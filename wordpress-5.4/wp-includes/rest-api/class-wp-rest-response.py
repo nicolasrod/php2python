@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,8 +22,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_HTTP_Response
 #//
 class WP_REST_Response(WP_HTTP_Response):
+    #// 
+    #// Links related to the response.
+    #// 
+    #// @since 4.4.0
+    #// @var array
+    #//
     links = Array()
+    #// 
+    #// The route that was to create the response.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     matched_route = ""
+    #// 
+    #// The handler that was used to create the response.
+    #// 
+    #// @since 4.4.0
+    #// @var null|array
+    #//
     matched_handler = None
     #// 
     #// Adds a link to the response.
@@ -45,15 +58,18 @@ class WP_REST_Response(WP_HTTP_Response):
     #// @param string $href       Target URI for the link.
     #// @param array  $attributes Optional. Link parameters to send along with the URL. Default empty array.
     #//
-    def add_link(self, rel=None, href=None, attributes=Array()):
+    def add_link(self, rel_=None, href_=None, attributes_=None):
+        if attributes_ is None:
+            attributes_ = Array()
+        # end if
         
-        if php_empty(lambda : self.links[rel]):
-            self.links[rel] = Array()
+        if php_empty(lambda : self.links[rel_]):
+            self.links[rel_] = Array()
         # end if
-        if (php_isset(lambda : attributes["href"])):
-            attributes["href"] = None
+        if (php_isset(lambda : attributes_["href"])):
+            attributes_["href"] = None
         # end if
-        self.links[rel][-1] = Array({"href": href, "attributes": attributes})
+        self.links[rel_][-1] = Array({"href": href_, "attributes": attributes_})
     # end def add_link
     #// 
     #// Removes a link from the response.
@@ -64,18 +80,19 @@ class WP_REST_Response(WP_HTTP_Response):
     #// @param string $href Optional. Only remove links for the relation matching the given href.
     #// Default null.
     #//
-    def remove_link(self, rel=None, href=None):
+    def remove_link(self, rel_=None, href_=None):
         
-        if (not (php_isset(lambda : self.links[rel]))):
+        
+        if (not (php_isset(lambda : self.links[rel_]))):
             return
         # end if
-        if href:
-            self.links[rel] = wp_list_filter(self.links[rel], Array({"href": href}), "NOT")
+        if href_:
+            self.links[rel_] = wp_list_filter(self.links[rel_], Array({"href": href_}), "NOT")
         else:
-            self.links[rel] = Array()
+            self.links[rel_] = Array()
         # end if
-        if (not self.links[rel]):
-            self.links[rel] = None
+        if (not self.links[rel_]):
+            self.links[rel_] = None
         # end if
     # end def remove_link
     #// 
@@ -90,15 +107,16 @@ class WP_REST_Response(WP_HTTP_Response):
     #// 
     #// @param array $links Map of link relation to list of links.
     #//
-    def add_links(self, links=None):
+    def add_links(self, links_=None):
         
-        for rel,set in links:
+        
+        for rel_,set_ in links_:
             #// If it's a single link, wrap with an array for consistent handling.
-            if (php_isset(lambda : set["href"])):
-                set = Array(set)
+            if (php_isset(lambda : set_["href"])):
+                set_ = Array(set_)
             # end if
-            for attributes in set:
-                self.add_link(rel, attributes["href"], attributes)
+            for attributes_ in set_:
+                self.add_link(rel_, attributes_["href"], attributes_)
             # end for
         # end for
     # end def add_links
@@ -110,6 +128,7 @@ class WP_REST_Response(WP_HTTP_Response):
     #// @return array List of links.
     #//
     def get_links(self):
+        
         
         return self.links
     # end def get_links
@@ -128,16 +147,19 @@ class WP_REST_Response(WP_HTTP_Response):
     #// @param array  $other Optional. Other parameters to send, as an assocative array.
     #// Default empty array.
     #//
-    def link_header(self, rel=None, link=None, other=Array()):
+    def link_header(self, rel_=None, link_=None, other_=None):
+        if other_ is None:
+            other_ = Array()
+        # end if
         
-        header = "<" + link + ">; rel=\"" + rel + "\""
-        for key,value in other:
-            if "title" == key:
-                value = "\"" + value + "\""
+        header_ = "<" + link_ + ">; rel=\"" + rel_ + "\""
+        for key_,value_ in other_:
+            if "title" == key_:
+                value_ = "\"" + value_ + "\""
             # end if
-            header += "; " + key + "=" + value
+            header_ += "; " + key_ + "=" + value_
         # end for
-        self.header("Link", header, False)
+        self.header("Link", header_, False)
     # end def link_header
     #// 
     #// Retrieves the route that was used.
@@ -148,6 +170,7 @@ class WP_REST_Response(WP_HTTP_Response):
     #//
     def get_matched_route(self):
         
+        
         return self.matched_route
     # end def get_matched_route
     #// 
@@ -157,9 +180,10 @@ class WP_REST_Response(WP_HTTP_Response):
     #// 
     #// @param string $route Route name.
     #//
-    def set_matched_route(self, route=None):
+    def set_matched_route(self, route_=None):
         
-        self.matched_route = route
+        
+        self.matched_route = route_
     # end def set_matched_route
     #// 
     #// Retrieves the handler that was used to generate the response.
@@ -170,6 +194,7 @@ class WP_REST_Response(WP_HTTP_Response):
     #//
     def get_matched_handler(self):
         
+        
         return self.matched_handler
     # end def get_matched_handler
     #// 
@@ -179,9 +204,10 @@ class WP_REST_Response(WP_HTTP_Response):
     #// 
     #// @param array $handler The matched handler.
     #//
-    def set_matched_handler(self, handler=None):
+    def set_matched_handler(self, handler_=None):
         
-        self.matched_handler = handler
+        
+        self.matched_handler = handler_
     # end def set_matched_handler
     #// 
     #// Checks if the response is an error, i.e. >= 400 response code.
@@ -191,6 +217,7 @@ class WP_REST_Response(WP_HTTP_Response):
     #// @return bool Whether the response is an error.
     #//
     def is_error(self):
+        
         
         return self.get_status() >= 400
     # end def is_error
@@ -203,22 +230,23 @@ class WP_REST_Response(WP_HTTP_Response):
     #//
     def as_error(self):
         
+        
         if (not self.is_error()):
             return None
         # end if
-        error = php_new_class("WP_Error", lambda : WP_Error())
+        error_ = php_new_class("WP_Error", lambda : WP_Error())
         if php_is_array(self.get_data()):
-            data = self.get_data()
-            error.add(data["code"], data["message"], data["data"])
-            if (not php_empty(lambda : data["additional_errors"])):
-                for err in data["additional_errors"]:
-                    error.add(err["code"], err["message"], err["data"])
+            data_ = self.get_data()
+            error_.add(data_["code"], data_["message"], data_["data"])
+            if (not php_empty(lambda : data_["additional_errors"])):
+                for err_ in data_["additional_errors"]:
+                    error_.add(err_["code"], err_["message"], err_["data"])
                 # end for
             # end if
         else:
-            error.add(self.get_status(), "", Array({"status": self.get_status()}))
+            error_.add(self.get_status(), "", Array({"status": self.get_status()}))
         # end if
-        return error
+        return error_
     # end def as_error
     #// 
     #// Retrieves the CURIEs (compact URIs) used for relations.
@@ -229,7 +257,8 @@ class WP_REST_Response(WP_HTTP_Response):
     #//
     def get_curies(self):
         
-        curies = Array(Array({"name": "wp", "href": "https://api.w.org/{rel}"}, {"templated": True}))
+        
+        curies_ = Array(Array({"name": "wp", "href": "https://api.w.org/{rel}"}, {"templated": True}))
         #// 
         #// Filters extra CURIEs available on API responses.
         #// 
@@ -255,7 +284,7 @@ class WP_REST_Response(WP_HTTP_Response):
         #// 
         #// @param array $additional Additional CURIEs to register with the API.
         #//
-        additional = apply_filters("rest_response_link_curies", Array())
-        return php_array_merge(curies, additional)
+        additional_ = apply_filters("rest_response_link_curies", Array())
+        return php_array_merge(curies_, additional_)
     # end def get_curies
 # end class WP_REST_Response

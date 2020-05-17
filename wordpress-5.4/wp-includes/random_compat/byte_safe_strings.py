@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -52,12 +47,13 @@ if (not php_is_callable("RandomCompat_strlen")):
         #// 
         #// @return int
         #//
-        def RandomCompat_strlen(binary_string=None, *args_):
+        def RandomCompat_strlen(binary_string_=None, *_args_):
             
-            if (not php_is_string(binary_string)):
+            
+            if (not php_is_string(binary_string_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_strlen() expects a string"))
             # end if
-            return php_int(php_mb_strlen(binary_string, "8bit"))
+            return php_int(php_mb_strlen(binary_string_, "8bit"))
         # end def RandomCompat_strlen
     else:
         #// 
@@ -71,12 +67,13 @@ if (not php_is_callable("RandomCompat_strlen")):
         #// 
         #// @return int
         #//
-        def RandomCompat_strlen(binary_string=None, *args_):
+        def RandomCompat_strlen(binary_string_=None, *_args_):
             
-            if (not php_is_string(binary_string)):
+            
+            if (not php_is_string(binary_string_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_strlen() expects a string"))
             # end if
-            return php_int(php_strlen(binary_string))
+            return php_int(php_strlen(binary_string_))
         # end def RandomCompat_strlen
     # end if
 # end if
@@ -96,31 +93,32 @@ if (not php_is_callable("RandomCompat_substr")):
         #// 
         #// @return string
         #//
-        def RandomCompat_substr(binary_string=None, start=None, length=None, *args_):
+        def RandomCompat_substr(binary_string_=None, start_=None, length_=None, *_args_):
             
-            if (not php_is_string(binary_string)):
+            
+            if (not php_is_string(binary_string_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): First argument should be a string"))
             # end if
-            if (not php_is_int(start)):
+            if (not php_is_int(start_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): Second argument should be an integer"))
             # end if
-            if length == None:
+            if length_ == None:
                 #// 
                 #// mb_substr($str, 0, NULL, '8bit') returns an empty string on
                 #// PHP 5.3, so we have to find the length ourselves.
                 #//
-                length = RandomCompat_strlen(binary_string) - start
-            elif (not php_is_int(length)):
+                length_ = RandomCompat_strlen(binary_string_) - start_
+            elif (not php_is_int(length_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): Third argument should be an integer, or omitted"))
             # end if
             #// Consistency with PHP's behavior
-            if start == RandomCompat_strlen(binary_string) and length == 0:
+            if start_ == RandomCompat_strlen(binary_string_) and length_ == 0:
                 return ""
             # end if
-            if start > RandomCompat_strlen(binary_string):
+            if start_ > RandomCompat_strlen(binary_string_):
                 return ""
             # end if
-            return php_str(php_mb_substr(binary_string, start, length, "8bit"))
+            return php_str(php_mb_substr(binary_string_, start_, length_, "8bit"))
         # end def RandomCompat_substr
     else:
         #// 
@@ -136,21 +134,22 @@ if (not php_is_callable("RandomCompat_substr")):
         #// 
         #// @return string
         #//
-        def RandomCompat_substr(binary_string=None, start=None, length=None, *args_):
+        def RandomCompat_substr(binary_string_=None, start_=None, length_=None, *_args_):
             
-            if (not php_is_string(binary_string)):
+            
+            if (not php_is_string(binary_string_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): First argument should be a string"))
             # end if
-            if (not php_is_int(start)):
+            if (not php_is_int(start_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): Second argument should be an integer"))
             # end if
-            if length != None:
-                if (not php_is_int(length)):
+            if length_ != None:
+                if (not php_is_int(length_)):
                     raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): Third argument should be an integer, or omitted"))
                 # end if
-                return php_str(php_substr(binary_string, start, length))
+                return php_str(php_substr(binary_string_, start_, length_))
             # end if
-            return php_str(php_substr(binary_string, start))
+            return php_str(php_substr(binary_string_, start_))
         # end def RandomCompat_substr
     # end if
 # end if

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -37,8 +32,9 @@ class WP_Feed_Cache(SimplePie_Cache):
     #// @param string $extension 'spi' or 'spc'.
     #// @return WP_Feed_Cache_Transient Feed cache handler object that uses transients.
     #//
-    def create(self, location=None, filename=None, extension=None):
+    def create(self, location_=None, filename_=None, extension_=None):
         
-        return php_new_class("WP_Feed_Cache_Transient", lambda : WP_Feed_Cache_Transient(location, filename, extension))
+        
+        return php_new_class("WP_Feed_Cache_Transient", lambda : WP_Feed_Cache_Transient(location_, filename_, extension_))
     # end def create
 # end class WP_Feed_Cache

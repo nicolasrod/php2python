@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,9 +20,35 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @abstract
 #//
 class Walker():
+    #// 
+    #// What the class handles.
+    #// 
+    #// @since 2.1.0
+    #// @var string
+    #//
     tree_type = Array()
+    #// 
+    #// DB fields to use.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     db_fields = Array()
+    #// 
+    #// Max number of pages walked by the paged walker
+    #// 
+    #// @since 2.7.0
+    #// @var int
+    #//
     max_pages = 1
+    #// 
+    #// Whether the current element has children or not.
+    #// 
+    #// To be used in start_el().
+    #// 
+    #// @since 4.0.0
+    #// @var bool
+    #//
     has_children = Array()
     #// 
     #// Starts the list before the elements are added.
@@ -42,7 +63,10 @@ class Walker():
     #// @param int    $depth  Depth of the item.
     #// @param array  $args   An array of additional arguments.
     #//
-    def start_lvl(self, output=None, depth=0, args=Array()):
+    def start_lvl(self, output_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         pass
     # end def start_lvl
@@ -59,7 +83,10 @@ class Walker():
     #// @param int    $depth  Depth of the item.
     #// @param array  $args   An array of additional arguments.
     #//
-    def end_lvl(self, output=None, depth=0, args=Array()):
+    def end_lvl(self, output_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         pass
     # end def end_lvl
@@ -78,7 +105,10 @@ class Walker():
     #// @param array  $args              An array of additional arguments.
     #// @param int    $current_object_id ID of the current item.
     #//
-    def start_el(self, output=None, object=None, depth=0, args=Array(), current_object_id=0):
+    def start_el(self, output_=None, object_=None, depth_=0, args_=None, current_object_id_=0):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         pass
     # end def start_el
@@ -95,7 +125,10 @@ class Walker():
     #// @param int    $depth  Depth of the item.
     #// @param array  $args   An array of additional arguments.
     #//
-    def end_el(self, output=None, object=None, depth=0, args=Array()):
+    def end_el(self, output_=None, object_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         pass
     # end def end_el
@@ -118,38 +151,39 @@ class Walker():
     #// @param array  $args              An array of arguments.
     #// @param string $output            Used to append additional content (passed by reference).
     #//
-    def display_element(self, element=None, children_elements=None, max_depth=None, depth=None, args=None, output=None):
+    def display_element(self, element_=None, children_elements_=None, max_depth_=None, depth_=None, args_=None, output_=None):
         
-        if (not element):
+        
+        if (not element_):
             return
         # end if
-        id_field = self.db_fields["id"]
-        id = element.id_field
+        id_field_ = self.db_fields["id"]
+        id_ = element_.id_field_
         #// Display this element.
-        self.has_children = (not php_empty(lambda : children_elements[id]))
-        if (php_isset(lambda : args[0])) and php_is_array(args[0]):
-            args[0]["has_children"] = self.has_children
+        self.has_children = (not php_empty(lambda : children_elements_[id_]))
+        if (php_isset(lambda : args_[0])) and php_is_array(args_[0]):
+            args_[0]["has_children"] = self.has_children
             pass
         # end if
-        self.start_el(output, element, depth, php_array_values(args))
+        self.start_el(output_, element_, depth_, php_array_values(args_))
         #// Descend only when the depth is right and there are childrens for this element.
-        if 0 == max_depth or max_depth > depth + 1 and (php_isset(lambda : children_elements[id])):
-            for child in children_elements[id]:
-                if (not (php_isset(lambda : newlevel))):
-                    newlevel = True
+        if 0 == max_depth_ or max_depth_ > depth_ + 1 and (php_isset(lambda : children_elements_[id_])):
+            for child_ in children_elements_[id_]:
+                if (not (php_isset(lambda : newlevel_))):
+                    newlevel_ = True
                     #// Start the child delimiter.
-                    self.start_lvl(output, depth, php_array_values(args))
+                    self.start_lvl(output_, depth_, php_array_values(args_))
                 # end if
-                self.display_element(child, children_elements, max_depth, depth + 1, args, output)
+                self.display_element(child_, children_elements_, max_depth_, depth_ + 1, args_, output_)
             # end for
-            children_elements[id] = None
+            children_elements_[id_] = None
         # end if
-        if (php_isset(lambda : newlevel)) and newlevel:
+        if (php_isset(lambda : newlevel_)) and newlevel_:
             #// End the child delimiter.
-            self.end_lvl(output, depth, php_array_values(args))
+            self.end_lvl(output_, depth_, php_array_values(args_))
         # end if
         #// End this element.
-        self.end_el(output, element, depth, php_array_values(args))
+        self.end_el(output_, element_, depth_, php_array_values(args_))
     # end def display_element
     #// 
     #// Display array of elements hierarchically.
@@ -169,21 +203,22 @@ class Walker():
     #// @param mixed ...$args   Optional additional arguments.
     #// @return string The hierarchical item output.
     #//
-    def walk(self, elements=None, max_depth=None, *args):
+    def walk(self, elements_=None, max_depth_=None, *args_):
         
-        output = ""
+        
+        output_ = ""
         #// Invalid parameter or nothing to walk.
-        if max_depth < -1 or php_empty(lambda : elements):
-            return output
+        if max_depth_ < -1 or php_empty(lambda : elements_):
+            return output_
         # end if
-        parent_field = self.db_fields["parent"]
+        parent_field_ = self.db_fields["parent"]
         #// Flat display.
-        if -1 == max_depth:
-            empty_array = Array()
-            for e in elements:
-                self.display_element(e, empty_array, 1, 0, args, output)
+        if -1 == max_depth_:
+            empty_array_ = Array()
+            for e_ in elements_:
+                self.display_element(e_, empty_array_, 1, 0, args_, output_)
             # end for
-            return output
+            return output_
         # end if
         #// 
         #// Need to display in hierarchical order.
@@ -191,48 +226,48 @@ class Walker():
         #// Children_elements is two dimensional array, eg.
         #// Children_elements[10][] contains all sub-elements whose parent is 10.
         #//
-        top_level_elements = Array()
-        children_elements = Array()
-        for e in elements:
-            if php_empty(lambda : e.parent_field):
-                top_level_elements[-1] = e
+        top_level_elements_ = Array()
+        children_elements_ = Array()
+        for e_ in elements_:
+            if php_empty(lambda : e_.parent_field_):
+                top_level_elements_[-1] = e_
             else:
-                children_elements[e.parent_field][-1] = e
+                children_elements_[e_.parent_field_][-1] = e_
             # end if
         # end for
         #// 
         #// When none of the elements is top level.
         #// Assume the first one must be root of the sub elements.
         #//
-        if php_empty(lambda : top_level_elements):
-            first = php_array_slice(elements, 0, 1)
-            root = first[0]
-            top_level_elements = Array()
-            children_elements = Array()
-            for e in elements:
-                if root.parent_field == e.parent_field:
-                    top_level_elements[-1] = e
+        if php_empty(lambda : top_level_elements_):
+            first_ = php_array_slice(elements_, 0, 1)
+            root_ = first_[0]
+            top_level_elements_ = Array()
+            children_elements_ = Array()
+            for e_ in elements_:
+                if root_.parent_field_ == e_.parent_field_:
+                    top_level_elements_[-1] = e_
                 else:
-                    children_elements[e.parent_field][-1] = e
+                    children_elements_[e_.parent_field_][-1] = e_
                 # end if
             # end for
         # end if
-        for e in top_level_elements:
-            self.display_element(e, children_elements, max_depth, 0, args, output)
+        for e_ in top_level_elements_:
+            self.display_element(e_, children_elements_, max_depth_, 0, args_, output_)
         # end for
         #// 
         #// If we are displaying all levels, and remaining children_elements is not empty,
         #// then we got orphans, which should be displayed regardless.
         #//
-        if 0 == max_depth and php_count(children_elements) > 0:
-            empty_array = Array()
-            for orphans in children_elements:
-                for op in orphans:
-                    self.display_element(op, empty_array, 1, 0, args, output)
+        if 0 == max_depth_ and php_count(children_elements_) > 0:
+            empty_array_ = Array()
+            for orphans_ in children_elements_:
+                for op_ in orphans_:
+                    self.display_element(op_, empty_array_, 1, 0, args_, output_)
                 # end for
             # end for
         # end if
-        return output
+        return output_
     # end def walk
     #// 
     #// paged_walk() - produce a page of nested elements
@@ -255,108 +290,109 @@ class Walker():
     #// @param mixed ...$args   Optional additional arguments.
     #// @return string XHTML of the specified page of elements
     #//
-    def paged_walk(self, elements=None, max_depth=None, page_num=None, per_page=None, *args):
+    def paged_walk(self, elements_=None, max_depth_=None, page_num_=None, per_page_=None, *args_):
         
-        if php_empty(lambda : elements) or max_depth < -1:
+        
+        if php_empty(lambda : elements_) or max_depth_ < -1:
             return ""
         # end if
-        output = ""
-        parent_field = self.db_fields["parent"]
-        count = -1
-        if -1 == max_depth:
-            total_top = php_count(elements)
+        output_ = ""
+        parent_field_ = self.db_fields["parent"]
+        count_ = -1
+        if -1 == max_depth_:
+            total_top_ = php_count(elements_)
         # end if
-        if page_num < 1 or per_page < 0:
+        if page_num_ < 1 or per_page_ < 0:
             #// No paging.
-            paging = False
-            start = 0
-            if -1 == max_depth:
-                end_ = total_top
+            paging_ = False
+            start_ = 0
+            if -1 == max_depth_:
+                end_ = total_top_
             # end if
             self.max_pages = 1
         else:
-            paging = True
-            start = php_int(page_num) - 1 * php_int(per_page)
-            end_ = start + per_page
-            if -1 == max_depth:
-                self.max_pages = ceil(total_top / per_page)
+            paging_ = True
+            start_ = php_int(page_num_) - 1 * php_int(per_page_)
+            end_ = start_ + per_page_
+            if -1 == max_depth_:
+                self.max_pages = ceil(total_top_ / per_page_)
             # end if
         # end if
         #// Flat display.
-        if -1 == max_depth:
-            if (not php_empty(lambda : args[0]["reverse_top_level"])):
-                elements = array_reverse(elements)
-                oldstart = start
-                start = total_top - end_
-                end_ = total_top - oldstart
+        if -1 == max_depth_:
+            if (not php_empty(lambda : args_[0]["reverse_top_level"])):
+                elements_ = array_reverse(elements_)
+                oldstart_ = start_
+                start_ = total_top_ - end_
+                end_ = total_top_ - oldstart_
             # end if
-            empty_array = Array()
-            for e in elements:
-                count += 1
-                if count < start:
+            empty_array_ = Array()
+            for e_ in elements_:
+                count_ += 1
+                if count_ < start_:
                     continue
                 # end if
-                if count >= end_:
+                if count_ >= end_:
                     break
                 # end if
-                self.display_element(e, empty_array, 1, 0, args, output)
+                self.display_element(e_, empty_array_, 1, 0, args_, output_)
             # end for
-            return output
+            return output_
         # end if
         #// 
         #// Separate elements into two buckets: top level and children elements.
         #// Children_elements is two dimensional array, e.g.
         #// $children_elements[10][] contains all sub-elements whose parent is 10.
         #//
-        top_level_elements = Array()
-        children_elements = Array()
-        for e in elements:
-            if 0 == e.parent_field:
-                top_level_elements[-1] = e
+        top_level_elements_ = Array()
+        children_elements_ = Array()
+        for e_ in elements_:
+            if 0 == e_.parent_field_:
+                top_level_elements_[-1] = e_
             else:
-                children_elements[e.parent_field][-1] = e
+                children_elements_[e_.parent_field_][-1] = e_
             # end if
         # end for
-        total_top = php_count(top_level_elements)
-        if paging:
-            self.max_pages = ceil(total_top / per_page)
+        total_top_ = php_count(top_level_elements_)
+        if paging_:
+            self.max_pages = ceil(total_top_ / per_page_)
         else:
-            end_ = total_top
+            end_ = total_top_
         # end if
-        if (not php_empty(lambda : args[0]["reverse_top_level"])):
-            top_level_elements = array_reverse(top_level_elements)
-            oldstart = start
-            start = total_top - end_
-            end_ = total_top - oldstart
+        if (not php_empty(lambda : args_[0]["reverse_top_level"])):
+            top_level_elements_ = array_reverse(top_level_elements_)
+            oldstart_ = start_
+            start_ = total_top_ - end_
+            end_ = total_top_ - oldstart_
         # end if
-        if (not php_empty(lambda : args[0]["reverse_children"])):
-            for parent,children in children_elements:
-                children_elements[parent] = array_reverse(children)
+        if (not php_empty(lambda : args_[0]["reverse_children"])):
+            for parent_,children_ in children_elements_:
+                children_elements_[parent_] = array_reverse(children_)
             # end for
         # end if
-        for e in top_level_elements:
-            count += 1
+        for e_ in top_level_elements_:
+            count_ += 1
             #// For the last page, need to unset earlier children in order to keep track of orphans.
-            if end_ >= total_top and count < start:
-                self.unset_children(e, children_elements)
+            if end_ >= total_top_ and count_ < start_:
+                self.unset_children(e_, children_elements_)
             # end if
-            if count < start:
+            if count_ < start_:
                 continue
             # end if
-            if count >= end_:
+            if count_ >= end_:
                 break
             # end if
-            self.display_element(e, children_elements, max_depth, 0, args, output)
+            self.display_element(e_, children_elements_, max_depth_, 0, args_, output_)
         # end for
-        if end_ >= total_top and php_count(children_elements) > 0:
-            empty_array = Array()
-            for orphans in children_elements:
-                for op in orphans:
-                    self.display_element(op, empty_array, 1, 0, args, output)
+        if end_ >= total_top_ and php_count(children_elements_) > 0:
+            empty_array_ = Array()
+            for orphans_ in children_elements_:
+                for op_ in orphans_:
+                    self.display_element(op_, empty_array_, 1, 0, args_, output_)
                 # end for
             # end for
         # end if
-        return output
+        return output_
     # end def paged_walk
     #// 
     #// Calculates the total number of root elements.
@@ -366,16 +402,17 @@ class Walker():
     #// @param array $elements Elements to list.
     #// @return int Number of root elements.
     #//
-    def get_number_of_root_elements(self, elements=None):
+    def get_number_of_root_elements(self, elements_=None):
         
-        num = 0
-        parent_field = self.db_fields["parent"]
-        for e in elements:
-            if 0 == e.parent_field:
-                num += 1
+        
+        num_ = 0
+        parent_field_ = self.db_fields["parent"]
+        for e_ in elements_:
+            if 0 == e_.parent_field_:
+                num_ += 1
             # end if
         # end for
-        return num
+        return num_
     # end def get_number_of_root_elements
     #// 
     #// Unset all the children for a given top level element.
@@ -385,18 +422,19 @@ class Walker():
     #// @param object $e
     #// @param array $children_elements
     #//
-    def unset_children(self, e=None, children_elements=None):
+    def unset_children(self, e_=None, children_elements_=None):
         
-        if (not e) or (not children_elements):
+        
+        if (not e_) or (not children_elements_):
             return
         # end if
-        id_field = self.db_fields["id"]
-        id = e.id_field
-        if (not php_empty(lambda : children_elements[id])) and php_is_array(children_elements[id]):
-            for child in children_elements[id]:
-                self.unset_children(child, children_elements)
+        id_field_ = self.db_fields["id"]
+        id_ = e_.id_field_
+        if (not php_empty(lambda : children_elements_[id_])) and php_is_array(children_elements_[id_]):
+            for child_ in children_elements_[id_]:
+                self.unset_children(child_, children_elements_)
             # end for
         # end if
-        children_elements[id] = None
+        children_elements_[id_] = None
     # end def unset_children
 # end class Walker

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,9 +24,33 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Setting
 #//
 class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
+    #// 
+    #// The setting type.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     type = "custom_css"
+    #// 
+    #// Setting Transport
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     transport = "postMessage"
+    #// 
+    #// Capability required to edit this setting.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     capability = "edit_css"
+    #// 
+    #// Stylesheet
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     stylesheet = ""
     #// 
     #// WP_Customize_Custom_CSS_Setting constructor.
@@ -45,9 +64,12 @@ class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
     #// Can be a theme mod or option name.
     #// @param array                $args    Setting arguments.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        super().__init__(manager, id, args)
+        super().__init__(manager_, id_, args_)
         if "custom_css" != self.id_data["base"]:
             raise php_new_class("Exception", lambda : Exception("Expected custom_css id_base."))
         # end if
@@ -64,6 +86,7 @@ class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
     #// @return bool False when preview short-circuits due no change needing to be previewed.
     #//
     def preview(self):
+        
         
         if self.is_previewed:
             return False
@@ -84,15 +107,16 @@ class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
     #// @param string $stylesheet Current stylesheet.
     #// @return string CSS.
     #//
-    def filter_previewed_wp_get_custom_css(self, css=None, stylesheet=None):
+    def filter_previewed_wp_get_custom_css(self, css_=None, stylesheet_=None):
         
-        if stylesheet == self.stylesheet:
-            customized_value = self.post_value(None)
-            if (not is_null(customized_value)):
-                css = customized_value
+        
+        if stylesheet_ == self.stylesheet:
+            customized_value_ = self.post_value(None)
+            if (not is_null(customized_value_)):
+                css_ = customized_value_
             # end if
         # end if
-        return css
+        return css_
     # end def filter_previewed_wp_get_custom_css
     #// 
     #// Fetch the value of the setting. Will return the previewed value when `preview()` is called.
@@ -104,24 +128,25 @@ class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
     #//
     def value(self):
         
+        
         if self.is_previewed:
-            post_value = self.post_value(None)
-            if None != post_value:
-                return post_value
+            post_value_ = self.post_value(None)
+            if None != post_value_:
+                return post_value_
             # end if
         # end if
-        id_base = self.id_data["base"]
-        value = ""
-        post = wp_get_custom_css_post(self.stylesheet)
-        if post:
-            value = post.post_content
+        id_base_ = self.id_data["base"]
+        value_ = ""
+        post_ = wp_get_custom_css_post(self.stylesheet)
+        if post_:
+            value_ = post_.post_content
         # end if
-        if php_empty(lambda : value):
-            value = self.default
+        if php_empty(lambda : value_):
+            value_ = self.default
         # end if
         #// This filter is documented in wp-includes/class-wp-customize-setting.php
-        value = apply_filters(str("customize_value_") + str(id_base), value, self)
-        return value
+        value_ = apply_filters(str("customize_value_") + str(id_base_), value_, self)
+        return value_
     # end def value
     #// 
     #// Validate CSS.
@@ -135,16 +160,17 @@ class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
     #// @param string $css The input string.
     #// @return true|WP_Error True if the input was validated, otherwise WP_Error.
     #//
-    def validate(self, css=None):
+    def validate(self, css_=None):
         
-        validity = php_new_class("WP_Error", lambda : WP_Error())
-        if php_preg_match("#</?\\w+#", css):
-            validity.add("illegal_markup", __("Markup is not allowed in CSS."))
+        
+        validity_ = php_new_class("WP_Error", lambda : WP_Error())
+        if php_preg_match("#</?\\w+#", css_):
+            validity_.add("illegal_markup", __("Markup is not allowed in CSS."))
         # end if
-        if (not validity.has_errors()):
-            validity = super().validate(css)
+        if (not validity_.has_errors()):
+            validity_ = super().validate(css_)
         # end if
-        return validity
+        return validity_
     # end def validate
     #// 
     #// Store the CSS setting value in the custom_css custom post type for the stylesheet.
@@ -154,20 +180,21 @@ class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
     #// @param string $css The input value.
     #// @return int|false The post ID or false if the value could not be saved.
     #//
-    def update(self, css=None):
+    def update(self, css_=None):
         
-        if php_empty(lambda : css):
-            css = ""
+        
+        if php_empty(lambda : css_):
+            css_ = ""
         # end if
-        r = wp_update_custom_css_post(css, Array({"stylesheet": self.stylesheet}))
-        if type(r).__name__ == "WP_Error":
+        r_ = wp_update_custom_css_post(css_, Array({"stylesheet": self.stylesheet}))
+        if type(r_).__name__ == "WP_Error":
             return False
         # end if
-        post_id = r.ID
+        post_id_ = r_.ID
         #// Cache post ID in theme mod for performance to avoid additional DB query.
         if self.manager.get_stylesheet() == self.stylesheet:
-            set_theme_mod("custom_css_post_id", post_id)
+            set_theme_mod("custom_css_post_id", post_id_)
         # end if
-        return post_id
+        return post_id_
     # end def update
 # end class WP_Customize_Custom_CSS_Setting

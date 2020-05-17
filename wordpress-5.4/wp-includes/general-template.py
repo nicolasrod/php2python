@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -31,7 +26,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @param string $name The name of the specialised header.
 #//
-def get_header(name=None, *args_):
+def get_header(name_=None, *_args_):
+    
     
     #// 
     #// Fires before the header template file is loaded.
@@ -41,14 +37,14 @@ def get_header(name=None, *args_):
     #// 
     #// @param string|null $name Name of the specific header file to use. null for the default header.
     #//
-    do_action("get_header", name)
-    templates = Array()
-    name = php_str(name)
-    if "" != name:
-        templates[-1] = str("header-") + str(name) + str(".php")
+    do_action("get_header", name_)
+    templates_ = Array()
+    name_ = php_str(name_)
+    if "" != name_:
+        templates_[-1] = str("header-") + str(name_) + str(".php")
     # end if
-    templates[-1] = "header.php"
-    locate_template(templates, True)
+    templates_[-1] = "header.php"
+    locate_template(templates_, True)
 # end def get_header
 #// 
 #// Load footer template.
@@ -63,7 +59,8 @@ def get_header(name=None, *args_):
 #// 
 #// @param string $name The name of the specialised footer.
 #//
-def get_footer(name=None, *args_):
+def get_footer(name_=None, *_args_):
+    
     
     #// 
     #// Fires before the footer template file is loaded.
@@ -73,14 +70,14 @@ def get_footer(name=None, *args_):
     #// 
     #// @param string|null $name Name of the specific footer file to use. null for the default footer.
     #//
-    do_action("get_footer", name)
-    templates = Array()
-    name = php_str(name)
-    if "" != name:
-        templates[-1] = str("footer-") + str(name) + str(".php")
+    do_action("get_footer", name_)
+    templates_ = Array()
+    name_ = php_str(name_)
+    if "" != name_:
+        templates_[-1] = str("footer-") + str(name_) + str(".php")
     # end if
-    templates[-1] = "footer.php"
-    locate_template(templates, True)
+    templates_[-1] = "footer.php"
+    locate_template(templates_, True)
 # end def get_footer
 #// 
 #// Load sidebar template.
@@ -95,7 +92,8 @@ def get_footer(name=None, *args_):
 #// 
 #// @param string $name The name of the specialised sidebar.
 #//
-def get_sidebar(name=None, *args_):
+def get_sidebar(name_=None, *_args_):
+    
     
     #// 
     #// Fires before the sidebar template file is loaded.
@@ -105,14 +103,14 @@ def get_sidebar(name=None, *args_):
     #// 
     #// @param string|null $name Name of the specific sidebar file to use. null for the default sidebar.
     #//
-    do_action("get_sidebar", name)
-    templates = Array()
-    name = php_str(name)
-    if "" != name:
-        templates[-1] = str("sidebar-") + str(name) + str(".php")
+    do_action("get_sidebar", name_)
+    templates_ = Array()
+    name_ = php_str(name_)
+    if "" != name_:
+        templates_[-1] = str("sidebar-") + str(name_) + str(".php")
     # end if
-    templates[-1] = "sidebar.php"
-    locate_template(templates, True)
+    templates_[-1] = "sidebar.php"
+    locate_template(templates_, True)
 # end def get_sidebar
 #// 
 #// Loads a template part into a template.
@@ -135,7 +133,8 @@ def get_sidebar(name=None, *args_):
 #// @param string $slug The slug name for the generic template.
 #// @param string $name The name of the specialised template.
 #//
-def get_template_part(slug=None, name=None, *args_):
+def get_template_part(slug_=None, name_=None, *_args_):
+    
     
     #// 
     #// Fires before the specified template part file is loaded.
@@ -148,13 +147,13 @@ def get_template_part(slug=None, name=None, *args_):
     #// @param string      $slug The slug name for the generic template.
     #// @param string|null $name The name of the specialized template.
     #//
-    do_action(str("get_template_part_") + str(slug), slug, name)
-    templates = Array()
-    name = php_str(name)
-    if "" != name:
-        templates[-1] = str(slug) + str("-") + str(name) + str(".php")
+    do_action(str("get_template_part_") + str(slug_), slug_, name_)
+    templates_ = Array()
+    name_ = php_str(name_)
+    if "" != name_:
+        templates_[-1] = str(slug_) + str("-") + str(name_) + str(".php")
     # end if
-    templates[-1] = str(slug) + str(".php")
+    templates_[-1] = str(slug_) + str(".php")
     #// 
     #// Fires before a template part is loaded.
     #// 
@@ -164,8 +163,8 @@ def get_template_part(slug=None, name=None, *args_):
     #// @param string   $name      The name of the specialized template.
     #// @param string[] $templates Array of template files to search for, in order.
     #//
-    do_action("get_template_part", slug, name, templates)
-    locate_template(templates, True, False)
+    do_action("get_template_part", slug_, name_, templates_)
+    locate_template(templates_, True, False)
 # end def get_template_part
 #// 
 #// Display search form.
@@ -197,7 +196,10 @@ def get_template_part(slug=None, name=None, *args_):
 #// }
 #// @return void|string Void if 'echo' argument is true, search form HTML if 'echo' is false.
 #//
-def get_search_form(args=Array(), *args_):
+def get_search_form(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// 
     #// Fires before the search form is retrieved, at the start of get_search_form().
@@ -208,20 +210,20 @@ def get_search_form(args=Array(), *args_):
     #// @link https://core.trac.wordpress.org/ticket/19321
     #//
     do_action("pre_get_search_form")
-    echo = True
-    if (not php_is_array(args)):
+    echo_ = True
+    if (not php_is_array(args_)):
         #// 
         #// Back compat: to ensure previous uses of get_search_form() continue to
         #// function as expected, we handle a value for the boolean $echo param removed
         #// in 5.2.0. Then we deal with the $args array and cast its defaults.
         #//
-        echo = php_bool(args)
+        echo_ = php_bool(args_)
         #// Set an empty array and allow default arguments to take over.
-        args = Array()
+        args_ = Array()
     # end if
     #// Defaults are to echo and to output no custom label on the form.
-    defaults = Array({"echo": echo, "aria_label": ""})
-    args = wp_parse_args(args, defaults)
+    defaults_ = Array({"echo": echo_, "aria_label": ""})
+    args_ = wp_parse_args(args_, defaults_)
     #// 
     #// Filters the array of arguments used when generating the search form.
     #// 
@@ -229,8 +231,8 @@ def get_search_form(args=Array(), *args_):
     #// 
     #// @param array $args The array of arguments for building the search form.
     #//
-    args = apply_filters("search_form_args", args)
-    format = "html5" if current_theme_supports("html5", "search-form") else "xhtml"
+    args_ = apply_filters("search_form_args", args_)
+    format_ = "html5" if current_theme_supports("html5", "search-form") else "xhtml"
     #// 
     #// Filters the HTML format of the search form.
     #// 
@@ -239,27 +241,27 @@ def get_search_form(args=Array(), *args_):
     #// @param string $format The type of markup to use in the search form.
     #// Accepts 'html5', 'xhtml'.
     #//
-    format = apply_filters("search_form_format", format)
-    search_form_template = locate_template("searchform.php")
-    if "" != search_form_template:
+    format_ = apply_filters("search_form_format", format_)
+    search_form_template_ = locate_template("searchform.php")
+    if "" != search_form_template_:
         ob_start()
-        php_include_file(search_form_template, once=False)
-        form = ob_get_clean()
+        php_include_file(search_form_template_, once=False)
+        form_ = ob_get_clean()
     else:
         #// Build a string containing an aria-label to use for the search form.
-        if (php_isset(lambda : args["aria_label"])) and args["aria_label"]:
-            aria_label = "aria-label=\"" + esc_attr(args["aria_label"]) + "\" "
+        if (php_isset(lambda : args_["aria_label"])) and args_["aria_label"]:
+            aria_label_ = "aria-label=\"" + esc_attr(args_["aria_label"]) + "\" "
         else:
             #// 
             #// If there's no custom aria-label, we can set a default here. At the
             #// moment it's empty as there's uncertainty about what the default should be.
             #//
-            aria_label = ""
+            aria_label_ = ""
         # end if
-        if "html5" == format:
-            form = "<form role=\"search\" " + aria_label + "method=\"get\" class=\"search-form\" action=\"" + esc_url(home_url("/")) + "\">\n               <label>\n                   <span class=\"screen-reader-text\">" + _x("Search for:", "label") + "</span>\n                  <input type=\"search\" class=\"search-field\" placeholder=\"" + esc_attr_x("Search &hellip;", "placeholder") + "\" value=\"" + get_search_query() + "\" name=\"s\" />\n             </label>\n              <input type=\"submit\" class=\"search-submit\" value=\"" + esc_attr_x("Search", "submit button") + "\" />\n         </form>"
+        if "html5" == format_:
+            form_ = "<form role=\"search\" " + aria_label_ + "method=\"get\" class=\"search-form\" action=\"" + esc_url(home_url("/")) + "\">\n             <label>\n                   <span class=\"screen-reader-text\">" + _x("Search for:", "label") + "</span>\n                  <input type=\"search\" class=\"search-field\" placeholder=\"" + esc_attr_x("Search &hellip;", "placeholder") + "\" value=\"" + get_search_query() + "\" name=\"s\" />\n             </label>\n              <input type=\"submit\" class=\"search-submit\" value=\"" + esc_attr_x("Search", "submit button") + "\" />\n         </form>"
         else:
-            form = "<form role=\"search\" " + aria_label + "method=\"get\" id=\"searchform\" class=\"searchform\" action=\"" + esc_url(home_url("/")) + "\">\n              <div>\n                 <label class=\"screen-reader-text\" for=\"s\">" + _x("Search for:", "label") + "</label>\n                  <input type=\"text\" value=\"" + get_search_query() + "\" name=\"s\" id=\"s\" />\n                  <input type=\"submit\" id=\"searchsubmit\" value=\"" + esc_attr_x("Search", "submit button") + "\" />\n             </div>\n            </form>"
+            form_ = "<form role=\"search\" " + aria_label_ + "method=\"get\" id=\"searchform\" class=\"searchform\" action=\"" + esc_url(home_url("/")) + "\">\n                <div>\n                 <label class=\"screen-reader-text\" for=\"s\">" + _x("Search for:", "label") + "</label>\n                  <input type=\"text\" value=\"" + get_search_query() + "\" name=\"s\" id=\"s\" />\n                  <input type=\"submit\" id=\"searchsubmit\" value=\"" + esc_attr_x("Search", "submit button") + "\" />\n             </div>\n            </form>"
         # end if
     # end if
     #// 
@@ -269,14 +271,14 @@ def get_search_form(args=Array(), *args_):
     #// 
     #// @param string $form The search form HTML output.
     #//
-    result = apply_filters("get_search_form", form)
-    if None == result:
-        result = form
+    result_ = apply_filters("get_search_form", form_)
+    if None == result_:
+        result_ = form_
     # end if
-    if args["echo"]:
-        php_print(result)
+    if args_["echo"]:
+        php_print(result_)
     else:
-        return result
+        return result_
     # end if
 # end def get_search_form
 #// 
@@ -291,14 +293,17 @@ def get_search_form(args=Array(), *args_):
 #// @param bool   $echo     Default to echo and not return the link.
 #// @return void|string Void if `$echo` argument is true, log in/out link if `$echo` is false.
 #//
-def wp_loginout(redirect="", echo=True, *args_):
+def wp_loginout(redirect_="", echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
     if (not is_user_logged_in()):
-        link = "<a href=\"" + esc_url(wp_login_url(redirect)) + "\">" + __("Log in") + "</a>"
+        link_ = "<a href=\"" + esc_url(wp_login_url(redirect_)) + "\">" + __("Log in") + "</a>"
     else:
-        link = "<a href=\"" + esc_url(wp_logout_url(redirect)) + "\">" + __("Log out") + "</a>"
+        link_ = "<a href=\"" + esc_url(wp_logout_url(redirect_)) + "\">" + __("Log out") + "</a>"
     # end if
-    if echo:
+    if echo_:
         #// 
         #// Filters the HTML output for the Log In/Log Out link.
         #// 
@@ -306,10 +311,10 @@ def wp_loginout(redirect="", echo=True, *args_):
         #// 
         #// @param string $link The HTML link content.
         #//
-        php_print(apply_filters("loginout", link))
+        php_print(apply_filters("loginout", link_))
     else:
         #// This filter is documented in wp-includes/general-template.php
-        return apply_filters("loginout", link)
+        return apply_filters("loginout", link_)
     # end if
 # end def wp_loginout
 #// 
@@ -322,14 +327,15 @@ def wp_loginout(redirect="", echo=True, *args_):
 #// @param string $redirect Path to redirect to on logout.
 #// @return string The logout URL. Note: HTML-encoded via esc_html() in wp_nonce_url().
 #//
-def wp_logout_url(redirect="", *args_):
+def wp_logout_url(redirect_="", *_args_):
     
-    args = Array()
-    if (not php_empty(lambda : redirect)):
-        args["redirect_to"] = urlencode(redirect)
+    
+    args_ = Array()
+    if (not php_empty(lambda : redirect_)):
+        args_["redirect_to"] = urlencode(redirect_)
     # end if
-    logout_url = add_query_arg(args, site_url("wp-login.php?action=logout", "login"))
-    logout_url = wp_nonce_url(logout_url, "log-out")
+    logout_url_ = add_query_arg(args_, site_url("wp-login.php?action=logout", "login"))
+    logout_url_ = wp_nonce_url(logout_url_, "log-out")
     #// 
     #// Filters the logout URL.
     #// 
@@ -338,7 +344,7 @@ def wp_logout_url(redirect="", *args_):
     #// @param string $logout_url The HTML-encoded logout URL.
     #// @param string $redirect   Path to redirect to on logout.
     #//
-    return apply_filters("logout_url", logout_url, redirect)
+    return apply_filters("logout_url", logout_url_, redirect_)
 # end def wp_logout_url
 #// 
 #// Retrieves the login URL.
@@ -350,14 +356,17 @@ def wp_logout_url(redirect="", *args_):
 #// Default false.
 #// @return string The login URL. Not HTML-encoded.
 #//
-def wp_login_url(redirect="", force_reauth=False, *args_):
-    
-    login_url = site_url("wp-login.php", "login")
-    if (not php_empty(lambda : redirect)):
-        login_url = add_query_arg("redirect_to", urlencode(redirect), login_url)
+def wp_login_url(redirect_="", force_reauth_=None, *_args_):
+    if force_reauth_ is None:
+        force_reauth_ = False
     # end if
-    if force_reauth:
-        login_url = add_query_arg("reauth", "1", login_url)
+    
+    login_url_ = site_url("wp-login.php", "login")
+    if (not php_empty(lambda : redirect_)):
+        login_url_ = add_query_arg("redirect_to", urlencode(redirect_), login_url_)
+    # end if
+    if force_reauth_:
+        login_url_ = add_query_arg("reauth", "1", login_url_)
     # end if
     #// 
     #// Filters the login URL.
@@ -369,7 +378,7 @@ def wp_login_url(redirect="", force_reauth=False, *args_):
     #// @param string $redirect     The path to redirect to on login, if supplied.
     #// @param bool   $force_reauth Whether to force reauthorization, even if a cookie is present.
     #//
-    return apply_filters("login_url", login_url, redirect, force_reauth)
+    return apply_filters("login_url", login_url_, redirect_, force_reauth_)
 # end def wp_login_url
 #// 
 #// Returns the URL that allows the user to register on the site.
@@ -378,7 +387,8 @@ def wp_login_url(redirect="", force_reauth=False, *args_):
 #// 
 #// @return string User registration URL.
 #//
-def wp_registration_url(*args_):
+def wp_registration_url(*_args_):
+    
     
     #// 
     #// Filters the user registration URL.
@@ -420,9 +430,12 @@ def wp_registration_url(*args_):
 #// }
 #// @return void|string Void if 'echo' argument is true, login form HTML if 'echo' is false.
 #//
-def wp_login_form(args=Array(), *args_):
+def wp_login_form(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    defaults = Array({"echo": True, "redirect": "https://" if is_ssl() else "http://" + PHP_SERVER["HTTP_HOST"] + PHP_SERVER["REQUEST_URI"], "form_id": "loginform", "label_username": __("Username or Email Address"), "label_password": __("Password"), "label_remember": __("Remember Me"), "label_log_in": __("Log In"), "id_username": "user_login", "id_password": "user_pass", "id_remember": "rememberme", "id_submit": "wp-submit", "remember": True, "value_username": "", "value_remember": False})
+    defaults_ = Array({"echo": True, "redirect": "https://" if is_ssl() else "http://" + PHP_SERVER["HTTP_HOST"] + PHP_SERVER["REQUEST_URI"], "form_id": "loginform", "label_username": __("Username or Email Address"), "label_password": __("Password"), "label_remember": __("Remember Me"), "label_log_in": __("Log In"), "id_username": "user_login", "id_password": "user_pass", "id_remember": "rememberme", "id_submit": "wp-submit", "remember": True, "value_username": "", "value_remember": False})
     #// 
     #// Filters the default login form output arguments.
     #// 
@@ -432,7 +445,7 @@ def wp_login_form(args=Array(), *args_):
     #// 
     #// @param array $defaults An array of default login form arguments.
     #//
-    args = wp_parse_args(args, apply_filters("login_form_defaults", defaults))
+    args_ = wp_parse_args(args_, apply_filters("login_form_defaults", defaults_))
     #// 
     #// Filters content to display at the top of the login form.
     #// 
@@ -443,7 +456,7 @@ def wp_login_form(args=Array(), *args_):
     #// @param string $content Content to display. Default empty.
     #// @param array  $args    Array of login form arguments.
     #//
-    login_form_top = apply_filters("login_form_top", "", args)
+    login_form_top_ = apply_filters("login_form_top", "", args_)
     #// 
     #// Filters content to display in the middle of the login form.
     #// 
@@ -455,7 +468,7 @@ def wp_login_form(args=Array(), *args_):
     #// @param string $content Content to display. Default empty.
     #// @param array  $args    Array of login form arguments.
     #//
-    login_form_middle = apply_filters("login_form_middle", "", args)
+    login_form_middle_ = apply_filters("login_form_middle", "", args_)
     #// 
     #// Filters content to display at the bottom of the login form.
     #// 
@@ -466,15 +479,15 @@ def wp_login_form(args=Array(), *args_):
     #// @param string $content Content to display. Default empty.
     #// @param array  $args    Array of login form arguments.
     #//
-    login_form_bottom = apply_filters("login_form_bottom", "", args)
-    form = "\n      <form name=\"" + args["form_id"] + "\" id=\"" + args["form_id"] + "\" action=\"" + esc_url(site_url("wp-login.php", "login_post")) + "\" method=\"post\">\n         " + login_form_top + "\n            <p class=\"login-username\">\n              <label for=\"" + esc_attr(args["id_username"]) + "\">" + esc_html(args["label_username"]) + "</label>\n             <input type=\"text\" name=\"log\" id=\"" + esc_attr(args["id_username"]) + "\" class=\"input\" value=\"" + esc_attr(args["value_username"]) + """\" size=\"20\" />
+    login_form_bottom_ = apply_filters("login_form_bottom", "", args_)
+    form_ = "\n     <form name=\"" + args_["form_id"] + "\" id=\"" + args_["form_id"] + "\" action=\"" + esc_url(site_url("wp-login.php", "login_post")) + "\" method=\"post\">\n           " + login_form_top_ + "\n           <p class=\"login-username\">\n              <label for=\"" + esc_attr(args_["id_username"]) + "\">" + esc_html(args_["label_username"]) + "</label>\n               <input type=\"text\" name=\"log\" id=\"" + esc_attr(args_["id_username"]) + "\" class=\"input\" value=\"" + esc_attr(args_["value_username"]) + """\" size=\"20\" />
     </p>
     <p class=\"login-password\">
-    <label for=\"""" + esc_attr(args["id_password"]) + "\">" + esc_html(args["label_password"]) + "</label>\n               <input type=\"password\" name=\"pwd\" id=\"" + esc_attr(args["id_password"]) + "\" class=\"input\" value=\"\" size=\"20\" />\n          </p>\n          " + login_form_middle + "\n         " + "<p class=\"login-remember\"><label><input name=\"rememberme\" type=\"checkbox\" id=\"" + esc_attr(args["id_remember"]) + "\" value=\"forever\"" + " checked=\"checked\"" if args["value_remember"] else "" + " /> " + esc_html(args["label_remember"]) + "</label></p>" if args["remember"] else "" + "\n          <p class=\"login-submit\">\n                <input type=\"submit\" name=\"wp-submit\" id=\"" + esc_attr(args["id_submit"]) + "\" class=\"button button-primary\" value=\"" + esc_attr(args["label_log_in"]) + "\" />\n              <input type=\"hidden\" name=\"redirect_to\" value=\"" + esc_url(args["redirect"]) + "\" />\n            </p>\n          " + login_form_bottom + "\n     </form>"
-    if args["echo"]:
-        php_print(form)
+    <label for=\"""" + esc_attr(args_["id_password"]) + "\">" + esc_html(args_["label_password"]) + "</label>\n             <input type=\"password\" name=\"pwd\" id=\"" + esc_attr(args_["id_password"]) + "\" class=\"input\" value=\"\" size=\"20\" />\n         </p>\n          " + login_form_middle_ + "\n            " + "<p class=\"login-remember\"><label><input name=\"rememberme\" type=\"checkbox\" id=\"" + esc_attr(args_["id_remember"]) + "\" value=\"forever\"" + " checked=\"checked\"" if args_["value_remember"] else "" + " /> " + esc_html(args_["label_remember"]) + "</label></p>" if args_["remember"] else "" + "\n          <p class=\"login-submit\">\n                <input type=\"submit\" name=\"wp-submit\" id=\"" + esc_attr(args_["id_submit"]) + "\" class=\"button button-primary\" value=\"" + esc_attr(args_["label_log_in"]) + "\" />\n                <input type=\"hidden\" name=\"redirect_to\" value=\"" + esc_url(args_["redirect"]) + "\" />\n           </p>\n          " + login_form_bottom_ + "\n        </form>"
+    if args_["echo"]:
+        php_print(form_)
     else:
-        return form
+        return form_
     # end if
 # end def wp_login_form
 #// 
@@ -485,13 +498,14 @@ def wp_login_form(args=Array(), *args_):
 #// @param string $redirect Path to redirect to on login.
 #// @return string Lost password URL.
 #//
-def wp_lostpassword_url(redirect="", *args_):
+def wp_lostpassword_url(redirect_="", *_args_):
     
-    args = Array()
-    if (not php_empty(lambda : redirect)):
-        args["redirect_to"] = urlencode(redirect)
+    
+    args_ = Array()
+    if (not php_empty(lambda : redirect_)):
+        args_["redirect_to"] = urlencode(redirect_)
     # end if
-    lostpassword_url = add_query_arg(args, network_site_url("wp-login.php?action=lostpassword", "login"))
+    lostpassword_url_ = add_query_arg(args_, network_site_url("wp-login.php?action=lostpassword", "login"))
     #// 
     #// Filters the Lost Password URL.
     #// 
@@ -500,7 +514,7 @@ def wp_lostpassword_url(redirect="", *args_):
     #// @param string $lostpassword_url The lost password page URL.
     #// @param string $redirect         The path to redirect to on login.
     #//
-    return apply_filters("lostpassword_url", lostpassword_url, redirect)
+    return apply_filters("lostpassword_url", lostpassword_url_, redirect_)
 # end def wp_lostpassword_url
 #// 
 #// Display the Registration or Admin link.
@@ -516,18 +530,21 @@ def wp_lostpassword_url(redirect="", *args_):
 #// @return void|string Void if `$echo` argument is true, registration or admin link
 #// if `$echo` is false.
 #//
-def wp_register(before="<li>", after="</li>", echo=True, *args_):
+def wp_register(before_="<li>", after_="</li>", echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
     if (not is_user_logged_in()):
         if get_option("users_can_register"):
-            link = before + "<a href=\"" + esc_url(wp_registration_url()) + "\">" + __("Register") + "</a>" + after
+            link_ = before_ + "<a href=\"" + esc_url(wp_registration_url()) + "\">" + __("Register") + "</a>" + after_
         else:
-            link = ""
+            link_ = ""
         # end if
     elif current_user_can("read"):
-        link = before + "<a href=\"" + admin_url() + "\">" + __("Site Admin") + "</a>" + after
+        link_ = before_ + "<a href=\"" + admin_url() + "\">" + __("Site Admin") + "</a>" + after_
     else:
-        link = ""
+        link_ = ""
     # end if
     #// 
     #// Filters the HTML link to the Registration or Admin page.
@@ -539,11 +556,11 @@ def wp_register(before="<li>", after="</li>", echo=True, *args_):
     #// 
     #// @param string $link The HTML code for the link to the Registration or Admin page.
     #//
-    link = apply_filters("register", link)
-    if echo:
-        php_print(link)
+    link_ = apply_filters("register", link_)
+    if echo_:
+        php_print(link_)
     else:
-        return link
+        return link_
     # end if
 # end def wp_register
 #// 
@@ -556,7 +573,8 @@ def wp_register(before="<li>", after="</li>", echo=True, *args_):
 #// 
 #// @link https://core.trac.wordpress.org/ticket/1458 Explanation of 'wp_meta' action.
 #//
-def wp_meta(*args_):
+def wp_meta(*_args_):
+    
     
     #// 
     #// Fires before displaying echoed content in the sidebar.
@@ -574,9 +592,10 @@ def wp_meta(*args_):
 #// 
 #// @param string $show Optional. Site information to display. Default empty.
 #//
-def bloginfo(show="", *args_):
+def bloginfo(show_="", *_args_):
     
-    php_print(get_bloginfo(show, "display"))
+    
+    php_print(get_bloginfo(show_, "display"))
 # end def bloginfo
 #// 
 #// Retrieves information about the current site.
@@ -625,90 +644,91 @@ def bloginfo(show="", *args_):
 #// @param string $filter Optional. How to filter what is retrieved. Default 'raw'.
 #// @return string Mostly string values, might be empty.
 #//
-def get_bloginfo(show="", filter="raw", *args_):
+def get_bloginfo(show_="", filter_="raw", *_args_):
     
-    for case in Switch(show):
+    
+    for case in Switch(show_):
         if case("home"):
             pass
         # end if
         if case("siteurl"):
             #// Deprecated.
-            _deprecated_argument(__FUNCTION__, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s option instead."), "<code>" + show + "</code>", "<code>bloginfo()</code>", "<code>url</code>"))
+            _deprecated_argument(__FUNCTION__, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s option instead."), "<code>" + show_ + "</code>", "<code>bloginfo()</code>", "<code>url</code>"))
         # end if
         if case("url"):
-            output = home_url()
+            output_ = home_url()
             break
         # end if
         if case("wpurl"):
-            output = site_url()
+            output_ = site_url()
             break
         # end if
         if case("description"):
-            output = get_option("blogdescription")
+            output_ = get_option("blogdescription")
             break
         # end if
         if case("rdf_url"):
-            output = get_feed_link("rdf")
+            output_ = get_feed_link("rdf")
             break
         # end if
         if case("rss_url"):
-            output = get_feed_link("rss")
+            output_ = get_feed_link("rss")
             break
         # end if
         if case("rss2_url"):
-            output = get_feed_link("rss2")
+            output_ = get_feed_link("rss2")
             break
         # end if
         if case("atom_url"):
-            output = get_feed_link("atom")
+            output_ = get_feed_link("atom")
             break
         # end if
         if case("comments_atom_url"):
-            output = get_feed_link("comments_atom")
+            output_ = get_feed_link("comments_atom")
             break
         # end if
         if case("comments_rss2_url"):
-            output = get_feed_link("comments_rss2")
+            output_ = get_feed_link("comments_rss2")
             break
         # end if
         if case("pingback_url"):
-            output = site_url("xmlrpc.php")
+            output_ = site_url("xmlrpc.php")
             break
         # end if
         if case("stylesheet_url"):
-            output = get_stylesheet_uri()
+            output_ = get_stylesheet_uri()
             break
         # end if
         if case("stylesheet_directory"):
-            output = get_stylesheet_directory_uri()
+            output_ = get_stylesheet_directory_uri()
             break
         # end if
         if case("template_directory"):
             pass
         # end if
         if case("template_url"):
-            output = get_template_directory_uri()
+            output_ = get_template_directory_uri()
             break
         # end if
         if case("admin_email"):
-            output = get_option("admin_email")
+            output_ = get_option("admin_email")
             break
         # end if
         if case("charset"):
-            output = get_option("blog_charset")
-            if "" == output:
-                output = "UTF-8"
+            output_ = get_option("blog_charset")
+            if "" == output_:
+                output_ = "UTF-8"
             # end if
             break
         # end if
         if case("html_type"):
-            output = get_option("html_type")
+            output_ = get_option("html_type")
             break
         # end if
         if case("version"):
-            global wp_version
-            php_check_if_defined("wp_version")
-            output = wp_version
+            global wp_version_
+            php_check_if_defined("wp_version_")
+            output_ = wp_version_
             break
         # end if
         if case("language"):
@@ -717,19 +737,19 @@ def get_bloginfo(show="", filter="raw", *args_):
             #// see https://www.w3.org/International/articles/language-tags/ for reference.
             #// Do not translate into your own language.
             #//
-            output = __("html_lang_attribute")
-            if "html_lang_attribute" == output or php_preg_match("/[^a-zA-Z0-9-]/", output):
-                output = determine_locale()
-                output = php_str_replace("_", "-", output)
+            output_ = __("html_lang_attribute")
+            if "html_lang_attribute" == output_ or php_preg_match("/[^a-zA-Z0-9-]/", output_):
+                output_ = determine_locale()
+                output_ = php_str_replace("_", "-", output_)
             # end if
             break
         # end if
         if case("text_direction"):
-            _deprecated_argument(__FUNCTION__, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s function instead."), "<code>" + show + "</code>", "<code>bloginfo()</code>", "<code>is_rtl()</code>"))
+            _deprecated_argument(__FUNCTION__, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s function instead."), "<code>" + show_ + "</code>", "<code>bloginfo()</code>", "<code>is_rtl()</code>"))
             if php_function_exists("is_rtl"):
-                output = "rtl" if is_rtl() else "ltr"
+                output_ = "rtl" if is_rtl() else "ltr"
             else:
-                output = "ltr"
+                output_ = "ltr"
             # end if
             break
         # end if
@@ -737,16 +757,16 @@ def get_bloginfo(show="", filter="raw", *args_):
             pass
         # end if
         if case():
-            output = get_option("blogname")
+            output_ = get_option("blogname")
             break
         # end if
     # end for
-    url = True
-    if php_strpos(show, "url") == False and php_strpos(show, "directory") == False and php_strpos(show, "home") == False:
-        url = False
+    url_ = True
+    if php_strpos(show_, "url") == False and php_strpos(show_, "directory") == False and php_strpos(show_, "home") == False:
+        url_ = False
     # end if
-    if "display" == filter:
-        if url:
+    if "display" == filter_:
+        if url_:
             #// 
             #// Filters the URL returned by get_bloginfo().
             #// 
@@ -755,7 +775,7 @@ def get_bloginfo(show="", filter="raw", *args_):
             #// @param string $output The URL returned by bloginfo().
             #// @param string $show   Type of information requested.
             #//
-            output = apply_filters("bloginfo_url", output, show)
+            output_ = apply_filters("bloginfo_url", output_, show_)
         else:
             #// 
             #// Filters the site information returned by get_bloginfo().
@@ -765,10 +785,10 @@ def get_bloginfo(show="", filter="raw", *args_):
             #// @param mixed  $output The requested non-URL site information.
             #// @param string $show   Type of information requested.
             #//
-            output = apply_filters("bloginfo", output, show)
+            output_ = apply_filters("bloginfo", output_, show_)
         # end if
     # end if
-    return output
+    return output_
 # end def get_bloginfo
 #// 
 #// Returns the Site Icon URL.
@@ -780,23 +800,24 @@ def get_bloginfo(show="", filter="raw", *args_):
 #// @param int    $blog_id Optional. ID of the blog to get the site icon for. Default current blog.
 #// @return string Site Icon URL.
 #//
-def get_site_icon_url(size=512, url="", blog_id=0, *args_):
+def get_site_icon_url(size_=512, url_="", blog_id_=0, *_args_):
     
-    switched_blog = False
-    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != php_int(blog_id):
-        switch_to_blog(blog_id)
-        switched_blog = True
+    
+    switched_blog_ = False
+    if is_multisite() and (not php_empty(lambda : blog_id_)) and get_current_blog_id() != php_int(blog_id_):
+        switch_to_blog(blog_id_)
+        switched_blog_ = True
     # end if
-    site_icon_id = get_option("site_icon")
-    if site_icon_id:
-        if size >= 512:
-            size_data = "full"
+    site_icon_id_ = get_option("site_icon")
+    if site_icon_id_:
+        if size_ >= 512:
+            size_data_ = "full"
         else:
-            size_data = Array(size, size)
+            size_data_ = Array(size_, size_)
         # end if
-        url = wp_get_attachment_image_url(site_icon_id, size_data)
+        url_ = wp_get_attachment_image_url(site_icon_id_, size_data_)
     # end if
-    if switched_blog:
+    if switched_blog_:
         restore_current_blog()
     # end if
     #// 
@@ -808,7 +829,7 @@ def get_site_icon_url(size=512, url="", blog_id=0, *args_):
     #// @param int    $size    Size of the site icon.
     #// @param int    $blog_id ID of the blog to get the site icon for.
     #//
-    return apply_filters("get_site_icon_url", url, size, blog_id)
+    return apply_filters("get_site_icon_url", url_, size_, blog_id_)
 # end def get_site_icon_url
 #// 
 #// Displays the Site Icon URL.
@@ -819,9 +840,10 @@ def get_site_icon_url(size=512, url="", blog_id=0, *args_):
 #// @param string $url     Optional. Fallback url if no site icon is found. Default empty.
 #// @param int    $blog_id Optional. ID of the blog to get the site icon for. Default current blog.
 #//
-def site_icon_url(size=512, url="", blog_id=0, *args_):
+def site_icon_url(size_=512, url_="", blog_id_=0, *_args_):
     
-    php_print(esc_url(get_site_icon_url(size, url, blog_id)))
+    
+    php_print(esc_url(get_site_icon_url(size_, url_, blog_id_)))
 # end def site_icon_url
 #// 
 #// Whether the site has a Site Icon.
@@ -831,9 +853,10 @@ def site_icon_url(size=512, url="", blog_id=0, *args_):
 #// @param int $blog_id Optional. ID of the blog in question. Default current blog.
 #// @return bool Whether the site has a site icon or not.
 #//
-def has_site_icon(blog_id=0, *args_):
+def has_site_icon(blog_id_=0, *_args_):
     
-    return php_bool(get_site_icon_url(512, "", blog_id))
+    
+    return php_bool(get_site_icon_url(512, "", blog_id_))
 # end def has_site_icon
 #// 
 #// Determines whether the site has a custom logo.
@@ -843,18 +866,19 @@ def has_site_icon(blog_id=0, *args_):
 #// @param int $blog_id Optional. ID of the blog in question. Default is the ID of the current blog.
 #// @return bool Whether the site has a custom logo or not.
 #//
-def has_custom_logo(blog_id=0, *args_):
+def has_custom_logo(blog_id_=0, *_args_):
     
-    switched_blog = False
-    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != php_int(blog_id):
-        switch_to_blog(blog_id)
-        switched_blog = True
+    
+    switched_blog_ = False
+    if is_multisite() and (not php_empty(lambda : blog_id_)) and get_current_blog_id() != php_int(blog_id_):
+        switch_to_blog(blog_id_)
+        switched_blog_ = True
     # end if
-    custom_logo_id = get_theme_mod("custom_logo")
-    if switched_blog:
+    custom_logo_id_ = get_theme_mod("custom_logo")
+    if switched_blog_:
         restore_current_blog()
     # end if
-    return php_bool(custom_logo_id)
+    return php_bool(custom_logo_id_)
 # end def has_custom_logo
 #// 
 #// Returns a custom logo, linked to home.
@@ -864,36 +888,37 @@ def has_custom_logo(blog_id=0, *args_):
 #// @param int $blog_id Optional. ID of the blog in question. Default is the ID of the current blog.
 #// @return string Custom logo markup.
 #//
-def get_custom_logo(blog_id=0, *args_):
+def get_custom_logo(blog_id_=0, *_args_):
     
-    html = ""
-    switched_blog = False
-    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != php_int(blog_id):
-        switch_to_blog(blog_id)
-        switched_blog = True
+    
+    html_ = ""
+    switched_blog_ = False
+    if is_multisite() and (not php_empty(lambda : blog_id_)) and get_current_blog_id() != php_int(blog_id_):
+        switch_to_blog(blog_id_)
+        switched_blog_ = True
     # end if
-    custom_logo_id = get_theme_mod("custom_logo")
+    custom_logo_id_ = get_theme_mod("custom_logo")
     #// We have a logo. Logo is go.
-    if custom_logo_id:
-        custom_logo_attr = Array({"class": "custom-logo"})
+    if custom_logo_id_:
+        custom_logo_attr_ = Array({"class": "custom-logo"})
         #// 
         #// If the logo alt attribute is empty, get the site title and explicitly
         #// pass it to the attributes used by wp_get_attachment_image().
         #//
-        image_alt = get_post_meta(custom_logo_id, "_wp_attachment_image_alt", True)
-        if php_empty(lambda : image_alt):
-            custom_logo_attr["alt"] = get_bloginfo("name", "display")
+        image_alt_ = get_post_meta(custom_logo_id_, "_wp_attachment_image_alt", True)
+        if php_empty(lambda : image_alt_):
+            custom_logo_attr_["alt"] = get_bloginfo("name", "display")
         # end if
         #// 
         #// If the alt attribute is not empty, there's no need to explicitly pass
         #// it because wp_get_attachment_image() already adds the alt attribute.
         #//
-        html = php_sprintf("<a href=\"%1$s\" class=\"custom-logo-link\" rel=\"home\">%2$s</a>", esc_url(home_url("/")), wp_get_attachment_image(custom_logo_id, "full", False, custom_logo_attr))
+        html_ = php_sprintf("<a href=\"%1$s\" class=\"custom-logo-link\" rel=\"home\">%2$s</a>", esc_url(home_url("/")), wp_get_attachment_image(custom_logo_id_, "full", False, custom_logo_attr_))
     elif is_customize_preview():
         #// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
-        html = php_sprintf("<a href=\"%1$s\" class=\"custom-logo-link\" style=\"display:none;\"><img class=\"custom-logo\"/></a>", esc_url(home_url("/")))
+        html_ = php_sprintf("<a href=\"%1$s\" class=\"custom-logo-link\" style=\"display:none;\"><img class=\"custom-logo\"/></a>", esc_url(home_url("/")))
     # end if
-    if switched_blog:
+    if switched_blog_:
         restore_current_blog()
     # end if
     #// 
@@ -905,7 +930,7 @@ def get_custom_logo(blog_id=0, *args_):
     #// @param string $html    Custom logo HTML output.
     #// @param int    $blog_id ID of the blog to get the custom logo for.
     #//
-    return apply_filters("get_custom_logo", html, blog_id)
+    return apply_filters("get_custom_logo", html_, blog_id_)
 # end def get_custom_logo
 #// 
 #// Displays a custom logo, linked to home.
@@ -914,9 +939,10 @@ def get_custom_logo(blog_id=0, *args_):
 #// 
 #// @param int $blog_id Optional. ID of the blog in question. Default is the ID of the current blog.
 #//
-def the_custom_logo(blog_id=0, *args_):
+def the_custom_logo(blog_id_=0, *_args_):
     
-    php_print(get_custom_logo(blog_id))
+    
+    php_print(get_custom_logo(blog_id_))
 # end def the_custom_logo
 #// 
 #// Returns document title for the current page.
@@ -928,7 +954,8 @@ def the_custom_logo(blog_id=0, *args_):
 #// 
 #// @return string Tag with the document title.
 #//
-def wp_get_document_title(*args_):
+def wp_get_document_title(*_args_):
+    
     
     #// 
     #// Filters the document title before it is generated.
@@ -940,57 +967,58 @@ def wp_get_document_title(*args_):
     #// 
     #// @param string $title The document title. Default empty string.
     #//
-    title = apply_filters("pre_get_document_title", "")
-    if (not php_empty(lambda : title)):
-        return title
+    title_ = apply_filters("pre_get_document_title", "")
+    if (not php_empty(lambda : title_)):
+        return title_
     # end if
-    global page,paged
-    php_check_if_defined("page","paged")
-    title = Array({"title": ""})
+    global page_
+    global paged_
+    php_check_if_defined("page_","paged_")
+    title_ = Array({"title": ""})
     #// If it's a 404 page, use a "Page not found" title.
     if is_404():
-        title["title"] = __("Page not found")
+        title_["title"] = __("Page not found")
         pass
     elif is_search():
         #// translators: %s: Search query.
-        title["title"] = php_sprintf(__("Search Results for &#8220;%s&#8221;"), get_search_query())
+        title_["title"] = php_sprintf(__("Search Results for &#8220;%s&#8221;"), get_search_query())
         pass
     elif is_front_page():
-        title["title"] = get_bloginfo("name", "display")
+        title_["title"] = get_bloginfo("name", "display")
         pass
     elif is_post_type_archive():
-        title["title"] = post_type_archive_title("", False)
+        title_["title"] = post_type_archive_title("", False)
         pass
     elif is_tax():
-        title["title"] = single_term_title("", False)
+        title_["title"] = single_term_title("", False)
         pass
     elif is_home() or is_singular():
-        title["title"] = single_post_title("", False)
+        title_["title"] = single_post_title("", False)
         pass
     elif is_category() or is_tag():
-        title["title"] = single_term_title("", False)
+        title_["title"] = single_term_title("", False)
         pass
     elif is_author() and get_queried_object():
-        author = get_queried_object()
-        title["title"] = author.display_name
+        author_ = get_queried_object()
+        title_["title"] = author_.display_name
         pass
     elif is_year():
-        title["title"] = get_the_date(_x("Y", "yearly archives date format"))
+        title_["title"] = get_the_date(_x("Y", "yearly archives date format"))
     elif is_month():
-        title["title"] = get_the_date(_x("F Y", "monthly archives date format"))
+        title_["title"] = get_the_date(_x("F Y", "monthly archives date format"))
     elif is_day():
-        title["title"] = get_the_date()
+        title_["title"] = get_the_date()
     # end if
     #// Add a page number if necessary.
-    if paged >= 2 or page >= 2 and (not is_404()):
+    if paged_ >= 2 or page_ >= 2 and (not is_404()):
         #// translators: %s: Page number.
-        title["page"] = php_sprintf(__("Page %s"), php_max(paged, page))
+        title_["page"] = php_sprintf(__("Page %s"), php_max(paged_, page_))
     # end if
     #// Append the description or site title to give context.
     if is_front_page():
-        title["tagline"] = get_bloginfo("description", "display")
+        title_["tagline"] = get_bloginfo("description", "display")
     else:
-        title["site"] = get_bloginfo("name", "display")
+        title_["site"] = get_bloginfo("name", "display")
     # end if
     #// 
     #// Filters the separator for the document title.
@@ -999,7 +1027,7 @@ def wp_get_document_title(*args_):
     #// 
     #// @param string $sep Document title separator. Default '-'.
     #//
-    sep = apply_filters("document_title_separator", "-")
+    sep_ = apply_filters("document_title_separator", "-")
     #// 
     #// Filters the parts of the document title.
     #// 
@@ -1014,13 +1042,13 @@ def wp_get_document_title(*args_):
     #// @type string $site    Optional. Site title when not on home page.
     #// }
     #//
-    title = apply_filters("document_title_parts", title)
-    title = php_implode(str(" ") + str(sep) + str(" "), php_array_filter(title))
-    title = wptexturize(title)
-    title = convert_chars(title)
-    title = esc_html(title)
-    title = capital_P_dangit(title)
-    return title
+    title_ = apply_filters("document_title_parts", title_)
+    title_ = php_implode(str(" ") + str(sep_) + str(" "), php_array_filter(title_))
+    title_ = wptexturize(title_)
+    title_ = convert_chars(title_)
+    title_ = esc_html(title_)
+    title_ = capital_P_dangit(title_)
+    return title_
 # end def wp_get_document_title
 #// 
 #// Displays title tag with content.
@@ -1030,7 +1058,8 @@ def wp_get_document_title(*args_):
 #// @since 4.4.0 Improved title output replaced `wp_title()`.
 #// @access private
 #//
-def _wp_render_title_tag(*args_):
+def _wp_render_title_tag(*_args_):
+    
     
     if (not current_theme_supports("title-tag")):
         return
@@ -1062,85 +1091,88 @@ def _wp_render_title_tag(*args_):
 #// @param string $seplocation Optional. Location of the separator ('left' or 'right').
 #// @return string|null String on retrieve, null when displaying.
 #//
-def wp_title(sep="&raquo;", display=True, seplocation="", *args_):
+def wp_title(sep_="&raquo;", display_=None, seplocation_="", *_args_):
+    if display_ is None:
+        display_ = True
+    # end if
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    m = get_query_var("m")
-    year = get_query_var("year")
-    monthnum = get_query_var("monthnum")
-    day = get_query_var("day")
-    search = get_query_var("s")
-    title = ""
-    t_sep = "%WP_TITLE_SEP%"
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    m_ = get_query_var("m")
+    year_ = get_query_var("year")
+    monthnum_ = get_query_var("monthnum")
+    day_ = get_query_var("day")
+    search_ = get_query_var("s")
+    title_ = ""
+    t_sep_ = "%WP_TITLE_SEP%"
     #// Temporary separator, for accurate flipping, if necessary.
     #// If there is a post.
     if is_single() or is_home() and (not is_front_page()) or is_page() and (not is_front_page()):
-        title = single_post_title("", False)
+        title_ = single_post_title("", False)
     # end if
     #// If there's a post type archive.
     if is_post_type_archive():
-        post_type = get_query_var("post_type")
-        if php_is_array(post_type):
-            post_type = reset(post_type)
+        post_type_ = get_query_var("post_type")
+        if php_is_array(post_type_):
+            post_type_ = reset(post_type_)
         # end if
-        post_type_object = get_post_type_object(post_type)
-        if (not post_type_object.has_archive):
-            title = post_type_archive_title("", False)
+        post_type_object_ = get_post_type_object(post_type_)
+        if (not post_type_object_.has_archive):
+            title_ = post_type_archive_title("", False)
         # end if
     # end if
     #// If there's a category or tag.
     if is_category() or is_tag():
-        title = single_term_title("", False)
+        title_ = single_term_title("", False)
     # end if
     #// If there's a taxonomy.
     if is_tax():
-        term = get_queried_object()
-        if term:
-            tax = get_taxonomy(term.taxonomy)
-            title = single_term_title(tax.labels.name + t_sep, False)
+        term_ = get_queried_object()
+        if term_:
+            tax_ = get_taxonomy(term_.taxonomy)
+            title_ = single_term_title(tax_.labels.name + t_sep_, False)
         # end if
     # end if
     #// If there's an author.
     if is_author() and (not is_post_type_archive()):
-        author = get_queried_object()
-        if author:
-            title = author.display_name
+        author_ = get_queried_object()
+        if author_:
+            title_ = author_.display_name
         # end if
     # end if
     #// Post type archives with has_archive should override terms.
-    if is_post_type_archive() and post_type_object.has_archive:
-        title = post_type_archive_title("", False)
+    if is_post_type_archive() and post_type_object_.has_archive:
+        title_ = post_type_archive_title("", False)
     # end if
     #// If there's a month.
-    if is_archive() and (not php_empty(lambda : m)):
-        my_year = php_substr(m, 0, 4)
-        my_month = wp_locale.get_month(php_substr(m, 4, 2))
-        my_day = php_intval(php_substr(m, 6, 2))
-        title = my_year + t_sep + my_month if my_month else "" + t_sep + my_day if my_day else ""
+    if is_archive() and (not php_empty(lambda : m_)):
+        my_year_ = php_substr(m_, 0, 4)
+        my_month_ = wp_locale_.get_month(php_substr(m_, 4, 2))
+        my_day_ = php_intval(php_substr(m_, 6, 2))
+        title_ = my_year_ + t_sep_ + my_month_ if my_month_ else "" + t_sep_ + my_day_ if my_day_ else ""
     # end if
     #// If there's a year.
-    if is_archive() and (not php_empty(lambda : year)):
-        title = year
-        if (not php_empty(lambda : monthnum)):
-            title += t_sep + wp_locale.get_month(monthnum)
+    if is_archive() and (not php_empty(lambda : year_)):
+        title_ = year_
+        if (not php_empty(lambda : monthnum_)):
+            title_ += t_sep_ + wp_locale_.get_month(monthnum_)
         # end if
-        if (not php_empty(lambda : day)):
-            title += t_sep + zeroise(day, 2)
+        if (not php_empty(lambda : day_)):
+            title_ += t_sep_ + zeroise(day_, 2)
         # end if
     # end if
     #// If it's a search.
     if is_search():
         #// translators: 1: Separator, 2: Search query.
-        title = php_sprintf(__("Search Results %1$s %2$s"), t_sep, strip_tags(search))
+        title_ = php_sprintf(__("Search Results %1$s %2$s"), t_sep_, strip_tags(search_))
     # end if
     #// If it's a 404 page.
     if is_404():
-        title = __("Page not found")
+        title_ = __("Page not found")
     # end if
-    prefix = ""
-    if (not php_empty(lambda : title)):
-        prefix = str(" ") + str(sep) + str(" ")
+    prefix_ = ""
+    if (not php_empty(lambda : title_)):
+        prefix_ = str(" ") + str(sep_) + str(" ")
     # end if
     #// 
     #// Filters the parts of the page title.
@@ -1149,14 +1181,14 @@ def wp_title(sep="&raquo;", display=True, seplocation="", *args_):
     #// 
     #// @param string[] $title_array Array of parts of the page title.
     #//
-    title_array = apply_filters("wp_title_parts", php_explode(t_sep, title))
+    title_array_ = apply_filters("wp_title_parts", php_explode(t_sep_, title_))
     #// Determines position of the separator and direction of the breadcrumb.
-    if "right" == seplocation:
+    if "right" == seplocation_:
         #// Separator on right, so reverse the order.
-        title_array = array_reverse(title_array)
-        title = php_implode(str(" ") + str(sep) + str(" "), title_array) + prefix
+        title_array_ = array_reverse(title_array_)
+        title_ = php_implode(str(" ") + str(sep_) + str(" "), title_array_) + prefix_
     else:
-        title = prefix + php_implode(str(" ") + str(sep) + str(" "), title_array)
+        title_ = prefix_ + php_implode(str(" ") + str(sep_) + str(" "), title_array_)
     # end if
     #// 
     #// Filters the text of the page title.
@@ -1167,12 +1199,12 @@ def wp_title(sep="&raquo;", display=True, seplocation="", *args_):
     #// @param string $sep         Title separator.
     #// @param string $seplocation Location of the separator ('left' or 'right').
     #//
-    title = apply_filters("wp_title", title, sep, seplocation)
+    title_ = apply_filters("wp_title", title_, sep_, seplocation_)
     #// Send it out.
-    if display:
-        php_print(title)
+    if display_:
+        php_print(title_)
     else:
-        return title
+        return title_
     # end if
 # end def wp_title
 #// 
@@ -1191,10 +1223,13 @@ def wp_title(sep="&raquo;", display=True, seplocation="", *args_):
 #// @param bool   $display Optional, default is true. Whether to display or retrieve title.
 #// @return string|void Title when retrieving.
 #//
-def single_post_title(prefix="", display=True, *args_):
+def single_post_title(prefix_="", display_=None, *_args_):
+    if display_ is None:
+        display_ = True
+    # end if
     
-    _post = get_queried_object()
-    if (not (php_isset(lambda : _post.post_title))):
+    _post_ = get_queried_object()
+    if (not (php_isset(lambda : _post_.post_title))):
         return
     # end if
     #// 
@@ -1205,11 +1240,11 @@ def single_post_title(prefix="", display=True, *args_):
     #// @param string  $_post_title The single post page title.
     #// @param WP_Post $_post       The current post.
     #//
-    title = apply_filters("single_post_title", _post.post_title, _post)
-    if display:
-        php_print(prefix + title)
+    title_ = apply_filters("single_post_title", _post_.post_title, _post_)
+    if display_:
+        php_print(prefix_ + title_)
     else:
-        return prefix + title
+        return prefix_ + title_
     # end if
 # end def single_post_title
 #// 
@@ -1224,16 +1259,19 @@ def single_post_title(prefix="", display=True, *args_):
 #// @param bool   $display Optional, default is true. Whether to display or retrieve title.
 #// @return string|void Title when retrieving, null when displaying or failure.
 #//
-def post_type_archive_title(prefix="", display=True, *args_):
+def post_type_archive_title(prefix_="", display_=None, *_args_):
+    if display_ is None:
+        display_ = True
+    # end if
     
     if (not is_post_type_archive()):
         return
     # end if
-    post_type = get_query_var("post_type")
-    if php_is_array(post_type):
-        post_type = reset(post_type)
+    post_type_ = get_query_var("post_type")
+    if php_is_array(post_type_):
+        post_type_ = reset(post_type_)
     # end if
-    post_type_obj = get_post_type_object(post_type)
+    post_type_obj_ = get_post_type_object(post_type_)
     #// 
     #// Filters the post type archive title.
     #// 
@@ -1242,11 +1280,11 @@ def post_type_archive_title(prefix="", display=True, *args_):
     #// @param string $post_type_name Post type 'name' label.
     #// @param string $post_type      Post type.
     #//
-    title = apply_filters("post_type_archive_title", post_type_obj.labels.name, post_type)
-    if display:
-        php_print(prefix + title)
+    title_ = apply_filters("post_type_archive_title", post_type_obj_.labels.name, post_type_)
+    if display_:
+        php_print(prefix_ + title_)
     else:
-        return prefix + title
+        return prefix_ + title_
     # end if
 # end def post_type_archive_title
 #// 
@@ -1262,9 +1300,12 @@ def post_type_archive_title(prefix="", display=True, *args_):
 #// @param bool   $display Optional, default is true. Whether to display or retrieve title.
 #// @return string|void Title when retrieving.
 #//
-def single_cat_title(prefix="", display=True, *args_):
+def single_cat_title(prefix_="", display_=None, *_args_):
+    if display_ is None:
+        display_ = True
+    # end if
     
-    return single_term_title(prefix, display)
+    return single_term_title(prefix_, display_)
 # end def single_cat_title
 #// 
 #// Display or retrieve page title for tag post archive.
@@ -1279,9 +1320,12 @@ def single_cat_title(prefix="", display=True, *args_):
 #// @param bool   $display Optional, default is true. Whether to display or retrieve title.
 #// @return string|void Title when retrieving.
 #//
-def single_tag_title(prefix="", display=True, *args_):
+def single_tag_title(prefix_="", display_=None, *_args_):
+    if display_ is None:
+        display_ = True
+    # end if
     
-    return single_term_title(prefix, display)
+    return single_term_title(prefix_, display_)
 # end def single_tag_title
 #// 
 #// Display or retrieve page title for taxonomy term archive.
@@ -1296,10 +1340,13 @@ def single_tag_title(prefix="", display=True, *args_):
 #// @param bool   $display Optional, default is true. Whether to display or retrieve title.
 #// @return string|void Title when retrieving.
 #//
-def single_term_title(prefix="", display=True, *args_):
+def single_term_title(prefix_="", display_=None, *_args_):
+    if display_ is None:
+        display_ = True
+    # end if
     
-    term = get_queried_object()
-    if (not term):
+    term_ = get_queried_object()
+    if (not term_):
         return
     # end if
     if is_category():
@@ -1310,7 +1357,7 @@ def single_term_title(prefix="", display=True, *args_):
         #// 
         #// @param string $term_name Category name for archive being displayed.
         #//
-        term_name = apply_filters("single_cat_title", term.name)
+        term_name_ = apply_filters("single_cat_title", term_.name)
     elif is_tag():
         #// 
         #// Filters the tag archive page title.
@@ -1319,7 +1366,7 @@ def single_term_title(prefix="", display=True, *args_):
         #// 
         #// @param string $term_name Tag name for archive being displayed.
         #//
-        term_name = apply_filters("single_tag_title", term.name)
+        term_name_ = apply_filters("single_tag_title", term_.name)
     elif is_tax():
         #// 
         #// Filters the custom taxonomy archive page title.
@@ -1328,17 +1375,17 @@ def single_term_title(prefix="", display=True, *args_):
         #// 
         #// @param string $term_name Term name for archive being displayed.
         #//
-        term_name = apply_filters("single_term_title", term.name)
+        term_name_ = apply_filters("single_term_title", term_.name)
     else:
         return
     # end if
-    if php_empty(lambda : term_name):
+    if php_empty(lambda : term_name_):
         return
     # end if
-    if display:
-        php_print(prefix + term_name)
+    if display_:
+        php_print(prefix_ + term_name_)
     else:
-        return prefix + term_name
+        return prefix_ + term_name_
     # end if
 # end def single_term_title
 #// 
@@ -1357,28 +1404,31 @@ def single_term_title(prefix="", display=True, *args_):
 #// @param bool   $display Optional, default is true. Whether to display or retrieve title.
 #// @return string|void Title when retrieving.
 #//
-def single_month_title(prefix="", display=True, *args_):
-    
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    m = get_query_var("m")
-    year = get_query_var("year")
-    monthnum = get_query_var("monthnum")
-    if (not php_empty(lambda : monthnum)) and (not php_empty(lambda : year)):
-        my_year = year
-        my_month = wp_locale.get_month(monthnum)
-    elif (not php_empty(lambda : m)):
-        my_year = php_substr(m, 0, 4)
-        my_month = wp_locale.get_month(php_substr(m, 4, 2))
+def single_month_title(prefix_="", display_=None, *_args_):
+    if display_ is None:
+        display_ = True
     # end if
-    if php_empty(lambda : my_month):
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    m_ = get_query_var("m")
+    year_ = get_query_var("year")
+    monthnum_ = get_query_var("monthnum")
+    if (not php_empty(lambda : monthnum_)) and (not php_empty(lambda : year_)):
+        my_year_ = year_
+        my_month_ = wp_locale_.get_month(monthnum_)
+    elif (not php_empty(lambda : m_)):
+        my_year_ = php_substr(m_, 0, 4)
+        my_month_ = wp_locale_.get_month(php_substr(m_, 4, 2))
+    # end if
+    if php_empty(lambda : my_month_):
         return False
     # end if
-    result = prefix + my_month + prefix + my_year
-    if (not display):
-        return result
+    result_ = prefix_ + my_month_ + prefix_ + my_year_
+    if (not display_):
+        return result_
     # end if
-    php_print(result)
+    php_print(result_)
 # end def single_month_title
 #// 
 #// Display the archive title based on the queried object.
@@ -1390,11 +1440,12 @@ def single_month_title(prefix="", display=True, *args_):
 #// @param string $before Optional. Content to prepend to the title. Default empty.
 #// @param string $after  Optional. Content to append to the title. Default empty.
 #//
-def the_archive_title(before="", after="", *args_):
+def the_archive_title(before_="", after_="", *_args_):
     
-    title = get_the_archive_title()
-    if (not php_empty(lambda : title)):
-        php_print(before + title + after)
+    
+    title_ = get_the_archive_title()
+    if (not php_empty(lambda : title_)):
+        php_print(before_ + title_ + after_)
     # end if
 # end def the_archive_title
 #// 
@@ -1404,56 +1455,57 @@ def the_archive_title(before="", after="", *args_):
 #// 
 #// @return string Archive title.
 #//
-def get_the_archive_title(*args_):
+def get_the_archive_title(*_args_):
     
-    title = __("Archives")
+    
+    title_ = __("Archives")
     if is_category():
         #// translators: Category archive title. %s: Category name.
-        title = php_sprintf(__("Category: %s"), single_cat_title("", False))
+        title_ = php_sprintf(__("Category: %s"), single_cat_title("", False))
     elif is_tag():
         #// translators: Tag archive title. %s: Tag name.
-        title = php_sprintf(__("Tag: %s"), single_tag_title("", False))
+        title_ = php_sprintf(__("Tag: %s"), single_tag_title("", False))
     elif is_author():
         #// translators: Author archive title. %s: Author name.
-        title = php_sprintf(__("Author: %s"), "<span class=\"vcard\">" + get_the_author() + "</span>")
+        title_ = php_sprintf(__("Author: %s"), "<span class=\"vcard\">" + get_the_author() + "</span>")
     elif is_year():
         #// translators: Yearly archive title. %s: Year.
-        title = php_sprintf(__("Year: %s"), get_the_date(_x("Y", "yearly archives date format")))
+        title_ = php_sprintf(__("Year: %s"), get_the_date(_x("Y", "yearly archives date format")))
     elif is_month():
         #// translators: Monthly archive title. %s: Month name and year.
-        title = php_sprintf(__("Month: %s"), get_the_date(_x("F Y", "monthly archives date format")))
+        title_ = php_sprintf(__("Month: %s"), get_the_date(_x("F Y", "monthly archives date format")))
     elif is_day():
         #// translators: Daily archive title. %s: Date.
-        title = php_sprintf(__("Day: %s"), get_the_date(_x("F j, Y", "daily archives date format")))
+        title_ = php_sprintf(__("Day: %s"), get_the_date(_x("F j, Y", "daily archives date format")))
     elif is_tax("post_format"):
         if is_tax("post_format", "post-format-aside"):
-            title = _x("Asides", "post format archive title")
+            title_ = _x("Asides", "post format archive title")
         elif is_tax("post_format", "post-format-gallery"):
-            title = _x("Galleries", "post format archive title")
+            title_ = _x("Galleries", "post format archive title")
         elif is_tax("post_format", "post-format-image"):
-            title = _x("Images", "post format archive title")
+            title_ = _x("Images", "post format archive title")
         elif is_tax("post_format", "post-format-video"):
-            title = _x("Videos", "post format archive title")
+            title_ = _x("Videos", "post format archive title")
         elif is_tax("post_format", "post-format-quote"):
-            title = _x("Quotes", "post format archive title")
+            title_ = _x("Quotes", "post format archive title")
         elif is_tax("post_format", "post-format-link"):
-            title = _x("Links", "post format archive title")
+            title_ = _x("Links", "post format archive title")
         elif is_tax("post_format", "post-format-status"):
-            title = _x("Statuses", "post format archive title")
+            title_ = _x("Statuses", "post format archive title")
         elif is_tax("post_format", "post-format-audio"):
-            title = _x("Audio", "post format archive title")
+            title_ = _x("Audio", "post format archive title")
         elif is_tax("post_format", "post-format-chat"):
-            title = _x("Chats", "post format archive title")
+            title_ = _x("Chats", "post format archive title")
         # end if
     elif is_post_type_archive():
         #// translators: Post type archive title. %s: Post type name.
-        title = php_sprintf(__("Archives: %s"), post_type_archive_title("", False))
+        title_ = php_sprintf(__("Archives: %s"), post_type_archive_title("", False))
     elif is_tax():
-        queried_object = get_queried_object()
-        if queried_object:
-            tax = get_taxonomy(queried_object.taxonomy)
+        queried_object_ = get_queried_object()
+        if queried_object_:
+            tax_ = get_taxonomy(queried_object_.taxonomy)
             #// translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term.
-            title = php_sprintf(__("%1$s: %2$s"), tax.labels.singular_name, single_term_title("", False))
+            title_ = php_sprintf(__("%1$s: %2$s"), tax_.labels.singular_name, single_term_title("", False))
         # end if
     # end if
     #// 
@@ -1463,7 +1515,7 @@ def get_the_archive_title(*args_):
     #// 
     #// @param string $title Archive title to be displayed.
     #//
-    return apply_filters("get_the_archive_title", title)
+    return apply_filters("get_the_archive_title", title_)
 # end def get_the_archive_title
 #// 
 #// Display category, tag, term, or author description.
@@ -1475,11 +1527,12 @@ def get_the_archive_title(*args_):
 #// @param string $before Optional. Content to prepend to the description. Default empty.
 #// @param string $after  Optional. Content to append to the description. Default empty.
 #//
-def the_archive_description(before="", after="", *args_):
+def the_archive_description(before_="", after_="", *_args_):
     
-    description = get_the_archive_description()
-    if description:
-        php_print(before + description + after)
+    
+    description_ = get_the_archive_description()
+    if description_:
+        php_print(before_ + description_ + after_)
     # end if
 # end def the_archive_description
 #// 
@@ -1493,14 +1546,15 @@ def the_archive_description(before="", after="", *args_):
 #// 
 #// @return string Archive description.
 #//
-def get_the_archive_description(*args_):
+def get_the_archive_description(*_args_):
+    
     
     if is_author():
-        description = get_the_author_meta("description")
+        description_ = get_the_author_meta("description")
     elif is_post_type_archive():
-        description = get_the_post_type_description()
+        description_ = get_the_post_type_description()
     else:
-        description = term_description()
+        description_ = term_description()
     # end if
     #// 
     #// Filters the archive description.
@@ -1509,7 +1563,7 @@ def get_the_archive_description(*args_):
     #// 
     #// @param string $description Archive description to be displayed.
     #//
-    return apply_filters("get_the_archive_description", description)
+    return apply_filters("get_the_archive_description", description_)
 # end def get_the_archive_description
 #// 
 #// Retrieves the description for a post type archive.
@@ -1518,18 +1572,19 @@ def get_the_archive_description(*args_):
 #// 
 #// @return string The post type description.
 #//
-def get_the_post_type_description(*args_):
+def get_the_post_type_description(*_args_):
     
-    post_type = get_query_var("post_type")
-    if php_is_array(post_type):
-        post_type = reset(post_type)
+    
+    post_type_ = get_query_var("post_type")
+    if php_is_array(post_type_):
+        post_type_ = reset(post_type_)
     # end if
-    post_type_obj = get_post_type_object(post_type)
+    post_type_obj_ = get_post_type_object(post_type_)
     #// Check if a description is set.
-    if (php_isset(lambda : post_type_obj.description)):
-        description = post_type_obj.description
+    if (php_isset(lambda : post_type_obj_.description)):
+        description_ = post_type_obj_.description
     else:
-        description = ""
+        description_ = ""
     # end if
     #// 
     #// Filters the description for a post type archive.
@@ -1539,7 +1594,7 @@ def get_the_post_type_description(*args_):
     #// @param string       $description   The post type description.
     #// @param WP_Post_Type $post_type_obj The post type object.
     #//
-    return apply_filters("get_the_post_type_description", description, post_type_obj)
+    return apply_filters("get_the_post_type_description", description_, post_type_obj_)
 # end def get_the_post_type_description
 #// 
 #// Retrieve archive link content based on predefined or custom code.
@@ -1576,21 +1631,24 @@ def get_the_post_type_description(*args_):
 #// @param bool   $selected Optional. Set to true if the current page is the selected archive page.
 #// @return string HTML link content for archive.
 #//
-def get_archives_link(url=None, text=None, format="html", before="", after="", selected=False, *args_):
+def get_archives_link(url_=None, text_=None, format_="html", before_="", after_="", selected_=None, *_args_):
+    if selected_ is None:
+        selected_ = False
+    # end if
     
-    text = wptexturize(text)
-    url = esc_url(url)
-    aria_current = " aria-current=\"page\"" if selected else ""
-    if "link" == format:
-        link_html = "   <link rel='archives' title='" + esc_attr(text) + str("' href='") + str(url) + str("' />\n")
-    elif "option" == format:
-        selected_attr = " selected='selected'" if selected else ""
-        link_html = str("   <option value='") + str(url) + str("'") + str(selected_attr) + str(">") + str(before) + str(" ") + str(text) + str(" ") + str(after) + str("</option>\n")
-    elif "html" == format:
-        link_html = str("   <li>") + str(before) + str("<a href='") + str(url) + str("'") + str(aria_current) + str(">") + str(text) + str("</a>") + str(after) + str("</li>\n")
+    text_ = wptexturize(text_)
+    url_ = esc_url(url_)
+    aria_current_ = " aria-current=\"page\"" if selected_ else ""
+    if "link" == format_:
+        link_html_ = "  <link rel='archives' title='" + esc_attr(text_) + str("' href='") + str(url_) + str("' />\n")
+    elif "option" == format_:
+        selected_attr_ = " selected='selected'" if selected_ else ""
+        link_html_ = str("  <option value='") + str(url_) + str("'") + str(selected_attr_) + str(">") + str(before_) + str(" ") + str(text_) + str(" ") + str(after_) + str("</option>\n")
+    elif "html" == format_:
+        link_html_ = str("  <li>") + str(before_) + str("<a href='") + str(url_) + str("'") + str(aria_current_) + str(">") + str(text_) + str("</a>") + str(after_) + str("</li>\n")
     else:
         #// Custom.
-        link_html = str("   ") + str(before) + str("<a href='") + str(url) + str("'") + str(aria_current) + str(">") + str(text) + str("</a>") + str(after) + str("\n")
+        link_html_ = str("  ") + str(before_) + str("<a href='") + str(url_) + str("'") + str(aria_current_) + str(">") + str(text_) + str("</a>") + str(after_) + str("\n")
     # end if
     #// 
     #// Filters the archive link content.
@@ -1607,7 +1665,7 @@ def get_archives_link(url=None, text=None, format="html", before="", after="", s
     #// @param string $after     Content to append to the description.
     #// @param bool   $selected  True if the current page is the selected archive.
     #//
-    return apply_filters("get_archives_link", link_html, url, text, format, before, after, selected)
+    return apply_filters("get_archives_link", link_html_, url_, text_, format_, before_, after_, selected_)
 # end def get_archives_link
 #// 
 #// Display archive links based on type and format.
@@ -1649,31 +1707,33 @@ def get_archives_link(url=None, text=None, format="html", before="", after="", s
 #// }
 #// @return void|string Void if 'echo' argument is true, archive links if 'echo' is false.
 #//
-def wp_get_archives(args="", *args_):
+def wp_get_archives(args_="", *_args_):
     
-    global wpdb,wp_locale
-    php_check_if_defined("wpdb","wp_locale")
-    defaults = Array({"type": "monthly", "limit": "", "format": "html", "before": "", "after": "", "show_post_count": False, "echo": 1, "order": "DESC", "post_type": "post", "year": get_query_var("year"), "monthnum": get_query_var("monthnum"), "day": get_query_var("day"), "w": get_query_var("w")})
-    parsed_args = wp_parse_args(args, defaults)
-    post_type_object = get_post_type_object(parsed_args["post_type"])
-    if (not is_post_type_viewable(post_type_object)):
+    
+    global wpdb_
+    global wp_locale_
+    php_check_if_defined("wpdb_","wp_locale_")
+    defaults_ = Array({"type": "monthly", "limit": "", "format": "html", "before": "", "after": "", "show_post_count": False, "echo": 1, "order": "DESC", "post_type": "post", "year": get_query_var("year"), "monthnum": get_query_var("monthnum"), "day": get_query_var("day"), "w": get_query_var("w")})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    post_type_object_ = get_post_type_object(parsed_args_["post_type"])
+    if (not is_post_type_viewable(post_type_object_)):
         return
     # end if
-    parsed_args["post_type"] = post_type_object.name
-    if "" == parsed_args["type"]:
-        parsed_args["type"] = "monthly"
+    parsed_args_["post_type"] = post_type_object_.name
+    if "" == parsed_args_["type"]:
+        parsed_args_["type"] = "monthly"
     # end if
-    if (not php_empty(lambda : parsed_args["limit"])):
-        parsed_args["limit"] = absint(parsed_args["limit"])
-        parsed_args["limit"] = " LIMIT " + parsed_args["limit"]
+    if (not php_empty(lambda : parsed_args_["limit"])):
+        parsed_args_["limit"] = absint(parsed_args_["limit"])
+        parsed_args_["limit"] = " LIMIT " + parsed_args_["limit"]
     # end if
-    order = php_strtoupper(parsed_args["order"])
-    if "ASC" != order:
-        order = "DESC"
+    order_ = php_strtoupper(parsed_args_["order"])
+    if "ASC" != order_:
+        order_ = "DESC"
     # end if
     #// This is what will separate dates on weekly archive links.
-    archive_week_separator = "&#8211;"
-    sql_where = wpdb.prepare("WHERE post_type = %s AND post_status = 'publish'", parsed_args["post_type"])
+    archive_week_separator_ = "&#8211;"
+    sql_where_ = wpdb_.prepare("WHERE post_type = %s AND post_status = 'publish'", parsed_args_["post_type"])
     #// 
     #// Filters the SQL WHERE clause for retrieving archives.
     #// 
@@ -1682,7 +1742,7 @@ def wp_get_archives(args="", *args_):
     #// @param string $sql_where   Portion of SQL query containing the WHERE clause.
     #// @param array  $parsed_args An array of default arguments.
     #//
-    where = apply_filters("getarchives_where", sql_where, parsed_args)
+    where_ = apply_filters("getarchives_where", sql_where_, parsed_args_)
     #// 
     #// Filters the SQL JOIN clause for retrieving archives.
     #// 
@@ -1691,147 +1751,147 @@ def wp_get_archives(args="", *args_):
     #// @param string $sql_join    Portion of SQL query containing JOIN clause.
     #// @param array  $parsed_args An array of default arguments.
     #//
-    join = apply_filters("getarchives_join", "", parsed_args)
-    output = ""
-    last_changed = wp_cache_get_last_changed("posts")
-    limit = parsed_args["limit"]
-    if "monthly" == parsed_args["type"]:
-        query = str("SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM ") + str(wpdb.posts) + str(" ") + str(join) + str(" ") + str(where) + str(" GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date ") + str(order) + str(" ") + str(limit)
-        key = php_md5(query)
-        key = str("wp_get_archives:") + str(key) + str(":") + str(last_changed)
-        results = wp_cache_get(key, "posts")
-        if (not results):
-            results = wpdb.get_results(query)
-            wp_cache_set(key, results, "posts")
+    join_ = apply_filters("getarchives_join", "", parsed_args_)
+    output_ = ""
+    last_changed_ = wp_cache_get_last_changed("posts")
+    limit_ = parsed_args_["limit"]
+    if "monthly" == parsed_args_["type"]:
+        query_ = str("SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM ") + str(wpdb_.posts) + str(" ") + str(join_) + str(" ") + str(where_) + str(" GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date ") + str(order_) + str(" ") + str(limit_)
+        key_ = php_md5(query_)
+        key_ = str("wp_get_archives:") + str(key_) + str(":") + str(last_changed_)
+        results_ = wp_cache_get(key_, "posts")
+        if (not results_):
+            results_ = wpdb_.get_results(query_)
+            wp_cache_set(key_, results_, "posts")
         # end if
-        if results:
-            after = parsed_args["after"]
-            for result in results:
-                url = get_month_link(result.year, result.month)
-                if "post" != parsed_args["post_type"]:
-                    url = add_query_arg("post_type", parsed_args["post_type"], url)
+        if results_:
+            after_ = parsed_args_["after"]
+            for result_ in results_:
+                url_ = get_month_link(result_.year, result_.month)
+                if "post" != parsed_args_["post_type"]:
+                    url_ = add_query_arg("post_type", parsed_args_["post_type"], url_)
                 # end if
                 #// translators: 1: Month name, 2: 4-digit year.
-                text = php_sprintf(__("%1$s %2$d"), wp_locale.get_month(result.month), result.year)
-                if parsed_args["show_post_count"]:
-                    parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
+                text_ = php_sprintf(__("%1$s %2$d"), wp_locale_.get_month(result_.month), result_.year)
+                if parsed_args_["show_post_count"]:
+                    parsed_args_["after"] = "&nbsp;(" + result_.posts + ")" + after_
                 # end if
-                selected = is_archive() and php_str(parsed_args["year"]) == result.year and php_str(parsed_args["monthnum"]) == result.month
-                output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
+                selected_ = is_archive() and php_str(parsed_args_["year"]) == result_.year and php_str(parsed_args_["monthnum"]) == result_.month
+                output_ += get_archives_link(url_, text_, parsed_args_["format"], parsed_args_["before"], parsed_args_["after"], selected_)
             # end for
         # end if
-    elif "yearly" == parsed_args["type"]:
-        query = str("SELECT YEAR(post_date) AS `year`, count(ID) as posts FROM ") + str(wpdb.posts) + str(" ") + str(join) + str(" ") + str(where) + str(" GROUP BY YEAR(post_date) ORDER BY post_date ") + str(order) + str(" ") + str(limit)
-        key = php_md5(query)
-        key = str("wp_get_archives:") + str(key) + str(":") + str(last_changed)
-        results = wp_cache_get(key, "posts")
-        if (not results):
-            results = wpdb.get_results(query)
-            wp_cache_set(key, results, "posts")
+    elif "yearly" == parsed_args_["type"]:
+        query_ = str("SELECT YEAR(post_date) AS `year`, count(ID) as posts FROM ") + str(wpdb_.posts) + str(" ") + str(join_) + str(" ") + str(where_) + str(" GROUP BY YEAR(post_date) ORDER BY post_date ") + str(order_) + str(" ") + str(limit_)
+        key_ = php_md5(query_)
+        key_ = str("wp_get_archives:") + str(key_) + str(":") + str(last_changed_)
+        results_ = wp_cache_get(key_, "posts")
+        if (not results_):
+            results_ = wpdb_.get_results(query_)
+            wp_cache_set(key_, results_, "posts")
         # end if
-        if results:
-            after = parsed_args["after"]
-            for result in results:
-                url = get_year_link(result.year)
-                if "post" != parsed_args["post_type"]:
-                    url = add_query_arg("post_type", parsed_args["post_type"], url)
+        if results_:
+            after_ = parsed_args_["after"]
+            for result_ in results_:
+                url_ = get_year_link(result_.year)
+                if "post" != parsed_args_["post_type"]:
+                    url_ = add_query_arg("post_type", parsed_args_["post_type"], url_)
                 # end if
-                text = php_sprintf("%d", result.year)
-                if parsed_args["show_post_count"]:
-                    parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
+                text_ = php_sprintf("%d", result_.year)
+                if parsed_args_["show_post_count"]:
+                    parsed_args_["after"] = "&nbsp;(" + result_.posts + ")" + after_
                 # end if
-                selected = is_archive() and php_str(parsed_args["year"]) == result.year
-                output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
+                selected_ = is_archive() and php_str(parsed_args_["year"]) == result_.year
+                output_ += get_archives_link(url_, text_, parsed_args_["format"], parsed_args_["before"], parsed_args_["after"], selected_)
             # end for
         # end if
-    elif "daily" == parsed_args["type"]:
-        query = str("SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, DAYOFMONTH(post_date) AS `dayofmonth`, count(ID) as posts FROM ") + str(wpdb.posts) + str(" ") + str(join) + str(" ") + str(where) + str(" GROUP BY YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) ORDER BY post_date ") + str(order) + str(" ") + str(limit)
-        key = php_md5(query)
-        key = str("wp_get_archives:") + str(key) + str(":") + str(last_changed)
-        results = wp_cache_get(key, "posts")
-        if (not results):
-            results = wpdb.get_results(query)
-            wp_cache_set(key, results, "posts")
+    elif "daily" == parsed_args_["type"]:
+        query_ = str("SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, DAYOFMONTH(post_date) AS `dayofmonth`, count(ID) as posts FROM ") + str(wpdb_.posts) + str(" ") + str(join_) + str(" ") + str(where_) + str(" GROUP BY YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) ORDER BY post_date ") + str(order_) + str(" ") + str(limit_)
+        key_ = php_md5(query_)
+        key_ = str("wp_get_archives:") + str(key_) + str(":") + str(last_changed_)
+        results_ = wp_cache_get(key_, "posts")
+        if (not results_):
+            results_ = wpdb_.get_results(query_)
+            wp_cache_set(key_, results_, "posts")
         # end if
-        if results:
-            after = parsed_args["after"]
-            for result in results:
-                url = get_day_link(result.year, result.month, result.dayofmonth)
-                if "post" != parsed_args["post_type"]:
-                    url = add_query_arg("post_type", parsed_args["post_type"], url)
+        if results_:
+            after_ = parsed_args_["after"]
+            for result_ in results_:
+                url_ = get_day_link(result_.year, result_.month, result_.dayofmonth)
+                if "post" != parsed_args_["post_type"]:
+                    url_ = add_query_arg("post_type", parsed_args_["post_type"], url_)
                 # end if
-                date = php_sprintf("%1$d-%2$02d-%3$02d 00:00:00", result.year, result.month, result.dayofmonth)
-                text = mysql2date(get_option("date_format"), date)
-                if parsed_args["show_post_count"]:
-                    parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
+                date_ = php_sprintf("%1$d-%2$02d-%3$02d 00:00:00", result_.year, result_.month, result_.dayofmonth)
+                text_ = mysql2date(get_option("date_format"), date_)
+                if parsed_args_["show_post_count"]:
+                    parsed_args_["after"] = "&nbsp;(" + result_.posts + ")" + after_
                 # end if
-                selected = is_archive() and php_str(parsed_args["year"]) == result.year and php_str(parsed_args["monthnum"]) == result.month and php_str(parsed_args["day"]) == result.dayofmonth
-                output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
+                selected_ = is_archive() and php_str(parsed_args_["year"]) == result_.year and php_str(parsed_args_["monthnum"]) == result_.month and php_str(parsed_args_["day"]) == result_.dayofmonth
+                output_ += get_archives_link(url_, text_, parsed_args_["format"], parsed_args_["before"], parsed_args_["after"], selected_)
             # end for
         # end if
-    elif "weekly" == parsed_args["type"]:
-        week = _wp_mysql_week("`post_date`")
-        query = str("SELECT DISTINCT ") + str(week) + str(" AS `week`, YEAR( `post_date` ) AS `yr`, DATE_FORMAT( `post_date`, '%Y-%m-%d' ) AS `yyyymmdd`, count( `ID` ) AS `posts` FROM `") + str(wpdb.posts) + str("` ") + str(join) + str(" ") + str(where) + str(" GROUP BY ") + str(week) + str(", YEAR( `post_date` ) ORDER BY `post_date` ") + str(order) + str(" ") + str(limit)
-        key = php_md5(query)
-        key = str("wp_get_archives:") + str(key) + str(":") + str(last_changed)
-        results = wp_cache_get(key, "posts")
-        if (not results):
-            results = wpdb.get_results(query)
-            wp_cache_set(key, results, "posts")
+    elif "weekly" == parsed_args_["type"]:
+        week_ = _wp_mysql_week("`post_date`")
+        query_ = str("SELECT DISTINCT ") + str(week_) + str(" AS `week`, YEAR( `post_date` ) AS `yr`, DATE_FORMAT( `post_date`, '%Y-%m-%d' ) AS `yyyymmdd`, count( `ID` ) AS `posts` FROM `") + str(wpdb_.posts) + str("` ") + str(join_) + str(" ") + str(where_) + str(" GROUP BY ") + str(week_) + str(", YEAR( `post_date` ) ORDER BY `post_date` ") + str(order_) + str(" ") + str(limit_)
+        key_ = php_md5(query_)
+        key_ = str("wp_get_archives:") + str(key_) + str(":") + str(last_changed_)
+        results_ = wp_cache_get(key_, "posts")
+        if (not results_):
+            results_ = wpdb_.get_results(query_)
+            wp_cache_set(key_, results_, "posts")
         # end if
-        arc_w_last = ""
-        if results:
-            after = parsed_args["after"]
-            for result in results:
-                if result.week != arc_w_last:
-                    arc_year = result.yr
-                    arc_w_last = result.week
-                    arc_week = get_weekstartend(result.yyyymmdd, get_option("start_of_week"))
-                    arc_week_start = date_i18n(get_option("date_format"), arc_week["start"])
-                    arc_week_end = date_i18n(get_option("date_format"), arc_week["end"])
-                    url = add_query_arg(Array({"m": arc_year, "w": result.week}), home_url("/"))
-                    if "post" != parsed_args["post_type"]:
-                        url = add_query_arg("post_type", parsed_args["post_type"], url)
+        arc_w_last_ = ""
+        if results_:
+            after_ = parsed_args_["after"]
+            for result_ in results_:
+                if result_.week != arc_w_last_:
+                    arc_year_ = result_.yr
+                    arc_w_last_ = result_.week
+                    arc_week_ = get_weekstartend(result_.yyyymmdd, get_option("start_of_week"))
+                    arc_week_start_ = date_i18n(get_option("date_format"), arc_week_["start"])
+                    arc_week_end_ = date_i18n(get_option("date_format"), arc_week_["end"])
+                    url_ = add_query_arg(Array({"m": arc_year_, "w": result_.week}), home_url("/"))
+                    if "post" != parsed_args_["post_type"]:
+                        url_ = add_query_arg("post_type", parsed_args_["post_type"], url_)
                     # end if
-                    text = arc_week_start + archive_week_separator + arc_week_end
-                    if parsed_args["show_post_count"]:
-                        parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
+                    text_ = arc_week_start_ + archive_week_separator_ + arc_week_end_
+                    if parsed_args_["show_post_count"]:
+                        parsed_args_["after"] = "&nbsp;(" + result_.posts + ")" + after_
                     # end if
-                    selected = is_archive() and php_str(parsed_args["year"]) == result.yr and php_str(parsed_args["w"]) == result.week
-                    output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
+                    selected_ = is_archive() and php_str(parsed_args_["year"]) == result_.yr and php_str(parsed_args_["w"]) == result_.week
+                    output_ += get_archives_link(url_, text_, parsed_args_["format"], parsed_args_["before"], parsed_args_["after"], selected_)
                 # end if
             # end for
         # end if
-    elif "postbypost" == parsed_args["type"] or "alpha" == parsed_args["type"]:
-        orderby = "post_title ASC " if "alpha" == parsed_args["type"] else "post_date DESC, ID DESC "
-        query = str("SELECT * FROM ") + str(wpdb.posts) + str(" ") + str(join) + str(" ") + str(where) + str(" ORDER BY ") + str(orderby) + str(" ") + str(limit)
-        key = php_md5(query)
-        key = str("wp_get_archives:") + str(key) + str(":") + str(last_changed)
-        results = wp_cache_get(key, "posts")
-        if (not results):
-            results = wpdb.get_results(query)
-            wp_cache_set(key, results, "posts")
+    elif "postbypost" == parsed_args_["type"] or "alpha" == parsed_args_["type"]:
+        orderby_ = "post_title ASC " if "alpha" == parsed_args_["type"] else "post_date DESC, ID DESC "
+        query_ = str("SELECT * FROM ") + str(wpdb_.posts) + str(" ") + str(join_) + str(" ") + str(where_) + str(" ORDER BY ") + str(orderby_) + str(" ") + str(limit_)
+        key_ = php_md5(query_)
+        key_ = str("wp_get_archives:") + str(key_) + str(":") + str(last_changed_)
+        results_ = wp_cache_get(key_, "posts")
+        if (not results_):
+            results_ = wpdb_.get_results(query_)
+            wp_cache_set(key_, results_, "posts")
         # end if
-        if results:
-            for result in results:
-                if "0000-00-00 00:00:00" != result.post_date:
-                    url = get_permalink(result)
-                    if result.post_title:
+        if results_:
+            for result_ in results_:
+                if "0000-00-00 00:00:00" != result_.post_date:
+                    url_ = get_permalink(result_)
+                    if result_.post_title:
                         #// This filter is documented in wp-includes/post-template.php
-                        text = strip_tags(apply_filters("the_title", result.post_title, result.ID))
+                        text_ = strip_tags(apply_filters("the_title", result_.post_title, result_.ID))
                     else:
-                        text = result.ID
+                        text_ = result_.ID
                     # end if
-                    selected = get_the_ID() == result.ID
-                    output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
+                    selected_ = get_the_ID() == result_.ID
+                    output_ += get_archives_link(url_, text_, parsed_args_["format"], parsed_args_["before"], parsed_args_["after"], selected_)
                 # end if
             # end for
         # end if
     # end if
-    if parsed_args["echo"]:
-        php_print(output)
+    if parsed_args_["echo"]:
+        php_print(output_)
     else:
-        return output
+        return output_
     # end if
 # end def wp_get_archives
 #// 
@@ -1842,10 +1902,11 @@ def wp_get_archives(args="", *args_):
 #// @param int $num Number of day.
 #// @return float Days since the start of the week.
 #//
-def calendar_week_mod(num=None, *args_):
+def calendar_week_mod(num_=None, *_args_):
     
-    base = 7
-    return num - base * floor(num / base)
+    
+    base_ = 7
+    return num_ - base_ * floor(num_ / base_)
 # end def calendar_week_mod
 #// 
 #// Display calendar with days that have posts as links.
@@ -1866,151 +1927,162 @@ def calendar_week_mod(num=None, *args_):
 #// @param bool $echo    Optional, default is true. Set to false for return.
 #// @return void|string Void if `$echo` argument is true, calendar HTML if `$echo` is false.
 #//
-def get_calendar(initial=True, echo=True, *args_):
+def get_calendar(initial_=None, echo_=None, *_args_):
+    if initial_ is None:
+        initial_ = True
+    # end if
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    global wpdb,m,monthnum,year,wp_locale,posts
-    php_check_if_defined("wpdb","m","monthnum","year","wp_locale","posts")
-    key = php_md5(m + monthnum + year)
-    cache = wp_cache_get("get_calendar", "calendar")
-    if cache and php_is_array(cache) and (php_isset(lambda : cache[key])):
+    global wpdb_
+    global m_
+    global monthnum_
+    global year_
+    global wp_locale_
+    global posts_
+    php_check_if_defined("wpdb_","m_","monthnum_","year_","wp_locale_","posts_")
+    key_ = php_md5(m_ + monthnum_ + year_)
+    cache_ = wp_cache_get("get_calendar", "calendar")
+    if cache_ and php_is_array(cache_) and (php_isset(lambda : cache_[key_])):
         #// This filter is documented in wp-includes/general-template.php
-        output = apply_filters("get_calendar", cache[key])
-        if echo:
-            php_print(output)
+        output_ = apply_filters("get_calendar", cache_[key_])
+        if echo_:
+            php_print(output_)
             return
         # end if
-        return output
+        return output_
     # end if
-    if (not php_is_array(cache)):
-        cache = Array()
+    if (not php_is_array(cache_)):
+        cache_ = Array()
     # end if
     #// Quick check. If we have no posts at all, abort!
-    if (not posts):
-        gotsome = wpdb.get_var(str("SELECT 1 as test FROM ") + str(wpdb.posts) + str(" WHERE post_type = 'post' AND post_status = 'publish' LIMIT 1"))
-        if (not gotsome):
-            cache[key] = ""
-            wp_cache_set("get_calendar", cache, "calendar")
+    if (not posts_):
+        gotsome_ = wpdb_.get_var(str("SELECT 1 as test FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'post' AND post_status = 'publish' LIMIT 1"))
+        if (not gotsome_):
+            cache_[key_] = ""
+            wp_cache_set("get_calendar", cache_, "calendar")
             return
         # end if
     # end if
     if (php_isset(lambda : PHP_REQUEST["w"])):
-        w = php_int(PHP_REQUEST["w"])
+        w_ = php_int(PHP_REQUEST["w"])
     # end if
     #// week_begins = 0 stands for Sunday.
-    week_begins = php_int(get_option("start_of_week"))
+    week_begins_ = php_int(get_option("start_of_week"))
     #// Let's figure out when we are.
-    if (not php_empty(lambda : monthnum)) and (not php_empty(lambda : year)):
-        thismonth = zeroise(php_intval(monthnum), 2)
-        thisyear = php_int(year)
-    elif (not php_empty(lambda : w)):
+    if (not php_empty(lambda : monthnum_)) and (not php_empty(lambda : year_)):
+        thismonth_ = zeroise(php_intval(monthnum_), 2)
+        thisyear_ = php_int(year_)
+    elif (not php_empty(lambda : w_)):
         #// We need to get the month from MySQL.
-        thisyear = php_int(php_substr(m, 0, 4))
+        thisyear_ = php_int(php_substr(m_, 0, 4))
         #// It seems MySQL's weeks disagree with PHP's.
-        d = w - 1 * 7 + 6
-        thismonth = wpdb.get_var(str("SELECT DATE_FORMAT((DATE_ADD('") + str(thisyear) + str("0101', INTERVAL ") + str(d) + str(" DAY) ), '%m')"))
-    elif (not php_empty(lambda : m)):
-        thisyear = php_int(php_substr(m, 0, 4))
-        if php_strlen(m) < 6:
-            thismonth = "01"
+        d_ = w_ - 1 * 7 + 6
+        thismonth_ = wpdb_.get_var(str("SELECT DATE_FORMAT((DATE_ADD('") + str(thisyear_) + str("0101', INTERVAL ") + str(d_) + str(" DAY) ), '%m')"))
+    elif (not php_empty(lambda : m_)):
+        thisyear_ = php_int(php_substr(m_, 0, 4))
+        if php_strlen(m_) < 6:
+            thismonth_ = "01"
         else:
-            thismonth = zeroise(php_int(php_substr(m, 4, 2)), 2)
+            thismonth_ = zeroise(php_int(php_substr(m_, 4, 2)), 2)
         # end if
     else:
-        thisyear = current_time("Y")
-        thismonth = current_time("m")
+        thisyear_ = current_time("Y")
+        thismonth_ = current_time("m")
     # end if
-    unixmonth = mktime(0, 0, 0, thismonth, 1, thisyear)
-    last_day = gmdate("t", unixmonth)
+    unixmonth_ = mktime(0, 0, 0, thismonth_, 1, thisyear_)
+    last_day_ = gmdate("t", unixmonth_)
     #// Get the next and previous month and year with at least one post.
-    previous = wpdb.get_row(str("SELECT MONTH(post_date) AS month, YEAR(post_date) AS year\n        FROM ") + str(wpdb.posts) + str("\n     WHERE post_date < '") + str(thisyear) + str("-") + str(thismonth) + str("""-01'\n       AND post_type = 'post' AND post_status = 'publish'\n            ORDER BY post_date DESC\n           LIMIT 1"""))
-    next = wpdb.get_row(str("SELECT MONTH(post_date) AS month, YEAR(post_date) AS year\n        FROM ") + str(wpdb.posts) + str("\n     WHERE post_date > '") + str(thisyear) + str("-") + str(thismonth) + str("-") + str(last_day) + str(""" 23:59:59'\n      AND post_type = 'post' AND post_status = 'publish'\n            ORDER BY post_date ASC\n            LIMIT 1"""))
+    previous_ = wpdb_.get_row(str("SELECT MONTH(post_date) AS month, YEAR(post_date) AS year\n      FROM ") + str(wpdb_.posts) + str("\n        WHERE post_date < '") + str(thisyear_) + str("-") + str(thismonth_) + str("""-01'\n     AND post_type = 'post' AND post_status = 'publish'\n            ORDER BY post_date DESC\n           LIMIT 1"""))
+    next_ = wpdb_.get_row(str("SELECT MONTH(post_date) AS month, YEAR(post_date) AS year\n      FROM ") + str(wpdb_.posts) + str("\n        WHERE post_date > '") + str(thisyear_) + str("-") + str(thismonth_) + str("-") + str(last_day_) + str(""" 23:59:59'\n       AND post_type = 'post' AND post_status = 'publish'\n            ORDER BY post_date ASC\n            LIMIT 1"""))
     #// translators: Calendar caption: 1: Month name, 2: 4-digit year.
-    calendar_caption = _x("%1$s %2$s", "calendar caption")
-    calendar_output = "<table id=\"wp-calendar\" class=\"wp-calendar-table\">\n <caption>" + php_sprintf(calendar_caption, wp_locale.get_month(thismonth), gmdate("Y", unixmonth)) + "</caption>\n  <thead>\n   <tr>"
-    myweek = Array()
-    wdcount = 0
-    while wdcount <= 6:
+    calendar_caption_ = _x("%1$s %2$s", "calendar caption")
+    calendar_output_ = "<table id=\"wp-calendar\" class=\"wp-calendar-table\">\n    <caption>" + php_sprintf(calendar_caption_, wp_locale_.get_month(thismonth_), gmdate("Y", unixmonth_)) + "</caption>\n  <thead>\n   <tr>"
+    myweek_ = Array()
+    wdcount_ = 0
+    while wdcount_ <= 6:
         
-        myweek[-1] = wp_locale.get_weekday(wdcount + week_begins % 7)
-        wdcount += 1
+        myweek_[-1] = wp_locale_.get_weekday(wdcount_ + week_begins_ % 7)
+        wdcount_ += 1
     # end while
-    for wd in myweek:
-        day_name = wp_locale.get_weekday_initial(wd) if initial else wp_locale.get_weekday_abbrev(wd)
-        wd = esc_attr(wd)
-        calendar_output += str("\n      <th scope=\"col\" title=\"") + str(wd) + str("\">") + str(day_name) + str("</th>")
+    for wd_ in myweek_:
+        day_name_ = wp_locale_.get_weekday_initial(wd_) if initial_ else wp_locale_.get_weekday_abbrev(wd_)
+        wd_ = esc_attr(wd_)
+        calendar_output_ += str("\n     <th scope=\"col\" title=\"") + str(wd_) + str("\">") + str(day_name_) + str("</th>")
     # end for
-    calendar_output += """
+    calendar_output_ += """
     </tr>
     </thead>
     <tbody>
     <tr>"""
-    daywithpost = Array()
+    daywithpost_ = Array()
     #// Get days with posts.
-    dayswithposts = wpdb.get_results(str("SELECT DISTINCT DAYOFMONTH(post_date)\n       FROM ") + str(wpdb.posts) + str(" WHERE post_date >= '") + str(thisyear) + str("-") + str(thismonth) + str("-01 00:00:00'\n     AND post_type = 'post' AND post_status = 'publish'\n        AND post_date <= '") + str(thisyear) + str("-") + str(thismonth) + str("-") + str(last_day) + str(" 23:59:59'"), ARRAY_N)
-    if dayswithposts:
-        for daywith in dayswithposts:
-            daywithpost[-1] = daywith[0]
+    dayswithposts_ = wpdb_.get_results(str("SELECT DISTINCT DAYOFMONTH(post_date)\n     FROM ") + str(wpdb_.posts) + str(" WHERE post_date >= '") + str(thisyear_) + str("-") + str(thismonth_) + str("-01 00:00:00'\n      AND post_type = 'post' AND post_status = 'publish'\n        AND post_date <= '") + str(thisyear_) + str("-") + str(thismonth_) + str("-") + str(last_day_) + str(" 23:59:59'"), ARRAY_N)
+    if dayswithposts_:
+        for daywith_ in dayswithposts_:
+            daywithpost_[-1] = daywith_[0]
         # end for
     # end if
     #// See how much we should pad in the beginning.
-    pad = calendar_week_mod(gmdate("w", unixmonth) - week_begins)
-    if 0 != pad:
-        calendar_output += "\n      " + "<td colspan=\"" + esc_attr(pad) + "\" class=\"pad\">&nbsp;</td>"
+    pad_ = calendar_week_mod(gmdate("w", unixmonth_) - week_begins_)
+    if 0 != pad_:
+        calendar_output_ += "\n     " + "<td colspan=\"" + esc_attr(pad_) + "\" class=\"pad\">&nbsp;</td>"
     # end if
-    newrow = False
-    daysinmonth = php_int(gmdate("t", unixmonth))
-    day = 1
-    while day <= daysinmonth:
+    newrow_ = False
+    daysinmonth_ = php_int(gmdate("t", unixmonth_))
+    day_ = 1
+    while day_ <= daysinmonth_:
         
-        if (php_isset(lambda : newrow)) and newrow:
-            calendar_output += """
+        if (php_isset(lambda : newrow_)) and newrow_:
+            calendar_output_ += """
             </tr>
             <tr>
             """
         # end if
-        newrow = False
-        if current_time("j") == day and current_time("m") == thismonth and current_time("Y") == thisyear:
-            calendar_output += "<td id=\"today\">"
+        newrow_ = False
+        if current_time("j") == day_ and current_time("m") == thismonth_ and current_time("Y") == thisyear_:
+            calendar_output_ += "<td id=\"today\">"
         else:
-            calendar_output += "<td>"
+            calendar_output_ += "<td>"
         # end if
-        if php_in_array(day, daywithpost):
+        if php_in_array(day_, daywithpost_):
             #// Any posts today?
-            date_format = gmdate(_x("F j, Y", "daily archives date format"), strtotime(str(thisyear) + str("-") + str(thismonth) + str("-") + str(day)))
+            date_format_ = gmdate(_x("F j, Y", "daily archives date format"), strtotime(str(thisyear_) + str("-") + str(thismonth_) + str("-") + str(day_)))
             #// translators: Post calendar label. %s: Date.
-            label = php_sprintf(__("Posts published on %s"), date_format)
-            calendar_output += php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", get_day_link(thisyear, thismonth, day), esc_attr(label), day)
+            label_ = php_sprintf(__("Posts published on %s"), date_format_)
+            calendar_output_ += php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", get_day_link(thisyear_, thismonth_, day_), esc_attr(label_), day_)
         else:
-            calendar_output += day
+            calendar_output_ += day_
         # end if
-        calendar_output += "</td>"
-        if 6 == calendar_week_mod(gmdate("w", mktime(0, 0, 0, thismonth, day, thisyear)) - week_begins):
-            newrow = True
+        calendar_output_ += "</td>"
+        if 6 == calendar_week_mod(gmdate("w", mktime(0, 0, 0, thismonth_, day_, thisyear_)) - week_begins_):
+            newrow_ = True
         # end if
-        day += 1
+        day_ += 1
     # end while
-    pad = 7 - calendar_week_mod(gmdate("w", mktime(0, 0, 0, thismonth, day, thisyear)) - week_begins)
-    if 0 != pad and 7 != pad:
-        calendar_output += "\n      " + "<td class=\"pad\" colspan=\"" + esc_attr(pad) + "\">&nbsp;</td>"
+    pad_ = 7 - calendar_week_mod(gmdate("w", mktime(0, 0, 0, thismonth_, day_, thisyear_)) - week_begins_)
+    if 0 != pad_ and 7 != pad_:
+        calendar_output_ += "\n     " + "<td class=\"pad\" colspan=\"" + esc_attr(pad_) + "\">&nbsp;</td>"
     # end if
-    calendar_output += "\n  </tr>\n </tbody>"
-    calendar_output += "\n  </table>"
-    calendar_output += "<nav aria-label=\"" + __("Previous and next months") + "\" class=\"wp-calendar-nav\">"
-    if previous:
-        calendar_output += "\n      " + "<span class=\"wp-calendar-nav-prev\"><a href=\"" + get_month_link(previous.year, previous.month) + "\">&laquo; " + wp_locale.get_month_abbrev(wp_locale.get_month(previous.month)) + "</a></span>"
+    calendar_output_ += "\n </tr>\n </tbody>"
+    calendar_output_ += "\n </table>"
+    calendar_output_ += "<nav aria-label=\"" + __("Previous and next months") + "\" class=\"wp-calendar-nav\">"
+    if previous_:
+        calendar_output_ += "\n     " + "<span class=\"wp-calendar-nav-prev\"><a href=\"" + get_month_link(previous_.year, previous_.month) + "\">&laquo; " + wp_locale_.get_month_abbrev(wp_locale_.get_month(previous_.month)) + "</a></span>"
     else:
-        calendar_output += "\n      " + "<span class=\"wp-calendar-nav-prev\">&nbsp;</span>"
+        calendar_output_ += "\n     " + "<span class=\"wp-calendar-nav-prev\">&nbsp;</span>"
     # end if
-    calendar_output += "\n      " + "<span class=\"pad\">&nbsp;</span>"
-    if next:
-        calendar_output += "\n      " + "<span class=\"wp-calendar-nav-next\"><a href=\"" + get_month_link(next.year, next.month) + "\">" + wp_locale.get_month_abbrev(wp_locale.get_month(next.month)) + " &raquo;</a></span>"
+    calendar_output_ += "\n     " + "<span class=\"pad\">&nbsp;</span>"
+    if next_:
+        calendar_output_ += "\n     " + "<span class=\"wp-calendar-nav-next\"><a href=\"" + get_month_link(next_.year, next_.month) + "\">" + wp_locale_.get_month_abbrev(wp_locale_.get_month(next_.month)) + " &raquo;</a></span>"
     else:
-        calendar_output += "\n      " + "<span class=\"wp-calendar-nav-next\">&nbsp;</span>"
+        calendar_output_ += "\n     " + "<span class=\"wp-calendar-nav-next\">&nbsp;</span>"
     # end if
-    calendar_output += "\n  </nav>"
-    cache[key] = calendar_output
-    wp_cache_set("get_calendar", cache, "calendar")
-    if echo:
+    calendar_output_ += "\n </nav>"
+    cache_[key_] = calendar_output_
+    wp_cache_set("get_calendar", cache_, "calendar")
+    if echo_:
         #// 
         #// Filters the HTML calendar output.
         #// 
@@ -2018,11 +2090,11 @@ def get_calendar(initial=True, echo=True, *args_):
         #// 
         #// @param string $calendar_output HTML output of the calendar.
         #//
-        php_print(apply_filters("get_calendar", calendar_output))
+        php_print(apply_filters("get_calendar", calendar_output_))
         return
     # end if
     #// This filter is documented in wp-includes/general-template.php
-    return apply_filters("get_calendar", calendar_output)
+    return apply_filters("get_calendar", calendar_output_)
 # end def get_calendar
 #// 
 #// Purge the cached results of get_calendar.
@@ -2030,7 +2102,8 @@ def get_calendar(initial=True, echo=True, *args_):
 #// @see get_calendar
 #// @since 2.1.0
 #//
-def delete_get_calendar_cache(*args_):
+def delete_get_calendar_cache(*_args_):
+    
     
     wp_cache_delete("get_calendar", "calendar")
 # end def delete_get_calendar_cache
@@ -2046,21 +2119,22 @@ def delete_get_calendar_cache(*args_):
 #// 
 #// @return string HTML allowed tags entity encoded.
 #//
-def allowed_tags(*args_):
+def allowed_tags(*_args_):
     
-    global allowedtags
-    php_check_if_defined("allowedtags")
-    allowed = ""
-    for tag,attributes in allowedtags:
-        allowed += "<" + tag
-        if 0 < php_count(attributes):
-            for attribute,limits in attributes:
-                allowed += " " + attribute + "=\"\""
+    
+    global allowedtags_
+    php_check_if_defined("allowedtags_")
+    allowed_ = ""
+    for tag_,attributes_ in allowedtags_:
+        allowed_ += "<" + tag_
+        if 0 < php_count(attributes_):
+            for attribute_,limits_ in attributes_:
+                allowed_ += " " + attribute_ + "=\"\""
             # end for
         # end if
-        allowed += "> "
+        allowed_ += "> "
     # end for
-    return htmlentities(allowed)
+    return htmlentities(allowed_)
 # end def allowed_tags
 #// Date/Time tags
 #// 
@@ -2068,7 +2142,8 @@ def allowed_tags(*args_):
 #// 
 #// @since 1.0.0
 #//
-def the_date_xml(*args_):
+def the_date_xml(*_args_):
+    
     
     php_print(mysql2date("Y-m-d", get_post().post_date, False))
 # end def the_date_xml
@@ -2095,14 +2170,18 @@ def the_date_xml(*args_):
 #// @param bool   $echo   Optional, default is display. Whether to echo the date or return it.
 #// @return string|void String if retrieving.
 #//
-def the_date(format="", before="", after="", echo=True, *args_):
+def the_date(format_="", before_="", after_="", echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    global currentday,previousday
-    php_check_if_defined("currentday","previousday")
-    the_date = ""
+    global currentday_
+    global previousday_
+    php_check_if_defined("currentday_","previousday_")
+    the_date_ = ""
     if is_new_day():
-        the_date = before + get_the_date(format) + after
-        previousday = currentday
+        the_date_ = before_ + get_the_date(format_) + after_
+        previousday_ = currentday_
     # end if
     #// 
     #// Filters the date a post was published for display.
@@ -2115,11 +2194,11 @@ def the_date(format="", before="", after="", echo=True, *args_):
     #// @param string $before   HTML output before the date.
     #// @param string $after    HTML output after the date.
     #//
-    the_date = apply_filters("the_date", the_date, format, before, after)
-    if echo:
-        php_print(the_date)
+    the_date_ = apply_filters("the_date", the_date_, format_, before_, after_)
+    if echo_:
+        php_print(the_date_)
     else:
-        return the_date
+        return the_date_
     # end if
 # end def the_date
 #// 
@@ -2134,16 +2213,17 @@ def the_date(format="", before="", after="", echo=True, *args_):
 #// @param  int|WP_Post $post   Optional. Post ID or WP_Post object. Default current post.
 #// @return string|false Date the current post was written. False on failure.
 #//
-def get_the_date(format="", post=None, *args_):
+def get_the_date(format_="", post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    if "" == format:
-        the_date = get_post_time(get_option("date_format"), False, post, True)
+    if "" == format_:
+        the_date_ = get_post_time(get_option("date_format"), False, post_, True)
     else:
-        the_date = get_post_time(format, False, post, True)
+        the_date_ = get_post_time(format_, False, post_, True)
     # end if
     #// 
     #// Filters the date a post was published.
@@ -2155,7 +2235,7 @@ def get_the_date(format="", post=None, *args_):
     #// if not specified.
     #// @param int|WP_Post $post     The post object or ID.
     #//
-    return apply_filters("get_the_date", the_date, format, post)
+    return apply_filters("get_the_date", the_date_, format_, post_)
 # end def get_the_date
 #// 
 #// Display the date on which the post was last modified.
@@ -2168,9 +2248,12 @@ def get_the_date(format="", post=None, *args_):
 #// @param bool   $echo   Optional, default is display. Whether to echo the date or return it.
 #// @return string|void String if retrieving.
 #//
-def the_modified_date(format="", before="", after="", echo=True, *args_):
+def the_modified_date(format_="", before_="", after_="", echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    the_modified_date = before + get_the_modified_date(format) + after
+    the_modified_date_ = before_ + get_the_modified_date(format_) + after_
     #// 
     #// Filters the date a post was last modified for display.
     #// 
@@ -2182,11 +2265,11 @@ def the_modified_date(format="", before="", after="", echo=True, *args_):
     #// @param string $before            HTML output before the date.
     #// @param string $after             HTML output after the date.
     #//
-    the_modified_date = apply_filters("the_modified_date", the_modified_date, format, before, after)
-    if echo:
-        php_print(the_modified_date)
+    the_modified_date_ = apply_filters("the_modified_date", the_modified_date_, format_, before_, after_)
+    if echo_:
+        php_print(the_modified_date_)
     else:
-        return the_modified_date
+        return the_modified_date_
     # end if
 # end def the_modified_date
 #// 
@@ -2199,16 +2282,17 @@ def the_modified_date(format="", before="", after="", echo=True, *args_):
 #// @param int|WP_Post $post   Optional. Post ID or WP_Post object. Default current post.
 #// @return string|false Date the current post was modified. False on failure.
 #//
-def get_the_modified_date(format="", post=None, *args_):
+def get_the_modified_date(format_="", post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         #// For backward compatibility, failures go through the filter below.
-        the_time = False
-    elif php_empty(lambda : format):
-        the_time = get_post_modified_time(get_option("date_format"), False, post, True)
+        the_time_ = False
+    elif php_empty(lambda : format_):
+        the_time_ = get_post_modified_time(get_option("date_format"), False, post_, True)
     else:
-        the_time = get_post_modified_time(format, False, post, True)
+        the_time_ = get_post_modified_time(format_, False, post_, True)
     # end if
     #// 
     #// Filters the date a post was last modified.
@@ -2221,7 +2305,7 @@ def get_the_modified_date(format="", post=None, *args_):
     #// 'date_format' option.
     #// @param WP_Post|null $post     WP_Post object or null if no post is found.
     #//
-    return apply_filters("get_the_modified_date", the_time, format, post)
+    return apply_filters("get_the_modified_date", the_time_, format_, post_)
 # end def get_the_modified_date
 #// 
 #// Display the time at which the post was written.
@@ -2230,7 +2314,8 @@ def get_the_modified_date(format="", post=None, *args_):
 #// 
 #// @param string $format Either 'G', 'U', or PHP date format.
 #//
-def the_time(format="", *args_):
+def the_time(format_="", *_args_):
+    
     
     #// 
     #// Filters the time a post was written for display.
@@ -2241,7 +2326,7 @@ def the_time(format="", *args_):
     #// @param string $format       The time format. Accepts 'G', 'U',
     #// or PHP date format.
     #//
-    php_print(apply_filters("the_time", get_the_time(format), format))
+    php_print(apply_filters("the_time", get_the_time(format_), format_))
 # end def the_time
 #// 
 #// Retrieve the time at which the post was written.
@@ -2255,16 +2340,17 @@ def the_time(format="", *args_):
 #// @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
 #// False on failure.
 #//
-def get_the_time(format="", post=None, *args_):
+def get_the_time(format_="", post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    if "" == format:
-        the_time = get_post_time(get_option("time_format"), False, post, True)
+    if "" == format_:
+        the_time_ = get_post_time(get_option("time_format"), False, post_, True)
     else:
-        the_time = get_post_time(format, False, post, True)
+        the_time_ = get_post_time(format_, False, post_, True)
     # end if
     #// 
     #// Filters the time a post was written.
@@ -2277,7 +2363,7 @@ def get_the_time(format="", post=None, *args_):
     #// in 'time_format' option. Default empty.
     #// @param int|WP_Post $post     WP_Post object or ID.
     #//
-    return apply_filters("get_the_time", the_time, format, post)
+    return apply_filters("get_the_time", the_time_, format_, post_)
 # end def get_the_time
 #// 
 #// Retrieve the time at which the post was written.
@@ -2292,30 +2378,36 @@ def get_the_time(format="", post=None, *args_):
 #// @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
 #// False on failure.
 #//
-def get_post_time(format="U", gmt=False, post=None, translate=False, *args_):
+def get_post_time(format_="U", gmt_=None, post_=None, translate_=None, *_args_):
+    if gmt_ is None:
+        gmt_ = False
+    # end if
+    if translate_ is None:
+        translate_ = False
+    # end if
     
-    post = get_post(post)
-    if (not post):
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    source = "gmt" if gmt else "local"
-    datetime = get_post_datetime(post, "date", source)
-    if False == datetime:
+    source_ = "gmt" if gmt_ else "local"
+    datetime_ = get_post_datetime(post_, "date", source_)
+    if False == datetime_:
         return False
     # end if
-    if "U" == format or "G" == format:
-        time = datetime.gettimestamp()
+    if "U" == format_ or "G" == format_:
+        time_ = datetime_.gettimestamp()
         #// Returns a sum of timestamp with timezone offset. Ideally should never be used.
-        if (not gmt):
-            time += datetime.getoffset()
+        if (not gmt_):
+            time_ += datetime_.getoffset()
         # end if
-    elif translate:
-        time = wp_date(format, datetime.gettimestamp(), php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")) if gmt else None)
+    elif translate_:
+        time_ = wp_date(format_, datetime_.gettimestamp(), php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")) if gmt_ else None)
     else:
-        if gmt:
-            datetime = datetime.settimezone(php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")))
+        if gmt_:
+            datetime_ = datetime_.settimezone(php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")))
         # end if
-        time = datetime.format(format)
+        time_ = datetime_.format(format_)
     # end if
     #// 
     #// Filters the localized time a post was written.
@@ -2327,7 +2419,7 @@ def get_post_time(format="U", gmt=False, post=None, translate=False, *args_):
     #// Accepts 'G', 'U', or PHP date format. Default 'U'.
     #// @param bool   $gmt    Whether to retrieve the GMT time. Default false.
     #//
-    return apply_filters("get_post_time", time, format, gmt)
+    return apply_filters("get_post_time", time_, format_, gmt_)
 # end def get_post_time
 #// 
 #// Retrieve post published or modified time as a `DateTimeImmutable` object instance.
@@ -2348,28 +2440,29 @@ def get_post_time(format="U", gmt=False, post=None, translate=False, *args_):
 #// Default 'local'.
 #// @return DateTimeImmutable|false Time object on success, false on failure.
 #//
-def get_post_datetime(post=None, field="date", source="local", *args_):
+def get_post_datetime(post_=None, field_="date", source_="local", *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    wp_timezone = wp_timezone()
-    if "gmt" == source:
-        time = post.post_modified_gmt if "modified" == field else post.post_date_gmt
-        timezone = php_new_class("DateTimeZone", lambda : DateTimeZone("UTC"))
+    wp_timezone_ = wp_timezone()
+    if "gmt" == source_:
+        time_ = post_.post_modified_gmt if "modified" == field_ else post_.post_date_gmt
+        timezone_ = php_new_class("DateTimeZone", lambda : DateTimeZone("UTC"))
     else:
-        time = post.post_modified if "modified" == field else post.post_date
-        timezone = wp_timezone
+        time_ = post_.post_modified if "modified" == field_ else post_.post_date
+        timezone_ = wp_timezone_
     # end if
-    if php_empty(lambda : time) or "0000-00-00 00:00:00" == time:
+    if php_empty(lambda : time_) or "0000-00-00 00:00:00" == time_:
         return False
     # end if
-    datetime = date_create_immutable_from_format("Y-m-d H:i:s", time, timezone)
-    if False == datetime:
+    datetime_ = date_create_immutable_from_format("Y-m-d H:i:s", time_, timezone_)
+    if False == datetime_:
         return False
     # end if
-    return datetime.settimezone(wp_timezone)
+    return datetime_.settimezone(wp_timezone_)
 # end def get_post_datetime
 #// 
 #// Retrieve post published or modified time as a Unix timestamp.
@@ -2384,13 +2477,14 @@ def get_post_datetime(post=None, field="date", source="local", *args_):
 #// Default 'date'.
 #// @return int|false Unix timestamp on success, false on failure.
 #//
-def get_post_timestamp(post=None, field="date", *args_):
+def get_post_timestamp(post_=None, field_="date", *_args_):
     
-    datetime = get_post_datetime(post, field)
-    if False == datetime:
+    
+    datetime_ = get_post_datetime(post_, field_)
+    if False == datetime_:
         return False
     # end if
-    return datetime.gettimestamp()
+    return datetime_.gettimestamp()
 # end def get_post_timestamp
 #// 
 #// Display the time at which the post was last modified.
@@ -2400,7 +2494,8 @@ def get_post_timestamp(post=None, field="date", *args_):
 #// @param string $format Optional. Either 'G', 'U', or PHP date format defaults
 #// to the value specified in the time_format option.
 #//
-def the_modified_time(format="", *args_):
+def the_modified_time(format_="", *_args_):
+    
     
     #// 
     #// Filters the localized time a post was last modified, for display.
@@ -2412,7 +2507,7 @@ def the_modified_time(format="", *args_):
     #// or PHP date format. Defaults to value
     #// specified in 'time_format' option.
     #//
-    php_print(apply_filters("the_modified_time", get_the_modified_time(format), format))
+    php_print(apply_filters("the_modified_time", get_the_modified_time(format_), format_))
 # end def the_modified_time
 #// 
 #// Retrieve the time at which the post was last modified.
@@ -2426,16 +2521,17 @@ def the_modified_time(format="", *args_):
 #// @param int|WP_Post $post   Optional. Post ID or WP_Post object. Default current post.
 #// @return string|false Formatted date string or Unix timestamp. False on failure.
 #//
-def get_the_modified_time(format="", post=None, *args_):
+def get_the_modified_time(format_="", post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         #// For backward compatibility, failures go through the filter below.
-        the_time = False
-    elif php_empty(lambda : format):
-        the_time = get_post_modified_time(get_option("time_format"), False, post, True)
+        the_time_ = False
+    elif php_empty(lambda : format_):
+        the_time_ = get_post_modified_time(get_option("time_format"), False, post_, True)
     else:
-        the_time = get_post_modified_time(format, False, post, True)
+        the_time_ = get_post_modified_time(format_, False, post_, True)
     # end if
     #// 
     #// Filters the localized time a post was last modified.
@@ -2449,7 +2545,7 @@ def get_the_modified_time(format="", post=None, *args_):
     #// to value specified in 'time_format' option.
     #// @param WP_Post|null $post     WP_Post object or null if no post is found.
     #//
-    return apply_filters("get_the_modified_time", the_time, format, post)
+    return apply_filters("get_the_modified_time", the_time_, format_, post_)
 # end def get_the_modified_time
 #// 
 #// Retrieve the time at which the post was last modified.
@@ -2464,30 +2560,36 @@ def get_the_modified_time(format="", post=None, *args_):
 #// @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
 #// False on failure.
 #//
-def get_post_modified_time(format="U", gmt=False, post=None, translate=False, *args_):
+def get_post_modified_time(format_="U", gmt_=None, post_=None, translate_=None, *_args_):
+    if gmt_ is None:
+        gmt_ = False
+    # end if
+    if translate_ is None:
+        translate_ = False
+    # end if
     
-    post = get_post(post)
-    if (not post):
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    source = "gmt" if gmt else "local"
-    datetime = get_post_datetime(post, "modified", source)
-    if False == datetime:
+    source_ = "gmt" if gmt_ else "local"
+    datetime_ = get_post_datetime(post_, "modified", source_)
+    if False == datetime_:
         return False
     # end if
-    if "U" == format or "G" == format:
-        time = datetime.gettimestamp()
+    if "U" == format_ or "G" == format_:
+        time_ = datetime_.gettimestamp()
         #// Returns a sum of timestamp with timezone offset. Ideally should never be used.
-        if (not gmt):
-            time += datetime.getoffset()
+        if (not gmt_):
+            time_ += datetime_.getoffset()
         # end if
-    elif translate:
-        time = wp_date(format, datetime.gettimestamp(), php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")) if gmt else None)
+    elif translate_:
+        time_ = wp_date(format_, datetime_.gettimestamp(), php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")) if gmt_ else None)
     else:
-        if gmt:
-            datetime = datetime.settimezone(php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")))
+        if gmt_:
+            datetime_ = datetime_.settimezone(php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")))
         # end if
-        time = datetime.format(format)
+        time_ = datetime_.format(format_)
     # end if
     #// 
     #// Filters the localized time a post was last modified.
@@ -2499,7 +2601,7 @@ def get_post_modified_time(format="U", gmt=False, post=None, translate=False, *a
     #// Accepts 'G', 'U', or PHP date format. Default 'U'.
     #// @param bool   $gmt    Whether to retrieve the GMT time. Default false.
     #//
-    return apply_filters("get_post_modified_time", time, format, gmt)
+    return apply_filters("get_post_modified_time", time_, format_, gmt_)
 # end def get_post_modified_time
 #// 
 #// Display the weekday on which the post was written.
@@ -2508,15 +2610,16 @@ def get_post_modified_time(format="U", gmt=False, post=None, translate=False, *a
 #// 
 #// @global WP_Locale $wp_locale WordPress date and time locale object.
 #//
-def the_weekday(*args_):
+def the_weekday(*_args_):
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    post = get_post()
-    if (not post):
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    post_ = get_post()
+    if (not post_):
         return
     # end if
-    the_weekday = wp_locale.get_weekday(get_post_time("w", False, post))
+    the_weekday_ = wp_locale_.get_weekday(get_post_time("w", False, post_))
     #// 
     #// Filters the weekday on which the post was written, for display.
     #// 
@@ -2524,7 +2627,7 @@ def the_weekday(*args_):
     #// 
     #// @param string $the_weekday
     #//
-    php_print(apply_filters("the_weekday", the_weekday))
+    php_print(apply_filters("the_weekday", the_weekday_))
 # end def the_weekday
 #// 
 #// Display the weekday on which the post was written.
@@ -2541,20 +2644,23 @@ def the_weekday(*args_):
 #// @param string $before Optional. Output before the date.
 #// @param string $after  Optional. Output after the date.
 #//
-def the_weekday_date(before="", after="", *args_):
+def the_weekday_date(before_="", after_="", *_args_):
     
-    global wp_locale,currentday,previousweekday
-    php_check_if_defined("wp_locale","currentday","previousweekday")
-    post = get_post()
-    if (not post):
+    
+    global wp_locale_
+    global currentday_
+    global previousweekday_
+    php_check_if_defined("wp_locale_","currentday_","previousweekday_")
+    post_ = get_post()
+    if (not post_):
         return
     # end if
-    the_weekday_date = ""
-    if currentday != previousweekday:
-        the_weekday_date += before
-        the_weekday_date += wp_locale.get_weekday(get_post_time("w", False, post))
-        the_weekday_date += after
-        previousweekday = currentday
+    the_weekday_date_ = ""
+    if currentday_ != previousweekday_:
+        the_weekday_date_ += before_
+        the_weekday_date_ += wp_locale_.get_weekday(get_post_time("w", False, post_))
+        the_weekday_date_ += after_
+        previousweekday_ = currentday_
     # end if
     #// 
     #// Filters the localized date on which the post was written, for display.
@@ -2565,7 +2671,7 @@ def the_weekday_date(before="", after="", *args_):
     #// @param string $before           The HTML to output before the date.
     #// @param string $after            The HTML to output after the date.
     #//
-    php_print(apply_filters("the_weekday_date", the_weekday_date, before, after))
+    php_print(apply_filters("the_weekday_date", the_weekday_date_, before_, after_))
 # end def the_weekday_date
 #// 
 #// Fire the wp_head action.
@@ -2574,7 +2680,8 @@ def the_weekday_date(before="", after="", *args_):
 #// 
 #// @since 1.2.0
 #//
-def wp_head(*args_):
+def wp_head(*_args_):
+    
     
     #// 
     #// Prints scripts or data in the head tag on the front end.
@@ -2590,7 +2697,8 @@ def wp_head(*args_):
 #// 
 #// @since 1.5.1
 #//
-def wp_footer(*args_):
+def wp_footer(*_args_):
+    
     
     #// 
     #// Prints scripts or data before the closing body tag on the front end.
@@ -2606,7 +2714,8 @@ def wp_footer(*args_):
 #// 
 #// @since 5.2.0
 #//
-def wp_body_open(*args_):
+def wp_body_open(*_args_):
+    
     
     #// 
     #// Triggered after the opening body tag.
@@ -2622,13 +2731,16 @@ def wp_body_open(*args_):
 #// 
 #// @param array $args Optional arguments.
 #//
-def feed_links(args=Array(), *args_):
+def feed_links(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     if (not current_theme_supports("automatic-feed-links")):
         return
     # end if
-    defaults = Array({"separator": _x("&raquo;", "feed link"), "feedtitle": __("%1$s %2$s Feed"), "comstitle": __("%1$s %2$s Comments Feed")})
-    args = wp_parse_args(args, defaults)
+    defaults_ = Array({"separator": _x("&raquo;", "feed link"), "feedtitle": __("%1$s %2$s Feed"), "comstitle": __("%1$s %2$s Comments Feed")})
+    args_ = wp_parse_args(args_, defaults_)
     #// 
     #// Filters whether to display the posts feed link.
     #// 
@@ -2637,7 +2749,7 @@ def feed_links(args=Array(), *args_):
     #// @param bool $show Whether to display the posts feed link. Default true.
     #//
     if apply_filters("feed_links_show_posts_feed", True):
-        php_print("<link rel=\"alternate\" type=\"" + feed_content_type() + "\" title=\"" + esc_attr(php_sprintf(args["feedtitle"], get_bloginfo("name"), args["separator"])) + "\" href=\"" + esc_url(get_feed_link()) + "\" />\n")
+        php_print("<link rel=\"alternate\" type=\"" + feed_content_type() + "\" title=\"" + esc_attr(php_sprintf(args_["feedtitle"], get_bloginfo("name"), args_["separator"])) + "\" href=\"" + esc_url(get_feed_link()) + "\" />\n")
     # end if
     #// 
     #// Filters whether to display the comments feed link.
@@ -2647,7 +2759,7 @@ def feed_links(args=Array(), *args_):
     #// @param bool $show Whether to display the comments feed link. Default true.
     #//
     if apply_filters("feed_links_show_comments_feed", True):
-        php_print("<link rel=\"alternate\" type=\"" + feed_content_type() + "\" title=\"" + esc_attr(php_sprintf(args["comstitle"], get_bloginfo("name"), args["separator"])) + "\" href=\"" + esc_url(get_feed_link("comments_" + get_default_feed())) + "\" />\n")
+        php_print("<link rel=\"alternate\" type=\"" + feed_content_type() + "\" title=\"" + esc_attr(php_sprintf(args_["comstitle"], get_bloginfo("name"), args_["separator"])) + "\" href=\"" + esc_url(get_feed_link("comments_" + get_default_feed())) + "\" />\n")
     # end if
 # end def feed_links
 #// 
@@ -2657,54 +2769,57 @@ def feed_links(args=Array(), *args_):
 #// 
 #// @param array $args Optional arguments.
 #//
-def feed_links_extra(args=Array(), *args_):
+def feed_links_extra(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    defaults = Array({"separator": _x("&raquo;", "feed link"), "singletitle": __("%1$s %2$s %3$s Comments Feed"), "cattitle": __("%1$s %2$s %3$s Category Feed"), "tagtitle": __("%1$s %2$s %3$s Tag Feed"), "taxtitle": __("%1$s %2$s %3$s %4$s Feed"), "authortitle": __("%1$s %2$s Posts by %3$s Feed"), "searchtitle": __("%1$s %2$s Search Results for &#8220;%3$s&#8221; Feed"), "posttypetitle": __("%1$s %2$s %3$s Feed")})
-    args = wp_parse_args(args, defaults)
+    defaults_ = Array({"separator": _x("&raquo;", "feed link"), "singletitle": __("%1$s %2$s %3$s Comments Feed"), "cattitle": __("%1$s %2$s %3$s Category Feed"), "tagtitle": __("%1$s %2$s %3$s Tag Feed"), "taxtitle": __("%1$s %2$s %3$s %4$s Feed"), "authortitle": __("%1$s %2$s Posts by %3$s Feed"), "searchtitle": __("%1$s %2$s Search Results for &#8220;%3$s&#8221; Feed"), "posttypetitle": __("%1$s %2$s %3$s Feed")})
+    args_ = wp_parse_args(args_, defaults_)
     if is_singular():
-        id = 0
-        post = get_post(id)
-        if comments_open() or pings_open() or post.comment_count > 0:
-            title = php_sprintf(args["singletitle"], get_bloginfo("name"), args["separator"], the_title_attribute(Array({"echo": False})))
-            href = get_post_comments_feed_link(post.ID)
+        id_ = 0
+        post_ = get_post(id_)
+        if comments_open() or pings_open() or post_.comment_count > 0:
+            title_ = php_sprintf(args_["singletitle"], get_bloginfo("name"), args_["separator"], the_title_attribute(Array({"echo": False})))
+            href_ = get_post_comments_feed_link(post_.ID)
         # end if
     elif is_post_type_archive():
-        post_type = get_query_var("post_type")
-        if php_is_array(post_type):
-            post_type = reset(post_type)
+        post_type_ = get_query_var("post_type")
+        if php_is_array(post_type_):
+            post_type_ = reset(post_type_)
         # end if
-        post_type_obj = get_post_type_object(post_type)
-        title = php_sprintf(args["posttypetitle"], get_bloginfo("name"), args["separator"], post_type_obj.labels.name)
-        href = get_post_type_archive_feed_link(post_type_obj.name)
+        post_type_obj_ = get_post_type_object(post_type_)
+        title_ = php_sprintf(args_["posttypetitle"], get_bloginfo("name"), args_["separator"], post_type_obj_.labels.name)
+        href_ = get_post_type_archive_feed_link(post_type_obj_.name)
     elif is_category():
-        term = get_queried_object()
-        if term:
-            title = php_sprintf(args["cattitle"], get_bloginfo("name"), args["separator"], term.name)
-            href = get_category_feed_link(term.term_id)
+        term_ = get_queried_object()
+        if term_:
+            title_ = php_sprintf(args_["cattitle"], get_bloginfo("name"), args_["separator"], term_.name)
+            href_ = get_category_feed_link(term_.term_id)
         # end if
     elif is_tag():
-        term = get_queried_object()
-        if term:
-            title = php_sprintf(args["tagtitle"], get_bloginfo("name"), args["separator"], term.name)
-            href = get_tag_feed_link(term.term_id)
+        term_ = get_queried_object()
+        if term_:
+            title_ = php_sprintf(args_["tagtitle"], get_bloginfo("name"), args_["separator"], term_.name)
+            href_ = get_tag_feed_link(term_.term_id)
         # end if
     elif is_tax():
-        term = get_queried_object()
-        if term:
-            tax = get_taxonomy(term.taxonomy)
-            title = php_sprintf(args["taxtitle"], get_bloginfo("name"), args["separator"], term.name, tax.labels.singular_name)
-            href = get_term_feed_link(term.term_id, term.taxonomy)
+        term_ = get_queried_object()
+        if term_:
+            tax_ = get_taxonomy(term_.taxonomy)
+            title_ = php_sprintf(args_["taxtitle"], get_bloginfo("name"), args_["separator"], term_.name, tax_.labels.singular_name)
+            href_ = get_term_feed_link(term_.term_id, term_.taxonomy)
         # end if
     elif is_author():
-        author_id = php_intval(get_query_var("author"))
-        title = php_sprintf(args["authortitle"], get_bloginfo("name"), args["separator"], get_the_author_meta("display_name", author_id))
-        href = get_author_feed_link(author_id)
+        author_id_ = php_intval(get_query_var("author"))
+        title_ = php_sprintf(args_["authortitle"], get_bloginfo("name"), args_["separator"], get_the_author_meta("display_name", author_id_))
+        href_ = get_author_feed_link(author_id_)
     elif is_search():
-        title = php_sprintf(args["searchtitle"], get_bloginfo("name"), args["separator"], get_search_query(False))
-        href = get_search_feed_link()
+        title_ = php_sprintf(args_["searchtitle"], get_bloginfo("name"), args_["separator"], get_search_query(False))
+        href_ = get_search_feed_link()
     # end if
-    if (php_isset(lambda : title)) and (php_isset(lambda : href)):
-        php_print("<link rel=\"alternate\" type=\"" + feed_content_type() + "\" title=\"" + esc_attr(title) + "\" href=\"" + esc_url(href) + "\" />" + "\n")
+    if (php_isset(lambda : title_)) and (php_isset(lambda : href_)):
+        php_print("<link rel=\"alternate\" type=\"" + feed_content_type() + "\" title=\"" + esc_attr(title_) + "\" href=\"" + esc_url(href_) + "\" />" + "\n")
     # end if
 # end def feed_links_extra
 #// 
@@ -2713,7 +2828,8 @@ def feed_links_extra(args=Array(), *args_):
 #// @link http://archipelago.phrasewise.com/rsd
 #// @since 2.0.0
 #//
-def rsd_link(*args_):
+def rsd_link(*_args_):
+    
     
     php_print("<link rel=\"EditURI\" type=\"application/rsd+xml\" title=\"RSD\" href=\"" + esc_url(site_url("xmlrpc.php?rsd", "rpc")) + "\" />" + "\n")
 # end def rsd_link
@@ -2723,7 +2839,8 @@ def rsd_link(*args_):
 #// @link https://msdn.microsoft.com/en-us/library/bb463265.aspx
 #// @since 2.3.1
 #//
-def wlwmanifest_link(*args_):
+def wlwmanifest_link(*_args_):
+    
     
     php_print("<link rel=\"wlwmanifest\" type=\"application/wlwmanifest+xml\" href=\"" + includes_url("wlwmanifest.xml") + "\" /> " + "\n")
 # end def wlwmanifest_link
@@ -2742,7 +2859,8 @@ def wlwmanifest_link(*args_):
 #// 
 #// @since 2.1.0
 #//
-def noindex(*args_):
+def noindex(*_args_):
+    
     
     #// If the blog is not public, tell robots to go away.
     if "0" == get_option("blog_public"):
@@ -2758,7 +2876,8 @@ def noindex(*args_):
 #// @since 3.3.0
 #// @since 5.3.0 Echo "noindex,nofollow" if search engine visibility is discouraged.
 #//
-def wp_no_robots(*args_):
+def wp_no_robots(*_args_):
+    
     
     if get_option("blog_public"):
         php_print("<meta name='robots' content='noindex,follow' />\n")
@@ -2777,7 +2896,8 @@ def wp_no_robots(*args_):
 #// 
 #// @since 5.0.1
 #//
-def wp_sensitive_page_meta(*args_):
+def wp_sensitive_page_meta(*_args_):
+    
     
     php_print(" <meta name='robots' content='noindex,noarchive' />\n    <meta name='referrer' content='strict-origin-when-cross-origin' />\n    ")
 # end def wp_sensitive_page_meta
@@ -2788,31 +2908,32 @@ def wp_sensitive_page_meta(*args_):
 #// 
 #// @link https://www.whatwg.org/specs/web-apps/current-work/multipage/links.html#rel-icon HTML5 specification link icon.
 #//
-def wp_site_icon(*args_):
+def wp_site_icon(*_args_):
+    
     
     if (not has_site_icon()) and (not is_customize_preview()):
         return
     # end if
-    meta_tags = Array()
-    icon_32 = get_site_icon_url(32)
-    if php_empty(lambda : icon_32) and is_customize_preview():
-        icon_32 = "/favicon.ico"
+    meta_tags_ = Array()
+    icon_32_ = get_site_icon_url(32)
+    if php_empty(lambda : icon_32_) and is_customize_preview():
+        icon_32_ = "/favicon.ico"
         pass
     # end if
-    if icon_32:
-        meta_tags[-1] = php_sprintf("<link rel=\"icon\" href=\"%s\" sizes=\"32x32\" />", esc_url(icon_32))
+    if icon_32_:
+        meta_tags_[-1] = php_sprintf("<link rel=\"icon\" href=\"%s\" sizes=\"32x32\" />", esc_url(icon_32_))
     # end if
-    icon_192 = get_site_icon_url(192)
-    if icon_192:
-        meta_tags[-1] = php_sprintf("<link rel=\"icon\" href=\"%s\" sizes=\"192x192\" />", esc_url(icon_192))
+    icon_192_ = get_site_icon_url(192)
+    if icon_192_:
+        meta_tags_[-1] = php_sprintf("<link rel=\"icon\" href=\"%s\" sizes=\"192x192\" />", esc_url(icon_192_))
     # end if
-    icon_180 = get_site_icon_url(180)
-    if icon_180:
-        meta_tags[-1] = php_sprintf("<link rel=\"apple-touch-icon\" href=\"%s\" />", esc_url(icon_180))
+    icon_180_ = get_site_icon_url(180)
+    if icon_180_:
+        meta_tags_[-1] = php_sprintf("<link rel=\"apple-touch-icon\" href=\"%s\" />", esc_url(icon_180_))
     # end if
-    icon_270 = get_site_icon_url(270)
-    if icon_270:
-        meta_tags[-1] = php_sprintf("<meta name=\"msapplication-TileImage\" content=\"%s\" />", esc_url(icon_270))
+    icon_270_ = get_site_icon_url(270)
+    if icon_270_:
+        meta_tags_[-1] = php_sprintf("<meta name=\"msapplication-TileImage\" content=\"%s\" />", esc_url(icon_270_))
     # end if
     #// 
     #// Filters the site icon meta tags, so plugins can add their own.
@@ -2821,10 +2942,10 @@ def wp_site_icon(*args_):
     #// 
     #// @param string[] $meta_tags Array of Site Icon meta tags.
     #//
-    meta_tags = apply_filters("site_icon_meta_tags", meta_tags)
-    meta_tags = php_array_filter(meta_tags)
-    for meta_tag in meta_tags:
-        php_print(str(meta_tag) + str("\n"))
+    meta_tags_ = apply_filters("site_icon_meta_tags", meta_tags_)
+    meta_tags_ = php_array_filter(meta_tags_)
+    for meta_tag_ in meta_tags_:
+        php_print(str(meta_tag_) + str("\n"))
     # end for
 # end def wp_site_icon
 #// 
@@ -2839,17 +2960,18 @@ def wp_site_icon(*args_):
 #// 
 #// @since 4.6.0
 #//
-def wp_resource_hints(*args_):
+def wp_resource_hints(*_args_):
     
-    hints = Array({"dns-prefetch": wp_dependencies_unique_hosts(), "preconnect": Array(), "prefetch": Array(), "prerender": Array()})
+    
+    hints_ = Array({"dns-prefetch": wp_dependencies_unique_hosts(), "preconnect": Array(), "prefetch": Array(), "prerender": Array()})
     #// 
     #// Add DNS prefetch for the Emoji CDN.
     #// The path is removed in the foreach loop below.
     #// 
     #// This filter is documented in wp-includes/formatting.php
-    hints["dns-prefetch"][-1] = apply_filters("emoji_svg_url", "https://s.w.org/images/core/emoji/12.0.0-1/svg/")
-    for relation_type,urls in hints:
-        unique_urls = Array()
+    hints_["dns-prefetch"][-1] = apply_filters("emoji_svg_url", "https://s.w.org/images/core/emoji/12.0.0-1/svg/")
+    for relation_type_,urls_ in hints_:
+        unique_urls_ = Array()
         #// 
         #// Filters domains and URLs for resource hints of relation type.
         #// 
@@ -2858,55 +2980,55 @@ def wp_resource_hints(*args_):
         #// @param array  $urls          URLs to print for resource hints.
         #// @param string $relation_type The relation type the URLs are printed for, e.g. 'preconnect' or 'prerender'.
         #//
-        urls = apply_filters("wp_resource_hints", urls, relation_type)
-        for key,url in urls:
-            atts = Array()
-            if php_is_array(url):
-                if (php_isset(lambda : url["href"])):
-                    atts = url
-                    url = url["href"]
+        urls_ = apply_filters("wp_resource_hints", urls_, relation_type_)
+        for key_,url_ in urls_:
+            atts_ = Array()
+            if php_is_array(url_):
+                if (php_isset(lambda : url_["href"])):
+                    atts_ = url_
+                    url_ = url_["href"]
                 else:
                     continue
                 # end if
             # end if
-            url = esc_url(url, Array("http", "https"))
-            if (not url):
+            url_ = esc_url(url_, Array("http", "https"))
+            if (not url_):
                 continue
             # end if
-            if (php_isset(lambda : unique_urls[url])):
+            if (php_isset(lambda : unique_urls_[url_])):
                 continue
             # end if
-            if php_in_array(relation_type, Array("preconnect", "dns-prefetch")):
-                parsed = wp_parse_url(url)
-                if php_empty(lambda : parsed["host"]):
+            if php_in_array(relation_type_, Array("preconnect", "dns-prefetch")):
+                parsed_ = wp_parse_url(url_)
+                if php_empty(lambda : parsed_["host"]):
                     continue
                 # end if
-                if "preconnect" == relation_type and (not php_empty(lambda : parsed["scheme"])):
-                    url = parsed["scheme"] + "://" + parsed["host"]
+                if "preconnect" == relation_type_ and (not php_empty(lambda : parsed_["scheme"])):
+                    url_ = parsed_["scheme"] + "://" + parsed_["host"]
                 else:
                     #// Use protocol-relative URLs for dns-prefetch or if scheme is missing.
-                    url = "//" + parsed["host"]
+                    url_ = "//" + parsed_["host"]
                 # end if
             # end if
-            atts["rel"] = relation_type
-            atts["href"] = url
-            unique_urls[url] = atts
+            atts_["rel"] = relation_type_
+            atts_["href"] = url_
+            unique_urls_[url_] = atts_
         # end for
-        for atts in unique_urls:
-            html = ""
-            for attr,value in atts:
-                if (not is_scalar(value)) or (not php_in_array(attr, Array("as", "crossorigin", "href", "pr", "rel", "type"), True)) and (not php_is_numeric(attr)):
+        for atts_ in unique_urls_:
+            html_ = ""
+            for attr_,value_ in atts_:
+                if (not is_scalar(value_)) or (not php_in_array(attr_, Array("as", "crossorigin", "href", "pr", "rel", "type"), True)) and (not php_is_numeric(attr_)):
                     continue
                 # end if
-                value = esc_url(value) if "href" == attr else esc_attr(value)
-                if (not php_is_string(attr)):
-                    html += str(" ") + str(value)
+                value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
+                if (not php_is_string(attr_)):
+                    html_ += str(" ") + str(value_)
                 else:
-                    html += str(" ") + str(attr) + str("='") + str(value) + str("'")
+                    html_ += str(" ") + str(attr_) + str("='") + str(value_) + str("'")
                 # end if
             # end for
-            html = php_trim(html)
-            php_print(str("<link ") + str(html) + str(" />\n"))
+            html_ = php_trim(html_)
+            php_print(str("<link ") + str(html_) + str(" />\n"))
         # end for
     # end for
 # end def wp_resource_hints
@@ -2917,27 +3039,29 @@ def wp_resource_hints(*args_):
 #// 
 #// @return string[] A list of unique hosts of enqueued scripts and styles.
 #//
-def wp_dependencies_unique_hosts(*args_):
+def wp_dependencies_unique_hosts(*_args_):
     
-    global wp_scripts,wp_styles
-    php_check_if_defined("wp_scripts","wp_styles")
-    unique_hosts = Array()
-    for dependencies in Array(wp_scripts, wp_styles):
-        if type(dependencies).__name__ == "WP_Dependencies" and (not php_empty(lambda : dependencies.queue)):
-            for handle in dependencies.queue:
-                if (not (php_isset(lambda : dependencies.registered[handle]))):
+    
+    global wp_scripts_
+    global wp_styles_
+    php_check_if_defined("wp_scripts_","wp_styles_")
+    unique_hosts_ = Array()
+    for dependencies_ in Array(wp_scripts_, wp_styles_):
+        if type(dependencies_).__name__ == "WP_Dependencies" and (not php_empty(lambda : dependencies_.queue)):
+            for handle_ in dependencies_.queue:
+                if (not (php_isset(lambda : dependencies_.registered[handle_]))):
                     continue
                 # end if
                 #// @var _WP_Dependency $dependency
-                dependency = dependencies.registered[handle]
-                parsed = wp_parse_url(dependency.src)
-                if (not php_empty(lambda : parsed["host"])) and (not php_in_array(parsed["host"], unique_hosts)) and parsed["host"] != PHP_SERVER["SERVER_NAME"]:
-                    unique_hosts[-1] = parsed["host"]
+                dependency_ = dependencies_.registered[handle_]
+                parsed_ = wp_parse_url(dependency_.src)
+                if (not php_empty(lambda : parsed_["host"])) and (not php_in_array(parsed_["host"], unique_hosts_)) and parsed_["host"] != PHP_SERVER["SERVER_NAME"]:
+                    unique_hosts_[-1] = parsed_["host"]
                 # end if
             # end for
         # end if
     # end for
-    return unique_hosts
+    return unique_hosts_
 # end def wp_dependencies_unique_hosts
 #// 
 #// Whether the user can access the visual editor.
@@ -2956,20 +3080,27 @@ def wp_dependencies_unique_hosts(*args_):
 #// 
 #// @return bool True if the user can access the visual editor, false otherwise.
 #//
-def user_can_richedit(*args_):
+def user_can_richedit(*_args_):
     
-    global wp_rich_edit,is_gecko,is_opera,is_safari,is_chrome,is_IE,is_edge
-    php_check_if_defined("wp_rich_edit","is_gecko","is_opera","is_safari","is_chrome","is_IE","is_edge")
-    if (not (php_isset(lambda : wp_rich_edit))):
-        wp_rich_edit = False
+    
+    global wp_rich_edit_
+    global is_gecko_
+    global is_opera_
+    global is_safari_
+    global is_chrome_
+    global is_IE_
+    global is_edge_
+    php_check_if_defined("wp_rich_edit_","is_gecko_","is_opera_","is_safari_","is_chrome_","is_IE_","is_edge_")
+    if (not (php_isset(lambda : wp_rich_edit_))):
+        wp_rich_edit_ = False
         if get_user_option("rich_editing") == "true" or (not is_user_logged_in()):
             #// Default to 'true' for logged out users.
-            if is_safari:
-                wp_rich_edit = (not wp_is_mobile()) or php_preg_match("!AppleWebKit/(\\d+)!", PHP_SERVER["HTTP_USER_AGENT"], match) and php_intval(match[1]) >= 534
-            elif is_IE:
-                wp_rich_edit = php_strpos(PHP_SERVER["HTTP_USER_AGENT"], "Trident/7.0;") != False
-            elif is_gecko or is_chrome or is_edge or is_opera and (not wp_is_mobile()):
-                wp_rich_edit = True
+            if is_safari_:
+                wp_rich_edit_ = (not wp_is_mobile()) or php_preg_match("!AppleWebKit/(\\d+)!", PHP_SERVER["HTTP_USER_AGENT"], match_) and php_intval(match_[1]) >= 534
+            elif is_IE_:
+                wp_rich_edit_ = php_strpos(PHP_SERVER["HTTP_USER_AGENT"], "Trident/7.0;") != False
+            elif is_gecko_ or is_chrome_ or is_edge_ or is_opera_ and (not wp_is_mobile()):
+                wp_rich_edit_ = True
             # end if
         # end if
     # end if
@@ -2980,7 +3111,7 @@ def user_can_richedit(*args_):
     #// 
     #// @param bool $wp_rich_edit Whether the user can access the visual editor.
     #//
-    return apply_filters("user_can_richedit", wp_rich_edit)
+    return apply_filters("user_can_richedit", wp_rich_edit_)
 # end def user_can_richedit
 #// 
 #// Find out which editor should be displayed by default.
@@ -2992,14 +3123,15 @@ def user_can_richedit(*args_):
 #// 
 #// @return string Either 'tinymce', or 'html', or 'test'
 #//
-def wp_default_editor(*args_):
+def wp_default_editor(*_args_):
     
-    r = "tinymce" if user_can_richedit() else "html"
+    
+    r_ = "tinymce" if user_can_richedit() else "html"
     #// Defaults.
     if wp_get_current_user():
         #// Look for cookie.
-        ed = get_user_setting("editor", "tinymce")
-        r = ed if php_in_array(ed, Array("tinymce", "html", "test")) else r
+        ed_ = get_user_setting("editor", "tinymce")
+        r_ = ed_ if php_in_array(ed_, Array("tinymce", "html", "test")) else r_
     # end if
     #// 
     #// Filters which editor should be displayed by default.
@@ -3008,7 +3140,7 @@ def wp_default_editor(*args_):
     #// 
     #// @param string $r Which editor should be displayed by default. Either 'tinymce', 'html', or 'test'.
     #//
-    return apply_filters("wp_default_editor", r)
+    return apply_filters("wp_default_editor", r_)
 # end def wp_default_editor
 #// 
 #// Renders an editor.
@@ -3031,12 +3163,15 @@ def wp_default_editor(*args_):
 #// Should not contain square brackets.
 #// @param array  $settings  See _WP_Editors::parse_settings() for description.
 #//
-def wp_editor(content=None, editor_id=None, settings=Array(), *args_):
+def wp_editor(content_=None, editor_id_=None, settings_=None, *_args_):
+    if settings_ is None:
+        settings_ = Array()
+    # end if
     
     if (not php_class_exists("_WP_Editors", False)):
         php_include_file(ABSPATH + WPINC + "/class-wp-editor.php", once=False)
     # end if
-    _WP_Editors.editor(content, editor_id, settings)
+    _WP_Editors.editor(content_, editor_id_, settings_)
 # end def wp_editor
 #// 
 #// Outputs the editor scripts, stylesheets, and default settings.
@@ -3047,7 +3182,8 @@ def wp_editor(content=None, editor_id=None, settings=Array(), *args_):
 #// @uses _WP_Editors
 #// @since 4.8.0
 #//
-def wp_enqueue_editor(*args_):
+def wp_enqueue_editor(*_args_):
+    
     
     if (not php_class_exists("_WP_Editors", False)):
         php_include_file(ABSPATH + WPINC + "/class-wp-editor.php", once=False)
@@ -3077,24 +3213,25 @@ def wp_enqueue_editor(*args_):
 #// }
 #// @return array|false Settings for the enqueued code editor, or false if the editor was not enqueued.
 #//
-def wp_enqueue_code_editor(args=None, *args_):
+def wp_enqueue_code_editor(args_=None, *_args_):
+    
     
     if is_user_logged_in() and "false" == wp_get_current_user().syntax_highlighting:
         return False
     # end if
-    settings = wp_get_code_editor_settings(args)
-    if php_empty(lambda : settings) or php_empty(lambda : settings["codemirror"]):
+    settings_ = wp_get_code_editor_settings(args_)
+    if php_empty(lambda : settings_) or php_empty(lambda : settings_["codemirror"]):
         return False
     # end if
     wp_enqueue_script("code-editor")
     wp_enqueue_style("code-editor")
-    if (php_isset(lambda : settings["codemirror"]["mode"])):
-        mode = settings["codemirror"]["mode"]
-        if php_is_string(mode):
-            mode = Array({"name": mode})
+    if (php_isset(lambda : settings_["codemirror"]["mode"])):
+        mode_ = settings_["codemirror"]["mode"]
+        if php_is_string(mode_):
+            mode_ = Array({"name": mode_})
         # end if
-        if (not php_empty(lambda : settings["codemirror"]["lint"])):
-            for case in Switch(mode["name"]):
+        if (not php_empty(lambda : settings_["codemirror"]["lint"])):
+            for case in Switch(mode_["name"]):
                 if case("css"):
                     pass
                 # end if
@@ -3155,7 +3292,7 @@ def wp_enqueue_code_editor(args=None, *args_):
             # end for
         # end if
     # end if
-    wp_add_inline_script("code-editor", php_sprintf("jQuery.extend( wp.codeEditor.defaultSettings, %s );", wp_json_encode(settings)))
+    wp_add_inline_script("code-editor", php_sprintf("jQuery.extend( wp.codeEditor.defaultSettings, %s );", wp_json_encode(settings_)))
     #// 
     #// Fires when scripts and styles are enqueued for the code editor.
     #// 
@@ -3163,8 +3300,8 @@ def wp_enqueue_code_editor(args=None, *args_):
     #// 
     #// @param array $settings Settings for the enqueued code editor.
     #//
-    do_action("wp_enqueue_code_editor", settings)
-    return settings
+    do_action("wp_enqueue_code_editor", settings_)
+    return settings_
 # end def wp_enqueue_code_editor
 #// 
 #// Generate and return code editor settings.
@@ -3187,71 +3324,72 @@ def wp_enqueue_code_editor(args=None, *args_):
 #// }
 #// @return array|false Settings for the code editor.
 #//
-def wp_get_code_editor_settings(args=None, *args_):
+def wp_get_code_editor_settings(args_=None, *_args_):
     
-    settings = Array({"codemirror": Array({"indentUnit": 4, "indentWithTabs": True, "inputStyle": "contenteditable", "lineNumbers": True, "lineWrapping": True, "styleActiveLine": True, "continueComments": True, "extraKeys": Array({"Ctrl-Space": "autocomplete", "Ctrl-/": "toggleComment", "Cmd-/": "toggleComment", "Alt-F": "findPersistent", "Ctrl-F": "findPersistent", "Cmd-F": "findPersistent"})}, {"direction": "ltr", "gutters": Array()})}, {"csslint": Array({"errors": True, "box-model": True, "display-property-grouping": True, "duplicate-properties": True, "known-properties": True, "outline-none": True})}, {"jshint": Array({"boss": True, "curly": True, "eqeqeq": True, "eqnull": True, "es3": True, "expr": True, "immed": True, "noarg": True, "nonbsp": True, "onevar": True, "quotmark": "single", "trailing": True, "undef": True, "unused": True, "browser": True, "globals": Array({"_": False, "Backbone": False, "jQuery": False, "JSON": False, "wp": False})})}, {"htmlhint": Array({"tagname-lowercase": True, "attr-lowercase": True, "attr-value-double-quotes": False, "doctype-first": False, "tag-pair": True, "spec-char-escape": True, "id-unique": True, "src-not-empty": True, "attr-no-duplication": True, "alt-require": True, "space-tab-mixed-disabled": "tab", "attr-unsafe-chars": True})})
-    type = ""
-    if (php_isset(lambda : args["type"])):
-        type = args["type"]
+    
+    settings_ = Array({"codemirror": Array({"indentUnit": 4, "indentWithTabs": True, "inputStyle": "contenteditable", "lineNumbers": True, "lineWrapping": True, "styleActiveLine": True, "continueComments": True, "extraKeys": Array({"Ctrl-Space": "autocomplete", "Ctrl-/": "toggleComment", "Cmd-/": "toggleComment", "Alt-F": "findPersistent", "Ctrl-F": "findPersistent", "Cmd-F": "findPersistent"})}, {"direction": "ltr", "gutters": Array()})}, {"csslint": Array({"errors": True, "box-model": True, "display-property-grouping": True, "duplicate-properties": True, "known-properties": True, "outline-none": True})}, {"jshint": Array({"boss": True, "curly": True, "eqeqeq": True, "eqnull": True, "es3": True, "expr": True, "immed": True, "noarg": True, "nonbsp": True, "onevar": True, "quotmark": "single", "trailing": True, "undef": True, "unused": True, "browser": True, "globals": Array({"_": False, "Backbone": False, "jQuery": False, "JSON": False, "wp": False})})}, {"htmlhint": Array({"tagname-lowercase": True, "attr-lowercase": True, "attr-value-double-quotes": False, "doctype-first": False, "tag-pair": True, "spec-char-escape": True, "id-unique": True, "src-not-empty": True, "attr-no-duplication": True, "alt-require": True, "space-tab-mixed-disabled": "tab", "attr-unsafe-chars": True})})
+    type_ = ""
+    if (php_isset(lambda : args_["type"])):
+        type_ = args_["type"]
         #// Remap MIME types to ones that CodeMirror modes will recognize.
-        if "application/x-patch" == type or "text/x-patch" == type:
-            type = "text/x-diff"
+        if "application/x-patch" == type_ or "text/x-patch" == type_:
+            type_ = "text/x-diff"
         # end if
-    elif (php_isset(lambda : args["file"])) and False != php_strpos(php_basename(args["file"]), "."):
-        extension = php_strtolower(pathinfo(args["file"], PATHINFO_EXTENSION))
-        for exts,mime in wp_get_mime_types():
-            if php_preg_match("!^(" + exts + ")$!i", extension):
-                type = mime
+    elif (php_isset(lambda : args_["file"])) and False != php_strpos(php_basename(args_["file"]), "."):
+        extension_ = php_strtolower(pathinfo(args_["file"], PATHINFO_EXTENSION))
+        for exts_,mime_ in wp_get_mime_types():
+            if php_preg_match("!^(" + exts_ + ")$!i", extension_):
+                type_ = mime_
                 break
             # end if
         # end for
         #// Supply any types that are not matched by wp_get_mime_types().
-        if php_empty(lambda : type):
-            for case in Switch(extension):
+        if php_empty(lambda : type_):
+            for case in Switch(extension_):
                 if case("conf"):
-                    type = "text/nginx"
+                    type_ = "text/nginx"
                     break
                 # end if
                 if case("css"):
-                    type = "text/css"
+                    type_ = "text/css"
                     break
                 # end if
                 if case("diff"):
                     pass
                 # end if
                 if case("patch"):
-                    type = "text/x-diff"
+                    type_ = "text/x-diff"
                     break
                 # end if
                 if case("html"):
                     pass
                 # end if
                 if case("htm"):
-                    type = "text/html"
+                    type_ = "text/html"
                     break
                 # end if
                 if case("http"):
-                    type = "message/http"
+                    type_ = "message/http"
                     break
                 # end if
                 if case("js"):
-                    type = "text/javascript"
+                    type_ = "text/javascript"
                     break
                 # end if
                 if case("json"):
-                    type = "application/json"
+                    type_ = "application/json"
                     break
                 # end if
                 if case("jsx"):
-                    type = "text/jsx"
+                    type_ = "text/jsx"
                     break
                 # end if
                 if case("less"):
-                    type = "text/x-less"
+                    type_ = "text/x-less"
                     break
                 # end if
                 if case("md"):
-                    type = "text/x-gfm"
+                    type_ = "text/x-gfm"
                     break
                 # end if
                 if case("php"):
@@ -3273,96 +3411,96 @@ def wp_get_code_editor_settings(args=None, *args_):
                     pass
                 # end if
                 if case("phps"):
-                    type = "application/x-httpd-php"
+                    type_ = "application/x-httpd-php"
                     break
                 # end if
                 if case("scss"):
-                    type = "text/x-scss"
+                    type_ = "text/x-scss"
                     break
                 # end if
                 if case("sass"):
-                    type = "text/x-sass"
+                    type_ = "text/x-sass"
                     break
                 # end if
                 if case("sh"):
                     pass
                 # end if
                 if case("bash"):
-                    type = "text/x-sh"
+                    type_ = "text/x-sh"
                     break
                 # end if
                 if case("sql"):
-                    type = "text/x-sql"
+                    type_ = "text/x-sql"
                     break
                 # end if
                 if case("svg"):
-                    type = "application/svg+xml"
+                    type_ = "application/svg+xml"
                     break
                 # end if
                 if case("xml"):
-                    type = "text/xml"
+                    type_ = "text/xml"
                     break
                 # end if
                 if case("yml"):
                     pass
                 # end if
                 if case("yaml"):
-                    type = "text/x-yaml"
+                    type_ = "text/x-yaml"
                     break
                 # end if
                 if case("txt"):
                     pass
                 # end if
                 if case():
-                    type = "text/plain"
+                    type_ = "text/plain"
                     break
                 # end if
             # end for
         # end if
     # end if
-    if php_in_array(type, Array("text/css", "text/x-scss", "text/x-less", "text/x-sass"), True):
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": type, "lint": False, "autoCloseBrackets": True, "matchBrackets": True}))
-    elif "text/x-diff" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "diff"}))
-    elif "text/html" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "htmlmixed", "lint": True, "autoCloseBrackets": True, "autoCloseTags": True, "matchTags": Array({"bothTags": True})}))
+    if php_in_array(type_, Array("text/css", "text/x-scss", "text/x-less", "text/x-sass"), True):
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": type_, "lint": False, "autoCloseBrackets": True, "matchBrackets": True}))
+    elif "text/x-diff" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "diff"}))
+    elif "text/html" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "htmlmixed", "lint": True, "autoCloseBrackets": True, "autoCloseTags": True, "matchTags": Array({"bothTags": True})}))
         if (not current_user_can("unfiltered_html")):
-            settings["htmlhint"]["kses"] = wp_kses_allowed_html("post")
+            settings_["htmlhint"]["kses"] = wp_kses_allowed_html("post")
         # end if
-    elif "text/x-gfm" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "gfm", "highlightFormatting": True}))
-    elif "application/javascript" == type or "text/javascript" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "javascript", "lint": True, "autoCloseBrackets": True, "matchBrackets": True}))
-    elif False != php_strpos(type, "json"):
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": Array({"name": "javascript"})}, {"lint": True, "autoCloseBrackets": True, "matchBrackets": True}))
-        if "application/ld+json" == type:
-            settings["codemirror"]["mode"]["jsonld"] = True
+    elif "text/x-gfm" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "gfm", "highlightFormatting": True}))
+    elif "application/javascript" == type_ or "text/javascript" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "javascript", "lint": True, "autoCloseBrackets": True, "matchBrackets": True}))
+    elif False != php_strpos(type_, "json"):
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": Array({"name": "javascript"})}, {"lint": True, "autoCloseBrackets": True, "matchBrackets": True}))
+        if "application/ld+json" == type_:
+            settings_["codemirror"]["mode"]["jsonld"] = True
         else:
-            settings["codemirror"]["mode"]["json"] = True
+            settings_["codemirror"]["mode"]["json"] = True
         # end if
-    elif False != php_strpos(type, "jsx"):
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "jsx", "autoCloseBrackets": True, "matchBrackets": True}))
-    elif "text/x-markdown" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "markdown", "highlightFormatting": True}))
-    elif "text/nginx" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "nginx"}))
-    elif "application/x-httpd-php" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "php", "autoCloseBrackets": True, "autoCloseTags": True, "matchBrackets": True, "matchTags": Array({"bothTags": True})}))
-    elif "text/x-sql" == type or "text/x-mysql" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "sql", "autoCloseBrackets": True, "matchBrackets": True}))
-    elif False != php_strpos(type, "xml"):
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "xml", "autoCloseBrackets": True, "autoCloseTags": True, "matchTags": Array({"bothTags": True})}))
-    elif "text/x-yaml" == type:
-        settings["codemirror"] = php_array_merge(settings["codemirror"], Array({"mode": "yaml"}))
+    elif False != php_strpos(type_, "jsx"):
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "jsx", "autoCloseBrackets": True, "matchBrackets": True}))
+    elif "text/x-markdown" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "markdown", "highlightFormatting": True}))
+    elif "text/nginx" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "nginx"}))
+    elif "application/x-httpd-php" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "php", "autoCloseBrackets": True, "autoCloseTags": True, "matchBrackets": True, "matchTags": Array({"bothTags": True})}))
+    elif "text/x-sql" == type_ or "text/x-mysql" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "sql", "autoCloseBrackets": True, "matchBrackets": True}))
+    elif False != php_strpos(type_, "xml"):
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "xml", "autoCloseBrackets": True, "autoCloseTags": True, "matchTags": Array({"bothTags": True})}))
+    elif "text/x-yaml" == type_:
+        settings_["codemirror"] = php_array_merge(settings_["codemirror"], Array({"mode": "yaml"}))
     else:
-        settings["codemirror"]["mode"] = type
+        settings_["codemirror"]["mode"] = type_
     # end if
-    if (not php_empty(lambda : settings["codemirror"]["lint"])):
-        settings["codemirror"]["gutters"][-1] = "CodeMirror-lint-markers"
+    if (not php_empty(lambda : settings_["codemirror"]["lint"])):
+        settings_["codemirror"]["gutters"][-1] = "CodeMirror-lint-markers"
     # end if
     #// Let settings supplied via args override any defaults.
-    for key,value in wp_array_slice_assoc(args, Array("codemirror", "csslint", "jshint", "htmlhint")):
-        settings[key] = php_array_merge(settings[key], value)
+    for key_,value_ in wp_array_slice_assoc(args_, Array("codemirror", "csslint", "jshint", "htmlhint")):
+        settings_[key_] = php_array_merge(settings_[key_], value_)
     # end for
     #// 
     #// Filters settings that are passed into the code editor.
@@ -3385,7 +3523,7 @@ def wp_get_code_editor_settings(args=None, *args_):
     #// @type array    $htmlhint   JSHint rule overrides.
     #// }
     #//
-    return apply_filters("wp_code_editor_settings", settings, args)
+    return apply_filters("wp_code_editor_settings", settings_, args_)
 # end def wp_get_code_editor_settings
 #// 
 #// Retrieves the contents of the search WordPress query variable.
@@ -3399,7 +3537,10 @@ def wp_get_code_editor_settings(args=None, *args_):
 #// Only use when you are later escaping it. Do not use unescaped.
 #// @return string
 #//
-def get_search_query(escaped=True, *args_):
+def get_search_query(escaped_=None, *_args_):
+    if escaped_ is None:
+        escaped_ = True
+    # end if
     
     #// 
     #// Filters the contents of the search query variable.
@@ -3408,11 +3549,11 @@ def get_search_query(escaped=True, *args_):
     #// 
     #// @param mixed $search Contents of the search query variable.
     #//
-    query = apply_filters("get_search_query", get_query_var("s"))
-    if escaped:
-        query = esc_attr(query)
+    query_ = apply_filters("get_search_query", get_query_var("s"))
+    if escaped_:
+        query_ = esc_attr(query_)
     # end if
-    return query
+    return query_
 # end def get_search_query
 #// 
 #// Displays the contents of the search query variable.
@@ -3422,7 +3563,8 @@ def get_search_query(escaped=True, *args_):
 #// 
 #// @since 2.1.0
 #//
-def the_search_query(*args_):
+def the_search_query(*_args_):
+    
     
     #// 
     #// Filters the contents of the search query variable for display.
@@ -3443,22 +3585,23 @@ def the_search_query(*args_):
 #// 
 #// @param string $doctype Optional. The type of html document. Accepts 'xhtml' or 'html'. Default 'html'.
 #//
-def get_language_attributes(doctype="html", *args_):
+def get_language_attributes(doctype_="html", *_args_):
     
-    attributes = Array()
+    
+    attributes_ = Array()
     if php_function_exists("is_rtl") and is_rtl():
-        attributes[-1] = "dir=\"rtl\""
+        attributes_[-1] = "dir=\"rtl\""
     # end if
-    lang = get_bloginfo("language")
-    if lang:
-        if "text/html" == get_option("html_type") or "html" == doctype:
-            attributes[-1] = "lang=\"" + esc_attr(lang) + "\""
+    lang_ = get_bloginfo("language")
+    if lang_:
+        if "text/html" == get_option("html_type") or "html" == doctype_:
+            attributes_[-1] = "lang=\"" + esc_attr(lang_) + "\""
         # end if
-        if "text/html" != get_option("html_type") or "xhtml" == doctype:
-            attributes[-1] = "xml:lang=\"" + esc_attr(lang) + "\""
+        if "text/html" != get_option("html_type") or "xhtml" == doctype_:
+            attributes_[-1] = "xml:lang=\"" + esc_attr(lang_) + "\""
         # end if
     # end if
-    output = php_implode(" ", attributes)
+    output_ = php_implode(" ", attributes_)
     #// 
     #// Filters the language attributes for display in the html tag.
     #// 
@@ -3468,7 +3611,7 @@ def get_language_attributes(doctype="html", *args_):
     #// @param string $output A space-separated list of language attributes.
     #// @param string $doctype The type of html document (xhtml|html).
     #//
-    return apply_filters("language_attributes", output, doctype)
+    return apply_filters("language_attributes", output_, doctype_)
 # end def get_language_attributes
 #// 
 #// Displays the language attributes for the html tag.
@@ -3481,9 +3624,10 @@ def get_language_attributes(doctype="html", *args_):
 #// 
 #// @param string $doctype Optional. The type of html document. Accepts 'xhtml' or 'html'. Default 'html'.
 #//
-def language_attributes(doctype="html", *args_):
+def language_attributes(doctype_="html", *_args_):
     
-    php_print(get_language_attributes(doctype))
+    
+    php_print(get_language_attributes(doctype_))
 # end def language_attributes
 #// 
 #// Retrieve paginated link for archive post pages.
@@ -3564,116 +3708,118 @@ def language_attributes(doctype="html", *args_):
 #// @return string|array|void String of page links or array of page links, depending on 'type' argument.
 #// Void if total number of pages is less than 2.
 #//
-def paginate_links(args="", *args_):
+def paginate_links(args_="", *_args_):
     
-    global wp_query,wp_rewrite
-    php_check_if_defined("wp_query","wp_rewrite")
+    
+    global wp_query_
+    global wp_rewrite_
+    php_check_if_defined("wp_query_","wp_rewrite_")
     #// Setting up default values based on the current URL.
-    pagenum_link = html_entity_decode(get_pagenum_link())
-    url_parts = php_explode("?", pagenum_link)
+    pagenum_link_ = html_entity_decode(get_pagenum_link())
+    url_parts_ = php_explode("?", pagenum_link_)
     #// Get max pages and current page out of the current query, if available.
-    total = wp_query.max_num_pages if (php_isset(lambda : wp_query.max_num_pages)) else 1
-    current = php_intval(get_query_var("paged")) if get_query_var("paged") else 1
+    total_ = wp_query_.max_num_pages if (php_isset(lambda : wp_query_.max_num_pages)) else 1
+    current_ = php_intval(get_query_var("paged")) if get_query_var("paged") else 1
     #// Append the format placeholder to the base URL.
-    pagenum_link = trailingslashit(url_parts[0]) + "%_%"
+    pagenum_link_ = trailingslashit(url_parts_[0]) + "%_%"
     #// URL base depends on permalink settings.
-    format = "index.php/" if wp_rewrite.using_index_permalinks() and (not php_strpos(pagenum_link, "index.php")) else ""
-    format += user_trailingslashit(wp_rewrite.pagination_base + "/%#%", "paged") if wp_rewrite.using_permalinks() else "?paged=%#%"
-    defaults = Array({"base": pagenum_link, "format": format, "total": total, "current": current, "aria_current": "page", "show_all": False, "prev_next": True, "prev_text": __("&laquo; Previous"), "next_text": __("Next &raquo;"), "end_size": 1, "mid_size": 2, "type": "plain", "add_args": Array(), "add_fragment": "", "before_page_number": "", "after_page_number": ""})
-    args = wp_parse_args(args, defaults)
-    if (not php_is_array(args["add_args"])):
-        args["add_args"] = Array()
+    format_ = "index.php/" if wp_rewrite_.using_index_permalinks() and (not php_strpos(pagenum_link_, "index.php")) else ""
+    format_ += user_trailingslashit(wp_rewrite_.pagination_base + "/%#%", "paged") if wp_rewrite_.using_permalinks() else "?paged=%#%"
+    defaults_ = Array({"base": pagenum_link_, "format": format_, "total": total_, "current": current_, "aria_current": "page", "show_all": False, "prev_next": True, "prev_text": __("&laquo; Previous"), "next_text": __("Next &raquo;"), "end_size": 1, "mid_size": 2, "type": "plain", "add_args": Array(), "add_fragment": "", "before_page_number": "", "after_page_number": ""})
+    args_ = wp_parse_args(args_, defaults_)
+    if (not php_is_array(args_["add_args"])):
+        args_["add_args"] = Array()
     # end if
     #// Merge additional query vars found in the original URL into 'add_args' array.
-    if (php_isset(lambda : url_parts[1])):
+    if (php_isset(lambda : url_parts_[1])):
         #// Find the format argument.
-        format = php_explode("?", php_str_replace("%_%", args["format"], args["base"]))
-        format_query = format[1] if (php_isset(lambda : format[1])) else ""
-        wp_parse_str(format_query, format_args)
+        format_ = php_explode("?", php_str_replace("%_%", args_["format"], args_["base"]))
+        format_query_ = format_[1] if (php_isset(lambda : format_[1])) else ""
+        wp_parse_str(format_query_, format_args_)
         #// Find the query args of the requested URL.
-        wp_parse_str(url_parts[1], url_query_args)
+        wp_parse_str(url_parts_[1], url_query_args_)
         #// Remove the format argument from the array of query arguments, to avoid overwriting custom format.
-        for format_arg,format_arg_value in format_args:
-            url_query_args[format_arg] = None
+        for format_arg_,format_arg_value_ in format_args_:
+            url_query_args_[format_arg_] = None
         # end for
-        args["add_args"] = php_array_merge(args["add_args"], urlencode_deep(url_query_args))
+        args_["add_args"] = php_array_merge(args_["add_args"], urlencode_deep(url_query_args_))
     # end if
     #// Who knows what else people pass in $args.
-    total = php_int(args["total"])
-    if total < 2:
+    total_ = php_int(args_["total"])
+    if total_ < 2:
         return
     # end if
-    current = php_int(args["current"])
-    end_size = php_int(args["end_size"])
+    current_ = php_int(args_["current"])
+    end_size_ = php_int(args_["end_size"])
     #// Out of bounds? Make it the default.
-    if end_size < 1:
-        end_size = 1
+    if end_size_ < 1:
+        end_size_ = 1
     # end if
-    mid_size = php_int(args["mid_size"])
-    if mid_size < 0:
-        mid_size = 2
+    mid_size_ = php_int(args_["mid_size"])
+    if mid_size_ < 0:
+        mid_size_ = 2
     # end if
-    add_args = args["add_args"]
-    r = ""
-    page_links = Array()
-    dots = False
-    if args["prev_next"] and current and 1 < current:
-        link = php_str_replace("%_%", "" if 2 == current else args["format"], args["base"])
-        link = php_str_replace("%#%", current - 1, link)
-        if add_args:
-            link = add_query_arg(add_args, link)
+    add_args_ = args_["add_args"]
+    r_ = ""
+    page_links_ = Array()
+    dots_ = False
+    if args_["prev_next"] and current_ and 1 < current_:
+        link_ = php_str_replace("%_%", "" if 2 == current_ else args_["format"], args_["base"])
+        link_ = php_str_replace("%#%", current_ - 1, link_)
+        if add_args_:
+            link_ = add_query_arg(add_args_, link_)
         # end if
-        link += args["add_fragment"]
-        page_links[-1] = php_sprintf("<a class=\"prev page-numbers\" href=\"%s\">%s</a>", esc_url(apply_filters("paginate_links", link)), args["prev_text"])
+        link_ += args_["add_fragment"]
+        page_links_[-1] = php_sprintf("<a class=\"prev page-numbers\" href=\"%s\">%s</a>", esc_url(apply_filters("paginate_links", link_)), args_["prev_text"])
     # end if
-    n = 1
-    while n <= total:
+    n_ = 1
+    while n_ <= total_:
         
-        if n == current:
-            page_links[-1] = php_sprintf("<span aria-current=\"%s\" class=\"page-numbers current\">%s</span>", esc_attr(args["aria_current"]), args["before_page_number"] + number_format_i18n(n) + args["after_page_number"])
-            dots = True
+        if n_ == current_:
+            page_links_[-1] = php_sprintf("<span aria-current=\"%s\" class=\"page-numbers current\">%s</span>", esc_attr(args_["aria_current"]), args_["before_page_number"] + number_format_i18n(n_) + args_["after_page_number"])
+            dots_ = True
         else:
-            if args["show_all"] or n <= end_size or current and n >= current - mid_size and n <= current + mid_size or n > total - end_size:
-                link = php_str_replace("%_%", "" if 1 == n else args["format"], args["base"])
-                link = php_str_replace("%#%", n, link)
-                if add_args:
-                    link = add_query_arg(add_args, link)
+            if args_["show_all"] or n_ <= end_size_ or current_ and n_ >= current_ - mid_size_ and n_ <= current_ + mid_size_ or n_ > total_ - end_size_:
+                link_ = php_str_replace("%_%", "" if 1 == n_ else args_["format"], args_["base"])
+                link_ = php_str_replace("%#%", n_, link_)
+                if add_args_:
+                    link_ = add_query_arg(add_args_, link_)
                 # end if
-                link += args["add_fragment"]
-                page_links[-1] = php_sprintf("<a class=\"page-numbers\" href=\"%s\">%s</a>", esc_url(apply_filters("paginate_links", link)), args["before_page_number"] + number_format_i18n(n) + args["after_page_number"])
-                dots = True
-            elif dots and (not args["show_all"]):
-                page_links[-1] = "<span class=\"page-numbers dots\">" + __("&hellip;") + "</span>"
-                dots = False
+                link_ += args_["add_fragment"]
+                page_links_[-1] = php_sprintf("<a class=\"page-numbers\" href=\"%s\">%s</a>", esc_url(apply_filters("paginate_links", link_)), args_["before_page_number"] + number_format_i18n(n_) + args_["after_page_number"])
+                dots_ = True
+            elif dots_ and (not args_["show_all"]):
+                page_links_[-1] = "<span class=\"page-numbers dots\">" + __("&hellip;") + "</span>"
+                dots_ = False
             # end if
         # end if
-        n += 1
+        n_ += 1
     # end while
-    if args["prev_next"] and current and current < total:
-        link = php_str_replace("%_%", args["format"], args["base"])
-        link = php_str_replace("%#%", current + 1, link)
-        if add_args:
-            link = add_query_arg(add_args, link)
+    if args_["prev_next"] and current_ and current_ < total_:
+        link_ = php_str_replace("%_%", args_["format"], args_["base"])
+        link_ = php_str_replace("%#%", current_ + 1, link_)
+        if add_args_:
+            link_ = add_query_arg(add_args_, link_)
         # end if
-        link += args["add_fragment"]
-        page_links[-1] = php_sprintf("<a class=\"next page-numbers\" href=\"%s\">%s</a>", esc_url(apply_filters("paginate_links", link)), args["next_text"])
+        link_ += args_["add_fragment"]
+        page_links_[-1] = php_sprintf("<a class=\"next page-numbers\" href=\"%s\">%s</a>", esc_url(apply_filters("paginate_links", link_)), args_["next_text"])
     # end if
-    for case in Switch(args["type"]):
+    for case in Switch(args_["type"]):
         if case("array"):
-            return page_links
+            return page_links_
         # end if
         if case("list"):
-            r += "<ul class='page-numbers'>\n   <li>"
-            r += join("</li>\n  <li>", page_links)
-            r += "</li>\n</ul>\n"
+            r_ += "<ul class='page-numbers'>\n  <li>"
+            r_ += join("</li>\n <li>", page_links_)
+            r_ += "</li>\n</ul>\n"
             break
         # end if
         if case():
-            r = join("\n", page_links)
+            r_ = join("\n", page_links_)
             break
         # end if
     # end for
-    return r
+    return r_
 # end def paginate_links
 #// 
 #// Registers an admin color scheme css file.
@@ -3701,14 +3847,20 @@ def paginate_links(args="", *args_):
 #// @type string $current SVG icon color of current admin menu link.
 #// }
 #//
-def wp_admin_css_color(key=None, name=None, url=None, colors=Array(), icons=Array(), *args_):
-    
-    global _wp_admin_css_colors
-    php_check_if_defined("_wp_admin_css_colors")
-    if (not (php_isset(lambda : _wp_admin_css_colors))):
-        _wp_admin_css_colors = Array()
+def wp_admin_css_color(key_=None, name_=None, url_=None, colors_=None, icons_=None, *_args_):
+    if colors_ is None:
+        colors_ = Array()
     # end if
-    _wp_admin_css_colors[key] = Array({"name": name, "url": url, "colors": colors, "icon_colors": icons})
+    if icons_ is None:
+        icons_ = Array()
+    # end if
+    
+    global _wp_admin_css_colors_
+    php_check_if_defined("_wp_admin_css_colors_")
+    if (not (php_isset(lambda : _wp_admin_css_colors_))):
+        _wp_admin_css_colors_ = Array()
+    # end if
+    _wp_admin_css_colors_[key_] = Array({"name": name_, "url": url_, "colors": colors_, "icon_colors": icons_})
 # end def wp_admin_css_color
 #// 
 #// Registers the default admin color schemes.
@@ -3720,22 +3872,23 @@ def wp_admin_css_color(key=None, name=None, url=None, colors=Array(), icons=Arra
 #// 
 #// @since 3.0.0
 #//
-def register_admin_color_schemes(*args_):
+def register_admin_color_schemes(*_args_):
     
-    suffix = "-rtl" if is_rtl() else ""
-    suffix += "" if SCRIPT_DEBUG else ".min"
+    
+    suffix_ = "-rtl" if is_rtl() else ""
+    suffix_ += "" if SCRIPT_DEBUG else ".min"
     wp_admin_css_color("fresh", _x("Default", "admin color scheme"), False, Array("#222", "#333", "#0073aa", "#00a0d2"), Array({"base": "#a0a5aa", "focus": "#00a0d2", "current": "#fff"}))
     #// Other color schemes are not available when running out of src.
     if False != php_strpos(get_bloginfo("version"), "-src"):
         return
     # end if
-    wp_admin_css_color("light", _x("Light", "admin color scheme"), admin_url(str("css/colors/light/colors") + str(suffix) + str(".css")), Array("#e5e5e5", "#999", "#d64e07", "#04a4cc"), Array({"base": "#999", "focus": "#ccc", "current": "#ccc"}))
-    wp_admin_css_color("blue", _x("Blue", "admin color scheme"), admin_url(str("css/colors/blue/colors") + str(suffix) + str(".css")), Array("#096484", "#4796b3", "#52accc", "#74B6CE"), Array({"base": "#e5f8ff", "focus": "#fff", "current": "#fff"}))
-    wp_admin_css_color("midnight", _x("Midnight", "admin color scheme"), admin_url(str("css/colors/midnight/colors") + str(suffix) + str(".css")), Array("#25282b", "#363b3f", "#69a8bb", "#e14d43"), Array({"base": "#f1f2f3", "focus": "#fff", "current": "#fff"}))
-    wp_admin_css_color("sunrise", _x("Sunrise", "admin color scheme"), admin_url(str("css/colors/sunrise/colors") + str(suffix) + str(".css")), Array("#b43c38", "#cf4944", "#dd823b", "#ccaf0b"), Array({"base": "#f3f1f1", "focus": "#fff", "current": "#fff"}))
-    wp_admin_css_color("ectoplasm", _x("Ectoplasm", "admin color scheme"), admin_url(str("css/colors/ectoplasm/colors") + str(suffix) + str(".css")), Array("#413256", "#523f6d", "#a3b745", "#d46f15"), Array({"base": "#ece6f6", "focus": "#fff", "current": "#fff"}))
-    wp_admin_css_color("ocean", _x("Ocean", "admin color scheme"), admin_url(str("css/colors/ocean/colors") + str(suffix) + str(".css")), Array("#627c83", "#738e96", "#9ebaa0", "#aa9d88"), Array({"base": "#f2fcff", "focus": "#fff", "current": "#fff"}))
-    wp_admin_css_color("coffee", _x("Coffee", "admin color scheme"), admin_url(str("css/colors/coffee/colors") + str(suffix) + str(".css")), Array("#46403c", "#59524c", "#c7a589", "#9ea476"), Array({"base": "#f3f2f1", "focus": "#fff", "current": "#fff"}))
+    wp_admin_css_color("light", _x("Light", "admin color scheme"), admin_url(str("css/colors/light/colors") + str(suffix_) + str(".css")), Array("#e5e5e5", "#999", "#d64e07", "#04a4cc"), Array({"base": "#999", "focus": "#ccc", "current": "#ccc"}))
+    wp_admin_css_color("blue", _x("Blue", "admin color scheme"), admin_url(str("css/colors/blue/colors") + str(suffix_) + str(".css")), Array("#096484", "#4796b3", "#52accc", "#74B6CE"), Array({"base": "#e5f8ff", "focus": "#fff", "current": "#fff"}))
+    wp_admin_css_color("midnight", _x("Midnight", "admin color scheme"), admin_url(str("css/colors/midnight/colors") + str(suffix_) + str(".css")), Array("#25282b", "#363b3f", "#69a8bb", "#e14d43"), Array({"base": "#f1f2f3", "focus": "#fff", "current": "#fff"}))
+    wp_admin_css_color("sunrise", _x("Sunrise", "admin color scheme"), admin_url(str("css/colors/sunrise/colors") + str(suffix_) + str(".css")), Array("#b43c38", "#cf4944", "#dd823b", "#ccaf0b"), Array({"base": "#f3f1f1", "focus": "#fff", "current": "#fff"}))
+    wp_admin_css_color("ectoplasm", _x("Ectoplasm", "admin color scheme"), admin_url(str("css/colors/ectoplasm/colors") + str(suffix_) + str(".css")), Array("#413256", "#523f6d", "#a3b745", "#d46f15"), Array({"base": "#ece6f6", "focus": "#fff", "current": "#fff"}))
+    wp_admin_css_color("ocean", _x("Ocean", "admin color scheme"), admin_url(str("css/colors/ocean/colors") + str(suffix_) + str(".css")), Array("#627c83", "#738e96", "#9ebaa0", "#aa9d88"), Array({"base": "#f2fcff", "focus": "#fff", "current": "#fff"}))
+    wp_admin_css_color("coffee", _x("Coffee", "admin color scheme"), admin_url(str("css/colors/coffee/colors") + str(suffix_) + str(".css")), Array("#46403c", "#59524c", "#c7a589", "#9ea476"), Array({"base": "#f3f2f1", "focus": "#fff", "current": "#fff"}))
 # end def register_admin_color_schemes
 #// 
 #// Displays the URL of a WordPress admin CSS file.
@@ -3747,14 +3900,15 @@ def register_admin_color_schemes(*args_):
 #// @param string $file file relative to wp-admin/ without its ".css" extension.
 #// @return string
 #//
-def wp_admin_css_uri(file="wp-admin", *args_):
+def wp_admin_css_uri(file_="wp-admin", *_args_):
+    
     
     if php_defined("WP_INSTALLING"):
-        _file = str("./") + str(file) + str(".css")
+        _file_ = str("./") + str(file_) + str(".css")
     else:
-        _file = admin_url(str(file) + str(".css"))
+        _file_ = admin_url(str(file_) + str(".css"))
     # end if
-    _file = add_query_arg("version", get_bloginfo("version"), _file)
+    _file_ = add_query_arg("version", get_bloginfo("version"), _file_)
     #// 
     #// Filters the URI of a WordPress admin CSS file.
     #// 
@@ -3763,7 +3917,7 @@ def wp_admin_css_uri(file="wp-admin", *args_):
     #// @param string $_file Relative path to the file with query arguments attached.
     #// @param string $file  Relative path to the file, minus its ".css" extension.
     #//
-    return apply_filters("wp_admin_css_uri", _file, file)
+    return apply_filters("wp_admin_css_uri", _file_, file_)
 # end def wp_admin_css_uri
 #// 
 #// Enqueues or directly prints a stylesheet link to the specified CSS file.
@@ -3785,21 +3939,24 @@ def wp_admin_css_uri(file="wp-admin", *args_):
 #// to wp-admin/. Defaults to 'wp-admin'.
 #// @param bool   $force_echo Optional. Force the stylesheet link to be printed rather than enqueued.
 #//
-def wp_admin_css(file="wp-admin", force_echo=False, *args_):
+def wp_admin_css(file_="wp-admin", force_echo_=None, *_args_):
+    if force_echo_ is None:
+        force_echo_ = False
+    # end if
     
     #// For backward compatibility.
-    handle = php_substr(file, 4) if 0 == php_strpos(file, "css/") else file
-    if wp_styles().query(handle):
-        if force_echo or did_action("wp_print_styles"):
+    handle_ = php_substr(file_, 4) if 0 == php_strpos(file_, "css/") else file_
+    if wp_styles().query(handle_):
+        if force_echo_ or did_action("wp_print_styles"):
             #// We already printed the style queue. Print this one immediately.
-            wp_print_styles(handle)
+            wp_print_styles(handle_)
         else:
             #// Add to style queue.
-            wp_enqueue_style(handle)
+            wp_enqueue_style(handle_)
         # end if
         return
     # end if
-    stylesheet_link = php_sprintf("<link rel='stylesheet' href='%s' type='text/css' />\n", esc_url(wp_admin_css_uri(file)))
+    stylesheet_link_ = php_sprintf("<link rel='stylesheet' href='%s' type='text/css' />\n", esc_url(wp_admin_css_uri(file_)))
     #// 
     #// Filters the stylesheet link to the specified CSS file.
     #// 
@@ -3811,11 +3968,11 @@ def wp_admin_css(file="wp-admin", force_echo=False, *args_):
     #// @param string $file            Style handle name or filename (without ".css" extension)
     #// relative to wp-admin/. Defaults to 'wp-admin'.
     #//
-    php_print(apply_filters("wp_admin_css", stylesheet_link, file))
+    php_print(apply_filters("wp_admin_css", stylesheet_link_, file_))
     if php_function_exists("is_rtl") and is_rtl():
-        rtl_stylesheet_link = php_sprintf("<link rel='stylesheet' href='%s' type='text/css' />\n", esc_url(wp_admin_css_uri(str(file) + str("-rtl"))))
+        rtl_stylesheet_link_ = php_sprintf("<link rel='stylesheet' href='%s' type='text/css' />\n", esc_url(wp_admin_css_uri(str(file_) + str("-rtl"))))
         #// This filter is documented in wp-includes/general-template.php
-        php_print(apply_filters("wp_admin_css", rtl_stylesheet_link, str(file) + str("-rtl")))
+        php_print(apply_filters("wp_admin_css", rtl_stylesheet_link_, str(file_) + str("-rtl")))
     # end if
 # end def wp_admin_css
 #// 
@@ -3827,7 +3984,8 @@ def wp_admin_css(file="wp-admin", force_echo=False, *args_):
 #// 
 #// @since 2.5.0
 #//
-def add_thickbox(*args_):
+def add_thickbox(*_args_):
+    
     
     wp_enqueue_script("thickbox")
     wp_enqueue_style("thickbox")
@@ -3842,7 +4000,8 @@ def add_thickbox(*args_):
 #// 
 #// @since 2.5.0
 #//
-def wp_generator(*args_):
+def wp_generator(*_args_):
+    
     
     #// 
     #// Filters the output of the XHTML generator tag.
@@ -3863,7 +4022,8 @@ def wp_generator(*args_):
 #// 
 #// @param string $type The type of generator to output - (html|xhtml|atom|rss2|rdf|comment|export).
 #//
-def the_generator(type=None, *args_):
+def the_generator(type_=None, *_args_):
+    
     
     #// 
     #// Filters the output of the XHTML generator tag for display.
@@ -3874,7 +4034,7 @@ def the_generator(type=None, *args_):
     #// @param string $type           The type of generator to output. Accepts 'html',
     #// 'xhtml', 'atom', 'rss2', 'rdf', 'comment', 'export'.
     #//
-    php_print(apply_filters("the_generator", get_the_generator(type), type) + "\n")
+    php_print(apply_filters("the_generator", get_the_generator(type_), type_) + "\n")
 # end def the_generator
 #// 
 #// Creates the generator XML or Comment for RSS, ATOM, etc.
@@ -3888,30 +4048,31 @@ def the_generator(type=None, *args_):
 #// @param string $type The type of generator to return - (html|xhtml|atom|rss2|rdf|comment|export).
 #// @return string|void The HTML content for the generator.
 #//
-def get_the_generator(type="", *args_):
+def get_the_generator(type_="", *_args_):
     
-    if php_empty(lambda : type):
-        current_filter = current_filter()
-        if php_empty(lambda : current_filter):
+    
+    if php_empty(lambda : type_):
+        current_filter_ = current_filter()
+        if php_empty(lambda : current_filter_):
             return
         # end if
-        for case in Switch(current_filter):
+        for case in Switch(current_filter_):
             if case("rss2_head"):
                 pass
             # end if
             if case("commentsrss2_head"):
-                type = "rss2"
+                type_ = "rss2"
                 break
             # end if
             if case("rss_head"):
                 pass
             # end if
             if case("opml_head"):
-                type = "comment"
+                type_ = "comment"
                 break
             # end if
             if case("rdf_header"):
-                type = "rdf"
+                type_ = "rdf"
                 break
             # end if
             if case("atom_head"):
@@ -3921,38 +4082,38 @@ def get_the_generator(type="", *args_):
                 pass
             # end if
             if case("app_head"):
-                type = "atom"
+                type_ = "atom"
                 break
             # end if
         # end for
     # end if
-    for case in Switch(type):
+    for case in Switch(type_):
         if case("html"):
-            gen = "<meta name=\"generator\" content=\"WordPress " + esc_attr(get_bloginfo("version")) + "\">"
+            gen_ = "<meta name=\"generator\" content=\"WordPress " + esc_attr(get_bloginfo("version")) + "\">"
             break
         # end if
         if case("xhtml"):
-            gen = "<meta name=\"generator\" content=\"WordPress " + esc_attr(get_bloginfo("version")) + "\" />"
+            gen_ = "<meta name=\"generator\" content=\"WordPress " + esc_attr(get_bloginfo("version")) + "\" />"
             break
         # end if
         if case("atom"):
-            gen = "<generator uri=\"https://wordpress.org/\" version=\"" + esc_attr(get_bloginfo_rss("version")) + "\">WordPress</generator>"
+            gen_ = "<generator uri=\"https://wordpress.org/\" version=\"" + esc_attr(get_bloginfo_rss("version")) + "\">WordPress</generator>"
             break
         # end if
         if case("rss2"):
-            gen = "<generator>" + esc_url_raw("https://wordpress.org/?v=" + get_bloginfo_rss("version")) + "</generator>"
+            gen_ = "<generator>" + esc_url_raw("https://wordpress.org/?v=" + get_bloginfo_rss("version")) + "</generator>"
             break
         # end if
         if case("rdf"):
-            gen = "<admin:generatorAgent rdf:resource=\"" + esc_url_raw("https://wordpress.org/?v=" + get_bloginfo_rss("version")) + "\" />"
+            gen_ = "<admin:generatorAgent rdf:resource=\"" + esc_url_raw("https://wordpress.org/?v=" + get_bloginfo_rss("version")) + "\" />"
             break
         # end if
         if case("comment"):
-            gen = "<!-- generator=\"WordPress/" + esc_attr(get_bloginfo("version")) + "\" -->"
+            gen_ = "<!-- generator=\"WordPress/" + esc_attr(get_bloginfo("version")) + "\" -->"
             break
         # end if
         if case("export"):
-            gen = "<!-- generator=\"WordPress/" + esc_attr(get_bloginfo_rss("version")) + "\" created=\"" + gmdate("Y-m-d H:i") + "\" -->"
+            gen_ = "<!-- generator=\"WordPress/" + esc_attr(get_bloginfo_rss("version")) + "\" created=\"" + gmdate("Y-m-d H:i") + "\" -->"
             break
         # end if
     # end for
@@ -3967,7 +4128,7 @@ def get_the_generator(type="", *args_):
     #// @param string $type The type of generator. Accepts 'html', 'xhtml', 'atom',
     #// 'rss2', 'rdf', 'comment', 'export'.
     #//
-    return apply_filters(str("get_the_generator_") + str(type), gen, type)
+    return apply_filters(str("get_the_generator_") + str(type_), gen_, type_)
 # end def get_the_generator
 #// 
 #// Outputs the html checked attribute.
@@ -3981,9 +4142,15 @@ def get_the_generator(type="", *args_):
 #// @param bool  $echo    Whether to echo or just return the string
 #// @return string html attribute or empty string
 #//
-def checked(checked=None, current=True, echo=True, *args_):
+def checked(checked_=None, current_=None, echo_=None, *_args_):
+    if current_ is None:
+        current_ = True
+    # end if
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    return __checked_selected_helper(checked, current, echo, "checked")
+    return __checked_selected_helper(checked_, current_, echo_, "checked")
 # end def checked
 #// 
 #// Outputs the html selected attribute.
@@ -3997,9 +4164,15 @@ def checked(checked=None, current=True, echo=True, *args_):
 #// @param bool  $echo     Whether to echo or just return the string
 #// @return string html attribute or empty string
 #//
-def selected(selected=None, current=True, echo=True, *args_):
+def selected(selected_=None, current_=None, echo_=None, *_args_):
+    if current_ is None:
+        current_ = True
+    # end if
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    return __checked_selected_helper(selected, current, echo, "selected")
+    return __checked_selected_helper(selected_, current_, echo_, "selected")
 # end def selected
 #// 
 #// Outputs the html disabled attribute.
@@ -4013,9 +4186,15 @@ def selected(selected=None, current=True, echo=True, *args_):
 #// @param bool  $echo     Whether to echo or just return the string
 #// @return string html attribute or empty string
 #//
-def disabled(disabled=None, current=True, echo=True, *args_):
+def disabled(disabled_=None, current_=None, echo_=None, *_args_):
+    if current_ is None:
+        current_ = True
+    # end if
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    return __checked_selected_helper(disabled, current, echo, "disabled")
+    return __checked_selected_helper(disabled_, current_, echo_, "disabled")
 # end def disabled
 #// 
 #// Outputs the html readonly attribute.
@@ -4029,9 +4208,15 @@ def disabled(disabled=None, current=True, echo=True, *args_):
 #// @param bool  $echo     Whether to echo or just return the string
 #// @return string html attribute or empty string
 #//
-def readonly(readonly=None, current=True, echo=True, *args_):
+def readonly(readonly_=None, current_=None, echo_=None, *_args_):
+    if current_ is None:
+        current_ = True
+    # end if
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    return __checked_selected_helper(readonly, current, echo, "readonly")
+    return __checked_selected_helper(readonly_, current_, echo_, "readonly")
 # end def readonly
 #// 
 #// Private helper function for checked, selected, disabled and readonly.
@@ -4047,18 +4232,19 @@ def readonly(readonly=None, current=True, echo=True, *args_):
 #// @param string $type    The type of checked|selected|disabled|readonly we are doing
 #// @return string html attribute or empty string
 #//
-def __checked_selected_helper(helper=None, current=None, echo=None, type=None, *args_):
+def __checked_selected_helper(helper_=None, current_=None, echo_=None, type_=None, *_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
-    if php_str(helper) == php_str(current):
-        result = str(" ") + str(type) + str("='") + str(type) + str("'")
+    if php_str(helper_) == php_str(current_):
+        result_ = str(" ") + str(type_) + str("='") + str(type_) + str("'")
     else:
-        result = ""
+        result_ = ""
     # end if
-    if echo:
-        php_print(result)
+    if echo_:
+        php_print(result_)
     # end if
-    return result
+    return result_
 # end def __checked_selected_helper
 #// 
 #// Default settings for heartbeat
@@ -4070,13 +4256,14 @@ def __checked_selected_helper(helper=None, current=None, echo=None, type=None, *
 #// @param array $settings
 #// @return array $settings
 #//
-def wp_heartbeat_settings(settings=None, *args_):
+def wp_heartbeat_settings(settings_=None, *_args_):
+    
     
     if (not is_admin()):
-        settings["ajaxurl"] = admin_url("admin-ajax.php", "relative")
+        settings_["ajaxurl"] = admin_url("admin-ajax.php", "relative")
     # end if
     if is_user_logged_in():
-        settings["nonce"] = wp_create_nonce("heartbeat-nonce")
+        settings_["nonce"] = wp_create_nonce("heartbeat-nonce")
     # end if
-    return settings
+    return settings_
 # end def wp_heartbeat_settings

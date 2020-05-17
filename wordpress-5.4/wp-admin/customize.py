@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,15 +24,16 @@ if (not current_user_can("customize")):
 #// @global WP_Scripts           $wp_scripts
 #// @global WP_Customize_Manager $wp_customize
 #//
-global wp_scripts,wp_customize
-php_check_if_defined("wp_scripts","wp_customize")
-if wp_customize.changeset_post_id():
-    changeset_post = get_post(wp_customize.changeset_post_id())
-    if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post.ID)):
+global wp_scripts_
+global wp_customize_
+php_check_if_defined("wp_scripts_","wp_customize_")
+if wp_customize_.changeset_post_id():
+    changeset_post_ = get_post(wp_customize_.changeset_post_id())
+    if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_.ID)):
         wp_die("<h1>" + __("You need a higher level of permission.") + "</h1>" + "<p>" + __("Sorry, you are not allowed to edit this changeset.") + "</p>", 403)
     # end if
-    missed_schedule = "future" == changeset_post.post_status and get_post_time("G", True, changeset_post) < time()
-    if missed_schedule:
+    missed_schedule_ = "future" == changeset_post_.post_status and get_post_time("G", True, changeset_post_) < time()
+    if missed_schedule_:
         #// 
         #// Note that an Ajax request spawns here instead of just calling `wp_publish_post( $changeset_post->ID )`.
         #// 
@@ -47,34 +43,34 @@ if wp_customize.changeset_post_id():
         #// 
         #// By opening an Ajax request, this is avoided and the changeset is published. See #39221.
         #//
-        nonces = wp_customize.get_nonces()
-        request_args = Array({"nonce": nonces["save"], "customize_changeset_uuid": wp_customize.changeset_uuid(), "wp_customize": "on", "customize_changeset_status": "publish"})
+        nonces_ = wp_customize_.get_nonces()
+        request_args_ = Array({"nonce": nonces_["save"], "customize_changeset_uuid": wp_customize_.changeset_uuid(), "wp_customize": "on", "customize_changeset_status": "publish"})
         ob_start()
         php_print("     ")
         wp_print_scripts(Array("wp-util"))
         php_print("     <script>\n          wp.ajax.post( 'customize_save', ")
-        php_print(wp_json_encode(request_args))
+        php_print(wp_json_encode(request_args_))
         php_print(" );\n        </script>\n     ")
-        script = ob_get_clean()
-        wp_die("<h1>" + __("Your scheduled changes just published") + "</h1>" + "<p><a href=\"" + esc_url(remove_query_arg("changeset_uuid")) + "\">" + __("Customize New Changes") + "</a></p>" + script, 200)
+        script_ = ob_get_clean()
+        wp_die("<h1>" + __("Your scheduled changes just published") + "</h1>" + "<p><a href=\"" + esc_url(remove_query_arg("changeset_uuid")) + "\">" + __("Customize New Changes") + "</a></p>" + script_, 200)
     # end if
-    if php_in_array(get_post_status(changeset_post.ID), Array("publish", "trash"), True):
+    if php_in_array(get_post_status(changeset_post_.ID), Array("publish", "trash"), True):
         wp_die("<h1>" + __("Something went wrong.") + "</h1>" + "<p>" + __("This changeset cannot be further modified.") + "</p>" + "<p><a href=\"" + esc_url(remove_query_arg("changeset_uuid")) + "\">" + __("Customize New Changes") + "</a></p>", 403)
     # end if
 # end if
 wp_reset_vars(Array("url", "return", "autofocus"))
-if (not php_empty(lambda : url)):
-    wp_customize.set_preview_url(wp_unslash(url))
+if (not php_empty(lambda : url_)):
+    wp_customize_.set_preview_url(wp_unslash(url_))
 # end if
 if (not php_empty(lambda : return_)):
-    wp_customize.set_return_url(wp_unslash(return_))
+    wp_customize_.set_return_url(wp_unslash(return_))
 # end if
-if (not php_empty(lambda : autofocus)) and php_is_array(autofocus):
-    wp_customize.set_autofocus(wp_unslash(autofocus))
+if (not php_empty(lambda : autofocus_)) and php_is_array(autofocus_):
+    wp_customize_.set_autofocus(wp_unslash(autofocus_))
 # end if
-registered = wp_scripts.registered
-wp_scripts = php_new_class("WP_Scripts", lambda : WP_Scripts())
-wp_scripts.registered = registered
+registered_ = wp_scripts_.registered
+wp_scripts_ = php_new_class("WP_Scripts", lambda : WP_Scripts())
+wp_scripts_.registered = registered_
 add_action("customize_controls_print_scripts", "print_head_scripts", 20)
 add_action("customize_controls_print_footer_scripts", "_wp_footer_scripts")
 add_action("customize_controls_print_styles", "print_admin_styles", 20)
@@ -97,21 +93,21 @@ do_action("customize_controls_enqueue_scripts")
 php_header("Content-Type: " + get_option("html_type") + "; charset=" + get_option("blog_charset"))
 wp_user_settings()
 _wp_admin_html_begin()
-body_class = "wp-core-ui wp-customizer js"
+body_class_ = "wp-core-ui wp-customizer js"
 if wp_is_mobile():
-    body_class += " mobile"
+    body_class_ += " mobile"
     php_print(" <meta name=\"viewport\" id=\"viewport-meta\" content=\"width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.2\" />\n   ")
 # end if
-if wp_customize.is_ios():
-    body_class += " ios"
+if wp_customize_.is_ios():
+    body_class_ += " ios"
 # end if
 if is_rtl():
-    body_class += " rtl"
+    body_class_ += " rtl"
 # end if
-body_class += " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_user_locale())))
-admin_title = php_sprintf(wp_customize.get_document_title_template(), __("Loading&hellip;"))
+body_class_ += " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_user_locale())))
+admin_title_ = php_sprintf(wp_customize_.get_document_title_template(), __("Loading&hellip;"))
 php_print("<title>")
-php_print(admin_title)
+php_print(admin_title_)
 php_print("""</title>
 <script type=\"text/javascript\">
 var ajaxurl = """)
@@ -133,15 +129,15 @@ do_action("customize_controls_print_styles")
 #//
 do_action("customize_controls_print_scripts")
 php_print("</head>\n<body class=\"")
-php_print(esc_attr(body_class))
+php_print(esc_attr(body_class_))
 php_print("""\">
 <div class=\"wp-full-overlay expanded\">
 <form id=\"customize-controls\" class=\"wrap wp-full-overlay-sidebar\">
 <div id=\"customize-header-actions\" class=\"wp-full-overlay-header\">
 """)
-save_text = __("Publish") if wp_customize.is_theme_active() else __("Activate &amp; Publish")
+save_text_ = __("Publish") if wp_customize_.is_theme_active() else __("Activate &amp; Publish")
 php_print("         <div id=\"customize-save-button-wrapper\" class=\"customize-save-button-wrapper\" >\n               ")
-submit_button(save_text, "primary save", "save", False)
+submit_button(save_text_, "primary save", "save", False)
 php_print("             <button id=\"publish-settings\" class=\"publish-settings button-primary button dashicons dashicons-admin-generic\" aria-label=\"")
 esc_attr_e("Publish Settings")
 php_print("""\" aria-expanded=\"false\" disabled></button>
@@ -153,7 +149,7 @@ _e("Customize")
 php_print("</span>\n                <span class=\"preview\">")
 _e("Preview")
 php_print("</span>\n            </button>\n         <a class=\"customize-controls-close\" href=\"")
-php_print(esc_url(wp_customize.get_return_url()))
+php_print(esc_url(wp_customize_.get_return_url()))
 php_print("\">\n                <span class=\"screen-reader-text\">")
 _e("Close the Customizer and go back to the previous page")
 php_print("""</span>
@@ -199,28 +195,28 @@ php_print(esc_attr(_x("Hide Controls", "label for hide controls button without l
 php_print("\">\n                <span class=\"collapse-sidebar-arrow\"></span>\n                <span class=\"collapse-sidebar-label\">")
 _ex("Hide Controls", "short (~12 characters) label for hide controls button")
 php_print("</span>\n            </button>\n         ")
-previewable_devices = wp_customize.get_previewable_devices()
+previewable_devices_ = wp_customize_.get_previewable_devices()
 php_print("         ")
-if (not php_empty(lambda : previewable_devices)):
+if (not php_empty(lambda : previewable_devices_)):
     php_print("         <div class=\"devices-wrapper\">\n               <div class=\"devices\">\n                   ")
-    for device,settings in previewable_devices:
+    for device_,settings_ in previewable_devices_:
         php_print("                     ")
-        if php_empty(lambda : settings["label"]):
+        if php_empty(lambda : settings_["label"]):
             continue
         # end if
-        active = (not php_empty(lambda : settings["default"]))
-        class_ = "preview-" + device
-        if active:
+        active_ = (not php_empty(lambda : settings_["default"]))
+        class_ = "preview-" + device_
+        if active_:
             class_ += " active"
         # end if
         php_print("                     <button type=\"button\" class=\"")
         php_print(esc_attr(class_))
         php_print("\" aria-pressed=\"")
-        php_print(esc_attr(active))
+        php_print(esc_attr(active_))
         php_print("\" data-device=\"")
-        php_print(esc_attr(device))
+        php_print(esc_attr(device_))
         php_print("\">\n                            <span class=\"screen-reader-text\">")
-        php_print(esc_html(settings["label"]))
+        php_print(esc_html(settings_["label"]))
         php_print("</span>\n                        </button>\n                 ")
     # end for
     php_print("             </div>\n            </div>\n            ")

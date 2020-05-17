@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,6 +21,7 @@ class IXR_IntrospectionServer(IXR_Server):
     #//
     def __init__(self):
         
+        
         self.setcallbacks()
         self.setcapabilities()
         self.capabilities["introspection"] = Array({"specUrl": "http://xmlrpc.usefulinc.com/doc/reserved.html", "specVersion": 1})
@@ -39,47 +35,50 @@ class IXR_IntrospectionServer(IXR_Server):
     #//
     def ixr_introspectionserver(self):
         
+        
         self.__init__()
     # end def ixr_introspectionserver
-    def addcallback(self, method=None, callback=None, args=None, help=None):
+    def addcallback(self, method_=None, callback_=None, args_=None, help_=None):
         
-        self.callbacks[method] = callback
-        self.signatures[method] = args
-        self.help[method] = help
+        
+        self.callbacks[method_] = callback_
+        self.signatures[method_] = args_
+        self.help[method_] = help_
     # end def addcallback
-    def call(self, methodname=None, args=None):
+    def call(self, methodname_=None, args_=None):
+        
         
         #// Make sure it's in an array
-        if args and (not php_is_array(args)):
-            args = Array(args)
+        if args_ and (not php_is_array(args_)):
+            args_ = Array(args_)
         # end if
         #// Over-rides default call method, adds signature check
-        if (not self.hasmethod(methodname)):
+        if (not self.hasmethod(methodname_)):
             return php_new_class("IXR_Error", lambda : IXR_Error(-32601, "server error. requested method \"" + self.message.methodName + "\" not specified."))
         # end if
-        method = self.callbacks[methodname]
-        signature = self.signatures[methodname]
-        returnType = php_array_shift(signature)
+        method_ = self.callbacks[methodname_]
+        signature_ = self.signatures[methodname_]
+        returnType_ = php_array_shift(signature_)
         #// Check the number of arguments
-        if php_count(args) != php_count(signature):
+        if php_count(args_) != php_count(signature_):
             return php_new_class("IXR_Error", lambda : IXR_Error(-32602, "server error. wrong number of method parameters"))
         # end if
         #// Check the argument types
-        ok = True
-        argsbackup = args
-        i = 0
-        j = php_count(args)
-        while i < j:
+        ok_ = True
+        argsbackup_ = args_
+        i_ = 0
+        j_ = php_count(args_)
+        while i_ < j_:
             
-            arg = php_array_shift(args)
-            type = php_array_shift(signature)
-            for case in Switch(type):
+            arg_ = php_array_shift(args_)
+            type_ = php_array_shift(signature_)
+            for case in Switch(type_):
                 if case("int"):
                     pass
                 # end if
                 if case("i4"):
-                    if php_is_array(arg) or (not php_is_int(arg)):
-                        ok = False
+                    if php_is_array(arg_) or (not php_is_int(arg_)):
+                        ok_ = False
                     # end if
                     break
                 # end if
@@ -87,14 +86,14 @@ class IXR_IntrospectionServer(IXR_Server):
                     pass
                 # end if
                 if case("string"):
-                    if (not php_is_string(arg)):
-                        ok = False
+                    if (not php_is_string(arg_)):
+                        ok_ = False
                     # end if
                     break
                 # end if
                 if case("boolean"):
-                    if arg != False and arg != True:
-                        ok = False
+                    if arg_ != False and arg_ != True:
+                        ok_ = False
                     # end if
                     break
                 # end if
@@ -102,8 +101,8 @@ class IXR_IntrospectionServer(IXR_Server):
                     pass
                 # end if
                 if case("double"):
-                    if (not php_is_float(arg)):
-                        ok = False
+                    if (not php_is_float(arg_)):
+                        ok_ = False
                     # end if
                     break
                 # end if
@@ -111,30 +110,31 @@ class IXR_IntrospectionServer(IXR_Server):
                     pass
                 # end if
                 if case("dateTime.iso8601"):
-                    if (not php_is_a(arg, "IXR_Date")):
-                        ok = False
+                    if (not php_is_a(arg_, "IXR_Date")):
+                        ok_ = False
                     # end if
                     break
                 # end if
             # end for
-            if (not ok):
+            if (not ok_):
                 return php_new_class("IXR_Error", lambda : IXR_Error(-32602, "server error. invalid method parameters"))
             # end if
-            i += 1
+            i_ += 1
         # end while
         #// It passed the test - run the "real" method call
-        return super().call(methodname, argsbackup)
+        return super().call(methodname_, argsbackup_)
     # end def call
-    def methodsignature(self, method=None):
+    def methodsignature(self, method_=None):
         
-        if (not self.hasmethod(method)):
-            return php_new_class("IXR_Error", lambda : IXR_Error(-32601, "server error. requested method \"" + method + "\" not specified."))
+        
+        if (not self.hasmethod(method_)):
+            return php_new_class("IXR_Error", lambda : IXR_Error(-32601, "server error. requested method \"" + method_ + "\" not specified."))
         # end if
         #// We should be returning an array of types
-        types = self.signatures[method]
+        types_ = self.signatures[method_]
         return_ = Array()
-        for type in types:
-            for case in Switch(type):
+        for type_ in types_:
+            for case in Switch(type_):
                 if case("string"):
                     return_[-1] = "string"
                     break
@@ -174,8 +174,9 @@ class IXR_IntrospectionServer(IXR_Server):
         # end for
         return return_
     # end def methodsignature
-    def methodhelp(self, method=None):
+    def methodhelp(self, method_=None):
         
-        return self.help[method]
+        
+        return self.help[method_]
     # end def methodhelp
 # end class IXR_IntrospectionServer

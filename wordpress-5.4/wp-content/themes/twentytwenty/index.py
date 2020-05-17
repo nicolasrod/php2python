@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,35 +25,35 @@ get_header()
 php_print("""
 <main id=\"site-content\" role=\"main\">
 """)
-archive_title = ""
-archive_subtitle = ""
+archive_title_ = ""
+archive_subtitle_ = ""
 if is_search():
-    global wp_query
-    php_check_if_defined("wp_query")
-    archive_title = php_sprintf("%1$s %2$s", "<span class=\"color-accent\">" + __("Search:", "twentytwenty") + "</span>", "&ldquo;" + get_search_query() + "&rdquo;")
-    if wp_query.found_posts:
-        archive_subtitle = php_sprintf(_n("We found %s result for your search.", "We found %s results for your search.", wp_query.found_posts, "twentytwenty"), number_format_i18n(wp_query.found_posts))
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    archive_title_ = php_sprintf("%1$s %2$s", "<span class=\"color-accent\">" + __("Search:", "twentytwenty") + "</span>", "&ldquo;" + get_search_query() + "&rdquo;")
+    if wp_query_.found_posts:
+        archive_subtitle_ = php_sprintf(_n("We found %s result for your search.", "We found %s results for your search.", wp_query_.found_posts, "twentytwenty"), number_format_i18n(wp_query_.found_posts))
     else:
-        archive_subtitle = __("We could not find any results for your search. You can give it another try through the search form below.", "twentytwenty")
+        archive_subtitle_ = __("We could not find any results for your search. You can give it another try through the search form below.", "twentytwenty")
     # end if
 elif (not is_home()):
-    archive_title = get_the_archive_title()
-    archive_subtitle = get_the_archive_description()
+    archive_title_ = get_the_archive_title()
+    archive_subtitle_ = get_the_archive_description()
 # end if
-if archive_title or archive_subtitle:
+if archive_title_ or archive_subtitle_:
     php_print("""
     <header class=\"archive-header has-text-align-center header-footer-group\">
     <div class=\"archive-header-inner section-inner medium\">
     """)
-    if archive_title:
+    if archive_title_:
         php_print("                 <h1 class=\"archive-title\">")
-        php_print(wp_kses_post(archive_title))
+        php_print(wp_kses_post(archive_title_))
         php_print("</h1>\n              ")
     # end if
     php_print("\n               ")
-    if archive_subtitle:
+    if archive_subtitle_:
         php_print("                 <div class=\"archive-subtitle section-inner thin max-percentage intro-text\">")
-        php_print(wp_kses_post(wpautop(archive_subtitle)))
+        php_print(wp_kses_post(wpautop(archive_subtitle_)))
         php_print("</div>\n             ")
     # end if
     php_print("""
@@ -67,14 +62,14 @@ if archive_title or archive_subtitle:
     """)
 # end if
 if have_posts():
-    i = 0
+    i_ = 0
     while True:
         
         if not (have_posts()):
             break
         # end if
-        i += 1
-        if i > 1:
+        i_ += 1
+        if i_ > 1:
             php_print("<hr class=\"post-separator styled-separator is-style-wide section-inner\" aria-hidden=\"true\" />")
         # end if
         the_post()

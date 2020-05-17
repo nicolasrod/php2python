@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,18 +31,20 @@ if '__PHP2PY_LOADED__' not in globals():
 #// Initialize the filter globals.
 php_include_file(__DIR__ + "/class-wp-hook.php", once=False)
 #// @var WP_Hook[] $wp_filter
-global wp_filter,wp_actions,wp_current_filter
-php_check_if_defined("wp_filter","wp_actions","wp_current_filter")
-if wp_filter:
-    wp_filter = WP_Hook.build_preinitialized_hooks(wp_filter)
+global wp_filter_
+global wp_actions_
+global wp_current_filter_
+php_check_if_defined("wp_filter_","wp_actions_","wp_current_filter_")
+if wp_filter_:
+    wp_filter_ = WP_Hook.build_preinitialized_hooks(wp_filter_)
 else:
-    wp_filter = Array()
+    wp_filter_ = Array()
 # end if
-if (not (php_isset(lambda : wp_actions))):
-    wp_actions = Array()
+if (not (php_isset(lambda : wp_actions_))):
+    wp_actions_ = Array()
 # end if
-if (not (php_isset(lambda : wp_current_filter))):
-    wp_current_filter = Array()
+if (not (php_isset(lambda : wp_current_filter_))):
+    wp_current_filter_ = Array()
 # end if
 #// 
 #// Hook a function or method to a specific filter action.
@@ -113,14 +110,15 @@ if (not (php_isset(lambda : wp_current_filter))):
 #// @param int      $accepted_args   Optional. The number of arguments the function accepts. Default 1.
 #// @return true
 #//
-def add_filter(tag=None, function_to_add=None, priority=10, accepted_args=1, *args_):
+def add_filter(tag_=None, function_to_add_=None, priority_=10, accepted_args_=1, *_args_):
     
-    global wp_filter
-    php_check_if_defined("wp_filter")
-    if (not (php_isset(lambda : wp_filter[tag]))):
-        wp_filter[tag] = php_new_class("WP_Hook", lambda : WP_Hook())
+    
+    global wp_filter_
+    php_check_if_defined("wp_filter_")
+    if (not (php_isset(lambda : wp_filter_[tag_]))):
+        wp_filter_[tag_] = php_new_class("WP_Hook", lambda : WP_Hook())
     # end if
-    wp_filter[tag].add_filter(tag, function_to_add, priority, accepted_args)
+    wp_filter_[tag_].add_filter(tag_, function_to_add_, priority_, accepted_args_)
     return True
 # end def add_filter
 #// 
@@ -139,14 +137,17 @@ def add_filter(tag=None, function_to_add=None, priority=10, accepted_args=1, *ar
 #// that evaluates to false (e.g.) 0, so use the === operator for testing the
 #// return value.
 #//
-def has_filter(tag=None, function_to_check=False, *args_):
+def has_filter(tag_=None, function_to_check_=None, *_args_):
+    if function_to_check_ is None:
+        function_to_check_ = False
+    # end if
     
-    global wp_filter
-    php_check_if_defined("wp_filter")
-    if (not (php_isset(lambda : wp_filter[tag]))):
+    global wp_filter_
+    php_check_if_defined("wp_filter_")
+    if (not (php_isset(lambda : wp_filter_[tag_]))):
         return False
     # end if
-    return wp_filter[tag].has_filter(tag, function_to_check)
+    return wp_filter_[tag_].has_filter(tag_, function_to_check_)
 # end def has_filter
 #// 
 #// Calls the callback functions that have been added to a filter hook.
@@ -186,30 +187,32 @@ def has_filter(tag=None, function_to_check=False, *args_):
 #// @param mixed  ...$args Additional parameters to pass to the callback functions.
 #// @return mixed The filtered value after all hooked functions are applied to it.
 #//
-def apply_filters(tag=None, value=None, *args_):
+def apply_filters(tag_=None, value_=None, *_args_):
     
-    global wp_filter,wp_current_filter
-    php_check_if_defined("wp_filter","wp_current_filter")
-    args = php_func_get_args()
+    
+    global wp_filter_
+    global wp_current_filter_
+    php_check_if_defined("wp_filter_","wp_current_filter_")
+    args_ = php_func_get_args()
     #// Do 'all' actions first.
-    if (php_isset(lambda : wp_filter["all"])):
-        wp_current_filter[-1] = tag
-        _wp_call_all_hook(args)
+    if (php_isset(lambda : wp_filter_["all"])):
+        wp_current_filter_[-1] = tag_
+        _wp_call_all_hook(args_)
     # end if
-    if (not (php_isset(lambda : wp_filter[tag]))):
-        if (php_isset(lambda : wp_filter["all"])):
-            php_array_pop(wp_current_filter)
+    if (not (php_isset(lambda : wp_filter_[tag_]))):
+        if (php_isset(lambda : wp_filter_["all"])):
+            php_array_pop(wp_current_filter_)
         # end if
-        return value
+        return value_
     # end if
-    if (not (php_isset(lambda : wp_filter["all"]))):
-        wp_current_filter[-1] = tag
+    if (not (php_isset(lambda : wp_filter_["all"]))):
+        wp_current_filter_[-1] = tag_
     # end if
     #// Don't pass the tag name to WP_Hook.
-    php_array_shift(args)
-    filtered = wp_filter[tag].apply_filters(value, args)
-    php_array_pop(wp_current_filter)
-    return filtered
+    php_array_shift(args_)
+    filtered_ = wp_filter_[tag_].apply_filters(value_, args_)
+    php_array_pop(wp_current_filter_)
+    return filtered_
 # end def apply_filters
 #// 
 #// Calls the callback functions that have been added to a filter hook, specifying arguments in an array.
@@ -226,28 +229,30 @@ def apply_filters(tag=None, value=None, *args_):
 #// @param array  $args The arguments supplied to the functions hooked to $tag.
 #// @return mixed The filtered value after all hooked functions are applied to it.
 #//
-def apply_filters_ref_array(tag=None, args=None, *args_):
+def apply_filters_ref_array(tag_=None, args_=None, *_args_):
     
-    global wp_filter,wp_current_filter
-    php_check_if_defined("wp_filter","wp_current_filter")
+    
+    global wp_filter_
+    global wp_current_filter_
+    php_check_if_defined("wp_filter_","wp_current_filter_")
     #// Do 'all' actions first.
-    if (php_isset(lambda : wp_filter["all"])):
-        wp_current_filter[-1] = tag
-        all_args = php_func_get_args()
-        _wp_call_all_hook(all_args)
+    if (php_isset(lambda : wp_filter_["all"])):
+        wp_current_filter_[-1] = tag_
+        all_args_ = php_func_get_args()
+        _wp_call_all_hook(all_args_)
     # end if
-    if (not (php_isset(lambda : wp_filter[tag]))):
-        if (php_isset(lambda : wp_filter["all"])):
-            php_array_pop(wp_current_filter)
+    if (not (php_isset(lambda : wp_filter_[tag_]))):
+        if (php_isset(lambda : wp_filter_["all"])):
+            php_array_pop(wp_current_filter_)
         # end if
-        return args[0]
+        return args_[0]
     # end if
-    if (not (php_isset(lambda : wp_filter["all"]))):
-        wp_current_filter[-1] = tag
+    if (not (php_isset(lambda : wp_filter_["all"]))):
+        wp_current_filter_[-1] = tag_
     # end if
-    filtered = wp_filter[tag].apply_filters(args[0], args)
-    php_array_pop(wp_current_filter)
-    return filtered
+    filtered_ = wp_filter_[tag_].apply_filters(args_[0], args_)
+    php_array_pop(wp_current_filter_)
+    return filtered_
 # end def apply_filters_ref_array
 #// 
 #// Removes a function from a specified filter hook.
@@ -269,18 +274,19 @@ def apply_filters_ref_array(tag=None, args=None, *args_):
 #// @param int      $priority           Optional. The priority of the function. Default 10.
 #// @return bool    Whether the function existed before it was removed.
 #//
-def remove_filter(tag=None, function_to_remove=None, priority=10, *args_):
+def remove_filter(tag_=None, function_to_remove_=None, priority_=10, *_args_):
     
-    global wp_filter
-    php_check_if_defined("wp_filter")
-    r = False
-    if (php_isset(lambda : wp_filter[tag])):
-        r = wp_filter[tag].remove_filter(tag, function_to_remove, priority)
-        if (not wp_filter[tag].callbacks):
-            wp_filter[tag] = None
+    
+    global wp_filter_
+    php_check_if_defined("wp_filter_")
+    r_ = False
+    if (php_isset(lambda : wp_filter_[tag_])):
+        r_ = wp_filter_[tag_].remove_filter(tag_, function_to_remove_, priority_)
+        if (not wp_filter_[tag_].callbacks):
+            wp_filter_[tag_] = None
         # end if
     # end if
-    return r
+    return r_
 # end def remove_filter
 #// 
 #// Remove all of the hooks from a filter.
@@ -293,14 +299,17 @@ def remove_filter(tag=None, function_to_remove=None, priority=10, *args_):
 #// @param int|bool $priority Optional. The priority number to remove. Default false.
 #// @return true True when finished.
 #//
-def remove_all_filters(tag=None, priority=False, *args_):
+def remove_all_filters(tag_=None, priority_=None, *_args_):
+    if priority_ is None:
+        priority_ = False
+    # end if
     
-    global wp_filter
-    php_check_if_defined("wp_filter")
-    if (php_isset(lambda : wp_filter[tag])):
-        wp_filter[tag].remove_all_filters(priority)
-        if (not wp_filter[tag].has_filters()):
-            wp_filter[tag] = None
+    global wp_filter_
+    php_check_if_defined("wp_filter_")
+    if (php_isset(lambda : wp_filter_[tag_])):
+        wp_filter_[tag_].remove_all_filters(priority_)
+        if (not wp_filter_[tag_].has_filters()):
+            wp_filter_[tag_] = None
         # end if
     # end if
     return True
@@ -314,11 +323,12 @@ def remove_all_filters(tag=None, priority=False, *args_):
 #// 
 #// @return string Hook name of the current filter or action.
 #//
-def current_filter(*args_):
+def current_filter(*_args_):
     
-    global wp_current_filter
-    php_check_if_defined("wp_current_filter")
-    return php_end(wp_current_filter)
+    
+    global wp_current_filter_
+    php_check_if_defined("wp_current_filter_")
+    return php_end(wp_current_filter_)
 # end def current_filter
 #// 
 #// Retrieve the name of the current action.
@@ -327,7 +337,8 @@ def current_filter(*args_):
 #// 
 #// @return string Hook name of the current action.
 #//
-def current_action(*args_):
+def current_action(*_args_):
+    
     
     return current_filter()
 # end def current_action
@@ -352,14 +363,15 @@ def current_action(*args_):
 #// checks if any filter is currently being run.
 #// @return bool Whether the filter is currently in the stack.
 #//
-def doing_filter(filter=None, *args_):
+def doing_filter(filter_=None, *_args_):
     
-    global wp_current_filter
-    php_check_if_defined("wp_current_filter")
-    if None == filter:
-        return (not php_empty(lambda : wp_current_filter))
+    
+    global wp_current_filter_
+    php_check_if_defined("wp_current_filter_")
+    if None == filter_:
+        return (not php_empty(lambda : wp_current_filter_))
     # end if
-    return php_in_array(filter, wp_current_filter)
+    return php_in_array(filter_, wp_current_filter_)
 # end def doing_filter
 #// 
 #// Retrieve the name of an action currently being processed.
@@ -370,9 +382,10 @@ def doing_filter(filter=None, *args_):
 #// if any action is currently being run.
 #// @return bool Whether the action is currently in the stack.
 #//
-def doing_action(action=None, *args_):
+def doing_action(action_=None, *_args_):
     
-    return doing_filter(action)
+    
+    return doing_filter(action_)
 # end def doing_action
 #// 
 #// Hooks a function on to a specific action.
@@ -394,9 +407,10 @@ def doing_action(action=None, *args_):
 #// @param int      $accepted_args   Optional. The number of arguments the function accepts. Default 1.
 #// @return true Will always return true.
 #//
-def add_action(tag=None, function_to_add=None, priority=10, accepted_args=1, *args_):
+def add_action(tag_=None, function_to_add_=None, priority_=10, accepted_args_=1, *_args_):
     
-    return add_filter(tag, function_to_add, priority, accepted_args)
+    
+    return add_filter(tag_, function_to_add_, priority_, accepted_args_)
 # end def add_action
 #// 
 #// Execute functions hooked on a specific action hook.
@@ -435,38 +449,41 @@ def add_action(tag=None, function_to_add=None, priority=10, accepted_args=1, *ar
 #// @param mixed  ...$arg Optional. Additional arguments which are passed on to the
 #// functions hooked to the action. Default empty.
 #//
-def do_action(tag=None, *arg):
+def do_action(tag_=None, *arg_):
     
-    global wp_filter,wp_actions,wp_current_filter
-    php_check_if_defined("wp_filter","wp_actions","wp_current_filter")
-    if (not (php_isset(lambda : wp_actions[tag]))):
-        wp_actions[tag] = 1
+    
+    global wp_filter_
+    global wp_actions_
+    global wp_current_filter_
+    php_check_if_defined("wp_filter_","wp_actions_","wp_current_filter_")
+    if (not (php_isset(lambda : wp_actions_[tag_]))):
+        wp_actions_[tag_] = 1
     else:
-        wp_actions[tag] += 1
+        wp_actions_[tag_] += 1
     # end if
     #// Do 'all' actions first.
-    if (php_isset(lambda : wp_filter["all"])):
-        wp_current_filter[-1] = tag
-        all_args = php_func_get_args()
-        _wp_call_all_hook(all_args)
+    if (php_isset(lambda : wp_filter_["all"])):
+        wp_current_filter_[-1] = tag_
+        all_args_ = php_func_get_args()
+        _wp_call_all_hook(all_args_)
     # end if
-    if (not (php_isset(lambda : wp_filter[tag]))):
-        if (php_isset(lambda : wp_filter["all"])):
-            php_array_pop(wp_current_filter)
+    if (not (php_isset(lambda : wp_filter_[tag_]))):
+        if (php_isset(lambda : wp_filter_["all"])):
+            php_array_pop(wp_current_filter_)
         # end if
         return
     # end if
-    if (not (php_isset(lambda : wp_filter["all"]))):
-        wp_current_filter[-1] = tag
+    if (not (php_isset(lambda : wp_filter_["all"]))):
+        wp_current_filter_[-1] = tag_
     # end if
-    if php_empty(lambda : arg):
-        arg[-1] = ""
-    elif php_is_array(arg[0]) and 1 == php_count(arg[0]) and (php_isset(lambda : arg[0][0])) and php_is_object(arg[0][0]):
+    if php_empty(lambda : arg_):
+        arg_[-1] = ""
+    elif php_is_array(arg_[0]) and 1 == php_count(arg_[0]) and (php_isset(lambda : arg_[0][0])) and php_is_object(arg_[0][0]):
         #// Backward compatibility for PHP4-style passing of `array( &$this )` as action `$arg`.
-        arg[0] = arg[0][0]
+        arg_[0] = arg_[0][0]
     # end if
-    wp_filter[tag].do_action(arg)
-    php_array_pop(wp_current_filter)
+    wp_filter_[tag_].do_action(arg_)
+    php_array_pop(wp_current_filter_)
 # end def do_action
 #// 
 #// Retrieve the number of times an action is fired.
@@ -478,14 +495,15 @@ def do_action(tag=None, *arg):
 #// @param string $tag The name of the action hook.
 #// @return int The number of times action hook $tag is fired.
 #//
-def did_action(tag=None, *args_):
+def did_action(tag_=None, *_args_):
     
-    global wp_actions
-    php_check_if_defined("wp_actions")
-    if (not (php_isset(lambda : wp_actions[tag]))):
+    
+    global wp_actions_
+    php_check_if_defined("wp_actions_")
+    if (not (php_isset(lambda : wp_actions_[tag_]))):
         return 0
     # end if
-    return wp_actions[tag]
+    return wp_actions_[tag_]
 # end def did_action
 #// 
 #// Calls the callback functions that have been added to an action hook, specifying arguments in an array.
@@ -501,32 +519,35 @@ def did_action(tag=None, *args_):
 #// @param string $tag  The name of the action to be executed.
 #// @param array  $args The arguments supplied to the functions hooked to `$tag`.
 #//
-def do_action_ref_array(tag=None, args=None, *args_):
+def do_action_ref_array(tag_=None, args_=None, *_args_):
     
-    global wp_filter,wp_actions,wp_current_filter
-    php_check_if_defined("wp_filter","wp_actions","wp_current_filter")
-    if (not (php_isset(lambda : wp_actions[tag]))):
-        wp_actions[tag] = 1
+    
+    global wp_filter_
+    global wp_actions_
+    global wp_current_filter_
+    php_check_if_defined("wp_filter_","wp_actions_","wp_current_filter_")
+    if (not (php_isset(lambda : wp_actions_[tag_]))):
+        wp_actions_[tag_] = 1
     else:
-        wp_actions[tag] += 1
+        wp_actions_[tag_] += 1
     # end if
     #// Do 'all' actions first.
-    if (php_isset(lambda : wp_filter["all"])):
-        wp_current_filter[-1] = tag
-        all_args = php_func_get_args()
-        _wp_call_all_hook(all_args)
+    if (php_isset(lambda : wp_filter_["all"])):
+        wp_current_filter_[-1] = tag_
+        all_args_ = php_func_get_args()
+        _wp_call_all_hook(all_args_)
     # end if
-    if (not (php_isset(lambda : wp_filter[tag]))):
-        if (php_isset(lambda : wp_filter["all"])):
-            php_array_pop(wp_current_filter)
+    if (not (php_isset(lambda : wp_filter_[tag_]))):
+        if (php_isset(lambda : wp_filter_["all"])):
+            php_array_pop(wp_current_filter_)
         # end if
         return
     # end if
-    if (not (php_isset(lambda : wp_filter["all"]))):
-        wp_current_filter[-1] = tag
+    if (not (php_isset(lambda : wp_filter_["all"]))):
+        wp_current_filter_[-1] = tag_
     # end if
-    wp_filter[tag].do_action(args)
-    php_array_pop(wp_current_filter)
+    wp_filter_[tag_].do_action(args_)
+    php_array_pop(wp_current_filter_)
 # end def do_action_ref_array
 #// 
 #// Check if any action has been registered for a hook.
@@ -544,9 +565,12 @@ def do_action_ref_array(tag=None, args=None, *args_):
 #// that evaluates to false (e.g.) 0, so use the === operator for testing the
 #// return value.
 #//
-def has_action(tag=None, function_to_check=False, *args_):
+def has_action(tag_=None, function_to_check_=None, *_args_):
+    if function_to_check_ is None:
+        function_to_check_ = False
+    # end if
     
-    return has_filter(tag, function_to_check)
+    return has_filter(tag_, function_to_check_)
 # end def has_action
 #// 
 #// Removes a function from a specified action hook.
@@ -562,9 +586,10 @@ def has_action(tag=None, function_to_check=False, *args_):
 #// @param int      $priority           Optional. The priority of the function. Default 10.
 #// @return bool Whether the function is removed.
 #//
-def remove_action(tag=None, function_to_remove=None, priority=10, *args_):
+def remove_action(tag_=None, function_to_remove_=None, priority_=10, *_args_):
     
-    return remove_filter(tag, function_to_remove, priority)
+    
+    return remove_filter(tag_, function_to_remove_, priority_)
 # end def remove_action
 #// 
 #// Remove all of the hooks from an action.
@@ -575,9 +600,12 @@ def remove_action(tag=None, function_to_remove=None, priority=10, *args_):
 #// @param int|bool $priority The priority number to remove them from. Default false.
 #// @return true True when finished.
 #//
-def remove_all_actions(tag=None, priority=False, *args_):
+def remove_all_actions(tag_=None, priority_=None, *_args_):
+    if priority_ is None:
+        priority_ = False
+    # end if
     
-    return remove_all_filters(tag, priority)
+    return remove_all_filters(tag_, priority_)
 # end def remove_all_actions
 #// 
 #// Fires functions attached to a deprecated filter hook.
@@ -605,13 +633,14 @@ def remove_all_actions(tag=None, priority=False, *args_):
 #// @param string $replacement Optional. The hook that should have been used. Default null.
 #// @param string $message     Optional. A message regarding the change. Default null.
 #//
-def apply_filters_deprecated(tag=None, args=None, version=None, replacement=None, message=None, *args_):
+def apply_filters_deprecated(tag_=None, args_=None, version_=None, replacement_=None, message_=None, *_args_):
     
-    if (not has_filter(tag)):
-        return args[0]
+    
+    if (not has_filter(tag_)):
+        return args_[0]
     # end if
-    _deprecated_hook(tag, version, replacement, message)
-    return apply_filters_ref_array(tag, args)
+    _deprecated_hook(tag_, version_, replacement_, message_)
+    return apply_filters_ref_array(tag_, args_)
 # end def apply_filters_deprecated
 #// 
 #// Fires functions attached to a deprecated action hook.
@@ -630,13 +659,14 @@ def apply_filters_deprecated(tag=None, args=None, version=None, replacement=None
 #// @param string $replacement Optional. The hook that should have been used. Default null.
 #// @param string $message     Optional. A message regarding the change. Default null.
 #//
-def do_action_deprecated(tag=None, args=None, version=None, replacement=None, message=None, *args_):
+def do_action_deprecated(tag_=None, args_=None, version_=None, replacement_=None, message_=None, *_args_):
     
-    if (not has_action(tag)):
+    
+    if (not has_action(tag_)):
         return
     # end if
-    _deprecated_hook(tag, version, replacement, message)
-    do_action_ref_array(tag, args)
+    _deprecated_hook(tag_, version_, replacement_, message_)
+    do_action_ref_array(tag_, args_)
 # end def do_action_deprecated
 #// 
 #// Functions for handling plugins.
@@ -653,24 +683,25 @@ def do_action_deprecated(tag=None, args=None, version=None, replacement=None, me
 #// @param string $file The filename of plugin.
 #// @return string The name of a plugin.
 #//
-def plugin_basename(file=None, *args_):
+def plugin_basename(file_=None, *_args_):
     
-    global wp_plugin_paths
-    php_check_if_defined("wp_plugin_paths")
+    
+    global wp_plugin_paths_
+    php_check_if_defined("wp_plugin_paths_")
     #// $wp_plugin_paths contains normalized paths.
-    file = wp_normalize_path(file)
-    arsort(wp_plugin_paths)
-    for dir,realdir in wp_plugin_paths:
-        if php_strpos(file, realdir) == 0:
-            file = dir + php_substr(file, php_strlen(realdir))
+    file_ = wp_normalize_path(file_)
+    arsort(wp_plugin_paths_)
+    for dir_,realdir_ in wp_plugin_paths_:
+        if php_strpos(file_, realdir_) == 0:
+            file_ = dir_ + php_substr(file_, php_strlen(realdir_))
         # end if
     # end for
-    plugin_dir = wp_normalize_path(WP_PLUGIN_DIR)
-    mu_plugin_dir = wp_normalize_path(WPMU_PLUGIN_DIR)
+    plugin_dir_ = wp_normalize_path(WP_PLUGIN_DIR)
+    mu_plugin_dir_ = wp_normalize_path(WPMU_PLUGIN_DIR)
     #// Get relative path from plugins directory.
-    file = php_preg_replace("#^" + preg_quote(plugin_dir, "#") + "/|^" + preg_quote(mu_plugin_dir, "#") + "/#", "", file)
-    file = php_trim(file, "/")
-    return file
+    file_ = php_preg_replace("#^" + preg_quote(plugin_dir_, "#") + "/|^" + preg_quote(mu_plugin_dir_, "#") + "/#", "", file_)
+    file_ = php_trim(file_, "/")
+    return file_
 # end def plugin_basename
 #// 
 #// Register a plugin's real path.
@@ -689,23 +720,24 @@ def plugin_basename(file=None, *args_):
 #// @param string $file Known path to the file.
 #// @return bool Whether the path was able to be registered.
 #//
-def wp_register_plugin_realpath(file=None, *args_):
+def wp_register_plugin_realpath(file_=None, *_args_):
     
-    global wp_plugin_paths
-    php_check_if_defined("wp_plugin_paths")
-    wp_register_plugin_realpath.wp_plugin_path = None
-    wp_register_plugin_realpath.wpmu_plugin_path = None
-    if (not (php_isset(lambda : wp_register_plugin_realpath.wp_plugin_path))):
-        wp_register_plugin_realpath.wp_plugin_path = wp_normalize_path(WP_PLUGIN_DIR)
-        wp_register_plugin_realpath.wpmu_plugin_path = wp_normalize_path(WPMU_PLUGIN_DIR)
+    
+    global wp_plugin_paths_
+    php_check_if_defined("wp_plugin_paths_")
+    wp_plugin_path_ = None
+    wpmu_plugin_path_ = None
+    if (not (php_isset(lambda : wp_plugin_path_))):
+        wp_plugin_path_ = wp_normalize_path(WP_PLUGIN_DIR)
+        wpmu_plugin_path_ = wp_normalize_path(WPMU_PLUGIN_DIR)
     # end if
-    plugin_path = wp_normalize_path(php_dirname(file))
-    plugin_realpath = wp_normalize_path(php_dirname(php_realpath(file)))
-    if plugin_path == wp_register_plugin_realpath.wp_plugin_path or plugin_path == wp_register_plugin_realpath.wpmu_plugin_path:
+    plugin_path_ = wp_normalize_path(php_dirname(file_))
+    plugin_realpath_ = wp_normalize_path(php_dirname(php_realpath(file_)))
+    if plugin_path_ == wp_plugin_path_ or plugin_path_ == wpmu_plugin_path_:
         return False
     # end if
-    if plugin_path != plugin_realpath:
-        wp_plugin_paths[plugin_path] = plugin_realpath
+    if plugin_path_ != plugin_realpath_:
+        wp_plugin_paths_[plugin_path_] = plugin_realpath_
     # end if
     return True
 # end def wp_register_plugin_realpath
@@ -717,9 +749,10 @@ def wp_register_plugin_realpath(file=None, *args_):
 #// @param string $file The filename of the plugin (__FILE__).
 #// @return string the filesystem path of the directory that contains the plugin.
 #//
-def plugin_dir_path(file=None, *args_):
+def plugin_dir_path(file_=None, *_args_):
     
-    return trailingslashit(php_dirname(file))
+    
+    return trailingslashit(php_dirname(file_))
 # end def plugin_dir_path
 #// 
 #// Get the URL directory path (with trailing slash) for the plugin __FILE__ passed in.
@@ -729,9 +762,10 @@ def plugin_dir_path(file=None, *args_):
 #// @param string $file The filename of the plugin (__FILE__).
 #// @return string the URL path of the directory that contains the plugin.
 #//
-def plugin_dir_url(file=None, *args_):
+def plugin_dir_url(file_=None, *_args_):
     
-    return trailingslashit(plugins_url("", file))
+    
+    return trailingslashit(plugins_url("", file_))
 # end def plugin_dir_url
 #// 
 #// Set the activation hook for a plugin.
@@ -751,10 +785,11 @@ def plugin_dir_url(file=None, *args_):
 #// @param string   $file     The filename of the plugin including the path.
 #// @param callable $function The function hooked to the 'activate_PLUGIN' action.
 #//
-def register_activation_hook(file=None, function=None, *args_):
+def register_activation_hook(file_=None, function_=None, *_args_):
     
-    file = plugin_basename(file)
-    add_action("activate_" + file, function)
+    
+    file_ = plugin_basename(file_)
+    add_action("activate_" + file_, function_)
 # end def register_activation_hook
 #// 
 #// Set the deactivation hook for a plugin.
@@ -774,10 +809,11 @@ def register_activation_hook(file=None, function=None, *args_):
 #// @param string   $file     The filename of the plugin including the path.
 #// @param callable $function The function hooked to the 'deactivate_PLUGIN' action.
 #//
-def register_deactivation_hook(file=None, function=None, *args_):
+def register_deactivation_hook(file_=None, function_=None, *_args_):
     
-    file = plugin_basename(file)
-    add_action("deactivate_" + file, function)
+    
+    file_ = plugin_basename(file_)
+    add_action("deactivate_" + file_, function_)
 # end def register_deactivation_hook
 #// 
 #// Set the uninstallation hook for a plugin.
@@ -805,9 +841,10 @@ def register_deactivation_hook(file=None, function=None, *args_):
 #// @param callable $callback The callback to run when the hook is called. Must be
 #// a static method or function.
 #//
-def register_uninstall_hook(file=None, callback=None, *args_):
+def register_uninstall_hook(file_=None, callback_=None, *_args_):
     
-    if php_is_array(callback) and php_is_object(callback[0]):
+    
+    if php_is_array(callback_) and php_is_object(callback_[0]):
         _doing_it_wrong(__FUNCTION__, __("Only a static class method or function can be used in an uninstall hook."), "3.1.0")
         return
     # end if
@@ -816,11 +853,11 @@ def register_uninstall_hook(file=None, callback=None, *args_):
     #// cases. Emphasis should be put on using the 'uninstall.php' way of
     #// uninstalling the plugin.
     #//
-    uninstallable_plugins = get_option("uninstall_plugins")
-    plugin_basename = plugin_basename(file)
-    if (not (php_isset(lambda : uninstallable_plugins[plugin_basename]))) or uninstallable_plugins[plugin_basename] != callback:
-        uninstallable_plugins[plugin_basename] = callback
-        update_option("uninstall_plugins", uninstallable_plugins)
+    uninstallable_plugins_ = get_option("uninstall_plugins")
+    plugin_basename_ = plugin_basename(file_)
+    if (not (php_isset(lambda : uninstallable_plugins_[plugin_basename_]))) or uninstallable_plugins_[plugin_basename_] != callback_:
+        uninstallable_plugins_[plugin_basename_] = callback_
+        update_option("uninstall_plugins", uninstallable_plugins_)
     # end if
 # end def register_uninstall_hook
 #// 
@@ -841,11 +878,12 @@ def register_uninstall_hook(file=None, callback=None, *args_):
 #// 
 #// @param array $args The collected parameters from the hook that was called.
 #//
-def _wp_call_all_hook(args=None, *args_):
+def _wp_call_all_hook(args_=None, *_args_):
     
-    global wp_filter
-    php_check_if_defined("wp_filter")
-    wp_filter["all"].do_all_hook(args)
+    
+    global wp_filter_
+    php_check_if_defined("wp_filter_")
+    wp_filter_["all"].do_all_hook(args_)
 # end def _wp_call_all_hook
 #// 
 #// Build Unique ID for storage and retrieval.
@@ -878,22 +916,23 @@ def _wp_call_all_hook(args=None, *args_):
 #// associated with a particular action are executed.
 #// @return string Unique function ID for usage as array key.
 #//
-def _wp_filter_build_unique_id(tag=None, function=None, priority=None, *args_):
+def _wp_filter_build_unique_id(tag_=None, function_=None, priority_=None, *_args_):
     
-    if php_is_string(function):
-        return function
+    
+    if php_is_string(function_):
+        return function_
     # end if
-    if php_is_object(function):
+    if php_is_object(function_):
         #// Closures are currently implemented as objects.
-        function = Array(function, "")
+        function_ = Array(function_, "")
     else:
-        function = function
+        function_ = function_
     # end if
-    if php_is_object(function[0]):
+    if php_is_object(function_[0]):
         #// Object class calling.
-        return spl_object_hash(function[0]) + function[1]
-    elif php_is_string(function[0]):
+        return spl_object_hash(function_[0]) + function_[1]
+    elif php_is_string(function_[0]):
         #// Static calling.
-        return function[0] + "::" + function[1]
+        return function_[0] + "::" + function_[1]
     # end if
 # end def _wp_filter_build_unique_id

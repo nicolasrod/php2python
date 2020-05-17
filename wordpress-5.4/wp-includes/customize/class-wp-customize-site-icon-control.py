@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,6 +24,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Cropped_Image_Control
 #//
 class WP_Customize_Site_Icon_Control(WP_Customize_Cropped_Image_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "site_icon"
     #// 
     #// Constructor.
@@ -43,9 +44,12 @@ class WP_Customize_Site_Icon_Control(WP_Customize_Cropped_Image_Control):
     #// See WP_Customize_Control::__construct() for information
     #// on accepted arguments. Default empty array.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        super().__init__(manager, id, args)
+        super().__init__(manager_, id_, args_)
         add_action("customize_controls_print_styles", "wp_site_icon", 99)
     # end def __init__
     #// 
@@ -54,6 +58,7 @@ class WP_Customize_Site_Icon_Control(WP_Customize_Cropped_Image_Control):
     #// @since 4.5.0
     #//
     def content_template(self):
+        
         
         php_print("""       <# if ( data.label ) { #>
         <span class=\"customize-control-title\">{{ data.label }}</span>

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Widget
 #//
 class WP_Widget_Media(WP_Widget):
+    #// 
+    #// Translation labels.
+    #// 
+    #// @since 4.8.0
+    #// @var array
+    #//
     l10n = Array({"add_to_widget": "", "replace_media": "", "edit_media": "", "media_library_state_multi": "", "media_library_state_single": "", "missing_attachment": "", "no_media_selected": "", "add_media": ""})
+    #// 
+    #// Whether or not the widget has been registered yet.
+    #// 
+    #// @since 4.8.1
+    #// @var bool
+    #//
     registered = False
     #// 
     #// Constructor.
@@ -41,13 +48,19 @@ class WP_Widget_Media(WP_Widget):
     #// @param array  $control_options Optional. Widget control options. See wp_register_widget_control()
     #// for information on accepted arguments. Default empty array.
     #//
-    def __init__(self, id_base=None, name=None, widget_options=Array(), control_options=Array()):
+    def __init__(self, id_base_=None, name_=None, widget_options_=None, control_options_=None):
+        if widget_options_ is None:
+            widget_options_ = Array()
+        # end if
+        if control_options_ is None:
+            control_options_ = Array()
+        # end if
         
-        widget_opts = wp_parse_args(widget_options, Array({"description": __("A media item."), "customize_selective_refresh": True, "mime_type": ""}))
-        control_opts = wp_parse_args(control_options, Array())
-        l10n_defaults = Array({"no_media_selected": __("No media selected"), "add_media": _x("Add Media", "label for button in the media widget"), "replace_media": _x("Replace Media", "label for button in the media widget; should preferably not be longer than ~13 characters long"), "edit_media": _x("Edit Media", "label for button in the media widget; should preferably not be longer than ~13 characters long"), "add_to_widget": __("Add to Widget"), "missing_attachment": php_sprintf(__("We can&#8217;t find that file. Check your <a href=\"%s\">media library</a> and make sure it wasn&#8217;t deleted."), esc_url(admin_url("upload.php"))), "media_library_state_multi": _n_noop("Media Widget (%d)", "Media Widget (%d)"), "media_library_state_single": __("Media Widget"), "unsupported_file_type": __("Looks like this isn&#8217;t the correct kind of file. Please link to an appropriate file instead.")})
-        self.l10n = php_array_merge(l10n_defaults, php_array_filter(self.l10n))
-        super().__init__(id_base, name, widget_opts, control_opts)
+        widget_opts_ = wp_parse_args(widget_options_, Array({"description": __("A media item."), "customize_selective_refresh": True, "mime_type": ""}))
+        control_opts_ = wp_parse_args(control_options_, Array())
+        l10n_defaults_ = Array({"no_media_selected": __("No media selected"), "add_media": _x("Add Media", "label for button in the media widget"), "replace_media": _x("Replace Media", "label for button in the media widget; should preferably not be longer than ~13 characters long"), "edit_media": _x("Edit Media", "label for button in the media widget; should preferably not be longer than ~13 characters long"), "add_to_widget": __("Add to Widget"), "missing_attachment": php_sprintf(__("We can&#8217;t find that file. Check your <a href=\"%s\">media library</a> and make sure it wasn&#8217;t deleted."), esc_url(admin_url("upload.php"))), "media_library_state_multi": _n_noop("Media Widget (%d)", "Media Widget (%d)"), "media_library_state_single": __("Media Widget"), "unsupported_file_type": __("Looks like this isn&#8217;t the correct kind of file. Please link to an appropriate file instead.")})
+        self.l10n = php_array_merge(l10n_defaults_, php_array_filter(self.l10n))
+        super().__init__(id_base_, name_, widget_opts_, control_opts_)
     # end def __init__
     #// 
     #// Add hooks while registering all widget instances of this widget class.
@@ -57,9 +70,12 @@ class WP_Widget_Media(WP_Widget):
     #// @param integer $number Optional. The unique order number of this widget instance
     #// compared to other instances of the same class. Default -1.
     #//
-    def _register_one(self, number=-1):
+    def _register_one(self, number_=None):
+        if number_ is None:
+            number_ = -1
+        # end if
         
-        super()._register_one(number)
+        super()._register_one(number_)
         if self.registered:
             return
         # end if
@@ -88,7 +104,8 @@ class WP_Widget_Media(WP_Widget):
     #//
     def get_instance_schema(self):
         
-        schema = Array({"attachment_id": Array({"type": "integer", "default": 0, "minimum": 0, "description": __("Attachment post ID"), "media_prop": "id"})}, {"url": Array({"type": "string", "default": "", "format": "uri", "description": __("URL to the media file")})}, {"title": Array({"type": "string", "default": "", "sanitize_callback": "sanitize_text_field", "description": __("Title for the widget"), "should_preview_update": False})})
+        
+        schema_ = Array({"attachment_id": Array({"type": "integer", "default": 0, "minimum": 0, "description": __("Attachment post ID"), "media_prop": "id"})}, {"url": Array({"type": "string", "default": "", "format": "uri", "description": __("URL to the media file")})}, {"title": Array({"type": "string", "default": "", "sanitize_callback": "sanitize_text_field", "description": __("Title for the widget"), "should_preview_update": False})})
         #// 
         #// Filters the media widget instance schema to add additional properties.
         #// 
@@ -97,8 +114,8 @@ class WP_Widget_Media(WP_Widget):
         #// @param array           $schema Instance schema.
         #// @param WP_Widget_Media $this   Widget object.
         #//
-        schema = apply_filters(str("widget_") + str(self.id_base) + str("_instance_schema"), schema, self)
-        return schema
+        schema_ = apply_filters(str("widget_") + str(self.id_base) + str("_instance_schema"), schema_, self)
+        return schema_
     # end def get_instance_schema
     #// 
     #// Determine if the supplied attachment is for a valid attachment post with the specified MIME type.
@@ -109,19 +126,20 @@ class WP_Widget_Media(WP_Widget):
     #// @param string      $mime_type  MIME type.
     #// @return bool Is matching MIME type.
     #//
-    def is_attachment_with_mime_type(self, attachment=None, mime_type=None):
+    def is_attachment_with_mime_type(self, attachment_=None, mime_type_=None):
         
-        if php_empty(lambda : attachment):
+        
+        if php_empty(lambda : attachment_):
             return False
         # end if
-        attachment = get_post(attachment)
-        if (not attachment):
+        attachment_ = get_post(attachment_)
+        if (not attachment_):
             return False
         # end if
-        if "attachment" != attachment.post_type:
+        if "attachment" != attachment_.post_type:
             return False
         # end if
-        return wp_attachment_is(mime_type, attachment)
+        return wp_attachment_is(mime_type_, attachment_)
     # end def is_attachment_with_mime_type
     #// 
     #// Sanitize a token list string, such as used in HTML rel and class attributes.
@@ -133,14 +151,15 @@ class WP_Widget_Media(WP_Widget):
     #// @param string|array $tokens List of tokens separated by spaces, or an array of tokens.
     #// @return string Sanitized token string list.
     #//
-    def sanitize_token_list(self, tokens=None):
+    def sanitize_token_list(self, tokens_=None):
         
-        if php_is_string(tokens):
-            tokens = php_preg_split("/\\s+/", php_trim(tokens))
+        
+        if php_is_string(tokens_):
+            tokens_ = php_preg_split("/\\s+/", php_trim(tokens_))
         # end if
-        tokens = php_array_map("sanitize_html_class", tokens)
-        tokens = php_array_filter(tokens)
-        return join(" ", tokens)
+        tokens_ = php_array_map("sanitize_html_class", tokens_)
+        tokens_ = php_array_filter(tokens_)
+        return join(" ", tokens_)
     # end def sanitize_token_list
     #// 
     #// Displays the widget on the front-end.
@@ -152,18 +171,19 @@ class WP_Widget_Media(WP_Widget):
     #// @param array $args     Display arguments including before_title, after_title, before_widget, and after_widget.
     #// @param array $instance Saved setting from the database.
     #//
-    def widget(self, args=None, instance=None):
+    def widget(self, args_=None, instance_=None):
         
-        instance = wp_parse_args(instance, wp_list_pluck(self.get_instance_schema(), "default"))
+        
+        instance_ = wp_parse_args(instance_, wp_list_pluck(self.get_instance_schema(), "default"))
         #// Short-circuit if no media is selected.
-        if (not self.has_content(instance)):
+        if (not self.has_content(instance_)):
             return
         # end if
-        php_print(args["before_widget"])
+        php_print(args_["before_widget"])
         #// This filter is documented in wp-includes/widgets/class-wp-widget-pages.php
-        title = apply_filters("widget_title", instance["title"], instance, self.id_base)
-        if title:
-            php_print(args["before_title"] + title + args["after_title"])
+        title_ = apply_filters("widget_title", instance_["title"], instance_, self.id_base)
+        if title_:
+            php_print(args_["before_title"] + title_ + args_["after_title"])
         # end if
         #// 
         #// Filters the media widget instance prior to rendering the media.
@@ -174,9 +194,9 @@ class WP_Widget_Media(WP_Widget):
         #// @param array           $args     Widget args.
         #// @param WP_Widget_Media $this     Widget object.
         #//
-        instance = apply_filters(str("widget_") + str(self.id_base) + str("_instance"), instance, args, self)
-        self.render_media(instance)
-        php_print(args["after_widget"])
+        instance_ = apply_filters(str("widget_") + str(self.id_base) + str("_instance"), instance_, args_, self)
+        self.render_media(instance_)
+        php_print(args_["after_widget"])
     # end def widget
     #// 
     #// Sanitizes the widget form values as they are saved.
@@ -191,40 +211,41 @@ class WP_Widget_Media(WP_Widget):
     #// @param array $instance     Previously saved values from database.
     #// @return array Updated safe values to be saved.
     #//
-    def update(self, new_instance=None, instance=None):
+    def update(self, new_instance_=None, instance_=None):
         
-        schema = self.get_instance_schema()
-        for field,field_schema in schema:
-            if (not php_array_key_exists(field, new_instance)):
+        
+        schema_ = self.get_instance_schema()
+        for field_,field_schema_ in schema_:
+            if (not php_array_key_exists(field_, new_instance_)):
                 continue
             # end if
-            value = new_instance[field]
+            value_ = new_instance_[field_]
             #// 
             #// Workaround for rest_validate_value_from_schema() due to the fact that
             #// rest_is_boolean( '' ) === false, while rest_is_boolean( '1' ) is true.
             #//
-            if "boolean" == field_schema["type"] and "" == value:
-                value = False
+            if "boolean" == field_schema_["type"] and "" == value_:
+                value_ = False
             # end if
-            if True != rest_validate_value_from_schema(value, field_schema, field):
+            if True != rest_validate_value_from_schema(value_, field_schema_, field_):
                 continue
             # end if
-            value = rest_sanitize_value_from_schema(value, field_schema)
+            value_ = rest_sanitize_value_from_schema(value_, field_schema_)
             #// @codeCoverageIgnoreStart
-            if is_wp_error(value):
+            if is_wp_error(value_):
                 continue
                 pass
             # end if
             #// @codeCoverageIgnoreEnd
-            if (php_isset(lambda : field_schema["sanitize_callback"])):
-                value = php_call_user_func(field_schema["sanitize_callback"], value)
+            if (php_isset(lambda : field_schema_["sanitize_callback"])):
+                value_ = php_call_user_func(field_schema_["sanitize_callback"], value_)
             # end if
-            if is_wp_error(value):
+            if is_wp_error(value_):
                 continue
             # end if
-            instance[field] = value
+            instance_[field_] = value_
         # end for
-        return instance
+        return instance_
     # end def update
     #// 
     #// Render the media on the frontend.
@@ -234,7 +255,8 @@ class WP_Widget_Media(WP_Widget):
     #// @param array $instance Widget instance props.
     #// @return string
     #//
-    def render_media(self, instance=None):
+    def render_media(self, instance_=None):
+        
         
         pass
     # end def render_media
@@ -249,20 +271,21 @@ class WP_Widget_Media(WP_Widget):
     #// 
     #// @param array $instance Current settings.
     #//
-    def form(self, instance=None):
+    def form(self, instance_=None):
         
-        instance_schema = self.get_instance_schema()
-        instance = wp_array_slice_assoc(wp_parse_args(instance, wp_list_pluck(instance_schema, "default")), php_array_keys(instance_schema))
-        for name,value in instance:
+        
+        instance_schema_ = self.get_instance_schema()
+        instance_ = wp_array_slice_assoc(wp_parse_args(instance_, wp_list_pluck(instance_schema_, "default")), php_array_keys(instance_schema_))
+        for name_,value_ in instance_:
             php_print("         <input\n                type=\"hidden\"\n               data-property=\"")
-            php_print(esc_attr(name))
+            php_print(esc_attr(name_))
             php_print("\"\n             class=\"media-widget-instance-property\"\n              name=\"")
-            php_print(esc_attr(self.get_field_name(name)))
+            php_print(esc_attr(self.get_field_name(name_)))
             php_print("\"\n             id=\"")
-            php_print(esc_attr(self.get_field_id(name)))
+            php_print(esc_attr(self.get_field_id(name_)))
             pass
             php_print("\"\n             value=\"")
-            php_print(esc_attr(join(",", value) if php_is_array(value) else php_strval(value)))
+            php_print(esc_attr(join(",", value_) if php_is_array(value_) else php_strval(value_)))
             php_print("\"\n         />\n            ")
         # end for
     # end def form
@@ -275,24 +298,25 @@ class WP_Widget_Media(WP_Widget):
     #// @param WP_Post $post   The current attachment object.
     #// @return array
     #//
-    def display_media_state(self, states=None, post=None):
+    def display_media_state(self, states_=None, post_=None):
         
-        if (not post):
-            post = get_post()
+        
+        if (not post_):
+            post_ = get_post()
         # end if
         #// Count how many times this attachment is used in widgets.
-        use_count = 0
-        for instance in self.get_settings():
-            if (php_isset(lambda : instance["attachment_id"])) and instance["attachment_id"] == post.ID:
-                use_count += 1
+        use_count_ = 0
+        for instance_ in self.get_settings():
+            if (php_isset(lambda : instance_["attachment_id"])) and instance_["attachment_id"] == post_.ID:
+                use_count_ += 1
             # end if
         # end for
-        if 1 == use_count:
-            states[-1] = self.l10n["media_library_state_single"]
-        elif use_count > 0:
-            states[-1] = php_sprintf(translate_nooped_plural(self.l10n["media_library_state_multi"], use_count), number_format_i18n(use_count))
+        if 1 == use_count_:
+            states_[-1] = self.l10n["media_library_state_single"]
+        elif use_count_ > 0:
+            states_[-1] = php_sprintf(translate_nooped_plural(self.l10n["media_library_state_multi"], use_count_), number_format_i18n(use_count_))
         # end if
-        return states
+        return states_
     # end def display_media_state
     #// 
     #// Enqueue preview scripts.
@@ -306,6 +330,7 @@ class WP_Widget_Media(WP_Widget):
     #//
     def enqueue_preview_scripts(self):
         
+        
         pass
     # end def enqueue_preview_scripts
     #// 
@@ -314,6 +339,7 @@ class WP_Widget_Media(WP_Widget):
     #// @since 4.8.0
     #//
     def enqueue_admin_scripts(self):
+        
         
         wp_enqueue_media()
         wp_enqueue_script("media-widgets")
@@ -324,6 +350,7 @@ class WP_Widget_Media(WP_Widget):
     #// @since 4.8.0
     #//
     def render_control_template_scripts(self):
+        
         
         php_print("     <script type=\"text/html\" id=\"tmpl-widget-media-")
         php_print(esc_attr(self.id_base))
@@ -369,8 +396,9 @@ class WP_Widget_Media(WP_Widget):
     #// @param array $instance Widget instance props.
     #// @return bool Whether widget has content.
     #//
-    def has_content(self, instance=None):
+    def has_content(self, instance_=None):
         
-        return instance["attachment_id"] and "attachment" == get_post_type(instance["attachment_id"]) or instance["url"]
+        
+        return instance_["attachment_id"] and "attachment" == get_post_type(instance_["attachment_id"]) or instance_["url"]
     # end def has_content
 # end class WP_Widget_Media

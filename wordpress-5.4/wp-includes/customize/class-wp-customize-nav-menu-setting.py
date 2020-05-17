@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,13 +29,84 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     ID_PATTERN = "/^nav_menu\\[(?P<id>-?\\d+)\\]$/"
     TAXONOMY = "nav_menu"
     TYPE = "nav_menu"
+    #// 
+    #// Setting type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = self.TYPE
+    #// 
+    #// Default setting value.
+    #// 
+    #// @since 4.3.0
+    #// @var array
+    #// 
+    #// @see wp_get_nav_menu_object()
+    #//
     default = Array({"name": "", "description": "", "parent": 0, "auto_add": False})
+    #// 
+    #// Default transport.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     transport = "postMessage"
+    #// 
+    #// The term ID represented by this setting instance.
+    #// 
+    #// A negative value represents a placeholder ID for a new menu not yet saved.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #//
     term_id = Array()
+    #// 
+    #// Previous (placeholder) term ID used before creating a new menu.
+    #// 
+    #// This value will be exported to JS via the {@see 'customize_save_response'} filter
+    #// so that JavaScript can update the settings to refer to the newly-assigned
+    #// term ID. This value is always negative to indicate it does not refer to
+    #// a real term.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #// 
+    #// @see WP_Customize_Nav_Menu_Setting::update()
+    #// @see WP_Customize_Nav_Menu_Setting::amend_customize_save_response()
+    #//
     previous_term_id = Array()
+    #// 
+    #// Whether or not update() was called.
+    #// 
+    #// @since 4.3.0
+    #// @var bool
+    #//
     is_updated = False
+    #// 
+    #// Status for calling the update method, used in customize_save_response filter.
+    #// 
+    #// See {@see 'customize_save_response'}.
+    #// 
+    #// When status is inserted, the placeholder term ID is stored in `$previous_term_id`.
+    #// When status is error, the error is stored in `$update_error`.
+    #// 
+    #// @since 4.3.0
+    #// @var string updated|inserted|deleted|error
+    #// 
+    #// @see WP_Customize_Nav_Menu_Setting::update()
+    #// @see WP_Customize_Nav_Menu_Setting::amend_customize_save_response()
+    #//
     update_status = Array()
+    #// 
+    #// Any error object returned by wp_update_nav_menu_object() when setting is updated.
+    #// 
+    #// @since 4.3.0
+    #// @var WP_Error
+    #// 
+    #// @see WP_Customize_Nav_Menu_Setting::update()
+    #// @see WP_Customize_Nav_Menu_Setting::amend_customize_save_response()
+    #//
     update_error = Array()
     #// 
     #// Constructor.
@@ -56,16 +122,19 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// 
     #// @throws Exception If $id is not valid for this setting type.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if php_empty(lambda : manager.nav_menus):
+        if php_empty(lambda : manager_.nav_menus):
             raise php_new_class("Exception", lambda : Exception("Expected WP_Customize_Manager::$nav_menus to be set."))
         # end if
-        if (not php_preg_match(self.ID_PATTERN, id, matches)):
-            raise php_new_class("Exception", lambda : Exception(str("Illegal widget setting ID: ") + str(id)))
+        if (not php_preg_match(self.ID_PATTERN, id_, matches_)):
+            raise php_new_class("Exception", lambda : Exception(str("Illegal widget setting ID: ") + str(id_)))
         # end if
-        self.term_id = php_intval(matches["id"])
-        super().__init__(manager, id, args)
+        self.term_id = php_intval(matches_["id"])
+        super().__init__(manager_, id_, args_)
     # end def __init__
     #// 
     #// Get the instance data for a given widget setting.
@@ -78,34 +147,35 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #//
     def value(self):
         
+        
         if self.is_previewed and get_current_blog_id() == self._previewed_blog_id:
-            undefined = php_new_class("stdClass", lambda : stdClass())
+            undefined_ = php_new_class("stdClass", lambda : stdClass())
             #// Symbol.
-            post_value = self.post_value(undefined)
-            if undefined == post_value:
-                value = self._original_value
+            post_value_ = self.post_value(undefined_)
+            if undefined_ == post_value_:
+                value_ = self._original_value
             else:
-                value = post_value
+                value_ = post_value_
             # end if
         else:
-            value = False
+            value_ = False
             #// Note that a term_id of less than one indicates a nav_menu not yet inserted.
             if self.term_id > 0:
-                term = wp_get_nav_menu_object(self.term_id)
-                if term:
-                    value = wp_array_slice_assoc(term, php_array_keys(self.default))
-                    nav_menu_options = get_option("nav_menu_options", Array())
-                    value["auto_add"] = False
-                    if (php_isset(lambda : nav_menu_options["auto_add"])) and php_is_array(nav_menu_options["auto_add"]):
-                        value["auto_add"] = php_in_array(term.term_id, nav_menu_options["auto_add"])
+                term_ = wp_get_nav_menu_object(self.term_id)
+                if term_:
+                    value_ = wp_array_slice_assoc(term_, php_array_keys(self.default))
+                    nav_menu_options_ = get_option("nav_menu_options", Array())
+                    value_["auto_add"] = False
+                    if (php_isset(lambda : nav_menu_options_["auto_add"])) and php_is_array(nav_menu_options_["auto_add"]):
+                        value_["auto_add"] = php_in_array(term_.term_id, nav_menu_options_["auto_add"])
                     # end if
                 # end if
             # end if
-            if (not php_is_array(value)):
-                value = self.default
+            if (not php_is_array(value_)):
+                value_ = self.default
             # end if
         # end if
-        return value
+        return value_
     # end def value
     #// 
     #// Handle previewing the setting.
@@ -119,13 +189,14 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #//
     def preview(self):
         
+        
         if self.is_previewed:
             return False
         # end if
-        undefined = php_new_class("stdClass", lambda : stdClass())
-        is_placeholder = self.term_id < 0
-        is_dirty = undefined != self.post_value(undefined)
-        if (not is_placeholder) and (not is_dirty):
+        undefined_ = php_new_class("stdClass", lambda : stdClass())
+        is_placeholder_ = self.term_id < 0
+        is_dirty_ = undefined_ != self.post_value(undefined_)
+        if (not is_placeholder_) and (not is_dirty_):
             return False
         # end if
         self.is_previewed = True
@@ -148,38 +219,48 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// @param array     $args  An array of arguments used to retrieve menu objects.
     #// @return WP_Term[] Array of menu objects.
     #//
-    def filter_wp_get_nav_menus(self, menus=None, args=None):
+    def filter_wp_get_nav_menus(self, menus_=None, args_=None):
+        
         
         if get_current_blog_id() != self._previewed_blog_id:
-            return menus
+            return menus_
         # end if
-        setting_value = self.value()
-        is_delete = False == setting_value
-        index = -1
+        setting_value_ = self.value()
+        is_delete_ = False == setting_value_
+        index_ = -1
         #// Find the existing menu item's position in the list.
-        for i,menu in menus:
-            if php_int(self.term_id) == php_int(menu.term_id) or php_int(self.previous_term_id) == php_int(menu.term_id):
-                index = i
+        for i_,menu_ in menus_:
+            if php_int(self.term_id) == php_int(menu_.term_id) or php_int(self.previous_term_id) == php_int(menu_.term_id):
+                index_ = i_
                 break
             # end if
         # end for
-        if is_delete:
+        if is_delete_:
             #// Handle deleted menu by removing it from the list.
-            if -1 != index:
-                array_splice(menus, index, 1)
+            if -1 != index_:
+                array_splice(menus_, index_, 1)
             # end if
         else:
             #// Handle menus being updated or inserted.
-            menu_obj = php_array_merge(Array({"term_id": self.term_id, "term_taxonomy_id": self.term_id, "slug": sanitize_title(setting_value["name"]), "count": 0, "term_group": 0, "taxonomy": self.TAXONOMY, "filter": "raw"}), setting_value)
-            array_splice(menus, index, 0 if -1 == index else 1, Array(menu_obj))
+            menu_obj_ = php_array_merge(Array({"term_id": self.term_id, "term_taxonomy_id": self.term_id, "slug": sanitize_title(setting_value_["name"]), "count": 0, "term_group": 0, "taxonomy": self.TAXONOMY, "filter": "raw"}), setting_value_)
+            array_splice(menus_, index_, 0 if -1 == index_ else 1, Array(menu_obj_))
         # end if
         #// Make sure the menu objects get re-sorted after an update/insert.
-        if (not is_delete) and (not php_empty(lambda : args["orderby"])):
-            menus = wp_list_sort(menus, Array({args["orderby"]: "ASC"}))
+        if (not is_delete_) and (not php_empty(lambda : args_["orderby"])):
+            menus_ = wp_list_sort(menus_, Array({args_["orderby"]: "ASC"}))
         # end if
         #// @todo Add support for $args['hide_empty'] === true.
-        return menus
+        return menus_
     # end def filter_wp_get_nav_menus
+    #// 
+    #// Temporary non-closure passing of orderby value to function.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #// 
+    #// @see WP_Customize_Nav_Menu_Setting::filter_wp_get_nav_menus()
+    #// @see WP_Customize_Nav_Menu_Setting::_sort_menus_by_orderby()
+    #//
     _current_menus_sort_orderby = Array()
     #// 
     #// Sort menu objects by the class-supplied orderby property.
@@ -195,11 +276,12 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// 
     #// @see WP_Customize_Nav_Menu_Setting::filter_wp_get_nav_menus()
     #//
-    def _sort_menus_by_orderby(self, menu1=None, menu2=None):
+    def _sort_menus_by_orderby(self, menu1_=None, menu2_=None):
+        
         
         _deprecated_function(__METHOD__, "4.7.0", "wp_list_sort")
-        key = self._current_menus_sort_orderby
-        return strcmp(menu1.key, menu2.key)
+        key_ = self._current_menus_sort_orderby
+        return strcmp(menu1_.key_, menu2_.key_)
     # end def _sort_menus_by_orderby
     #// 
     #// Filters the wp_get_nav_menu_object() result to supply the previewed menu object.
@@ -214,23 +296,24 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// @param string      $menu_id  ID of the nav_menu term. Requests by slug or name will be ignored.
     #// @return object|null
     #//
-    def filter_wp_get_nav_menu_object(self, menu_obj=None, menu_id=None):
+    def filter_wp_get_nav_menu_object(self, menu_obj_=None, menu_id_=None):
         
-        ok = get_current_blog_id() == self._previewed_blog_id and php_is_int(menu_id) and menu_id == self.term_id
-        if (not ok):
-            return menu_obj
+        
+        ok_ = get_current_blog_id() == self._previewed_blog_id and php_is_int(menu_id_) and menu_id_ == self.term_id
+        if (not ok_):
+            return menu_obj_
         # end if
-        setting_value = self.value()
+        setting_value_ = self.value()
         #// Handle deleted menus.
-        if False == setting_value:
+        if False == setting_value_:
             return False
         # end if
         #// Handle sanitization failure by preventing short-circuiting.
-        if None == setting_value:
-            return menu_obj
+        if None == setting_value_:
+            return menu_obj_
         # end if
-        menu_obj = php_array_merge(Array({"term_id": self.term_id, "term_taxonomy_id": self.term_id, "slug": sanitize_title(setting_value["name"]), "count": 0, "term_group": 0, "taxonomy": self.TAXONOMY, "filter": "raw"}), setting_value)
-        return menu_obj
+        menu_obj_ = php_array_merge(Array({"term_id": self.term_id, "term_taxonomy_id": self.term_id, "slug": sanitize_title(setting_value_["name"]), "count": 0, "term_group": 0, "taxonomy": self.TAXONOMY, "filter": "raw"}), setting_value_)
+        return menu_obj_
     # end def filter_wp_get_nav_menu_object
     #// 
     #// Filters the nav_menu_options option to include this menu's auto_add preference.
@@ -240,14 +323,15 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// @param array $nav_menu_options Nav menu options including auto_add.
     #// @return array (Maybe) modified nav menu options.
     #//
-    def filter_nav_menu_options(self, nav_menu_options=None):
+    def filter_nav_menu_options(self, nav_menu_options_=None):
+        
         
         if get_current_blog_id() != self._previewed_blog_id:
-            return nav_menu_options
+            return nav_menu_options_
         # end if
-        menu = self.value()
-        nav_menu_options = self.filter_nav_menu_options_value(nav_menu_options, self.term_id, False if False == menu else menu["auto_add"])
-        return nav_menu_options
+        menu_ = self.value()
+        nav_menu_options_ = self.filter_nav_menu_options_value(nav_menu_options_, self.term_id, False if False == menu_ else menu_["auto_add"])
+        return nav_menu_options_
     # end def filter_nav_menu_options
     #// 
     #// Sanitize an input.
@@ -261,30 +345,41 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// @return array|false|null Null if an input isn't valid. False if it is marked for deletion.
     #// Otherwise the sanitized value.
     #//
-    def sanitize(self, value=None):
+    def sanitize(self, value_=None):
+        
         
         #// Menu is marked for deletion.
-        if False == value:
-            return value
+        if False == value_:
+            return value_
         # end if
         #// Invalid.
-        if (not php_is_array(value)):
+        if (not php_is_array(value_)):
             return None
         # end if
-        default = Array({"name": "", "description": "", "parent": 0, "auto_add": False})
-        value = php_array_merge(default, value)
-        value = wp_array_slice_assoc(value, php_array_keys(default))
-        value["name"] = php_trim(esc_html(value["name"]))
+        default_ = Array({"name": "", "description": "", "parent": 0, "auto_add": False})
+        value_ = php_array_merge(default_, value_)
+        value_ = wp_array_slice_assoc(value_, php_array_keys(default_))
+        value_["name"] = php_trim(esc_html(value_["name"]))
         #// This sanitization code is used in wp-admin/nav-menus.php.
-        value["description"] = sanitize_text_field(value["description"])
-        value["parent"] = php_max(0, php_intval(value["parent"]))
-        value["auto_add"] = (not php_empty(lambda : value["auto_add"]))
-        if "" == value["name"]:
-            value["name"] = _x("(unnamed)", "Missing menu name.")
+        value_["description"] = sanitize_text_field(value_["description"])
+        value_["parent"] = php_max(0, php_intval(value_["parent"]))
+        value_["auto_add"] = (not php_empty(lambda : value_["auto_add"]))
+        if "" == value_["name"]:
+            value_["name"] = _x("(unnamed)", "Missing menu name.")
         # end if
         #// This filter is documented in wp-includes/class-wp-customize-setting.php
-        return apply_filters(str("customize_sanitize_") + str(self.id), value, self)
+        return apply_filters(str("customize_sanitize_") + str(self.id), value_, self)
     # end def sanitize
+    #// 
+    #// Storage for data to be sent back to client in customize_save_response filter.
+    #// 
+    #// See {@see 'customize_save_response'}.
+    #// 
+    #// @since 4.3.0
+    #// @var array
+    #// 
+    #// @see WP_Customize_Nav_Menu_Setting::amend_customize_save_response()
+    #//
     _widget_nav_menu_updates = Array()
     #// 
     #// Create/update the nav_menu term for this setting.
@@ -310,94 +405,95 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// }
     #// @return null|void
     #//
-    def update(self, value=None):
+    def update(self, value_=None):
+        
         
         if self.is_updated:
             return
         # end if
         self.is_updated = True
-        is_placeholder = self.term_id < 0
-        is_delete = False == value
+        is_placeholder_ = self.term_id < 0
+        is_delete_ = False == value_
         add_filter("customize_save_response", Array(self, "amend_customize_save_response"))
-        auto_add = None
-        if is_delete:
+        auto_add_ = None
+        if is_delete_:
             #// If the current setting term is a placeholder, a delete request is a no-op.
-            if is_placeholder:
+            if is_placeholder_:
                 self.update_status = "deleted"
             else:
-                r = wp_delete_nav_menu(self.term_id)
-                if is_wp_error(r):
+                r_ = wp_delete_nav_menu(self.term_id)
+                if is_wp_error(r_):
                     self.update_status = "error"
-                    self.update_error = r
+                    self.update_error = r_
                 else:
                     self.update_status = "deleted"
-                    auto_add = False
+                    auto_add_ = False
                 # end if
             # end if
         else:
             #// Insert or update menu.
-            menu_data = wp_array_slice_assoc(value, Array("description", "parent"))
-            menu_data["menu-name"] = value["name"]
-            menu_id = 0 if is_placeholder else self.term_id
-            r = wp_update_nav_menu_object(menu_id, wp_slash(menu_data))
-            original_name = menu_data["menu-name"]
-            name_conflict_suffix = 1
+            menu_data_ = wp_array_slice_assoc(value_, Array("description", "parent"))
+            menu_data_["menu-name"] = value_["name"]
+            menu_id_ = 0 if is_placeholder_ else self.term_id
+            r_ = wp_update_nav_menu_object(menu_id_, wp_slash(menu_data_))
+            original_name_ = menu_data_["menu-name"]
+            name_conflict_suffix_ = 1
             while True:
                 
-                if not (is_wp_error(r) and "menu_exists" == r.get_error_code()):
+                if not (is_wp_error(r_) and "menu_exists" == r_.get_error_code()):
                     break
                 # end if
-                name_conflict_suffix += 1
+                name_conflict_suffix_ += 1
                 #// translators: 1: Original menu name, 2: Duplicate count.
-                menu_data["menu-name"] = php_sprintf(__("%1$s (%2$d)"), original_name, name_conflict_suffix)
-                r = wp_update_nav_menu_object(menu_id, wp_slash(menu_data))
+                menu_data_["menu-name"] = php_sprintf(__("%1$s (%2$d)"), original_name_, name_conflict_suffix_)
+                r_ = wp_update_nav_menu_object(menu_id_, wp_slash(menu_data_))
             # end while
-            if is_wp_error(r):
+            if is_wp_error(r_):
                 self.update_status = "error"
-                self.update_error = r
+                self.update_error = r_
             else:
-                if is_placeholder:
+                if is_placeholder_:
                     self.previous_term_id = self.term_id
-                    self.term_id = r
+                    self.term_id = r_
                     self.update_status = "inserted"
                 else:
                     self.update_status = "updated"
                 # end if
-                auto_add = value["auto_add"]
+                auto_add_ = value_["auto_add"]
             # end if
         # end if
-        if None != auto_add:
-            nav_menu_options = self.filter_nav_menu_options_value(get_option("nav_menu_options", Array()), self.term_id, auto_add)
-            update_option("nav_menu_options", nav_menu_options)
+        if None != auto_add_:
+            nav_menu_options_ = self.filter_nav_menu_options_value(get_option("nav_menu_options", Array()), self.term_id, auto_add_)
+            update_option("nav_menu_options", nav_menu_options_)
         # end if
         if "inserted" == self.update_status:
             #// Make sure that new menus assigned to nav menu locations use their new IDs.
-            for setting in self.manager.settings():
-                if (not php_preg_match("/^nav_menu_locations\\[/", setting.id)):
+            for setting_ in self.manager.settings():
+                if (not php_preg_match("/^nav_menu_locations\\[/", setting_.id)):
                     continue
                 # end if
-                post_value = setting.post_value(None)
-                if (not is_null(post_value)) and php_intval(post_value) == self.previous_term_id:
-                    self.manager.set_post_value(setting.id, self.term_id)
-                    setting.save()
+                post_value_ = setting_.post_value(None)
+                if (not is_null(post_value_)) and php_intval(post_value_) == self.previous_term_id:
+                    self.manager.set_post_value(setting_.id, self.term_id)
+                    setting_.save()
                 # end if
             # end for
             #// Make sure that any nav_menu widgets referencing the placeholder nav menu get updated and sent back to client.
-            for setting_id in php_array_keys(self.manager.unsanitized_post_values()):
-                nav_menu_widget_setting = self.manager.get_setting(setting_id)
-                if (not nav_menu_widget_setting) or (not php_preg_match("/^widget_nav_menu\\[/", nav_menu_widget_setting.id)):
+            for setting_id_ in php_array_keys(self.manager.unsanitized_post_values()):
+                nav_menu_widget_setting_ = self.manager.get_setting(setting_id_)
+                if (not nav_menu_widget_setting_) or (not php_preg_match("/^widget_nav_menu\\[/", nav_menu_widget_setting_.id)):
                     continue
                 # end if
-                widget_instance = nav_menu_widget_setting.post_value()
+                widget_instance_ = nav_menu_widget_setting_.post_value()
                 #// Note that this calls WP_Customize_Widgets::sanitize_widget_instance().
-                if php_empty(lambda : widget_instance["nav_menu"]) or php_intval(widget_instance["nav_menu"]) != self.previous_term_id:
+                if php_empty(lambda : widget_instance_["nav_menu"]) or php_intval(widget_instance_["nav_menu"]) != self.previous_term_id:
                     continue
                 # end if
-                widget_instance["nav_menu"] = self.term_id
-                updated_widget_instance = self.manager.widgets.sanitize_widget_js_instance(widget_instance)
-                self.manager.set_post_value(nav_menu_widget_setting.id, updated_widget_instance)
-                nav_menu_widget_setting.save()
-                self._widget_nav_menu_updates[nav_menu_widget_setting.id] = updated_widget_instance
+                widget_instance_["nav_menu"] = self.term_id
+                updated_widget_instance_ = self.manager.widgets.sanitize_widget_js_instance(widget_instance_)
+                self.manager.set_post_value(nav_menu_widget_setting_.id, updated_widget_instance_)
+                nav_menu_widget_setting_.save()
+                self._widget_nav_menu_updates[nav_menu_widget_setting_.id] = updated_widget_instance_
             # end for
         # end if
     # end def update
@@ -414,19 +510,20 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// @param bool  $auto_add         Whether to auto-add or not.
     #// @return array (Maybe) modified nav_menu_otions array.
     #//
-    def filter_nav_menu_options_value(self, nav_menu_options=None, menu_id=None, auto_add=None):
+    def filter_nav_menu_options_value(self, nav_menu_options_=None, menu_id_=None, auto_add_=None):
         
-        nav_menu_options = nav_menu_options
-        if (not (php_isset(lambda : nav_menu_options["auto_add"]))):
-            nav_menu_options["auto_add"] = Array()
+        
+        nav_menu_options_ = nav_menu_options_
+        if (not (php_isset(lambda : nav_menu_options_["auto_add"]))):
+            nav_menu_options_["auto_add"] = Array()
         # end if
-        i = php_array_search(menu_id, nav_menu_options["auto_add"])
-        if auto_add and False == i:
-            php_array_push(nav_menu_options["auto_add"], self.term_id)
-        elif (not auto_add) and False != i:
-            array_splice(nav_menu_options["auto_add"], i, 1)
+        i_ = php_array_search(menu_id_, nav_menu_options_["auto_add"])
+        if auto_add_ and False == i_:
+            php_array_push(nav_menu_options_["auto_add"], self.term_id)
+        elif (not auto_add_) and False != i_:
+            array_splice(nav_menu_options_["auto_add"], i_, 1)
         # end if
-        return nav_menu_options
+        return nav_menu_options_
     # end def filter_nav_menu_options_value
     #// 
     #// Export data for the JS client.
@@ -438,17 +535,18 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     #// @param array $data Additional information passed back to the 'saved' event on `wp.customize`.
     #// @return array Export data.
     #//
-    def amend_customize_save_response(self, data=None):
+    def amend_customize_save_response(self, data_=None):
         
-        if (not (php_isset(lambda : data["nav_menu_updates"]))):
-            data["nav_menu_updates"] = Array()
+        
+        if (not (php_isset(lambda : data_["nav_menu_updates"]))):
+            data_["nav_menu_updates"] = Array()
         # end if
-        if (not (php_isset(lambda : data["widget_nav_menu_updates"]))):
-            data["widget_nav_menu_updates"] = Array()
+        if (not (php_isset(lambda : data_["widget_nav_menu_updates"]))):
+            data_["widget_nav_menu_updates"] = Array()
         # end if
-        data["nav_menu_updates"][-1] = Array({"term_id": self.term_id, "previous_term_id": self.previous_term_id, "error": self.update_error.get_error_code() if self.update_error else None, "status": self.update_status, "saved_value": None if "deleted" == self.update_status else self.value()})
-        data["widget_nav_menu_updates"] = php_array_merge(data["widget_nav_menu_updates"], self._widget_nav_menu_updates)
+        data_["nav_menu_updates"][-1] = Array({"term_id": self.term_id, "previous_term_id": self.previous_term_id, "error": self.update_error.get_error_code() if self.update_error else None, "status": self.update_status, "saved_value": None if "deleted" == self.update_status else self.value()})
+        data_["widget_nav_menu_updates"] = php_array_merge(data_["widget_nav_menu_updates"], self._widget_nav_menu_updates)
         self._widget_nav_menu_updates = Array()
-        return data
+        return data_
     # end def amend_customize_save_response
 # end class WP_Customize_Nav_Menu_Setting

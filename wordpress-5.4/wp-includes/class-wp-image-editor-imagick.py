@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,8 +21,14 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Image_Editor
 #//
 class WP_Image_Editor_Imagick(WP_Image_Editor):
+    #// 
+    #// Imagick object.
+    #// 
+    #// @var Imagick
+    #//
     image = Array()
     def __del__(self):
+        
         
         if type(self.image).__name__ == "Imagick":
             #// We don't need the original in memory anymore.
@@ -47,7 +48,10 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return bool
     #//
     @classmethod
-    def test(self, args=Array()):
+    def test(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         #// First, test Imagick's extension and classes.
         if (not php_extension_loaded("imagick")) or (not php_class_exists("Imagick", False)) or (not php_class_exists("ImagickPixel", False)):
@@ -56,13 +60,13 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
         if php_version_compare(php_phpversion("imagick"), "2.2.0", "<"):
             return False
         # end if
-        required_methods = Array("clear", "destroy", "valid", "getimage", "writeimage", "getimageblob", "getimagegeometry", "getimageformat", "setimageformat", "setimagecompression", "setimagecompressionquality", "setimagepage", "setoption", "scaleimage", "cropimage", "rotateimage", "flipimage", "flopimage", "readimage")
+        required_methods_ = Array("clear", "destroy", "valid", "getimage", "writeimage", "getimageblob", "getimagegeometry", "getimageformat", "setimageformat", "setimagecompression", "setimagecompressionquality", "setimagepage", "setoption", "scaleimage", "cropimage", "rotateimage", "flipimage", "flopimage", "readimage")
         #// Now, test for deep requirements within Imagick.
         if (not php_defined("imagick::COMPRESSION_JPEG")):
             return False
         # end if
-        class_methods = php_array_map("strtolower", get_class_methods("Imagick"))
-        if php_array_diff(required_methods, class_methods):
+        class_methods_ = php_array_map("strtolower", get_class_methods("Imagick"))
+        if php_array_diff(required_methods_, class_methods_):
             return False
         # end if
         return True
@@ -76,21 +80,22 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return bool
     #//
     @classmethod
-    def supports_mime_type(self, mime_type=None):
+    def supports_mime_type(self, mime_type_=None):
         
-        imagick_extension = php_strtoupper(self.get_extension(mime_type))
-        if (not imagick_extension):
+        
+        imagick_extension_ = php_strtoupper(self.get_extension(mime_type_))
+        if (not imagick_extension_):
             return False
         # end if
         #// setIteratorIndex is optional unless mime is an animated format.
         #// Here, we just say no if you are missing it and aren't loading a jpeg.
-        if (not php_method_exists("Imagick", "setIteratorIndex")) and "image/jpeg" != mime_type:
+        if (not php_method_exists("Imagick", "setIteratorIndex")) and "image/jpeg" != mime_type_:
             return False
         # end if
         try: 
             #// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-            return php_bool(php_no_error(lambda: Imagick.queryformats(imagick_extension)))
-        except Exception as e:
+            return php_bool(php_no_error(lambda: Imagick.queryformats(imagick_extension_)))
+        except Exception as e_:
             return False
         # end try
     # end def supports_mime_type
@@ -103,11 +108,12 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #//
     def load(self):
         
+        
         if type(self.image).__name__ == "Imagick":
             return True
         # end if
-        if (not php_is_file(self.file)) and (not php_preg_match("|^https?://|", self.file)):
-            return php_new_class("WP_Error", lambda : WP_Error("error_loading_image", __("File doesn&#8217;t exist?"), self.file))
+        if (not php_is_file(self.file_)) and (not php_preg_match("|^https?://|", self.file_)):
+            return php_new_class("WP_Error", lambda : WP_Error("error_loading_image", __("File doesn&#8217;t exist?"), self.file_))
         # end if
         #// 
         #// Even though Imagick uses less PHP memory than GD, set higher limit
@@ -116,28 +122,28 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
         wp_raise_memory_limit("image")
         try: 
             self.image = php_new_class("Imagick", lambda : Imagick())
-            file_extension = php_strtolower(pathinfo(self.file, PATHINFO_EXTENSION))
-            filename = self.file
-            if "pdf" == file_extension:
-                filename = self.pdf_setup()
+            file_extension_ = php_strtolower(pathinfo(self.file_, PATHINFO_EXTENSION))
+            filename_ = self.file_
+            if "pdf" == file_extension_:
+                filename_ = self.pdf_setup()
             # end if
             #// Reading image after Imagick instantiation because `setResolution`
             #// only applies correctly before the image is read.
-            self.image.readimage(filename)
+            self.image.readimage(filename_)
             if (not self.image.valid()):
-                return php_new_class("WP_Error", lambda : WP_Error("invalid_image", __("File is not an image."), self.file))
+                return php_new_class("WP_Error", lambda : WP_Error("invalid_image", __("File is not an image."), self.file_))
             # end if
             #// Select the first frame to handle animated images properly.
             if php_is_callable(Array(self.image, "setIteratorIndex")):
                 self.image.setiteratorindex(0)
             # end if
             self.mime_type = self.get_mime_type(self.image.getimageformat())
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("invalid_image", e.getmessage(), self.file))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("invalid_image", e_.getmessage(), self.file_))
         # end try
-        updated_size = self.update_size()
-        if is_wp_error(updated_size):
-            return updated_size
+        updated_size_ = self.update_size()
+        if is_wp_error(updated_size_):
+            return updated_size_
         # end if
         return self.set_quality()
     # end def load
@@ -149,23 +155,24 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param int $quality Compression Quality. Range: [1,100]
     #// @return true|WP_Error True if set successfully; WP_Error on failure.
     #//
-    def set_quality(self, quality=None):
+    def set_quality(self, quality_=None):
         
-        quality_result = super().set_quality(quality)
-        if is_wp_error(quality_result):
-            return quality_result
+        
+        quality_result_ = super().set_quality(quality_)
+        if is_wp_error(quality_result_):
+            return quality_result_
         else:
-            quality = self.get_quality()
+            quality_ = self.get_quality()
         # end if
         try: 
             if "image/jpeg" == self.mime_type:
-                self.image.setimagecompressionquality(quality)
+                self.image.setimagecompressionquality(quality_)
                 self.image.setimagecompression(imagick.COMPRESSION_JPEG)
             else:
-                self.image.setimagecompressionquality(quality)
+                self.image.setimagecompressionquality(quality_)
             # end if
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_quality_error", e.getmessage()))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_quality_error", e_.getmessage()))
         # end try
         return True
     # end def set_quality
@@ -179,23 +186,24 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// 
     #// @return true|WP_Error
     #//
-    def update_size(self, width=None, height=None):
+    def update_size(self, width_=None, height_=None):
         
-        size = None
-        if (not width) or (not height):
+        
+        size_ = None
+        if (not width_) or (not height_):
             try: 
-                size = self.image.getimagegeometry()
-            except Exception as e:
-                return php_new_class("WP_Error", lambda : WP_Error("invalid_image", __("Could not read image size."), self.file))
+                size_ = self.image.getimagegeometry()
+            except Exception as e_:
+                return php_new_class("WP_Error", lambda : WP_Error("invalid_image", __("Could not read image size."), self.file_))
             # end try
         # end if
-        if (not width):
-            width = size["width"]
+        if (not width_):
+            width_ = size_["width"]
         # end if
-        if (not height):
-            height = size["height"]
+        if (not height_):
+            height_ = size_["height"]
         # end if
-        return super().update_size(width, height)
+        return super().update_size(width_, height_)
     # end def update_size
     #// 
     #// Resizes current image.
@@ -211,25 +219,28 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param  bool     $crop
     #// @return bool|WP_Error
     #//
-    def resize(self, max_w=None, max_h=None, crop=False):
+    def resize(self, max_w_=None, max_h_=None, crop_=None):
+        if crop_ is None:
+            crop_ = False
+        # end if
         
-        if self.size["width"] == max_w and self.size["height"] == max_h:
+        if self.size["width"] == max_w_ and self.size["height"] == max_h_:
             return True
         # end if
-        dims = image_resize_dimensions(self.size["width"], self.size["height"], max_w, max_h, crop)
-        if (not dims):
+        dims_ = image_resize_dimensions(self.size["width"], self.size["height"], max_w_, max_h_, crop_)
+        if (not dims_):
             return php_new_class("WP_Error", lambda : WP_Error("error_getting_dimensions", __("Could not calculate resized image dimensions")))
         # end if
-        dst_x, dst_y, src_x, src_y, dst_w, dst_h, src_w, src_h = dims
-        if crop:
-            return self.crop(src_x, src_y, src_w, src_h, dst_w, dst_h)
+        dst_x_, dst_y_, src_x_, src_y_, dst_w_, dst_h_, src_w_, src_h_ = dims_
+        if crop_:
+            return self.crop(src_x_, src_y_, src_w_, src_h_, dst_w_, dst_h_)
         # end if
         #// Execute the resize.
-        thumb_result = self.thumbnail_image(dst_w, dst_h)
-        if is_wp_error(thumb_result):
-            return thumb_result
+        thumb_result_ = self.thumbnail_image(dst_w_, dst_h_)
+        if is_wp_error(thumb_result_):
+            return thumb_result_
         # end if
-        return self.update_size(dst_w, dst_h)
+        return self.update_size(dst_w_, dst_h_)
     # end def resize
     #// 
     #// Efficiently resize the current image
@@ -245,17 +256,20 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param bool   $strip_meta  Optional. Strip all profiles, excluding color profiles, from the image. Default true.
     #// @return bool|WP_Error
     #//
-    def thumbnail_image(self, dst_w=None, dst_h=None, filter_name="FILTER_TRIANGLE", strip_meta=True):
+    def thumbnail_image(self, dst_w_=None, dst_h_=None, filter_name_="FILTER_TRIANGLE", strip_meta_=None):
+        if strip_meta_ is None:
+            strip_meta_ = True
+        # end if
         
-        allowed_filters = Array("FILTER_POINT", "FILTER_BOX", "FILTER_TRIANGLE", "FILTER_HERMITE", "FILTER_HANNING", "FILTER_HAMMING", "FILTER_BLACKMAN", "FILTER_GAUSSIAN", "FILTER_QUADRATIC", "FILTER_CUBIC", "FILTER_CATROM", "FILTER_MITCHELL", "FILTER_LANCZOS", "FILTER_BESSEL", "FILTER_SINC")
+        allowed_filters_ = Array("FILTER_POINT", "FILTER_BOX", "FILTER_TRIANGLE", "FILTER_HERMITE", "FILTER_HANNING", "FILTER_HAMMING", "FILTER_BLACKMAN", "FILTER_GAUSSIAN", "FILTER_QUADRATIC", "FILTER_CUBIC", "FILTER_CATROM", "FILTER_MITCHELL", "FILTER_LANCZOS", "FILTER_BESSEL", "FILTER_SINC")
         #// 
         #// Set the filter value if '$filter_name' name is in our whitelist and the related
         #// Imagick constant is defined or fall back to our default filter.
         #//
-        if php_in_array(filter_name, allowed_filters, True) and php_defined("Imagick::" + filter_name):
-            filter = constant("Imagick::" + filter_name)
+        if php_in_array(filter_name_, allowed_filters_, True) and php_defined("Imagick::" + filter_name_):
+            filter_ = constant("Imagick::" + filter_name_)
         else:
-            filter = Imagick.FILTER_TRIANGLE if php_defined("Imagick::FILTER_TRIANGLE") else False
+            filter_ = Imagick.FILTER_TRIANGLE if php_defined("Imagick::FILTER_TRIANGLE") else False
         # end if
         #// 
         #// Filters whether to strip metadata from images when they're resized.
@@ -267,7 +281,7 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
         #// 
         #// @param bool $strip_meta Whether to strip image metadata during resizing. Default true.
         #//
-        if apply_filters("image_strip_meta", strip_meta):
+        if apply_filters("image_strip_meta", strip_meta_):
             self.strip_meta()
             pass
         # end if
@@ -278,10 +292,10 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
             #// unless we would be resampling to a scale smaller than 128x128.
             #//
             if php_is_callable(Array(self.image, "sampleImage")):
-                resize_ratio = dst_w / self.size["width"] * dst_h / self.size["height"]
-                sample_factor = 5
-                if resize_ratio < 0.111 and dst_w * sample_factor > 128 and dst_h * sample_factor > 128:
-                    self.image.sampleimage(dst_w * sample_factor, dst_h * sample_factor)
+                resize_ratio_ = dst_w_ / self.size["width"] * dst_h_ / self.size["height"]
+                sample_factor_ = 5
+                if resize_ratio_ < 0.111 and dst_w_ * sample_factor_ > 128 and dst_h_ * sample_factor_ > 128:
+                    self.image.sampleimage(dst_w_ * sample_factor_, dst_h_ * sample_factor_)
                 # end if
             # end if
             #// 
@@ -290,11 +304,11 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
             #// results in better image quality over resizeImage() with default filter
             #// settings and retains backward compatibility with pre 4.5 functionality.
             #//
-            if php_is_callable(Array(self.image, "resizeImage")) and filter:
+            if php_is_callable(Array(self.image, "resizeImage")) and filter_:
                 self.image.setoption("filter:support", "2.0")
-                self.image.resizeimage(dst_w, dst_h, filter, 1)
+                self.image.resizeimage(dst_w_, dst_h_, filter_, 1)
             else:
-                self.image.scaleimage(dst_w, dst_h)
+                self.image.scaleimage(dst_w_, dst_h_)
             # end if
             #// Set appropriate quality settings after resizing.
             if "image/jpeg" == self.mime_type:
@@ -329,8 +343,8 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
             if php_is_callable(Array(self.image, "setInterlaceScheme")) and php_defined("Imagick::INTERLACE_NO"):
                 self.image.setinterlacescheme(Imagick.INTERLACE_NO)
             # end if
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_resize_error", e.getmessage()))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_resize_error", e_.getmessage()))
         # end try
     # end def thumbnail_image
     #// 
@@ -363,16 +377,17 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// }
     #// @return array An array of resized images' metadata by size.
     #//
-    def multi_resize(self, sizes=None):
+    def multi_resize(self, sizes_=None):
         
-        metadata = Array()
-        for size,size_data in sizes:
-            meta = self.make_subsize(size_data)
-            if (not is_wp_error(meta)):
-                metadata[size] = meta
+        
+        metadata_ = Array()
+        for size_,size_data_ in sizes_:
+            meta_ = self.make_subsize(size_data_)
+            if (not is_wp_error(meta_)):
+                metadata_[size_] = meta_
             # end if
         # end for
-        return metadata
+        return metadata_
     # end def multi_resize
     #// 
     #// Create an image sub-size and return the image meta data value for it.
@@ -389,37 +404,38 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return array|WP_Error The image data array for inclusion in the `sizes` array in the image meta,
     #// WP_Error object on error.
     #//
-    def make_subsize(self, size_data=None):
+    def make_subsize(self, size_data_=None):
         
-        if (not (php_isset(lambda : size_data["width"]))) and (not (php_isset(lambda : size_data["height"]))):
+        
+        if (not (php_isset(lambda : size_data_["width"]))) and (not (php_isset(lambda : size_data_["height"]))):
             return php_new_class("WP_Error", lambda : WP_Error("image_subsize_create_error", __("Cannot resize the image. Both width and height are not set.")))
         # end if
-        orig_size = self.size
-        orig_image = self.image.getimage()
-        if (not (php_isset(lambda : size_data["width"]))):
-            size_data["width"] = None
+        orig_size_ = self.size
+        orig_image_ = self.image.getimage()
+        if (not (php_isset(lambda : size_data_["width"]))):
+            size_data_["width"] = None
         # end if
-        if (not (php_isset(lambda : size_data["height"]))):
-            size_data["height"] = None
+        if (not (php_isset(lambda : size_data_["height"]))):
+            size_data_["height"] = None
         # end if
-        if (not (php_isset(lambda : size_data["crop"]))):
-            size_data["crop"] = False
+        if (not (php_isset(lambda : size_data_["crop"]))):
+            size_data_["crop"] = False
         # end if
-        resized = self.resize(size_data["width"], size_data["height"], size_data["crop"])
-        if is_wp_error(resized):
-            saved = resized
+        resized_ = self.resize(size_data_["width"], size_data_["height"], size_data_["crop"])
+        if is_wp_error(resized_):
+            saved_ = resized_
         else:
-            saved = self._save(self.image)
+            saved_ = self._save(self.image)
             self.image.clear()
             self.image.destroy()
             self.image = None
         # end if
-        self.size = orig_size
-        self.image = orig_image
-        if (not is_wp_error(saved)):
-            saved["path"] = None
+        self.size = orig_size_
+        self.image = orig_image_
+        if (not is_wp_error(saved_)):
+            saved_["path"] = None
         # end if
-        return saved
+        return saved_
     # end def make_subsize
     #// 
     #// Crops Image.
@@ -435,32 +451,35 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param bool $src_abs Optional. If the source crop points are absolute.
     #// @return bool|WP_Error
     #//
-    def crop(self, src_x=None, src_y=None, src_w=None, src_h=None, dst_w=None, dst_h=None, src_abs=False):
+    def crop(self, src_x_=None, src_y_=None, src_w_=None, src_h_=None, dst_w_=None, dst_h_=None, src_abs_=None):
+        if src_abs_ is None:
+            src_abs_ = False
+        # end if
         
-        if src_abs:
-            src_w -= src_x
-            src_h -= src_y
+        if src_abs_:
+            src_w_ -= src_x_
+            src_h_ -= src_y_
         # end if
         try: 
-            self.image.cropimage(src_w, src_h, src_x, src_y)
-            self.image.setimagepage(src_w, src_h, 0, 0)
-            if dst_w or dst_h:
+            self.image.cropimage(src_w_, src_h_, src_x_, src_y_)
+            self.image.setimagepage(src_w_, src_h_, 0, 0)
+            if dst_w_ or dst_h_:
                 #// If destination width/height isn't specified,
                 #// use same as width/height from source.
-                if (not dst_w):
-                    dst_w = src_w
+                if (not dst_w_):
+                    dst_w_ = src_w_
                 # end if
-                if (not dst_h):
-                    dst_h = src_h
+                if (not dst_h_):
+                    dst_h_ = src_h_
                 # end if
-                thumb_result = self.thumbnail_image(dst_w, dst_h)
-                if is_wp_error(thumb_result):
-                    return thumb_result
+                thumb_result_ = self.thumbnail_image(dst_w_, dst_h_)
+                if is_wp_error(thumb_result_):
+                    return thumb_result_
                 # end if
                 return self.update_size()
             # end if
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_crop_error", e.getmessage()))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_crop_error", e_.getmessage()))
         # end try
         return self.update_size()
     # end def crop
@@ -472,26 +491,27 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param float $angle
     #// @return true|WP_Error
     #//
-    def rotate(self, angle=None):
+    def rotate(self, angle_=None):
+        
         
         #// 
         #// $angle is 360-$angle because Imagick rotates clockwise
         #// (GD rotates counter-clockwise)
         #//
         try: 
-            self.image.rotateimage(php_new_class("ImagickPixel", lambda : ImagickPixel("none")), 360 - angle)
+            self.image.rotateimage(php_new_class("ImagickPixel", lambda : ImagickPixel("none")), 360 - angle_)
             #// Normalise EXIF orientation data so that display is consistent across devices.
             if php_is_callable(Array(self.image, "setImageOrientation")) and php_defined("Imagick::ORIENTATION_TOPLEFT"):
                 self.image.setimageorientation(Imagick.ORIENTATION_TOPLEFT)
             # end if
             #// Since this changes the dimensions of the image, update the size.
-            result = self.update_size()
-            if is_wp_error(result):
-                return result
+            result_ = self.update_size()
+            if is_wp_error(result_):
+                return result_
             # end if
             self.image.setimagepage(self.size["width"], self.size["height"], 0, 0)
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_rotate_error", e.getmessage()))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_rotate_error", e_.getmessage()))
         # end try
         return True
     # end def rotate
@@ -504,21 +524,22 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param bool $vert Flip along Vertical Axis
     #// @return true|WP_Error
     #//
-    def flip(self, horz=None, vert=None):
+    def flip(self, horz_=None, vert_=None):
+        
         
         try: 
-            if horz:
+            if horz_:
                 self.image.flipimage()
             # end if
-            if vert:
+            if vert_:
                 self.image.flopimage()
             # end if
             #// Normalise EXIF orientation data so that display is consistent across devices.
             if php_is_callable(Array(self.image, "setImageOrientation")) and php_defined("Imagick::ORIENTATION_TOPLEFT"):
                 self.image.setimageorientation(Imagick.ORIENTATION_TOPLEFT)
             # end if
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_flip_error", e.getmessage()))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_flip_error", e_.getmessage()))
         # end try
         return True
     # end def flip
@@ -535,6 +556,7 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #//
     def maybe_exif_rotate(self):
         
+        
         if php_is_callable(Array(self.image, "setImageOrientation")) and php_defined("Imagick::ORIENTATION_TOPLEFT"):
             return super().maybe_exif_rotate()
         else:
@@ -550,19 +572,20 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param string $mime_type
     #// @return array|WP_Error {'path'=>string, 'file'=>string, 'width'=>int, 'height'=>int, 'mime-type'=>string}
     #//
-    def save(self, destfilename=None, mime_type=None):
+    def save(self, destfilename_=None, mime_type_=None):
         
-        saved = self._save(self.image, destfilename, mime_type)
-        if (not is_wp_error(saved)):
-            self.file = saved["path"]
-            self.mime_type = saved["mime-type"]
+        
+        saved_ = self._save(self.image, destfilename_, mime_type_)
+        if (not is_wp_error(saved_)):
+            self.file_ = saved_["path"]
+            self.mime_type = saved_["mime-type"]
             try: 
                 self.image.setimageformat(php_strtoupper(self.get_extension(self.mime_type)))
-            except Exception as e:
-                return php_new_class("WP_Error", lambda : WP_Error("image_save_error", e.getmessage(), self.file))
+            except Exception as e_:
+                return php_new_class("WP_Error", lambda : WP_Error("image_save_error", e_.getmessage(), self.file_))
             # end try
         # end if
-        return saved
+        return saved_
     # end def save
     #// 
     #// @param Imagick $image
@@ -570,28 +593,29 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param string $mime_type
     #// @return array|WP_Error
     #//
-    def _save(self, image=None, filename=None, mime_type=None):
+    def _save(self, image_=None, filename_=None, mime_type_=None):
         
-        filename, extension, mime_type = self.get_output_format(filename, mime_type)
-        if (not filename):
-            filename = self.generate_filename(None, None, extension)
+        
+        filename_, extension_, mime_type_ = self.get_output_format(filename_, mime_type_)
+        if (not filename_):
+            filename_ = self.generate_filename(None, None, extension_)
         # end if
         try: 
             #// Store initial format.
-            orig_format = self.image.getimageformat()
-            self.image.setimageformat(php_strtoupper(self.get_extension(mime_type)))
-            self.make_image(filename, Array(image, "writeImage"), Array(filename))
+            orig_format_ = self.image.getimageformat()
+            self.image.setimageformat(php_strtoupper(self.get_extension(mime_type_)))
+            self.make_image(filename_, Array(image_, "writeImage"), Array(filename_))
             #// Reset original format.
-            self.image.setimageformat(orig_format)
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_save_error", e.getmessage(), filename))
+            self.image.setimageformat(orig_format_)
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_save_error", e_.getmessage(), filename_))
         # end try
         #// Set correct file permissions.
-        stat = stat(php_dirname(filename))
-        perms = stat["mode"] & 438
+        stat_ = stat(php_dirname(filename_))
+        perms_ = stat_["mode"] & 438
         #// Same permissions as parent folder, strip off the executable bits.
-        chmod(filename, perms)
-        return Array({"path": filename, "file": wp_basename(apply_filters("image_make_intermediate_size", filename)), "width": self.size["width"], "height": self.size["height"], "mime-type": mime_type})
+        chmod(filename_, perms_)
+        return Array({"path": filename_, "file": wp_basename(apply_filters("image_make_intermediate_size", filename_)), "width": self.size["width"], "height": self.size["height"], "mime-type": mime_type_})
     # end def _save
     #// 
     #// Streams current image to browser.
@@ -601,19 +625,20 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @param string $mime_type The mime type of the image.
     #// @return bool|WP_Error True on success, WP_Error object on failure.
     #//
-    def stream(self, mime_type=None):
+    def stream(self, mime_type_=None):
         
-        filename, extension, mime_type = self.get_output_format(None, mime_type)
+        
+        filename_, extension_, mime_type_ = self.get_output_format(None, mime_type_)
         try: 
             #// Temporarily change format for stream.
-            self.image.setimageformat(php_strtoupper(extension))
+            self.image.setimageformat(php_strtoupper(extension_))
             #// Output stream of image content.
-            php_header(str("Content-Type: ") + str(mime_type))
+            php_header(str("Content-Type: ") + str(mime_type_))
             php_print(self.image.getimageblob())
             #// Reset image to original format.
             self.image.setimageformat(self.get_extension(self.mime_type))
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_stream_error", e.getmessage()))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_stream_error", e_.getmessage()))
         # end try
         return True
     # end def stream
@@ -625,6 +650,7 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return true|WP_Error True if stripping metadata was successful. WP_Error object on error.
     #//
     def strip_meta(self):
+        
         
         if (not php_is_callable(Array(self.image, "getImageProfiles"))):
             #// translators: %s: ImageMagick method name.
@@ -643,16 +669,16 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
         #// - exif: Orientation data
         #// - xmp:  Rights usage data
         #//
-        protected_profiles = Array("icc", "icm", "iptc", "exif", "xmp")
+        protected_profiles_ = Array("icc", "icm", "iptc", "exif", "xmp")
         try: 
             #// Strip profiles.
-            for key,value in self.image.getimageprofiles("*", True):
-                if (not php_in_array(key, protected_profiles, True)):
-                    self.image.removeimageprofile(key)
+            for key_,value_ in self.image.getimageprofiles("*", True):
+                if (not php_in_array(key_, protected_profiles_, True)):
+                    self.image.removeimageprofile(key_)
                 # end if
             # end for
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("image_strip_meta_error", e.getmessage()))
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("image_strip_meta_error", e_.getmessage()))
         # end try
         return True
     # end def strip_meta
@@ -666,6 +692,7 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #//
     def pdf_setup(self):
         
+        
         try: 
             #// By default, PDFs are rendered in a very low resolution.
             #// We want the thumbnail to be readable, so increase the rendering DPI.
@@ -674,9 +701,9 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
             #// area (resulting in unnecessary whitespace) unless the following option is set.
             self.image.setoption("pdf:use-cropbox", True)
             #// Only load the first page.
-            return self.file + "[0]"
-        except Exception as e:
-            return php_new_class("WP_Error", lambda : WP_Error("pdf_setup_failed", e.getmessage(), self.file))
+            return self.file_ + "[0]"
+        except Exception as e_:
+            return php_new_class("WP_Error", lambda : WP_Error("pdf_setup_failed", e_.getmessage(), self.file_))
         # end try
     # end def pdf_setup
 # end class WP_Image_Editor_Imagick

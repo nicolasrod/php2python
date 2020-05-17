@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,10 +20,44 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Cookies
 #//
 class Requests_Cookie():
+    #// 
+    #// Cookie name.
+    #// 
+    #// @var string
+    #//
     name = Array()
+    #// 
+    #// Cookie value.
+    #// 
+    #// @var string
+    #//
     value = Array()
+    #// 
+    #// Cookie attributes
+    #// 
+    #// Valid keys are (currently) path, domain, expires, max-age, secure and
+    #// httponly.
+    #// 
+    #// @var Requests_Utility_CaseInsensitiveDictionary|array Array-like object
+    #//
     attributes = Array()
+    #// 
+    #// Cookie flags
+    #// 
+    #// Valid keys are (currently) creation, last-access, persistent and
+    #// host-only.
+    #// 
+    #// @var array
+    #//
     flags = Array()
+    #// 
+    #// Reference time for relative calculations
+    #// 
+    #// This is used in place of `time()` when calculating Max-Age expiration and
+    #// checking time validity.
+    #// 
+    #// @var int
+    #//
     reference_time = 0
     #// 
     #// Create a new cookie object
@@ -37,16 +66,22 @@ class Requests_Cookie():
     #// @param string $value
     #// @param array|Requests_Utility_CaseInsensitiveDictionary $attributes Associative array of attribute data
     #//
-    def __init__(self, name=None, value=None, attributes=Array(), flags=Array(), reference_time=None):
+    def __init__(self, name_=None, value_=None, attributes_=None, flags_=None, reference_time_=None):
+        if attributes_ is None:
+            attributes_ = Array()
+        # end if
+        if flags_ is None:
+            flags_ = Array()
+        # end if
         
-        self.name = name
-        self.value = value
-        self.attributes = attributes
-        default_flags = Array({"creation": time(), "last-access": time(), "persistent": False, "host-only": True})
-        self.flags = php_array_merge(default_flags, flags)
+        self.name = name_
+        self.value = value_
+        self.attributes = attributes_
+        default_flags_ = Array({"creation": time(), "last-access": time(), "persistent": False, "host-only": True})
+        self.flags = php_array_merge(default_flags_, flags_)
         self.reference_time = time()
-        if reference_time != None:
-            self.reference_time = reference_time
+        if reference_time_ != None:
+            self.reference_time = reference_time_
         # end if
         self.normalize()
     # end def __init__
@@ -60,17 +95,18 @@ class Requests_Cookie():
     #//
     def is_expired(self):
         
+        
         #// RFC6265, s. 4.1.2.2:
         #// If a cookie has both the Max-Age and the Expires attribute, the Max-
         #// Age attribute has precedence and controls the expiration date of the
         #// cookie.
         if (php_isset(lambda : self.attributes["max-age"])):
-            max_age = self.attributes["max-age"]
-            return max_age < self.reference_time
+            max_age_ = self.attributes["max-age"]
+            return max_age_ < self.reference_time
         # end if
         if (php_isset(lambda : self.attributes["expires"])):
-            expires = self.attributes["expires"]
-            return expires < self.reference_time
+            expires_ = self.attributes["expires"]
+            return expires_ < self.reference_time
         # end if
         return False
     # end def is_expired
@@ -80,15 +116,16 @@ class Requests_Cookie():
     #// @param Requests_IRI $uri URI to check
     #// @return boolean Whether the cookie is valid for the given URI
     #//
-    def uri_matches(self, uri=None):
+    def uri_matches(self, uri_=None):
         
-        if (not self.domain_matches(uri.host)):
+        
+        if (not self.domain_matches(uri_.host)):
             return False
         # end if
-        if (not self.path_matches(uri.path)):
+        if (not self.path_matches(uri_.path)):
             return False
         # end if
-        return php_empty(lambda : self.attributes["secure"]) or uri.scheme == "https"
+        return php_empty(lambda : self.attributes["secure"]) or uri_.scheme == "https"
     # end def uri_matches
     #// 
     #// Check if a cookie is valid for a given domain
@@ -96,15 +133,16 @@ class Requests_Cookie():
     #// @param string $string Domain to check
     #// @return boolean Whether the cookie is valid for the given domain
     #//
-    def domain_matches(self, string=None):
+    def domain_matches(self, string_=None):
+        
         
         if (not (php_isset(lambda : self.attributes["domain"]))):
             #// Cookies created manually; cookies created by Requests will set
             #// the domain to the requested domain
             return True
         # end if
-        domain_string = self.attributes["domain"]
-        if domain_string == string:
+        domain_string_ = self.attributes["domain"]
+        if domain_string_ == string_:
             #// The domain string and the string are identical.
             return True
         # end if
@@ -113,23 +151,23 @@ class Requests_Cookie():
         if self.flags["host-only"] == True:
             return False
         # end if
-        if php_strlen(string) <= php_strlen(domain_string):
+        if php_strlen(string_) <= php_strlen(domain_string_):
             #// For obvious reasons, the string cannot be a suffix if the domain
             #// is shorter than the domain string
             return False
         # end if
-        if php_substr(string, -1 * php_strlen(domain_string)) != domain_string:
+        if php_substr(string_, -1 * php_strlen(domain_string_)) != domain_string_:
             #// The domain string should be a suffix of the string.
             return False
         # end if
-        prefix = php_substr(string, 0, php_strlen(string) - php_strlen(domain_string))
-        if php_substr(prefix, -1) != ".":
+        prefix_ = php_substr(string_, 0, php_strlen(string_) - php_strlen(domain_string_))
+        if php_substr(prefix_, -1) != ".":
             #// The last character of the string that is not included in the
             #// domain string should be a %x2E (".") character.
             return False
         # end if
         #// The string should be a host name (i.e., not an IP address).
-        return (not php_preg_match("#^(.+\\.)\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$#", string))
+        return (not php_preg_match("#^(.+\\.)\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$#", string_))
     # end def domain_matches
     #// 
     #// Check if a cookie is valid for a given path
@@ -139,29 +177,30 @@ class Requests_Cookie():
     #// @param string $request_path Path to check
     #// @return boolean Whether the cookie is valid for the given path
     #//
-    def path_matches(self, request_path=None):
+    def path_matches(self, request_path_=None):
         
-        if php_empty(lambda : request_path):
+        
+        if php_empty(lambda : request_path_):
             #// Normalize empty path to root
-            request_path = "/"
+            request_path_ = "/"
         # end if
         if (not (php_isset(lambda : self.attributes["path"]))):
             #// Cookies created manually; cookies created by Requests will set
             #// the path to the requested path
             return True
         # end if
-        cookie_path = self.attributes["path"]
-        if cookie_path == request_path:
+        cookie_path_ = self.attributes["path"]
+        if cookie_path_ == request_path_:
             #// The cookie-path and the request-path are identical.
             return True
         # end if
-        if php_strlen(request_path) > php_strlen(cookie_path) and php_substr(request_path, 0, php_strlen(cookie_path)) == cookie_path:
-            if php_substr(cookie_path, -1) == "/":
+        if php_strlen(request_path_) > php_strlen(cookie_path_) and php_substr(request_path_, 0, php_strlen(cookie_path_)) == cookie_path_:
+            if php_substr(cookie_path_, -1) == "/":
                 #// The cookie-path is a prefix of the request-path, and the last
                 #// character of the cookie-path is %x2F ("/").
                 return True
             # end if
-            if php_substr(request_path, php_strlen(cookie_path), 1) == "/":
+            if php_substr(request_path_, php_strlen(cookie_path_), 1) == "/":
                 #// The cookie-path is a prefix of the request-path, and the
                 #// first character of the request-path that is not included in
                 #// the cookie-path is a %x2F ("/") character.
@@ -177,15 +216,16 @@ class Requests_Cookie():
     #//
     def normalize(self):
         
-        for key,value in self.attributes:
-            orig_value = value
-            value = self.normalize_attribute(key, value)
-            if value == None:
-                self.attributes[key] = None
+        
+        for key_,value_ in self.attributes:
+            orig_value_ = value_
+            value_ = self.normalize_attribute(key_, value_)
+            if value_ == None:
+                self.attributes[key_] = None
                 continue
             # end if
-            if value != orig_value:
-                self.attributes[key] = value
+            if value_ != orig_value_:
+                self.attributes[key_] = value_
             # end if
         # end for
         return True
@@ -199,50 +239,51 @@ class Requests_Cookie():
     #// @param string|boolean $value Attribute value (string value, or true if empty/flag)
     #// @return mixed Value if available, or null if the attribute value is invalid (and should be skipped)
     #//
-    def normalize_attribute(self, name=None, value=None):
+    def normalize_attribute(self, name_=None, value_=None):
         
-        for case in Switch(php_strtolower(name)):
+        
+        for case in Switch(php_strtolower(name_)):
             if case("expires"):
                 #// Expiration parsing, as per RFC 6265 section 5.2.1
-                if php_is_int(value):
-                    return value
+                if php_is_int(value_):
+                    return value_
                 # end if
-                expiry_time = strtotime(value)
-                if expiry_time == False:
+                expiry_time_ = strtotime(value_)
+                if expiry_time_ == False:
                     return None
                 # end if
-                return expiry_time
+                return expiry_time_
             # end if
             if case("max-age"):
                 #// Expiration parsing, as per RFC 6265 section 5.2.2
-                if php_is_int(value):
-                    return value
+                if php_is_int(value_):
+                    return value_
                 # end if
                 #// Check that we have a valid age
-                if (not php_preg_match("/^-?\\d+$/", value)):
+                if (not php_preg_match("/^-?\\d+$/", value_)):
                     return None
                 # end if
-                delta_seconds = php_int(value)
-                if delta_seconds <= 0:
-                    expiry_time = 0
+                delta_seconds_ = php_int(value_)
+                if delta_seconds_ <= 0:
+                    expiry_time_ = 0
                 else:
-                    expiry_time = self.reference_time + delta_seconds
+                    expiry_time_ = self.reference_time + delta_seconds_
                 # end if
-                return expiry_time
+                return expiry_time_
             # end if
             if case("domain"):
                 #// Domains are not required as per RFC 6265 section 5.2.3
-                if php_empty(lambda : value):
+                if php_empty(lambda : value_):
                     return None
                 # end if
                 #// Domain normalization, as per RFC 6265 section 5.2.3
-                if value[0] == ".":
-                    value = php_substr(value, 1)
+                if value_[0] == ".":
+                    value_ = php_substr(value_, 1)
                 # end if
-                return value
+                return value_
             # end if
             if case():
-                return value
+                return value_
             # end if
         # end for
     # end def normalize_attribute
@@ -255,6 +296,7 @@ class Requests_Cookie():
     #//
     def format_for_header(self):
         
+        
         return php_sprintf("%s=%s", self.name, self.value)
     # end def format_for_header
     #// 
@@ -265,6 +307,7 @@ class Requests_Cookie():
     #// @return string
     #//
     def formatforheader(self):
+        
         
         return self.format_for_header()
     # end def formatforheader
@@ -278,20 +321,21 @@ class Requests_Cookie():
     #//
     def format_for_set_cookie(self):
         
-        header_value = self.format_for_header()
+        
+        header_value_ = self.format_for_header()
         if (not php_empty(lambda : self.attributes)):
-            parts = Array()
-            for key,value in self.attributes:
+            parts_ = Array()
+            for key_,value_ in self.attributes:
                 #// Ignore non-associative attributes
-                if php_is_numeric(key):
-                    parts[-1] = value
+                if php_is_numeric(key_):
+                    parts_[-1] = value_
                 else:
-                    parts[-1] = php_sprintf("%s=%s", key, value)
+                    parts_[-1] = php_sprintf("%s=%s", key_, value_)
                 # end if
             # end for
-            header_value += "; " + php_implode("; ", parts)
+            header_value_ += "; " + php_implode("; ", parts_)
         # end if
-        return header_value
+        return header_value_
     # end def format_for_set_cookie
     #// 
     #// Format a cookie for a Set-Cookie header
@@ -302,6 +346,7 @@ class Requests_Cookie():
     #//
     def formatforsetcookie(self):
         
+        
         return self.format_for_set_cookie()
     # end def formatforsetcookie
     #// 
@@ -310,6 +355,7 @@ class Requests_Cookie():
     #// Attributes and other data can be accessed via methods.
     #//
     def __tostring(self):
+        
         
         return self.value
     # end def __tostring
@@ -324,41 +370,42 @@ class Requests_Cookie():
     #// @return Requests_Cookie Parsed cookie object
     #//
     @classmethod
-    def parse(self, string=None, name="", reference_time=None):
+    def parse(self, string_=None, name_="", reference_time_=None):
         
-        parts = php_explode(";", string)
-        kvparts = php_array_shift(parts)
-        if (not php_empty(lambda : name)):
-            value = string
-        elif php_strpos(kvparts, "=") == False:
+        
+        parts_ = php_explode(";", string_)
+        kvparts_ = php_array_shift(parts_)
+        if (not php_empty(lambda : name_)):
+            value_ = string_
+        elif php_strpos(kvparts_, "=") == False:
             #// Some sites might only have a value without the equals separator.
             #// Deviate from RFC 6265 and pretend it was actually a blank name
             #// (`=foo`)
             #// 
             #// https://bugzilla.mozilla.org/show_bug.cgi?id=169091
-            name = ""
-            value = kvparts
+            name_ = ""
+            value_ = kvparts_
         else:
-            name, value = php_explode("=", kvparts, 2)
+            name_, value_ = php_explode("=", kvparts_, 2)
         # end if
-        name = php_trim(name)
-        value = php_trim(value)
+        name_ = php_trim(name_)
+        value_ = php_trim(value_)
         #// Attribute key are handled case-insensitively
-        attributes = php_new_class("Requests_Utility_CaseInsensitiveDictionary", lambda : Requests_Utility_CaseInsensitiveDictionary())
-        if (not php_empty(lambda : parts)):
-            for part in parts:
-                if php_strpos(part, "=") == False:
-                    part_key = part
-                    part_value = True
+        attributes_ = php_new_class("Requests_Utility_CaseInsensitiveDictionary", lambda : Requests_Utility_CaseInsensitiveDictionary())
+        if (not php_empty(lambda : parts_)):
+            for part_ in parts_:
+                if php_strpos(part_, "=") == False:
+                    part_key_ = part_
+                    part_value_ = True
                 else:
-                    part_key, part_value = php_explode("=", part, 2)
-                    part_value = php_trim(part_value)
+                    part_key_, part_value_ = php_explode("=", part_, 2)
+                    part_value_ = php_trim(part_value_)
                 # end if
-                part_key = php_trim(part_key)
-                attributes[part_key] = part_value
+                part_key_ = php_trim(part_key_)
+                attributes_[part_key_] = part_value_
             # end for
         # end if
-        return php_new_class("Requests_Cookie", lambda : Requests_Cookie(name, value, attributes, Array(), reference_time))
+        return php_new_class("Requests_Cookie", lambda : Requests_Cookie(name_, value_, attributes_, Array(), reference_time_))
     # end def parse
     #// 
     #// Parse all Set-Cookie headers from request headers
@@ -369,51 +416,52 @@ class Requests_Cookie():
     #// @return array
     #//
     @classmethod
-    def parse_from_headers(self, headers=None, origin=None, time=None):
+    def parse_from_headers(self, headers_=None, origin_=None, time_=None):
         
-        cookie_headers = headers.getvalues("Set-Cookie")
-        if php_empty(lambda : cookie_headers):
+        
+        cookie_headers_ = headers_.getvalues("Set-Cookie")
+        if php_empty(lambda : cookie_headers_):
             return Array()
         # end if
-        cookies = Array()
-        for header in cookie_headers:
-            parsed = self.parse(header, "", time)
+        cookies_ = Array()
+        for header_ in cookie_headers_:
+            parsed_ = self.parse(header_, "", time_)
             #// Default domain/path attributes
-            if php_empty(lambda : parsed.attributes["domain"]) and (not php_empty(lambda : origin)):
-                parsed.attributes["domain"] = origin.host
-                parsed.flags["host-only"] = True
+            if php_empty(lambda : parsed_.attributes["domain"]) and (not php_empty(lambda : origin_)):
+                parsed_.attributes["domain"] = origin_.host
+                parsed_.flags["host-only"] = True
             else:
-                parsed.flags["host-only"] = False
+                parsed_.flags["host-only"] = False
             # end if
-            path_is_valid = (not php_empty(lambda : parsed.attributes["path"])) and parsed.attributes["path"][0] == "/"
-            if (not path_is_valid) and (not php_empty(lambda : origin)):
-                path = origin.path
+            path_is_valid_ = (not php_empty(lambda : parsed_.attributes["path"])) and parsed_.attributes["path"][0] == "/"
+            if (not path_is_valid_) and (not php_empty(lambda : origin_)):
+                path_ = origin_.path
                 #// Default path normalization as per RFC 6265 section 5.1.4
-                if php_substr(path, 0, 1) != "/":
+                if php_substr(path_, 0, 1) != "/":
                     #// If the uri-path is empty or if the first character of
                     #// the uri-path is not a %x2F ("/") character, output
                     #// %x2F ("/") and skip the remaining steps.
-                    path = "/"
-                elif php_substr_count(path, "/") == 1:
+                    path_ = "/"
+                elif php_substr_count(path_, "/") == 1:
                     #// If the uri-path contains no more than one %x2F ("/")
                     #// character, output %x2F ("/") and skip the remaining
                     #// step.
-                    path = "/"
+                    path_ = "/"
                 else:
                     #// Output the characters of the uri-path from the first
                     #// character up to, but not including, the right-most
                     #// %x2F ("/").
-                    path = php_substr(path, 0, php_strrpos(path, "/"))
+                    path_ = php_substr(path_, 0, php_strrpos(path_, "/"))
                 # end if
-                parsed.attributes["path"] = path
+                parsed_.attributes["path"] = path_
             # end if
             #// Reject invalid cookie domains
-            if (not php_empty(lambda : origin)) and (not parsed.domain_matches(origin.host)):
+            if (not php_empty(lambda : origin_)) and (not parsed_.domain_matches(origin_.host)):
                 continue
             # end if
-            cookies[parsed.name] = parsed
+            cookies_[parsed_.name] = parsed_
         # end for
-        return cookies
+        return cookies_
     # end def parse_from_headers
     #// 
     #// Parse all Set-Cookie headers from request headers
@@ -423,8 +471,9 @@ class Requests_Cookie():
     #// @return string
     #//
     @classmethod
-    def parsefromheaders(self, headers=None):
+    def parsefromheaders(self, headers_=None):
         
-        return self.parse_from_headers(headers)
+        
+        return self.parse_from_headers(headers_)
     # end def parsefromheaders
 # end class Requests_Cookie

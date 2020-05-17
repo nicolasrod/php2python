@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -18,7 +13,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package WordPress
 #//
 php_header("Content-Type: " + feed_content_type("rss2") + "; charset=" + get_option("blog_charset"), True)
-more = 1
+more_ = 1
 php_print("<?xml version=\"1.0\" encoding=\"" + get_option("blog_charset") + "\"?" + ">")
 #// 
 #// Fires between the xml and rss tags in a feed.
@@ -58,7 +53,7 @@ php_print(get_feed_build_date("r"))
 php_print("</lastBuildDate>\n   <language>")
 bloginfo_rss("language")
 php_print("</language>\n    <sy:updatePeriod>\n ")
-duration = "hourly"
+duration_ = "hourly"
 #// 
 #// Filters how often to update the RSS feed.
 #// 
@@ -67,9 +62,9 @@ duration = "hourly"
 #// @param string $duration The update period. Accepts 'hourly', 'daily', 'weekly', 'monthly',
 #// 'yearly'. Default 'hourly'.
 #//
-php_print(apply_filters("rss_update_period", duration))
+php_print(apply_filters("rss_update_period", duration_))
 php_print(" </sy:updatePeriod>\n    <sy:updateFrequency>\n  ")
-frequency = "1"
+frequency_ = "1"
 #// 
 #// Filters the RSS update frequency.
 #// 
@@ -78,7 +73,7 @@ frequency = "1"
 #// @param string $frequency An integer passed as a string representing the frequency
 #// of RSS updates within the update period. Default '1'.
 #//
-php_print(apply_filters("rss_update_frequency", frequency))
+php_print(apply_filters("rss_update_frequency", frequency_))
 php_print(" </sy:updateFrequency>\n ")
 #// 
 #// Fires at the end of the RSS2 Feed Header.
@@ -119,11 +114,11 @@ while True:
         php_print("         <description><![CDATA[")
         the_excerpt_rss()
         php_print("]]></description>\n          ")
-        content = get_the_content_feed("rss2")
+        content_ = get_the_content_feed("rss2")
         php_print("         ")
-        if php_strlen(content) > 0:
+        if php_strlen(content_) > 0:
             php_print("             <content:encoded><![CDATA[")
-            php_print(content)
+            php_print(content_)
             php_print("]]></content:encoded>\n          ")
         else:
             php_print("             <content:encoded><![CDATA[")

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,23 +30,24 @@ if (not php_function_exists("wp_set_current_user")):
     #// @param string $name User's username
     #// @return WP_User Current user User object
     #//
-    def wp_set_current_user(id=None, name="", *args_):
+    def wp_set_current_user(id_=None, name_="", *_args_):
         
-        global current_user
-        php_check_if_defined("current_user")
+        
+        global current_user_
+        php_check_if_defined("current_user_")
         #// If `$id` matches the current user, there is nothing to do.
-        if (php_isset(lambda : current_user)) and type(current_user).__name__ == "WP_User" and id == current_user.ID and None != id:
-            return current_user
+        if (php_isset(lambda : current_user_)) and type(current_user_).__name__ == "WP_User" and id_ == current_user_.ID and None != id_:
+            return current_user_
         # end if
-        current_user = php_new_class("WP_User", lambda : WP_User(id, name))
-        setup_userdata(current_user.ID)
+        current_user_ = php_new_class("WP_User", lambda : WP_User(id_, name_))
+        setup_userdata(current_user_.ID)
         #// 
         #// Fires after the current user is set.
         #// 
         #// @since 2.0.1
         #//
         do_action("set_current_user")
-        return current_user
+        return current_user_
     # end def wp_set_current_user
 # end if
 if (not php_function_exists("wp_get_current_user")):
@@ -69,7 +65,8 @@ if (not php_function_exists("wp_get_current_user")):
     #// 
     #// @return WP_User Current WP_User instance.
     #//
-    def wp_get_current_user(*args_):
+    def wp_get_current_user(*_args_):
+        
         
         return _wp_get_current_user()
     # end def wp_get_current_user
@@ -83,9 +80,10 @@ if (not php_function_exists("get_userdata")):
     #// @param int $user_id User ID
     #// @return WP_User|false WP_User object on success, false on failure.
     #//
-    def get_userdata(user_id=None, *args_):
+    def get_userdata(user_id_=None, *_args_):
         
-        return get_user_by("id", user_id)
+        
+        return get_user_by("id", user_id_)
     # end def get_userdata
 # end if
 if (not php_function_exists("get_user_by")):
@@ -99,15 +97,16 @@ if (not php_function_exists("get_user_by")):
     #// @param int|string $value A value for $field. A user ID, slug, email address, or login name.
     #// @return WP_User|false WP_User object on success, false on failure.
     #//
-    def get_user_by(field=None, value=None, *args_):
+    def get_user_by(field_=None, value_=None, *_args_):
         
-        userdata = WP_User.get_data_by(field, value)
-        if (not userdata):
+        
+        userdata_ = WP_User.get_data_by(field_, value_)
+        if (not userdata_):
             return False
         # end if
-        user = php_new_class("WP_User", lambda : WP_User())
-        user.init(userdata)
-        return user
+        user_ = php_new_class("WP_User", lambda : WP_User())
+        user_.init(userdata_)
+        return user_
     # end def get_user_by
 # end if
 if (not php_function_exists("cache_users")):
@@ -120,22 +119,23 @@ if (not php_function_exists("cache_users")):
     #// 
     #// @param array $user_ids User ID numbers list
     #//
-    def cache_users(user_ids=None, *args_):
+    def cache_users(user_ids_=None, *_args_):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        clean = _get_non_cached_ids(user_ids, "users")
-        if php_empty(lambda : clean):
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        clean_ = _get_non_cached_ids(user_ids_, "users")
+        if php_empty(lambda : clean_):
             return
         # end if
-        list = php_implode(",", clean)
-        users = wpdb.get_results(str("SELECT * FROM ") + str(wpdb.users) + str(" WHERE ID IN (") + str(list) + str(")"))
-        ids = Array()
-        for user in users:
-            update_user_caches(user)
-            ids[-1] = user.ID
+        list_ = php_implode(",", clean_)
+        users_ = wpdb_.get_results(str("SELECT * FROM ") + str(wpdb_.users) + str(" WHERE ID IN (") + str(list_) + str(")"))
+        ids_ = Array()
+        for user_ in users_:
+            update_user_caches(user_)
+            ids_[-1] = user_.ID
         # end for
-        update_meta_cache("user", ids)
+        update_meta_cache("user", ids_)
     # end def cache_users
 # end if
 if (not php_function_exists("wp_mail")):
@@ -164,7 +164,10 @@ if (not php_function_exists("wp_mail")):
     #// @param string|array $attachments Optional. Files to attach.
     #// @return bool Whether the email contents were sent successfully.
     #//
-    def wp_mail(to=None, subject=None, message=None, headers="", attachments=Array(), *args_):
+    def wp_mail(to_=None, subject_=None, message_=None, headers_="", attachments_=None, *_args_):
+        if attachments_ is None:
+            attachments_ = Array()
+        # end if
         
         #// Compact the input, apply the filters, and extract them back out.
         #// 
@@ -175,117 +178,117 @@ if (not php_function_exists("wp_mail")):
         #// @param array $args A compacted array of wp_mail() arguments, including the "to" email,
         #// subject, message, headers, and attachments values.
         #//
-        atts = apply_filters("wp_mail", compact("to", "subject", "message", "headers", "attachments"))
-        if (php_isset(lambda : atts["to"])):
-            to = atts["to"]
+        atts_ = apply_filters("wp_mail", php_compact("to", "subject", "message", "headers", "attachments"))
+        if (php_isset(lambda : atts_["to"])):
+            to_ = atts_["to"]
         # end if
-        if (not php_is_array(to)):
-            to = php_explode(",", to)
+        if (not php_is_array(to_)):
+            to_ = php_explode(",", to_)
         # end if
-        if (php_isset(lambda : atts["subject"])):
-            subject = atts["subject"]
+        if (php_isset(lambda : atts_["subject"])):
+            subject_ = atts_["subject"]
         # end if
-        if (php_isset(lambda : atts["message"])):
-            message = atts["message"]
+        if (php_isset(lambda : atts_["message"])):
+            message_ = atts_["message"]
         # end if
-        if (php_isset(lambda : atts["headers"])):
-            headers = atts["headers"]
+        if (php_isset(lambda : atts_["headers"])):
+            headers_ = atts_["headers"]
         # end if
-        if (php_isset(lambda : atts["attachments"])):
-            attachments = atts["attachments"]
+        if (php_isset(lambda : atts_["attachments"])):
+            attachments_ = atts_["attachments"]
         # end if
-        if (not php_is_array(attachments)):
-            attachments = php_explode("\n", php_str_replace("\r\n", "\n", attachments))
+        if (not php_is_array(attachments_)):
+            attachments_ = php_explode("\n", php_str_replace("\r\n", "\n", attachments_))
         # end if
-        global phpmailer
-        php_check_if_defined("phpmailer")
+        global phpmailer_
+        php_check_if_defined("phpmailer_")
         #// (Re)create it, if it's gone missing.
-        if (not type(phpmailer).__name__ == "PHPMailer"):
+        if (not type(phpmailer_).__name__ == "PHPMailer"):
             php_include_file(ABSPATH + WPINC + "/class-phpmailer.php", once=True)
             php_include_file(ABSPATH + WPINC + "/class-smtp.php", once=True)
-            phpmailer = php_new_class("PHPMailer", lambda : PHPMailer(True))
+            phpmailer_ = php_new_class("PHPMailer", lambda : PHPMailer(True))
         # end if
         #// Headers.
-        cc = Array()
-        bcc = Array()
-        reply_to = Array()
-        if php_empty(lambda : headers):
-            headers = Array()
+        cc_ = Array()
+        bcc_ = Array()
+        reply_to_ = Array()
+        if php_empty(lambda : headers_):
+            headers_ = Array()
         else:
-            if (not php_is_array(headers)):
+            if (not php_is_array(headers_)):
                 #// Explode the headers out, so this function can take
                 #// both string headers and an array of headers.
-                tempheaders = php_explode("\n", php_str_replace("\r\n", "\n", headers))
+                tempheaders_ = php_explode("\n", php_str_replace("\r\n", "\n", headers_))
             else:
-                tempheaders = headers
+                tempheaders_ = headers_
             # end if
-            headers = Array()
+            headers_ = Array()
             #// If it's actually got contents.
-            if (not php_empty(lambda : tempheaders)):
+            if (not php_empty(lambda : tempheaders_)):
                 #// Iterate through the raw headers.
-                for header in tempheaders:
-                    if php_strpos(header, ":") == False:
-                        if False != php_stripos(header, "boundary="):
-                            parts = php_preg_split("/boundary=/i", php_trim(header))
-                            boundary = php_trim(php_str_replace(Array("'", "\""), "", parts[1]))
+                for header_ in tempheaders_:
+                    if php_strpos(header_, ":") == False:
+                        if False != php_stripos(header_, "boundary="):
+                            parts_ = php_preg_split("/boundary=/i", php_trim(header_))
+                            boundary_ = php_trim(php_str_replace(Array("'", "\""), "", parts_[1]))
                         # end if
                         continue
                     # end if
                     #// Explode them out.
-                    name, content = php_explode(":", php_trim(header), 2)
+                    name_, content_ = php_explode(":", php_trim(header_), 2)
                     #// Cleanup crew.
-                    name = php_trim(name)
-                    content = php_trim(content)
-                    for case in Switch(php_strtolower(name)):
+                    name_ = php_trim(name_)
+                    content_ = php_trim(content_)
+                    for case in Switch(php_strtolower(name_)):
                         if case("from"):
-                            bracket_pos = php_strpos(content, "<")
-                            if False != bracket_pos:
+                            bracket_pos_ = php_strpos(content_, "<")
+                            if False != bracket_pos_:
                                 #// Text before the bracketed email is the "From" name.
-                                if bracket_pos > 0:
-                                    from_name = php_substr(content, 0, bracket_pos - 1)
-                                    from_name = php_str_replace("\"", "", from_name)
-                                    from_name = php_trim(from_name)
+                                if bracket_pos_ > 0:
+                                    from_name_ = php_substr(content_, 0, bracket_pos_ - 1)
+                                    from_name_ = php_str_replace("\"", "", from_name_)
+                                    from_name_ = php_trim(from_name_)
                                 # end if
-                                from_email = php_substr(content, bracket_pos + 1)
-                                from_email = php_str_replace(">", "", from_email)
-                                from_email = php_trim(from_email)
+                                from_email_ = php_substr(content_, bracket_pos_ + 1)
+                                from_email_ = php_str_replace(">", "", from_email_)
+                                from_email_ = php_trim(from_email_)
                                 pass
-                            elif "" != php_trim(content):
-                                from_email = php_trim(content)
+                            elif "" != php_trim(content_):
+                                from_email_ = php_trim(content_)
                             # end if
                             break
                         # end if
                         if case("content-type"):
-                            if php_strpos(content, ";") != False:
-                                type, charset_content = php_explode(";", content)
-                                content_type = php_trim(type)
-                                if False != php_stripos(charset_content, "charset="):
-                                    charset = php_trim(php_str_replace(Array("charset=", "\""), "", charset_content))
-                                elif False != php_stripos(charset_content, "boundary="):
-                                    boundary = php_trim(php_str_replace(Array("BOUNDARY=", "boundary=", "\""), "", charset_content))
-                                    charset = ""
+                            if php_strpos(content_, ";") != False:
+                                type_, charset_content_ = php_explode(";", content_)
+                                content_type_ = php_trim(type_)
+                                if False != php_stripos(charset_content_, "charset="):
+                                    charset_ = php_trim(php_str_replace(Array("charset=", "\""), "", charset_content_))
+                                elif False != php_stripos(charset_content_, "boundary="):
+                                    boundary_ = php_trim(php_str_replace(Array("BOUNDARY=", "boundary=", "\""), "", charset_content_))
+                                    charset_ = ""
                                 # end if
                                 pass
-                            elif "" != php_trim(content):
-                                content_type = php_trim(content)
+                            elif "" != php_trim(content_):
+                                content_type_ = php_trim(content_)
                             # end if
                             break
                         # end if
                         if case("cc"):
-                            cc = php_array_merge(cc, php_explode(",", content))
+                            cc_ = php_array_merge(cc_, php_explode(",", content_))
                             break
                         # end if
                         if case("bcc"):
-                            bcc = php_array_merge(bcc, php_explode(",", content))
+                            bcc_ = php_array_merge(bcc_, php_explode(",", content_))
                             break
                         # end if
                         if case("reply-to"):
-                            reply_to = php_array_merge(reply_to, php_explode(",", content))
+                            reply_to_ = php_array_merge(reply_to_, php_explode(",", content_))
                             break
                         # end if
                         if case():
                             #// Add it to our grand headers array.
-                            headers[php_trim(name)] = php_trim(content)
+                            headers_[php_trim(name_)] = php_trim(content_)
                             break
                         # end if
                     # end for
@@ -293,14 +296,14 @@ if (not php_function_exists("wp_mail")):
             # end if
         # end if
         #// Empty out the values that may be set.
-        phpmailer.clearallrecipients()
-        phpmailer.clearattachments()
-        phpmailer.clearcustomheaders()
-        phpmailer.clearreplytos()
+        phpmailer_.clearallrecipients()
+        phpmailer_.clearattachments()
+        phpmailer_.clearcustomheaders()
+        phpmailer_.clearreplytos()
         #// Set "From" name and email.
         #// If we don't have a name from the input headers.
-        if (not (php_isset(lambda : from_name))):
-            from_name = "WordPress"
+        if (not (php_isset(lambda : from_name_))):
+            from_name_ = "WordPress"
         # end if
         #// 
         #// If we don't have an email from the input headers, default to wordpress@$sitename
@@ -309,13 +312,13 @@ if (not php_function_exists("wp_mail")):
         #// another option, but some hosts may refuse to relay mail from an unknown domain.
         #// See https://core.trac.wordpress.org/ticket/5007.
         #//
-        if (not (php_isset(lambda : from_email))):
+        if (not (php_isset(lambda : from_email_))):
             #// Get the site domain and get rid of www.
-            sitename = php_strtolower(PHP_SERVER["SERVER_NAME"])
-            if php_substr(sitename, 0, 4) == "www.":
-                sitename = php_substr(sitename, 4)
+            sitename_ = php_strtolower(PHP_SERVER["SERVER_NAME"])
+            if php_substr(sitename_, 0, 4) == "www.":
+                sitename_ = php_substr(sitename_, 4)
             # end if
-            from_email = "wordpress@" + sitename
+            from_email_ = "wordpress@" + sitename_
         # end if
         #// 
         #// Filters the email address to send from.
@@ -324,7 +327,7 @@ if (not php_function_exists("wp_mail")):
         #// 
         #// @param string $from_email Email address to send from.
         #//
-        from_email = apply_filters("wp_mail_from", from_email)
+        from_email_ = apply_filters("wp_mail_from", from_email_)
         #// 
         #// Filters the name to associate with the "from" email address.
         #// 
@@ -332,64 +335,64 @@ if (not php_function_exists("wp_mail")):
         #// 
         #// @param string $from_name Name associated with the "from" email address.
         #//
-        from_name = apply_filters("wp_mail_from_name", from_name)
+        from_name_ = apply_filters("wp_mail_from_name", from_name_)
         try: 
-            phpmailer.setfrom(from_email, from_name, False)
-        except phpmailerException as e:
-            mail_error_data = compact("to", "subject", "message", "headers", "attachments")
-            mail_error_data["phpmailer_exception_code"] = e.getcode()
+            phpmailer_.setfrom(from_email_, from_name_, False)
+        except phpmailerException as e_:
+            mail_error_data_ = php_compact("to", "subject", "message", "headers", "attachments")
+            mail_error_data_["phpmailer_exception_code"] = e_.getcode()
             #// This filter is documented in wp-includes/pluggable.php
-            do_action("wp_mail_failed", php_new_class("WP_Error", lambda : WP_Error("wp_mail_failed", e.getmessage(), mail_error_data)))
+            do_action("wp_mail_failed", php_new_class("WP_Error", lambda : WP_Error("wp_mail_failed", e_.getmessage(), mail_error_data_)))
             return False
         # end try
         #// Set mail's subject and body.
-        phpmailer.Subject = subject
-        phpmailer.Body = message
+        phpmailer_.Subject = subject_
+        phpmailer_.Body = message_
         #// Set destination addresses, using appropriate methods for handling addresses.
-        address_headers = compact("to", "cc", "bcc", "reply_to")
-        for address_header,addresses in address_headers:
-            if php_empty(lambda : addresses):
+        address_headers_ = php_compact("to", "cc", "bcc", "reply_to")
+        for address_header_,addresses_ in address_headers_:
+            if php_empty(lambda : addresses_):
                 continue
             # end if
-            for address in addresses:
+            for address_ in addresses_:
                 try: 
                     #// Break $recipient into name and address parts if in the format "Foo <bar@baz.com>".
-                    recipient_name = ""
-                    if php_preg_match("/(.*)<(.+)>/", address, matches):
-                        if php_count(matches) == 3:
-                            recipient_name = matches[1]
-                            address = matches[2]
+                    recipient_name_ = ""
+                    if php_preg_match("/(.*)<(.+)>/", address_, matches_):
+                        if php_count(matches_) == 3:
+                            recipient_name_ = matches_[1]
+                            address_ = matches_[2]
                         # end if
                     # end if
-                    for case in Switch(address_header):
+                    for case in Switch(address_header_):
                         if case("to"):
-                            phpmailer.addaddress(address, recipient_name)
+                            phpmailer_.addaddress(address_, recipient_name_)
                             break
                         # end if
                         if case("cc"):
-                            phpmailer.addcc(address, recipient_name)
+                            phpmailer_.addcc(address_, recipient_name_)
                             break
                         # end if
                         if case("bcc"):
-                            phpmailer.addbcc(address, recipient_name)
+                            phpmailer_.addbcc(address_, recipient_name_)
                             break
                         # end if
                         if case("reply_to"):
-                            phpmailer.addreplyto(address, recipient_name)
+                            phpmailer_.addreplyto(address_, recipient_name_)
                             break
                         # end if
                     # end for
-                except phpmailerException as e:
+                except phpmailerException as e_:
                     continue
                 # end try
             # end for
         # end for
         #// Set to use PHP's mail().
-        phpmailer.ismail()
+        phpmailer_.ismail()
         #// Set Content-Type and charset.
         #// If we don't have a content-type from the input headers.
-        if (not (php_isset(lambda : content_type))):
-            content_type = "text/plain"
+        if (not (php_isset(lambda : content_type_))):
+            content_type_ = "text/plain"
         # end if
         #// 
         #// Filters the wp_mail() content type.
@@ -398,15 +401,15 @@ if (not php_function_exists("wp_mail")):
         #// 
         #// @param string $content_type Default wp_mail() content type.
         #//
-        content_type = apply_filters("wp_mail_content_type", content_type)
-        phpmailer.ContentType = content_type
+        content_type_ = apply_filters("wp_mail_content_type", content_type_)
+        phpmailer_.ContentType = content_type_
         #// Set whether it's plaintext, depending on $content_type.
-        if "text/html" == content_type:
-            phpmailer.ishtml(True)
+        if "text/html" == content_type_:
+            phpmailer_.ishtml(True)
         # end if
         #// If we don't have a charset from the input headers.
-        if (not (php_isset(lambda : charset))):
-            charset = get_bloginfo("charset")
+        if (not (php_isset(lambda : charset_))):
+            charset_ = get_bloginfo("charset")
         # end if
         #// 
         #// Filters the default wp_mail() charset.
@@ -415,24 +418,24 @@ if (not php_function_exists("wp_mail")):
         #// 
         #// @param string $charset Default email charset.
         #//
-        phpmailer.CharSet = apply_filters("wp_mail_charset", charset)
+        phpmailer_.CharSet = apply_filters("wp_mail_charset", charset_)
         #// Set custom headers.
-        if (not php_empty(lambda : headers)):
-            for name,content in headers:
+        if (not php_empty(lambda : headers_)):
+            for name_,content_ in headers_:
                 #// Only add custom headers not added automatically by PHPMailer.
-                if (not php_in_array(name, Array("MIME-Version", "X-Mailer"))):
-                    phpmailer.addcustomheader(php_sprintf("%1$s: %2$s", name, content))
+                if (not php_in_array(name_, Array("MIME-Version", "X-Mailer"))):
+                    phpmailer_.addcustomheader(php_sprintf("%1$s: %2$s", name_, content_))
                 # end if
             # end for
-            if False != php_stripos(content_type, "multipart") and (not php_empty(lambda : boundary)):
-                phpmailer.addcustomheader(php_sprintf("Content-Type: %s;\n   boundary=\"%s\"", content_type, boundary))
+            if False != php_stripos(content_type_, "multipart") and (not php_empty(lambda : boundary_)):
+                phpmailer_.addcustomheader(php_sprintf("Content-Type: %s;\n  boundary=\"%s\"", content_type_, boundary_))
             # end if
         # end if
-        if (not php_empty(lambda : attachments)):
-            for attachment in attachments:
+        if (not php_empty(lambda : attachments_)):
+            for attachment_ in attachments_:
                 try: 
-                    phpmailer.addattachment(attachment)
-                except phpmailerException as e:
+                    phpmailer_.addattachment(attachment_)
+                except phpmailerException as e_:
                     continue
                 # end try
             # end for
@@ -444,13 +447,13 @@ if (not php_function_exists("wp_mail")):
         #// 
         #// @param PHPMailer $phpmailer The PHPMailer instance (passed by reference).
         #//
-        do_action_ref_array("phpmailer_init", Array(phpmailer))
+        do_action_ref_array("phpmailer_init", Array(phpmailer_))
         #// Send!
         try: 
-            return phpmailer.send()
-        except phpmailerException as e:
-            mail_error_data = compact("to", "subject", "message", "headers", "attachments")
-            mail_error_data["phpmailer_exception_code"] = e.getcode()
+            return phpmailer_.send()
+        except phpmailerException as e_:
+            mail_error_data_ = php_compact("to", "subject", "message", "headers", "attachments")
+            mail_error_data_["phpmailer_exception_code"] = e_.getcode()
             #// 
             #// Fires after a phpmailerException is caught.
             #// 
@@ -459,7 +462,7 @@ if (not php_function_exists("wp_mail")):
             #// @param WP_Error $error A WP_Error object with the phpmailerException message, and an array
             #// containing the mail recipient, subject, message, headers, and attachments.
             #//
-            do_action("wp_mail_failed", php_new_class("WP_Error", lambda : WP_Error("wp_mail_failed", e.getmessage(), mail_error_data)))
+            do_action("wp_mail_failed", php_new_class("WP_Error", lambda : WP_Error("wp_mail_failed", e_.getmessage(), mail_error_data_)))
             return False
         # end try
     # end def wp_mail
@@ -476,10 +479,11 @@ if (not php_function_exists("wp_authenticate")):
     #// @return WP_User|WP_Error WP_User object if the credentials are valid,
     #// otherwise WP_Error.
     #//
-    def wp_authenticate(username=None, password=None, *args_):
+    def wp_authenticate(username_=None, password_=None, *_args_):
         
-        username = sanitize_user(username)
-        password = php_trim(password)
+        
+        username_ = sanitize_user(username_)
+        password_ = php_trim(password_)
         #// 
         #// Filters whether a set of user login credentials are valid.
         #// 
@@ -494,15 +498,15 @@ if (not php_function_exists("wp_authenticate")):
         #// @param string                $username Username or email address.
         #// @param string                $password User password
         #//
-        user = apply_filters("authenticate", None, username, password)
-        if None == user:
+        user_ = apply_filters("authenticate", None, username_, password_)
+        if None == user_:
             #// TODO: What should the error message be? (Or would these even happen?)
             #// Only needed if all authentication handlers fail to return anything.
-            user = php_new_class("WP_Error", lambda : WP_Error("authentication_failed", __("<strong>Error</strong>: Invalid username, email address or incorrect password.")))
+            user_ = php_new_class("WP_Error", lambda : WP_Error("authentication_failed", __("<strong>Error</strong>: Invalid username, email address or incorrect password.")))
         # end if
-        ignore_codes = Array("empty_username", "empty_password")
-        if is_wp_error(user) and (not php_in_array(user.get_error_code(), ignore_codes)):
-            error = user
+        ignore_codes_ = Array("empty_username", "empty_password")
+        if is_wp_error(user_) and (not php_in_array(user_.get_error_code(), ignore_codes_)):
+            error_ = user_
             #// 
             #// Fires after a user login has failed.
             #// 
@@ -513,9 +517,9 @@ if (not php_function_exists("wp_authenticate")):
             #// @param string   $username Username or email address.
             #// @param WP_Error $error    A WP_Error object with the authentication failure details.
             #//
-            do_action("wp_login_failed", username, error)
+            do_action("wp_login_failed", username_, error_)
         # end if
-        return user
+        return user_
     # end def wp_authenticate
 # end if
 if (not php_function_exists("wp_logout")):
@@ -524,7 +528,8 @@ if (not php_function_exists("wp_logout")):
     #// 
     #// @since 2.5.0
     #//
-    def wp_logout(*args_):
+    def wp_logout(*_args_):
+        
         
         wp_destroy_current_session()
         wp_clear_auth_cookie()
@@ -555,10 +560,11 @@ if (not php_function_exists("wp_validate_auth_cookie")):
     #// @param string $scheme Optional. The cookie scheme to use: 'auth', 'secure_auth', or 'logged_in'.
     #// @return int|false User ID if valid cookie, false if invalid.
     #//
-    def wp_validate_auth_cookie(cookie="", scheme="", *args_):
+    def wp_validate_auth_cookie(cookie_="", scheme_="", *_args_):
+        
         global PHP_GLOBALS
-        cookie_elements = wp_parse_auth_cookie(cookie, scheme)
-        if (not cookie_elements):
+        cookie_elements_ = wp_parse_auth_cookie(cookie_, scheme_)
+        if (not cookie_elements_):
             #// 
             #// Fires if an authentication cookie is malformed.
             #// 
@@ -568,21 +574,21 @@ if (not php_function_exists("wp_validate_auth_cookie")):
             #// @param string $scheme Authentication scheme. Values include 'auth', 'secure_auth',
             #// or 'logged_in'.
             #//
-            do_action("auth_cookie_malformed", cookie, scheme)
+            do_action("auth_cookie_malformed", cookie_, scheme_)
             return False
         # end if
-        scheme = cookie_elements["scheme"]
-        username = cookie_elements["username"]
-        hmac = cookie_elements["hmac"]
-        token = cookie_elements["token"]
-        expired = cookie_elements["expiration"]
-        expiration = cookie_elements["expiration"]
+        scheme_ = cookie_elements_["scheme"]
+        username_ = cookie_elements_["username"]
+        hmac_ = cookie_elements_["hmac"]
+        token_ = cookie_elements_["token"]
+        expired_ = cookie_elements_["expiration"]
+        expiration_ = cookie_elements_["expiration"]
         #// Allow a grace period for POST and Ajax requests.
         if wp_doing_ajax() or "POST" == PHP_SERVER["REQUEST_METHOD"]:
-            expired += HOUR_IN_SECONDS
+            expired_ += HOUR_IN_SECONDS
         # end if
         #// Quick check to see if an honest cookie has expired.
-        if expired < time():
+        if expired_ < time():
             #// 
             #// Fires once an authentication cookie has expired.
             #// 
@@ -590,11 +596,11 @@ if (not php_function_exists("wp_validate_auth_cookie")):
             #// 
             #// @param string[] $cookie_elements An array of data for the authentication cookie.
             #//
-            do_action("auth_cookie_expired", cookie_elements)
+            do_action("auth_cookie_expired", cookie_elements_)
             return False
         # end if
-        user = get_user_by("login", username)
-        if (not user):
+        user_ = get_user_by("login", username_)
+        if (not user_):
             #// 
             #// Fires if a bad username is entered in the user authentication process.
             #// 
@@ -602,15 +608,15 @@ if (not php_function_exists("wp_validate_auth_cookie")):
             #// 
             #// @param string[] $cookie_elements An array of data for the authentication cookie.
             #//
-            do_action("auth_cookie_bad_username", cookie_elements)
+            do_action("auth_cookie_bad_username", cookie_elements_)
             return False
         # end if
-        pass_frag = php_substr(user.user_pass, 8, 4)
-        key = wp_hash(username + "|" + pass_frag + "|" + expiration + "|" + token, scheme)
+        pass_frag_ = php_substr(user_.user_pass, 8, 4)
+        key_ = wp_hash(username_ + "|" + pass_frag_ + "|" + expiration_ + "|" + token_, scheme_)
         #// If ext/hash is not present, compat.php's hash_hmac() does not support sha256.
-        algo = "sha256" if php_function_exists("hash") else "sha1"
-        hash = hash_hmac(algo, username + "|" + expiration + "|" + token, key)
-        if (not hash_equals(hash, hmac)):
+        algo_ = "sha256" if php_function_exists("hash") else "sha1"
+        hash_ = hash_hmac(algo_, username_ + "|" + expiration_ + "|" + token_, key_)
+        if (not hash_equals(hash_, hmac_)):
             #// 
             #// Fires if a bad authentication cookie hash is encountered.
             #// 
@@ -618,11 +624,11 @@ if (not php_function_exists("wp_validate_auth_cookie")):
             #// 
             #// @param string[] $cookie_elements An array of data for the authentication cookie.
             #//
-            do_action("auth_cookie_bad_hash", cookie_elements)
+            do_action("auth_cookie_bad_hash", cookie_elements_)
             return False
         # end if
-        manager = WP_Session_Tokens.get_instance(user.ID)
-        if (not manager.verify(token)):
+        manager_ = WP_Session_Tokens.get_instance(user_.ID)
+        if (not manager_.verify(token_)):
             #// 
             #// Fires if a bad session token is encountered.
             #// 
@@ -630,11 +636,11 @@ if (not php_function_exists("wp_validate_auth_cookie")):
             #// 
             #// @param string[] $cookie_elements An array of data for the authentication cookie.
             #//
-            do_action("auth_cookie_bad_session_token", cookie_elements)
+            do_action("auth_cookie_bad_session_token", cookie_elements_)
             return False
         # end if
         #// Ajax/POST grace period set above.
-        if expiration < time():
+        if expiration_ < time():
             PHP_GLOBALS["login_grace_period"] = 1
         # end if
         #// 
@@ -645,8 +651,8 @@ if (not php_function_exists("wp_validate_auth_cookie")):
         #// @param string[] $cookie_elements An array of data for the authentication cookie.
         #// @param WP_User  $user            User object.
         #//
-        do_action("auth_cookie_valid", cookie_elements, user)
-        return user.ID
+        do_action("auth_cookie_valid", cookie_elements_, user_)
+        return user_.ID
     # end def wp_validate_auth_cookie
 # end if
 if (not php_function_exists("wp_generate_auth_cookie")):
@@ -663,22 +669,23 @@ if (not php_function_exists("wp_generate_auth_cookie")):
     #// @param string $token      User's session token to use for this cookie.
     #// @return string Authentication cookie contents. Empty string if user does not exist.
     #//
-    def wp_generate_auth_cookie(user_id=None, expiration=None, scheme="auth", token="", *args_):
+    def wp_generate_auth_cookie(user_id_=None, expiration_=None, scheme_="auth", token_="", *_args_):
         
-        user = get_userdata(user_id)
-        if (not user):
+        
+        user_ = get_userdata(user_id_)
+        if (not user_):
             return ""
         # end if
-        if (not token):
-            manager = WP_Session_Tokens.get_instance(user_id)
-            token = manager.create(expiration)
+        if (not token_):
+            manager_ = WP_Session_Tokens.get_instance(user_id_)
+            token_ = manager_.create(expiration_)
         # end if
-        pass_frag = php_substr(user.user_pass, 8, 4)
-        key = wp_hash(user.user_login + "|" + pass_frag + "|" + expiration + "|" + token, scheme)
+        pass_frag_ = php_substr(user_.user_pass, 8, 4)
+        key_ = wp_hash(user_.user_login + "|" + pass_frag_ + "|" + expiration_ + "|" + token_, scheme_)
         #// If ext/hash is not present, compat.php's hash_hmac() does not support sha256.
-        algo = "sha256" if php_function_exists("hash") else "sha1"
-        hash = hash_hmac(algo, user.user_login + "|" + expiration + "|" + token, key)
-        cookie = user.user_login + "|" + expiration + "|" + token + "|" + hash
+        algo_ = "sha256" if php_function_exists("hash") else "sha1"
+        hash_ = hash_hmac(algo_, user_.user_login + "|" + expiration_ + "|" + token_, key_)
+        cookie_ = user_.user_login + "|" + expiration_ + "|" + token_ + "|" + hash_
         #// 
         #// Filters the authentication cookie.
         #// 
@@ -691,7 +698,7 @@ if (not php_function_exists("wp_generate_auth_cookie")):
         #// @param string $scheme     Cookie scheme used. Accepts 'auth', 'secure_auth', or 'logged_in'.
         #// @param string $token      User's session token used.
         #//
-        return apply_filters("auth_cookie", cookie, user_id, expiration, scheme, token)
+        return apply_filters("auth_cookie", cookie_, user_id_, expiration_, scheme_, token_)
     # end def wp_generate_auth_cookie
 # end if
 if (not php_function_exists("wp_parse_auth_cookie")):
@@ -704,43 +711,44 @@ if (not php_function_exists("wp_parse_auth_cookie")):
     #// @param string $scheme Optional. The cookie scheme to use: 'auth', 'secure_auth', or 'logged_in'.
     #// @return string[]|false Authentication cookie components.
     #//
-    def wp_parse_auth_cookie(cookie="", scheme="", *args_):
+    def wp_parse_auth_cookie(cookie_="", scheme_="", *_args_):
         
-        if php_empty(lambda : cookie):
-            for case in Switch(scheme):
+        
+        if php_empty(lambda : cookie_):
+            for case in Switch(scheme_):
                 if case("auth"):
-                    cookie_name = AUTH_COOKIE
+                    cookie_name_ = AUTH_COOKIE
                     break
                 # end if
                 if case("secure_auth"):
-                    cookie_name = SECURE_AUTH_COOKIE
+                    cookie_name_ = SECURE_AUTH_COOKIE
                     break
                 # end if
                 if case("logged_in"):
-                    cookie_name = LOGGED_IN_COOKIE
+                    cookie_name_ = LOGGED_IN_COOKIE
                     break
                 # end if
                 if case():
                     if is_ssl():
-                        cookie_name = SECURE_AUTH_COOKIE
-                        scheme = "secure_auth"
+                        cookie_name_ = SECURE_AUTH_COOKIE
+                        scheme_ = "secure_auth"
                     else:
-                        cookie_name = AUTH_COOKIE
-                        scheme = "auth"
+                        cookie_name_ = AUTH_COOKIE
+                        scheme_ = "auth"
                     # end if
                 # end if
             # end for
-            if php_empty(lambda : PHP_COOKIE[cookie_name]):
+            if php_empty(lambda : PHP_COOKIE[cookie_name_]):
                 return False
             # end if
-            cookie = PHP_COOKIE[cookie_name]
+            cookie_ = PHP_COOKIE[cookie_name_]
         # end if
-        cookie_elements = php_explode("|", cookie)
-        if php_count(cookie_elements) != 4:
+        cookie_elements_ = php_explode("|", cookie_)
+        if php_count(cookie_elements_) != 4:
             return False
         # end if
-        username, expiration, token, hmac = cookie_elements
-        return compact("username", "expiration", "token", "hmac", "scheme")
+        username_, expiration_, token_, hmac_ = cookie_elements_
+        return php_compact("username", "expiration", "token", "hmac", "scheme")
     # end def wp_parse_auth_cookie
 # end if
 if (not php_function_exists("wp_set_auth_cookie")):
@@ -760,9 +768,12 @@ if (not php_function_exists("wp_set_auth_cookie")):
     #// string which means the value of `is_ssl()` will be used.
     #// @param string      $token    Optional. User's session token to use for this cookie.
     #//
-    def wp_set_auth_cookie(user_id=None, remember=False, secure="", token="", *args_):
+    def wp_set_auth_cookie(user_id_=None, remember_=None, secure_="", token_="", *_args_):
+        if remember_ is None:
+            remember_ = False
+        # end if
         
-        if remember:
+        if remember_:
             #// 
             #// Filters the duration of the authentication cookie expiration period.
             #// 
@@ -772,22 +783,22 @@ if (not php_function_exists("wp_set_auth_cookie")):
             #// @param int  $user_id  User ID.
             #// @param bool $remember Whether to remember the user login. Default false.
             #//
-            expiration = time() + apply_filters("auth_cookie_expiration", 14 * DAY_IN_SECONDS, user_id, remember)
+            expiration_ = time() + apply_filters("auth_cookie_expiration", 14 * DAY_IN_SECONDS, user_id_, remember_)
             #// 
             #// Ensure the browser will continue to send the cookie after the expiration time is reached.
             #// Needed for the login grace period in wp_validate_auth_cookie().
             #//
-            expire = expiration + 12 * HOUR_IN_SECONDS
+            expire_ = expiration_ + 12 * HOUR_IN_SECONDS
         else:
             #// This filter is documented in wp-includes/pluggable.php
-            expiration = time() + apply_filters("auth_cookie_expiration", 2 * DAY_IN_SECONDS, user_id, remember)
-            expire = 0
+            expiration_ = time() + apply_filters("auth_cookie_expiration", 2 * DAY_IN_SECONDS, user_id_, remember_)
+            expire_ = 0
         # end if
-        if "" == secure:
-            secure = is_ssl()
+        if "" == secure_:
+            secure_ = is_ssl()
         # end if
         #// Front-end cookie is secure when the auth cookie is secure and the site's home URL uses HTTPS.
-        secure_logged_in_cookie = secure and "https" == php_parse_url(get_option("home"), PHP_URL_SCHEME)
+        secure_logged_in_cookie_ = secure_ and "https" == php_parse_url(get_option("home"), PHP_URL_SCHEME)
         #// 
         #// Filters whether the auth cookie should only be sent over HTTPS.
         #// 
@@ -796,7 +807,7 @@ if (not php_function_exists("wp_set_auth_cookie")):
         #// @param bool $secure  Whether the cookie should only be sent over HTTPS.
         #// @param int  $user_id User ID.
         #//
-        secure = apply_filters("secure_auth_cookie", secure, user_id)
+        secure_ = apply_filters("secure_auth_cookie", secure_, user_id_)
         #// 
         #// Filters whether the logged in cookie should only be sent over HTTPS.
         #// 
@@ -806,20 +817,20 @@ if (not php_function_exists("wp_set_auth_cookie")):
         #// @param int  $user_id                 User ID.
         #// @param bool $secure                  Whether the auth cookie should only be sent over HTTPS.
         #//
-        secure_logged_in_cookie = apply_filters("secure_logged_in_cookie", secure_logged_in_cookie, user_id, secure)
-        if secure:
-            auth_cookie_name = SECURE_AUTH_COOKIE
-            scheme = "secure_auth"
+        secure_logged_in_cookie_ = apply_filters("secure_logged_in_cookie", secure_logged_in_cookie_, user_id_, secure_)
+        if secure_:
+            auth_cookie_name_ = SECURE_AUTH_COOKIE
+            scheme_ = "secure_auth"
         else:
-            auth_cookie_name = AUTH_COOKIE
-            scheme = "auth"
+            auth_cookie_name_ = AUTH_COOKIE
+            scheme_ = "auth"
         # end if
-        if "" == token:
-            manager = WP_Session_Tokens.get_instance(user_id)
-            token = manager.create(expiration)
+        if "" == token_:
+            manager_ = WP_Session_Tokens.get_instance(user_id_)
+            token_ = manager_.create(expiration_)
         # end if
-        auth_cookie = wp_generate_auth_cookie(user_id, expiration, scheme, token)
-        logged_in_cookie = wp_generate_auth_cookie(user_id, expiration, "logged_in", token)
+        auth_cookie_ = wp_generate_auth_cookie(user_id_, expiration_, scheme_, token_)
+        logged_in_cookie_ = wp_generate_auth_cookie(user_id_, expiration_, "logged_in", token_)
         #// 
         #// Fires immediately before the authentication cookie is set.
         #// 
@@ -835,7 +846,7 @@ if (not php_function_exists("wp_set_auth_cookie")):
         #// @param string $scheme      Authentication scheme. Values include 'auth' or 'secure_auth'.
         #// @param string $token       User's session token to use for this cookie.
         #//
-        do_action("set_auth_cookie", auth_cookie, expire, expiration, user_id, scheme, token)
+        do_action("set_auth_cookie", auth_cookie_, expire_, expiration_, user_id_, scheme_, token_)
         #// 
         #// Fires immediately before the logged-in authentication cookie is set.
         #// 
@@ -851,7 +862,7 @@ if (not php_function_exists("wp_set_auth_cookie")):
         #// @param string $scheme           Authentication scheme. Default 'logged_in'.
         #// @param string $token            User's session token to use for this cookie.
         #//
-        do_action("set_logged_in_cookie", logged_in_cookie, expire, expiration, user_id, "logged_in", token)
+        do_action("set_logged_in_cookie", logged_in_cookie_, expire_, expiration_, user_id_, "logged_in", token_)
         #// 
         #// Allows preventing auth cookies from actually being sent to the client.
         #// 
@@ -862,11 +873,11 @@ if (not php_function_exists("wp_set_auth_cookie")):
         if (not apply_filters("send_auth_cookies", True)):
             return
         # end if
-        setcookie(auth_cookie_name, auth_cookie, expire, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN, secure, True)
-        setcookie(auth_cookie_name, auth_cookie, expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, secure, True)
-        setcookie(LOGGED_IN_COOKIE, logged_in_cookie, expire, COOKIEPATH, COOKIE_DOMAIN, secure_logged_in_cookie, True)
+        setcookie(auth_cookie_name_, auth_cookie_, expire_, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN, secure_, True)
+        setcookie(auth_cookie_name_, auth_cookie_, expire_, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, secure_, True)
+        setcookie(LOGGED_IN_COOKIE, logged_in_cookie_, expire_, COOKIEPATH, COOKIE_DOMAIN, secure_logged_in_cookie_, True)
         if COOKIEPATH != SITECOOKIEPATH:
-            setcookie(LOGGED_IN_COOKIE, logged_in_cookie, expire, SITECOOKIEPATH, COOKIE_DOMAIN, secure_logged_in_cookie, True)
+            setcookie(LOGGED_IN_COOKIE, logged_in_cookie_, expire_, SITECOOKIEPATH, COOKIE_DOMAIN, secure_logged_in_cookie_, True)
         # end if
     # end def wp_set_auth_cookie
 # end if
@@ -876,7 +887,8 @@ if (not php_function_exists("wp_clear_auth_cookie")):
     #// 
     #// @since 2.5.0
     #//
-    def wp_clear_auth_cookie(*args_):
+    def wp_clear_auth_cookie(*_args_):
+        
         
         #// 
         #// Fires just before the authentication cookies are cleared.
@@ -924,10 +936,11 @@ if (not php_function_exists("is_user_logged_in")):
     #// 
     #// @return bool True if user is logged in, false if not logged in.
     #//
-    def is_user_logged_in(*args_):
+    def is_user_logged_in(*_args_):
         
-        user = wp_get_current_user()
-        return user.exists()
+        
+        user_ = wp_get_current_user()
+        return user_.exists()
     # end def is_user_logged_in
 # end if
 if (not php_function_exists("auth_redirect")):
@@ -941,9 +954,10 @@ if (not php_function_exists("auth_redirect")):
     #// 
     #// @since 1.5.0
     #//
-    def auth_redirect(*args_):
+    def auth_redirect(*_args_):
         
-        secure = is_ssl() or force_ssl_admin()
+        
+        secure_ = is_ssl() or force_ssl_admin()
         #// 
         #// Filters whether to use a secure authentication redirect.
         #// 
@@ -951,9 +965,9 @@ if (not php_function_exists("auth_redirect")):
         #// 
         #// @param bool $secure Whether to use a secure authentication redirect. Default false.
         #//
-        secure = apply_filters("secure_auth_redirect", secure)
+        secure_ = apply_filters("secure_auth_redirect", secure_)
         #// If https is required and request is http, redirect.
-        if secure and (not is_ssl()) and False != php_strpos(PHP_SERVER["REQUEST_URI"], "wp-admin"):
+        if secure_ and (not is_ssl()) and False != php_strpos(PHP_SERVER["REQUEST_URI"], "wp-admin"):
             if 0 == php_strpos(PHP_SERVER["REQUEST_URI"], "http"):
                 wp_redirect(set_url_scheme(PHP_SERVER["REQUEST_URI"], "https"))
                 php_exit(0)
@@ -969,9 +983,9 @@ if (not php_function_exists("auth_redirect")):
         #// 
         #// @param string $scheme Authentication redirect scheme. Default empty.
         #//
-        scheme = apply_filters("auth_redirect_scheme", "")
-        user_id = wp_validate_auth_cookie("", scheme)
-        if user_id:
+        scheme_ = apply_filters("auth_redirect_scheme", "")
+        user_id_ = wp_validate_auth_cookie("", scheme_)
+        if user_id_:
             #// 
             #// Fires before the authentication redirect.
             #// 
@@ -979,9 +993,9 @@ if (not php_function_exists("auth_redirect")):
             #// 
             #// @param int $user_id User ID.
             #//
-            do_action("auth_redirect", user_id)
+            do_action("auth_redirect", user_id_)
             #// If the user wants ssl but the session is not ssl, redirect.
-            if (not secure) and get_user_option("use_ssl", user_id) and False != php_strpos(PHP_SERVER["REQUEST_URI"], "wp-admin"):
+            if (not secure_) and get_user_option("use_ssl", user_id_) and False != php_strpos(PHP_SERVER["REQUEST_URI"], "wp-admin"):
                 if 0 == php_strpos(PHP_SERVER["REQUEST_URI"], "http"):
                     wp_redirect(set_url_scheme(PHP_SERVER["REQUEST_URI"], "https"))
                     php_exit(0)
@@ -995,9 +1009,9 @@ if (not php_function_exists("auth_redirect")):
         # end if
         #// The cookie is no good, so force login.
         nocache_headers()
-        redirect = wp_get_referer() if php_strpos(PHP_SERVER["REQUEST_URI"], "/options.php") and wp_get_referer() else set_url_scheme("http://" + PHP_SERVER["HTTP_HOST"] + PHP_SERVER["REQUEST_URI"])
-        login_url = wp_login_url(redirect, True)
-        wp_redirect(login_url)
+        redirect_ = wp_get_referer() if php_strpos(PHP_SERVER["REQUEST_URI"], "/options.php") and wp_get_referer() else set_url_scheme("http://" + PHP_SERVER["HTTP_HOST"] + PHP_SERVER["REQUEST_URI"])
+        login_url_ = wp_login_url(redirect_, True)
+        wp_redirect(login_url_)
         php_exit(0)
     # end def auth_redirect
 # end if
@@ -1020,14 +1034,17 @@ if (not php_function_exists("check_admin_referer")):
     #// 2 if the nonce is valid and generated between 12-24 hours ago.
     #// False if the nonce is invalid.
     #//
-    def check_admin_referer(action=-1, query_arg="_wpnonce", *args_):
+    def check_admin_referer(action_=None, query_arg_="_wpnonce", *_args_):
+        if action_ is None:
+            action_ = -1
+        # end if
         
-        if -1 == action:
+        if -1 == action_:
             _doing_it_wrong(__FUNCTION__, __("You should specify a nonce action to be verified by using the first parameter."), "3.2.0")
         # end if
-        adminurl = php_strtolower(admin_url())
-        referer = php_strtolower(wp_get_referer())
-        result = wp_verify_nonce(PHP_REQUEST[query_arg], action) if (php_isset(lambda : PHP_REQUEST[query_arg])) else False
+        adminurl_ = php_strtolower(admin_url())
+        referer_ = php_strtolower(wp_get_referer())
+        result_ = wp_verify_nonce(PHP_REQUEST[query_arg_], action_) if (php_isset(lambda : PHP_REQUEST[query_arg_])) else False
         #// 
         #// Fires once the admin request has been validated or not.
         #// 
@@ -1037,12 +1054,12 @@ if (not php_function_exists("check_admin_referer")):
         #// @param false|int $result False if the nonce is invalid, 1 if the nonce is valid and generated between
         #// 0-12 hours ago, 2 if the nonce is valid and generated between 12-24 hours ago.
         #//
-        do_action("check_admin_referer", action, result)
-        if (not result) and (not -1 == action and php_strpos(referer, adminurl) == 0):
-            wp_nonce_ays(action)
+        do_action("check_admin_referer", action_, result_)
+        if (not result_) and (not -1 == action_ and php_strpos(referer_, adminurl_) == 0):
+            wp_nonce_ays(action_)
             php_exit(0)
         # end if
-        return result
+        return result_
     # end def check_admin_referer
 # end if
 if (not php_function_exists("check_ajax_referer")):
@@ -1061,20 +1078,29 @@ if (not php_function_exists("check_ajax_referer")):
     #// 2 if the nonce is valid and generated between 12-24 hours ago.
     #// False if the nonce is invalid.
     #//
-    def check_ajax_referer(action=-1, query_arg=False, die=True, *args_):
+    def check_ajax_referer(action_=None, query_arg_=None, die_=None, *_args_):
+        if action_ is None:
+            action_ = -1
+        # end if
+        if query_arg_ is None:
+            query_arg_ = False
+        # end if
+        if die_ is None:
+            die_ = True
+        # end if
         
-        if -1 == action:
+        if -1 == action_:
             _doing_it_wrong(__FUNCTION__, __("You should specify a nonce action to be verified by using the first parameter."), "4.7")
         # end if
-        nonce = ""
-        if query_arg and (php_isset(lambda : PHP_REQUEST[query_arg])):
-            nonce = PHP_REQUEST[query_arg]
+        nonce_ = ""
+        if query_arg_ and (php_isset(lambda : PHP_REQUEST[query_arg_])):
+            nonce_ = PHP_REQUEST[query_arg_]
         elif (php_isset(lambda : PHP_REQUEST["_ajax_nonce"])):
-            nonce = PHP_REQUEST["_ajax_nonce"]
+            nonce_ = PHP_REQUEST["_ajax_nonce"]
         elif (php_isset(lambda : PHP_REQUEST["_wpnonce"])):
-            nonce = PHP_REQUEST["_wpnonce"]
+            nonce_ = PHP_REQUEST["_wpnonce"]
         # end if
-        result = wp_verify_nonce(nonce, action)
+        result_ = wp_verify_nonce(nonce_, action_)
         #// 
         #// Fires once the Ajax request has been validated or not.
         #// 
@@ -1084,8 +1110,8 @@ if (not php_function_exists("check_ajax_referer")):
         #// @param false|int $result False if the nonce is invalid, 1 if the nonce is valid and generated between
         #// 0-12 hours ago, 2 if the nonce is valid and generated between 12-24 hours ago.
         #//
-        do_action("check_ajax_referer", action, result)
-        if die and False == result:
+        do_action("check_ajax_referer", action_, result_)
+        if die_ and False == result_:
             if wp_doing_ajax():
                 wp_die(-1, 403)
             else:
@@ -1093,7 +1119,7 @@ if (not php_function_exists("check_ajax_referer")):
                 php_exit()
             # end if
         # end if
-        return result
+        return result_
     # end def check_ajax_referer
 # end if
 if (not php_function_exists("wp_redirect")):
@@ -1124,10 +1150,11 @@ if (not php_function_exists("wp_redirect")):
     #// @param string $x_redirect_by Optional. The application doing the redirect. Default 'WordPress'.
     #// @return bool False if the redirect was cancelled, true otherwise.
     #//
-    def wp_redirect(location=None, status=302, x_redirect_by="WordPress", *args_):
+    def wp_redirect(location_=None, status_=302, x_redirect_by_="WordPress", *_args_):
         
-        global is_IIS
-        php_check_if_defined("is_IIS")
+        
+        global is_IIS_
+        php_check_if_defined("is_IIS_")
         #// 
         #// Filters the redirect location.
         #// 
@@ -1136,7 +1163,7 @@ if (not php_function_exists("wp_redirect")):
         #// @param string $location The path or URL to redirect to.
         #// @param int    $status   The HTTP response status code to use.
         #//
-        location = apply_filters("wp_redirect", location, status)
+        location_ = apply_filters("wp_redirect", location_, status_)
         #// 
         #// Filters the redirect HTTP response status code to use.
         #// 
@@ -1145,16 +1172,16 @@ if (not php_function_exists("wp_redirect")):
         #// @param int    $status   The HTTP response status code to use.
         #// @param string $location The path or URL to redirect to.
         #//
-        status = apply_filters("wp_redirect_status", status, location)
-        if (not location):
+        status_ = apply_filters("wp_redirect_status", status_, location_)
+        if (not location_):
             return False
         # end if
-        if status < 300 or 399 < status:
+        if status_ < 300 or 399 < status_:
             wp_die(__("HTTP redirect status code must be a redirection code, 3xx."))
         # end if
-        location = wp_sanitize_redirect(location)
-        if (not is_IIS) and PHP_SAPI != "cgi-fcgi":
-            status_header(status)
+        location_ = wp_sanitize_redirect(location_)
+        if (not is_IIS_) and PHP_SAPI != "cgi-fcgi":
+            status_header(status_)
             pass
         # end if
         #// 
@@ -1168,11 +1195,11 @@ if (not php_function_exists("wp_redirect")):
         #// @param int    $status        Status code to use.
         #// @param string $location      The path to redirect to.
         #//
-        x_redirect_by = apply_filters("x_redirect_by", x_redirect_by, status, location)
-        if php_is_string(x_redirect_by):
-            php_header(str("X-Redirect-By: ") + str(x_redirect_by))
+        x_redirect_by_ = apply_filters("x_redirect_by", x_redirect_by_, status_, location_)
+        if php_is_string(x_redirect_by_):
+            php_header(str("X-Redirect-By: ") + str(x_redirect_by_))
         # end if
-        php_header(str("Location: ") + str(location), True, status)
+        php_header(str("Location: ") + str(location_), True, status_)
         return True
     # end def wp_redirect
 # end if
@@ -1185,11 +1212,12 @@ if (not php_function_exists("wp_sanitize_redirect")):
     #// @param string $location The path to redirect to.
     #// @return string Redirect-sanitized URL.
     #//
-    def wp_sanitize_redirect(location=None, *args_):
+    def wp_sanitize_redirect(location_=None, *_args_):
+        
         
         #// Encode spaces.
-        location = php_str_replace(" ", "%20", location)
-        regex = """/
+        location_ = php_str_replace(" ", "%20", location_)
+        regex_ = """/
         (
         (?: [\\xC2-\\xDF][\\x80-\\xBF]        # double-byte sequences   110xxxxx 10xxxxxx
         |   \\xE0[\\xA0-\\xBF][\\x80-\\xBF]    # triple-byte sequences   1110xxxx 10xxxxxx * 2
@@ -1201,12 +1229,12 @@ if (not php_function_exists("wp_sanitize_redirect")):
         |   \\xF4[\\x80-\\x8F][\\x80-\\xBF]{2}
         ){1,40}                              # ...one or more times
         )/x"""
-        location = preg_replace_callback(regex, "_wp_sanitize_utf8_in_redirect", location)
-        location = php_preg_replace("|[^a-z0-9-~+_.?#=&;,/:%!*\\[\\]()@]|i", "", location)
-        location = wp_kses_no_null(location)
+        location_ = preg_replace_callback(regex_, "_wp_sanitize_utf8_in_redirect", location_)
+        location_ = php_preg_replace("|[^a-z0-9-~+_.?#=&;,/:%!*\\[\\]()@]|i", "", location_)
+        location_ = wp_kses_no_null(location_)
         #// Remove %0D and %0A from location.
-        strip = Array("%0d", "%0a", "%0D", "%0A")
-        return _deep_replace(strip, location)
+        strip_ = Array("%0d", "%0a", "%0D", "%0A")
+        return _deep_replace(strip_, location_)
     # end def wp_sanitize_redirect
     #// 
     #// URL encode UTF-8 characters in a URL.
@@ -1220,9 +1248,10 @@ if (not php_function_exists("wp_sanitize_redirect")):
     #// @param array $matches RegEx matches against the redirect location.
     #// @return string URL-encoded version of the first RegEx match.
     #//
-    def _wp_sanitize_utf8_in_redirect(matches=None, *args_):
+    def _wp_sanitize_utf8_in_redirect(matches_=None, *_args_):
         
-        return urlencode(matches[0])
+        
+        return urlencode(matches_[0])
     # end def _wp_sanitize_utf8_in_redirect
 # end if
 if (not php_function_exists("wp_safe_redirect")):
@@ -1258,10 +1287,11 @@ if (not php_function_exists("wp_safe_redirect")):
     #// @param string $x_redirect_by Optional. The application doing the redirect. Default 'WordPress'.
     #// @return bool  $redirect False if the redirect was cancelled, true otherwise.
     #//
-    def wp_safe_redirect(location=None, status=302, x_redirect_by="WordPress", *args_):
+    def wp_safe_redirect(location_=None, status_=302, x_redirect_by_="WordPress", *_args_):
+        
         
         #// Need to look at the URL the way it will end up in wp_redirect().
-        location = wp_sanitize_redirect(location)
+        location_ = wp_sanitize_redirect(location_)
         #// 
         #// Filters the redirect fallback URL for when the provided redirect is not safe (local).
         #// 
@@ -1270,8 +1300,8 @@ if (not php_function_exists("wp_safe_redirect")):
         #// @param string $fallback_url The fallback URL to use by default.
         #// @param int    $status       The HTTP response status code to use.
         #//
-        location = wp_validate_redirect(location, apply_filters("wp_safe_redirect_fallback", admin_url(), status))
-        return wp_redirect(location, status, x_redirect_by)
+        location_ = wp_validate_redirect(location_, apply_filters("wp_safe_redirect_fallback", admin_url(), status_))
+        return wp_redirect(location_, status_, x_redirect_by_)
     # end def wp_safe_redirect
 # end if
 if (not php_function_exists("wp_validate_redirect")):
@@ -1290,47 +1320,48 @@ if (not php_function_exists("wp_validate_redirect")):
     #// @param string $default  The value to return if $location is not allowed
     #// @return string redirect-sanitized URL
     #//
-    def wp_validate_redirect(location=None, default="", *args_):
+    def wp_validate_redirect(location_=None, default_="", *_args_):
         
-        location = php_trim(location, "     \n\r ")
+        
+        location_ = php_trim(location_, "   \n\r ")
         #// Browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'.
-        if php_substr(location, 0, 2) == "//":
-            location = "http:" + location
+        if php_substr(location_, 0, 2) == "//":
+            location_ = "http:" + location_
         # end if
         #// In PHP 5 parse_url() may fail if the URL query part contains 'http://'.
         #// See https://bugs.php.net/bug.php?id=38143
-        cut = php_strpos(location, "?")
-        test = php_substr(location, 0, cut) if cut else location
+        cut_ = php_strpos(location_, "?")
+        test_ = php_substr(location_, 0, cut_) if cut_ else location_
         #// @-operator is used to prevent possible warnings in PHP < 5.3.3.
-        lp = php_no_error(lambda: php_parse_url(test))
+        lp_ = php_no_error(lambda: php_parse_url(test_))
         #// Give up if malformed URL.
-        if False == lp:
-            return default
+        if False == lp_:
+            return default_
         # end if
         #// Allow only 'http' and 'https' schemes. No 'data:', etc.
-        if (php_isset(lambda : lp["scheme"])) and (not "http" == lp["scheme"] or "https" == lp["scheme"]):
-            return default
+        if (php_isset(lambda : lp_["scheme"])) and (not "http" == lp_["scheme"] or "https" == lp_["scheme"]):
+            return default_
         # end if
-        if (not (php_isset(lambda : lp["host"]))) and (not php_empty(lambda : lp["path"])) and "/" != lp["path"][0]:
-            path = ""
+        if (not (php_isset(lambda : lp_["host"]))) and (not php_empty(lambda : lp_["path"])) and "/" != lp_["path"][0]:
+            path_ = ""
             if (not php_empty(lambda : PHP_SERVER["REQUEST_URI"])):
-                path = php_dirname(php_parse_url("http://placeholder" + PHP_SERVER["REQUEST_URI"], PHP_URL_PATH) + "?")
-                path = wp_normalize_path(path)
+                path_ = php_dirname(php_parse_url("http://placeholder" + PHP_SERVER["REQUEST_URI"], PHP_URL_PATH) + "?")
+                path_ = wp_normalize_path(path_)
             # end if
-            location = "/" + php_ltrim(path + "/", "/") + location
+            location_ = "/" + php_ltrim(path_ + "/", "/") + location_
         # end if
         #// Reject if certain components are set but host is not.
         #// This catches URLs like https:host.com for which parse_url() does not set the host field.
-        if (not (php_isset(lambda : lp["host"]))) and (php_isset(lambda : lp["scheme"])) or (php_isset(lambda : lp["user"])) or (php_isset(lambda : lp["pass"])) or (php_isset(lambda : lp["port"])):
-            return default
+        if (not (php_isset(lambda : lp_["host"]))) and (php_isset(lambda : lp_["scheme"])) or (php_isset(lambda : lp_["user"])) or (php_isset(lambda : lp_["pass"])) or (php_isset(lambda : lp_["port"])):
+            return default_
         # end if
         #// Reject malformed components parse_url() can return on odd inputs.
-        for component in Array("user", "pass", "host"):
-            if (php_isset(lambda : lp[component])) and strpbrk(lp[component], ":/?#@"):
-                return default
+        for component_ in Array("user", "pass", "host"):
+            if (php_isset(lambda : lp_[component_])) and strpbrk(lp_[component_], ":/?#@"):
+                return default_
             # end if
         # end for
-        wpp = php_parse_url(home_url())
+        wpp_ = php_parse_url(home_url())
         #// 
         #// Filters the whitelist of hosts to redirect to.
         #// 
@@ -1339,11 +1370,11 @@ if (not php_function_exists("wp_validate_redirect")):
         #// @param string[] $hosts An array of allowed host names.
         #// @param string   $host  The host name of the redirect destination; empty string if not set.
         #//
-        allowed_hosts = apply_filters("allowed_redirect_hosts", Array(wpp["host"]), lp["host"] if (php_isset(lambda : lp["host"])) else "")
-        if (php_isset(lambda : lp["host"])) and (not php_in_array(lp["host"], allowed_hosts)) and php_strtolower(wpp["host"]) != lp["host"]:
-            location = default
+        allowed_hosts_ = apply_filters("allowed_redirect_hosts", Array(wpp_["host"]), lp_["host"] if (php_isset(lambda : lp_["host"])) else "")
+        if (php_isset(lambda : lp_["host"])) and (not php_in_array(lp_["host"], allowed_hosts_)) and php_strtolower(wpp_["host"]) != lp_["host"]:
+            location_ = default_
         # end if
-        return location
+        return location_
     # end def wp_validate_redirect
 # end if
 if (not php_function_exists("wp_notify_postauthor")):
@@ -1356,21 +1387,22 @@ if (not php_function_exists("wp_notify_postauthor")):
     #// @param string          $deprecated Not used
     #// @return bool True on completion. False if no email addresses were specified.
     #//
-    def wp_notify_postauthor(comment_id=None, deprecated=None, *args_):
+    def wp_notify_postauthor(comment_id_=None, deprecated_=None, *_args_):
         
-        if None != deprecated:
+        
+        if None != deprecated_:
             _deprecated_argument(__FUNCTION__, "3.8.0")
         # end if
-        comment = get_comment(comment_id)
-        if php_empty(lambda : comment) or php_empty(lambda : comment.comment_post_ID):
+        comment_ = get_comment(comment_id_)
+        if php_empty(lambda : comment_) or php_empty(lambda : comment_.comment_post_ID):
             return False
         # end if
-        post = get_post(comment.comment_post_ID)
-        author = get_userdata(post.post_author)
+        post_ = get_post(comment_.comment_post_ID)
+        author_ = get_userdata(post_.post_author)
         #// Who to notify? By default, just the post author, but others can be added.
-        emails = Array()
-        if author:
-            emails[-1] = author.user_email
+        emails_ = Array()
+        if author_:
+            emails_[-1] = author_.user_email
         # end if
         #// 
         #// Filters the list of email addresses to receive a comment notification.
@@ -1383,14 +1415,14 @@ if (not php_function_exists("wp_notify_postauthor")):
         #// @param string[] $emails     An array of email addresses to receive a comment notification.
         #// @param int      $comment_id The comment ID.
         #//
-        emails = apply_filters("comment_notification_recipients", emails, comment.comment_ID)
-        emails = php_array_filter(emails)
+        emails_ = apply_filters("comment_notification_recipients", emails_, comment_.comment_ID)
+        emails_ = php_array_filter(emails_)
         #// If there are no addresses to send the comment to, bail.
-        if (not php_count(emails)):
+        if (not php_count(emails_)):
             return False
         # end if
         #// Facilitate unsetting below without knowing the keys.
-        emails = php_array_flip(emails)
+        emails_ = php_array_flip(emails_)
         #// 
         #// Filters whether to notify comment authors of their comments on their own posts.
         #// 
@@ -1403,114 +1435,114 @@ if (not php_function_exists("wp_notify_postauthor")):
         #// Default false.
         #// @param int  $comment_id The comment ID.
         #//
-        notify_author = apply_filters("comment_notification_notify_author", False, comment.comment_ID)
+        notify_author_ = apply_filters("comment_notification_notify_author", False, comment_.comment_ID)
         #// The comment was left by the author.
-        if author and (not notify_author) and comment.user_id == post.post_author:
-            emails[author.user_email] = None
+        if author_ and (not notify_author_) and comment_.user_id == post_.post_author:
+            emails_[author_.user_email] = None
         # end if
         #// The author moderated a comment on their own post.
-        if author and (not notify_author) and get_current_user_id() == post.post_author:
-            emails[author.user_email] = None
+        if author_ and (not notify_author_) and get_current_user_id() == post_.post_author:
+            emails_[author_.user_email] = None
         # end if
         #// The post author is no longer a member of the blog.
-        if author and (not notify_author) and (not user_can(post.post_author, "read_post", post.ID)):
-            emails[author.user_email] = None
+        if author_ and (not notify_author_) and (not user_can(post_.post_author, "read_post", post_.ID)):
+            emails_[author_.user_email] = None
         # end if
         #// If there's no email to send the comment to, bail, otherwise flip array back around for use below.
-        if (not php_count(emails)):
+        if (not php_count(emails_)):
             return False
         else:
-            emails = php_array_flip(emails)
+            emails_ = php_array_flip(emails_)
         # end if
-        switched_locale = switch_to_locale(get_locale())
-        comment_author_domain = ""
-        if WP_Http.is_ip_address(comment.comment_author_IP):
-            comment_author_domain = gethostbyaddr(comment.comment_author_IP)
+        switched_locale_ = switch_to_locale(get_locale())
+        comment_author_domain_ = ""
+        if WP_Http.is_ip_address(comment_.comment_author_IP):
+            comment_author_domain_ = gethostbyaddr(comment_.comment_author_IP)
         # end if
         #// The blogname option is escaped with esc_html() on the way into the database in sanitize_option().
         #// We want to reverse this for the plain text arena of emails.
-        blogname = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
-        comment_content = wp_specialchars_decode(comment.comment_content)
-        for case in Switch(comment.comment_type):
+        blogname_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+        comment_content_ = wp_specialchars_decode(comment_.comment_content)
+        for case in Switch(comment_.comment_type):
             if case("trackback"):
                 #// translators: %s: Post title.
-                notify_message = php_sprintf(__("New trackback on your post \"%s\""), post.post_title) + "\r\n"
+                notify_message_ = php_sprintf(__("New trackback on your post \"%s\""), post_.post_title) + "\r\n"
                 #// translators: 1: Trackback/pingback website name, 2: Website IP address, 3: Website hostname.
-                notify_message += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment.comment_author, comment.comment_author_IP, comment_author_domain) + "\r\n"
+                notify_message_ += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment_.comment_author, comment_.comment_author_IP, comment_author_domain_) + "\r\n"
                 #// translators: %s: Trackback/pingback/comment author URL.
-                notify_message += php_sprintf(__("URL: %s"), comment.comment_author_url) + "\r\n"
+                notify_message_ += php_sprintf(__("URL: %s"), comment_.comment_author_url) + "\r\n"
                 #// translators: %s: Comment text.
-                notify_message += php_sprintf(__("Comment: %s"), "\r\n" + comment_content) + "\r\n\r\n"
-                notify_message += __("You can see all trackbacks on this post here:") + "\r\n"
+                notify_message_ += php_sprintf(__("Comment: %s"), "\r\n" + comment_content_) + "\r\n\r\n"
+                notify_message_ += __("You can see all trackbacks on this post here:") + "\r\n"
                 #// translators: Trackback notification email subject. 1: Site title, 2: Post title.
-                subject = php_sprintf(__("[%1$s] Trackback: \"%2$s\""), blogname, post.post_title)
+                subject_ = php_sprintf(__("[%1$s] Trackback: \"%2$s\""), blogname_, post_.post_title)
                 break
             # end if
             if case("pingback"):
                 #// translators: %s: Post title.
-                notify_message = php_sprintf(__("New pingback on your post \"%s\""), post.post_title) + "\r\n"
+                notify_message_ = php_sprintf(__("New pingback on your post \"%s\""), post_.post_title) + "\r\n"
                 #// translators: 1: Trackback/pingback website name, 2: Website IP address, 3: Website hostname.
-                notify_message += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment.comment_author, comment.comment_author_IP, comment_author_domain) + "\r\n"
+                notify_message_ += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment_.comment_author, comment_.comment_author_IP, comment_author_domain_) + "\r\n"
                 #// translators: %s: Trackback/pingback/comment author URL.
-                notify_message += php_sprintf(__("URL: %s"), comment.comment_author_url) + "\r\n"
+                notify_message_ += php_sprintf(__("URL: %s"), comment_.comment_author_url) + "\r\n"
                 #// translators: %s: Comment text.
-                notify_message += php_sprintf(__("Comment: %s"), "\r\n" + comment_content) + "\r\n\r\n"
-                notify_message += __("You can see all pingbacks on this post here:") + "\r\n"
+                notify_message_ += php_sprintf(__("Comment: %s"), "\r\n" + comment_content_) + "\r\n\r\n"
+                notify_message_ += __("You can see all pingbacks on this post here:") + "\r\n"
                 #// translators: Pingback notification email subject. 1: Site title, 2: Post title.
-                subject = php_sprintf(__("[%1$s] Pingback: \"%2$s\""), blogname, post.post_title)
+                subject_ = php_sprintf(__("[%1$s] Pingback: \"%2$s\""), blogname_, post_.post_title)
                 break
             # end if
             if case():
                 #// Comments.
                 #// translators: %s: Post title.
-                notify_message = php_sprintf(__("New comment on your post \"%s\""), post.post_title) + "\r\n"
+                notify_message_ = php_sprintf(__("New comment on your post \"%s\""), post_.post_title) + "\r\n"
                 #// translators: 1: Comment author's name, 2: Comment author's IP address, 3: Comment author's hostname.
-                notify_message += php_sprintf(__("Author: %1$s (IP address: %2$s, %3$s)"), comment.comment_author, comment.comment_author_IP, comment_author_domain) + "\r\n"
+                notify_message_ += php_sprintf(__("Author: %1$s (IP address: %2$s, %3$s)"), comment_.comment_author, comment_.comment_author_IP, comment_author_domain_) + "\r\n"
                 #// translators: %s: Comment author email.
-                notify_message += php_sprintf(__("Email: %s"), comment.comment_author_email) + "\r\n"
+                notify_message_ += php_sprintf(__("Email: %s"), comment_.comment_author_email) + "\r\n"
                 #// translators: %s: Trackback/pingback/comment author URL.
-                notify_message += php_sprintf(__("URL: %s"), comment.comment_author_url) + "\r\n"
-                if comment.comment_parent and user_can(post.post_author, "edit_comment", comment.comment_parent):
+                notify_message_ += php_sprintf(__("URL: %s"), comment_.comment_author_url) + "\r\n"
+                if comment_.comment_parent and user_can(post_.post_author, "edit_comment", comment_.comment_parent):
                     #// translators: Comment moderation. %s: Parent comment edit URL.
-                    notify_message += php_sprintf(__("In reply to: %s"), admin_url(str("comment.php?action=editcomment&c=") + str(comment.comment_parent) + str("#wpbody-content"))) + "\r\n"
+                    notify_message_ += php_sprintf(__("In reply to: %s"), admin_url(str("comment.php?action=editcomment&c=") + str(comment_.comment_parent) + str("#wpbody-content"))) + "\r\n"
                 # end if
                 #// translators: %s: Comment text.
-                notify_message += php_sprintf(__("Comment: %s"), "\r\n" + comment_content) + "\r\n\r\n"
-                notify_message += __("You can see all comments on this post here:") + "\r\n"
+                notify_message_ += php_sprintf(__("Comment: %s"), "\r\n" + comment_content_) + "\r\n\r\n"
+                notify_message_ += __("You can see all comments on this post here:") + "\r\n"
                 #// translators: Comment notification email subject. 1: Site title, 2: Post title.
-                subject = php_sprintf(__("[%1$s] Comment: \"%2$s\""), blogname, post.post_title)
+                subject_ = php_sprintf(__("[%1$s] Comment: \"%2$s\""), blogname_, post_.post_title)
                 break
             # end if
         # end for
-        notify_message += get_permalink(comment.comment_post_ID) + "#comments\r\n\r\n"
+        notify_message_ += get_permalink(comment_.comment_post_ID) + "#comments\r\n\r\n"
         #// translators: %s: Comment URL.
-        notify_message += php_sprintf(__("Permalink: %s"), get_comment_link(comment)) + "\r\n"
-        if user_can(post.post_author, "edit_comment", comment.comment_ID):
+        notify_message_ += php_sprintf(__("Permalink: %s"), get_comment_link(comment_)) + "\r\n"
+        if user_can(post_.post_author, "edit_comment", comment_.comment_ID):
             if EMPTY_TRASH_DAYS:
                 #// translators: Comment moderation. %s: Comment action URL.
-                notify_message += php_sprintf(__("Trash it: %s"), admin_url(str("comment.php?action=trash&c=") + str(comment.comment_ID) + str("#wpbody-content"))) + "\r\n"
+                notify_message_ += php_sprintf(__("Trash it: %s"), admin_url(str("comment.php?action=trash&c=") + str(comment_.comment_ID) + str("#wpbody-content"))) + "\r\n"
             else:
                 #// translators: Comment moderation. %s: Comment action URL.
-                notify_message += php_sprintf(__("Delete it: %s"), admin_url(str("comment.php?action=delete&c=") + str(comment.comment_ID) + str("#wpbody-content"))) + "\r\n"
+                notify_message_ += php_sprintf(__("Delete it: %s"), admin_url(str("comment.php?action=delete&c=") + str(comment_.comment_ID) + str("#wpbody-content"))) + "\r\n"
             # end if
             #// translators: Comment moderation. %s: Comment action URL.
-            notify_message += php_sprintf(__("Spam it: %s"), admin_url(str("comment.php?action=spam&c=") + str(comment.comment_ID) + str("#wpbody-content"))) + "\r\n"
+            notify_message_ += php_sprintf(__("Spam it: %s"), admin_url(str("comment.php?action=spam&c=") + str(comment_.comment_ID) + str("#wpbody-content"))) + "\r\n"
         # end if
-        wp_email = "wordpress@" + php_preg_replace("#^www\\.#", "", php_strtolower(PHP_SERVER["SERVER_NAME"]))
-        if "" == comment.comment_author:
-            from_ = str("From: \"") + str(blogname) + str("\" <") + str(wp_email) + str(">")
-            if "" != comment.comment_author_email:
-                reply_to = str("Reply-To: ") + str(comment.comment_author_email)
+        wp_email_ = "wordpress@" + php_preg_replace("#^www\\.#", "", php_strtolower(PHP_SERVER["SERVER_NAME"]))
+        if "" == comment_.comment_author:
+            from_ = str("From: \"") + str(blogname_) + str("\" <") + str(wp_email_) + str(">")
+            if "" != comment_.comment_author_email:
+                reply_to_ = str("Reply-To: ") + str(comment_.comment_author_email)
             # end if
         else:
-            from_ = str("From: \"") + str(comment.comment_author) + str("\" <") + str(wp_email) + str(">")
-            if "" != comment.comment_author_email:
-                reply_to = str("Reply-To: \"") + str(comment.comment_author_email) + str("\" <") + str(comment.comment_author_email) + str(">")
+            from_ = str("From: \"") + str(comment_.comment_author) + str("\" <") + str(wp_email_) + str(">")
+            if "" != comment_.comment_author_email:
+                reply_to_ = str("Reply-To: \"") + str(comment_.comment_author_email) + str("\" <") + str(comment_.comment_author_email) + str(">")
             # end if
         # end if
-        message_headers = str(from_) + str("\n") + "Content-Type: text/plain; charset=\"" + get_option("blog_charset") + "\"\n"
-        if (php_isset(lambda : reply_to)):
-            message_headers += reply_to + "\n"
+        message_headers_ = str(from_) + str("\n") + "Content-Type: text/plain; charset=\"" + get_option("blog_charset") + "\"\n"
+        if (php_isset(lambda : reply_to_)):
+            message_headers_ += reply_to_ + "\n"
         # end if
         #// 
         #// Filters the comment notification email text.
@@ -1520,7 +1552,7 @@ if (not php_function_exists("wp_notify_postauthor")):
         #// @param string $notify_message The comment notification email text.
         #// @param int    $comment_id     Comment ID.
         #//
-        notify_message = apply_filters("comment_notification_text", notify_message, comment.comment_ID)
+        notify_message_ = apply_filters("comment_notification_text", notify_message_, comment_.comment_ID)
         #// 
         #// Filters the comment notification email subject.
         #// 
@@ -1529,7 +1561,7 @@ if (not php_function_exists("wp_notify_postauthor")):
         #// @param string $subject    The comment notification email subject.
         #// @param int    $comment_id Comment ID.
         #//
-        subject = apply_filters("comment_notification_subject", subject, comment.comment_ID)
+        subject_ = apply_filters("comment_notification_subject", subject_, comment_.comment_ID)
         #// 
         #// Filters the comment notification email headers.
         #// 
@@ -1538,11 +1570,11 @@ if (not php_function_exists("wp_notify_postauthor")):
         #// @param string $message_headers Headers for the comment notification email.
         #// @param int    $comment_id      Comment ID.
         #//
-        message_headers = apply_filters("comment_notification_headers", message_headers, comment.comment_ID)
-        for email in emails:
-            wp_mail(email, wp_specialchars_decode(subject), notify_message, message_headers)
+        message_headers_ = apply_filters("comment_notification_headers", message_headers_, comment_.comment_ID)
+        for email_ in emails_:
+            wp_mail(email_, wp_specialchars_decode(subject_), notify_message_, message_headers_)
         # end for
-        if switched_locale:
+        if switched_locale_:
             restore_previous_locale()
         # end if
         return True
@@ -1562,11 +1594,12 @@ if (not php_function_exists("wp_notify_moderator")):
     #// @param int $comment_id Comment ID.
     #// @return true Always returns true.
     #//
-    def wp_notify_moderator(comment_id=None, *args_):
+    def wp_notify_moderator(comment_id_=None, *_args_):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        maybe_notify = get_option("moderation_notify")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        maybe_notify_ = get_option("moderation_notify")
         #// 
         #// Filters whether to send the site moderator email notifications, overriding the site setting.
         #// 
@@ -1575,89 +1608,89 @@ if (not php_function_exists("wp_notify_moderator")):
         #// @param bool $maybe_notify Whether to notify blog moderator.
         #// @param int  $comment_ID   The id of the comment for the notification.
         #//
-        maybe_notify = apply_filters("notify_moderator", maybe_notify, comment_id)
-        if (not maybe_notify):
+        maybe_notify_ = apply_filters("notify_moderator", maybe_notify_, comment_id_)
+        if (not maybe_notify_):
             return True
         # end if
-        comment = get_comment(comment_id)
-        post = get_post(comment.comment_post_ID)
-        user = get_userdata(post.post_author)
+        comment_ = get_comment(comment_id_)
+        post_ = get_post(comment_.comment_post_ID)
+        user_ = get_userdata(post_.post_author)
         #// Send to the administration and to the post author if the author can modify the comment.
-        emails = Array(get_option("admin_email"))
-        if user and user_can(user.ID, "edit_comment", comment_id) and (not php_empty(lambda : user.user_email)):
-            if 0 != strcasecmp(user.user_email, get_option("admin_email")):
-                emails[-1] = user.user_email
+        emails_ = Array(get_option("admin_email"))
+        if user_ and user_can(user_.ID, "edit_comment", comment_id_) and (not php_empty(lambda : user_.user_email)):
+            if 0 != strcasecmp(user_.user_email, get_option("admin_email")):
+                emails_[-1] = user_.user_email
             # end if
         # end if
-        switched_locale = switch_to_locale(get_locale())
-        comment_author_domain = ""
-        if WP_Http.is_ip_address(comment.comment_author_IP):
-            comment_author_domain = gethostbyaddr(comment.comment_author_IP)
+        switched_locale_ = switch_to_locale(get_locale())
+        comment_author_domain_ = ""
+        if WP_Http.is_ip_address(comment_.comment_author_IP):
+            comment_author_domain_ = gethostbyaddr(comment_.comment_author_IP)
         # end if
-        comments_waiting = wpdb.get_var(str("SELECT COUNT(*) FROM ") + str(wpdb.comments) + str(" WHERE comment_approved = '0'"))
+        comments_waiting_ = wpdb_.get_var(str("SELECT COUNT(*) FROM ") + str(wpdb_.comments) + str(" WHERE comment_approved = '0'"))
         #// The blogname option is escaped with esc_html() on the way into the database in sanitize_option().
         #// We want to reverse this for the plain text arena of emails.
-        blogname = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
-        comment_content = wp_specialchars_decode(comment.comment_content)
-        for case in Switch(comment.comment_type):
+        blogname_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+        comment_content_ = wp_specialchars_decode(comment_.comment_content)
+        for case in Switch(comment_.comment_type):
             if case("trackback"):
                 #// translators: %s: Post title.
-                notify_message = php_sprintf(__("A new trackback on the post \"%s\" is waiting for your approval"), post.post_title) + "\r\n"
-                notify_message += get_permalink(comment.comment_post_ID) + "\r\n\r\n"
+                notify_message_ = php_sprintf(__("A new trackback on the post \"%s\" is waiting for your approval"), post_.post_title) + "\r\n"
+                notify_message_ += get_permalink(comment_.comment_post_ID) + "\r\n\r\n"
                 #// translators: 1: Trackback/pingback website name, 2: Website IP address, 3: Website hostname.
-                notify_message += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment.comment_author, comment.comment_author_IP, comment_author_domain) + "\r\n"
+                notify_message_ += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment_.comment_author, comment_.comment_author_IP, comment_author_domain_) + "\r\n"
                 #// translators: %s: Trackback/pingback/comment author URL.
-                notify_message += php_sprintf(__("URL: %s"), comment.comment_author_url) + "\r\n"
-                notify_message += __("Trackback excerpt: ") + "\r\n" + comment_content + "\r\n\r\n"
+                notify_message_ += php_sprintf(__("URL: %s"), comment_.comment_author_url) + "\r\n"
+                notify_message_ += __("Trackback excerpt: ") + "\r\n" + comment_content_ + "\r\n\r\n"
                 break
             # end if
             if case("pingback"):
                 #// translators: %s: Post title.
-                notify_message = php_sprintf(__("A new pingback on the post \"%s\" is waiting for your approval"), post.post_title) + "\r\n"
-                notify_message += get_permalink(comment.comment_post_ID) + "\r\n\r\n"
+                notify_message_ = php_sprintf(__("A new pingback on the post \"%s\" is waiting for your approval"), post_.post_title) + "\r\n"
+                notify_message_ += get_permalink(comment_.comment_post_ID) + "\r\n\r\n"
                 #// translators: 1: Trackback/pingback website name, 2: Website IP address, 3: Website hostname.
-                notify_message += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment.comment_author, comment.comment_author_IP, comment_author_domain) + "\r\n"
+                notify_message_ += php_sprintf(__("Website: %1$s (IP address: %2$s, %3$s)"), comment_.comment_author, comment_.comment_author_IP, comment_author_domain_) + "\r\n"
                 #// translators: %s: Trackback/pingback/comment author URL.
-                notify_message += php_sprintf(__("URL: %s"), comment.comment_author_url) + "\r\n"
-                notify_message += __("Pingback excerpt: ") + "\r\n" + comment_content + "\r\n\r\n"
+                notify_message_ += php_sprintf(__("URL: %s"), comment_.comment_author_url) + "\r\n"
+                notify_message_ += __("Pingback excerpt: ") + "\r\n" + comment_content_ + "\r\n\r\n"
                 break
             # end if
             if case():
                 #// Comments.
                 #// translators: %s: Post title.
-                notify_message = php_sprintf(__("A new comment on the post \"%s\" is waiting for your approval"), post.post_title) + "\r\n"
-                notify_message += get_permalink(comment.comment_post_ID) + "\r\n\r\n"
+                notify_message_ = php_sprintf(__("A new comment on the post \"%s\" is waiting for your approval"), post_.post_title) + "\r\n"
+                notify_message_ += get_permalink(comment_.comment_post_ID) + "\r\n\r\n"
                 #// translators: 1: Comment author's name, 2: Comment author's IP address, 3: Comment author's hostname.
-                notify_message += php_sprintf(__("Author: %1$s (IP address: %2$s, %3$s)"), comment.comment_author, comment.comment_author_IP, comment_author_domain) + "\r\n"
+                notify_message_ += php_sprintf(__("Author: %1$s (IP address: %2$s, %3$s)"), comment_.comment_author, comment_.comment_author_IP, comment_author_domain_) + "\r\n"
                 #// translators: %s: Comment author email.
-                notify_message += php_sprintf(__("Email: %s"), comment.comment_author_email) + "\r\n"
+                notify_message_ += php_sprintf(__("Email: %s"), comment_.comment_author_email) + "\r\n"
                 #// translators: %s: Trackback/pingback/comment author URL.
-                notify_message += php_sprintf(__("URL: %s"), comment.comment_author_url) + "\r\n"
-                if comment.comment_parent:
+                notify_message_ += php_sprintf(__("URL: %s"), comment_.comment_author_url) + "\r\n"
+                if comment_.comment_parent:
                     #// translators: Comment moderation. %s: Parent comment edit URL.
-                    notify_message += php_sprintf(__("In reply to: %s"), admin_url(str("comment.php?action=editcomment&c=") + str(comment.comment_parent) + str("#wpbody-content"))) + "\r\n"
+                    notify_message_ += php_sprintf(__("In reply to: %s"), admin_url(str("comment.php?action=editcomment&c=") + str(comment_.comment_parent) + str("#wpbody-content"))) + "\r\n"
                 # end if
                 #// translators: %s: Comment text.
-                notify_message += php_sprintf(__("Comment: %s"), "\r\n" + comment_content) + "\r\n\r\n"
+                notify_message_ += php_sprintf(__("Comment: %s"), "\r\n" + comment_content_) + "\r\n\r\n"
                 break
             # end if
         # end for
         #// translators: Comment moderation. %s: Comment action URL.
-        notify_message += php_sprintf(__("Approve it: %s"), admin_url(str("comment.php?action=approve&c=") + str(comment_id) + str("#wpbody-content"))) + "\r\n"
+        notify_message_ += php_sprintf(__("Approve it: %s"), admin_url(str("comment.php?action=approve&c=") + str(comment_id_) + str("#wpbody-content"))) + "\r\n"
         if EMPTY_TRASH_DAYS:
             #// translators: Comment moderation. %s: Comment action URL.
-            notify_message += php_sprintf(__("Trash it: %s"), admin_url(str("comment.php?action=trash&c=") + str(comment_id) + str("#wpbody-content"))) + "\r\n"
+            notify_message_ += php_sprintf(__("Trash it: %s"), admin_url(str("comment.php?action=trash&c=") + str(comment_id_) + str("#wpbody-content"))) + "\r\n"
         else:
             #// translators: Comment moderation. %s: Comment action URL.
-            notify_message += php_sprintf(__("Delete it: %s"), admin_url(str("comment.php?action=delete&c=") + str(comment_id) + str("#wpbody-content"))) + "\r\n"
+            notify_message_ += php_sprintf(__("Delete it: %s"), admin_url(str("comment.php?action=delete&c=") + str(comment_id_) + str("#wpbody-content"))) + "\r\n"
         # end if
         #// translators: Comment moderation. %s: Comment action URL.
-        notify_message += php_sprintf(__("Spam it: %s"), admin_url(str("comment.php?action=spam&c=") + str(comment_id) + str("#wpbody-content"))) + "\r\n"
-        notify_message += php_sprintf(_n("Currently %s comment is waiting for approval. Please visit the moderation panel:", "Currently %s comments are waiting for approval. Please visit the moderation panel:", comments_waiting), number_format_i18n(comments_waiting)) + "\r\n"
-        notify_message += admin_url("edit-comments.php?comment_status=moderated#wpbody-content") + "\r\n"
+        notify_message_ += php_sprintf(__("Spam it: %s"), admin_url(str("comment.php?action=spam&c=") + str(comment_id_) + str("#wpbody-content"))) + "\r\n"
+        notify_message_ += php_sprintf(_n("Currently %s comment is waiting for approval. Please visit the moderation panel:", "Currently %s comments are waiting for approval. Please visit the moderation panel:", comments_waiting_), number_format_i18n(comments_waiting_)) + "\r\n"
+        notify_message_ += admin_url("edit-comments.php?comment_status=moderated#wpbody-content") + "\r\n"
         #// translators: Comment moderation notification email subject. 1: Site title, 2: Post title.
-        subject = php_sprintf(__("[%1$s] Please moderate: \"%2$s\""), blogname, post.post_title)
-        message_headers = ""
+        subject_ = php_sprintf(__("[%1$s] Please moderate: \"%2$s\""), blogname_, post_.post_title)
+        message_headers_ = ""
         #// 
         #// Filters the list of recipients for comment moderation emails.
         #// 
@@ -1666,7 +1699,7 @@ if (not php_function_exists("wp_notify_moderator")):
         #// @param string[] $emails     List of email addresses to notify for comment moderation.
         #// @param int      $comment_id Comment ID.
         #//
-        emails = apply_filters("comment_moderation_recipients", emails, comment_id)
+        emails_ = apply_filters("comment_moderation_recipients", emails_, comment_id_)
         #// 
         #// Filters the comment moderation email text.
         #// 
@@ -1675,7 +1708,7 @@ if (not php_function_exists("wp_notify_moderator")):
         #// @param string $notify_message Text of the comment moderation email.
         #// @param int    $comment_id     Comment ID.
         #//
-        notify_message = apply_filters("comment_moderation_text", notify_message, comment_id)
+        notify_message_ = apply_filters("comment_moderation_text", notify_message_, comment_id_)
         #// 
         #// Filters the comment moderation email subject.
         #// 
@@ -1684,7 +1717,7 @@ if (not php_function_exists("wp_notify_moderator")):
         #// @param string $subject    Subject of the comment moderation email.
         #// @param int    $comment_id Comment ID.
         #//
-        subject = apply_filters("comment_moderation_subject", subject, comment_id)
+        subject_ = apply_filters("comment_moderation_subject", subject_, comment_id_)
         #// 
         #// Filters the comment moderation email headers.
         #// 
@@ -1693,11 +1726,11 @@ if (not php_function_exists("wp_notify_moderator")):
         #// @param string $message_headers Headers for the comment moderation email.
         #// @param int    $comment_id      Comment ID.
         #//
-        message_headers = apply_filters("comment_moderation_headers", message_headers, comment_id)
-        for email in emails:
-            wp_mail(email, wp_specialchars_decode(subject), notify_message, message_headers)
+        message_headers_ = apply_filters("comment_moderation_headers", message_headers_, comment_id_)
+        for email_ in emails_:
+            wp_mail(email_, wp_specialchars_decode(subject_), notify_message_, message_headers_)
         # end for
-        if switched_locale:
+        if switched_locale_:
             restore_previous_locale()
         # end if
         return True
@@ -1711,17 +1744,18 @@ if (not php_function_exists("wp_password_change_notification")):
     #// 
     #// @param WP_User $user User object.
     #//
-    def wp_password_change_notification(user=None, *args_):
+    def wp_password_change_notification(user_=None, *_args_):
+        
         
         #// Send a copy of password change notification to the admin,
         #// but check to see if it's the admin whose password we're changing, and skip this.
-        if 0 != strcasecmp(user.user_email, get_option("admin_email")):
+        if 0 != strcasecmp(user_.user_email, get_option("admin_email")):
             #// translators: %s: User name.
-            message = php_sprintf(__("Password changed for user: %s"), user.user_login) + "\r\n"
+            message_ = php_sprintf(__("Password changed for user: %s"), user_.user_login) + "\r\n"
             #// The blogname option is escaped with esc_html() on the way into the database in sanitize_option().
             #// We want to reverse this for the plain text arena of emails.
-            blogname = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
-            wp_password_change_notification_email = Array({"to": get_option("admin_email"), "subject": __("[%s] Password Changed"), "message": message, "headers": ""})
+            blogname_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+            wp_password_change_notification_email_ = Array({"to": get_option("admin_email"), "subject": __("[%s] Password Changed"), "message": message_, "headers": ""})
             #// 
             #// Filters the contents of the password change notification email sent to the site admin.
             #// 
@@ -1738,8 +1772,8 @@ if (not php_function_exists("wp_password_change_notification")):
             #// @param WP_User $user     User object for user whose password was changed.
             #// @param string  $blogname The site title.
             #//
-            wp_password_change_notification_email = apply_filters("wp_password_change_notification_email", wp_password_change_notification_email, user, blogname)
-            wp_mail(wp_password_change_notification_email["to"], wp_specialchars_decode(php_sprintf(wp_password_change_notification_email["subject"], blogname)), wp_password_change_notification_email["message"], wp_password_change_notification_email["headers"])
+            wp_password_change_notification_email_ = apply_filters("wp_password_change_notification_email", wp_password_change_notification_email_, user_, blogname_)
+            wp_mail(wp_password_change_notification_email_["to"], wp_specialchars_decode(php_sprintf(wp_password_change_notification_email_["subject"], blogname_)), wp_password_change_notification_email_["message"], wp_password_change_notification_email_["headers"])
         # end if
     # end def wp_password_change_notification
 # end if
@@ -1759,28 +1793,29 @@ if (not php_function_exists("wp_new_user_notification")):
     #// @param string $notify     Optional. Type of notification that should happen. Accepts 'admin' or an empty
     #// string (admin only), 'user', or 'both' (admin and user). Default empty.
     #//
-    def wp_new_user_notification(user_id=None, deprecated=None, notify="", *args_):
+    def wp_new_user_notification(user_id_=None, deprecated_=None, notify_="", *_args_):
         
-        if None != deprecated:
+        
+        if None != deprecated_:
             _deprecated_argument(__FUNCTION__, "4.3.1")
         # end if
         #// Accepts only 'user', 'admin' , 'both' or default '' as $notify.
-        if (not php_in_array(notify, Array("user", "admin", "both", ""), True)):
+        if (not php_in_array(notify_, Array("user", "admin", "both", ""), True)):
             return
         # end if
-        user = get_userdata(user_id)
+        user_ = get_userdata(user_id_)
         #// The blogname option is escaped with esc_html() on the way into the database in sanitize_option().
         #// We want to reverse this for the plain text arena of emails.
-        blogname = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
-        if "user" != notify:
-            switched_locale = switch_to_locale(get_locale())
+        blogname_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+        if "user" != notify_:
+            switched_locale_ = switch_to_locale(get_locale())
             #// translators: %s: Site title.
-            message = php_sprintf(__("New user registration on your site %s:"), blogname) + "\r\n\r\n"
+            message_ = php_sprintf(__("New user registration on your site %s:"), blogname_) + "\r\n\r\n"
             #// translators: %s: User login.
-            message += php_sprintf(__("Username: %s"), user.user_login) + "\r\n\r\n"
+            message_ += php_sprintf(__("Username: %s"), user_.user_login) + "\r\n\r\n"
             #// translators: %s: User email address.
-            message += php_sprintf(__("Email: %s"), user.user_email) + "\r\n"
-            wp_new_user_notification_email_admin = Array({"to": get_option("admin_email"), "subject": __("[%s] New User Registration"), "message": message, "headers": ""})
+            message_ += php_sprintf(__("Email: %s"), user_.user_email) + "\r\n"
+            wp_new_user_notification_email_admin_ = Array({"to": get_option("admin_email"), "subject": __("[%s] New User Registration"), "message": message_, "headers": ""})
             #// 
             #// Filters the contents of the new user notification email sent to the site admin.
             #// 
@@ -1797,27 +1832,27 @@ if (not php_function_exists("wp_new_user_notification")):
             #// @param WP_User $user     User object for new user.
             #// @param string  $blogname The site title.
             #//
-            wp_new_user_notification_email_admin = apply_filters("wp_new_user_notification_email_admin", wp_new_user_notification_email_admin, user, blogname)
-            wp_mail(wp_new_user_notification_email_admin["to"], wp_specialchars_decode(php_sprintf(wp_new_user_notification_email_admin["subject"], blogname)), wp_new_user_notification_email_admin["message"], wp_new_user_notification_email_admin["headers"])
-            if switched_locale:
+            wp_new_user_notification_email_admin_ = apply_filters("wp_new_user_notification_email_admin", wp_new_user_notification_email_admin_, user_, blogname_)
+            wp_mail(wp_new_user_notification_email_admin_["to"], wp_specialchars_decode(php_sprintf(wp_new_user_notification_email_admin_["subject"], blogname_)), wp_new_user_notification_email_admin_["message"], wp_new_user_notification_email_admin_["headers"])
+            if switched_locale_:
                 restore_previous_locale()
             # end if
         # end if
         #// `$deprecated` was pre-4.3 `$plaintext_pass`. An empty `$plaintext_pass` didn't sent a user notification.
-        if "admin" == notify or php_empty(lambda : deprecated) and php_empty(lambda : notify):
+        if "admin" == notify_ or php_empty(lambda : deprecated_) and php_empty(lambda : notify_):
             return
         # end if
-        key = get_password_reset_key(user)
-        if is_wp_error(key):
+        key_ = get_password_reset_key(user_)
+        if is_wp_error(key_):
             return
         # end if
-        switched_locale = switch_to_locale(get_user_locale(user))
+        switched_locale_ = switch_to_locale(get_user_locale(user_))
         #// translators: %s: User login.
-        message = php_sprintf(__("Username: %s"), user.user_login) + "\r\n\r\n"
-        message += __("To set your password, visit the following address:") + "\r\n\r\n"
-        message += network_site_url(str("wp-login.php?action=rp&key=") + str(key) + str("&login=") + rawurlencode(user.user_login), "login") + "\r\n\r\n"
-        message += wp_login_url() + "\r\n"
-        wp_new_user_notification_email = Array({"to": user.user_email, "subject": __("[%s] Login Details"), "message": message, "headers": ""})
+        message_ = php_sprintf(__("Username: %s"), user_.user_login) + "\r\n\r\n"
+        message_ += __("To set your password, visit the following address:") + "\r\n\r\n"
+        message_ += network_site_url(str("wp-login.php?action=rp&key=") + str(key_) + str("&login=") + rawurlencode(user_.user_login), "login") + "\r\n\r\n"
+        message_ += wp_login_url() + "\r\n"
+        wp_new_user_notification_email_ = Array({"to": user_.user_email, "subject": __("[%s] Login Details"), "message": message_, "headers": ""})
         #// 
         #// Filters the contents of the new user notification email sent to the new user.
         #// 
@@ -1834,9 +1869,9 @@ if (not php_function_exists("wp_new_user_notification")):
         #// @param WP_User $user     User object for new user.
         #// @param string  $blogname The site title.
         #//
-        wp_new_user_notification_email = apply_filters("wp_new_user_notification_email", wp_new_user_notification_email, user, blogname)
-        wp_mail(wp_new_user_notification_email["to"], wp_specialchars_decode(php_sprintf(wp_new_user_notification_email["subject"], blogname)), wp_new_user_notification_email["message"], wp_new_user_notification_email["headers"])
-        if switched_locale:
+        wp_new_user_notification_email_ = apply_filters("wp_new_user_notification_email", wp_new_user_notification_email_, user_, blogname_)
+        wp_mail(wp_new_user_notification_email_["to"], wp_specialchars_decode(php_sprintf(wp_new_user_notification_email_["subject"], blogname_)), wp_new_user_notification_email_["message"], wp_new_user_notification_email_["headers"])
+        if switched_locale_:
             restore_previous_locale()
         # end if
     # end def wp_new_user_notification
@@ -1852,7 +1887,8 @@ if (not php_function_exists("wp_nonce_tick")):
     #// 
     #// @return float Float value rounded up to the next highest integer.
     #//
-    def wp_nonce_tick(*args_):
+    def wp_nonce_tick(*_args_):
+        
         
         #// 
         #// Filters the lifespan of nonces in seconds.
@@ -1861,8 +1897,8 @@ if (not php_function_exists("wp_nonce_tick")):
         #// 
         #// @param int $lifespan Lifespan of nonces in seconds. Default 86,400 seconds, or one day.
         #//
-        nonce_life = apply_filters("nonce_life", DAY_IN_SECONDS)
-        return ceil(time() / nonce_life / 2)
+        nonce_life_ = apply_filters("nonce_life", DAY_IN_SECONDS)
+        return ceil(time() / nonce_life_ / 2)
     # end def wp_nonce_tick
 # end if
 if (not php_function_exists("wp_verify_nonce")):
@@ -1879,12 +1915,15 @@ if (not php_function_exists("wp_verify_nonce")):
     #// 2 if the nonce is valid and generated between 12-24 hours ago.
     #// False if the nonce is invalid.
     #//
-    def wp_verify_nonce(nonce=None, action=-1, *args_):
+    def wp_verify_nonce(nonce_=None, action_=None, *_args_):
+        if action_ is None:
+            action_ = -1
+        # end if
         
-        nonce = php_str(nonce)
-        user = wp_get_current_user()
-        uid = php_int(user.ID)
-        if (not uid):
+        nonce_ = php_str(nonce_)
+        user_ = wp_get_current_user()
+        uid_ = php_int(user_.ID)
+        if (not uid_):
             #// 
             #// Filters whether the user who generated the nonce is logged out.
             #// 
@@ -1893,21 +1932,21 @@ if (not php_function_exists("wp_verify_nonce")):
             #// @param int    $uid    ID of the nonce-owning user.
             #// @param string $action The nonce action.
             #//
-            uid = apply_filters("nonce_user_logged_out", uid, action)
+            uid_ = apply_filters("nonce_user_logged_out", uid_, action_)
         # end if
-        if php_empty(lambda : nonce):
+        if php_empty(lambda : nonce_):
             return False
         # end if
-        token = wp_get_session_token()
-        i = wp_nonce_tick()
+        token_ = wp_get_session_token()
+        i_ = wp_nonce_tick()
         #// Nonce generated 0-12 hours ago.
-        expected = php_substr(wp_hash(i + "|" + action + "|" + uid + "|" + token, "nonce"), -12, 10)
-        if hash_equals(expected, nonce):
+        expected_ = php_substr(wp_hash(i_ + "|" + action_ + "|" + uid_ + "|" + token_, "nonce"), -12, 10)
+        if hash_equals(expected_, nonce_):
             return 1
         # end if
         #// Nonce generated 12-24 hours ago.
-        expected = php_substr(wp_hash(i - 1 + "|" + action + "|" + uid + "|" + token, "nonce"), -12, 10)
-        if hash_equals(expected, nonce):
+        expected_ = php_substr(wp_hash(i_ - 1 + "|" + action_ + "|" + uid_ + "|" + token_, "nonce"), -12, 10)
+        if hash_equals(expected_, nonce_):
             return 2
         # end if
         #// 
@@ -1920,7 +1959,7 @@ if (not php_function_exists("wp_verify_nonce")):
         #// @param WP_User    $user   The current user object.
         #// @param string     $token  The user's session token.
         #//
-        do_action("wp_verify_nonce_failed", nonce, action, user, token)
+        do_action("wp_verify_nonce_failed", nonce_, action_, user_, token_)
         #// Invalid nonce.
         return False
     # end def wp_verify_nonce
@@ -1936,17 +1975,20 @@ if (not php_function_exists("wp_create_nonce")):
     #// @param string|int $action Scalar value to add context to the nonce.
     #// @return string The token.
     #//
-    def wp_create_nonce(action=-1, *args_):
-        
-        user = wp_get_current_user()
-        uid = php_int(user.ID)
-        if (not uid):
-            #// This filter is documented in wp-includes/pluggable.php
-            uid = apply_filters("nonce_user_logged_out", uid, action)
+    def wp_create_nonce(action_=None, *_args_):
+        if action_ is None:
+            action_ = -1
         # end if
-        token = wp_get_session_token()
-        i = wp_nonce_tick()
-        return php_substr(wp_hash(i + "|" + action + "|" + uid + "|" + token, "nonce"), -12, 10)
+        
+        user_ = wp_get_current_user()
+        uid_ = php_int(user_.ID)
+        if (not uid_):
+            #// This filter is documented in wp-includes/pluggable.php
+            uid_ = apply_filters("nonce_user_logged_out", uid_, action_)
+        # end if
+        token_ = wp_get_session_token()
+        i_ = wp_nonce_tick()
+        return php_substr(wp_hash(i_ + "|" + action_ + "|" + uid_ + "|" + token_, "nonce"), -12, 10)
     # end def wp_create_nonce
 # end if
 if (not php_function_exists("wp_salt")):
@@ -1985,10 +2027,11 @@ if (not php_function_exists("wp_salt")):
     #// @param string $scheme Authentication scheme (auth, secure_auth, logged_in, nonce)
     #// @return string Salt value
     #//
-    def wp_salt(scheme="auth", *args_):
+    def wp_salt(scheme_="auth", *_args_):
         
-        wp_salt.cached_salts = Array()
-        if (php_isset(lambda : wp_salt.cached_salts[scheme])):
+        
+        cached_salts_ = Array()
+        if (php_isset(lambda : cached_salts_[scheme_])):
             #// 
             #// Filters the WordPress salt.
             #// 
@@ -1998,54 +2041,54 @@ if (not php_function_exists("wp_salt")):
             #// @param string $scheme      Authentication scheme. Values include 'auth',
             #// 'secure_auth', 'logged_in', and 'nonce'.
             #//
-            return apply_filters("salt", wp_salt.cached_salts[scheme], scheme)
+            return apply_filters("salt", cached_salts_[scheme_], scheme_)
         # end if
-        wp_salt.duplicated_keys = None
-        if None == wp_salt.duplicated_keys:
-            wp_salt.duplicated_keys = Array({"put your unique phrase here": True})
-            for first in Array("AUTH", "SECURE_AUTH", "LOGGED_IN", "NONCE", "SECRET"):
-                for second in Array("KEY", "SALT"):
-                    if (not php_defined(str(first) + str("_") + str(second))):
+        duplicated_keys_ = None
+        if None == duplicated_keys_:
+            duplicated_keys_ = Array({"put your unique phrase here": True})
+            for first_ in Array("AUTH", "SECURE_AUTH", "LOGGED_IN", "NONCE", "SECRET"):
+                for second_ in Array("KEY", "SALT"):
+                    if (not php_defined(str(first_) + str("_") + str(second_))):
                         continue
                     # end if
-                    value = constant(str(first) + str("_") + str(second))
-                    wp_salt.duplicated_keys[value] = (php_isset(lambda : wp_salt.duplicated_keys[value]))
+                    value_ = constant(str(first_) + str("_") + str(second_))
+                    duplicated_keys_[value_] = (php_isset(lambda : duplicated_keys_[value_]))
                 # end for
             # end for
         # end if
-        values = Array({"key": "", "salt": ""})
-        if php_defined("SECRET_KEY") and SECRET_KEY and php_empty(lambda : wp_salt.duplicated_keys[SECRET_KEY]):
-            values["key"] = SECRET_KEY
+        values_ = Array({"key": "", "salt": ""})
+        if php_defined("SECRET_KEY") and SECRET_KEY and php_empty(lambda : duplicated_keys_[SECRET_KEY]):
+            values_["key"] = SECRET_KEY
         # end if
-        if "auth" == scheme and php_defined("SECRET_SALT") and SECRET_SALT and php_empty(lambda : wp_salt.duplicated_keys[SECRET_SALT]):
-            values["salt"] = SECRET_SALT
+        if "auth" == scheme_ and php_defined("SECRET_SALT") and SECRET_SALT and php_empty(lambda : duplicated_keys_[SECRET_SALT]):
+            values_["salt"] = SECRET_SALT
         # end if
-        if php_in_array(scheme, Array("auth", "secure_auth", "logged_in", "nonce")):
-            for type in Array("key", "salt"):
-                const = php_strtoupper(str(scheme) + str("_") + str(type))
-                if php_defined(const) and constant(const) and php_empty(lambda : wp_salt.duplicated_keys[constant(const)]):
-                    values[type] = constant(const)
-                elif (not values[type]):
-                    values[type] = get_site_option(str(scheme) + str("_") + str(type))
-                    if (not values[type]):
-                        values[type] = wp_generate_password(64, True, True)
-                        update_site_option(str(scheme) + str("_") + str(type), values[type])
+        if php_in_array(scheme_, Array("auth", "secure_auth", "logged_in", "nonce")):
+            for type_ in Array("key", "salt"):
+                const_ = php_strtoupper(str(scheme_) + str("_") + str(type_))
+                if php_defined(const_) and constant(const_) and php_empty(lambda : duplicated_keys_[constant(const_)]):
+                    values_[type_] = constant(const_)
+                elif (not values_[type_]):
+                    values_[type_] = get_site_option(str(scheme_) + str("_") + str(type_))
+                    if (not values_[type_]):
+                        values_[type_] = wp_generate_password(64, True, True)
+                        update_site_option(str(scheme_) + str("_") + str(type_), values_[type_])
                     # end if
                 # end if
             # end for
         else:
-            if (not values["key"]):
-                values["key"] = get_site_option("secret_key")
-                if (not values["key"]):
-                    values["key"] = wp_generate_password(64, True, True)
-                    update_site_option("secret_key", values["key"])
+            if (not values_["key"]):
+                values_["key"] = get_site_option("secret_key")
+                if (not values_["key"]):
+                    values_["key"] = wp_generate_password(64, True, True)
+                    update_site_option("secret_key", values_["key"])
                 # end if
             # end if
-            values["salt"] = hash_hmac("md5", scheme, values["key"])
+            values_["salt"] = hash_hmac("md5", scheme_, values_["key"])
         # end if
-        wp_salt.cached_salts[scheme] = values["key"] + values["salt"]
+        cached_salts_[scheme_] = values_["key"] + values_["salt"]
         #// This filter is documented in wp-includes/pluggable.php
-        return apply_filters("salt", wp_salt.cached_salts[scheme], scheme)
+        return apply_filters("salt", cached_salts_[scheme_], scheme_)
     # end def wp_salt
 # end if
 if (not php_function_exists("wp_hash")):
@@ -2058,10 +2101,11 @@ if (not php_function_exists("wp_hash")):
     #// @param string $scheme Authentication scheme (auth, secure_auth, logged_in, nonce)
     #// @return string Hash of $data
     #//
-    def wp_hash(data=None, scheme="auth", *args_):
+    def wp_hash(data_=None, scheme_="auth", *_args_):
         
-        salt = wp_salt(scheme)
-        return hash_hmac("md5", data, salt)
+        
+        salt_ = wp_salt(scheme_)
+        return hash_hmac("md5", data_, salt_)
     # end def wp_hash
 # end if
 if (not php_function_exists("wp_hash_password")):
@@ -2078,16 +2122,17 @@ if (not php_function_exists("wp_hash_password")):
     #// @param string $password Plain text user password to hash
     #// @return string The hash string of the password
     #//
-    def wp_hash_password(password=None, *args_):
+    def wp_hash_password(password_=None, *_args_):
         
-        global wp_hasher
-        php_check_if_defined("wp_hasher")
-        if php_empty(lambda : wp_hasher):
+        
+        global wp_hasher_
+        php_check_if_defined("wp_hasher_")
+        if php_empty(lambda : wp_hasher_):
             php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
             #// By default, use the portable hash from phpass.
-            wp_hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+            wp_hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
         # end if
-        return wp_hasher.hashpassword(php_trim(password))
+        return wp_hasher_.hashpassword(php_trim(password_))
     # end def wp_hash_password
 # end if
 if (not php_function_exists("wp_check_password")):
@@ -2113,17 +2158,18 @@ if (not php_function_exists("wp_check_password")):
     #// @param string|int $user_id  Optional. User ID.
     #// @return bool False, if the $password does not match the hashed password
     #//
-    def wp_check_password(password=None, hash=None, user_id="", *args_):
+    def wp_check_password(password_=None, hash_=None, user_id_="", *_args_):
         
-        global wp_hasher
-        php_check_if_defined("wp_hasher")
+        
+        global wp_hasher_
+        php_check_if_defined("wp_hasher_")
         #// If the hash is still md5...
-        if php_strlen(hash) <= 32:
-            check = hash_equals(hash, php_md5(password))
-            if check and user_id:
+        if php_strlen(hash_) <= 32:
+            check_ = hash_equals(hash_, php_md5(password_))
+            if check_ and user_id_:
                 #// Rehash using new hash.
-                wp_set_password(password, user_id)
-                hash = wp_hash_password(password)
+                wp_set_password(password_, user_id_)
+                hash_ = wp_hash_password(password_)
             # end if
             #// 
             #// Filters whether the plaintext password matches the encrypted password.
@@ -2135,18 +2181,18 @@ if (not php_function_exists("wp_check_password")):
             #// @param string     $hash     The hashed password.
             #// @param string|int $user_id  User ID. Can be empty.
             #//
-            return apply_filters("check_password", check, password, hash, user_id)
+            return apply_filters("check_password", check_, password_, hash_, user_id_)
         # end if
         #// If the stored hash is longer than an MD5,
         #// presume the new style phpass portable hash.
-        if php_empty(lambda : wp_hasher):
+        if php_empty(lambda : wp_hasher_):
             php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
             #// By default, use the portable hash from phpass.
-            wp_hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+            wp_hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
         # end if
-        check = wp_hasher.checkpassword(password, hash)
+        check_ = wp_hasher_.checkpassword(password_, hash_)
         #// This filter is documented in wp-includes/pluggable.php
-        return apply_filters("check_password", check, password, hash, user_id)
+        return apply_filters("check_password", check_, password_, hash_, user_id_)
     # end def wp_check_password
 # end if
 if (not php_function_exists("wp_generate_password")):
@@ -2165,21 +2211,27 @@ if (not php_function_exists("wp_generate_password")):
     #// Used when generating secret keys and salts. Default false.
     #// @return string The random password.
     #//
-    def wp_generate_password(length=12, special_chars=True, extra_special_chars=False, *args_):
+    def wp_generate_password(length_=12, special_chars_=None, extra_special_chars_=None, *_args_):
+        if special_chars_ is None:
+            special_chars_ = True
+        # end if
+        if extra_special_chars_ is None:
+            extra_special_chars_ = False
+        # end if
         
-        chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        if special_chars:
-            chars += "!@#$%^&*()"
+        chars_ = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        if special_chars_:
+            chars_ += "!@#$%^&*()"
         # end if
-        if extra_special_chars:
-            chars += "-_ []{}<>~`+=,.;:/?|"
+        if extra_special_chars_:
+            chars_ += "-_ []{}<>~`+=,.;:/?|"
         # end if
-        password = ""
-        i = 0
-        while i < length:
+        password_ = ""
+        i_ = 0
+        while i_ < length_:
             
-            password += php_substr(chars, wp_rand(0, php_strlen(chars) - 1), 1)
-            i += 1
+            password_ += php_substr(chars_, wp_rand(0, php_strlen(chars_) - 1), 1)
+            i_ += 1
         # end while
         #// 
         #// Filters the randomly-generated password.
@@ -2192,7 +2244,7 @@ if (not php_function_exists("wp_generate_password")):
         #// @param bool   $special_chars       Whether to include standard special characters.
         #// @param bool   $extra_special_chars Whether to include other special characters.
         #//
-        return apply_filters("random_password", password, length, special_chars, extra_special_chars)
+        return apply_filters("random_password", password_, length_, special_chars_, extra_special_chars_)
     # end def wp_generate_password
 # end if
 if (not php_function_exists("wp_rand")):
@@ -2210,62 +2262,63 @@ if (not php_function_exists("wp_rand")):
     #// @param int $max Upper limit for the generated number
     #// @return int A random number between min and max
     #//
-    def wp_rand(min=0, max=0, *args_):
+    def wp_rand(min_=0, max_=0, *_args_):
         
-        global rnd_value
-        php_check_if_defined("rnd_value")
+        
+        global rnd_value_
+        php_check_if_defined("rnd_value_")
         #// Some misconfigured 32-bit environments (Entropy PHP, for example)
         #// truncate integers larger than PHP_INT_MAX to PHP_INT_MAX rather than overflowing them to floats.
-        max_random_number = php_float("4294967295") if 3000000000 == 2147483647 else 4294967295
+        max_random_number_ = php_float("4294967295") if 3000000000 == 2147483647 else 4294967295
         #// 4294967295 = 0xffffffff
         #// We only handle ints, floats are truncated to their integer value.
-        min = php_int(min)
-        max = php_int(max)
-        wp_rand.use_random_int_functionality = True
-        if wp_rand.use_random_int_functionality:
+        min_ = php_int(min_)
+        max_ = php_int(max_)
+        use_random_int_functionality_ = True
+        if use_random_int_functionality_:
             try: 
-                _max = max if 0 != max else max_random_number
+                _max_ = max_ if 0 != max_ else max_random_number_
                 #// wp_rand() can accept arguments in either order, PHP cannot.
-                _max = php_max(min, _max)
-                _min = php_min(min, _max)
-                val = random_int(_min, _max)
-                if False != val:
-                    return absint(val)
+                _max_ = php_max(min_, _max_)
+                _min_ = php_min(min_, _max_)
+                val_ = php_random_int(_min_, _max_)
+                if False != val_:
+                    return absint(val_)
                 else:
-                    wp_rand.use_random_int_functionality = False
+                    use_random_int_functionality_ = False
                 # end if
-            except Error as e:
-                wp_rand.use_random_int_functionality = False
-            except Exception as e:
-                wp_rand.use_random_int_functionality = False
+            except Error as e_:
+                use_random_int_functionality_ = False
+            except Exception as e_:
+                use_random_int_functionality_ = False
             # end try
         # end if
         #// Reset $rnd_value after 14 uses.
         #// 32 (md5) + 40 (sha1) + 40 (sha1) / 8 = 14 random numbers from $rnd_value.
-        if php_strlen(rnd_value) < 8:
+        if php_strlen(rnd_value_) < 8:
             if php_defined("WP_SETUP_CONFIG"):
-                wp_rand.seed = ""
+                seed_ = ""
             else:
-                wp_rand.seed = get_transient("random_seed")
+                seed_ = get_transient("random_seed")
             # end if
-            rnd_value = php_md5(uniqid(php_microtime() + mt_rand(), True) + wp_rand.seed)
-            rnd_value += sha1(rnd_value)
-            rnd_value += sha1(rnd_value + wp_rand.seed)
-            wp_rand.seed = php_md5(wp_rand.seed + rnd_value)
+            rnd_value_ = php_md5(uniqid(php_microtime() + mt_rand(), True) + seed_)
+            rnd_value_ += sha1(rnd_value_)
+            rnd_value_ += sha1(rnd_value_ + seed_)
+            seed_ = php_md5(seed_ + rnd_value_)
             if (not php_defined("WP_SETUP_CONFIG")) and (not php_defined("WP_INSTALLING")):
-                set_transient("random_seed", wp_rand.seed)
+                set_transient("random_seed", seed_)
             # end if
         # end if
         #// Take the first 8 digits for our value.
-        value = php_substr(rnd_value, 0, 8)
+        value_ = php_substr(rnd_value_, 0, 8)
         #// Strip the first eight, leaving the remainder for the next call to wp_rand().
-        rnd_value = php_substr(rnd_value, 8)
-        value = abs(hexdec(value))
+        rnd_value_ = php_substr(rnd_value_, 8)
+        value_ = abs(hexdec(value_))
         #// Reduce the value to be within the min - max range.
-        if 0 != max:
-            value = min + max - min + 1 * value / max_random_number + 1
+        if 0 != max_:
+            value_ = min_ + max_ - min_ + 1 * value_ / max_random_number_ + 1
         # end if
-        return abs(php_intval(value))
+        return abs(php_intval(value_))
     # end def wp_rand
 # end if
 if (not php_function_exists("wp_set_password")):
@@ -2286,13 +2339,14 @@ if (not php_function_exists("wp_set_password")):
     #// @param string $password The plaintext new user password
     #// @param int    $user_id  User ID
     #//
-    def wp_set_password(password=None, user_id=None, *args_):
+    def wp_set_password(password_=None, user_id_=None, *_args_):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        hash = wp_hash_password(password)
-        wpdb.update(wpdb.users, Array({"user_pass": hash, "user_activation_key": ""}), Array({"ID": user_id}))
-        clean_user_cache(user_id)
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        hash_ = wp_hash_password(password_)
+        wpdb_.update(wpdb_.users, Array({"user_pass": hash_, "user_activation_key": ""}), Array({"ID": user_id_}))
+        clean_user_cache(user_id_)
     # end def wp_set_password
 # end if
 if (not php_function_exists("get_avatar")):
@@ -2330,24 +2384,25 @@ if (not php_function_exists("get_avatar")):
     #// }
     #// @return string|false `<img>` tag for the user's avatar. False on failure.
     #//
-    def get_avatar(id_or_email=None, size=96, default="", alt="", args=None, *args_):
+    def get_avatar(id_or_email_=None, size_=96, default_="", alt_="", args_=None, *_args_):
         
-        defaults = Array({"size": 96, "height": None, "width": None, "default": get_option("avatar_default", "mystery"), "force_default": False, "rating": get_option("avatar_rating"), "scheme": None, "alt": "", "class": None, "force_display": False, "extra_attr": ""})
-        if php_empty(lambda : args):
-            args = Array()
+        
+        defaults_ = Array({"size": 96, "height": None, "width": None, "default": get_option("avatar_default", "mystery"), "force_default": False, "rating": get_option("avatar_rating"), "scheme": None, "alt": "", "class": None, "force_display": False, "extra_attr": ""})
+        if php_empty(lambda : args_):
+            args_ = Array()
         # end if
-        args["size"] = php_int(size)
-        args["default"] = default
-        args["alt"] = alt
-        args = wp_parse_args(args, defaults)
-        if php_empty(lambda : args["height"]):
-            args["height"] = args["size"]
+        args_["size"] = php_int(size_)
+        args_["default"] = default_
+        args_["alt"] = alt_
+        args_ = wp_parse_args(args_, defaults_)
+        if php_empty(lambda : args_["height"]):
+            args_["height"] = args_["size"]
         # end if
-        if php_empty(lambda : args["width"]):
-            args["width"] = args["size"]
+        if php_empty(lambda : args_["width"]):
+            args_["width"] = args_["size"]
         # end if
-        if php_is_object(id_or_email) and (php_isset(lambda : id_or_email.comment_ID)):
-            id_or_email = get_comment(id_or_email)
+        if php_is_object(id_or_email_) and (php_isset(lambda : id_or_email_.comment_ID)):
+            id_or_email_ = get_comment(id_or_email_)
         # end if
         #// 
         #// Filters whether to retrieve the avatar URL early.
@@ -2362,32 +2417,32 @@ if (not php_function_exists("get_avatar")):
         #// user email, WP_User object, WP_Post object, or WP_Comment object.
         #// @param array       $args        Arguments passed to get_avatar_url(), after processing.
         #//
-        avatar = apply_filters("pre_get_avatar", None, id_or_email, args)
-        if (not is_null(avatar)):
+        avatar_ = apply_filters("pre_get_avatar", None, id_or_email_, args_)
+        if (not is_null(avatar_)):
             #// This filter is documented in wp-includes/pluggable.php
-            return apply_filters("get_avatar", avatar, id_or_email, args["size"], args["default"], args["alt"], args)
+            return apply_filters("get_avatar", avatar_, id_or_email_, args_["size"], args_["default"], args_["alt"], args_)
         # end if
-        if (not args["force_display"]) and (not get_option("show_avatars")):
+        if (not args_["force_display"]) and (not get_option("show_avatars")):
             return False
         # end if
-        url2x = get_avatar_url(id_or_email, php_array_merge(args, Array({"size": args["size"] * 2})))
-        args = get_avatar_data(id_or_email, args)
-        url = args["url"]
-        if (not url) or is_wp_error(url):
+        url2x_ = get_avatar_url(id_or_email_, php_array_merge(args_, Array({"size": args_["size"] * 2})))
+        args_ = get_avatar_data(id_or_email_, args_)
+        url_ = args_["url"]
+        if (not url_) or is_wp_error(url_):
             return False
         # end if
-        class_ = Array("avatar", "avatar-" + php_int(args["size"]), "photo")
-        if (not args["found_avatar"]) or args["force_default"]:
+        class_ = Array("avatar", "avatar-" + php_int(args_["size"]), "photo")
+        if (not args_["found_avatar"]) or args_["force_default"]:
             class_[-1] = "avatar-default"
         # end if
-        if args["class"]:
-            if php_is_array(args["class"]):
-                class_ = php_array_merge(class_, args["class"])
+        if args_["class"]:
+            if php_is_array(args_["class"]):
+                class_ = php_array_merge(class_, args_["class"])
             else:
-                class_[-1] = args["class"]
+                class_[-1] = args_["class"]
             # end if
         # end if
-        avatar = php_sprintf("<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>", esc_attr(args["alt"]), esc_url(url), esc_url(url2x) + " 2x", esc_attr(join(" ", class_)), php_int(args["height"]), php_int(args["width"]), args["extra_attr"])
+        avatar_ = php_sprintf("<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>", esc_attr(args_["alt"]), esc_url(url_), esc_url(url2x_) + " 2x", esc_attr(join(" ", class_)), php_int(args_["height"]), php_int(args_["width"]), args_["extra_attr"])
         #// 
         #// Filters the avatar to retrieve.
         #// 
@@ -2404,7 +2459,7 @@ if (not php_function_exists("get_avatar")):
         #// @param string $alt         Alternative text to use in the avatar image tag. Default empty.
         #// @param array  $args        Arguments passed to get_avatar_data(), after processing.
         #//
-        return apply_filters("get_avatar", avatar, id_or_email, args["size"], args["default"], args["alt"], args)
+        return apply_filters("get_avatar", avatar_, id_or_email_, args_["size"], args_["default"], args_["alt"], args_)
     # end def get_avatar
 # end if
 if (not php_function_exists("wp_text_diff")):
@@ -2437,46 +2492,47 @@ if (not php_function_exists("wp_text_diff")):
     #// }
     #// @return string Empty string if strings are equivalent or HTML with differences.
     #//
-    def wp_text_diff(left_string=None, right_string=None, args=None, *args_):
+    def wp_text_diff(left_string_=None, right_string_=None, args_=None, *_args_):
         
-        defaults = Array({"title": "", "title_left": "", "title_right": "", "show_split_view": True})
-        args = wp_parse_args(args, defaults)
+        
+        defaults_ = Array({"title": "", "title_left": "", "title_right": "", "show_split_view": True})
+        args_ = wp_parse_args(args_, defaults_)
         if (not php_class_exists("WP_Text_Diff_Renderer_Table", False)):
             php_include_file(ABSPATH + WPINC + "/wp-diff.php", once=False)
         # end if
-        left_string = normalize_whitespace(left_string)
-        right_string = normalize_whitespace(right_string)
-        left_lines = php_explode("\n", left_string)
-        right_lines = php_explode("\n", right_string)
-        text_diff = php_new_class("Text_Diff", lambda : Text_Diff(left_lines, right_lines))
-        renderer = php_new_class("WP_Text_Diff_Renderer_Table", lambda : WP_Text_Diff_Renderer_Table(args))
-        diff = renderer.render(text_diff)
-        if (not diff):
+        left_string_ = normalize_whitespace(left_string_)
+        right_string_ = normalize_whitespace(right_string_)
+        left_lines_ = php_explode("\n", left_string_)
+        right_lines_ = php_explode("\n", right_string_)
+        text_diff_ = php_new_class("Text_Diff", lambda : Text_Diff(left_lines_, right_lines_))
+        renderer_ = php_new_class("WP_Text_Diff_Renderer_Table", lambda : WP_Text_Diff_Renderer_Table(args_))
+        diff_ = renderer_.render(text_diff_)
+        if (not diff_):
             return ""
         # end if
-        r = "<table class='diff'>\n"
-        if (not php_empty(lambda : args["show_split_view"])):
-            r += "<col class='content diffsplit left' /><col class='content diffsplit middle' /><col class='content diffsplit right' />"
+        r_ = "<table class='diff'>\n"
+        if (not php_empty(lambda : args_["show_split_view"])):
+            r_ += "<col class='content diffsplit left' /><col class='content diffsplit middle' /><col class='content diffsplit right' />"
         else:
-            r += "<col class='content' />"
+            r_ += "<col class='content' />"
         # end if
-        if args["title"] or args["title_left"] or args["title_right"]:
-            r += "<thead>"
+        if args_["title"] or args_["title_left"] or args_["title_right"]:
+            r_ += "<thead>"
         # end if
-        if args["title"]:
-            r += str("<tr class='diff-title'><th colspan='4'>") + str(args["title"]) + str("</th></tr>\n")
+        if args_["title"]:
+            r_ += str("<tr class='diff-title'><th colspan='4'>") + str(args_["title"]) + str("</th></tr>\n")
         # end if
-        if args["title_left"] or args["title_right"]:
-            r += "<tr class='diff-sub-title'>\n"
-            r += str("  <td></td><th>") + str(args["title_left"]) + str("</th>\n")
-            r += str("  <td></td><th>") + str(args["title_right"]) + str("</th>\n")
-            r += "</tr>\n"
+        if args_["title_left"] or args_["title_right"]:
+            r_ += "<tr class='diff-sub-title'>\n"
+            r_ += str(" <td></td><th>") + str(args_["title_left"]) + str("</th>\n")
+            r_ += str(" <td></td><th>") + str(args_["title_right"]) + str("</th>\n")
+            r_ += "</tr>\n"
         # end if
-        if args["title"] or args["title_left"] or args["title_right"]:
-            r += "</thead>\n"
+        if args_["title"] or args_["title_left"] or args_["title_right"]:
+            r_ += "</thead>\n"
         # end if
-        r += str("<tbody>\n") + str(diff) + str("\n</tbody>\n")
-        r += "</table>"
-        return r
+        r_ += str("<tbody>\n") + str(diff_) + str("\n</tbody>\n")
+        r_ += "</table>"
+        return r_
     # end def wp_text_diff
 # end if

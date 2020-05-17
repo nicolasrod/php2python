@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,6 +22,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_REST_Meta_Fields
 #//
 class WP_REST_Term_Meta_Fields(WP_REST_Meta_Fields):
+    #// 
+    #// Taxonomy to register fields for.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     taxonomy = Array()
     #// 
     #// Constructor.
@@ -35,9 +36,10 @@ class WP_REST_Term_Meta_Fields(WP_REST_Meta_Fields):
     #// 
     #// @param string $taxonomy Taxonomy to register fields for.
     #//
-    def __init__(self, taxonomy=None):
+    def __init__(self, taxonomy_=None):
         
-        self.taxonomy = taxonomy
+        
+        self.taxonomy = taxonomy_
     # end def __init__
     #// 
     #// Retrieves the object meta type.
@@ -47,6 +49,7 @@ class WP_REST_Term_Meta_Fields(WP_REST_Meta_Fields):
     #// @return string The meta type.
     #//
     def get_meta_type(self):
+        
         
         return "term"
     # end def get_meta_type
@@ -59,6 +62,7 @@ class WP_REST_Term_Meta_Fields(WP_REST_Meta_Fields):
     #//
     def get_meta_subtype(self):
         
+        
         return self.taxonomy
     # end def get_meta_subtype
     #// 
@@ -69,6 +73,7 @@ class WP_REST_Term_Meta_Fields(WP_REST_Meta_Fields):
     #// @return string The REST field type.
     #//
     def get_rest_field_type(self):
+        
         
         return "tag" if "post_tag" == self.taxonomy else self.taxonomy
     # end def get_rest_field_type

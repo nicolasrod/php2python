@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -18,6 +13,7 @@ class Akismet_REST_API():
     #//
     @classmethod
     def init(self):
+        
         
         if (not php_function_exists("register_rest_route")):
             #// The REST API wasn't integrated into core until 4.4, and we support 4.0+ (for now).
@@ -36,7 +32,8 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def get_key(self, request=None):
+    def get_key(self, request_=None):
+        
         
         return rest_ensure_response(Akismet.get_api_key())
     # end def get_key
@@ -47,16 +44,17 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def set_key(self, request=None):
+    def set_key(self, request_=None):
+        
         
         if php_defined("WPCOM_API_KEY"):
             return rest_ensure_response(php_new_class("WP_Error", lambda : WP_Error("hardcoded_key", __("This site's API key is hardcoded and cannot be changed via the API.", "akismet"), Array({"status": 409}))))
         # end if
-        new_api_key = request.get_param("key")
-        if (not self.key_is_valid(new_api_key)):
+        new_api_key_ = request_.get_param("key")
+        if (not self.key_is_valid(new_api_key_)):
             return rest_ensure_response(php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("The value provided is not a valid and registered API key.", "akismet"), Array({"status": 400}))))
         # end if
-        update_option("wordpress_api_key", new_api_key)
+        update_option("wordpress_api_key", new_api_key_)
         return self.get_key()
     # end def set_key
     #// 
@@ -66,7 +64,8 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def delete_key(self, request=None):
+    def delete_key(self, request_=None):
+        
         
         if php_defined("WPCOM_API_KEY"):
             return rest_ensure_response(php_new_class("WP_Error", lambda : WP_Error("hardcoded_key", __("This site's API key is hardcoded and cannot be deleted.", "akismet"), Array({"status": 409}))))
@@ -81,7 +80,8 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def get_settings(self, request=None):
+    def get_settings(self, request_=None):
+        
         
         return rest_ensure_response(Array({"akismet_strictness": get_option("akismet_strictness", "1") == "1", "akismet_show_user_comments_approved": get_option("akismet_show_user_comments_approved", "1") == "1"}))
     # end def get_settings
@@ -92,18 +92,19 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def set_boolean_settings(self, request=None):
+    def set_boolean_settings(self, request_=None):
         
-        for setting_key in Array("akismet_strictness", "akismet_show_user_comments_approved"):
-            setting_value = request.get_param(setting_key)
-            if is_null(setting_value):
+        
+        for setting_key_ in Array("akismet_strictness", "akismet_show_user_comments_approved"):
+            setting_value_ = request_.get_param(setting_key_)
+            if is_null(setting_value_):
                 continue
             # end if
             #// From 4.7+, WP core will ensure that these are always boolean
             #// values because they are registered with 'type' => 'boolean',
             #// but we need to do this ourselves for prior versions.
-            setting_value = Akismet_REST_API.parse_boolean(setting_value)
-            update_option(setting_key, "1" if setting_value else "0")
+            setting_value_ = Akismet_REST_API.parse_boolean(setting_value_)
+            update_option(setting_key_, "1" if setting_value_ else "0")
         # end for
         return self.get_settings()
     # end def set_boolean_settings
@@ -114,9 +115,10 @@ class Akismet_REST_API():
     #// @return bool The converted value.
     #//
     @classmethod
-    def parse_boolean(self, value=None):
+    def parse_boolean(self, value_=None):
         
-        for case in Switch(value):
+        
+        for case in Switch(value_):
             if case(True):
                 pass
             # end if
@@ -142,7 +144,7 @@ class Akismet_REST_API():
                 return False
             # end if
             if case():
-                return php_bool(value)
+                return php_bool(value_)
             # end if
         # end for
     # end def parse_boolean
@@ -158,16 +160,17 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def get_stats(self, request=None):
+    def get_stats(self, request_=None):
         
-        api_key = Akismet.get_api_key()
-        interval = request.get_param("interval")
-        stat_totals = Array()
-        response = Akismet.http_post(Akismet.build_query(Array({"blog": get_option("home"), "key": api_key, "from": interval})), "get-stats")
-        if (not php_empty(lambda : response[1])):
-            stat_totals[interval] = php_json_decode(response[1])
+        
+        api_key_ = Akismet.get_api_key()
+        interval_ = request_.get_param("interval")
+        stat_totals_ = Array()
+        response_ = Akismet.http_post(Akismet.build_query(Array({"blog": get_option("home"), "key": api_key_, "from": interval_})), "get-stats")
+        if (not php_empty(lambda : response_[1])):
+            stat_totals_[interval_] = php_json_decode(response_[1])
         # end if
-        return rest_ensure_response(stat_totals)
+        return rest_ensure_response(stat_totals_)
     # end def get_stats
     #// 
     #// Get the current alert code and message. Alert codes are used to notify the site owner
@@ -178,7 +181,8 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def get_alert(self, request=None):
+    def get_alert(self, request_=None):
+        
         
         return rest_ensure_response(Array({"code": get_option("akismet_alert_code"), "message": get_option("akismet_alert_msg")}))
     # end def get_alert
@@ -189,13 +193,14 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def set_alert(self, request=None):
+    def set_alert(self, request_=None):
+        
         
         delete_option("akismet_alert_code")
         delete_option("akismet_alert_msg")
         #// Make a request so the most recent alert code and message are retrieved.
         Akismet.verify_key(Akismet.get_api_key())
-        return self.get_alert(request)
+        return self.get_alert(request_)
     # end def set_alert
     #// 
     #// Clear the current alert code and message.
@@ -204,16 +209,18 @@ class Akismet_REST_API():
     #// @return WP_Error|WP_REST_Response
     #//
     @classmethod
-    def delete_alert(self, request=None):
+    def delete_alert(self, request_=None):
+        
         
         delete_option("akismet_alert_code")
         delete_option("akismet_alert_msg")
-        return self.get_alert(request)
+        return self.get_alert(request_)
     # end def delete_alert
-    def key_is_valid(self, key=None):
+    def key_is_valid(self, key_=None):
         
-        response = Akismet.http_post(Akismet.build_query(Array({"key": key, "blog": get_option("home")})), "verify-key")
-        if response[1] == "valid":
+        
+        response_ = Akismet.http_post(Akismet.build_query(Array({"key": key_, "blog": get_option("home")})), "verify-key")
+        if response_[1] == "valid":
             return True
         # end if
         return False
@@ -221,30 +228,34 @@ class Akismet_REST_API():
     @classmethod
     def privileged_permission_callback(self):
         
+        
         return current_user_can("manage_options")
     # end def privileged_permission_callback
     #// 
     #// For calls that Akismet.com makes to the site to clear outdated alert codes, use the API key for authorization.
     #//
     @classmethod
-    def remote_call_permission_callback(self, request=None):
+    def remote_call_permission_callback(self, request_=None):
         
-        local_key = Akismet.get_api_key()
-        return local_key and php_strtolower(request.get_param("key")) == php_strtolower(local_key)
+        
+        local_key_ = Akismet.get_api_key()
+        return local_key_ and php_strtolower(request_.get_param("key")) == php_strtolower(local_key_)
     # end def remote_call_permission_callback
     @classmethod
-    def sanitize_interval(self, interval=None, request=None, param=None):
+    def sanitize_interval(self, interval_=None, request_=None, param_=None):
         
-        interval = php_trim(interval)
-        valid_intervals = Array("60-days", "6-months", "all")
-        if (not php_in_array(interval, valid_intervals)):
-            interval = "all"
+        
+        interval_ = php_trim(interval_)
+        valid_intervals_ = Array("60-days", "6-months", "all")
+        if (not php_in_array(interval_, valid_intervals_)):
+            interval_ = "all"
         # end if
-        return interval
+        return interval_
     # end def sanitize_interval
     @classmethod
-    def sanitize_key(self, key=None, request=None, param=None):
+    def sanitize_key(self, key_=None, request_=None, param_=None):
         
-        return php_trim(key)
+        
+        return php_trim(key_)
     # end def sanitize_key
 # end class Akismet_REST_API

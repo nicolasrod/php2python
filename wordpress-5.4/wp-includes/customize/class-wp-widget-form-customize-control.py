@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,13 +22,61 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Widget_Form_Customize_Control(WP_Customize_Control):
+    #// 
+    #// Customize control type.
+    #// 
+    #// @since 3.9.0
+    #// @var string
+    #//
     type = "widget_form"
+    #// 
+    #// Widget ID.
+    #// 
+    #// @since 3.9.0
+    #// @var string
+    #//
     widget_id = Array()
+    #// 
+    #// Widget ID base.
+    #// 
+    #// @since 3.9.0
+    #// @var string
+    #//
     widget_id_base = Array()
+    #// 
+    #// Sidebar ID.
+    #// 
+    #// @since 3.9.0
+    #// @var string
+    #//
     sidebar_id = Array()
+    #// 
+    #// Widget status.
+    #// 
+    #// @since 3.9.0
+    #// @var bool True if new, false otherwise. Default false.
+    #//
     is_new = False
+    #// 
+    #// Widget width.
+    #// 
+    #// @since 3.9.0
+    #// @var int
+    #//
     width = Array()
+    #// 
+    #// Widget height.
+    #// 
+    #// @since 3.9.0
+    #// @var int
+    #//
     height = Array()
+    #// 
+    #// Widget mode.
+    #// 
+    #// @since 3.9.0
+    #// @var bool True if wide, false otherwise. Default false.
+    #//
     is_wide = False
     #// 
     #// Gather control params for exporting to JavaScript.
@@ -44,24 +87,25 @@ class WP_Widget_Form_Customize_Control(WP_Customize_Control):
     #//
     def to_json(self):
         
-        global wp_registered_widgets
-        php_check_if_defined("wp_registered_widgets")
+        
+        global wp_registered_widgets_
+        php_check_if_defined("wp_registered_widgets_")
         super().to_json()
-        exported_properties = Array("widget_id", "widget_id_base", "sidebar_id", "width", "height", "is_wide")
-        for key in exported_properties:
-            self.json[key] = self.key
+        exported_properties_ = Array("widget_id", "widget_id_base", "sidebar_id", "width", "height", "is_wide")
+        for key_ in exported_properties_:
+            self.json[key_] = self.key_
         # end for
         #// Get the widget_control and widget_content.
         php_include_file(ABSPATH + "wp-admin/includes/widgets.php", once=True)
-        widget = wp_registered_widgets[self.widget_id]
-        if (not (php_isset(lambda : widget["params"][0]))):
-            widget["params"][0] = Array()
+        widget_ = wp_registered_widgets_[self.widget_id]
+        if (not (php_isset(lambda : widget_["params"][0]))):
+            widget_["params"][0] = Array()
         # end if
-        args = Array({"widget_id": widget["id"], "widget_name": widget["name"]})
-        args = wp_list_widget_controls_dynamic_sidebar(Array({0: args, 1: widget["params"][0]}))
-        widget_control_parts = self.manager.widgets.get_widget_control_parts(args)
-        self.json["widget_control"] = widget_control_parts["control"]
-        self.json["widget_content"] = widget_control_parts["content"]
+        args_ = Array({"widget_id": widget_["id"], "widget_name": widget_["name"]})
+        args_ = wp_list_widget_controls_dynamic_sidebar(Array({0: args_, 1: widget_["params"][0]}))
+        widget_control_parts_ = self.manager.widgets.get_widget_control_parts(args_)
+        self.json["widget_control"] = widget_control_parts_["control"]
+        self.json["widget_content"] = widget_control_parts_["content"]
     # end def to_json
     #// 
     #// Override render_content to be no-op since content is exported via to_json for deferred embedding.
@@ -69,6 +113,7 @@ class WP_Widget_Form_Customize_Control(WP_Customize_Control):
     #// @since 3.9.0
     #//
     def render_content(self):
+        
         
         pass
     # end def render_content
@@ -80,6 +125,7 @@ class WP_Widget_Form_Customize_Control(WP_Customize_Control):
     #// @return bool Whether the widget is rendered.
     #//
     def active_callback(self):
+        
         
         return self.manager.widgets.is_widget_rendered(self.widget_id)
     # end def active_callback

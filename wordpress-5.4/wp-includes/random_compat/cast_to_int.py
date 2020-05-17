@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -56,21 +51,24 @@ if (not php_is_callable("RandomCompat_intval")):
     #// 
     #// @throws TypeError
     #//
-    def RandomCompat_intval(number=None, fail_open=False, *args_):
+    def RandomCompat_intval(number_=None, fail_open_=None, *_args_):
+        if fail_open_ is None:
+            fail_open_ = False
+        # end if
         
-        if php_is_int(number) or php_is_float(number):
-            number += 0
-        elif php_is_numeric(number):
-            number += 0
+        if php_is_int(number_) or php_is_float(number_):
+            number_ += 0
+        elif php_is_numeric(number_):
+            number_ += 0
         # end if
-        if php_is_float(number) and number > (1 << (PHP_INT_MAX).bit_length()) - 1 - PHP_INT_MAX and number < PHP_INT_MAX:
-            number = php_int(number)
+        if php_is_float(number_) and number_ > (1 << (PHP_INT_MAX).bit_length()) - 1 - PHP_INT_MAX and number_ < PHP_INT_MAX:
+            number_ = php_int(number_)
         # end if
-        if php_is_int(number):
-            return php_int(number)
-        elif (not fail_open):
+        if php_is_int(number_):
+            return php_int(number_)
+        elif (not fail_open_):
             raise php_new_class("TypeError", lambda : TypeError("Expected an integer."))
         # end if
-        return number
+        return number_
     # end def RandomCompat_intval
 # end if

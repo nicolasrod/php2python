@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -61,25 +56,81 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage HTTP
 #//
 class SimplePie_HTTP_Parser():
+    #// 
+    #// HTTP Version
+    #// 
+    #// @var float
+    #//
     http_version = 0
+    #// 
+    #// Status code
+    #// 
+    #// @var int
+    #//
     status_code = 0
+    #// 
+    #// Reason phrase
+    #// 
+    #// @var string
+    #//
     reason = ""
+    #// 
+    #// Key/value pairs of the headers
+    #// 
+    #// @var array
+    #//
     headers = Array()
+    #// 
+    #// Body of the response
+    #// 
+    #// @var string
+    #//
     body = ""
+    #// 
+    #// Current state of the state machine
+    #// 
+    #// @var string
+    #//
     state = "http_version"
+    #// 
+    #// Input data
+    #// 
+    #// @var string
+    #//
     data = ""
+    #// 
+    #// Input data length (to avoid calling strlen() everytime this is needed)
+    #// 
+    #// @var int
+    #//
     data_length = 0
+    #// 
+    #// Current position of the pointer
+    #// 
+    #// @var int
+    #//
     position = 0
+    #// 
+    #// Name of the hedaer currently being parsed
+    #// 
+    #// @var string
+    #//
     name = ""
+    #// 
+    #// Value of the hedaer currently being parsed
+    #// 
+    #// @var string
+    #//
     value = ""
     #// 
     #// Create an instance of the class with the input data
     #// 
     #// @param string $data Input data
     #//
-    def __init__(self, data=None):
+    def __init__(self, data_=None):
         
-        self.data = data
+        
+        self.data = data_
         self.data_length = php_strlen(self.data)
     # end def __init__
     #// 
@@ -89,13 +140,14 @@ class SimplePie_HTTP_Parser():
     #//
     def parse(self):
         
+        
         while True:
             
             if not (self.state and self.state != "emit" and self.has_data()):
                 break
             # end if
-            state = self.state
-            self.state()
+            state_ = self.state
+            self.state_()
         # end while
         self.data = ""
         if self.state == "emit" or self.state == "body":
@@ -116,6 +168,7 @@ class SimplePie_HTTP_Parser():
     #//
     def has_data(self):
         
+        
         return php_bool(self.position < self.data_length)
     # end def has_data
     #// 
@@ -125,6 +178,7 @@ class SimplePie_HTTP_Parser():
     #//
     def is_linear_whitespace(self):
         
+        
         return php_bool(self.data[self.position] == "   " or self.data[self.position] == " " or self.data[self.position] == "\n" and (php_isset(lambda : self.data[self.position + 1])) and self.data[self.position + 1] == "   " or self.data[self.position + 1] == " ")
     # end def is_linear_whitespace
     #// 
@@ -132,10 +186,11 @@ class SimplePie_HTTP_Parser():
     #//
     def http_version(self):
         
+        
         if php_strpos(self.data, "\n") != False and php_strtoupper(php_substr(self.data, 0, 5)) == "HTTP/":
-            len = strspn(self.data, "0123456789.", 5)
-            self.http_version = php_substr(self.data, 5, len)
-            self.position += 5 + len
+            len_ = strspn(self.data, "0123456789.", 5)
+            self.http_version = php_substr(self.data, 5, len_)
+            self.position += 5 + len_
             if php_substr_count(self.http_version, ".") <= 1:
                 self.http_version = php_float(self.http_version)
                 self.position += strspn(self.data, "     ", self.position)
@@ -152,10 +207,11 @@ class SimplePie_HTTP_Parser():
     #//
     def status(self):
         
-        len = strspn(self.data, "0123456789", self.position)
-        if len:
-            self.status_code = php_int(php_substr(self.data, self.position, len))
-            self.position += len
+        
+        len_ = strspn(self.data, "0123456789", self.position)
+        if len_:
+            self.status_code = php_int(php_substr(self.data, self.position, len_))
+            self.position += len_
             self.state = "reason"
         else:
             self.state = False
@@ -166,15 +222,17 @@ class SimplePie_HTTP_Parser():
     #//
     def reason(self):
         
-        len = strcspn(self.data, "\n", self.position)
-        self.reason = php_trim(php_substr(self.data, self.position, len), " \r ")
-        self.position += len + 1
+        
+        len_ = strcspn(self.data, "\n", self.position)
+        self.reason = php_trim(php_substr(self.data, self.position, len_), "    \r ")
+        self.position += len_ + 1
         self.state = "new_line"
     # end def reason
     #// 
     #// Deal with a new line, shifting data around as needed
     #//
     def new_line(self):
+        
         
         self.value = php_trim(self.value, "\r ")
         if self.name != "" and self.value != "":
@@ -203,14 +261,15 @@ class SimplePie_HTTP_Parser():
     #//
     def name(self):
         
-        len = strcspn(self.data, "\n:", self.position)
-        if (php_isset(lambda : self.data[self.position + len])):
-            if self.data[self.position + len] == "\n":
-                self.position += len
+        
+        len_ = strcspn(self.data, "\n:", self.position)
+        if (php_isset(lambda : self.data[self.position + len_])):
+            if self.data[self.position + len_] == "\n":
+                self.position += len_
                 self.state = "new_line"
             else:
-                self.name = php_substr(self.data, self.position, len)
-                self.position += len + 1
+                self.name = php_substr(self.data, self.position, len_)
+                self.position += len_ + 1
                 self.state = "value"
             # end if
         else:
@@ -221,6 +280,7 @@ class SimplePie_HTTP_Parser():
     #// Parse LWS, replacing consecutive LWS characters with a single space
     #//
     def linear_whitespace(self):
+        
         
         while True:
             if php_substr(self.data, self.position, 2) == "\r\n":
@@ -240,6 +300,7 @@ class SimplePie_HTTP_Parser():
     #// See what state to move to while within non-quoted header values
     #//
     def value(self):
+        
         
         if self.is_linear_whitespace():
             self.linear_whitespace()
@@ -275,15 +336,17 @@ class SimplePie_HTTP_Parser():
     #//
     def value_char(self):
         
-        len = strcspn(self.data, "   \n\"", self.position)
-        self.value += php_substr(self.data, self.position, len)
-        self.position += len
+        
+        len_ = strcspn(self.data, "  \n\"", self.position)
+        self.value += php_substr(self.data, self.position, len_)
+        self.position += len_
         self.state = "value"
     # end def value_char
     #// 
     #// See what state to move to while within quoted header values
     #//
     def quote(self):
+        
         
         if self.is_linear_whitespace():
             self.linear_whitespace()
@@ -316,15 +379,17 @@ class SimplePie_HTTP_Parser():
     #//
     def quote_char(self):
         
-        len = strcspn(self.data, "   \n\"\\", self.position)
-        self.value += php_substr(self.data, self.position, len)
-        self.position += len
+        
+        len_ = strcspn(self.data, "  \n\"\\", self.position)
+        self.value += php_substr(self.data, self.position, len_)
+        self.position += len_
         self.state = "value"
     # end def quote_char
     #// 
     #// Parse an escaped character within quotes
     #//
     def quote_escaped(self):
+        
         
         self.value += self.data[self.position]
         self.position += 1
@@ -334,6 +399,7 @@ class SimplePie_HTTP_Parser():
     #// Parse the body
     #//
     def body(self):
+        
         
         self.body = php_substr(self.data, self.position)
         if (not php_empty(lambda : self.headers["transfer-encoding"])):
@@ -348,36 +414,37 @@ class SimplePie_HTTP_Parser():
     #//
     def chunked(self):
         
+        
         if (not php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", php_trim(self.body))):
             self.state = "emit"
             return
         # end if
-        decoded = ""
-        encoded = self.body
+        decoded_ = ""
+        encoded_ = self.body
         while True:
             
             if not (True):
                 break
             # end if
-            is_chunked = php_bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", encoded, matches))
-            if (not is_chunked):
+            is_chunked_ = php_bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", encoded_, matches_))
+            if (not is_chunked_):
                 #// Looks like it's not chunked after all
                 self.state = "emit"
                 return
             # end if
-            length = hexdec(php_trim(matches[1]))
-            if length == 0:
+            length_ = hexdec(php_trim(matches_[1]))
+            if length_ == 0:
                 #// Ignore trailer headers
                 self.state = "emit"
-                self.body = decoded
+                self.body = decoded_
                 return
             # end if
-            chunk_length = php_strlen(matches[0])
-            decoded += part = php_substr(encoded, chunk_length, length)
-            encoded = php_substr(encoded, chunk_length + length + 2)
-            if php_trim(encoded) == "0" or php_empty(lambda : encoded):
+            chunk_length_ = php_strlen(matches_[0])
+            decoded_ += part_ = php_substr(encoded_, chunk_length_, length_)
+            encoded_ = php_substr(encoded_, chunk_length_ + length_ + 2)
+            if php_trim(encoded_) == "0" or php_empty(lambda : encoded_):
                 self.state = "emit"
-                self.body = decoded
+                self.body = decoded_
                 return
             # end if
         # end while

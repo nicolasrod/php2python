@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,11 +29,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param int      $priority Optional. Used to specify the order in which the registered handlers will
 #// be tested. Default 10.
 #//
-def wp_embed_register_handler(id=None, regex=None, callback=None, priority=10, *args_):
+def wp_embed_register_handler(id_=None, regex_=None, callback_=None, priority_=10, *_args_):
     
-    global wp_embed
-    php_check_if_defined("wp_embed")
-    wp_embed.register_handler(id, regex, callback, priority)
+    
+    global wp_embed_
+    php_check_if_defined("wp_embed_")
+    wp_embed_.register_handler(id_, regex_, callback_, priority_)
 # end def wp_embed_register_handler
 #// 
 #// Unregisters a previously-registered embed handler.
@@ -50,11 +46,12 @@ def wp_embed_register_handler(id=None, regex=None, callback=None, priority=10, *
 #// @param string $id       The handler ID that should be removed.
 #// @param int    $priority Optional. The priority of the handler to be removed. Default 10.
 #//
-def wp_embed_unregister_handler(id=None, priority=10, *args_):
+def wp_embed_unregister_handler(id_=None, priority_=10, *_args_):
     
-    global wp_embed
-    php_check_if_defined("wp_embed")
-    wp_embed.unregister_handler(id, priority)
+    
+    global wp_embed_
+    php_check_if_defined("wp_embed_")
+    wp_embed_.unregister_handler(id_, priority_)
 # end def wp_embed_unregister_handler
 #// 
 #// Creates default array of embed parameters.
@@ -79,15 +76,16 @@ def wp_embed_unregister_handler(id=None, priority=10, *args_):
 #// @type int $1 The embed height.
 #// }
 #//
-def wp_embed_defaults(url="", *args_):
+def wp_embed_defaults(url_="", *_args_):
+    
     
     if (not php_empty(lambda : PHP_GLOBALS["content_width"])):
-        width = php_int(PHP_GLOBALS["content_width"])
+        width_ = php_int(PHP_GLOBALS["content_width"])
     # end if
-    if php_empty(lambda : width):
-        width = 500
+    if php_empty(lambda : width_):
+        width_ = 500
     # end if
-    height = php_min(ceil(width * 1.5), 1000)
+    height_ = php_min(ceil(width_ * 1.5), 1000)
     #// 
     #// Filters the default array of embed dimensions.
     #// 
@@ -101,7 +99,7 @@ def wp_embed_defaults(url="", *args_):
     #// }
     #// @param string $url  The URL that should be embedded.
     #//
-    return apply_filters("embed_defaults", compact("width", "height"), url)
+    return apply_filters("embed_defaults", php_compact("width", "height"), url_)
 # end def wp_embed_defaults
 #// 
 #// Attempts to fetch the embed HTML for a provided URL using oEmbed.
@@ -115,10 +113,11 @@ def wp_embed_defaults(url="", *args_):
 #// Default empty.
 #// @return string|false The embed HTML on success, false on failure.
 #//
-def wp_oembed_get(url=None, args="", *args_):
+def wp_oembed_get(url_=None, args_="", *_args_):
     
-    oembed = _wp_oembed_get_object()
-    return oembed.get_html(url, args)
+    
+    oembed_ = _wp_oembed_get_object()
+    return oembed_.get_html(url_, args_)
 # end def wp_oembed_get
 #// 
 #// Returns the initialized WP_oEmbed object.
@@ -130,13 +129,14 @@ def wp_oembed_get(url=None, args="", *args_):
 #// 
 #// @return WP_oEmbed object.
 #//
-def _wp_oembed_get_object(*args_):
+def _wp_oembed_get_object(*_args_):
     
-    _wp_oembed_get_object.wp_oembed = None
-    if is_null(_wp_oembed_get_object.wp_oembed):
-        _wp_oembed_get_object.wp_oembed = php_new_class("WP_oEmbed", lambda : WP_oEmbed())
+    
+    wp_oembed_ = None
+    if is_null(wp_oembed_):
+        wp_oembed_ = php_new_class("WP_oEmbed", lambda : WP_oEmbed())
     # end if
-    return _wp_oembed_get_object.wp_oembed
+    return wp_oembed_
 # end def _wp_oembed_get_object
 #// 
 #// Adds a URL format and oEmbed provider URL pair.
@@ -150,13 +150,16 @@ def _wp_oembed_get_object(*args_):
 #// @param string  $provider The URL to the oEmbed provider.
 #// @param boolean $regex    Optional. Whether the `$format` parameter is in a RegEx format. Default false.
 #//
-def wp_oembed_add_provider(format=None, provider=None, regex=False, *args_):
+def wp_oembed_add_provider(format_=None, provider_=None, regex_=None, *_args_):
+    if regex_ is None:
+        regex_ = False
+    # end if
     
     if did_action("plugins_loaded"):
-        oembed = _wp_oembed_get_object()
-        oembed.providers[format] = Array(provider, regex)
+        oembed_ = _wp_oembed_get_object()
+        oembed_.providers[format_] = Array(provider_, regex_)
     else:
-        WP_oEmbed._add_provider_early(format, provider, regex)
+        WP_oEmbed._add_provider_early(format_, provider_, regex_)
     # end if
 # end def wp_oembed_add_provider
 #// 
@@ -169,16 +172,17 @@ def wp_oembed_add_provider(format=None, provider=None, regex=False, *args_):
 #// @param string $format The URL format for the oEmbed provider to remove.
 #// @return bool Was the provider removed successfully?
 #//
-def wp_oembed_remove_provider(format=None, *args_):
+def wp_oembed_remove_provider(format_=None, *_args_):
+    
     
     if did_action("plugins_loaded"):
-        oembed = _wp_oembed_get_object()
-        if (php_isset(lambda : oembed.providers[format])):
-            oembed.providers[format] = None
+        oembed_ = _wp_oembed_get_object()
+        if (php_isset(lambda : oembed_.providers[format_])):
+            oembed_.providers[format_] = None
             return True
         # end if
     else:
-        WP_oEmbed._remove_provider_early(format)
+        WP_oEmbed._remove_provider_early(format_)
     # end if
     return False
 # end def wp_oembed_remove_provider
@@ -192,7 +196,8 @@ def wp_oembed_remove_provider(format=None, *args_):
 #// 
 #// @see wp_embed_register_handler()
 #//
-def wp_maybe_load_embeds(*args_):
+def wp_maybe_load_embeds(*_args_):
+    
     
     #// 
     #// Filters whether to load the default embed handlers.
@@ -240,11 +245,12 @@ def wp_maybe_load_embeds(*args_):
 #// @param array  $rawattr The original unmodified attributes.
 #// @return string The embed HTML.
 #//
-def wp_embed_handler_youtube(matches=None, attr=None, url=None, rawattr=None, *args_):
+def wp_embed_handler_youtube(matches_=None, attr_=None, url_=None, rawattr_=None, *_args_):
     
-    global wp_embed
-    php_check_if_defined("wp_embed")
-    embed = wp_embed.autoembed(php_sprintf("https://youtube.com/watch?v=%s", urlencode(matches[2])))
+    
+    global wp_embed_
+    php_check_if_defined("wp_embed_")
+    embed_ = wp_embed_.autoembed(php_sprintf("https://youtube.com/watch?v=%s", urlencode(matches_[2])))
     #// 
     #// Filters the YoutTube embed output.
     #// 
@@ -257,7 +263,7 @@ def wp_embed_handler_youtube(matches=None, attr=None, url=None, rawattr=None, *a
     #// @param string $url     The original URL that was matched by the regex.
     #// @param array  $rawattr The original unmodified attributes.
     #//
-    return apply_filters("wp_embed_handler_youtube", embed, attr, url, rawattr)
+    return apply_filters("wp_embed_handler_youtube", embed_, attr_, url_, rawattr_)
 # end def wp_embed_handler_youtube
 #// 
 #// Audio embed handler callback.
@@ -270,9 +276,10 @@ def wp_embed_handler_youtube(matches=None, attr=None, url=None, rawattr=None, *a
 #// @param array  $rawattr The original unmodified attributes.
 #// @return string The embed HTML.
 #//
-def wp_embed_handler_audio(matches=None, attr=None, url=None, rawattr=None, *args_):
+def wp_embed_handler_audio(matches_=None, attr_=None, url_=None, rawattr_=None, *_args_):
     
-    audio = php_sprintf("[audio src=\"%s\" /]", esc_url(url))
+    
+    audio_ = php_sprintf("[audio src=\"%s\" /]", esc_url(url_))
     #// 
     #// Filters the audio embed output.
     #// 
@@ -283,7 +290,7 @@ def wp_embed_handler_audio(matches=None, attr=None, url=None, rawattr=None, *arg
     #// @param string $url     The original URL that was matched by the regex.
     #// @param array  $rawattr The original unmodified attributes.
     #//
-    return apply_filters("wp_embed_handler_audio", audio, attr, url, rawattr)
+    return apply_filters("wp_embed_handler_audio", audio_, attr_, url_, rawattr_)
 # end def wp_embed_handler_audio
 #// 
 #// Video embed handler callback.
@@ -296,14 +303,15 @@ def wp_embed_handler_audio(matches=None, attr=None, url=None, rawattr=None, *arg
 #// @param array  $rawattr The original unmodified attributes.
 #// @return string The embed HTML.
 #//
-def wp_embed_handler_video(matches=None, attr=None, url=None, rawattr=None, *args_):
+def wp_embed_handler_video(matches_=None, attr_=None, url_=None, rawattr_=None, *_args_):
     
-    dimensions = ""
-    if (not php_empty(lambda : rawattr["width"])) and (not php_empty(lambda : rawattr["height"])):
-        dimensions += php_sprintf("width=\"%d\" ", php_int(rawattr["width"]))
-        dimensions += php_sprintf("height=\"%d\" ", php_int(rawattr["height"]))
+    
+    dimensions_ = ""
+    if (not php_empty(lambda : rawattr_["width"])) and (not php_empty(lambda : rawattr_["height"])):
+        dimensions_ += php_sprintf("width=\"%d\" ", php_int(rawattr_["width"]))
+        dimensions_ += php_sprintf("height=\"%d\" ", php_int(rawattr_["height"]))
     # end if
-    video = php_sprintf("[video %s src=\"%s\" /]", dimensions, esc_url(url))
+    video_ = php_sprintf("[video %s src=\"%s\" /]", dimensions_, esc_url(url_))
     #// 
     #// Filters the video embed output.
     #// 
@@ -314,30 +322,32 @@ def wp_embed_handler_video(matches=None, attr=None, url=None, rawattr=None, *arg
     #// @param string $url     The original URL that was matched by the regex.
     #// @param array  $rawattr The original unmodified attributes.
     #//
-    return apply_filters("wp_embed_handler_video", video, attr, url, rawattr)
+    return apply_filters("wp_embed_handler_video", video_, attr_, url_, rawattr_)
 # end def wp_embed_handler_video
 #// 
 #// Registers the oEmbed REST API route.
 #// 
 #// @since 4.4.0
 #//
-def wp_oembed_register_route(*args_):
+def wp_oembed_register_route(*_args_):
     
-    controller = php_new_class("WP_oEmbed_Controller", lambda : WP_oEmbed_Controller())
-    controller.register_routes()
+    
+    controller_ = php_new_class("WP_oEmbed_Controller", lambda : WP_oEmbed_Controller())
+    controller_.register_routes()
 # end def wp_oembed_register_route
 #// 
 #// Adds oEmbed discovery links in the website <head>.
 #// 
 #// @since 4.4.0
 #//
-def wp_oembed_add_discovery_links(*args_):
+def wp_oembed_add_discovery_links(*_args_):
     
-    output = ""
+    
+    output_ = ""
     if is_singular():
-        output += "<link rel=\"alternate\" type=\"application/json+oembed\" href=\"" + esc_url(get_oembed_endpoint_url(get_permalink())) + "\" />" + "\n"
+        output_ += "<link rel=\"alternate\" type=\"application/json+oembed\" href=\"" + esc_url(get_oembed_endpoint_url(get_permalink())) + "\" />" + "\n"
         if php_class_exists("SimpleXMLElement"):
-            output += "<link rel=\"alternate\" type=\"text/xml+oembed\" href=\"" + esc_url(get_oembed_endpoint_url(get_permalink(), "xml")) + "\" />" + "\n"
+            output_ += "<link rel=\"alternate\" type=\"text/xml+oembed\" href=\"" + esc_url(get_oembed_endpoint_url(get_permalink(), "xml")) + "\" />" + "\n"
         # end if
     # end if
     #// 
@@ -347,14 +357,15 @@ def wp_oembed_add_discovery_links(*args_):
     #// 
     #// @param string $output HTML of the discovery links.
     #//
-    php_print(apply_filters("oembed_discovery_links", output))
+    php_print(apply_filters("oembed_discovery_links", output_))
 # end def wp_oembed_add_discovery_links
 #// 
 #// Adds the necessary JavaScript to communicate with the embedded iframes.
 #// 
 #// @since 4.4.0
 #//
-def wp_oembed_add_host_js(*args_):
+def wp_oembed_add_host_js(*_args_):
+    
     
     wp_enqueue_script("wp-embed")
 # end def wp_oembed_add_host_js
@@ -366,16 +377,17 @@ def wp_oembed_add_host_js(*args_):
 #// @param int|WP_Post $post Optional. Post ID or object. Defaults to the current post.
 #// @return string|false The post embed URL on success, false if the post doesn't exist.
 #//
-def get_post_embed_url(post=None, *args_):
+def get_post_embed_url(post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    embed_url = trailingslashit(get_permalink(post)) + user_trailingslashit("embed")
-    path_conflict = get_page_by_path(php_str_replace(home_url(), "", embed_url), OBJECT, get_post_types(Array({"public": True})))
-    if (not get_option("permalink_structure")) or path_conflict:
-        embed_url = add_query_arg(Array({"embed": "true"}), get_permalink(post))
+    embed_url_ = trailingslashit(get_permalink(post_)) + user_trailingslashit("embed")
+    path_conflict_ = get_page_by_path(php_str_replace(home_url(), "", embed_url_), OBJECT, get_post_types(Array({"public": True})))
+    if (not get_option("permalink_structure")) or path_conflict_:
+        embed_url_ = add_query_arg(Array({"embed": "true"}), get_permalink(post_))
     # end if
     #// 
     #// Filters the URL to embed a specific post.
@@ -385,7 +397,7 @@ def get_post_embed_url(post=None, *args_):
     #// @param string  $embed_url The post embed URL.
     #// @param WP_Post $post      The corresponding post object.
     #//
-    return esc_url_raw(apply_filters("post_embed_url", embed_url, post))
+    return esc_url_raw(apply_filters("post_embed_url", embed_url_, post_))
 # end def get_post_embed_url
 #// 
 #// Retrieves the oEmbed endpoint URL for a given permalink.
@@ -398,11 +410,12 @@ def get_post_embed_url(post=None, *args_):
 #// @param string $format    Optional. The requested response format. Default 'json'.
 #// @return string The oEmbed endpoint URL.
 #//
-def get_oembed_endpoint_url(permalink="", format="json", *args_):
+def get_oembed_endpoint_url(permalink_="", format_="json", *_args_):
     
-    url = rest_url("oembed/1.0/embed")
-    if "" != permalink:
-        url = add_query_arg(Array({"url": urlencode(permalink), "format": format if "json" != format else False}), url)
+    
+    url_ = rest_url("oembed/1.0/embed")
+    if "" != permalink_:
+        url_ = add_query_arg(Array({"url": urlencode(permalink_), "format": format_ if "json" != format_ else False}), url_)
     # end if
     #// 
     #// Filters the oEmbed endpoint URL.
@@ -413,7 +426,7 @@ def get_oembed_endpoint_url(permalink="", format="json", *args_):
     #// @param string $permalink The permalink used for the `url` query arg.
     #// @param string $format    The requested response format.
     #//
-    return apply_filters("oembed_endpoint_url", url, permalink, format)
+    return apply_filters("oembed_endpoint_url", url_, permalink_, format_)
 # end def get_oembed_endpoint_url
 #// 
 #// Retrieves the embed code for a specific post.
@@ -425,18 +438,19 @@ def get_oembed_endpoint_url(permalink="", format="json", *args_):
 #// @param int|WP_Post $post   Optional. Post ID or object. Default is global `$post`.
 #// @return string|false Embed code on success, false if post doesn't exist.
 #//
-def get_post_embed_html(width=None, height=None, post=None, *args_):
+def get_post_embed_html(width_=None, height_=None, post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    embed_url = get_post_embed_url(post)
-    output = "<blockquote class=\"wp-embedded-content\"><a href=\"" + esc_url(get_permalink(post)) + "\">" + get_the_title(post) + "</a></blockquote>\n"
-    output += "<script type='text/javascript'>\n"
-    output += "<!--//--><![CDATA[//><!--\n"
+    embed_url_ = get_post_embed_url(post_)
+    output_ = "<blockquote class=\"wp-embedded-content\"><a href=\"" + esc_url(get_permalink(post_)) + "\">" + get_the_title(post_) + "</a></blockquote>\n"
+    output_ += "<script type='text/javascript'>\n"
+    output_ += "<!--//--><![CDATA[//><!--\n"
     if SCRIPT_DEBUG:
-        output += php_file_get_contents(ABSPATH + WPINC + "/js/wp-embed.js")
+        output_ += php_file_get_contents(ABSPATH + WPINC + "/js/wp-embed.js")
     else:
         #// 
         #// If you're looking at a src version of this file, you'll see an "include"
@@ -448,11 +462,11 @@ def get_post_embed_html(width=None, height=None, post=None, *args_):
         #// minified JavaScript. If you need to debug it, please turn on SCRIPT_DEBUG
         #// and edit wp-embed.js directly.
         #//
-        output += "     /*! This file is auto-generated */\n        !function(d,l){\"use strict\";var e=!1,o=!1;if(l.querySelector)if(d.addEventListener)e=!0;if(d.wp=d.wp||{},!d.wp.receiveEmbedMessage)if(d.wp.receiveEmbedMessage=function(e){var t=e.data;if(t)if(t.secret||t.message||t.value)if(!/[^a-zA-Z0-9]/.test(t.secret)){var r,a,i,s,n,o=l.querySelectorAll('iframe[data-secret=\"'+t.secret+'\"]'),c=l.querySelectorAll('blockquote[data-secret=\"'+t.secret+'\"]');for(r=0;r<c.length;r++)c[r].style.display=\"none\";for(r=0;r<o.length;r++)if(a=o[r],e.source===a.contentWindow){if(a.removeAttribute(\"style\"),\"height\"===t.message){if(1e3<(i=parseInt(t.value,10)))i=1e3;else if(~~i<200)i=200;a.height=i}if(\"link\"===t.message)if(s=l.createElement(\"a\"),n=l.createElement(\"a\"),s.href=a.getAttribute(\"src\"),n.href=t.value,n.host===s.host)if(l.activeElement===a)d.top.location.href=t.value}}},e)d.addEventListener(\"message\",d.wp.receiveEmbedMessage,!1),l.addEventListener(\"DOMContentLoaded\",t,!1),d.addEventListener(\"load\",t,!1);function t(){if(!o){o=!0;var e,t,r,a,i=-1!==navigator.appVersion.indexOf(\"MSIE 10\"),s=!!navigator.userAgent.match(/Trident.*rv:11\\./),n=l.querySelectorAll(\"iframe.wp-embedded-content\");for(t=0;t<n.length;t++){if(!(r=n[t]).getAttribute(\"data-secret\"))a=Math.random().toString(36).substr(2,10),r.src+=\"#?secret=\"+a,r.setAttribute(\"data-secret\",a);if(i||s)(e=r.cloneNode(!0)).removeAttribute(\"security\"),r.parentNode.replaceChild(e,r)}}}}(window,document);"
+        output_ += "        /*! This file is auto-generated */\n        !function(d,l){\"use strict\";var e=!1,o=!1;if(l.querySelector)if(d.addEventListener)e=!0;if(d.wp=d.wp||{},!d.wp.receiveEmbedMessage)if(d.wp.receiveEmbedMessage=function(e){var t=e.data;if(t)if(t.secret||t.message||t.value)if(!/[^a-zA-Z0-9]/.test(t.secret)){var r,a,i,s,n,o=l.querySelectorAll('iframe[data-secret=\"'+t.secret+'\"]'),c=l.querySelectorAll('blockquote[data-secret=\"'+t.secret+'\"]');for(r=0;r<c.length;r++)c[r].style.display=\"none\";for(r=0;r<o.length;r++)if(a=o[r],e.source===a.contentWindow){if(a.removeAttribute(\"style\"),\"height\"===t.message){if(1e3<(i=parseInt(t.value,10)))i=1e3;else if(~~i<200)i=200;a.height=i}if(\"link\"===t.message)if(s=l.createElement(\"a\"),n=l.createElement(\"a\"),s.href=a.getAttribute(\"src\"),n.href=t.value,n.host===s.host)if(l.activeElement===a)d.top.location.href=t.value}}},e)d.addEventListener(\"message\",d.wp.receiveEmbedMessage,!1),l.addEventListener(\"DOMContentLoaded\",t,!1),d.addEventListener(\"load\",t,!1);function t(){if(!o){o=!0;var e,t,r,a,i=-1!==navigator.appVersion.indexOf(\"MSIE 10\"),s=!!navigator.userAgent.match(/Trident.*rv:11\\./),n=l.querySelectorAll(\"iframe.wp-embedded-content\");for(t=0;t<n.length;t++){if(!(r=n[t]).getAttribute(\"data-secret\"))a=Math.random().toString(36).substr(2,10),r.src+=\"#?secret=\"+a,r.setAttribute(\"data-secret\",a);if(i||s)(e=r.cloneNode(!0)).removeAttribute(\"security\"),r.parentNode.replaceChild(e,r)}}}}(window,document);"
     # end if
-    output += "\n//--><!]]>"
-    output += "\n</script>"
-    output += php_sprintf("<iframe sandbox=\"allow-scripts\" security=\"restricted\" src=\"%1$s\" width=\"%2$d\" height=\"%3$d\" title=\"%4$s\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\" class=\"wp-embedded-content\"></iframe>", esc_url(embed_url), absint(width), absint(height), esc_attr(php_sprintf(__("&#8220;%1$s&#8221; &#8212; %2$s"), get_the_title(post), get_bloginfo("name"))))
+    output_ += "\n//--><!]]>"
+    output_ += "\n</script>"
+    output_ += php_sprintf("<iframe sandbox=\"allow-scripts\" security=\"restricted\" src=\"%1$s\" width=\"%2$d\" height=\"%3$d\" title=\"%4$s\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\" class=\"wp-embedded-content\"></iframe>", esc_url(embed_url_), absint(width_), absint(height_), esc_attr(php_sprintf(__("&#8220;%1$s&#8221; &#8212; %2$s"), get_the_title(post_), get_bloginfo("name"))))
     #// 
     #// Filters the embed HTML output for a given post.
     #// 
@@ -463,7 +477,7 @@ def get_post_embed_html(width=None, height=None, post=None, *args_):
     #// @param int     $width  Width of the response.
     #// @param int     $height Height of the response.
     #//
-    return apply_filters("embed_html", output, post, width, height)
+    return apply_filters("embed_html", output_, post_, width_, height_)
 # end def get_post_embed_html
 #// 
 #// Retrieves the oEmbed response data for a given post.
@@ -474,14 +488,15 @@ def get_post_embed_html(width=None, height=None, post=None, *args_):
 #// @param int         $width The requested width.
 #// @return array|false Response data on success, false if post doesn't exist.
 #//
-def get_oembed_response_data(post=None, width=None, *args_):
+def get_oembed_response_data(post_=None, width_=None, *_args_):
     
-    post = get_post(post)
-    width = absint(width)
-    if (not post):
+    
+    post_ = get_post(post_)
+    width_ = absint(width_)
+    if (not post_):
         return False
     # end if
-    if "publish" != get_post_status(post):
+    if "publish" != get_post_status(post_):
         return False
     # end if
     #// 
@@ -496,14 +511,14 @@ def get_oembed_response_data(post=None, width=None, *args_):
     #// @type int $max Maximum width. Default 600.
     #// }
     #//
-    min_max_width = apply_filters("oembed_min_max_width", Array({"min": 200, "max": 600}))
-    width = php_min(php_max(min_max_width["min"], width), min_max_width["max"])
-    height = php_max(ceil(width / 16 * 9), 200)
-    data = Array({"version": "1.0", "provider_name": get_bloginfo("name"), "provider_url": get_home_url(), "author_name": get_bloginfo("name"), "author_url": get_home_url(), "title": get_the_title(post), "type": "link"})
-    author = get_userdata(post.post_author)
-    if author:
-        data["author_name"] = author.display_name
-        data["author_url"] = get_author_posts_url(author.ID)
+    min_max_width_ = apply_filters("oembed_min_max_width", Array({"min": 200, "max": 600}))
+    width_ = php_min(php_max(min_max_width_["min"], width_), min_max_width_["max"])
+    height_ = php_max(ceil(width_ / 16 * 9), 200)
+    data_ = Array({"version": "1.0", "provider_name": get_bloginfo("name"), "provider_url": get_home_url(), "author_name": get_bloginfo("name"), "author_url": get_home_url(), "title": get_the_title(post_), "type": "link"})
+    author_ = get_userdata(post_.post_author)
+    if author_:
+        data_["author_name"] = author_.display_name
+        data_["author_url"] = get_author_posts_url(author_.ID)
     # end if
     #// 
     #// Filters the oEmbed response data.
@@ -515,7 +530,7 @@ def get_oembed_response_data(post=None, width=None, *args_):
     #// @param int     $width  The requested width.
     #// @param int     $height The calculated height.
     #//
-    return apply_filters("oembed_response_data", data, post, width, height)
+    return apply_filters("oembed_response_data", data_, post_, width_, height_)
 # end def get_oembed_response_data
 #// 
 #// Retrieves the oEmbed response data for a given URL.
@@ -526,42 +541,43 @@ def get_oembed_response_data(post=None, width=None, *args_):
 #// @param array  $args oEmbed remote get arguments.
 #// @return object|false oEmbed response data if the URL does belong to the current site. False otherwise.
 #//
-def get_oembed_response_data_for_url(url=None, args=None, *args_):
+def get_oembed_response_data_for_url(url_=None, args_=None, *_args_):
     
-    switched_blog = False
+    
+    switched_blog_ = False
     if is_multisite():
-        url_parts = wp_parse_args(wp_parse_url(url), Array({"host": "", "path": "/"}))
-        qv = Array({"domain": url_parts["host"], "path": "/", "update_site_meta_cache": False})
+        url_parts_ = wp_parse_args(wp_parse_url(url_), Array({"host": "", "path": "/"}))
+        qv_ = Array({"domain": url_parts_["host"], "path": "/", "update_site_meta_cache": False})
         #// In case of subdirectory configs, set the path.
         if (not is_subdomain_install()):
-            path = php_explode("/", php_ltrim(url_parts["path"], "/"))
-            path = reset(path)
-            if path:
-                qv["path"] = get_network().path + path + "/"
+            path_ = php_explode("/", php_ltrim(url_parts_["path"], "/"))
+            path_ = reset(path_)
+            if path_:
+                qv_["path"] = get_network().path + path_ + "/"
             # end if
         # end if
-        sites = get_sites(qv)
-        site = reset(sites)
-        if site and get_current_blog_id() != php_int(site.blog_id):
-            switch_to_blog(site.blog_id)
-            switched_blog = True
+        sites_ = get_sites(qv_)
+        site_ = reset(sites_)
+        if site_ and get_current_blog_id() != php_int(site_.blog_id):
+            switch_to_blog(site_.blog_id)
+            switched_blog_ = True
         # end if
     # end if
-    post_id = url_to_postid(url)
+    post_id_ = url_to_postid(url_)
     #// This filter is documented in wp-includes/class-wp-oembed-controller.php
-    post_id = apply_filters("oembed_request_post_id", post_id, url)
-    if (not post_id):
-        if switched_blog:
+    post_id_ = apply_filters("oembed_request_post_id", post_id_, url_)
+    if (not post_id_):
+        if switched_blog_:
             restore_current_blog()
         # end if
         return False
     # end if
-    width = args["width"] if (php_isset(lambda : args["width"])) else 0
-    data = get_oembed_response_data(post_id, width)
-    if switched_blog:
+    width_ = args_["width"] if (php_isset(lambda : args_["width"])) else 0
+    data_ = get_oembed_response_data(post_id_, width_)
+    if switched_blog_:
         restore_current_blog()
     # end if
-    return data if data else False
+    return data_ if data_ else False
 # end def get_oembed_response_data_for_url
 #// 
 #// Filters the oEmbed response data to return an iframe embed code.
@@ -574,32 +590,33 @@ def get_oembed_response_data_for_url(url=None, args=None, *args_):
 #// @param int     $height The calculated height.
 #// @return array The modified response data.
 #//
-def get_oembed_response_data_rich(data=None, post=None, width=None, height=None, *args_):
+def get_oembed_response_data_rich(data_=None, post_=None, width_=None, height_=None, *_args_):
     
-    data["width"] = absint(width)
-    data["height"] = absint(height)
-    data["type"] = "rich"
-    data["html"] = get_post_embed_html(width, height, post)
+    
+    data_["width"] = absint(width_)
+    data_["height"] = absint(height_)
+    data_["type"] = "rich"
+    data_["html"] = get_post_embed_html(width_, height_, post_)
     #// Add post thumbnail to response if available.
-    thumbnail_id = False
-    if has_post_thumbnail(post.ID):
-        thumbnail_id = get_post_thumbnail_id(post.ID)
+    thumbnail_id_ = False
+    if has_post_thumbnail(post_.ID):
+        thumbnail_id_ = get_post_thumbnail_id(post_.ID)
     # end if
-    if "attachment" == get_post_type(post):
-        if wp_attachment_is_image(post):
-            thumbnail_id = post.ID
-        elif wp_attachment_is("video", post):
-            thumbnail_id = get_post_thumbnail_id(post)
-            data["type"] = "video"
+    if "attachment" == get_post_type(post_):
+        if wp_attachment_is_image(post_):
+            thumbnail_id_ = post_.ID
+        elif wp_attachment_is("video", post_):
+            thumbnail_id_ = get_post_thumbnail_id(post_)
+            data_["type"] = "video"
         # end if
     # end if
-    if thumbnail_id:
-        thumbnail_url, thumbnail_width, thumbnail_height = wp_get_attachment_image_src(thumbnail_id, Array(width, 99999))
-        data["thumbnail_url"] = thumbnail_url
-        data["thumbnail_width"] = thumbnail_width
-        data["thumbnail_height"] = thumbnail_height
+    if thumbnail_id_:
+        thumbnail_url_, thumbnail_width_, thumbnail_height_ = wp_get_attachment_image_src(thumbnail_id_, Array(width_, 99999))
+        data_["thumbnail_url"] = thumbnail_url_
+        data_["thumbnail_width"] = thumbnail_width_
+        data_["thumbnail_height"] = thumbnail_height_
     # end if
-    return data
+    return data_
 # end def get_oembed_response_data_rich
 #// 
 #// Ensures that the specified format is either 'json' or 'xml'.
@@ -609,12 +626,13 @@ def get_oembed_response_data_rich(data=None, post=None, width=None, height=None,
 #// @param string $format The oEmbed response format. Accepts 'json' or 'xml'.
 #// @return string The format, either 'xml' or 'json'. Default 'json'.
 #//
-def wp_oembed_ensure_format(format=None, *args_):
+def wp_oembed_ensure_format(format_=None, *_args_):
     
-    if (not php_in_array(format, Array("json", "xml"), True)):
+    
+    if (not php_in_array(format_, Array("json", "xml"), True)):
         return "json"
     # end if
-    return format
+    return format_
 # end def wp_oembed_ensure_format
 #// 
 #// Hooks into the REST API output to print XML instead of JSON.
@@ -631,32 +649,33 @@ def wp_oembed_ensure_format(format=None, *args_):
 #// @param WP_REST_Server            $server  Server instance.
 #// @return true
 #//
-def _oembed_rest_pre_serve_request(served=None, result=None, request=None, server=None, *args_):
+def _oembed_rest_pre_serve_request(served_=None, result_=None, request_=None, server_=None, *_args_):
     
-    params = request.get_params()
-    if "/oembed/1.0/embed" != request.get_route() or "GET" != request.get_method():
-        return served
+    
+    params_ = request_.get_params()
+    if "/oembed/1.0/embed" != request_.get_route() or "GET" != request_.get_method():
+        return served_
     # end if
-    if (not (php_isset(lambda : params["format"]))) or "xml" != params["format"]:
-        return served
+    if (not (php_isset(lambda : params_["format"]))) or "xml" != params_["format"]:
+        return served_
     # end if
     #// Embed links inside the request.
-    data = server.response_to_data(result, False)
+    data_ = server_.response_to_data(result_, False)
     if (not php_class_exists("SimpleXMLElement")):
         status_header(501)
         php_print(get_status_header_desc(501))
         php_exit()
     # end if
-    result = _oembed_create_xml(data)
+    result_ = _oembed_create_xml(data_)
     #// Bail if there's no XML.
-    if (not result):
+    if (not result_):
         status_header(501)
         return get_status_header_desc(501)
     # end if
     if (not php_headers_sent()):
-        server.send_header("Content-Type", "text/xml; charset=" + get_option("blog_charset"))
+        server_.send_header("Content-Type", "text/xml; charset=" + get_option("blog_charset"))
     # end if
-    php_print(result)
+    php_print(result_)
     return True
 # end def _oembed_rest_pre_serve_request
 #// 
@@ -669,26 +688,27 @@ def _oembed_rest_pre_serve_request(served=None, result=None, request=None, serve
 #// @param SimpleXMLElement $node Optional. XML node to append the result to recursively.
 #// @return string|false XML string on success, false on error.
 #//
-def _oembed_create_xml(data=None, node=None, *args_):
+def _oembed_create_xml(data_=None, node_=None, *_args_):
     
-    if (not php_is_array(data)) or php_empty(lambda : data):
+    
+    if (not php_is_array(data_)) or php_empty(lambda : data_):
         return False
     # end if
-    if None == node:
-        node = php_new_class("SimpleXMLElement", lambda : SimpleXMLElement("<oembed></oembed>"))
+    if None == node_:
+        node_ = php_new_class("SimpleXMLElement", lambda : SimpleXMLElement("<oembed></oembed>"))
     # end if
-    for key,value in data:
-        if php_is_numeric(key):
-            key = "oembed"
+    for key_,value_ in data_:
+        if php_is_numeric(key_):
+            key_ = "oembed"
         # end if
-        if php_is_array(value):
-            item = node.addchild(key)
-            _oembed_create_xml(value, item)
+        if php_is_array(value_):
+            item_ = node_.addchild(key_)
+            _oembed_create_xml(value_, item_)
         else:
-            node.addchild(key, esc_html(value))
+            node_.addchild(key_, esc_html(value_))
         # end if
     # end for
-    return node.asxml()
+    return node_.asxml()
 # end def _oembed_create_xml
 #// 
 #// Filters the given oEmbed HTML to make sure iframes have a title attribute.
@@ -700,16 +720,17 @@ def _oembed_create_xml(data=None, node=None, *args_):
 #// @param string $url    The URL of the content to be embedded.
 #// @return string The filtered oEmbed result.
 #//
-def wp_filter_oembed_iframe_title_attribute(result=None, data=None, url=None, *args_):
+def wp_filter_oembed_iframe_title_attribute(result_=None, data_=None, url_=None, *_args_):
     
-    if False == result or (not php_in_array(data.type, Array("rich", "video"))):
-        return result
+    
+    if False == result_ or (not php_in_array(data_.type, Array("rich", "video"))):
+        return result_
     # end if
-    title = data.title if (not php_empty(lambda : data.title)) else ""
-    pattern = "`<iframe[^>]*?title=(\\\\'|\\\\\"|['\"])([^>]*?)\\1`i"
-    has_title_attr = php_preg_match(pattern, result, matches)
-    if has_title_attr and (not php_empty(lambda : matches[2])):
-        title = matches[2]
+    title_ = data_.title if (not php_empty(lambda : data_.title)) else ""
+    pattern_ = "`<iframe[^>]*?title=(\\\\'|\\\\\"|['\"])([^>]*?)\\1`i"
+    has_title_attr_ = php_preg_match(pattern_, result_, matches_)
+    if has_title_attr_ and (not php_empty(lambda : matches_[2])):
+        title_ = matches_[2]
     # end if
     #// 
     #// Filters the title attribute of the given oEmbed HTML iframe.
@@ -721,15 +742,15 @@ def wp_filter_oembed_iframe_title_attribute(result=None, data=None, url=None, *a
     #// @param object $data   A data object result from an oEmbed provider.
     #// @param string $url    The URL of the content to be embedded.
     #//
-    title = apply_filters("oembed_iframe_title_attribute", title, result, data, url)
-    if "" == title:
-        return result
+    title_ = apply_filters("oembed_iframe_title_attribute", title_, result_, data_, url_)
+    if "" == title_:
+        return result_
     # end if
-    if has_title_attr:
+    if has_title_attr_:
         #// Remove the old title, $matches[1]: quote, $matches[2]: title attribute value.
-        result = php_str_replace(" title=" + matches[1] + matches[2] + matches[1], "", result)
+        result_ = php_str_replace(" title=" + matches_[1] + matches_[2] + matches_[1], "", result_)
     # end if
-    return php_str_ireplace("<iframe ", php_sprintf("<iframe title=\"%s\" ", esc_attr(title)), result)
+    return php_str_ireplace("<iframe ", php_sprintf("<iframe title=\"%s\" ", esc_attr(title_)), result_)
 # end def wp_filter_oembed_iframe_title_attribute
 #// 
 #// Filters the given oEmbed HTML.
@@ -746,42 +767,43 @@ def wp_filter_oembed_iframe_title_attribute(result=None, data=None, url=None, *a
 #// @param string $url    The URL of the content to be embedded.
 #// @return string The filtered and sanitized oEmbed result.
 #//
-def wp_filter_oembed_result(result=None, data=None, url=None, *args_):
+def wp_filter_oembed_result(result_=None, data_=None, url_=None, *_args_):
     
-    if False == result or (not php_in_array(data.type, Array("rich", "video"))):
-        return result
+    
+    if False == result_ or (not php_in_array(data_.type, Array("rich", "video"))):
+        return result_
     # end if
-    wp_filter_oembed_result.wp_oembed = _wp_oembed_get_object()
+    wp_oembed_ = _wp_oembed_get_object()
     #// Don't modify the HTML for trusted providers.
-    if False != wp_filter_oembed_result.wp_oembed.get_provider(url, Array({"discover": False})):
-        return result
+    if False != wp_oembed_.get_provider(url_, Array({"discover": False})):
+        return result_
     # end if
-    allowed_html = Array({"a": Array({"href": True})}, {"blockquote": Array(), "iframe": Array({"src": True, "width": True, "height": True, "frameborder": True, "marginwidth": True, "marginheight": True, "scrolling": True, "title": True})})
-    html = wp_kses(result, allowed_html)
-    php_preg_match("|(<blockquote>.*?</blockquote>)?.*(<iframe.*?></iframe>)|ms", html, content)
+    allowed_html_ = Array({"a": Array({"href": True})}, {"blockquote": Array(), "iframe": Array({"src": True, "width": True, "height": True, "frameborder": True, "marginwidth": True, "marginheight": True, "scrolling": True, "title": True})})
+    html_ = wp_kses(result_, allowed_html_)
+    php_preg_match("|(<blockquote>.*?</blockquote>)?.*(<iframe.*?></iframe>)|ms", html_, content_)
     #// We require at least the iframe to exist.
-    if php_empty(lambda : content[2]):
+    if php_empty(lambda : content_[2]):
         return False
     # end if
-    html = content[1] + content[2]
-    php_preg_match("/ src=(['\"])(.*?)\\1/", html, results)
-    if (not php_empty(lambda : results)):
-        secret = wp_generate_password(10, False)
-        url = esc_url(str(results[2]) + str("#?secret=") + str(secret))
-        q = results[1]
-        html = php_str_replace(results[0], " src=" + q + url + q + " data-secret=" + q + secret + q, html)
-        html = php_str_replace("<blockquote", str("<blockquote data-secret=\"") + str(secret) + str("\""), html)
+    html_ = content_[1] + content_[2]
+    php_preg_match("/ src=(['\"])(.*?)\\1/", html_, results_)
+    if (not php_empty(lambda : results_)):
+        secret_ = wp_generate_password(10, False)
+        url_ = esc_url(str(results_[2]) + str("#?secret=") + str(secret_))
+        q_ = results_[1]
+        html_ = php_str_replace(results_[0], " src=" + q_ + url_ + q_ + " data-secret=" + q_ + secret_ + q_, html_)
+        html_ = php_str_replace("<blockquote", str("<blockquote data-secret=\"") + str(secret_) + str("\""), html_)
     # end if
-    allowed_html["blockquote"]["data-secret"] = True
-    allowed_html["iframe"]["data-secret"] = True
-    html = wp_kses(html, allowed_html)
-    if (not php_empty(lambda : content[1])):
+    allowed_html_["blockquote"]["data-secret"] = True
+    allowed_html_["iframe"]["data-secret"] = True
+    html_ = wp_kses(html_, allowed_html_)
+    if (not php_empty(lambda : content_[1])):
         #// We have a blockquote to fall back on. Hide the iframe by default.
-        html = php_str_replace("<iframe", "<iframe style=\"position: absolute; clip: rect(1px, 1px, 1px, 1px);\"", html)
-        html = php_str_replace("<blockquote", "<blockquote class=\"wp-embedded-content\"", html)
+        html_ = php_str_replace("<iframe", "<iframe style=\"position: absolute; clip: rect(1px, 1px, 1px, 1px);\"", html_)
+        html_ = php_str_replace("<blockquote", "<blockquote class=\"wp-embedded-content\"", html_)
     # end if
-    html = php_str_ireplace("<iframe", "<iframe class=\"wp-embedded-content\" sandbox=\"allow-scripts\" security=\"restricted\"", html)
-    return html
+    html_ = php_str_ireplace("<iframe", "<iframe class=\"wp-embedded-content\" sandbox=\"allow-scripts\" security=\"restricted\"", html_)
+    return html_
 # end def wp_filter_oembed_result
 #// 
 #// Filters the string in the 'more' link displayed after a trimmed excerpt.
@@ -794,13 +816,14 @@ def wp_filter_oembed_result(result=None, data=None, url=None, *args_):
 #// @param string $more_string Default 'more' string.
 #// @return string 'Continue reading' link prepended with an ellipsis.
 #//
-def wp_embed_excerpt_more(more_string=None, *args_):
+def wp_embed_excerpt_more(more_string_=None, *_args_):
+    
     
     if (not is_embed()):
-        return more_string
+        return more_string_
     # end if
-    link = php_sprintf("<a href=\"%1$s\" class=\"wp-embed-more\" target=\"_top\">%2$s</a>", esc_url(get_permalink()), php_sprintf(__("Continue reading %s"), "<span class=\"screen-reader-text\">" + get_the_title() + "</span>"))
-    return " &hellip; " + link
+    link_ = php_sprintf("<a href=\"%1$s\" class=\"wp-embed-more\" target=\"_top\">%2$s</a>", esc_url(get_permalink()), php_sprintf(__("Continue reading %s"), "<span class=\"screen-reader-text\">" + get_the_title() + "</span>"))
+    return " &hellip; " + link_
 # end def wp_embed_excerpt_more
 #// 
 #// Displays the post excerpt for the embed template.
@@ -809,9 +832,10 @@ def wp_embed_excerpt_more(more_string=None, *args_):
 #// 
 #// @since 4.4.0
 #//
-def the_excerpt_embed(*args_):
+def the_excerpt_embed(*_args_):
     
-    output = get_the_excerpt()
+    
+    output_ = get_the_excerpt()
     #// 
     #// Filters the post excerpt for the embed template.
     #// 
@@ -819,7 +843,7 @@ def the_excerpt_embed(*args_):
     #// 
     #// @param string $output The current post excerpt.
     #//
-    php_print(apply_filters("the_excerpt_embed", output))
+    php_print(apply_filters("the_excerpt_embed", output_))
 # end def the_excerpt_embed
 #// 
 #// Filters the post excerpt for the embed template.
@@ -831,12 +855,13 @@ def the_excerpt_embed(*args_):
 #// @param string $content The current post excerpt.
 #// @return string The modified post excerpt.
 #//
-def wp_embed_excerpt_attachment(content=None, *args_):
+def wp_embed_excerpt_attachment(content_=None, *_args_):
+    
     
     if is_attachment():
         return prepend_attachment("")
     # end if
-    return content
+    return content_
 # end def wp_embed_excerpt_attachment
 #// 
 #// Enqueue embed iframe default CSS and JS & fire do_action('enqueue_embed_scripts')
@@ -848,7 +873,8 @@ def wp_embed_excerpt_attachment(content=None, *args_):
 #// 
 #// @since 4.4.0
 #//
-def enqueue_embed_scripts(*args_):
+def enqueue_embed_scripts(*_args_):
+    
     
     wp_enqueue_style("wp-embed-template-ie")
     #// 
@@ -863,11 +889,12 @@ def enqueue_embed_scripts(*args_):
 #// 
 #// @since 4.4.0
 #//
-def print_embed_styles(*args_):
+def print_embed_styles(*_args_):
     
-    type_attr = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
+    
+    type_attr_ = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
     php_print(" <style")
-    php_print(type_attr)
+    php_print(type_attr_)
     php_print(">\n  ")
     if SCRIPT_DEBUG:
         readfile(ABSPATH + WPINC + "/css/wp-embed-template.css")
@@ -882,11 +909,12 @@ def print_embed_styles(*args_):
 #// 
 #// @since 4.4.0
 #//
-def print_embed_scripts(*args_):
+def print_embed_scripts(*_args_):
     
-    type_attr = "" if current_theme_supports("html5", "script") else " type=\"text/javascript\""
+    
+    type_attr_ = "" if current_theme_supports("html5", "script") else " type=\"text/javascript\""
     php_print(" <script")
-    php_print(type_attr)
+    php_print(type_attr_)
     php_print(">\n  ")
     if SCRIPT_DEBUG:
         readfile(ABSPATH + WPINC + "/js/wp-embed-template.js")
@@ -905,16 +933,18 @@ def print_embed_scripts(*args_):
 #// @param string $content The content to filter.
 #// @return string The filtered content.
 #//
-def _oembed_filter_feed_content(content=None, *args_):
+def _oembed_filter_feed_content(content_=None, *_args_):
     
-    return php_str_replace("<iframe class=\"wp-embedded-content\" sandbox=\"allow-scripts\" security=\"restricted\" style=\"position: absolute; clip: rect(1px, 1px, 1px, 1px);\"", "<iframe class=\"wp-embedded-content\" sandbox=\"allow-scripts\" security=\"restricted\"", content)
+    
+    return php_str_replace("<iframe class=\"wp-embedded-content\" sandbox=\"allow-scripts\" security=\"restricted\" style=\"position: absolute; clip: rect(1px, 1px, 1px, 1px);\"", "<iframe class=\"wp-embedded-content\" sandbox=\"allow-scripts\" security=\"restricted\"", content_)
 # end def _oembed_filter_feed_content
 #// 
 #// Prints the necessary markup for the embed comments button.
 #// 
 #// @since 4.4.0
 #//
-def print_embed_comments_button(*args_):
+def print_embed_comments_button(*_args_):
+    
     
     if is_404() or (not get_comments_number() or comments_open()):
         return
@@ -930,7 +960,8 @@ def print_embed_comments_button(*args_):
 #// 
 #// @since 4.4.0
 #//
-def print_embed_sharing_button(*args_):
+def print_embed_sharing_button(*_args_):
+    
     
     if is_404():
         return
@@ -948,7 +979,8 @@ def print_embed_sharing_button(*args_):
 #// 
 #// @since 4.4.0
 #//
-def print_embed_sharing_dialog(*args_):
+def print_embed_sharing_dialog(*_args_):
+    
     
     if is_404():
         return
@@ -1003,10 +1035,11 @@ def print_embed_sharing_dialog(*args_):
 #// 
 #// @since 4.5.0
 #//
-def the_embed_site_title(*args_):
+def the_embed_site_title(*_args_):
     
-    site_title = php_sprintf("<a href=\"%s\" target=\"_top\"><img src=\"%s\" srcset=\"%s 2x\" width=\"32\" height=\"32\" alt=\"\" class=\"wp-embed-site-icon\"/><span>%s</span></a>", esc_url(home_url()), esc_url(get_site_icon_url(32, admin_url("images/w-logo-blue.png"))), esc_url(get_site_icon_url(64, admin_url("images/w-logo-blue.png"))), esc_html(get_bloginfo("name")))
-    site_title = "<div class=\"wp-embed-site-title\">" + site_title + "</div>"
+    
+    site_title_ = php_sprintf("<a href=\"%s\" target=\"_top\"><img src=\"%s\" srcset=\"%s 2x\" width=\"32\" height=\"32\" alt=\"\" class=\"wp-embed-site-icon\"/><span>%s</span></a>", esc_url(home_url()), esc_url(get_site_icon_url(32, admin_url("images/w-logo-blue.png"))), esc_url(get_site_icon_url(64, admin_url("images/w-logo-blue.png"))), esc_html(get_bloginfo("name")))
+    site_title_ = "<div class=\"wp-embed-site-title\">" + site_title_ + "</div>"
     #// 
     #// Filters the site title HTML in the embed footer.
     #// 
@@ -1014,7 +1047,7 @@ def the_embed_site_title(*args_):
     #// 
     #// @param string $site_title The site title HTML.
     #//
-    php_print(apply_filters("embed_site_title_html", site_title))
+    php_print(apply_filters("embed_site_title_html", site_title_))
 # end def the_embed_site_title
 #// 
 #// Filters the oEmbed result before any HTTP requests are made.
@@ -1030,11 +1063,12 @@ def the_embed_site_title(*args_):
 #// @return null|string The UNSANITIZED (and potentially unsafe) HTML that should be used to embed.
 #// Null if the URL does not belong to the current site.
 #//
-def wp_filter_pre_oembed_result(result=None, url=None, args=None, *args_):
+def wp_filter_pre_oembed_result(result_=None, url_=None, args_=None, *_args_):
     
-    data = get_oembed_response_data_for_url(url, args)
-    if data:
-        return _wp_oembed_get_object().data2html(data, url)
+    
+    data_ = get_oembed_response_data_for_url(url_, args_)
+    if data_:
+        return _wp_oembed_get_object().data2html(data_, url_)
     # end if
-    return result
+    return result_
 # end def wp_filter_pre_oembed_result

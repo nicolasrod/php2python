@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,8 +24,31 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Section
 #//
 class WP_Customize_Themes_Section(WP_Customize_Section):
+    #// 
+    #// Section type.
+    #// 
+    #// @since 4.2.0
+    #// @var string
+    #//
     type = "themes"
+    #// 
+    #// Theme section action.
+    #// 
+    #// Defines the type of themes to load (installed, wporg, etc.).
+    #// 
+    #// @since 4.9.0
+    #// @var string
+    #//
     action = ""
+    #// 
+    #// Theme section filter type.
+    #// 
+    #// Determines whether filters are applied to loaded (local) themes or by initiating a new remote query (remote).
+    #// When filtering is local, the initial themes query is not paginated by default.
+    #// 
+    #// @since 4.9.0
+    #// @var string
+    #//
     filter_type = "local"
     #// 
     #// Get section parameters for JS.
@@ -40,10 +58,11 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
     #//
     def json(self):
         
-        exported = super().json()
-        exported["action"] = self.action
-        exported["filter_type"] = self.filter_type
-        return exported
+        
+        exported_ = super().json()
+        exported_["action"] = self.action
+        exported_["filter_type"] = self.filter_type
+        return exported_
     # end def json
     #// 
     #// Render a themes section as a JS template.
@@ -53,6 +72,7 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
     #// @since 4.9.0
     #//
     def render_template(self):
+        
         
         php_print("     <li id=\"accordion-section-{{ data.id }}\" class=\"theme-section\">\n           <button type=\"button\" class=\"customize-themes-section-title themes-section-{{ data.id }}\">{{ data.title }}</button>\n           ")
         if current_user_can("install_themes") or is_multisite():
@@ -94,6 +114,7 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
     #// @since 4.9.0
     #//
     def filter_bar_content_template(self):
+        
         
         php_print("     <button type=\"button\" class=\"button button-primary customize-section-back customize-themes-mobile-back\">")
         _e("Back to theme sources")
@@ -143,22 +164,23 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
     #//
     def filter_drawer_content_template(self):
         
-        feature_list = get_theme_feature_list(False)
+        
+        feature_list_ = get_theme_feature_list(False)
         pass
         php_print("     <# if ( 'wporg' === data.action ) { #>\n            <div class=\"filter-drawer filter-details\">\n              ")
-        for feature_name,features in feature_list:
+        for feature_name_,features_ in feature_list_:
             php_print("                 <fieldset class=\"filter-group\">\n                     <legend>")
-            php_print(esc_html(feature_name))
+            php_print(esc_html(feature_name_))
             php_print("</legend>\n                      <div class=\"filter-group-feature\">\n                          ")
-            for feature,feature_name in features:
+            for feature_,feature_name_ in features_:
                 php_print("                             <input type=\"checkbox\" id=\"filter-id-")
-                php_print(esc_attr(feature))
+                php_print(esc_attr(feature_))
                 php_print("\" value=\"")
-                php_print(esc_attr(feature))
+                php_print(esc_attr(feature_))
                 php_print("\" />\n                              <label for=\"filter-id-")
-                php_print(esc_attr(feature))
+                php_print(esc_attr(feature_))
                 php_print("\">")
-                php_print(esc_html(feature_name))
+                php_print(esc_html(feature_name_))
                 php_print("</label>\n                           ")
             # end for
             php_print("                     </div>\n                    </fieldset>\n               ")

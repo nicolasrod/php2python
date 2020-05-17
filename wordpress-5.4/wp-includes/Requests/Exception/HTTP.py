@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,7 +18,17 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package Requests
 #//
 class Requests_Exception_HTTP(Requests_Exception):
+    #// 
+    #// HTTP status code
+    #// 
+    #// @var integer
+    #//
     code = 0
+    #// 
+    #// Reason phrase
+    #// 
+    #// @var string
+    #//
     reason = "Unknown"
     #// 
     #// Create a new exception
@@ -34,18 +39,20 @@ class Requests_Exception_HTTP(Requests_Exception):
     #// @param string|null $reason Reason phrase
     #// @param mixed $data Associated data
     #//
-    def __init__(self, reason=None, data=None):
+    def __init__(self, reason_=None, data_=None):
         
-        if reason != None:
-            self.reason = reason
+        
+        if reason_ != None:
+            self.reason = reason_
         # end if
-        message = php_sprintf("%d %s", self.code, self.reason)
-        super().__init__(message, "httpresponse", data, self.code)
+        message_ = php_sprintf("%d %s", self.code, self.reason)
+        super().__init__(message_, "httpresponse", data_, self.code)
     # end def __init__
     #// 
     #// Get the status message
     #//
     def getreason(self):
+        
         
         return self.reason
     # end def getreason
@@ -56,12 +63,13 @@ class Requests_Exception_HTTP(Requests_Exception):
     #// @return string Exception class name to use
     #//
     @classmethod
-    def get_class(self, code=None):
+    def get_class(self, code_=None):
         
-        if (not code):
+        
+        if (not code_):
             return "Requests_Exception_HTTP_Unknown"
         # end if
-        class_ = php_sprintf("Requests_Exception_HTTP_%d", code)
+        class_ = php_sprintf("Requests_Exception_HTTP_%d", code_)
         if php_class_exists(class_):
             return class_
         # end if

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,74 +25,75 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @return bool|null|WP_Error True on success, false if `$stylesheet` is empty, WP_Error on failure.
 #// Null if filesystem credentials are required to proceed.
 #//
-def delete_theme(stylesheet=None, redirect="", *args_):
+def delete_theme(stylesheet_=None, redirect_="", *_args_):
     
-    global wp_filesystem
-    php_check_if_defined("wp_filesystem")
-    if php_empty(lambda : stylesheet):
+    
+    global wp_filesystem_
+    php_check_if_defined("wp_filesystem_")
+    if php_empty(lambda : stylesheet_):
         return False
     # end if
-    if php_empty(lambda : redirect):
-        redirect = wp_nonce_url("themes.php?action=delete&stylesheet=" + urlencode(stylesheet), "delete-theme_" + stylesheet)
+    if php_empty(lambda : redirect_):
+        redirect_ = wp_nonce_url("themes.php?action=delete&stylesheet=" + urlencode(stylesheet_), "delete-theme_" + stylesheet_)
     # end if
     ob_start()
-    credentials = request_filesystem_credentials(redirect)
-    data = ob_get_clean()
-    if False == credentials:
-        if (not php_empty(lambda : data)):
+    credentials_ = request_filesystem_credentials(redirect_)
+    data_ = ob_get_clean()
+    if False == credentials_:
+        if (not php_empty(lambda : data_)):
             php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
-            php_print(data)
+            php_print(data_)
             php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
             php_exit(0)
         # end if
         return
     # end if
-    if (not WP_Filesystem(credentials)):
+    if (not WP_Filesystem(credentials_)):
         ob_start()
         #// Failed to connect. Error and request again.
-        request_filesystem_credentials(redirect, "", True)
-        data = ob_get_clean()
-        if (not php_empty(lambda : data)):
+        request_filesystem_credentials(redirect_, "", True)
+        data_ = ob_get_clean()
+        if (not php_empty(lambda : data_)):
             php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
-            php_print(data)
+            php_print(data_)
             php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
             php_exit(0)
         # end if
         return
     # end if
-    if (not php_is_object(wp_filesystem)):
+    if (not php_is_object(wp_filesystem_)):
         return php_new_class("WP_Error", lambda : WP_Error("fs_unavailable", __("Could not access filesystem.")))
     # end if
-    if is_wp_error(wp_filesystem.errors) and wp_filesystem.errors.has_errors():
-        return php_new_class("WP_Error", lambda : WP_Error("fs_error", __("Filesystem error."), wp_filesystem.errors))
+    if is_wp_error(wp_filesystem_.errors) and wp_filesystem_.errors.has_errors():
+        return php_new_class("WP_Error", lambda : WP_Error("fs_error", __("Filesystem error."), wp_filesystem_.errors))
     # end if
     #// Get the base plugin folder.
-    themes_dir = wp_filesystem.wp_themes_dir()
-    if php_empty(lambda : themes_dir):
+    themes_dir_ = wp_filesystem_.wp_themes_dir()
+    if php_empty(lambda : themes_dir_):
         return php_new_class("WP_Error", lambda : WP_Error("fs_no_themes_dir", __("Unable to locate WordPress theme directory.")))
     # end if
-    themes_dir = trailingslashit(themes_dir)
-    theme_dir = trailingslashit(themes_dir + stylesheet)
-    deleted = wp_filesystem.delete(theme_dir, True)
-    if (not deleted):
-        return php_new_class("WP_Error", lambda : WP_Error("could_not_remove_theme", php_sprintf(__("Could not fully remove the theme %s."), stylesheet)))
+    themes_dir_ = trailingslashit(themes_dir_)
+    theme_dir_ = trailingslashit(themes_dir_ + stylesheet_)
+    deleted_ = wp_filesystem_.delete(theme_dir_, True)
+    if (not deleted_):
+        return php_new_class("WP_Error", lambda : WP_Error("could_not_remove_theme", php_sprintf(__("Could not fully remove the theme %s."), stylesheet_)))
     # end if
-    theme_translations = wp_get_installed_translations("themes")
+    theme_translations_ = wp_get_installed_translations("themes")
     #// Remove language files, silently.
-    if (not php_empty(lambda : theme_translations[stylesheet])):
-        translations = theme_translations[stylesheet]
-        for translation,data in translations:
-            wp_filesystem.delete(WP_LANG_DIR + "/themes/" + stylesheet + "-" + translation + ".po")
-            wp_filesystem.delete(WP_LANG_DIR + "/themes/" + stylesheet + "-" + translation + ".mo")
-            json_translation_files = glob(WP_LANG_DIR + "/themes/" + stylesheet + "-" + translation + "-*.json")
-            if json_translation_files:
-                php_array_map(Array(wp_filesystem, "delete"), json_translation_files)
+    if (not php_empty(lambda : theme_translations_[stylesheet_])):
+        translations_ = theme_translations_[stylesheet_]
+        for translation_,data_ in translations_:
+            wp_filesystem_.delete(WP_LANG_DIR + "/themes/" + stylesheet_ + "-" + translation_ + ".po")
+            wp_filesystem_.delete(WP_LANG_DIR + "/themes/" + stylesheet_ + "-" + translation_ + ".mo")
+            json_translation_files_ = glob(WP_LANG_DIR + "/themes/" + stylesheet_ + "-" + translation_ + "-*.json")
+            if json_translation_files_:
+                php_array_map(Array(wp_filesystem_, "delete"), json_translation_files_)
             # end if
         # end for
     # end if
     #// Remove the theme from allowed themes on the network.
     if is_multisite():
-        WP_Theme.network_disable_theme(stylesheet)
+        WP_Theme.network_disable_theme(stylesheet_)
     # end if
     #// Force refresh of theme update information.
     delete_site_transient("update_themes")
@@ -113,9 +109,10 @@ def delete_theme(stylesheet=None, redirect="", *args_):
 #// @param string       $post_type Optional. Post type to get the templates for. Default 'page'.
 #// @return string[] Array of template file names keyed by the template header name.
 #//
-def get_page_templates(post=None, post_type="page", *args_):
+def get_page_templates(post_=None, post_type_="page", *_args_):
     
-    return php_array_flip(wp_get_theme().get_page_templates(post, post_type))
+    
+    return php_array_flip(wp_get_theme().get_page_templates(post_, post_type_))
 # end def get_page_templates
 #// 
 #// Tidies a filename for url display by the theme editor.
@@ -127,9 +124,10 @@ def get_page_templates(post=None, post_type="page", *args_):
 #// @param string $containingfolder Path of the theme parent folder
 #// @return string
 #//
-def _get_template_edit_filename(fullpath=None, containingfolder=None, *args_):
+def _get_template_edit_filename(fullpath_=None, containingfolder_=None, *_args_):
     
-    return php_str_replace(php_dirname(php_dirname(containingfolder)), "", fullpath)
+    
+    return php_str_replace(php_dirname(php_dirname(containingfolder_)), "", fullpath_)
 # end def _get_template_edit_filename
 #// 
 #// Check if there is an update for a theme available.
@@ -141,9 +139,10 @@ def _get_template_edit_filename(fullpath=None, containingfolder=None, *args_):
 #// 
 #// @param WP_Theme $theme Theme data object.
 #//
-def theme_update_available(theme=None, *args_):
+def theme_update_available(theme_=None, *_args_):
     
-    php_print(get_theme_update_available(theme))
+    
+    php_print(get_theme_update_available(theme_))
 # end def theme_update_available
 #// 
 #// Retrieve the update link if there is a theme update available.
@@ -157,37 +156,38 @@ def theme_update_available(theme=None, *args_):
 #// @param WP_Theme $theme WP_Theme object.
 #// @return string|false HTML for the update link, or false if invalid info was passed.
 #//
-def get_theme_update_available(theme=None, *args_):
+def get_theme_update_available(theme_=None, *_args_):
     
-    get_theme_update_available.themes_update = None
+    
+    themes_update_ = None
     if (not current_user_can("update_themes")):
         return False
     # end if
-    if (not (php_isset(lambda : get_theme_update_available.themes_update))):
-        get_theme_update_available.themes_update = get_site_transient("update_themes")
+    if (not (php_isset(lambda : themes_update_))):
+        themes_update_ = get_site_transient("update_themes")
     # end if
-    if (not type(theme).__name__ == "WP_Theme"):
+    if (not type(theme_).__name__ == "WP_Theme"):
         return False
     # end if
-    stylesheet = theme.get_stylesheet()
-    html = ""
-    if (php_isset(lambda : get_theme_update_available.themes_update.response[stylesheet])):
-        update = get_theme_update_available.themes_update.response[stylesheet]
-        theme_name = theme.display("Name")
-        details_url = add_query_arg(Array({"TB_iframe": "true", "width": 1024, "height": 800}), update["url"])
+    stylesheet_ = theme_.get_stylesheet()
+    html_ = ""
+    if (php_isset(lambda : themes_update_.response[stylesheet_])):
+        update_ = themes_update_.response[stylesheet_]
+        theme_name_ = theme_.display("Name")
+        details_url_ = add_query_arg(Array({"TB_iframe": "true", "width": 1024, "height": 800}), update_["url"])
         #// Theme browser inside WP? Replace this. Also, theme preview JS will override this on the available list.
-        update_url = wp_nonce_url(admin_url("update.php?action=upgrade-theme&amp;theme=" + urlencode(stylesheet)), "upgrade-theme_" + stylesheet)
+        update_url_ = wp_nonce_url(admin_url("update.php?action=upgrade-theme&amp;theme=" + urlencode(stylesheet_)), "upgrade-theme_" + stylesheet_)
         if (not is_multisite()):
             if (not current_user_can("update_themes")):
-                html = php_sprintf("<p><strong>" + __("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>.") + "</strong></p>", theme_name, esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_name, update["new_version"]))), update["new_version"])
-            elif php_empty(lambda : update["package"]):
-                html = php_sprintf("<p><strong>" + __("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>") + "</strong></p>", theme_name, esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_name, update["new_version"]))), update["new_version"])
+                html_ = php_sprintf("<p><strong>" + __("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>.") + "</strong></p>", theme_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_name_, update_["new_version"]))), update_["new_version"])
+            elif php_empty(lambda : update_["package"]):
+                html_ = php_sprintf("<p><strong>" + __("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>") + "</strong></p>", theme_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_name_, update_["new_version"]))), update_["new_version"])
             else:
-                html = php_sprintf("<p><strong>" + __("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>.") + "</strong></p>", theme_name, esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_name, update["new_version"]))), update["new_version"], update_url, php_sprintf("aria-label=\"%s\" id=\"update-theme\" data-slug=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), theme_name)), stylesheet))
+                html_ = php_sprintf("<p><strong>" + __("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>.") + "</strong></p>", theme_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_name_, update_["new_version"]))), update_["new_version"], update_url_, php_sprintf("aria-label=\"%s\" id=\"update-theme\" data-slug=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), theme_name_)), stylesheet_))
             # end if
         # end if
     # end if
-    return html
+    return html_
 # end def get_theme_update_available
 #// 
 #// Retrieve list of WordPress theme features (aka theme tags).
@@ -197,44 +197,47 @@ def get_theme_update_available(theme=None, *args_):
 #// @param bool $api Optional. Whether try to fetch tags from the WordPress.org API. Defaults to true.
 #// @return array Array of features keyed by category with translations keyed by slug.
 #//
-def get_theme_feature_list(api=True, *args_):
+def get_theme_feature_list(api_=None, *_args_):
+    if api_ is None:
+        api_ = True
+    # end if
     
     #// Hard-coded list is used if API is not accessible.
-    features = Array({__("Subject"): Array({"blog": __("Blog"), "e-commerce": __("E-Commerce"), "education": __("Education"), "entertainment": __("Entertainment"), "food-and-drink": __("Food & Drink"), "holiday": __("Holiday"), "news": __("News"), "photography": __("Photography"), "portfolio": __("Portfolio")})}, {__("Features"): Array({"accessibility-ready": __("Accessibility Ready"), "custom-background": __("Custom Background"), "custom-colors": __("Custom Colors"), "custom-header": __("Custom Header"), "custom-logo": __("Custom Logo"), "editor-style": __("Editor Style"), "featured-image-header": __("Featured Image Header"), "featured-images": __("Featured Images"), "footer-widgets": __("Footer Widgets"), "full-width-template": __("Full Width Template"), "post-formats": __("Post Formats"), "sticky-post": __("Sticky Post"), "theme-options": __("Theme Options")})}, {__("Layout"): Array({"grid-layout": __("Grid Layout"), "one-column": __("One Column"), "two-columns": __("Two Columns"), "three-columns": __("Three Columns"), "four-columns": __("Four Columns"), "left-sidebar": __("Left Sidebar"), "right-sidebar": __("Right Sidebar")})})
-    if (not api) or (not current_user_can("install_themes")):
-        return features
+    features_ = Array({__("Subject"): Array({"blog": __("Blog"), "e-commerce": __("E-Commerce"), "education": __("Education"), "entertainment": __("Entertainment"), "food-and-drink": __("Food & Drink"), "holiday": __("Holiday"), "news": __("News"), "photography": __("Photography"), "portfolio": __("Portfolio")})}, {__("Features"): Array({"accessibility-ready": __("Accessibility Ready"), "custom-background": __("Custom Background"), "custom-colors": __("Custom Colors"), "custom-header": __("Custom Header"), "custom-logo": __("Custom Logo"), "editor-style": __("Editor Style"), "featured-image-header": __("Featured Image Header"), "featured-images": __("Featured Images"), "footer-widgets": __("Footer Widgets"), "full-width-template": __("Full Width Template"), "post-formats": __("Post Formats"), "sticky-post": __("Sticky Post"), "theme-options": __("Theme Options")})}, {__("Layout"): Array({"grid-layout": __("Grid Layout"), "one-column": __("One Column"), "two-columns": __("Two Columns"), "three-columns": __("Three Columns"), "four-columns": __("Four Columns"), "left-sidebar": __("Left Sidebar"), "right-sidebar": __("Right Sidebar")})})
+    if (not api_) or (not current_user_can("install_themes")):
+        return features_
     # end if
-    feature_list = get_site_transient("wporg_theme_feature_list")
-    if (not feature_list):
+    feature_list_ = get_site_transient("wporg_theme_feature_list")
+    if (not feature_list_):
         set_site_transient("wporg_theme_feature_list", Array(), 3 * HOUR_IN_SECONDS)
     # end if
-    if (not feature_list):
-        feature_list = themes_api("feature_list", Array())
-        if is_wp_error(feature_list):
-            return features
+    if (not feature_list_):
+        feature_list_ = themes_api("feature_list", Array())
+        if is_wp_error(feature_list_):
+            return features_
         # end if
     # end if
-    if (not feature_list):
-        return features
+    if (not feature_list_):
+        return features_
     # end if
-    set_site_transient("wporg_theme_feature_list", feature_list, 3 * HOUR_IN_SECONDS)
-    category_translations = Array({"Layout": __("Layout"), "Features": __("Features"), "Subject": __("Subject")})
+    set_site_transient("wporg_theme_feature_list", feature_list_, 3 * HOUR_IN_SECONDS)
+    category_translations_ = Array({"Layout": __("Layout"), "Features": __("Features"), "Subject": __("Subject")})
     #// Loop over the wp.org canonical list and apply translations.
-    wporg_features = Array()
-    for feature_category,feature_items in feature_list:
-        if (php_isset(lambda : category_translations[feature_category])):
-            feature_category = category_translations[feature_category]
+    wporg_features_ = Array()
+    for feature_category_,feature_items_ in feature_list_:
+        if (php_isset(lambda : category_translations_[feature_category_])):
+            feature_category_ = category_translations_[feature_category_]
         # end if
-        wporg_features[feature_category] = Array()
-        for feature in feature_items:
-            if (php_isset(lambda : features[feature_category][feature])):
-                wporg_features[feature_category][feature] = features[feature_category][feature]
+        wporg_features_[feature_category_] = Array()
+        for feature_ in feature_items_:
+            if (php_isset(lambda : features_[feature_category_][feature_])):
+                wporg_features_[feature_category_][feature_] = features_[feature_category_][feature_]
             else:
-                wporg_features[feature_category][feature] = feature
+                wporg_features_[feature_category_][feature_] = feature_
             # end if
         # end for
     # end for
-    return wporg_features
+    return wporg_features_
 # end def get_theme_feature_list
 #// 
 #// Retrieves theme installer pages from the WordPress.org Themes API.
@@ -317,23 +320,26 @@ def get_theme_feature_list(api=True, *args_):
 #// {@link https://developer.wordpress.org/reference/functions/themes_api/ function reference article}
 #// for more information on the make-up of possible return objects depending on the value of `$action`.
 #//
-def themes_api(action=None, args=Array(), *args_):
+def themes_api(action_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Include an unmodified $wp_version.
     php_include_file(ABSPATH + WPINC + "/version.php", once=False)
-    if php_is_array(args):
-        args = args
+    if php_is_array(args_):
+        args_ = args_
     # end if
-    if "query_themes" == action:
-        if (not (php_isset(lambda : args.per_page))):
-            args.per_page = 24
+    if "query_themes" == action_:
+        if (not (php_isset(lambda : args_.per_page))):
+            args_.per_page = 24
         # end if
     # end if
-    if (not (php_isset(lambda : args.locale))):
-        args.locale = get_user_locale()
+    if (not (php_isset(lambda : args_.locale))):
+        args_.locale = get_user_locale()
     # end if
-    if (not (php_isset(lambda : args.wp_version))):
-        args.wp_version = php_substr(wp_version, 0, 3)
+    if (not (php_isset(lambda : args_.wp_version))):
+        args_.wp_version = php_substr(wp_version_, 0, 3)
         pass
     # end if
     #// 
@@ -347,7 +353,7 @@ def themes_api(action=None, args=Array(), *args_):
     #// @param string $action Requested action. Likely values are 'theme_information',
     #// 'feature_list', or 'query_themes'.
     #//
-    args = apply_filters("themes_api_args", args, action)
+    args_ = apply_filters("themes_api_args", args_, action_)
     #// 
     #// Filters whether to override the WordPress.org Themes API.
     #// 
@@ -363,46 +369,46 @@ def themes_api(action=None, args=Array(), *args_):
     #// 'feature_list', or 'query_themes'.
     #// @param object             $args     Arguments used to query for installer pages from the Themes API.
     #//
-    res = apply_filters("themes_api", False, action, args)
-    if (not res):
-        url = "http://api.wordpress.org/themes/info/1.2/"
-        url = add_query_arg(Array({"action": action, "request": args}), url)
-        http_url = url
-        ssl = wp_http_supports(Array("ssl"))
-        if ssl:
-            url = set_url_scheme(url, "https")
+    res_ = apply_filters("themes_api", False, action_, args_)
+    if (not res_):
+        url_ = "http://api.wordpress.org/themes/info/1.2/"
+        url_ = add_query_arg(Array({"action": action_, "request": args_}), url_)
+        http_url_ = url_
+        ssl_ = wp_http_supports(Array("ssl"))
+        if ssl_:
+            url_ = set_url_scheme(url_, "https")
         # end if
-        http_args = Array({"user-agent": "WordPress/" + wp_version + "; " + home_url("/")})
-        request = wp_remote_get(url, http_args)
-        if ssl and is_wp_error(request):
+        http_args_ = Array({"user-agent": "WordPress/" + wp_version_ + "; " + home_url("/")})
+        request_ = wp_remote_get(url_, http_args_)
+        if ssl_ and is_wp_error(request_):
             if (not wp_doing_ajax()):
                 trigger_error(php_sprintf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/")) + " " + __("(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)"), E_USER_WARNING if php_headers_sent() or WP_DEBUG else E_USER_NOTICE)
             # end if
-            request = wp_remote_get(http_url, http_args)
+            request_ = wp_remote_get(http_url_, http_args_)
         # end if
-        if is_wp_error(request):
-            res = php_new_class("WP_Error", lambda : WP_Error("themes_api_failed", php_sprintf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/")), request.get_error_message()))
+        if is_wp_error(request_):
+            res_ = php_new_class("WP_Error", lambda : WP_Error("themes_api_failed", php_sprintf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/")), request_.get_error_message()))
         else:
-            res = php_json_decode(wp_remote_retrieve_body(request), True)
-            if php_is_array(res):
+            res_ = php_json_decode(wp_remote_retrieve_body(request_), True)
+            if php_is_array(res_):
                 #// Object casting is required in order to match the info/1.0 format.
-                res = res
-            elif None == res:
-                res = php_new_class("WP_Error", lambda : WP_Error("themes_api_failed", php_sprintf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/")), wp_remote_retrieve_body(request)))
+                res_ = res_
+            elif None == res_:
+                res_ = php_new_class("WP_Error", lambda : WP_Error("themes_api_failed", php_sprintf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/")), wp_remote_retrieve_body(request_)))
             # end if
-            if (php_isset(lambda : res.error)):
-                res = php_new_class("WP_Error", lambda : WP_Error("themes_api_failed", res.error))
+            if (php_isset(lambda : res_.error)):
+                res_ = php_new_class("WP_Error", lambda : WP_Error("themes_api_failed", res_.error))
             # end if
         # end if
         #// Back-compat for info/1.2 API, upgrade the theme objects in query_themes to objects.
-        if "query_themes" == action:
-            for i,theme in res.themes:
-                res.themes[i] = theme
+        if "query_themes" == action_:
+            for i_,theme_ in res_.themes:
+                res_.themes[i_] = theme_
             # end for
         # end if
         #// Back-compat for info/1.2 API, downgrade the feature_list result back to an array.
-        if "feature_list" == action:
-            res = res
+        if "feature_list" == action_:
+            res_ = res_
         # end if
     # end if
     #// 
@@ -415,7 +421,7 @@ def themes_api(action=None, args=Array(), *args_):
     #// 'feature_list', or 'query_themes'.
     #// @param object                $args   Arguments used to query for installer pages from the WordPress.org Themes API.
     #//
-    return apply_filters("themes_api_result", res, action, args)
+    return apply_filters("themes_api_result", res_, action_, args_)
 # end def themes_api
 #// 
 #// Prepare themes for JavaScript.
@@ -427,9 +433,10 @@ def themes_api(action=None, args=Array(), *args_):
 #// 
 #// @return array An associative array of theme data, sorted by name.
 #//
-def wp_prepare_themes_for_js(themes=None, *args_):
+def wp_prepare_themes_for_js(themes_=None, *_args_):
     
-    current_theme = get_stylesheet()
+    
+    current_theme_ = get_stylesheet()
     #// 
     #// Filters theme data before it is prepared for JavaScript.
     #// 
@@ -442,45 +449,45 @@ def wp_prepare_themes_for_js(themes=None, *args_):
     #// @param WP_Theme[]|null $themes          An array of theme objects to prepare, if any.
     #// @param string          $current_theme   The current theme slug.
     #//
-    prepared_themes = apply_filters("pre_prepare_themes_for_js", Array(), themes, current_theme)
-    if (not php_empty(lambda : prepared_themes)):
-        return prepared_themes
+    prepared_themes_ = apply_filters("pre_prepare_themes_for_js", Array(), themes_, current_theme_)
+    if (not php_empty(lambda : prepared_themes_)):
+        return prepared_themes_
     # end if
     #// Make sure the current theme is listed first.
-    prepared_themes[current_theme] = Array()
-    if None == themes:
-        themes = wp_get_themes(Array({"allowed": True}))
-        if (not (php_isset(lambda : themes[current_theme]))):
-            themes[current_theme] = wp_get_theme()
+    prepared_themes_[current_theme_] = Array()
+    if None == themes_:
+        themes_ = wp_get_themes(Array({"allowed": True}))
+        if (not (php_isset(lambda : themes_[current_theme_]))):
+            themes_[current_theme_] = wp_get_theme()
         # end if
     # end if
-    updates = Array()
+    updates_ = Array()
     if current_user_can("update_themes"):
-        updates_transient = get_site_transient("update_themes")
-        if (php_isset(lambda : updates_transient.response)):
-            updates = updates_transient.response
+        updates_transient_ = get_site_transient("update_themes")
+        if (php_isset(lambda : updates_transient_.response)):
+            updates_ = updates_transient_.response
         # end if
     # end if
-    WP_Theme.sort_by_name(themes)
-    parents = Array()
-    for theme in themes:
-        slug = theme.get_stylesheet()
-        encoded_slug = urlencode(slug)
-        parent = False
-        if theme.parent():
-            parent = theme.parent()
-            parents[slug] = parent.get_stylesheet()
-            parent = parent.display("Name")
+    WP_Theme.sort_by_name(themes_)
+    parents_ = Array()
+    for theme_ in themes_:
+        slug_ = theme_.get_stylesheet()
+        encoded_slug_ = urlencode(slug_)
+        parent_ = False
+        if theme_.parent():
+            parent_ = theme_.parent()
+            parents_[slug_] = parent_.get_stylesheet()
+            parent_ = parent_.display("Name")
         # end if
-        customize_action = None
+        customize_action_ = None
         if current_user_can("edit_theme_options") and current_user_can("customize"):
-            customize_action = esc_url(add_query_arg(Array({"return": urlencode(esc_url_raw(remove_query_arg(wp_removable_query_args(), wp_unslash(PHP_SERVER["REQUEST_URI"]))))}), wp_customize_url(slug)))
+            customize_action_ = esc_url(add_query_arg(Array({"return": urlencode(esc_url_raw(remove_query_arg(wp_removable_query_args(), wp_unslash(PHP_SERVER["REQUEST_URI"]))))}), wp_customize_url(slug_)))
         # end if
-        prepared_themes[slug] = Array({"id": slug, "name": theme.display("Name"), "screenshot": Array(theme.get_screenshot()), "description": theme.display("Description"), "author": theme.display("Author", False, True), "authorAndUri": theme.display("Author"), "version": theme.display("Version"), "tags": theme.display("Tags"), "parent": parent, "active": slug == current_theme, "hasUpdate": (php_isset(lambda : updates[slug])), "hasPackage": (php_isset(lambda : updates[slug])) and (not php_empty(lambda : updates[slug]["package"])), "update": get_theme_update_available(theme), "actions": Array({"activate": wp_nonce_url(admin_url("themes.php?action=activate&amp;stylesheet=" + encoded_slug), "switch-theme_" + slug) if current_user_can("switch_themes") else None, "customize": customize_action, "delete": wp_nonce_url(admin_url("themes.php?action=delete&amp;stylesheet=" + encoded_slug), "delete-theme_" + slug) if current_user_can("delete_themes") else None})})
+        prepared_themes_[slug_] = Array({"id": slug_, "name": theme_.display("Name"), "screenshot": Array(theme_.get_screenshot()), "description": theme_.display("Description"), "author": theme_.display("Author", False, True), "authorAndUri": theme_.display("Author"), "version": theme_.display("Version"), "tags": theme_.display("Tags"), "parent": parent_, "active": slug_ == current_theme_, "hasUpdate": (php_isset(lambda : updates_[slug_])), "hasPackage": (php_isset(lambda : updates_[slug_])) and (not php_empty(lambda : updates_[slug_]["package"])), "update": get_theme_update_available(theme_), "actions": Array({"activate": wp_nonce_url(admin_url("themes.php?action=activate&amp;stylesheet=" + encoded_slug_), "switch-theme_" + slug_) if current_user_can("switch_themes") else None, "customize": customize_action_, "delete": wp_nonce_url(admin_url("themes.php?action=delete&amp;stylesheet=" + encoded_slug_), "delete-theme_" + slug_) if current_user_can("delete_themes") else None})})
     # end for
     #// Remove 'delete' action if theme has an active child.
-    if (not php_empty(lambda : parents)) and php_array_key_exists(current_theme, parents):
-        prepared_themes[parents[current_theme]]["actions"]["delete"] = None
+    if (not php_empty(lambda : parents_)) and php_array_key_exists(current_theme_, parents_):
+        prepared_themes_[parents_[current_theme_]]["actions"]["delete"] = None
     # end if
     #// 
     #// Filters the themes prepared for JavaScript, for themes.php.
@@ -491,16 +498,17 @@ def wp_prepare_themes_for_js(themes=None, *args_):
     #// 
     #// @param array $prepared_themes Array of theme data.
     #//
-    prepared_themes = apply_filters("wp_prepare_themes_for_js", prepared_themes)
-    prepared_themes = php_array_values(prepared_themes)
-    return php_array_filter(prepared_themes)
+    prepared_themes_ = apply_filters("wp_prepare_themes_for_js", prepared_themes_)
+    prepared_themes_ = php_array_values(prepared_themes_)
+    return php_array_filter(prepared_themes_)
 # end def wp_prepare_themes_for_js
 #// 
 #// Print JS templates for the theme-browsing UI in the Customizer.
 #// 
 #// @since 4.2.0
 #//
-def customize_themes_print_templates(*args_):
+def customize_themes_print_templates(*_args_):
+    
     
     php_print("""   <script type=\"text/html\" id=\"tmpl-customize-themes-details-view\">
     <div class=\"theme-backdrop\"></div>
@@ -603,15 +611,16 @@ def customize_themes_print_templates(*args_):
 #// @param string $theme Path to the theme directory relative to the themes directory.
 #// @return bool True, if in the list of paused themes. False, not in the list.
 #//
-def is_theme_paused(theme=None, *args_):
+def is_theme_paused(theme_=None, *_args_):
+    
     
     if (not (php_isset(lambda : PHP_GLOBALS["_paused_themes"]))):
         return False
     # end if
-    if get_stylesheet() != theme and get_template() != theme:
+    if get_stylesheet() != theme_ and get_template() != theme_:
         return False
     # end if
-    return php_array_key_exists(theme, PHP_GLOBALS["_paused_themes"])
+    return php_array_key_exists(theme_, PHP_GLOBALS["_paused_themes"])
 # end def is_theme_paused
 #// 
 #// Gets the error that was recorded for a paused theme.
@@ -623,15 +632,16 @@ def is_theme_paused(theme=None, *args_):
 #// @return array|false Array of error information as it was returned by
 #// `error_get_last()`, or false if none was recorded.
 #//
-def wp_get_theme_error(theme=None, *args_):
+def wp_get_theme_error(theme_=None, *_args_):
+    
     
     if (not (php_isset(lambda : PHP_GLOBALS["_paused_themes"]))):
         return False
     # end if
-    if (not php_array_key_exists(theme, PHP_GLOBALS["_paused_themes"])):
+    if (not php_array_key_exists(theme_, PHP_GLOBALS["_paused_themes"])):
         return False
     # end if
-    return PHP_GLOBALS["_paused_themes"][theme]
+    return PHP_GLOBALS["_paused_themes"][theme_]
 # end def wp_get_theme_error
 #// 
 #// Tries to resume a single theme.
@@ -650,33 +660,34 @@ def wp_get_theme_error(theme=None, *args_):
 #// @return bool|WP_Error True on success, false if `$theme` was not paused,
 #// `WP_Error` on failure.
 #//
-def resume_theme(theme=None, redirect="", *args_):
+def resume_theme(theme_=None, redirect_="", *_args_):
     
-    extension = php_explode("/", theme)
+    
+    extension_ = php_explode("/", theme_)
     #// 
     #// We'll override this later if the theme could be resumed without
     #// creating a fatal error.
     #//
-    if (not php_empty(lambda : redirect)):
-        functions_path = ""
-        if php_strpos(STYLESHEETPATH, extension):
-            functions_path = STYLESHEETPATH + "/functions.php"
-        elif php_strpos(TEMPLATEPATH, extension):
-            functions_path = TEMPLATEPATH + "/functions.php"
+    if (not php_empty(lambda : redirect_)):
+        functions_path_ = ""
+        if php_strpos(STYLESHEETPATH, extension_):
+            functions_path_ = STYLESHEETPATH + "/functions.php"
+        elif php_strpos(TEMPLATEPATH, extension_):
+            functions_path_ = TEMPLATEPATH + "/functions.php"
         # end if
-        if (not php_empty(lambda : functions_path)):
-            wp_redirect(add_query_arg("_error_nonce", wp_create_nonce("theme-resume-error_" + theme), redirect))
+        if (not php_empty(lambda : functions_path_)):
+            wp_redirect(add_query_arg("_error_nonce", wp_create_nonce("theme-resume-error_" + theme_), redirect_))
             #// Load the theme's functions.php to test whether it throws a fatal error.
             ob_start()
             if (not php_defined("WP_SANDBOX_SCRAPING")):
                 php_define("WP_SANDBOX_SCRAPING", True)
             # end if
-            php_include_file(functions_path, once=False)
+            php_include_file(functions_path_, once=False)
             ob_clean()
         # end if
     # end if
-    result = wp_paused_themes().delete(extension)
-    if (not result):
+    result_ = wp_paused_themes().delete(extension_)
+    if (not result_):
         return php_new_class("WP_Error", lambda : WP_Error("could_not_resume_theme", __("Could not resume the theme.")))
     # end if
     return True
@@ -686,7 +697,8 @@ def resume_theme(theme=None, redirect="", *args_):
 #// 
 #// @since 5.2.0
 #//
-def paused_themes_notice(*args_):
+def paused_themes_notice(*_args_):
+    
     
     if "themes.php" == PHP_GLOBALS["pagenow"]:
         return

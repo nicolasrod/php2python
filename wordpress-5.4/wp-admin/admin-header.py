@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,33 +29,40 @@ if (not php_defined("WP_ADMIN")):
 #// @global int       $total_update_count
 #// @global string    $parent_file
 #//
-global title,hook_suffix,current_screen,wp_locale,pagenow,update_title,total_update_count,parent_file
-php_check_if_defined("title","hook_suffix","current_screen","wp_locale","pagenow","update_title","total_update_count","parent_file")
+global title_
+global hook_suffix_
+global current_screen_
+global wp_locale_
+global pagenow_
+global update_title_
+global total_update_count_
+global parent_file_
+php_check_if_defined("title_","hook_suffix_","current_screen_","wp_locale_","pagenow_","update_title_","total_update_count_","parent_file_")
 #// Catch plugins that include admin-header.php before admin.php completes.
-if php_empty(lambda : current_screen):
+if php_empty(lambda : current_screen_):
     set_current_screen()
 # end if
 get_admin_page_title()
-title = esc_html(strip_tags(title))
+title_ = esc_html(strip_tags(title_))
 if is_network_admin():
     #// translators: Network admin screen title. %s: Network title.
-    admin_title = php_sprintf(__("Network Admin: %s"), esc_html(get_network().site_name))
+    admin_title_ = php_sprintf(__("Network Admin: %s"), esc_html(get_network().site_name))
 elif is_user_admin():
     #// translators: User dashboard screen title. %s: Network title.
-    admin_title = php_sprintf(__("User Dashboard: %s"), esc_html(get_network().site_name))
+    admin_title_ = php_sprintf(__("User Dashboard: %s"), esc_html(get_network().site_name))
 else:
-    admin_title = get_bloginfo("name")
+    admin_title_ = get_bloginfo("name")
 # end if
-if admin_title == title:
+if admin_title_ == title_:
     #// translators: Admin screen title. %s: Admin screen name.
-    admin_title = php_sprintf(__("%s &#8212; WordPress"), title)
+    admin_title_ = php_sprintf(__("%s &#8212; WordPress"), title_)
 else:
     #// translators: Admin screen title. 1: Admin screen name, 2: Network or site name.
-    admin_title = php_sprintf(__("%1$s &lsaquo; %2$s &#8212; WordPress"), title, admin_title)
+    admin_title_ = php_sprintf(__("%1$s &lsaquo; %2$s &#8212; WordPress"), title_, admin_title_)
 # end if
 if wp_is_recovery_mode():
     #// translators: %s: Admin screen title.
-    admin_title = php_sprintf(__("Recovery Mode &#8212; %s"), admin_title)
+    admin_title_ = php_sprintf(__("Recovery Mode &#8212; %s"), admin_title_)
 # end if
 #// 
 #// Filters the title tag content for an admin page.
@@ -70,29 +72,29 @@ if wp_is_recovery_mode():
 #// @param string $admin_title The page title, with extra context added.
 #// @param string $title       The original page title.
 #//
-admin_title = apply_filters("admin_title", admin_title, title)
+admin_title_ = apply_filters("admin_title", admin_title_, title_)
 wp_user_settings()
 _wp_admin_html_begin()
 php_print("<title>")
-php_print(admin_title)
+php_print(admin_title_)
 php_print("</title>\n")
 wp_enqueue_style("colors")
 wp_enqueue_style("ie")
 wp_enqueue_script("utils")
 wp_enqueue_script("svg-painter")
-admin_body_class = php_preg_replace("/[^a-z0-9_-]+/i", "-", hook_suffix)
+admin_body_class_ = php_preg_replace("/[^a-z0-9_-]+/i", "-", hook_suffix_)
 php_print("<script type=\"text/javascript\">\naddLoadEvent = function(func){if(typeof jQuery!=\"undefined\")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};\nvar ajaxurl = '")
 php_print(admin_url("admin-ajax.php", "relative"))
 php_print("',\n pagenow = '")
-php_print(current_screen.id)
+php_print(current_screen_.id)
 php_print("',\n typenow = '")
-php_print(current_screen.post_type)
+php_print(current_screen_.post_type)
 php_print("',\n adminpage = '")
-php_print(admin_body_class)
+php_print(admin_body_class_)
 php_print("',\n thousandsSeparator = '")
-php_print(addslashes(wp_locale.number_format["thousands_sep"]))
+php_print(addslashes(wp_locale_.number_format["thousands_sep"]))
 php_print("',\n decimalPoint = '")
-php_print(addslashes(wp_locale.number_format["decimal_point"]))
+php_print(addslashes(wp_locale_.number_format["decimal_point"]))
 php_print("',\n isRtl = ")
 php_print(php_int(is_rtl()))
 php_print(""";
@@ -106,13 +108,13 @@ php_print(""";
 #// 
 #// @param string $hook_suffix The current admin page.
 #//
-do_action("admin_enqueue_scripts", hook_suffix)
+do_action("admin_enqueue_scripts", hook_suffix_)
 #// 
 #// Fires when styles are printed for a specific admin page based on $hook_suffix.
 #// 
 #// @since 2.6.0
 #//
-do_action(str("admin_print_styles-") + str(hook_suffix))
+do_action(str("admin_print_styles-") + str(hook_suffix_))
 #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 #// 
 #// Fires when styles are printed for all admin pages.
@@ -125,7 +127,7 @@ do_action("admin_print_styles")
 #// 
 #// @since 2.1.0
 #//
-do_action(str("admin_print_scripts-") + str(hook_suffix))
+do_action(str("admin_print_scripts-") + str(hook_suffix_))
 #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 #// 
 #// Fires when scripts are printed for all admin pages.
@@ -141,7 +143,7 @@ do_action("admin_print_scripts")
 #// 
 #// @since 2.1.0
 #//
-do_action(str("admin_head-") + str(hook_suffix))
+do_action(str("admin_head-") + str(hook_suffix_))
 #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 #// 
 #// Fires in head section for all admin pages.
@@ -150,42 +152,42 @@ do_action(str("admin_head-") + str(hook_suffix))
 #//
 do_action("admin_head")
 if get_user_setting("mfold") == "f":
-    admin_body_class += " folded"
+    admin_body_class_ += " folded"
 # end if
 if (not get_user_setting("unfold")):
-    admin_body_class += " auto-fold"
+    admin_body_class_ += " auto-fold"
 # end if
 if is_admin_bar_showing():
-    admin_body_class += " admin-bar"
+    admin_body_class_ += " admin-bar"
 # end if
 if is_rtl():
-    admin_body_class += " rtl"
+    admin_body_class_ += " rtl"
 # end if
-if current_screen.post_type:
-    admin_body_class += " post-type-" + current_screen.post_type
+if current_screen_.post_type:
+    admin_body_class_ += " post-type-" + current_screen_.post_type
 # end if
-if current_screen.taxonomy:
-    admin_body_class += " taxonomy-" + current_screen.taxonomy
+if current_screen_.taxonomy:
+    admin_body_class_ += " taxonomy-" + current_screen_.taxonomy
 # end if
-admin_body_class += " branch-" + php_str_replace(Array(".", ","), "-", floatval(get_bloginfo("version")))
-admin_body_class += " version-" + php_str_replace(".", "-", php_preg_replace("/^([.0-9]+).*/", "$1", get_bloginfo("version")))
-admin_body_class += " admin-color-" + sanitize_html_class(get_user_option("admin_color"), "fresh")
-admin_body_class += " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_user_locale())))
+admin_body_class_ += " branch-" + php_str_replace(Array(".", ","), "-", floatval(get_bloginfo("version")))
+admin_body_class_ += " version-" + php_str_replace(".", "-", php_preg_replace("/^([.0-9]+).*/", "$1", get_bloginfo("version")))
+admin_body_class_ += " admin-color-" + sanitize_html_class(get_user_option("admin_color"), "fresh")
+admin_body_class_ += " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_user_locale())))
 if wp_is_mobile():
-    admin_body_class += " mobile"
+    admin_body_class_ += " mobile"
 # end if
 if is_multisite():
-    admin_body_class += " multisite"
+    admin_body_class_ += " multisite"
 # end if
 if is_network_admin():
-    admin_body_class += " network-admin"
+    admin_body_class_ += " network-admin"
 # end if
-admin_body_class += " no-customize-support no-svg"
-if current_screen.is_block_editor():
+admin_body_class_ += " no-customize-support no-svg"
+if current_screen_.is_block_editor():
     #// Default to is-fullscreen-mode to avoid jumps in the UI.
-    admin_body_class += " block-editor-page is-fullscreen-mode wp-embed-responsive"
+    admin_body_class_ += " block-editor-page is-fullscreen-mode wp-embed-responsive"
     if current_theme_supports("editor-styles") and current_theme_supports("dark-editor-style"):
-        admin_body_class += " is-dark-theme"
+        admin_body_class_ += " is-dark-theme"
     # end if
 # end if
 php_print("</head>\n")
@@ -203,10 +205,10 @@ php_print("</head>\n")
 #// 
 #// @param string $classes Space-separated list of CSS classes.
 #//
-admin_body_classes = apply_filters("admin_body_class", "")
-admin_body_classes = php_ltrim(admin_body_classes + " " + admin_body_class)
+admin_body_classes_ = apply_filters("admin_body_class", "")
+admin_body_classes_ = php_ltrim(admin_body_classes_ + " " + admin_body_class_)
 php_print("<body class=\"wp-admin wp-core-ui no-js ")
-php_print(admin_body_classes)
+php_print(admin_body_classes_)
 php_print("""\">
 <script type=\"text/javascript\">
 document.body.className = document.body.className.replace('no-js','js');
@@ -226,12 +228,12 @@ php_print("<div id=\"wpcontent\">\n\n")
 #//
 do_action("in_admin_header")
 php_print("\n<div id=\"wpbody\" role=\"main\">\n")
-blog_name = None
-total_update_count = None
-update_title = None
-current_screen.set_parentage(parent_file)
+blog_name_ = None
+total_update_count_ = None
+update_title_ = None
+current_screen_.set_parentage(parent_file_)
 php_print("\n<div id=\"wpbody-content\">\n")
-current_screen.render_screen_meta()
+current_screen_.render_screen_meta()
 if is_network_admin():
     #// 
     #// Prints network admin screen notices.
@@ -260,6 +262,6 @@ else:
 #// @since 3.1.0
 #//
 do_action("all_admin_notices")
-if "options-general.php" == parent_file:
+if "options-general.php" == parent_file_:
     php_include_file(ABSPATH + "wp-admin/options-head.php", once=False)
 # end if

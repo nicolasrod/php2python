@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,8 +21,23 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 class Requests_Transport_fsockopen(Requests_Transport):
     SECOND_IN_MICROSECONDS = 1000000
+    #// 
+    #// Raw HTTP data
+    #// 
+    #// @var string
+    #//
     headers = ""
+    #// 
+    #// Stream metadata
+    #// 
+    #// @var array Associative array of properties, see {@see https://secure.php.net/stream_get_meta_data}
+    #//
     info = Array()
+    #// 
+    #// What's the maximum number of bytes we should keep?
+    #// 
+    #// @var int|bool Byte count, or false if no limit.
+    #//
     max_bytes = False
     connect_error = ""
     #// 
@@ -42,188 +52,197 @@ class Requests_Transport_fsockopen(Requests_Transport):
     #// @param array $options Request options, see {@see Requests::response()} for documentation
     #// @return string Raw HTTP result
     #//
-    def request(self, url=None, headers=Array(), data=Array(), options=Array()):
-        
-        options["hooks"].dispatch("fsockopen.before_request")
-        url_parts = php_parse_url(url)
-        if php_empty(lambda : url_parts):
-            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid URL.", "invalidurl", url))
+    def request(self, url_=None, headers_=None, data_=None, options_=None):
+        if headers_ is None:
+            headers_ = Array()
         # end if
-        host = url_parts["host"]
-        context = stream_context_create()
-        verifyname = False
-        case_insensitive_headers = php_new_class("Requests_Utility_CaseInsensitiveDictionary", lambda : Requests_Utility_CaseInsensitiveDictionary(headers))
+        if data_ is None:
+            data_ = Array()
+        # end if
+        if options_ is None:
+            options_ = Array()
+        # end if
+        
+        options_["hooks"].dispatch("fsockopen.before_request")
+        url_parts_ = php_parse_url(url_)
+        if php_empty(lambda : url_parts_):
+            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid URL.", "invalidurl", url_))
+        # end if
+        host_ = url_parts_["host"]
+        context_ = stream_context_create()
+        verifyname_ = False
+        case_insensitive_headers_ = php_new_class("Requests_Utility_CaseInsensitiveDictionary", lambda : Requests_Utility_CaseInsensitiveDictionary(headers_))
         #// HTTPS support
-        if (php_isset(lambda : url_parts["scheme"])) and php_strtolower(url_parts["scheme"]) == "https":
-            remote_socket = "ssl://" + host
-            if (not (php_isset(lambda : url_parts["port"]))):
-                url_parts["port"] = 443
+        if (php_isset(lambda : url_parts_["scheme"])) and php_strtolower(url_parts_["scheme"]) == "https":
+            remote_socket_ = "ssl://" + host_
+            if (not (php_isset(lambda : url_parts_["port"]))):
+                url_parts_["port"] = 443
             # end if
-            context_options = Array({"verify_peer": True, "capture_peer_cert": True})
-            verifyname = True
+            context_options_ = Array({"verify_peer": True, "capture_peer_cert": True})
+            verifyname_ = True
             #// SNI, if enabled (OpenSSL >=0.9.8j)
             if php_defined("OPENSSL_TLSEXT_SERVER_NAME") and OPENSSL_TLSEXT_SERVER_NAME:
-                context_options["SNI_enabled"] = True
-                if (php_isset(lambda : options["verifyname"])) and options["verifyname"] == False:
-                    context_options["SNI_enabled"] = False
+                context_options_["SNI_enabled"] = True
+                if (php_isset(lambda : options_["verifyname"])) and options_["verifyname"] == False:
+                    context_options_["SNI_enabled"] = False
                 # end if
             # end if
-            if (php_isset(lambda : options["verify"])):
-                if options["verify"] == False:
-                    context_options["verify_peer"] = False
-                elif php_is_string(options["verify"]):
-                    context_options["cafile"] = options["verify"]
+            if (php_isset(lambda : options_["verify"])):
+                if options_["verify"] == False:
+                    context_options_["verify_peer"] = False
+                elif php_is_string(options_["verify"]):
+                    context_options_["cafile"] = options_["verify"]
                 # end if
             # end if
-            if (php_isset(lambda : options["verifyname"])) and options["verifyname"] == False:
-                context_options["verify_peer_name"] = False
-                verifyname = False
+            if (php_isset(lambda : options_["verifyname"])) and options_["verifyname"] == False:
+                context_options_["verify_peer_name"] = False
+                verifyname_ = False
             # end if
-            stream_context_set_option(context, Array({"ssl": context_options}))
+            stream_context_set_option(context_, Array({"ssl": context_options_}))
         else:
-            remote_socket = "tcp://" + host
+            remote_socket_ = "tcp://" + host_
         # end if
-        self.max_bytes = options["max_bytes"]
-        if (not (php_isset(lambda : url_parts["port"]))):
-            url_parts["port"] = 80
+        self.max_bytes = options_["max_bytes"]
+        if (not (php_isset(lambda : url_parts_["port"]))):
+            url_parts_["port"] = 80
         # end if
-        remote_socket += ":" + url_parts["port"]
+        remote_socket_ += ":" + url_parts_["port"]
         set_error_handler(Array(self, "connect_error_handler"), E_WARNING | E_NOTICE)
-        options["hooks"].dispatch("fsockopen.remote_socket", Array(remote_socket))
-        socket = stream_socket_client(remote_socket, errno, errstr, ceil(options["connect_timeout"]), STREAM_CLIENT_CONNECT, context)
+        options_["hooks"].dispatch("fsockopen.remote_socket", Array(remote_socket_))
+        socket_ = stream_socket_client(remote_socket_, errno_, errstr_, ceil(options_["connect_timeout"]), STREAM_CLIENT_CONNECT, context_)
         restore_error_handler()
-        if verifyname and (not self.verify_certificate_from_context(host, context)):
+        if verifyname_ and (not self.verify_certificate_from_context(host_, context_)):
             raise php_new_class("Requests_Exception", lambda : Requests_Exception("SSL certificate did not match the requested domain name", "ssl.no_match"))
         # end if
-        if (not socket):
-            if errno == 0:
+        if (not socket_):
+            if errno_ == 0:
                 raise php_new_class("Requests_Exception", lambda : Requests_Exception(php_rtrim(self.connect_error), "fsockopen.connect_error"))
             # end if
-            raise php_new_class("Requests_Exception", lambda : Requests_Exception(errstr, "fsockopenerror", None, errno))
+            raise php_new_class("Requests_Exception", lambda : Requests_Exception(errstr_, "fsockopenerror", None, errno_))
         # end if
-        data_format = options["data_format"]
-        if data_format == "query":
-            path = self.format_get(url_parts, data)
-            data = ""
+        data_format_ = options_["data_format"]
+        if data_format_ == "query":
+            path_ = self.format_get(url_parts_, data_)
+            data_ = ""
         else:
-            path = self.format_get(url_parts, Array())
+            path_ = self.format_get(url_parts_, Array())
         # end if
-        options["hooks"].dispatch("fsockopen.remote_host_path", Array(path, url))
-        request_body = ""
-        out = php_sprintf("%s %s HTTP/%.1F\r\n", options["type"], path, options["protocol_version"])
-        if options["type"] != Requests.TRACE:
-            if php_is_array(data):
-                request_body = http_build_query(data, None, "&")
+        options_["hooks"].dispatch("fsockopen.remote_host_path", Array(path_, url_))
+        request_body_ = ""
+        out_ = php_sprintf("%s %s HTTP/%.1F\r\n", options_["type"], path_, options_["protocol_version"])
+        if options_["type"] != Requests.TRACE:
+            if php_is_array(data_):
+                request_body_ = http_build_query(data_, None, "&")
             else:
-                request_body = data
+                request_body_ = data_
             # end if
-            if (not php_empty(lambda : data)):
-                if (not (php_isset(lambda : case_insensitive_headers["Content-Length"]))):
-                    headers["Content-Length"] = php_strlen(request_body)
+            if (not php_empty(lambda : data_)):
+                if (not (php_isset(lambda : case_insensitive_headers_["Content-Length"]))):
+                    headers_["Content-Length"] = php_strlen(request_body_)
                 # end if
-                if (not (php_isset(lambda : case_insensitive_headers["Content-Type"]))):
-                    headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
+                if (not (php_isset(lambda : case_insensitive_headers_["Content-Type"]))):
+                    headers_["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
                 # end if
             # end if
         # end if
-        if (not (php_isset(lambda : case_insensitive_headers["Host"]))):
-            out += php_sprintf("Host: %s", url_parts["host"])
-            if "http" == php_strtolower(url_parts["scheme"]) and url_parts["port"] != 80 or "https" == php_strtolower(url_parts["scheme"]) and url_parts["port"] != 443:
-                out += ":" + url_parts["port"]
+        if (not (php_isset(lambda : case_insensitive_headers_["Host"]))):
+            out_ += php_sprintf("Host: %s", url_parts_["host"])
+            if "http" == php_strtolower(url_parts_["scheme"]) and url_parts_["port"] != 80 or "https" == php_strtolower(url_parts_["scheme"]) and url_parts_["port"] != 443:
+                out_ += ":" + url_parts_["port"]
             # end if
-            out += "\r\n"
+            out_ += "\r\n"
         # end if
-        if (not (php_isset(lambda : case_insensitive_headers["User-Agent"]))):
-            out += php_sprintf("User-Agent: %s\r\n", options["useragent"])
+        if (not (php_isset(lambda : case_insensitive_headers_["User-Agent"]))):
+            out_ += php_sprintf("User-Agent: %s\r\n", options_["useragent"])
         # end if
-        accept_encoding = self.accept_encoding()
-        if (not (php_isset(lambda : case_insensitive_headers["Accept-Encoding"]))) and (not php_empty(lambda : accept_encoding)):
-            out += php_sprintf("Accept-Encoding: %s\r\n", accept_encoding)
+        accept_encoding_ = self.accept_encoding()
+        if (not (php_isset(lambda : case_insensitive_headers_["Accept-Encoding"]))) and (not php_empty(lambda : accept_encoding_)):
+            out_ += php_sprintf("Accept-Encoding: %s\r\n", accept_encoding_)
         # end if
-        headers = Requests.flatten(headers)
-        if (not php_empty(lambda : headers)):
-            out += php_implode("\r\n", headers) + "\r\n"
+        headers_ = Requests.flatten(headers_)
+        if (not php_empty(lambda : headers_)):
+            out_ += php_implode("\r\n", headers_) + "\r\n"
         # end if
-        options["hooks"].dispatch("fsockopen.after_headers", Array(out))
-        if php_substr(out, -2) != "\r\n":
-            out += "\r\n"
+        options_["hooks"].dispatch("fsockopen.after_headers", Array(out_))
+        if php_substr(out_, -2) != "\r\n":
+            out_ += "\r\n"
         # end if
-        if (not (php_isset(lambda : case_insensitive_headers["Connection"]))):
-            out += "Connection: Close\r\n"
+        if (not (php_isset(lambda : case_insensitive_headers_["Connection"]))):
+            out_ += "Connection: Close\r\n"
         # end if
-        out += "\r\n" + request_body
-        options["hooks"].dispatch("fsockopen.before_send", Array(out))
-        fwrite(socket, out)
-        options["hooks"].dispatch("fsockopen.after_send", Array(out))
-        if (not options["blocking"]):
-            php_fclose(socket)
-            fake_headers = ""
-            options["hooks"].dispatch("fsockopen.after_request", Array(fake_headers))
+        out_ += "\r\n" + request_body_
+        options_["hooks"].dispatch("fsockopen.before_send", Array(out_))
+        fwrite(socket_, out_)
+        options_["hooks"].dispatch("fsockopen.after_send", Array(out_))
+        if (not options_["blocking"]):
+            php_fclose(socket_)
+            fake_headers_ = ""
+            options_["hooks"].dispatch("fsockopen.after_request", Array(fake_headers_))
             return ""
         # end if
-        timeout_sec = php_int(floor(options["timeout"]))
-        if timeout_sec == options["timeout"]:
-            timeout_msec = 0
+        timeout_sec_ = php_int(floor(options_["timeout"]))
+        if timeout_sec_ == options_["timeout"]:
+            timeout_msec_ = 0
         else:
-            timeout_msec = self.SECOND_IN_MICROSECONDS * options["timeout"] % self.SECOND_IN_MICROSECONDS
+            timeout_msec_ = self.SECOND_IN_MICROSECONDS * options_["timeout"] % self.SECOND_IN_MICROSECONDS
         # end if
-        stream_set_timeout(socket, timeout_sec, timeout_msec)
-        response = body = headers = ""
-        self.info = stream_get_meta_data(socket)
-        size = 0
-        doingbody = False
-        download = False
-        if options["filename"]:
-            download = fopen(options["filename"], "wb")
+        stream_set_timeout(socket_, timeout_sec_, timeout_msec_)
+        response_ = body_ = headers_ = ""
+        self.info = stream_get_meta_data(socket_)
+        size_ = 0
+        doingbody_ = False
+        download_ = False
+        if options_["filename"]:
+            download_ = fopen(options_["filename"], "wb")
         # end if
         while True:
             
-            if not ((not php_feof(socket))):
+            if not ((not php_feof(socket_))):
                 break
             # end if
-            self.info = stream_get_meta_data(socket)
+            self.info = stream_get_meta_data(socket_)
             if self.info["timed_out"]:
                 raise php_new_class("Requests_Exception", lambda : Requests_Exception("fsocket timed out", "timeout"))
             # end if
-            block = fread(socket, Requests.BUFFER_SIZE)
-            if (not doingbody):
-                response += block
-                if php_strpos(response, "\r\n\r\n"):
-                    headers, block = php_explode("\r\n\r\n", response, 2)
-                    doingbody = True
+            block_ = fread(socket_, Requests.BUFFER_SIZE)
+            if (not doingbody_):
+                response_ += block_
+                if php_strpos(response_, "\r\n\r\n"):
+                    headers_, block_ = php_explode("\r\n\r\n", response_, 2)
+                    doingbody_ = True
                 # end if
             # end if
             #// Are we in body mode now?
-            if doingbody:
-                options["hooks"].dispatch("request.progress", Array(block, size, self.max_bytes))
-                data_length = php_strlen(block)
+            if doingbody_:
+                options_["hooks"].dispatch("request.progress", Array(block_, size_, self.max_bytes))
+                data_length_ = php_strlen(block_)
                 if self.max_bytes:
                     #// Have we already hit a limit?
-                    if size == self.max_bytes:
+                    if size_ == self.max_bytes:
                         continue
                     # end if
-                    if size + data_length > self.max_bytes:
+                    if size_ + data_length_ > self.max_bytes:
                         #// Limit the length
-                        limited_length = self.max_bytes - size
-                        block = php_substr(block, 0, limited_length)
+                        limited_length_ = self.max_bytes - size_
+                        block_ = php_substr(block_, 0, limited_length_)
                     # end if
                 # end if
-                size += php_strlen(block)
-                if download:
-                    fwrite(download, block)
+                size_ += php_strlen(block_)
+                if download_:
+                    fwrite(download_, block_)
                 else:
-                    body += block
+                    body_ += block_
                 # end if
             # end if
         # end while
-        self.headers = headers
-        if download:
-            php_fclose(download)
+        self.headers = headers_
+        if download_:
+            php_fclose(download_)
         else:
-            self.headers += "\r\n\r\n" + body
+            self.headers += "\r\n\r\n" + body_
         # end if
-        php_fclose(socket)
-        options["hooks"].dispatch("fsockopen.after_request", Array(self.headers, self.info))
+        php_fclose(socket_)
+        options_["hooks"].dispatch("fsockopen.after_request", Array(self.headers, self.info))
         return self.headers
     # end def request
     #// 
@@ -233,23 +252,24 @@ class Requests_Transport_fsockopen(Requests_Transport):
     #// @param array $options Global options, see {@see Requests::response()} for documentation
     #// @return array Array of Requests_Response objects (may contain Requests_Exception or string responses as well)
     #//
-    def request_multiple(self, requests=None, options=None):
+    def request_multiple(self, requests_=None, options_=None):
         
-        responses = Array()
+        
+        responses_ = Array()
         class_ = get_class(self)
-        for id,request in requests:
+        for id_,request_ in requests_:
             try: 
-                handler = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
-                responses[id] = handler.request(request["url"], request["headers"], request["data"], request["options"])
-                request["options"]["hooks"].dispatch("transport.internal.parse_response", Array(responses[id], request))
-            except Requests_Exception as e:
-                responses[id] = e
+                handler_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
+                responses_[id_] = handler_.request(request_["url"], request_["headers"], request_["data"], request_["options"])
+                request_["options"]["hooks"].dispatch("transport.internal.parse_response", Array(responses_[id_], request_))
+            except Requests_Exception as e_:
+                responses_[id_] = e_
             # end try
-            if (not php_is_string(responses[id])):
-                request["options"]["hooks"].dispatch("multiple.request.complete", Array(responses[id], id))
+            if (not php_is_string(responses_[id_])):
+                request_["options"]["hooks"].dispatch("multiple.request.complete", Array(responses_[id_], id_))
             # end if
         # end for
-        return responses
+        return responses_
     # end def request_multiple
     #// 
     #// Retrieve the encodings we can accept
@@ -258,15 +278,16 @@ class Requests_Transport_fsockopen(Requests_Transport):
     #//
     def accept_encoding(self):
         
-        type = Array()
+        
+        type_ = Array()
         if php_function_exists("gzinflate"):
-            type[-1] = "deflate;q=1.0"
+            type_[-1] = "deflate;q=1.0"
         # end if
         if php_function_exists("gzuncompress"):
-            type[-1] = "compress;q=0.5"
+            type_[-1] = "compress;q=0.5"
         # end if
-        type[-1] = "gzip;q=0.5"
-        return php_implode(", ", type)
+        type_[-1] = "gzip;q=0.5"
+        return php_implode(", ", type_)
     # end def accept_encoding
     #// 
     #// Format a URL given GET data
@@ -275,25 +296,26 @@ class Requests_Transport_fsockopen(Requests_Transport):
     #// @param array|object $data Data to build query using, see {@see https://secure.php.net/http_build_query}
     #// @return string URL with data
     #//
-    def format_get(self, url_parts=None, data=None):
+    def format_get(self, url_parts_=None, data_=None):
         
-        if (not php_empty(lambda : data)):
-            if php_empty(lambda : url_parts["query"]):
-                url_parts["query"] = ""
+        
+        if (not php_empty(lambda : data_)):
+            if php_empty(lambda : url_parts_["query"]):
+                url_parts_["query"] = ""
             # end if
-            url_parts["query"] += "&" + http_build_query(data, None, "&")
-            url_parts["query"] = php_trim(url_parts["query"], "&")
+            url_parts_["query"] += "&" + http_build_query(data_, None, "&")
+            url_parts_["query"] = php_trim(url_parts_["query"], "&")
         # end if
-        if (php_isset(lambda : url_parts["path"])):
-            if (php_isset(lambda : url_parts["query"])):
-                get = url_parts["path"] + "?" + url_parts["query"]
+        if (php_isset(lambda : url_parts_["path"])):
+            if (php_isset(lambda : url_parts_["query"])):
+                get_ = url_parts_["path"] + "?" + url_parts_["query"]
             else:
-                get = url_parts["path"]
+                get_ = url_parts_["path"]
             # end if
         else:
-            get = "/"
+            get_ = "/"
         # end if
-        return get
+        return get_
     # end def format_get
     #// 
     #// Error handler for stream_socket_client()
@@ -301,14 +323,15 @@ class Requests_Transport_fsockopen(Requests_Transport):
     #// @param int $errno Error number (e.g. E_WARNING)
     #// @param string $errstr Error message
     #//
-    def connect_error_handler(self, errno=None, errstr=None):
+    def connect_error_handler(self, errno_=None, errstr_=None):
+        
         
         #// Double-check we can handle it
-        if errno & E_WARNING == 0 and errno & E_NOTICE == 0:
+        if errno_ & E_WARNING == 0 and errno_ & E_NOTICE == 0:
             #// Return false to indicate the default error handler should engage
             return False
         # end if
-        self.connect_error += errstr + "\n"
+        self.connect_error += errstr_ + "\n"
         return True
     # end def connect_error_handler
     #// 
@@ -326,16 +349,17 @@ class Requests_Transport_fsockopen(Requests_Transport):
     #// @param resource $context Stream context
     #// @return bool
     #//
-    def verify_certificate_from_context(self, host=None, context=None):
+    def verify_certificate_from_context(self, host_=None, context_=None):
         
-        meta = stream_context_get_options(context)
+        
+        meta_ = stream_context_get_options(context_)
         #// If we don't have SSL options, then we couldn't make the connection at
         #// all
-        if php_empty(lambda : meta) or php_empty(lambda : meta["ssl"]) or php_empty(lambda : meta["ssl"]["peer_certificate"]):
+        if php_empty(lambda : meta_) or php_empty(lambda : meta_["ssl"]) or php_empty(lambda : meta_["ssl"]["peer_certificate"]):
             raise php_new_class("Requests_Exception", lambda : Requests_Exception(php_rtrim(self.connect_error), "ssl.connect_error"))
         # end if
-        cert = openssl_x509_parse(meta["ssl"]["peer_certificate"])
-        return Requests_SSL.verify_certificate(host, cert)
+        cert_ = openssl_x509_parse(meta_["ssl"]["peer_certificate"])
+        return Requests_SSL.verify_certificate(host_, cert_)
     # end def verify_certificate_from_context
     #// 
     #// Whether this transport is valid
@@ -344,13 +368,16 @@ class Requests_Transport_fsockopen(Requests_Transport):
     #// @return boolean True if the transport is valid, false otherwise.
     #//
     @classmethod
-    def test(self, capabilities=Array()):
+    def test(self, capabilities_=None):
+        if capabilities_ is None:
+            capabilities_ = Array()
+        # end if
         
         if (not php_function_exists("fsockopen")):
             return False
         # end if
         #// If needed, check that streams support SSL
-        if (php_isset(lambda : capabilities["ssl"])) and capabilities["ssl"]:
+        if (php_isset(lambda : capabilities_["ssl"])) and capabilities_["ssl"]:
             if (not php_extension_loaded("openssl")) or (not php_function_exists("openssl_x509_parse")):
                 return False
             # end if

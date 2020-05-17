@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,7 +28,8 @@ class ParagonIE_Sodium_Core32_Salsa20(ParagonIE_Sodium_Core32_Util):
     #// @throws TypeError
     #//
     @classmethod
-    def core_salsa20(self, in_=None, k=None, c=None):
+    def core_salsa20(self, in_=None, k_=None, c_=None):
+        
         
         #// 
         #// @var ParagonIE_Sodium_Core32_Int32 $x0
@@ -69,102 +65,102 @@ class ParagonIE_Sodium_Core32_Salsa20(ParagonIE_Sodium_Core32_Util):
         #// @var ParagonIE_Sodium_Core32_Int32 $j14
         #// @var ParagonIE_Sodium_Core32_Int32 $j15
         #//
-        if self.strlen(k) < 32:
+        if self.strlen(k_) < 32:
             raise php_new_class("RangeException", lambda : RangeException("Key must be 32 bytes long"))
         # end if
-        if c == None:
-            x0 = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(24944, 30821)))
-            x5 = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(13088, 25710)))
-            x10 = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(31074, 11570)))
-            x15 = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(27424, 25972)))
+        if c_ == None:
+            x0_ = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(24944, 30821)))
+            x5_ = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(13088, 25710)))
+            x10_ = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(31074, 11570)))
+            x15_ = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32(Array(27424, 25972)))
         else:
-            x0 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c, 0, 4))
-            x5 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c, 4, 4))
-            x10 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c, 8, 4))
-            x15 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c, 12, 4))
+            x0_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c_, 0, 4))
+            x5_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c_, 4, 4))
+            x10_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c_, 8, 4))
+            x15_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(c_, 12, 4))
         # end if
-        x1 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 0, 4))
-        x2 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 4, 4))
-        x3 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 8, 4))
-        x4 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 12, 4))
-        x6 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 0, 4))
-        x7 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 4, 4))
-        x8 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 8, 4))
-        x9 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 12, 4))
-        x11 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 16, 4))
-        x12 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 20, 4))
-        x13 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 24, 4))
-        x14 = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k, 28, 4))
-        j0 = copy.deepcopy(x0)
-        j1 = copy.deepcopy(x1)
-        j2 = copy.deepcopy(x2)
-        j3 = copy.deepcopy(x3)
-        j4 = copy.deepcopy(x4)
-        j5 = copy.deepcopy(x5)
-        j6 = copy.deepcopy(x6)
-        j7 = copy.deepcopy(x7)
-        j8 = copy.deepcopy(x8)
-        j9 = copy.deepcopy(x9)
-        j10 = copy.deepcopy(x10)
-        j11 = copy.deepcopy(x11)
-        j12 = copy.deepcopy(x12)
-        j13 = copy.deepcopy(x13)
-        j14 = copy.deepcopy(x14)
-        j15 = copy.deepcopy(x15)
-        i = self.ROUNDS
-        while i > 0:
+        x1_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 0, 4))
+        x2_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 4, 4))
+        x3_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 8, 4))
+        x4_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 12, 4))
+        x6_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 0, 4))
+        x7_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 4, 4))
+        x8_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 8, 4))
+        x9_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(in_, 12, 4))
+        x11_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 16, 4))
+        x12_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 20, 4))
+        x13_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 24, 4))
+        x14_ = ParagonIE_Sodium_Core32_Int32.fromreversestring(self.substr(k_, 28, 4))
+        j0_ = copy.deepcopy(x0_)
+        j1_ = copy.deepcopy(x1_)
+        j2_ = copy.deepcopy(x2_)
+        j3_ = copy.deepcopy(x3_)
+        j4_ = copy.deepcopy(x4_)
+        j5_ = copy.deepcopy(x5_)
+        j6_ = copy.deepcopy(x6_)
+        j7_ = copy.deepcopy(x7_)
+        j8_ = copy.deepcopy(x8_)
+        j9_ = copy.deepcopy(x9_)
+        j10_ = copy.deepcopy(x10_)
+        j11_ = copy.deepcopy(x11_)
+        j12_ = copy.deepcopy(x12_)
+        j13_ = copy.deepcopy(x13_)
+        j14_ = copy.deepcopy(x14_)
+        j15_ = copy.deepcopy(x15_)
+        i_ = self.ROUNDS
+        while i_ > 0:
             
-            x4 = x4.xorint32(x0.addint32(x12).rotateleft(7))
-            x8 = x8.xorint32(x4.addint32(x0).rotateleft(9))
-            x12 = x12.xorint32(x8.addint32(x4).rotateleft(13))
-            x0 = x0.xorint32(x12.addint32(x8).rotateleft(18))
-            x9 = x9.xorint32(x5.addint32(x1).rotateleft(7))
-            x13 = x13.xorint32(x9.addint32(x5).rotateleft(9))
-            x1 = x1.xorint32(x13.addint32(x9).rotateleft(13))
-            x5 = x5.xorint32(x1.addint32(x13).rotateleft(18))
-            x14 = x14.xorint32(x10.addint32(x6).rotateleft(7))
-            x2 = x2.xorint32(x14.addint32(x10).rotateleft(9))
-            x6 = x6.xorint32(x2.addint32(x14).rotateleft(13))
-            x10 = x10.xorint32(x6.addint32(x2).rotateleft(18))
-            x3 = x3.xorint32(x15.addint32(x11).rotateleft(7))
-            x7 = x7.xorint32(x3.addint32(x15).rotateleft(9))
-            x11 = x11.xorint32(x7.addint32(x3).rotateleft(13))
-            x15 = x15.xorint32(x11.addint32(x7).rotateleft(18))
-            x1 = x1.xorint32(x0.addint32(x3).rotateleft(7))
-            x2 = x2.xorint32(x1.addint32(x0).rotateleft(9))
-            x3 = x3.xorint32(x2.addint32(x1).rotateleft(13))
-            x0 = x0.xorint32(x3.addint32(x2).rotateleft(18))
-            x6 = x6.xorint32(x5.addint32(x4).rotateleft(7))
-            x7 = x7.xorint32(x6.addint32(x5).rotateleft(9))
-            x4 = x4.xorint32(x7.addint32(x6).rotateleft(13))
-            x5 = x5.xorint32(x4.addint32(x7).rotateleft(18))
-            x11 = x11.xorint32(x10.addint32(x9).rotateleft(7))
-            x8 = x8.xorint32(x11.addint32(x10).rotateleft(9))
-            x9 = x9.xorint32(x8.addint32(x11).rotateleft(13))
-            x10 = x10.xorint32(x9.addint32(x8).rotateleft(18))
-            x12 = x12.xorint32(x15.addint32(x14).rotateleft(7))
-            x13 = x13.xorint32(x12.addint32(x15).rotateleft(9))
-            x14 = x14.xorint32(x13.addint32(x12).rotateleft(13))
-            x15 = x15.xorint32(x14.addint32(x13).rotateleft(18))
-            i -= 2
+            x4_ = x4_.xorint32(x0_.addint32(x12_).rotateleft(7))
+            x8_ = x8_.xorint32(x4_.addint32(x0_).rotateleft(9))
+            x12_ = x12_.xorint32(x8_.addint32(x4_).rotateleft(13))
+            x0_ = x0_.xorint32(x12_.addint32(x8_).rotateleft(18))
+            x9_ = x9_.xorint32(x5_.addint32(x1_).rotateleft(7))
+            x13_ = x13_.xorint32(x9_.addint32(x5_).rotateleft(9))
+            x1_ = x1_.xorint32(x13_.addint32(x9_).rotateleft(13))
+            x5_ = x5_.xorint32(x1_.addint32(x13_).rotateleft(18))
+            x14_ = x14_.xorint32(x10_.addint32(x6_).rotateleft(7))
+            x2_ = x2_.xorint32(x14_.addint32(x10_).rotateleft(9))
+            x6_ = x6_.xorint32(x2_.addint32(x14_).rotateleft(13))
+            x10_ = x10_.xorint32(x6_.addint32(x2_).rotateleft(18))
+            x3_ = x3_.xorint32(x15_.addint32(x11_).rotateleft(7))
+            x7_ = x7_.xorint32(x3_.addint32(x15_).rotateleft(9))
+            x11_ = x11_.xorint32(x7_.addint32(x3_).rotateleft(13))
+            x15_ = x15_.xorint32(x11_.addint32(x7_).rotateleft(18))
+            x1_ = x1_.xorint32(x0_.addint32(x3_).rotateleft(7))
+            x2_ = x2_.xorint32(x1_.addint32(x0_).rotateleft(9))
+            x3_ = x3_.xorint32(x2_.addint32(x1_).rotateleft(13))
+            x0_ = x0_.xorint32(x3_.addint32(x2_).rotateleft(18))
+            x6_ = x6_.xorint32(x5_.addint32(x4_).rotateleft(7))
+            x7_ = x7_.xorint32(x6_.addint32(x5_).rotateleft(9))
+            x4_ = x4_.xorint32(x7_.addint32(x6_).rotateleft(13))
+            x5_ = x5_.xorint32(x4_.addint32(x7_).rotateleft(18))
+            x11_ = x11_.xorint32(x10_.addint32(x9_).rotateleft(7))
+            x8_ = x8_.xorint32(x11_.addint32(x10_).rotateleft(9))
+            x9_ = x9_.xorint32(x8_.addint32(x11_).rotateleft(13))
+            x10_ = x10_.xorint32(x9_.addint32(x8_).rotateleft(18))
+            x12_ = x12_.xorint32(x15_.addint32(x14_).rotateleft(7))
+            x13_ = x13_.xorint32(x12_.addint32(x15_).rotateleft(9))
+            x14_ = x14_.xorint32(x13_.addint32(x12_).rotateleft(13))
+            x15_ = x15_.xorint32(x14_.addint32(x13_).rotateleft(18))
+            i_ -= 2
         # end while
-        x0 = x0.addint32(j0)
-        x1 = x1.addint32(j1)
-        x2 = x2.addint32(j2)
-        x3 = x3.addint32(j3)
-        x4 = x4.addint32(j4)
-        x5 = x5.addint32(j5)
-        x6 = x6.addint32(j6)
-        x7 = x7.addint32(j7)
-        x8 = x8.addint32(j8)
-        x9 = x9.addint32(j9)
-        x10 = x10.addint32(j10)
-        x11 = x11.addint32(j11)
-        x12 = x12.addint32(j12)
-        x13 = x13.addint32(j13)
-        x14 = x14.addint32(j14)
-        x15 = x15.addint32(j15)
-        return x0.toreversestring() + x1.toreversestring() + x2.toreversestring() + x3.toreversestring() + x4.toreversestring() + x5.toreversestring() + x6.toreversestring() + x7.toreversestring() + x8.toreversestring() + x9.toreversestring() + x10.toreversestring() + x11.toreversestring() + x12.toreversestring() + x13.toreversestring() + x14.toreversestring() + x15.toreversestring()
+        x0_ = x0_.addint32(j0_)
+        x1_ = x1_.addint32(j1_)
+        x2_ = x2_.addint32(j2_)
+        x3_ = x3_.addint32(j3_)
+        x4_ = x4_.addint32(j4_)
+        x5_ = x5_.addint32(j5_)
+        x6_ = x6_.addint32(j6_)
+        x7_ = x7_.addint32(j7_)
+        x8_ = x8_.addint32(j8_)
+        x9_ = x9_.addint32(j9_)
+        x10_ = x10_.addint32(j10_)
+        x11_ = x11_.addint32(j11_)
+        x12_ = x12_.addint32(j12_)
+        x13_ = x13_.addint32(j13_)
+        x14_ = x14_.addint32(j14_)
+        x15_ = x15_.addint32(j15_)
+        return x0_.toreversestring() + x1_.toreversestring() + x2_.toreversestring() + x3_.toreversestring() + x4_.toreversestring() + x5_.toreversestring() + x6_.toreversestring() + x7_.toreversestring() + x8_.toreversestring() + x9_.toreversestring() + x10_.toreversestring() + x11_.toreversestring() + x12_.toreversestring() + x13_.toreversestring() + x14_.toreversestring() + x15_.toreversestring()
     # end def core_salsa20
     #// 
     #// @internal You should not use this directly from another application
@@ -177,41 +173,42 @@ class ParagonIE_Sodium_Core32_Salsa20(ParagonIE_Sodium_Core32_Util):
     #// @throws TypeError
     #//
     @classmethod
-    def salsa20(self, len=None, nonce=None, key=None):
+    def salsa20(self, len_=None, nonce_=None, key_=None):
         
-        if self.strlen(key) != 32:
+        
+        if self.strlen(key_) != 32:
             raise php_new_class("RangeException", lambda : RangeException("Key must be 32 bytes long"))
         # end if
-        kcopy = "" + key
-        in_ = self.substr(nonce, 0, 8) + php_str_repeat(" ", 8)
-        c = ""
+        kcopy_ = "" + key_
+        in_ = self.substr(nonce_, 0, 8) + php_str_repeat(" ", 8)
+        c_ = ""
         while True:
             
-            if not (len >= 64):
+            if not (len_ >= 64):
                 break
             # end if
-            c += self.core_salsa20(in_, kcopy, None)
-            u = 1
+            c_ += self.core_salsa20(in_, kcopy_, None)
+            u_ = 1
             #// Internal counter.
-            i = 8
-            while i < 16:
+            i_ = 8
+            while i_ < 16:
                 
-                u += self.chrtoint(in_[i])
-                in_[i] = self.inttochr(u & 255)
-                u >>= 8
-                i += 1
+                u_ += self.chrtoint(in_[i_])
+                in_[i_] = self.inttochr(u_ & 255)
+                u_ >>= 8
+                i_ += 1
             # end while
-            len -= 64
+            len_ -= 64
         # end while
-        if len > 0:
-            c += self.substr(self.core_salsa20(in_, kcopy, None), 0, len)
+        if len_ > 0:
+            c_ += self.substr(self.core_salsa20(in_, kcopy_, None), 0, len_)
         # end if
         try: 
-            ParagonIE_Sodium_Compat.memzero(kcopy)
-        except SodiumException as ex:
-            kcopy = None
+            ParagonIE_Sodium_Compat.memzero(kcopy_)
+        except SodiumException as ex_:
+            kcopy_ = None
         # end try
-        return c
+        return c_
     # end def salsa20
     #// 
     #// @internal You should not use this directly from another application
@@ -225,48 +222,49 @@ class ParagonIE_Sodium_Core32_Salsa20(ParagonIE_Sodium_Core32_Util):
     #// @throws TypeError
     #//
     @classmethod
-    def salsa20_xor_ic(self, m=None, n=None, ic=None, k=None):
+    def salsa20_xor_ic(self, m_=None, n_=None, ic_=None, k_=None):
         
-        mlen = self.strlen(m)
-        if mlen < 1:
+        
+        mlen_ = self.strlen(m_)
+        if mlen_ < 1:
             return ""
         # end if
-        kcopy = self.substr(k, 0, 32)
-        in_ = self.substr(n, 0, 8)
+        kcopy_ = self.substr(k_, 0, 32)
+        in_ = self.substr(n_, 0, 8)
         #// Initialize the counter
-        in_ += ParagonIE_Sodium_Core32_Util.store64_le(ic)
-        c = ""
+        in_ += ParagonIE_Sodium_Core32_Util.store64_le(ic_)
+        c_ = ""
         while True:
             
-            if not (mlen >= 64):
+            if not (mlen_ >= 64):
                 break
             # end if
-            block = self.core_salsa20(in_, kcopy, None)
-            c += self.xorstrings(self.substr(m, 0, 64), self.substr(block, 0, 64))
-            u = 1
-            i = 8
-            while i < 16:
+            block_ = self.core_salsa20(in_, kcopy_, None)
+            c_ += self.xorstrings(self.substr(m_, 0, 64), self.substr(block_, 0, 64))
+            u_ = 1
+            i_ = 8
+            while i_ < 16:
                 
-                u += self.chrtoint(in_[i])
-                in_[i] = self.inttochr(u & 255)
-                u >>= 8
-                i += 1
+                u_ += self.chrtoint(in_[i_])
+                in_[i_] = self.inttochr(u_ & 255)
+                u_ >>= 8
+                i_ += 1
             # end while
-            mlen -= 64
-            m = self.substr(m, 64)
+            mlen_ -= 64
+            m_ = self.substr(m_, 64)
         # end while
-        if mlen:
-            block = self.core_salsa20(in_, kcopy, None)
-            c += self.xorstrings(self.substr(m, 0, mlen), self.substr(block, 0, mlen))
+        if mlen_:
+            block_ = self.core_salsa20(in_, kcopy_, None)
+            c_ += self.xorstrings(self.substr(m_, 0, mlen_), self.substr(block_, 0, mlen_))
         # end if
         try: 
-            ParagonIE_Sodium_Compat.memzero(block)
-            ParagonIE_Sodium_Compat.memzero(kcopy)
-        except SodiumException as ex:
-            block = None
-            kcopy = None
+            ParagonIE_Sodium_Compat.memzero(block_)
+            ParagonIE_Sodium_Compat.memzero(kcopy_)
+        except SodiumException as ex_:
+            block_ = None
+            kcopy_ = None
         # end try
-        return c
+        return c_
     # end def salsa20_xor_ic
     #// 
     #// @internal You should not use this directly from another application
@@ -279,8 +277,9 @@ class ParagonIE_Sodium_Core32_Salsa20(ParagonIE_Sodium_Core32_Util):
     #// @throws TypeError
     #//
     @classmethod
-    def salsa20_xor(self, message=None, nonce=None, key=None):
+    def salsa20_xor(self, message_=None, nonce_=None, key_=None):
         
-        return self.xorstrings(message, self.salsa20(self.strlen(message), nonce, key))
+        
+        return self.xorstrings(message_, self.salsa20(self.strlen(message_), nonce_, key_))
     # end def salsa20_xor
 # end class ParagonIE_Sodium_Core32_Salsa20

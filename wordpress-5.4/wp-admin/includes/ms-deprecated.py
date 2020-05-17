@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @deprecated 3.0.0
 #//
-def wpmu_menu(*args_):
+def wpmu_menu(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0")
     pass
@@ -38,7 +34,8 @@ def wpmu_menu(*args_):
 #// @deprecated 3.0.0 Use is_upload_space_available()
 #// @see is_upload_space_available()
 #//
-def wpmu_checkAvailableSpace(*args_):
+def wpmu_checkAvailableSpace(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0", "is_upload_space_available()")
     if (not is_upload_space_available()):
@@ -50,10 +47,11 @@ def wpmu_checkAvailableSpace(*args_):
 #// 
 #// @deprecated 3.0.0
 #//
-def mu_options(options=None, *args_):
+def mu_options(options_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0")
-    return options
+    return options_
 # end def mu_options
 #// 
 #// Deprecated functionality for activating a network-only plugin.
@@ -61,7 +59,8 @@ def mu_options(options=None, *args_):
 #// @deprecated 3.0.0 Use activate_plugin()
 #// @see activate_plugin()
 #//
-def activate_sitewide_plugin(*args_):
+def activate_sitewide_plugin(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0", "activate_plugin()")
     return False
@@ -72,7 +71,10 @@ def activate_sitewide_plugin(*args_):
 #// @deprecated 3.0.0 Use deactivate_plugin()
 #// @see deactivate_plugin()
 #//
-def deactivate_sitewide_plugin(plugin=False, *args_):
+def deactivate_sitewide_plugin(plugin_=None, *_args_):
+    if plugin_ is None:
+        plugin_ = False
+    # end if
     
     _deprecated_function(__FUNCTION__, "3.0.0", "deactivate_plugin()")
 # end def deactivate_sitewide_plugin
@@ -82,10 +84,11 @@ def deactivate_sitewide_plugin(plugin=False, *args_):
 #// @deprecated 3.0.0 Use is_network_only_plugin()
 #// @see is_network_only_plugin()
 #//
-def is_wpmu_sitewide_plugin(file=None, *args_):
+def is_wpmu_sitewide_plugin(file_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0", "is_network_only_plugin()")
-    return is_network_only_plugin(file)
+    return is_network_only_plugin(file_)
 # end def is_wpmu_sitewide_plugin
 #// 
 #// Deprecated functionality for getting themes network-enabled themes.
@@ -93,7 +96,8 @@ def is_wpmu_sitewide_plugin(file=None, *args_):
 #// @deprecated 3.4.0 Use WP_Theme::get_allowed_on_network()
 #// @see WP_Theme::get_allowed_on_network()
 #//
-def get_site_allowed_themes(*args_):
+def get_site_allowed_themes(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.4.0", "WP_Theme::get_allowed_on_network()")
     return php_array_map("intval", WP_Theme.get_allowed_on_network())
@@ -104,17 +108,19 @@ def get_site_allowed_themes(*args_):
 #// @deprecated 3.4.0 Use WP_Theme::get_allowed_on_site()
 #// @see WP_Theme::get_allowed_on_site()
 #//
-def wpmu_get_blog_allowedthemes(blog_id=0, *args_):
+def wpmu_get_blog_allowedthemes(blog_id_=0, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.4.0", "WP_Theme::get_allowed_on_site()")
-    return php_array_map("intval", WP_Theme.get_allowed_on_site(blog_id))
+    return php_array_map("intval", WP_Theme.get_allowed_on_site(blog_id_))
 # end def wpmu_get_blog_allowedthemes
 #// 
 #// Deprecated functionality for determining whether a file is deprecated.
 #// 
 #// @deprecated 3.5.0
 #//
-def ms_deprecated_blogs_file(*args_):
+def ms_deprecated_blogs_file(*_args_):
+    
     
     pass
 # end def ms_deprecated_blogs_file

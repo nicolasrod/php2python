@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -46,20 +41,113 @@ class SMTP():
     DEBUG_SERVER = 2
     DEBUG_CONNECTION = 3
     DEBUG_LOWLEVEL = 4
+    #// 
+    #// The PHPMailer SMTP Version number.
+    #// @var string
+    #// @deprecated Use the `VERSION` constant instead
+    #// @see SMTP::VERSION
+    #//
     Version = "5.2.27"
+    #// 
+    #// SMTP server port number.
+    #// @var integer
+    #// @deprecated This is only ever used as a default value, so use the `DEFAULT_SMTP_PORT` constant instead
+    #// @see SMTP::DEFAULT_SMTP_PORT
+    #//
     SMTP_PORT = 25
+    #// 
+    #// SMTP reply line ending.
+    #// @var string
+    #// @deprecated Use the `CRLF` constant instead
+    #// @see SMTP::CRLF
+    #//
     CRLF = "\r\n"
+    #// 
+    #// Debug output level.
+    #// Options:
+    #// self::DEBUG_OFF (`0`) No debug output, default
+    #// self::DEBUG_CLIENT (`1`) Client commands
+    #// self::DEBUG_SERVER (`2`) Client commands and server responses
+    #// self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
+    #// self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
+    #// @var integer
+    #//
     do_debug = self.DEBUG_OFF
+    #// 
+    #// How to handle debug output.
+    #// Options:
+    #// `echo` Output plain-text as-is, appropriate for CLI
+    #// `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
+    #// `error_log` Output to error log as configured in php.ini
+    #// 
+    #// Alternatively, you can provide a callable expecting two params: a message string and the debug level:
+    #// <code>
+    #// $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
+    #// </code>
+    #// @var string|callable
+    #//
     Debugoutput = "echo"
+    #// 
+    #// Whether to use VERP.
+    #// @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
+    #// @link http://www.postfix.org/VERP_README.html Info on VERP
+    #// @var boolean
+    #//
     do_verp = False
+    #// 
+    #// The timeout value for connection, in seconds.
+    #// Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+    #// This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
+    #// @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
+    #// @var integer
+    #//
     Timeout = 300
+    #// 
+    #// How long to wait for commands to complete, in seconds.
+    #// Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+    #// @var integer
+    #//
     Timelimit = 300
+    #// 
+    #// @var array Patterns to extract an SMTP transaction id from reply to a DATA command.
+    #// The first capture group in each regex will be used as the ID.
+    #//
     smtp_transaction_id_patterns = Array({"exim": "/[0-9]{3} OK id=(.*)/"}, {"sendmail": "/[0-9]{3} 2.0.0 (.*) Message/"}, {"postfix": "/[0-9]{3} 2.0.0 Ok: queued as (.*)/"})
+    #// 
+    #// @var string The last transaction ID issued in response to a DATA command,
+    #// if one was detected
+    #//
     last_smtp_transaction_id = Array()
+    #// 
+    #// The socket for the server connection.
+    #// @var resource
+    #//
     smtp_conn = Array()
+    #// 
+    #// Error information, if any, for the last SMTP command.
+    #// @var array
+    #//
     error = Array({"error": "", "detail": "", "smtp_code": "", "smtp_code_ex": ""})
+    #// 
+    #// The reply the server sent to us for HELO.
+    #// If null, no HELO string has yet been received.
+    #// @var string|null
+    #//
     helo_rply = None
+    #// 
+    #// The set of SMTP extensions sent in reply to EHLO command.
+    #// Indexes of the array are extension names.
+    #// Value at index 'HELO' or 'EHLO' (according to command that was sent)
+    #// represents the server name. In case of HELO it is the only element of the array.
+    #// Other values can be boolean TRUE or an array containing extension options.
+    #// If null, no HELO/EHLO string has yet been received.
+    #// @var array|null
+    #//
     server_caps = None
+    #// 
+    #// The most recent reply received from the server.
+    #// @var string
+    #//
     last_reply = ""
     #// 
     #// Output debugging info via a user-selected method.
@@ -69,25 +157,26 @@ class SMTP():
     #// @param integer $level The debug level of this message; see DEBUG_* constants
     #// @return void
     #//
-    def edebug(self, str=None, level=0):
+    def edebug(self, str_=None, level_=0):
         
-        if level > self.do_debug:
+        
+        if level_ > self.do_debug:
             return
         # end if
         #// Avoid clash with built-in function names
         if (not php_in_array(self.Debugoutput, Array("error_log", "html", "echo"))) and php_is_callable(self.Debugoutput):
-            php_call_user_func(self.Debugoutput, str, level)
+            php_call_user_func(self.Debugoutput, str_, level_)
             return
         # end if
         for case in Switch(self.Debugoutput):
             if case("error_log"):
                 #// Don't output, just log
-                php_error_log(str)
+                php_error_log(str_)
                 break
             # end if
             if case("html"):
                 #// Cleans up output a bit for a better looking, HTML-safe output
-                php_print(gmdate("Y-m-d H:i:s") + " " + htmlentities(php_preg_replace("/[\\r\\n]+/", "", str), ENT_QUOTES, "UTF-8") + "<br>\n")
+                php_print(gmdate("Y-m-d H:i:s") + " " + htmlentities(php_preg_replace("/[\\r\\n]+/", "", str_), ENT_QUOTES, "UTF-8") + "<br>\n")
                 break
             # end if
             if case("echo"):
@@ -95,8 +184,8 @@ class SMTP():
             # end if
             if case():
                 #// Normalize line breaks
-                str = php_preg_replace("/(\\r\\n|\\r|\\n)/ms", "\n", str)
-                php_print(gmdate("Y-m-d H:i:s") + " " + php_str_replace("\n", "\n                                         ", php_trim(str)) + "\n")
+                str_ = php_preg_replace("/(\\r\\n|\\r|\\n)/ms", "\n", str_)
+                php_print(gmdate("Y-m-d H:i:s") + " " + php_str_replace("\n", "\n                                         ", php_trim(str_)) + "\n")
             # end if
         # end for
     # end def edebug
@@ -109,13 +198,16 @@ class SMTP():
     #// @access public
     #// @return boolean
     #//
-    def connect(self, host=None, port=None, timeout=30, options=Array()):
+    def connect(self, host_=None, port_=None, timeout_=30, options_=None):
+        if options_ is None:
+            options_ = Array()
+        # end if
         
-        connect.streamok = None
+        streamok_ = None
         #// This is enabled by default since 5.0.0 but some providers disable it
         #// Check this once and cache the result
-        if is_null(connect.streamok):
-            connect.streamok = php_function_exists("stream_socket_client")
+        if is_null(streamok_):
+            streamok_ = php_function_exists("stream_socket_client")
         # end if
         #// Clear errors to avoid confusion
         self.seterror("")
@@ -125,45 +217,45 @@ class SMTP():
             self.seterror("Already connected to a server")
             return False
         # end if
-        if php_empty(lambda : port):
-            port = self.DEFAULT_SMTP_PORT
+        if php_empty(lambda : port_):
+            port_ = self.DEFAULT_SMTP_PORT
         # end if
         #// Connect to the SMTP server
-        self.edebug(str("Connection: opening to ") + str(host) + str(":") + str(port) + str(", timeout=") + str(timeout) + str(", options=") + var_export(options, True), self.DEBUG_CONNECTION)
-        errno = 0
-        errstr = ""
-        if connect.streamok:
-            socket_context = stream_context_create(options)
+        self.edebug(str("Connection: opening to ") + str(host_) + str(":") + str(port_) + str(", timeout=") + str(timeout_) + str(", options=") + var_export(options_, True), self.DEBUG_CONNECTION)
+        errno_ = 0
+        errstr_ = ""
+        if streamok_:
+            socket_context_ = stream_context_create(options_)
             set_error_handler(Array(self, "errorHandler"))
-            self.smtp_conn = stream_socket_client(host + ":" + port, errno, errstr, timeout, STREAM_CLIENT_CONNECT, socket_context)
+            self.smtp_conn = stream_socket_client(host_ + ":" + port_, errno_, errstr_, timeout_, STREAM_CLIENT_CONNECT, socket_context_)
             restore_error_handler()
         else:
             #// Fall back to fsockopen which should work in more places, but is missing some features
             self.edebug("Connection: stream_socket_client not available, falling back to fsockopen", self.DEBUG_CONNECTION)
             set_error_handler(Array(self, "errorHandler"))
-            self.smtp_conn = fsockopen(host, port, errno, errstr, timeout)
+            self.smtp_conn = fsockopen(host_, port_, errno_, errstr_, timeout_)
             restore_error_handler()
         # end if
         #// Verify we connected properly
         if (not is_resource(self.smtp_conn)):
-            self.seterror("Failed to connect to server", errno, errstr)
-            self.edebug("SMTP ERROR: " + self.error["error"] + str(": ") + str(errstr) + str(" (") + str(errno) + str(")"), self.DEBUG_CLIENT)
+            self.seterror("Failed to connect to server", errno_, errstr_)
+            self.edebug("SMTP ERROR: " + self.error["error"] + str(": ") + str(errstr_) + str(" (") + str(errno_) + str(")"), self.DEBUG_CLIENT)
             return False
         # end if
         self.edebug("Connection: opened", self.DEBUG_CONNECTION)
         #// SMTP server can take longer to respond, give longer timeout for first read
         #// Windows does not have support for this timeout function
         if php_substr(PHP_OS, 0, 3) != "WIN":
-            max = php_ini_get("max_execution_time")
+            max_ = php_ini_get("max_execution_time")
             #// Don't bother if unlimited
-            if max != 0 and timeout > max:
-                php_no_error(lambda: set_time_limit(timeout))
+            if max_ != 0 and timeout_ > max_:
+                php_no_error(lambda: set_time_limit(timeout_))
             # end if
-            stream_set_timeout(self.smtp_conn, timeout, 0)
+            stream_set_timeout(self.smtp_conn, timeout_, 0)
         # end if
         #// Get any announcement
-        announce = self.get_lines()
-        self.edebug("SERVER -> CLIENT: " + announce, self.DEBUG_SERVER)
+        announce_ = self.get_lines()
+        self.edebug("SERVER -> CLIENT: " + announce_, self.DEBUG_SERVER)
         return True
     # end def connect
     #// 
@@ -173,22 +265,23 @@ class SMTP():
     #//
     def starttls(self):
         
+        
         if (not self.sendcommand("STARTTLS", "STARTTLS", 220)):
             return False
         # end if
         #// Allow the best TLS version(s) we can
-        crypto_method = STREAM_CRYPTO_METHOD_TLS_CLIENT
+        crypto_method_ = STREAM_CRYPTO_METHOD_TLS_CLIENT
         #// PHP 5.6.7 dropped inclusion of TLS 1.1 and 1.2 in STREAM_CRYPTO_METHOD_TLS_CLIENT
         #// so add them back in manually if we can
         if php_defined("STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT"):
-            crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT
-            crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT
+            crypto_method_ |= STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT
+            crypto_method_ |= STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT
         # end if
         #// Begin encrypted connection
         set_error_handler(Array(self, "errorHandler"))
-        crypto_ok = stream_socket_enable_crypto(self.smtp_conn, True, crypto_method)
+        crypto_ok_ = stream_socket_enable_crypto(self.smtp_conn, True, crypto_method_)
         restore_error_handler()
-        return crypto_ok
+        return crypto_ok_
     # end def starttls
     #// 
     #// Perform SMTP authentication.
@@ -202,7 +295,8 @@ class SMTP():
     #// @param null|OAuth $OAuth An optional OAuth instance (@see PHPMailerOAuth)
     #// @return bool True if successfully authenticated.* @access public
     #//
-    def authenticate(self, username=None, password=None, authtype=None, realm="", workstation="", OAuth=None):
+    def authenticate(self, username_=None, password_=None, authtype_=None, realm_="", workstation_="", OAuth_=None):
+        
         
         if (not self.server_caps):
             self.seterror("Authentication is not allowed before HELO/EHLO")
@@ -216,36 +310,36 @@ class SMTP():
                 #// e.g. after STARTTLS
                 return False
             # end if
-            self.edebug("Auth method requested: " + authtype if authtype else "UNKNOWN", self.DEBUG_LOWLEVEL)
+            self.edebug("Auth method requested: " + authtype_ if authtype_ else "UNKNOWN", self.DEBUG_LOWLEVEL)
             self.edebug("Auth methods available on the server: " + php_implode(",", self.server_caps["AUTH"]), self.DEBUG_LOWLEVEL)
-            if php_empty(lambda : authtype):
-                for method in Array("CRAM-MD5", "LOGIN", "PLAIN"):
-                    if php_in_array(method, self.server_caps["AUTH"]):
-                        authtype = method
+            if php_empty(lambda : authtype_):
+                for method_ in Array("CRAM-MD5", "LOGIN", "PLAIN"):
+                    if php_in_array(method_, self.server_caps["AUTH"]):
+                        authtype_ = method_
                         break
                     # end if
                 # end for
-                if php_empty(lambda : authtype):
+                if php_empty(lambda : authtype_):
                     self.seterror("No supported authentication methods found")
                     return False
                 # end if
-                self.edebug("Auth method selected: " + authtype, self.DEBUG_LOWLEVEL)
+                self.edebug("Auth method selected: " + authtype_, self.DEBUG_LOWLEVEL)
             # end if
-            if (not php_in_array(authtype, self.server_caps["AUTH"])):
-                self.seterror(str("The requested authentication method \"") + str(authtype) + str("\" is not supported by the server"))
+            if (not php_in_array(authtype_, self.server_caps["AUTH"])):
+                self.seterror(str("The requested authentication method \"") + str(authtype_) + str("\" is not supported by the server"))
                 return False
             # end if
-        elif php_empty(lambda : authtype):
-            authtype = "LOGIN"
+        elif php_empty(lambda : authtype_):
+            authtype_ = "LOGIN"
         # end if
-        for case in Switch(authtype):
+        for case in Switch(authtype_):
             if case("PLAIN"):
                 #// Start authentication
                 if (not self.sendcommand("AUTH", "AUTH PLAIN", 334)):
                     return False
                 # end if
                 #// Send encoded username and password
-                if (not self.sendcommand("User & Password", php_base64_encode(" " + username + " " + password), 235)):
+                if (not self.sendcommand("User & Password", php_base64_encode(" " + username_ + " " + password_), 235)):
                     return False
                 # end if
                 break
@@ -255,10 +349,10 @@ class SMTP():
                 if (not self.sendcommand("AUTH", "AUTH LOGIN", 334)):
                     return False
                 # end if
-                if (not self.sendcommand("Username", php_base64_encode(username), 334)):
+                if (not self.sendcommand("Username", php_base64_encode(username_), 334)):
                     return False
                 # end if
-                if (not self.sendcommand("Password", php_base64_encode(password), 235)):
+                if (not self.sendcommand("Password", php_base64_encode(password_), 235)):
                     return False
                 # end if
                 break
@@ -269,14 +363,14 @@ class SMTP():
                     return False
                 # end if
                 #// Get the challenge
-                challenge = php_base64_decode(php_substr(self.last_reply, 4))
+                challenge_ = php_base64_decode(php_substr(self.last_reply, 4))
                 #// Build the response
-                response = username + " " + self.hmac(challenge, password)
+                response_ = username_ + " " + self.hmac(challenge_, password_)
                 #// send encoded credentials
-                return self.sendcommand("Username", php_base64_encode(response), 235)
+                return self.sendcommand("Username", php_base64_encode(response_), 235)
             # end if
             if case():
-                self.seterror(str("Authentication method \"") + str(authtype) + str("\" is not supported"))
+                self.seterror(str("Authentication method \"") + str(authtype_) + str("\" is not supported"))
                 return False
             # end if
         # end for
@@ -291,10 +385,11 @@ class SMTP():
     #// @access protected
     #// @return string
     #//
-    def hmac(self, data=None, key=None):
+    def hmac(self, data_=None, key_=None):
+        
         
         if php_function_exists("hash_hmac"):
-            return hash_hmac("md5", data, key)
+            return hash_hmac("md5", data_, key_)
         # end if
         #// The following borrowed from
         #// http://php.net/manual/en/function.mhash.php#27225
@@ -302,17 +397,17 @@ class SMTP():
         #// Creates an md5 HMAC.
         #// Eliminates the need to install mhash to compute a HMAC
         #// by Lance Rushing
-        bytelen = 64
+        bytelen_ = 64
         #// byte length for md5
-        if php_strlen(key) > bytelen:
-            key = pack("H*", php_md5(key))
+        if php_strlen(key_) > bytelen_:
+            key_ = pack("H*", php_md5(key_))
         # end if
-        key = php_str_pad(key, bytelen, chr(0))
-        ipad = php_str_pad("", bytelen, chr(54))
-        opad = php_str_pad("", bytelen, chr(92))
-        k_ipad = key ^ ipad
-        k_opad = key ^ opad
-        return php_md5(k_opad + pack("H*", php_md5(k_ipad + data)))
+        key_ = php_str_pad(key_, bytelen_, chr(0))
+        ipad_ = php_str_pad("", bytelen_, chr(54))
+        opad_ = php_str_pad("", bytelen_, chr(92))
+        k_ipad_ = key_ ^ ipad_
+        k_opad_ = key_ ^ opad_
+        return php_md5(k_opad_ + pack("H*", php_md5(k_ipad_ + data_)))
     # end def hmac
     #// 
     #// Check connection state.
@@ -321,9 +416,10 @@ class SMTP():
     #//
     def connected(self):
         
+        
         if is_resource(self.smtp_conn):
-            sock_status = stream_get_meta_data(self.smtp_conn)
-            if sock_status["eof"]:
+            sock_status_ = stream_get_meta_data(self.smtp_conn)
+            if sock_status_["eof"]:
                 #// The socket is valid but we are not connected
                 self.edebug("SMTP NOTICE: EOF caught while checking if connected", self.DEBUG_CLIENT)
                 self.close()
@@ -342,6 +438,7 @@ class SMTP():
     #// @return void
     #//
     def close(self):
+        
         
         self.seterror("")
         self.server_caps = None
@@ -366,7 +463,8 @@ class SMTP():
     #// @access public
     #// @return boolean
     #//
-    def data(self, msg_data=None):
+    def data(self, msg_data_=None):
+        
         
         #// This will use the standard timelimit
         if (not self.sendcommand("DATA", "DATA", 354)):
@@ -380,67 +478,67 @@ class SMTP():
         #// NOTE: this does not count towards line-length limit.
         #// 
         #// Normalize line breaks before exploding
-        lines = php_explode("\n", php_str_replace(Array("\r\n", "\r"), "\n", msg_data))
+        lines_ = php_explode("\n", php_str_replace(Array("\r\n", "\r"), "\n", msg_data_))
         #// To distinguish between a complete RFC822 message and a plain message body, we check if the first field
         #// of the first line (':' separated) does not contain a space then it _should_ be a header and we will
         #// process all lines before a blank line as headers.
         #//
-        field = php_substr(lines[0], 0, php_strpos(lines[0], ":"))
-        in_headers = False
-        if (not php_empty(lambda : field)) and php_strpos(field, " ") == False:
-            in_headers = True
+        field_ = php_substr(lines_[0], 0, php_strpos(lines_[0], ":"))
+        in_headers_ = False
+        if (not php_empty(lambda : field_)) and php_strpos(field_, " ") == False:
+            in_headers_ = True
         # end if
-        for line in lines:
-            lines_out = Array()
-            if in_headers and line == "":
-                in_headers = False
+        for line_ in lines_:
+            lines_out_ = Array()
+            if in_headers_ and line_ == "":
+                in_headers_ = False
             # end if
             #// Break this line up into several smaller lines if it's too long
             #// Micro-optimisation: isset($str[$len]) is faster than (strlen($str) > $len),
             while True:
                 
-                if not ((php_isset(lambda : line[self.MAX_LINE_LENGTH]))):
+                if not ((php_isset(lambda : line_[self.MAX_LINE_LENGTH]))):
                     break
                 # end if
                 #// Working backwards, try to find a space within the last MAX_LINE_LENGTH chars of the line to break on
                 #// so as to avoid breaking in the middle of a word
-                pos = php_strrpos(php_substr(line, 0, self.MAX_LINE_LENGTH), " ")
+                pos_ = php_strrpos(php_substr(line_, 0, self.MAX_LINE_LENGTH), " ")
                 #// Deliberately matches both false and 0
-                if (not pos):
+                if (not pos_):
                     #// No nice break found, add a hard break
-                    pos = self.MAX_LINE_LENGTH - 1
-                    lines_out[-1] = php_substr(line, 0, pos)
-                    line = php_substr(line, pos)
+                    pos_ = self.MAX_LINE_LENGTH - 1
+                    lines_out_[-1] = php_substr(line_, 0, pos_)
+                    line_ = php_substr(line_, pos_)
                 else:
                     #// Break at the found point
-                    lines_out[-1] = php_substr(line, 0, pos)
+                    lines_out_[-1] = php_substr(line_, 0, pos_)
                     #// Move along by the amount we dealt with
-                    line = php_substr(line, pos + 1)
+                    line_ = php_substr(line_, pos_ + 1)
                 # end if
                 #// If processing headers add a LWSP-char to the front of new line RFC822 section 3.1.1
-                if in_headers:
-                    line = "    " + line
+                if in_headers_:
+                    line_ = "   " + line_
                 # end if
             # end while
-            lines_out[-1] = line
+            lines_out_[-1] = line_
             #// Send the lines to the server
-            for line_out in lines_out:
+            for line_out_ in lines_out_:
                 #// RFC2821 section 4.5.2
-                if (not php_empty(lambda : line_out)) and line_out[0] == ".":
-                    line_out = "." + line_out
+                if (not php_empty(lambda : line_out_)) and line_out_[0] == ".":
+                    line_out_ = "." + line_out_
                 # end if
-                self.client_send(line_out + self.CRLF)
+                self.client_send(line_out_ + self.CRLF)
             # end for
         # end for
         #// Message data has been sent, complete the command
         #// Increase timelimit for end of DATA command
-        savetimelimit = self.Timelimit
+        savetimelimit_ = self.Timelimit
         self.Timelimit = self.Timelimit * 2
-        result = self.sendcommand("DATA END", ".", 250)
+        result_ = self.sendcommand("DATA END", ".", 250)
         self.recordlasttransactionid()
         #// Restore timelimit
-        self.Timelimit = savetimelimit
-        return result
+        self.Timelimit = savetimelimit_
+        return result_
     # end def data
     #// 
     #// Send an SMTP HELO or EHLO command.
@@ -452,10 +550,11 @@ class SMTP():
     #// @access public
     #// @return boolean
     #//
-    def hello(self, host=""):
+    def hello(self, host_=""):
+        
         
         #// Try extended hello first (RFC 2821)
-        return php_bool(self.sendhello("EHLO", host) or self.sendhello("HELO", host))
+        return php_bool(self.sendhello("EHLO", host_) or self.sendhello("HELO", host_))
     # end def hello
     #// 
     #// Send an SMTP HELO or EHLO command.
@@ -466,16 +565,17 @@ class SMTP():
     #// @access protected
     #// @return boolean
     #//
-    def sendhello(self, hello=None, host=None):
+    def sendhello(self, hello_=None, host_=None):
         
-        noerror = self.sendcommand(hello, hello + " " + host, 250)
+        
+        noerror_ = self.sendcommand(hello_, hello_ + " " + host_, 250)
         self.helo_rply = self.last_reply
-        if noerror:
-            self.parsehellofields(hello)
+        if noerror_:
+            self.parsehellofields(hello_)
         else:
             self.server_caps = None
         # end if
-        return noerror
+        return noerror_
     # end def sendhello
     #// 
     #// Parse a reply to HELO/EHLO command to discover server extensions.
@@ -483,40 +583,41 @@ class SMTP():
     #// @access protected
     #// @param string $type - 'HELO' or 'EHLO'
     #//
-    def parsehellofields(self, type=None):
+    def parsehellofields(self, type_=None):
+        
         
         self.server_caps = Array()
-        lines = php_explode("\n", self.helo_rply)
-        for n,s in lines:
+        lines_ = php_explode("\n", self.helo_rply)
+        for n_,s_ in lines_:
             #// First 4 chars contain response code followed by - or space
-            s = php_trim(php_substr(s, 4))
-            if php_empty(lambda : s):
+            s_ = php_trim(php_substr(s_, 4))
+            if php_empty(lambda : s_):
                 continue
             # end if
-            fields = php_explode(" ", s)
-            if (not php_empty(lambda : fields)):
-                if (not n):
-                    name = type
-                    fields = fields[0]
+            fields_ = php_explode(" ", s_)
+            if (not php_empty(lambda : fields_)):
+                if (not n_):
+                    name_ = type_
+                    fields_ = fields_[0]
                 else:
-                    name = php_array_shift(fields)
-                    for case in Switch(name):
+                    name_ = php_array_shift(fields_)
+                    for case in Switch(name_):
                         if case("SIZE"):
-                            fields = fields[0] if fields else 0
+                            fields_ = fields_[0] if fields_ else 0
                             break
                         # end if
                         if case("AUTH"):
-                            if (not php_is_array(fields)):
-                                fields = Array()
+                            if (not php_is_array(fields_)):
+                                fields_ = Array()
                             # end if
                             break
                         # end if
                         if case():
-                            fields = True
+                            fields_ = True
                         # end if
                     # end for
                 # end if
-                self.server_caps[name] = fields
+                self.server_caps[name_] = fields_
             # end if
         # end for
     # end def parsehellofields
@@ -533,8 +634,9 @@ class SMTP():
     #//
     def mail(self, from_=None):
         
-        useVerp = " XVERP" if self.do_verp else ""
-        return self.sendcommand("MAIL FROM", "MAIL FROM:<" + from_ + ">" + useVerp, 250)
+        
+        useVerp_ = " XVERP" if self.do_verp else ""
+        return self.sendcommand("MAIL FROM", "MAIL FROM:<" + from_ + ">" + useVerp_, 250)
     # end def mail
     #// 
     #// Send an SMTP QUIT command.
@@ -544,17 +646,20 @@ class SMTP():
     #// @access public
     #// @return boolean
     #//
-    def quit(self, close_on_error=True):
+    def quit(self, close_on_error_=None):
+        if close_on_error_ is None:
+            close_on_error_ = True
+        # end if
         
-        noerror = self.sendcommand("QUIT", "QUIT", 221)
-        err = self.error
+        noerror_ = self.sendcommand("QUIT", "QUIT", 221)
+        err_ = self.error
         #// Save any error
-        if noerror or close_on_error:
+        if noerror_ or close_on_error_:
             self.close()
-            self.error = err
+            self.error = err_
             pass
         # end if
-        return noerror
+        return noerror_
     # end def quit
     #// 
     #// Send an SMTP RCPT command.
@@ -565,9 +670,10 @@ class SMTP():
     #// @access public
     #// @return boolean
     #//
-    def recipient(self, address=None):
+    def recipient(self, address_=None):
         
-        return self.sendcommand("RCPT TO", "RCPT TO:<" + address + ">", Array(250, 251))
+        
+        return self.sendcommand("RCPT TO", "RCPT TO:<" + address_ + ">", Array(250, 251))
     # end def recipient
     #// 
     #// Send an SMTP RSET command.
@@ -577,6 +683,7 @@ class SMTP():
     #// @return boolean True on success.
     #//
     def reset(self):
+        
         
         return self.sendcommand("RSET", "RSET", 250)
     # end def reset
@@ -588,35 +695,36 @@ class SMTP():
     #// @access protected
     #// @return boolean True on success.
     #//
-    def sendcommand(self, command=None, commandstring=None, expect=None):
+    def sendcommand(self, command_=None, commandstring_=None, expect_=None):
+        
         
         if (not self.connected()):
-            self.seterror(str("Called ") + str(command) + str(" without being connected"))
+            self.seterror(str("Called ") + str(command_) + str(" without being connected"))
             return False
         # end if
         #// Reject line breaks in all commands
-        if php_strpos(commandstring, "\n") != False or php_strpos(commandstring, "\r") != False:
-            self.seterror(str("Command '") + str(command) + str("' contained line breaks"))
+        if php_strpos(commandstring_, "\n") != False or php_strpos(commandstring_, "\r") != False:
+            self.seterror(str("Command '") + str(command_) + str("' contained line breaks"))
             return False
         # end if
-        self.client_send(commandstring + self.CRLF)
+        self.client_send(commandstring_ + self.CRLF)
         self.last_reply = self.get_lines()
         #// Fetch SMTP code and possible error code explanation
-        matches = Array()
-        if php_preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", self.last_reply, matches):
-            code = matches[1]
-            code_ex = matches[2] if php_count(matches) > 2 else None
+        matches_ = Array()
+        if php_preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", self.last_reply, matches_):
+            code_ = matches_[1]
+            code_ex_ = matches_[2] if php_count(matches_) > 2 else None
             #// Cut off error code from each response line
-            detail = php_preg_replace(str("/") + str(code) + str("[ -]") + php_str_replace(".", "\\.", code_ex) + " " if code_ex else "" + "/m", "", self.last_reply)
+            detail_ = php_preg_replace(str("/") + str(code_) + str("[ -]") + php_str_replace(".", "\\.", code_ex_) + " " if code_ex_ else "" + "/m", "", self.last_reply)
         else:
             #// Fall back to simple parsing if regex fails
-            code = php_substr(self.last_reply, 0, 3)
-            code_ex = None
-            detail = php_substr(self.last_reply, 4)
+            code_ = php_substr(self.last_reply, 0, 3)
+            code_ex_ = None
+            detail_ = php_substr(self.last_reply, 4)
         # end if
         self.edebug("SERVER -> CLIENT: " + self.last_reply, self.DEBUG_SERVER)
-        if (not php_in_array(code, expect)):
-            self.seterror(str(command) + str(" command failed"), detail, code, code_ex)
+        if (not php_in_array(code_, expect_)):
+            self.seterror(str(command_) + str(" command failed"), detail_, code_, code_ex_)
             self.edebug("SMTP ERROR: " + self.error["error"] + ": " + self.last_reply, self.DEBUG_CLIENT)
             return False
         # end if
@@ -638,6 +746,7 @@ class SMTP():
     #//
     def sendandmail(self, from_=None):
         
+        
         return self.sendcommand("SAML", str("SAML FROM:") + str(from_), 250)
     # end def sendandmail
     #// 
@@ -646,9 +755,10 @@ class SMTP():
     #// @access public
     #// @return boolean
     #//
-    def verify(self, name=None):
+    def verify(self, name_=None):
         
-        return self.sendcommand("VRFY", str("VRFY ") + str(name), Array(250, 251))
+        
+        return self.sendcommand("VRFY", str("VRFY ") + str(name_), Array(250, 251))
     # end def verify
     #// 
     #// Send an SMTP NOOP command.
@@ -657,6 +767,7 @@ class SMTP():
     #// @return boolean
     #//
     def noop(self):
+        
         
         return self.sendcommand("NOOP", "NOOP", 250)
     # end def noop
@@ -671,6 +782,7 @@ class SMTP():
     #//
     def turn(self):
         
+        
         self.seterror("The SMTP TURN command is not implemented")
         self.edebug("SMTP NOTICE: " + self.error["error"], self.DEBUG_CLIENT)
         return False
@@ -681,13 +793,14 @@ class SMTP():
     #// @access public
     #// @return integer|boolean The number of bytes sent to the server or false on error
     #//
-    def client_send(self, data=None):
+    def client_send(self, data_=None):
         
-        self.edebug(str("CLIENT -> SERVER: ") + str(data), self.DEBUG_CLIENT)
+        
+        self.edebug(str("CLIENT -> SERVER: ") + str(data_), self.DEBUG_CLIENT)
         set_error_handler(Array(self, "errorHandler"))
-        result = fwrite(self.smtp_conn, data)
+        result_ = fwrite(self.smtp_conn, data_)
         restore_error_handler()
-        return result
+        return result_
     # end def client_send
     #// 
     #// Get the latest error.
@@ -695,6 +808,7 @@ class SMTP():
     #// @return array
     #//
     def geterror(self):
+        
         
         return self.error
     # end def geterror
@@ -704,6 +818,7 @@ class SMTP():
     #// @return array|null
     #//
     def getserverextlist(self):
+        
         
         return self.server_caps
     # end def getserverextlist
@@ -726,24 +841,25 @@ class SMTP():
     #// @param string $name Name of SMTP extension or 'HELO'|'EHLO'
     #// @return mixed
     #//
-    def getserverext(self, name=None):
+    def getserverext(self, name_=None):
+        
         
         if (not self.server_caps):
             self.seterror("No HELO/EHLO was sent")
             return None
         # end if
         #// the tight logic knot ;)
-        if (not php_array_key_exists(name, self.server_caps)):
-            if name == "HELO":
+        if (not php_array_key_exists(name_, self.server_caps)):
+            if name_ == "HELO":
                 return self.server_caps["EHLO"]
             # end if
-            if name == "EHLO" or php_array_key_exists("EHLO", self.server_caps):
+            if name_ == "EHLO" or php_array_key_exists("EHLO", self.server_caps):
                 return False
             # end if
             self.seterror("HELO handshake was used. Client knows nothing about server extensions")
             return None
         # end if
-        return self.server_caps[name]
+        return self.server_caps[name_]
     # end def getserverext
     #// 
     #// Get the last reply from the server.
@@ -751,6 +867,7 @@ class SMTP():
     #// @return string
     #//
     def getlastreply(self):
+        
         
         return self.last_reply
     # end def getlastreply
@@ -765,58 +882,63 @@ class SMTP():
     #//
     def get_lines(self):
         
+        
         #// If the connection is bad, give up straight away
         if (not is_resource(self.smtp_conn)):
             return ""
         # end if
-        data = ""
-        endtime = 0
+        data_ = ""
+        endtime_ = 0
         stream_set_timeout(self.smtp_conn, self.Timeout)
         if self.Timelimit > 0:
-            endtime = time() + self.Timelimit
+            endtime_ = time() + self.Timelimit
         # end if
         while True:
             
             if not (is_resource(self.smtp_conn) and (not php_feof(self.smtp_conn))):
                 break
             # end if
-            str = php_no_error(lambda: php_fgets(self.smtp_conn, 515))
-            self.edebug(str("SMTP -> get_lines(): $data is \"") + str(data) + str("\""), self.DEBUG_LOWLEVEL)
-            self.edebug(str("SMTP -> get_lines(): $str is  \"") + str(str) + str("\""), self.DEBUG_LOWLEVEL)
-            data += str
+            str_ = php_no_error(lambda: php_fgets(self.smtp_conn, 515))
+            self.edebug(str("SMTP -> get_lines(): $data is \"") + str(data_) + str("\""), self.DEBUG_LOWLEVEL)
+            self.edebug(str("SMTP -> get_lines(): $str is  \"") + str(str_) + str("\""), self.DEBUG_LOWLEVEL)
+            data_ += str_
             #// If response is only 3 chars (not valid, but RFC5321 S4.2 says it must be handled),
             #// or 4th character is a space, we are done reading, break the loop,
             #// string array access is a micro-optimisation over strlen
-            if (not (php_isset(lambda : str[3]))) or (php_isset(lambda : str[3])) and str[3] == " ":
+            if (not (php_isset(lambda : str_[3]))) or (php_isset(lambda : str_[3])) and str_[3] == " ":
                 break
             # end if
             #// Timed-out? Log and break
-            info = stream_get_meta_data(self.smtp_conn)
-            if info["timed_out"]:
+            info_ = stream_get_meta_data(self.smtp_conn)
+            if info_["timed_out"]:
                 self.edebug("SMTP -> get_lines(): timed-out (" + self.Timeout + " sec)", self.DEBUG_LOWLEVEL)
                 break
             # end if
             #// Now check if reads took too long
-            if endtime and time() > endtime:
+            if endtime_ and time() > endtime_:
                 self.edebug("SMTP -> get_lines(): timelimit reached (" + self.Timelimit + " sec)", self.DEBUG_LOWLEVEL)
                 break
             # end if
         # end while
-        return data
+        return data_
     # end def get_lines
     #// 
     #// Enable or disable VERP address generation.
     #// @param boolean $enabled
     #//
-    def setverp(self, enabled=False):
+    def setverp(self, enabled_=None):
+        if enabled_ is None:
+            enabled_ = False
+        # end if
         
-        self.do_verp = enabled
+        self.do_verp = enabled_
     # end def setverp
     #// 
     #// Get VERP address generation mode.
     #// @return boolean
     #//
     def getverp(self):
+        
         
         return self.do_verp
     # end def getverp
@@ -827,17 +949,19 @@ class SMTP():
     #// @param string $smtp_code An associated SMTP error code
     #// @param string $smtp_code_ex Extended SMTP code
     #//
-    def seterror(self, message=None, detail="", smtp_code="", smtp_code_ex=""):
+    def seterror(self, message_=None, detail_="", smtp_code_="", smtp_code_ex_=""):
         
-        self.error = Array({"error": message, "detail": detail, "smtp_code": smtp_code, "smtp_code_ex": smtp_code_ex})
+        
+        self.error = Array({"error": message_, "detail": detail_, "smtp_code": smtp_code_, "smtp_code_ex": smtp_code_ex_})
     # end def seterror
     #// 
     #// Set debug output method.
     #// @param string|callable $method The name of the mechanism to use for debugging output, or a callable to handle it.
     #//
-    def setdebugoutput(self, method="echo"):
+    def setdebugoutput(self, method_="echo"):
         
-        self.Debugoutput = method
+        
+        self.Debugoutput = method_
     # end def setdebugoutput
     #// 
     #// Get debug output method.
@@ -845,15 +969,17 @@ class SMTP():
     #//
     def getdebugoutput(self):
         
+        
         return self.Debugoutput
     # end def getdebugoutput
     #// 
     #// Set debug output level.
     #// @param integer $level
     #//
-    def setdebuglevel(self, level=0):
+    def setdebuglevel(self, level_=0):
         
-        self.do_debug = level
+        
+        self.do_debug = level_
     # end def setdebuglevel
     #// 
     #// Get debug output level.
@@ -861,21 +987,24 @@ class SMTP():
     #//
     def getdebuglevel(self):
         
+        
         return self.do_debug
     # end def getdebuglevel
     #// 
     #// Set SMTP timeout.
     #// @param integer $timeout
     #//
-    def settimeout(self, timeout=0):
+    def settimeout(self, timeout_=0):
         
-        self.Timeout = timeout
+        
+        self.Timeout = timeout_
     # end def settimeout
     #// 
     #// Get SMTP timeout.
     #// @return integer
     #//
     def gettimeout(self):
+        
         
         return self.Timeout
     # end def gettimeout
@@ -886,11 +1015,12 @@ class SMTP():
     #// @param string $errfile The file the error occurred in
     #// @param integer $errline The line number the error occurred on
     #//
-    def errorhandler(self, errno=None, errmsg=None, errfile="", errline=0):
+    def errorhandler(self, errno_=None, errmsg_=None, errfile_="", errline_=0):
         
-        notice = "Connection failed."
-        self.seterror(notice, errno, errmsg)
-        self.edebug(notice + " Error #" + errno + ": " + errmsg + str(" [") + str(errfile) + str(" line ") + str(errline) + str("]"), self.DEBUG_CONNECTION)
+        
+        notice_ = "Connection failed."
+        self.seterror(notice_, errno_, errmsg_)
+        self.edebug(notice_ + " Error #" + errno_ + ": " + errmsg_ + str(" [") + str(errfile_) + str(" line ") + str(errline_) + str("]"), self.DEBUG_CONNECTION)
     # end def errorhandler
     #// 
     #// Extract and return the ID of the last SMTP transaction based on
@@ -902,14 +1032,15 @@ class SMTP():
     #//
     def recordlasttransactionid(self):
         
-        reply = self.getlastreply()
-        if php_empty(lambda : reply):
+        
+        reply_ = self.getlastreply()
+        if php_empty(lambda : reply_):
             self.last_smtp_transaction_id = None
         else:
             self.last_smtp_transaction_id = False
-            for smtp_transaction_id_pattern in self.smtp_transaction_id_patterns:
-                if php_preg_match(smtp_transaction_id_pattern, reply, matches):
-                    self.last_smtp_transaction_id = matches[1]
+            for smtp_transaction_id_pattern_ in self.smtp_transaction_id_patterns:
+                if php_preg_match(smtp_transaction_id_pattern_, reply_, matches_):
+                    self.last_smtp_transaction_id = matches_[1]
                 # end if
             # end for
         # end if
@@ -923,6 +1054,7 @@ class SMTP():
     #// @see recordLastTransactionID()
     #//
     def getlasttransactionid(self):
+        
         
         return self.last_smtp_transaction_id
     # end def getlasttransactionid

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,8 +18,8 @@ php_include_file(__DIR__ + "/admin.php", once=True)
 if (not current_user_can("manage_options")):
     wp_die(__("Sorry, you are not allowed to manage options for this site."))
 # end if
-title = __("Writing Settings")
-parent_file = "options-general.php"
+title_ = __("Writing Settings")
+parent_file_ = "options-general.php"
 get_current_screen().add_help_tab(Array({"id": "overview", "title": __("Overview"), "content": "<p>" + __("You can submit content in several different ways; this screen holds the settings for all of them. The top section controls the editor within the dashboard, while the rest control external publishing methods. For more information on any of these methods, use the documentation links.") + "</p>" + "<p>" + __("You must click the Save Changes button at the bottom of the screen for new settings to take effect.") + "</p>"}))
 #// This filter is documented in wp-admin/options.php
 if apply_filters("enable_post_by_email_configuration", True):
@@ -37,7 +32,7 @@ if apply_filters("enable_update_services_configuration", True):
 get_current_screen().set_help_sidebar("<p><strong>" + __("For more information:") + "</strong></p>" + "<p>" + __("<a href=\"https://wordpress.org/support/article/settings-writing-screen/\">Documentation on Writing Settings</a>") + "</p>" + "<p>" + __("<a href=\"https://wordpress.org/support/\">Support</a>") + "</p>")
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("\n<div class=\"wrap\">\n<h1>")
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("""</h1>
 <form method=\"post\" action=\"options.php\">
 """)
@@ -66,8 +61,8 @@ _e("Default Post Category")
 php_print("</label></th>\n<td>\n")
 wp_dropdown_categories(Array({"hide_empty": 0, "name": "default_category", "orderby": "name", "selected": get_option("default_category"), "hierarchical": True}))
 php_print("</td>\n</tr>\n")
-post_formats = get_post_format_strings()
-post_formats["standard"] = None
+post_formats_ = get_post_format_strings()
+post_formats_["standard"] = None
 php_print("<tr>\n<th scope=\"row\"><label for=\"default_post_format\">")
 _e("Default Post Format")
 php_print("""</label></th>
@@ -76,13 +71,13 @@ php_print("""</label></th>
 <option value=\"0\">""")
 php_print(get_post_format_string("standard"))
 php_print("</option>\n")
-for format_slug,format_name in post_formats:
+for format_slug_,format_name_ in post_formats_:
     php_print("     <option")
-    selected(get_option("default_post_format"), format_slug)
+    selected(get_option("default_post_format"), format_slug_)
     php_print(" value=\"")
-    php_print(esc_attr(format_slug))
+    php_print(esc_attr(format_slug_))
     php_print("\">")
-    php_print(esc_html(format_name))
+    php_print(esc_html(format_name_))
     php_print("</option>\n")
 # end for
 php_print("""   </select>

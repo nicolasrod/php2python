@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -85,108 +80,115 @@ php_define("H264_PROFILE_HIGH444", 144)
 php_define("H264_PROFILE_HIGH444_PREDICTIVE", 244)
 class getid3_flv(getid3_handler):
     magic = "FLV"
+    #// 
+    #// Break out of the loop if too many frames have been scanned; only scan this
+    #// many if meta frame does not contain useful duration.
+    #// 
+    #// @var int
+    #//
     max_frames = 100000
     #// 
     #// @return bool
     #//
     def analyze(self):
         
-        info = self.getid3.info
-        self.fseek(info["avdataoffset"])
-        FLVdataLength = info["avdataend"] - info["avdataoffset"]
-        FLVheader = self.fread(5)
-        info["fileformat"] = "flv"
-        info["flv"]["header"]["signature"] = php_substr(FLVheader, 0, 3)
-        info["flv"]["header"]["version"] = getid3_lib.bigendian2int(php_substr(FLVheader, 3, 1))
-        TypeFlags = getid3_lib.bigendian2int(php_substr(FLVheader, 4, 1))
-        if info["flv"]["header"]["signature"] != self.magic:
-            self.error("Expecting \"" + getid3_lib.printhexbytes(self.magic) + "\" at offset " + info["avdataoffset"] + ", found \"" + getid3_lib.printhexbytes(info["flv"]["header"]["signature"]) + "\"")
-            info["flv"] = None
-            info["fileformat"] = None
+        
+        info_ = self.getid3.info
+        self.fseek(info_["avdataoffset"])
+        FLVdataLength_ = info_["avdataend"] - info_["avdataoffset"]
+        FLVheader_ = self.fread(5)
+        info_["fileformat"] = "flv"
+        info_["flv"]["header"]["signature"] = php_substr(FLVheader_, 0, 3)
+        info_["flv"]["header"]["version"] = getid3_lib.bigendian2int(php_substr(FLVheader_, 3, 1))
+        TypeFlags_ = getid3_lib.bigendian2int(php_substr(FLVheader_, 4, 1))
+        if info_["flv"]["header"]["signature"] != self.magic:
+            self.error("Expecting \"" + getid3_lib.printhexbytes(self.magic) + "\" at offset " + info_["avdataoffset"] + ", found \"" + getid3_lib.printhexbytes(info_["flv"]["header"]["signature"]) + "\"")
+            info_["flv"] = None
+            info_["fileformat"] = None
             return False
         # end if
-        info["flv"]["header"]["hasAudio"] = php_bool(TypeFlags & 4)
-        info["flv"]["header"]["hasVideo"] = php_bool(TypeFlags & 1)
-        FrameSizeDataLength = getid3_lib.bigendian2int(self.fread(4))
-        FLVheaderFrameLength = 9
-        if FrameSizeDataLength > FLVheaderFrameLength:
-            self.fseek(FrameSizeDataLength - FLVheaderFrameLength, SEEK_CUR)
+        info_["flv"]["header"]["hasAudio"] = php_bool(TypeFlags_ & 4)
+        info_["flv"]["header"]["hasVideo"] = php_bool(TypeFlags_ & 1)
+        FrameSizeDataLength_ = getid3_lib.bigendian2int(self.fread(4))
+        FLVheaderFrameLength_ = 9
+        if FrameSizeDataLength_ > FLVheaderFrameLength_:
+            self.fseek(FrameSizeDataLength_ - FLVheaderFrameLength_, SEEK_CUR)
         # end if
-        Duration = 0
-        found_video = False
-        found_audio = False
-        found_meta = False
-        found_valid_meta_playtime = False
-        tagParseCount = 0
-        info["flv"]["framecount"] = Array({"total": 0, "audio": 0, "video": 0})
-        flv_framecount = info["flv"]["framecount"]
+        Duration_ = 0
+        found_video_ = False
+        found_audio_ = False
+        found_meta_ = False
+        found_valid_meta_playtime_ = False
+        tagParseCount_ = 0
+        info_["flv"]["framecount"] = Array({"total": 0, "audio": 0, "video": 0})
+        flv_framecount_ = info_["flv"]["framecount"]
         while True:
-            
-            if not (self.ftell() + 16 < info["avdataend"] and tagParseCount <= self.max_frames or (not found_valid_meta_playtime)):
+            tagParseCount_ += 1
+            if not (self.ftell() + 16 < info_["avdataend"] and tagParseCount_ <= self.max_frames or (not found_valid_meta_playtime_)):
                 break
             # end if
-            ThisTagHeader = self.fread(16)
-            tagParseCount += 1
-            PreviousTagLength = getid3_lib.bigendian2int(php_substr(ThisTagHeader, 0, 4))
-            TagType = getid3_lib.bigendian2int(php_substr(ThisTagHeader, 4, 1))
-            DataLength = getid3_lib.bigendian2int(php_substr(ThisTagHeader, 5, 3))
-            Timestamp = getid3_lib.bigendian2int(php_substr(ThisTagHeader, 8, 3))
-            LastHeaderByte = getid3_lib.bigendian2int(php_substr(ThisTagHeader, 15, 1))
-            NextOffset = self.ftell() - 1 + DataLength
-            if Timestamp > Duration:
-                Duration = Timestamp
+            ThisTagHeader_ = self.fread(16)
+            tagParseCount_ += 1
+            PreviousTagLength_ = getid3_lib.bigendian2int(php_substr(ThisTagHeader_, 0, 4))
+            TagType_ = getid3_lib.bigendian2int(php_substr(ThisTagHeader_, 4, 1))
+            DataLength_ = getid3_lib.bigendian2int(php_substr(ThisTagHeader_, 5, 3))
+            Timestamp_ = getid3_lib.bigendian2int(php_substr(ThisTagHeader_, 8, 3))
+            LastHeaderByte_ = getid3_lib.bigendian2int(php_substr(ThisTagHeader_, 15, 1))
+            NextOffset_ = self.ftell() - 1 + DataLength_
+            if Timestamp_ > Duration_:
+                Duration_ = Timestamp_
             # end if
-            flv_framecount["total"] += 1
-            for case in Switch(TagType):
+            flv_framecount_["total"] += 1
+            for case in Switch(TagType_):
                 if case(GETID3_FLV_TAG_AUDIO):
-                    flv_framecount["audio"] += 1
-                    if (not found_audio):
-                        found_audio = True
-                        info["flv"]["audio"]["audioFormat"] = LastHeaderByte >> 4 & 15
-                        info["flv"]["audio"]["audioRate"] = LastHeaderByte >> 2 & 3
-                        info["flv"]["audio"]["audioSampleSize"] = LastHeaderByte >> 1 & 1
-                        info["flv"]["audio"]["audioType"] = LastHeaderByte & 1
+                    flv_framecount_["audio"] += 1
+                    if (not found_audio_):
+                        found_audio_ = True
+                        info_["flv"]["audio"]["audioFormat"] = LastHeaderByte_ >> 4 & 15
+                        info_["flv"]["audio"]["audioRate"] = LastHeaderByte_ >> 2 & 3
+                        info_["flv"]["audio"]["audioSampleSize"] = LastHeaderByte_ >> 1 & 1
+                        info_["flv"]["audio"]["audioType"] = LastHeaderByte_ & 1
                     # end if
                     break
                 # end if
                 if case(GETID3_FLV_TAG_VIDEO):
-                    flv_framecount["video"] += 1
-                    if (not found_video):
-                        found_video = True
-                        info["flv"]["video"]["videoCodec"] = LastHeaderByte & 7
-                        FLVvideoHeader = self.fread(11)
-                        if info["flv"]["video"]["videoCodec"] == GETID3_FLV_VIDEO_H264:
+                    flv_framecount_["video"] += 1
+                    if (not found_video_):
+                        found_video_ = True
+                        info_["flv"]["video"]["videoCodec"] = LastHeaderByte_ & 7
+                        FLVvideoHeader_ = self.fread(11)
+                        if info_["flv"]["video"]["videoCodec"] == GETID3_FLV_VIDEO_H264:
                             #// this code block contributed by: moysevichØgmail*com
-                            AVCPacketType = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 0, 1))
-                            if AVCPacketType == H264_AVC_SEQUENCE_HEADER:
+                            AVCPacketType_ = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 0, 1))
+                            if AVCPacketType_ == H264_AVC_SEQUENCE_HEADER:
                                 #// read AVCDecoderConfigurationRecord
-                                configurationVersion = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 4, 1))
-                                AVCProfileIndication = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 5, 1))
-                                profile_compatibility = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 6, 1))
-                                lengthSizeMinusOne = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 7, 1))
-                                numOfSequenceParameterSets = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 8, 1))
-                                if numOfSequenceParameterSets & 31 != 0:
+                                configurationVersion_ = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 4, 1))
+                                AVCProfileIndication_ = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 5, 1))
+                                profile_compatibility_ = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 6, 1))
+                                lengthSizeMinusOne_ = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 7, 1))
+                                numOfSequenceParameterSets_ = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 8, 1))
+                                if numOfSequenceParameterSets_ & 31 != 0:
                                     #// there is at least one SequenceParameterSet
                                     #// read size of the first SequenceParameterSet
                                     #// $spsSize = getid3_lib::BigEndian2Int(substr($FLVvideoHeader, 9, 2));
-                                    spsSize = getid3_lib.littleendian2int(php_substr(FLVvideoHeader, 9, 2))
+                                    spsSize_ = getid3_lib.littleendian2int(php_substr(FLVvideoHeader_, 9, 2))
                                     #// read the first SequenceParameterSet
-                                    sps = self.fread(spsSize)
-                                    if php_strlen(sps) == spsSize:
+                                    sps_ = self.fread(spsSize_)
+                                    if php_strlen(sps_) == spsSize_:
                                         #// make sure that whole SequenceParameterSet was red
-                                        spsReader = php_new_class("AVCSequenceParameterSetReader", lambda : AVCSequenceParameterSetReader(sps))
-                                        spsReader.readdata()
-                                        info["video"]["resolution_x"] = spsReader.getwidth()
-                                        info["video"]["resolution_y"] = spsReader.getheight()
+                                        spsReader_ = php_new_class("AVCSequenceParameterSetReader", lambda : AVCSequenceParameterSetReader(sps_))
+                                        spsReader_.readdata()
+                                        info_["video"]["resolution_x"] = spsReader_.getwidth()
+                                        info_["video"]["resolution_y"] = spsReader_.getheight()
                                     # end if
                                 # end if
                             # end if
                             pass
-                        elif info["flv"]["video"]["videoCodec"] == GETID3_FLV_VIDEO_H263:
-                            PictureSizeType = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 3, 2)) >> 7
-                            PictureSizeType = PictureSizeType & 7
-                            info["flv"]["header"]["videoSizeType"] = PictureSizeType
-                            for case in Switch(PictureSizeType):
+                        elif info_["flv"]["video"]["videoCodec"] == GETID3_FLV_VIDEO_H263:
+                            PictureSizeType_ = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 3, 2)) >> 7
+                            PictureSizeType_ = PictureSizeType_ & 7
+                            info_["flv"]["header"]["videoSizeType"] = PictureSizeType_
+                            for case in Switch(PictureSizeType_):
                                 if case(0):
                                     #// $PictureSizeEnc = getid3_lib::BigEndian2Int(substr($FLVvideoHeader, 5, 2));
                                     #// $PictureSizeEnc <<= 1;
@@ -194,90 +196,90 @@ class getid3_flv(getid3_handler):
                                     #// $PictureSizeEnc = getid3_lib::BigEndian2Int(substr($FLVvideoHeader, 6, 2));
                                     #// $PictureSizeEnc <<= 1;
                                     #// $info['video']['resolution_y'] = ($PictureSizeEnc & 0xFF00) >> 8;
-                                    PictureSizeEnc["x"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 4, 2)) >> 7
-                                    PictureSizeEnc["y"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 5, 2)) >> 7
-                                    info["video"]["resolution_x"] = PictureSizeEnc["x"] & 255
-                                    info["video"]["resolution_y"] = PictureSizeEnc["y"] & 255
+                                    PictureSizeEnc_["x"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 4, 2)) >> 7
+                                    PictureSizeEnc_["y"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 5, 2)) >> 7
+                                    info_["video"]["resolution_x"] = PictureSizeEnc_["x"] & 255
+                                    info_["video"]["resolution_y"] = PictureSizeEnc_["y"] & 255
                                     break
                                 # end if
                                 if case(1):
-                                    PictureSizeEnc["x"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 4, 3)) >> 7
-                                    PictureSizeEnc["y"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 6, 3)) >> 7
-                                    info["video"]["resolution_x"] = PictureSizeEnc["x"] & 65535
-                                    info["video"]["resolution_y"] = PictureSizeEnc["y"] & 65535
+                                    PictureSizeEnc_["x"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 4, 3)) >> 7
+                                    PictureSizeEnc_["y"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 6, 3)) >> 7
+                                    info_["video"]["resolution_x"] = PictureSizeEnc_["x"] & 65535
+                                    info_["video"]["resolution_y"] = PictureSizeEnc_["y"] & 65535
                                     break
                                 # end if
                                 if case(2):
-                                    info["video"]["resolution_x"] = 352
-                                    info["video"]["resolution_y"] = 288
+                                    info_["video"]["resolution_x"] = 352
+                                    info_["video"]["resolution_y"] = 288
                                     break
                                 # end if
                                 if case(3):
-                                    info["video"]["resolution_x"] = 176
-                                    info["video"]["resolution_y"] = 144
+                                    info_["video"]["resolution_x"] = 176
+                                    info_["video"]["resolution_y"] = 144
                                     break
                                 # end if
                                 if case(4):
-                                    info["video"]["resolution_x"] = 128
-                                    info["video"]["resolution_y"] = 96
+                                    info_["video"]["resolution_x"] = 128
+                                    info_["video"]["resolution_y"] = 96
                                     break
                                 # end if
                                 if case(5):
-                                    info["video"]["resolution_x"] = 320
-                                    info["video"]["resolution_y"] = 240
+                                    info_["video"]["resolution_x"] = 320
+                                    info_["video"]["resolution_y"] = 240
                                     break
                                 # end if
                                 if case(6):
-                                    info["video"]["resolution_x"] = 160
-                                    info["video"]["resolution_y"] = 120
+                                    info_["video"]["resolution_x"] = 160
+                                    info_["video"]["resolution_y"] = 120
                                     break
                                 # end if
                                 if case():
-                                    info["video"]["resolution_x"] = 0
-                                    info["video"]["resolution_y"] = 0
+                                    info_["video"]["resolution_x"] = 0
+                                    info_["video"]["resolution_y"] = 0
                                     break
                                 # end if
                             # end for
-                        elif info["flv"]["video"]["videoCodec"] == GETID3_FLV_VIDEO_VP6FLV_ALPHA:
+                        elif info_["flv"]["video"]["videoCodec"] == GETID3_FLV_VIDEO_VP6FLV_ALPHA:
                             #// contributed by schouwerwouØgmail*com
-                            if (not (php_isset(lambda : info["video"]["resolution_x"]))):
+                            if (not (php_isset(lambda : info_["video"]["resolution_x"]))):
                                 #// only when meta data isn't set
-                                PictureSizeEnc["x"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 6, 2))
-                                PictureSizeEnc["y"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader, 7, 2))
-                                info["video"]["resolution_x"] = PictureSizeEnc["x"] & 255 << 3
-                                info["video"]["resolution_y"] = PictureSizeEnc["y"] & 255 << 3
+                                PictureSizeEnc_["x"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 6, 2))
+                                PictureSizeEnc_["y"] = getid3_lib.bigendian2int(php_substr(FLVvideoHeader_, 7, 2))
+                                info_["video"]["resolution_x"] = PictureSizeEnc_["x"] & 255 << 3
+                                info_["video"]["resolution_y"] = PictureSizeEnc_["y"] & 255 << 3
                             # end if
                             pass
                         # end if
-                        if (not php_empty(lambda : info["video"]["resolution_x"])) and (not php_empty(lambda : info["video"]["resolution_y"])):
-                            info["video"]["pixel_aspect_ratio"] = info["video"]["resolution_x"] / info["video"]["resolution_y"]
+                        if (not php_empty(lambda : info_["video"]["resolution_x"])) and (not php_empty(lambda : info_["video"]["resolution_y"])):
+                            info_["video"]["pixel_aspect_ratio"] = info_["video"]["resolution_x"] / info_["video"]["resolution_y"]
                         # end if
                     # end if
                     break
                 # end if
                 if case(GETID3_FLV_TAG_META):
-                    if (not found_meta):
-                        found_meta = True
+                    if (not found_meta_):
+                        found_meta_ = True
                         self.fseek(-1, SEEK_CUR)
-                        datachunk = self.fread(DataLength)
-                        AMFstream = php_new_class("AMFStream", lambda : AMFStream(datachunk))
-                        reader = php_new_class("AMFReader", lambda : AMFReader(AMFstream))
-                        eventName = reader.readdata()
-                        info["flv"]["meta"][eventName] = reader.readdata()
-                        reader = None
-                        copykeys = Array({"framerate": "frame_rate", "width": "resolution_x", "height": "resolution_y", "audiodatarate": "bitrate", "videodatarate": "bitrate"})
-                        for sourcekey,destkey in copykeys:
-                            if (php_isset(lambda : info["flv"]["meta"]["onMetaData"][sourcekey])):
-                                for case in Switch(sourcekey):
+                        datachunk_ = self.fread(DataLength_)
+                        AMFstream_ = php_new_class("AMFStream", lambda : AMFStream(datachunk_))
+                        reader_ = php_new_class("AMFReader", lambda : AMFReader(AMFstream_))
+                        eventName_ = reader_.readdata()
+                        info_["flv"]["meta"][eventName_] = reader_.readdata()
+                        reader_ = None
+                        copykeys_ = Array({"framerate": "frame_rate", "width": "resolution_x", "height": "resolution_y", "audiodatarate": "bitrate", "videodatarate": "bitrate"})
+                        for sourcekey_,destkey_ in copykeys_:
+                            if (php_isset(lambda : info_["flv"]["meta"]["onMetaData"][sourcekey_])):
+                                for case in Switch(sourcekey_):
                                     if case("width"):
                                         pass
                                     # end if
                                     if case("height"):
-                                        info["video"][destkey] = php_intval(round(info["flv"]["meta"]["onMetaData"][sourcekey]))
+                                        info_["video"][destkey_] = php_intval(round(info_["flv"]["meta"]["onMetaData"][sourcekey_]))
                                         break
                                     # end if
                                     if case("audiodatarate"):
-                                        info["audio"][destkey] = getid3_lib.castasint(round(info["flv"]["meta"]["onMetaData"][sourcekey] * 1000))
+                                        info_["audio"][destkey_] = getid3_lib.castasint(round(info_["flv"]["meta"]["onMetaData"][sourcekey_] * 1000))
                                         break
                                     # end if
                                     if case("videodatarate"):
@@ -287,14 +289,14 @@ class getid3_flv(getid3_handler):
                                         pass
                                     # end if
                                     if case():
-                                        info["video"][destkey] = info["flv"]["meta"]["onMetaData"][sourcekey]
+                                        info_["video"][destkey_] = info_["flv"]["meta"]["onMetaData"][sourcekey_]
                                         break
                                     # end if
                                 # end for
                             # end if
                         # end for
-                        if (not php_empty(lambda : info["flv"]["meta"]["onMetaData"]["duration"])):
-                            found_valid_meta_playtime = True
+                        if (not php_empty(lambda : info_["flv"]["meta"]["onMetaData"]["duration"])):
+                            found_valid_meta_playtime_ = True
                         # end if
                     # end if
                     break
@@ -303,37 +305,37 @@ class getid3_flv(getid3_handler):
                     break
                 # end if
             # end for
-            self.fseek(NextOffset)
+            self.fseek(NextOffset_)
         # end while
-        info["playtime_seconds"] = Duration / 1000
-        if info["playtime_seconds"] > 0:
-            info["bitrate"] = info["avdataend"] - info["avdataoffset"] * 8 / info["playtime_seconds"]
+        info_["playtime_seconds"] = Duration_ / 1000
+        if info_["playtime_seconds"] > 0:
+            info_["bitrate"] = info_["avdataend"] - info_["avdataoffset"] * 8 / info_["playtime_seconds"]
         # end if
-        if info["flv"]["header"]["hasAudio"]:
-            info["audio"]["codec"] = self.audioformatlookup(info["flv"]["audio"]["audioFormat"])
-            info["audio"]["sample_rate"] = self.audioratelookup(info["flv"]["audio"]["audioRate"])
-            info["audio"]["bits_per_sample"] = self.audiobitdepthlookup(info["flv"]["audio"]["audioSampleSize"])
-            info["audio"]["channels"] = info["flv"]["audio"]["audioType"] + 1
+        if info_["flv"]["header"]["hasAudio"]:
+            info_["audio"]["codec"] = self.audioformatlookup(info_["flv"]["audio"]["audioFormat"])
+            info_["audio"]["sample_rate"] = self.audioratelookup(info_["flv"]["audio"]["audioRate"])
+            info_["audio"]["bits_per_sample"] = self.audiobitdepthlookup(info_["flv"]["audio"]["audioSampleSize"])
+            info_["audio"]["channels"] = info_["flv"]["audio"]["audioType"] + 1
             #// 0=mono,1=stereo
-            info["audio"]["lossless"] = False if info["flv"]["audio"]["audioFormat"] else True
+            info_["audio"]["lossless"] = False if info_["flv"]["audio"]["audioFormat"] else True
             #// 0=uncompressed
-            info["audio"]["dataformat"] = "flv"
+            info_["audio"]["dataformat"] = "flv"
         # end if
-        if (not php_empty(lambda : info["flv"]["header"]["hasVideo"])):
-            info["video"]["codec"] = self.videocodeclookup(info["flv"]["video"]["videoCodec"])
-            info["video"]["dataformat"] = "flv"
-            info["video"]["lossless"] = False
+        if (not php_empty(lambda : info_["flv"]["header"]["hasVideo"])):
+            info_["video"]["codec"] = self.videocodeclookup(info_["flv"]["video"]["videoCodec"])
+            info_["video"]["dataformat"] = "flv"
+            info_["video"]["lossless"] = False
         # end if
         #// Set information from meta
-        if (not php_empty(lambda : info["flv"]["meta"]["onMetaData"]["duration"])):
-            info["playtime_seconds"] = info["flv"]["meta"]["onMetaData"]["duration"]
-            info["bitrate"] = info["avdataend"] - info["avdataoffset"] * 8 / info["playtime_seconds"]
+        if (not php_empty(lambda : info_["flv"]["meta"]["onMetaData"]["duration"])):
+            info_["playtime_seconds"] = info_["flv"]["meta"]["onMetaData"]["duration"]
+            info_["bitrate"] = info_["avdataend"] - info_["avdataoffset"] * 8 / info_["playtime_seconds"]
         # end if
-        if (php_isset(lambda : info["flv"]["meta"]["onMetaData"]["audiocodecid"])):
-            info["audio"]["codec"] = self.audioformatlookup(info["flv"]["meta"]["onMetaData"]["audiocodecid"])
+        if (php_isset(lambda : info_["flv"]["meta"]["onMetaData"]["audiocodecid"])):
+            info_["audio"]["codec"] = self.audioformatlookup(info_["flv"]["meta"]["onMetaData"]["audiocodecid"])
         # end if
-        if (php_isset(lambda : info["flv"]["meta"]["onMetaData"]["videocodecid"])):
-            info["video"]["codec"] = self.videocodeclookup(info["flv"]["meta"]["onMetaData"]["videocodecid"])
+        if (php_isset(lambda : info_["flv"]["meta"]["onMetaData"]["videocodecid"])):
+            info_["video"]["codec"] = self.videocodeclookup(info_["flv"]["meta"]["onMetaData"]["videocodecid"])
         # end if
         return True
     # end def analyze
@@ -343,10 +345,11 @@ class getid3_flv(getid3_handler):
     #// @return string|false
     #//
     @classmethod
-    def audioformatlookup(self, id=None):
+    def audioformatlookup(self, id_=None):
         
-        audioformatlookup.lookup = Array({0: "Linear PCM, platform endian", 1: "ADPCM", 2: "mp3", 3: "Linear PCM, little endian", 4: "Nellymoser 16kHz mono", 5: "Nellymoser 8kHz mono", 6: "Nellymoser", 7: "G.711A-law logarithmic PCM", 8: "G.711 mu-law logarithmic PCM", 9: "reserved", 10: "AAC", 11: "Speex", 12: False, 13: False, 14: "mp3 8kHz", 15: "Device-specific sound"})
-        return audioformatlookup.lookup[id] if (php_isset(lambda : audioformatlookup.lookup[id])) else False
+        
+        lookup_ = Array({0: "Linear PCM, platform endian", 1: "ADPCM", 2: "mp3", 3: "Linear PCM, little endian", 4: "Nellymoser 16kHz mono", 5: "Nellymoser 8kHz mono", 6: "Nellymoser", 7: "G.711A-law logarithmic PCM", 8: "G.711 mu-law logarithmic PCM", 9: "reserved", 10: "AAC", 11: "Speex", 12: False, 13: False, 14: "mp3 8kHz", 15: "Device-specific sound"})
+        return lookup_[id_] if (php_isset(lambda : lookup_[id_])) else False
     # end def audioformatlookup
     #// 
     #// @param int $id
@@ -354,10 +357,11 @@ class getid3_flv(getid3_handler):
     #// @return int|false
     #//
     @classmethod
-    def audioratelookup(self, id=None):
+    def audioratelookup(self, id_=None):
         
-        audioratelookup.lookup = Array({0: 5500, 1: 11025, 2: 22050, 3: 44100})
-        return audioratelookup.lookup[id] if (php_isset(lambda : audioratelookup.lookup[id])) else False
+        
+        lookup_ = Array({0: 5500, 1: 11025, 2: 22050, 3: 44100})
+        return lookup_[id_] if (php_isset(lambda : lookup_[id_])) else False
     # end def audioratelookup
     #// 
     #// @param int $id
@@ -365,10 +369,11 @@ class getid3_flv(getid3_handler):
     #// @return int|false
     #//
     @classmethod
-    def audiobitdepthlookup(self, id=None):
+    def audiobitdepthlookup(self, id_=None):
         
-        audiobitdepthlookup.lookup = Array({0: 8, 1: 16})
-        return audiobitdepthlookup.lookup[id] if (php_isset(lambda : audiobitdepthlookup.lookup[id])) else False
+        
+        lookup_ = Array({0: 8, 1: 16})
+        return lookup_[id_] if (php_isset(lambda : lookup_[id_])) else False
     # end def audiobitdepthlookup
     #// 
     #// @param int $id
@@ -376,21 +381,29 @@ class getid3_flv(getid3_handler):
     #// @return string|false
     #//
     @classmethod
-    def videocodeclookup(self, id=None):
+    def videocodeclookup(self, id_=None):
         
-        videocodeclookup.lookup = Array({GETID3_FLV_VIDEO_H263: "Sorenson H.263", GETID3_FLV_VIDEO_SCREEN: "Screen video", GETID3_FLV_VIDEO_VP6FLV: "On2 VP6", GETID3_FLV_VIDEO_VP6FLV_ALPHA: "On2 VP6 with alpha channel", GETID3_FLV_VIDEO_SCREENV2: "Screen video v2", GETID3_FLV_VIDEO_H264: "Sorenson H.264"})
-        return videocodeclookup.lookup[id] if (php_isset(lambda : videocodeclookup.lookup[id])) else False
+        
+        lookup_ = Array({GETID3_FLV_VIDEO_H263: "Sorenson H.263", GETID3_FLV_VIDEO_SCREEN: "Screen video", GETID3_FLV_VIDEO_VP6FLV: "On2 VP6", GETID3_FLV_VIDEO_VP6FLV_ALPHA: "On2 VP6 with alpha channel", GETID3_FLV_VIDEO_SCREENV2: "Screen video v2", GETID3_FLV_VIDEO_H264: "Sorenson H.264"})
+        return lookup_[id_] if (php_isset(lambda : lookup_[id_])) else False
     # end def videocodeclookup
 # end class getid3_flv
 class AMFStream():
+    #// 
+    #// @var string
+    #//
     bytes = Array()
+    #// 
+    #// @var int
+    #//
     pos = Array()
     #// 
     #// @param string $bytes
     #//
-    def __init__(self, bytes=None):
+    def __init__(self, bytes_=None):
         
-        self.bytes = bytes
+        
+        self.bytes = bytes_
         self.pos = 0
     # end def __init__
     #// 
@@ -398,7 +411,9 @@ class AMFStream():
     #//
     def readbyte(self):
         
+        
         #// 8-bit
+        self.pos += 1
         return php_ord(php_substr(self.bytes, self.pos, 1))
         self.pos += 1
     # end def readbyte
@@ -406,6 +421,7 @@ class AMFStream():
     #// @return int
     #//
     def readint(self):
+        
         
         #// 16-bit
         return self.readbyte() << 8 + self.readbyte()
@@ -415,6 +431,7 @@ class AMFStream():
     #//
     def readlong(self):
         
+        
         #// 32-bit
         return self.readbyte() << 24 + self.readbyte() << 16 + self.readbyte() << 8 + self.readbyte()
     # end def readlong
@@ -423,6 +440,7 @@ class AMFStream():
     #//
     def readdouble(self):
         
+        
         return getid3_lib.bigendian2float(self.read(8))
     # end def readdouble
     #// 
@@ -430,120 +448,134 @@ class AMFStream():
     #//
     def readutf(self):
         
-        length = self.readint()
-        return self.read(length)
+        
+        length_ = self.readint()
+        return self.read(length_)
     # end def readutf
     #// 
     #// @return string
     #//
     def readlongutf(self):
         
-        length = self.readlong()
-        return self.read(length)
+        
+        length_ = self.readlong()
+        return self.read(length_)
     # end def readlongutf
     #// 
     #// @param int $length
     #// 
     #// @return string
     #//
-    def read(self, length=None):
+    def read(self, length_=None):
         
-        val = php_substr(self.bytes, self.pos, length)
-        self.pos += length
-        return val
+        
+        val_ = php_substr(self.bytes, self.pos, length_)
+        self.pos += length_
+        return val_
     # end def read
     #// 
     #// @return int
     #//
     def peekbyte(self):
         
-        pos = self.pos
-        val = self.readbyte()
-        self.pos = pos
-        return val
+        
+        pos_ = self.pos
+        val_ = self.readbyte()
+        self.pos = pos_
+        return val_
     # end def peekbyte
     #// 
     #// @return int
     #//
     def peekint(self):
         
-        pos = self.pos
-        val = self.readint()
-        self.pos = pos
-        return val
+        
+        pos_ = self.pos
+        val_ = self.readint()
+        self.pos = pos_
+        return val_
     # end def peekint
     #// 
     #// @return int
     #//
     def peeklong(self):
         
-        pos = self.pos
-        val = self.readlong()
-        self.pos = pos
-        return val
+        
+        pos_ = self.pos
+        val_ = self.readlong()
+        self.pos = pos_
+        return val_
     # end def peeklong
     #// 
     #// @return float|false
     #//
     def peekdouble(self):
         
-        pos = self.pos
-        val = self.readdouble()
-        self.pos = pos
-        return val
+        
+        pos_ = self.pos
+        val_ = self.readdouble()
+        self.pos = pos_
+        return val_
     # end def peekdouble
     #// 
     #// @return string
     #//
     def peekutf(self):
         
-        pos = self.pos
-        val = self.readutf()
-        self.pos = pos
-        return val
+        
+        pos_ = self.pos
+        val_ = self.readutf()
+        self.pos = pos_
+        return val_
     # end def peekutf
     #// 
     #// @return string
     #//
     def peeklongutf(self):
         
-        pos = self.pos
-        val = self.readlongutf()
-        self.pos = pos
-        return val
+        
+        pos_ = self.pos
+        val_ = self.readlongutf()
+        self.pos = pos_
+        return val_
     # end def peeklongutf
 # end class AMFStream
 class AMFReader():
+    #// 
+    #// @var AMFStream
+    #//
     stream = Array()
     #// 
     #// @param AMFStream $stream
     #//
-    def __init__(self, stream=None):
+    def __init__(self, stream_=None):
         
-        self.stream = stream
+        
+        self.stream = stream_
     # end def __init__
     #// 
     #// @return mixed
     #//
     def readdata(self):
         
-        value = None
-        type = self.stream.readbyte()
-        for case in Switch(type):
+        
+        value_ = None
+        type_ = self.stream.readbyte()
+        for case in Switch(type_):
             if case(0):
-                value = self.readdouble()
+                value_ = self.readdouble()
                 break
             # end if
             if case(1):
-                value = self.readboolean()
+                value_ = self.readboolean()
                 break
             # end if
             if case(2):
-                value = self.readstring()
+                value_ = self.readstring()
                 break
             # end if
             if case(3):
-                value = self.readobject()
+                value_ = self.readobject()
                 break
             # end if
             if case(6):
@@ -551,40 +583,41 @@ class AMFReader():
                 break
             # end if
             if case(8):
-                value = self.readmixedarray()
+                value_ = self.readmixedarray()
                 break
             # end if
             if case(10):
-                value = self.readarray()
+                value_ = self.readarray()
                 break
             # end if
             if case(11):
-                value = self.readdate()
+                value_ = self.readdate()
                 break
             # end if
             if case(13):
-                value = self.readlongstring()
+                value_ = self.readlongstring()
                 break
             # end if
             if case(15):
-                value = self.readxml()
+                value_ = self.readxml()
                 break
             # end if
             if case(16):
-                value = self.readtypedobject()
+                value_ = self.readtypedobject()
                 break
             # end if
             if case():
-                value = "(unknown or unsupported data type)"
+                value_ = "(unknown or unsupported data type)"
                 break
             # end if
         # end for
-        return value
+        return value_
     # end def readdata
     #// 
     #// @return float|false
     #//
     def readdouble(self):
+        
         
         return self.stream.readdouble()
     # end def readdouble
@@ -593,12 +626,14 @@ class AMFReader():
     #//
     def readboolean(self):
         
+        
         return self.stream.readbyte() == 1
     # end def readboolean
     #// 
     #// @return string
     #//
     def readstring(self):
+        
         
         return self.stream.readutf()
     # end def readstring
@@ -607,78 +642,83 @@ class AMFReader():
     #//
     def readobject(self):
         
+        
         #// Get highest numerical index - ignored
         #// $highestIndex = $this->stream->readLong();
-        data = Array()
-        key = None
+        data_ = Array()
+        key_ = None
         while True:
-            key = self.stream.readutf()
-            if not (key):
+            key_ = self.stream.readutf()
+            if not (key_):
                 break
             # end if
-            data[key] = self.readdata()
+            data_[key_] = self.readdata()
         # end while
         #// Mixed array record ends with empty string (0x00 0x00) and 0x09
-        if key == "" and self.stream.peekbyte() == 9:
+        if key_ == "" and self.stream.peekbyte() == 9:
             #// Consume byte
             self.stream.readbyte()
         # end if
-        return data
+        return data_
     # end def readobject
     #// 
     #// @return array
     #//
     def readmixedarray(self):
         
+        
         #// Get highest numerical index - ignored
-        highestIndex = self.stream.readlong()
-        data = Array()
-        key = None
+        highestIndex_ = self.stream.readlong()
+        data_ = Array()
+        key_ = None
         while True:
-            key = self.stream.readutf()
-            if not (key):
+            key_ = self.stream.readutf()
+            if not (key_):
                 break
             # end if
-            if php_is_numeric(key):
-                key = php_int(key)
+            if php_is_numeric(key_):
+                key_ = php_int(key_)
             # end if
-            data[key] = self.readdata()
+            data_[key_] = self.readdata()
         # end while
         #// Mixed array record ends with empty string (0x00 0x00) and 0x09
-        if key == "" and self.stream.peekbyte() == 9:
+        if key_ == "" and self.stream.peekbyte() == 9:
             #// Consume byte
             self.stream.readbyte()
         # end if
-        return data
+        return data_
     # end def readmixedarray
     #// 
     #// @return array
     #//
     def readarray(self):
         
-        length = self.stream.readlong()
-        data = Array()
-        i = 0
-        while i < length:
+        
+        length_ = self.stream.readlong()
+        data_ = Array()
+        i_ = 0
+        while i_ < length_:
             
-            data[-1] = self.readdata()
-            i += 1
+            data_[-1] = self.readdata()
+            i_ += 1
         # end while
-        return data
+        return data_
     # end def readarray
     #// 
     #// @return float|false
     #//
     def readdate(self):
         
-        timestamp = self.stream.readdouble()
-        timezone = self.stream.readint()
-        return timestamp
+        
+        timestamp_ = self.stream.readdouble()
+        timezone_ = self.stream.readint()
+        return timestamp_
     # end def readdate
     #// 
     #// @return string
     #//
     def readlongstring(self):
+        
         
         return self.stream.readlongutf()
     # end def readlongstring
@@ -687,6 +727,7 @@ class AMFReader():
     #//
     def readxml(self):
         
+        
         return self.stream.readlongutf()
     # end def readxml
     #// 
@@ -694,164 +735,181 @@ class AMFReader():
     #//
     def readtypedobject(self):
         
-        className = self.stream.readutf()
+        
+        className_ = self.stream.readutf()
         return self.readobject()
     # end def readtypedobject
 # end class AMFReader
 class AVCSequenceParameterSetReader():
+    #// 
+    #// @var string
+    #//
     sps = Array()
     start = 0
     currentBytes = 0
     currentBits = 0
+    #// 
+    #// @var int
+    #//
     width = Array()
+    #// 
+    #// @var int
+    #//
     height = Array()
     #// 
     #// @param string $sps
     #//
-    def __init__(self, sps=None):
+    def __init__(self, sps_=None):
         
-        self.sps = sps
+        
+        self.sps = sps_
     # end def __init__
     def readdata(self):
         
+        
         self.skipbits(8)
         self.skipbits(8)
-        profile = self.getbits(8)
+        profile_ = self.getbits(8)
         #// read profile
-        if profile > 0:
+        if profile_ > 0:
             self.skipbits(8)
-            level_idc = self.getbits(8)
+            level_idc_ = self.getbits(8)
             #// level_idc
             self.expgolombue()
             #// seq_parameter_set_id // sps
             self.expgolombue()
             #// log2_max_frame_num_minus4
-            picOrderType = self.expgolombue()
+            picOrderType_ = self.expgolombue()
             #// pic_order_cnt_type
-            if picOrderType == 0:
+            if picOrderType_ == 0:
                 self.expgolombue()
                 pass
-            elif picOrderType == 1:
+            elif picOrderType_ == 1:
                 self.skipbits(1)
                 #// delta_pic_order_always_zero_flag
                 self.expgolombse()
                 #// offset_for_non_ref_pic
                 self.expgolombse()
                 #// offset_for_top_to_bottom_field
-                num_ref_frames_in_pic_order_cnt_cycle = self.expgolombue()
+                num_ref_frames_in_pic_order_cnt_cycle_ = self.expgolombue()
                 #// num_ref_frames_in_pic_order_cnt_cycle
-                i = 0
-                while i < num_ref_frames_in_pic_order_cnt_cycle:
+                i_ = 0
+                while i_ < num_ref_frames_in_pic_order_cnt_cycle_:
                     
                     self.expgolombse()
                     pass
-                    i += 1
+                    i_ += 1
                 # end while
             # end if
             self.expgolombue()
             #// num_ref_frames
             self.skipbits(1)
             #// gaps_in_frame_num_value_allowed_flag
-            pic_width_in_mbs_minus1 = self.expgolombue()
+            pic_width_in_mbs_minus1_ = self.expgolombue()
             #// pic_width_in_mbs_minus1
-            pic_height_in_map_units_minus1 = self.expgolombue()
+            pic_height_in_map_units_minus1_ = self.expgolombue()
             #// pic_height_in_map_units_minus1
-            frame_mbs_only_flag = self.getbits(1)
+            frame_mbs_only_flag_ = self.getbits(1)
             #// frame_mbs_only_flag
-            if frame_mbs_only_flag == 0:
+            if frame_mbs_only_flag_ == 0:
                 self.skipbits(1)
                 pass
             # end if
             self.skipbits(1)
             #// direct_8x8_inference_flag
-            frame_cropping_flag = self.getbits(1)
+            frame_cropping_flag_ = self.getbits(1)
             #// frame_cropping_flag
-            frame_crop_left_offset = 0
-            frame_crop_right_offset = 0
-            frame_crop_top_offset = 0
-            frame_crop_bottom_offset = 0
-            if frame_cropping_flag:
-                frame_crop_left_offset = self.expgolombue()
+            frame_crop_left_offset_ = 0
+            frame_crop_right_offset_ = 0
+            frame_crop_top_offset_ = 0
+            frame_crop_bottom_offset_ = 0
+            if frame_cropping_flag_:
+                frame_crop_left_offset_ = self.expgolombue()
                 #// frame_crop_left_offset
-                frame_crop_right_offset = self.expgolombue()
+                frame_crop_right_offset_ = self.expgolombue()
                 #// frame_crop_right_offset
-                frame_crop_top_offset = self.expgolombue()
+                frame_crop_top_offset_ = self.expgolombue()
                 #// frame_crop_top_offset
-                frame_crop_bottom_offset = self.expgolombue()
+                frame_crop_bottom_offset_ = self.expgolombue()
                 pass
             # end if
             self.skipbits(1)
             #// vui_parameters_present_flag
             #// etc
-            self.width = pic_width_in_mbs_minus1 + 1 * 16 - frame_crop_left_offset * 2 - frame_crop_right_offset * 2
-            self.height = 2 - frame_mbs_only_flag * pic_height_in_map_units_minus1 + 1 * 16 - frame_crop_top_offset * 2 - frame_crop_bottom_offset * 2
+            self.width = pic_width_in_mbs_minus1_ + 1 * 16 - frame_crop_left_offset_ * 2 - frame_crop_right_offset_ * 2
+            self.height = 2 - frame_mbs_only_flag_ * pic_height_in_map_units_minus1_ + 1 * 16 - frame_crop_top_offset_ * 2 - frame_crop_bottom_offset_ * 2
         # end if
     # end def readdata
     #// 
     #// @param int $bits
     #//
-    def skipbits(self, bits=None):
+    def skipbits(self, bits_=None):
         
-        newBits = self.currentBits + bits
-        self.currentBytes += php_int(floor(newBits / 8))
-        self.currentBits = newBits % 8
+        
+        newBits_ = self.currentBits + bits_
+        self.currentBytes += php_int(floor(newBits_ / 8))
+        self.currentBits = newBits_ % 8
     # end def skipbits
     #// 
     #// @return int
     #//
     def getbit(self):
         
-        result = getid3_lib.bigendian2int(php_substr(self.sps, self.currentBytes, 1)) >> 7 - self.currentBits & 1
+        
+        result_ = getid3_lib.bigendian2int(php_substr(self.sps, self.currentBytes, 1)) >> 7 - self.currentBits & 1
         self.skipbits(1)
-        return result
+        return result_
     # end def getbit
     #// 
     #// @param int $bits
     #// 
     #// @return int
     #//
-    def getbits(self, bits=None):
+    def getbits(self, bits_=None):
         
-        result = 0
-        i = 0
-        while i < bits:
+        
+        result_ = 0
+        i_ = 0
+        while i_ < bits_:
             
-            result = result << 1 + self.getbit()
-            i += 1
+            result_ = result_ << 1 + self.getbit()
+            i_ += 1
         # end while
-        return result
+        return result_
     # end def getbits
     #// 
     #// @return int
     #//
     def expgolombue(self):
         
-        significantBits = 0
-        bit = self.getbit()
+        
+        significantBits_ = 0
+        bit_ = self.getbit()
         while True:
             
-            if not (bit == 0):
+            if not (bit_ == 0):
                 break
             # end if
-            significantBits += 1
-            bit = self.getbit()
-            if significantBits > 31:
+            significantBits_ += 1
+            bit_ = self.getbit()
+            if significantBits_ > 31:
                 #// something is broken, this is an emergency escape to prevent infinite loops
                 return 0
             # end if
         # end while
-        return 1 << significantBits + self.getbits(significantBits) - 1
+        return 1 << significantBits_ + self.getbits(significantBits_) - 1
     # end def expgolombue
     #// 
     #// @return int
     #//
     def expgolombse(self):
         
-        result = self.expgolombue()
-        if result & 1 == 0:
-            return -result >> 1
+        
+        result_ = self.expgolombue()
+        if result_ & 1 == 0:
+            return -result_ >> 1
         else:
-            return result + 1 >> 1
+            return result_ + 1 >> 1
         # end if
     # end def expgolombse
     #// 
@@ -859,12 +917,14 @@ class AVCSequenceParameterSetReader():
     #//
     def getwidth(self):
         
+        
         return self.width
     # end def getwidth
     #// 
     #// @return int
     #//
     def getheight(self):
+        
         
         return self.height
     # end def getheight

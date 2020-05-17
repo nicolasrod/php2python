@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -43,27 +38,28 @@ class WP_SimplePie_Sanitize_KSES(SimplePie_Sanitize):
     #// URLs to absolute ones. Default empty.
     #// @return mixed Sanitized data.
     #//
-    def sanitize(self, data=None, type=None, base=""):
+    def sanitize(self, data_=None, type_=None, base_=""):
         
-        data = php_trim(data)
-        if type & SIMPLEPIE_CONSTRUCT_MAYBE_HTML:
-            if php_preg_match("/(&(#(x[0-9a-fA-F]+|[0-9]+)|[a-zA-Z0-9]+)|<\\/[A-Za-z][^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x2F\\x3E]*" + SIMPLEPIE_PCRE_HTML_ATTRIBUTE + ">)/", data):
-                type |= SIMPLEPIE_CONSTRUCT_HTML
+        
+        data_ = php_trim(data_)
+        if type_ & SIMPLEPIE_CONSTRUCT_MAYBE_HTML:
+            if php_preg_match("/(&(#(x[0-9a-fA-F]+|[0-9]+)|[a-zA-Z0-9]+)|<\\/[A-Za-z][^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x2F\\x3E]*" + SIMPLEPIE_PCRE_HTML_ATTRIBUTE + ">)/", data_):
+                type_ |= SIMPLEPIE_CONSTRUCT_HTML
             else:
-                type |= SIMPLEPIE_CONSTRUCT_TEXT
+                type_ |= SIMPLEPIE_CONSTRUCT_TEXT
             # end if
         # end if
-        if type & SIMPLEPIE_CONSTRUCT_BASE64:
-            data = php_base64_decode(data)
+        if type_ & SIMPLEPIE_CONSTRUCT_BASE64:
+            data_ = php_base64_decode(data_)
         # end if
-        if type & SIMPLEPIE_CONSTRUCT_HTML | SIMPLEPIE_CONSTRUCT_XHTML:
-            data = wp_kses_post(data)
+        if type_ & SIMPLEPIE_CONSTRUCT_HTML | SIMPLEPIE_CONSTRUCT_XHTML:
+            data_ = wp_kses_post(data_)
             if "UTF-8" != self.output_encoding:
-                data = self.registry.call("Misc", "change_encoding", Array(data, "UTF-8", self.output_encoding))
+                data_ = self.registry.call("Misc", "change_encoding", Array(data_, "UTF-8", self.output_encoding))
             # end if
-            return data
+            return data_
         else:
-            return super().sanitize(data, type, base)
+            return super().sanitize(data_, type_, base_)
         # end if
     # end def sanitize
 # end class WP_SimplePie_Sanitize_KSES

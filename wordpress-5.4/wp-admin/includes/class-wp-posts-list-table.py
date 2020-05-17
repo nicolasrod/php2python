@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -28,11 +23,41 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_List_Table
 #//
 class WP_Posts_List_Table(WP_List_Table):
+    #// 
+    #// Whether the items should be displayed hierarchically or linearly.
+    #// 
+    #// @since 3.1.0
+    #// @var bool
+    #//
     hierarchical_display = Array()
+    #// 
+    #// Holds the number of pending comments for each post.
+    #// 
+    #// @since 3.1.0
+    #// @var array
+    #//
     comment_pending_count = Array()
+    #// 
+    #// Holds the number of posts for this user.
+    #// 
+    #// @since 3.1.0
+    #// @var int
+    #//
     user_posts_count = Array()
+    #// 
+    #// Holds the number of posts which are sticky.
+    #// 
+    #// @since 3.1.0
+    #// @var int
+    #//
     sticky_posts_count = 0
     is_trash = Array()
+    #// 
+    #// Current level for output.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #//
     current_level = 0
     #// 
     #// Constructor.
@@ -46,22 +71,26 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param array $args An associative array of arguments.
     #//
-    def __init__(self, args=Array()):
+    def __init__(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         global PHP_REQUEST
-        global post_type_object,wpdb
-        php_check_if_defined("post_type_object","wpdb")
-        super().__init__(Array({"plural": "posts", "screen": args["screen"] if (php_isset(lambda : args["screen"])) else None}))
-        post_type = self.screen.post_type
-        post_type_object = get_post_type_object(post_type)
-        exclude_states = get_post_stati(Array({"show_in_admin_all_list": False}))
-        self.user_posts_count = php_intval(wpdb.get_var(wpdb.prepare(str("\n            SELECT COUNT( 1 )\n         FROM ") + str(wpdb.posts) + str("\n         WHERE post_type = %s\n          AND post_status NOT IN ( '") + php_implode("','", exclude_states) + "' )\n          AND post_author = %d\n      ", post_type, get_current_user_id())))
-        if self.user_posts_count and (not current_user_can(post_type_object.cap.edit_others_posts)) and php_empty(lambda : PHP_REQUEST["post_status"]) and php_empty(lambda : PHP_REQUEST["all_posts"]) and php_empty(lambda : PHP_REQUEST["author"]) and php_empty(lambda : PHP_REQUEST["show_sticky"]):
+        global post_type_object_
+        global wpdb_
+        php_check_if_defined("post_type_object_","wpdb_")
+        super().__init__(Array({"plural": "posts", "screen": args_["screen"] if (php_isset(lambda : args_["screen"])) else None}))
+        post_type_ = self.screen.post_type
+        post_type_object_ = get_post_type_object(post_type_)
+        exclude_states_ = get_post_stati(Array({"show_in_admin_all_list": False}))
+        self.user_posts_count = php_intval(wpdb_.get_var(wpdb_.prepare(str("\n          SELECT COUNT( 1 )\n         FROM ") + str(wpdb_.posts) + str("\n            WHERE post_type = %s\n          AND post_status NOT IN ( '") + php_implode("','", exclude_states_) + "' )\n         AND post_author = %d\n      ", post_type_, get_current_user_id())))
+        if self.user_posts_count and (not current_user_can(post_type_object_.cap.edit_others_posts)) and php_empty(lambda : PHP_REQUEST["post_status"]) and php_empty(lambda : PHP_REQUEST["all_posts"]) and php_empty(lambda : PHP_REQUEST["author"]) and php_empty(lambda : PHP_REQUEST["show_sticky"]):
             PHP_REQUEST["author"] = get_current_user_id()
         # end if
-        sticky_posts = get_option("sticky_posts")
-        if "post" == post_type and sticky_posts:
-            sticky_posts = php_implode(", ", php_array_map("absint", sticky_posts))
-            self.sticky_posts_count = wpdb.get_var(wpdb.prepare(str("SELECT COUNT( 1 ) FROM ") + str(wpdb.posts) + str(" WHERE post_type = %s AND post_status NOT IN ('trash', 'auto-draft') AND ID IN (") + str(sticky_posts) + str(")"), post_type))
+        sticky_posts_ = get_option("sticky_posts")
+        if "post" == post_type_ and sticky_posts_:
+            sticky_posts_ = php_implode(", ", php_array_map("absint", sticky_posts_))
+            self.sticky_posts_count = wpdb_.get_var(wpdb_.prepare(str("SELECT COUNT( 1 ) FROM ") + str(wpdb_.posts) + str(" WHERE post_type = %s AND post_status NOT IN ('trash', 'auto-draft') AND ID IN (") + str(sticky_posts_) + str(")"), post_type_))
         # end if
     # end def __init__
     #// 
@@ -71,14 +100,16 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param bool $display Whether the table layout should be hierarchical.
     #//
-    def set_hierarchical_display(self, display=None):
+    def set_hierarchical_display(self, display_=None):
         
-        self.hierarchical_display = display
+        
+        self.hierarchical_display = display_
     # end def set_hierarchical_display
     #// 
     #// @return bool
     #//
     def ajax_user_can(self):
+        
         
         return current_user_can(get_post_type_object(self.screen.post_type).cap.edit_posts)
     # end def ajax_user_can
@@ -90,54 +121,60 @@ class WP_Posts_List_Table(WP_List_Table):
     #//
     def prepare_items(self):
         
-        global avail_post_stati,wp_query,per_page,mode
-        php_check_if_defined("avail_post_stati","wp_query","per_page","mode")
+        
+        global avail_post_stati_
+        global wp_query_
+        global per_page_
+        global mode_
+        php_check_if_defined("avail_post_stati_","wp_query_","per_page_","mode_")
         #// Is going to call wp().
-        avail_post_stati = wp_edit_posts_query()
-        self.set_hierarchical_display(is_post_type_hierarchical(self.screen.post_type) and "menu_order title" == wp_query.query["orderby"])
-        post_type = self.screen.post_type
-        per_page = self.get_items_per_page("edit_" + post_type + "_per_page")
+        avail_post_stati_ = wp_edit_posts_query()
+        self.set_hierarchical_display(is_post_type_hierarchical(self.screen.post_type) and "menu_order title" == wp_query_.query["orderby"])
+        post_type_ = self.screen.post_type
+        per_page_ = self.get_items_per_page("edit_" + post_type_ + "_per_page")
         #// This filter is documented in wp-admin/includes/post.php
-        per_page = apply_filters("edit_posts_per_page", per_page, post_type)
+        per_page_ = apply_filters("edit_posts_per_page", per_page_, post_type_)
         if self.hierarchical_display:
-            total_items = wp_query.post_count
-        elif wp_query.found_posts or self.get_pagenum() == 1:
-            total_items = wp_query.found_posts
+            total_items_ = wp_query_.post_count
+        elif wp_query_.found_posts or self.get_pagenum() == 1:
+            total_items_ = wp_query_.found_posts
         else:
-            post_counts = wp_count_posts(post_type, "readable")
-            if (php_isset(lambda : PHP_REQUEST["post_status"])) and php_in_array(PHP_REQUEST["post_status"], avail_post_stati):
-                total_items = post_counts[PHP_REQUEST["post_status"]]
+            post_counts_ = wp_count_posts(post_type_, "readable")
+            if (php_isset(lambda : PHP_REQUEST["post_status"])) and php_in_array(PHP_REQUEST["post_status"], avail_post_stati_):
+                total_items_ = post_counts_[PHP_REQUEST["post_status"]]
             elif (php_isset(lambda : PHP_REQUEST["show_sticky"])) and PHP_REQUEST["show_sticky"]:
-                total_items = self.sticky_posts_count
+                total_items_ = self.sticky_posts_count
             elif (php_isset(lambda : PHP_REQUEST["author"])) and get_current_user_id() == PHP_REQUEST["author"]:
-                total_items = self.user_posts_count
+                total_items_ = self.user_posts_count
             else:
-                total_items = array_sum(post_counts)
+                total_items_ = array_sum(post_counts_)
                 #// Subtract post types that are not included in the admin all list.
-                for state in get_post_stati(Array({"show_in_admin_all_list": False})):
-                    total_items -= post_counts[state]
+                for state_ in get_post_stati(Array({"show_in_admin_all_list": False})):
+                    total_items_ -= post_counts_[state_]
                 # end for
             # end if
         # end if
         if (not php_empty(lambda : PHP_REQUEST["mode"])):
-            mode = "excerpt" if "excerpt" == PHP_REQUEST["mode"] else "list"
-            set_user_setting("posts_list_mode", mode)
+            mode_ = "excerpt" if "excerpt" == PHP_REQUEST["mode"] else "list"
+            set_user_setting("posts_list_mode", mode_)
         else:
-            mode = get_user_setting("posts_list_mode", "list")
+            mode_ = get_user_setting("posts_list_mode", "list")
         # end if
         self.is_trash = (php_isset(lambda : PHP_REQUEST["post_status"])) and "trash" == PHP_REQUEST["post_status"]
-        self.set_pagination_args(Array({"total_items": total_items, "per_page": per_page}))
+        self.set_pagination_args(Array({"total_items": total_items_, "per_page": per_page_}))
     # end def prepare_items
     #// 
     #// @return bool
     #//
     def has_items(self):
         
+        
         return have_posts()
     # end def has_items
     #// 
     #//
     def no_items(self):
+        
         
         if (php_isset(lambda : PHP_REQUEST["post_status"])) and "trash" == PHP_REQUEST["post_status"]:
             php_print(get_post_type_object(self.screen.post_type).labels.not_found_in_trash)
@@ -154,14 +191,15 @@ class WP_Posts_List_Table(WP_List_Table):
     #//
     def is_base_request(self):
         
-        vars = PHP_REQUEST
-        vars["paged"] = None
-        if php_empty(lambda : vars):
+        
+        vars_ = PHP_REQUEST
+        vars_["paged"] = None
+        if php_empty(lambda : vars_):
             return True
-        elif 1 == php_count(vars) and (not php_empty(lambda : vars["post_type"])):
-            return self.screen.post_type == vars["post_type"]
+        elif 1 == php_count(vars_) and (not php_empty(lambda : vars_["post_type"])):
+            return self.screen.post_type == vars_["post_type"]
         # end if
-        return 1 == php_count(vars) and (not php_empty(lambda : vars["mode"]))
+        return 1 == php_count(vars_) and (not php_empty(lambda : vars_["mode"]))
     # end def is_base_request
     #// 
     #// Helper to create links to edit.php with params.
@@ -173,18 +211,19 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @param string   $class Optional. Class attribute. Default empty string.
     #// @return string The formatted link string.
     #//
-    def get_edit_link(self, args=None, label=None, class_=""):
+    def get_edit_link(self, args_=None, label_=None, class_=""):
         
-        url = add_query_arg(args, "edit.php")
-        class_html = ""
-        aria_current = ""
+        
+        url_ = add_query_arg(args_, "edit.php")
+        class_html_ = ""
+        aria_current_ = ""
         if (not php_empty(lambda : class_)):
-            class_html = php_sprintf(" class=\"%s\"", esc_attr(class_))
+            class_html_ = php_sprintf(" class=\"%s\"", esc_attr(class_))
             if "current" == class_:
-                aria_current = " aria-current=\"page\""
+                aria_current_ = " aria-current=\"page\""
             # end if
         # end if
-        return php_sprintf("<a href=\"%s\"%s%s>%s</a>", esc_url(url), class_html, aria_current, label)
+        return php_sprintf("<a href=\"%s\"%s%s>%s</a>", esc_url(url_), class_html_, aria_current_, label_)
     # end def get_edit_link
     #// 
     #// @global array $locked_post_status This seems to be deprecated.
@@ -193,87 +232,90 @@ class WP_Posts_List_Table(WP_List_Table):
     #//
     def get_views(self):
         
-        global locked_post_status,avail_post_stati
-        php_check_if_defined("locked_post_status","avail_post_stati")
-        post_type = self.screen.post_type
-        if (not php_empty(lambda : locked_post_status)):
+        
+        global locked_post_status_
+        global avail_post_stati_
+        php_check_if_defined("locked_post_status_","avail_post_stati_")
+        post_type_ = self.screen.post_type
+        if (not php_empty(lambda : locked_post_status_)):
             return Array()
         # end if
-        status_links = Array()
-        num_posts = wp_count_posts(post_type, "readable")
-        total_posts = array_sum(num_posts)
+        status_links_ = Array()
+        num_posts_ = wp_count_posts(post_type_, "readable")
+        total_posts_ = array_sum(num_posts_)
         class_ = ""
-        current_user_id = get_current_user_id()
-        all_args = Array({"post_type": post_type})
-        mine = ""
+        current_user_id_ = get_current_user_id()
+        all_args_ = Array({"post_type": post_type_})
+        mine_ = ""
         #// Subtract post types that are not included in the admin all list.
-        for state in get_post_stati(Array({"show_in_admin_all_list": False})):
-            total_posts -= num_posts.state
+        for state_ in get_post_stati(Array({"show_in_admin_all_list": False})):
+            total_posts_ -= num_posts_.state_
         # end for
-        if self.user_posts_count and self.user_posts_count != total_posts:
-            if (php_isset(lambda : PHP_REQUEST["author"])) and PHP_REQUEST["author"] == current_user_id:
+        if self.user_posts_count and self.user_posts_count != total_posts_:
+            if (php_isset(lambda : PHP_REQUEST["author"])) and PHP_REQUEST["author"] == current_user_id_:
                 class_ = "current"
             # end if
-            mine_args = Array({"post_type": post_type, "author": current_user_id})
-            mine_inner_html = php_sprintf(_nx("Mine <span class=\"count\">(%s)</span>", "Mine <span class=\"count\">(%s)</span>", self.user_posts_count, "posts"), number_format_i18n(self.user_posts_count))
-            mine = self.get_edit_link(mine_args, mine_inner_html, class_)
-            all_args["all_posts"] = 1
+            mine_args_ = Array({"post_type": post_type_, "author": current_user_id_})
+            mine_inner_html_ = php_sprintf(_nx("Mine <span class=\"count\">(%s)</span>", "Mine <span class=\"count\">(%s)</span>", self.user_posts_count, "posts"), number_format_i18n(self.user_posts_count))
+            mine_ = self.get_edit_link(mine_args_, mine_inner_html_, class_)
+            all_args_["all_posts"] = 1
             class_ = ""
         # end if
         if php_empty(lambda : class_) and self.is_base_request() or (php_isset(lambda : PHP_REQUEST["all_posts"])):
             class_ = "current"
         # end if
-        all_inner_html = php_sprintf(_nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", total_posts, "posts"), number_format_i18n(total_posts))
-        status_links["all"] = self.get_edit_link(all_args, all_inner_html, class_)
-        if mine:
-            status_links["mine"] = mine
+        all_inner_html_ = php_sprintf(_nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", total_posts_, "posts"), number_format_i18n(total_posts_))
+        status_links_["all"] = self.get_edit_link(all_args_, all_inner_html_, class_)
+        if mine_:
+            status_links_["mine"] = mine_
         # end if
-        for status in get_post_stati(Array({"show_in_admin_status_list": True}), "objects"):
+        for status_ in get_post_stati(Array({"show_in_admin_status_list": True}), "objects"):
             class_ = ""
-            status_name = status.name
-            if (not php_in_array(status_name, avail_post_stati)) or php_empty(lambda : num_posts.status_name):
+            status_name_ = status_.name
+            if (not php_in_array(status_name_, avail_post_stati_)) or php_empty(lambda : num_posts_.status_name_):
                 continue
             # end if
-            if (php_isset(lambda : PHP_REQUEST["post_status"])) and status_name == PHP_REQUEST["post_status"]:
+            if (php_isset(lambda : PHP_REQUEST["post_status"])) and status_name_ == PHP_REQUEST["post_status"]:
                 class_ = "current"
             # end if
-            status_args = Array({"post_status": status_name, "post_type": post_type})
-            status_label = php_sprintf(translate_nooped_plural(status.label_count, num_posts.status_name), number_format_i18n(num_posts.status_name))
-            status_links[status_name] = self.get_edit_link(status_args, status_label, class_)
+            status_args_ = Array({"post_status": status_name_, "post_type": post_type_})
+            status_label_ = php_sprintf(translate_nooped_plural(status_.label_count, num_posts_.status_name_), number_format_i18n(num_posts_.status_name_))
+            status_links_[status_name_] = self.get_edit_link(status_args_, status_label_, class_)
         # end for
         if (not php_empty(lambda : self.sticky_posts_count)):
             class_ = "current" if (not php_empty(lambda : PHP_REQUEST["show_sticky"])) else ""
-            sticky_args = Array({"post_type": post_type, "show_sticky": 1})
-            sticky_inner_html = php_sprintf(_nx("Sticky <span class=\"count\">(%s)</span>", "Sticky <span class=\"count\">(%s)</span>", self.sticky_posts_count, "posts"), number_format_i18n(self.sticky_posts_count))
-            sticky_link = Array({"sticky": self.get_edit_link(sticky_args, sticky_inner_html, class_)})
+            sticky_args_ = Array({"post_type": post_type_, "show_sticky": 1})
+            sticky_inner_html_ = php_sprintf(_nx("Sticky <span class=\"count\">(%s)</span>", "Sticky <span class=\"count\">(%s)</span>", self.sticky_posts_count, "posts"), number_format_i18n(self.sticky_posts_count))
+            sticky_link_ = Array({"sticky": self.get_edit_link(sticky_args_, sticky_inner_html_, class_)})
             #// Sticky comes after Publish, or if not listed, after All.
-            split = 1 + php_array_search("publish" if (php_isset(lambda : status_links["publish"])) else "all", php_array_keys(status_links))
-            status_links = php_array_merge(php_array_slice(status_links, 0, split), sticky_link, php_array_slice(status_links, split))
+            split_ = 1 + php_array_search("publish" if (php_isset(lambda : status_links_["publish"])) else "all", php_array_keys(status_links_))
+            status_links_ = php_array_merge(php_array_slice(status_links_, 0, split_), sticky_link_, php_array_slice(status_links_, split_))
         # end if
-        return status_links
+        return status_links_
     # end def get_views
     #// 
     #// @return array
     #//
     def get_bulk_actions(self):
         
-        actions = Array()
-        post_type_obj = get_post_type_object(self.screen.post_type)
-        if current_user_can(post_type_obj.cap.edit_posts):
+        
+        actions_ = Array()
+        post_type_obj_ = get_post_type_object(self.screen.post_type)
+        if current_user_can(post_type_obj_.cap.edit_posts):
             if self.is_trash:
-                actions["untrash"] = __("Restore")
+                actions_["untrash"] = __("Restore")
             else:
-                actions["edit"] = __("Edit")
+                actions_["edit"] = __("Edit")
             # end if
         # end if
-        if current_user_can(post_type_obj.cap.delete_posts):
+        if current_user_can(post_type_obj_.cap.delete_posts):
             if self.is_trash or (not EMPTY_TRASH_DAYS):
-                actions["delete"] = __("Delete Permanently")
+                actions_["delete"] = __("Delete Permanently")
             else:
-                actions["trash"] = __("Move to Trash")
+                actions_["trash"] = __("Move to Trash")
             # end if
         # end if
-        return actions
+        return actions_
     # end def get_bulk_actions
     #// 
     #// Displays a categories drop-down for filtering on the Posts list table.
@@ -284,10 +326,11 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param string $post_type Post type slug.
     #//
-    def categories_dropdown(self, post_type=None):
+    def categories_dropdown(self, post_type_=None):
         
-        global cat
-        php_check_if_defined("cat")
+        
+        global cat_
+        php_check_if_defined("cat_")
         #// 
         #// Filters whether to remove the 'Categories' drop-down from the post list table.
         #// 
@@ -296,13 +339,13 @@ class WP_Posts_List_Table(WP_List_Table):
         #// @param bool   $disable   Whether to disable the categories drop-down. Default false.
         #// @param string $post_type Post type slug.
         #//
-        if False != apply_filters("disable_categories_dropdown", False, post_type):
+        if False != apply_filters("disable_categories_dropdown", False, post_type_):
             return
         # end if
-        if is_object_in_taxonomy(post_type, "category"):
-            dropdown_options = Array({"show_option_all": get_taxonomy("category").labels.all_items, "hide_empty": 0, "hierarchical": 1, "show_count": 0, "orderby": "name", "selected": cat})
+        if is_object_in_taxonomy(post_type_, "category"):
+            dropdown_options_ = Array({"show_option_all": get_taxonomy("category").labels.all_items, "hide_empty": 0, "hierarchical": 1, "show_count": 0, "orderby": "name", "selected": cat_})
             php_print("<label class=\"screen-reader-text\" for=\"cat\">" + __("Filter by category") + "</label>")
-            wp_dropdown_categories(dropdown_options)
+            wp_dropdown_categories(dropdown_options_)
         # end if
     # end def categories_dropdown
     #// 
@@ -313,7 +356,8 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param string $post_type Post type key.
     #//
-    def formats_dropdown(self, post_type=None):
+    def formats_dropdown(self, post_type_=None):
+        
         
         #// 
         #// Filters whether to remove the 'Formats' drop-down from the post list table.
@@ -326,37 +370,37 @@ class WP_Posts_List_Table(WP_List_Table):
             return
         # end if
         #// Make sure the dropdown shows only formats with a post count greater than 0.
-        used_post_formats = get_terms(Array({"taxonomy": "post_format", "hide_empty": True}))
+        used_post_formats_ = get_terms(Array({"taxonomy": "post_format", "hide_empty": True}))
         #// 
         #// Return if the post type doesn't have post formats, or there are no posts using formats,
         #// or if we're in the Trash.
         #//
-        if (not is_object_in_taxonomy(post_type, "post_format")) or (not used_post_formats) or self.is_trash:
+        if (not is_object_in_taxonomy(post_type_, "post_format")) or (not used_post_formats_) or self.is_trash:
             return
         # end if
-        displayed_post_format = PHP_REQUEST["post_format"] if (php_isset(lambda : PHP_REQUEST["post_format"])) else ""
+        displayed_post_format_ = PHP_REQUEST["post_format"] if (php_isset(lambda : PHP_REQUEST["post_format"])) else ""
         php_print("     <label for=\"filter-by-format\" class=\"screen-reader-text\">")
         _e("Filter by post format")
         php_print("</label>\n       <select name=\"post_format\" id=\"filter-by-format\">\n         <option")
-        selected(displayed_post_format, "")
+        selected(displayed_post_format_, "")
         php_print(" value=\"\">")
         _e("All formats")
         php_print("</option>\n          ")
-        for used_post_format in used_post_formats:
+        for used_post_format_ in used_post_formats_:
             #// Post format slug.
-            slug = php_str_replace("post-format-", "", used_post_format.slug)
+            slug_ = php_str_replace("post-format-", "", used_post_format_.slug)
             #// Pretty, translated version of the post format slug.
-            pretty_name = get_post_format_string(slug)
+            pretty_name_ = get_post_format_string(slug_)
             #// Skip the standard post format.
-            if "standard" == slug:
+            if "standard" == slug_:
                 continue
             # end if
             php_print("             <option")
-            selected(displayed_post_format, slug)
+            selected(displayed_post_format_, slug_)
             php_print(" value=\"")
-            php_print(esc_attr(slug))
+            php_print(esc_attr(slug_))
             php_print("\">")
-            php_print(esc_html(pretty_name))
+            php_print(esc_html(pretty_name_))
             php_print("</option>\n              ")
         # end for
         php_print("     </select>\n     ")
@@ -364,10 +408,11 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param string $which
     #//
-    def extra_tablenav(self, which=None):
+    def extra_tablenav(self, which_=None):
+        
         
         php_print("     <div class=\"alignleft actions\">\n     ")
-        if "top" == which and (not is_singular()):
+        if "top" == which_ and (not is_singular()):
             ob_start()
             self.months_dropdown(self.screen.post_type)
             self.categories_dropdown(self.screen.post_type)
@@ -387,10 +432,10 @@ class WP_Posts_List_Table(WP_List_Table):
             #// 'top' or 'bottom' for WP_Posts_List_Table,
             #// 'bar' for WP_Media_List_Table.
             #//
-            do_action("restrict_manage_posts", self.screen.post_type, which)
-            output = ob_get_clean()
-            if (not php_empty(lambda : output)):
-                php_print(output)
+            do_action("restrict_manage_posts", self.screen.post_type, which_)
+            output_ = ob_get_clean()
+            if (not php_empty(lambda : output_)):
+                php_print(output_)
                 submit_button(__("Filter"), "", "filter_action", False, Array({"id": "post-query-submit"}))
             # end if
         # end if
@@ -406,12 +451,13 @@ class WP_Posts_List_Table(WP_List_Table):
         #// 
         #// @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
         #//
-        do_action("manage_posts_extra_tablenav", which)
+        do_action("manage_posts_extra_tablenav", which_)
     # end def extra_tablenav
     #// 
     #// @return string
     #//
     def current_action(self):
+        
         
         if (php_isset(lambda : PHP_REQUEST["delete_all"])) or (php_isset(lambda : PHP_REQUEST["delete_all2"])):
             return "delete_all"
@@ -423,6 +469,7 @@ class WP_Posts_List_Table(WP_List_Table):
     #//
     def get_table_classes(self):
         
+        
         return Array("widefat", "fixed", "striped", "pages" if is_post_type_hierarchical(self.screen.post_type) else "posts")
     # end def get_table_classes
     #// 
@@ -430,16 +477,17 @@ class WP_Posts_List_Table(WP_List_Table):
     #//
     def get_columns(self):
         
-        post_type = self.screen.post_type
-        posts_columns = Array()
-        posts_columns["cb"] = "<input type=\"checkbox\" />"
+        
+        post_type_ = self.screen.post_type
+        posts_columns_ = Array()
+        posts_columns_["cb"] = "<input type=\"checkbox\" />"
         #// translators: Posts screen column name.
-        posts_columns["title"] = _x("Title", "column name")
-        if post_type_supports(post_type, "author"):
-            posts_columns["author"] = __("Author")
+        posts_columns_["title"] = _x("Title", "column name")
+        if post_type_supports(post_type_, "author"):
+            posts_columns_["author"] = __("Author")
         # end if
-        taxonomies = get_object_taxonomies(post_type, "objects")
-        taxonomies = wp_filter_object_list(taxonomies, Array({"show_admin_column": True}), "and", "name")
+        taxonomies_ = get_object_taxonomies(post_type_, "objects")
+        taxonomies_ = wp_filter_object_list(taxonomies_, Array({"show_admin_column": True}), "and", "name")
         #// 
         #// Filters the taxonomy columns in the Posts list table.
         #// 
@@ -451,24 +499,24 @@ class WP_Posts_List_Table(WP_List_Table):
         #// @param string[] $taxonomies Array of taxonomy names to show columns for.
         #// @param string   $post_type  The post type.
         #//
-        taxonomies = apply_filters(str("manage_taxonomies_for_") + str(post_type) + str("_columns"), taxonomies, post_type)
-        taxonomies = php_array_filter(taxonomies, "taxonomy_exists")
-        for taxonomy in taxonomies:
-            if "category" == taxonomy:
-                column_key = "categories"
-            elif "post_tag" == taxonomy:
-                column_key = "tags"
+        taxonomies_ = apply_filters(str("manage_taxonomies_for_") + str(post_type_) + str("_columns"), taxonomies_, post_type_)
+        taxonomies_ = php_array_filter(taxonomies_, "taxonomy_exists")
+        for taxonomy_ in taxonomies_:
+            if "category" == taxonomy_:
+                column_key_ = "categories"
+            elif "post_tag" == taxonomy_:
+                column_key_ = "tags"
             else:
-                column_key = "taxonomy-" + taxonomy
+                column_key_ = "taxonomy-" + taxonomy_
             # end if
-            posts_columns[column_key] = get_taxonomy(taxonomy).labels.name
+            posts_columns_[column_key_] = get_taxonomy(taxonomy_).labels.name
         # end for
-        post_status = PHP_REQUEST["post_status"] if (not php_empty(lambda : PHP_REQUEST["post_status"])) else "all"
-        if post_type_supports(post_type, "comments") and (not php_in_array(post_status, Array("pending", "draft", "future"))):
-            posts_columns["comments"] = "<span class=\"vers comment-grey-bubble\" title=\"" + esc_attr__("Comments") + "\"><span class=\"screen-reader-text\">" + __("Comments") + "</span></span>"
+        post_status_ = PHP_REQUEST["post_status"] if (not php_empty(lambda : PHP_REQUEST["post_status"])) else "all"
+        if post_type_supports(post_type_, "comments") and (not php_in_array(post_status_, Array("pending", "draft", "future"))):
+            posts_columns_["comments"] = "<span class=\"vers comment-grey-bubble\" title=\"" + esc_attr__("Comments") + "\"><span class=\"screen-reader-text\">" + __("Comments") + "</span></span>"
         # end if
-        posts_columns["date"] = __("Date")
-        if "page" == post_type:
+        posts_columns_["date"] = __("Date")
+        if "page" == post_type_:
             #// 
             #// Filters the columns displayed in the Pages list table.
             #// 
@@ -476,7 +524,7 @@ class WP_Posts_List_Table(WP_List_Table):
             #// 
             #// @param string[] $post_columns An associative array of column headings.
             #//
-            posts_columns = apply_filters("manage_pages_columns", posts_columns)
+            posts_columns_ = apply_filters("manage_pages_columns", posts_columns_)
         else:
             #// 
             #// Filters the columns displayed in the Posts list table.
@@ -486,7 +534,7 @@ class WP_Posts_List_Table(WP_List_Table):
             #// @param string[] $post_columns An associative array of column headings.
             #// @param string   $post_type    The post type slug.
             #//
-            posts_columns = apply_filters("manage_posts_columns", posts_columns, post_type)
+            posts_columns_ = apply_filters("manage_posts_columns", posts_columns_, post_type_)
         # end if
         #// 
         #// Filters the columns displayed in the Posts list table for a specific post type.
@@ -497,12 +545,13 @@ class WP_Posts_List_Table(WP_List_Table):
         #// 
         #// @param string[] $post_columns An associative array of column headings.
         #//
-        return apply_filters(str("manage_") + str(post_type) + str("_posts_columns"), posts_columns)
+        return apply_filters(str("manage_") + str(post_type_) + str("_posts_columns"), posts_columns_)
     # end def get_columns
     #// 
     #// @return array
     #//
     def get_sortable_columns(self):
+        
         
         return Array({"title": "title", "parent": "parent", "comments": "comment_count", "date": Array("date", True)})
     # end def get_sortable_columns
@@ -512,37 +561,42 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @param array $posts
     #// @param int $level
     #//
-    def display_rows(self, posts=Array(), level=0):
+    def display_rows(self, posts_=None, level_=0):
+        if posts_ is None:
+            posts_ = Array()
+        # end if
         
-        global wp_query,per_page
-        php_check_if_defined("wp_query","per_page")
-        if php_empty(lambda : posts):
-            posts = wp_query.posts
+        global wp_query_
+        global per_page_
+        php_check_if_defined("wp_query_","per_page_")
+        if php_empty(lambda : posts_):
+            posts_ = wp_query_.posts
         # end if
         add_filter("the_title", "esc_html")
         if self.hierarchical_display:
-            self._display_rows_hierarchical(posts, self.get_pagenum(), per_page)
+            self._display_rows_hierarchical(posts_, self.get_pagenum(), per_page_)
         else:
-            self._display_rows(posts, level)
+            self._display_rows(posts_, level_)
         # end if
     # end def display_rows
     #// 
     #// @param array $posts
     #// @param int $level
     #//
-    def _display_rows(self, posts=None, level=0):
+    def _display_rows(self, posts_=None, level_=0):
         
-        post_type = self.screen.post_type
+        
+        post_type_ = self.screen.post_type
         #// Create array of post IDs.
-        post_ids = Array()
-        for a_post in posts:
-            post_ids[-1] = a_post.ID
+        post_ids_ = Array()
+        for a_post_ in posts_:
+            post_ids_[-1] = a_post_.ID
         # end for
-        if post_type_supports(post_type, "comments"):
-            self.comment_pending_count = get_pending_comments_num(post_ids)
+        if post_type_supports(post_type_, "comments"):
+            self.comment_pending_count = get_pending_comments_num(post_ids_)
         # end if
-        for post in posts:
-            self.single_row(post, level)
+        for post_ in posts_:
+            self.single_row(post_, level_)
         # end for
     # end def _display_rows
     #// 
@@ -552,14 +606,15 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @param int $pagenum
     #// @param int $per_page
     #//
-    def _display_rows_hierarchical(self, pages=None, pagenum=1, per_page=20):
+    def _display_rows_hierarchical(self, pages_=None, pagenum_=1, per_page_=20):
+        
         global PHP_GLOBALS
-        global wpdb
-        php_check_if_defined("wpdb")
-        level = 0
-        if (not pages):
-            pages = get_pages(Array({"sort_column": "menu_order"}))
-            if (not pages):
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        level_ = 0
+        if (not pages_):
+            pages_ = get_pages(Array({"sort_column": "menu_order"}))
+            if (not pages_):
                 return
             # end if
         # end if
@@ -571,61 +626,61 @@ class WP_Posts_List_Table(WP_List_Table):
         #// If searching, ignore hierarchy and treat everything as top level
         #//
         if php_empty(lambda : PHP_REQUEST["s"]):
-            top_level_pages = Array()
-            children_pages = Array()
-            for page in pages:
+            top_level_pages_ = Array()
+            children_pages_ = Array()
+            for page_ in pages_:
                 #// Catch and repair bad pages.
-                if page.post_parent == page.ID:
-                    page.post_parent = 0
-                    wpdb.update(wpdb.posts, Array({"post_parent": 0}), Array({"ID": page.ID}))
-                    clean_post_cache(page)
+                if page_.post_parent == page_.ID:
+                    page_.post_parent = 0
+                    wpdb_.update(wpdb_.posts, Array({"post_parent": 0}), Array({"ID": page_.ID}))
+                    clean_post_cache(page_)
                 # end if
-                if 0 == page.post_parent:
-                    top_level_pages[-1] = page
+                if 0 == page_.post_parent:
+                    top_level_pages_[-1] = page_
                 else:
-                    children_pages[page.post_parent][-1] = page
+                    children_pages_[page_.post_parent][-1] = page_
                 # end if
             # end for
-            pages = top_level_pages
+            pages_ = top_level_pages_
         # end if
-        count = 0
-        start = pagenum - 1 * per_page
-        end_ = start + per_page
-        to_display = Array()
-        for page in pages:
-            if count >= end_:
+        count_ = 0
+        start_ = pagenum_ - 1 * per_page_
+        end_ = start_ + per_page_
+        to_display_ = Array()
+        for page_ in pages_:
+            if count_ >= end_:
                 break
             # end if
-            if count >= start:
-                to_display[page.ID] = level
+            if count_ >= start_:
+                to_display_[page_.ID] = level_
             # end if
-            count += 1
-            if (php_isset(lambda : children_pages)):
-                self._page_rows(children_pages, count, page.ID, level + 1, pagenum, per_page, to_display)
+            count_ += 1
+            if (php_isset(lambda : children_pages_)):
+                self._page_rows(children_pages_, count_, page_.ID, level_ + 1, pagenum_, per_page_, to_display_)
             # end if
         # end for
         #// If it is the last pagenum and there are orphaned pages, display them with paging as well.
-        if (php_isset(lambda : children_pages)) and count < end_:
-            for orphans in children_pages:
-                for op in orphans:
-                    if count >= end_:
+        if (php_isset(lambda : children_pages_)) and count_ < end_:
+            for orphans_ in children_pages_:
+                for op_ in orphans_:
+                    if count_ >= end_:
                         break
                     # end if
-                    if count >= start:
-                        to_display[op.ID] = 0
+                    if count_ >= start_:
+                        to_display_[op_.ID] = 0
                     # end if
-                    count += 1
+                    count_ += 1
                 # end for
             # end for
         # end if
-        ids = php_array_keys(to_display)
-        _prime_post_caches(ids)
+        ids_ = php_array_keys(to_display_)
+        _prime_post_caches(ids_)
         if (not (php_isset(lambda : PHP_GLOBALS["post"]))):
-            PHP_GLOBALS["post"] = reset(ids)
+            PHP_GLOBALS["post"] = reset(ids_)
         # end if
-        for page_id,level in to_display:
+        for page_id_,level_ in to_display_:
             php_print(" ")
-            self.single_row(page_id, level)
+            self.single_row(page_id_, level_)
         # end for
     # end def _display_rows_hierarchical
     #// 
@@ -643,55 +698,56 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @param int $per_page
     #// @param array $to_display List of pages to be displayed. Passed by reference.
     #//
-    def _page_rows(self, children_pages=None, count=None, parent=None, level=None, pagenum=None, per_page=None, to_display=None):
+    def _page_rows(self, children_pages_=None, count_=None, parent_=None, level_=None, pagenum_=None, per_page_=None, to_display_=None):
         
-        if (not (php_isset(lambda : children_pages[parent]))):
+        
+        if (not (php_isset(lambda : children_pages_[parent_]))):
             return
         # end if
-        start = pagenum - 1 * per_page
-        end_ = start + per_page
-        for page in children_pages[parent]:
-            if count >= end_:
+        start_ = pagenum_ - 1 * per_page_
+        end_ = start_ + per_page_
+        for page_ in children_pages_[parent_]:
+            if count_ >= end_:
                 break
             # end if
             #// If the page starts in a subtree, print the parents.
-            if count == start and page.post_parent > 0:
-                my_parents = Array()
-                my_parent = page.post_parent
+            if count_ == start_ and page_.post_parent > 0:
+                my_parents_ = Array()
+                my_parent_ = page_.post_parent
                 while True:
                     
-                    if not (my_parent):
+                    if not (my_parent_):
                         break
                     # end if
                     #// Get the ID from the list or the attribute if my_parent is an object.
-                    parent_id = my_parent
-                    if php_is_object(my_parent):
-                        parent_id = my_parent.ID
+                    parent_id_ = my_parent_
+                    if php_is_object(my_parent_):
+                        parent_id_ = my_parent_.ID
                     # end if
-                    my_parent = get_post(parent_id)
-                    my_parents[-1] = my_parent
-                    if (not my_parent.post_parent):
+                    my_parent_ = get_post(parent_id_)
+                    my_parents_[-1] = my_parent_
+                    if (not my_parent_.post_parent):
                         break
                     # end if
-                    my_parent = my_parent.post_parent
+                    my_parent_ = my_parent_.post_parent
                 # end while
-                num_parents = php_count(my_parents)
+                num_parents_ = php_count(my_parents_)
                 while True:
-                    my_parent = php_array_pop(my_parents)
-                    if not (my_parent):
+                    my_parent_ = php_array_pop(my_parents_)
+                    if not (my_parent_):
                         break
                     # end if
-                    to_display[my_parent.ID] = level - num_parents
-                    num_parents -= 1
+                    to_display_[my_parent_.ID] = level_ - num_parents_
+                    num_parents_ -= 1
                 # end while
             # end if
-            if count >= start:
-                to_display[page.ID] = level
+            if count_ >= start_:
+                to_display_[page_.ID] = level_
             # end if
-            count += 1
-            self._page_rows(children_pages, count, page.ID, level + 1, pagenum, per_page, to_display)
+            count_ += 1
+            self._page_rows(children_pages_, count_, page_.ID, level_ + 1, pagenum_, per_page_, to_display_)
         # end for
-        children_pages[parent] = None
+        children_pages_[parent_] = None
         pass
     # end def _page_rows
     #// 
@@ -701,9 +757,10 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param WP_Post $post The current WP_Post object.
     #//
-    def column_cb(self, post=None):
+    def column_cb(self, post_=None):
         
-        if current_user_can("edit_post", post.ID):
+        
+        if current_user_can("edit_post", post_.ID):
             php_print("         <label class=\"screen-reader-text\" for=\"cb-select-")
             the_ID()
             php_print("\">\n                ")
@@ -730,11 +787,12 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @param string  $data
     #// @param string  $primary
     #//
-    def _column_title(self, post=None, classes=None, data=None, primary=None):
+    def _column_title(self, post_=None, classes_=None, data_=None, primary_=None):
         
-        php_print("<td class=\"" + classes + " page-title\" ", data, ">")
-        php_print(self.column_title(post))
-        php_print(self.handle_row_actions(post, "title", primary))
+        
+        php_print("<td class=\"" + classes_ + " page-title\" ", data_, ">")
+        php_print(self.column_title(post_))
+        php_print(self.handle_row_actions(post_, "title", primary_))
         php_print("</td>")
     # end def _column_title
     #// 
@@ -746,68 +804,69 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param WP_Post $post The current WP_Post object.
     #//
-    def column_title(self, post=None):
+    def column_title(self, post_=None):
         
-        global mode
-        php_check_if_defined("mode")
+        
+        global mode_
+        php_check_if_defined("mode_")
         if self.hierarchical_display:
-            if 0 == self.current_level and php_int(post.post_parent) > 0:
+            if 0 == self.current_level and php_int(post_.post_parent) > 0:
                 #// Sent level 0 by accident, by default, or because we don't know the actual level.
-                find_main_page = php_int(post.post_parent)
+                find_main_page_ = php_int(post_.post_parent)
                 while True:
                     
-                    if not (find_main_page > 0):
+                    if not (find_main_page_ > 0):
                         break
                     # end if
-                    parent = get_post(find_main_page)
-                    if is_null(parent):
+                    parent_ = get_post(find_main_page_)
+                    if is_null(parent_):
                         break
                     # end if
                     self.current_level += 1
-                    find_main_page = php_int(parent.post_parent)
-                    if (not (php_isset(lambda : parent_name))):
+                    find_main_page_ = php_int(parent_.post_parent)
+                    if (not (php_isset(lambda : parent_name_))):
                         #// This filter is documented in wp-includes/post-template.php
-                        parent_name = apply_filters("the_title", parent.post_title, parent.ID)
+                        parent_name_ = apply_filters("the_title", parent_.post_title, parent_.ID)
                     # end if
                 # end while
             # end if
         # end if
-        can_edit_post = current_user_can("edit_post", post.ID)
-        if can_edit_post and "trash" != post.post_status:
-            lock_holder = wp_check_post_lock(post.ID)
-            if lock_holder:
-                lock_holder = get_userdata(lock_holder)
-                locked_avatar = get_avatar(lock_holder.ID, 18)
+        can_edit_post_ = current_user_can("edit_post", post_.ID)
+        if can_edit_post_ and "trash" != post_.post_status:
+            lock_holder_ = wp_check_post_lock(post_.ID)
+            if lock_holder_:
+                lock_holder_ = get_userdata(lock_holder_)
+                locked_avatar_ = get_avatar(lock_holder_.ID, 18)
                 #// translators: %s: User's display name.
-                locked_text = esc_html(php_sprintf(__("%s is currently editing"), lock_holder.display_name))
+                locked_text_ = esc_html(php_sprintf(__("%s is currently editing"), lock_holder_.display_name))
             else:
-                locked_avatar = ""
-                locked_text = ""
+                locked_avatar_ = ""
+                locked_text_ = ""
             # end if
-            php_print("<div class=\"locked-info\"><span class=\"locked-avatar\">" + locked_avatar + "</span> <span class=\"locked-text\">" + locked_text + "</span></div>\n")
+            php_print("<div class=\"locked-info\"><span class=\"locked-avatar\">" + locked_avatar_ + "</span> <span class=\"locked-text\">" + locked_text_ + "</span></div>\n")
         # end if
-        pad = php_str_repeat("&#8212; ", self.current_level)
+        pad_ = php_str_repeat("&#8212; ", self.current_level)
         php_print("<strong>")
-        title = _draft_or_post_title()
-        if can_edit_post and "trash" != post.post_status:
-            printf("<a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s%s</a>", get_edit_post_link(post.ID), esc_attr(php_sprintf(__("&#8220;%s&#8221; (Edit)"), title)), pad, title)
+        title_ = _draft_or_post_title()
+        if can_edit_post_ and "trash" != post_.post_status:
+            printf("<a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s%s</a>", get_edit_post_link(post_.ID), esc_attr(php_sprintf(__("&#8220;%s&#8221; (Edit)"), title_)), pad_, title_)
         else:
-            printf("<span>%s%s</span>", pad, title)
+            printf("<span>%s%s</span>", pad_, title_)
         # end if
-        _post_states(post)
-        if (php_isset(lambda : parent_name)):
-            post_type_object = get_post_type_object(post.post_type)
-            php_print(" | " + post_type_object.labels.parent_item_colon + " " + esc_html(parent_name))
+        _post_states(post_)
+        if (php_isset(lambda : parent_name_)):
+            post_type_object_ = get_post_type_object(post_.post_type)
+            php_print(" | " + post_type_object_.labels.parent_item_colon + " " + esc_html(parent_name_))
         # end if
         php_print("</strong>\n")
-        if (not is_post_type_hierarchical(self.screen.post_type)) and "excerpt" == mode and current_user_can("read_post", post.ID):
-            if post_password_required(post):
+        if (not is_post_type_hierarchical(self.screen.post_type)) and "excerpt" == mode_ and current_user_can("read_post", post_.ID):
+            if post_password_required(post_):
                 php_print("<span class=\"protected-post-excerpt\">" + esc_html(get_the_excerpt()) + "</span>")
             else:
                 php_print(esc_html(get_the_excerpt()))
             # end if
         # end if
-        get_inline_data(post)
+        get_inline_data(post_)
     # end def column_title
     #// 
     #// Handles the post date column output.
@@ -818,35 +877,36 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param WP_Post $post The current WP_Post object.
     #//
-    def column_date(self, post=None):
+    def column_date(self, post_=None):
         
-        global mode
-        php_check_if_defined("mode")
-        if "0000-00-00 00:00:00" == post.post_date:
-            t_time = __("Unpublished")
-            h_time = t_time
-            time_diff = 0
+        
+        global mode_
+        php_check_if_defined("mode_")
+        if "0000-00-00 00:00:00" == post_.post_date:
+            t_time_ = __("Unpublished")
+            h_time_ = t_time_
+            time_diff_ = 0
         else:
-            t_time = get_the_time(__("Y/m/d g:i:s a"), post)
-            time = get_post_timestamp(post)
-            time_diff = time() - time
-            if time and time_diff > 0 and time_diff < DAY_IN_SECONDS:
+            t_time_ = get_the_time(__("Y/m/d g:i:s a"), post_)
+            time_ = get_post_timestamp(post_)
+            time_diff_ = time() - time_
+            if time_ and time_diff_ > 0 and time_diff_ < DAY_IN_SECONDS:
                 #// translators: %s: Human-readable time difference.
-                h_time = php_sprintf(__("%s ago"), human_time_diff(time))
+                h_time_ = php_sprintf(__("%s ago"), human_time_diff(time_))
             else:
-                h_time = get_the_time(__("Y/m/d"), post)
+                h_time_ = get_the_time(__("Y/m/d"), post_)
             # end if
         # end if
-        if "publish" == post.post_status:
-            status = __("Published")
-        elif "future" == post.post_status:
-            if time_diff > 0:
-                status = "<strong class=\"error-message\">" + __("Missed schedule") + "</strong>"
+        if "publish" == post_.post_status:
+            status_ = __("Published")
+        elif "future" == post_.post_status:
+            if time_diff_ > 0:
+                status_ = "<strong class=\"error-message\">" + __("Missed schedule") + "</strong>"
             else:
-                status = __("Scheduled")
+                status_ = __("Scheduled")
             # end if
         else:
-            status = __("Last Modified")
+            status_ = __("Last Modified")
         # end if
         #// 
         #// Filters the status text of the post.
@@ -858,11 +918,11 @@ class WP_Posts_List_Table(WP_List_Table):
         #// @param string  $column_name The column name.
         #// @param string  $mode        The list display mode ('excerpt' or 'list').
         #//
-        status = apply_filters("post_date_column_status", status, post, "date", mode)
-        if status:
-            php_print(status + "<br />")
+        status_ = apply_filters("post_date_column_status", status_, post_, "date", mode_)
+        if status_:
+            php_print(status_ + "<br />")
         # end if
-        if "excerpt" == mode:
+        if "excerpt" == mode_:
             #// 
             #// Filters the published time of the post.
             #// 
@@ -877,10 +937,10 @@ class WP_Posts_List_Table(WP_List_Table):
             #// @param string  $column_name The column name.
             #// @param string  $mode        The list display mode ('excerpt' or 'list').
             #//
-            php_print(apply_filters("post_date_column_time", t_time, post, "date", mode))
+            php_print(apply_filters("post_date_column_time", t_time_, post_, "date", mode_))
         else:
             #// This filter is documented in wp-admin/includes/class-wp-posts-list-table.php
-            php_print("<span title=\"" + t_time + "\">" + apply_filters("post_date_column_time", h_time, post, "date", mode) + "</span>")
+            php_print("<span title=\"" + t_time_ + "\">" + apply_filters("post_date_column_time", h_time_, post_, "date", mode_) + "</span>")
         # end if
     # end def column_date
     #// 
@@ -890,11 +950,12 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param WP_Post $post The current WP_Post object.
     #//
-    def column_comments(self, post=None):
+    def column_comments(self, post_=None):
+        
         
         php_print("     <div class=\"post-com-count-wrapper\">\n        ")
-        pending_comments = self.comment_pending_count[post.ID] if (php_isset(lambda : self.comment_pending_count[post.ID])) else 0
-        self.comments_bubble(post.ID, pending_comments)
+        pending_comments_ = self.comment_pending_count[post_.ID] if (php_isset(lambda : self.comment_pending_count[post_.ID])) else 0
+        self.comments_bubble(post_.ID, pending_comments_)
         php_print("     </div>\n        ")
     # end def column_comments
     #// 
@@ -904,10 +965,11 @@ class WP_Posts_List_Table(WP_List_Table):
     #// 
     #// @param WP_Post $post The current WP_Post object.
     #//
-    def column_author(self, post=None):
+    def column_author(self, post_=None):
         
-        args = Array({"post_type": post.post_type, "author": get_the_author_meta("ID")})
-        php_print(self.get_edit_link(args, get_the_author()))
+        
+        args_ = Array({"post_type": post_.post_type, "author": get_the_author_meta("ID")})
+        php_print(self.get_edit_link(args_, get_the_author()))
     # end def column_author
     #// 
     #// Handles the default column output.
@@ -917,35 +979,36 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @param WP_Post $post        The current WP_Post object.
     #// @param string  $column_name The current column name.
     #//
-    def column_default(self, post=None, column_name=None):
+    def column_default(self, post_=None, column_name_=None):
         
-        if "categories" == column_name:
-            taxonomy = "category"
-        elif "tags" == column_name:
-            taxonomy = "post_tag"
-        elif 0 == php_strpos(column_name, "taxonomy-"):
-            taxonomy = php_substr(column_name, 9)
+        
+        if "categories" == column_name_:
+            taxonomy_ = "category"
+        elif "tags" == column_name_:
+            taxonomy_ = "post_tag"
+        elif 0 == php_strpos(column_name_, "taxonomy-"):
+            taxonomy_ = php_substr(column_name_, 9)
         else:
-            taxonomy = False
+            taxonomy_ = False
         # end if
-        if taxonomy:
-            taxonomy_object = get_taxonomy(taxonomy)
-            terms = get_the_terms(post.ID, taxonomy)
-            if php_is_array(terms):
-                term_links = Array()
-                for t in terms:
-                    posts_in_term_qv = Array()
-                    if "post" != post.post_type:
-                        posts_in_term_qv["post_type"] = post.post_type
+        if taxonomy_:
+            taxonomy_object_ = get_taxonomy(taxonomy_)
+            terms_ = get_the_terms(post_.ID, taxonomy_)
+            if php_is_array(terms_):
+                term_links_ = Array()
+                for t_ in terms_:
+                    posts_in_term_qv_ = Array()
+                    if "post" != post_.post_type:
+                        posts_in_term_qv_["post_type"] = post_.post_type
                     # end if
-                    if taxonomy_object.query_var:
-                        posts_in_term_qv[taxonomy_object.query_var] = t.slug
+                    if taxonomy_object_.query_var:
+                        posts_in_term_qv_[taxonomy_object_.query_var] = t_.slug
                     else:
-                        posts_in_term_qv["taxonomy"] = taxonomy
-                        posts_in_term_qv["term"] = t.slug
+                        posts_in_term_qv_["taxonomy"] = taxonomy_
+                        posts_in_term_qv_["term"] = t_.slug
                     # end if
-                    label = esc_html(sanitize_term_field("name", t.name, t.term_id, taxonomy, "display"))
-                    term_links[-1] = self.get_edit_link(posts_in_term_qv, label)
+                    label_ = esc_html(sanitize_term_field("name", t_.name, t_.term_id, taxonomy_, "display"))
+                    term_links_[-1] = self.get_edit_link(posts_in_term_qv_, label_)
                 # end for
                 #// 
                 #// Filters the links in `$taxonomy` column of edit.php.
@@ -956,15 +1019,15 @@ class WP_Posts_List_Table(WP_List_Table):
                 #// @param string    $taxonomy   Taxonomy name.
                 #// @param WP_Term[] $terms      Array of term objects appearing in the post row.
                 #//
-                term_links = apply_filters("post_column_taxonomy_links", term_links, taxonomy, terms)
+                term_links_ = apply_filters("post_column_taxonomy_links", term_links_, taxonomy_, terms_)
                 #// translators: Used between list items, there is a space after the comma.
-                php_print(join(__(", "), term_links))
+                php_print(join(__(", "), term_links_))
             else:
-                php_print("<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">" + taxonomy_object.labels.no_terms + "</span>")
+                php_print("<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">" + taxonomy_object_.labels.no_terms + "</span>")
             # end if
             return
         # end if
-        if is_post_type_hierarchical(post.post_type):
+        if is_post_type_hierarchical(post_.post_type):
             #// 
             #// Fires in each custom column on the Posts list table.
             #// 
@@ -976,7 +1039,7 @@ class WP_Posts_List_Table(WP_List_Table):
             #// @param string $column_name The name of the column to display.
             #// @param int    $post_id     The current post ID.
             #//
-            do_action("manage_pages_custom_column", column_name, post.ID)
+            do_action("manage_pages_custom_column", column_name_, post_.ID)
         else:
             #// 
             #// Fires in each custom column in the Posts list table.
@@ -989,7 +1052,7 @@ class WP_Posts_List_Table(WP_List_Table):
             #// @param string $column_name The name of the column to display.
             #// @param int    $post_id     The current post ID.
             #//
-            do_action("manage_posts_custom_column", column_name, post.ID)
+            do_action("manage_posts_custom_column", column_name_, post_.ID)
         # end if
         #// 
         #// Fires for each custom column of a specific post type in the Posts list table.
@@ -1001,7 +1064,7 @@ class WP_Posts_List_Table(WP_List_Table):
         #// @param string $column_name The name of the column to display.
         #// @param int    $post_id     The current post ID.
         #//
-        do_action(str("manage_") + str(post.post_type) + str("_posts_custom_column"), column_name, post.ID)
+        do_action(str("manage_") + str(post_.post_type) + str("_posts_custom_column"), column_name_, post_.ID)
     # end def column_default
     #// 
     #// @global WP_Post $post Global post object.
@@ -1009,32 +1072,33 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @param int|WP_Post $post
     #// @param int         $level
     #//
-    def single_row(self, post=None, level=0):
+    def single_row(self, post_=None, level_=0):
+        
         global PHP_GLOBALS
-        global_post = get_post()
-        post = get_post(post)
-        self.current_level = level
-        PHP_GLOBALS["post"] = post
-        setup_postdata(post)
-        classes = "iedit author-" + "self" if get_current_user_id() == post.post_author else "other"
-        lock_holder = wp_check_post_lock(post.ID)
-        if lock_holder:
-            classes += " wp-locked"
+        global_post_ = get_post()
+        post_ = get_post(post_)
+        self.current_level = level_
+        PHP_GLOBALS["post"] = post_
+        setup_postdata(post_)
+        classes_ = "iedit author-" + "self" if get_current_user_id() == post_.post_author else "other"
+        lock_holder_ = wp_check_post_lock(post_.ID)
+        if lock_holder_:
+            classes_ += " wp-locked"
         # end if
-        if post.post_parent:
-            count = php_count(get_post_ancestors(post.ID))
-            classes += " level-" + count
+        if post_.post_parent:
+            count_ = php_count(get_post_ancestors(post_.ID))
+            classes_ += " level-" + count_
         else:
-            classes += " level-0"
+            classes_ += " level-0"
         # end if
         php_print("     <tr id=\"post-")
-        php_print(post.ID)
+        php_print(post_.ID)
         php_print("\" class=\"")
-        php_print(php_implode(" ", get_post_class(classes, post.ID)))
+        php_print(php_implode(" ", get_post_class(classes_, post_.ID)))
         php_print("\">\n            ")
-        self.single_row_columns(post)
+        self.single_row_columns(post_)
         php_print("     </tr>\n     ")
-        PHP_GLOBALS["post"] = global_post
+        PHP_GLOBALS["post"] = global_post_
     # end def single_row
     #// 
     #// Gets the name of the default primary column.
@@ -1044,6 +1108,7 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @return string Name of the default primary column, in this case, 'title'.
     #//
     def get_default_primary_column_name(self):
+        
         
         return "title"
     # end def get_default_primary_column_name
@@ -1058,45 +1123,46 @@ class WP_Posts_List_Table(WP_List_Table):
     #// @return string Row actions output for posts, or an empty string
     #// if the current column is not the primary column.
     #//
-    def handle_row_actions(self, post=None, column_name=None, primary=None):
+    def handle_row_actions(self, post_=None, column_name_=None, primary_=None):
         
-        if primary != column_name:
+        
+        if primary_ != column_name_:
             return ""
         # end if
-        post_type_object = get_post_type_object(post.post_type)
-        can_edit_post = current_user_can("edit_post", post.ID)
-        actions = Array()
-        title = _draft_or_post_title()
-        if can_edit_post and "trash" != post.post_status:
-            actions["edit"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", get_edit_post_link(post.ID), esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), title)), __("Edit"))
-            if "wp_block" != post.post_type:
-                actions["inline hide-if-no-js"] = php_sprintf("<button type=\"button\" class=\"button-link editinline\" aria-label=\"%s\" aria-expanded=\"false\">%s</button>", esc_attr(php_sprintf(__("Quick edit &#8220;%s&#8221; inline"), title)), __("Quick&nbsp;Edit"))
+        post_type_object_ = get_post_type_object(post_.post_type)
+        can_edit_post_ = current_user_can("edit_post", post_.ID)
+        actions_ = Array()
+        title_ = _draft_or_post_title()
+        if can_edit_post_ and "trash" != post_.post_status:
+            actions_["edit"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", get_edit_post_link(post_.ID), esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), title_)), __("Edit"))
+            if "wp_block" != post_.post_type:
+                actions_["inline hide-if-no-js"] = php_sprintf("<button type=\"button\" class=\"button-link editinline\" aria-label=\"%s\" aria-expanded=\"false\">%s</button>", esc_attr(php_sprintf(__("Quick edit &#8220;%s&#8221; inline"), title_)), __("Quick&nbsp;Edit"))
             # end if
         # end if
-        if current_user_can("delete_post", post.ID):
-            if "trash" == post.post_status:
-                actions["untrash"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", wp_nonce_url(admin_url(php_sprintf(post_type_object._edit_link + "&amp;action=untrash", post.ID)), "untrash-post_" + post.ID), esc_attr(php_sprintf(__("Restore &#8220;%s&#8221; from the Trash"), title)), __("Restore"))
+        if current_user_can("delete_post", post_.ID):
+            if "trash" == post_.post_status:
+                actions_["untrash"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", wp_nonce_url(admin_url(php_sprintf(post_type_object_._edit_link + "&amp;action=untrash", post_.ID)), "untrash-post_" + post_.ID), esc_attr(php_sprintf(__("Restore &#8220;%s&#8221; from the Trash"), title_)), __("Restore"))
             elif EMPTY_TRASH_DAYS:
-                actions["trash"] = php_sprintf("<a href=\"%s\" class=\"submitdelete\" aria-label=\"%s\">%s</a>", get_delete_post_link(post.ID), esc_attr(php_sprintf(__("Move &#8220;%s&#8221; to the Trash"), title)), _x("Trash", "verb"))
+                actions_["trash"] = php_sprintf("<a href=\"%s\" class=\"submitdelete\" aria-label=\"%s\">%s</a>", get_delete_post_link(post_.ID), esc_attr(php_sprintf(__("Move &#8220;%s&#8221; to the Trash"), title_)), _x("Trash", "verb"))
             # end if
-            if "trash" == post.post_status or (not EMPTY_TRASH_DAYS):
-                actions["delete"] = php_sprintf("<a href=\"%s\" class=\"submitdelete\" aria-label=\"%s\">%s</a>", get_delete_post_link(post.ID, "", True), esc_attr(php_sprintf(__("Delete &#8220;%s&#8221; permanently"), title)), __("Delete Permanently"))
+            if "trash" == post_.post_status or (not EMPTY_TRASH_DAYS):
+                actions_["delete"] = php_sprintf("<a href=\"%s\" class=\"submitdelete\" aria-label=\"%s\">%s</a>", get_delete_post_link(post_.ID, "", True), esc_attr(php_sprintf(__("Delete &#8220;%s&#8221; permanently"), title_)), __("Delete Permanently"))
             # end if
         # end if
-        if is_post_type_viewable(post_type_object):
-            if php_in_array(post.post_status, Array("pending", "draft", "future")):
-                if can_edit_post:
-                    preview_link = get_preview_post_link(post)
-                    actions["view"] = php_sprintf("<a href=\"%s\" rel=\"bookmark\" aria-label=\"%s\">%s</a>", esc_url(preview_link), esc_attr(php_sprintf(__("Preview &#8220;%s&#8221;"), title)), __("Preview"))
+        if is_post_type_viewable(post_type_object_):
+            if php_in_array(post_.post_status, Array("pending", "draft", "future")):
+                if can_edit_post_:
+                    preview_link_ = get_preview_post_link(post_)
+                    actions_["view"] = php_sprintf("<a href=\"%s\" rel=\"bookmark\" aria-label=\"%s\">%s</a>", esc_url(preview_link_), esc_attr(php_sprintf(__("Preview &#8220;%s&#8221;"), title_)), __("Preview"))
                 # end if
-            elif "trash" != post.post_status:
-                actions["view"] = php_sprintf("<a href=\"%s\" rel=\"bookmark\" aria-label=\"%s\">%s</a>", get_permalink(post.ID), esc_attr(php_sprintf(__("View &#8220;%s&#8221;"), title)), __("View"))
+            elif "trash" != post_.post_status:
+                actions_["view"] = php_sprintf("<a href=\"%s\" rel=\"bookmark\" aria-label=\"%s\">%s</a>", get_permalink(post_.ID), esc_attr(php_sprintf(__("View &#8220;%s&#8221;"), title_)), __("View"))
             # end if
         # end if
-        if "wp_block" == post.post_type:
-            actions["export"] = php_sprintf("<button type=\"button\" class=\"wp-list-reusable-blocks__export button-link\" data-id=\"%s\" aria-label=\"%s\">%s</button>", post.ID, esc_attr(php_sprintf(__("Export &#8220;%s&#8221; as JSON"), title)), __("Export as JSON"))
+        if "wp_block" == post_.post_type:
+            actions_["export"] = php_sprintf("<button type=\"button\" class=\"wp-list-reusable-blocks__export button-link\" data-id=\"%s\" aria-label=\"%s\">%s</button>", post_.ID, esc_attr(php_sprintf(__("Export &#8220;%s&#8221; as JSON"), title_)), __("Export as JSON"))
         # end if
-        if is_post_type_hierarchical(post.post_type):
+        if is_post_type_hierarchical(post_.post_type):
             #// 
             #// Filters the array of row action links on the Pages list table.
             #// 
@@ -1109,7 +1175,7 @@ class WP_Posts_List_Table(WP_List_Table):
             #// 'Delete Permanently', 'Preview', and 'View'.
             #// @param WP_Post  $post    The post object.
             #//
-            actions = apply_filters("page_row_actions", actions, post)
+            actions_ = apply_filters("page_row_actions", actions_, post_)
         else:
             #// 
             #// Filters the array of row action links on the Posts list table.
@@ -1123,9 +1189,9 @@ class WP_Posts_List_Table(WP_List_Table):
             #// 'Delete Permanently', 'Preview', and 'View'.
             #// @param WP_Post  $post    The post object.
             #//
-            actions = apply_filters("post_row_actions", actions, post)
+            actions_ = apply_filters("post_row_actions", actions_, post_)
         # end if
-        return self.row_actions(actions)
+        return self.row_actions(actions_)
     # end def handle_row_actions
     #// 
     #// Outputs the hidden row displayed when inline editing
@@ -1136,17 +1202,18 @@ class WP_Posts_List_Table(WP_List_Table):
     #//
     def inline_edit(self):
         
-        global mode
-        php_check_if_defined("mode")
-        screen = self.screen
-        post = get_default_post_to_edit(screen.post_type)
-        post_type_object = get_post_type_object(screen.post_type)
-        taxonomy_names = get_object_taxonomies(screen.post_type)
-        hierarchical_taxonomies = Array()
-        flat_taxonomies = Array()
-        for taxonomy_name in taxonomy_names:
-            taxonomy = get_taxonomy(taxonomy_name)
-            show_in_quick_edit = taxonomy.show_in_quick_edit
+        
+        global mode_
+        php_check_if_defined("mode_")
+        screen_ = self.screen
+        post_ = get_default_post_to_edit(screen_.post_type)
+        post_type_object_ = get_post_type_object(screen_.post_type)
+        taxonomy_names_ = get_object_taxonomies(screen_.post_type)
+        hierarchical_taxonomies_ = Array()
+        flat_taxonomies_ = Array()
+        for taxonomy_name_ in taxonomy_names_:
+            taxonomy_ = get_taxonomy(taxonomy_name_)
+            show_in_quick_edit_ = taxonomy_.show_in_quick_edit
             #// 
             #// Filters whether the current taxonomy should be shown in the Quick Edit panel.
             #// 
@@ -1156,50 +1223,50 @@ class WP_Posts_List_Table(WP_List_Table):
             #// @param string $taxonomy_name      Taxonomy name.
             #// @param string $post_type          Post type of current Quick Edit post.
             #//
-            if (not apply_filters("quick_edit_show_taxonomy", show_in_quick_edit, taxonomy_name, screen.post_type)):
+            if (not apply_filters("quick_edit_show_taxonomy", show_in_quick_edit_, taxonomy_name_, screen_.post_type)):
                 continue
             # end if
-            if taxonomy.hierarchical:
-                hierarchical_taxonomies[-1] = taxonomy
+            if taxonomy_.hierarchical:
+                hierarchical_taxonomies_[-1] = taxonomy_
             else:
-                flat_taxonomies[-1] = taxonomy
+                flat_taxonomies_[-1] = taxonomy_
             # end if
         # end for
-        m = "excerpt" if (php_isset(lambda : mode)) and "excerpt" == mode else "list"
-        can_publish = current_user_can(post_type_object.cap.publish_posts)
-        core_columns = Array({"cb": True, "date": True, "title": True, "categories": True, "tags": True, "comments": True, "author": True})
+        m_ = "excerpt" if (php_isset(lambda : mode_)) and "excerpt" == mode_ else "list"
+        can_publish_ = current_user_can(post_type_object_.cap.publish_posts)
+        core_columns_ = Array({"cb": True, "date": True, "title": True, "categories": True, "tags": True, "comments": True, "author": True})
         php_print("""
         <form method=\"get\">
         <table style=\"display: none\"><tbody id=\"inlineedit\">
         """)
-        hclass = "post" if php_count(hierarchical_taxonomies) else "page"
-        inline_edit_classes = str("inline-edit-row inline-edit-row-") + str(hclass)
-        bulk_edit_classes = str("bulk-edit-row bulk-edit-row-") + str(hclass) + str(" bulk-edit-") + str(screen.post_type)
-        quick_edit_classes = str("quick-edit-row quick-edit-row-") + str(hclass) + str(" inline-edit-") + str(screen.post_type)
-        bulk = 0
+        hclass_ = "post" if php_count(hierarchical_taxonomies_) else "page"
+        inline_edit_classes_ = str("inline-edit-row inline-edit-row-") + str(hclass_)
+        bulk_edit_classes_ = str("bulk-edit-row bulk-edit-row-") + str(hclass_) + str(" bulk-edit-") + str(screen_.post_type)
+        quick_edit_classes_ = str("quick-edit-row quick-edit-row-") + str(hclass_) + str(" inline-edit-") + str(screen_.post_type)
+        bulk_ = 0
         while True:
             
-            if not (bulk < 2):
+            if not (bulk_ < 2):
                 break
             # end if
-            classes = inline_edit_classes + " "
-            classes += bulk_edit_classes if bulk else quick_edit_classes
+            classes_ = inline_edit_classes_ + " "
+            classes_ += bulk_edit_classes_ if bulk_ else quick_edit_classes_
             php_print("         <tr id=\"")
-            php_print("bulk-edit" if bulk else "inline-edit")
+            php_print("bulk-edit" if bulk_ else "inline-edit")
             php_print("\" class=\"")
-            php_print(classes)
+            php_print(classes_)
             php_print("\" style=\"display: none\">\n            <td colspan=\"")
             php_print(self.get_column_count())
             php_print("""\" class=\"colspanchange\">
             <fieldset class=\"inline-edit-col-left\">
             <legend class=\"inline-edit-legend\">""")
-            php_print(__("Bulk Edit") if bulk else __("Quick Edit"))
+            php_print(__("Bulk Edit") if bulk_ else __("Quick Edit"))
             php_print("""</legend>
             <div class=\"inline-edit-col\">
             """)
-            if post_type_supports(screen.post_type, "title"):
+            if post_type_supports(screen_.post_type, "title"):
                 php_print("\n                   ")
-                if bulk:
+                if bulk_:
                     php_print("""
                     <div id=\"bulk-title-div\">
                     <div id=\"bulk-titles\"></div>
@@ -1213,7 +1280,7 @@ class WP_Posts_List_Table(WP_List_Table):
                     <span class=\"input-text-wrap\"><input type=\"text\" name=\"post_title\" class=\"ptitle\" value=\"\" /></span>
                     </label>
                     """)
-                    if is_post_type_viewable(screen.post_type):
+                    if is_post_type_viewable(screen_.post_type):
                         php_print("\n                           <label>\n                               <span class=\"title\">")
                         _e("Slug")
                         php_print("""</span>
@@ -1229,7 +1296,7 @@ class WP_Posts_List_Table(WP_List_Table):
             # end if
             pass
             php_print("\n               ")
-            if (not bulk):
+            if (not bulk_):
                 php_print("                 <fieldset class=\"inline-edit-date\">\n                     <legend><span class=\"title\">")
                 _e("Date")
                 php_print("</span></legend>\n                       ")
@@ -1238,30 +1305,30 @@ class WP_Posts_List_Table(WP_List_Table):
             # end if
             pass
             php_print("\n               ")
-            if post_type_supports(screen.post_type, "author"):
-                authors_dropdown = ""
-                if current_user_can(post_type_object.cap.edit_others_posts):
-                    users_opt = Array({"hide_if_only_one_author": False, "who": "authors", "name": "post_author", "class": "authors", "multi": 1, "echo": 0, "show": "display_name_with_login"})
-                    if bulk:
-                        users_opt["show_option_none"] = __("&mdash; No Change &mdash;")
+            if post_type_supports(screen_.post_type, "author"):
+                authors_dropdown_ = ""
+                if current_user_can(post_type_object_.cap.edit_others_posts):
+                    users_opt_ = Array({"hide_if_only_one_author": False, "who": "authors", "name": "post_author", "class": "authors", "multi": 1, "echo": 0, "show": "display_name_with_login"})
+                    if bulk_:
+                        users_opt_["show_option_none"] = __("&mdash; No Change &mdash;")
                     # end if
-                    authors = wp_dropdown_users(users_opt)
-                    if authors:
-                        authors_dropdown = "<label class=\"inline-edit-author\">"
-                        authors_dropdown += "<span class=\"title\">" + __("Author") + "</span>"
-                        authors_dropdown += authors
-                        authors_dropdown += "</label>"
+                    authors_ = wp_dropdown_users(users_opt_)
+                    if authors_:
+                        authors_dropdown_ = "<label class=\"inline-edit-author\">"
+                        authors_dropdown_ += "<span class=\"title\">" + __("Author") + "</span>"
+                        authors_dropdown_ += authors_
+                        authors_dropdown_ += "</label>"
                     # end if
                 # end if
                 pass
                 php_print("\n                   ")
-                if (not bulk):
-                    php_print(authors_dropdown)
+                if (not bulk_):
+                    php_print(authors_dropdown_)
                 # end if
             # end if
             pass
             php_print("\n               ")
-            if (not bulk) and can_publish:
+            if (not bulk_) and can_publish_:
                 php_print("""
                 <div class=\"inline-edit-group wp-clearfix\">
                 <label class=\"alignleft\">
@@ -1288,20 +1355,20 @@ class WP_Posts_List_Table(WP_List_Table):
             </div>
             </fieldset>
             """)
-            if php_count(hierarchical_taxonomies) and (not bulk):
+            if php_count(hierarchical_taxonomies_) and (not bulk_):
                 php_print("""
                 <fieldset class=\"inline-edit-col-center inline-edit-categories\">
                 <div class=\"inline-edit-col\">
                 """)
-                for taxonomy in hierarchical_taxonomies:
+                for taxonomy_ in hierarchical_taxonomies_:
                     php_print("\n                       <span class=\"title inline-edit-categories-label\">")
-                    php_print(esc_html(taxonomy.labels.name))
+                    php_print(esc_html(taxonomy_.labels.name))
                     php_print("</span>\n                        <input type=\"hidden\" name=\"")
-                    php_print("post_category[]" if "category" == taxonomy.name else "tax_input[" + esc_attr(taxonomy.name) + "][]")
+                    php_print("post_category[]" if "category" == taxonomy_.name else "tax_input[" + esc_attr(taxonomy_.name) + "][]")
                     php_print("\" value=\"0\" />\n                      <ul class=\"cat-checklist ")
-                    php_print(esc_attr(taxonomy.name))
+                    php_print(esc_attr(taxonomy_.name))
                     php_print("-checklist\">\n                          ")
-                    wp_terms_checklist(None, Array({"taxonomy": taxonomy.name}))
+                    wp_terms_checklist(None, Array({"taxonomy": taxonomy_.name}))
                     php_print("                     </ul>\n\n                   ")
                 # end for
                 pass
@@ -1315,19 +1382,19 @@ class WP_Posts_List_Table(WP_List_Table):
             <fieldset class=\"inline-edit-col-right\">
             <div class=\"inline-edit-col\">
             """)
-            if post_type_supports(screen.post_type, "author") and bulk:
-                php_print(authors_dropdown)
+            if post_type_supports(screen_.post_type, "author") and bulk_:
+                php_print(authors_dropdown_)
             # end if
             php_print("\n               ")
-            if post_type_supports(screen.post_type, "page-attributes"):
+            if post_type_supports(screen_.post_type, "page-attributes"):
                 php_print("\n                   ")
-                if post_type_object.hierarchical:
+                if post_type_object_.hierarchical:
                     php_print("\n                       <label>\n                           <span class=\"title\">")
                     _e("Parent")
                     php_print("</span>\n                            ")
-                    dropdown_args = Array({"post_type": post_type_object.name, "selected": post.post_parent, "name": "post_parent", "show_option_none": __("Main Page (no parent)"), "option_none_value": 0, "sort_column": "menu_order, post_title"})
-                    if bulk:
-                        dropdown_args["show_option_no_change"] = __("&mdash; No Change &mdash;")
+                    dropdown_args_ = Array({"post_type": post_type_object_.name, "selected": post_.post_parent, "name": "post_parent", "show_option_none": __("Main Page (no parent)"), "option_none_value": 0, "sort_column": "menu_order, post_title"})
+                    if bulk_:
+                        dropdown_args_["show_option_no_change"] = __("&mdash; No Change &mdash;")
                     # end if
                     #// 
                     #// Filters the arguments used to generate the Quick Edit page-parent drop-down.
@@ -1338,17 +1405,17 @@ class WP_Posts_List_Table(WP_List_Table):
                     #// 
                     #// @param array $dropdown_args An array of arguments.
                     #//
-                    dropdown_args = apply_filters("quick_edit_dropdown_pages_args", dropdown_args)
-                    wp_dropdown_pages(dropdown_args)
+                    dropdown_args_ = apply_filters("quick_edit_dropdown_pages_args", dropdown_args_)
+                    wp_dropdown_pages(dropdown_args_)
                     php_print("                     </label>\n\n                    ")
                 # end if
                 pass
                 php_print("\n                   ")
-                if (not bulk):
+                if (not bulk_):
                     php_print("\n                       <label>\n                           <span class=\"title\">")
                     _e("Order")
                     php_print("</span>\n                            <span class=\"input-text-wrap\"><input type=\"text\" name=\"menu_order\" class=\"inline-edit-menu-order-input\" value=\"")
-                    php_print(post.menu_order)
+                    php_print(post_.menu_order)
                     php_print("""\" /></span>
                     </label>
                     """)
@@ -1358,11 +1425,11 @@ class WP_Posts_List_Table(WP_List_Table):
             # end if
             pass
             php_print("\n               ")
-            if 0 < php_count(get_page_templates(None, screen.post_type)):
+            if 0 < php_count(get_page_templates(None, screen_.post_type)):
                 php_print("\n                   <label>\n                       <span class=\"title\">")
                 _e("Template")
                 php_print("</span>\n                        <select name=\"page_template\">\n                           ")
-                if bulk:
+                if bulk_:
                     php_print("                         <option value=\"-1\">")
                     _e("&mdash; No Change &mdash;")
                     php_print("</option>\n                          ")
@@ -1370,31 +1437,31 @@ class WP_Posts_List_Table(WP_List_Table):
                 pass
                 php_print("                         ")
                 #// This filter is documented in wp-admin/includes/meta-boxes.php
-                default_title = apply_filters("default_page_template_title", __("Default Template"), "quick-edit")
+                default_title_ = apply_filters("default_page_template_title", __("Default Template"), "quick-edit")
                 php_print("                         <option value=\"default\">")
-                php_print(esc_html(default_title))
+                php_print(esc_html(default_title_))
                 php_print("</option>\n                          ")
-                page_template_dropdown("", screen.post_type)
+                page_template_dropdown("", screen_.post_type)
                 php_print("""                       </select>
                 </label>
                 """)
             # end if
             php_print("\n               ")
-            if php_count(flat_taxonomies) and (not bulk):
+            if php_count(flat_taxonomies_) and (not bulk_):
                 php_print("\n                   ")
-                for taxonomy in flat_taxonomies:
+                for taxonomy_ in flat_taxonomies_:
                     php_print("\n                       ")
-                    if current_user_can(taxonomy.cap.assign_terms):
+                    if current_user_can(taxonomy_.cap.assign_terms):
                         php_print("                         ")
-                        taxonomy_name = esc_attr(taxonomy.name)
+                        taxonomy_name_ = esc_attr(taxonomy_.name)
                         php_print("\n                           <label class=\"inline-edit-tags\">\n                                <span class=\"title\">")
-                        php_print(esc_html(taxonomy.labels.name))
+                        php_print(esc_html(taxonomy_.labels.name))
                         php_print("</span>\n                                <textarea data-wp-taxonomy=\"")
-                        php_print(taxonomy_name)
+                        php_print(taxonomy_name_)
                         php_print("\" cols=\"22\" rows=\"1\" name=\"tax_input[")
-                        php_print(taxonomy_name)
+                        php_print(taxonomy_name_)
                         php_print("]\" class=\"tax_input_")
-                        php_print(taxonomy_name)
+                        php_print(taxonomy_name_)
                         php_print("""\"></textarea>
                         </label>
                         """)
@@ -1407,13 +1474,13 @@ class WP_Posts_List_Table(WP_List_Table):
             # end if
             pass
             php_print("\n               ")
-            if post_type_supports(screen.post_type, "comments") or post_type_supports(screen.post_type, "trackbacks"):
+            if post_type_supports(screen_.post_type, "comments") or post_type_supports(screen_.post_type, "trackbacks"):
                 php_print("\n                   ")
-                if bulk:
+                if bulk_:
                     php_print("""
                     <div class=\"inline-edit-group wp-clearfix\">
                     """)
-                    if post_type_supports(screen.post_type, "comments"):
+                    if post_type_supports(screen_.post_type, "comments"):
                         php_print("\n                           <label class=\"alignleft\">\n                               <span class=\"title\">")
                         _e("Comments")
                         php_print("</span>\n                                <select name=\"comment_status\">\n                                  <option value=\"\">")
@@ -1428,7 +1495,7 @@ class WP_Posts_List_Table(WP_List_Table):
                         """)
                     # end if
                     php_print("\n                       ")
-                    if post_type_supports(screen.post_type, "trackbacks"):
+                    if post_type_supports(screen_.post_type, "trackbacks"):
                         php_print("\n                           <label class=\"alignright\">\n                              <span class=\"title\">")
                         _e("Pings")
                         php_print("</span>\n                                <select name=\"ping_status\">\n                                 <option value=\"\">")
@@ -1450,7 +1517,7 @@ class WP_Posts_List_Table(WP_List_Table):
                     php_print("""
                     <div class=\"inline-edit-group wp-clearfix\">
                     """)
-                    if post_type_supports(screen.post_type, "comments"):
+                    if post_type_supports(screen_.post_type, "comments"):
                         php_print("""
                         <label class=\"alignleft\">
                         <input type=\"checkbox\" name=\"comment_status\" value=\"open\" />
@@ -1461,7 +1528,7 @@ class WP_Posts_List_Table(WP_List_Table):
                         """)
                     # end if
                     php_print("\n                       ")
-                    if post_type_supports(screen.post_type, "trackbacks"):
+                    if post_type_supports(screen_.post_type, "trackbacks"):
                         php_print("""
                         <label class=\"alignleft\">
                         <input type=\"checkbox\" name=\"ping_status\" value=\"open\" />
@@ -1485,21 +1552,21 @@ class WP_Posts_List_Table(WP_List_Table):
             <span class=\"title\">""")
             _e("Status")
             php_print("</span>\n                            <select name=\"_status\">\n                             ")
-            if bulk:
+            if bulk_:
                 php_print("                                 <option value=\"-1\">")
                 _e("&mdash; No Change &mdash;")
                 php_print("</option>\n                              ")
             # end if
             pass
             php_print("\n                               ")
-            if can_publish:
+            if can_publish_:
                 pass
                 php_print("                                 <option value=\"publish\">")
                 _e("Published")
                 php_print("</option>\n                                  <option value=\"future\">")
                 _e("Scheduled")
                 php_print("</option>\n                                  ")
-                if bulk:
+                if bulk_:
                     php_print("                                     <option value=\"private\">")
                     _e("Private")
                     php_print("</option>\n                                  ")
@@ -1515,9 +1582,9 @@ class WP_Posts_List_Table(WP_List_Table):
             </select>
             </label>
             """)
-            if "post" == screen.post_type and can_publish and current_user_can(post_type_object.cap.edit_others_posts):
+            if "post" == screen_.post_type and can_publish_ and current_user_can(post_type_object_.cap.edit_others_posts):
                 php_print("\n                           ")
-                if bulk:
+                if bulk_:
                     php_print("\n                               <label class=\"alignright\">\n                                  <span class=\"title\">")
                     _e("Sticky")
                     php_print("</span>\n                                    <select name=\"sticky\">\n                                      <option value=\"-1\">")
@@ -1548,9 +1615,9 @@ class WP_Posts_List_Table(WP_List_Table):
             php_print("""
             </div>
             """)
-            if bulk and current_theme_supports("post-formats") and post_type_supports(screen.post_type, "post-formats"):
+            if bulk_ and current_theme_supports("post-formats") and post_type_supports(screen_.post_type, "post-formats"):
                 php_print("                 ")
-                post_formats = get_theme_support("post-formats")
+                post_formats_ = get_theme_support("post-formats")
                 php_print("\n                   <label class=\"alignleft\">\n                       <span class=\"title\">")
                 _ex("Format", "post format")
                 php_print("</span>\n                        <select name=\"post_format\">\n                         <option value=\"-1\">")
@@ -1558,13 +1625,13 @@ class WP_Posts_List_Table(WP_List_Table):
                 php_print("</option>\n                          <option value=\"0\">")
                 php_print(get_post_format_string("standard"))
                 php_print("</option>\n                          ")
-                if php_is_array(post_formats[0]):
+                if php_is_array(post_formats_[0]):
                     php_print("                             ")
-                    for format in post_formats[0]:
+                    for format_ in post_formats_[0]:
                         php_print("                                 <option value=\"")
-                        php_print(esc_attr(format))
+                        php_print(esc_attr(format_))
                         php_print("\">")
-                        php_print(esc_html(get_post_format_string(format)))
+                        php_print(esc_html(get_post_format_string(format_)))
                         php_print("</option>\n                              ")
                     # end for
                     php_print("                         ")
@@ -1577,12 +1644,12 @@ class WP_Posts_List_Table(WP_List_Table):
             </div>
             </fieldset>
             """)
-            columns = self.get_column_info()
-            for column_name,column_display_name in columns:
-                if (php_isset(lambda : core_columns[column_name])):
+            columns_ = self.get_column_info()
+            for column_name_,column_display_name_ in columns_:
+                if (php_isset(lambda : core_columns_[column_name_])):
                     continue
                 # end if
-                if bulk:
+                if bulk_:
                     #// 
                     #// Fires once for each column in Bulk Edit mode.
                     #// 
@@ -1591,7 +1658,7 @@ class WP_Posts_List_Table(WP_List_Table):
                     #// @param string $column_name Name of the column to edit.
                     #// @param string $post_type   The post type slug.
                     #//
-                    do_action("bulk_edit_custom_box", column_name, screen.post_type)
+                    do_action("bulk_edit_custom_box", column_name_, screen_.post_type)
                 else:
                     #// 
                     #// Fires once for each column in Quick Edit mode.
@@ -1602,13 +1669,13 @@ class WP_Posts_List_Table(WP_List_Table):
                     #// @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
                     #// @param string $taxonomy    The taxonomy name, if any.
                     #//
-                    do_action("quick_edit_custom_box", column_name, screen.post_type, "")
+                    do_action("quick_edit_custom_box", column_name_, screen_.post_type, "")
                 # end if
             # end for
             php_print("\n           <div class=\"submit inline-edit-save\">\n               <button type=\"button\" class=\"button cancel alignleft\">")
             _e("Cancel")
             php_print("</button>\n\n                ")
-            if (not bulk):
+            if (not bulk_):
                 php_print("                 ")
                 wp_nonce_field("inlineeditnonce", "_inline_edit", False)
                 php_print("                 <button type=\"button\" class=\"button button-primary save alignright\">")
@@ -1620,13 +1687,13 @@ class WP_Posts_List_Table(WP_List_Table):
                 php_print("             ")
             # end if
             php_print("\n               <input type=\"hidden\" name=\"post_view\" value=\"")
-            php_print(esc_attr(m))
+            php_print(esc_attr(m_))
             php_print("\" />\n              <input type=\"hidden\" name=\"screen\" value=\"")
-            php_print(esc_attr(screen.id))
+            php_print(esc_attr(screen_.id))
             php_print("\" />\n              ")
-            if (not bulk) and (not post_type_supports(screen.post_type, "author")):
+            if (not bulk_) and (not post_type_supports(screen_.post_type, "author")):
                 php_print("                 <input type=\"hidden\" name=\"post_author\" value=\"")
-                php_print(esc_attr(post.post_author))
+                php_print(esc_attr(post_.post_author))
                 php_print("\" />\n              ")
             # end if
             php_print("""               <br class=\"clear\" />
@@ -1636,7 +1703,7 @@ class WP_Posts_List_Table(WP_List_Table):
             </div>
             </td></tr>
             """)
-            bulk += 1
+            bulk_ += 1
         # end while
         php_print("     </tbody></table>\n      </form>\n       ")
     # end def inline_edit

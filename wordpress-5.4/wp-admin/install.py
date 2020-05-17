@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -50,7 +45,7 @@ php_include_file(ABSPATH + "wp-admin/includes/translation-install.php", once=Tru
 #// Load wpdb
 php_include_file(ABSPATH + WPINC + "/wp-db.php", once=True)
 nocache_headers()
-step = php_int(PHP_REQUEST["step"]) if (php_isset(lambda : PHP_REQUEST["step"])) else 0
+step_ = php_int(PHP_REQUEST["step"]) if (php_isset(lambda : PHP_REQUEST["step"])) else 0
 #// 
 #// Display installation header.
 #// 
@@ -58,14 +53,15 @@ step = php_int(PHP_REQUEST["step"]) if (php_isset(lambda : PHP_REQUEST["step"]))
 #// 
 #// @param string $body_classes
 #//
-def display_header(body_classes="", *args_):
+def display_header(body_classes_="", *_args_):
+    
     
     php_header("Content-Type: text/html; charset=utf-8")
     if is_rtl():
-        body_classes += "rtl"
+        body_classes_ += "rtl"
     # end if
-    if body_classes:
-        body_classes = " " + body_classes
+    if body_classes_:
+        body_classes_ = " " + body_classes_
     # end if
     php_print("<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\" ")
     language_attributes()
@@ -79,7 +75,7 @@ def display_header(body_classes="", *args_):
     php_print("</title>\n   ")
     wp_admin_css("install", True)
     php_print("</head>\n<body class=\"wp-core-ui")
-    php_print(body_classes)
+    php_print(body_classes_)
     php_print("\">\n<p id=\"logo\"><a href=\"")
     php_print(esc_url(__("https://wordpress.org/")))
     php_print("\">")
@@ -96,25 +92,26 @@ def display_header(body_classes="", *args_):
 #// 
 #// @param string|null $error
 #//
-def display_setup_form(error=None, *args_):
+def display_setup_form(error_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    sql = wpdb.prepare("SHOW TABLES LIKE %s", wpdb.esc_like(wpdb.users))
-    user_table = wpdb.get_var(sql) != None
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    sql_ = wpdb_.prepare("SHOW TABLES LIKE %s", wpdb_.esc_like(wpdb_.users))
+    user_table_ = wpdb_.get_var(sql_) != None
     #// Ensure that sites appear in search engines by default.
-    blog_public = 1
+    blog_public_ = 1
     if (php_isset(lambda : PHP_POST["weblog_title"])):
-        blog_public = (php_isset(lambda : PHP_POST["blog_public"]))
+        blog_public_ = (php_isset(lambda : PHP_POST["blog_public"]))
     # end if
-    weblog_title = php_trim(wp_unslash(PHP_POST["weblog_title"])) if (php_isset(lambda : PHP_POST["weblog_title"])) else ""
-    user_name = php_trim(wp_unslash(PHP_POST["user_name"])) if (php_isset(lambda : PHP_POST["user_name"])) else ""
-    admin_email = php_trim(wp_unslash(PHP_POST["admin_email"])) if (php_isset(lambda : PHP_POST["admin_email"])) else ""
-    if (not is_null(error)):
+    weblog_title_ = php_trim(wp_unslash(PHP_POST["weblog_title"])) if (php_isset(lambda : PHP_POST["weblog_title"])) else ""
+    user_name_ = php_trim(wp_unslash(PHP_POST["user_name"])) if (php_isset(lambda : PHP_POST["user_name"])) else ""
+    admin_email_ = php_trim(wp_unslash(PHP_POST["admin_email"])) if (php_isset(lambda : PHP_POST["admin_email"])) else ""
+    if (not is_null(error_)):
         php_print("<h1>")
         _ex("Welcome", "Howdy")
         php_print("</h1>\n<p class=\"message\">")
-        php_print(error)
+        php_print(error_)
         php_print("</p>\n")
     # end if
     php_print("""<form id=\"setup\" method=\"post\" action=\"install.php?step=2\" novalidate=\"novalidate\">
@@ -123,25 +120,25 @@ def display_setup_form(error=None, *args_):
     <th scope=\"row\"><label for=\"weblog_title\">""")
     _e("Site Title")
     php_print("</label></th>\n          <td><input name=\"weblog_title\" type=\"text\" id=\"weblog_title\" size=\"25\" value=\"")
-    php_print(esc_attr(weblog_title))
+    php_print(esc_attr(weblog_title_))
     php_print("""\" /></td>
     </tr>
     <tr>
     <th scope=\"row\"><label for=\"user_login\">""")
     _e("Username")
     php_print("</label></th>\n          <td>\n          ")
-    if user_table:
+    if user_table_:
         _e("User(s) already exists.")
         php_print("<input name=\"user_name\" type=\"hidden\" value=\"admin\" />")
     else:
         php_print("             <input name=\"user_name\" type=\"text\" id=\"user_login\" size=\"25\" value=\"")
-        php_print(esc_attr(sanitize_user(user_name, True)))
+        php_print(esc_attr(sanitize_user(user_name_, True)))
         php_print("\" />\n              <p>")
         _e("Usernames can have only alphanumeric characters, spaces, underscores, hyphens, periods, and the @ symbol.")
         php_print("</p>\n               ")
     # end if
     php_print("         </td>\n     </tr>\n     ")
-    if (not user_table):
+    if (not user_table_):
         php_print("""       <tr class=\"form-field form-required user-pass1-wrap\">
         <th scope=\"row\">
         <label for=\"pass1\">
@@ -152,9 +149,9 @@ def display_setup_form(error=None, *args_):
         <td>
         <div class=\"wp-pwd\">
         """)
-        initial_password = stripslashes(PHP_POST["admin_password"]) if (php_isset(lambda : PHP_POST["admin_password"])) else wp_generate_password(18)
+        initial_password_ = stripslashes(PHP_POST["admin_password"]) if (php_isset(lambda : PHP_POST["admin_password"])) else wp_generate_password(18)
         php_print("                 <input type=\"password\" name=\"admin_password\" id=\"pass1\" class=\"regular-text\" autocomplete=\"off\" data-reveal=\"1\" data-pw=\"")
-        php_print(esc_attr(initial_password))
+        php_print(esc_attr(initial_password_))
         php_print("\" aria-describedby=\"pass-strength-result\" />\n                    <button type=\"button\" class=\"button wp-hide-pw hide-if-no-js\" data-start-masked=\"")
         php_print(php_int((php_isset(lambda : PHP_POST["admin_password"]))))
         php_print("\" data-toggle=\"0\" aria-label=\"")
@@ -205,7 +202,7 @@ def display_setup_form(error=None, *args_):
     php_print("     <tr>\n          <th scope=\"row\"><label for=\"admin_email\">")
     _e("Your Email")
     php_print("</label></th>\n          <td><input name=\"admin_email\" type=\"email\" id=\"admin_email\" size=\"25\" value=\"")
-    php_print(esc_attr(admin_email))
+    php_print(esc_attr(admin_email_))
     php_print("\" />\n          <p>")
     _e("Double-check your email address before continuing.")
     php_print("""</p></td>
@@ -221,11 +218,11 @@ def display_setup_form(error=None, *args_):
     php_print(" </span></legend>\n                  ")
     if has_action("blog_privacy_selector"):
         php_print("                     <input id=\"blog-public\" type=\"radio\" name=\"blog_public\" value=\"1\" ")
-        checked(1, blog_public)
+        checked(1, blog_public_)
         php_print(" />\n                        <label for=\"blog-public\">")
         _e("Allow search engines to index this site")
         php_print("</label><br/>\n                      <input id=\"blog-norobots\" type=\"radio\" name=\"blog_public\" value=\"0\" ")
-        checked(0, blog_public)
+        checked(0, blog_public_)
         php_print(" />\n                        <label for=\"blog-norobots\">")
         _e("Discourage search engines from indexing this site")
         php_print("</label>\n                       <p class=\"description\">")
@@ -235,7 +232,7 @@ def display_setup_form(error=None, *args_):
         do_action("blog_privacy_selector")
     else:
         php_print("                     <label for=\"blog_public\"><input name=\"blog_public\" type=\"checkbox\" id=\"blog_public\" value=\"0\" ")
-        checked(0, blog_public)
+        checked(0, blog_public_)
         php_print(" />\n                        ")
         _e("Discourage search engines from indexing this site")
         php_print("</label>\n                       <p class=\"description\">")
@@ -264,35 +261,37 @@ if is_blog_installed():
 #// @global string $required_php_version   The required PHP version string.
 #// @global string $required_mysql_version The required MySQL version string.
 #//
-global wp_version,required_php_version,required_mysql_version
-php_check_if_defined("wp_version","required_php_version","required_mysql_version")
-php_version = php_phpversion()
-mysql_version = wpdb.db_version()
-php_compat = php_version_compare(php_version, required_php_version, ">=")
-mysql_compat = php_version_compare(mysql_version, required_mysql_version, ">=") or php_file_exists(WP_CONTENT_DIR + "/db.php")
-version_url = php_sprintf(esc_url(__("https://wordpress.org/support/wordpress-version/version-%s/")), sanitize_title(wp_version))
+global wp_version_
+global required_php_version_
+global required_mysql_version_
+php_check_if_defined("wp_version_","required_php_version_","required_mysql_version_")
+php_version_ = php_phpversion()
+mysql_version_ = wpdb_.db_version()
+php_compat_ = php_version_compare(php_version_, required_php_version_, ">=")
+mysql_compat_ = php_version_compare(mysql_version_, required_mysql_version_, ">=") or php_file_exists(WP_CONTENT_DIR + "/db.php")
+version_url_ = php_sprintf(esc_url(__("https://wordpress.org/support/wordpress-version/version-%s/")), sanitize_title(wp_version_))
 #// translators: %s: URL to Update PHP page.
-php_update_message = "</p><p>" + php_sprintf(__("<a href=\"%s\">Learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
-annotation = wp_get_update_php_annotation()
-if annotation:
-    php_update_message += "</p><p><em>" + annotation + "</em>"
+php_update_message_ = "</p><p>" + php_sprintf(__("<a href=\"%s\">Learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
+annotation_ = wp_get_update_php_annotation()
+if annotation_:
+    php_update_message_ += "</p><p><em>" + annotation_ + "</em>"
 # end if
-if (not mysql_compat) and (not php_compat):
+if (not mysql_compat_) and (not php_compat_):
     #// translators: 1: URL to WordPress release notes, 2: WordPress version number, 3: Minimum required PHP version number, 4: Minimum required MySQL version number, 5: Current PHP version number, 6: Current MySQL version number.
-    compat = php_sprintf(__("You cannot install because <a href=\"%1$s\">WordPress %2$s</a> requires PHP version %3$s or higher and MySQL version %4$s or higher. You are running PHP version %5$s and MySQL version %6$s."), version_url, wp_version, required_php_version, required_mysql_version, php_version, mysql_version) + php_update_message
-elif (not php_compat):
+    compat_ = php_sprintf(__("You cannot install because <a href=\"%1$s\">WordPress %2$s</a> requires PHP version %3$s or higher and MySQL version %4$s or higher. You are running PHP version %5$s and MySQL version %6$s."), version_url_, wp_version_, required_php_version_, required_mysql_version_, php_version_, mysql_version_) + php_update_message_
+elif (not php_compat_):
     #// translators: 1: URL to WordPress release notes, 2: WordPress version number, 3: Minimum required PHP version number, 4: Current PHP version number.
-    compat = php_sprintf(__("You cannot install because <a href=\"%1$s\">WordPress %2$s</a> requires PHP version %3$s or higher. You are running version %4$s."), version_url, wp_version, required_php_version, php_version) + php_update_message
-elif (not mysql_compat):
+    compat_ = php_sprintf(__("You cannot install because <a href=\"%1$s\">WordPress %2$s</a> requires PHP version %3$s or higher. You are running version %4$s."), version_url_, wp_version_, required_php_version_, php_version_) + php_update_message_
+elif (not mysql_compat_):
     #// translators: 1: URL to WordPress release notes, 2: WordPress version number, 3: Minimum required MySQL version number, 4: Current MySQL version number.
-    compat = php_sprintf(__("You cannot install because <a href=\"%1$s\">WordPress %2$s</a> requires MySQL version %3$s or higher. You are running version %4$s."), version_url, wp_version, required_mysql_version, mysql_version)
+    compat_ = php_sprintf(__("You cannot install because <a href=\"%1$s\">WordPress %2$s</a> requires MySQL version %3$s or higher. You are running version %4$s."), version_url_, wp_version_, required_mysql_version_, mysql_version_)
 # end if
-if (not mysql_compat) or (not php_compat):
+if (not mysql_compat_) or (not php_compat_):
     display_header()
-    php_print("<h1>" + __("Requirements Not Met") + "</h1><p>" + compat + "</p></body></html>")
+    php_print("<h1>" + __("Requirements Not Met") + "</h1><p>" + compat_ + "</p></body></html>")
     php_exit()
 # end if
-if (not php_is_string(wpdb.base_prefix)) or "" == wpdb.base_prefix:
+if (not php_is_string(wpdb_.base_prefix)) or "" == wpdb_.base_prefix:
     display_header()
     php_print("<h1>" + __("Configuration Error") + "</h1>" + "<p>" + php_sprintf(__("Your %s file has an empty database table prefix, which is not supported."), "<code>wp-config.php</code>") + "</p></body></html>")
     php_exit()
@@ -307,23 +306,23 @@ if php_defined("DO_NOT_UPGRADE_GLOBAL_TABLES"):
 #// @global string    $wp_local_package Locale code of the package.
 #// @global WP_Locale $wp_locale        WordPress date and time locale object.
 #//
-language = ""
+language_ = ""
 if (not php_empty(lambda : PHP_REQUEST["language"])):
-    language = php_preg_replace("/[^a-zA-Z0-9_]/", "", PHP_REQUEST["language"])
+    language_ = php_preg_replace("/[^a-zA-Z0-9_]/", "", PHP_REQUEST["language"])
 elif (php_isset(lambda : PHP_GLOBALS["wp_local_package"])):
-    language = PHP_GLOBALS["wp_local_package"]
+    language_ = PHP_GLOBALS["wp_local_package"]
 # end if
-scripts_to_print = Array("jquery")
-for case in Switch(step):
+scripts_to_print_ = Array("jquery")
+for case in Switch(step_):
     if case(0):
         #// Step 0.
-        if wp_can_install_language_pack() and php_empty(lambda : language):
-            languages = wp_get_available_translations()
-            if languages:
-                scripts_to_print[-1] = "language-chooser"
+        if wp_can_install_language_pack() and php_empty(lambda : language_):
+            languages_ = wp_get_available_translations()
+            if languages_:
+                scripts_to_print_[-1] = "language-chooser"
                 display_header("language-chooser")
                 php_print("<form id=\"setup\" method=\"post\" action=\"?step=1\">")
-                wp_install_language_form(languages)
+                wp_install_language_form(languages_)
                 php_print("</form>")
                 break
             # end if
@@ -331,14 +330,14 @@ for case in Switch(step):
     # end if
     if case(1):
         #// Step 1, direct link or from language chooser.
-        if (not php_empty(lambda : language)):
-            loaded_language = wp_download_language_pack(language)
-            if loaded_language:
-                load_default_textdomain(loaded_language)
+        if (not php_empty(lambda : language_)):
+            loaded_language_ = wp_download_language_pack(language_)
+            if loaded_language_:
+                load_default_textdomain(loaded_language_)
                 PHP_GLOBALS["wp_locale"] = php_new_class("WP_Locale", lambda : WP_Locale())
             # end if
         # end if
-        scripts_to_print[-1] = "user-profile"
+        scripts_to_print_[-1] = "user-profile"
         display_header()
         php_print("<h1>")
         _ex("Welcome", "Howdy")
@@ -353,49 +352,49 @@ for case in Switch(step):
         break
     # end if
     if case(2):
-        if (not php_empty(lambda : language)) and load_default_textdomain(language):
-            loaded_language = language
+        if (not php_empty(lambda : language_)) and load_default_textdomain(language_):
+            loaded_language_ = language_
             PHP_GLOBALS["wp_locale"] = php_new_class("WP_Locale", lambda : WP_Locale())
         else:
-            loaded_language = "en_US"
+            loaded_language_ = "en_US"
         # end if
-        if (not php_empty(lambda : wpdb.error)):
-            wp_die(wpdb.error.get_error_message())
+        if (not php_empty(lambda : wpdb_.error)):
+            wp_die(wpdb_.error.get_error_message())
         # end if
-        scripts_to_print[-1] = "user-profile"
+        scripts_to_print_[-1] = "user-profile"
         display_header()
         #// Fill in the data we gathered.
-        weblog_title = php_trim(wp_unslash(PHP_POST["weblog_title"])) if (php_isset(lambda : PHP_POST["weblog_title"])) else ""
-        user_name = php_trim(wp_unslash(PHP_POST["user_name"])) if (php_isset(lambda : PHP_POST["user_name"])) else ""
-        admin_password = wp_unslash(PHP_POST["admin_password"]) if (php_isset(lambda : PHP_POST["admin_password"])) else ""
-        admin_password_check = wp_unslash(PHP_POST["admin_password2"]) if (php_isset(lambda : PHP_POST["admin_password2"])) else ""
-        admin_email = php_trim(wp_unslash(PHP_POST["admin_email"])) if (php_isset(lambda : PHP_POST["admin_email"])) else ""
-        public = php_int(PHP_POST["blog_public"]) if (php_isset(lambda : PHP_POST["blog_public"])) else 1
+        weblog_title_ = php_trim(wp_unslash(PHP_POST["weblog_title"])) if (php_isset(lambda : PHP_POST["weblog_title"])) else ""
+        user_name_ = php_trim(wp_unslash(PHP_POST["user_name"])) if (php_isset(lambda : PHP_POST["user_name"])) else ""
+        admin_password_ = wp_unslash(PHP_POST["admin_password"]) if (php_isset(lambda : PHP_POST["admin_password"])) else ""
+        admin_password_check_ = wp_unslash(PHP_POST["admin_password2"]) if (php_isset(lambda : PHP_POST["admin_password2"])) else ""
+        admin_email_ = php_trim(wp_unslash(PHP_POST["admin_email"])) if (php_isset(lambda : PHP_POST["admin_email"])) else ""
+        public_ = php_int(PHP_POST["blog_public"]) if (php_isset(lambda : PHP_POST["blog_public"])) else 1
         #// Check email address.
-        error = False
-        if php_empty(lambda : user_name):
+        error_ = False
+        if php_empty(lambda : user_name_):
             #// TODO: Poka-yoke.
             display_setup_form(__("Please provide a valid username."))
-            error = True
-        elif sanitize_user(user_name, True) != user_name:
+            error_ = True
+        elif sanitize_user(user_name_, True) != user_name_:
             display_setup_form(__("The username you provided has invalid characters."))
-            error = True
-        elif admin_password != admin_password_check:
+            error_ = True
+        elif admin_password_ != admin_password_check_:
             #// TODO: Poka-yoke.
             display_setup_form(__("Your passwords do not match. Please try again."))
-            error = True
-        elif php_empty(lambda : admin_email):
+            error_ = True
+        elif php_empty(lambda : admin_email_):
             #// TODO: Poka-yoke.
             display_setup_form(__("You must provide an email address."))
-            error = True
-        elif (not is_email(admin_email)):
+            error_ = True
+        elif (not is_email(admin_email_)):
             #// TODO: Poka-yoke.
             display_setup_form(__("Sorry, that isn&#8217;t a valid email address. Email addresses look like <code>username@example.com</code>."))
-            error = True
+            error_ = True
         # end if
-        if False == error:
-            wpdb.show_errors()
-            result = wp_install(weblog_title, user_name, admin_email, public, "", wp_slash(admin_password), loaded_language)
+        if False == error_:
+            wpdb_.show_errors()
+            result_ = wp_install(weblog_title_, user_name_, admin_email_, public_, "", wp_slash(admin_password_), loaded_language_)
             php_print("\n<h1>")
             _e("Success!")
             php_print("</h1>\n\n<p>")
@@ -406,20 +405,20 @@ for case in Switch(step):
             <th>""")
             _e("Username")
             php_print("</th>\n      <td>")
-            php_print(esc_html(sanitize_user(user_name, True)))
+            php_print(esc_html(sanitize_user(user_name_, True)))
             php_print("""</td>
             </tr>
             <tr>
             <th>""")
             _e("Password")
             php_print("</th>\n      <td>\n          ")
-            if (not php_empty(lambda : result["password"])) and php_empty(lambda : admin_password_check):
+            if (not php_empty(lambda : result_["password"])) and php_empty(lambda : admin_password_check_):
                 php_print("         <code>")
-                php_print(esc_html(result["password"]))
+                php_print(esc_html(result_["password"]))
                 php_print("</code><br />\n      ")
             # end if
             php_print("         <p>")
-            php_print(result["password_message"])
+            php_print(result_["password_message"])
             php_print("""</p>
             </td>
             </tr>
@@ -436,7 +435,7 @@ for case in Switch(step):
 if (not wp_is_mobile()):
     php_print("<script type=\"text/javascript\">var t = document.getElementById('weblog_title'); if (t){ t.focus(); }</script>\n    ")
 # end if
-wp_print_scripts(scripts_to_print)
+wp_print_scripts(scripts_to_print_)
 php_print("""<script type=\"text/javascript\">
 jQuery( function( $ ) {
 $( '.hide-if-no-js' ).removeClass( 'hide-if-no-js' );

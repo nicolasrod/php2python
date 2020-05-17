@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -37,17 +32,18 @@ if (not php_class_exists("PO", False)):
         #//
         def export_headers(self):
             
-            header_string = ""
-            for header,value in self.headers:
-                header_string += str(header) + str(": ") + str(value) + str("\n")
+            
+            header_string_ = ""
+            for header_,value_ in self.headers:
+                header_string_ += str(header_) + str(": ") + str(value_) + str("\n")
             # end for
-            poified = PO.poify(header_string)
+            poified_ = PO.poify(header_string_)
             if self.comments_before_headers:
-                before_headers = self.prepend_each_line(php_rtrim(self.comments_before_headers) + "\n", "# ")
+                before_headers_ = self.prepend_each_line(php_rtrim(self.comments_before_headers) + "\n", "# ")
             else:
-                before_headers = ""
+                before_headers_ = ""
             # end if
-            return php_rtrim(str(before_headers) + str("msgid \"\"\nmsgstr ") + str(poified))
+            return php_rtrim(str(before_headers_) + str("msgid \"\"\nmsgstr ") + str(poified_))
         # end def export_headers
         #// 
         #// Exports all entries to PO format
@@ -55,6 +51,7 @@ if (not php_class_exists("PO", False)):
         #// @return string sequence of mgsgid/msgstr PO strings, doesn't containt newline at the end
         #//
         def export_entries(self):
+            
             
             #// TODO: Sorting.
             return php_implode("\n\n", php_array_map(Array("PO", "export_entry"), self.entries))
@@ -65,15 +62,18 @@ if (not php_class_exists("PO", False)):
         #// @param bool $include_headers whether to include the headers in the export
         #// @return string ready for inclusion in PO file string for headers and all the enrtries
         #//
-        def export(self, include_headers=True):
-            
-            res = ""
-            if include_headers:
-                res += self.export_headers()
-                res += "\n\n"
+        def export(self, include_headers_=None):
+            if include_headers_ is None:
+                include_headers_ = True
             # end if
-            res += self.export_entries()
-            return res
+            
+            res_ = ""
+            if include_headers_:
+                res_ += self.export_headers()
+                res_ += "\n\n"
+            # end if
+            res_ += self.export_entries()
+            return res_
         # end def export
         #// 
         #// Same as {@link export}, but writes the result to a file
@@ -82,27 +82,31 @@ if (not php_class_exists("PO", False)):
         #// @param bool $include_headers whether to include tje headers in the export
         #// @return bool true on success, false on error
         #//
-        def export_to_file(self, filename=None, include_headers=True):
+        def export_to_file(self, filename_=None, include_headers_=None):
+            if include_headers_ is None:
+                include_headers_ = True
+            # end if
             
-            fh = fopen(filename, "w")
-            if False == fh:
+            fh_ = fopen(filename_, "w")
+            if False == fh_:
                 return False
             # end if
-            export = self.export(include_headers)
-            res = fwrite(fh, export)
-            if False == res:
+            export_ = self.export(include_headers_)
+            res_ = fwrite(fh_, export_)
+            if False == res_:
                 return False
             # end if
-            return php_fclose(fh)
+            return php_fclose(fh_)
         # end def export_to_file
         #// 
         #// Text to include as a comment before the start of the PO contents
         #// 
         #// Doesn't need to include # in the beginning of lines, these are added automatically
         #//
-        def set_comment_before_headers(self, text=None):
+        def set_comment_before_headers(self, text_=None):
             
-            self.comments_before_headers = text
+            
+            self.comments_before_headers = text_
         # end def set_comment_before_headers
         #// 
         #// Formats a string in PO-style
@@ -111,21 +115,22 @@ if (not php_class_exists("PO", False)):
         #// @return string the poified string
         #//
         @classmethod
-        def poify(self, string=None):
+        def poify(self, string_=None):
             
-            quote = "\""
-            slash = "\\"
-            newline = "\n"
-            replaces = Array({str(slash): str(slash) + str(slash), str(quote): str(slash) + str(quote), "   ": "\\t"})
-            string = php_str_replace(php_array_keys(replaces), php_array_values(replaces), string)
-            po = quote + php_implode(str(slash) + str("n") + str(quote) + str(newline) + str(quote), php_explode(newline, string)) + quote
+            
+            quote_ = "\""
+            slash_ = "\\"
+            newline_ = "\n"
+            replaces_ = Array({str(slash_): str(slash_) + str(slash_), str(quote_): str(slash_) + str(quote_), "    ": "\\t"})
+            string_ = php_str_replace(php_array_keys(replaces_), php_array_values(replaces_), string_)
+            po_ = quote_ + php_implode(str(slash_) + str("n") + str(quote_) + str(newline_) + str(quote_), php_explode(newline_, string_)) + quote_
             #// Add empty string on first line for readbility.
-            if False != php_strpos(string, newline) and php_substr_count(string, newline) > 1 or php_substr(string, -php_strlen(newline)) != newline:
-                po = str(quote) + str(quote) + str(newline) + str(po)
+            if False != php_strpos(string_, newline_) and php_substr_count(string_, newline_) > 1 or php_substr(string_, -php_strlen(newline_)) != newline_:
+                po_ = str(quote_) + str(quote_) + str(newline_) + str(po_)
             # end if
             #// Remove empty strings.
-            po = php_str_replace(str(newline) + str(quote) + str(quote), "", po)
-            return po
+            po_ = php_str_replace(str(newline_) + str(quote_) + str(quote_), "", po_)
+            return po_
         # end def poify
         #// 
         #// Gives back the original string from a PO-formatted string
@@ -134,32 +139,33 @@ if (not php_class_exists("PO", False)):
         #// @return string enascaped string
         #//
         @classmethod
-        def unpoify(self, string=None):
+        def unpoify(self, string_=None):
             
-            escapes = Array({"t": " ", "n": "\n", "r": "\r", "\\": "\\"})
-            lines = php_array_map("trim", php_explode("\n", string))
-            lines = php_array_map(Array("PO", "trim_quotes"), lines)
-            unpoified = ""
-            previous_is_backslash = False
-            for line in lines:
-                preg_match_all("/./u", line, chars)
-                chars = chars[0]
-                for char in chars:
-                    if (not previous_is_backslash):
-                        if "\\" == char:
-                            previous_is_backslash = True
+            
+            escapes_ = Array({"t": "    ", "n": "\n", "r": "\r", "\\": "\\"})
+            lines_ = php_array_map("trim", php_explode("\n", string_))
+            lines_ = php_array_map(Array("PO", "trim_quotes"), lines_)
+            unpoified_ = ""
+            previous_is_backslash_ = False
+            for line_ in lines_:
+                preg_match_all("/./u", line_, chars_)
+                chars_ = chars_[0]
+                for char_ in chars_:
+                    if (not previous_is_backslash_):
+                        if "\\" == char_:
+                            previous_is_backslash_ = True
                         else:
-                            unpoified += char
+                            unpoified_ += char_
                         # end if
                     else:
-                        previous_is_backslash = False
-                        unpoified += escapes[char] if (php_isset(lambda : escapes[char])) else char
+                        previous_is_backslash_ = False
+                        unpoified_ += escapes_[char_] if (php_isset(lambda : escapes_[char_])) else char_
                     # end if
                 # end for
             # end for
             #// Standardise the line endings on imported content, technically PO files shouldn't contain \r.
-            unpoified = php_str_replace(Array("\r\n", "\r"), "\n", unpoified)
-            return unpoified
+            unpoified_ = php_str_replace(Array("\r\n", "\r"), "\n", unpoified_)
+            return unpoified_
         # end def unpoify
         #// 
         #// Inserts $with in the beginning of every new line of $string and
@@ -169,24 +175,25 @@ if (not php_class_exists("PO", False)):
         #// @param string $with prepend lines with this string
         #//
         @classmethod
-        def prepend_each_line(self, string=None, with_=None):
+        def prepend_each_line(self, string_=None, with_=None):
             
-            lines = php_explode("\n", string)
-            append = ""
-            if "\n" == php_substr(string, -1) and "" == php_end(lines):
+            
+            lines_ = php_explode("\n", string_)
+            append_ = ""
+            if "\n" == php_substr(string_, -1) and "" == php_end(lines_):
                 #// 
                 #// Last line might be empty because $string was terminated
                 #// with a newline, remove it from the $lines array,
                 #// we'll restore state by re-terminating the string at the end.
                 #//
-                php_array_pop(lines)
-                append = "\n"
+                php_array_pop(lines_)
+                append_ = "\n"
             # end if
-            for line in lines:
-                line = with_ + line
+            for line_ in lines_:
+                line_ = with_ + line_
             # end for
-            line = None
-            return php_implode("\n", lines) + append
+            line_ = None
+            return php_implode("\n", lines_) + append_
         # end def prepend_each_line
         #// 
         #// Prepare a text as a comment -- wraps the lines and prepends #
@@ -198,10 +205,11 @@ if (not php_class_exists("PO", False)):
         #// like :, default is a space
         #//
         @classmethod
-        def comment_block(self, text=None, char=" "):
+        def comment_block(self, text_=None, char_=" "):
             
-            text = wordwrap(text, PO_MAX_LINE_LEN - 3)
-            return PO.prepend_each_line(text, str("#") + str(char) + str(" "))
+            
+            text_ = wordwrap(text_, PO_MAX_LINE_LEN - 3)
+            return PO.prepend_each_line(text_, str("#") + str(char_) + str(" "))
         # end def comment_block
         #// 
         #// Builds a string from the entry for inclusion in PO file
@@ -211,96 +219,99 @@ if (not php_class_exists("PO", False)):
         #// false if the entry is empty
         #//
         @classmethod
-        def export_entry(self, entry=None):
+        def export_entry(self, entry_=None):
             
-            if None == entry.singular or "" == entry.singular:
+            
+            if None == entry_.singular or "" == entry_.singular:
                 return False
             # end if
-            po = Array()
-            if (not php_empty(lambda : entry.translator_comments)):
-                po[-1] = PO.comment_block(entry.translator_comments)
+            po_ = Array()
+            if (not php_empty(lambda : entry_.translator_comments)):
+                po_[-1] = PO.comment_block(entry_.translator_comments)
             # end if
-            if (not php_empty(lambda : entry.extracted_comments)):
-                po[-1] = PO.comment_block(entry.extracted_comments, ".")
+            if (not php_empty(lambda : entry_.extracted_comments)):
+                po_[-1] = PO.comment_block(entry_.extracted_comments, ".")
             # end if
-            if (not php_empty(lambda : entry.references)):
-                po[-1] = PO.comment_block(php_implode(" ", entry.references), ":")
+            if (not php_empty(lambda : entry_.references)):
+                po_[-1] = PO.comment_block(php_implode(" ", entry_.references), ":")
             # end if
-            if (not php_empty(lambda : entry.flags)):
-                po[-1] = PO.comment_block(php_implode(", ", entry.flags), ",")
+            if (not php_empty(lambda : entry_.flags)):
+                po_[-1] = PO.comment_block(php_implode(", ", entry_.flags), ",")
             # end if
-            if entry.context:
-                po[-1] = "msgctxt " + PO.poify(entry.context)
+            if entry_.context:
+                po_[-1] = "msgctxt " + PO.poify(entry_.context)
             # end if
-            po[-1] = "msgid " + PO.poify(entry.singular)
-            if (not entry.is_plural):
-                translation = "" if php_empty(lambda : entry.translations) else entry.translations[0]
-                translation = PO.match_begin_and_end_newlines(translation, entry.singular)
-                po[-1] = "msgstr " + PO.poify(translation)
+            po_[-1] = "msgid " + PO.poify(entry_.singular)
+            if (not entry_.is_plural):
+                translation_ = "" if php_empty(lambda : entry_.translations) else entry_.translations[0]
+                translation_ = PO.match_begin_and_end_newlines(translation_, entry_.singular)
+                po_[-1] = "msgstr " + PO.poify(translation_)
             else:
-                po[-1] = "msgid_plural " + PO.poify(entry.plural)
-                translations = Array("", "") if php_empty(lambda : entry.translations) else entry.translations
-                for i,translation in translations:
-                    translation = PO.match_begin_and_end_newlines(translation, entry.plural)
-                    po[-1] = str("msgstr[") + str(i) + str("] ") + PO.poify(translation)
+                po_[-1] = "msgid_plural " + PO.poify(entry_.plural)
+                translations_ = Array("", "") if php_empty(lambda : entry_.translations) else entry_.translations
+                for i_,translation_ in translations_:
+                    translation_ = PO.match_begin_and_end_newlines(translation_, entry_.plural)
+                    po_[-1] = str("msgstr[") + str(i_) + str("] ") + PO.poify(translation_)
                 # end for
             # end if
-            return php_implode("\n", po)
+            return php_implode("\n", po_)
         # end def export_entry
         @classmethod
-        def match_begin_and_end_newlines(self, translation=None, original=None):
+        def match_begin_and_end_newlines(self, translation_=None, original_=None):
             
-            if "" == translation:
-                return translation
+            
+            if "" == translation_:
+                return translation_
             # end if
-            original_begin = "\n" == php_substr(original, 0, 1)
-            original_end = "\n" == php_substr(original, -1)
-            translation_begin = "\n" == php_substr(translation, 0, 1)
-            translation_end = "\n" == php_substr(translation, -1)
-            if original_begin:
-                if (not translation_begin):
-                    translation = "\n" + translation
+            original_begin_ = "\n" == php_substr(original_, 0, 1)
+            original_end_ = "\n" == php_substr(original_, -1)
+            translation_begin_ = "\n" == php_substr(translation_, 0, 1)
+            translation_end_ = "\n" == php_substr(translation_, -1)
+            if original_begin_:
+                if (not translation_begin_):
+                    translation_ = "\n" + translation_
                 # end if
-            elif translation_begin:
-                translation = php_ltrim(translation, "\n")
+            elif translation_begin_:
+                translation_ = php_ltrim(translation_, "\n")
             # end if
-            if original_end:
-                if (not translation_end):
-                    translation += "\n"
+            if original_end_:
+                if (not translation_end_):
+                    translation_ += "\n"
                 # end if
-            elif translation_end:
-                translation = php_rtrim(translation, "\n")
+            elif translation_end_:
+                translation_ = php_rtrim(translation_, "\n")
             # end if
-            return translation
+            return translation_
         # end def match_begin_and_end_newlines
         #// 
         #// @param string $filename
         #// @return boolean
         #//
-        def import_from_file(self, filename=None):
+        def import_from_file(self, filename_=None):
             
-            f = fopen(filename, "r")
-            if (not f):
+            
+            f_ = fopen(filename_, "r")
+            if (not f_):
                 return False
             # end if
-            lineno = 0
+            lineno_ = 0
             while True:
                 
                 if not (True):
                     break
                 # end if
-                res = self.read_entry(f, lineno)
-                if (not res):
+                res_ = self.read_entry(f_, lineno_)
+                if (not res_):
                     break
                 # end if
-                if "" == res["entry"].singular:
-                    self.set_headers(self.make_headers(res["entry"].translations[0]))
+                if "" == res_["entry"].singular:
+                    self.set_headers(self.make_headers(res_["entry"].translations[0]))
                 else:
-                    self.add_entry(res["entry"])
+                    self.add_entry(res_["entry"])
                 # end if
             # end while
-            PO.read_line(f, "clear")
-            if False == res:
+            PO.read_line(f_, "clear")
+            if False == res_:
                 return False
             # end if
             if (not self.headers) and (not self.entries):
@@ -314,34 +325,36 @@ if (not php_class_exists("PO", False)):
         #// @param string $context
         #// @return bool
         #//
-        def is_final(self, context=None):
+        def is_final(self, context_=None):
             
-            return "msgstr" == context or "msgstr_plural" == context
+            
+            return "msgstr" == context_ or "msgstr_plural" == context_
         # end def is_final
         #// 
         #// @param resource $f
         #// @param int      $lineno
         #// @return null|false|array
         #//
-        def read_entry(self, f=None, lineno=0):
+        def read_entry(self, f_=None, lineno_=0):
             
-            entry = php_new_class("Translation_Entry", lambda : Translation_Entry())
+            
+            entry_ = php_new_class("Translation_Entry", lambda : Translation_Entry())
             #// Where were we in the last step.
             #// Can be: comment, msgctxt, msgid, msgid_plural, msgstr, msgstr_plural.
-            context = ""
-            msgstr_index = 0
+            context_ = ""
+            msgstr_index_ = 0
             while True:
                 
                 if not (True):
                     break
                 # end if
-                lineno += 1
-                line = PO.read_line(f)
-                if (not line):
-                    if php_feof(f):
-                        if self.is_final(context):
+                lineno_ += 1
+                line_ = PO.read_line(f_)
+                if (not line_):
+                    if php_feof(f_):
+                        if self.is_final(context_):
                             break
-                        elif (not context):
+                        elif (not context_):
                             #// We haven't read a line and EOF came.
                             return None
                         else:
@@ -351,86 +364,86 @@ if (not php_class_exists("PO", False)):
                         return False
                     # end if
                 # end if
-                if "\n" == line:
+                if "\n" == line_:
                     continue
                 # end if
-                line = php_trim(line)
-                if php_preg_match("/^#/", line, m):
+                line_ = php_trim(line_)
+                if php_preg_match("/^#/", line_, m_):
                     #// The comment is the start of a new entry.
-                    if self.is_final(context):
-                        PO.read_line(f, "put-back")
-                        lineno -= 1
+                    if self.is_final(context_):
+                        PO.read_line(f_, "put-back")
+                        lineno_ -= 1
                         break
                     # end if
                     #// Comments have to be at the beginning.
-                    if context and "comment" != context:
+                    if context_ and "comment" != context_:
                         return False
                     # end if
                     #// Add comment.
-                    self.add_comment_to_entry(entry, line)
-                elif php_preg_match("/^msgctxt\\s+(\".*\")/", line, m):
-                    if self.is_final(context):
-                        PO.read_line(f, "put-back")
-                        lineno -= 1
+                    self.add_comment_to_entry(entry_, line_)
+                elif php_preg_match("/^msgctxt\\s+(\".*\")/", line_, m_):
+                    if self.is_final(context_):
+                        PO.read_line(f_, "put-back")
+                        lineno_ -= 1
                         break
                     # end if
-                    if context and "comment" != context:
+                    if context_ and "comment" != context_:
                         return False
                     # end if
-                    context = "msgctxt"
-                    entry.context += PO.unpoify(m[1])
-                elif php_preg_match("/^msgid\\s+(\".*\")/", line, m):
-                    if self.is_final(context):
-                        PO.read_line(f, "put-back")
-                        lineno -= 1
+                    context_ = "msgctxt"
+                    entry_.context += PO.unpoify(m_[1])
+                elif php_preg_match("/^msgid\\s+(\".*\")/", line_, m_):
+                    if self.is_final(context_):
+                        PO.read_line(f_, "put-back")
+                        lineno_ -= 1
                         break
                     # end if
-                    if context and "msgctxt" != context and "comment" != context:
+                    if context_ and "msgctxt" != context_ and "comment" != context_:
                         return False
                     # end if
-                    context = "msgid"
-                    entry.singular += PO.unpoify(m[1])
-                elif php_preg_match("/^msgid_plural\\s+(\".*\")/", line, m):
-                    if "msgid" != context:
+                    context_ = "msgid"
+                    entry_.singular += PO.unpoify(m_[1])
+                elif php_preg_match("/^msgid_plural\\s+(\".*\")/", line_, m_):
+                    if "msgid" != context_:
                         return False
                     # end if
-                    context = "msgid_plural"
-                    entry.is_plural = True
-                    entry.plural += PO.unpoify(m[1])
-                elif php_preg_match("/^msgstr\\s+(\".*\")/", line, m):
-                    if "msgid" != context:
+                    context_ = "msgid_plural"
+                    entry_.is_plural = True
+                    entry_.plural += PO.unpoify(m_[1])
+                elif php_preg_match("/^msgstr\\s+(\".*\")/", line_, m_):
+                    if "msgid" != context_:
                         return False
                     # end if
-                    context = "msgstr"
-                    entry.translations = Array(PO.unpoify(m[1]))
-                elif php_preg_match("/^msgstr\\[(\\d+)\\]\\s+(\".*\")/", line, m):
-                    if "msgid_plural" != context and "msgstr_plural" != context:
+                    context_ = "msgstr"
+                    entry_.translations = Array(PO.unpoify(m_[1]))
+                elif php_preg_match("/^msgstr\\[(\\d+)\\]\\s+(\".*\")/", line_, m_):
+                    if "msgid_plural" != context_ and "msgstr_plural" != context_:
                         return False
                     # end if
-                    context = "msgstr_plural"
-                    msgstr_index = m[1]
-                    entry.translations[m[1]] = PO.unpoify(m[2])
-                elif php_preg_match("/^\".*\"$/", line):
-                    unpoified = PO.unpoify(line)
-                    for case in Switch(context):
+                    context_ = "msgstr_plural"
+                    msgstr_index_ = m_[1]
+                    entry_.translations[m_[1]] = PO.unpoify(m_[2])
+                elif php_preg_match("/^\".*\"$/", line_):
+                    unpoified_ = PO.unpoify(line_)
+                    for case in Switch(context_):
                         if case("msgid"):
-                            entry.singular += unpoified
+                            entry_.singular += unpoified_
                             break
                         # end if
                         if case("msgctxt"):
-                            entry.context += unpoified
+                            entry_.context += unpoified_
                             break
                         # end if
                         if case("msgid_plural"):
-                            entry.plural += unpoified
+                            entry_.plural += unpoified_
                             break
                         # end if
                         if case("msgstr"):
-                            entry.translations[0] += unpoified
+                            entry_.translations[0] += unpoified_
                             break
                         # end if
                         if case("msgstr_plural"):
-                            entry.translations[msgstr_index] += unpoified
+                            entry_.translations[msgstr_index_] += unpoified_
                             break
                         # end if
                         if case():
@@ -441,17 +454,17 @@ if (not php_class_exists("PO", False)):
                     return False
                 # end if
             # end while
-            have_translations = False
-            for t in entry.translations:
-                if t or "0" == t:
-                    have_translations = True
+            have_translations_ = False
+            for t_ in entry_.translations:
+                if t_ or "0" == t_:
+                    have_translations_ = True
                     break
                 # end if
             # end for
-            if False == have_translations:
-                entry.translations = Array()
+            if False == have_translations_:
+                entry_.translations = Array()
             # end if
-            return Array({"entry": entry, "lineno": lineno})
+            return Array({"entry": entry_, "lineno": lineno_})
         # end def read_entry
         #// 
         #// @staticvar string   $last_line
@@ -461,40 +474,42 @@ if (not php_class_exists("PO", False)):
         #// @param     string   $action
         #// @return boolean
         #//
-        def read_line(self, f=None, action="read"):
+        def read_line(self, f_=None, action_="read"):
             
-            read_line.last_line = ""
-            read_line.use_last_line = False
-            if "clear" == action:
-                read_line.last_line = ""
+            
+            last_line_ = ""
+            use_last_line_ = False
+            if "clear" == action_:
+                last_line_ = ""
                 return True
             # end if
-            if "put-back" == action:
-                read_line.use_last_line = True
+            if "put-back" == action_:
+                use_last_line_ = True
                 return True
             # end if
-            line = read_line.last_line if read_line.use_last_line else php_fgets(f)
-            line = php_rtrim(line, "\r\n") + "\n" if "\r\n" == php_substr(line, -2) else line
-            read_line.last_line = line
-            read_line.use_last_line = False
-            return line
+            line_ = last_line_ if use_last_line_ else php_fgets(f_)
+            line_ = php_rtrim(line_, "\r\n") + "\n" if "\r\n" == php_substr(line_, -2) else line_
+            last_line_ = line_
+            use_last_line_ = False
+            return line_
         # end def read_line
         #// 
         #// @param Translation_Entry $entry
         #// @param string            $po_comment_line
         #//
-        def add_comment_to_entry(self, entry=None, po_comment_line=None):
+        def add_comment_to_entry(self, entry_=None, po_comment_line_=None):
             
-            first_two = php_substr(po_comment_line, 0, 2)
-            comment = php_trim(php_substr(po_comment_line, 2))
-            if "#:" == first_two:
-                entry.references = php_array_merge(entry.references, php_preg_split("/\\s+/", comment))
-            elif "#." == first_two:
-                entry.extracted_comments = php_trim(entry.extracted_comments + "\n" + comment)
-            elif "#," == first_two:
-                entry.flags = php_array_merge(entry.flags, php_preg_split("/,\\s*/", comment))
+            
+            first_two_ = php_substr(po_comment_line_, 0, 2)
+            comment_ = php_trim(php_substr(po_comment_line_, 2))
+            if "#:" == first_two_:
+                entry_.references = php_array_merge(entry_.references, php_preg_split("/\\s+/", comment_))
+            elif "#." == first_two_:
+                entry_.extracted_comments = php_trim(entry_.extracted_comments + "\n" + comment_)
+            elif "#," == first_two_:
+                entry_.flags = php_array_merge(entry_.flags, php_preg_split("/,\\s*/", comment_))
             else:
-                entry.translator_comments = php_trim(entry.translator_comments + "\n" + comment)
+                entry_.translator_comments = php_trim(entry_.translator_comments + "\n" + comment_)
             # end if
         # end def add_comment_to_entry
         #// 
@@ -502,15 +517,16 @@ if (not php_class_exists("PO", False)):
         #// @return string
         #//
         @classmethod
-        def trim_quotes(self, s=None):
+        def trim_quotes(self, s_=None):
             
-            if php_substr(s, 0, 1) == "\"":
-                s = php_substr(s, 1)
+            
+            if php_substr(s_, 0, 1) == "\"":
+                s_ = php_substr(s_, 1)
             # end if
-            if php_substr(s, -1, 1) == "\"":
-                s = php_substr(s, 0, -1)
+            if php_substr(s_, -1, 1) == "\"":
+                s_ = php_substr(s_, 0, -1)
             # end if
-            return s
+            return s_
         # end def trim_quotes
     # end class PO
 # end if

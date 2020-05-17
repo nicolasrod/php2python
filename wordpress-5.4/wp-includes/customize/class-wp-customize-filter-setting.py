@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,7 +31,8 @@ class WP_Customize_Filter_Setting(WP_Customize_Setting):
     #// 
     #// @param mixed $value The value to update.
     #//
-    def update(self, value=None):
+    def update(self, value_=None):
+        
         
         pass
     # end def update

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -91,15 +86,15 @@ while True:
         break
     # end if
     the_comment()
-    comment_post = get_post(comment.comment_post_ID)
-    PHP_GLOBALS["post"] = comment_post
+    comment_post_ = get_post(comment_.comment_post_ID)
+    PHP_GLOBALS["post"] = comment_post_
     php_print(" <entry>\n       <title>\n       ")
     if (not is_singular()):
-        title = get_the_title(comment_post.ID)
+        title_ = get_the_title(comment_post_.ID)
         #// This filter is documented in wp-includes/feed.php
-        title = apply_filters("the_title_rss", title)
+        title_ = apply_filters("the_title_rss", title_)
         #// translators: Individual comment title. 1: Post title, 2: Comment author name.
-        printf(ent2ncr(__("Comment on %1$s by %2$s")), title, get_comment_author_rss())
+        printf(ent2ncr(__("Comment on %1$s by %2$s")), title_, get_comment_author_rss())
     else:
         #// translators: Comment author title. %s: Comment author name.
         printf(ent2ncr(__("By: %s")), get_comment_author_rss())
@@ -125,7 +120,7 @@ while True:
     php_print("</updated>\n     <published>")
     php_print(mysql2date("Y-m-d\\TH:i:s\\Z", get_comment_time("Y-m-d H:i:s", True, False), False))
     php_print("</published>\n\n     ")
-    if post_password_required(comment_post):
+    if post_password_required(comment_post_):
         php_print("         <content type=\"html\" xml:base=\"")
         comment_link()
         php_print("\"><![CDATA[")
@@ -141,7 +136,7 @@ while True:
     pass
     php_print("\n       ")
     #// Return comment threading information (https://www.ietf.org/rfc/rfc4685.txt).
-    if 0 == comment.comment_parent:
+    if 0 == comment_.comment_parent:
         pass
         php_print("         <thr:in-reply-to ref=\"")
         the_guid()
@@ -152,12 +147,12 @@ while True:
         php_print("\" />\n          ")
     else:
         #// This comment is in reply to another comment.
-        parent_comment = get_comment(comment.comment_parent)
+        parent_comment_ = get_comment(comment_.comment_parent)
         pass
         php_print("         <thr:in-reply-to ref=\"")
-        comment_guid(parent_comment)
+        comment_guid(parent_comment_)
         php_print("\" href=\"")
-        php_print(get_comment_link(parent_comment))
+        php_print(get_comment_link(parent_comment_))
         php_print("\" type=\"")
         bloginfo_rss("html_type")
         php_print("\" />\n          ")
@@ -170,7 +165,7 @@ while True:
     #// @param int $comment_id      ID of the current comment.
     #// @param int $comment_post_id ID of the post the current comment is connected to.
     #//
-    do_action("comment_atom_entry", comment.comment_ID, comment_post.ID)
+    do_action("comment_atom_entry", comment_.comment_ID, comment_post_.ID)
     php_print(" </entry>\n  ")
 # end while
 php_print("</feed>\n")

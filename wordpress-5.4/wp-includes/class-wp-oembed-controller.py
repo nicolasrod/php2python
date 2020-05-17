@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,6 +30,7 @@ class WP_oEmbed_Controller():
     #//
     def register_routes(self):
         
+        
         #// 
         #// Filters the maxwidth oEmbed parameter.
         #// 
@@ -42,9 +38,9 @@ class WP_oEmbed_Controller():
         #// 
         #// @param int $maxwidth Maximum allowed width. Default 600.
         #//
-        maxwidth = apply_filters("oembed_default_width", 600)
-        register_rest_route("oembed/1.0", "/embed", Array(Array({"methods": WP_REST_Server.READABLE, "callback": Array(self, "get_item"), "args": Array({"url": Array({"required": True, "sanitize_callback": "esc_url_raw"})}, {"format": Array({"default": "json", "sanitize_callback": "wp_oembed_ensure_format"})}, {"maxwidth": Array({"default": maxwidth, "sanitize_callback": "absint"})})})))
-        register_rest_route("oembed/1.0", "/proxy", Array(Array({"methods": WP_REST_Server.READABLE, "callback": Array(self, "get_proxy_item"), "permission_callback": Array(self, "get_proxy_item_permissions_check"), "args": Array({"url": Array({"description": __("The URL of the resource for which to fetch oEmbed data."), "type": "string", "required": True, "sanitize_callback": "esc_url_raw"})}, {"format": Array({"description": __("The oEmbed format to use."), "type": "string", "default": "json", "enum": Array("json", "xml")})}, {"maxwidth": Array({"description": __("The maximum width of the embed frame in pixels."), "type": "integer", "default": maxwidth, "sanitize_callback": "absint"})}, {"maxheight": Array({"description": __("The maximum height of the embed frame in pixels."), "type": "integer", "sanitize_callback": "absint"})}, {"discover": Array({"description": __("Whether to perform an oEmbed discovery request for non-whitelisted providers."), "type": "boolean", "default": True})})})))
+        maxwidth_ = apply_filters("oembed_default_width", 600)
+        register_rest_route("oembed/1.0", "/embed", Array(Array({"methods": WP_REST_Server.READABLE, "callback": Array(self, "get_item"), "args": Array({"url": Array({"required": True, "sanitize_callback": "esc_url_raw"})}, {"format": Array({"default": "json", "sanitize_callback": "wp_oembed_ensure_format"})}, {"maxwidth": Array({"default": maxwidth_, "sanitize_callback": "absint"})})})))
+        register_rest_route("oembed/1.0", "/proxy", Array(Array({"methods": WP_REST_Server.READABLE, "callback": Array(self, "get_proxy_item"), "permission_callback": Array(self, "get_proxy_item_permissions_check"), "args": Array({"url": Array({"description": __("The URL of the resource for which to fetch oEmbed data."), "type": "string", "required": True, "sanitize_callback": "esc_url_raw"})}, {"format": Array({"description": __("The oEmbed format to use."), "type": "string", "default": "json", "enum": Array("json", "xml")})}, {"maxwidth": Array({"description": __("The maximum width of the embed frame in pixels."), "type": "integer", "default": maxwidth_, "sanitize_callback": "absint"})}, {"maxheight": Array({"description": __("The maximum height of the embed frame in pixels."), "type": "integer", "sanitize_callback": "absint"})}, {"discover": Array({"description": __("Whether to perform an oEmbed discovery request for non-whitelisted providers."), "type": "boolean", "default": True})})})))
     # end def register_routes
     #// 
     #// Callback for the embed API endpoint.
@@ -56,9 +52,10 @@ class WP_oEmbed_Controller():
     #// @param WP_REST_Request $request Full data about the request.
     #// @return array|WP_Error oEmbed response data or WP_Error on failure.
     #//
-    def get_item(self, request=None):
+    def get_item(self, request_=None):
         
-        post_id = url_to_postid(request["url"])
+        
+        post_id_ = url_to_postid(request_["url"])
         #// 
         #// Filters the determined post ID.
         #// 
@@ -67,12 +64,12 @@ class WP_oEmbed_Controller():
         #// @param int    $post_id The post ID.
         #// @param string $url     The requested URL.
         #//
-        post_id = apply_filters("oembed_request_post_id", post_id, request["url"])
-        data = get_oembed_response_data(post_id, request["maxwidth"])
-        if (not data):
+        post_id_ = apply_filters("oembed_request_post_id", post_id_, request_["url"])
+        data_ = get_oembed_response_data(post_id_, request_["maxwidth"])
+        if (not data_):
             return php_new_class("WP_Error", lambda : WP_Error("oembed_invalid_url", get_status_header_desc(404), Array({"status": 404})))
         # end if
-        return data
+        return data_
     # end def get_item
     #// 
     #// Checks if current user can make a proxy oEmbed request.
@@ -82,6 +79,7 @@ class WP_oEmbed_Controller():
     #// @return true|WP_Error True if the request has read access, WP_Error object otherwise.
     #//
     def get_proxy_item_permissions_check(self):
+        
         
         if (not current_user_can("edit_posts")):
             return php_new_class("WP_Error", lambda : WP_Error("rest_forbidden", __("Sorry, you are not allowed to make proxied oEmbed requests."), Array({"status": rest_authorization_required_code()})))
@@ -99,35 +97,36 @@ class WP_oEmbed_Controller():
     #// @param WP_REST_Request $request Full data about the request.
     #// @return object|WP_Error oEmbed response data or WP_Error on failure.
     #//
-    def get_proxy_item(self, request=None):
+    def get_proxy_item(self, request_=None):
         
-        args = request.get_params()
-        args["_wpnonce"] = None
-        cache_key = "oembed_" + php_md5(serialize(args))
-        data = get_transient(cache_key)
-        if (not php_empty(lambda : data)):
-            return data
+        
+        args_ = request_.get_params()
+        args_["_wpnonce"] = None
+        cache_key_ = "oembed_" + php_md5(serialize(args_))
+        data_ = get_transient(cache_key_)
+        if (not php_empty(lambda : data_)):
+            return data_
         # end if
-        url = request["url"]
-        args["url"] = None
+        url_ = request_["url"]
+        args_["url"] = None
         #// Copy maxwidth/maxheight to width/height since WP_oEmbed::fetch() uses these arg names.
-        if (php_isset(lambda : args["maxwidth"])):
-            args["width"] = args["maxwidth"]
+        if (php_isset(lambda : args_["maxwidth"])):
+            args_["width"] = args_["maxwidth"]
         # end if
-        if (php_isset(lambda : args["maxheight"])):
-            args["height"] = args["maxheight"]
+        if (php_isset(lambda : args_["maxheight"])):
+            args_["height"] = args_["maxheight"]
         # end if
         #// Short-circuit process for URLs belonging to the current site.
-        data = get_oembed_response_data_for_url(url, args)
-        if data:
-            return data
+        data_ = get_oembed_response_data_for_url(url_, args_)
+        if data_:
+            return data_
         # end if
-        data = _wp_oembed_get_object().get_data(url, args)
-        if False == data:
+        data_ = _wp_oembed_get_object().get_data(url_, args_)
+        if False == data_:
             return php_new_class("WP_Error", lambda : WP_Error("oembed_invalid_url", get_status_header_desc(404), Array({"status": 404})))
         # end if
         #// This filter is documented in wp-includes/class-wp-oembed.php
-        data.html = apply_filters("oembed_result", _wp_oembed_get_object().data2html(data, url), url, args)
+        data_.html = apply_filters("oembed_result", _wp_oembed_get_object().data2html(data_, url_), url_, args_)
         #// 
         #// Filters the oEmbed TTL value (time to live).
         #// 
@@ -140,8 +139,8 @@ class WP_oEmbed_Controller():
         #// @param string $url     The attempted embed URL.
         #// @param array  $args    An array of embed request arguments.
         #//
-        ttl = apply_filters("rest_oembed_ttl", DAY_IN_SECONDS, url, args)
-        set_transient(cache_key, data, ttl)
-        return data
+        ttl_ = apply_filters("rest_oembed_ttl", DAY_IN_SECONDS, url_, args_)
+        set_transient(cache_key_, data_, ttl_)
+        return data_
     # end def get_proxy_item
 # end class WP_oEmbed_Controller

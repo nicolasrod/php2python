@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,11 +27,11 @@ if '__PHP2PY_LOADED__' not in globals():
 if post_password_required():
     sys.exit(-1)
 # end if
-discussion = twentynineteen_get_discussion_data()
+discussion_ = twentynineteen_get_discussion_data()
 php_print("\n<div id=\"comments\" class=\"")
 php_print("comments-area" if comments_open() else "comments-area comments-closed")
 php_print("\">\n    <div class=\"")
-php_print("comments-title-wrap" if discussion.responses > 0 else "comments-title-wrap no-responses")
+php_print("comments-title-wrap" if discussion_.responses > 0 else "comments-title-wrap no-responses")
 php_print("\">\n        <h2 class=\"comments-title\">\n     ")
 if comments_open():
     if have_comments():
@@ -45,11 +40,11 @@ if comments_open():
         _e("Leave a comment", "twentynineteen")
     # end if
 else:
-    if "1" == discussion.responses:
+    if "1" == discussion_.responses:
         #// translators: %s: Post title.
         printf(_x("One reply on &ldquo;%s&rdquo;", "comments title", "twentynineteen"), get_the_title())
     else:
-        printf(_nx("%1$s reply on &ldquo;%2$s&rdquo;", "%1$s replies on &ldquo;%2$s&rdquo;", discussion.responses, "comments title", "twentynineteen"), number_format_i18n(discussion.responses), get_the_title())
+        printf(_nx("%1$s reply on &ldquo;%2$s&rdquo;", "%1$s replies on &ldquo;%2$s&rdquo;", discussion_.responses, "comments title", "twentynineteen"), number_format_i18n(discussion_.responses), get_the_title())
     # end if
 # end if
 php_print("     </h2><!-- .comments-title -->\n     ")
@@ -68,10 +63,10 @@ if have_comments():
     php_print("     </ol><!-- .comment-list -->\n       ")
     #// Show comment navigation.
     if have_comments():
-        prev_icon = twentynineteen_get_icon_svg("chevron_left", 22)
-        next_icon = twentynineteen_get_icon_svg("chevron_right", 22)
-        comments_text = __("Comments", "twentynineteen")
-        the_comments_navigation(Array({"prev_text": php_sprintf("%s <span class=\"nav-prev-text\"><span class=\"primary-text\">%s</span> <span class=\"secondary-text\">%s</span></span>", prev_icon, __("Previous", "twentynineteen"), __("Comments", "twentynineteen")), "next_text": php_sprintf("<span class=\"nav-next-text\"><span class=\"primary-text\">%s</span> <span class=\"secondary-text\">%s</span></span> %s", __("Next", "twentynineteen"), __("Comments", "twentynineteen"), next_icon)}))
+        prev_icon_ = twentynineteen_get_icon_svg("chevron_left", 22)
+        next_icon_ = twentynineteen_get_icon_svg("chevron_right", 22)
+        comments_text_ = __("Comments", "twentynineteen")
+        the_comments_navigation(Array({"prev_text": php_sprintf("%s <span class=\"nav-prev-text\"><span class=\"primary-text\">%s</span> <span class=\"secondary-text\">%s</span></span>", prev_icon_, __("Previous", "twentynineteen"), __("Comments", "twentynineteen")), "next_text": php_sprintf("<span class=\"nav-next-text\"><span class=\"primary-text\">%s</span> <span class=\"secondary-text\">%s</span></span> %s", __("Next", "twentynineteen"), __("Comments", "twentynineteen"), next_icon_)}))
     # end if
     #// Show comment form at bottom if showing newest comments at the bottom.
     if comments_open() and "asc" == php_strtolower(get_option("comment_order", "asc")):

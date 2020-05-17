@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -50,8 +45,8 @@ while True:
     #// 
     #// @param string $image_size Image size. Default 'large'.
     #//
-    image_size = apply_filters("twentynineteen_attachment_size", "full")
-    php_print(wp_get_attachment_image(get_the_ID(), image_size))
+    image_size_ = apply_filters("twentynineteen_attachment_size", "full")
+    php_print(wp_get_attachment_image(get_the_ID(), image_size_))
     php_print("\n                           <figcaption class=\"wp-caption-text\">")
     the_excerpt()
     php_print("""</figcaption>
@@ -63,9 +58,9 @@ while True:
     <footer class=\"entry-footer\">
     """)
     #// Retrieve attachment metadata.
-    metadata = wp_get_attachment_metadata()
-    if metadata:
-        printf("<span class=\"full-size-link\"><span class=\"screen-reader-text\">%1$s</span><a href=\"%2$s\">%3$s &times; %4$s</a></span>", _x("Full size", "Used before full size attachment link.", "twentynineteen"), esc_url(wp_get_attachment_url()), absint(metadata["width"]), absint(metadata["height"]))
+    metadata_ = wp_get_attachment_metadata()
+    if metadata_:
+        printf("<span class=\"full-size-link\"><span class=\"screen-reader-text\">%1$s</span><a href=\"%2$s\">%3$s &times; %4$s</a></span>", _x("Full size", "Used before full size attachment link.", "twentynineteen"), esc_url(wp_get_attachment_url()), absint(metadata_["width"]), absint(metadata_["height"]))
     # end if
     php_print("\n                       ")
     twentynineteen_entry_footer()

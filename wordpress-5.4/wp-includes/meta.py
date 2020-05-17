@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -39,27 +34,30 @@ if '__PHP2PY_LOADED__' not in globals():
 #// no change will be made. Default false.
 #// @return int|false The meta ID on success, false on failure.
 #//
-def add_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=None, unique=False, *args_):
+def add_metadata(meta_type_=None, object_id_=None, meta_key_=None, meta_value_=None, unique_=None, *_args_):
+    if unique_ is None:
+        unique_ = False
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not meta_type) or (not meta_key) or (not php_is_numeric(object_id)):
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not meta_type_) or (not meta_key_) or (not php_is_numeric(object_id_)):
         return False
     # end if
-    object_id = absint(object_id)
-    if (not object_id):
+    object_id_ = absint(object_id_)
+    if (not object_id_):
         return False
     # end if
-    table = _get_meta_table(meta_type)
-    if (not table):
+    table_ = _get_meta_table(meta_type_)
+    if (not table_):
         return False
     # end if
-    meta_subtype = get_object_subtype(meta_type, object_id)
-    column = sanitize_key(meta_type + "_id")
+    meta_subtype_ = get_object_subtype(meta_type_, object_id_)
+    column_ = sanitize_key(meta_type_ + "_id")
     #// expected_slashed ($meta_key)
-    meta_key = wp_unslash(meta_key)
-    meta_value = wp_unslash(meta_value)
-    meta_value = sanitize_meta(meta_key, meta_value, meta_type, meta_subtype)
+    meta_key_ = wp_unslash(meta_key_)
+    meta_value_ = wp_unslash(meta_value_)
+    meta_value_ = sanitize_meta(meta_key_, meta_value_, meta_type_, meta_subtype_)
     #// 
     #// Filters whether to add metadata of a specific type.
     #// 
@@ -75,15 +73,15 @@ def add_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=None,
     #// @param mixed     $meta_value Metadata value. Must be serializable if non-scalar.
     #// @param bool      $unique     Whether the specified meta key should be unique for the object.
     #//
-    check = apply_filters(str("add_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, meta_value, unique)
-    if None != check:
-        return check
+    check_ = apply_filters(str("add_") + str(meta_type_) + str("_metadata"), None, object_id_, meta_key_, meta_value_, unique_)
+    if None != check_:
+        return check_
     # end if
-    if unique and wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(table) + str(" WHERE meta_key = %s AND ") + str(column) + str(" = %d"), meta_key, object_id)):
+    if unique_ and wpdb_.get_var(wpdb_.prepare(str("SELECT COUNT(*) FROM ") + str(table_) + str(" WHERE meta_key = %s AND ") + str(column_) + str(" = %d"), meta_key_, object_id_)):
         return False
     # end if
-    _meta_value = meta_value
-    meta_value = maybe_serialize(meta_value)
+    _meta_value_ = meta_value_
+    meta_value_ = maybe_serialize(meta_value_)
     #// 
     #// Fires immediately before meta of a specific type is added.
     #// 
@@ -96,13 +94,13 @@ def add_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=None,
     #// @param string $meta_key    Metadata key.
     #// @param mixed  $_meta_value Metadata value. Serialized if non-scalar.
     #//
-    do_action(str("add_") + str(meta_type) + str("_meta"), object_id, meta_key, _meta_value)
-    result = wpdb.insert(table, Array({column: object_id, "meta_key": meta_key, "meta_value": meta_value}))
-    if (not result):
+    do_action(str("add_") + str(meta_type_) + str("_meta"), object_id_, meta_key_, _meta_value_)
+    result_ = wpdb_.insert(table_, Array({column_: object_id_, "meta_key": meta_key_, "meta_value": meta_value_}))
+    if (not result_):
         return False
     # end if
-    mid = php_int(wpdb.insert_id)
-    wp_cache_delete(object_id, meta_type + "_meta")
+    mid_ = php_int(wpdb_.insert_id)
+    wp_cache_delete(object_id_, meta_type_ + "_meta")
     #// 
     #// Fires immediately after meta of a specific type is added.
     #// 
@@ -116,8 +114,8 @@ def add_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=None,
     #// @param string $meta_key    Metadata key.
     #// @param mixed  $_meta_value Metadata value. Serialized if non-scalar.
     #//
-    do_action(str("added_") + str(meta_type) + str("_meta"), mid, object_id, meta_key, _meta_value)
-    return mid
+    do_action(str("added_") + str(meta_type_) + str("_meta"), mid_, object_id_, meta_key_, _meta_value_)
+    return mid_
 # end def add_metadata
 #// 
 #// Updates metadata for the specified object. If no value already exists for the specified object
@@ -137,30 +135,31 @@ def add_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=None,
 #// @return int|bool The new meta field ID if a field with the given key didn't exist and was
 #// therefore added, true on successful update, false on failure.
 #//
-def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=None, prev_value="", *args_):
+def update_metadata(meta_type_=None, object_id_=None, meta_key_=None, meta_value_=None, prev_value_="", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not meta_type) or (not meta_key) or (not php_is_numeric(object_id)):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not meta_type_) or (not meta_key_) or (not php_is_numeric(object_id_)):
         return False
     # end if
-    object_id = absint(object_id)
-    if (not object_id):
+    object_id_ = absint(object_id_)
+    if (not object_id_):
         return False
     # end if
-    table = _get_meta_table(meta_type)
-    if (not table):
+    table_ = _get_meta_table(meta_type_)
+    if (not table_):
         return False
     # end if
-    meta_subtype = get_object_subtype(meta_type, object_id)
-    column = sanitize_key(meta_type + "_id")
-    id_column = "umeta_id" if "user" == meta_type else "meta_id"
+    meta_subtype_ = get_object_subtype(meta_type_, object_id_)
+    column_ = sanitize_key(meta_type_ + "_id")
+    id_column_ = "umeta_id" if "user" == meta_type_ else "meta_id"
     #// expected_slashed ($meta_key)
-    raw_meta_key = meta_key
-    meta_key = wp_unslash(meta_key)
-    passed_value = meta_value
-    meta_value = wp_unslash(meta_value)
-    meta_value = sanitize_meta(meta_key, meta_value, meta_type, meta_subtype)
+    raw_meta_key_ = meta_key_
+    meta_key_ = wp_unslash(meta_key_)
+    passed_value_ = meta_value_
+    meta_value_ = wp_unslash(meta_value_)
+    meta_value_ = sanitize_meta(meta_key_, meta_value_, meta_type_, meta_subtype_)
     #// 
     #// Filters whether to update metadata of a specific type.
     #// 
@@ -177,32 +176,32 @@ def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=No
     #// @param mixed     $prev_value Optional. If specified, only update existing metadata entries
     #// with this value. Otherwise, update all entries.
     #//
-    check = apply_filters(str("update_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, meta_value, prev_value)
-    if None != check:
-        return php_bool(check)
+    check_ = apply_filters(str("update_") + str(meta_type_) + str("_metadata"), None, object_id_, meta_key_, meta_value_, prev_value_)
+    if None != check_:
+        return php_bool(check_)
     # end if
     #// Compare existing value to new value if no prev value given and the key exists only once.
-    if php_empty(lambda : prev_value):
-        old_value = get_metadata(meta_type, object_id, meta_key)
-        if php_count(old_value) == 1:
-            if old_value[0] == meta_value:
+    if php_empty(lambda : prev_value_):
+        old_value_ = get_metadata(meta_type_, object_id_, meta_key_)
+        if php_count(old_value_) == 1:
+            if old_value_[0] == meta_value_:
                 return False
             # end if
         # end if
     # end if
-    meta_ids = wpdb.get_col(wpdb.prepare(str("SELECT ") + str(id_column) + str(" FROM ") + str(table) + str(" WHERE meta_key = %s AND ") + str(column) + str(" = %d"), meta_key, object_id))
-    if php_empty(lambda : meta_ids):
-        return add_metadata(meta_type, object_id, raw_meta_key, passed_value)
+    meta_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT ") + str(id_column_) + str(" FROM ") + str(table_) + str(" WHERE meta_key = %s AND ") + str(column_) + str(" = %d"), meta_key_, object_id_))
+    if php_empty(lambda : meta_ids_):
+        return add_metadata(meta_type_, object_id_, raw_meta_key_, passed_value_)
     # end if
-    _meta_value = meta_value
-    meta_value = maybe_serialize(meta_value)
-    data = compact("meta_value")
-    where = Array({column: object_id, "meta_key": meta_key})
-    if (not php_empty(lambda : prev_value)):
-        prev_value = maybe_serialize(prev_value)
-        where["meta_value"] = prev_value
+    _meta_value_ = meta_value_
+    meta_value_ = maybe_serialize(meta_value_)
+    data_ = php_compact("meta_value")
+    where_ = Array({column_: object_id_, "meta_key": meta_key_})
+    if (not php_empty(lambda : prev_value_)):
+        prev_value_ = maybe_serialize(prev_value_)
+        where_["meta_value"] = prev_value_
     # end if
-    for meta_id in meta_ids:
+    for meta_id_ in meta_ids_:
         #// 
         #// Fires immediately before updating metadata of a specific type.
         #// 
@@ -216,8 +215,8 @@ def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=No
         #// @param string $meta_key    Metadata key.
         #// @param mixed  $_meta_value Metadata value. Serialized if non-scalar.
         #//
-        do_action(str("update_") + str(meta_type) + str("_meta"), meta_id, object_id, meta_key, _meta_value)
-        if "post" == meta_type:
+        do_action(str("update_") + str(meta_type_) + str("_meta"), meta_id_, object_id_, meta_key_, _meta_value_)
+        if "post" == meta_type_:
             #// 
             #// Fires immediately before updating a post's metadata.
             #// 
@@ -229,15 +228,15 @@ def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=No
             #// @param mixed  $meta_value Metadata value. This will be a PHP-serialized string representation of the value
             #// if the value is an array, an object, or itself a PHP-serialized string.
             #//
-            do_action("update_postmeta", meta_id, object_id, meta_key, meta_value)
+            do_action("update_postmeta", meta_id_, object_id_, meta_key_, meta_value_)
         # end if
     # end for
-    result = wpdb.update(table, data, where)
-    if (not result):
+    result_ = wpdb_.update(table_, data_, where_)
+    if (not result_):
         return False
     # end if
-    wp_cache_delete(object_id, meta_type + "_meta")
-    for meta_id in meta_ids:
+    wp_cache_delete(object_id_, meta_type_ + "_meta")
+    for meta_id_ in meta_ids_:
         #// 
         #// Fires immediately after updating metadata of a specific type.
         #// 
@@ -251,8 +250,8 @@ def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=No
         #// @param string $meta_key    Metadata key.
         #// @param mixed  $_meta_value Metadata value. Serialized if non-scalar.
         #//
-        do_action(str("updated_") + str(meta_type) + str("_meta"), meta_id, object_id, meta_key, _meta_value)
-        if "post" == meta_type:
+        do_action(str("updated_") + str(meta_type_) + str("_meta"), meta_id_, object_id_, meta_key_, _meta_value_)
+        if "post" == meta_type_:
             #// 
             #// Fires immediately after updating a post's metadata.
             #// 
@@ -264,7 +263,7 @@ def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=No
             #// @param mixed  $meta_value Metadata value. This will be a PHP-serialized string representation of the value
             #// if the value is an array, an object, or itself a PHP-serialized string.
             #//
-            do_action("updated_postmeta", meta_id, object_id, meta_key, meta_value)
+            do_action("updated_postmeta", meta_id_, object_id_, meta_key_, meta_value_)
         # end if
     # end for
     return True
@@ -291,26 +290,29 @@ def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=No
 #// matching metadata entries for the specified object_id. Default false.
 #// @return bool True on successful delete, false on failure.
 #//
-def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value="", delete_all=False, *args_):
+def delete_metadata(meta_type_=None, object_id_=None, meta_key_=None, meta_value_="", delete_all_=None, *_args_):
+    if delete_all_ is None:
+        delete_all_ = False
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not meta_type) or (not meta_key) or (not php_is_numeric(object_id)) and (not delete_all):
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not meta_type_) or (not meta_key_) or (not php_is_numeric(object_id_)) and (not delete_all_):
         return False
     # end if
-    object_id = absint(object_id)
-    if (not object_id) and (not delete_all):
+    object_id_ = absint(object_id_)
+    if (not object_id_) and (not delete_all_):
         return False
     # end if
-    table = _get_meta_table(meta_type)
-    if (not table):
+    table_ = _get_meta_table(meta_type_)
+    if (not table_):
         return False
     # end if
-    type_column = sanitize_key(meta_type + "_id")
-    id_column = "umeta_id" if "user" == meta_type else "meta_id"
+    type_column_ = sanitize_key(meta_type_ + "_id")
+    id_column_ = "umeta_id" if "user" == meta_type_ else "meta_id"
     #// expected_slashed ($meta_key)
-    meta_key = wp_unslash(meta_key)
-    meta_value = wp_unslash(meta_value)
+    meta_key_ = wp_unslash(meta_key_)
+    meta_value_ = wp_unslash(meta_value_)
     #// 
     #// Filters whether to delete metadata of a specific type.
     #// 
@@ -328,28 +330,28 @@ def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=""
     #// for all objects, ignoring the specified $object_id.
     #// Default false.
     #//
-    check = apply_filters(str("delete_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, meta_value, delete_all)
-    if None != check:
-        return php_bool(check)
+    check_ = apply_filters(str("delete_") + str(meta_type_) + str("_metadata"), None, object_id_, meta_key_, meta_value_, delete_all_)
+    if None != check_:
+        return php_bool(check_)
     # end if
-    _meta_value = meta_value
-    meta_value = maybe_serialize(meta_value)
-    query = wpdb.prepare(str("SELECT ") + str(id_column) + str(" FROM ") + str(table) + str(" WHERE meta_key = %s"), meta_key)
-    if (not delete_all):
-        query += wpdb.prepare(str(" AND ") + str(type_column) + str(" = %d"), object_id)
+    _meta_value_ = meta_value_
+    meta_value_ = maybe_serialize(meta_value_)
+    query_ = wpdb_.prepare(str("SELECT ") + str(id_column_) + str(" FROM ") + str(table_) + str(" WHERE meta_key = %s"), meta_key_)
+    if (not delete_all_):
+        query_ += wpdb_.prepare(str(" AND ") + str(type_column_) + str(" = %d"), object_id_)
     # end if
-    if "" != meta_value and None != meta_value and False != meta_value:
-        query += wpdb.prepare(" AND meta_value = %s", meta_value)
+    if "" != meta_value_ and None != meta_value_ and False != meta_value_:
+        query_ += wpdb_.prepare(" AND meta_value = %s", meta_value_)
     # end if
-    meta_ids = wpdb.get_col(query)
-    if (not php_count(meta_ids)):
+    meta_ids_ = wpdb_.get_col(query_)
+    if (not php_count(meta_ids_)):
         return False
     # end if
-    if delete_all:
-        if "" != meta_value and None != meta_value and False != meta_value:
-            object_ids = wpdb.get_col(wpdb.prepare(str("SELECT ") + str(type_column) + str(" FROM ") + str(table) + str(" WHERE meta_key = %s AND meta_value = %s"), meta_key, meta_value))
+    if delete_all_:
+        if "" != meta_value_ and None != meta_value_ and False != meta_value_:
+            object_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT ") + str(type_column_) + str(" FROM ") + str(table_) + str(" WHERE meta_key = %s AND meta_value = %s"), meta_key_, meta_value_))
         else:
-            object_ids = wpdb.get_col(wpdb.prepare(str("SELECT ") + str(type_column) + str(" FROM ") + str(table) + str(" WHERE meta_key = %s"), meta_key))
+            object_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT ") + str(type_column_) + str(" FROM ") + str(table_) + str(" WHERE meta_key = %s"), meta_key_))
         # end if
     # end if
     #// 
@@ -365,9 +367,9 @@ def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=""
     #// @param string   $meta_key    Metadata key.
     #// @param mixed    $_meta_value Metadata value. Serialized if non-scalar.
     #//
-    do_action(str("delete_") + str(meta_type) + str("_meta"), meta_ids, object_id, meta_key, _meta_value)
+    do_action(str("delete_") + str(meta_type_) + str("_meta"), meta_ids_, object_id_, meta_key_, _meta_value_)
     #// Old-style action.
-    if "post" == meta_type:
+    if "post" == meta_type_:
         #// 
         #// Fires immediately before deleting metadata for a post.
         #// 
@@ -375,19 +377,19 @@ def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=""
         #// 
         #// @param string[] $meta_ids An array of metadata entry IDs to delete.
         #//
-        do_action("delete_postmeta", meta_ids)
+        do_action("delete_postmeta", meta_ids_)
     # end if
-    query = str("DELETE FROM ") + str(table) + str(" WHERE ") + str(id_column) + str(" IN( ") + php_implode(",", meta_ids) + " )"
-    count = wpdb.query(query)
-    if (not count):
+    query_ = str("DELETE FROM ") + str(table_) + str(" WHERE ") + str(id_column_) + str(" IN( ") + php_implode(",", meta_ids_) + " )"
+    count_ = wpdb_.query(query_)
+    if (not count_):
         return False
     # end if
-    if delete_all:
-        for o_id in object_ids:
-            wp_cache_delete(o_id, meta_type + "_meta")
+    if delete_all_:
+        for o_id_ in object_ids_:
+            wp_cache_delete(o_id_, meta_type_ + "_meta")
         # end for
     else:
-        wp_cache_delete(object_id, meta_type + "_meta")
+        wp_cache_delete(object_id_, meta_type_ + "_meta")
     # end if
     #// 
     #// Fires immediately after deleting metadata of a specific type.
@@ -402,9 +404,9 @@ def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=""
     #// @param string   $meta_key    Metadata key.
     #// @param mixed    $_meta_value Metadata value. Serialized if non-scalar.
     #//
-    do_action(str("deleted_") + str(meta_type) + str("_meta"), meta_ids, object_id, meta_key, _meta_value)
+    do_action(str("deleted_") + str(meta_type_) + str("_meta"), meta_ids_, object_id_, meta_key_, _meta_value_)
     #// Old-style action.
-    if "post" == meta_type:
+    if "post" == meta_type_:
         #// 
         #// Fires immediately after deleting metadata for a post.
         #// 
@@ -412,7 +414,7 @@ def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=""
         #// 
         #// @param string[] $meta_ids An array of metadata entry IDs to delete.
         #//
-        do_action("deleted_postmeta", meta_ids)
+        do_action("deleted_postmeta", meta_ids_)
     # end if
     return True
 # end def delete_metadata
@@ -430,13 +432,16 @@ def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=""
 #// This parameter has no effect if meta_key is not specified. Default false.
 #// @return mixed Single metadata value, or array of values
 #//
-def get_metadata(meta_type=None, object_id=None, meta_key="", single=False, *args_):
+def get_metadata(meta_type_=None, object_id_=None, meta_key_="", single_=None, *_args_):
+    if single_ is None:
+        single_ = False
+    # end if
     
-    if (not meta_type) or (not php_is_numeric(object_id)):
+    if (not meta_type_) or (not php_is_numeric(object_id_)):
         return False
     # end if
-    object_id = absint(object_id)
-    if (not object_id):
+    object_id_ = absint(object_id_)
+    if (not object_id_):
         return False
     # end if
     #// 
@@ -454,34 +459,34 @@ def get_metadata(meta_type=None, object_id=None, meta_key="", single=False, *arg
     #// @param string            $meta_key  Metadata key.
     #// @param bool              $single    Whether to return only the first value of the specified $meta_key.
     #//
-    check = apply_filters(str("get_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, single)
-    if None != check:
-        if single and php_is_array(check):
-            return check[0]
+    check_ = apply_filters(str("get_") + str(meta_type_) + str("_metadata"), None, object_id_, meta_key_, single_)
+    if None != check_:
+        if single_ and php_is_array(check_):
+            return check_[0]
         else:
-            return check
+            return check_
         # end if
     # end if
-    meta_cache = wp_cache_get(object_id, meta_type + "_meta")
-    if (not meta_cache):
-        meta_cache = update_meta_cache(meta_type, Array(object_id))
-        if (php_isset(lambda : meta_cache[object_id])):
-            meta_cache = meta_cache[object_id]
+    meta_cache_ = wp_cache_get(object_id_, meta_type_ + "_meta")
+    if (not meta_cache_):
+        meta_cache_ = update_meta_cache(meta_type_, Array(object_id_))
+        if (php_isset(lambda : meta_cache_[object_id_])):
+            meta_cache_ = meta_cache_[object_id_]
         else:
-            meta_cache = None
+            meta_cache_ = None
         # end if
     # end if
-    if (not meta_key):
-        return meta_cache
+    if (not meta_key_):
+        return meta_cache_
     # end if
-    if (php_isset(lambda : meta_cache[meta_key])):
-        if single:
-            return maybe_unserialize(meta_cache[meta_key][0])
+    if (php_isset(lambda : meta_cache_[meta_key_])):
+        if single_:
+            return maybe_unserialize(meta_cache_[meta_key_][0])
         else:
-            return php_array_map("maybe_unserialize", meta_cache[meta_key])
+            return php_array_map("maybe_unserialize", meta_cache_[meta_key_])
         # end if
     # end if
-    if single:
+    if single_:
         return ""
     else:
         return Array()
@@ -498,26 +503,27 @@ def get_metadata(meta_type=None, object_id=None, meta_key="", single=False, *arg
 #// @param string $meta_key  Metadata key.
 #// @return bool True of the key is set, false if not.
 #//
-def metadata_exists(meta_type=None, object_id=None, meta_key=None, *args_):
+def metadata_exists(meta_type_=None, object_id_=None, meta_key_=None, *_args_):
     
-    if (not meta_type) or (not php_is_numeric(object_id)):
+    
+    if (not meta_type_) or (not php_is_numeric(object_id_)):
         return False
     # end if
-    object_id = absint(object_id)
-    if (not object_id):
+    object_id_ = absint(object_id_)
+    if (not object_id_):
         return False
     # end if
     #// This filter is documented in wp-includes/meta.php
-    check = apply_filters(str("get_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, True)
-    if None != check:
-        return php_bool(check)
+    check_ = apply_filters(str("get_") + str(meta_type_) + str("_metadata"), None, object_id_, meta_key_, True)
+    if None != check_:
+        return php_bool(check_)
     # end if
-    meta_cache = wp_cache_get(object_id, meta_type + "_meta")
-    if (not meta_cache):
-        meta_cache = update_meta_cache(meta_type, Array(object_id))
-        meta_cache = meta_cache[object_id]
+    meta_cache_ = wp_cache_get(object_id_, meta_type_ + "_meta")
+    if (not meta_cache_):
+        meta_cache_ = update_meta_cache(meta_type_, Array(object_id_))
+        meta_cache_ = meta_cache_[object_id_]
     # end if
-    if (php_isset(lambda : meta_cache[meta_key])):
+    if (php_isset(lambda : meta_cache_[meta_key_])):
         return True
     # end if
     return False
@@ -534,22 +540,23 @@ def metadata_exists(meta_type=None, object_id=None, meta_key=None, *args_):
 #// @param int    $meta_id   ID for a specific meta row.
 #// @return object|false Meta object or false.
 #//
-def get_metadata_by_mid(meta_type=None, meta_id=None, *args_):
+def get_metadata_by_mid(meta_type_=None, meta_id_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not meta_type) or (not php_is_numeric(meta_id)) or floor(meta_id) != meta_id:
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not meta_type_) or (not php_is_numeric(meta_id_)) or floor(meta_id_) != meta_id_:
         return False
     # end if
-    meta_id = php_intval(meta_id)
-    if meta_id <= 0:
+    meta_id_ = php_intval(meta_id_)
+    if meta_id_ <= 0:
         return False
     # end if
-    table = _get_meta_table(meta_type)
-    if (not table):
+    table_ = _get_meta_table(meta_type_)
+    if (not table_):
         return False
     # end if
-    id_column = "umeta_id" if "user" == meta_type else "meta_id"
+    id_column_ = "umeta_id" if "user" == meta_type_ else "meta_id"
     #// 
     #// Filters whether to retrieve metadata of a specific type by meta ID.
     #// 
@@ -562,18 +569,18 @@ def get_metadata_by_mid(meta_type=None, meta_id=None, *args_):
     #// @param mixed $value    The value get_metadata_by_mid() should return.
     #// @param int   $meta_id  Meta ID.
     #//
-    check = apply_filters(str("get_") + str(meta_type) + str("_metadata_by_mid"), None, meta_id)
-    if None != check:
-        return check
+    check_ = apply_filters(str("get_") + str(meta_type_) + str("_metadata_by_mid"), None, meta_id_)
+    if None != check_:
+        return check_
     # end if
-    meta = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(table) + str(" WHERE ") + str(id_column) + str(" = %d"), meta_id))
-    if php_empty(lambda : meta):
+    meta_ = wpdb_.get_row(wpdb_.prepare(str("SELECT * FROM ") + str(table_) + str(" WHERE ") + str(id_column_) + str(" = %d"), meta_id_))
+    if php_empty(lambda : meta_):
         return False
     # end if
-    if (php_isset(lambda : meta.meta_value)):
-        meta.meta_value = maybe_unserialize(meta.meta_value)
+    if (php_isset(lambda : meta_.meta_value)):
+        meta_.meta_value = maybe_unserialize(meta_.meta_value)
     # end if
-    return meta
+    return meta_
 # end def get_metadata_by_mid
 #// 
 #// Updates metadata by meta ID.
@@ -589,24 +596,27 @@ def get_metadata_by_mid(meta_type=None, meta_id=None, *args_):
 #// @param string $meta_key   Optional. You can provide a meta key to update it. Default false.
 #// @return bool True on successful update, false on failure.
 #//
-def update_metadata_by_mid(meta_type=None, meta_id=None, meta_value=None, meta_key=False, *args_):
+def update_metadata_by_mid(meta_type_=None, meta_id_=None, meta_value_=None, meta_key_=None, *_args_):
+    if meta_key_ is None:
+        meta_key_ = False
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    global wpdb_
+    php_check_if_defined("wpdb_")
     #// Make sure everything is valid.
-    if (not meta_type) or (not php_is_numeric(meta_id)) or floor(meta_id) != meta_id:
+    if (not meta_type_) or (not php_is_numeric(meta_id_)) or floor(meta_id_) != meta_id_:
         return False
     # end if
-    meta_id = php_intval(meta_id)
-    if meta_id <= 0:
+    meta_id_ = php_intval(meta_id_)
+    if meta_id_ <= 0:
         return False
     # end if
-    table = _get_meta_table(meta_type)
-    if (not table):
+    table_ = _get_meta_table(meta_type_)
+    if (not table_):
         return False
     # end if
-    column = sanitize_key(meta_type + "_id")
-    id_column = "umeta_id" if "user" == meta_type else "meta_id"
+    column_ = sanitize_key(meta_type_ + "_id")
+    id_column_ = "umeta_id" if "user" == meta_type_ else "meta_id"
     #// 
     #// Filters whether to update metadata of a specific type by meta ID.
     #// 
@@ -621,50 +631,50 @@ def update_metadata_by_mid(meta_type=None, meta_id=None, meta_value=None, meta_k
     #// @param mixed       $meta_value Meta value. Must be serializable if non-scalar.
     #// @param string|bool $meta_key   Meta key, if provided.
     #//
-    check = apply_filters(str("update_") + str(meta_type) + str("_metadata_by_mid"), None, meta_id, meta_value, meta_key)
-    if None != check:
-        return php_bool(check)
+    check_ = apply_filters(str("update_") + str(meta_type_) + str("_metadata_by_mid"), None, meta_id_, meta_value_, meta_key_)
+    if None != check_:
+        return php_bool(check_)
     # end if
     #// Fetch the meta and go on if it's found.
-    meta = get_metadata_by_mid(meta_type, meta_id)
-    if meta:
-        original_key = meta.meta_key
-        object_id = meta.column
+    meta_ = get_metadata_by_mid(meta_type_, meta_id_)
+    if meta_:
+        original_key_ = meta_.meta_key
+        object_id_ = meta_.column_
         #// If a new meta_key (last parameter) was specified, change the meta key,
         #// otherwise use the original key in the update statement.
-        if False == meta_key:
-            meta_key = original_key
-        elif (not php_is_string(meta_key)):
+        if False == meta_key_:
+            meta_key_ = original_key_
+        elif (not php_is_string(meta_key_)):
             return False
         # end if
-        meta_subtype = get_object_subtype(meta_type, object_id)
+        meta_subtype_ = get_object_subtype(meta_type_, object_id_)
         #// Sanitize the meta.
-        _meta_value = meta_value
-        meta_value = sanitize_meta(meta_key, meta_value, meta_type, meta_subtype)
-        meta_value = maybe_serialize(meta_value)
+        _meta_value_ = meta_value_
+        meta_value_ = sanitize_meta(meta_key_, meta_value_, meta_type_, meta_subtype_)
+        meta_value_ = maybe_serialize(meta_value_)
         #// Format the data query arguments.
-        data = Array({"meta_key": meta_key, "meta_value": meta_value})
+        data_ = Array({"meta_key": meta_key_, "meta_value": meta_value_})
         #// Format the where query arguments.
-        where = Array()
-        where[id_column] = meta_id
+        where_ = Array()
+        where_[id_column_] = meta_id_
         #// This action is documented in wp-includes/meta.php
-        do_action(str("update_") + str(meta_type) + str("_meta"), meta_id, object_id, meta_key, _meta_value)
-        if "post" == meta_type:
+        do_action(str("update_") + str(meta_type_) + str("_meta"), meta_id_, object_id_, meta_key_, _meta_value_)
+        if "post" == meta_type_:
             #// This action is documented in wp-includes/meta.php
-            do_action("update_postmeta", meta_id, object_id, meta_key, meta_value)
+            do_action("update_postmeta", meta_id_, object_id_, meta_key_, meta_value_)
         # end if
         #// Run the update query, all fields in $data are %s, $where is a %d.
-        result = wpdb.update(table, data, where, "%s", "%d")
-        if (not result):
+        result_ = wpdb_.update(table_, data_, where_, "%s", "%d")
+        if (not result_):
             return False
         # end if
         #// Clear the caches.
-        wp_cache_delete(object_id, meta_type + "_meta")
+        wp_cache_delete(object_id_, meta_type_ + "_meta")
         #// This action is documented in wp-includes/meta.php
-        do_action(str("updated_") + str(meta_type) + str("_meta"), meta_id, object_id, meta_key, _meta_value)
-        if "post" == meta_type:
+        do_action(str("updated_") + str(meta_type_) + str("_meta"), meta_id_, object_id_, meta_key_, _meta_value_)
+        if "post" == meta_type_:
             #// This action is documented in wp-includes/meta.php
-            do_action("updated_postmeta", meta_id, object_id, meta_key, meta_value)
+            do_action("updated_postmeta", meta_id_, object_id_, meta_key_, meta_value_)
         # end if
         return True
     # end if
@@ -683,25 +693,26 @@ def update_metadata_by_mid(meta_type=None, meta_id=None, meta_value=None, meta_k
 #// @param int    $meta_id   ID for a specific meta row.
 #// @return bool True on successful delete, false on failure.
 #//
-def delete_metadata_by_mid(meta_type=None, meta_id=None, *args_):
+def delete_metadata_by_mid(meta_type_=None, meta_id_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     #// Make sure everything is valid.
-    if (not meta_type) or (not php_is_numeric(meta_id)) or floor(meta_id) != meta_id:
+    if (not meta_type_) or (not php_is_numeric(meta_id_)) or floor(meta_id_) != meta_id_:
         return False
     # end if
-    meta_id = php_intval(meta_id)
-    if meta_id <= 0:
+    meta_id_ = php_intval(meta_id_)
+    if meta_id_ <= 0:
         return False
     # end if
-    table = _get_meta_table(meta_type)
-    if (not table):
+    table_ = _get_meta_table(meta_type_)
+    if (not table_):
         return False
     # end if
     #// Object and ID columns.
-    column = sanitize_key(meta_type + "_id")
-    id_column = "umeta_id" if "user" == meta_type else "meta_id"
+    column_ = sanitize_key(meta_type_ + "_id")
+    id_column_ = "umeta_id" if "user" == meta_type_ else "meta_id"
     #// 
     #// Filters whether to delete metadata of a specific type by meta ID.
     #// 
@@ -714,18 +725,18 @@ def delete_metadata_by_mid(meta_type=None, meta_id=None, *args_):
     #// @param null|bool $delete  Whether to allow metadata deletion of the given type.
     #// @param int       $meta_id Meta ID.
     #//
-    check = apply_filters(str("delete_") + str(meta_type) + str("_metadata_by_mid"), None, meta_id)
-    if None != check:
-        return php_bool(check)
+    check_ = apply_filters(str("delete_") + str(meta_type_) + str("_metadata_by_mid"), None, meta_id_)
+    if None != check_:
+        return php_bool(check_)
     # end if
     #// Fetch the meta and go on if it's found.
-    meta = get_metadata_by_mid(meta_type, meta_id)
-    if meta:
-        object_id = php_int(meta.column)
+    meta_ = get_metadata_by_mid(meta_type_, meta_id_)
+    if meta_:
+        object_id_ = php_int(meta_.column_)
         #// This action is documented in wp-includes/meta.php
-        do_action(str("delete_") + str(meta_type) + str("_meta"), meta_id, object_id, meta.meta_key, meta.meta_value)
+        do_action(str("delete_") + str(meta_type_) + str("_meta"), meta_id_, object_id_, meta_.meta_key, meta_.meta_value)
         #// Old-style action.
-        if "post" == meta_type or "comment" == meta_type:
+        if "post" == meta_type_ or "comment" == meta_type_:
             #// 
             #// Fires immediately before deleting post or comment metadata of a specific type.
             #// 
@@ -736,16 +747,16 @@ def delete_metadata_by_mid(meta_type=None, meta_id=None, *args_):
             #// 
             #// @param int $meta_id ID of the metadata entry to delete.
             #//
-            do_action(str("delete_") + str(meta_type) + str("meta"), meta_id)
+            do_action(str("delete_") + str(meta_type_) + str("meta"), meta_id_)
         # end if
         #// Run the query, will return true if deleted, false otherwise.
-        result = php_bool(wpdb.delete(table, Array({id_column: meta_id})))
+        result_ = php_bool(wpdb_.delete(table_, Array({id_column_: meta_id_})))
         #// Clear the caches.
-        wp_cache_delete(object_id, meta_type + "_meta")
+        wp_cache_delete(object_id_, meta_type_ + "_meta")
         #// This action is documented in wp-includes/meta.php
-        do_action(str("deleted_") + str(meta_type) + str("_meta"), meta_id, object_id, meta.meta_key, meta.meta_value)
+        do_action(str("deleted_") + str(meta_type_) + str("_meta"), meta_id_, object_id_, meta_.meta_key, meta_.meta_value)
         #// Old-style action.
-        if "post" == meta_type or "comment" == meta_type:
+        if "post" == meta_type_ or "comment" == meta_type_:
             #// 
             #// Fires immediately after deleting post or comment metadata of a specific type.
             #// 
@@ -756,9 +767,9 @@ def delete_metadata_by_mid(meta_type=None, meta_id=None, *args_):
             #// 
             #// @param int $meta_ids Deleted metadata entry ID.
             #//
-            do_action(str("deleted_") + str(meta_type) + str("meta"), meta_id)
+            do_action(str("deleted_") + str(meta_type_) + str("meta"), meta_id_)
         # end if
-        return result
+        return result_
     # end if
     #// Meta ID was not found.
     return False
@@ -775,23 +786,24 @@ def delete_metadata_by_mid(meta_type=None, meta_id=None, *args_):
 #// @param string|int[] $object_ids Array or comma delimited list of object IDs to update cache for.
 #// @return array|false Metadata cache for the specified objects, or false on failure.
 #//
-def update_meta_cache(meta_type=None, object_ids=None, *args_):
+def update_meta_cache(meta_type_=None, object_ids_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not meta_type) or (not object_ids):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not meta_type_) or (not object_ids_):
         return False
     # end if
-    table = _get_meta_table(meta_type)
-    if (not table):
+    table_ = _get_meta_table(meta_type_)
+    if (not table_):
         return False
     # end if
-    column = sanitize_key(meta_type + "_id")
-    if (not php_is_array(object_ids)):
-        object_ids = php_preg_replace("|[^0-9,]|", "", object_ids)
-        object_ids = php_explode(",", object_ids)
+    column_ = sanitize_key(meta_type_ + "_id")
+    if (not php_is_array(object_ids_)):
+        object_ids_ = php_preg_replace("|[^0-9,]|", "", object_ids_)
+        object_ids_ = php_explode(",", object_ids_)
     # end if
-    object_ids = php_array_map("intval", object_ids)
+    object_ids_ = php_array_map("intval", object_ids_)
     #// 
     #// Filters whether to update the metadata cache of a specific type.
     #// 
@@ -804,51 +816,51 @@ def update_meta_cache(meta_type=None, object_ids=None, *args_):
     #// @param mixed $check      Whether to allow updating the meta cache of the given type.
     #// @param int[] $object_ids Array of object IDs to update the meta cache for.
     #//
-    check = apply_filters(str("update_") + str(meta_type) + str("_metadata_cache"), None, object_ids)
-    if None != check:
-        return php_bool(check)
+    check_ = apply_filters(str("update_") + str(meta_type_) + str("_metadata_cache"), None, object_ids_)
+    if None != check_:
+        return php_bool(check_)
     # end if
-    cache_key = meta_type + "_meta"
-    ids = Array()
-    cache = Array()
-    for id in object_ids:
-        cached_object = wp_cache_get(id, cache_key)
-        if False == cached_object:
-            ids[-1] = id
+    cache_key_ = meta_type_ + "_meta"
+    ids_ = Array()
+    cache_ = Array()
+    for id_ in object_ids_:
+        cached_object_ = wp_cache_get(id_, cache_key_)
+        if False == cached_object_:
+            ids_[-1] = id_
         else:
-            cache[id] = cached_object
+            cache_[id_] = cached_object_
         # end if
     # end for
-    if php_empty(lambda : ids):
-        return cache
+    if php_empty(lambda : ids_):
+        return cache_
     # end if
     #// Get meta info.
-    id_list = join(",", ids)
-    id_column = "umeta_id" if "user" == meta_type else "meta_id"
-    meta_list = wpdb.get_results(str("SELECT ") + str(column) + str(", meta_key, meta_value FROM ") + str(table) + str(" WHERE ") + str(column) + str(" IN (") + str(id_list) + str(") ORDER BY ") + str(id_column) + str(" ASC"), ARRAY_A)
-    if (not php_empty(lambda : meta_list)):
-        for metarow in meta_list:
-            mpid = php_intval(metarow[column])
-            mkey = metarow["meta_key"]
-            mval = metarow["meta_value"]
+    id_list_ = join(",", ids_)
+    id_column_ = "umeta_id" if "user" == meta_type_ else "meta_id"
+    meta_list_ = wpdb_.get_results(str("SELECT ") + str(column_) + str(", meta_key, meta_value FROM ") + str(table_) + str(" WHERE ") + str(column_) + str(" IN (") + str(id_list_) + str(") ORDER BY ") + str(id_column_) + str(" ASC"), ARRAY_A)
+    if (not php_empty(lambda : meta_list_)):
+        for metarow_ in meta_list_:
+            mpid_ = php_intval(metarow_[column_])
+            mkey_ = metarow_["meta_key"]
+            mval_ = metarow_["meta_value"]
             #// Force subkeys to be array type.
-            if (not (php_isset(lambda : cache[mpid]))) or (not php_is_array(cache[mpid])):
-                cache[mpid] = Array()
+            if (not (php_isset(lambda : cache_[mpid_]))) or (not php_is_array(cache_[mpid_])):
+                cache_[mpid_] = Array()
             # end if
-            if (not (php_isset(lambda : cache[mpid][mkey]))) or (not php_is_array(cache[mpid][mkey])):
-                cache[mpid][mkey] = Array()
+            if (not (php_isset(lambda : cache_[mpid_][mkey_]))) or (not php_is_array(cache_[mpid_][mkey_])):
+                cache_[mpid_][mkey_] = Array()
             # end if
             #// Add a value to the current pid/key.
-            cache[mpid][mkey][-1] = mval
+            cache_[mpid_][mkey_][-1] = mval_
         # end for
     # end if
-    for id in ids:
-        if (not (php_isset(lambda : cache[id]))):
-            cache[id] = Array()
+    for id_ in ids_:
+        if (not (php_isset(lambda : cache_[id_]))):
+            cache_[id_] = Array()
         # end if
-        wp_cache_add(id, cache[id], cache_key)
+        wp_cache_add(id_, cache_[id_], cache_key_)
     # end for
-    return cache
+    return cache_
 # end def update_meta_cache
 #// 
 #// Retrieves the queue for lazy-loading metadata.
@@ -857,13 +869,14 @@ def update_meta_cache(meta_type=None, object_ids=None, *args_):
 #// 
 #// @return WP_Metadata_Lazyloader $lazyloader Metadata lazyloader queue.
 #//
-def wp_metadata_lazyloader(*args_):
+def wp_metadata_lazyloader(*_args_):
     
-    wp_metadata_lazyloader.wp_metadata_lazyloader = None
-    if None == wp_metadata_lazyloader.wp_metadata_lazyloader:
-        wp_metadata_lazyloader.wp_metadata_lazyloader = php_new_class("WP_Metadata_Lazyloader", lambda : WP_Metadata_Lazyloader())
+    
+    wp_metadata_lazyloader_ = None
+    if None == wp_metadata_lazyloader_:
+        wp_metadata_lazyloader_ = php_new_class("WP_Metadata_Lazyloader", lambda : WP_Metadata_Lazyloader())
     # end if
-    return wp_metadata_lazyloader.wp_metadata_lazyloader
+    return wp_metadata_lazyloader_
 # end def wp_metadata_lazyloader
 #// 
 #// Given a meta query, generates SQL clauses to be appended to a main query.
@@ -879,10 +892,11 @@ def wp_metadata_lazyloader(*args_):
 #// @param object $context           Optional. The main query object
 #// @return array Associative array of `JOIN` and `WHERE` SQL.
 #//
-def get_meta_sql(meta_query=None, type=None, primary_table=None, primary_id_column=None, context=None, *args_):
+def get_meta_sql(meta_query_=None, type_=None, primary_table_=None, primary_id_column_=None, context_=None, *_args_):
     
-    meta_query_obj = php_new_class("WP_Meta_Query", lambda : WP_Meta_Query(meta_query))
-    return meta_query_obj.get_sql(type, primary_table, primary_id_column, context)
+    
+    meta_query_obj_ = php_new_class("WP_Meta_Query", lambda : WP_Meta_Query(meta_query_))
+    return meta_query_obj_.get_sql(type_, primary_table_, primary_id_column_, context_)
 # end def get_meta_sql
 #// 
 #// Retrieves the name of the metadata table for the specified object type.
@@ -895,15 +909,16 @@ def get_meta_sql(meta_query=None, type=None, primary_table=None, primary_id_colu
 #// or any other object type with an associated meta table.
 #// @return string|false Metadata table name, or false if no metadata table exists
 #//
-def _get_meta_table(type=None, *args_):
+def _get_meta_table(type_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    table_name = type + "meta"
-    if php_empty(lambda : wpdb.table_name):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    table_name_ = type_ + "meta"
+    if php_empty(lambda : wpdb_.table_name_):
         return False
     # end if
-    return wpdb.table_name
+    return wpdb_.table_name_
 # end def _get_meta_table
 #// 
 #// Determines whether a meta key is considered protected.
@@ -915,9 +930,10 @@ def _get_meta_table(type=None, *args_):
 #// or any other object type with an associated meta table. Default empty.
 #// @return bool Whether the meta key is considered protected.
 #//
-def is_protected_meta(meta_key=None, meta_type="", *args_):
+def is_protected_meta(meta_key_=None, meta_type_="", *_args_):
     
-    protected = "_" == meta_key[0]
+    
+    protected_ = "_" == meta_key_[0]
     #// 
     #// Filters whether a meta key is considered protected.
     #// 
@@ -928,7 +944,7 @@ def is_protected_meta(meta_key=None, meta_type="", *args_):
     #// @param string $meta_type Type of object metadata is for. Accepts 'post', 'comment', 'term', 'user',
     #// or any other object type with an associated meta table.
     #//
-    return apply_filters("is_protected_meta", protected, meta_key, meta_type)
+    return apply_filters("is_protected_meta", protected_, meta_key_, meta_type_)
 # end def is_protected_meta
 #// 
 #// Sanitizes meta value.
@@ -943,9 +959,10 @@ def is_protected_meta(meta_key=None, meta_type="", *args_):
 #// @param string $object_subtype Optional. The subtype of the object type.
 #// @return mixed Sanitized $meta_value.
 #//
-def sanitize_meta(meta_key=None, meta_value=None, object_type=None, object_subtype="", *args_):
+def sanitize_meta(meta_key_=None, meta_value_=None, object_type_=None, object_subtype_="", *_args_):
     
-    if (not php_empty(lambda : object_subtype)) and has_filter(str("sanitize_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype)):
+    
+    if (not php_empty(lambda : object_subtype_)) and has_filter(str("sanitize_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_)):
         #// 
         #// Filters the sanitization of a specific meta key of a specific meta type and subtype.
         #// 
@@ -961,7 +978,7 @@ def sanitize_meta(meta_key=None, meta_value=None, object_type=None, object_subty
         #// or any other object type with an associated meta table.
         #// @param string $object_subtype Object subtype.
         #//
-        return apply_filters(str("sanitize_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype), meta_value, meta_key, object_type, object_subtype)
+        return apply_filters(str("sanitize_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_), meta_value_, meta_key_, object_type_, object_subtype_)
     # end if
     #// 
     #// Filters the sanitization of a specific meta key of a specific meta type.
@@ -977,7 +994,7 @@ def sanitize_meta(meta_key=None, meta_value=None, object_type=None, object_subty
     #// @param string $object_type Type of object metadata is for. Accepts 'post', 'comment', 'term', 'user',
     #// or any other object type with an associated meta table.
     #//
-    return apply_filters(str("sanitize_") + str(object_type) + str("_meta_") + str(meta_key), meta_value, meta_key, object_type)
+    return apply_filters(str("sanitize_") + str(object_type_) + str("_meta_") + str(meta_key_), meta_value_, meta_key_, object_type_)
 # end def sanitize_meta
 #// 
 #// Registers a meta key.
@@ -1022,26 +1039,27 @@ def sanitize_meta(meta_key=None, meta_value=None, object_type=None, object_subty
 #// Registering a meta key with distinct sanitize and auth callbacks will fire those callbacks,
 #// but will not add to the global registry.
 #//
-def register_meta(object_type=None, meta_key=None, args=None, deprecated=None, *args_):
+def register_meta(object_type_=None, meta_key_=None, args_=None, deprecated_=None, *_args_):
     
-    global wp_meta_keys
-    php_check_if_defined("wp_meta_keys")
-    if (not php_is_array(wp_meta_keys)):
-        wp_meta_keys = Array()
+    
+    global wp_meta_keys_
+    php_check_if_defined("wp_meta_keys_")
+    if (not php_is_array(wp_meta_keys_)):
+        wp_meta_keys_ = Array()
     # end if
-    defaults = Array({"object_subtype": "", "type": "string", "description": "", "single": False, "sanitize_callback": None, "auth_callback": None, "show_in_rest": False})
+    defaults_ = Array({"object_subtype": "", "type": "string", "description": "", "single": False, "sanitize_callback": None, "auth_callback": None, "show_in_rest": False})
     #// There used to be individual args for sanitize and auth callbacks.
-    has_old_sanitize_cb = False
-    has_old_auth_cb = False
-    if php_is_callable(args):
-        args = Array({"sanitize_callback": args})
-        has_old_sanitize_cb = True
+    has_old_sanitize_cb_ = False
+    has_old_auth_cb_ = False
+    if php_is_callable(args_):
+        args_ = Array({"sanitize_callback": args_})
+        has_old_sanitize_cb_ = True
     else:
-        args = args
+        args_ = args_
     # end if
-    if php_is_callable(deprecated):
-        args["auth_callback"] = deprecated
-        has_old_auth_cb = True
+    if php_is_callable(deprecated_):
+        args_["auth_callback"] = deprecated_
+        has_old_auth_cb_ = True
     # end if
     #// 
     #// Filters the registration arguments when registering meta.
@@ -1054,43 +1072,43 @@ def register_meta(object_type=None, meta_key=None, args=None, deprecated=None, *
     #// or any other object type with an associated meta table.
     #// @param string $meta_key    Meta key.
     #//
-    args = apply_filters("register_meta_args", args, defaults, object_type, meta_key)
-    args = wp_parse_args(args, defaults)
+    args_ = apply_filters("register_meta_args", args_, defaults_, object_type_, meta_key_)
+    args_ = wp_parse_args(args_, defaults_)
     #// Require an item schema when registering array meta.
-    if False != args["show_in_rest"] and "array" == args["type"]:
-        if (not php_is_array(args["show_in_rest"])) or (not (php_isset(lambda : args["show_in_rest"]["schema"]["items"]))):
+    if False != args_["show_in_rest"] and "array" == args_["type"]:
+        if (not php_is_array(args_["show_in_rest"])) or (not (php_isset(lambda : args_["show_in_rest"]["schema"]["items"]))):
             _doing_it_wrong(__FUNCTION__, __("When registering an \"array\" meta type to show in the REST API, you must specify the schema for each array item in \"show_in_rest.schema.items\"."), "5.3.0")
             return False
         # end if
     # end if
-    object_subtype = args["object_subtype"] if (not php_empty(lambda : args["object_subtype"])) else ""
+    object_subtype_ = args_["object_subtype"] if (not php_empty(lambda : args_["object_subtype"])) else ""
     #// If `auth_callback` is not provided, fall back to `is_protected_meta()`.
-    if php_empty(lambda : args["auth_callback"]):
-        if is_protected_meta(meta_key, object_type):
-            args["auth_callback"] = "__return_false"
+    if php_empty(lambda : args_["auth_callback"]):
+        if is_protected_meta(meta_key_, object_type_):
+            args_["auth_callback"] = "__return_false"
         else:
-            args["auth_callback"] = "__return_true"
+            args_["auth_callback"] = "__return_true"
         # end if
     # end if
     #// Back-compat: old sanitize and auth callbacks are applied to all of an object type.
-    if php_is_callable(args["sanitize_callback"]):
-        if (not php_empty(lambda : object_subtype)):
-            add_filter(str("sanitize_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype), args["sanitize_callback"], 10, 4)
+    if php_is_callable(args_["sanitize_callback"]):
+        if (not php_empty(lambda : object_subtype_)):
+            add_filter(str("sanitize_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_), args_["sanitize_callback"], 10, 4)
         else:
-            add_filter(str("sanitize_") + str(object_type) + str("_meta_") + str(meta_key), args["sanitize_callback"], 10, 3)
+            add_filter(str("sanitize_") + str(object_type_) + str("_meta_") + str(meta_key_), args_["sanitize_callback"], 10, 3)
         # end if
     # end if
-    if php_is_callable(args["auth_callback"]):
-        if (not php_empty(lambda : object_subtype)):
-            add_filter(str("auth_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype), args["auth_callback"], 10, 6)
+    if php_is_callable(args_["auth_callback"]):
+        if (not php_empty(lambda : object_subtype_)):
+            add_filter(str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_), args_["auth_callback"], 10, 6)
         else:
-            add_filter(str("auth_") + str(object_type) + str("_meta_") + str(meta_key), args["auth_callback"], 10, 6)
+            add_filter(str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_), args_["auth_callback"], 10, 6)
         # end if
     # end if
     #// Global registry only contains meta keys registered with the array of arguments added in 4.6.0.
-    if (not has_old_auth_cb) and (not has_old_sanitize_cb):
-        args["object_subtype"] = None
-        wp_meta_keys[object_type][object_subtype][meta_key] = args
+    if (not has_old_auth_cb_) and (not has_old_sanitize_cb_):
+        args_["object_subtype"] = None
+        wp_meta_keys_[object_type_][object_subtype_][meta_key_] = args_
         return True
     # end if
     return False
@@ -1108,10 +1126,11 @@ def register_meta(object_type=None, meta_key=None, args=None, deprecated=None, *
 #// @return bool True if the meta key is registered to the object type and, if provided,
 #// the object subtype. False if not.
 #//
-def registered_meta_key_exists(object_type=None, meta_key=None, object_subtype="", *args_):
+def registered_meta_key_exists(object_type_=None, meta_key_=None, object_subtype_="", *_args_):
     
-    meta_keys = get_registered_meta_keys(object_type, object_subtype)
-    return (php_isset(lambda : meta_keys[meta_key]))
+    
+    meta_keys_ = get_registered_meta_keys(object_type_, object_subtype_)
+    return (php_isset(lambda : meta_keys_[meta_key_]))
 # end def registered_meta_key_exists
 #// 
 #// Unregisters a meta key from the list of registered keys.
@@ -1125,35 +1144,36 @@ def registered_meta_key_exists(object_type=None, meta_key=None, object_subtype="
 #// @param string $object_subtype Optional. The subtype of the object type.
 #// @return bool True if successful. False if the meta key was not registered.
 #//
-def unregister_meta_key(object_type=None, meta_key=None, object_subtype="", *args_):
+def unregister_meta_key(object_type_=None, meta_key_=None, object_subtype_="", *_args_):
     
-    global wp_meta_keys
-    php_check_if_defined("wp_meta_keys")
-    if (not registered_meta_key_exists(object_type, meta_key, object_subtype)):
+    
+    global wp_meta_keys_
+    php_check_if_defined("wp_meta_keys_")
+    if (not registered_meta_key_exists(object_type_, meta_key_, object_subtype_)):
         return False
     # end if
-    args = wp_meta_keys[object_type][object_subtype][meta_key]
-    if (php_isset(lambda : args["sanitize_callback"])) and php_is_callable(args["sanitize_callback"]):
-        if (not php_empty(lambda : object_subtype)):
-            remove_filter(str("sanitize_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype), args["sanitize_callback"])
+    args_ = wp_meta_keys_[object_type_][object_subtype_][meta_key_]
+    if (php_isset(lambda : args_["sanitize_callback"])) and php_is_callable(args_["sanitize_callback"]):
+        if (not php_empty(lambda : object_subtype_)):
+            remove_filter(str("sanitize_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_), args_["sanitize_callback"])
         else:
-            remove_filter(str("sanitize_") + str(object_type) + str("_meta_") + str(meta_key), args["sanitize_callback"])
+            remove_filter(str("sanitize_") + str(object_type_) + str("_meta_") + str(meta_key_), args_["sanitize_callback"])
         # end if
     # end if
-    if (php_isset(lambda : args["auth_callback"])) and php_is_callable(args["auth_callback"]):
-        if (not php_empty(lambda : object_subtype)):
-            remove_filter(str("auth_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype), args["auth_callback"])
+    if (php_isset(lambda : args_["auth_callback"])) and php_is_callable(args_["auth_callback"]):
+        if (not php_empty(lambda : object_subtype_)):
+            remove_filter(str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_), args_["auth_callback"])
         else:
-            remove_filter(str("auth_") + str(object_type) + str("_meta_") + str(meta_key), args["auth_callback"])
+            remove_filter(str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_), args_["auth_callback"])
         # end if
     # end if
-    wp_meta_keys[object_type][object_subtype][meta_key] = None
+    wp_meta_keys_[object_type_][object_subtype_][meta_key_] = None
     #// Do some clean up.
-    if php_empty(lambda : wp_meta_keys[object_type][object_subtype]):
-        wp_meta_keys[object_type][object_subtype] = None
+    if php_empty(lambda : wp_meta_keys_[object_type_][object_subtype_]):
+        wp_meta_keys_[object_type_][object_subtype_] = None
     # end if
-    if php_empty(lambda : wp_meta_keys[object_type]):
-        wp_meta_keys[object_type] = None
+    if php_empty(lambda : wp_meta_keys_[object_type_]):
+        wp_meta_keys_[object_type_] = None
     # end if
     return True
 # end def unregister_meta_key
@@ -1168,14 +1188,15 @@ def unregister_meta_key(object_type=None, meta_key=None, object_subtype="", *arg
 #// @param string $object_subtype Optional. The subtype of the object type.
 #// @return string[] List of registered meta keys.
 #//
-def get_registered_meta_keys(object_type=None, object_subtype="", *args_):
+def get_registered_meta_keys(object_type_=None, object_subtype_="", *_args_):
     
-    global wp_meta_keys
-    php_check_if_defined("wp_meta_keys")
-    if (not php_is_array(wp_meta_keys)) or (not (php_isset(lambda : wp_meta_keys[object_type]))) or (not (php_isset(lambda : wp_meta_keys[object_type][object_subtype]))):
+    
+    global wp_meta_keys_
+    php_check_if_defined("wp_meta_keys_")
+    if (not php_is_array(wp_meta_keys_)) or (not (php_isset(lambda : wp_meta_keys_[object_type_]))) or (not (php_isset(lambda : wp_meta_keys_[object_type_][object_subtype_]))):
         return Array()
     # end if
-    return wp_meta_keys[object_type][object_subtype]
+    return wp_meta_keys_[object_type_][object_subtype_]
 # end def get_registered_meta_keys
 #// 
 #// Retrieves registered metadata for a specified object.
@@ -1193,30 +1214,31 @@ def get_registered_meta_keys(object_type=None, object_subtype="", *args_):
 #// @return mixed A single value or array of values for a key if specified. An array of all registered keys
 #// and values for an object ID if not. False if a given $meta_key is not registered.
 #//
-def get_registered_metadata(object_type=None, object_id=None, meta_key="", *args_):
+def get_registered_metadata(object_type_=None, object_id_=None, meta_key_="", *_args_):
     
-    object_subtype = get_object_subtype(object_type, object_id)
-    if (not php_empty(lambda : meta_key)):
-        if (not php_empty(lambda : object_subtype)) and (not registered_meta_key_exists(object_type, meta_key, object_subtype)):
-            object_subtype = ""
+    
+    object_subtype_ = get_object_subtype(object_type_, object_id_)
+    if (not php_empty(lambda : meta_key_)):
+        if (not php_empty(lambda : object_subtype_)) and (not registered_meta_key_exists(object_type_, meta_key_, object_subtype_)):
+            object_subtype_ = ""
         # end if
-        if (not registered_meta_key_exists(object_type, meta_key, object_subtype)):
+        if (not registered_meta_key_exists(object_type_, meta_key_, object_subtype_)):
             return False
         # end if
-        meta_keys = get_registered_meta_keys(object_type, object_subtype)
-        meta_key_data = meta_keys[meta_key]
-        data = get_metadata(object_type, object_id, meta_key, meta_key_data["single"])
-        return data
+        meta_keys_ = get_registered_meta_keys(object_type_, object_subtype_)
+        meta_key_data_ = meta_keys_[meta_key_]
+        data_ = get_metadata(object_type_, object_id_, meta_key_, meta_key_data_["single"])
+        return data_
     # end if
-    data = get_metadata(object_type, object_id)
-    if (not data):
+    data_ = get_metadata(object_type_, object_id_)
+    if (not data_):
         return Array()
     # end if
-    meta_keys = get_registered_meta_keys(object_type)
-    if (not php_empty(lambda : object_subtype)):
-        meta_keys = php_array_merge(meta_keys, get_registered_meta_keys(object_type, object_subtype))
+    meta_keys_ = get_registered_meta_keys(object_type_)
+    if (not php_empty(lambda : object_subtype_)):
+        meta_keys_ = php_array_merge(meta_keys_, get_registered_meta_keys(object_type_, object_subtype_))
     # end if
-    return php_array_intersect_key(data, meta_keys)
+    return php_array_intersect_key(data_, meta_keys_)
 # end def get_registered_metadata
 #// 
 #// Filters out `register_meta()` args based on a whitelist.
@@ -1231,9 +1253,10 @@ def get_registered_metadata(object_type=None, object_id=None, meta_key="", *args
 #// @param array $default_args Default arguments for `register_meta()`.
 #// @return array Filtered arguments.
 #//
-def _wp_register_meta_args_whitelist(args=None, default_args=None, *args_):
+def _wp_register_meta_args_whitelist(args_=None, default_args_=None, *_args_):
     
-    return php_array_intersect_key(args, default_args)
+    
+    return php_array_intersect_key(args_, default_args_)
 # end def _wp_register_meta_args_whitelist
 #// 
 #// Returns the object subtype for a given object ID of a specific type.
@@ -1245,40 +1268,41 @@ def _wp_register_meta_args_whitelist(args=None, default_args=None, *args_):
 #// @param int    $object_id   ID of the object to retrieve its subtype.
 #// @return string The object subtype or an empty string if unspecified subtype.
 #//
-def get_object_subtype(object_type=None, object_id=None, *args_):
+def get_object_subtype(object_type_=None, object_id_=None, *_args_):
     
-    object_id = php_int(object_id)
-    object_subtype = ""
-    for case in Switch(object_type):
+    
+    object_id_ = php_int(object_id_)
+    object_subtype_ = ""
+    for case in Switch(object_type_):
         if case("post"):
-            post_type = get_post_type(object_id)
-            if (not php_empty(lambda : post_type)):
-                object_subtype = post_type
+            post_type_ = get_post_type(object_id_)
+            if (not php_empty(lambda : post_type_)):
+                object_subtype_ = post_type_
             # end if
             break
         # end if
         if case("term"):
-            term = get_term(object_id)
-            if (not type(term).__name__ == "WP_Term"):
+            term_ = get_term(object_id_)
+            if (not type(term_).__name__ == "WP_Term"):
                 break
             # end if
-            object_subtype = term.taxonomy
+            object_subtype_ = term_.taxonomy
             break
         # end if
         if case("comment"):
-            comment = get_comment(object_id)
-            if (not comment):
+            comment_ = get_comment(object_id_)
+            if (not comment_):
                 break
             # end if
-            object_subtype = "comment"
+            object_subtype_ = "comment"
             break
         # end if
         if case("user"):
-            user = get_user_by("id", object_id)
-            if (not user):
+            user_ = get_user_by("id", object_id_)
+            if (not user_):
                 break
             # end if
-            object_subtype = "user"
+            object_subtype_ = "user"
             break
         # end if
     # end for
@@ -1293,5 +1317,5 @@ def get_object_subtype(object_type=None, object_id=None, *args_):
     #// @param string $object_subtype Empty string to override.
     #// @param int    $object_id      ID of the object to get the subtype for.
     #//
-    return apply_filters(str("get_object_subtype_") + str(object_type), object_subtype, object_id)
+    return apply_filters(str("get_object_subtype_") + str(object_type_), object_subtype_, object_id_)
 # end def get_object_subtype

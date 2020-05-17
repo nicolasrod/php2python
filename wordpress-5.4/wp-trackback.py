@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,7 +15,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package WordPress
 #// @subpackage Trackbacks
 #//
-if php_empty(lambda : wp):
+if php_empty(lambda : wp_):
     php_include_file(__DIR__ + "/wp-load.php", once=True)
     wp(Array({"tb": "1"}))
 # end if
@@ -35,14 +30,15 @@ if php_empty(lambda : wp):
 #// Default '0'. Accepts '0' or '1', true or false.
 #// @param string   $error_message Error message if an error occurred.
 #//
-def trackback_response(error=0, error_message="", *args_):
+def trackback_response(error_=0, error_message_="", *_args_):
+    
     
     php_header("Content-Type: text/xml; charset=" + get_option("blog_charset"))
-    if error:
+    if error_:
         php_print("<?xml version=\"1.0\" encoding=\"utf-8\"?" + ">\n")
         php_print("<response>\n")
         php_print("<error>1</error>\n")
-        php_print(str("<message>") + str(error_message) + str("</message>\n"))
+        php_print(str("<message>") + str(error_message_) + str("</message>\n"))
         php_print("</response>")
         php_exit(0)
     else:
@@ -53,48 +49,48 @@ def trackback_response(error=0, error_message="", *args_):
     # end if
 # end def trackback_response
 #// Trackback is done by a POST.
-request_array = "HTTP_POST_VARS"
+request_array_ = "HTTP_POST_VARS"
 if (not (php_isset(lambda : PHP_REQUEST["tb_id"]))) or (not PHP_REQUEST["tb_id"]):
-    tb_id = php_explode("/", PHP_SERVER["REQUEST_URI"])
-    tb_id = php_intval(tb_id[php_count(tb_id) - 1])
+    tb_id_ = php_explode("/", PHP_SERVER["REQUEST_URI"])
+    tb_id_ = php_intval(tb_id_[php_count(tb_id_) - 1])
 # end if
-tb_url = PHP_POST["url"] if (php_isset(lambda : PHP_POST["url"])) else ""
-charset = PHP_POST["charset"] if (php_isset(lambda : PHP_POST["charset"])) else ""
+tb_url_ = PHP_POST["url"] if (php_isset(lambda : PHP_POST["url"])) else ""
+charset_ = PHP_POST["charset"] if (php_isset(lambda : PHP_POST["charset"])) else ""
 #// These three are stripslashed here so they can be properly escaped after mb_convert_encoding().
-title = wp_unslash(PHP_POST["title"]) if (php_isset(lambda : PHP_POST["title"])) else ""
-excerpt = wp_unslash(PHP_POST["excerpt"]) if (php_isset(lambda : PHP_POST["excerpt"])) else ""
-blog_name = wp_unslash(PHP_POST["blog_name"]) if (php_isset(lambda : PHP_POST["blog_name"])) else ""
-if charset:
-    charset = php_str_replace(Array(",", " "), "", php_strtoupper(php_trim(charset)))
+title_ = wp_unslash(PHP_POST["title"]) if (php_isset(lambda : PHP_POST["title"])) else ""
+excerpt_ = wp_unslash(PHP_POST["excerpt"]) if (php_isset(lambda : PHP_POST["excerpt"])) else ""
+blog_name_ = wp_unslash(PHP_POST["blog_name"]) if (php_isset(lambda : PHP_POST["blog_name"])) else ""
+if charset_:
+    charset_ = php_str_replace(Array(",", " "), "", php_strtoupper(php_trim(charset_)))
 else:
-    charset = "ASCII, UTF-8, ISO-8859-1, JIS, EUC-JP, SJIS"
+    charset_ = "ASCII, UTF-8, ISO-8859-1, JIS, EUC-JP, SJIS"
 # end if
 #// No valid uses for UTF-7.
-if False != php_strpos(charset, "UTF-7"):
+if False != php_strpos(charset_, "UTF-7"):
     php_exit(0)
 # end if
 #// For international trackbacks.
 if php_function_exists("mb_convert_encoding"):
-    title = mb_convert_encoding(title, get_option("blog_charset"), charset)
-    excerpt = mb_convert_encoding(excerpt, get_option("blog_charset"), charset)
-    blog_name = mb_convert_encoding(blog_name, get_option("blog_charset"), charset)
+    title_ = mb_convert_encoding(title_, get_option("blog_charset"), charset_)
+    excerpt_ = mb_convert_encoding(excerpt_, get_option("blog_charset"), charset_)
+    blog_name_ = mb_convert_encoding(blog_name_, get_option("blog_charset"), charset_)
 # end if
 #// Now that mb_convert_encoding() has been given a swing, we need to escape these three.
-title = wp_slash(title)
-excerpt = wp_slash(excerpt)
-blog_name = wp_slash(blog_name)
+title_ = wp_slash(title_)
+excerpt_ = wp_slash(excerpt_)
+blog_name_ = wp_slash(blog_name_)
 if is_single() or is_page():
-    tb_id = posts[0].ID
+    tb_id_ = posts_[0].ID
 # end if
-if (not (php_isset(lambda : tb_id))) or (not php_intval(tb_id)):
+if (not (php_isset(lambda : tb_id_))) or (not php_intval(tb_id_)):
     trackback_response(1, __("I really need an ID for this to work."))
 # end if
-if php_empty(lambda : title) and php_empty(lambda : tb_url) and php_empty(lambda : blog_name):
+if php_empty(lambda : title_) and php_empty(lambda : tb_url_) and php_empty(lambda : blog_name_):
     #// If it doesn't look like a trackback at all.
-    wp_redirect(get_permalink(tb_id))
+    wp_redirect(get_permalink(tb_id_))
     php_exit(0)
 # end if
-if (not php_empty(lambda : tb_url)) and (not php_empty(lambda : title)):
+if (not php_empty(lambda : tb_url_)) and (not php_empty(lambda : title_)):
     #// 
     #// Fires before the trackback is added to a post.
     #// 
@@ -107,29 +103,29 @@ if (not php_empty(lambda : tb_url)) and (not php_empty(lambda : title)):
     #// @param string $excerpt   Trackback Excerpt.
     #// @param string $blog_name Blog Name.
     #//
-    do_action("pre_trackback_post", tb_id, tb_url, charset, title, excerpt, blog_name)
+    do_action("pre_trackback_post", tb_id_, tb_url_, charset_, title_, excerpt_, blog_name_)
     php_header("Content-Type: text/xml; charset=" + get_option("blog_charset"))
-    if (not pings_open(tb_id)):
+    if (not pings_open(tb_id_)):
         trackback_response(1, __("Sorry, trackbacks are closed for this item."))
     # end if
-    title = wp_html_excerpt(title, 250, "&#8230;")
-    excerpt = wp_html_excerpt(excerpt, 252, "&#8230;")
-    comment_post_ID = php_int(tb_id)
-    comment_author = blog_name
-    comment_author_email = ""
-    comment_author_url = tb_url
-    comment_content = str("<strong>") + str(title) + str("</strong>\n\n") + str(excerpt)
-    comment_type = "trackback"
-    dupe = wpdb.get_results(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.comments) + str(" WHERE comment_post_ID = %d AND comment_author_url = %s"), comment_post_ID, comment_author_url))
-    if dupe:
+    title_ = wp_html_excerpt(title_, 250, "&#8230;")
+    excerpt_ = wp_html_excerpt(excerpt_, 252, "&#8230;")
+    comment_post_ID_ = php_int(tb_id_)
+    comment_author_ = blog_name_
+    comment_author_email_ = ""
+    comment_author_url_ = tb_url_
+    comment_content_ = str("<strong>") + str(title_) + str("</strong>\n\n") + str(excerpt_)
+    comment_type_ = "trackback"
+    dupe_ = wpdb_.get_results(wpdb_.prepare(str("SELECT * FROM ") + str(wpdb_.comments) + str(" WHERE comment_post_ID = %d AND comment_author_url = %s"), comment_post_ID_, comment_author_url_))
+    if dupe_:
         trackback_response(1, __("We already have a ping from that URL for this post."))
     # end if
-    commentdata = compact("comment_post_ID", "comment_author", "comment_author_email", "comment_author_url", "comment_content", "comment_type")
-    result = wp_new_comment(commentdata)
-    if is_wp_error(result):
-        trackback_response(1, result.get_error_message())
+    commentdata_ = php_compact("comment_post_ID", "comment_author", "comment_author_email", "comment_author_url", "comment_content", "comment_type")
+    result_ = wp_new_comment(commentdata_)
+    if is_wp_error(result_):
+        trackback_response(1, result_.get_error_message())
     # end if
-    trackback_id = wpdb.insert_id
+    trackback_id_ = wpdb_.insert_id
     #// 
     #// Fires after a trackback is added to a post.
     #// 
@@ -137,6 +133,6 @@ if (not php_empty(lambda : tb_url)) and (not php_empty(lambda : title)):
     #// 
     #// @param int $trackback_id Trackback ID.
     #//
-    do_action("trackback_post", trackback_id)
+    do_action("trackback_post", trackback_id_)
     trackback_response(0)
 # end if

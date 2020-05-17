@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,11 +21,20 @@ class WP_Embed():
     linkifunknown = True
     last_attr = Array()
     last_url = ""
+    #// 
+    #// When a URL cannot be embedded, return false instead of returning a link
+    #// or the URL.
+    #// 
+    #// Bypasses the {@see 'embed_maybe_make_link'} filter.
+    #// 
+    #// @var bool
+    #//
     return_false_on_fail = False
     #// 
     #// Constructor
     #//
     def __init__(self):
+        
         
         #// Hack to get the [embed] shortcode to run before wpautop().
         add_filter("the_content", Array(self, "run_shortcode"), 8)
@@ -56,19 +60,20 @@ class WP_Embed():
     #// @param string $content Content to parse
     #// @return string Content with shortcode parsed
     #//
-    def run_shortcode(self, content=None):
+    def run_shortcode(self, content_=None):
         
-        global shortcode_tags
-        php_check_if_defined("shortcode_tags")
+        
+        global shortcode_tags_
+        php_check_if_defined("shortcode_tags_")
         #// Back up current registered shortcodes and clear them all out.
-        orig_shortcode_tags = shortcode_tags
+        orig_shortcode_tags_ = shortcode_tags_
         remove_all_shortcodes()
         add_shortcode("embed", Array(self, "shortcode"))
         #// Do the shortcode (only the [embed] one is registered).
-        content = do_shortcode(content, True)
+        content_ = do_shortcode(content_, True)
         #// Put the original shortcodes back.
-        shortcode_tags = orig_shortcode_tags
-        return content
+        shortcode_tags_ = orig_shortcode_tags_
+        return content_
     # end def run_shortcode
     #// 
     #// If a post/page was saved, then output JavaScript to make
@@ -76,12 +81,13 @@ class WP_Embed():
     #//
     def maybe_run_ajax_cache(self):
         
-        post = get_post()
-        if (not post) or php_empty(lambda : PHP_REQUEST["message"]):
+        
+        post_ = get_post()
+        if (not post_) or php_empty(lambda : PHP_REQUEST["message"]):
             return
         # end if
         php_print("<script type=\"text/javascript\">\n  jQuery(document).ready(function($){\n       $.get(\"")
-        php_print(admin_url("admin-ajax.php?action=oembed-cache&post=" + post.ID, "relative"))
+        php_print(admin_url("admin-ajax.php?action=oembed-cache&post=" + post_.ID, "relative"))
         php_print("""\");
         });
         </script>
@@ -99,9 +105,10 @@ class WP_Embed():
     #// @param callable $callback The callback function that will be called if the regex is matched.
     #// @param int $priority Optional. Used to specify the order in which the registered handlers will be tested (default: 10). Lower numbers correspond with earlier testing, and handlers with the same priority are tested in the order in which they were added to the action.
     #//
-    def register_handler(self, id=None, regex=None, callback=None, priority=10):
+    def register_handler(self, id_=None, regex_=None, callback_=None, priority_=10):
         
-        self.handlers[priority][id] = Array({"regex": regex, "callback": callback})
+        
+        self.handlers[priority_][id_] = Array({"regex": regex_, "callback": callback_})
     # end def register_handler
     #// 
     #// Unregisters a previously-registered embed handler.
@@ -111,9 +118,10 @@ class WP_Embed():
     #// @param string $id The handler ID that should be removed.
     #// @param int $priority Optional. The priority of the handler to be removed (default: 10).
     #//
-    def unregister_handler(self, id=None, priority=10):
+    def unregister_handler(self, id_=None, priority_=10):
         
-        self.handlers[priority][id] = None
+        
+        self.handlers[priority_][id_] = None
     # end def unregister_handler
     #// 
     #// The do_shortcode() callback function.
@@ -132,29 +140,30 @@ class WP_Embed():
     #// @return string|false The embed HTML on success, otherwise the original URL.
     #// `->maybe_make_link()` can return false on failure.
     #//
-    def shortcode(self, attr=None, url=""):
+    def shortcode(self, attr_=None, url_=""):
         
-        post = get_post()
-        if php_empty(lambda : url) and (not php_empty(lambda : attr["src"])):
-            url = attr["src"]
+        
+        post_ = get_post()
+        if php_empty(lambda : url_) and (not php_empty(lambda : attr_["src"])):
+            url_ = attr_["src"]
         # end if
-        self.last_url = url
-        if php_empty(lambda : url):
-            self.last_attr = attr
+        self.last_url = url_
+        if php_empty(lambda : url_):
+            self.last_attr = attr_
             return ""
         # end if
-        rawattr = attr
-        attr = wp_parse_args(attr, wp_embed_defaults(url))
-        self.last_attr = attr
+        rawattr_ = attr_
+        attr_ = wp_parse_args(attr_, wp_embed_defaults(url_))
+        self.last_attr = attr_
         #// KSES converts & into &amp; and we need to undo this.
         #// See https://core.trac.wordpress.org/ticket/11311
-        url = php_str_replace("&amp;", "&", url)
+        url_ = php_str_replace("&amp;", "&", url_)
         #// Look for known internal handlers.
         ksort(self.handlers)
-        for priority,handlers in self.handlers:
-            for id,handler in handlers:
-                if php_preg_match(handler["regex"], url, matches) and php_is_callable(handler["callback"]):
-                    return_ = php_call_user_func(handler["callback"], matches, attr, url, rawattr)
+        for priority_,handlers_ in self.handlers:
+            for id_,handler_ in handlers_:
+                if php_preg_match(handler_["regex"], url_, matches_) and php_is_callable(handler_["callback"]):
+                    return_ = php_call_user_func(handler_["callback"], matches_, attr_, url_, rawattr_)
                     if False != return_:
                         #// 
                         #// Filters the returned embed HTML.
@@ -167,20 +176,20 @@ class WP_Embed():
                         #// @param string       $url    The embed URL.
                         #// @param array        $attr   An array of shortcode attributes.
                         #//
-                        return apply_filters("embed_handler_html", return_, url, attr)
+                        return apply_filters("embed_handler_html", return_, url_, attr_)
                     # end if
                 # end if
             # end for
         # end for
-        post_ID = post.ID if (not php_empty(lambda : post.ID)) else None
+        post_ID_ = post_.ID if (not php_empty(lambda : post_.ID)) else None
         #// Potentially set by WP_Embed::cache_oembed().
         if (not php_empty(lambda : self.post_ID)):
-            post_ID = self.post_ID
+            post_ID_ = self.post_ID
         # end if
         #// Check for a cached result (stored as custom post or in the post meta).
-        key_suffix = php_md5(url + serialize(attr))
-        cachekey = "_oembed_" + key_suffix
-        cachekey_time = "_oembed_time_" + key_suffix
+        key_suffix_ = php_md5(url_ + serialize(attr_))
+        cachekey_ = "_oembed_" + key_suffix_
+        cachekey_time_ = "_oembed_time_" + key_suffix_
         #// 
         #// Filters the oEmbed TTL value (time to live).
         #// 
@@ -191,28 +200,28 @@ class WP_Embed():
         #// @param array  $attr    An array of shortcode attributes.
         #// @param int    $post_ID Post ID.
         #//
-        ttl = apply_filters("oembed_ttl", DAY_IN_SECONDS, url, attr, post_ID)
-        cache = ""
-        cache_time = 0
-        cached_post_id = self.find_oembed_post_id(key_suffix)
-        if post_ID:
-            cache = get_post_meta(post_ID, cachekey, True)
-            cache_time = get_post_meta(post_ID, cachekey_time, True)
-            if (not cache_time):
-                cache_time = 0
+        ttl_ = apply_filters("oembed_ttl", DAY_IN_SECONDS, url_, attr_, post_ID_)
+        cache_ = ""
+        cache_time_ = 0
+        cached_post_id_ = self.find_oembed_post_id(key_suffix_)
+        if post_ID_:
+            cache_ = get_post_meta(post_ID_, cachekey_, True)
+            cache_time_ = get_post_meta(post_ID_, cachekey_time_, True)
+            if (not cache_time_):
+                cache_time_ = 0
             # end if
-        elif cached_post_id:
-            cached_post = get_post(cached_post_id)
-            cache = cached_post.post_content
-            cache_time = strtotime(cached_post.post_modified_gmt)
+        elif cached_post_id_:
+            cached_post_ = get_post(cached_post_id_)
+            cache_ = cached_post_.post_content
+            cache_time_ = strtotime(cached_post_.post_modified_gmt)
         # end if
-        cached_recently = time() - cache_time < ttl
-        if self.usecache or cached_recently:
+        cached_recently_ = time() - cache_time_ < ttl_
+        if self.usecache or cached_recently_:
             #// Failures are cached. Serve one if we're using the cache.
-            if "{{unknown}}" == cache:
-                return self.maybe_make_link(url)
+            if "{{unknown}}" == cache_:
+                return self.maybe_make_link(url_)
             # end if
-            if (not php_empty(lambda : cache)):
+            if (not php_empty(lambda : cache_)):
                 #// 
                 #// Filters the cached oEmbed HTML.
                 #// 
@@ -225,7 +234,7 @@ class WP_Embed():
                 #// @param array        $attr    An array of shortcode attributes.
                 #// @param int          $post_ID Post ID.
                 #//
-                return apply_filters("embed_oembed_html", cache, url, attr, post_ID)
+                return apply_filters("embed_oembed_html", cache_, url_, attr_, post_ID_)
             # end if
         # end if
         #// 
@@ -238,58 +247,59 @@ class WP_Embed():
         #// 
         #// @param bool $enable Whether to enable `<link>` tag discovery. Default true.
         #//
-        attr["discover"] = apply_filters("embed_oembed_discover", True)
+        attr_["discover"] = apply_filters("embed_oembed_discover", True)
         #// Use oEmbed to get the HTML.
-        html = wp_oembed_get(url, attr)
-        if post_ID:
-            if html:
-                update_post_meta(post_ID, cachekey, html)
-                update_post_meta(post_ID, cachekey_time, time())
-            elif (not cache):
-                update_post_meta(post_ID, cachekey, "{{unknown}}")
+        html_ = wp_oembed_get(url_, attr_)
+        if post_ID_:
+            if html_:
+                update_post_meta(post_ID_, cachekey_, html_)
+                update_post_meta(post_ID_, cachekey_time_, time())
+            elif (not cache_):
+                update_post_meta(post_ID_, cachekey_, "{{unknown}}")
             # end if
         else:
-            has_kses = False != has_filter("content_save_pre", "wp_filter_post_kses")
-            if has_kses:
+            has_kses_ = False != has_filter("content_save_pre", "wp_filter_post_kses")
+            if has_kses_:
                 #// Prevent KSES from corrupting JSON in post_content.
                 kses_remove_filters()
             # end if
-            insert_post_args = Array({"post_name": key_suffix, "post_status": "publish", "post_type": "oembed_cache"})
-            if html:
-                if cached_post_id:
-                    wp_update_post(wp_slash(Array({"ID": cached_post_id, "post_content": html})))
+            insert_post_args_ = Array({"post_name": key_suffix_, "post_status": "publish", "post_type": "oembed_cache"})
+            if html_:
+                if cached_post_id_:
+                    wp_update_post(wp_slash(Array({"ID": cached_post_id_, "post_content": html_})))
                 else:
-                    wp_insert_post(wp_slash(php_array_merge(insert_post_args, Array({"post_content": html}))))
+                    wp_insert_post(wp_slash(php_array_merge(insert_post_args_, Array({"post_content": html_}))))
                 # end if
-            elif (not cache):
-                wp_insert_post(wp_slash(php_array_merge(insert_post_args, Array({"post_content": "{{unknown}}"}))))
+            elif (not cache_):
+                wp_insert_post(wp_slash(php_array_merge(insert_post_args_, Array({"post_content": "{{unknown}}"}))))
             # end if
-            if has_kses:
+            if has_kses_:
                 kses_init_filters()
             # end if
         # end if
         #// If there was a result, return it.
-        if html:
+        if html_:
             #// This filter is documented in wp-includes/class-wp-embed.php
-            return apply_filters("embed_oembed_html", html, url, attr, post_ID)
+            return apply_filters("embed_oembed_html", html_, url_, attr_, post_ID_)
         # end if
         #// Still unknown.
-        return self.maybe_make_link(url)
+        return self.maybe_make_link(url_)
     # end def shortcode
     #// 
     #// Delete all oEmbed caches. Unused by core as of 4.0.0.
     #// 
     #// @param int $post_ID Post ID to delete the caches for.
     #//
-    def delete_oembed_caches(self, post_ID=None):
+    def delete_oembed_caches(self, post_ID_=None):
         
-        post_metas = get_post_custom_keys(post_ID)
-        if php_empty(lambda : post_metas):
+        
+        post_metas_ = get_post_custom_keys(post_ID_)
+        if php_empty(lambda : post_metas_):
             return
         # end if
-        for post_meta_key in post_metas:
-            if "_oembed_" == php_substr(post_meta_key, 0, 8):
-                delete_post_meta(post_ID, post_meta_key)
+        for post_meta_key_ in post_metas_:
+            if "_oembed_" == php_substr(post_meta_key_, 0, 8):
+                delete_post_meta(post_ID_, post_meta_key_)
             # end if
         # end for
     # end def delete_oembed_caches
@@ -298,10 +308,11 @@ class WP_Embed():
     #// 
     #// @param int $post_ID Post ID to do the caching for.
     #//
-    def cache_oembed(self, post_ID=None):
+    def cache_oembed(self, post_ID_=None):
         
-        post = get_post(post_ID)
-        post_types = get_post_types(Array({"show_ui": True}))
+        
+        post_ = get_post(post_ID_)
+        post_types_ = get_post_types(Array({"show_ui": True}))
         #// 
         #// Filters the array of post types to cache oEmbed results for.
         #// 
@@ -309,15 +320,15 @@ class WP_Embed():
         #// 
         #// @param string[] $post_types Array of post type names to cache oEmbed results for. Defaults to post types with `show_ui` set to true.
         #//
-        if php_empty(lambda : post.ID) or (not php_in_array(post.post_type, apply_filters("embed_cache_oembed_types", post_types))):
+        if php_empty(lambda : post_.ID) or (not php_in_array(post_.post_type, apply_filters("embed_cache_oembed_types", post_types_))):
             return
         # end if
         #// Trigger a caching.
-        if (not php_empty(lambda : post.post_content)):
-            self.post_ID = post.ID
+        if (not php_empty(lambda : post_.post_content)):
+            self.post_ID = post_.ID
             self.usecache = False
-            content = self.run_shortcode(post.post_content)
-            self.autoembed(content)
+            content_ = self.run_shortcode(post_.post_content)
+            self.autoembed(content_)
             self.usecache = True
         # end if
     # end def cache_oembed
@@ -329,18 +340,19 @@ class WP_Embed():
     #// @param string $content The content to be searched.
     #// @return string Potentially modified $content.
     #//
-    def autoembed(self, content=None):
+    def autoembed(self, content_=None):
+        
         
         #// Replace line breaks from all HTML elements with placeholders.
-        content = wp_replace_in_html_tags(content, Array({"\n": "<!-- wp-line-break -->"}))
-        if php_preg_match("#(^|\\s|>)https?://#i", content):
+        content_ = wp_replace_in_html_tags(content_, Array({"\n": "<!-- wp-line-break -->"}))
+        if php_preg_match("#(^|\\s|>)https?://#i", content_):
             #// Find URLs on their own line.
-            content = preg_replace_callback("|^(\\s*)(https?://[^\\s<>\"]+)(\\s*)$|im", Array(self, "autoembed_callback"), content)
+            content_ = preg_replace_callback("|^(\\s*)(https?://[^\\s<>\"]+)(\\s*)$|im", Array(self, "autoembed_callback"), content_)
             #// Find URLs in their own paragraph.
-            content = preg_replace_callback("|(<p(?: [^>]*)?>\\s*)(https?://[^\\s<>\"]+)(\\s*<\\/p>)|i", Array(self, "autoembed_callback"), content)
+            content_ = preg_replace_callback("|(<p(?: [^>]*)?>\\s*)(https?://[^\\s<>\"]+)(\\s*<\\/p>)|i", Array(self, "autoembed_callback"), content_)
         # end if
         #// Put the line breaks back.
-        return php_str_replace("<!-- wp-line-break -->", "\n", content)
+        return php_str_replace("<!-- wp-line-break -->", "\n", content_)
     # end def autoembed
     #// 
     #// Callback function for WP_Embed::autoembed().
@@ -348,13 +360,14 @@ class WP_Embed():
     #// @param array $match A regex match array.
     #// @return string The embed HTML on success, otherwise the original URL.
     #//
-    def autoembed_callback(self, match=None):
+    def autoembed_callback(self, match_=None):
         
-        oldval = self.linkifunknown
+        
+        oldval_ = self.linkifunknown
         self.linkifunknown = False
-        return_ = self.shortcode(Array(), match[2])
-        self.linkifunknown = oldval
-        return match[1] + return_ + match[3]
+        return_ = self.shortcode(Array(), match_[2])
+        self.linkifunknown = oldval_
+        return match_[1] + return_ + match_[3]
     # end def autoembed_callback
     #// 
     #// Conditionally makes a hyperlink based on an internal class variable.
@@ -362,12 +375,13 @@ class WP_Embed():
     #// @param string $url URL to potentially be linked.
     #// @return string|false Linked URL or the original URL. False if 'return_false_on_fail' is true.
     #//
-    def maybe_make_link(self, url=None):
+    def maybe_make_link(self, url_=None):
+        
         
         if self.return_false_on_fail:
             return False
         # end if
-        output = "<a href=\"" + esc_url(url) + "\">" + esc_html(url) + "</a>" if self.linkifunknown else url
+        output_ = "<a href=\"" + esc_url(url_) + "\">" + esc_html(url_) + "</a>" if self.linkifunknown else url_
         #// 
         #// Filters the returned, maybe-linked embed URL.
         #// 
@@ -376,7 +390,7 @@ class WP_Embed():
         #// @param string $output The linked or original URL.
         #// @param string $url    The original URL.
         #//
-        return apply_filters("embed_maybe_make_link", output, url)
+        return apply_filters("embed_maybe_make_link", output_, url_)
     # end def maybe_make_link
     #// 
     #// Find the oEmbed cache post ID for a given cache key.
@@ -386,19 +400,20 @@ class WP_Embed():
     #// @param string $cache_key oEmbed cache key.
     #// @return int|null Post ID on success, null on failure.
     #//
-    def find_oembed_post_id(self, cache_key=None):
+    def find_oembed_post_id(self, cache_key_=None):
         
-        cache_group = "oembed_cache_post"
-        oembed_post_id = wp_cache_get(cache_key, cache_group)
-        if oembed_post_id and "oembed_cache" == get_post_type(oembed_post_id):
-            return oembed_post_id
+        
+        cache_group_ = "oembed_cache_post"
+        oembed_post_id_ = wp_cache_get(cache_key_, cache_group_)
+        if oembed_post_id_ and "oembed_cache" == get_post_type(oembed_post_id_):
+            return oembed_post_id_
         # end if
-        oembed_post_query = php_new_class("WP_Query", lambda : WP_Query(Array({"post_type": "oembed_cache", "post_status": "publish", "name": cache_key, "posts_per_page": 1, "no_found_rows": True, "cache_results": True, "update_post_meta_cache": False, "update_post_term_cache": False, "lazy_load_term_meta": False})))
-        if (not php_empty(lambda : oembed_post_query.posts)):
+        oembed_post_query_ = php_new_class("WP_Query", lambda : WP_Query(Array({"post_type": "oembed_cache", "post_status": "publish", "name": cache_key_, "posts_per_page": 1, "no_found_rows": True, "cache_results": True, "update_post_meta_cache": False, "update_post_term_cache": False, "lazy_load_term_meta": False})))
+        if (not php_empty(lambda : oembed_post_query_.posts)):
             #// Note: 'fields' => 'ids' is not being used in order to cache the post object as it will be needed.
-            oembed_post_id = oembed_post_query.posts[0].ID
-            wp_cache_set(cache_key, oembed_post_id, cache_group)
-            return oembed_post_id
+            oembed_post_id_ = oembed_post_query_.posts[0].ID
+            wp_cache_set(cache_key_, oembed_post_id_, cache_group_)
+            return oembed_post_id_
         # end if
         return None
     # end def find_oembed_post_id

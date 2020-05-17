@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,6 +25,12 @@ _deprecated_file(php_basename(__FILE__), "4.9.0")
 #// @see WP_Customize_Control
 #//
 class WP_Customize_New_Menu_Control(WP_Customize_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "new_menu"
     #// 
     #// Constructor.
@@ -45,10 +46,13 @@ class WP_Customize_New_Menu_Control(WP_Customize_Control):
     #// See WP_Customize_Control::__construct() for information
     #// on accepted arguments. Default empty array.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         _deprecated_function(__METHOD__, "4.9.0")
-        super().__init__(manager, id, args)
+        super().__init__(manager_, id_, args_)
     # end def __init__
     #// 
     #// Render the control's content.
@@ -57,6 +61,7 @@ class WP_Customize_New_Menu_Control(WP_Customize_Control):
     #// @deprecated 4.9.0
     #//
     def render_content(self):
+        
         
         _deprecated_function(__METHOD__, "4.9.0")
         php_print("     <button type=\"button\" class=\"button button-primary\" id=\"create-new-menu-submit\">")

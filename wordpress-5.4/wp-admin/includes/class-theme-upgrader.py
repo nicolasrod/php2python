@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -31,7 +26,20 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Upgrader
 #//
 class Theme_Upgrader(WP_Upgrader):
+    #// 
+    #// Result of the theme upgrade offer.
+    #// 
+    #// @since 2.8.0
+    #// @var array|WP_Error $result
+    #// @see WP_Upgrader::$result
+    #//
     result = Array()
+    #// 
+    #// Whether multiple themes are being upgraded/installed in bulk.
+    #// 
+    #// @since 2.9.0
+    #// @var bool $bulk
+    #//
     bulk = False
     #// 
     #// Initialize the upgrade strings.
@@ -39,6 +47,7 @@ class Theme_Upgrader(WP_Upgrader):
     #// @since 2.8.0
     #//
     def upgrade_strings(self):
+        
         
         self.strings["up_to_date"] = __("The theme is at the latest version.")
         self.strings["no_package"] = __("Update package not available.")
@@ -56,6 +65,7 @@ class Theme_Upgrader(WP_Upgrader):
     #// @since 2.8.0
     #//
     def install_strings(self):
+        
         
         self.strings["no_package"] = __("Installation package not available.")
         #// translators: %s: Package URL.
@@ -89,50 +99,51 @@ class Theme_Upgrader(WP_Upgrader):
     #// @param array $child_result
     #// @return bool
     #//
-    def check_parent_theme_filter(self, install_result=None, hook_extra=None, child_result=None):
+    def check_parent_theme_filter(self, install_result_=None, hook_extra_=None, child_result_=None):
+        
         
         #// Check to see if we need to install a parent theme.
-        theme_info = self.theme_info()
-        if (not theme_info.parent()):
-            return install_result
+        theme_info_ = self.theme_info()
+        if (not theme_info_.parent()):
+            return install_result_
         # end if
         self.skin.feedback("parent_theme_search")
-        if (not theme_info.parent().errors()):
-            self.skin.feedback("parent_theme_currently_installed", theme_info.parent().display("Name"), theme_info.parent().display("Version"))
+        if (not theme_info_.parent().errors()):
+            self.skin.feedback("parent_theme_currently_installed", theme_info_.parent().display("Name"), theme_info_.parent().display("Version"))
             #// We already have the theme, fall through.
-            return install_result
+            return install_result_
         # end if
         #// We don't have the parent theme, let's install it.
-        api = themes_api("theme_information", Array({"slug": theme_info.get("Template"), "fields": Array({"sections": False, "tags": False})}))
+        api_ = themes_api("theme_information", Array({"slug": theme_info_.get("Template"), "fields": Array({"sections": False, "tags": False})}))
         #// Save on a bit of bandwidth.
-        if (not api) or is_wp_error(api):
-            self.skin.feedback("parent_theme_not_found", theme_info.get("Template"))
+        if (not api_) or is_wp_error(api_):
+            self.skin.feedback("parent_theme_not_found", theme_info_.get("Template"))
             #// Don't show activate or preview actions after installation.
             add_filter("install_theme_complete_actions", Array(self, "hide_activate_preview_actions"))
-            return install_result
+            return install_result_
         # end if
         #// Backup required data we're going to override:
-        child_api = self.skin.api
-        child_success_message = self.strings["process_success"]
+        child_api_ = self.skin.api
+        child_success_message_ = self.strings["process_success"]
         #// Override them.
-        self.skin.api = api
+        self.skin.api = api_
         self.strings["process_success_specific"] = self.strings["parent_theme_install_success"]
         #// , $api->name, $api->version );
-        self.skin.feedback("parent_theme_prepare_install", api.name, api.version)
+        self.skin.feedback("parent_theme_prepare_install", api_.name, api_.version)
         add_filter("install_theme_complete_actions", "__return_false", 999)
         #// Don't show any actions after installing the theme.
         #// Install the parent theme.
-        parent_result = self.run(Array({"package": api.download_link, "destination": get_theme_root(), "clear_destination": False, "clear_working": True}))
-        if is_wp_error(parent_result):
+        parent_result_ = self.run(Array({"package": api_.download_link, "destination": get_theme_root(), "clear_destination": False, "clear_working": True}))
+        if is_wp_error(parent_result_):
             add_filter("install_theme_complete_actions", Array(self, "hide_activate_preview_actions"))
         # end if
         #// Start cleaning up after the parent's installation.
         remove_filter("install_theme_complete_actions", "__return_false", 999)
         #// Reset child's result and data.
-        self.result = child_result
-        self.skin.api = child_api
-        self.strings["process_success"] = child_success_message
-        return install_result
+        self.result = child_result_
+        self.skin.api = child_api_
+        self.strings["process_success"] = child_success_message_
+        return install_result_
     # end def check_parent_theme_filter
     #// 
     #// Don't display the activate and preview actions to the user.
@@ -146,11 +157,12 @@ class Theme_Upgrader(WP_Upgrader):
     #// @param array $actions Preview actions.
     #// @return array
     #//
-    def hide_activate_preview_actions(self, actions=None):
+    def hide_activate_preview_actions(self, actions_=None):
         
-        actions["activate"] = None
-        actions["preview"] = None
-        return actions
+        
+        actions_["activate"] = None
+        actions_["preview"] = None
+        return actions_
     # end def hide_activate_preview_actions
     #// 
     #// Install a theme package.
@@ -168,19 +180,22 @@ class Theme_Upgrader(WP_Upgrader):
     #// 
     #// @return bool|WP_Error True if the installation was successful, false or a WP_Error object otherwise.
     #//
-    def install(self, package=None, args=Array()):
+    def install(self, package_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"clear_update_cache": True})
-        parsed_args = wp_parse_args(args, defaults)
+        defaults_ = Array({"clear_update_cache": True})
+        parsed_args_ = wp_parse_args(args_, defaults_)
         self.init()
         self.install_strings()
         add_filter("upgrader_source_selection", Array(self, "check_package"))
         add_filter("upgrader_post_install", Array(self, "check_parent_theme_filter"), 10, 3)
-        if parsed_args["clear_update_cache"]:
+        if parsed_args_["clear_update_cache"]:
             #// Clear cache so wp_update_themes() knows about the new theme.
             add_action("upgrader_process_complete", "wp_clean_themes_cache", 9, 0)
         # end if
-        self.run(Array({"package": package, "destination": get_theme_root(), "clear_destination": False, "clear_working": True, "hook_extra": Array({"type": "theme", "action": "install"})}))
+        self.run(Array({"package": package_, "destination": get_theme_root(), "clear_destination": False, "clear_working": True, "hook_extra": Array({"type": "theme", "action": "install"})}))
         remove_action("upgrader_process_complete", "wp_clean_themes_cache", 9)
         remove_filter("upgrader_source_selection", Array(self, "check_package"))
         remove_filter("upgrader_post_install", Array(self, "check_parent_theme_filter"))
@@ -188,7 +203,7 @@ class Theme_Upgrader(WP_Upgrader):
             return self.result
         # end if
         #// Refresh the Theme Update information.
-        wp_clean_themes_cache(parsed_args["clear_update_cache"])
+        wp_clean_themes_cache(parsed_args_["clear_update_cache"])
         return True
     # end def install
     #// 
@@ -206,30 +221,33 @@ class Theme_Upgrader(WP_Upgrader):
     #// }
     #// @return bool|WP_Error True if the upgrade was successful, false or a WP_Error object otherwise.
     #//
-    def upgrade(self, theme=None, args=Array()):
+    def upgrade(self, theme_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"clear_update_cache": True})
-        parsed_args = wp_parse_args(args, defaults)
+        defaults_ = Array({"clear_update_cache": True})
+        parsed_args_ = wp_parse_args(args_, defaults_)
         self.init()
         self.upgrade_strings()
         #// Is an update available?
-        current = get_site_transient("update_themes")
-        if (not (php_isset(lambda : current.response[theme]))):
+        current_ = get_site_transient("update_themes")
+        if (not (php_isset(lambda : current_.response[theme_]))):
             self.skin.before()
             self.skin.set_result(False)
             self.skin.error("up_to_date")
             self.skin.after()
             return False
         # end if
-        r = current.response[theme]
+        r_ = current_.response[theme_]
         add_filter("upgrader_pre_install", Array(self, "current_before"), 10, 2)
         add_filter("upgrader_post_install", Array(self, "current_after"), 10, 2)
         add_filter("upgrader_clear_destination", Array(self, "delete_old_theme"), 10, 4)
-        if parsed_args["clear_update_cache"]:
+        if parsed_args_["clear_update_cache"]:
             #// Clear cache so wp_update_themes() knows about the new theme.
             add_action("upgrader_process_complete", "wp_clean_themes_cache", 9, 0)
         # end if
-        self.run(Array({"package": r["package"], "destination": get_theme_root(theme), "clear_destination": True, "clear_working": True, "hook_extra": Array({"theme": theme, "type": "theme", "action": "update"})}))
+        self.run(Array({"package": r_["package"], "destination": get_theme_root(theme_), "clear_destination": True, "clear_working": True, "hook_extra": Array({"theme": theme_, "type": "theme", "action": "update"})}))
         remove_action("upgrader_process_complete", "wp_clean_themes_cache", 9)
         remove_filter("upgrader_pre_install", Array(self, "current_before"))
         remove_filter("upgrader_post_install", Array(self, "current_after"))
@@ -237,7 +255,7 @@ class Theme_Upgrader(WP_Upgrader):
         if (not self.result) or is_wp_error(self.result):
             return self.result
         # end if
-        wp_clean_themes_cache(parsed_args["clear_update_cache"])
+        wp_clean_themes_cache(parsed_args_["clear_update_cache"])
         return True
     # end def upgrade
     #// 
@@ -255,21 +273,24 @@ class Theme_Upgrader(WP_Upgrader):
     #// }
     #// @return array[]|false An array of results, or false if unable to connect to the filesystem.
     #//
-    def bulk_upgrade(self, themes=None, args=Array()):
+    def bulk_upgrade(self, themes_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"clear_update_cache": True})
-        parsed_args = wp_parse_args(args, defaults)
+        defaults_ = Array({"clear_update_cache": True})
+        parsed_args_ = wp_parse_args(args_, defaults_)
         self.init()
         self.bulk = True
         self.upgrade_strings()
-        current = get_site_transient("update_themes")
+        current_ = get_site_transient("update_themes")
         add_filter("upgrader_pre_install", Array(self, "current_before"), 10, 2)
         add_filter("upgrader_post_install", Array(self, "current_after"), 10, 2)
         add_filter("upgrader_clear_destination", Array(self, "delete_old_theme"), 10, 4)
         self.skin.header()
         #// Connect to the filesystem first.
-        res = self.fs_connect(Array(WP_CONTENT_DIR))
-        if (not res):
+        res_ = self.fs_connect(Array(WP_CONTENT_DIR))
+        if (not res_):
             self.skin.footer()
             return False
         # end if
@@ -280,49 +301,49 @@ class Theme_Upgrader(WP_Upgrader):
         #// - a theme with an update available is currently in use.
         #// @todo For multisite, maintenance mode should only kick in for individual sites if at all possible.
         #//
-        maintenance = is_multisite() and (not php_empty(lambda : themes))
-        for theme in themes:
-            maintenance = maintenance or get_stylesheet() == theme or get_template() == theme
+        maintenance_ = is_multisite() and (not php_empty(lambda : themes_))
+        for theme_ in themes_:
+            maintenance_ = maintenance_ or get_stylesheet() == theme_ or get_template() == theme_
         # end for
-        if maintenance:
+        if maintenance_:
             self.maintenance_mode(True)
         # end if
-        results = Array()
-        self.update_count = php_count(themes)
+        results_ = Array()
+        self.update_count = php_count(themes_)
         self.update_current = 0
-        for theme in themes:
+        for theme_ in themes_:
             self.update_current += 1
-            self.skin.theme_info = self.theme_info(theme)
-            if (not (php_isset(lambda : current.response[theme]))):
+            self.skin.theme_info = self.theme_info(theme_)
+            if (not (php_isset(lambda : current_.response[theme_]))):
                 self.skin.set_result(True)
                 self.skin.before()
                 self.skin.feedback("up_to_date")
                 self.skin.after()
-                results[theme] = True
+                results_[theme_] = True
                 continue
             # end if
             #// Get the URL to the zip file.
-            r = current.response[theme]
-            result = self.run(Array({"package": r["package"], "destination": get_theme_root(theme), "clear_destination": True, "clear_working": True, "is_multi": True, "hook_extra": Array({"theme": theme})}))
-            results[theme] = self.result
+            r_ = current_.response[theme_]
+            result_ = self.run(Array({"package": r_["package"], "destination": get_theme_root(theme_), "clear_destination": True, "clear_working": True, "is_multi": True, "hook_extra": Array({"theme": theme_})}))
+            results_[theme_] = self.result
             #// Prevent credentials auth screen from displaying multiple times.
-            if False == result:
+            if False == result_:
                 break
             # end if
         # end for
         #// End foreach $themes.
         self.maintenance_mode(False)
         #// Refresh the Theme Update information.
-        wp_clean_themes_cache(parsed_args["clear_update_cache"])
+        wp_clean_themes_cache(parsed_args_["clear_update_cache"])
         #// This action is documented in wp-admin/includes/class-wp-upgrader.php
-        do_action("upgrader_process_complete", self, Array({"action": "update", "type": "theme", "bulk": True, "themes": themes}))
+        do_action("upgrader_process_complete", self, Array({"action": "update", "type": "theme", "bulk": True, "themes": themes_}))
         self.skin.bulk_footer()
         self.skin.footer()
         #// Cleanup our hooks, in case something else does a upgrade on this connection.
         remove_filter("upgrader_pre_install", Array(self, "current_before"))
         remove_filter("upgrader_post_install", Array(self, "current_after"))
         remove_filter("upgrader_clear_destination", Array(self, "delete_old_theme"))
-        return results
+        return results_
     # end def bulk_upgrade
     #// 
     #// Check that the package source contains a valid theme.
@@ -338,32 +359,33 @@ class Theme_Upgrader(WP_Upgrader):
     #// @param string $source The full path to the package source.
     #// @return string|WP_Error The source or a WP_Error.
     #//
-    def check_package(self, source=None):
+    def check_package(self, source_=None):
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
-        if is_wp_error(source):
-            return source
+        
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
+        if is_wp_error(source_):
+            return source_
         # end if
         #// Check that the folder contains a valid theme.
-        working_directory = php_str_replace(wp_filesystem.wp_content_dir(), trailingslashit(WP_CONTENT_DIR), source)
-        if (not php_is_dir(working_directory)):
+        working_directory_ = php_str_replace(wp_filesystem_.wp_content_dir(), trailingslashit(WP_CONTENT_DIR), source_)
+        if (not php_is_dir(working_directory_)):
             #// Sanity check, if the above fails, let's not prevent installation.
-            return source
+            return source_
         # end if
         #// A proper archive should have a style.css file in the single subdirectory.
-        if (not php_file_exists(working_directory + "style.css")):
+        if (not php_file_exists(working_directory_ + "style.css")):
             return php_new_class("WP_Error", lambda : WP_Error("incompatible_archive_theme_no_style", self.strings["incompatible_archive"], php_sprintf(__("The theme is missing the %s stylesheet."), "<code>style.css</code>")))
         # end if
-        info = get_file_data(working_directory + "style.css", Array({"Name": "Theme Name", "Template": "Template"}))
-        if php_empty(lambda : info["Name"]):
+        info_ = get_file_data(working_directory_ + "style.css", Array({"Name": "Theme Name", "Template": "Template"}))
+        if php_empty(lambda : info_["Name"]):
             return php_new_class("WP_Error", lambda : WP_Error("incompatible_archive_theme_no_name", self.strings["incompatible_archive"], php_sprintf(__("The %s stylesheet doesn&#8217;t contain a valid theme header."), "<code>style.css</code>")))
         # end if
         #// If it's not a child theme, it must have at least an index.php to be legit.
-        if php_empty(lambda : info["Template"]) and (not php_file_exists(working_directory + "index.php")):
+        if php_empty(lambda : info_["Template"]) and (not php_file_exists(working_directory_ + "index.php")):
             return php_new_class("WP_Error", lambda : WP_Error("incompatible_archive_theme_no_index", self.strings["incompatible_archive"], php_sprintf(__("The theme is missing the %s file."), "<code>index.php</code>")))
         # end if
-        return source
+        return source_
     # end def check_package
     #// 
     #// Turn on maintenance mode before attempting to upgrade the current theme.
@@ -377,14 +399,15 @@ class Theme_Upgrader(WP_Upgrader):
     #// @param array         $theme  Theme arguments.
     #// @return bool|WP_Error The passed in $return param or WP_Error.
     #//
-    def current_before(self, return_=None, theme=None):
+    def current_before(self, return_=None, theme_=None):
+        
         
         if is_wp_error(return_):
             return return_
         # end if
-        theme = theme["theme"] if (php_isset(lambda : theme["theme"])) else ""
+        theme_ = theme_["theme"] if (php_isset(lambda : theme_["theme"])) else ""
         #// Only run if current theme
-        if get_stylesheet() != theme:
+        if get_stylesheet() != theme_:
             return return_
         # end if
         #// Change to maintenance mode. Bulk edit handles this separately.
@@ -405,21 +428,22 @@ class Theme_Upgrader(WP_Upgrader):
     #// @param array         $theme  Theme arguments.
     #// @return bool|WP_Error The passed in $return param or WP_Error.
     #//
-    def current_after(self, return_=None, theme=None):
+    def current_after(self, return_=None, theme_=None):
+        
         
         if is_wp_error(return_):
             return return_
         # end if
-        theme = theme["theme"] if (php_isset(lambda : theme["theme"])) else ""
+        theme_ = theme_["theme"] if (php_isset(lambda : theme_["theme"])) else ""
         #// Only run if current theme.
-        if get_stylesheet() != theme:
+        if get_stylesheet() != theme_:
             return return_
         # end if
         #// Ensure stylesheet name hasn't changed after the upgrade:
-        if get_stylesheet() == theme and theme != self.result["destination_name"]:
+        if get_stylesheet() == theme_ and theme_ != self.result["destination_name"]:
             wp_clean_themes_cache()
-            stylesheet = self.result["destination_name"]
-            switch_theme(stylesheet)
+            stylesheet_ = self.result["destination_name"]
+            switch_theme(stylesheet_)
         # end if
         #// Time to remove maintenance mode. Bulk edit handles this separately.
         if (not self.bulk):
@@ -443,21 +467,22 @@ class Theme_Upgrader(WP_Upgrader):
     #// @param array  $theme
     #// @return bool
     #//
-    def delete_old_theme(self, removed=None, local_destination=None, remote_destination=None, theme=None):
+    def delete_old_theme(self, removed_=None, local_destination_=None, remote_destination_=None, theme_=None):
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
-        if is_wp_error(removed):
-            return removed
+        
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
+        if is_wp_error(removed_):
+            return removed_
             pass
         # end if
-        if (not (php_isset(lambda : theme["theme"]))):
-            return removed
+        if (not (php_isset(lambda : theme_["theme"]))):
+            return removed_
         # end if
-        theme = theme["theme"]
-        themes_dir = trailingslashit(wp_filesystem.wp_themes_dir(theme))
-        if wp_filesystem.exists(themes_dir + theme):
-            if (not wp_filesystem.delete(themes_dir + theme, True)):
+        theme_ = theme_["theme"]
+        themes_dir_ = trailingslashit(wp_filesystem_.wp_themes_dir(theme_))
+        if wp_filesystem_.exists(themes_dir_ + theme_):
+            if (not wp_filesystem_.delete(themes_dir_ + theme_, True)):
                 return False
             # end if
         # end if
@@ -474,15 +499,16 @@ class Theme_Upgrader(WP_Upgrader):
     #// @return WP_Theme|false The theme's info object, or false `$theme` is not supplied
     #// and the last result isn't set.
     #//
-    def theme_info(self, theme=None):
+    def theme_info(self, theme_=None):
         
-        if php_empty(lambda : theme):
+        
+        if php_empty(lambda : theme_):
             if (not php_empty(lambda : self.result["destination_name"])):
-                theme = self.result["destination_name"]
+                theme_ = self.result["destination_name"]
             else:
                 return False
             # end if
         # end if
-        return wp_get_theme(theme)
+        return wp_get_theme(theme_)
     # end def theme_info
 # end class Theme_Upgrader

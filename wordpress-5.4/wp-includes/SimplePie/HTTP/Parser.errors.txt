@@ -1,9 +1,9 @@
 Traceback (most recent call last):
-  File "/Users/nico/repos/php2python/ast2py.py", line 44, in is_valid_code
+  File "/Users/nico/repos/php2python/ast2py.py", line 49, in is_valid_code
     ast.parse(src.replace('\x00', ''))
   File "/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/lib/python3.7/ast.py", line 35, in parse
     return compile(source, filename, mode, PyCF_ONLY_AST)
-  File "<unknown>", line 376
-    decoded += part = php_substr(encoded, chunk_length, length)
-                    ^
+  File "<unknown>", line 443
+    decoded_ += part_ = php_substr(encoded_, chunk_length_, length_)
+                      ^
 SyntaxError: invalid syntax

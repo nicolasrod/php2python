@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,14 +22,15 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return array Additional images size data.
 #//
-def wp_get_additional_image_sizes(*args_):
+def wp_get_additional_image_sizes(*_args_):
     
-    global _wp_additional_image_sizes
-    php_check_if_defined("_wp_additional_image_sizes")
-    if (not _wp_additional_image_sizes):
-        _wp_additional_image_sizes = Array()
+    
+    global _wp_additional_image_sizes_
+    php_check_if_defined("_wp_additional_image_sizes_")
+    if (not _wp_additional_image_sizes_):
+        _wp_additional_image_sizes_ = Array()
     # end if
-    return _wp_additional_image_sizes
+    return _wp_additional_image_sizes_
 # end def wp_get_additional_image_sizes
 #// 
 #// Scale down the default size of an image.
@@ -69,57 +65,58 @@ def wp_get_additional_image_sizes(*args_):
 #// @type int $1 The maximum height in pixels.
 #// }
 #//
-def image_constrain_size_for_editor(width=None, height=None, size="medium", context=None, *args_):
+def image_constrain_size_for_editor(width_=None, height_=None, size_="medium", context_=None, *_args_):
     
-    global content_width
-    php_check_if_defined("content_width")
-    _wp_additional_image_sizes = wp_get_additional_image_sizes()
-    if (not context):
-        context = "edit" if is_admin() else "display"
+    
+    global content_width_
+    php_check_if_defined("content_width_")
+    _wp_additional_image_sizes_ = wp_get_additional_image_sizes()
+    if (not context_):
+        context_ = "edit" if is_admin() else "display"
     # end if
-    if php_is_array(size):
-        max_width = size[0]
-        max_height = size[1]
-    elif "thumb" == size or "thumbnail" == size:
-        max_width = php_intval(get_option("thumbnail_size_w"))
-        max_height = php_intval(get_option("thumbnail_size_h"))
+    if php_is_array(size_):
+        max_width_ = size_[0]
+        max_height_ = size_[1]
+    elif "thumb" == size_ or "thumbnail" == size_:
+        max_width_ = php_intval(get_option("thumbnail_size_w"))
+        max_height_ = php_intval(get_option("thumbnail_size_h"))
         #// Last chance thumbnail size defaults.
-        if (not max_width) and (not max_height):
-            max_width = 128
-            max_height = 96
+        if (not max_width_) and (not max_height_):
+            max_width_ = 128
+            max_height_ = 96
         # end if
-    elif "medium" == size:
-        max_width = php_intval(get_option("medium_size_w"))
-        max_height = php_intval(get_option("medium_size_h"))
-    elif "medium_large" == size:
-        max_width = php_intval(get_option("medium_large_size_w"))
-        max_height = php_intval(get_option("medium_large_size_h"))
-        if php_intval(content_width) > 0:
-            max_width = php_min(php_intval(content_width), max_width)
+    elif "medium" == size_:
+        max_width_ = php_intval(get_option("medium_size_w"))
+        max_height_ = php_intval(get_option("medium_size_h"))
+    elif "medium_large" == size_:
+        max_width_ = php_intval(get_option("medium_large_size_w"))
+        max_height_ = php_intval(get_option("medium_large_size_h"))
+        if php_intval(content_width_) > 0:
+            max_width_ = php_min(php_intval(content_width_), max_width_)
         # end if
-    elif "large" == size:
+    elif "large" == size_:
         #// 
         #// We're inserting a large size image into the editor. If it's a really
         #// big image we'll scale it down to fit reasonably within the editor
         #// itself, and within the theme's content width if it's known. The user
         #// can resize it in the editor if they wish.
         #//
-        max_width = php_intval(get_option("large_size_w"))
-        max_height = php_intval(get_option("large_size_h"))
-        if php_intval(content_width) > 0:
-            max_width = php_min(php_intval(content_width), max_width)
+        max_width_ = php_intval(get_option("large_size_w"))
+        max_height_ = php_intval(get_option("large_size_h"))
+        if php_intval(content_width_) > 0:
+            max_width_ = php_min(php_intval(content_width_), max_width_)
         # end if
-    elif (not php_empty(lambda : _wp_additional_image_sizes)) and php_in_array(size, php_array_keys(_wp_additional_image_sizes), True):
-        max_width = php_intval(_wp_additional_image_sizes[size]["width"])
-        max_height = php_intval(_wp_additional_image_sizes[size]["height"])
+    elif (not php_empty(lambda : _wp_additional_image_sizes_)) and php_in_array(size_, php_array_keys(_wp_additional_image_sizes_), True):
+        max_width_ = php_intval(_wp_additional_image_sizes_[size_]["width"])
+        max_height_ = php_intval(_wp_additional_image_sizes_[size_]["height"])
         #// Only in admin. Assume that theme authors know what they're doing.
-        if php_intval(content_width) > 0 and "edit" == context:
-            max_width = php_min(php_intval(content_width), max_width)
+        if php_intval(content_width_) > 0 and "edit" == context_:
+            max_width_ = php_min(php_intval(content_width_), max_width_)
         # end if
     else:
         #// $size === 'full' has no constraint.
-        max_width = width
-        max_height = height
+        max_width_ = width_
+        max_height_ = height_
     # end if
     #// 
     #// Filters the maximum image size dimensions for the editor.
@@ -137,8 +134,8 @@ def image_constrain_size_for_editor(width=None, height=None, size="medium", cont
     #// Possible values are 'display' (like in a theme)
     #// or 'edit' (like inserting into an editor).
     #//
-    max_width, max_height = apply_filters("editor_max_image_size", Array(max_width, max_height), size, context)
-    return wp_constrain_dimensions(width, height, max_width, max_height)
+    max_width_, max_height_ = apply_filters("editor_max_image_size", Array(max_width_, max_height_), size_, context_)
+    return wp_constrain_dimensions(width_, height_, max_width_, max_height_)
 # end def image_constrain_size_for_editor
 #// 
 #// Retrieve width and height attributes using given width and height values.
@@ -157,16 +154,17 @@ def image_constrain_size_for_editor(width=None, height=None, size="medium", cont
 #// @param int|string $height Image height in pixels.
 #// @return string HTML attributes for width and, or height.
 #//
-def image_hwstring(width=None, height=None, *args_):
+def image_hwstring(width_=None, height_=None, *_args_):
     
-    out = ""
-    if width:
-        out += "width=\"" + php_intval(width) + "\" "
+    
+    out_ = ""
+    if width_:
+        out_ += "width=\"" + php_intval(width_) + "\" "
     # end if
-    if height:
-        out += "height=\"" + php_intval(height) + "\" "
+    if height_:
+        out_ += "height=\"" + php_intval(height_) + "\" "
     # end if
-    return out
+    return out_
 # end def image_hwstring
 #// 
 #// Scale an image to fit a particular size (such as 'thumb' or 'medium').
@@ -194,9 +192,10 @@ def image_hwstring(width=None, height=None, *args_):
 #// @type bool   $3 Whether the image is a resized image.
 #// }
 #//
-def image_downsize(id=None, size="medium", *args_):
+def image_downsize(id_=None, size_="medium", *_args_):
     
-    is_image = wp_attachment_is_image(id)
+    
+    is_image_ = wp_attachment_is_image(id_)
     #// 
     #// Filters whether to preempt the output of image_downsize().
     #// 
@@ -210,58 +209,58 @@ def image_downsize(id=None, size="medium", *args_):
     #// @param array|string $size     Requested size of image. Image size name, or array of width
     #// and height values (in that order).
     #//
-    out = apply_filters("image_downsize", False, id, size)
-    if out:
-        return out
+    out_ = apply_filters("image_downsize", False, id_, size_)
+    if out_:
+        return out_
     # end if
-    img_url = wp_get_attachment_url(id)
-    meta = wp_get_attachment_metadata(id)
-    width = 0
-    height = 0
-    is_intermediate = False
-    img_url_basename = wp_basename(img_url)
+    img_url_ = wp_get_attachment_url(id_)
+    meta_ = wp_get_attachment_metadata(id_)
+    width_ = 0
+    height_ = 0
+    is_intermediate_ = False
+    img_url_basename_ = wp_basename(img_url_)
     #// If the file isn't an image, attempt to replace its URL with a rendered image from its meta.
     #// Otherwise, a non-image type could be returned.
-    if (not is_image):
-        if (not php_empty(lambda : meta["sizes"]["full"])):
-            img_url = php_str_replace(img_url_basename, meta["sizes"]["full"]["file"], img_url)
-            img_url_basename = meta["sizes"]["full"]["file"]
-            width = meta["sizes"]["full"]["width"]
-            height = meta["sizes"]["full"]["height"]
+    if (not is_image_):
+        if (not php_empty(lambda : meta_["sizes"]["full"])):
+            img_url_ = php_str_replace(img_url_basename_, meta_["sizes"]["full"]["file"], img_url_)
+            img_url_basename_ = meta_["sizes"]["full"]["file"]
+            width_ = meta_["sizes"]["full"]["width"]
+            height_ = meta_["sizes"]["full"]["height"]
         else:
             return False
         # end if
     # end if
     #// Try for a new style intermediate size.
-    intermediate = image_get_intermediate_size(id, size)
-    if intermediate:
-        img_url = php_str_replace(img_url_basename, intermediate["file"], img_url)
-        width = intermediate["width"]
-        height = intermediate["height"]
-        is_intermediate = True
-    elif "thumbnail" == size:
+    intermediate_ = image_get_intermediate_size(id_, size_)
+    if intermediate_:
+        img_url_ = php_str_replace(img_url_basename_, intermediate_["file"], img_url_)
+        width_ = intermediate_["width"]
+        height_ = intermediate_["height"]
+        is_intermediate_ = True
+    elif "thumbnail" == size_:
         #// Fall back to the old thumbnail.
-        thumb_file = wp_get_attachment_thumb_file(id)
-        info = None
-        if thumb_file:
-            info = php_no_error(lambda: getimagesize(thumb_file))
+        thumb_file_ = wp_get_attachment_thumb_file(id_)
+        info_ = None
+        if thumb_file_:
+            info_ = php_no_error(lambda: getimagesize(thumb_file_))
         # end if
-        if thumb_file and info:
-            img_url = php_str_replace(img_url_basename, wp_basename(thumb_file), img_url)
-            width = info[0]
-            height = info[1]
-            is_intermediate = True
+        if thumb_file_ and info_:
+            img_url_ = php_str_replace(img_url_basename_, wp_basename(thumb_file_), img_url_)
+            width_ = info_[0]
+            height_ = info_[1]
+            is_intermediate_ = True
         # end if
     # end if
-    if (not width) and (not height) and (php_isset(lambda : meta["width"]) and php_isset(lambda : meta["height"])):
+    if (not width_) and (not height_) and (php_isset(lambda : meta_["width"]) and php_isset(lambda : meta_["height"])):
         #// Any other type: use the real image.
-        width = meta["width"]
-        height = meta["height"]
+        width_ = meta_["width"]
+        height_ = meta_["height"]
     # end if
-    if img_url:
+    if img_url_:
         #// We have the actual image size, but might need to further constrain it if content_width is narrower.
-        width, height = image_constrain_size_for_editor(width, height, size)
-        return Array(img_url, width, height, is_intermediate)
+        width_, height_ = image_constrain_size_for_editor(width_, height_, size_)
+        return Array(img_url_, width_, height_, is_intermediate_)
     # end if
     return False
 # end def image_downsize
@@ -282,11 +281,14 @@ def image_downsize(id=None, size="medium", *args_):
 #// - x_crop_position accepts: 'left', 'center', or 'right'.
 #// - y_crop_position accepts: 'top', 'center', or 'bottom'.
 #//
-def add_image_size(name=None, width=0, height=0, crop=False, *args_):
+def add_image_size(name_=None, width_=0, height_=0, crop_=None, *_args_):
+    if crop_ is None:
+        crop_ = False
+    # end if
     
-    global _wp_additional_image_sizes
-    php_check_if_defined("_wp_additional_image_sizes")
-    _wp_additional_image_sizes[name] = Array({"width": absint(width), "height": absint(height), "crop": crop})
+    global _wp_additional_image_sizes_
+    php_check_if_defined("_wp_additional_image_sizes_")
+    _wp_additional_image_sizes_[name_] = Array({"width": absint(width_), "height": absint(height_), "crop": crop_})
 # end def add_image_size
 #// 
 #// Check if an image size exists.
@@ -296,10 +298,11 @@ def add_image_size(name=None, width=0, height=0, crop=False, *args_):
 #// @param string $name The image size to check.
 #// @return bool True if the image size exists, false if not.
 #//
-def has_image_size(name=None, *args_):
+def has_image_size(name_=None, *_args_):
     
-    sizes = wp_get_additional_image_sizes()
-    return (php_isset(lambda : sizes[name]))
+    
+    sizes_ = wp_get_additional_image_sizes()
+    return (php_isset(lambda : sizes_[name_]))
 # end def has_image_size
 #// 
 #// Remove a new image size.
@@ -311,12 +314,13 @@ def has_image_size(name=None, *args_):
 #// @param string $name The image size to remove.
 #// @return bool True if the image size was successfully removed, false on failure.
 #//
-def remove_image_size(name=None, *args_):
+def remove_image_size(name_=None, *_args_):
     
-    global _wp_additional_image_sizes
-    php_check_if_defined("_wp_additional_image_sizes")
-    if (php_isset(lambda : _wp_additional_image_sizes[name])):
-        _wp_additional_image_sizes[name] = None
+    
+    global _wp_additional_image_sizes_
+    php_check_if_defined("_wp_additional_image_sizes_")
+    if (php_isset(lambda : _wp_additional_image_sizes_[name_])):
+        _wp_additional_image_sizes_[name_] = None
         return True
     # end if
     return False
@@ -333,9 +337,12 @@ def remove_image_size(name=None, *args_):
 #// @param bool|array $crop   Optional. Whether to crop images to specified width and height or resize.
 #// An array can specify positioning of the crop area. Default false.
 #//
-def set_post_thumbnail_size(width=0, height=0, crop=False, *args_):
+def set_post_thumbnail_size(width_=0, height_=0, crop_=None, *_args_):
+    if crop_ is None:
+        crop_ = False
+    # end if
     
-    add_image_size("post-thumbnail", width, height, crop)
+    add_image_size("post-thumbnail", width_, height_, crop_)
 # end def set_post_thumbnail_size
 #// 
 #// Gets an img tag for an image attachment, scaling it down if requested.
@@ -360,12 +367,13 @@ def set_post_thumbnail_size(width=0, height=0, crop=False, *args_):
 #// (in that order). Default 'medium'.
 #// @return string HTML IMG element for given image attachment
 #//
-def get_image_tag(id=None, alt=None, title=None, align=None, size="medium", *args_):
+def get_image_tag(id_=None, alt_=None, title_=None, align_=None, size_="medium", *_args_):
     
-    img_src, width, height = image_downsize(id, size)
-    hwstring = image_hwstring(width, height)
-    title = "title=\"" + esc_attr(title) + "\" " if title else ""
-    class_ = "align" + esc_attr(align) + " size-" + esc_attr(size) + " wp-image-" + id
+    
+    img_src_, width_, height_ = image_downsize(id_, size_)
+    hwstring_ = image_hwstring(width_, height_)
+    title_ = "title=\"" + esc_attr(title_) + "\" " if title_ else ""
+    class_ = "align" + esc_attr(align_) + " size-" + esc_attr(size_) + " wp-image-" + id_
     #// 
     #// Filters the value of the attachment's image tag class attribute.
     #// 
@@ -377,8 +385,8 @@ def get_image_tag(id=None, alt=None, title=None, align=None, size="medium", *arg
     #// @param string|array $size  Size of image. Image size or array of width and height values (in that order).
     #// Default 'medium'.
     #//
-    class_ = apply_filters("get_image_tag_class", class_, id, align, size)
-    html = "<img src=\"" + esc_attr(img_src) + "\" alt=\"" + esc_attr(alt) + "\" " + title + hwstring + "class=\"" + class_ + "\" />"
+    class_ = apply_filters("get_image_tag_class", class_, id_, align_, size_)
+    html_ = "<img src=\"" + esc_attr(img_src_) + "\" alt=\"" + esc_attr(alt_) + "\" " + title_ + hwstring_ + "class=\"" + class_ + "\" />"
     #// 
     #// Filters the HTML content for the image tag.
     #// 
@@ -392,7 +400,7 @@ def get_image_tag(id=None, alt=None, title=None, align=None, size="medium", *arg
     #// @param string|array $size  Size of image. Image size or array of width and height values (in that order).
     #// Default 'medium'.
     #//
-    return apply_filters("get_image_tag", html, id, alt, title, align, size)
+    return apply_filters("get_image_tag", html_, id_, alt_, title_, align_, size_)
 # end def get_image_tag
 #// 
 #// Calculates the new dimensions for a down-sampled image.
@@ -413,36 +421,37 @@ def get_image_tag(id=None, alt=None, title=None, align=None, size="medium", *arg
 #// @type int $1 The height in pixels.
 #// }
 #//
-def wp_constrain_dimensions(current_width=None, current_height=None, max_width=0, max_height=0, *args_):
+def wp_constrain_dimensions(current_width_=None, current_height_=None, max_width_=0, max_height_=0, *_args_):
     
-    if (not max_width) and (not max_height):
-        return Array(current_width, current_height)
+    
+    if (not max_width_) and (not max_height_):
+        return Array(current_width_, current_height_)
     # end if
-    width_ratio = 1
-    height_ratio = 1
-    did_width = False
-    did_height = False
-    if max_width > 0 and current_width > 0 and current_width > max_width:
-        width_ratio = max_width / current_width
-        did_width = True
+    width_ratio_ = 1
+    height_ratio_ = 1
+    did_width_ = False
+    did_height_ = False
+    if max_width_ > 0 and current_width_ > 0 and current_width_ > max_width_:
+        width_ratio_ = max_width_ / current_width_
+        did_width_ = True
     # end if
-    if max_height > 0 and current_height > 0 and current_height > max_height:
-        height_ratio = max_height / current_height
-        did_height = True
+    if max_height_ > 0 and current_height_ > 0 and current_height_ > max_height_:
+        height_ratio_ = max_height_ / current_height_
+        did_height_ = True
     # end if
     #// Calculate the larger/smaller ratios.
-    smaller_ratio = php_min(width_ratio, height_ratio)
-    larger_ratio = php_max(width_ratio, height_ratio)
-    if php_int(round(current_width * larger_ratio)) > max_width or php_int(round(current_height * larger_ratio)) > max_height:
+    smaller_ratio_ = php_min(width_ratio_, height_ratio_)
+    larger_ratio_ = php_max(width_ratio_, height_ratio_)
+    if php_int(round(current_width_ * larger_ratio_)) > max_width_ or php_int(round(current_height_ * larger_ratio_)) > max_height_:
         #// The larger ratio is too big. It would result in an overflow.
-        ratio = smaller_ratio
+        ratio_ = smaller_ratio_
     else:
         #// The larger ratio fits, and is likely to be a more "snug" fit.
-        ratio = larger_ratio
+        ratio_ = larger_ratio_
     # end if
     #// Very small dimensions may result in 0, 1 should be the minimum.
-    w = php_max(1, php_int(round(current_width * ratio)))
-    h = php_max(1, php_int(round(current_height * ratio)))
+    w_ = php_max(1, php_int(round(current_width_ * ratio_)))
+    h_ = php_max(1, php_int(round(current_height_ * ratio_)))
     #// 
     #// Sometimes, due to rounding, we'll end up with a result like this:
     #// 465x700 in a 177x177 box is 117x176... a pixel short.
@@ -451,13 +460,13 @@ def wp_constrain_dimensions(current_width=None, current_height=None, max_width=0
     #// Thus we look for dimensions that are one pixel shy of the max value and bump them up.
     #// 
     #// Note: $did_width means it is possible $smaller_ratio == $width_ratio.
-    if did_width and w == max_width - 1:
-        w = max_width
+    if did_width_ and w_ == max_width_ - 1:
+        w_ = max_width_
         pass
     # end if
     #// Note: $did_height means it is possible $smaller_ratio == $height_ratio.
-    if did_height and h == max_height - 1:
-        h = max_height
+    if did_height_ and h_ == max_height_ - 1:
+        h_ = max_height_
         pass
     # end if
     #// 
@@ -476,7 +485,7 @@ def wp_constrain_dimensions(current_width=None, current_height=None, max_width=0
     #// @param int   $max_width      The maximum width permitted.
     #// @param int   $max_height     The maximum height permitted.
     #//
-    return apply_filters("wp_constrain_dimensions", Array(w, h), current_width, current_height, max_width, max_height)
+    return apply_filters("wp_constrain_dimensions", Array(w_, h_), current_width_, current_height_, max_width_, max_height_)
 # end def wp_constrain_dimensions
 #// 
 #// Retrieves calculated resize dimensions for use in WP_Image_Editor.
@@ -502,13 +511,16 @@ def wp_constrain_dimensions(current_width=None, current_height=None, max_width=0
 #// An array can specify positioning of the crop area. Default false.
 #// @return array|false Returned array matches parameters for `imagecopyresampled()`. False on failure.
 #//
-def image_resize_dimensions(orig_w=None, orig_h=None, dest_w=None, dest_h=None, crop=False, *args_):
+def image_resize_dimensions(orig_w_=None, orig_h_=None, dest_w_=None, dest_h_=None, crop_=None, *_args_):
+    if crop_ is None:
+        crop_ = False
+    # end if
     
-    if orig_w <= 0 or orig_h <= 0:
+    if orig_w_ <= 0 or orig_h_ <= 0:
         return False
     # end if
     #// At least one of $dest_w or $dest_h must be specific.
-    if dest_w <= 0 and dest_h <= 0:
+    if dest_w_ <= 0 and dest_h_ <= 0:
         return False
     # end if
     #// 
@@ -527,25 +539,25 @@ def image_resize_dimensions(orig_w=None, orig_h=None, dest_w=None, dest_h=None, 
     #// @param bool|array $crop   Whether to crop image to specified width and height or resize.
     #// An array can specify positioning of the crop area. Default false.
     #//
-    output = apply_filters("image_resize_dimensions", None, orig_w, orig_h, dest_w, dest_h, crop)
-    if None != output:
-        return output
+    output_ = apply_filters("image_resize_dimensions", None, orig_w_, orig_h_, dest_w_, dest_h_, crop_)
+    if None != output_:
+        return output_
     # end if
     #// Stop if the destination size is larger than the original image dimensions.
-    if php_empty(lambda : dest_h):
-        if orig_w < dest_w:
+    if php_empty(lambda : dest_h_):
+        if orig_w_ < dest_w_:
             return False
         # end if
-    elif php_empty(lambda : dest_w):
-        if orig_h < dest_h:
+    elif php_empty(lambda : dest_w_):
+        if orig_h_ < dest_h_:
             return False
         # end if
     else:
-        if orig_w < dest_w and orig_h < dest_h:
+        if orig_w_ < dest_w_ and orig_h_ < dest_h_:
             return False
         # end if
     # end if
-    if crop:
+    if crop_:
         #// 
         #// Crop the largest possible portion of the original image that we can size to $dest_w x $dest_h.
         #// Note that the requested crop dimensions are used as a maximum bounding box for the original image.
@@ -554,45 +566,45 @@ def image_resize_dimensions(orig_w=None, orig_h=None, dest_w=None, dest_h=None, 
         #// For example when the original image is 600x300, and the requested crop dimensions are 400x400,
         #// the resulting image will be 400x300.
         #//
-        aspect_ratio = orig_w / orig_h
-        new_w = php_min(dest_w, orig_w)
-        new_h = php_min(dest_h, orig_h)
-        if (not new_w):
-            new_w = php_int(round(new_h * aspect_ratio))
+        aspect_ratio_ = orig_w_ / orig_h_
+        new_w_ = php_min(dest_w_, orig_w_)
+        new_h_ = php_min(dest_h_, orig_h_)
+        if (not new_w_):
+            new_w_ = php_int(round(new_h_ * aspect_ratio_))
         # end if
-        if (not new_h):
-            new_h = php_int(round(new_w / aspect_ratio))
+        if (not new_h_):
+            new_h_ = php_int(round(new_w_ / aspect_ratio_))
         # end if
-        size_ratio = php_max(new_w / orig_w, new_h / orig_h)
-        crop_w = round(new_w / size_ratio)
-        crop_h = round(new_h / size_ratio)
-        if (not php_is_array(crop)) or php_count(crop) != 2:
-            crop = Array("center", "center")
+        size_ratio_ = php_max(new_w_ / orig_w_, new_h_ / orig_h_)
+        crop_w_ = round(new_w_ / size_ratio_)
+        crop_h_ = round(new_h_ / size_ratio_)
+        if (not php_is_array(crop_)) or php_count(crop_) != 2:
+            crop_ = Array("center", "center")
         # end if
-        x, y = crop
-        if "left" == x:
-            s_x = 0
-        elif "right" == x:
-            s_x = orig_w - crop_w
+        x_, y_ = crop_
+        if "left" == x_:
+            s_x_ = 0
+        elif "right" == x_:
+            s_x_ = orig_w_ - crop_w_
         else:
-            s_x = floor(orig_w - crop_w / 2)
+            s_x_ = floor(orig_w_ - crop_w_ / 2)
         # end if
-        if "top" == y:
-            s_y = 0
-        elif "bottom" == y:
-            s_y = orig_h - crop_h
+        if "top" == y_:
+            s_y_ = 0
+        elif "bottom" == y_:
+            s_y_ = orig_h_ - crop_h_
         else:
-            s_y = floor(orig_h - crop_h / 2)
+            s_y_ = floor(orig_h_ - crop_h_ / 2)
         # end if
     else:
         #// Resize using $dest_w x $dest_h as a maximum bounding box.
-        crop_w = orig_w
-        crop_h = orig_h
-        s_x = 0
-        s_y = 0
-        new_w, new_h = wp_constrain_dimensions(orig_w, orig_h, dest_w, dest_h)
+        crop_w_ = orig_w_
+        crop_h_ = orig_h_
+        s_x_ = 0
+        s_y_ = 0
+        new_w_, new_h_ = wp_constrain_dimensions(orig_w_, orig_h_, dest_w_, dest_h_)
     # end if
-    if wp_fuzzy_number_match(new_w, orig_w) and wp_fuzzy_number_match(new_h, orig_h):
+    if wp_fuzzy_number_match(new_w_, orig_w_) and wp_fuzzy_number_match(new_h_, orig_h_):
         #// The new size has virtually the same dimensions as the original image.
         #// 
         #// Filters whether to proceed with making an image sub-size with identical dimensions
@@ -604,14 +616,14 @@ def image_resize_dimensions(orig_w=None, orig_h=None, dest_w=None, dest_h=None, 
         #// @param int  $orig_w  Original image width.
         #// @param int  $orig_h  Original image height.
         #//
-        proceed = php_bool(apply_filters("wp_image_resize_identical_dimensions", False, orig_w, orig_h))
-        if (not proceed):
+        proceed_ = php_bool(apply_filters("wp_image_resize_identical_dimensions", False, orig_w_, orig_h_))
+        if (not proceed_):
             return False
         # end if
     # end if
     #// The return array matches the parameters to imagecopyresampled().
     #// int dst_x, int dst_y, int src_x, int src_y, int dst_w, int dst_h, int src_w, int src_h
-    return Array(0, 0, php_int(s_x), php_int(s_y), php_int(new_w), php_int(new_h), php_int(crop_w), php_int(crop_h))
+    return Array(0, 0, php_int(s_x_), php_int(s_y_), php_int(new_w_), php_int(new_h_), php_int(crop_w_), php_int(crop_h_))
 # end def image_resize_dimensions
 #// 
 #// Resizes an image to make a thumbnail or intermediate size.
@@ -629,17 +641,20 @@ def image_resize_dimensions(orig_w=None, orig_h=None, dest_w=None, dest_h=None, 
 #// Default false.
 #// @return array|false Metadata array on success. False if no image was created.
 #//
-def image_make_intermediate_size(file=None, width=None, height=None, crop=False, *args_):
+def image_make_intermediate_size(file_=None, width_=None, height_=None, crop_=None, *_args_):
+    if crop_ is None:
+        crop_ = False
+    # end if
     
-    if width or height:
-        editor = wp_get_image_editor(file)
-        if is_wp_error(editor) or is_wp_error(editor.resize(width, height, crop)):
+    if width_ or height_:
+        editor_ = wp_get_image_editor(file_)
+        if is_wp_error(editor_) or is_wp_error(editor_.resize(width_, height_, crop_)):
             return False
         # end if
-        resized_file = editor.save()
-        if (not is_wp_error(resized_file)) and resized_file:
-            resized_file["path"] = None
-            return resized_file
+        resized_file_ = editor_.save()
+        if (not is_wp_error(resized_file_)) and resized_file_:
+            resized_file_["path"] = None
+            return resized_file_
         # end if
     # end if
     return False
@@ -655,22 +670,23 @@ def image_make_intermediate_size(file=None, width=None, height=None, crop=False,
 #// @param int $target_height Height of the second image in pixels.
 #// @return bool True if aspect ratios match within 1px. False if not.
 #//
-def wp_image_matches_ratio(source_width=None, source_height=None, target_width=None, target_height=None, *args_):
+def wp_image_matches_ratio(source_width_=None, source_height_=None, target_width_=None, target_height_=None, *_args_):
+    
     
     #// 
     #// To test for varying crops, we constrain the dimensions of the larger image
     #// to the dimensions of the smaller image and see if they match.
     #//
-    if source_width > target_width:
-        constrained_size = wp_constrain_dimensions(source_width, source_height, target_width)
-        expected_size = Array(target_width, target_height)
+    if source_width_ > target_width_:
+        constrained_size_ = wp_constrain_dimensions(source_width_, source_height_, target_width_)
+        expected_size_ = Array(target_width_, target_height_)
     else:
-        constrained_size = wp_constrain_dimensions(target_width, target_height, source_width)
-        expected_size = Array(source_width, source_height)
+        constrained_size_ = wp_constrain_dimensions(target_width_, target_height_, source_width_)
+        expected_size_ = Array(source_width_, source_height_)
     # end if
     #// If the image dimensions are within 1px of the expected size, we consider it a match.
-    matched = wp_fuzzy_number_match(constrained_size[0], expected_size[0]) and wp_fuzzy_number_match(constrained_size[1], expected_size[1])
-    return matched
+    matched_ = wp_fuzzy_number_match(constrained_size_[0], expected_size_[0]) and wp_fuzzy_number_match(constrained_size_[1], expected_size_[1])
+    return matched_
 # end def wp_image_matches_ratio
 #// 
 #// Retrieves the image's intermediate size (resized) path, width, and height.
@@ -708,65 +724,66 @@ def wp_image_matches_ratio(source_width=None, source_height=None, target_width=N
 #// @type string $url    Image's URL.
 #// }
 #//
-def image_get_intermediate_size(post_id=None, size="thumbnail", *args_):
+def image_get_intermediate_size(post_id_=None, size_="thumbnail", *_args_):
     
-    imagedata = wp_get_attachment_metadata(post_id)
-    if (not size) or (not php_is_array(imagedata)) or php_empty(lambda : imagedata["sizes"]):
+    
+    imagedata_ = wp_get_attachment_metadata(post_id_)
+    if (not size_) or (not php_is_array(imagedata_)) or php_empty(lambda : imagedata_["sizes"]):
         return False
     # end if
-    data = Array()
+    data_ = Array()
     #// Find the best match when '$size' is an array.
-    if php_is_array(size):
-        candidates = Array()
-        if (not (php_isset(lambda : imagedata["file"]))) and (php_isset(lambda : imagedata["sizes"]["full"])):
-            imagedata["height"] = imagedata["sizes"]["full"]["height"]
-            imagedata["width"] = imagedata["sizes"]["full"]["width"]
+    if php_is_array(size_):
+        candidates_ = Array()
+        if (not (php_isset(lambda : imagedata_["file"]))) and (php_isset(lambda : imagedata_["sizes"]["full"])):
+            imagedata_["height"] = imagedata_["sizes"]["full"]["height"]
+            imagedata_["width"] = imagedata_["sizes"]["full"]["width"]
         # end if
-        for _size,data in imagedata["sizes"]:
+        for _size_,data_ in imagedata_["sizes"]:
             #// If there's an exact match to an existing image size, short circuit.
-            if php_intval(data["width"]) == php_intval(size[0]) and php_intval(data["height"]) == php_intval(size[1]):
-                candidates[data["width"] * data["height"]] = data
+            if php_intval(data_["width"]) == php_intval(size_[0]) and php_intval(data_["height"]) == php_intval(size_[1]):
+                candidates_[data_["width"] * data_["height"]] = data_
                 break
             # end if
             #// If it's not an exact match, consider larger sizes with the same aspect ratio.
-            if data["width"] >= size[0] and data["height"] >= size[1]:
+            if data_["width"] >= size_[0] and data_["height"] >= size_[1]:
                 #// If '0' is passed to either size, we test ratios against the original file.
-                if 0 == size[0] or 0 == size[1]:
-                    same_ratio = wp_image_matches_ratio(data["width"], data["height"], imagedata["width"], imagedata["height"])
+                if 0 == size_[0] or 0 == size_[1]:
+                    same_ratio_ = wp_image_matches_ratio(data_["width"], data_["height"], imagedata_["width"], imagedata_["height"])
                 else:
-                    same_ratio = wp_image_matches_ratio(data["width"], data["height"], size[0], size[1])
+                    same_ratio_ = wp_image_matches_ratio(data_["width"], data_["height"], size_[0], size_[1])
                 # end if
-                if same_ratio:
-                    candidates[data["width"] * data["height"]] = data
+                if same_ratio_:
+                    candidates_[data_["width"] * data_["height"]] = data_
                 # end if
             # end if
         # end for
-        if (not php_empty(lambda : candidates)):
+        if (not php_empty(lambda : candidates_)):
             #// Sort the array by size if we have more than one candidate.
-            if 1 < php_count(candidates):
-                ksort(candidates)
+            if 1 < php_count(candidates_):
+                ksort(candidates_)
             # end if
-            data = php_array_shift(candidates)
+            data_ = php_array_shift(candidates_)
             pass
-        elif (not php_empty(lambda : imagedata["sizes"]["thumbnail"])) and imagedata["sizes"]["thumbnail"]["width"] >= size[0] and imagedata["sizes"]["thumbnail"]["width"] >= size[1]:
-            data = imagedata["sizes"]["thumbnail"]
+        elif (not php_empty(lambda : imagedata_["sizes"]["thumbnail"])) and imagedata_["sizes"]["thumbnail"]["width"] >= size_[0] and imagedata_["sizes"]["thumbnail"]["width"] >= size_[1]:
+            data_ = imagedata_["sizes"]["thumbnail"]
         else:
             return False
         # end if
         #// Constrain the width and height attributes to the requested values.
-        data["width"], data["height"] = image_constrain_size_for_editor(data["width"], data["height"], size)
-    elif (not php_empty(lambda : imagedata["sizes"][size])):
-        data = imagedata["sizes"][size]
+        data_["width"], data_["height"] = image_constrain_size_for_editor(data_["width"], data_["height"], size_)
+    elif (not php_empty(lambda : imagedata_["sizes"][size_])):
+        data_ = imagedata_["sizes"][size_]
     # end if
     #// If we still don't have a match at this point, return false.
-    if php_empty(lambda : data):
+    if php_empty(lambda : data_):
         return False
     # end if
     #// Include the full filesystem path of the intermediate file.
-    if php_empty(lambda : data["path"]) and (not php_empty(lambda : data["file"])) and (not php_empty(lambda : imagedata["file"])):
-        file_url = wp_get_attachment_url(post_id)
-        data["path"] = path_join(php_dirname(imagedata["file"]), data["file"])
-        data["url"] = path_join(php_dirname(file_url), data["file"])
+    if php_empty(lambda : data_["path"]) and (not php_empty(lambda : data_["file"])) and (not php_empty(lambda : imagedata_["file"])):
+        file_url_ = wp_get_attachment_url(post_id_)
+        data_["path"] = path_join(php_dirname(imagedata_["file"]), data_["file"])
+        data_["url"] = path_join(php_dirname(file_url_), data_["file"])
     # end if
     #// 
     #// Filters the output of image_get_intermediate_size()
@@ -781,7 +798,7 @@ def image_get_intermediate_size(post_id=None, size="thumbnail", *args_):
     #// @param string|array $size    Registered image size or flat array of initially-requested height and width
     #// dimensions (in that order).
     #//
-    return apply_filters("image_get_intermediate_size", data, post_id, size)
+    return apply_filters("image_get_intermediate_size", data_, post_id_, size_)
 # end def image_get_intermediate_size
 #// 
 #// Gets the available intermediate image size names.
@@ -790,12 +807,13 @@ def image_get_intermediate_size(post_id=None, size="thumbnail", *args_):
 #// 
 #// @return string[] An array of image size names.
 #//
-def get_intermediate_image_sizes(*args_):
+def get_intermediate_image_sizes(*_args_):
     
-    default_sizes = Array("thumbnail", "medium", "medium_large", "large")
-    additional_sizes = wp_get_additional_image_sizes()
-    if (not php_empty(lambda : additional_sizes)):
-        default_sizes = php_array_merge(default_sizes, php_array_keys(additional_sizes))
+    
+    default_sizes_ = Array("thumbnail", "medium", "medium_large", "large")
+    additional_sizes_ = wp_get_additional_image_sizes()
+    if (not php_empty(lambda : additional_sizes_)):
+        default_sizes_ = php_array_merge(default_sizes_, php_array_keys(additional_sizes_))
     # end if
     #// 
     #// Filters the list of intermediate image sizes.
@@ -805,7 +823,7 @@ def get_intermediate_image_sizes(*args_):
     #// @param string[] $default_sizes An array of intermediate image size names. Defaults
     #// are 'thumbnail', 'medium', 'medium_large', 'large'.
     #//
-    return apply_filters("intermediate_image_sizes", default_sizes)
+    return apply_filters("intermediate_image_sizes", default_sizes_)
 # end def get_intermediate_image_sizes
 #// 
 #// Returns a normalized list of all currently registered image sub-sizes.
@@ -816,38 +834,39 @@ def get_intermediate_image_sizes(*args_):
 #// 
 #// @return array Associative array of the registered image sub-sizes.
 #//
-def wp_get_registered_image_subsizes(*args_):
+def wp_get_registered_image_subsizes(*_args_):
     
-    additional_sizes = wp_get_additional_image_sizes()
-    all_sizes = Array()
-    for size_name in get_intermediate_image_sizes():
-        size_data = Array({"width": 0, "height": 0, "crop": False})
-        if (php_isset(lambda : additional_sizes[size_name]["width"])):
+    
+    additional_sizes_ = wp_get_additional_image_sizes()
+    all_sizes_ = Array()
+    for size_name_ in get_intermediate_image_sizes():
+        size_data_ = Array({"width": 0, "height": 0, "crop": False})
+        if (php_isset(lambda : additional_sizes_[size_name_]["width"])):
             #// For sizes added by plugins and themes.
-            size_data["width"] = php_intval(additional_sizes[size_name]["width"])
+            size_data_["width"] = php_intval(additional_sizes_[size_name_]["width"])
         else:
             #// For default sizes set in options.
-            size_data["width"] = php_intval(get_option(str(size_name) + str("_size_w")))
+            size_data_["width"] = php_intval(get_option(str(size_name_) + str("_size_w")))
         # end if
-        if (php_isset(lambda : additional_sizes[size_name]["height"])):
-            size_data["height"] = php_intval(additional_sizes[size_name]["height"])
+        if (php_isset(lambda : additional_sizes_[size_name_]["height"])):
+            size_data_["height"] = php_intval(additional_sizes_[size_name_]["height"])
         else:
-            size_data["height"] = php_intval(get_option(str(size_name) + str("_size_h")))
+            size_data_["height"] = php_intval(get_option(str(size_name_) + str("_size_h")))
         # end if
-        if php_empty(lambda : size_data["width"]) and php_empty(lambda : size_data["height"]):
+        if php_empty(lambda : size_data_["width"]) and php_empty(lambda : size_data_["height"]):
             continue
         # end if
-        if (php_isset(lambda : additional_sizes[size_name]["crop"])):
-            size_data["crop"] = additional_sizes[size_name]["crop"]
+        if (php_isset(lambda : additional_sizes_[size_name_]["crop"])):
+            size_data_["crop"] = additional_sizes_[size_name_]["crop"]
         else:
-            size_data["crop"] = get_option(str(size_name) + str("_crop"))
+            size_data_["crop"] = get_option(str(size_name_) + str("_crop"))
         # end if
-        if (not php_is_array(size_data["crop"])) or php_empty(lambda : size_data["crop"]):
-            size_data["crop"] = php_bool(size_data["crop"])
+        if (not php_is_array(size_data_["crop"])) or php_empty(lambda : size_data_["crop"]):
+            size_data_["crop"] = php_bool(size_data_["crop"])
         # end if
-        all_sizes[size_name] = size_data
+        all_sizes_[size_name_] = size_data_
     # end for
-    return all_sizes
+    return all_sizes_
 # end def wp_get_registered_image_subsizes
 #// 
 #// Retrieves an image to represent an attachment.
@@ -866,23 +885,26 @@ def wp_get_registered_image_subsizes(*args_):
 #// @type int    $2 Image height in pixels.
 #// }
 #//
-def wp_get_attachment_image_src(attachment_id=None, size="thumbnail", icon=False, *args_):
+def wp_get_attachment_image_src(attachment_id_=None, size_="thumbnail", icon_=None, *_args_):
+    if icon_ is None:
+        icon_ = False
+    # end if
     
     #// Get a thumbnail or intermediate image if there is one.
-    image = image_downsize(attachment_id, size)
-    if (not image):
-        src = False
-        if icon:
-            src = wp_mime_type_icon(attachment_id)
-            if src:
+    image_ = image_downsize(attachment_id_, size_)
+    if (not image_):
+        src_ = False
+        if icon_:
+            src_ = wp_mime_type_icon(attachment_id_)
+            if src_:
                 #// This filter is documented in wp-includes/post.php
-                icon_dir = apply_filters("icon_dir", ABSPATH + WPINC + "/images/media")
-                src_file = icon_dir + "/" + wp_basename(src)
-                width, height = php_no_error(lambda: getimagesize(src_file))
+                icon_dir_ = apply_filters("icon_dir", ABSPATH + WPINC + "/images/media")
+                src_file_ = icon_dir_ + "/" + wp_basename(src_)
+                width_, height_ = php_no_error(lambda: getimagesize(src_file_))
             # end if
         # end if
-        if src and width and height:
-            image = Array(src, width, height)
+        if src_ and width_ and height_:
+            image_ = Array(src_, width_, height_)
         # end if
     # end if
     #// 
@@ -902,7 +924,7 @@ def wp_get_attachment_image_src(attachment_id=None, size="thumbnail", icon=False
     #// and height values (in that order).
     #// @param bool         $icon          Whether the image should be treated as an icon.
     #//
-    return apply_filters("wp_get_attachment_image_src", image, attachment_id, size, icon)
+    return apply_filters("wp_get_attachment_image_src", image_, attachment_id_, size_, icon_)
 # end def wp_get_attachment_image_src
 #// 
 #// Get an HTML img element representing an image attachment
@@ -931,31 +953,34 @@ def wp_get_attachment_image_src(attachment_id=None, size="thumbnail", icon=False
 #// }
 #// @return string HTML img element or empty string on failure.
 #//
-def wp_get_attachment_image(attachment_id=None, size="thumbnail", icon=False, attr="", *args_):
+def wp_get_attachment_image(attachment_id_=None, size_="thumbnail", icon_=None, attr_="", *_args_):
+    if icon_ is None:
+        icon_ = False
+    # end if
     
-    html = ""
-    image = wp_get_attachment_image_src(attachment_id, size, icon)
-    if image:
-        src, width, height = image
-        hwstring = image_hwstring(width, height)
-        size_class = size
-        if php_is_array(size_class):
-            size_class = join("x", size_class)
+    html_ = ""
+    image_ = wp_get_attachment_image_src(attachment_id_, size_, icon_)
+    if image_:
+        src_, width_, height_ = image_
+        hwstring_ = image_hwstring(width_, height_)
+        size_class_ = size_
+        if php_is_array(size_class_):
+            size_class_ = join("x", size_class_)
         # end if
-        attachment = get_post(attachment_id)
-        default_attr = Array({"src": src, "class": str("attachment-") + str(size_class) + str(" size-") + str(size_class), "alt": php_trim(strip_tags(get_post_meta(attachment_id, "_wp_attachment_image_alt", True)))})
-        attr = wp_parse_args(attr, default_attr)
+        attachment_ = get_post(attachment_id_)
+        default_attr_ = Array({"src": src_, "class": str("attachment-") + str(size_class_) + str(" size-") + str(size_class_), "alt": php_trim(strip_tags(get_post_meta(attachment_id_, "_wp_attachment_image_alt", True)))})
+        attr_ = wp_parse_args(attr_, default_attr_)
         #// Generate 'srcset' and 'sizes' if not already present.
-        if php_empty(lambda : attr["srcset"]):
-            image_meta = wp_get_attachment_metadata(attachment_id)
-            if php_is_array(image_meta):
-                size_array = Array(absint(width), absint(height))
-                srcset = wp_calculate_image_srcset(size_array, src, image_meta, attachment_id)
-                sizes = wp_calculate_image_sizes(size_array, src, image_meta, attachment_id)
-                if srcset and sizes or (not php_empty(lambda : attr["sizes"])):
-                    attr["srcset"] = srcset
-                    if php_empty(lambda : attr["sizes"]):
-                        attr["sizes"] = sizes
+        if php_empty(lambda : attr_["srcset"]):
+            image_meta_ = wp_get_attachment_metadata(attachment_id_)
+            if php_is_array(image_meta_):
+                size_array_ = Array(absint(width_), absint(height_))
+                srcset_ = wp_calculate_image_srcset(size_array_, src_, image_meta_, attachment_id_)
+                sizes_ = wp_calculate_image_sizes(size_array_, src_, image_meta_, attachment_id_)
+                if srcset_ and sizes_ or (not php_empty(lambda : attr_["sizes"])):
+                    attr_["srcset"] = srcset_
+                    if php_empty(lambda : attr_["sizes"]):
+                        attr_["sizes"] = sizes_
                     # end if
                 # end if
             # end if
@@ -971,15 +996,15 @@ def wp_get_attachment_image(attachment_id=None, size="thumbnail", icon=False, at
         #// @param string|array $size       Requested size. Image size or array of width and height values
         #// (in that order). Default 'thumbnail'.
         #//
-        attr = apply_filters("wp_get_attachment_image_attributes", attr, attachment, size)
-        attr = php_array_map("esc_attr", attr)
-        html = php_rtrim(str("<img ") + str(hwstring))
-        for name,value in attr:
-            html += str(" ") + str(name) + str("=") + "\"" + value + "\""
+        attr_ = apply_filters("wp_get_attachment_image_attributes", attr_, attachment_, size_)
+        attr_ = php_array_map("esc_attr", attr_)
+        html_ = php_rtrim(str("<img ") + str(hwstring_))
+        for name_,value_ in attr_:
+            html_ += str(" ") + str(name_) + str("=") + "\"" + value_ + "\""
         # end for
-        html += " />"
+        html_ += " />"
     # end if
-    return html
+    return html_
 # end def wp_get_attachment_image
 #// 
 #// Get the URL of an image attachment.
@@ -992,10 +1017,13 @@ def wp_get_attachment_image(attachment_id=None, size="thumbnail", icon=False, at
 #// @param bool         $icon          Optional. Whether the image should be treated as an icon. Default false.
 #// @return string|false Attachment URL or false if no image is available.
 #//
-def wp_get_attachment_image_url(attachment_id=None, size="thumbnail", icon=False, *args_):
+def wp_get_attachment_image_url(attachment_id_=None, size_="thumbnail", icon_=None, *_args_):
+    if icon_ is None:
+        icon_ = False
+    # end if
     
-    image = wp_get_attachment_image_src(attachment_id, size, icon)
-    return image["0"] if (php_isset(lambda : image["0"])) else False
+    image_ = wp_get_attachment_image_src(attachment_id_, size_, icon_)
+    return image_["0"] if (php_isset(lambda : image_["0"])) else False
 # end def wp_get_attachment_image_url
 #// 
 #// Get the attachment path relative to the upload directory.
@@ -1006,18 +1034,19 @@ def wp_get_attachment_image_url(attachment_id=None, size="thumbnail", icon=False
 #// @param string $file Attachment file name.
 #// @return string Attachment path relative to the upload directory.
 #//
-def _wp_get_attachment_relative_path(file=None, *args_):
+def _wp_get_attachment_relative_path(file_=None, *_args_):
     
-    dirname = php_dirname(file)
-    if "." == dirname:
+    
+    dirname_ = php_dirname(file_)
+    if "." == dirname_:
         return ""
     # end if
-    if False != php_strpos(dirname, "wp-content/uploads"):
+    if False != php_strpos(dirname_, "wp-content/uploads"):
         #// Get the directory name relative to the upload directory (back compat for pre-2.7 uploads).
-        dirname = php_substr(dirname, php_strpos(dirname, "wp-content/uploads") + 18)
-        dirname = php_ltrim(dirname, "/")
+        dirname_ = php_substr(dirname_, php_strpos(dirname_, "wp-content/uploads") + 18)
+        dirname_ = php_ltrim(dirname_, "/")
     # end if
-    return dirname
+    return dirname_
 # end def _wp_get_attachment_relative_path
 #// 
 #// Get the image size as array from its meta data.
@@ -1031,12 +1060,13 @@ def _wp_get_attachment_relative_path(file=None, *args_):
 #// @param array  $image_meta The image meta data.
 #// @return array|bool The image meta data as returned by `wp_get_attachment_metadata()`.
 #//
-def _wp_get_image_size_from_meta(size_name=None, image_meta=None, *args_):
+def _wp_get_image_size_from_meta(size_name_=None, image_meta_=None, *_args_):
     
-    if "full" == size_name:
-        return Array(absint(image_meta["width"]), absint(image_meta["height"]))
-    elif (not php_empty(lambda : image_meta["sizes"][size_name])):
-        return Array(absint(image_meta["sizes"][size_name]["width"]), absint(image_meta["sizes"][size_name]["height"]))
+    
+    if "full" == size_name_:
+        return Array(absint(image_meta_["width"]), absint(image_meta_["height"]))
+    elif (not php_empty(lambda : image_meta_["sizes"][size_name_])):
+        return Array(absint(image_meta_["sizes"][size_name_]["width"]), absint(image_meta_["sizes"][size_name_]["height"]))
     # end if
     return False
 # end def _wp_get_image_size_from_meta
@@ -1054,18 +1084,19 @@ def _wp_get_image_size_from_meta(size_name=None, image_meta=None, *args_):
 #// Default null.
 #// @return string|bool A 'srcset' value string or false.
 #//
-def wp_get_attachment_image_srcset(attachment_id=None, size="medium", image_meta=None, *args_):
+def wp_get_attachment_image_srcset(attachment_id_=None, size_="medium", image_meta_=None, *_args_):
     
-    image = wp_get_attachment_image_src(attachment_id, size)
-    if (not image):
+    
+    image_ = wp_get_attachment_image_src(attachment_id_, size_)
+    if (not image_):
         return False
     # end if
-    if (not php_is_array(image_meta)):
-        image_meta = wp_get_attachment_metadata(attachment_id)
+    if (not php_is_array(image_meta_)):
+        image_meta_ = wp_get_attachment_metadata(attachment_id_)
     # end if
-    image_src = image[0]
-    size_array = Array(absint(image[1]), absint(image[2]))
-    return wp_calculate_image_srcset(size_array, image_src, image_meta, attachment_id)
+    image_src_ = image_[0]
+    size_array_ = Array(absint(image_[1]), absint(image_[2]))
+    return wp_calculate_image_srcset(size_array_, image_src_, image_meta_, attachment_id_)
 # end def wp_get_attachment_image_srcset
 #// 
 #// A helper function to calculate the image sources to include in a 'srcset' attribute.
@@ -1083,7 +1114,8 @@ def wp_get_attachment_image_srcset(attachment_id=None, size="medium", image_meta
 #// @param int    $attachment_id Optional. The image attachment ID. Default 0.
 #// @return string|bool          The 'srcset' attribute value. False on error or when only one source exists.
 #//
-def wp_calculate_image_srcset(size_array=None, image_src=None, image_meta=None, attachment_id=0, *args_):
+def wp_calculate_image_srcset(size_array_=None, image_src_=None, image_meta_=None, attachment_id_=0, *_args_):
+    
     
     #// 
     #// Let plugins pre-filter the image meta to be able to fix inconsistencies in the stored data.
@@ -1100,49 +1132,49 @@ def wp_calculate_image_srcset(size_array=None, image_src=None, image_meta=None, 
     #// @param string $image_src     The 'src' of the image.
     #// @param int    $attachment_id The image attachment ID or 0 if not supplied.
     #//
-    image_meta = apply_filters("wp_calculate_image_srcset_meta", image_meta, size_array, image_src, attachment_id)
-    if php_empty(lambda : image_meta["sizes"]) or (not (php_isset(lambda : image_meta["file"]))) or php_strlen(image_meta["file"]) < 4:
+    image_meta_ = apply_filters("wp_calculate_image_srcset_meta", image_meta_, size_array_, image_src_, attachment_id_)
+    if php_empty(lambda : image_meta_["sizes"]) or (not (php_isset(lambda : image_meta_["file"]))) or php_strlen(image_meta_["file"]) < 4:
         return False
     # end if
-    image_sizes = image_meta["sizes"]
+    image_sizes_ = image_meta_["sizes"]
     #// Get the width and height of the image.
-    image_width = php_int(size_array[0])
-    image_height = php_int(size_array[1])
+    image_width_ = php_int(size_array_[0])
+    image_height_ = php_int(size_array_[1])
     #// Bail early if error/no width.
-    if image_width < 1:
+    if image_width_ < 1:
         return False
     # end if
-    image_basename = wp_basename(image_meta["file"])
+    image_basename_ = wp_basename(image_meta_["file"])
     #// 
     #// WordPress flattens animated GIFs into one frame when generating intermediate sizes.
     #// To avoid hiding animation in user content, if src is a full size GIF, a srcset attribute is not generated.
     #// If src is an intermediate size GIF, the full size is excluded from srcset to keep a flattened GIF from becoming animated.
     #//
-    if (not (php_isset(lambda : image_sizes["thumbnail"]["mime-type"]))) or "image/gif" != image_sizes["thumbnail"]["mime-type"]:
-        image_sizes[-1] = Array({"width": image_meta["width"], "height": image_meta["height"], "file": image_basename})
-    elif php_strpos(image_src, image_meta["file"]):
+    if (not (php_isset(lambda : image_sizes_["thumbnail"]["mime-type"]))) or "image/gif" != image_sizes_["thumbnail"]["mime-type"]:
+        image_sizes_[-1] = Array({"width": image_meta_["width"], "height": image_meta_["height"], "file": image_basename_})
+    elif php_strpos(image_src_, image_meta_["file"]):
         return False
     # end if
     #// Retrieve the uploads sub-directory from the full size image.
-    dirname = _wp_get_attachment_relative_path(image_meta["file"])
-    if dirname:
-        dirname = trailingslashit(dirname)
+    dirname_ = _wp_get_attachment_relative_path(image_meta_["file"])
+    if dirname_:
+        dirname_ = trailingslashit(dirname_)
     # end if
-    upload_dir = wp_get_upload_dir()
-    image_baseurl = trailingslashit(upload_dir["baseurl"]) + dirname
+    upload_dir_ = wp_get_upload_dir()
+    image_baseurl_ = trailingslashit(upload_dir_["baseurl"]) + dirname_
     #// 
     #// If currently on HTTPS, prefer HTTPS URLs when we know they're supported by the domain
     #// (which is to say, when they share the domain name of the current request).
     #//
-    if is_ssl() and "https" != php_substr(image_baseurl, 0, 5) and php_parse_url(image_baseurl, PHP_URL_HOST) == PHP_SERVER["HTTP_HOST"]:
-        image_baseurl = set_url_scheme(image_baseurl, "https")
+    if is_ssl() and "https" != php_substr(image_baseurl_, 0, 5) and php_parse_url(image_baseurl_, PHP_URL_HOST) == PHP_SERVER["HTTP_HOST"]:
+        image_baseurl_ = set_url_scheme(image_baseurl_, "https")
     # end if
     #// 
     #// Images that have been edited in WordPress after being uploaded will
     #// contain a unique hash. Look for that hash and use it later to filter
     #// out images that are leftovers from previous versions.
     #//
-    image_edited = php_preg_match("/-e[0-9]{13}/", wp_basename(image_src), image_edit_hash)
+    image_edited_ = php_preg_match("/-e[0-9]{13}/", wp_basename(image_src_), image_edit_hash_)
     #// 
     #// Filters the maximum image width to be included in a 'srcset' attribute.
     #// 
@@ -1156,50 +1188,50 @@ def wp_calculate_image_srcset(size_array=None, image_src=None, image_meta=None, 
     #// @type int $1 The height in pixels.
     #// }
     #//
-    max_srcset_image_width = apply_filters("max_srcset_image_width", 2048, size_array)
+    max_srcset_image_width_ = apply_filters("max_srcset_image_width", 2048, size_array_)
     #// Array to hold URL candidates.
-    sources = Array()
+    sources_ = Array()
     #// 
     #// To make sure the ID matches our image src, we will check to see if any sizes in our attachment
     #// meta match our $image_src. If no matches are found we don't return a srcset to avoid serving
     #// an incorrect image. See #35045.
     #//
-    src_matched = False
+    src_matched_ = False
     #// 
     #// Loop through available images. Only use images that are resized
     #// versions of the same edit.
     #//
-    for image in image_sizes:
-        is_src = False
+    for image_ in image_sizes_:
+        is_src_ = False
         #// Check if image meta isn't corrupted.
-        if (not php_is_array(image)):
+        if (not php_is_array(image_)):
             continue
         # end if
         #// If the file name is part of the `src`, we've confirmed a match.
-        if (not src_matched) and False != php_strpos(image_src, dirname + image["file"]):
-            src_matched = True
-            is_src = True
+        if (not src_matched_) and False != php_strpos(image_src_, dirname_ + image_["file"]):
+            src_matched_ = True
+            is_src_ = True
         # end if
         #// Filter out images that are from previous edits.
-        if image_edited and (not php_strpos(image["file"], image_edit_hash[0])):
+        if image_edited_ and (not php_strpos(image_["file"], image_edit_hash_[0])):
             continue
         # end if
         #// 
         #// Filters out images that are wider than '$max_srcset_image_width' unless
         #// that file is in the 'src' attribute.
         #//
-        if max_srcset_image_width and image["width"] > max_srcset_image_width and (not is_src):
+        if max_srcset_image_width_ and image_["width"] > max_srcset_image_width_ and (not is_src_):
             continue
         # end if
         #// If the image dimensions are within 1px of the expected size, use it.
-        if wp_image_matches_ratio(image_width, image_height, image["width"], image["height"]):
+        if wp_image_matches_ratio(image_width_, image_height_, image_["width"], image_["height"]):
             #// Add the URL, descriptor, and value to the sources array to be returned.
-            source = Array({"url": image_baseurl + image["file"], "descriptor": "w", "value": image["width"]})
+            source_ = Array({"url": image_baseurl_ + image_["file"], "descriptor": "w", "value": image_["width"]})
             #// The 'src' image has to be the first in the 'srcset', because of a bug in iOS8. See #35030.
-            if is_src:
-                sources = Array({image["width"]: source}) + sources
+            if is_src_:
+                sources_ = Array({image_["width"]: source_}) + sources_
             else:
-                sources[image["width"]] = source
+                sources_[image_["width"]] = source_
             # end if
         # end if
     # end for
@@ -1229,16 +1261,16 @@ def wp_calculate_image_srcset(size_array=None, image_src=None, image_meta=None, 
     #// @param array  $image_meta    The image meta data as returned by 'wp_get_attachment_metadata()'.
     #// @param int    $attachment_id Image attachment ID or 0.
     #//
-    sources = apply_filters("wp_calculate_image_srcset", sources, size_array, image_src, image_meta, attachment_id)
+    sources_ = apply_filters("wp_calculate_image_srcset", sources_, size_array_, image_src_, image_meta_, attachment_id_)
     #// Only return a 'srcset' value if there is more than one source.
-    if (not src_matched) or (not php_is_array(sources)) or php_count(sources) < 2:
+    if (not src_matched_) or (not php_is_array(sources_)) or php_count(sources_) < 2:
         return False
     # end if
-    srcset = ""
-    for source in sources:
-        srcset += php_str_replace(" ", "%20", source["url"]) + " " + source["value"] + source["descriptor"] + ", "
+    srcset_ = ""
+    for source_ in sources_:
+        srcset_ += php_str_replace(" ", "%20", source_["url"]) + " " + source_["value"] + source_["descriptor"] + ", "
     # end for
-    return php_rtrim(srcset, ", ")
+    return php_rtrim(srcset_, ", ")
 # end def wp_calculate_image_srcset
 #// 
 #// Retrieves the value for an image attachment's 'sizes' attribute.
@@ -1254,18 +1286,19 @@ def wp_calculate_image_srcset(size_array=None, image_src=None, image_meta=None, 
 #// Default null.
 #// @return string|bool A valid source size value for use in a 'sizes' attribute or false.
 #//
-def wp_get_attachment_image_sizes(attachment_id=None, size="medium", image_meta=None, *args_):
+def wp_get_attachment_image_sizes(attachment_id_=None, size_="medium", image_meta_=None, *_args_):
     
-    image = wp_get_attachment_image_src(attachment_id, size)
-    if (not image):
+    
+    image_ = wp_get_attachment_image_src(attachment_id_, size_)
+    if (not image_):
         return False
     # end if
-    if (not php_is_array(image_meta)):
-        image_meta = wp_get_attachment_metadata(attachment_id)
+    if (not php_is_array(image_meta_)):
+        image_meta_ = wp_get_attachment_metadata(attachment_id_)
     # end if
-    image_src = image[0]
-    size_array = Array(absint(image[1]), absint(image[2]))
-    return wp_calculate_image_sizes(size_array, image_src, image_meta, attachment_id)
+    image_src_ = image_[0]
+    size_array_ = Array(absint(image_[1]), absint(image_[2]))
+    return wp_calculate_image_sizes(size_array_, image_src_, image_meta_, attachment_id_)
 # end def wp_get_attachment_image_sizes
 #// 
 #// Creates a 'sizes' attribute value for an image.
@@ -1281,27 +1314,28 @@ def wp_get_attachment_image_sizes(attachment_id=None, size="medium", image_meta=
 #// is needed when using the image size name as argument for `$size`. Default 0.
 #// @return string|bool A valid source size value for use in a 'sizes' attribute or false.
 #//
-def wp_calculate_image_sizes(size=None, image_src=None, image_meta=None, attachment_id=0, *args_):
+def wp_calculate_image_sizes(size_=None, image_src_=None, image_meta_=None, attachment_id_=0, *_args_):
     
-    width = 0
-    if php_is_array(size):
-        width = absint(size[0])
-    elif php_is_string(size):
-        if (not image_meta) and attachment_id:
-            image_meta = wp_get_attachment_metadata(attachment_id)
+    
+    width_ = 0
+    if php_is_array(size_):
+        width_ = absint(size_[0])
+    elif php_is_string(size_):
+        if (not image_meta_) and attachment_id_:
+            image_meta_ = wp_get_attachment_metadata(attachment_id_)
         # end if
-        if php_is_array(image_meta):
-            size_array = _wp_get_image_size_from_meta(size, image_meta)
-            if size_array:
-                width = absint(size_array[0])
+        if php_is_array(image_meta_):
+            size_array_ = _wp_get_image_size_from_meta(size_, image_meta_)
+            if size_array_:
+                width_ = absint(size_array_[0])
             # end if
         # end if
     # end if
-    if (not width):
+    if (not width_):
         return False
     # end if
     #// Setup the default 'sizes' attribute.
-    sizes = php_sprintf("(max-width: %1$dpx) 100vw, %1$dpx", width)
+    sizes_ = php_sprintf("(max-width: %1$dpx) 100vw, %1$dpx", width_)
     #// 
     #// Filters the output of 'wp_calculate_image_sizes()'.
     #// 
@@ -1314,7 +1348,7 @@ def wp_calculate_image_sizes(size=None, image_src=None, image_meta=None, attachm
     #// @param array|null   $image_meta    The image meta data as returned by wp_get_attachment_metadata() or null.
     #// @param int          $attachment_id Image attachment ID of the original image or 0.
     #//
-    return apply_filters("wp_calculate_image_sizes", sizes, size, image_src, image_meta, attachment_id)
+    return apply_filters("wp_calculate_image_sizes", sizes_, size_, image_src_, image_meta_, attachment_id_)
 # end def wp_calculate_image_sizes
 #// 
 #// Filters 'img' elements in post content to add 'srcset' and 'sizes' attributes.
@@ -1326,39 +1360,40 @@ def wp_calculate_image_sizes(size=None, image_src=None, image_meta=None, attachm
 #// @param string $content The raw post content to be filtered.
 #// @return string Converted content with 'srcset' and 'sizes' attributes added to images.
 #//
-def wp_make_content_images_responsive(content=None, *args_):
+def wp_make_content_images_responsive(content_=None, *_args_):
     
-    if (not preg_match_all("/<img [^>]+>/", content, matches)):
-        return content
+    
+    if (not preg_match_all("/<img [^>]+>/", content_, matches_)):
+        return content_
     # end if
-    selected_images = Array()
-    attachment_ids = Array()
-    for image in matches[0]:
-        if False == php_strpos(image, " srcset=") and php_preg_match("/wp-image-([0-9]+)/i", image, class_id):
-            attachment_id = absint(class_id[1])
-            if attachment_id:
+    selected_images_ = Array()
+    attachment_ids_ = Array()
+    for image_ in matches_[0]:
+        if False == php_strpos(image_, " srcset=") and php_preg_match("/wp-image-([0-9]+)/i", image_, class_id_):
+            attachment_id_ = absint(class_id_[1])
+            if attachment_id_:
                 #// 
                 #// If exactly the same image tag is used more than once, overwrite it.
                 #// All identical tags will be replaced later with 'str_replace()'.
                 #//
-                selected_images[image] = attachment_id
+                selected_images_[image_] = attachment_id_
                 #// Overwrite the ID when the same image is included more than once.
-                attachment_ids[attachment_id] = True
+                attachment_ids_[attachment_id_] = True
             # end if
         # end if
     # end for
-    if php_count(attachment_ids) > 1:
+    if php_count(attachment_ids_) > 1:
         #// 
         #// Warm the object cache with post and meta information for all found
         #// images to avoid making individual database calls.
         #//
-        _prime_post_caches(php_array_keys(attachment_ids), False, True)
+        _prime_post_caches(php_array_keys(attachment_ids_), False, True)
     # end if
-    for image,attachment_id in selected_images:
-        image_meta = wp_get_attachment_metadata(attachment_id)
-        content = php_str_replace(image, wp_image_add_srcset_and_sizes(image, image_meta, attachment_id), content)
+    for image_,attachment_id_ in selected_images_:
+        image_meta_ = wp_get_attachment_metadata(attachment_id_)
+        content_ = php_str_replace(image_, wp_image_add_srcset_and_sizes(image_, image_meta_, attachment_id_), content_)
     # end for
-    return content
+    return content_
 # end def wp_make_content_images_responsive
 #// 
 #// Adds 'srcset' and 'sizes' attributes to an existing 'img' element.
@@ -1373,65 +1408,66 @@ def wp_make_content_images_responsive(content=None, *args_):
 #// @param int    $attachment_id Image attachment ID.
 #// @return string Converted 'img' element with 'srcset' and 'sizes' attributes added.
 #//
-def wp_image_add_srcset_and_sizes(image=None, image_meta=None, attachment_id=None, *args_):
+def wp_image_add_srcset_and_sizes(image_=None, image_meta_=None, attachment_id_=None, *_args_):
+    
     
     #// Ensure the image meta exists.
-    if php_empty(lambda : image_meta["sizes"]):
-        return image
+    if php_empty(lambda : image_meta_["sizes"]):
+        return image_
     # end if
-    image_src = match_src[1] if php_preg_match("/src=\"([^\"]+)\"/", image, match_src) else ""
-    image_src = php_explode("?", image_src)
+    image_src_ = match_src_[1] if php_preg_match("/src=\"([^\"]+)\"/", image_, match_src_) else ""
+    image_src_ = php_explode("?", image_src_)
     #// Return early if we couldn't get the image source.
-    if (not image_src):
-        return image
+    if (not image_src_):
+        return image_
     # end if
     #// Bail early if an image has been inserted and later edited.
-    if php_preg_match("/-e[0-9]{13}/", image_meta["file"], img_edit_hash) and php_strpos(wp_basename(image_src), img_edit_hash[0]) == False:
-        return image
+    if php_preg_match("/-e[0-9]{13}/", image_meta_["file"], img_edit_hash_) and php_strpos(wp_basename(image_src_), img_edit_hash_[0]) == False:
+        return image_
     # end if
-    width = php_int(match_width[1]) if php_preg_match("/ width=\"([0-9]+)\"/", image, match_width) else 0
-    height = php_int(match_height[1]) if php_preg_match("/ height=\"([0-9]+)\"/", image, match_height) else 0
-    if (not width) or (not height):
+    width_ = php_int(match_width_[1]) if php_preg_match("/ width=\"([0-9]+)\"/", image_, match_width_) else 0
+    height_ = php_int(match_height_[1]) if php_preg_match("/ height=\"([0-9]+)\"/", image_, match_height_) else 0
+    if (not width_) or (not height_):
         #// 
         #// If attempts to parse the size value failed, attempt to use the image meta data to match
         #// the image file name from 'src' against the available sizes for an attachment.
         #//
-        image_filename = wp_basename(image_src)
-        if wp_basename(image_meta["file"]) == image_filename:
-            width = php_int(image_meta["width"])
-            height = php_int(image_meta["height"])
+        image_filename_ = wp_basename(image_src_)
+        if wp_basename(image_meta_["file"]) == image_filename_:
+            width_ = php_int(image_meta_["width"])
+            height_ = php_int(image_meta_["height"])
         else:
-            for image_size_data in image_meta["sizes"]:
-                if image_filename == image_size_data["file"]:
-                    width = php_int(image_size_data["width"])
-                    height = php_int(image_size_data["height"])
+            for image_size_data_ in image_meta_["sizes"]:
+                if image_filename_ == image_size_data_["file"]:
+                    width_ = php_int(image_size_data_["width"])
+                    height_ = php_int(image_size_data_["height"])
                     break
                 # end if
             # end for
         # end if
     # end if
-    if (not width) or (not height):
-        return image
+    if (not width_) or (not height_):
+        return image_
     # end if
-    size_array = Array(width, height)
-    srcset = wp_calculate_image_srcset(size_array, image_src, image_meta, attachment_id)
-    if srcset:
+    size_array_ = Array(width_, height_)
+    srcset_ = wp_calculate_image_srcset(size_array_, image_src_, image_meta_, attachment_id_)
+    if srcset_:
         #// Check if there is already a 'sizes' attribute.
-        sizes = php_strpos(image, " sizes=")
-        if (not sizes):
-            sizes = wp_calculate_image_sizes(size_array, image_src, image_meta, attachment_id)
+        sizes_ = php_strpos(image_, " sizes=")
+        if (not sizes_):
+            sizes_ = wp_calculate_image_sizes(size_array_, image_src_, image_meta_, attachment_id_)
         # end if
     # end if
-    if srcset and sizes:
+    if srcset_ and sizes_:
         #// Format the 'srcset' and 'sizes' string and escape attributes.
-        attr = php_sprintf(" srcset=\"%s\"", esc_attr(srcset))
-        if php_is_string(sizes):
-            attr += php_sprintf(" sizes=\"%s\"", esc_attr(sizes))
+        attr_ = php_sprintf(" srcset=\"%s\"", esc_attr(srcset_))
+        if php_is_string(sizes_):
+            attr_ += php_sprintf(" sizes=\"%s\"", esc_attr(sizes_))
         # end if
         #// Add 'srcset' and 'sizes' attributes to the image markup.
-        image = php_preg_replace("/<img ([^>]+?)[\\/ ]*>/", "<img $1" + attr + " />", image)
+        image_ = php_preg_replace("/<img ([^>]+?)[\\/ ]*>/", "<img $1" + attr_ + " />", image_)
     # end if
-    return image
+    return image_
 # end def wp_image_add_srcset_and_sizes
 #// 
 #// Adds a 'wp-post-image' class to post thumbnails. Internal use only.
@@ -1445,10 +1481,11 @@ def wp_image_add_srcset_and_sizes(image=None, image_meta=None, attachment_id=Non
 #// @param string[] $attr Array of thumbnail attributes including src, class, alt, title, keyed by attribute name.
 #// @return string[] Modified array of attributes including the new 'wp-post-image' class.
 #//
-def _wp_post_thumbnail_class_filter(attr=None, *args_):
+def _wp_post_thumbnail_class_filter(attr_=None, *_args_):
     
-    attr["class"] += " wp-post-image"
-    return attr
+    
+    attr_["class"] += " wp-post-image"
+    return attr_
 # end def _wp_post_thumbnail_class_filter
 #// 
 #// Adds '_wp_post_thumbnail_class_filter' callback to the 'wp_get_attachment_image_attributes'
@@ -1459,7 +1496,8 @@ def _wp_post_thumbnail_class_filter(attr=None, *args_):
 #// 
 #// @param string[] $attr Array of thumbnail attributes including src, class, alt, title, keyed by attribute name.
 #//
-def _wp_post_thumbnail_class_filter_add(attr=None, *args_):
+def _wp_post_thumbnail_class_filter_add(attr_=None, *_args_):
+    
     
     add_filter("wp_get_attachment_image_attributes", "_wp_post_thumbnail_class_filter")
 # end def _wp_post_thumbnail_class_filter_add
@@ -1472,7 +1510,8 @@ def _wp_post_thumbnail_class_filter_add(attr=None, *args_):
 #// 
 #// @param string[] $attr Array of thumbnail attributes including src, class, alt, title, keyed by attribute name.
 #//
-def _wp_post_thumbnail_class_filter_remove(attr=None, *args_):
+def _wp_post_thumbnail_class_filter_remove(attr_=None, *_args_):
+    
     
     remove_filter("wp_get_attachment_image_attributes", "_wp_post_thumbnail_class_filter")
 # end def _wp_post_thumbnail_class_filter_remove
@@ -1506,16 +1545,17 @@ add_shortcode("caption", "img_caption_shortcode")
 #// @param string $content Shortcode content.
 #// @return string HTML content to display the caption.
 #//
-def img_caption_shortcode(attr=None, content=None, *args_):
+def img_caption_shortcode(attr_=None, content_=None, *_args_):
+    
     
     #// New-style shortcode with the caption inside the shortcode with the link and image tags.
-    if (not (php_isset(lambda : attr["caption"]))):
-        if php_preg_match("#((?:<a [^>]+>\\s*)?<img [^>]+>(?:\\s*</a>)?)(.*)#is", content, matches):
-            content = matches[1]
-            attr["caption"] = php_trim(matches[2])
+    if (not (php_isset(lambda : attr_["caption"]))):
+        if php_preg_match("#((?:<a [^>]+>\\s*)?<img [^>]+>(?:\\s*</a>)?)(.*)#is", content_, matches_):
+            content_ = matches_[1]
+            attr_["caption"] = php_trim(matches_[2])
         # end if
-    elif php_strpos(attr["caption"], "<") != False:
-        attr["caption"] = wp_kses(attr["caption"], "post")
+    elif php_strpos(attr_["caption"], "<") != False:
+        attr_["caption"] = wp_kses(attr_["caption"], "post")
     # end if
     #// 
     #// Filters the default caption shortcode output.
@@ -1531,35 +1571,35 @@ def img_caption_shortcode(attr=None, content=None, *args_):
     #// @param array  $attr    Attributes of the caption shortcode.
     #// @param string $content The image element, possibly wrapped in a hyperlink.
     #//
-    output = apply_filters("img_caption_shortcode", "", attr, content)
-    if (not php_empty(lambda : output)):
-        return output
+    output_ = apply_filters("img_caption_shortcode", "", attr_, content_)
+    if (not php_empty(lambda : output_)):
+        return output_
     # end if
-    atts = shortcode_atts(Array({"id": "", "caption_id": "", "align": "alignnone", "width": "", "caption": "", "class": ""}), attr, "caption")
-    atts["width"] = php_int(atts["width"])
-    if atts["width"] < 1 or php_empty(lambda : atts["caption"]):
-        return content
+    atts_ = shortcode_atts(Array({"id": "", "caption_id": "", "align": "alignnone", "width": "", "caption": "", "class": ""}), attr_, "caption")
+    atts_["width"] = php_int(atts_["width"])
+    if atts_["width"] < 1 or php_empty(lambda : atts_["caption"]):
+        return content_
     # end if
-    id = ""
-    caption_id = ""
-    describedby = ""
-    if atts["id"]:
-        atts["id"] = sanitize_html_class(atts["id"])
-        id = "id=\"" + esc_attr(atts["id"]) + "\" "
+    id_ = ""
+    caption_id_ = ""
+    describedby_ = ""
+    if atts_["id"]:
+        atts_["id"] = sanitize_html_class(atts_["id"])
+        id_ = "id=\"" + esc_attr(atts_["id"]) + "\" "
     # end if
-    if atts["caption_id"]:
-        atts["caption_id"] = sanitize_html_class(atts["caption_id"])
-    elif atts["id"]:
-        atts["caption_id"] = "caption-" + php_str_replace("_", "-", atts["id"])
+    if atts_["caption_id"]:
+        atts_["caption_id"] = sanitize_html_class(atts_["caption_id"])
+    elif atts_["id"]:
+        atts_["caption_id"] = "caption-" + php_str_replace("_", "-", atts_["id"])
     # end if
-    if atts["caption_id"]:
-        caption_id = "id=\"" + esc_attr(atts["caption_id"]) + "\" "
-        describedby = "aria-describedby=\"" + esc_attr(atts["caption_id"]) + "\" "
+    if atts_["caption_id"]:
+        caption_id_ = "id=\"" + esc_attr(atts_["caption_id"]) + "\" "
+        describedby_ = "aria-describedby=\"" + esc_attr(atts_["caption_id"]) + "\" "
     # end if
-    class_ = php_trim("wp-caption " + atts["align"] + " " + atts["class"])
-    html5 = current_theme_supports("html5", "caption")
+    class_ = php_trim("wp-caption " + atts_["align"] + " " + atts_["class"])
+    html5_ = current_theme_supports("html5", "caption")
     #// HTML5 captions never added the extra 10px to the image width.
-    width = atts["width"] if html5 else 10 + atts["width"]
+    width_ = atts_["width"] if html5_ else 10 + atts_["width"]
     #// 
     #// Filters the width of an image's caption.
     #// 
@@ -1575,17 +1615,17 @@ def img_caption_shortcode(attr=None, content=None, *args_):
     #// @param array  $atts     Attributes of the caption shortcode.
     #// @param string $content  The image element, possibly wrapped in a hyperlink.
     #//
-    caption_width = apply_filters("img_caption_shortcode_width", width, atts, content)
-    style = ""
-    if caption_width:
-        style = "style=\"width: " + php_int(caption_width) + "px\" "
+    caption_width_ = apply_filters("img_caption_shortcode_width", width_, atts_, content_)
+    style_ = ""
+    if caption_width_:
+        style_ = "style=\"width: " + php_int(caption_width_) + "px\" "
     # end if
-    if html5:
-        html = php_sprintf("<figure %s%s%sclass=\"%s\">%s%s</figure>", id, describedby, style, esc_attr(class_), do_shortcode(content), php_sprintf("<figcaption %sclass=\"wp-caption-text\">%s</figcaption>", caption_id, atts["caption"]))
+    if html5_:
+        html_ = php_sprintf("<figure %s%s%sclass=\"%s\">%s%s</figure>", id_, describedby_, style_, esc_attr(class_), do_shortcode(content_), php_sprintf("<figcaption %sclass=\"wp-caption-text\">%s</figcaption>", caption_id_, atts_["caption"]))
     else:
-        html = php_sprintf("<div %s%sclass=\"%s\">%s%s</div>", id, style, esc_attr(class_), php_str_replace("<img ", "<img " + describedby, do_shortcode(content)), php_sprintf("<p %sclass=\"wp-caption-text\">%s</p>", caption_id, atts["caption"]))
+        html_ = php_sprintf("<div %s%sclass=\"%s\">%s%s</div>", id_, style_, esc_attr(class_), php_str_replace("<img ", "<img " + describedby_, do_shortcode(content_)), php_sprintf("<p %sclass=\"wp-caption-text\">%s</p>", caption_id_, atts_["caption"]))
     # end if
-    return html
+    return html_
 # end def img_caption_shortcode
 add_shortcode("gallery", "gallery_shortcode")
 #// 
@@ -1622,17 +1662,18 @@ add_shortcode("gallery", "gallery_shortcode")
 #// }
 #// @return string HTML content to display gallery.
 #//
-def gallery_shortcode(attr=None, *args_):
+def gallery_shortcode(attr_=None, *_args_):
     
-    post = get_post()
-    gallery_shortcode.instance = 0
-    gallery_shortcode.instance += 1
-    if (not php_empty(lambda : attr["ids"])):
+    
+    post_ = get_post()
+    instance_ = 0
+    instance_ += 1
+    if (not php_empty(lambda : attr_["ids"])):
         #// 'ids' is explicitly ordered, unless you specify otherwise.
-        if php_empty(lambda : attr["orderby"]):
-            attr["orderby"] = "post__in"
+        if php_empty(lambda : attr_["orderby"]):
+            attr_["orderby"] = "post__in"
         # end if
-        attr["include"] = attr["ids"]
+        attr_["include"] = attr_["ids"]
     # end if
     #// 
     #// Filters the default gallery shortcode output.
@@ -1649,52 +1690,52 @@ def gallery_shortcode(attr=None, *args_):
     #// @param array  $attr     Attributes of the gallery shortcode.
     #// @param int    $instance Unique numeric ID of this gallery shortcode instance.
     #//
-    output = apply_filters("post_gallery", "", attr, gallery_shortcode.instance)
-    if (not php_empty(lambda : output)):
-        return output
+    output_ = apply_filters("post_gallery", "", attr_, instance_)
+    if (not php_empty(lambda : output_)):
+        return output_
     # end if
-    html5 = current_theme_supports("html5", "gallery")
-    atts = shortcode_atts(Array({"order": "ASC", "orderby": "menu_order ID", "id": post.ID if post else 0, "itemtag": "figure" if html5 else "dl", "icontag": "div" if html5 else "dt", "captiontag": "figcaption" if html5 else "dd", "columns": 3, "size": "thumbnail", "include": "", "exclude": "", "link": ""}), attr, "gallery")
-    id = php_intval(atts["id"])
-    if (not php_empty(lambda : atts["include"])):
-        _attachments = get_posts(Array({"include": atts["include"], "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": atts["order"], "orderby": atts["orderby"]}))
-        attachments = Array()
-        for key,val in _attachments:
-            attachments[val.ID] = _attachments[key]
+    html5_ = current_theme_supports("html5", "gallery")
+    atts_ = shortcode_atts(Array({"order": "ASC", "orderby": "menu_order ID", "id": post_.ID if post_ else 0, "itemtag": "figure" if html5_ else "dl", "icontag": "div" if html5_ else "dt", "captiontag": "figcaption" if html5_ else "dd", "columns": 3, "size": "thumbnail", "include": "", "exclude": "", "link": ""}), attr_, "gallery")
+    id_ = php_intval(atts_["id"])
+    if (not php_empty(lambda : atts_["include"])):
+        _attachments_ = get_posts(Array({"include": atts_["include"], "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": atts_["order"], "orderby": atts_["orderby"]}))
+        attachments_ = Array()
+        for key_,val_ in _attachments_:
+            attachments_[val_.ID] = _attachments_[key_]
         # end for
-    elif (not php_empty(lambda : atts["exclude"])):
-        attachments = get_children(Array({"post_parent": id, "exclude": atts["exclude"], "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": atts["order"], "orderby": atts["orderby"]}))
+    elif (not php_empty(lambda : atts_["exclude"])):
+        attachments_ = get_children(Array({"post_parent": id_, "exclude": atts_["exclude"], "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": atts_["order"], "orderby": atts_["orderby"]}))
     else:
-        attachments = get_children(Array({"post_parent": id, "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": atts["order"], "orderby": atts["orderby"]}))
+        attachments_ = get_children(Array({"post_parent": id_, "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": atts_["order"], "orderby": atts_["orderby"]}))
     # end if
-    if php_empty(lambda : attachments):
+    if php_empty(lambda : attachments_):
         return ""
     # end if
     if is_feed():
-        output = "\n"
-        for att_id,attachment in attachments:
-            output += wp_get_attachment_link(att_id, atts["size"], True) + "\n"
+        output_ = "\n"
+        for att_id_,attachment_ in attachments_:
+            output_ += wp_get_attachment_link(att_id_, atts_["size"], True) + "\n"
         # end for
-        return output
+        return output_
     # end if
-    itemtag = tag_escape(atts["itemtag"])
-    captiontag = tag_escape(atts["captiontag"])
-    icontag = tag_escape(atts["icontag"])
-    valid_tags = wp_kses_allowed_html("post")
-    if (not (php_isset(lambda : valid_tags[itemtag]))):
-        itemtag = "dl"
+    itemtag_ = tag_escape(atts_["itemtag"])
+    captiontag_ = tag_escape(atts_["captiontag"])
+    icontag_ = tag_escape(atts_["icontag"])
+    valid_tags_ = wp_kses_allowed_html("post")
+    if (not (php_isset(lambda : valid_tags_[itemtag_]))):
+        itemtag_ = "dl"
     # end if
-    if (not (php_isset(lambda : valid_tags[captiontag]))):
-        captiontag = "dd"
+    if (not (php_isset(lambda : valid_tags_[captiontag_]))):
+        captiontag_ = "dd"
     # end if
-    if (not (php_isset(lambda : valid_tags[icontag]))):
-        icontag = "dt"
+    if (not (php_isset(lambda : valid_tags_[icontag_]))):
+        icontag_ = "dt"
     # end if
-    columns = php_intval(atts["columns"])
-    itemwidth = floor(100 / columns) if columns > 0 else 100
-    float = "right" if is_rtl() else "left"
-    selector = str("gallery-") + str(gallery_shortcode.instance)
-    gallery_style = ""
+    columns_ = php_intval(atts_["columns"])
+    itemwidth_ = floor(100 / columns_) if columns_ > 0 else 100
+    float_ = "right" if is_rtl() else "left"
+    selector_ = str("gallery-") + str(instance_)
+    gallery_style_ = ""
     #// 
     #// Filters whether to print default gallery styles.
     #// 
@@ -1704,12 +1745,12 @@ def gallery_shortcode(attr=None, *args_):
     #// Defaults to false if the theme supports HTML5 galleries.
     #// Otherwise, defaults to true.
     #//
-    if apply_filters("use_default_gallery_style", (not html5)):
-        type_attr = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
-        gallery_style = str("\n     <style") + str(type_attr) + str(">\n            #") + str(selector) + str(""" {\n               margin: auto;\n         }\n         #""") + str(selector) + str(" .gallery-item {\n             float: ") + str(float) + str(""";\n             margin-top: 10px;\n             text-align: center;\n               width: """) + str(itemwidth) + str("%;\n            }\n         #") + str(selector) + str(""" img {\n               border: 2px solid #cfcfcf;\n            }\n         #""") + str(selector) + str(""" .gallery-caption {\n                margin-left: 0;\n           }\n         /* see gallery_shortcode() in wp-includes/media.php */\n        </style>\n      """)
+    if apply_filters("use_default_gallery_style", (not html5_)):
+        type_attr_ = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
+        gallery_style_ = str("\n        <style") + str(type_attr_) + str(">\n           #") + str(selector_) + str(""" {\n              margin: auto;\n         }\n         #""") + str(selector_) + str(" .gallery-item {\n                float: ") + str(float_) + str(""";\n                margin-top: 10px;\n             text-align: center;\n               width: """) + str(itemwidth_) + str("%;\n           }\n         #") + str(selector_) + str(""" img {\n              border: 2px solid #cfcfcf;\n            }\n         #""") + str(selector_) + str(""" .gallery-caption {\n               margin-left: 0;\n           }\n         /* see gallery_shortcode() in wp-includes/media.php */\n        </style>\n      """)
     # end if
-    size_class = sanitize_html_class(atts["size"])
-    gallery_div = str("<div id='") + str(selector) + str("' class='gallery galleryid-") + str(id) + str(" gallery-columns-") + str(columns) + str(" gallery-size-") + str(size_class) + str("'>")
+    size_class_ = sanitize_html_class(atts_["size"])
+    gallery_div_ = str("<div id='") + str(selector_) + str("' class='gallery galleryid-") + str(id_) + str(" gallery-columns-") + str(columns_) + str(" gallery-size-") + str(size_class_) + str("'>")
     #// 
     #// Filters the default gallery shortcode CSS styles.
     #// 
@@ -1718,45 +1759,47 @@ def gallery_shortcode(attr=None, *args_):
     #// @param string $gallery_style Default CSS styles and opening HTML div container
     #// for the gallery shortcode output.
     #//
-    output = apply_filters("gallery_style", gallery_style + gallery_div)
-    i = 0
-    for id,attachment in attachments:
-        attr = Array({"aria-describedby": str(selector) + str("-") + str(id)}) if php_trim(attachment.post_excerpt) else ""
-        if (not php_empty(lambda : atts["link"])) and "file" == atts["link"]:
-            image_output = wp_get_attachment_link(id, atts["size"], False, False, False, attr)
-        elif (not php_empty(lambda : atts["link"])) and "none" == atts["link"]:
-            image_output = wp_get_attachment_image(id, atts["size"], False, attr)
+    output_ = apply_filters("gallery_style", gallery_style_ + gallery_div_)
+    i_ = 0
+    for id_,attachment_ in attachments_:
+        attr_ = Array({"aria-describedby": str(selector_) + str("-") + str(id_)}) if php_trim(attachment_.post_excerpt) else ""
+        if (not php_empty(lambda : atts_["link"])) and "file" == atts_["link"]:
+            image_output_ = wp_get_attachment_link(id_, atts_["size"], False, False, False, attr_)
+        elif (not php_empty(lambda : atts_["link"])) and "none" == atts_["link"]:
+            image_output_ = wp_get_attachment_image(id_, atts_["size"], False, attr_)
         else:
-            image_output = wp_get_attachment_link(id, atts["size"], True, False, False, attr)
+            image_output_ = wp_get_attachment_link(id_, atts_["size"], True, False, False, attr_)
         # end if
-        image_meta = wp_get_attachment_metadata(id)
-        orientation = ""
-        if (php_isset(lambda : image_meta["height"]) and php_isset(lambda : image_meta["width"])):
-            orientation = "portrait" if image_meta["height"] > image_meta["width"] else "landscape"
+        image_meta_ = wp_get_attachment_metadata(id_)
+        orientation_ = ""
+        if (php_isset(lambda : image_meta_["height"]) and php_isset(lambda : image_meta_["width"])):
+            orientation_ = "portrait" if image_meta_["height"] > image_meta_["width"] else "landscape"
         # end if
-        output += str("<") + str(itemtag) + str(" class='gallery-item'>")
-        output += str("\n           <") + str(icontag) + str(" class='gallery-icon ") + str(orientation) + str("'>\n                ") + str(image_output) + str("\n            </") + str(icontag) + str(">")
-        if captiontag and php_trim(attachment.post_excerpt):
-            output += str("\n               <") + str(captiontag) + str(" class='wp-caption-text gallery-caption' id='") + str(selector) + str("-") + str(id) + str("'>\n               ") + wptexturize(attachment.post_excerpt) + str("\n             </") + str(captiontag) + str(">")
+        output_ += str("<") + str(itemtag_) + str(" class='gallery-item'>")
+        output_ += str("\n          <") + str(icontag_) + str(" class='gallery-icon ") + str(orientation_) + str("'>\n              ") + str(image_output_) + str("\n           </") + str(icontag_) + str(">")
+        if captiontag_ and php_trim(attachment_.post_excerpt):
+            output_ += str("\n              <") + str(captiontag_) + str(" class='wp-caption-text gallery-caption' id='") + str(selector_) + str("-") + str(id_) + str("'>\n                ") + wptexturize(attachment_.post_excerpt) + str("\n                </") + str(captiontag_) + str(">")
         # end if
-        output += str("</") + str(itemtag) + str(">")
-        i += 1
-        if (not html5) and columns > 0 and 0 == i % columns:
-            output += "<br style=\"clear: both\" />"
+        output_ += str("</") + str(itemtag_) + str(">")
+        i_ += 1
+        i_ += 1
+        if (not html5_) and columns_ > 0 and 0 == i_ % columns_:
+            output_ += "<br style=\"clear: both\" />"
         # end if
     # end for
-    if (not html5) and columns > 0 and 0 != i % columns:
-        output += "\n           <br style='clear: both' />"
+    if (not html5_) and columns_ > 0 and 0 != i_ % columns_:
+        output_ += "\n          <br style='clear: both' />"
     # end if
-    output += "\n       </div>\n"
-    return output
+    output_ += "\n      </div>\n"
+    return output_
 # end def gallery_shortcode
 #// 
 #// Outputs the templates used by playlists.
 #// 
 #// @since 3.9.0
 #//
-def wp_underscore_playlist_templates(*args_):
+def wp_underscore_playlist_templates(*_args_):
+    
     
     php_print("""<script type=\"text/html\" id=\"tmpl-wp-playlist-current-item\">
     <# if ( data.image ) { #>
@@ -1803,12 +1846,13 @@ def wp_underscore_playlist_templates(*args_):
 #// 
 #// @param string $type Type of playlist. Accepts 'audio' or 'video'.
 #//
-def wp_playlist_scripts(type=None, *args_):
+def wp_playlist_scripts(type_=None, *_args_):
+    
     
     wp_enqueue_style("wp-mediaelement")
     wp_enqueue_script("wp-playlist")
     php_print("<!--[if lt IE 9]><script>document.createElement('")
-    php_print(esc_js(type))
+    php_print(esc_js(type_))
     php_print("');</script><![endif]-->\n   ")
     add_action("wp_footer", "wp_underscore_playlist_templates", 0)
     add_action("admin_footer", "wp_underscore_playlist_templates", 0)
@@ -1850,19 +1894,20 @@ def wp_playlist_scripts(type=None, *args_):
 #// 
 #// @return string Playlist output. Empty string if the passed type is unsupported.
 #//
-def wp_playlist_shortcode(attr=None, *args_):
+def wp_playlist_shortcode(attr_=None, *_args_):
     
-    global content_width
-    php_check_if_defined("content_width")
-    post = get_post()
-    wp_playlist_shortcode.instance = 0
-    wp_playlist_shortcode.instance += 1
-    if (not php_empty(lambda : attr["ids"])):
+    
+    global content_width_
+    php_check_if_defined("content_width_")
+    post_ = get_post()
+    instance_ = 0
+    instance_ += 1
+    if (not php_empty(lambda : attr_["ids"])):
         #// 'ids' is explicitly ordered, unless you specify otherwise.
-        if php_empty(lambda : attr["orderby"]):
-            attr["orderby"] = "post__in"
+        if php_empty(lambda : attr_["orderby"]):
+            attr_["orderby"] = "post__in"
         # end if
-        attr["include"] = attr["ids"]
+        attr_["include"] = attr_["ids"]
     # end if
     #// 
     #// Filters the playlist output.
@@ -1877,95 +1922,95 @@ def wp_playlist_shortcode(attr=None, *args_):
     #// @param array  $attr     An array of shortcode attributes.
     #// @param int    $instance Unique numeric ID of this playlist shortcode instance.
     #//
-    output = apply_filters("post_playlist", "", attr, wp_playlist_shortcode.instance)
-    if (not php_empty(lambda : output)):
-        return output
+    output_ = apply_filters("post_playlist", "", attr_, instance_)
+    if (not php_empty(lambda : output_)):
+        return output_
     # end if
-    atts = shortcode_atts(Array({"type": "audio", "order": "ASC", "orderby": "menu_order ID", "id": post.ID if post else 0, "include": "", "exclude": "", "style": "light", "tracklist": True, "tracknumbers": True, "images": True, "artists": True}), attr, "playlist")
-    id = php_intval(atts["id"])
-    if "audio" != atts["type"]:
-        atts["type"] = "video"
+    atts_ = shortcode_atts(Array({"type": "audio", "order": "ASC", "orderby": "menu_order ID", "id": post_.ID if post_ else 0, "include": "", "exclude": "", "style": "light", "tracklist": True, "tracknumbers": True, "images": True, "artists": True}), attr_, "playlist")
+    id_ = php_intval(atts_["id"])
+    if "audio" != atts_["type"]:
+        atts_["type"] = "video"
     # end if
-    args = Array({"post_status": "inherit", "post_type": "attachment", "post_mime_type": atts["type"], "order": atts["order"], "orderby": atts["orderby"]})
-    if (not php_empty(lambda : atts["include"])):
-        args["include"] = atts["include"]
-        _attachments = get_posts(args)
-        attachments = Array()
-        for key,val in _attachments:
-            attachments[val.ID] = _attachments[key]
+    args_ = Array({"post_status": "inherit", "post_type": "attachment", "post_mime_type": atts_["type"], "order": atts_["order"], "orderby": atts_["orderby"]})
+    if (not php_empty(lambda : atts_["include"])):
+        args_["include"] = atts_["include"]
+        _attachments_ = get_posts(args_)
+        attachments_ = Array()
+        for key_,val_ in _attachments_:
+            attachments_[val_.ID] = _attachments_[key_]
         # end for
-    elif (not php_empty(lambda : atts["exclude"])):
-        args["post_parent"] = id
-        args["exclude"] = atts["exclude"]
-        attachments = get_children(args)
+    elif (not php_empty(lambda : atts_["exclude"])):
+        args_["post_parent"] = id_
+        args_["exclude"] = atts_["exclude"]
+        attachments_ = get_children(args_)
     else:
-        args["post_parent"] = id
-        attachments = get_children(args)
+        args_["post_parent"] = id_
+        attachments_ = get_children(args_)
     # end if
-    if php_empty(lambda : attachments):
+    if php_empty(lambda : attachments_):
         return ""
     # end if
     if is_feed():
-        output = "\n"
-        for att_id,attachment in attachments:
-            output += wp_get_attachment_link(att_id) + "\n"
+        output_ = "\n"
+        for att_id_,attachment_ in attachments_:
+            output_ += wp_get_attachment_link(att_id_) + "\n"
         # end for
-        return output
+        return output_
     # end if
-    outer = 22
+    outer_ = 22
     #// Default padding and border of wrapper.
-    default_width = 640
-    default_height = 360
-    theme_width = default_width if php_empty(lambda : content_width) else content_width - outer
-    theme_height = default_height if php_empty(lambda : content_width) else round(default_height * theme_width / default_width)
-    data = Array({"type": atts["type"], "tracklist": wp_validate_boolean(atts["tracklist"]), "tracknumbers": wp_validate_boolean(atts["tracknumbers"]), "images": wp_validate_boolean(atts["images"]), "artists": wp_validate_boolean(atts["artists"])})
-    tracks = Array()
-    for attachment in attachments:
-        url = wp_get_attachment_url(attachment.ID)
-        ftype = wp_check_filetype(url, wp_get_mime_types())
-        track = Array({"src": url, "type": ftype["type"], "title": attachment.post_title, "caption": attachment.post_excerpt, "description": attachment.post_content})
-        track["meta"] = Array()
-        meta = wp_get_attachment_metadata(attachment.ID)
-        if (not php_empty(lambda : meta)):
-            for key,label in wp_get_attachment_id3_keys(attachment):
-                if (not php_empty(lambda : meta[key])):
-                    track["meta"][key] = meta[key]
+    default_width_ = 640
+    default_height_ = 360
+    theme_width_ = default_width_ if php_empty(lambda : content_width_) else content_width_ - outer_
+    theme_height_ = default_height_ if php_empty(lambda : content_width_) else round(default_height_ * theme_width_ / default_width_)
+    data_ = Array({"type": atts_["type"], "tracklist": wp_validate_boolean(atts_["tracklist"]), "tracknumbers": wp_validate_boolean(atts_["tracknumbers"]), "images": wp_validate_boolean(atts_["images"]), "artists": wp_validate_boolean(atts_["artists"])})
+    tracks_ = Array()
+    for attachment_ in attachments_:
+        url_ = wp_get_attachment_url(attachment_.ID)
+        ftype_ = wp_check_filetype(url_, wp_get_mime_types())
+        track_ = Array({"src": url_, "type": ftype_["type"], "title": attachment_.post_title, "caption": attachment_.post_excerpt, "description": attachment_.post_content})
+        track_["meta"] = Array()
+        meta_ = wp_get_attachment_metadata(attachment_.ID)
+        if (not php_empty(lambda : meta_)):
+            for key_,label_ in wp_get_attachment_id3_keys(attachment_):
+                if (not php_empty(lambda : meta_[key_])):
+                    track_["meta"][key_] = meta_[key_]
                 # end if
             # end for
-            if "video" == atts["type"]:
-                if (not php_empty(lambda : meta["width"])) and (not php_empty(lambda : meta["height"])):
-                    width = meta["width"]
-                    height = meta["height"]
-                    theme_height = round(height * theme_width / width)
+            if "video" == atts_["type"]:
+                if (not php_empty(lambda : meta_["width"])) and (not php_empty(lambda : meta_["height"])):
+                    width_ = meta_["width"]
+                    height_ = meta_["height"]
+                    theme_height_ = round(height_ * theme_width_ / width_)
                 else:
-                    width = default_width
-                    height = default_height
+                    width_ = default_width_
+                    height_ = default_height_
                 # end if
-                track["dimensions"] = Array({"original": compact("width", "height"), "resized": Array({"width": theme_width, "height": theme_height})})
+                track_["dimensions"] = Array({"original": php_compact("width", "height"), "resized": Array({"width": theme_width_, "height": theme_height_})})
             # end if
         # end if
-        if atts["images"]:
-            thumb_id = get_post_thumbnail_id(attachment.ID)
-            if (not php_empty(lambda : thumb_id)):
-                src, width, height = wp_get_attachment_image_src(thumb_id, "full")
-                track["image"] = compact("src", "width", "height")
-                src, width, height = wp_get_attachment_image_src(thumb_id, "thumbnail")
-                track["thumb"] = compact("src", "width", "height")
+        if atts_["images"]:
+            thumb_id_ = get_post_thumbnail_id(attachment_.ID)
+            if (not php_empty(lambda : thumb_id_)):
+                src_, width_, height_ = wp_get_attachment_image_src(thumb_id_, "full")
+                track_["image"] = php_compact("src", "width", "height")
+                src_, width_, height_ = wp_get_attachment_image_src(thumb_id_, "thumbnail")
+                track_["thumb"] = php_compact("src", "width", "height")
             else:
-                src = wp_mime_type_icon(attachment.ID)
-                width = 48
-                height = 64
-                track["image"] = compact("src", "width", "height")
-                track["thumb"] = compact("src", "width", "height")
+                src_ = wp_mime_type_icon(attachment_.ID)
+                width_ = 48
+                height_ = 64
+                track_["image"] = php_compact("src", "width", "height")
+                track_["thumb"] = php_compact("src", "width", "height")
             # end if
         # end if
-        tracks[-1] = track
+        tracks_[-1] = track_
     # end for
-    data["tracks"] = tracks
-    safe_type = esc_attr(atts["type"])
-    safe_style = esc_attr(atts["style"])
+    data_["tracks"] = tracks_
+    safe_type_ = esc_attr(atts_["type"])
+    safe_style_ = esc_attr(atts_["style"])
     ob_start()
-    if 1 == wp_playlist_shortcode.instance:
+    if 1 == instance_:
         #// 
         #// Prints and enqueues playlist scripts, styles, and JavaScript templates.
         #// 
@@ -1974,37 +2019,37 @@ def wp_playlist_shortcode(attr=None, *args_):
         #// @param string $type  Type of playlist. Possible values are 'audio' or 'video'.
         #// @param string $style The 'theme' for the playlist. Core provides 'light' and 'dark'.
         #//
-        do_action("wp_playlist_scripts", atts["type"], atts["style"])
+        do_action("wp_playlist_scripts", atts_["type"], atts_["style"])
     # end if
     php_print("<div class=\"wp-playlist wp-")
-    php_print(safe_type)
+    php_print(safe_type_)
     php_print("-playlist wp-playlist-")
-    php_print(safe_style)
+    php_print(safe_style_)
     php_print("\">\n    ")
-    if "audio" == atts["type"]:
+    if "audio" == atts_["type"]:
         php_print(" <div class=\"wp-playlist-current-item\"></div>\n    ")
     # end if
     php_print(" <")
-    php_print(safe_type)
+    php_print(safe_type_)
     php_print(" controls=\"controls\" preload=\"none\" width=\"\n               ")
-    php_print(php_int(theme_width))
+    php_print(php_int(theme_width_))
     php_print(" \"\n    ")
-    if "video" == safe_type:
-        php_print(" height=\"", php_int(theme_height), "\"")
+    if "video" == safe_type_:
+        php_print(" height=\"", php_int(theme_height_), "\"")
     # end if
     php_print(" ></")
-    php_print(safe_type)
+    php_print(safe_type_)
     php_print(""">
     <div class=\"wp-playlist-next\"></div>
     <div class=\"wp-playlist-prev\"></div>
     <noscript>
     <ol>
     """)
-    for att_id,attachment in attachments:
-        printf("<li>%s</li>", wp_get_attachment_link(att_id))
+    for att_id_,attachment_ in attachments_:
+        printf("<li>%s</li>", wp_get_attachment_link(att_id_))
     # end for
     php_print(" </ol>\n </noscript>\n   <script type=\"application/json\" class=\"wp-playlist-script\">")
-    php_print(wp_json_encode(data))
+    php_print(wp_json_encode(data_))
     php_print("</script>\n</div>\n  ")
     return ob_get_clean()
 # end def wp_playlist_shortcode
@@ -2017,7 +2062,8 @@ add_shortcode("playlist", "wp_playlist_shortcode")
 #// @param string $url The media element URL.
 #// @return string Fallback HTML.
 #//
-def wp_mediaelement_fallback(url=None, *args_):
+def wp_mediaelement_fallback(url_=None, *_args_):
+    
     
     #// 
     #// Filters the Mediaelement fallback output for no-JS.
@@ -2027,7 +2073,7 @@ def wp_mediaelement_fallback(url=None, *args_):
     #// @param string $output Fallback output for no-JS.
     #// @param string $url    Media file URL.
     #//
-    return apply_filters("wp_mediaelement_fallback", php_sprintf("<a href=\"%1$s\">%1$s</a>", esc_url(url)), url)
+    return apply_filters("wp_mediaelement_fallback", php_sprintf("<a href=\"%1$s\">%1$s</a>", esc_url(url_)), url_)
 # end def wp_mediaelement_fallback
 #// 
 #// Returns a filtered list of supported audio formats.
@@ -2036,7 +2082,8 @@ def wp_mediaelement_fallback(url=None, *args_):
 #// 
 #// @return string[] Supported audio formats.
 #//
-def wp_get_audio_extensions(*args_):
+def wp_get_audio_extensions(*_args_):
+    
     
     #// 
     #// Filters the list of supported audio formats.
@@ -2057,16 +2104,17 @@ def wp_get_audio_extensions(*args_):
 #// @param string  $context    Optional. The context. Accepts 'edit', 'display'. Default 'display'.
 #// @return string[] Key/value pairs of field keys to labels.
 #//
-def wp_get_attachment_id3_keys(attachment=None, context="display", *args_):
+def wp_get_attachment_id3_keys(attachment_=None, context_="display", *_args_):
     
-    fields = Array({"artist": __("Artist"), "album": __("Album")})
-    if "display" == context:
-        fields["genre"] = __("Genre")
-        fields["year"] = __("Year")
-        fields["length_formatted"] = _x("Length", "video or audio")
-    elif "js" == context:
-        fields["bitrate"] = __("Bitrate")
-        fields["bitrate_mode"] = __("Bitrate Mode")
+    
+    fields_ = Array({"artist": __("Artist"), "album": __("Album")})
+    if "display" == context_:
+        fields_["genre"] = __("Genre")
+        fields_["year"] = __("Year")
+        fields_["length_formatted"] = _x("Length", "video or audio")
+    elif "js" == context_:
+        fields_["bitrate"] = __("Bitrate")
+        fields_["bitrate_mode"] = __("Bitrate Mode")
     # end if
     #// 
     #// Filters the editable list of keys to look up data from an attachment's metadata.
@@ -2077,7 +2125,7 @@ def wp_get_attachment_id3_keys(attachment=None, context="display", *args_):
     #// @param WP_Post $attachment Attachment object.
     #// @param string  $context    The context. Accepts 'edit', 'display'. Default 'display'.
     #//
-    return apply_filters("wp_get_attachment_id3_keys", fields, attachment, context)
+    return apply_filters("wp_get_attachment_id3_keys", fields_, attachment_, context_)
 # end def wp_get_attachment_id3_keys
 #// 
 #// Builds the Audio shortcode output.
@@ -2102,11 +2150,12 @@ def wp_get_attachment_id3_keys(attachment=None, context="display", *args_):
 #// @param string $content Shortcode content.
 #// @return string|void HTML content to display audio.
 #//
-def wp_audio_shortcode(attr=None, content="", *args_):
+def wp_audio_shortcode(attr_=None, content_="", *_args_):
     
-    post_id = get_the_ID() if get_post() else 0
-    wp_audio_shortcode.instance = 0
-    wp_audio_shortcode.instance += 1
+    
+    post_id_ = get_the_ID() if get_post() else 0
+    instance_ = 0
+    instance_ += 1
     #// 
     #// Filters the default audio shortcode output.
     #// 
@@ -2119,46 +2168,46 @@ def wp_audio_shortcode(attr=None, content="", *args_):
     #// @param string $content  Shortcode content.
     #// @param int    $instance Unique numeric ID of this audio shortcode instance.
     #//
-    override = apply_filters("wp_audio_shortcode_override", "", attr, content, wp_audio_shortcode.instance)
-    if "" != override:
-        return override
+    override_ = apply_filters("wp_audio_shortcode_override", "", attr_, content_, instance_)
+    if "" != override_:
+        return override_
     # end if
-    audio = None
-    default_types = wp_get_audio_extensions()
-    defaults_atts = Array({"src": "", "loop": "", "autoplay": "", "preload": "none", "class": "wp-audio-shortcode", "style": "width: 100%;"})
-    for type in default_types:
-        defaults_atts[type] = ""
+    audio_ = None
+    default_types_ = wp_get_audio_extensions()
+    defaults_atts_ = Array({"src": "", "loop": "", "autoplay": "", "preload": "none", "class": "wp-audio-shortcode", "style": "width: 100%;"})
+    for type_ in default_types_:
+        defaults_atts_[type_] = ""
     # end for
-    atts = shortcode_atts(defaults_atts, attr, "audio")
-    primary = False
-    if (not php_empty(lambda : atts["src"])):
-        type = wp_check_filetype(atts["src"], wp_get_mime_types())
-        if (not php_in_array(php_strtolower(type["ext"]), default_types, True)):
-            return php_sprintf("<a class=\"wp-embedded-audio\" href=\"%s\">%s</a>", esc_url(atts["src"]), esc_html(atts["src"]))
+    atts_ = shortcode_atts(defaults_atts_, attr_, "audio")
+    primary_ = False
+    if (not php_empty(lambda : atts_["src"])):
+        type_ = wp_check_filetype(atts_["src"], wp_get_mime_types())
+        if (not php_in_array(php_strtolower(type_["ext"]), default_types_, True)):
+            return php_sprintf("<a class=\"wp-embedded-audio\" href=\"%s\">%s</a>", esc_url(atts_["src"]), esc_html(atts_["src"]))
         # end if
-        primary = True
-        array_unshift(default_types, "src")
+        primary_ = True
+        array_unshift(default_types_, "src")
     else:
-        for ext in default_types:
-            if (not php_empty(lambda : atts[ext])):
-                type = wp_check_filetype(atts[ext], wp_get_mime_types())
-                if php_strtolower(type["ext"]) == ext:
-                    primary = True
+        for ext_ in default_types_:
+            if (not php_empty(lambda : atts_[ext_])):
+                type_ = wp_check_filetype(atts_[ext_], wp_get_mime_types())
+                if php_strtolower(type_["ext"]) == ext_:
+                    primary_ = True
                 # end if
             # end if
         # end for
     # end if
-    if (not primary):
-        audios = get_attached_media("audio", post_id)
-        if php_empty(lambda : audios):
+    if (not primary_):
+        audios_ = get_attached_media("audio", post_id_)
+        if php_empty(lambda : audios_):
             return
         # end if
-        audio = reset(audios)
-        atts["src"] = wp_get_attachment_url(audio.ID)
-        if php_empty(lambda : atts["src"]):
+        audio_ = reset(audios_)
+        atts_["src"] = wp_get_attachment_url(audio_.ID)
+        if php_empty(lambda : atts_["src"]):
             return
         # end if
-        array_unshift(default_types, "src")
+        array_unshift(default_types_, "src")
     # end if
     #// 
     #// Filters the media library used for the audio shortcode.
@@ -2167,8 +2216,8 @@ def wp_audio_shortcode(attr=None, content="", *args_):
     #// 
     #// @param string $library Media library used for the audio shortcode.
     #//
-    library = apply_filters("wp_audio_shortcode_library", "mediaelement")
-    if "mediaelement" == library and did_action("init"):
+    library_ = apply_filters("wp_audio_shortcode_library", "mediaelement")
+    if "mediaelement" == library_ and did_action("init"):
         wp_enqueue_style("wp-mediaelement")
         wp_enqueue_script("wp-mediaelement")
     # end if
@@ -2181,39 +2230,39 @@ def wp_audio_shortcode(attr=None, content="", *args_):
     #// @param string $class CSS class or list of space-separated classes.
     #// @param array  $atts  Array of audio shortcode attributes.
     #//
-    atts["class"] = apply_filters("wp_audio_shortcode_class", atts["class"], atts)
-    html_atts = Array({"class": atts["class"], "id": php_sprintf("audio-%d-%d", post_id, wp_audio_shortcode.instance), "loop": wp_validate_boolean(atts["loop"]), "autoplay": wp_validate_boolean(atts["autoplay"]), "preload": atts["preload"], "style": atts["style"]})
+    atts_["class"] = apply_filters("wp_audio_shortcode_class", atts_["class"], atts_)
+    html_atts_ = Array({"class": atts_["class"], "id": php_sprintf("audio-%d-%d", post_id_, instance_), "loop": wp_validate_boolean(atts_["loop"]), "autoplay": wp_validate_boolean(atts_["autoplay"]), "preload": atts_["preload"], "style": atts_["style"]})
     #// These ones should just be omitted altogether if they are blank.
-    for a in Array("loop", "autoplay", "preload"):
-        if php_empty(lambda : html_atts[a]):
-            html_atts[a] = None
+    for a_ in Array("loop", "autoplay", "preload"):
+        if php_empty(lambda : html_atts_[a_]):
+            html_atts_[a_] = None
         # end if
     # end for
-    attr_strings = Array()
-    for k,v in html_atts:
-        attr_strings[-1] = k + "=\"" + esc_attr(v) + "\""
+    attr_strings_ = Array()
+    for k_,v_ in html_atts_:
+        attr_strings_[-1] = k_ + "=\"" + esc_attr(v_) + "\""
     # end for
-    html = ""
-    if "mediaelement" == library and 1 == wp_audio_shortcode.instance:
-        html += "<!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->\n"
+    html_ = ""
+    if "mediaelement" == library_ and 1 == instance_:
+        html_ += "<!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->\n"
     # end if
-    html += php_sprintf("<audio %s controls=\"controls\">", join(" ", attr_strings))
-    fileurl = ""
-    source = "<source type=\"%s\" src=\"%s\" />"
-    for fallback in default_types:
-        if (not php_empty(lambda : atts[fallback])):
-            if php_empty(lambda : fileurl):
-                fileurl = atts[fallback]
+    html_ += php_sprintf("<audio %s controls=\"controls\">", join(" ", attr_strings_))
+    fileurl_ = ""
+    source_ = "<source type=\"%s\" src=\"%s\" />"
+    for fallback_ in default_types_:
+        if (not php_empty(lambda : atts_[fallback_])):
+            if php_empty(lambda : fileurl_):
+                fileurl_ = atts_[fallback_]
             # end if
-            type = wp_check_filetype(atts[fallback], wp_get_mime_types())
-            url = add_query_arg("_", wp_audio_shortcode.instance, atts[fallback])
-            html += php_sprintf(source, type["type"], esc_url(url))
+            type_ = wp_check_filetype(atts_[fallback_], wp_get_mime_types())
+            url_ = add_query_arg("_", instance_, atts_[fallback_])
+            html_ += php_sprintf(source_, type_["type"], esc_url(url_))
         # end if
     # end for
-    if "mediaelement" == library:
-        html += wp_mediaelement_fallback(fileurl)
+    if "mediaelement" == library_:
+        html_ += wp_mediaelement_fallback(fileurl_)
     # end if
-    html += "</audio>"
+    html_ += "</audio>"
     #// 
     #// Filters the audio shortcode output.
     #// 
@@ -2225,7 +2274,7 @@ def wp_audio_shortcode(attr=None, content="", *args_):
     #// @param int    $post_id Post ID.
     #// @param string $library Media library used for the audio shortcode.
     #//
-    return apply_filters("wp_audio_shortcode", html, atts, audio, post_id, library)
+    return apply_filters("wp_audio_shortcode", html_, atts_, audio_, post_id_, library_)
 # end def wp_audio_shortcode
 add_shortcode("audio", "wp_audio_shortcode")
 #// 
@@ -2235,7 +2284,8 @@ add_shortcode("audio", "wp_audio_shortcode")
 #// 
 #// @return string[] List of supported video formats.
 #//
-def wp_get_video_extensions(*args_):
+def wp_get_video_extensions(*_args_):
+    
     
     #// 
     #// Filters the list of supported video formats.
@@ -2275,13 +2325,14 @@ def wp_get_video_extensions(*args_):
 #// @param string $content Shortcode content.
 #// @return string|void HTML content to display video.
 #//
-def wp_video_shortcode(attr=None, content="", *args_):
+def wp_video_shortcode(attr_=None, content_="", *_args_):
     
-    global content_width
-    php_check_if_defined("content_width")
-    post_id = get_the_ID() if get_post() else 0
-    wp_video_shortcode.instance = 0
-    wp_video_shortcode.instance += 1
+    
+    global content_width_
+    php_check_if_defined("content_width_")
+    post_id_ = get_the_ID() if get_post() else 0
+    instance_ = 0
+    instance_ += 1
     #// 
     #// Filters the default video shortcode output.
     #// 
@@ -2297,70 +2348,70 @@ def wp_video_shortcode(attr=None, content="", *args_):
     #// @param string $content  Video shortcode content.
     #// @param int    $instance Unique numeric ID of this video shortcode instance.
     #//
-    override = apply_filters("wp_video_shortcode_override", "", attr, content, wp_video_shortcode.instance)
-    if "" != override:
-        return override
+    override_ = apply_filters("wp_video_shortcode_override", "", attr_, content_, instance_)
+    if "" != override_:
+        return override_
     # end if
-    video = None
-    default_types = wp_get_video_extensions()
-    defaults_atts = Array({"src": "", "poster": "", "loop": "", "autoplay": "", "preload": "metadata", "width": 640, "height": 360, "class": "wp-video-shortcode"})
-    for type in default_types:
-        defaults_atts[type] = ""
+    video_ = None
+    default_types_ = wp_get_video_extensions()
+    defaults_atts_ = Array({"src": "", "poster": "", "loop": "", "autoplay": "", "preload": "metadata", "width": 640, "height": 360, "class": "wp-video-shortcode"})
+    for type_ in default_types_:
+        defaults_atts_[type_] = ""
     # end for
-    atts = shortcode_atts(defaults_atts, attr, "video")
+    atts_ = shortcode_atts(defaults_atts_, attr_, "video")
     if is_admin():
         #// Shrink the video so it isn't huge in the admin.
-        if atts["width"] > defaults_atts["width"]:
-            atts["height"] = round(atts["height"] * defaults_atts["width"] / atts["width"])
-            atts["width"] = defaults_atts["width"]
+        if atts_["width"] > defaults_atts_["width"]:
+            atts_["height"] = round(atts_["height"] * defaults_atts_["width"] / atts_["width"])
+            atts_["width"] = defaults_atts_["width"]
         # end if
     else:
         #// If the video is bigger than the theme.
-        if (not php_empty(lambda : content_width)) and atts["width"] > content_width:
-            atts["height"] = round(atts["height"] * content_width / atts["width"])
-            atts["width"] = content_width
+        if (not php_empty(lambda : content_width_)) and atts_["width"] > content_width_:
+            atts_["height"] = round(atts_["height"] * content_width_ / atts_["width"])
+            atts_["width"] = content_width_
         # end if
     # end if
-    is_vimeo = False
-    is_youtube = False
-    yt_pattern = "#^https?://(?:www\\.)?(?:youtube\\.com/watch|youtu\\.be/)#"
-    vimeo_pattern = "#^https?://(.+\\.)?vimeo\\.com/.*#"
-    primary = False
-    if (not php_empty(lambda : atts["src"])):
-        is_vimeo = php_preg_match(vimeo_pattern, atts["src"])
-        is_youtube = php_preg_match(yt_pattern, atts["src"])
-        if (not is_youtube) and (not is_vimeo):
-            type = wp_check_filetype(atts["src"], wp_get_mime_types())
-            if (not php_in_array(php_strtolower(type["ext"]), default_types, True)):
-                return php_sprintf("<a class=\"wp-embedded-video\" href=\"%s\">%s</a>", esc_url(atts["src"]), esc_html(atts["src"]))
+    is_vimeo_ = False
+    is_youtube_ = False
+    yt_pattern_ = "#^https?://(?:www\\.)?(?:youtube\\.com/watch|youtu\\.be/)#"
+    vimeo_pattern_ = "#^https?://(.+\\.)?vimeo\\.com/.*#"
+    primary_ = False
+    if (not php_empty(lambda : atts_["src"])):
+        is_vimeo_ = php_preg_match(vimeo_pattern_, atts_["src"])
+        is_youtube_ = php_preg_match(yt_pattern_, atts_["src"])
+        if (not is_youtube_) and (not is_vimeo_):
+            type_ = wp_check_filetype(atts_["src"], wp_get_mime_types())
+            if (not php_in_array(php_strtolower(type_["ext"]), default_types_, True)):
+                return php_sprintf("<a class=\"wp-embedded-video\" href=\"%s\">%s</a>", esc_url(atts_["src"]), esc_html(atts_["src"]))
             # end if
         # end if
-        if is_vimeo:
+        if is_vimeo_:
             wp_enqueue_script("mediaelement-vimeo")
         # end if
-        primary = True
-        array_unshift(default_types, "src")
+        primary_ = True
+        array_unshift(default_types_, "src")
     else:
-        for ext in default_types:
-            if (not php_empty(lambda : atts[ext])):
-                type = wp_check_filetype(atts[ext], wp_get_mime_types())
-                if php_strtolower(type["ext"]) == ext:
-                    primary = True
+        for ext_ in default_types_:
+            if (not php_empty(lambda : atts_[ext_])):
+                type_ = wp_check_filetype(atts_[ext_], wp_get_mime_types())
+                if php_strtolower(type_["ext"]) == ext_:
+                    primary_ = True
                 # end if
             # end if
         # end for
     # end if
-    if (not primary):
-        videos = get_attached_media("video", post_id)
-        if php_empty(lambda : videos):
+    if (not primary_):
+        videos_ = get_attached_media("video", post_id_)
+        if php_empty(lambda : videos_):
             return
         # end if
-        video = reset(videos)
-        atts["src"] = wp_get_attachment_url(video.ID)
-        if php_empty(lambda : atts["src"]):
+        video_ = reset(videos_)
+        atts_["src"] = wp_get_attachment_url(video_.ID)
+        if php_empty(lambda : atts_["src"]):
             return
         # end if
-        array_unshift(default_types, "src")
+        array_unshift(default_types_, "src")
     # end if
     #// 
     #// Filters the media library used for the video shortcode.
@@ -2369,26 +2420,26 @@ def wp_video_shortcode(attr=None, content="", *args_):
     #// 
     #// @param string $library Media library used for the video shortcode.
     #//
-    library = apply_filters("wp_video_shortcode_library", "mediaelement")
-    if "mediaelement" == library and did_action("init"):
+    library_ = apply_filters("wp_video_shortcode_library", "mediaelement")
+    if "mediaelement" == library_ and did_action("init"):
         wp_enqueue_style("wp-mediaelement")
         wp_enqueue_script("wp-mediaelement")
         wp_enqueue_script("mediaelement-vimeo")
     # end if
     #// MediaElement.js has issues with some URL formats for Vimeo and YouTube,
     #// so update the URL to prevent the ME.js player from breaking.
-    if "mediaelement" == library:
-        if is_youtube:
+    if "mediaelement" == library_:
+        if is_youtube_:
             #// Remove `feature` query arg and force SSL - see #40866.
-            atts["src"] = remove_query_arg("feature", atts["src"])
-            atts["src"] = set_url_scheme(atts["src"], "https")
-        elif is_vimeo:
+            atts_["src"] = remove_query_arg("feature", atts_["src"])
+            atts_["src"] = set_url_scheme(atts_["src"], "https")
+        elif is_vimeo_:
             #// Remove all query arguments and force SSL - see #40866.
-            parsed_vimeo_url = wp_parse_url(atts["src"])
-            vimeo_src = "https://" + parsed_vimeo_url["host"] + parsed_vimeo_url["path"]
+            parsed_vimeo_url_ = wp_parse_url(atts_["src"])
+            vimeo_src_ = "https://" + parsed_vimeo_url_["host"] + parsed_vimeo_url_["path"]
             #// Add loop param for mejs bug - see #40977, not needed after #39686.
-            loop = "1" if atts["loop"] else "0"
-            atts["src"] = add_query_arg("loop", loop, vimeo_src)
+            loop_ = "1" if atts_["loop"] else "0"
+            atts_["src"] = add_query_arg("loop", loop_, vimeo_src_)
         # end if
     # end if
     #// 
@@ -2400,56 +2451,56 @@ def wp_video_shortcode(attr=None, content="", *args_):
     #// @param string $class CSS class or list of space-separated classes.
     #// @param array  $atts  Array of video shortcode attributes.
     #//
-    atts["class"] = apply_filters("wp_video_shortcode_class", atts["class"], atts)
-    html_atts = Array({"class": atts["class"], "id": php_sprintf("video-%d-%d", post_id, wp_video_shortcode.instance), "width": absint(atts["width"]), "height": absint(atts["height"]), "poster": esc_url(atts["poster"]), "loop": wp_validate_boolean(atts["loop"]), "autoplay": wp_validate_boolean(atts["autoplay"]), "preload": atts["preload"]})
+    atts_["class"] = apply_filters("wp_video_shortcode_class", atts_["class"], atts_)
+    html_atts_ = Array({"class": atts_["class"], "id": php_sprintf("video-%d-%d", post_id_, instance_), "width": absint(atts_["width"]), "height": absint(atts_["height"]), "poster": esc_url(atts_["poster"]), "loop": wp_validate_boolean(atts_["loop"]), "autoplay": wp_validate_boolean(atts_["autoplay"]), "preload": atts_["preload"]})
     #// These ones should just be omitted altogether if they are blank.
-    for a in Array("poster", "loop", "autoplay", "preload"):
-        if php_empty(lambda : html_atts[a]):
-            html_atts[a] = None
+    for a_ in Array("poster", "loop", "autoplay", "preload"):
+        if php_empty(lambda : html_atts_[a_]):
+            html_atts_[a_] = None
         # end if
     # end for
-    attr_strings = Array()
-    for k,v in html_atts:
-        attr_strings[-1] = k + "=\"" + esc_attr(v) + "\""
+    attr_strings_ = Array()
+    for k_,v_ in html_atts_:
+        attr_strings_[-1] = k_ + "=\"" + esc_attr(v_) + "\""
     # end for
-    html = ""
-    if "mediaelement" == library and 1 == wp_video_shortcode.instance:
-        html += "<!--[if lt IE 9]><script>document.createElement('video');</script><![endif]-->\n"
+    html_ = ""
+    if "mediaelement" == library_ and 1 == instance_:
+        html_ += "<!--[if lt IE 9]><script>document.createElement('video');</script><![endif]-->\n"
     # end if
-    html += php_sprintf("<video %s controls=\"controls\">", join(" ", attr_strings))
-    fileurl = ""
-    source = "<source type=\"%s\" src=\"%s\" />"
-    for fallback in default_types:
-        if (not php_empty(lambda : atts[fallback])):
-            if php_empty(lambda : fileurl):
-                fileurl = atts[fallback]
+    html_ += php_sprintf("<video %s controls=\"controls\">", join(" ", attr_strings_))
+    fileurl_ = ""
+    source_ = "<source type=\"%s\" src=\"%s\" />"
+    for fallback_ in default_types_:
+        if (not php_empty(lambda : atts_[fallback_])):
+            if php_empty(lambda : fileurl_):
+                fileurl_ = atts_[fallback_]
             # end if
-            if "src" == fallback and is_youtube:
-                type = Array({"type": "video/youtube"})
-            elif "src" == fallback and is_vimeo:
-                type = Array({"type": "video/vimeo"})
+            if "src" == fallback_ and is_youtube_:
+                type_ = Array({"type": "video/youtube"})
+            elif "src" == fallback_ and is_vimeo_:
+                type_ = Array({"type": "video/vimeo"})
             else:
-                type = wp_check_filetype(atts[fallback], wp_get_mime_types())
+                type_ = wp_check_filetype(atts_[fallback_], wp_get_mime_types())
             # end if
-            url = add_query_arg("_", wp_video_shortcode.instance, atts[fallback])
-            html += php_sprintf(source, type["type"], esc_url(url))
+            url_ = add_query_arg("_", instance_, atts_[fallback_])
+            html_ += php_sprintf(source_, type_["type"], esc_url(url_))
         # end if
     # end for
-    if (not php_empty(lambda : content)):
-        if False != php_strpos(content, "\n"):
-            content = php_str_replace(Array("\r\n", "\n", " "), "", content)
+    if (not php_empty(lambda : content_)):
+        if False != php_strpos(content_, "\n"):
+            content_ = php_str_replace(Array("\r\n", "\n", "    "), "", content_)
         # end if
-        html += php_trim(content)
+        html_ += php_trim(content_)
     # end if
-    if "mediaelement" == library:
-        html += wp_mediaelement_fallback(fileurl)
+    if "mediaelement" == library_:
+        html_ += wp_mediaelement_fallback(fileurl_)
     # end if
-    html += "</video>"
-    width_rule = ""
-    if (not php_empty(lambda : atts["width"])):
-        width_rule = php_sprintf("width: %dpx;", atts["width"])
+    html_ += "</video>"
+    width_rule_ = ""
+    if (not php_empty(lambda : atts_["width"])):
+        width_rule_ = php_sprintf("width: %dpx;", atts_["width"])
     # end if
-    output = php_sprintf("<div style=\"%s\" class=\"wp-video\">%s</div>", width_rule, html)
+    output_ = php_sprintf("<div style=\"%s\" class=\"wp-video\">%s</div>", width_rule_, html_)
     #// 
     #// Filters the output of the video shortcode.
     #// 
@@ -2461,7 +2512,7 @@ def wp_video_shortcode(attr=None, content="", *args_):
     #// @param int    $post_id Post ID.
     #// @param string $library Media library used for the video shortcode.
     #//
-    return apply_filters("wp_video_shortcode", output, atts, video, post_id, library)
+    return apply_filters("wp_video_shortcode", output_, atts_, video_, post_id_, library_)
 # end def wp_video_shortcode
 add_shortcode("video", "wp_video_shortcode")
 #// 
@@ -2476,9 +2527,12 @@ add_shortcode("video", "wp_video_shortcode")
 #// default to 'post_title' or `$text`. Default 'thumbnail'.
 #// @param string       $text Optional. Link text. Default false.
 #//
-def previous_image_link(size="thumbnail", text=False, *args_):
+def previous_image_link(size_="thumbnail", text_=None, *_args_):
+    if text_ is None:
+        text_ = False
+    # end if
     
-    adjacent_image_link(True, size, text)
+    adjacent_image_link(True, size_, text_)
 # end def previous_image_link
 #// 
 #// Displays next image link that has the same post parent.
@@ -2492,9 +2546,12 @@ def previous_image_link(size="thumbnail", text=False, *args_):
 #// default to 'post_title' or `$text`. Default 'thumbnail'.
 #// @param string       $text Optional. Link text. Default false.
 #//
-def next_image_link(size="thumbnail", text=False, *args_):
+def next_image_link(size_="thumbnail", text_=None, *_args_):
+    if text_ is None:
+        text_ = False
+    # end if
     
-    adjacent_image_link(False, size, text)
+    adjacent_image_link(False, size_, text_)
 # end def next_image_link
 #// 
 #// Displays next or previous image link that has the same post parent.
@@ -2508,25 +2565,31 @@ def next_image_link(size="thumbnail", text=False, *args_):
 #// values in pixels (in that order). Default 'thumbnail'.
 #// @param bool         $text Optional. Link text. Default false.
 #//
-def adjacent_image_link(prev=True, size="thumbnail", text=False, *args_):
+def adjacent_image_link(prev_=None, size_="thumbnail", text_=None, *_args_):
+    if prev_ is None:
+        prev_ = True
+    # end if
+    if text_ is None:
+        text_ = False
+    # end if
     
-    post = get_post()
-    attachments = php_array_values(get_children(Array({"post_parent": post.post_parent, "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": "ASC", "orderby": "menu_order ID"})))
-    for k,attachment in attachments:
-        if php_intval(attachment.ID) == php_intval(post.ID):
+    post_ = get_post()
+    attachments_ = php_array_values(get_children(Array({"post_parent": post_.post_parent, "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": "ASC", "orderby": "menu_order ID"})))
+    for k_,attachment_ in attachments_:
+        if php_intval(attachment_.ID) == php_intval(post_.ID):
             break
         # end if
     # end for
-    output = ""
-    attachment_id = 0
-    if attachments:
-        k = k - 1 if prev else k + 1
-        if (php_isset(lambda : attachments[k])):
-            attachment_id = attachments[k].ID
-            output = wp_get_attachment_link(attachment_id, size, True, False, text)
+    output_ = ""
+    attachment_id_ = 0
+    if attachments_:
+        k_ = k_ - 1 if prev_ else k_ + 1
+        if (php_isset(lambda : attachments_[k_])):
+            attachment_id_ = attachments_[k_].ID
+            output_ = wp_get_attachment_link(attachment_id_, size_, True, False, text_)
         # end if
     # end if
-    adjacent = "previous" if prev else "next"
+    adjacent_ = "previous" if prev_ else "next"
     #// 
     #// Filters the adjacent image link.
     #// 
@@ -2540,7 +2603,7 @@ def adjacent_image_link(prev=True, size="thumbnail", text=False, *args_):
     #// @param string $size          Image size.
     #// @param string $text          Link text.
     #//
-    php_print(apply_filters(str(adjacent) + str("_image_link"), output, attachment_id, size, text))
+    php_print(apply_filters(str(adjacent_) + str("_image_link"), output_, attachment_id_, size_, text_))
 # end def adjacent_image_link
 #// 
 #// Retrieves taxonomies attached to given the attachment.
@@ -2554,43 +2617,44 @@ def adjacent_image_link(prev=True, size="thumbnail", text=False, *args_):
 #// Default is 'names'.
 #// @return string[]|WP_Taxonomy[] List of taxonomies or taxonomy names. Empty array on failure.
 #//
-def get_attachment_taxonomies(attachment=None, output="names", *args_):
+def get_attachment_taxonomies(attachment_=None, output_="names", *_args_):
     
-    if php_is_int(attachment):
-        attachment = get_post(attachment)
-    elif php_is_array(attachment):
-        attachment = attachment
+    
+    if php_is_int(attachment_):
+        attachment_ = get_post(attachment_)
+    elif php_is_array(attachment_):
+        attachment_ = attachment_
     # end if
-    if (not php_is_object(attachment)):
+    if (not php_is_object(attachment_)):
         return Array()
     # end if
-    file = get_attached_file(attachment.ID)
-    filename = wp_basename(file)
-    objects = Array("attachment")
-    if False != php_strpos(filename, "."):
-        objects[-1] = "attachment:" + php_substr(filename, php_strrpos(filename, ".") + 1)
+    file_ = get_attached_file(attachment_.ID)
+    filename_ = wp_basename(file_)
+    objects_ = Array("attachment")
+    if False != php_strpos(filename_, "."):
+        objects_[-1] = "attachment:" + php_substr(filename_, php_strrpos(filename_, ".") + 1)
     # end if
-    if (not php_empty(lambda : attachment.post_mime_type)):
-        objects[-1] = "attachment:" + attachment.post_mime_type
-        if False != php_strpos(attachment.post_mime_type, "/"):
-            for token in php_explode("/", attachment.post_mime_type):
-                if (not php_empty(lambda : token)):
-                    objects[-1] = str("attachment:") + str(token)
+    if (not php_empty(lambda : attachment_.post_mime_type)):
+        objects_[-1] = "attachment:" + attachment_.post_mime_type
+        if False != php_strpos(attachment_.post_mime_type, "/"):
+            for token_ in php_explode("/", attachment_.post_mime_type):
+                if (not php_empty(lambda : token_)):
+                    objects_[-1] = str("attachment:") + str(token_)
                 # end if
             # end for
         # end if
     # end if
-    taxonomies = Array()
-    for object in objects:
-        taxes = get_object_taxonomies(object, output)
-        if taxes:
-            taxonomies = php_array_merge(taxonomies, taxes)
+    taxonomies_ = Array()
+    for object_ in objects_:
+        taxes_ = get_object_taxonomies(object_, output_)
+        if taxes_:
+            taxonomies_ = php_array_merge(taxonomies_, taxes_)
         # end if
     # end for
-    if "names" == output:
-        taxonomies = array_unique(taxonomies)
+    if "names" == output_:
+        taxonomies_ = array_unique(taxonomies_)
     # end if
-    return taxonomies
+    return taxonomies_
 # end def get_attachment_taxonomies
 #// 
 #// Retrieves all of the taxonomies that are registered for attachments.
@@ -2604,22 +2668,23 @@ def get_attachment_taxonomies(attachment=None, output="names", *args_):
 #// Default 'names'.
 #// @return string[]|WP_Taxonomy[] Array of names or objects of registered taxonomies for attachments.
 #//
-def get_taxonomies_for_attachments(output="names", *args_):
+def get_taxonomies_for_attachments(output_="names", *_args_):
     
-    taxonomies = Array()
-    for taxonomy in get_taxonomies(Array(), "objects"):
-        for object_type in taxonomy.object_type:
-            if "attachment" == object_type or 0 == php_strpos(object_type, "attachment:"):
-                if "names" == output:
-                    taxonomies[-1] = taxonomy.name
+    
+    taxonomies_ = Array()
+    for taxonomy_ in get_taxonomies(Array(), "objects"):
+        for object_type_ in taxonomy_.object_type:
+            if "attachment" == object_type_ or 0 == php_strpos(object_type_, "attachment:"):
+                if "names" == output_:
+                    taxonomies_[-1] = taxonomy_.name
                 else:
-                    taxonomies[taxonomy.name] = taxonomy
+                    taxonomies_[taxonomy_.name] = taxonomy_
                 # end if
                 break
             # end if
         # end for
     # end for
-    return taxonomies
+    return taxonomies_
 # end def get_taxonomies_for_attachments
 #// 
 #// Create new GD image resource with transparency support
@@ -2632,14 +2697,15 @@ def get_taxonomies_for_attachments(output="names", *args_):
 #// @param int $height Image height in pixels..
 #// @return resource The GD image resource.
 #//
-def wp_imagecreatetruecolor(width=None, height=None, *args_):
+def wp_imagecreatetruecolor(width_=None, height_=None, *_args_):
     
-    img = imagecreatetruecolor(width, height)
-    if is_resource(img) and php_function_exists("imagealphablending") and php_function_exists("imagesavealpha"):
-        imagealphablending(img, False)
-        imagesavealpha(img, True)
+    
+    img_ = imagecreatetruecolor(width_, height_)
+    if is_resource(img_) and php_function_exists("imagealphablending") and php_function_exists("imagesavealpha"):
+        imagealphablending(img_, False)
+        imagesavealpha(img_, True)
     # end if
-    return img
+    return img_
 # end def wp_imagecreatetruecolor
 #// 
 #// Based on a supplied width/height example, return the biggest possible dimensions based on the max width/height.
@@ -2659,13 +2725,14 @@ def wp_imagecreatetruecolor(width=None, height=None, *args_):
 #// @type int $1 The maximum height in pixels.
 #// }
 #//
-def wp_expand_dimensions(example_width=None, example_height=None, max_width=None, max_height=None, *args_):
+def wp_expand_dimensions(example_width_=None, example_height_=None, max_width_=None, max_height_=None, *_args_):
     
-    example_width = php_int(example_width)
-    example_height = php_int(example_height)
-    max_width = php_int(max_width)
-    max_height = php_int(max_height)
-    return wp_constrain_dimensions(example_width * 1000000, example_height * 1000000, max_width, max_height)
+    
+    example_width_ = php_int(example_width_)
+    example_height_ = php_int(example_height_)
+    max_width_ = php_int(max_width_)
+    max_height_ = php_int(max_height_)
+    return wp_constrain_dimensions(example_width_ * 1000000, example_height_ * 1000000, max_width_, max_height_)
 # end def wp_expand_dimensions
 #// 
 #// Determines the maximum upload size allowed in php.ini.
@@ -2674,10 +2741,11 @@ def wp_expand_dimensions(example_width=None, example_height=None, max_width=None
 #// 
 #// @return int Allowed upload size.
 #//
-def wp_max_upload_size(*args_):
+def wp_max_upload_size(*_args_):
     
-    u_bytes = wp_convert_hr_to_bytes(php_ini_get("upload_max_filesize"))
-    p_bytes = wp_convert_hr_to_bytes(php_ini_get("post_max_size"))
+    
+    u_bytes_ = wp_convert_hr_to_bytes(php_ini_get("upload_max_filesize"))
+    p_bytes_ = wp_convert_hr_to_bytes(php_ini_get("post_max_size"))
     #// 
     #// Filters the maximum upload size allowed in php.ini.
     #// 
@@ -2687,7 +2755,7 @@ def wp_max_upload_size(*args_):
     #// @param int $u_bytes Maximum upload filesize in bytes.
     #// @param int $p_bytes Maximum size of POST data in bytes.
     #//
-    return apply_filters("upload_size_limit", php_min(u_bytes, p_bytes), u_bytes, p_bytes)
+    return apply_filters("upload_size_limit", php_min(u_bytes_, p_bytes_), u_bytes_, p_bytes_)
 # end def wp_max_upload_size
 #// 
 #// Returns a WP_Image_Editor instance and loads file into it.
@@ -2700,25 +2768,28 @@ def wp_max_upload_size(*args_):
 #// @return WP_Image_Editor|WP_Error The WP_Image_Editor object if successful, an WP_Error
 #// object otherwise.
 #//
-def wp_get_image_editor(path=None, args=Array(), *args_):
+def wp_get_image_editor(path_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    args["path"] = path
-    if (not (php_isset(lambda : args["mime_type"]))):
-        file_info = wp_check_filetype(args["path"])
+    args_["path"] = path_
+    if (not (php_isset(lambda : args_["mime_type"]))):
+        file_info_ = wp_check_filetype(args_["path"])
         #// If $file_info['type'] is false, then we let the editor attempt to
         #// figure out the file type, rather than forcing a failure based on extension.
-        if (php_isset(lambda : file_info)) and file_info["type"]:
-            args["mime_type"] = file_info["type"]
+        if (php_isset(lambda : file_info_)) and file_info_["type"]:
+            args_["mime_type"] = file_info_["type"]
         # end if
     # end if
-    implementation = _wp_image_editor_choose(args)
-    if implementation:
-        editor = php_new_class(implementation, lambda : {**locals(), **globals()}[implementation](path))
-        loaded = editor.load()
-        if is_wp_error(loaded):
-            return loaded
+    implementation_ = _wp_image_editor_choose(args_)
+    if implementation_:
+        editor_ = php_new_class(implementation_, lambda : {**locals(), **globals()}[implementation_](path_))
+        loaded_ = editor_.load()
+        if is_wp_error(loaded_):
+            return loaded_
         # end if
-        return editor
+        return editor_
     # end if
     return php_new_class("WP_Error", lambda : WP_Error("image_no_editor", __("No editor could be selected.")))
 # end def wp_get_image_editor
@@ -2731,9 +2802,12 @@ def wp_get_image_editor(path=None, args=Array(), *args_):
 #// Default empty array.
 #// @return bool True if an eligible editor is found; false otherwise.
 #//
-def wp_image_editor_supports(args=Array(), *args_):
+def wp_image_editor_supports(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    return php_bool(_wp_image_editor_choose(args))
+    return php_bool(_wp_image_editor_choose(args_))
 # end def wp_image_editor_supports
 #// 
 #// Tests which editors are capable of supporting the request.
@@ -2745,7 +2819,10 @@ def wp_image_editor_supports(args=Array(), *args_):
 #// @return string|false Class name for the first editor that claims to support the request. False if no
 #// editor claims to support the request.
 #//
-def _wp_image_editor_choose(args=Array(), *args_):
+def _wp_image_editor_choose(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     php_include_file(ABSPATH + WPINC + "/class-wp-image-editor.php", once=True)
     php_include_file(ABSPATH + WPINC + "/class-wp-image-editor-gd.php", once=True)
@@ -2758,18 +2835,18 @@ def _wp_image_editor_choose(args=Array(), *args_):
     #// @param string[] $image_editors Array of available image editor class names. Defaults are
     #// 'WP_Image_Editor_Imagick', 'WP_Image_Editor_GD'.
     #//
-    implementations = apply_filters("wp_image_editors", Array("WP_Image_Editor_Imagick", "WP_Image_Editor_GD"))
-    for implementation in implementations:
-        if (not php_call_user_func(Array(implementation, "test"), args)):
+    implementations_ = apply_filters("wp_image_editors", Array("WP_Image_Editor_Imagick", "WP_Image_Editor_GD"))
+    for implementation_ in implementations_:
+        if (not php_call_user_func(Array(implementation_, "test"), args_)):
             continue
         # end if
-        if (php_isset(lambda : args["mime_type"])) and (not php_call_user_func(Array(implementation, "supports_mime_type"), args["mime_type"])):
+        if (php_isset(lambda : args_["mime_type"])) and (not php_call_user_func(Array(implementation_, "supports_mime_type"), args_["mime_type"])):
             continue
         # end if
-        if (php_isset(lambda : args["methods"])) and php_array_diff(args["methods"], get_class_methods(implementation)):
+        if (php_isset(lambda : args_["methods"])) and php_array_diff(args_["methods"], get_class_methods(implementation_)):
             continue
         # end if
-        return implementation
+        return implementation_
     # end for
     return False
 # end def _wp_image_editor_choose
@@ -2778,31 +2855,32 @@ def _wp_image_editor_choose(args=Array(), *args_):
 #// 
 #// @since 3.4.0
 #//
-def wp_plupload_default_settings(*args_):
+def wp_plupload_default_settings(*_args_):
     
-    wp_scripts = wp_scripts()
-    data = wp_scripts.get_data("wp-plupload", "data")
-    if data and False != php_strpos(data, "_wpPluploadSettings"):
+    
+    wp_scripts_ = wp_scripts()
+    data_ = wp_scripts_.get_data("wp-plupload", "data")
+    if data_ and False != php_strpos(data_, "_wpPluploadSettings"):
         return
     # end if
-    max_upload_size = wp_max_upload_size()
-    allowed_extensions = php_array_keys(get_allowed_mime_types())
-    extensions = Array()
-    for extension in allowed_extensions:
-        extensions = php_array_merge(extensions, php_explode("|", extension))
+    max_upload_size_ = wp_max_upload_size()
+    allowed_extensions_ = php_array_keys(get_allowed_mime_types())
+    extensions_ = Array()
+    for extension_ in allowed_extensions_:
+        extensions_ = php_array_merge(extensions_, php_explode("|", extension_))
     # end for
     #// 
     #// Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
     #// and the `flash_swf_url` and `silverlight_xap_url` are not used.
     #//
-    defaults = Array({"file_data_name": "async-upload", "url": admin_url("async-upload.php", "relative"), "filters": Array({"max_file_size": max_upload_size + "b", "mime_types": Array(Array({"extensions": php_implode(",", extensions)}))})})
+    defaults_ = Array({"file_data_name": "async-upload", "url": admin_url("async-upload.php", "relative"), "filters": Array({"max_file_size": max_upload_size_ + "b", "mime_types": Array(Array({"extensions": php_implode(",", extensions_)}))})})
     #// 
     #// Currently only iOS Safari supports multiple files uploading,
     #// but iOS 7.x has a bug that prevents uploading of videos when enabled.
     #// See #29602.
     #//
     if wp_is_mobile() and php_strpos(PHP_SERVER["HTTP_USER_AGENT"], "OS 7_") != False and php_strpos(PHP_SERVER["HTTP_USER_AGENT"], "like Mac OS X") != False:
-        defaults["multi_selection"] = False
+        defaults_["multi_selection"] = False
     # end if
     #// 
     #// Filters the Plupload default settings.
@@ -2811,8 +2889,8 @@ def wp_plupload_default_settings(*args_):
     #// 
     #// @param array $defaults Default Plupload settings array.
     #//
-    defaults = apply_filters("plupload_default_settings", defaults)
-    params = Array({"action": "upload-attachment"})
+    defaults_ = apply_filters("plupload_default_settings", defaults_)
+    params_ = Array({"action": "upload-attachment"})
     #// 
     #// Filters the Plupload default parameters.
     #// 
@@ -2820,15 +2898,15 @@ def wp_plupload_default_settings(*args_):
     #// 
     #// @param array $params Default Plupload parameters array.
     #//
-    params = apply_filters("plupload_default_params", params)
-    params["_wpnonce"] = wp_create_nonce("media-form")
-    defaults["multipart_params"] = params
-    settings = Array({"defaults": defaults, "browser": Array({"mobile": wp_is_mobile(), "supported": _device_can_upload()})}, {"limitExceeded": is_multisite() and (not is_upload_space_available())})
-    script = "var _wpPluploadSettings = " + wp_json_encode(settings) + ";"
-    if data:
-        script = str(data) + str("\n") + str(script)
+    params_ = apply_filters("plupload_default_params", params_)
+    params_["_wpnonce"] = wp_create_nonce("media-form")
+    defaults_["multipart_params"] = params_
+    settings_ = Array({"defaults": defaults_, "browser": Array({"mobile": wp_is_mobile(), "supported": _device_can_upload()})}, {"limitExceeded": is_multisite() and (not is_upload_space_available())})
+    script_ = "var _wpPluploadSettings = " + wp_json_encode(settings_) + ";"
+    if data_:
+        script_ = str(data_) + str("\n") + str(script_)
     # end if
-    wp_scripts.add_data("wp-plupload", "data", script)
+    wp_scripts_.add_data("wp-plupload", "data", script_)
 # end def wp_plupload_default_settings
 #// 
 #// Prepares an attachment post object for JS, where it is expected
@@ -2839,147 +2917,148 @@ def wp_plupload_default_settings(*args_):
 #// @param int|WP_Post $attachment Attachment ID or object.
 #// @return array|void Array of attachment details.
 #//
-def wp_prepare_attachment_for_js(attachment=None, *args_):
+def wp_prepare_attachment_for_js(attachment_=None, *_args_):
     
-    attachment = get_post(attachment)
-    if (not attachment):
+    
+    attachment_ = get_post(attachment_)
+    if (not attachment_):
         return
     # end if
-    if "attachment" != attachment.post_type:
+    if "attachment" != attachment_.post_type:
         return
     # end if
-    meta = wp_get_attachment_metadata(attachment.ID)
-    if False != php_strpos(attachment.post_mime_type, "/"):
-        type, subtype = php_explode("/", attachment.post_mime_type)
+    meta_ = wp_get_attachment_metadata(attachment_.ID)
+    if False != php_strpos(attachment_.post_mime_type, "/"):
+        type_, subtype_ = php_explode("/", attachment_.post_mime_type)
     else:
-        type, subtype = Array(attachment.post_mime_type, "")
+        type_, subtype_ = Array(attachment_.post_mime_type, "")
     # end if
-    attachment_url = wp_get_attachment_url(attachment.ID)
-    base_url = php_str_replace(wp_basename(attachment_url), "", attachment_url)
-    response = Array({"id": attachment.ID, "title": attachment.post_title, "filename": wp_basename(get_attached_file(attachment.ID)), "url": attachment_url, "link": get_attachment_link(attachment.ID), "alt": get_post_meta(attachment.ID, "_wp_attachment_image_alt", True), "author": attachment.post_author, "description": attachment.post_content, "caption": attachment.post_excerpt, "name": attachment.post_name, "status": attachment.post_status, "uploadedTo": attachment.post_parent, "date": strtotime(attachment.post_date_gmt) * 1000, "modified": strtotime(attachment.post_modified_gmt) * 1000, "menuOrder": attachment.menu_order, "mime": attachment.post_mime_type, "type": type, "subtype": subtype, "icon": wp_mime_type_icon(attachment.ID), "dateFormatted": mysql2date(__("F j, Y"), attachment.post_date), "nonces": Array({"update": False, "delete": False, "edit": False})}, {"editLink": False, "meta": False})
-    author = php_new_class("WP_User", lambda : WP_User(attachment.post_author))
-    if author.exists():
-        response["authorName"] = html_entity_decode(author.display_name, ENT_QUOTES, get_bloginfo("charset"))
+    attachment_url_ = wp_get_attachment_url(attachment_.ID)
+    base_url_ = php_str_replace(wp_basename(attachment_url_), "", attachment_url_)
+    response_ = Array({"id": attachment_.ID, "title": attachment_.post_title, "filename": wp_basename(get_attached_file(attachment_.ID)), "url": attachment_url_, "link": get_attachment_link(attachment_.ID), "alt": get_post_meta(attachment_.ID, "_wp_attachment_image_alt", True), "author": attachment_.post_author, "description": attachment_.post_content, "caption": attachment_.post_excerpt, "name": attachment_.post_name, "status": attachment_.post_status, "uploadedTo": attachment_.post_parent, "date": strtotime(attachment_.post_date_gmt) * 1000, "modified": strtotime(attachment_.post_modified_gmt) * 1000, "menuOrder": attachment_.menu_order, "mime": attachment_.post_mime_type, "type": type_, "subtype": subtype_, "icon": wp_mime_type_icon(attachment_.ID), "dateFormatted": mysql2date(__("F j, Y"), attachment_.post_date), "nonces": Array({"update": False, "delete": False, "edit": False})}, {"editLink": False, "meta": False})
+    author_ = php_new_class("WP_User", lambda : WP_User(attachment_.post_author))
+    if author_.exists():
+        response_["authorName"] = html_entity_decode(author_.display_name, ENT_QUOTES, get_bloginfo("charset"))
     else:
-        response["authorName"] = __("(no author)")
+        response_["authorName"] = __("(no author)")
     # end if
-    if attachment.post_parent:
-        post_parent = get_post(attachment.post_parent)
+    if attachment_.post_parent:
+        post_parent_ = get_post(attachment_.post_parent)
     else:
-        post_parent = False
+        post_parent_ = False
     # end if
-    if post_parent:
-        parent_type = get_post_type_object(post_parent.post_type)
-        if parent_type and parent_type.show_ui and current_user_can("edit_post", attachment.post_parent):
-            response["uploadedToLink"] = get_edit_post_link(attachment.post_parent, "raw")
+    if post_parent_:
+        parent_type_ = get_post_type_object(post_parent_.post_type)
+        if parent_type_ and parent_type_.show_ui and current_user_can("edit_post", attachment_.post_parent):
+            response_["uploadedToLink"] = get_edit_post_link(attachment_.post_parent, "raw")
         # end if
-        if parent_type and current_user_can("read_post", attachment.post_parent):
-            response["uploadedToTitle"] = post_parent.post_title if post_parent.post_title else __("(no title)")
+        if parent_type_ and current_user_can("read_post", attachment_.post_parent):
+            response_["uploadedToTitle"] = post_parent_.post_title if post_parent_.post_title else __("(no title)")
         # end if
     # end if
-    attached_file = get_attached_file(attachment.ID)
-    if (php_isset(lambda : meta["filesize"])):
-        bytes = meta["filesize"]
-    elif php_file_exists(attached_file):
-        bytes = filesize(attached_file)
+    attached_file_ = get_attached_file(attachment_.ID)
+    if (php_isset(lambda : meta_["filesize"])):
+        bytes_ = meta_["filesize"]
+    elif php_file_exists(attached_file_):
+        bytes_ = filesize(attached_file_)
     else:
-        bytes = ""
+        bytes_ = ""
     # end if
-    if bytes:
-        response["filesizeInBytes"] = bytes
-        response["filesizeHumanReadable"] = size_format(bytes)
+    if bytes_:
+        response_["filesizeInBytes"] = bytes_
+        response_["filesizeHumanReadable"] = size_format(bytes_)
     # end if
-    context = get_post_meta(attachment.ID, "_wp_attachment_context", True)
-    response["context"] = context if context else ""
-    if current_user_can("edit_post", attachment.ID):
-        response["nonces"]["update"] = wp_create_nonce("update-post_" + attachment.ID)
-        response["nonces"]["edit"] = wp_create_nonce("image_editor-" + attachment.ID)
-        response["editLink"] = get_edit_post_link(attachment.ID, "raw")
+    context_ = get_post_meta(attachment_.ID, "_wp_attachment_context", True)
+    response_["context"] = context_ if context_ else ""
+    if current_user_can("edit_post", attachment_.ID):
+        response_["nonces"]["update"] = wp_create_nonce("update-post_" + attachment_.ID)
+        response_["nonces"]["edit"] = wp_create_nonce("image_editor-" + attachment_.ID)
+        response_["editLink"] = get_edit_post_link(attachment_.ID, "raw")
     # end if
-    if current_user_can("delete_post", attachment.ID):
-        response["nonces"]["delete"] = wp_create_nonce("delete-post_" + attachment.ID)
+    if current_user_can("delete_post", attachment_.ID):
+        response_["nonces"]["delete"] = wp_create_nonce("delete-post_" + attachment_.ID)
     # end if
-    if meta and "image" == type or (not php_empty(lambda : meta["sizes"])):
-        sizes = Array()
+    if meta_ and "image" == type_ or (not php_empty(lambda : meta_["sizes"])):
+        sizes_ = Array()
         #// This filter is documented in wp-admin/includes/media.php
-        possible_sizes = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
-        possible_sizes["full"] = None
+        possible_sizes_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
+        possible_sizes_["full"] = None
         #// 
         #// Loop through all potential sizes that may be chosen. Try to do this with some efficiency.
         #// First: run the image_downsize filter. If it returns something, we can use its data.
         #// If the filter does not return something, then image_downsize() is just an expensive way
         #// to check the image metadata, which we do second.
         #//
-        for size,label in possible_sizes:
+        for size_,label_ in possible_sizes_:
             #// This filter is documented in wp-includes/media.php
-            downsize = apply_filters("image_downsize", False, attachment.ID, size)
-            if downsize:
-                if php_empty(lambda : downsize[3]):
+            downsize_ = apply_filters("image_downsize", False, attachment_.ID, size_)
+            if downsize_:
+                if php_empty(lambda : downsize_[3]):
                     continue
                 # end if
-                sizes[size] = Array({"height": downsize[2], "width": downsize[1], "url": downsize[0], "orientation": "portrait" if downsize[2] > downsize[1] else "landscape"})
-            elif (php_isset(lambda : meta["sizes"][size])):
+                sizes_[size_] = Array({"height": downsize_[2], "width": downsize_[1], "url": downsize_[0], "orientation": "portrait" if downsize_[2] > downsize_[1] else "landscape"})
+            elif (php_isset(lambda : meta_["sizes"][size_])):
                 #// Nothing from the filter, so consult image metadata if we have it.
-                size_meta = meta["sizes"][size]
+                size_meta_ = meta_["sizes"][size_]
                 #// We have the actual image size, but might need to further constrain it if content_width is narrower.
                 #// Thumbnail, medium, and full sizes are also checked against the site's height/width options.
-                width, height = image_constrain_size_for_editor(size_meta["width"], size_meta["height"], size, "edit")
-                sizes[size] = Array({"height": height, "width": width, "url": base_url + size_meta["file"], "orientation": "portrait" if height > width else "landscape"})
+                width_, height_ = image_constrain_size_for_editor(size_meta_["width"], size_meta_["height"], size_, "edit")
+                sizes_[size_] = Array({"height": height_, "width": width_, "url": base_url_ + size_meta_["file"], "orientation": "portrait" if height_ > width_ else "landscape"})
             # end if
         # end for
-        if "image" == type:
-            if (not php_empty(lambda : meta["original_image"])):
-                response["originalImageURL"] = wp_get_original_image_url(attachment.ID)
-                response["originalImageName"] = wp_basename(wp_get_original_image_path(attachment.ID))
+        if "image" == type_:
+            if (not php_empty(lambda : meta_["original_image"])):
+                response_["originalImageURL"] = wp_get_original_image_url(attachment_.ID)
+                response_["originalImageName"] = wp_basename(wp_get_original_image_path(attachment_.ID))
             # end if
-            sizes["full"] = Array({"url": attachment_url})
-            if (php_isset(lambda : meta["height"]) and php_isset(lambda : meta["width"])):
-                sizes["full"]["height"] = meta["height"]
-                sizes["full"]["width"] = meta["width"]
-                sizes["full"]["orientation"] = "portrait" if meta["height"] > meta["width"] else "landscape"
+            sizes_["full"] = Array({"url": attachment_url_})
+            if (php_isset(lambda : meta_["height"]) and php_isset(lambda : meta_["width"])):
+                sizes_["full"]["height"] = meta_["height"]
+                sizes_["full"]["width"] = meta_["width"]
+                sizes_["full"]["orientation"] = "portrait" if meta_["height"] > meta_["width"] else "landscape"
             # end if
-            response = php_array_merge(response, sizes["full"])
-        elif meta["sizes"]["full"]["file"]:
-            sizes["full"] = Array({"url": base_url + meta["sizes"]["full"]["file"], "height": meta["sizes"]["full"]["height"], "width": meta["sizes"]["full"]["width"], "orientation": "portrait" if meta["sizes"]["full"]["height"] > meta["sizes"]["full"]["width"] else "landscape"})
+            response_ = php_array_merge(response_, sizes_["full"])
+        elif meta_["sizes"]["full"]["file"]:
+            sizes_["full"] = Array({"url": base_url_ + meta_["sizes"]["full"]["file"], "height": meta_["sizes"]["full"]["height"], "width": meta_["sizes"]["full"]["width"], "orientation": "portrait" if meta_["sizes"]["full"]["height"] > meta_["sizes"]["full"]["width"] else "landscape"})
         # end if
-        response = php_array_merge(response, Array({"sizes": sizes}))
+        response_ = php_array_merge(response_, Array({"sizes": sizes_}))
     # end if
-    if meta and "video" == type:
-        if (php_isset(lambda : meta["width"])):
-            response["width"] = php_int(meta["width"])
+    if meta_ and "video" == type_:
+        if (php_isset(lambda : meta_["width"])):
+            response_["width"] = php_int(meta_["width"])
         # end if
-        if (php_isset(lambda : meta["height"])):
-            response["height"] = php_int(meta["height"])
+        if (php_isset(lambda : meta_["height"])):
+            response_["height"] = php_int(meta_["height"])
         # end if
     # end if
-    if meta and "audio" == type or "video" == type:
-        if (php_isset(lambda : meta["length_formatted"])):
-            response["fileLength"] = meta["length_formatted"]
-            response["fileLengthHumanReadable"] = human_readable_duration(meta["length_formatted"])
+    if meta_ and "audio" == type_ or "video" == type_:
+        if (php_isset(lambda : meta_["length_formatted"])):
+            response_["fileLength"] = meta_["length_formatted"]
+            response_["fileLengthHumanReadable"] = human_readable_duration(meta_["length_formatted"])
         # end if
-        response["meta"] = Array()
-        for key,label in wp_get_attachment_id3_keys(attachment, "js"):
-            response["meta"][key] = False
-            if (not php_empty(lambda : meta[key])):
-                response["meta"][key] = meta[key]
+        response_["meta"] = Array()
+        for key_,label_ in wp_get_attachment_id3_keys(attachment_, "js"):
+            response_["meta"][key_] = False
+            if (not php_empty(lambda : meta_[key_])):
+                response_["meta"][key_] = meta_[key_]
             # end if
         # end for
-        id = get_post_thumbnail_id(attachment.ID)
-        if (not php_empty(lambda : id)):
-            src, width, height = wp_get_attachment_image_src(id, "full")
-            response["image"] = compact("src", "width", "height")
-            src, width, height = wp_get_attachment_image_src(id, "thumbnail")
-            response["thumb"] = compact("src", "width", "height")
+        id_ = get_post_thumbnail_id(attachment_.ID)
+        if (not php_empty(lambda : id_)):
+            src_, width_, height_ = wp_get_attachment_image_src(id_, "full")
+            response_["image"] = php_compact("src", "width", "height")
+            src_, width_, height_ = wp_get_attachment_image_src(id_, "thumbnail")
+            response_["thumb"] = php_compact("src", "width", "height")
         else:
-            src = wp_mime_type_icon(attachment.ID)
-            width = 48
-            height = 64
-            response["image"] = compact("src", "width", "height")
-            response["thumb"] = compact("src", "width", "height")
+            src_ = wp_mime_type_icon(attachment_.ID)
+            width_ = 48
+            height_ = 64
+            response_["image"] = php_compact("src", "width", "height")
+            response_["thumb"] = php_compact("src", "width", "height")
         # end if
     # end if
     if php_function_exists("get_compat_media_markup"):
-        response["compat"] = get_compat_media_markup(attachment.ID, Array({"in_modal": True}))
+        response_["compat"] = get_compat_media_markup(attachment_.ID, Array({"in_modal": True}))
     # end if
     #// 
     #// Filters the attachment data prepared for JavaScript.
@@ -2990,7 +3069,7 @@ def wp_prepare_attachment_for_js(attachment=None, *args_):
     #// @param WP_Post     $attachment Attachment object.
     #// @param array|false $meta       Array of attachment meta data, or false if there is none.
     #//
-    return apply_filters("wp_prepare_attachment_for_js", response, attachment, meta)
+    return apply_filters("wp_prepare_attachment_for_js", response_, attachment_, meta_)
 # end def wp_prepare_attachment_for_js
 #// 
 #// Enqueues all scripts, styles, settings, and templates necessary to use
@@ -3008,33 +3087,38 @@ def wp_prepare_attachment_for_js(attachment=None, *args_):
 #// @type int|WP_Post A post object or ID.
 #// }
 #//
-def wp_enqueue_media(args=Array(), *args_):
+def wp_enqueue_media(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Enqueue me just once per page, please.
     if did_action("wp_enqueue_media"):
         return
     # end if
-    global content_width,wpdb,wp_locale
-    php_check_if_defined("content_width","wpdb","wp_locale")
-    defaults = Array({"post": None})
-    args = wp_parse_args(args, defaults)
+    global content_width_
+    global wpdb_
+    global wp_locale_
+    php_check_if_defined("content_width_","wpdb_","wp_locale_")
+    defaults_ = Array({"post": None})
+    args_ = wp_parse_args(args_, defaults_)
     #// We're going to pass the old thickbox media tabs to `media_upload_tabs`
     #// to ensure plugins will work. We will then unset those tabs.
-    tabs = Array({"type": "", "type_url": "", "gallery": "", "library": ""})
+    tabs_ = Array({"type": "", "type_url": "", "gallery": "", "library": ""})
     #// This filter is documented in wp-admin/includes/media.php
-    tabs = apply_filters("media_upload_tabs", tabs)
-    tabs["type"] = None
-    tabs["type_url"] = None
-    tabs["gallery"] = None
-    tabs["library"] = None
-    props = Array({"link": get_option("image_default_link_type"), "align": get_option("image_default_align"), "size": get_option("image_default_size")})
-    exts = php_array_merge(wp_get_audio_extensions(), wp_get_video_extensions())
-    mimes = get_allowed_mime_types()
-    ext_mimes = Array()
-    for ext in exts:
-        for ext_preg,mime_match in mimes:
-            if php_preg_match("#" + ext + "#i", ext_preg):
-                ext_mimes[ext] = mime_match
+    tabs_ = apply_filters("media_upload_tabs", tabs_)
+    tabs_["type"] = None
+    tabs_["type_url"] = None
+    tabs_["gallery"] = None
+    tabs_["library"] = None
+    props_ = Array({"link": get_option("image_default_link_type"), "align": get_option("image_default_align"), "size": get_option("image_default_size")})
+    exts_ = php_array_merge(wp_get_audio_extensions(), wp_get_video_extensions())
+    mimes_ = get_allowed_mime_types()
+    ext_mimes_ = Array()
+    for ext_ in exts_:
+        for ext_preg_,mime_match_ in mimes_:
+            if php_preg_match("#" + ext_ + "#i", ext_preg_):
+                ext_mimes_[ext_] = mime_match_
                 break
             # end if
         # end for
@@ -3056,9 +3140,9 @@ def wp_enqueue_media(args=Array(), *args_):
     #// @param bool|null $show Whether to show the button, or `null` to decide based
     #// on whether any audio files exist in the media library.
     #//
-    show_audio_playlist = apply_filters("media_library_show_audio_playlist", True)
-    if None == show_audio_playlist:
-        show_audio_playlist = wpdb.get_var(str("\n          SELECT ID\n         FROM ") + str(wpdb.posts) + str("""\n           WHERE post_type = 'attachment'\n            AND post_mime_type LIKE 'audio%'\n          LIMIT 1\n       """))
+    show_audio_playlist_ = apply_filters("media_library_show_audio_playlist", True)
+    if None == show_audio_playlist_:
+        show_audio_playlist_ = wpdb_.get_var(str("\n            SELECT ID\n         FROM ") + str(wpdb_.posts) + str("""\n          WHERE post_type = 'attachment'\n            AND post_mime_type LIKE 'audio%'\n          LIMIT 1\n       """))
     # end if
     #// 
     #// Allows showing or hiding the "Create Video Playlist" button in the media library.
@@ -3077,9 +3161,9 @@ def wp_enqueue_media(args=Array(), *args_):
     #// @param bool|null $show Whether to show the button, or `null` to decide based
     #// on whether any video files exist in the media library.
     #//
-    show_video_playlist = apply_filters("media_library_show_video_playlist", True)
-    if None == show_video_playlist:
-        show_video_playlist = wpdb.get_var(str("\n          SELECT ID\n         FROM ") + str(wpdb.posts) + str("""\n           WHERE post_type = 'attachment'\n            AND post_mime_type LIKE 'video%'\n          LIMIT 1\n       """))
+    show_video_playlist_ = apply_filters("media_library_show_video_playlist", True)
+    if None == show_video_playlist_:
+        show_video_playlist_ = wpdb_.get_var(str("\n            SELECT ID\n         FROM ") + str(wpdb_.posts) + str("""\n          WHERE post_type = 'attachment'\n            AND post_mime_type LIKE 'video%'\n          LIMIT 1\n       """))
     # end if
     #// 
     #// Allows overriding the list of months displayed in the media library.
@@ -3097,37 +3181,37 @@ def wp_enqueue_media(args=Array(), *args_):
     #// properties, or `null` (or any other non-array value)
     #// for default behavior.
     #//
-    months = apply_filters("media_library_months_with_files", None)
-    if (not php_is_array(months)):
-        months = wpdb.get_results(wpdb.prepare(str("\n          SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month\n            FROM ") + str(wpdb.posts) + str("""\n           WHERE post_type = %s\n          ORDER BY post_date DESC\n       """), "attachment"))
+    months_ = apply_filters("media_library_months_with_files", None)
+    if (not php_is_array(months_)):
+        months_ = wpdb_.get_results(wpdb_.prepare(str("\n           SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month\n            FROM ") + str(wpdb_.posts) + str("""\n          WHERE post_type = %s\n          ORDER BY post_date DESC\n       """), "attachment"))
     # end if
-    for month_year in months:
-        month_year.text = php_sprintf(__("%1$s %2$d"), wp_locale.get_month(month_year.month), month_year.year)
+    for month_year_ in months_:
+        month_year_.text = php_sprintf(__("%1$s %2$d"), wp_locale_.get_month(month_year_.month), month_year_.year)
     # end for
-    settings = Array({"tabs": tabs, "tabUrl": add_query_arg(Array({"chromeless": True}), admin_url("media-upload.php"))}, {"mimeTypes": wp_list_pluck(get_post_mime_types(), 0), "captions": (not apply_filters("disable_captions", "")), "nonce": Array({"sendToEditor": wp_create_nonce("media-send-to-editor")})}, {"post": Array({"id": 0})}, {"defaultProps": props, "attachmentCounts": Array({"audio": 1 if show_audio_playlist else 0, "video": 1 if show_video_playlist else 0})}, {"oEmbedProxyUrl": rest_url("oembed/1.0/proxy"), "embedExts": exts, "embedMimes": ext_mimes, "contentWidth": content_width, "months": months, "mediaTrash": 1 if MEDIA_TRASH else 0})
-    post = None
-    if (php_isset(lambda : args["post"])):
-        post = get_post(args["post"])
-        settings["post"] = Array({"id": post.ID, "nonce": wp_create_nonce("update-post_" + post.ID)})
-        thumbnail_support = current_theme_supports("post-thumbnails", post.post_type) and post_type_supports(post.post_type, "thumbnail")
-        if (not thumbnail_support) and "attachment" == post.post_type and post.post_mime_type:
-            if wp_attachment_is("audio", post):
-                thumbnail_support = post_type_supports("attachment:audio", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:audio")
-            elif wp_attachment_is("video", post):
-                thumbnail_support = post_type_supports("attachment:video", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:video")
+    settings_ = Array({"tabs": tabs_, "tabUrl": add_query_arg(Array({"chromeless": True}), admin_url("media-upload.php"))}, {"mimeTypes": wp_list_pluck(get_post_mime_types(), 0), "captions": (not apply_filters("disable_captions", "")), "nonce": Array({"sendToEditor": wp_create_nonce("media-send-to-editor")})}, {"post": Array({"id": 0})}, {"defaultProps": props_, "attachmentCounts": Array({"audio": 1 if show_audio_playlist_ else 0, "video": 1 if show_video_playlist_ else 0})}, {"oEmbedProxyUrl": rest_url("oembed/1.0/proxy"), "embedExts": exts_, "embedMimes": ext_mimes_, "contentWidth": content_width_, "months": months_, "mediaTrash": 1 if MEDIA_TRASH else 0})
+    post_ = None
+    if (php_isset(lambda : args_["post"])):
+        post_ = get_post(args_["post"])
+        settings_["post"] = Array({"id": post_.ID, "nonce": wp_create_nonce("update-post_" + post_.ID)})
+        thumbnail_support_ = current_theme_supports("post-thumbnails", post_.post_type) and post_type_supports(post_.post_type, "thumbnail")
+        if (not thumbnail_support_) and "attachment" == post_.post_type and post_.post_mime_type:
+            if wp_attachment_is("audio", post_):
+                thumbnail_support_ = post_type_supports("attachment:audio", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:audio")
+            elif wp_attachment_is("video", post_):
+                thumbnail_support_ = post_type_supports("attachment:video", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:video")
             # end if
         # end if
-        if thumbnail_support:
-            featured_image_id = get_post_meta(post.ID, "_thumbnail_id", True)
-            settings["post"]["featuredImageId"] = featured_image_id if featured_image_id else -1
+        if thumbnail_support_:
+            featured_image_id_ = get_post_meta(post_.ID, "_thumbnail_id", True)
+            settings_["post"]["featuredImageId"] = featured_image_id_ if featured_image_id_ else -1
         # end if
     # end if
-    if post:
-        post_type_object = get_post_type_object(post.post_type)
+    if post_:
+        post_type_object_ = get_post_type_object(post_.post_type)
     else:
-        post_type_object = get_post_type_object("post")
+        post_type_object_ = get_post_type_object("post")
     # end if
-    strings = Array({"mediaFrameDefaultTitle": __("Media"), "url": __("URL"), "addMedia": __("Add Media"), "search": __("Search"), "select": __("Select"), "cancel": __("Cancel"), "update": __("Update"), "replace": __("Replace"), "remove": __("Remove"), "back": __("Back"), "selected": __("%d selected"), "dragInfo": __("Drag and drop to reorder media files."), "uploadFilesTitle": __("Upload Files"), "uploadImagesTitle": __("Upload Images"), "mediaLibraryTitle": __("Media Library"), "insertMediaTitle": __("Add Media"), "createNewGallery": __("Create a new gallery"), "createNewPlaylist": __("Create a new playlist"), "createNewVideoPlaylist": __("Create a new video playlist"), "returnToLibrary": __("&#8592; Return to library"), "allMediaItems": __("All media items"), "allDates": __("All dates"), "noItemsFound": __("No items found."), "insertIntoPost": post_type_object.labels.insert_into_item, "unattached": __("Unattached"), "mine": _x("Mine", "media items"), "trash": _x("Trash", "noun"), "uploadedToThisPost": post_type_object.labels.uploaded_to_this_item, "warnDelete": __("You are about to permanently delete this item from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete."), "warnBulkDelete": __("You are about to permanently delete these items from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete."), "warnBulkTrash": __("You are about to trash these items.\n  'Cancel' to stop, 'OK' to delete."), "bulkSelect": __("Bulk Select"), "trashSelected": __("Move to Trash"), "restoreSelected": __("Restore from Trash"), "deletePermanently": __("Delete Permanently"), "apply": __("Apply"), "filterByDate": __("Filter by date"), "filterByType": __("Filter by type"), "searchLabel": __("Search"), "searchMediaLabel": __("Search Media"), "searchMediaPlaceholder": __("Search media items..."), "mediaFound": __("Number of media items found: %d"), "mediaFoundHasMoreResults": __("Number of media items displayed: %d. Scroll the page for more results."), "noMedia": __("No media items found."), "noMediaTryNewSearch": __("No media items found. Try a different search."), "attachmentDetails": __("Attachment Details"), "insertFromUrlTitle": __("Insert from URL"), "setFeaturedImageTitle": post_type_object.labels.featured_image, "setFeaturedImage": post_type_object.labels.set_featured_image, "createGalleryTitle": __("Create Gallery"), "editGalleryTitle": __("Edit Gallery"), "cancelGalleryTitle": __("&#8592; Cancel Gallery"), "insertGallery": __("Insert gallery"), "updateGallery": __("Update gallery"), "addToGallery": __("Add to gallery"), "addToGalleryTitle": __("Add to Gallery"), "reverseOrder": __("Reverse order"), "imageDetailsTitle": __("Image Details"), "imageReplaceTitle": __("Replace Image"), "imageDetailsCancel": __("Cancel Edit"), "editImage": __("Edit Image"), "chooseImage": __("Choose Image"), "selectAndCrop": __("Select and Crop"), "skipCropping": __("Skip Cropping"), "cropImage": __("Crop Image"), "cropYourImage": __("Crop your image"), "cropping": __("Cropping&hellip;"), "suggestedDimensions": __("Suggested image dimensions: %1$s by %2$s pixels."), "cropError": __("There has been an error cropping your image."), "audioDetailsTitle": __("Audio Details"), "audioReplaceTitle": __("Replace Audio"), "audioAddSourceTitle": __("Add Audio Source"), "audioDetailsCancel": __("Cancel Edit"), "videoDetailsTitle": __("Video Details"), "videoReplaceTitle": __("Replace Video"), "videoAddSourceTitle": __("Add Video Source"), "videoDetailsCancel": __("Cancel Edit"), "videoSelectPosterImageTitle": __("Select Poster Image"), "videoAddTrackTitle": __("Add Subtitles"), "playlistDragInfo": __("Drag and drop to reorder tracks."), "createPlaylistTitle": __("Create Audio Playlist"), "editPlaylistTitle": __("Edit Audio Playlist"), "cancelPlaylistTitle": __("&#8592; Cancel Audio Playlist"), "insertPlaylist": __("Insert audio playlist"), "updatePlaylist": __("Update audio playlist"), "addToPlaylist": __("Add to audio playlist"), "addToPlaylistTitle": __("Add to Audio Playlist"), "videoPlaylistDragInfo": __("Drag and drop to reorder videos."), "createVideoPlaylistTitle": __("Create Video Playlist"), "editVideoPlaylistTitle": __("Edit Video Playlist"), "cancelVideoPlaylistTitle": __("&#8592; Cancel Video Playlist"), "insertVideoPlaylist": __("Insert video playlist"), "updateVideoPlaylist": __("Update video playlist"), "addToVideoPlaylist": __("Add to video playlist"), "addToVideoPlaylistTitle": __("Add to Video Playlist"), "filterAttachments": __("Filter Media"), "attachmentsList": __("Media list")})
+    strings_ = Array({"mediaFrameDefaultTitle": __("Media"), "url": __("URL"), "addMedia": __("Add Media"), "search": __("Search"), "select": __("Select"), "cancel": __("Cancel"), "update": __("Update"), "replace": __("Replace"), "remove": __("Remove"), "back": __("Back"), "selected": __("%d selected"), "dragInfo": __("Drag and drop to reorder media files."), "uploadFilesTitle": __("Upload Files"), "uploadImagesTitle": __("Upload Images"), "mediaLibraryTitle": __("Media Library"), "insertMediaTitle": __("Add Media"), "createNewGallery": __("Create a new gallery"), "createNewPlaylist": __("Create a new playlist"), "createNewVideoPlaylist": __("Create a new video playlist"), "returnToLibrary": __("&#8592; Return to library"), "allMediaItems": __("All media items"), "allDates": __("All dates"), "noItemsFound": __("No items found."), "insertIntoPost": post_type_object_.labels.insert_into_item, "unattached": __("Unattached"), "mine": _x("Mine", "media items"), "trash": _x("Trash", "noun"), "uploadedToThisPost": post_type_object_.labels.uploaded_to_this_item, "warnDelete": __("You are about to permanently delete this item from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete."), "warnBulkDelete": __("You are about to permanently delete these items from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete."), "warnBulkTrash": __("You are about to trash these items.\n  'Cancel' to stop, 'OK' to delete."), "bulkSelect": __("Bulk Select"), "trashSelected": __("Move to Trash"), "restoreSelected": __("Restore from Trash"), "deletePermanently": __("Delete Permanently"), "apply": __("Apply"), "filterByDate": __("Filter by date"), "filterByType": __("Filter by type"), "searchLabel": __("Search"), "searchMediaLabel": __("Search Media"), "searchMediaPlaceholder": __("Search media items..."), "mediaFound": __("Number of media items found: %d"), "mediaFoundHasMoreResults": __("Number of media items displayed: %d. Scroll the page for more results."), "noMedia": __("No media items found."), "noMediaTryNewSearch": __("No media items found. Try a different search."), "attachmentDetails": __("Attachment Details"), "insertFromUrlTitle": __("Insert from URL"), "setFeaturedImageTitle": post_type_object_.labels.featured_image, "setFeaturedImage": post_type_object_.labels.set_featured_image, "createGalleryTitle": __("Create Gallery"), "editGalleryTitle": __("Edit Gallery"), "cancelGalleryTitle": __("&#8592; Cancel Gallery"), "insertGallery": __("Insert gallery"), "updateGallery": __("Update gallery"), "addToGallery": __("Add to gallery"), "addToGalleryTitle": __("Add to Gallery"), "reverseOrder": __("Reverse order"), "imageDetailsTitle": __("Image Details"), "imageReplaceTitle": __("Replace Image"), "imageDetailsCancel": __("Cancel Edit"), "editImage": __("Edit Image"), "chooseImage": __("Choose Image"), "selectAndCrop": __("Select and Crop"), "skipCropping": __("Skip Cropping"), "cropImage": __("Crop Image"), "cropYourImage": __("Crop your image"), "cropping": __("Cropping&hellip;"), "suggestedDimensions": __("Suggested image dimensions: %1$s by %2$s pixels."), "cropError": __("There has been an error cropping your image."), "audioDetailsTitle": __("Audio Details"), "audioReplaceTitle": __("Replace Audio"), "audioAddSourceTitle": __("Add Audio Source"), "audioDetailsCancel": __("Cancel Edit"), "videoDetailsTitle": __("Video Details"), "videoReplaceTitle": __("Replace Video"), "videoAddSourceTitle": __("Add Video Source"), "videoDetailsCancel": __("Cancel Edit"), "videoSelectPosterImageTitle": __("Select Poster Image"), "videoAddTrackTitle": __("Add Subtitles"), "playlistDragInfo": __("Drag and drop to reorder tracks."), "createPlaylistTitle": __("Create Audio Playlist"), "editPlaylistTitle": __("Edit Audio Playlist"), "cancelPlaylistTitle": __("&#8592; Cancel Audio Playlist"), "insertPlaylist": __("Insert audio playlist"), "updatePlaylist": __("Update audio playlist"), "addToPlaylist": __("Add to audio playlist"), "addToPlaylistTitle": __("Add to Audio Playlist"), "videoPlaylistDragInfo": __("Drag and drop to reorder videos."), "createVideoPlaylistTitle": __("Create Video Playlist"), "editVideoPlaylistTitle": __("Edit Video Playlist"), "cancelVideoPlaylistTitle": __("&#8592; Cancel Video Playlist"), "insertVideoPlaylist": __("Insert video playlist"), "updateVideoPlaylist": __("Update video playlist"), "addToVideoPlaylist": __("Add to video playlist"), "addToVideoPlaylistTitle": __("Add to Video Playlist"), "filterAttachments": __("Filter Media"), "attachmentsList": __("Media list")})
     #// 
     #// Filters the media view settings.
     #// 
@@ -3136,7 +3220,7 @@ def wp_enqueue_media(args=Array(), *args_):
     #// @param array   $settings List of media view settings.
     #// @param WP_Post $post     Post object.
     #//
-    settings = apply_filters("media_view_settings", settings, post)
+    settings_ = apply_filters("media_view_settings", settings_, post_)
     #// 
     #// Filters the media view strings.
     #// 
@@ -3145,12 +3229,12 @@ def wp_enqueue_media(args=Array(), *args_):
     #// @param string[] $strings Array of media view strings keyed by the name they'll be referenced by in JavaScript.
     #// @param WP_Post  $post    Post object.
     #//
-    strings = apply_filters("media_view_strings", strings, post)
-    strings["settings"] = settings
+    strings_ = apply_filters("media_view_strings", strings_, post_)
+    strings_["settings"] = settings_
     #// Ensure we enqueue media-editor first, that way media-views
     #// is registered internally before we try to localize it. See #24724.
     wp_enqueue_script("media-editor")
-    wp_localize_script("media-views", "_wpMediaViewsL10n", strings)
+    wp_localize_script("media-views", "_wpMediaViewsL10n", strings_)
     wp_enqueue_script("media-audiovideo")
     wp_enqueue_style("media-views")
     if is_admin():
@@ -3179,13 +3263,14 @@ def wp_enqueue_media(args=Array(), *args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
 #// @return WP_Post[] Array of media attached to the given post.
 #//
-def get_attached_media(type=None, post=0, *args_):
+def get_attached_media(type_=None, post_=0, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return Array()
     # end if
-    args = Array({"post_parent": post.ID, "post_type": "attachment", "post_mime_type": type, "posts_per_page": -1, "orderby": "menu_order", "order": "ASC"})
+    args_ = Array({"post_parent": post_.ID, "post_type": "attachment", "post_mime_type": type_, "posts_per_page": -1, "orderby": "menu_order", "order": "ASC"})
     #// 
     #// Filters arguments used to retrieve media attached to the given post.
     #// 
@@ -3195,8 +3280,8 @@ def get_attached_media(type=None, post=0, *args_):
     #// @param string  $type Mime type of the desired media.
     #// @param WP_Post $post Post object.
     #//
-    args = apply_filters("get_attached_media_args", args, type, post)
-    children = get_children(args)
+    args_ = apply_filters("get_attached_media_args", args_, type_, post_)
+    children_ = get_children(args_)
     #// 
     #// Filters the list of media attached to the given post.
     #// 
@@ -3206,7 +3291,7 @@ def get_attached_media(type=None, post=0, *args_):
     #// @param string    $type     Mime type of the media desired.
     #// @param WP_Post   $post     Post object.
     #//
-    return apply_filters("get_attached_media", children, type, post)
+    return apply_filters("get_attached_media", children_, type_, post_)
 # end def get_attached_media
 #// 
 #// Check the content HTML for a audio, video, object, embed, or iframe tags.
@@ -3217,9 +3302,10 @@ def get_attached_media(type=None, post=0, *args_):
 #// @param string[] $types   An array of media types: 'audio', 'video', 'object', 'embed', or 'iframe'.
 #// @return string[] Array of found HTML media elements.
 #//
-def get_media_embedded_in_content(content=None, types=None, *args_):
+def get_media_embedded_in_content(content_=None, types_=None, *_args_):
     
-    html = Array()
+    
+    html_ = Array()
     #// 
     #// Filters the embedded media types that are allowed to be returned from the content blob.
     #// 
@@ -3228,20 +3314,20 @@ def get_media_embedded_in_content(content=None, types=None, *args_):
     #// @param string[] $allowed_media_types An array of allowed media types. Default media types are
     #// 'audio', 'video', 'object', 'embed', and 'iframe'.
     #//
-    allowed_media_types = apply_filters("media_embedded_in_content_allowed_types", Array("audio", "video", "object", "embed", "iframe"))
-    if (not php_empty(lambda : types)):
-        if (not php_is_array(types)):
-            types = Array(types)
+    allowed_media_types_ = apply_filters("media_embedded_in_content_allowed_types", Array("audio", "video", "object", "embed", "iframe"))
+    if (not php_empty(lambda : types_)):
+        if (not php_is_array(types_)):
+            types_ = Array(types_)
         # end if
-        allowed_media_types = php_array_intersect(allowed_media_types, types)
+        allowed_media_types_ = php_array_intersect(allowed_media_types_, types_)
     # end if
-    tags = php_implode("|", allowed_media_types)
-    if preg_match_all("#<(?P<tag>" + tags + ")[^<]*?(?:>[\\s\\S]*?<\\/(?P=tag)>|\\s*\\/>)#", content, matches):
-        for match in matches[0]:
-            html[-1] = match
+    tags_ = php_implode("|", allowed_media_types_)
+    if preg_match_all("#<(?P<tag>" + tags_ + ")[^<]*?(?:>[\\s\\S]*?<\\/(?P=tag)>|\\s*\\/>)#", content_, matches_):
+        for match_ in matches_[0]:
+            html_[-1] = match_
         # end for
     # end if
-    return html
+    return html_
 # end def get_media_embedded_in_content
 #// 
 #// Retrieves galleries from the passed post's content.
@@ -3253,39 +3339,42 @@ def get_media_embedded_in_content(content=None, types=None, *args_):
 #// @return array A list of arrays, each containing gallery data and srcs parsed
 #// from the expanded shortcode.
 #//
-def get_post_galleries(post=None, html=True, *args_):
+def get_post_galleries(post_=None, html_=None, *_args_):
+    if html_ is None:
+        html_ = True
+    # end if
     
-    post = get_post(post)
-    if (not post):
+    post_ = get_post(post_)
+    if (not post_):
         return Array()
     # end if
-    if (not has_shortcode(post.post_content, "gallery")):
+    if (not has_shortcode(post_.post_content, "gallery")):
         return Array()
     # end if
-    galleries = Array()
-    if preg_match_all("/" + get_shortcode_regex() + "/s", post.post_content, matches, PREG_SET_ORDER):
-        for shortcode in matches:
-            if "gallery" == shortcode[2]:
-                srcs = Array()
-                shortcode_attrs = shortcode_parse_atts(shortcode[3])
-                if (not php_is_array(shortcode_attrs)):
-                    shortcode_attrs = Array()
+    galleries_ = Array()
+    if preg_match_all("/" + get_shortcode_regex() + "/s", post_.post_content, matches_, PREG_SET_ORDER):
+        for shortcode_ in matches_:
+            if "gallery" == shortcode_[2]:
+                srcs_ = Array()
+                shortcode_attrs_ = shortcode_parse_atts(shortcode_[3])
+                if (not php_is_array(shortcode_attrs_)):
+                    shortcode_attrs_ = Array()
                 # end if
                 #// Specify the post id of the gallery we're viewing if the shortcode doesn't reference another post already.
-                if (not (php_isset(lambda : shortcode_attrs["id"]))):
-                    shortcode[3] += " id=\"" + php_intval(post.ID) + "\""
+                if (not (php_isset(lambda : shortcode_attrs_["id"]))):
+                    shortcode_[3] += " id=\"" + php_intval(post_.ID) + "\""
                 # end if
-                gallery = do_shortcode_tag(shortcode)
-                if html:
-                    galleries[-1] = gallery
+                gallery_ = do_shortcode_tag(shortcode_)
+                if html_:
+                    galleries_[-1] = gallery_
                 else:
-                    preg_match_all("#src=(['\"])(.+?)\\1#is", gallery, src, PREG_SET_ORDER)
-                    if (not php_empty(lambda : src)):
-                        for s in src:
-                            srcs[-1] = s[2]
+                    preg_match_all("#src=(['\"])(.+?)\\1#is", gallery_, src_, PREG_SET_ORDER)
+                    if (not php_empty(lambda : src_)):
+                        for s_ in src_:
+                            srcs_[-1] = s_[2]
                         # end for
                     # end if
-                    galleries[-1] = php_array_merge(shortcode_attrs, Array({"src": php_array_values(array_unique(srcs))}))
+                    galleries_[-1] = php_array_merge(shortcode_attrs_, Array({"src": php_array_values(array_unique(srcs_))}))
                 # end if
             # end if
         # end for
@@ -3298,7 +3387,7 @@ def get_post_galleries(post=None, html=True, *args_):
     #// @param array   $galleries Associative array of all found post galleries.
     #// @param WP_Post $post      Post object.
     #//
-    return apply_filters("get_post_galleries", galleries, post)
+    return apply_filters("get_post_galleries", galleries_, post_)
 # end def get_post_galleries
 #// 
 #// Check a specified post's content for gallery and, if present, return the first
@@ -3309,10 +3398,13 @@ def get_post_galleries(post=None, html=True, *args_):
 #// @param bool        $html Optional. Whether to return HTML or data. Default is true.
 #// @return string|array Gallery data and srcs parsed from the expanded shortcode.
 #//
-def get_post_gallery(post=0, html=True, *args_):
+def get_post_gallery(post_=0, html_=None, *_args_):
+    if html_ is None:
+        html_ = True
+    # end if
     
-    galleries = get_post_galleries(post, html)
-    gallery = reset(galleries)
+    galleries_ = get_post_galleries(post_, html_)
+    gallery_ = reset(galleries_)
     #// 
     #// Filters the first-found post gallery.
     #// 
@@ -3322,7 +3414,7 @@ def get_post_gallery(post=0, html=True, *args_):
     #// @param int|WP_Post $post      Post ID or object.
     #// @param array       $galleries Associative array of all found post galleries.
     #//
-    return apply_filters("get_post_gallery", gallery, post, galleries)
+    return apply_filters("get_post_gallery", gallery_, post_, galleries_)
 # end def get_post_gallery
 #// 
 #// Retrieve the image srcs from galleries from a post's content, if present
@@ -3335,10 +3427,11 @@ def get_post_gallery(post=0, html=True, *args_):
 #// @return array A list of lists, each containing image srcs parsed.
 #// from an expanded shortcode
 #//
-def get_post_galleries_images(post=0, *args_):
+def get_post_galleries_images(post_=0, *_args_):
     
-    galleries = get_post_galleries(post, False)
-    return wp_list_pluck(galleries, "src")
+    
+    galleries_ = get_post_galleries(post_, False)
+    return wp_list_pluck(galleries_, "src")
 # end def get_post_galleries_images
 #// 
 #// Checks a post's content for galleries and return the image srcs for the first found gallery
@@ -3350,10 +3443,11 @@ def get_post_galleries_images(post=0, *args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
 #// @return string[] A list of a gallery's image srcs in order.
 #//
-def get_post_gallery_images(post=0, *args_):
+def get_post_gallery_images(post_=0, *_args_):
     
-    gallery = get_post_gallery(post, False)
-    return Array() if php_empty(lambda : gallery["src"]) else gallery["src"]
+    
+    gallery_ = get_post_gallery(post_, False)
+    return Array() if php_empty(lambda : gallery_["src"]) else gallery_["src"]
 # end def get_post_gallery_images
 #// 
 #// Maybe attempts to generate attachment metadata, if missing.
@@ -3362,21 +3456,22 @@ def get_post_gallery_images(post=0, *args_):
 #// 
 #// @param WP_Post $attachment Attachment object.
 #//
-def wp_maybe_generate_attachment_metadata(attachment=None, *args_):
+def wp_maybe_generate_attachment_metadata(attachment_=None, *_args_):
     
-    if php_empty(lambda : attachment) or php_empty(lambda : attachment.ID):
+    
+    if php_empty(lambda : attachment_) or php_empty(lambda : attachment_.ID):
         return
     # end if
-    attachment_id = php_int(attachment.ID)
-    file = get_attached_file(attachment_id)
-    meta = wp_get_attachment_metadata(attachment_id)
-    if php_empty(lambda : meta) and php_file_exists(file):
-        _meta = get_post_meta(attachment_id)
-        _lock = "wp_generating_att_" + attachment_id
-        if (not php_array_key_exists("_wp_attachment_metadata", _meta)) and (not get_transient(_lock)):
-            set_transient(_lock, file)
-            wp_update_attachment_metadata(attachment_id, wp_generate_attachment_metadata(attachment_id, file))
-            delete_transient(_lock)
+    attachment_id_ = php_int(attachment_.ID)
+    file_ = get_attached_file(attachment_id_)
+    meta_ = wp_get_attachment_metadata(attachment_id_)
+    if php_empty(lambda : meta_) and php_file_exists(file_):
+        _meta_ = get_post_meta(attachment_id_)
+        _lock_ = "wp_generating_att_" + attachment_id_
+        if (not php_array_key_exists("_wp_attachment_metadata", _meta_)) and (not get_transient(_lock_)):
+            set_transient(_lock_, file_)
+            wp_update_attachment_metadata(attachment_id_, wp_generate_attachment_metadata(attachment_id_, file_))
+            delete_transient(_lock_)
         # end if
     # end if
 # end def wp_maybe_generate_attachment_metadata
@@ -3390,31 +3485,32 @@ def wp_maybe_generate_attachment_metadata(attachment=None, *args_):
 #// @param string $url The URL to resolve.
 #// @return int The found post ID, or 0 on failure.
 #//
-def attachment_url_to_postid(url=None, *args_):
+def attachment_url_to_postid(url_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    dir = wp_get_upload_dir()
-    path = url
-    site_url = php_parse_url(dir["url"])
-    image_path = php_parse_url(path)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    dir_ = wp_get_upload_dir()
+    path_ = url_
+    site_url_ = php_parse_url(dir_["url"])
+    image_path_ = php_parse_url(path_)
     #// Force the protocols to match if needed.
-    if (php_isset(lambda : image_path["scheme"])) and image_path["scheme"] != site_url["scheme"]:
-        path = php_str_replace(image_path["scheme"], site_url["scheme"], path)
+    if (php_isset(lambda : image_path_["scheme"])) and image_path_["scheme"] != site_url_["scheme"]:
+        path_ = php_str_replace(image_path_["scheme"], site_url_["scheme"], path_)
     # end if
-    if 0 == php_strpos(path, dir["baseurl"] + "/"):
-        path = php_substr(path, php_strlen(dir["baseurl"] + "/"))
+    if 0 == php_strpos(path_, dir_["baseurl"] + "/"):
+        path_ = php_substr(path_, php_strlen(dir_["baseurl"] + "/"))
     # end if
-    sql = wpdb.prepare(str("SELECT post_id, meta_value FROM ") + str(wpdb.postmeta) + str(" WHERE meta_key = '_wp_attached_file' AND meta_value = %s"), path)
-    results = wpdb.get_results(sql)
-    post_id = None
-    if results:
+    sql_ = wpdb_.prepare(str("SELECT post_id, meta_value FROM ") + str(wpdb_.postmeta) + str(" WHERE meta_key = '_wp_attached_file' AND meta_value = %s"), path_)
+    results_ = wpdb_.get_results(sql_)
+    post_id_ = None
+    if results_:
         #// Use the first available result, but prefer a case-sensitive match, if exists.
-        post_id = reset(results).post_id
-        if php_count(results) > 1:
-            for result in results:
-                if path == result.meta_value:
-                    post_id = result.post_id
+        post_id_ = reset(results_).post_id
+        if php_count(results_) > 1:
+            for result_ in results_:
+                if path_ == result_.meta_value:
+                    post_id_ = result_.post_id
                     break
                 # end if
             # end for
@@ -3428,7 +3524,7 @@ def attachment_url_to_postid(url=None, *args_):
     #// @param int|null $post_id The post_id (if any) found by the function.
     #// @param string   $url     The URL being looked up.
     #//
-    return php_int(apply_filters("attachment_url_to_postid", post_id, url))
+    return php_int(apply_filters("attachment_url_to_postid", post_id_, url_))
 # end def attachment_url_to_postid
 #// 
 #// Returns the URLs for CSS files used in an iframe-sandbox'd TinyMCE media view.
@@ -3437,12 +3533,13 @@ def attachment_url_to_postid(url=None, *args_):
 #// 
 #// @return string[] The relevant CSS file URLs.
 #//
-def wpview_media_sandbox_styles(*args_):
+def wpview_media_sandbox_styles(*_args_):
     
-    version = "ver=" + get_bloginfo("version")
-    mediaelement = includes_url(str("js/mediaelement/mediaelementplayer-legacy.min.css?") + str(version))
-    wpmediaelement = includes_url(str("js/mediaelement/wp-mediaelement.css?") + str(version))
-    return Array(mediaelement, wpmediaelement)
+    
+    version_ = "ver=" + get_bloginfo("version")
+    mediaelement_ = includes_url(str("js/mediaelement/mediaelementplayer-legacy.min.css?") + str(version_))
+    wpmediaelement_ = includes_url(str("js/mediaelement/wp-mediaelement.css?") + str(version_))
+    return Array(mediaelement_, wpmediaelement_)
 # end def wpview_media_sandbox_styles
 #// 
 #// Registers the personal data exporter for media.
@@ -3450,10 +3547,11 @@ def wpview_media_sandbox_styles(*args_):
 #// @param array[] $exporters An array of personal data exporters, keyed by their ID.
 #// @return array[] Updated array of personal data exporters.
 #//
-def wp_register_media_personal_data_exporter(exporters=None, *args_):
+def wp_register_media_personal_data_exporter(exporters_=None, *_args_):
     
-    exporters["wordpress-media"] = Array({"exporter_friendly_name": __("WordPress Media"), "callback": "wp_media_personal_data_exporter"})
-    return exporters
+    
+    exporters_["wordpress-media"] = Array({"exporter_friendly_name": __("WordPress Media"), "callback": "wp_media_personal_data_exporter"})
+    return exporters_
 # end def wp_register_media_personal_data_exporter
 #// 
 #// Finds and exports attachments associated with an email address.
@@ -3464,26 +3562,27 @@ def wp_register_media_personal_data_exporter(exporters=None, *args_):
 #// @param  int    $page          Attachment page.
 #// @return array  $return        An array of personal data.
 #//
-def wp_media_personal_data_exporter(email_address=None, page=1, *args_):
+def wp_media_personal_data_exporter(email_address_=None, page_=1, *_args_):
+    
     
     #// Limit us to 50 attachments at a time to avoid timing out.
-    number = 50
-    page = php_int(page)
-    data_to_export = Array()
-    user = get_user_by("email", email_address)
-    if False == user:
-        return Array({"data": data_to_export, "done": True})
+    number_ = 50
+    page_ = php_int(page_)
+    data_to_export_ = Array()
+    user_ = get_user_by("email", email_address_)
+    if False == user_:
+        return Array({"data": data_to_export_, "done": True})
     # end if
-    post_query = php_new_class("WP_Query", lambda : WP_Query(Array({"author": user.ID, "posts_per_page": number, "paged": page, "post_type": "attachment", "post_status": "any", "orderby": "ID", "order": "ASC"})))
-    for post in post_query.posts:
-        attachment_url = wp_get_attachment_url(post.ID)
-        if attachment_url:
-            post_data_to_export = Array(Array({"name": __("URL"), "value": attachment_url}))
-            data_to_export[-1] = Array({"group_id": "media", "group_label": __("Media"), "group_description": __("User&#8217;s media data."), "item_id": str("post-") + str(post.ID), "data": post_data_to_export})
+    post_query_ = php_new_class("WP_Query", lambda : WP_Query(Array({"author": user_.ID, "posts_per_page": number_, "paged": page_, "post_type": "attachment", "post_status": "any", "orderby": "ID", "order": "ASC"})))
+    for post_ in post_query_.posts:
+        attachment_url_ = wp_get_attachment_url(post_.ID)
+        if attachment_url_:
+            post_data_to_export_ = Array(Array({"name": __("URL"), "value": attachment_url_}))
+            data_to_export_[-1] = Array({"group_id": "media", "group_label": __("Media"), "group_description": __("User&#8217;s media data."), "item_id": str("post-") + str(post_.ID), "data": post_data_to_export_})
         # end if
     # end for
-    done = post_query.max_num_pages <= page
-    return Array({"data": data_to_export, "done": done})
+    done_ = post_query_.max_num_pages <= page_
+    return Array({"data": data_to_export_, "done": done_})
 # end def wp_media_personal_data_exporter
 #// 
 #// Add additional default image sub-sizes.
@@ -3498,7 +3597,8 @@ def wp_media_personal_data_exporter(email_address=None, page=1, *args_):
 #// @since 5.3.0
 #// @access private
 #//
-def _wp_add_additional_image_sizes(*args_):
+def _wp_add_additional_image_sizes(*_args_):
+    
     
     #// 2x medium_large size.
     add_image_size("1536x1536", 1536, 1536)

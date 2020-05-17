@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,6 +24,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Panel
 #//
 class WP_Customize_Nav_Menus_Panel(WP_Customize_Panel):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "nav_menus"
     #// 
     #// Render screen options for Menus.
@@ -37,12 +38,13 @@ class WP_Customize_Nav_Menus_Panel(WP_Customize_Panel):
     #//
     def render_screen_options(self):
         
+        
         #// Adds the screen options.
         php_include_file(ABSPATH + "wp-admin/includes/nav-menu.php", once=True)
         add_filter("manage_nav-menus_columns", "wp_nav_menu_manage_columns")
         #// Display screen options.
-        screen = WP_Screen.get("nav-menus.php")
-        screen.render_screen_options(Array({"wrap": False}))
+        screen_ = WP_Screen.get("nav-menus.php")
+        screen_.render_screen_options(Array({"wrap": False}))
     # end def render_screen_options
     #// 
     #// Returns the advanced options for the nav menus page.
@@ -53,6 +55,7 @@ class WP_Customize_Nav_Menus_Panel(WP_Customize_Panel):
     #// @deprecated 4.5.0 Deprecated in favor of wp_nav_menu_manage_columns().
     #//
     def wp_nav_menu_manage_columns(self):
+        
         
         _deprecated_function(__METHOD__, "4.5.0", "wp_nav_menu_manage_columns")
         php_include_file(ABSPATH + "wp-admin/includes/nav-menu.php", once=True)
@@ -69,6 +72,7 @@ class WP_Customize_Nav_Menus_Panel(WP_Customize_Panel):
     #// @see WP_Customize_Panel::print_template()
     #//
     def content_template(self):
+        
         
         php_print("     <li class=\"panel-meta customize-info accordion-section <# if ( ! data.description ) { #> cannot-expand<# } #>\">\n         <button type=\"button\" class=\"customize-panel-back\" tabindex=\"-1\">\n               <span class=\"screen-reader-text\">")
         _e("Back")

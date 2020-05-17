@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -43,16 +38,20 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// 
     #// @param array $args An associative array of arguments.
     #//
-    def __init__(self, args=Array()):
-        
-        global status,page
-        php_check_if_defined("status","page")
-        super().__init__(Array({"plural": "themes", "screen": args["screen"] if (php_isset(lambda : args["screen"])) else None}))
-        status = PHP_REQUEST["theme_status"] if (php_isset(lambda : PHP_REQUEST["theme_status"])) else "all"
-        if (not php_in_array(status, Array("all", "enabled", "disabled", "upgrade", "search", "broken"))):
-            status = "all"
+    def __init__(self, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        page = self.get_pagenum()
+        
+        global status_
+        global page_
+        php_check_if_defined("status_","page_")
+        super().__init__(Array({"plural": "themes", "screen": args_["screen"] if (php_isset(lambda : args_["screen"])) else None}))
+        status_ = PHP_REQUEST["theme_status"] if (php_isset(lambda : PHP_REQUEST["theme_status"])) else "all"
+        if (not php_in_array(status_, Array("all", "enabled", "disabled", "upgrade", "search", "broken"))):
+            status_ = "all"
+        # end if
+        page_ = self.get_pagenum()
         self.is_site_themes = True if "site-themes-network" == self.screen.id else False
         if self.is_site_themes:
             self.site_id = php_intval(PHP_REQUEST["id"]) if (php_isset(lambda : PHP_REQUEST["id"])) else 0
@@ -63,6 +62,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #//
     def get_table_classes(self):
         
+        
         #// @todo Remove and add CSS for .themes.
         return Array("widefat", "plugins")
     # end def get_table_classes
@@ -70,6 +70,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// @return bool
     #//
     def ajax_user_can(self):
+        
         
         if self.is_site_themes:
             return current_user_can("manage_sites")
@@ -87,85 +88,92 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #//
     def prepare_items(self):
         
-        global status,totals,page,orderby,order,s
-        php_check_if_defined("status","totals","page","orderby","order","s")
+        
+        global status_
+        global totals_
+        global page_
+        global orderby_
+        global order_
+        global s_
+        php_check_if_defined("status_","totals_","page_","orderby_","order_","s_")
         wp_reset_vars(Array("orderby", "order", "s"))
-        themes = Array({"all": apply_filters("all_themes", wp_get_themes()), "search": Array(), "enabled": Array(), "disabled": Array(), "upgrade": Array(), "broken": Array() if self.is_site_themes else wp_get_themes(Array({"errors": True}))})
+        themes_ = Array({"all": apply_filters("all_themes", wp_get_themes()), "search": Array(), "enabled": Array(), "disabled": Array(), "upgrade": Array(), "broken": Array() if self.is_site_themes else wp_get_themes(Array({"errors": True}))})
         if self.is_site_themes:
-            themes_per_page = self.get_items_per_page("site_themes_network_per_page")
-            allowed_where = "site"
+            themes_per_page_ = self.get_items_per_page("site_themes_network_per_page")
+            allowed_where_ = "site"
         else:
-            themes_per_page = self.get_items_per_page("themes_network_per_page")
-            allowed_where = "network"
+            themes_per_page_ = self.get_items_per_page("themes_network_per_page")
+            allowed_where_ = "network"
         # end if
-        current = get_site_transient("update_themes")
-        maybe_update = current_user_can("update_themes") and (not self.is_site_themes) and current
-        for key,theme in themes["all"]:
-            if self.is_site_themes and theme.is_allowed("network"):
-                themes["all"][key] = None
+        current_ = get_site_transient("update_themes")
+        maybe_update_ = current_user_can("update_themes") and (not self.is_site_themes) and current_
+        for key_,theme_ in themes_["all"]:
+            if self.is_site_themes and theme_.is_allowed("network"):
+                themes_["all"][key_] = None
                 continue
             # end if
-            if maybe_update and (php_isset(lambda : current.response[key])):
-                themes["all"][key].update = True
-                themes["upgrade"][key] = themes["all"][key]
+            if maybe_update_ and (php_isset(lambda : current_.response[key_])):
+                themes_["all"][key_].update = True
+                themes_["upgrade"][key_] = themes_["all"][key_]
             # end if
-            filter = "enabled" if theme.is_allowed(allowed_where, self.site_id) else "disabled"
-            themes[filter][key] = themes["all"][key]
+            filter_ = "enabled" if theme_.is_allowed(allowed_where_, self.site_id) else "disabled"
+            themes_[filter_][key_] = themes_["all"][key_]
         # end for
-        if s:
-            status = "search"
-            themes["search"] = php_array_filter(php_array_merge(themes["all"], themes["broken"]), Array(self, "_search_callback"))
+        if s_:
+            status_ = "search"
+            themes_["search"] = php_array_filter(php_array_merge(themes_["all"], themes_["broken"]), Array(self, "_search_callback"))
         # end if
-        totals = Array()
-        for type,list in themes:
-            totals[type] = php_count(list)
+        totals_ = Array()
+        for type_,list_ in themes_:
+            totals_[type_] = php_count(list_)
         # end for
-        if php_empty(lambda : themes[status]) and (not php_in_array(status, Array("all", "search"))):
-            status = "all"
+        if php_empty(lambda : themes_[status_]) and (not php_in_array(status_, Array("all", "search"))):
+            status_ = "all"
         # end if
-        self.items = themes[status]
+        self.items = themes_[status_]
         WP_Theme.sort_by_name(self.items)
-        self.has_items = (not php_empty(lambda : themes["all"]))
-        total_this_page = totals[status]
-        wp_localize_script("updates", "_wpUpdatesItemCounts", Array({"themes": totals, "totals": wp_get_update_data()}))
-        if orderby:
-            orderby = ucfirst(orderby)
-            order = php_strtoupper(order)
-            if "Name" == orderby:
-                if "ASC" == order:
+        self.has_items = (not php_empty(lambda : themes_["all"]))
+        total_this_page_ = totals_[status_]
+        wp_localize_script("updates", "_wpUpdatesItemCounts", Array({"themes": totals_, "totals": wp_get_update_data()}))
+        if orderby_:
+            orderby_ = ucfirst(orderby_)
+            order_ = php_strtoupper(order_)
+            if "Name" == orderby_:
+                if "ASC" == order_:
                     self.items = array_reverse(self.items)
                 # end if
             else:
                 uasort(self.items, Array(self, "_order_callback"))
             # end if
         # end if
-        start = page - 1 * themes_per_page
-        if total_this_page > themes_per_page:
-            self.items = php_array_slice(self.items, start, themes_per_page, True)
+        start_ = page_ - 1 * themes_per_page_
+        if total_this_page_ > themes_per_page_:
+            self.items = php_array_slice(self.items, start_, themes_per_page_, True)
         # end if
-        self.set_pagination_args(Array({"total_items": total_this_page, "per_page": themes_per_page}))
+        self.set_pagination_args(Array({"total_items": total_this_page_, "per_page": themes_per_page_}))
     # end def prepare_items
     #// 
     #// @staticvar string $term
     #// @param WP_Theme $theme
     #// @return bool
     #//
-    def _search_callback(self, theme=None):
+    def _search_callback(self, theme_=None):
         
-        _search_callback.term = None
-        if is_null(_search_callback.term):
-            _search_callback.term = wp_unslash(PHP_REQUEST["s"])
+        
+        term_ = None
+        if is_null(term_):
+            term_ = wp_unslash(PHP_REQUEST["s"])
         # end if
-        for field in Array("Name", "Description", "Author", "Author", "AuthorURI"):
+        for field_ in Array("Name", "Description", "Author", "Author", "AuthorURI"):
             #// Don't mark up; Do translate.
-            if False != php_stripos(theme.display(field, False, True), _search_callback.term):
+            if False != php_stripos(theme_.display(field_, False, True), term_):
                 return True
             # end if
         # end for
-        if False != php_stripos(theme.get_stylesheet(), _search_callback.term):
+        if False != php_stripos(theme_.get_stylesheet(), term_):
             return True
         # end if
-        if False != php_stripos(theme.get_template(), _search_callback.term):
+        if False != php_stripos(theme_.get_template(), term_):
             return True
         # end if
         return False
@@ -178,24 +186,27 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// @param array $theme_b
     #// @return int
     #//
-    def _order_callback(self, theme_a=None, theme_b=None):
+    def _order_callback(self, theme_a_=None, theme_b_=None):
         
-        global orderby,order
-        php_check_if_defined("orderby","order")
-        a = theme_a[orderby]
-        b = theme_b[orderby]
-        if a == b:
+        
+        global orderby_
+        global order_
+        php_check_if_defined("orderby_","order_")
+        a_ = theme_a_[orderby_]
+        b_ = theme_b_[orderby_]
+        if a_ == b_:
             return 0
         # end if
-        if "DESC" == order:
-            return 1 if a < b else -1
+        if "DESC" == order_:
+            return 1 if a_ < b_ else -1
         else:
-            return -1 if a < b else 1
+            return -1 if a_ < b_ else 1
         # end if
     # end def _order_callback
     #// 
     #//
     def no_items(self):
+        
         
         if self.has_items:
             _e("No themes found.")
@@ -208,12 +219,14 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #//
     def get_columns(self):
         
+        
         return Array({"cb": "<input type=\"checkbox\" />", "name": __("Theme"), "description": __("Description")})
     # end def get_columns
     #// 
     #// @return array
     #//
     def get_sortable_columns(self):
+        
         
         return Array({"name": "name"})
     # end def get_sortable_columns
@@ -226,6 +239,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #//
     def get_primary_column_name(self):
         
+        
         return "name"
     # end def get_primary_column_name
     #// 
@@ -235,50 +249,52 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #//
     def get_views(self):
         
-        global totals,status
-        php_check_if_defined("totals","status")
-        status_links = Array()
-        for type,count in totals:
-            if (not count):
+        
+        global totals_
+        global status_
+        php_check_if_defined("totals_","status_")
+        status_links_ = Array()
+        for type_,count_ in totals_:
+            if (not count_):
                 continue
             # end if
-            for case in Switch(type):
+            for case in Switch(type_):
                 if case("all"):
                     #// translators: %s: Number of themes.
-                    text = _nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", count, "themes")
+                    text_ = _nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", count_, "themes")
                     break
                 # end if
                 if case("enabled"):
                     #// translators: %s: Number of themes.
-                    text = _nx("Enabled <span class=\"count\">(%s)</span>", "Enabled <span class=\"count\">(%s)</span>", count, "themes")
+                    text_ = _nx("Enabled <span class=\"count\">(%s)</span>", "Enabled <span class=\"count\">(%s)</span>", count_, "themes")
                     break
                 # end if
                 if case("disabled"):
                     #// translators: %s: Number of themes.
-                    text = _nx("Disabled <span class=\"count\">(%s)</span>", "Disabled <span class=\"count\">(%s)</span>", count, "themes")
+                    text_ = _nx("Disabled <span class=\"count\">(%s)</span>", "Disabled <span class=\"count\">(%s)</span>", count_, "themes")
                     break
                 # end if
                 if case("upgrade"):
                     #// translators: %s: Number of themes.
-                    text = _nx("Update Available <span class=\"count\">(%s)</span>", "Update Available <span class=\"count\">(%s)</span>", count, "themes")
+                    text_ = _nx("Update Available <span class=\"count\">(%s)</span>", "Update Available <span class=\"count\">(%s)</span>", count_, "themes")
                     break
                 # end if
                 if case("broken"):
                     #// translators: %s: Number of themes.
-                    text = _nx("Broken <span class=\"count\">(%s)</span>", "Broken <span class=\"count\">(%s)</span>", count, "themes")
+                    text_ = _nx("Broken <span class=\"count\">(%s)</span>", "Broken <span class=\"count\">(%s)</span>", count_, "themes")
                     break
                 # end if
             # end for
             if self.is_site_themes:
-                url = "site-themes.php?id=" + self.site_id
+                url_ = "site-themes.php?id=" + self.site_id
             else:
-                url = "themes.php"
+                url_ = "themes.php"
             # end if
-            if "search" != type:
-                status_links[type] = php_sprintf("<a href='%s'%s>%s</a>", esc_url(add_query_arg("theme_status", type, url)), " class=\"current\" aria-current=\"page\"" if type == status else "", php_sprintf(text, number_format_i18n(count)))
+            if "search" != type_:
+                status_links_[type_] = php_sprintf("<a href='%s'%s>%s</a>", esc_url(add_query_arg("theme_status", type_, url_)), " class=\"current\" aria-current=\"page\"" if type_ == status_ else "", php_sprintf(text_, number_format_i18n(count_)))
             # end if
         # end for
-        return status_links
+        return status_links_
     # end def get_views
     #// 
     #// @global string $status
@@ -287,31 +303,33 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #//
     def get_bulk_actions(self):
         
-        global status
-        php_check_if_defined("status")
-        actions = Array()
-        if "enabled" != status:
-            actions["enable-selected"] = __("Enable") if self.is_site_themes else __("Network Enable")
+        
+        global status_
+        php_check_if_defined("status_")
+        actions_ = Array()
+        if "enabled" != status_:
+            actions_["enable-selected"] = __("Enable") if self.is_site_themes else __("Network Enable")
         # end if
-        if "disabled" != status:
-            actions["disable-selected"] = __("Disable") if self.is_site_themes else __("Network Disable")
+        if "disabled" != status_:
+            actions_["disable-selected"] = __("Disable") if self.is_site_themes else __("Network Disable")
         # end if
         if (not self.is_site_themes):
             if current_user_can("update_themes"):
-                actions["update-selected"] = __("Update")
+                actions_["update-selected"] = __("Update")
             # end if
             if current_user_can("delete_themes"):
-                actions["delete-selected"] = __("Delete")
+                actions_["delete-selected"] = __("Delete")
             # end if
         # end if
-        return actions
+        return actions_
     # end def get_bulk_actions
     #// 
     #//
     def display_rows(self):
         
-        for theme in self.items:
-            self.single_row(theme)
+        
+        for theme_ in self.items:
+            self.single_row(theme_)
         # end for
     # end def display_rows
     #// 
@@ -321,19 +339,20 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// 
     #// @param WP_Theme $theme The current WP_Theme object.
     #//
-    def column_cb(self, theme=None):
+    def column_cb(self, theme_=None):
         
-        checkbox_id = "checkbox_" + php_md5(theme.get("Name"))
+        
+        checkbox_id_ = "checkbox_" + php_md5(theme_.get("Name"))
         php_print("     <input type=\"checkbox\" name=\"checked[]\" value=\"")
-        php_print(esc_attr(theme.get_stylesheet()))
+        php_print(esc_attr(theme_.get_stylesheet()))
         php_print("\" id=\"")
-        php_print(checkbox_id)
+        php_print(checkbox_id_)
         php_print("\" />\n      <label class=\"screen-reader-text\" for=\"")
-        php_print(checkbox_id)
+        php_print(checkbox_id_)
         php_print("\" >")
         _e("Select")
         php_print("  ")
-        php_print(theme.display("Name"))
+        php_print(theme_.display("Name"))
         php_print("</label>\n       ")
     # end def column_cb
     #// 
@@ -347,50 +366,53 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// 
     #// @param WP_Theme $theme The current WP_Theme object.
     #//
-    def column_name(self, theme=None):
+    def column_name(self, theme_=None):
         
-        global status,page,s
-        php_check_if_defined("status","page","s")
-        context = status
+        
+        global status_
+        global page_
+        global s_
+        php_check_if_defined("status_","page_","s_")
+        context_ = status_
         if self.is_site_themes:
-            url = str("site-themes.php?id=") + str(self.site_id) + str("&amp;")
-            allowed = theme.is_allowed("site", self.site_id)
+            url_ = str("site-themes.php?id=") + str(self.site_id) + str("&amp;")
+            allowed_ = theme_.is_allowed("site", self.site_id)
         else:
-            url = "themes.php?"
-            allowed = theme.is_allowed("network")
+            url_ = "themes.php?"
+            allowed_ = theme_.is_allowed("network")
         # end if
         #// Pre-order.
-        actions = Array({"enable": "", "disable": "", "delete": ""})
-        stylesheet = theme.get_stylesheet()
-        theme_key = urlencode(stylesheet)
-        if (not allowed):
-            if (not theme.errors()):
-                url = add_query_arg(Array({"action": "enable", "theme": theme_key, "paged": page, "s": s}), url)
+        actions_ = Array({"enable": "", "disable": "", "delete": ""})
+        stylesheet_ = theme_.get_stylesheet()
+        theme_key_ = urlencode(stylesheet_)
+        if (not allowed_):
+            if (not theme_.errors()):
+                url_ = add_query_arg(Array({"action": "enable", "theme": theme_key_, "paged": page_, "s": s_}), url_)
                 if self.is_site_themes:
                     #// translators: %s: Theme name.
-                    aria_label = php_sprintf(__("Enable %s"), theme.display("Name"))
+                    aria_label_ = php_sprintf(__("Enable %s"), theme_.display("Name"))
                 else:
                     #// translators: %s: Theme name.
-                    aria_label = php_sprintf(__("Network Enable %s"), theme.display("Name"))
+                    aria_label_ = php_sprintf(__("Network Enable %s"), theme_.display("Name"))
                 # end if
-                actions["enable"] = php_sprintf("<a href=\"%s\" class=\"edit\" aria-label=\"%s\">%s</a>", esc_url(wp_nonce_url(url, "enable-theme_" + stylesheet)), esc_attr(aria_label), __("Enable") if self.is_site_themes else __("Network Enable"))
+                actions_["enable"] = php_sprintf("<a href=\"%s\" class=\"edit\" aria-label=\"%s\">%s</a>", esc_url(wp_nonce_url(url_, "enable-theme_" + stylesheet_)), esc_attr(aria_label_), __("Enable") if self.is_site_themes else __("Network Enable"))
             # end if
         else:
-            url = add_query_arg(Array({"action": "disable", "theme": theme_key, "paged": page, "s": s}), url)
+            url_ = add_query_arg(Array({"action": "disable", "theme": theme_key_, "paged": page_, "s": s_}), url_)
             if self.is_site_themes:
                 #// translators: %s: Theme name.
-                aria_label = php_sprintf(__("Disable %s"), theme.display("Name"))
+                aria_label_ = php_sprintf(__("Disable %s"), theme_.display("Name"))
             else:
                 #// translators: %s: Theme name.
-                aria_label = php_sprintf(__("Network Disable %s"), theme.display("Name"))
+                aria_label_ = php_sprintf(__("Network Disable %s"), theme_.display("Name"))
             # end if
-            actions["disable"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", esc_url(wp_nonce_url(url, "disable-theme_" + stylesheet)), esc_attr(aria_label), __("Disable") if self.is_site_themes else __("Network Disable"))
+            actions_["disable"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", esc_url(wp_nonce_url(url_, "disable-theme_" + stylesheet_)), esc_attr(aria_label_), __("Disable") if self.is_site_themes else __("Network Disable"))
         # end if
-        if (not allowed) and current_user_can("delete_themes") and (not self.is_site_themes) and get_option("stylesheet") != stylesheet and get_option("template") != stylesheet:
-            url = add_query_arg(Array({"action": "delete-selected", "checked[]": theme_key, "theme_status": context, "paged": page, "s": s}), "themes.php")
+        if (not allowed_) and current_user_can("delete_themes") and (not self.is_site_themes) and get_option("stylesheet") != stylesheet_ and get_option("template") != stylesheet_:
+            url_ = add_query_arg(Array({"action": "delete-selected", "checked[]": theme_key_, "theme_status": context_, "paged": page_, "s": s_}), "themes.php")
             #// translators: %s: Theme name.
-            aria_label = php_sprintf(_x("Delete %s", "theme"), theme.display("Name"))
-            actions["delete"] = php_sprintf("<a href=\"%s\" class=\"delete\" aria-label=\"%s\">%s</a>", esc_url(wp_nonce_url(url, "bulk-themes")), esc_attr(aria_label), __("Delete"))
+            aria_label_ = php_sprintf(_x("Delete %s", "theme"), theme_.display("Name"))
+            actions_["delete"] = php_sprintf("<a href=\"%s\" class=\"delete\" aria-label=\"%s\">%s</a>", esc_url(wp_nonce_url(url_, "bulk-themes")), esc_attr(aria_label_), __("Delete"))
         # end if
         #// 
         #// Filters the action links displayed for each theme in the Multisite
@@ -414,7 +436,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         #// @param WP_Theme $theme   The current WP_Theme object.
         #// @param string   $context Status of the theme, one of 'all', 'enabled', or 'disabled'.
         #//
-        actions = apply_filters("theme_action_links", php_array_filter(actions), theme, context)
+        actions_ = apply_filters("theme_action_links", php_array_filter(actions_), theme_, context_)
         #// 
         #// Filters the action links of a specific theme in the Multisite themes
         #// list table.
@@ -429,8 +451,8 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         #// @param WP_Theme $theme   The current WP_Theme object.
         #// @param string   $context Status of the theme, one of 'all', 'enabled', or 'disabled'.
         #//
-        actions = apply_filters(str("theme_action_links_") + str(stylesheet), actions, theme, context)
-        php_print(self.row_actions(actions, True))
+        actions_ = apply_filters(str("theme_action_links_") + str(stylesheet_), actions_, theme_, context_)
+        php_print(self.row_actions(actions_, True))
     # end def column_name
     #// 
     #// Handles the description column output.
@@ -442,36 +464,38 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// 
     #// @param WP_Theme $theme The current WP_Theme object.
     #//
-    def column_description(self, theme=None):
+    def column_description(self, theme_=None):
         
-        global status,totals
-        php_check_if_defined("status","totals")
-        if theme.errors():
-            pre = __("Broken Theme:") + " " if "broken" == status else ""
-            php_print("<p><strong class=\"error-message\">" + pre + theme.errors().get_error_message() + "</strong></p>")
+        
+        global status_
+        global totals_
+        php_check_if_defined("status_","totals_")
+        if theme_.errors():
+            pre_ = __("Broken Theme:") + " " if "broken" == status_ else ""
+            php_print("<p><strong class=\"error-message\">" + pre_ + theme_.errors().get_error_message() + "</strong></p>")
         # end if
         if self.is_site_themes:
-            allowed = theme.is_allowed("site", self.site_id)
+            allowed_ = theme_.is_allowed("site", self.site_id)
         else:
-            allowed = theme.is_allowed("network")
+            allowed_ = theme_.is_allowed("network")
         # end if
-        class_ = "inactive" if (not allowed) else "active"
-        if (not php_empty(lambda : totals["upgrade"])) and (not php_empty(lambda : theme.update)):
+        class_ = "inactive" if (not allowed_) else "active"
+        if (not php_empty(lambda : totals_["upgrade"])) and (not php_empty(lambda : theme_.update)):
             class_ += " update"
         # end if
-        php_print("<div class='theme-description'><p>" + theme.display("Description") + str("</p></div>\n           <div class='") + str(class_) + str(" second theme-version-author-uri'>"))
-        stylesheet = theme.get_stylesheet()
-        theme_meta = Array()
-        if theme.get("Version"):
+        php_print("<div class='theme-description'><p>" + theme_.display("Description") + str("</p></div>\n          <div class='") + str(class_) + str(" second theme-version-author-uri'>"))
+        stylesheet_ = theme_.get_stylesheet()
+        theme_meta_ = Array()
+        if theme_.get("Version"):
             #// translators: %s: Theme version.
-            theme_meta[-1] = php_sprintf(__("Version %s"), theme.display("Version"))
+            theme_meta_[-1] = php_sprintf(__("Version %s"), theme_.display("Version"))
         # end if
         #// translators: %s: Theme author.
-        theme_meta[-1] = php_sprintf(__("By %s"), theme.display("Author"))
-        if theme.get("ThemeURI"):
+        theme_meta_[-1] = php_sprintf(__("By %s"), theme_.display("Author"))
+        if theme_.get("ThemeURI"):
             #// translators: %s: Theme name.
-            aria_label = php_sprintf(__("Visit %s homepage"), theme.display("Name"))
-            theme_meta[-1] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", theme.display("ThemeURI"), esc_attr(aria_label), __("Visit Theme Site"))
+            aria_label_ = php_sprintf(__("Visit %s homepage"), theme_.display("Name"))
+            theme_meta_[-1] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", theme_.display("ThemeURI"), esc_attr(aria_label_), __("Visit Theme Site"))
         # end if
         #// 
         #// Filters the array of row meta for each theme in the Multisite themes
@@ -486,8 +510,8 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         #// @param WP_Theme $theme      WP_Theme object.
         #// @param string   $status     Status of the theme.
         #//
-        theme_meta = apply_filters("theme_row_meta", theme_meta, stylesheet, theme, status)
-        php_print(php_implode(" | ", theme_meta))
+        theme_meta_ = apply_filters("theme_row_meta", theme_meta_, stylesheet_, theme_, status_)
+        php_print(php_implode(" | ", theme_meta_))
         php_print("</div>")
     # end def column_description
     #// 
@@ -498,9 +522,10 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// @param WP_Theme $theme       The current WP_Theme object.
     #// @param string   $column_name The current column name.
     #//
-    def column_default(self, theme=None, column_name=None):
+    def column_default(self, theme_=None, column_name_=None):
         
-        stylesheet = theme.get_stylesheet()
+        
+        stylesheet_ = theme_.get_stylesheet()
         #// 
         #// Fires inside each custom column of the Multisite themes list table.
         #// 
@@ -510,7 +535,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         #// @param string   $stylesheet  Directory name of the theme.
         #// @param WP_Theme $theme       Current WP_Theme object.
         #//
-        do_action("manage_themes_custom_column", column_name, stylesheet, theme)
+        do_action("manage_themes_custom_column", column_name_, stylesheet_, theme_)
     # end def column_default
     #// 
     #// Handles the output for a single table row.
@@ -519,50 +544,51 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// 
     #// @param WP_Theme $item The current WP_Theme object.
     #//
-    def single_row_columns(self, item=None):
+    def single_row_columns(self, item_=None):
         
-        columns, hidden, sortable, primary = self.get_column_info()
-        for column_name,column_display_name in columns:
-            extra_classes = ""
-            if php_in_array(column_name, hidden):
-                extra_classes += " hidden"
+        
+        columns_, hidden_, sortable_, primary_ = self.get_column_info()
+        for column_name_,column_display_name_ in columns_:
+            extra_classes_ = ""
+            if php_in_array(column_name_, hidden_):
+                extra_classes_ += " hidden"
             # end if
-            for case in Switch(column_name):
+            for case in Switch(column_name_):
                 if case("cb"):
                     php_print("<th scope=\"row\" class=\"check-column\">")
-                    self.column_cb(item)
+                    self.column_cb(item_)
                     php_print("</th>")
                     break
                 # end if
                 if case("name"):
-                    active_theme_label = ""
+                    active_theme_label_ = ""
                     #// The presence of the site_id property means that this is a subsite view and a label for the active theme needs to be added
                     if (not php_empty(lambda : self.site_id)):
-                        stylesheet = get_blog_option(self.site_id, "stylesheet")
-                        template = get_blog_option(self.site_id, "template")
+                        stylesheet_ = get_blog_option(self.site_id, "stylesheet")
+                        template_ = get_blog_option(self.site_id, "template")
                         #// Add a label for the active template
-                        if item.get_template() == template:
-                            active_theme_label = " &mdash; " + __("Active Theme")
+                        if item_.get_template() == template_:
+                            active_theme_label_ = " &mdash; " + __("Active Theme")
                         # end if
                         #// In case this is a child theme, label it properly
-                        if stylesheet != template and item.get_stylesheet() == stylesheet:
-                            active_theme_label = " &mdash; " + __("Active Child Theme")
+                        if stylesheet_ != template_ and item_.get_stylesheet() == stylesheet_:
+                            active_theme_label_ = " &mdash; " + __("Active Child Theme")
                         # end if
                     # end if
-                    php_print(str("<td class='theme-title column-primary") + str(extra_classes) + str("'><strong>") + item.display("Name") + active_theme_label + "</strong>")
-                    self.column_name(item)
+                    php_print(str("<td class='theme-title column-primary") + str(extra_classes_) + str("'><strong>") + item_.display("Name") + active_theme_label_ + "</strong>")
+                    self.column_name(item_)
                     php_print("</td>")
                     break
                 # end if
                 if case("description"):
-                    php_print(str("<td class='column-description desc") + str(extra_classes) + str("'>"))
-                    self.column_description(item)
+                    php_print(str("<td class='column-description desc") + str(extra_classes_) + str("'>"))
+                    self.column_description(item_)
                     php_print("</td>")
                     break
                 # end if
                 if case():
-                    php_print(str("<td class='") + str(column_name) + str(" column-") + str(column_name) + str(extra_classes) + str("'>"))
-                    self.column_default(item, column_name)
+                    php_print(str("<td class='") + str(column_name_) + str(" column-") + str(column_name_) + str(extra_classes_) + str("'>"))
+                    self.column_default(item_, column_name_)
                     php_print("</td>")
                     break
                 # end if
@@ -575,25 +601,27 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #// 
     #// @param WP_Theme $theme
     #//
-    def single_row(self, theme=None):
+    def single_row(self, theme_=None):
         
-        global status,totals
-        php_check_if_defined("status","totals")
+        
+        global status_
+        global totals_
+        php_check_if_defined("status_","totals_")
         if self.is_site_themes:
-            allowed = theme.is_allowed("site", self.site_id)
+            allowed_ = theme_.is_allowed("site", self.site_id)
         else:
-            allowed = theme.is_allowed("network")
+            allowed_ = theme_.is_allowed("network")
         # end if
-        stylesheet = theme.get_stylesheet()
-        class_ = "inactive" if (not allowed) else "active"
-        if (not php_empty(lambda : totals["upgrade"])) and (not php_empty(lambda : theme.update)):
+        stylesheet_ = theme_.get_stylesheet()
+        class_ = "inactive" if (not allowed_) else "active"
+        if (not php_empty(lambda : totals_["upgrade"])) and (not php_empty(lambda : theme_.update)):
             class_ += " update"
         # end if
-        printf("<tr class=\"%s\" data-slug=\"%s\">", esc_attr(class_), esc_attr(stylesheet))
-        self.single_row_columns(theme)
+        printf("<tr class=\"%s\" data-slug=\"%s\">", esc_attr(class_), esc_attr(stylesheet_))
+        self.single_row_columns(theme_)
         php_print("</tr>")
         if self.is_site_themes:
-            remove_action(str("after_theme_row_") + str(stylesheet), "wp_theme_update_row")
+            remove_action(str("after_theme_row_") + str(stylesheet_), "wp_theme_update_row")
         # end if
         #// 
         #// Fires after each row in the Multisite themes list table.
@@ -604,7 +632,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         #// @param WP_Theme $theme      Current WP_Theme object.
         #// @param string   $status     Status of the theme.
         #//
-        do_action("after_theme_row", stylesheet, theme, status)
+        do_action("after_theme_row", stylesheet_, theme_, status_)
         #// 
         #// Fires after each specific row in the Multisite themes list table.
         #// 
@@ -618,6 +646,6 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         #// @param WP_Theme $theme      Current WP_Theme object.
         #// @param string   $status     Status of the theme.
         #//
-        do_action(str("after_theme_row_") + str(stylesheet), stylesheet, theme, status)
+        do_action(str("after_theme_row_") + str(stylesheet_), stylesheet_, theme_, status_)
     # end def single_row
 # end class WP_MS_Themes_List_Table

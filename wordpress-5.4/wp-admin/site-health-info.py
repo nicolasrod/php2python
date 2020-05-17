@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,7 +15,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// WordPress Administration Bootstrap
 php_include_file(__DIR__ + "/admin.php", once=True)
-title = __("Site Health Info")
+title_ = __("Site Health Info")
 if (not current_user_can("view_site_health_checks")):
     wp_die(__("Sorry, you are not allowed to access the debug data."), "", 403)
 # end if
@@ -32,7 +27,7 @@ if (not php_class_exists("WP_Debug_Data")):
 if (not php_class_exists("WP_Site_Health")):
     php_include_file(ABSPATH + "wp-admin/includes/class-wp-site-health.php", once=True)
 # end if
-health_check_site_status = WP_Site_Health.get_instance()
+health_check_site_status_ = WP_Site_Health.get_instance()
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("""<div class=\"health-check-header\">
 <div class=\"health-check-title-section\">
@@ -77,7 +72,7 @@ php_print("""</p>
 <div class=\"health-check-body health-check-debug-tab hide-if-no-js\">
 """)
 WP_Debug_Data.check_for_updates()
-info = WP_Debug_Data.debug_data()
+info_ = WP_Debug_Data.debug_data()
 php_print("\n   <h2>\n      ")
 _e("Site Health Info")
 php_print("""   </h2>
@@ -91,7 +86,7 @@ php_print("""   </p>
 <div class=\"site-health-copy-buttons\">
 <div class=\"copy-button-wrapper\">
 <button type=\"button\" class=\"button copy-button\" data-clipboard-text=\"""")
-php_print(esc_attr(WP_Debug_Data.format(info, "debug")))
+php_print(esc_attr(WP_Debug_Data.format(info_, "debug")))
 php_print("\">\n                ")
 _e("Copy site info to clipboard")
 php_print("         </button>\n         <span class=\"success\" aria-hidden=\"true\">")
@@ -101,47 +96,47 @@ php_print("""</span>
 </div>
 <div id=\"health-check-debug\" class=\"health-check-accordion\">
 """)
-sizes_fields = Array("uploads_size", "themes_size", "plugins_size", "wordpress_size", "database_size", "total_size")
-for section,details in info:
-    if (not (php_isset(lambda : details["fields"]))) or php_empty(lambda : details["fields"]):
+sizes_fields_ = Array("uploads_size", "themes_size", "plugins_size", "wordpress_size", "database_size", "total_size")
+for section_,details_ in info_:
+    if (not (php_isset(lambda : details_["fields"]))) or php_empty(lambda : details_["fields"]):
         continue
     # end if
     php_print("         <h3 class=\"health-check-accordion-heading\">\n             <button aria-expanded=\"false\" class=\"health-check-accordion-trigger\" aria-controls=\"health-check-accordion-block-")
-    php_print(esc_attr(section))
+    php_print(esc_attr(section_))
     php_print("\" type=\"button\">\n                    <span class=\"title\">\n                        ")
-    php_print(esc_html(details["label"]))
+    php_print(esc_html(details_["label"]))
     php_print("                     ")
-    if (php_isset(lambda : details["show_count"])) and details["show_count"]:
-        printf("(%d)", php_count(details["fields"]))
+    if (php_isset(lambda : details_["show_count"])) and details_["show_count"]:
+        printf("(%d)", php_count(details_["fields"]))
     # end if
     php_print("                 </span>\n                   ")
-    if "wp-paths-sizes" == section:
+    if "wp-paths-sizes" == section_:
         php_print("                     <span class=\"health-check-wp-paths-sizes spinner\"></span>\n                       ")
     # end if
     php_print("""                   <span class=\"icon\"></span>
     </button>
     </h3>
     <div id=\"health-check-accordion-block-""")
-    php_print(esc_attr(section))
+    php_print(esc_attr(section_))
     php_print("\" class=\"health-check-accordion-panel\" hidden=\"hidden\">\n               ")
-    if (php_isset(lambda : details["description"])) and (not php_empty(lambda : details["description"])):
-        printf("<p>%s</p>", details["description"])
+    if (php_isset(lambda : details_["description"])) and (not php_empty(lambda : details_["description"])):
+        printf("<p>%s</p>", details_["description"])
     # end if
     php_print("             <table class=\"widefat striped health-check-table\" role=\"presentation\">\n                    <tbody>\n                   ")
-    for field_name,field in details["fields"]:
-        if php_is_array(field["value"]):
-            values = "<ul>"
-            for name,value in field["value"]:
-                values += php_sprintf("<li>%s: %s</li>", esc_html(name), esc_html(value))
+    for field_name_,field_ in details_["fields"]:
+        if php_is_array(field_["value"]):
+            values_ = "<ul>"
+            for name_,value_ in field_["value"]:
+                values_ += php_sprintf("<li>%s: %s</li>", esc_html(name_), esc_html(value_))
             # end for
-            values += "</ul>"
+            values_ += "</ul>"
         else:
-            values = esc_html(field["value"])
+            values_ = esc_html(field_["value"])
         # end if
-        if php_in_array(field_name, sizes_fields, True):
-            printf("<tr><td>%s</td><td class=\"%s\">%s</td></tr>", esc_html(field["label"]), esc_attr(field_name), values)
+        if php_in_array(field_name_, sizes_fields_, True):
+            printf("<tr><td>%s</td><td class=\"%s\">%s</td></tr>", esc_html(field_["label"]), esc_attr(field_name_), values_)
         else:
-            printf("<tr><td>%s</td><td>%s</td></tr>", esc_html(field["label"]), values)
+            printf("<tr><td>%s</td><td>%s</td></tr>", esc_html(field_["label"]), values_)
         # end if
     # end for
     php_print("""                   </tbody>

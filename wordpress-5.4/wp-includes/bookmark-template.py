@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -60,76 +55,77 @@ if '__PHP2PY_LOADED__' not in globals():
 #// }
 #// @return string Formatted output in HTML
 #//
-def _walk_bookmarks(bookmarks=None, args="", *args_):
+def _walk_bookmarks(bookmarks_=None, args_="", *_args_):
     
-    defaults = Array({"show_updated": 0, "show_description": 0, "show_images": 1, "show_name": 0, "before": "<li>", "after": "</li>", "between": "\n", "show_rating": 0, "link_before": "", "link_after": ""})
-    parsed_args = wp_parse_args(args, defaults)
-    output = ""
+    
+    defaults_ = Array({"show_updated": 0, "show_description": 0, "show_images": 1, "show_name": 0, "before": "<li>", "after": "</li>", "between": "\n", "show_rating": 0, "link_before": "", "link_after": ""})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    output_ = ""
     #// Blank string to start with.
-    for bookmark in bookmarks:
-        if (not (php_isset(lambda : bookmark.recently_updated))):
-            bookmark.recently_updated = False
+    for bookmark_ in bookmarks_:
+        if (not (php_isset(lambda : bookmark_.recently_updated))):
+            bookmark_.recently_updated = False
         # end if
-        output += parsed_args["before"]
-        if parsed_args["show_updated"] and bookmark.recently_updated:
-            output += "<em>"
+        output_ += parsed_args_["before"]
+        if parsed_args_["show_updated"] and bookmark_.recently_updated:
+            output_ += "<em>"
         # end if
-        the_link = "#"
-        if (not php_empty(lambda : bookmark.link_url)):
-            the_link = esc_url(bookmark.link_url)
+        the_link_ = "#"
+        if (not php_empty(lambda : bookmark_.link_url)):
+            the_link_ = esc_url(bookmark_.link_url)
         # end if
-        desc = esc_attr(sanitize_bookmark_field("link_description", bookmark.link_description, bookmark.link_id, "display"))
-        name = esc_attr(sanitize_bookmark_field("link_name", bookmark.link_name, bookmark.link_id, "display"))
-        title = desc
-        if parsed_args["show_updated"]:
-            if "00" != php_substr(bookmark.link_updated_f, 0, 2):
-                title += " ("
-                title += php_sprintf(__("Last updated: %s"), gmdate(get_option("links_updated_date_format"), bookmark.link_updated_f + get_option("gmt_offset") * HOUR_IN_SECONDS))
-                title += ")"
+        desc_ = esc_attr(sanitize_bookmark_field("link_description", bookmark_.link_description, bookmark_.link_id, "display"))
+        name_ = esc_attr(sanitize_bookmark_field("link_name", bookmark_.link_name, bookmark_.link_id, "display"))
+        title_ = desc_
+        if parsed_args_["show_updated"]:
+            if "00" != php_substr(bookmark_.link_updated_f, 0, 2):
+                title_ += " ("
+                title_ += php_sprintf(__("Last updated: %s"), gmdate(get_option("links_updated_date_format"), bookmark_.link_updated_f + get_option("gmt_offset") * HOUR_IN_SECONDS))
+                title_ += ")"
             # end if
         # end if
-        alt = " alt=\"" + name + " " + title if parsed_args["show_description"] else "" + "\""
-        if "" != title:
-            title = " title=\"" + title + "\""
+        alt_ = " alt=\"" + name_ + " " + title_ if parsed_args_["show_description"] else "" + "\""
+        if "" != title_:
+            title_ = " title=\"" + title_ + "\""
         # end if
-        rel = bookmark.link_rel
-        if "" != rel:
-            rel = " rel=\"" + esc_attr(rel) + "\""
+        rel_ = bookmark_.link_rel
+        if "" != rel_:
+            rel_ = " rel=\"" + esc_attr(rel_) + "\""
         # end if
-        target = bookmark.link_target
-        if "" != target:
-            target = " target=\"" + target + "\""
+        target_ = bookmark_.link_target
+        if "" != target_:
+            target_ = " target=\"" + target_ + "\""
         # end if
-        output += "<a href=\"" + the_link + "\"" + rel + title + target + ">"
-        output += parsed_args["link_before"]
-        if None != bookmark.link_image and parsed_args["show_images"]:
-            if php_strpos(bookmark.link_image, "http") == 0:
-                output += str("<img src=\"") + str(bookmark.link_image) + str("\" ") + str(alt) + str(" ") + str(title) + str(" />")
+        output_ += "<a href=\"" + the_link_ + "\"" + rel_ + title_ + target_ + ">"
+        output_ += parsed_args_["link_before"]
+        if None != bookmark_.link_image and parsed_args_["show_images"]:
+            if php_strpos(bookmark_.link_image, "http") == 0:
+                output_ += str("<img src=\"") + str(bookmark_.link_image) + str("\" ") + str(alt_) + str(" ") + str(title_) + str(" />")
             else:
                 #// If it's a relative path.
-                output += "<img src=\"" + get_option("siteurl") + str(bookmark.link_image) + str("\" ") + str(alt) + str(" ") + str(title) + str(" />")
+                output_ += "<img src=\"" + get_option("siteurl") + str(bookmark_.link_image) + str("\" ") + str(alt_) + str(" ") + str(title_) + str(" />")
             # end if
-            if parsed_args["show_name"]:
-                output += str(" ") + str(name)
+            if parsed_args_["show_name"]:
+                output_ += str(" ") + str(name_)
             # end if
         else:
-            output += name
+            output_ += name_
         # end if
-        output += parsed_args["link_after"]
-        output += "</a>"
-        if parsed_args["show_updated"] and bookmark.recently_updated:
-            output += "</em>"
+        output_ += parsed_args_["link_after"]
+        output_ += "</a>"
+        if parsed_args_["show_updated"] and bookmark_.recently_updated:
+            output_ += "</em>"
         # end if
-        if parsed_args["show_description"] and "" != desc:
-            output += parsed_args["between"] + desc
+        if parsed_args_["show_description"] and "" != desc_:
+            output_ += parsed_args_["between"] + desc_
         # end if
-        if parsed_args["show_rating"]:
-            output += parsed_args["between"] + sanitize_bookmark_field("link_rating", bookmark.link_rating, bookmark.link_id, "display")
+        if parsed_args_["show_rating"]:
+            output_ += parsed_args_["between"] + sanitize_bookmark_field("link_rating", bookmark_.link_rating, bookmark_.link_id, "display")
         # end if
-        output += parsed_args["after"] + "\n"
+        output_ += parsed_args_["after"] + "\n"
     # end for
     #// End while.
-    return output
+    return output_
 # end def _walk_bookmarks
 #// 
 #// Retrieve or echo all of the bookmarks.
@@ -183,31 +179,32 @@ def _walk_bookmarks(bookmarks=None, args="", *args_):
 #// }
 #// @return void|string Void if 'echo' argument is true, HTML list of bookmarks if 'echo' is false.
 #//
-def wp_list_bookmarks(args="", *args_):
+def wp_list_bookmarks(args_="", *_args_):
     
-    defaults = Array({"orderby": "name", "order": "ASC", "limit": -1, "category": "", "exclude_category": "", "category_name": "", "hide_invisible": 1, "show_updated": 0, "echo": 1, "categorize": 1, "title_li": __("Bookmarks"), "title_before": "<h2>", "title_after": "</h2>", "category_orderby": "name", "category_order": "ASC", "class": "linkcat", "category_before": "<li id=\"%id\" class=\"%class\">", "category_after": "</li>"})
-    parsed_args = wp_parse_args(args, defaults)
-    output = ""
-    if (not php_is_array(parsed_args["class"])):
-        parsed_args["class"] = php_explode(" ", parsed_args["class"])
+    
+    defaults_ = Array({"orderby": "name", "order": "ASC", "limit": -1, "category": "", "exclude_category": "", "category_name": "", "hide_invisible": 1, "show_updated": 0, "echo": 1, "categorize": 1, "title_li": __("Bookmarks"), "title_before": "<h2>", "title_after": "</h2>", "category_orderby": "name", "category_order": "ASC", "class": "linkcat", "category_before": "<li id=\"%id\" class=\"%class\">", "category_after": "</li>"})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    output_ = ""
+    if (not php_is_array(parsed_args_["class"])):
+        parsed_args_["class"] = php_explode(" ", parsed_args_["class"])
     # end if
-    parsed_args["class"] = php_array_map("sanitize_html_class", parsed_args["class"])
-    parsed_args["class"] = php_trim(join(" ", parsed_args["class"]))
-    if parsed_args["categorize"]:
-        cats = get_terms(Array({"taxonomy": "link_category", "name__like": parsed_args["category_name"], "include": parsed_args["category"], "exclude": parsed_args["exclude_category"], "orderby": parsed_args["category_orderby"], "order": parsed_args["category_order"], "hierarchical": 0}))
-        if php_empty(lambda : cats):
-            parsed_args["categorize"] = False
+    parsed_args_["class"] = php_array_map("sanitize_html_class", parsed_args_["class"])
+    parsed_args_["class"] = php_trim(join(" ", parsed_args_["class"]))
+    if parsed_args_["categorize"]:
+        cats_ = get_terms(Array({"taxonomy": "link_category", "name__like": parsed_args_["category_name"], "include": parsed_args_["category"], "exclude": parsed_args_["exclude_category"], "orderby": parsed_args_["category_orderby"], "order": parsed_args_["category_order"], "hierarchical": 0}))
+        if php_empty(lambda : cats_):
+            parsed_args_["categorize"] = False
         # end if
     # end if
-    if parsed_args["categorize"]:
+    if parsed_args_["categorize"]:
         #// Split the bookmarks into ul's for each category.
-        for cat in cats:
-            params = php_array_merge(parsed_args, Array({"category": cat.term_id}))
-            bookmarks = get_bookmarks(params)
-            if php_empty(lambda : bookmarks):
+        for cat_ in cats_:
+            params_ = php_array_merge(parsed_args_, Array({"category": cat_.term_id}))
+            bookmarks_ = get_bookmarks(params_)
+            if php_empty(lambda : bookmarks_):
                 continue
             # end if
-            output += php_str_replace(Array("%id", "%class"), Array(str("linkcat-") + str(cat.term_id), parsed_args["class"]), parsed_args["category_before"])
+            output_ += php_str_replace(Array("%id", "%class"), Array(str("linkcat-") + str(cat_.term_id), parsed_args_["class"]), parsed_args_["category_before"])
             #// 
             #// Filters the category name.
             #// 
@@ -215,30 +212,30 @@ def wp_list_bookmarks(args="", *args_):
             #// 
             #// @param string $cat_name The category name.
             #//
-            catname = apply_filters("link_category", cat.name)
-            output += parsed_args["title_before"]
-            output += catname
-            output += parsed_args["title_after"]
-            output += "\n   <ul class='xoxo blogroll'>\n"
-            output += _walk_bookmarks(bookmarks, parsed_args)
-            output += "\n   </ul>\n"
-            output += parsed_args["category_after"] + "\n"
+            catname_ = apply_filters("link_category", cat_.name)
+            output_ += parsed_args_["title_before"]
+            output_ += catname_
+            output_ += parsed_args_["title_after"]
+            output_ += "\n  <ul class='xoxo blogroll'>\n"
+            output_ += _walk_bookmarks(bookmarks_, parsed_args_)
+            output_ += "\n  </ul>\n"
+            output_ += parsed_args_["category_after"] + "\n"
         # end for
     else:
         #// Output one single list using title_li for the title.
-        bookmarks = get_bookmarks(parsed_args)
-        if (not php_empty(lambda : bookmarks)):
-            if (not php_empty(lambda : parsed_args["title_li"])):
-                output += php_str_replace(Array("%id", "%class"), Array("linkcat-" + parsed_args["category"], parsed_args["class"]), parsed_args["category_before"])
-                output += parsed_args["title_before"]
-                output += parsed_args["title_li"]
-                output += parsed_args["title_after"]
-                output += "\n   <ul class='xoxo blogroll'>\n"
-                output += _walk_bookmarks(bookmarks, parsed_args)
-                output += "\n   </ul>\n"
-                output += parsed_args["category_after"] + "\n"
+        bookmarks_ = get_bookmarks(parsed_args_)
+        if (not php_empty(lambda : bookmarks_)):
+            if (not php_empty(lambda : parsed_args_["title_li"])):
+                output_ += php_str_replace(Array("%id", "%class"), Array("linkcat-" + parsed_args_["category"], parsed_args_["class"]), parsed_args_["category_before"])
+                output_ += parsed_args_["title_before"]
+                output_ += parsed_args_["title_li"]
+                output_ += parsed_args_["title_after"]
+                output_ += "\n  <ul class='xoxo blogroll'>\n"
+                output_ += _walk_bookmarks(bookmarks_, parsed_args_)
+                output_ += "\n  </ul>\n"
+                output_ += parsed_args_["category_after"] + "\n"
             else:
-                output += _walk_bookmarks(bookmarks, parsed_args)
+                output_ += _walk_bookmarks(bookmarks_, parsed_args_)
             # end if
         # end if
     # end if
@@ -249,10 +246,10 @@ def wp_list_bookmarks(args="", *args_):
     #// 
     #// @param string $html The HTML list of bookmarks.
     #//
-    html = apply_filters("wp_list_bookmarks", output)
-    if parsed_args["echo"]:
-        php_print(html)
+    html_ = apply_filters("wp_list_bookmarks", output_)
+    if parsed_args_["echo"]:
+        php_print(html_)
     else:
-        return html
+        return html_
     # end if
 # end def wp_list_bookmarks

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -19,7 +14,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Twenty_Nineteen
 #// @since Twenty Nineteen 1.0
 #//
-discussion = twentynineteen_get_discussion_data() if (not is_page()) and twentynineteen_can_show_post_thumbnail() else None
+discussion_ = twentynineteen_get_discussion_data() if (not is_page()) and twentynineteen_can_show_post_thumbnail() else None
 php_print("\n")
 the_title("<h1 class=\"entry-title\">", "</h1>")
 php_print("\n")
@@ -29,8 +24,8 @@ if (not is_page()):
     php_print(" ")
     twentynineteen_posted_on()
     php_print(" <span class=\"comment-count\">\n        ")
-    if (not php_empty(lambda : discussion)):
-        twentynineteen_discussion_avatars_list(discussion.authors)
+    if (not php_empty(lambda : discussion_)):
+        twentynineteen_discussion_avatars_list(discussion_.authors)
     # end if
     php_print("     ")
     twentynineteen_comment_count()

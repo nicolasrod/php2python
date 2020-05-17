@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -21,7 +16,13 @@ if php_class_exists("ParagonIE_Sodium_Core32_Curve25519_Fe", False):
 #// This represents a Field Element
 #//
 class ParagonIE_Sodium_Core32_Curve25519_Fe():
+    #// 
+    #// @var array<int, ParagonIE_Sodium_Core32_Int32>
+    #//
     container = Array()
+    #// 
+    #// @var int
+    #//
     size = 10
     #// 
     #// @internal You should not use this directly from another application
@@ -33,34 +34,35 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #// @throws TypeError
     #//
     @classmethod
-    def fromarray(self, array=None, save_indexes=None):
+    def fromarray(self, array_=None, save_indexes_=None):
         
-        count = php_count(array)
-        if save_indexes:
-            keys = php_array_keys(array)
+        
+        count_ = php_count(array_)
+        if save_indexes_:
+            keys_ = php_array_keys(array_)
         else:
-            keys = range(0, count - 1)
+            keys_ = range(0, count_ - 1)
         # end if
-        array = php_array_values(array)
-        obj = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Fe", lambda : ParagonIE_Sodium_Core32_Curve25519_Fe())
-        if save_indexes:
-            i = 0
-            while i < count:
+        array_ = php_array_values(array_)
+        obj_ = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Fe", lambda : ParagonIE_Sodium_Core32_Curve25519_Fe())
+        if save_indexes_:
+            i_ = 0
+            while i_ < count_:
                 
-                array[i].overflow = 0
-                obj.offsetset(keys[i], array[i])
-                i += 1
+                array_[i_].overflow = 0
+                obj_.offsetset(keys_[i_], array_[i_])
+                i_ += 1
             # end while
         else:
-            i = 0
-            while i < count:
+            i_ = 0
+            while i_ < count_:
                 
-                array[i].overflow = 0
-                obj.offsetset(i, array[i])
-                i += 1
+                array_[i_].overflow = 0
+                obj_.offsetset(i_, array_[i_])
+                i_ += 1
             # end while
         # end if
-        return obj
+        return obj_
     # end def fromarray
     #// 
     #// @internal You should not use this directly from another application
@@ -72,40 +74,41 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #// @throws TypeError
     #//
     @classmethod
-    def fromintarray(self, array=None, save_indexes=None):
+    def fromintarray(self, array_=None, save_indexes_=None):
         
-        count = php_count(array)
-        if save_indexes:
-            keys = php_array_keys(array)
+        
+        count_ = php_count(array_)
+        if save_indexes_:
+            keys_ = php_array_keys(array_)
         else:
-            keys = range(0, count - 1)
+            keys_ = range(0, count_ - 1)
         # end if
-        array = php_array_values(array)
-        set = Array()
+        array_ = php_array_values(array_)
+        set_ = Array()
         #// @var int $i
         #// @var int $v
-        for i,v in array:
-            set[i] = ParagonIE_Sodium_Core32_Int32.fromint(v)
+        for i_,v_ in array_:
+            set_[i_] = ParagonIE_Sodium_Core32_Int32.fromint(v_)
         # end for
-        obj = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Fe", lambda : ParagonIE_Sodium_Core32_Curve25519_Fe())
-        if save_indexes:
-            i = 0
-            while i < count:
+        obj_ = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Fe", lambda : ParagonIE_Sodium_Core32_Curve25519_Fe())
+        if save_indexes_:
+            i_ = 0
+            while i_ < count_:
                 
-                set[i].overflow = 0
-                obj.offsetset(keys[i], set[i])
-                i += 1
+                set_[i_].overflow = 0
+                obj_.offsetset(keys_[i_], set_[i_])
+                i_ += 1
             # end while
         else:
-            i = 0
-            while i < count:
+            i_ = 0
+            while i_ < count_:
                 
-                set[i].overflow = 0
-                obj.offsetset(i, set[i])
-                i += 1
+                set_[i_].overflow = 0
+                obj_.offsetset(i_, set_[i_])
+                i_ += 1
             # end while
         # end if
-        return obj
+        return obj_
     # end def fromintarray
     #// 
     #// @internal You should not use this directly from another application
@@ -116,16 +119,17 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def offsetset(self, offset=None, value=None):
+    def offsetset(self, offset_=None, value_=None):
         
-        if (not type(value).__name__ == "ParagonIE_Sodium_Core32_Int32"):
+        
+        if (not type(value_).__name__ == "ParagonIE_Sodium_Core32_Int32"):
             raise php_new_class("InvalidArgumentException", lambda : InvalidArgumentException("Expected an instance of ParagonIE_Sodium_Core32_Int32"))
         # end if
-        if is_null(offset):
-            self.container[-1] = value
+        if is_null(offset_):
+            self.container[-1] = value_
         else:
-            ParagonIE_Sodium_Core32_Util.declarescalartype(offset, "int", 1)
-            self.container[php_int(offset)] = value
+            ParagonIE_Sodium_Core32_Util.declarescalartype(offset_, "int", 1)
+            self.container[php_int(offset_)] = value_
         # end if
     # end def offsetset
     #// 
@@ -135,9 +139,10 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #// @return bool
     #// @psalm-suppress MixedArrayOffset
     #//
-    def offsetexists(self, offset=None):
+    def offsetexists(self, offset_=None):
         
-        return (php_isset(lambda : self.container[offset]))
+        
+        return (php_isset(lambda : self.container[offset_]))
     # end def offsetexists
     #// 
     #// @internal You should not use this directly from another application
@@ -146,9 +151,10 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #// @return void
     #// @psalm-suppress MixedArrayOffset
     #//
-    def offsetunset(self, offset=None):
+    def offsetunset(self, offset_=None):
         
-        self.container[offset] = None
+        
+        self.container[offset_] = None
     # end def offsetunset
     #// 
     #// @internal You should not use this directly from another application
@@ -157,14 +163,15 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #// @return ParagonIE_Sodium_Core32_Int32
     #// @psalm-suppress MixedArrayOffset
     #//
-    def offsetget(self, offset=None):
+    def offsetget(self, offset_=None):
         
-        if (not (php_isset(lambda : self.container[offset]))):
-            self.container[php_int(offset)] = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32())
+        
+        if (not (php_isset(lambda : self.container[offset_]))):
+            self.container[php_int(offset_)] = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32())
         # end if
         #// @var ParagonIE_Sodium_Core32_Int32 $get
-        get = self.container[offset]
-        return get
+        get_ = self.container[offset_]
+        return get_
     # end def offsetget
     #// 
     #// @internal You should not use this directly from another application
@@ -173,10 +180,11 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #//
     def __debuginfo(self):
         
+        
         if php_empty(lambda : self.container):
             return Array()
         # end if
-        c = Array(php_int(self.container[0].toint()), php_int(self.container[1].toint()), php_int(self.container[2].toint()), php_int(self.container[3].toint()), php_int(self.container[4].toint()), php_int(self.container[5].toint()), php_int(self.container[6].toint()), php_int(self.container[7].toint()), php_int(self.container[8].toint()), php_int(self.container[9].toint()))
-        return Array(php_implode(", ", c))
+        c_ = Array(php_int(self.container[0].toint()), php_int(self.container[1].toint()), php_int(self.container[2].toint()), php_int(self.container[3].toint()), php_int(self.container[4].toint()), php_int(self.container[5].toint()), php_int(self.container[6].toint()), php_int(self.container[7].toint()), php_int(self.container[8].toint()), php_int(self.container[9].toint()))
+        return Array(php_implode(", ", c_))
     # end def __debuginfo
 # end class ParagonIE_Sodium_Core32_Curve25519_Fe

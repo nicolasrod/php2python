@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,19 +24,114 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Manager
 #//
 class WP_Customize_Section():
+    #// 
+    #// Incremented with each new class instantiation, then stored in $instance_number.
+    #// 
+    #// Used when sorting two instances whose priorities are equal.
+    #// 
+    #// @since 4.1.0
+    #// @var int
+    #//
     instance_count = 0
+    #// 
+    #// Order in which this instance was created in relation to other instances.
+    #// 
+    #// @since 4.1.0
+    #// @var int
+    #//
     instance_number = Array()
+    #// 
+    #// WP_Customize_Manager instance.
+    #// 
+    #// @since 3.4.0
+    #// @var WP_Customize_Manager
+    #//
     manager = Array()
+    #// 
+    #// Unique identifier.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     id = Array()
+    #// 
+    #// Priority of the section which informs load order of sections.
+    #// 
+    #// @since 3.4.0
+    #// @var integer
+    #//
     priority = 160
+    #// 
+    #// Panel in which to show the section, making it a sub-section.
+    #// 
+    #// @since 4.0.0
+    #// @var string
+    #//
     panel = ""
+    #// 
+    #// Capability required for the section.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     capability = "edit_theme_options"
+    #// 
+    #// Theme features required to support the section.
+    #// 
+    #// @since 3.4.0
+    #// @var string|string[]
+    #//
     theme_supports = ""
+    #// 
+    #// Title of the section to show in UI.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     title = ""
+    #// 
+    #// Description to show in the UI.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     description = ""
+    #// 
+    #// Customizer controls for this section.
+    #// 
+    #// @since 3.4.0
+    #// @var array
+    #//
     controls = Array()
+    #// 
+    #// Type of this section.
+    #// 
+    #// @since 4.1.0
+    #// @var string
+    #//
     type = "default"
+    #// 
+    #// Active callback.
+    #// 
+    #// @since 4.1.0
+    #// 
+    #// @see WP_Customize_Section::active()
+    #// 
+    #// @var callable Callback is called with one argument, the instance of
+    #// WP_Customize_Section, and returns bool to indicate whether
+    #// the section is active (such as it relates to the URL currently
+    #// being previewed).
+    #//
     active_callback = ""
+    #// 
+    #// Show the description or hide it behind the help icon.
+    #// 
+    #// @since 4.7.0
+    #// 
+    #// @var bool Indicates whether the Section's description should be
+    #// hidden behind a help icon ("?") in the Section header,
+    #// similar to how help icons are displayed on Panels.
+    #//
     description_hidden = False
     #// 
     #// Constructor.
@@ -71,16 +161,19 @@ class WP_Customize_Section():
     #// Default false.
     #// }
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        keys = php_array_keys(get_object_vars(self))
-        for key in keys:
-            if (php_isset(lambda : args[key])):
-                self.key = args[key]
+        keys_ = php_array_keys(get_object_vars(self))
+        for key_ in keys_:
+            if (php_isset(lambda : args_[key_])):
+                self.key_ = args_[key_]
             # end if
         # end for
-        self.manager = manager
-        self.id = id
+        self.manager = manager_
+        self.id = id_
         if php_empty(lambda : self.active_callback):
             self.active_callback = Array(self, "active_callback")
         # end if
@@ -98,8 +191,9 @@ class WP_Customize_Section():
     #//
     def active(self):
         
-        section = self
-        active = php_call_user_func(self.active_callback, self)
+        
+        section_ = self
+        active_ = php_call_user_func(self.active_callback, self)
         #// 
         #// Filters response of WP_Customize_Section::active().
         #// 
@@ -108,8 +202,8 @@ class WP_Customize_Section():
         #// @param bool                 $active  Whether the Customizer section is active.
         #// @param WP_Customize_Section $section WP_Customize_Section instance.
         #//
-        active = apply_filters("customize_section_active", active, section)
-        return active
+        active_ = apply_filters("customize_section_active", active_, section_)
+        return active_
     # end def active
     #// 
     #// Default callback used when invoking WP_Customize_Section::active().
@@ -123,6 +217,7 @@ class WP_Customize_Section():
     #//
     def active_callback(self):
         
+        
         return True
     # end def active_callback
     #// 
@@ -134,18 +229,19 @@ class WP_Customize_Section():
     #//
     def json(self):
         
-        array = wp_array_slice_assoc(self, Array("id", "description", "priority", "panel", "type", "description_hidden"))
-        array["title"] = html_entity_decode(self.title, ENT_QUOTES, get_bloginfo("charset"))
-        array["content"] = self.get_content()
-        array["active"] = self.active()
-        array["instanceNumber"] = self.instance_number
+        
+        array_ = wp_array_slice_assoc(self, Array("id", "description", "priority", "panel", "type", "description_hidden"))
+        array_["title"] = html_entity_decode(self.title, ENT_QUOTES, get_bloginfo("charset"))
+        array_["content"] = self.get_content()
+        array_["active"] = self.active()
+        array_["instanceNumber"] = self.instance_number
         if self.panel:
             #// translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer.
-            array["customizeAction"] = php_sprintf(__("Customizing &#9656; %s"), esc_html(self.manager.get_panel(self.panel).title))
+            array_["customizeAction"] = php_sprintf(__("Customizing &#9656; %s"), esc_html(self.manager.get_panel(self.panel).title))
         else:
-            array["customizeAction"] = __("Customizing")
+            array_["customizeAction"] = __("Customizing")
         # end if
-        return array
+        return array_
     # end def json
     #// 
     #// Checks required user capabilities and whether the theme has the
@@ -156,6 +252,7 @@ class WP_Customize_Section():
     #// @return bool False if theme doesn't support the section or user doesn't have the capability.
     #//
     def check_capabilities(self):
+        
         
         if self.capability and (not current_user_can(self.capability)):
             return False
@@ -174,6 +271,7 @@ class WP_Customize_Section():
     #//
     def get_content(self):
         
+        
         ob_start()
         self.maybe_render()
         return php_trim(ob_get_clean())
@@ -184,6 +282,7 @@ class WP_Customize_Section():
     #// @since 3.4.0
     #//
     def maybe_render(self):
+        
         
         if (not self.check_capabilities()):
             return
@@ -216,6 +315,7 @@ class WP_Customize_Section():
     #//
     def render(self):
         
+        
         pass
     # end def render
     #// 
@@ -229,6 +329,7 @@ class WP_Customize_Section():
     #// @see WP_Customize_Manager::render_template()
     #//
     def print_template(self):
+        
         
         php_print("     <script type=\"text/html\" id=\"tmpl-customize-section-")
         php_print(self.type)
@@ -247,6 +348,7 @@ class WP_Customize_Section():
     #// @see WP_Customize_Section::print_template()
     #//
     def render_template(self):
+        
         
         php_print("""       <li id=\"accordion-section-{{ data.id }}\" class=\"accordion-section control-section control-section-{{ data.type }}\">
         <h3 class=\"accordion-section-title\" tabindex=\"0\">

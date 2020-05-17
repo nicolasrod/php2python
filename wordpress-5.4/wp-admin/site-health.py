@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,7 +19,7 @@ if (php_isset(lambda : PHP_REQUEST["tab"])) and "debug" == PHP_REQUEST["tab"]:
 # end if
 #// WordPress Administration Bootstrap
 php_include_file(__DIR__ + "/admin.php", once=True)
-title = __("Site Health Status")
+title_ = __("Site Health Status")
 if (not current_user_can("view_site_health_checks")):
     wp_die(__("Sorry, you are not allowed to access site health information."), "", 403)
 # end if
@@ -33,9 +28,9 @@ wp_enqueue_script("site-health")
 if (not php_class_exists("WP_Site_Health")):
     php_include_file(ABSPATH + "wp-admin/includes/class-wp-site-health.php", once=True)
 # end if
-health_check_site_status = WP_Site_Health.get_instance()
+health_check_site_status_ = WP_Site_Health.get_instance()
 #// Start by checking if this is a special request checking for the existence of certain filters.
-health_check_site_status.check_wp_version_check_exists()
+health_check_site_status_.check_wp_version_check_exists()
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("""<div class=\"health-check-header\">
 <div class=\"health-check-title-section\">

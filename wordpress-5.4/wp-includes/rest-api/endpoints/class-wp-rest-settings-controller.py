@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,6 +29,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #//
     def __init__(self):
         
+        
         self.namespace = "wp/v2"
         self.rest_base = "settings"
     # end def __init__
@@ -46,6 +42,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #//
     def register_routes(self):
         
+        
         register_rest_route(self.namespace, "/" + self.rest_base, Array(Array({"methods": WP_REST_Server.READABLE, "callback": Array(self, "get_item"), "args": Array(), "permission_callback": Array(self, "get_item_permissions_check")}), Array({"methods": WP_REST_Server.EDITABLE, "callback": Array(self, "update_item"), "args": self.get_endpoint_args_for_item_schema(WP_REST_Server.EDITABLE), "permission_callback": Array(self, "get_item_permissions_check")}), {"schema": Array(self, "get_public_item_schema")}))
     # end def register_routes
     #// 
@@ -56,7 +53,8 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #// @param WP_REST_Request $request Full details about the request.
     #// @return bool True if the request has read access for the item, otherwise false.
     #//
-    def get_item_permissions_check(self, request=None):
+    def get_item_permissions_check(self, request_=None):
+        
         
         return current_user_can("manage_options")
     # end def get_item_permissions_check
@@ -68,11 +66,12 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #// @param WP_REST_Request $request Full details about the request.
     #// @return array|WP_Error Array on success, or WP_Error object on failure.
     #//
-    def get_item(self, request=None):
+    def get_item(self, request_=None):
         
-        options = self.get_registered_options()
-        response = Array()
-        for name,args in options:
+        
+        options_ = self.get_registered_options()
+        response_ = Array()
+        for name_,args_ in options_:
             #// 
             #// Filters the value of a setting recognized by the REST API.
             #// 
@@ -87,18 +86,18 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
             #// @param string $name   Setting name (as shown in REST API responses).
             #// @param array  $args   Arguments passed to register_setting() for this setting.
             #//
-            response[name] = apply_filters("rest_pre_get_setting", None, name, args)
-            if is_null(response[name]):
+            response_[name_] = apply_filters("rest_pre_get_setting", None, name_, args_)
+            if is_null(response_[name_]):
                 #// Default to a null value as "null" in the response means "not set".
-                response[name] = get_option(args["option_name"], args["schema"]["default"])
+                response_[name_] = get_option(args_["option_name"], args_["schema"]["default"])
             # end if
             #// 
             #// Because get_option() is lossy, we have to
             #// cast values to the type they are registered with.
             #//
-            response[name] = self.prepare_value(response[name], args["schema"])
+            response_[name_] = self.prepare_value(response_[name_], args_["schema"])
         # end for
-        return response
+        return response_
     # end def get_item
     #// 
     #// Prepares a value for output based off a schema array.
@@ -109,17 +108,18 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #// @param array $schema Schema to match.
     #// @return mixed The prepared value.
     #//
-    def prepare_value(self, value=None, schema=None):
+    def prepare_value(self, value_=None, schema_=None):
+        
         
         #// 
         #// If the value is not valid by the schema, set the value to null.
         #// Null values are specifically non-destructive, so this will not cause
         #// overwriting the current invalid value to null.
         #//
-        if is_wp_error(rest_validate_value_from_schema(value, schema)):
+        if is_wp_error(rest_validate_value_from_schema(value_, schema_)):
             return None
         # end if
-        return rest_sanitize_value_from_schema(value, schema)
+        return rest_sanitize_value_from_schema(value_, schema_)
     # end def prepare_value
     #// 
     #// Updates settings for the settings object.
@@ -129,12 +129,13 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #// @param WP_REST_Request $request Full details about the request.
     #// @return array|WP_Error Array on success, or error object on failure.
     #//
-    def update_item(self, request=None):
+    def update_item(self, request_=None):
         
-        options = self.get_registered_options()
-        params = request.get_params()
-        for name,args in options:
-            if (not php_array_key_exists(name, params)):
+        
+        options_ = self.get_registered_options()
+        params_ = request_.get_params()
+        for name_,args_ in options_:
+            if (not php_array_key_exists(name_, params_)):
                 continue
             # end if
             #// 
@@ -151,8 +152,8 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
             #// @param mixed  $value  Updated setting value.
             #// @param array  $args   Arguments passed to register_setting() for this setting.
             #//
-            updated = apply_filters("rest_pre_update_setting", False, name, request[name], args)
-            if updated:
+            updated_ = apply_filters("rest_pre_update_setting", False, name_, request_[name_], args_)
+            if updated_:
                 continue
             # end if
             #// 
@@ -160,7 +161,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
             #// deleting the option from the database, and relying on the
             #// default value.
             #//
-            if is_null(request[name]):
+            if is_null(request_[name_]):
                 #// 
                 #// A null value is returned in the response for any option
                 #// that has a non-scalar value.
@@ -172,15 +173,15 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
                 #// delete all options that have invalid values from the
                 #// database.
                 #//
-                if is_wp_error(rest_validate_value_from_schema(get_option(args["option_name"], False), args["schema"])):
-                    return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_stored_value", php_sprintf(__("The %s property has an invalid stored value, and cannot be updated to null."), name), Array({"status": 500})))
+                if is_wp_error(rest_validate_value_from_schema(get_option(args_["option_name"], False), args_["schema"])):
+                    return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_stored_value", php_sprintf(__("The %s property has an invalid stored value, and cannot be updated to null."), name_), Array({"status": 500})))
                 # end if
-                delete_option(args["option_name"])
+                delete_option(args_["option_name"])
             else:
-                update_option(args["option_name"], request[name])
+                update_option(args_["option_name"], request_[name_])
             # end if
         # end for
-        return self.get_item(request)
+        return self.get_item(request_)
     # end def update_item
     #// 
     #// Retrieves all of the registered options for the Settings API.
@@ -191,35 +192,36 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #//
     def get_registered_options(self):
         
-        rest_options = Array()
-        for name,args in get_registered_settings():
-            if php_empty(lambda : args["show_in_rest"]):
+        
+        rest_options_ = Array()
+        for name_,args_ in get_registered_settings():
+            if php_empty(lambda : args_["show_in_rest"]):
                 continue
             # end if
-            rest_args = Array()
-            if php_is_array(args["show_in_rest"]):
-                rest_args = args["show_in_rest"]
+            rest_args_ = Array()
+            if php_is_array(args_["show_in_rest"]):
+                rest_args_ = args_["show_in_rest"]
             # end if
-            defaults = Array({"name": rest_args["name"] if (not php_empty(lambda : rest_args["name"])) else name, "schema": Array()})
-            rest_args = php_array_merge(defaults, rest_args)
-            default_schema = Array({"type": None if php_empty(lambda : args["type"]) else args["type"], "description": "" if php_empty(lambda : args["description"]) else args["description"], "default": args["default"] if (php_isset(lambda : args["default"])) else None})
-            rest_args["schema"] = php_array_merge(default_schema, rest_args["schema"])
-            rest_args["option_name"] = name
+            defaults_ = Array({"name": rest_args_["name"] if (not php_empty(lambda : rest_args_["name"])) else name_, "schema": Array()})
+            rest_args_ = php_array_merge(defaults_, rest_args_)
+            default_schema_ = Array({"type": None if php_empty(lambda : args_["type"]) else args_["type"], "description": "" if php_empty(lambda : args_["description"]) else args_["description"], "default": args_["default"] if (php_isset(lambda : args_["default"])) else None})
+            rest_args_["schema"] = php_array_merge(default_schema_, rest_args_["schema"])
+            rest_args_["option_name"] = name_
             #// Skip over settings that don't have a defined type in the schema.
-            if php_empty(lambda : rest_args["schema"]["type"]):
+            if php_empty(lambda : rest_args_["schema"]["type"]):
                 continue
             # end if
             #// 
             #// Whitelist the supported types for settings, as we don't want invalid types
             #// to be updated with arbitrary values that we can't do decent sanitizing for.
             #//
-            if (not php_in_array(rest_args["schema"]["type"], Array("number", "integer", "string", "boolean", "array", "object"), True)):
+            if (not php_in_array(rest_args_["schema"]["type"], Array("number", "integer", "string", "boolean", "array", "object"), True)):
                 continue
             # end if
-            rest_args["schema"] = self.set_additional_properties_to_false(rest_args["schema"])
-            rest_options[rest_args["name"]] = rest_args
+            rest_args_["schema"] = self.set_additional_properties_to_false(rest_args_["schema"])
+            rest_options_[rest_args_["name"]] = rest_args_
         # end for
-        return rest_options
+        return rest_options_
     # end def get_registered_options
     #// 
     #// Retrieves the site setting schema, conforming to JSON Schema.
@@ -230,16 +232,17 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #//
     def get_item_schema(self):
         
+        
         if self.schema:
             return self.add_additional_fields_schema(self.schema)
         # end if
-        options = self.get_registered_options()
-        schema = Array({"$schema": "http://json-schema.org/draft-04/schema#", "title": "settings", "type": "object", "properties": Array()})
-        for option_name,option in options:
-            schema["properties"][option_name] = option["schema"]
-            schema["properties"][option_name]["arg_options"] = Array({"sanitize_callback": Array(self, "sanitize_callback")})
+        options_ = self.get_registered_options()
+        schema_ = Array({"$schema": "http://json-schema.org/draft-04/schema#", "title": "settings", "type": "object", "properties": Array()})
+        for option_name_,option_ in options_:
+            schema_["properties"][option_name_] = option_["schema"]
+            schema_["properties"][option_name_]["arg_options"] = Array({"sanitize_callback": Array(self, "sanitize_callback")})
         # end for
-        self.schema = schema
+        self.schema = schema_
         return self.add_additional_fields_schema(self.schema)
     # end def get_item_schema
     #// 
@@ -256,12 +259,13 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #// @param string          $param   The parameter name.
     #// @return mixed|WP_Error
     #//
-    def sanitize_callback(self, value=None, request=None, param=None):
+    def sanitize_callback(self, value_=None, request_=None, param_=None):
         
-        if is_null(value):
-            return value
+        
+        if is_null(value_):
+            return value_
         # end if
-        return rest_parse_request_arg(value, request, param)
+        return rest_parse_request_arg(value_, request_, param_)
     # end def sanitize_callback
     #// 
     #// Recursively add additionalProperties = false to all objects in a schema.
@@ -275,21 +279,22 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #// @param array $schema The schema array.
     #// @return array
     #//
-    def set_additional_properties_to_false(self, schema=None):
+    def set_additional_properties_to_false(self, schema_=None):
         
-        for case in Switch(schema["type"]):
+        
+        for case in Switch(schema_["type"]):
             if case("object"):
-                for key,child_schema in schema["properties"]:
-                    schema["properties"][key] = self.set_additional_properties_to_false(child_schema)
+                for key_,child_schema_ in schema_["properties"]:
+                    schema_["properties"][key_] = self.set_additional_properties_to_false(child_schema_)
                 # end for
-                schema["additionalProperties"] = False
+                schema_["additionalProperties"] = False
                 break
             # end if
             if case("array"):
-                schema["items"] = self.set_additional_properties_to_false(schema["items"])
+                schema_["items"] = self.set_additional_properties_to_false(schema_["items"])
                 break
             # end if
         # end for
-        return schema
+        return schema_
     # end def set_additional_properties_to_false
 # end class WP_REST_Settings_Controller

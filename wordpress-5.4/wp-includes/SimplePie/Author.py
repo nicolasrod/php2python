@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,8 +60,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage API
 #//
 class SimplePie_Author():
+    #// 
+    #// Author's name
+    #// 
+    #// @var string
+    #// @see get_name()
+    #//
     name = Array()
+    #// 
+    #// Author's link
+    #// 
+    #// @var string
+    #// @see get_link()
+    #//
     link = Array()
+    #// 
+    #// Author's email address
+    #// 
+    #// @var string
+    #// @see get_email()
+    #//
     email = Array()
     #// 
     #// Constructor, used to input the data
@@ -75,11 +88,12 @@ class SimplePie_Author():
     #// @param string $link
     #// @param string $email
     #//
-    def __init__(self, name=None, link=None, email=None):
+    def __init__(self, name_=None, link_=None, email_=None):
         
-        self.name = name
-        self.link = link
-        self.email = email
+        
+        self.name = name_
+        self.link = link_
+        self.email = email_
     # end def __init__
     #// 
     #// String-ified version
@@ -87,6 +101,7 @@ class SimplePie_Author():
     #// @return string
     #//
     def __tostring(self):
+        
         
         #// There is no $this->data here
         return php_md5(serialize(self))
@@ -97,6 +112,7 @@ class SimplePie_Author():
     #// @return string|null
     #//
     def get_name(self):
+        
         
         if self.name != None:
             return self.name
@@ -111,6 +127,7 @@ class SimplePie_Author():
     #//
     def get_link(self):
         
+        
         if self.link != None:
             return self.link
         else:
@@ -123,6 +140,7 @@ class SimplePie_Author():
     #// @return string|null
     #//
     def get_email(self):
+        
         
         if self.email != None:
             return self.email

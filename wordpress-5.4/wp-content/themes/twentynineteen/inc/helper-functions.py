@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -22,21 +17,24 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// Determines if post thumbnail can be displayed.
 #//
-def twentynineteen_can_show_post_thumbnail(*args_):
+def twentynineteen_can_show_post_thumbnail(*_args_):
+    
     
     return apply_filters("twentynineteen_can_show_post_thumbnail", (not post_password_required()) and (not is_attachment()) and has_post_thumbnail())
 # end def twentynineteen_can_show_post_thumbnail
 #// 
 #// Returns true if image filters are enabled on the theme options.
 #//
-def twentynineteen_image_filters_enabled(*args_):
+def twentynineteen_image_filters_enabled(*_args_):
+    
     
     return 0 != get_theme_mod("image_filter", 1)
 # end def twentynineteen_image_filters_enabled
 #// 
 #// Returns the size for avatars used in the theme.
 #//
-def twentynineteen_get_avatar_size(*args_):
+def twentynineteen_get_avatar_size(*_args_):
+    
     
     return 60
 # end def twentynineteen_get_avatar_size
@@ -45,13 +43,14 @@ def twentynineteen_get_avatar_size(*args_):
 #// 
 #// @see get_comment_class()
 #//
-def twentynineteen_is_comment_by_post_author(comment=None, *args_):
+def twentynineteen_is_comment_by_post_author(comment_=None, *_args_):
     
-    if php_is_object(comment) and comment.user_id > 0:
-        user = get_userdata(comment.user_id)
-        post = get_post(comment.comment_post_ID)
-        if (not php_empty(lambda : user)) and (not php_empty(lambda : post)):
-            return comment.user_id == post.post_author
+    
+    if php_is_object(comment_) and comment_.user_id > 0:
+        user_ = get_userdata(comment_.user_id)
+        post_ = get_post(comment_.comment_post_ID)
+        if (not php_empty(lambda : user_)) and (not php_empty(lambda : post_)):
+            return comment_.user_id == post_.post_author
         # end if
     # end if
     return False
@@ -59,101 +58,105 @@ def twentynineteen_is_comment_by_post_author(comment=None, *args_):
 #// 
 #// Returns information about the current post's discussion, with cache support.
 #//
-def twentynineteen_get_discussion_data(*args_):
+def twentynineteen_get_discussion_data(*_args_):
     
-    twentynineteen_get_discussion_data.discussion = None
-    twentynineteen_get_discussion_data.post_id = None
-    current_post_id = get_the_ID()
-    if current_post_id == twentynineteen_get_discussion_data.post_id:
-        return twentynineteen_get_discussion_data.discussion
+    
+    discussion_ = None
+    post_id_ = None
+    current_post_id_ = get_the_ID()
+    if current_post_id_ == post_id_:
+        return discussion_
         pass
     else:
-        twentynineteen_get_discussion_data.post_id = current_post_id
+        post_id_ = current_post_id_
     # end if
-    comments = get_comments(Array({"post_id": current_post_id, "orderby": "comment_date_gmt", "order": get_option("comment_order", "asc"), "status": "approve", "number": 20}))
-    authors = Array()
-    for comment in comments:
-        authors[-1] = php_int(comment.user_id) if php_int(comment.user_id) > 0 else comment.comment_author_email
+    comments_ = get_comments(Array({"post_id": current_post_id_, "orderby": "comment_date_gmt", "order": get_option("comment_order", "asc"), "status": "approve", "number": 20}))
+    authors_ = Array()
+    for comment_ in comments_:
+        authors_[-1] = php_int(comment_.user_id) if php_int(comment_.user_id) > 0 else comment_.comment_author_email
     # end for
-    authors = array_unique(authors)
-    twentynineteen_get_discussion_data.discussion = Array({"authors": php_array_slice(authors, 0, 6), "responses": get_comments_number(current_post_id)})
-    return twentynineteen_get_discussion_data.discussion
+    authors_ = array_unique(authors_)
+    discussion_ = Array({"authors": php_array_slice(authors_, 0, 6), "responses": get_comments_number(current_post_id_)})
+    return discussion_
 # end def twentynineteen_get_discussion_data
 #// 
 #// Converts HSL to HEX colors.
 #//
-def twentynineteen_hsl_hex(h=None, s=None, l=None, to_hex=True, *args_):
+def twentynineteen_hsl_hex(h_=None, s_=None, l_=None, to_hex_=None, *_args_):
+    if to_hex_ is None:
+        to_hex_ = True
+    # end if
     
-    h /= 360
-    s /= 100
-    l /= 100
-    r = l
-    g = l
-    b = l
-    v = l * 1 + s if l <= 0.5 else l + s - l * s
-    if v > 0:
-        m
-        sv
-        sextant
-        fract
-        vsf
-        mid1
-        mid2
-        m = l + l - v
-        sv = v - m / v
-        h *= 6
-        sextant = floor(h)
-        fract = h - sextant
-        vsf = v * sv * fract
-        mid1 = m + vsf
-        mid2 = v - vsf
-        for case in Switch(sextant):
+    h_ /= 360
+    s_ /= 100
+    l_ /= 100
+    r_ = l_
+    g_ = l_
+    b_ = l_
+    v_ = l_ * 1 + s_ if l_ <= 0.5 else l_ + s_ - l_ * s_
+    if v_ > 0:
+        m_
+        sv_
+        sextant_
+        fract_
+        vsf_
+        mid1_
+        mid2_
+        m_ = l_ + l_ - v_
+        sv_ = v_ - m_ / v_
+        h_ *= 6
+        sextant_ = floor(h_)
+        fract_ = h_ - sextant_
+        vsf_ = v_ * sv_ * fract_
+        mid1_ = m_ + vsf_
+        mid2_ = v_ - vsf_
+        for case in Switch(sextant_):
             if case(0):
-                r = v
-                g = mid1
-                b = m
+                r_ = v_
+                g_ = mid1_
+                b_ = m_
                 break
             # end if
             if case(1):
-                r = mid2
-                g = v
-                b = m
+                r_ = mid2_
+                g_ = v_
+                b_ = m_
                 break
             # end if
             if case(2):
-                r = m
-                g = v
-                b = mid1
+                r_ = m_
+                g_ = v_
+                b_ = mid1_
                 break
             # end if
             if case(3):
-                r = m
-                g = mid2
-                b = v
+                r_ = m_
+                g_ = mid2_
+                b_ = v_
                 break
             # end if
             if case(4):
-                r = mid1
-                g = m
-                b = v
+                r_ = mid1_
+                g_ = m_
+                b_ = v_
                 break
             # end if
             if case(5):
-                r = v
-                g = m
-                b = mid2
+                r_ = v_
+                g_ = m_
+                b_ = mid2_
                 break
             # end if
         # end for
     # end if
-    r = round(r * 255, 0)
-    g = round(g * 255, 0)
-    b = round(b * 255, 0)
-    if to_hex:
-        r = "0" + dechex(r) if r < 15 else dechex(r)
-        g = "0" + dechex(g) if g < 15 else dechex(g)
-        b = "0" + dechex(b) if b < 15 else dechex(b)
-        return str("#") + str(r) + str(g) + str(b)
+    r_ = round(r_ * 255, 0)
+    g_ = round(g_ * 255, 0)
+    b_ = round(b_ * 255, 0)
+    if to_hex_:
+        r_ = "0" + dechex(r_) if r_ < 15 else dechex(r_)
+        g_ = "0" + dechex(g_) if g_ < 15 else dechex(g_)
+        b_ = "0" + dechex(b_) if b_ < 15 else dechex(b_)
+        return str("#") + str(r_) + str(g_) + str(b_)
     # end if
-    return str("rgb(") + str(r) + str(", ") + str(g) + str(", ") + str(b) + str(")")
+    return str("rgb(") + str(r_) + str(", ") + str(g_) + str(", ") + str(b_) + str(")")
 # end def twentynineteen_hsl_hex

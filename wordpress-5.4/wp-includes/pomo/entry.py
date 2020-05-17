@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,6 +19,11 @@ if (not php_class_exists("Translation_Entry", False)):
     #// Translation_Entry class encapsulates a translatable string
     #//
     class Translation_Entry():
+        #// 
+        #// Whether the entry contains a string and its plural form, default is false
+        #// 
+        #// @var boolean
+        #//
         is_plural = False
         context = None
         singular = None
@@ -44,17 +44,20 @@ if (not php_class_exists("Translation_Entry", False)):
         #// - references (array) -- places in the code this strings is used, in relative_to_root_path/file.php:linenum form
         #// - flags (array) -- flags like php-format
         #//
-        def __init__(self, args=Array()):
+        def __init__(self, args_=None):
+            if args_ is None:
+                args_ = Array()
+            # end if
             
             #// If no singular -- empty object.
-            if (not (php_isset(lambda : args["singular"]))):
+            if (not (php_isset(lambda : args_["singular"]))):
                 return
             # end if
             #// Get member variable values from args hash.
-            for varname,value in args:
-                self.varname = value
+            for varname_,value_ in args_:
+                self.varname_ = value_
             # end for
-            if (php_isset(lambda : args["plural"])) and args["plural"]:
+            if (php_isset(lambda : args_["plural"])) and args_["plural"]:
                 self.is_plural = True
             # end if
             if (not php_is_array(self.translations)):
@@ -74,10 +77,13 @@ if (not php_class_exists("Translation_Entry", False)):
         #// 
         #// @see Translation_Entry::__construct()
         #//
-        def translation_entry(self, args=Array()):
+        def translation_entry(self, args_=None):
+            if args_ is None:
+                args_ = Array()
+            # end if
             
             _deprecated_constructor(self.class_, "5.4.0", static.class_)
-            self.__init__(args)
+            self.__init__(args_)
         # end def translation_entry
         #// 
         #// Generates a unique key for this entry
@@ -86,24 +92,26 @@ if (not php_class_exists("Translation_Entry", False)):
         #//
         def key(self):
             
+            
             if None == self.singular or "" == self.singular:
                 return False
             # end if
             #// Prepend context and EOT, like in MO files.
-            key = self.singular if (not self.context) else self.context + "" + self.singular
+            key_ = self.singular if (not self.context) else self.context + "" + self.singular
             #// Standardize on \n line endings.
-            key = php_str_replace(Array("\r\n", "\r"), "\n", key)
-            return key
+            key_ = php_str_replace(Array("\r\n", "\r"), "\n", key_)
+            return key_
         # end def key
         #// 
         #// @param object $other
         #//
-        def merge_with(self, other=None):
+        def merge_with(self, other_=None):
             
-            self.flags = array_unique(php_array_merge(self.flags, other.flags))
-            self.references = array_unique(php_array_merge(self.references, other.references))
-            if self.extracted_comments != other.extracted_comments:
-                self.extracted_comments += other.extracted_comments
+            
+            self.flags = array_unique(php_array_merge(self.flags, other_.flags))
+            self.references = array_unique(php_array_merge(self.references, other_.references))
+            if self.extracted_comments != other_.extracted_comments:
+                self.extracted_comments += other_.extracted_comments
             # end if
         # end def merge_with
     # end class Translation_Entry

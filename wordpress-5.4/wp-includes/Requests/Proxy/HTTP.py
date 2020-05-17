@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,9 +24,31 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 1.6
 #//
 class Requests_Proxy_HTTP(Requests_Proxy):
+    #// 
+    #// Proxy host and port
+    #// 
+    #// Notation: "host:port" (eg 127.0.0.1:8080 or someproxy.com:3128)
+    #// 
+    #// @var string
+    #//
     proxy = Array()
+    #// 
+    #// Username
+    #// 
+    #// @var string
+    #//
     user = Array()
+    #// 
+    #// Password
+    #// 
+    #// @var string
+    #//
     pass_ = Array()
+    #// 
+    #// Do we need to authenticate? (ie username & password have been provided)
+    #// 
+    #// @var boolean
+    #//
     use_authentication = Array()
     #// 
     #// Constructor
@@ -40,15 +57,16 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @throws Requests_Exception On incorrect number of arguments (`authbasicbadargs`)
     #// @param array|null $args Array of user and password. Must have exactly two elements
     #//
-    def __init__(self, args=None):
+    def __init__(self, args_=None):
         
-        if php_is_string(args):
-            self.proxy = args
-        elif php_is_array(args):
-            if php_count(args) == 1:
-                self.proxy = args
-            elif php_count(args) == 3:
-                self.proxy, self.user, self.pass_ = args
+        
+        if php_is_string(args_):
+            self.proxy = args_
+        elif php_is_array(args_):
+            if php_count(args_) == 1:
+                self.proxy = args_
+            elif php_count(args_) == 3:
+                self.proxy, self.user, self.pass_ = args_
                 self.use_authentication = True
             else:
                 raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid number of arguments", "proxyhttpbadargs"))
@@ -65,13 +83,14 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @see fsockopen_header
     #// @param Requests_Hooks $hooks Hook system
     #//
-    def register(self, hooks=None):
+    def register(self, hooks_=None):
         
-        hooks.register("curl.before_send", Array(self, "curl_before_send"))
-        hooks.register("fsockopen.remote_socket", Array(self, "fsockopen_remote_socket"))
-        hooks.register("fsockopen.remote_host_path", Array(self, "fsockopen_remote_host_path"))
+        
+        hooks_.register("curl.before_send", Array(self, "curl_before_send"))
+        hooks_.register("fsockopen.remote_socket", Array(self, "fsockopen_remote_socket"))
+        hooks_.register("fsockopen.remote_host_path", Array(self, "fsockopen_remote_host_path"))
         if self.use_authentication:
-            hooks.register("fsockopen.after_headers", Array(self, "fsockopen_header"))
+            hooks_.register("fsockopen.after_headers", Array(self, "fsockopen_header"))
         # end if
     # end def register
     #// 
@@ -80,13 +99,14 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @since 1.6
     #// @param resource $handle cURL resource
     #//
-    def curl_before_send(self, handle=None):
+    def curl_before_send(self, handle_=None):
         
-        curl_setopt(handle, CURLOPT_PROXYTYPE, CURLPROXY_HTTP)
-        curl_setopt(handle, CURLOPT_PROXY, self.proxy)
+        
+        curl_setopt(handle_, CURLOPT_PROXYTYPE, CURLPROXY_HTTP)
+        curl_setopt(handle_, CURLOPT_PROXY, self.proxy)
         if self.use_authentication:
-            curl_setopt(handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY)
-            curl_setopt(handle, CURLOPT_PROXYUSERPWD, self.get_auth_string())
+            curl_setopt(handle_, CURLOPT_PROXYAUTH, CURLAUTH_ANY)
+            curl_setopt(handle_, CURLOPT_PROXYUSERPWD, self.get_auth_string())
         # end if
     # end def curl_before_send
     #// 
@@ -95,9 +115,10 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @since 1.6
     #// @param string $remote_socket Socket connection string
     #//
-    def fsockopen_remote_socket(self, remote_socket=None):
+    def fsockopen_remote_socket(self, remote_socket_=None):
         
-        remote_socket = self.proxy
+        
+        remote_socket_ = self.proxy
     # end def fsockopen_remote_socket
     #// 
     #// Alter remote path before getting stream data
@@ -106,9 +127,10 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @param string $path Path to send in HTTP request string ("GET ...")
     #// @param string $url Full URL we're requesting
     #//
-    def fsockopen_remote_host_path(self, path=None, url=None):
+    def fsockopen_remote_host_path(self, path_=None, url_=None):
         
-        path = url
+        
+        path_ = url_
     # end def fsockopen_remote_host_path
     #// 
     #// Add extra headers to the request before sending
@@ -116,9 +138,10 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @since 1.6
     #// @param string $out HTTP header string
     #//
-    def fsockopen_header(self, out=None):
+    def fsockopen_header(self, out_=None):
         
-        out += php_sprintf("Proxy-Authorization: Basic %s\r\n", php_base64_encode(self.get_auth_string()))
+        
+        out_ += php_sprintf("Proxy-Authorization: Basic %s\r\n", php_base64_encode(self.get_auth_string()))
     # end def fsockopen_header
     #// 
     #// Get the authentication string (user:pass)
@@ -127,6 +150,7 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @return string
     #//
     def get_auth_string(self):
+        
         
         return self.user + ":" + self.pass_
     # end def get_auth_string

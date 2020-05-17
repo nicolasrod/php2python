@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,18 +18,18 @@ php_include_file(__DIR__ + "/admin.php", once=True)
 if (not current_user_can("manage_options")):
     wp_die(__("Sorry, you are not allowed to manage options for this site."))
 # end if
-title = __("Media Settings")
-parent_file = "options-general.php"
-media_options_help = "<p>" + __("You can set maximum sizes for images inserted into your written content; you can also insert an image as Full Size.") + "</p>"
+title_ = __("Media Settings")
+parent_file_ = "options-general.php"
+media_options_help_ = "<p>" + __("You can set maximum sizes for images inserted into your written content; you can also insert an image as Full Size.") + "</p>"
 if (not is_multisite()) and get_option("upload_url_path") or get_option("upload_path") != "wp-content/uploads" and get_option("upload_path"):
-    media_options_help += "<p>" + __("Uploading Files allows you to choose the folder and path for storing your uploaded files.") + "</p>"
+    media_options_help_ += "<p>" + __("Uploading Files allows you to choose the folder and path for storing your uploaded files.") + "</p>"
 # end if
-media_options_help += "<p>" + __("You must click the Save Changes button at the bottom of the screen for new settings to take effect.") + "</p>"
-get_current_screen().add_help_tab(Array({"id": "overview", "title": __("Overview"), "content": media_options_help}))
+media_options_help_ += "<p>" + __("You must click the Save Changes button at the bottom of the screen for new settings to take effect.") + "</p>"
+get_current_screen().add_help_tab(Array({"id": "overview", "title": __("Overview"), "content": media_options_help_}))
 get_current_screen().set_help_sidebar("<p><strong>" + __("For more information:") + "</strong></p>" + "<p>" + __("<a href=\"https://wordpress.org/support/article/settings-media-screen/\">Documentation on Media Settings</a>") + "</p>" + "<p>" + __("<a href=\"https://wordpress.org/support/\">Support</a>") + "</p>")
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("\n<div class=\"wrap\">\n<h1>")
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("""</h1>
 <form action=\"options.php\" method=\"post\">
 """)

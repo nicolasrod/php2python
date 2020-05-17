@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -31,11 +26,47 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 2.8.0
 #//
 class WP_Http_Cookie():
+    #// 
+    #// Cookie name.
+    #// 
+    #// @since 2.8.0
+    #// @var string
+    #//
     name = Array()
+    #// 
+    #// Cookie value.
+    #// 
+    #// @since 2.8.0
+    #// @var string
+    #//
     value = Array()
+    #// 
+    #// When the cookie expires. Unix timestamp or formatted date.
+    #// 
+    #// @since 2.8.0
+    #// @var string|int|null
+    #//
     expires = Array()
+    #// 
+    #// Cookie URL path.
+    #// 
+    #// @since 2.8.0
+    #// @var string
+    #//
     path = Array()
+    #// 
+    #// Cookie Domain.
+    #// 
+    #// @since 2.8.0
+    #// @var string
+    #//
     domain = Array()
+    #// 
+    #// host-only flag.
+    #// 
+    #// @since 5.2.0
+    #// @var bool
+    #//
     host_only = Array()
     #// 
     #// Sets up this cookie object.
@@ -60,54 +91,55 @@ class WP_Http_Cookie():
     #// @param string       $requested_url The URL which the cookie was set on, used for default $domain
     #// and $port values.
     #//
-    def __init__(self, data=None, requested_url=""):
+    def __init__(self, data_=None, requested_url_=""):
         
-        if requested_url:
-            arrURL = php_no_error(lambda: php_parse_url(requested_url))
+        
+        if requested_url_:
+            arrURL_ = php_no_error(lambda: php_parse_url(requested_url_))
         # end if
-        if (php_isset(lambda : arrURL["host"])):
-            self.domain = arrURL["host"]
+        if (php_isset(lambda : arrURL_["host"])):
+            self.domain = arrURL_["host"]
         # end if
-        self.path = arrURL["path"] if (php_isset(lambda : arrURL["path"])) else "/"
+        self.path = arrURL_["path"] if (php_isset(lambda : arrURL_["path"])) else "/"
         if "/" != php_substr(self.path, -1):
             self.path = php_dirname(self.path) + "/"
         # end if
-        if php_is_string(data):
+        if php_is_string(data_):
             #// Assume it's a header string direct from a previous request.
-            pairs = php_explode(";", data)
+            pairs_ = php_explode(";", data_)
             #// Special handling for first pair; name=value. Also be careful of "=" in value.
-            name = php_trim(php_substr(pairs[0], 0, php_strpos(pairs[0], "=")))
-            value = php_substr(pairs[0], php_strpos(pairs[0], "=") + 1)
-            self.name = name
-            self.value = urldecode(value)
+            name_ = php_trim(php_substr(pairs_[0], 0, php_strpos(pairs_[0], "=")))
+            value_ = php_substr(pairs_[0], php_strpos(pairs_[0], "=") + 1)
+            self.name = name_
+            self.value = urldecode(value_)
             #// Removes name=value from items.
-            php_array_shift(pairs)
+            php_array_shift(pairs_)
             #// Set everything else as a property.
-            for pair in pairs:
-                pair = php_rtrim(pair)
+            for pair_ in pairs_:
+                pair_ = php_rtrim(pair_)
                 #// Handle the cookie ending in ; which results in a empty final pair.
-                if php_empty(lambda : pair):
+                if php_empty(lambda : pair_):
                     continue
                 # end if
-                key, val = php_explode("=", pair) if php_strpos(pair, "=") else Array(pair, "")
-                key = php_strtolower(php_trim(key))
-                if "expires" == key:
-                    val = strtotime(val)
+                key_, val_ = php_explode("=", pair_) if php_strpos(pair_, "=") else Array(pair_, "")
+                key_ = php_strtolower(php_trim(key_))
+                if "expires" == key_:
+                    val_ = strtotime(val_)
                 # end if
-                self.key = val
+                self.key_ = val_
             # end for
         else:
-            if (not (php_isset(lambda : data["name"]))):
+            if (not (php_isset(lambda : data_["name"]))):
                 return
             # end if
             #// Set properties based directly on parameters.
-            for field in Array("name", "value", "path", "domain", "port", "host_only"):
-                if (php_isset(lambda : data[field])):
-                    self.field = data[field]
+            for field_ in Array("name", "value", "path", "domain", "port", "host_only"):
+                if (php_isset(lambda : data_[field_])):
+                    self.field_ = data_[field_]
                 # end if
             # end for
-            if (php_isset(lambda : data["expires"])):
-                self.expires = data["expires"] if php_is_int(data["expires"]) else strtotime(data["expires"])
+            if (php_isset(lambda : data_["expires"])):
+                self.expires = data_["expires"] if php_is_int(data_["expires"]) else strtotime(data_["expires"])
             else:
                 self.expires = None
             # end if
@@ -123,7 +155,8 @@ class WP_Http_Cookie():
     #// @param string $url URL you intend to send this cookie to
     #// @return bool true if allowed, false otherwise.
     #//
-    def test(self, url=None):
+    def test(self, url_=None):
+        
         
         if is_null(self.name):
             return False
@@ -133,27 +166,27 @@ class WP_Http_Cookie():
             return False
         # end if
         #// Get details on the URL we're thinking about sending to.
-        url = php_parse_url(url)
-        url["port"] = url["port"] if (php_isset(lambda : url["port"])) else 443 if "https" == url["scheme"] else 80
-        url["path"] = url["path"] if (php_isset(lambda : url["path"])) else "/"
+        url_ = php_parse_url(url_)
+        url_["port"] = url_["port"] if (php_isset(lambda : url_["port"])) else 443 if "https" == url_["scheme"] else 80
+        url_["path"] = url_["path"] if (php_isset(lambda : url_["path"])) else "/"
         #// Values to use for comparison against the URL.
-        path = self.path if (php_isset(lambda : self.path)) else "/"
-        port = self.port if (php_isset(lambda : self.port)) else None
-        domain = php_strtolower(self.domain) if (php_isset(lambda : self.domain)) else php_strtolower(url["host"])
-        if False == php_stripos(domain, "."):
-            domain += ".local"
+        path_ = self.path if (php_isset(lambda : self.path)) else "/"
+        port_ = self.port if (php_isset(lambda : self.port)) else None
+        domain_ = php_strtolower(self.domain) if (php_isset(lambda : self.domain)) else php_strtolower(url_["host"])
+        if False == php_stripos(domain_, "."):
+            domain_ += ".local"
         # end if
         #// Host - very basic check that the request URL ends with the domain restriction (minus leading dot).
-        domain = php_substr(domain, 1) if php_substr(domain, 0, 1) == "." else domain
-        if php_substr(url["host"], -php_strlen(domain)) != domain:
+        domain_ = php_substr(domain_, 1) if php_substr(domain_, 0, 1) == "." else domain_
+        if php_substr(url_["host"], -php_strlen(domain_)) != domain_:
             return False
         # end if
         #// Port - supports "port-lists" in the format: "80,8000,8080".
-        if (not php_empty(lambda : port)) and (not php_in_array(url["port"], php_explode(",", port))):
+        if (not php_empty(lambda : port_)) and (not php_in_array(url_["port"], php_explode(",", port_))):
             return False
         # end if
         #// Path - request path must start with path restriction.
-        if php_substr(url["path"], 0, php_strlen(path)) != path:
+        if php_substr(url_["path"], 0, php_strlen(path_)) != path_:
             return False
         # end if
         return True
@@ -166,6 +199,7 @@ class WP_Http_Cookie():
     #// @return string Header encoded cookie name and value.
     #//
     def getheadervalue(self):
+        
         
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         if (not (php_isset(lambda : self.name))) or (not (php_isset(lambda : self.value))):
@@ -190,6 +224,7 @@ class WP_Http_Cookie():
     #//
     def getfullheader(self):
         
+        
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         return "Cookie: " + self.getheadervalue()
     # end def getfullheader
@@ -207,6 +242,7 @@ class WP_Http_Cookie():
     #// }
     #//
     def get_attributes(self):
+        
         
         return Array({"expires": self.expires, "path": self.path, "domain": self.domain})
     # end def get_attributes

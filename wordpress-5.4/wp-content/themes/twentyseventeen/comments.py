@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -39,12 +34,12 @@ php_print("""
 #// You can start editing here -- including this comment!
 if have_comments():
     php_print("     <h2 class=\"comments-title\">\n         ")
-    comments_number = get_comments_number()
-    if "1" == comments_number:
+    comments_number_ = get_comments_number()
+    if "1" == comments_number_:
         #// translators: %s: Post title.
         printf(_x("One Reply to &ldquo;%s&rdquo;", "comments title", "twentyseventeen"), get_the_title())
     else:
-        printf(_nx("%1$s Reply to &ldquo;%2$s&rdquo;", "%1$s Replies to &ldquo;%2$s&rdquo;", comments_number, "comments title", "twentyseventeen"), number_format_i18n(comments_number), get_the_title())
+        printf(_nx("%1$s Reply to &ldquo;%2$s&rdquo;", "%1$s Replies to &ldquo;%2$s&rdquo;", comments_number_, "comments title", "twentyseventeen"), number_format_i18n(comments_number_), get_the_title())
     # end if
     php_print("""       </h2>
     <ol class=\"comment-list\">

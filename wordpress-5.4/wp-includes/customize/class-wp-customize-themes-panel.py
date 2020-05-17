@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,6 +22,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Panel
 #//
 class WP_Customize_Themes_Panel(WP_Customize_Panel):
+    #// 
+    #// Panel type.
+    #// 
+    #// @since 4.9.0
+    #// @var string
+    #//
     type = "themes"
     #// 
     #// An Underscore (JS) template for rendering this panel's container.
@@ -38,6 +39,7 @@ class WP_Customize_Themes_Panel(WP_Customize_Panel):
     #// @since 4.9.0
     #//
     def render_template(self):
+        
         
         php_print("     <li id=\"accordion-section-{{ data.id }}\" class=\"accordion-section control-panel-themes\">\n          <h3 class=\"accordion-section-title\">\n                ")
         if self.manager.is_theme_active():
@@ -69,6 +71,7 @@ class WP_Customize_Themes_Panel(WP_Customize_Panel):
     #// @see WP_Customize_Panel::print_template()
     #//
     def content_template(self):
+        
         
         php_print("     <li class=\"panel-meta customize-info accordion-section <# if ( ! data.description ) { #> cannot-expand<# } #>\">\n         <button class=\"customize-panel-back\" tabindex=\"-1\" type=\"button\"><span class=\"screen-reader-text\">")
         _e("Back")

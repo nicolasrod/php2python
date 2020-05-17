@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,24 +15,25 @@ if (not php_is_callable("sodiumCompatAutoloader")):
     #// 
     #// @return bool         Stop autoloading?
     #//
-    def sodiumCompatAutoloader(class_=None, *args_):
+    def sodiumCompatAutoloader(class_=None, *_args_):
         
-        namespace = "ParagonIE_Sodium_"
+        
+        namespace_ = "ParagonIE_Sodium_"
         #// Does the class use the namespace prefix?
-        len = php_strlen(namespace)
-        if php_strncmp(namespace, class_, len) != 0:
+        len_ = php_strlen(namespace_)
+        if php_strncmp(namespace_, class_, len_) != 0:
             #// no, move to the next registered autoloader
             return False
         # end if
         #// Get the relative class name
-        relative_class = php_substr(class_, len)
+        relative_class_ = php_substr(class_, len_)
         #// Replace the namespace prefix with the base directory, replace namespace
         #// separators with directory separators in the relative class name, append
         #// with .php
-        file = php_dirname(__FILE__) + "/src/" + php_str_replace("_", "/", relative_class) + ".php"
+        file_ = php_dirname(__FILE__) + "/src/" + php_str_replace("_", "/", relative_class_) + ".php"
         #// if the file exists, require it
-        if php_file_exists(file):
-            php_include_file(file, once=True)
+        if php_file_exists(file_):
+            php_include_file(file_, once=True)
             return True
         # end if
         return False

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,8 +60,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage API
 #//
 class SimplePie_Category():
+    #// 
+    #// Category identifier
+    #// 
+    #// @var string
+    #// @see get_term
+    #//
     term = Array()
+    #// 
+    #// Categorization scheme identifier
+    #// 
+    #// @var string
+    #// @see get_scheme()
+    #//
     scheme = Array()
+    #// 
+    #// Human readable label
+    #// 
+    #// @var string
+    #// @see get_label()
+    #//
     label = Array()
     #// 
     #// Constructor, used to input the data
@@ -75,11 +88,12 @@ class SimplePie_Category():
     #// @param string $scheme
     #// @param string $label
     #//
-    def __init__(self, term=None, scheme=None, label=None):
+    def __init__(self, term_=None, scheme_=None, label_=None):
         
-        self.term = term
-        self.scheme = scheme
-        self.label = label
+        
+        self.term = term_
+        self.scheme = scheme_
+        self.label = label_
     # end def __init__
     #// 
     #// String-ified version
@@ -87,6 +101,7 @@ class SimplePie_Category():
     #// @return string
     #//
     def __tostring(self):
+        
         
         #// There is no $this->data here
         return php_md5(serialize(self))
@@ -97,6 +112,7 @@ class SimplePie_Category():
     #// @return string|null
     #//
     def get_term(self):
+        
         
         if self.term != None:
             return self.term
@@ -111,6 +127,7 @@ class SimplePie_Category():
     #//
     def get_scheme(self):
         
+        
         if self.scheme != None:
             return self.scheme
         else:
@@ -123,6 +140,7 @@ class SimplePie_Category():
     #// @return string|null
     #//
     def get_label(self):
+        
         
         if self.label != None:
             return self.label

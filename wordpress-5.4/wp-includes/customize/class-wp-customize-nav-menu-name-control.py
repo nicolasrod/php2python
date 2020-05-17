@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,6 +22,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Customize_Nav_Menu_Name_Control(WP_Customize_Control):
+    #// 
+    #// Type of control, used by JS.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "nav_menu_name"
     #// 
     #// No-op since we're using JS template.
@@ -34,6 +35,7 @@ class WP_Customize_Nav_Menu_Name_Control(WP_Customize_Control):
     #// @since 4.3.0
     #//
     def render_content(self):
+        
         
         pass
     # end def render_content
@@ -43,6 +45,7 @@ class WP_Customize_Nav_Menu_Name_Control(WP_Customize_Control):
     #// @since 4.3.0
     #//
     def content_template(self):
+        
         
         php_print("""       <label>
         <# if ( data.label ) { #>

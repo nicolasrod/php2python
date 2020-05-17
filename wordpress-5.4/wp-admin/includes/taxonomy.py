@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,13 +27,14 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param int        $parent   Optional. ID of parent term.
 #// @return mixed
 #//
-def category_exists(cat_name=None, parent=None, *args_):
+def category_exists(cat_name_=None, parent_=None, *_args_):
     
-    id = term_exists(cat_name, "category", parent)
-    if php_is_array(id):
-        id = id["term_id"]
+    
+    id_ = term_exists(cat_name_, "category", parent_)
+    if php_is_array(id_):
+        id_ = id_["term_id"]
     # end if
-    return id
+    return id_
 # end def category_exists
 #// 
 #// Get category object for given ID and 'edit' filter context.
@@ -48,11 +44,12 @@ def category_exists(cat_name=None, parent=None, *args_):
 #// @param int $id
 #// @return object
 #//
-def get_category_to_edit(id=None, *args_):
+def get_category_to_edit(id_=None, *_args_):
     
-    category = get_term(id, "category", OBJECT, "edit")
-    _make_cat_compat(category)
-    return category
+    
+    category_ = get_term(id_, "category", OBJECT, "edit")
+    _make_cat_compat(category_)
+    return category_
 # end def get_category_to_edit
 #// 
 #// Add a new category to the database if it does not already exist.
@@ -63,13 +60,14 @@ def get_category_to_edit(id=None, *args_):
 #// @param int        $parent
 #// @return int|WP_Error
 #//
-def wp_create_category(cat_name=None, parent=0, *args_):
+def wp_create_category(cat_name_=None, parent_=0, *_args_):
     
-    id = category_exists(cat_name, parent)
-    if id:
-        return id
+    
+    id_ = category_exists(cat_name_, parent_)
+    if id_:
+        return id_
     # end if
-    return wp_insert_category(Array({"cat_name": cat_name, "category_parent": parent}))
+    return wp_insert_category(Array({"cat_name": cat_name_, "category_parent": parent_}))
 # end def wp_create_category
 #// 
 #// Create categories for the given post.
@@ -80,24 +78,25 @@ def wp_create_category(cat_name=None, parent=0, *args_):
 #// @param int      $post_id    Optional. The post ID. Default empty.
 #// @return int[] Array of IDs of categories assigned to the given post.
 #//
-def wp_create_categories(categories=None, post_id="", *args_):
+def wp_create_categories(categories_=None, post_id_="", *_args_):
     
-    cat_ids = Array()
-    for category in categories:
-        id = category_exists(category)
-        if id:
-            cat_ids[-1] = id
+    
+    cat_ids_ = Array()
+    for category_ in categories_:
+        id_ = category_exists(category_)
+        if id_:
+            cat_ids_[-1] = id_
         else:
-            id = wp_create_category(category)
-            if id:
-                cat_ids[-1] = id
+            id_ = wp_create_category(category_)
+            if id_:
+                cat_ids_[-1] = id_
             # end if
         # end if
     # end for
-    if post_id:
-        wp_set_post_categories(post_id, cat_ids)
+    if post_id_:
+        wp_set_post_categories(post_id_, cat_ids_)
     # end if
-    return cat_ids
+    return cat_ids_
 # end def wp_create_categories
 #// 
 #// Updates an existing Category or creates a new Category.
@@ -121,44 +120,47 @@ def wp_create_categories(categories=None, post_id="", *args_):
 #// @return int|object The ID number of the new or updated Category on success. Zero or a WP_Error on failure,
 #// depending on param $wp_error.
 #//
-def wp_insert_category(catarr=None, wp_error=False, *args_):
+def wp_insert_category(catarr_=None, wp_error_=None, *_args_):
+    if wp_error_ is None:
+        wp_error_ = False
+    # end if
     
-    cat_defaults = Array({"cat_ID": 0, "taxonomy": "category", "cat_name": "", "category_description": "", "category_nicename": "", "category_parent": ""})
-    catarr = wp_parse_args(catarr, cat_defaults)
-    if php_trim(catarr["cat_name"]) == "":
-        if (not wp_error):
+    cat_defaults_ = Array({"cat_ID": 0, "taxonomy": "category", "cat_name": "", "category_description": "", "category_nicename": "", "category_parent": ""})
+    catarr_ = wp_parse_args(catarr_, cat_defaults_)
+    if php_trim(catarr_["cat_name"]) == "":
+        if (not wp_error_):
             return 0
         else:
             return php_new_class("WP_Error", lambda : WP_Error("cat_name", __("You did not enter a category name.")))
         # end if
     # end if
-    catarr["cat_ID"] = php_int(catarr["cat_ID"])
+    catarr_["cat_ID"] = php_int(catarr_["cat_ID"])
     #// Are we updating or creating?
-    update = (not php_empty(lambda : catarr["cat_ID"]))
-    name = catarr["cat_name"]
-    description = catarr["category_description"]
-    slug = catarr["category_nicename"]
-    parent = php_int(catarr["category_parent"])
-    if parent < 0:
-        parent = 0
+    update_ = (not php_empty(lambda : catarr_["cat_ID"]))
+    name_ = catarr_["cat_name"]
+    description_ = catarr_["category_description"]
+    slug_ = catarr_["category_nicename"]
+    parent_ = php_int(catarr_["category_parent"])
+    if parent_ < 0:
+        parent_ = 0
     # end if
-    if php_empty(lambda : parent) or (not term_exists(parent, catarr["taxonomy"])) or catarr["cat_ID"] and term_is_ancestor_of(catarr["cat_ID"], parent, catarr["taxonomy"]):
-        parent = 0
+    if php_empty(lambda : parent_) or (not term_exists(parent_, catarr_["taxonomy"])) or catarr_["cat_ID"] and term_is_ancestor_of(catarr_["cat_ID"], parent_, catarr_["taxonomy"]):
+        parent_ = 0
     # end if
-    args = compact("name", "slug", "parent", "description")
-    if update:
-        catarr["cat_ID"] = wp_update_term(catarr["cat_ID"], catarr["taxonomy"], args)
+    args_ = php_compact("name", "slug", "parent", "description")
+    if update_:
+        catarr_["cat_ID"] = wp_update_term(catarr_["cat_ID"], catarr_["taxonomy"], args_)
     else:
-        catarr["cat_ID"] = wp_insert_term(catarr["cat_name"], catarr["taxonomy"], args)
+        catarr_["cat_ID"] = wp_insert_term(catarr_["cat_name"], catarr_["taxonomy"], args_)
     # end if
-    if is_wp_error(catarr["cat_ID"]):
-        if wp_error:
-            return catarr["cat_ID"]
+    if is_wp_error(catarr_["cat_ID"]):
+        if wp_error_:
+            return catarr_["cat_ID"]
         else:
             return 0
         # end if
     # end if
-    return catarr["cat_ID"]["term_id"]
+    return catarr_["cat_ID"]["term_id"]
 # end def wp_insert_category
 #// 
 #// Aliases wp_insert_category() with minimal args.
@@ -171,20 +173,21 @@ def wp_insert_category(catarr=None, wp_error=False, *args_):
 #// @param array $catarr The 'cat_ID' value is required. All other keys are optional.
 #// @return int|bool The ID number of the new or updated Category on success. Zero or FALSE on failure.
 #//
-def wp_update_category(catarr=None, *args_):
+def wp_update_category(catarr_=None, *_args_):
     
-    cat_ID = php_int(catarr["cat_ID"])
-    if (php_isset(lambda : catarr["category_parent"])) and cat_ID == catarr["category_parent"]:
+    
+    cat_ID_ = php_int(catarr_["cat_ID"])
+    if (php_isset(lambda : catarr_["category_parent"])) and cat_ID_ == catarr_["category_parent"]:
         return False
     # end if
     #// First, get all of the original fields.
-    category = get_term(cat_ID, "category", ARRAY_A)
-    _make_cat_compat(category)
+    category_ = get_term(cat_ID_, "category", ARRAY_A)
+    _make_cat_compat(category_)
     #// Escape data pulled from DB.
-    category = wp_slash(category)
+    category_ = wp_slash(category_)
     #// Merge old and new fields with new fields overwriting old ones.
-    catarr = php_array_merge(category, catarr)
-    return wp_insert_category(catarr)
+    catarr_ = php_array_merge(category_, catarr_)
+    return wp_insert_category(catarr_)
 # end def wp_update_category
 #// 
 #// Tags.
@@ -197,9 +200,10 @@ def wp_update_category(catarr=None, *args_):
 #// @param int|string $tag_name
 #// @return mixed
 #//
-def tag_exists(tag_name=None, *args_):
+def tag_exists(tag_name_=None, *_args_):
     
-    return term_exists(tag_name, "post_tag")
+    
+    return term_exists(tag_name_, "post_tag")
 # end def tag_exists
 #// 
 #// Add a new tag to the database if it does not already exist.
@@ -209,9 +213,10 @@ def tag_exists(tag_name=None, *args_):
 #// @param int|string $tag_name
 #// @return array|WP_Error
 #//
-def wp_create_tag(tag_name=None, *args_):
+def wp_create_tag(tag_name_=None, *_args_):
     
-    return wp_create_term(tag_name, "post_tag")
+    
+    return wp_create_term(tag_name_, "post_tag")
 # end def wp_create_tag
 #// 
 #// Get comma-separated list of tags available to edit.
@@ -222,9 +227,10 @@ def wp_create_tag(tag_name=None, *args_):
 #// @param string $taxonomy Optional. The taxonomy for which to retrieve terms. Default 'post_tag'.
 #// @return string|bool|WP_Error
 #//
-def get_tags_to_edit(post_id=None, taxonomy="post_tag", *args_):
+def get_tags_to_edit(post_id_=None, taxonomy_="post_tag", *_args_):
     
-    return get_terms_to_edit(post_id, taxonomy)
+    
+    return get_terms_to_edit(post_id_, taxonomy_)
 # end def get_tags_to_edit
 #// 
 #// Get comma-separated list of terms available to edit for the given post ID.
@@ -235,28 +241,29 @@ def get_tags_to_edit(post_id=None, taxonomy="post_tag", *args_):
 #// @param string $taxonomy Optional. The taxonomy for which to retrieve terms. Default 'post_tag'.
 #// @return string|bool|WP_Error
 #//
-def get_terms_to_edit(post_id=None, taxonomy="post_tag", *args_):
+def get_terms_to_edit(post_id_=None, taxonomy_="post_tag", *_args_):
     
-    post_id = php_int(post_id)
-    if (not post_id):
+    
+    post_id_ = php_int(post_id_)
+    if (not post_id_):
         return False
     # end if
-    terms = get_object_term_cache(post_id, taxonomy)
-    if False == terms:
-        terms = wp_get_object_terms(post_id, taxonomy)
-        wp_cache_add(post_id, wp_list_pluck(terms, "term_id"), taxonomy + "_relationships")
+    terms_ = get_object_term_cache(post_id_, taxonomy_)
+    if False == terms_:
+        terms_ = wp_get_object_terms(post_id_, taxonomy_)
+        wp_cache_add(post_id_, wp_list_pluck(terms_, "term_id"), taxonomy_ + "_relationships")
     # end if
-    if (not terms):
+    if (not terms_):
         return False
     # end if
-    if is_wp_error(terms):
-        return terms
+    if is_wp_error(terms_):
+        return terms_
     # end if
-    term_names = Array()
-    for term in terms:
-        term_names[-1] = term.name
+    term_names_ = Array()
+    for term_ in terms_:
+        term_names_[-1] = term_.name
     # end for
-    terms_to_edit = esc_attr(join(",", term_names))
+    terms_to_edit_ = esc_attr(join(",", term_names_))
     #// 
     #// Filters the comma-separated list of terms available to edit.
     #// 
@@ -267,8 +274,8 @@ def get_terms_to_edit(post_id=None, taxonomy="post_tag", *args_):
     #// @param string $terms_to_edit A comma-separated list of term names.
     #// @param string $taxonomy      The taxonomy name for which to retrieve terms.
     #//
-    terms_to_edit = apply_filters("terms_to_edit", terms_to_edit, taxonomy)
-    return terms_to_edit
+    terms_to_edit_ = apply_filters("terms_to_edit", terms_to_edit_, taxonomy_)
+    return terms_to_edit_
 # end def get_terms_to_edit
 #// 
 #// Add a new term to the database if it does not already exist.
@@ -279,11 +286,12 @@ def get_terms_to_edit(post_id=None, taxonomy="post_tag", *args_):
 #// @param string $taxonomy Optional. The taxonomy for which to retrieve terms. Default 'post_tag'.
 #// @return array|WP_Error
 #//
-def wp_create_term(tag_name=None, taxonomy="post_tag", *args_):
+def wp_create_term(tag_name_=None, taxonomy_="post_tag", *_args_):
     
-    id = term_exists(tag_name, taxonomy)
-    if id:
-        return id
+    
+    id_ = term_exists(tag_name_, taxonomy_)
+    if id_:
+        return id_
     # end if
-    return wp_insert_term(tag_name, taxonomy)
+    return wp_insert_term(tag_name_, taxonomy_)
 # end def wp_create_term

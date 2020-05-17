@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -64,6 +59,7 @@ class WP_HTTP_Proxy():
     #//
     def is_enabled(self):
         
+        
         return php_defined("WP_PROXY_HOST") and php_defined("WP_PROXY_PORT")
     # end def is_enabled
     #// 
@@ -78,6 +74,7 @@ class WP_HTTP_Proxy():
     #//
     def use_authentication(self):
         
+        
         return php_defined("WP_PROXY_USERNAME") and php_defined("WP_PROXY_PASSWORD")
     # end def use_authentication
     #// 
@@ -88,6 +85,7 @@ class WP_HTTP_Proxy():
     #// @return string
     #//
     def host(self):
+        
         
         if php_defined("WP_PROXY_HOST"):
             return WP_PROXY_HOST
@@ -103,6 +101,7 @@ class WP_HTTP_Proxy():
     #//
     def port(self):
         
+        
         if php_defined("WP_PROXY_PORT"):
             return WP_PROXY_PORT
         # end if
@@ -116,6 +115,7 @@ class WP_HTTP_Proxy():
     #// @return string
     #//
     def username(self):
+        
         
         if php_defined("WP_PROXY_USERNAME"):
             return WP_PROXY_USERNAME
@@ -131,6 +131,7 @@ class WP_HTTP_Proxy():
     #//
     def password(self):
         
+        
         if php_defined("WP_PROXY_PASSWORD"):
             return WP_PROXY_PASSWORD
         # end if
@@ -145,6 +146,7 @@ class WP_HTTP_Proxy():
     #//
     def authentication(self):
         
+        
         return self.username() + ":" + self.password()
     # end def authentication
     #// 
@@ -155,6 +157,7 @@ class WP_HTTP_Proxy():
     #// @return string
     #//
     def authentication_header(self):
+        
         
         return "Proxy-Authorization: Basic " + php_base64_encode(self.authentication())
     # end def authentication_header
@@ -173,18 +176,19 @@ class WP_HTTP_Proxy():
     #// @param string $uri URI to check.
     #// @return bool True, to send through the proxy and false if, the proxy should not be used.
     #//
-    def send_through_proxy(self, uri=None):
+    def send_through_proxy(self, uri_=None):
+        
         
         #// 
         #// parse_url() only handles http, https type URLs, and will emit E_WARNING on failure.
         #// This will be displayed on sites, which is not reasonable.
         #//
-        check = php_no_error(lambda: php_parse_url(uri))
+        check_ = php_no_error(lambda: php_parse_url(uri_))
         #// Malformed URL, can not process, but this could mean ssl, so let through anyway.
-        if False == check:
+        if False == check_:
             return True
         # end if
-        home = php_parse_url(get_option("siteurl"))
+        home_ = php_parse_url(get_option("siteurl"))
         #// 
         #// Filters whether to preempt sending the request through the proxy.
         #// 
@@ -198,32 +202,32 @@ class WP_HTTP_Proxy():
         #// @param array     $check    Associative array result of parsing the request URI.
         #// @param array     $home     Associative array result of parsing the site URL.
         #//
-        result = apply_filters("pre_http_send_through_proxy", None, uri, check, home)
-        if (not is_null(result)):
-            return result
+        result_ = apply_filters("pre_http_send_through_proxy", None, uri_, check_, home_)
+        if (not is_null(result_)):
+            return result_
         # end if
-        if "localhost" == check["host"] or (php_isset(lambda : home["host"])) and home["host"] == check["host"]:
+        if "localhost" == check_["host"] or (php_isset(lambda : home_["host"])) and home_["host"] == check_["host"]:
             return False
         # end if
         if (not php_defined("WP_PROXY_BYPASS_HOSTS")):
             return True
         # end if
-        send_through_proxy.bypass_hosts = None
-        send_through_proxy.wildcard_regex = Array()
-        if None == send_through_proxy.bypass_hosts:
-            send_through_proxy.bypass_hosts = php_preg_split("|,\\s*|", WP_PROXY_BYPASS_HOSTS)
+        bypass_hosts_ = None
+        wildcard_regex_ = Array()
+        if None == bypass_hosts_:
+            bypass_hosts_ = php_preg_split("|,\\s*|", WP_PROXY_BYPASS_HOSTS)
             if False != php_strpos(WP_PROXY_BYPASS_HOSTS, "*"):
-                send_through_proxy.wildcard_regex = Array()
-                for host in send_through_proxy.bypass_hosts:
-                    send_through_proxy.wildcard_regex[-1] = php_str_replace("\\*", ".+", preg_quote(host, "/"))
+                wildcard_regex_ = Array()
+                for host_ in bypass_hosts_:
+                    wildcard_regex_[-1] = php_str_replace("\\*", ".+", preg_quote(host_, "/"))
                 # end for
-                send_through_proxy.wildcard_regex = "/^(" + php_implode("|", send_through_proxy.wildcard_regex) + ")$/i"
+                wildcard_regex_ = "/^(" + php_implode("|", wildcard_regex_) + ")$/i"
             # end if
         # end if
-        if (not php_empty(lambda : send_through_proxy.wildcard_regex)):
-            return (not php_preg_match(send_through_proxy.wildcard_regex, check["host"]))
+        if (not php_empty(lambda : wildcard_regex_)):
+            return (not php_preg_match(wildcard_regex_, check_["host"]))
         else:
-            return (not php_in_array(check["host"], send_through_proxy.bypass_hosts))
+            return (not php_in_array(check_["host"], bypass_hosts_))
         # end if
     # end def send_through_proxy
 # end class WP_HTTP_Proxy

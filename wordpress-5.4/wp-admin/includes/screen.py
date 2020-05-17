@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -28,13 +23,14 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param string|WP_Screen $screen The screen you want the headers for
 #// @return string[] The column header labels keyed by column ID.
 #//
-def get_column_headers(screen=None, *args_):
+def get_column_headers(screen_=None, *_args_):
     
-    if php_is_string(screen):
-        screen = convert_to_screen(screen)
+    
+    if php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
     # end if
-    get_column_headers.column_headers = Array()
-    if (not (php_isset(lambda : get_column_headers.column_headers[screen.id]))):
+    column_headers_ = Array()
+    if (not (php_isset(lambda : column_headers_[screen_.id]))):
         #// 
         #// Filters the column headers for a list table on a specific screen.
         #// 
@@ -47,9 +43,9 @@ def get_column_headers(screen=None, *args_):
         #// 
         #// @param string[] $columns The column header labels keyed by column ID.
         #//
-        get_column_headers.column_headers[screen.id] = apply_filters(str("manage_") + str(screen.id) + str("_columns"), Array())
+        column_headers_[screen_.id] = apply_filters(str("manage_") + str(screen_.id) + str("_columns"), Array())
     # end if
-    return get_column_headers.column_headers[screen.id]
+    return column_headers_[screen_.id]
 # end def get_column_headers
 #// 
 #// Get a list of hidden columns.
@@ -59,15 +55,16 @@ def get_column_headers(screen=None, *args_):
 #// @param string|WP_Screen $screen The screen you want the hidden columns for
 #// @return string[] Array of IDs of hidden columns.
 #//
-def get_hidden_columns(screen=None, *args_):
+def get_hidden_columns(screen_=None, *_args_):
     
-    if php_is_string(screen):
-        screen = convert_to_screen(screen)
+    
+    if php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
     # end if
-    hidden = get_user_option("manage" + screen.id + "columnshidden")
-    use_defaults = (not php_is_array(hidden))
-    if use_defaults:
-        hidden = Array()
+    hidden_ = get_user_option("manage" + screen_.id + "columnshidden")
+    use_defaults_ = (not php_is_array(hidden_))
+    if use_defaults_:
+        hidden_ = Array()
         #// 
         #// Filters the default list of hidden columns.
         #// 
@@ -76,7 +73,7 @@ def get_hidden_columns(screen=None, *args_):
         #// @param string[]  $hidden Array of IDs of columns hidden by default.
         #// @param WP_Screen $screen WP_Screen object of the current screen.
         #//
-        hidden = apply_filters("default_hidden_columns", hidden, screen)
+        hidden_ = apply_filters("default_hidden_columns", hidden_, screen_)
     # end if
     #// 
     #// Filters the list of hidden columns.
@@ -88,7 +85,7 @@ def get_hidden_columns(screen=None, *args_):
     #// @param WP_Screen $screen       WP_Screen object of the current screen.
     #// @param bool      $use_defaults Whether to show the default columns.
     #//
-    return apply_filters("hidden_columns", hidden, screen, use_defaults)
+    return apply_filters("hidden_columns", hidden_, screen_, use_defaults_)
 # end def get_hidden_columns
 #// 
 #// Prints the meta box preferences for screen meta.
@@ -99,35 +96,36 @@ def get_hidden_columns(screen=None, *args_):
 #// 
 #// @param WP_Screen $screen
 #//
-def meta_box_prefs(screen=None, *args_):
+def meta_box_prefs(screen_=None, *_args_):
     
-    global wp_meta_boxes
-    php_check_if_defined("wp_meta_boxes")
-    if php_is_string(screen):
-        screen = convert_to_screen(screen)
+    
+    global wp_meta_boxes_
+    php_check_if_defined("wp_meta_boxes_")
+    if php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
     # end if
-    if php_empty(lambda : wp_meta_boxes[screen.id]):
+    if php_empty(lambda : wp_meta_boxes_[screen_.id]):
         return
     # end if
-    hidden = get_hidden_meta_boxes(screen)
-    for context in php_array_keys(wp_meta_boxes[screen.id]):
-        for priority in Array("high", "core", "default", "low"):
-            if (not (php_isset(lambda : wp_meta_boxes[screen.id][context][priority]))):
+    hidden_ = get_hidden_meta_boxes(screen_)
+    for context_ in php_array_keys(wp_meta_boxes_[screen_.id]):
+        for priority_ in Array("high", "core", "default", "low"):
+            if (not (php_isset(lambda : wp_meta_boxes_[screen_.id][context_][priority_]))):
                 continue
             # end if
-            for box in wp_meta_boxes[screen.id][context][priority]:
-                if False == box or (not box["title"]):
+            for box_ in wp_meta_boxes_[screen_.id][context_][priority_]:
+                if False == box_ or (not box_["title"]):
                     continue
                 # end if
                 #// Submit box cannot be hidden.
-                if "submitdiv" == box["id"] or "linksubmitdiv" == box["id"]:
+                if "submitdiv" == box_["id"] or "linksubmitdiv" == box_["id"]:
                     continue
                 # end if
-                widget_title = box["title"]
-                if php_is_array(box["args"]) and (php_isset(lambda : box["args"]["__widget_basename"])):
-                    widget_title = box["args"]["__widget_basename"]
+                widget_title_ = box_["title"]
+                if php_is_array(box_["args"]) and (php_isset(lambda : box_["args"]["__widget_basename"])):
+                    widget_title_ = box_["args"]["__widget_basename"]
                 # end if
-                printf("<label for=\"%1$s-hide\"><input class=\"hide-postbox-tog\" name=\"%1$s-hide\" type=\"checkbox\" id=\"%1$s-hide\" value=\"%1$s\" %2$s />%3$s</label>", esc_attr(box["id"]), checked(php_in_array(box["id"], hidden), False, False), widget_title)
+                printf("<label for=\"%1$s-hide\"><input class=\"hide-postbox-tog\" name=\"%1$s-hide\" type=\"checkbox\" id=\"%1$s-hide\" value=\"%1$s\" %2$s />%3$s</label>", esc_attr(box_["id"]), checked(php_in_array(box_["id"], hidden_), False, False), widget_title_)
             # end for
         # end for
     # end for
@@ -140,21 +138,22 @@ def meta_box_prefs(screen=None, *args_):
 #// @param string|WP_Screen $screen Screen identifier
 #// @return string[] IDs of hidden meta boxes.
 #//
-def get_hidden_meta_boxes(screen=None, *args_):
+def get_hidden_meta_boxes(screen_=None, *_args_):
     
-    if php_is_string(screen):
-        screen = convert_to_screen(screen)
+    
+    if php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
     # end if
-    hidden = get_user_option(str("metaboxhidden_") + str(screen.id))
-    use_defaults = (not php_is_array(hidden))
+    hidden_ = get_user_option(str("metaboxhidden_") + str(screen_.id))
+    use_defaults_ = (not php_is_array(hidden_))
     #// Hide slug boxes by default.
-    if use_defaults:
-        hidden = Array()
-        if "post" == screen.base:
-            if "post" == screen.post_type or "page" == screen.post_type or "attachment" == screen.post_type:
-                hidden = Array("slugdiv", "trackbacksdiv", "postcustom", "postexcerpt", "commentstatusdiv", "commentsdiv", "authordiv", "revisionsdiv")
+    if use_defaults_:
+        hidden_ = Array()
+        if "post" == screen_.base:
+            if "post" == screen_.post_type or "page" == screen_.post_type or "attachment" == screen_.post_type:
+                hidden_ = Array("slugdiv", "trackbacksdiv", "postcustom", "postexcerpt", "commentstatusdiv", "commentsdiv", "authordiv", "revisionsdiv")
             else:
-                hidden = Array("slugdiv")
+                hidden_ = Array("slugdiv")
             # end if
         # end if
         #// 
@@ -165,7 +164,7 @@ def get_hidden_meta_boxes(screen=None, *args_):
         #// @param string[]  $hidden An array of IDs of meta boxes hidden by default.
         #// @param WP_Screen $screen WP_Screen object of the current screen.
         #//
-        hidden = apply_filters("default_hidden_meta_boxes", hidden, screen)
+        hidden_ = apply_filters("default_hidden_meta_boxes", hidden_, screen_)
     # end if
     #// 
     #// Filters the list of hidden meta boxes.
@@ -177,7 +176,7 @@ def get_hidden_meta_boxes(screen=None, *args_):
     #// @param bool      $use_defaults Whether to show the default meta boxes.
     #// Default true.
     #//
-    return apply_filters("hidden_meta_boxes", hidden, screen, use_defaults)
+    return apply_filters("hidden_meta_boxes", hidden_, screen_, use_defaults_)
 # end def get_hidden_meta_boxes
 #// 
 #// Register and configure an admin screen option
@@ -187,13 +186,16 @@ def get_hidden_meta_boxes(screen=None, *args_):
 #// @param string $option An option name.
 #// @param mixed $args Option-dependent arguments.
 #//
-def add_screen_option(option=None, args=Array(), *args_):
+def add_screen_option(option_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    current_screen = get_current_screen()
-    if (not current_screen):
+    current_screen_ = get_current_screen()
+    if (not current_screen_):
         return
     # end if
-    current_screen.add_option(option, args)
+    current_screen_.add_option(option_, args_)
 # end def add_screen_option
 #// 
 #// Get the current screen object
@@ -204,14 +206,15 @@ def add_screen_option(option=None, args=Array(), *args_):
 #// 
 #// @return WP_Screen|null Current screen object or null when screen not defined.
 #//
-def get_current_screen(*args_):
+def get_current_screen(*_args_):
     
-    global current_screen
-    php_check_if_defined("current_screen")
-    if (not (php_isset(lambda : current_screen))):
+    
+    global current_screen_
+    php_check_if_defined("current_screen_")
+    if (not (php_isset(lambda : current_screen_))):
         return None
     # end if
-    return current_screen
+    return current_screen_
 # end def get_current_screen
 #// 
 #// Set the current screen object
@@ -221,7 +224,8 @@ def get_current_screen(*args_):
 #// @param string|WP_Screen $hook_name Optional. The hook name (also known as the hook suffix) used to determine the screen,
 #// or an existing screen object.
 #//
-def set_current_screen(hook_name="", *args_):
+def set_current_screen(hook_name_="", *_args_):
     
-    WP_Screen.get(hook_name).set_current_screen()
+    
+    WP_Screen.get(hook_name_).set_current_screen()
 # end def set_current_screen

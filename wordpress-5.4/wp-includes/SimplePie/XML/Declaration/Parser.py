@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -61,12 +56,54 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Parsing
 #//
 class SimplePie_XML_Declaration_Parser():
+    #// 
+    #// XML Version
+    #// 
+    #// @access public
+    #// @var string
+    #//
     version = "1.0"
+    #// 
+    #// Encoding
+    #// 
+    #// @access public
+    #// @var string
+    #//
     encoding = "UTF-8"
+    #// 
+    #// Standalone
+    #// 
+    #// @access public
+    #// @var bool
+    #//
     standalone = False
+    #// 
+    #// Current state of the state machine
+    #// 
+    #// @access private
+    #// @var string
+    #//
     state = "before_version_name"
+    #// 
+    #// Input data
+    #// 
+    #// @access private
+    #// @var string
+    #//
     data = ""
+    #// 
+    #// Input data length (to avoid calling strlen() everytime this is needed)
+    #// 
+    #// @access private
+    #// @var int
+    #//
     data_length = 0
+    #// 
+    #// Current position of the pointer
+    #// 
+    #// @var int
+    #// @access private
+    #//
     position = 0
     #// 
     #// Create an instance of the class with the input data
@@ -74,9 +111,10 @@ class SimplePie_XML_Declaration_Parser():
     #// @access public
     #// @param string $data Input data
     #//
-    def __init__(self, data=None):
+    def __init__(self, data_=None):
         
-        self.data = data
+        
+        self.data = data_
         self.data_length = php_strlen(self.data)
     # end def __init__
     #// 
@@ -87,13 +125,14 @@ class SimplePie_XML_Declaration_Parser():
     #//
     def parse(self):
         
+        
         while True:
             
             if not (self.state and self.state != "emit" and self.has_data()):
                 break
             # end if
-            state = self.state
-            self.state()
+            state_ = self.state
+            self.state_()
         # end while
         self.data = ""
         if self.state == "emit":
@@ -113,6 +152,7 @@ class SimplePie_XML_Declaration_Parser():
     #//
     def has_data(self):
         
+        
         return php_bool(self.position < self.data_length)
     # end def has_data
     #// 
@@ -122,28 +162,31 @@ class SimplePie_XML_Declaration_Parser():
     #//
     def skip_whitespace(self):
         
-        whitespace = strspn(self.data, "    \n\r ", self.position)
-        self.position += whitespace
-        return whitespace
+        
+        whitespace_ = strspn(self.data, "   \n\r ", self.position)
+        self.position += whitespace_
+        return whitespace_
     # end def skip_whitespace
     #// 
     #// Read value
     #//
     def get_value(self):
         
-        quote = php_substr(self.data, self.position, 1)
-        if quote == "\"" or quote == "'":
+        
+        quote_ = php_substr(self.data, self.position, 1)
+        if quote_ == "\"" or quote_ == "'":
             self.position += 1
-            len = strcspn(self.data, quote, self.position)
+            len_ = strcspn(self.data, quote_, self.position)
             if self.has_data():
-                value = php_substr(self.data, self.position, len)
-                self.position += len + 1
-                return value
+                value_ = php_substr(self.data, self.position, len_)
+                self.position += len_ + 1
+                return value_
             # end if
         # end if
         return False
     # end def get_value
     def before_version_name(self):
+        
         
         if self.skip_whitespace():
             self.state = "version_name"
@@ -152,6 +195,7 @@ class SimplePie_XML_Declaration_Parser():
         # end if
     # end def before_version_name
     def version_name(self):
+        
         
         if php_substr(self.data, self.position, 7) == "version":
             self.position += 7
@@ -163,6 +207,7 @@ class SimplePie_XML_Declaration_Parser():
     # end def version_name
     def version_equals(self):
         
+        
         if php_substr(self.data, self.position, 1) == "=":
             self.position += 1
             self.skip_whitespace()
@@ -172,6 +217,7 @@ class SimplePie_XML_Declaration_Parser():
         # end if
     # end def version_equals
     def version_value(self):
+        
         
         self.version = self.get_value()
         if self.version:
@@ -187,6 +233,7 @@ class SimplePie_XML_Declaration_Parser():
     # end def version_value
     def encoding_name(self):
         
+        
         if php_substr(self.data, self.position, 8) == "encoding":
             self.position += 8
             self.skip_whitespace()
@@ -197,6 +244,7 @@ class SimplePie_XML_Declaration_Parser():
     # end def encoding_name
     def encoding_equals(self):
         
+        
         if php_substr(self.data, self.position, 1) == "=":
             self.position += 1
             self.skip_whitespace()
@@ -206,6 +254,7 @@ class SimplePie_XML_Declaration_Parser():
         # end if
     # end def encoding_equals
     def encoding_value(self):
+        
         
         self.encoding = self.get_value()
         if self.encoding:
@@ -221,6 +270,7 @@ class SimplePie_XML_Declaration_Parser():
     # end def encoding_value
     def standalone_name(self):
         
+        
         if php_substr(self.data, self.position, 10) == "standalone":
             self.position += 10
             self.skip_whitespace()
@@ -230,6 +280,7 @@ class SimplePie_XML_Declaration_Parser():
         # end if
     # end def standalone_name
     def standalone_equals(self):
+        
         
         if php_substr(self.data, self.position, 1) == "=":
             self.position += 1
@@ -241,9 +292,10 @@ class SimplePie_XML_Declaration_Parser():
     # end def standalone_equals
     def standalone_value(self):
         
-        standalone = self.get_value()
-        if standalone:
-            for case in Switch(standalone):
+        
+        standalone_ = self.get_value()
+        if standalone_:
+            for case in Switch(standalone_):
                 if case("yes"):
                     self.standalone = True
                     break

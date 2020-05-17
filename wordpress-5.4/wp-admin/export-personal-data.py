@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,11 +24,11 @@ _wp_personal_data_handle_actions()
 _wp_personal_data_cleanup_requests()
 wp_enqueue_script("privacy-tools")
 add_screen_option("per_page", Array({"default": 20, "option": "export_personal_data_requests_per_page"}))
-_list_table_args = Array({"plural": "privacy_requests", "singular": "privacy_request"})
-requests_table = _get_list_table("WP_Privacy_Data_Export_Requests_List_Table", _list_table_args)
-requests_table.screen.set_screen_reader_content(Array({"heading_views": __("Filter export personal data list"), "heading_pagination": __("Export personal data list navigation"), "heading_list": __("Export personal data list")}))
-requests_table.process_bulk_action()
-requests_table.prepare_items()
+_list_table_args_ = Array({"plural": "privacy_requests", "singular": "privacy_request"})
+requests_table_ = _get_list_table("WP_Privacy_Data_Export_Requests_List_Table", _list_table_args_)
+requests_table_.screen.set_screen_reader_content(Array({"heading_views": __("Filter export personal data list"), "heading_pagination": __("Export personal data list navigation"), "heading_list": __("Export personal data list")}))
+requests_table_.process_bulk_action()
+requests_table_.prepare_items()
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("\n<div class=\"wrap nosubsub\">\n    <h1>")
 esc_html_e("Export Personal Data")
@@ -60,9 +55,9 @@ php_print("""       <input type=\"hidden\" name=\"action\" value=\"add_export_pe
 </form>
 <hr />
 """)
-requests_table.views()
+requests_table_.views()
 php_print("\n   <form class=\"search-form wp-clearfix\">\n      ")
-requests_table.search_box(__("Search Requests"), "requests")
+requests_table_.search_box(__("Search Requests"), "requests")
 php_print("     <input type=\"hidden\" name=\"filter-status\" value=\"")
 php_print(esc_attr(sanitize_text_field(PHP_REQUEST["filter-status"])) if (php_isset(lambda : PHP_REQUEST["filter-status"])) else "")
 php_print("\" />\n      <input type=\"hidden\" name=\"orderby\" value=\"")
@@ -73,8 +68,8 @@ php_print("""\" />
 </form>
 <form method=\"post\">
 """)
-requests_table.display()
-requests_table.embed_scripts()
+requests_table_.display()
+requests_table_.embed_scripts()
 php_print("""   </form>
 </div>
 """)

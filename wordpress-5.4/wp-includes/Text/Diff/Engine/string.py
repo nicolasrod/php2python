@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -47,43 +42,44 @@ class Text_Diff_Engine_string():
     #// 
     #// @return array  List of all diff operations.
     #//
-    def diff(self, diff=None, mode="autodetect"):
+    def diff(self, diff_=None, mode_="autodetect"):
+        
         
         #// Detect line breaks.
-        lnbr = "\n"
-        if php_strpos(diff, "\r\n") != False:
-            lnbr = "\r\n"
-        elif php_strpos(diff, "\r") != False:
-            lnbr = "\r"
+        lnbr_ = "\n"
+        if php_strpos(diff_, "\r\n") != False:
+            lnbr_ = "\r\n"
+        elif php_strpos(diff_, "\r") != False:
+            lnbr_ = "\r"
         # end if
         #// Make sure we have a line break at the EOF.
-        if php_substr(diff, -php_strlen(lnbr)) != lnbr:
-            diff += lnbr
+        if php_substr(diff_, -php_strlen(lnbr_)) != lnbr_:
+            diff_ += lnbr_
         # end if
-        if mode != "autodetect" and mode != "context" and mode != "unified":
+        if mode_ != "autodetect" and mode_ != "context" and mode_ != "unified":
             return PEAR.raiseerror("Type of diff is unsupported")
         # end if
-        if mode == "autodetect":
-            context = php_strpos(diff, "***")
-            unified = php_strpos(diff, "---")
-            if context == unified:
+        if mode_ == "autodetect":
+            context_ = php_strpos(diff_, "***")
+            unified_ = php_strpos(diff_, "---")
+            if context_ == unified_:
                 return PEAR.raiseerror("Type of diff could not be detected")
-            elif context == False or unified == False:
-                mode = "context" if context != False else "unified"
+            elif context_ == False or unified_ == False:
+                mode_ = "context" if context_ != False else "unified"
             else:
-                mode = "context" if context < unified else "unified"
+                mode_ = "context" if context_ < unified_ else "unified"
             # end if
         # end if
         #// Split by new line and remove the diff header, if there is one.
-        diff = php_explode(lnbr, diff)
-        if mode == "context" and php_strpos(diff[0], "***") == 0 or mode == "unified" and php_strpos(diff[0], "---") == 0:
-            php_array_shift(diff)
-            php_array_shift(diff)
+        diff_ = php_explode(lnbr_, diff_)
+        if mode_ == "context" and php_strpos(diff_[0], "***") == 0 or mode_ == "unified" and php_strpos(diff_[0], "---") == 0:
+            php_array_shift(diff_)
+            php_array_shift(diff_)
         # end if
-        if mode == "context":
-            return self.parsecontextdiff(diff)
+        if mode_ == "context":
+            return self.parsecontextdiff(diff_)
         else:
-            return self.parseunifieddiff(diff)
+            return self.parseunifieddiff(diff_)
         # end if
     # end def diff
     #// 
@@ -93,74 +89,75 @@ class Text_Diff_Engine_string():
     #// 
     #// @return array  List of all diff operations.
     #//
-    def parseunifieddiff(self, diff=None):
+    def parseunifieddiff(self, diff_=None):
         
-        edits = Array()
-        end_ = php_count(diff) - 1
-        i = 0
-        while i < end_:
+        
+        edits_ = Array()
+        end_ = php_count(diff_) - 1
+        i_ = 0
+        while i_ < end_:
             
-            diff1 = Array()
-            for case in Switch(php_substr(diff[i], 0, 1)):
+            diff1_ = Array()
+            for case in Switch(php_substr(diff_[i_], 0, 1)):
                 if case(" "):
-                    i += 1
+                    i_ += 1
                     while True:
-                        diff1[-1] = php_substr(diff[i], 1)
-                        
-                        if i < end_ and php_substr(diff[i], 0, 1) == " ":
+                        diff1_[-1] = php_substr(diff_[i_], 1)
+                        i_ += 1
+                        if i_ < end_ and php_substr(diff_[i_], 0, 1) == " ":
                             break
                         # end if
                     # end while
-                    edits[-1] = php_new_class("Text_Diff_Op_copy", lambda : Text_Diff_Op_copy(diff1))
+                    edits_[-1] = php_new_class("Text_Diff_Op_copy", lambda : Text_Diff_Op_copy(diff1_))
                     break
                 # end if
                 if case("+"):
-                    i += 1
+                    i_ += 1
                     #// get all new lines
                     while True:
-                        diff1[-1] = php_substr(diff[i], 1)
-                        
-                        if i < end_ and php_substr(diff[i], 0, 1) == "+":
+                        diff1_[-1] = php_substr(diff_[i_], 1)
+                        i_ += 1
+                        if i_ < end_ and php_substr(diff_[i_], 0, 1) == "+":
                             break
                         # end if
                     # end while
-                    edits[-1] = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(diff1))
+                    edits_[-1] = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(diff1_))
                     break
                 # end if
                 if case("-"):
                     #// get changed or removed lines
-                    diff2 = Array()
-                    i += 1
+                    diff2_ = Array()
+                    i_ += 1
                     while True:
-                        diff1[-1] = php_substr(diff[i], 1)
-                        
-                        if i < end_ and php_substr(diff[i], 0, 1) == "-":
+                        diff1_[-1] = php_substr(diff_[i_], 1)
+                        i_ += 1
+                        if i_ < end_ and php_substr(diff_[i_], 0, 1) == "-":
                             break
                         # end if
                     # end while
                     while True:
                         
-                        if not (i < end_ and php_substr(diff[i], 0, 1) == "+"):
+                        if not (i_ < end_ and php_substr(diff_[i_], 0, 1) == "+"):
                             break
                         # end if
-                        diff2[-1] = php_substr(diff[i], 1)
-                        i += 1
+                        diff2_[-1] = php_substr(diff_[i_], 1)
+                        i_ += 1
                     # end while
-                    if php_count(diff2) == 0:
-                        edits[-1] = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(diff1))
+                    if php_count(diff2_) == 0:
+                        edits_[-1] = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(diff1_))
                     else:
-                        edits[-1] = php_new_class("Text_Diff_Op_change", lambda : Text_Diff_Op_change(diff1, diff2))
+                        edits_[-1] = php_new_class("Text_Diff_Op_change", lambda : Text_Diff_Op_change(diff1_, diff2_))
                     # end if
                     break
                 # end if
                 if case():
-                    i += 1
+                    i_ += 1
                     break
                 # end if
             # end for
             
         # end while
-        return edits
+        return edits_
     # end def parseunifieddiff
     #// 
     #// Parses an array containing the context diff.
@@ -169,159 +166,163 @@ class Text_Diff_Engine_string():
     #// 
     #// @return array  List of all diff operations.
     #//
-    def parsecontextdiff(self, diff=None):
+    def parsecontextdiff(self, diff_=None):
         
-        edits = Array()
-        i = max_i = j = max_j = 0
-        end_ = php_count(diff) - 1
+        
+        edits_ = Array()
+        i_ = max_i_ = j_ = max_j_ = 0
+        end_ = php_count(diff_) - 1
         while True:
             
-            if not (i < end_ and j < end_):
+            if not (i_ < end_ and j_ < end_):
                 break
             # end if
             while True:
                 
-                if not (i >= max_i and j >= max_j):
+                if not (i_ >= max_i_ and j_ >= max_j_):
                     break
                 # end if
                 #// Find the boundaries of the diff output of the two files
-                i = j
-                while i < end_ and php_substr(diff[i], 0, 3) == "***":
+                i_ = j_
+                while i_ < end_ and php_substr(diff_[i_], 0, 3) == "***":
                     
                     
-                    i += 1
+                    i_ += 1
                 # end while
-                max_i = i
-                while max_i < end_ and php_substr(diff[max_i], 0, 3) != "---":
+                max_i_ = i_
+                while max_i_ < end_ and php_substr(diff_[max_i_], 0, 3) != "---":
                     
                     
-                    max_i += 1
+                    max_i_ += 1
                 # end while
-                j = max_i
-                while j < end_ and php_substr(diff[j], 0, 3) == "---":
+                j_ = max_i_
+                while j_ < end_ and php_substr(diff_[j_], 0, 3) == "---":
                     
                     
-                    j += 1
+                    j_ += 1
                 # end while
-                max_j = j
-                while max_j < end_ and php_substr(diff[max_j], 0, 3) != "***":
+                max_j_ = j_
+                while max_j_ < end_ and php_substr(diff_[max_j_], 0, 3) != "***":
                     
                     
-                    max_j += 1
+                    max_j_ += 1
                 # end while
             # end while
             #// find what hasn't been changed
-            array = Array()
+            array_ = Array()
             while True:
                 
-                if not (i < max_i and j < max_j and strcmp(diff[i], diff[j]) == 0):
+                if not (i_ < max_i_ and j_ < max_j_ and strcmp(diff_[i_], diff_[j_]) == 0):
                     break
                 # end if
-                array[-1] = php_substr(diff[i], 2)
-                i += 1
-                j += 1
+                array_[-1] = php_substr(diff_[i_], 2)
+                i_ += 1
+                j_ += 1
             # end while
             while True:
                 
-                if not (i < max_i and max_j - j <= 1):
+                if not (i_ < max_i_ and max_j_ - j_ <= 1):
                     break
                 # end if
-                if diff[i] != "" and php_substr(diff[i], 0, 1) != " ":
+                if diff_[i_] != "" and php_substr(diff_[i_], 0, 1) != " ":
                     break
                 # end if
-                array[-1] = php_substr(diff[i], 2)
-                i += 1
+                array_[-1] = php_substr(diff_[i_], 2)
+                i_ += 1
             # end while
             while True:
                 
-                if not (j < max_j and max_i - i <= 1):
+                if not (j_ < max_j_ and max_i_ - i_ <= 1):
                     break
                 # end if
-                if diff[j] != "" and php_substr(diff[j], 0, 1) != " ":
+                if diff_[j_] != "" and php_substr(diff_[j_], 0, 1) != " ":
                     break
                 # end if
-                array[-1] = php_substr(diff[j], 2)
-                j += 1
+                array_[-1] = php_substr(diff_[j_], 2)
+                j_ += 1
             # end while
-            if php_count(array) > 0:
-                edits[-1] = php_new_class("Text_Diff_Op_copy", lambda : Text_Diff_Op_copy(array))
+            if php_count(array_) > 0:
+                edits_[-1] = php_new_class("Text_Diff_Op_copy", lambda : Text_Diff_Op_copy(array_))
             # end if
-            if i < max_i:
-                diff1 = Array()
-                for case in Switch(php_substr(diff[i], 0, 1)):
+            if i_ < max_i_:
+                diff1_ = Array()
+                for case in Switch(php_substr(diff_[i_], 0, 1)):
                     if case("!"):
-                        diff2 = Array()
-                        i += 1
+                        diff2_ = Array()
+                        i_ += 1
                         while True:
-                            diff1[-1] = php_substr(diff[i], 2)
-                            if j < max_j and php_substr(diff[j], 0, 1) == "!":
-                                diff2[-1] = php_substr(diff[j], 2)
-                                j += 1
+                            diff1_[-1] = php_substr(diff_[i_], 2)
+                            if j_ < max_j_ and php_substr(diff_[j_], 0, 1) == "!":
+                                diff2_[-1] = php_substr(diff_[j_], 2)
+                                j_ += 1
+                                j_ += 1
                             # end if
-                            
-                            if i < max_i and php_substr(diff[i], 0, 1) == "!":
+                            i_ += 1
+                            if i_ < max_i_ and php_substr(diff_[i_], 0, 1) == "!":
                                 break
                             # end if
                         # end while
-                        edits[-1] = php_new_class("Text_Diff_Op_change", lambda : Text_Diff_Op_change(diff1, diff2))
+                        edits_[-1] = php_new_class("Text_Diff_Op_change", lambda : Text_Diff_Op_change(diff1_, diff2_))
                         break
                     # end if
                     if case("+"):
-                        i += 1
+                        i_ += 1
                         while True:
-                            diff1[-1] = php_substr(diff[i], 2)
-                            
-                            if i < max_i and php_substr(diff[i], 0, 1) == "+":
+                            diff1_[-1] = php_substr(diff_[i_], 2)
+                            i_ += 1
+                            if i_ < max_i_ and php_substr(diff_[i_], 0, 1) == "+":
                                 break
                             # end if
                         # end while
-                        edits[-1] = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(diff1))
+                        edits_[-1] = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(diff1_))
                         break
                     # end if
                     if case("-"):
-                        i += 1
+                        i_ += 1
                         while True:
-                            diff1[-1] = php_substr(diff[i], 2)
-                            
-                            if i < max_i and php_substr(diff[i], 0, 1) == "-":
+                            diff1_[-1] = php_substr(diff_[i_], 2)
+                            i_ += 1
+                            if i_ < max_i_ and php_substr(diff_[i_], 0, 1) == "-":
                                 break
                             # end if
                         # end while
-                        edits[-1] = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(diff1))
+                        edits_[-1] = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(diff1_))
                         break
                     # end if
                 # end for
             # end if
-            if j < max_j:
-                diff2 = Array()
-                for case in Switch(php_substr(diff[j], 0, 1)):
+            if j_ < max_j_:
+                diff2_ = Array()
+                for case in Switch(php_substr(diff_[j_], 0, 1)):
                     if case("+"):
                         while True:
-                            diff2[-1] = php_substr(diff[j], 2)
-                            j += 1
+                            diff2_[-1] = php_substr(diff_[j_], 2)
+                            j_ += 1
+                            j_ += 1
                             
-                            if j < max_j and php_substr(diff[j], 0, 1) == "+":
+                            if j_ < max_j_ and php_substr(diff_[j_], 0, 1) == "+":
                                 break
                             # end if
                         # end while
-                        edits[-1] = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(diff2))
+                        edits_[-1] = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(diff2_))
                         break
                     # end if
                     if case("-"):
                         while True:
-                            diff2[-1] = php_substr(diff[j], 2)
-                            j += 1
+                            diff2_[-1] = php_substr(diff_[j_], 2)
+                            j_ += 1
+                            j_ += 1
                             
-                            if j < max_j and php_substr(diff[j], 0, 1) == "-":
+                            if j_ < max_j_ and php_substr(diff_[j_], 0, 1) == "-":
                                 break
                             # end if
                         # end while
-                        edits[-1] = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(diff2))
+                        edits_[-1] = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(diff2_))
                         break
                     # end if
                 # end for
             # end if
         # end while
-        return edits
+        return edits_
     # end def parsecontextdiff
 # end class Text_Diff_Engine_string

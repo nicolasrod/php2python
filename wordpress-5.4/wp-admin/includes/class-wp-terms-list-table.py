@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -44,24 +39,30 @@ class WP_Terms_List_Table(WP_List_Table):
     #// 
     #// @param array $args An associative array of arguments.
     #//
-    def __init__(self, args=Array()):
-        
-        global post_type,taxonomy,action,tax
-        php_check_if_defined("post_type","taxonomy","action","tax")
-        super().__init__(Array({"plural": "tags", "singular": "tag", "screen": args["screen"] if (php_isset(lambda : args["screen"])) else None}))
-        action = self.screen.action
-        post_type = self.screen.post_type
-        taxonomy = self.screen.taxonomy
-        if php_empty(lambda : taxonomy):
-            taxonomy = "post_tag"
+    def __init__(self, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        if (not taxonomy_exists(taxonomy)):
+        
+        global post_type_
+        global taxonomy_
+        global action_
+        global tax_
+        php_check_if_defined("post_type_","taxonomy_","action_","tax_")
+        super().__init__(Array({"plural": "tags", "singular": "tag", "screen": args_["screen"] if (php_isset(lambda : args_["screen"])) else None}))
+        action_ = self.screen.action
+        post_type_ = self.screen.post_type
+        taxonomy_ = self.screen.taxonomy
+        if php_empty(lambda : taxonomy_):
+            taxonomy_ = "post_tag"
+        # end if
+        if (not taxonomy_exists(taxonomy_)):
             wp_die(__("Invalid taxonomy."))
         # end if
-        tax = get_taxonomy(taxonomy)
+        tax_ = get_taxonomy(taxonomy_)
         #// @todo Still needed? Maybe just the show_ui part.
-        if php_empty(lambda : post_type) or (not php_in_array(post_type, get_post_types(Array({"show_ui": True})))):
-            post_type = "post"
+        if php_empty(lambda : post_type_) or (not php_in_array(post_type_, get_post_types(Array({"show_ui": True})))):
+            post_type_ = "post"
         # end if
     # end def __init__
     #// 
@@ -69,13 +70,15 @@ class WP_Terms_List_Table(WP_List_Table):
     #//
     def ajax_user_can(self):
         
+        
         return current_user_can(get_taxonomy(self.screen.taxonomy).cap.manage_terms)
     # end def ajax_user_can
     #// 
     #//
     def prepare_items(self):
         
-        tags_per_page = self.get_items_per_page("edit_" + self.screen.taxonomy + "_per_page")
+        
+        tags_per_page_ = self.get_items_per_page("edit_" + self.screen.taxonomy + "_per_page")
         if "post_tag" == self.screen.taxonomy:
             #// 
             #// Filters the number of terms displayed per page for the Tags list table.
@@ -84,7 +87,7 @@ class WP_Terms_List_Table(WP_List_Table):
             #// 
             #// @param int $tags_per_page Number of tags to be displayed. Default 20.
             #//
-            tags_per_page = apply_filters("edit_tags_per_page", tags_per_page)
+            tags_per_page_ = apply_filters("edit_tags_per_page", tags_per_page_)
             #// 
             #// Filters the number of terms displayed per page for the Tags list table.
             #// 
@@ -93,7 +96,7 @@ class WP_Terms_List_Table(WP_List_Table):
             #// 
             #// @param int $tags_per_page Number of tags to be displayed. Default 20.
             #//
-            tags_per_page = apply_filters_deprecated("tagsperpage", Array(tags_per_page), "2.8.0", "edit_tags_per_page")
+            tags_per_page_ = apply_filters_deprecated("tagsperpage", Array(tags_per_page_), "2.8.0", "edit_tags_per_page")
         elif "category" == self.screen.taxonomy:
             #// 
             #// Filters the number of terms displayed per page for the Categories list table.
@@ -102,23 +105,24 @@ class WP_Terms_List_Table(WP_List_Table):
             #// 
             #// @param int $tags_per_page Number of categories to be displayed. Default 20.
             #//
-            tags_per_page = apply_filters("edit_categories_per_page", tags_per_page)
+            tags_per_page_ = apply_filters("edit_categories_per_page", tags_per_page_)
         # end if
-        search = php_trim(wp_unslash(PHP_REQUEST["s"])) if (not php_empty(lambda : PHP_REQUEST["s"])) else ""
-        args = Array({"search": search, "page": self.get_pagenum(), "number": tags_per_page})
+        search_ = php_trim(wp_unslash(PHP_REQUEST["s"])) if (not php_empty(lambda : PHP_REQUEST["s"])) else ""
+        args_ = Array({"search": search_, "page": self.get_pagenum(), "number": tags_per_page_})
         if (not php_empty(lambda : PHP_REQUEST["orderby"])):
-            args["orderby"] = php_trim(wp_unslash(PHP_REQUEST["orderby"]))
+            args_["orderby"] = php_trim(wp_unslash(PHP_REQUEST["orderby"]))
         # end if
         if (not php_empty(lambda : PHP_REQUEST["order"])):
-            args["order"] = php_trim(wp_unslash(PHP_REQUEST["order"]))
+            args_["order"] = php_trim(wp_unslash(PHP_REQUEST["order"]))
         # end if
-        self.callback_args = args
-        self.set_pagination_args(Array({"total_items": wp_count_terms(self.screen.taxonomy, compact("search")), "per_page": tags_per_page}))
+        self.callback_args = args_
+        self.set_pagination_args(Array({"total_items": wp_count_terms(self.screen.taxonomy, php_compact("search")), "per_page": tags_per_page_}))
     # end def prepare_items
     #// 
     #// @return bool
     #//
     def has_items(self):
+        
         
         #// @todo Populate $this->items in prepare_items().
         return True
@@ -127,6 +131,7 @@ class WP_Terms_List_Table(WP_List_Table):
     #//
     def no_items(self):
         
+        
         php_print(get_taxonomy(self.screen.taxonomy).labels.not_found)
     # end def no_items
     #// 
@@ -134,16 +139,18 @@ class WP_Terms_List_Table(WP_List_Table):
     #//
     def get_bulk_actions(self):
         
-        actions = Array()
+        
+        actions_ = Array()
         if current_user_can(get_taxonomy(self.screen.taxonomy).cap.delete_terms):
-            actions["delete"] = __("Delete")
+            actions_["delete"] = __("Delete")
         # end if
-        return actions
+        return actions_
     # end def get_bulk_actions
     #// 
     #// @return string
     #//
     def current_action(self):
+        
         
         if (php_isset(lambda : PHP_REQUEST["action"])) and (php_isset(lambda : PHP_REQUEST["delete_tags"])) and "delete" == PHP_REQUEST["action"] or "delete" == PHP_REQUEST["action2"]:
             return "bulk-delete"
@@ -155,18 +162,20 @@ class WP_Terms_List_Table(WP_List_Table):
     #//
     def get_columns(self):
         
-        columns = Array({"cb": "<input type=\"checkbox\" />", "name": _x("Name", "term name"), "description": __("Description"), "slug": __("Slug")})
+        
+        columns_ = Array({"cb": "<input type=\"checkbox\" />", "name": _x("Name", "term name"), "description": __("Description"), "slug": __("Slug")})
         if "link_category" == self.screen.taxonomy:
-            columns["links"] = __("Links")
+            columns_["links"] = __("Links")
         else:
-            columns["posts"] = _x("Count", "Number/count of items")
+            columns_["posts"] = _x("Count", "Number/count of items")
         # end if
-        return columns
+        return columns_
     # end def get_columns
     #// 
     #// @return array
     #//
     def get_sortable_columns(self):
+        
         
         return Array({"name": "name", "description": "description", "slug": "slug", "posts": "count", "links": "count"})
     # end def get_sortable_columns
@@ -174,42 +183,43 @@ class WP_Terms_List_Table(WP_List_Table):
     #//
     def display_rows_or_placeholder(self):
         
-        taxonomy = self.screen.taxonomy
-        args = wp_parse_args(self.callback_args, Array({"taxonomy": taxonomy, "page": 1, "number": 20, "search": "", "hide_empty": 0}))
-        page = args["page"]
+        
+        taxonomy_ = self.screen.taxonomy
+        args_ = wp_parse_args(self.callback_args, Array({"taxonomy": taxonomy_, "page": 1, "number": 20, "search": "", "hide_empty": 0}))
+        page_ = args_["page"]
         #// Set variable because $args['number'] can be subsequently overridden.
-        number = args["number"]
-        offset = page - 1 * number
-        args["offset"] = offset
+        number_ = args_["number"]
+        offset_ = page_ - 1 * number_
+        args_["offset"] = offset_
         #// Convert it to table rows.
-        count = 0
-        if is_taxonomy_hierarchical(taxonomy) and (not (php_isset(lambda : args["orderby"]))):
+        count_ = 0
+        if is_taxonomy_hierarchical(taxonomy_) and (not (php_isset(lambda : args_["orderby"]))):
             #// We'll need the full set of terms then.
-            args["number"] = 0
-            args["offset"] = args["number"]
+            args_["number"] = 0
+            args_["offset"] = args_["number"]
         # end if
-        terms = get_terms(args)
-        if php_empty(lambda : terms) or (not php_is_array(terms)):
+        terms_ = get_terms(args_)
+        if php_empty(lambda : terms_) or (not php_is_array(terms_)):
             php_print("<tr class=\"no-items\"><td class=\"colspanchange\" colspan=\"" + self.get_column_count() + "\">")
             self.no_items()
             php_print("</td></tr>")
             return
         # end if
-        if is_taxonomy_hierarchical(taxonomy) and (not (php_isset(lambda : args["orderby"]))):
-            if (not php_empty(lambda : args["search"])):
+        if is_taxonomy_hierarchical(taxonomy_) and (not (php_isset(lambda : args_["orderby"]))):
+            if (not php_empty(lambda : args_["search"])):
                 #// Ignore children on searches.
-                children = Array()
+                children_ = Array()
             else:
-                children = _get_term_hierarchy(taxonomy)
+                children_ = _get_term_hierarchy(taxonomy_)
             # end if
             #// 
             #// Some funky recursion to get the job done (paging & parents mainly) is contained within.
             #// Skip it for non-hierarchical taxonomies for performance sake.
             #//
-            self._rows(taxonomy, terms, children, offset, number, count)
+            self._rows(taxonomy_, terms_, children_, offset_, number_, count_)
         else:
-            for term in terms:
-                self.single_row(term)
+            for term_ in terms_:
+                self.single_row(term_)
             # end for
         # end if
     # end def display_rows_or_placeholder
@@ -223,54 +233,55 @@ class WP_Terms_List_Table(WP_List_Table):
     #// @param int   $parent
     #// @param int   $level
     #//
-    def _rows(self, taxonomy=None, terms=None, children=None, start=None, per_page=None, count=None, parent=0, level=0):
+    def _rows(self, taxonomy_=None, terms_=None, children_=None, start_=None, per_page_=None, count_=None, parent_=0, level_=0):
         
-        end_ = start + per_page
-        for key,term in terms:
-            if count >= end_:
+        
+        end_ = start_ + per_page_
+        for key_,term_ in terms_:
+            if count_ >= end_:
                 break
             # end if
-            if term.parent != parent and php_empty(lambda : PHP_REQUEST["s"]):
+            if term_.parent != parent_ and php_empty(lambda : PHP_REQUEST["s"]):
                 continue
             # end if
             #// If the page starts in a subtree, print the parents.
-            if count == start and term.parent > 0 and php_empty(lambda : PHP_REQUEST["s"]):
-                my_parents = Array()
-                parent_ids = Array()
-                p = term.parent
+            if count_ == start_ and term_.parent > 0 and php_empty(lambda : PHP_REQUEST["s"]):
+                my_parents_ = Array()
+                parent_ids_ = Array()
+                p_ = term_.parent
                 while True:
                     
-                    if not (p):
+                    if not (p_):
                         break
                     # end if
-                    my_parent = get_term(p, taxonomy)
-                    my_parents[-1] = my_parent
-                    p = my_parent.parent
-                    if php_in_array(p, parent_ids):
+                    my_parent_ = get_term(p_, taxonomy_)
+                    my_parents_[-1] = my_parent_
+                    p_ = my_parent_.parent
+                    if php_in_array(p_, parent_ids_):
                         break
                     # end if
-                    parent_ids[-1] = p
+                    parent_ids_[-1] = p_
                 # end while
-                parent_ids = None
-                num_parents = php_count(my_parents)
+                parent_ids_ = None
+                num_parents_ = php_count(my_parents_)
                 while True:
-                    my_parent = php_array_pop(my_parents)
-                    if not (my_parent):
+                    my_parent_ = php_array_pop(my_parents_)
+                    if not (my_parent_):
                         break
                     # end if
                     php_print(" ")
-                    self.single_row(my_parent, level - num_parents)
-                    num_parents -= 1
+                    self.single_row(my_parent_, level_ - num_parents_)
+                    num_parents_ -= 1
                 # end while
             # end if
-            if count >= start:
+            if count_ >= start_:
                 php_print(" ")
-                self.single_row(term, level)
+                self.single_row(term_, level_)
             # end if
-            count += 1
-            terms[key] = None
-            if (php_isset(lambda : children[term.term_id])) and php_empty(lambda : PHP_REQUEST["s"]):
-                self._rows(taxonomy, terms, children, start, per_page, count, term.term_id, level + 1)
+            count_ += 1
+            terms_[key_] = None
+            if (php_isset(lambda : children_[term_.term_id])) and php_empty(lambda : PHP_REQUEST["s"]):
+                self._rows(taxonomy_, terms_, children_, start_, per_page_, count_, term_.term_id, level_ + 1)
             # end if
         # end for
     # end def _rows
@@ -279,30 +290,32 @@ class WP_Terms_List_Table(WP_List_Table):
     #// @param WP_Term $tag Term object.
     #// @param int $level
     #//
-    def single_row(self, tag=None, level=0):
+    def single_row(self, tag_=None, level_=0):
         
-        global taxonomy
-        php_check_if_defined("taxonomy")
-        tag = sanitize_term(tag, taxonomy)
-        self.level = level
-        if tag.parent:
-            count = php_count(get_ancestors(tag.term_id, taxonomy, "taxonomy"))
-            level = "level-" + count
+        
+        global taxonomy_
+        php_check_if_defined("taxonomy_")
+        tag_ = sanitize_term(tag_, taxonomy_)
+        self.level = level_
+        if tag_.parent:
+            count_ = php_count(get_ancestors(tag_.term_id, taxonomy_, "taxonomy"))
+            level_ = "level-" + count_
         else:
-            level = "level-0"
+            level_ = "level-0"
         # end if
-        php_print("<tr id=\"tag-" + tag.term_id + "\" class=\"" + level + "\">")
-        self.single_row_columns(tag)
+        php_print("<tr id=\"tag-" + tag_.term_id + "\" class=\"" + level_ + "\">")
+        self.single_row_columns(tag_)
         php_print("</tr>")
     # end def single_row
     #// 
     #// @param WP_Term $tag Term object.
     #// @return string
     #//
-    def column_cb(self, tag=None):
+    def column_cb(self, tag_=None):
         
-        if current_user_can("delete_term", tag.term_id):
-            return php_sprintf("<label class=\"screen-reader-text\" for=\"cb-select-%1$s\">%2$s</label>" + "<input type=\"checkbox\" name=\"delete_tags[]\" value=\"%1$s\" id=\"cb-select-%1$s\" />", tag.term_id, php_sprintf(__("Select %s"), tag.name))
+        
+        if current_user_can("delete_term", tag_.term_id):
+            return php_sprintf("<label class=\"screen-reader-text\" for=\"cb-select-%1$s\">%2$s</label>" + "<input type=\"checkbox\" name=\"delete_tags[]\" value=\"%1$s\" id=\"cb-select-%1$s\" />", tag_.term_id, php_sprintf(__("Select %s"), tag_.name))
         # end if
         return "&nbsp;"
     # end def column_cb
@@ -310,10 +323,11 @@ class WP_Terms_List_Table(WP_List_Table):
     #// @param WP_Term $tag Term object.
     #// @return string
     #//
-    def column_name(self, tag=None):
+    def column_name(self, tag_=None):
         
-        taxonomy = self.screen.taxonomy
-        pad = php_str_repeat("&#8212; ", php_max(0, self.level))
+        
+        taxonomy_ = self.screen.taxonomy
+        pad_ = php_str_repeat("&#8212; ", php_max(0, self.level))
         #// 
         #// Filters display of the term name in the terms list table.
         #// 
@@ -327,21 +341,21 @@ class WP_Terms_List_Table(WP_List_Table):
         #// @param string $pad_tag_name The term name, padded if not top-level.
         #// @param WP_Term $tag         Term object.
         #//
-        name = apply_filters("term_name", pad + " " + tag.name, tag)
-        qe_data = get_term(tag.term_id, taxonomy, OBJECT, "edit")
-        uri = wp_get_referer() if wp_doing_ajax() else PHP_SERVER["REQUEST_URI"]
-        edit_link = get_edit_term_link(tag.term_id, taxonomy, self.screen.post_type)
-        if edit_link:
-            edit_link = add_query_arg("wp_http_referer", urlencode(wp_unslash(uri)), edit_link)
-            name = php_sprintf("<a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s</a>", esc_url(edit_link), esc_attr(php_sprintf(__("&#8220;%s&#8221; (Edit)"), tag.name)), name)
+        name_ = apply_filters("term_name", pad_ + " " + tag_.name, tag_)
+        qe_data_ = get_term(tag_.term_id, taxonomy_, OBJECT, "edit")
+        uri_ = wp_get_referer() if wp_doing_ajax() else PHP_SERVER["REQUEST_URI"]
+        edit_link_ = get_edit_term_link(tag_.term_id, taxonomy_, self.screen.post_type)
+        if edit_link_:
+            edit_link_ = add_query_arg("wp_http_referer", urlencode(wp_unslash(uri_)), edit_link_)
+            name_ = php_sprintf("<a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s</a>", esc_url(edit_link_), esc_attr(php_sprintf(__("&#8220;%s&#8221; (Edit)"), tag_.name)), name_)
         # end if
-        out = php_sprintf("<strong>%s</strong><br />", name)
-        out += "<div class=\"hidden\" id=\"inline_" + qe_data.term_id + "\">"
-        out += "<div class=\"name\">" + qe_data.name + "</div>"
+        out_ = php_sprintf("<strong>%s</strong><br />", name_)
+        out_ += "<div class=\"hidden\" id=\"inline_" + qe_data_.term_id + "\">"
+        out_ += "<div class=\"name\">" + qe_data_.name + "</div>"
         #// This filter is documented in wp-admin/edit-tag-form.php
-        out += "<div class=\"slug\">" + apply_filters("editable_slug", qe_data.slug, qe_data) + "</div>"
-        out += "<div class=\"parent\">" + qe_data.parent + "</div></div>"
-        return out
+        out_ += "<div class=\"slug\">" + apply_filters("editable_slug", qe_data_.slug, qe_data_) + "</div>"
+        out_ += "<div class=\"parent\">" + qe_data_.parent + "</div></div>"
+        return out_
     # end def column_name
     #// 
     #// Gets the name of the default primary column.
@@ -351,6 +365,7 @@ class WP_Terms_List_Table(WP_List_Table):
     #// @return string Name of the default primary column, in this case, 'name'.
     #//
     def get_default_primary_column_name(self):
+        
         
         return "name"
     # end def get_default_primary_column_name
@@ -365,25 +380,26 @@ class WP_Terms_List_Table(WP_List_Table):
     #// @return string Row actions output for terms, or an empty string
     #// if the current column is not the primary column.
     #//
-    def handle_row_actions(self, tag=None, column_name=None, primary=None):
+    def handle_row_actions(self, tag_=None, column_name_=None, primary_=None):
         
-        if primary != column_name:
+        
+        if primary_ != column_name_:
             return ""
         # end if
-        taxonomy = self.screen.taxonomy
-        tax = get_taxonomy(taxonomy)
-        uri = wp_get_referer() if wp_doing_ajax() else PHP_SERVER["REQUEST_URI"]
-        edit_link = add_query_arg("wp_http_referer", urlencode(wp_unslash(uri)), get_edit_term_link(tag.term_id, taxonomy, self.screen.post_type))
-        actions = Array()
-        if current_user_can("edit_term", tag.term_id):
-            actions["edit"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", esc_url(edit_link), esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), tag.name)), __("Edit"))
-            actions["inline hide-if-no-js"] = php_sprintf("<button type=\"button\" class=\"button-link editinline\" aria-label=\"%s\" aria-expanded=\"false\">%s</button>", esc_attr(php_sprintf(__("Quick edit &#8220;%s&#8221; inline"), tag.name)), __("Quick&nbsp;Edit"))
+        taxonomy_ = self.screen.taxonomy
+        tax_ = get_taxonomy(taxonomy_)
+        uri_ = wp_get_referer() if wp_doing_ajax() else PHP_SERVER["REQUEST_URI"]
+        edit_link_ = add_query_arg("wp_http_referer", urlencode(wp_unslash(uri_)), get_edit_term_link(tag_.term_id, taxonomy_, self.screen.post_type))
+        actions_ = Array()
+        if current_user_can("edit_term", tag_.term_id):
+            actions_["edit"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", esc_url(edit_link_), esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), tag_.name)), __("Edit"))
+            actions_["inline hide-if-no-js"] = php_sprintf("<button type=\"button\" class=\"button-link editinline\" aria-label=\"%s\" aria-expanded=\"false\">%s</button>", esc_attr(php_sprintf(__("Quick edit &#8220;%s&#8221; inline"), tag_.name)), __("Quick&nbsp;Edit"))
         # end if
-        if current_user_can("delete_term", tag.term_id):
-            actions["delete"] = php_sprintf("<a href=\"%s\" class=\"delete-tag aria-button-if-js\" aria-label=\"%s\">%s</a>", wp_nonce_url(str("edit-tags.php?action=delete&amp;taxonomy=") + str(taxonomy) + str("&amp;tag_ID=") + str(tag.term_id), "delete-tag_" + tag.term_id), esc_attr(php_sprintf(__("Delete &#8220;%s&#8221;"), tag.name)), __("Delete"))
+        if current_user_can("delete_term", tag_.term_id):
+            actions_["delete"] = php_sprintf("<a href=\"%s\" class=\"delete-tag aria-button-if-js\" aria-label=\"%s\">%s</a>", wp_nonce_url(str("edit-tags.php?action=delete&amp;taxonomy=") + str(taxonomy_) + str("&amp;tag_ID=") + str(tag_.term_id), "delete-tag_" + tag_.term_id), esc_attr(php_sprintf(__("Delete &#8220;%s&#8221;"), tag_.name)), __("Delete"))
         # end if
-        if is_taxonomy_viewable(tax):
-            actions["view"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", get_term_link(tag), esc_attr(php_sprintf(__("View &#8220;%s&#8221; archive"), tag.name)), __("View"))
+        if is_taxonomy_viewable(tax_):
+            actions_["view"] = php_sprintf("<a href=\"%s\" aria-label=\"%s\">%s</a>", get_term_link(tag_), esc_attr(php_sprintf(__("View &#8220;%s&#8221; archive"), tag_.name)), __("View"))
         # end if
         #// 
         #// Filters the action links displayed for each term in the Tags list table.
@@ -395,7 +411,7 @@ class WP_Terms_List_Table(WP_List_Table):
         #// 'Edit', 'Quick Edit', 'Delete', and 'View'.
         #// @param WP_Term  $tag     Term object.
         #//
-        actions = apply_filters_deprecated("tag_row_actions", Array(actions, tag), "3.0.0", "{$taxonomy}_row_actions")
+        actions_ = apply_filters_deprecated("tag_row_actions", Array(actions_, tag_), "3.0.0", "{$taxonomy}_row_actions")
         #// 
         #// Filters the action links displayed for each term in the terms list table.
         #// 
@@ -407,17 +423,18 @@ class WP_Terms_List_Table(WP_List_Table):
         #// 'Edit', 'Quick Edit', 'Delete', and 'View'.
         #// @param WP_Term  $tag     Term object.
         #//
-        actions = apply_filters(str(taxonomy) + str("_row_actions"), actions, tag)
-        return self.row_actions(actions)
+        actions_ = apply_filters(str(taxonomy_) + str("_row_actions"), actions_, tag_)
+        return self.row_actions(actions_)
     # end def handle_row_actions
     #// 
     #// @param WP_Term $tag Term object.
     #// @return string
     #//
-    def column_description(self, tag=None):
+    def column_description(self, tag_=None):
         
-        if tag.description:
-            return tag.description
+        
+        if tag_.description:
+            return tag_.description
         else:
             return "<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">" + __("No description") + "</span>"
         # end if
@@ -426,54 +443,58 @@ class WP_Terms_List_Table(WP_List_Table):
     #// @param WP_Term $tag Term object.
     #// @return string
     #//
-    def column_slug(self, tag=None):
+    def column_slug(self, tag_=None):
+        
         
         #// This filter is documented in wp-admin/edit-tag-form.php
-        return apply_filters("editable_slug", tag.slug, tag)
+        return apply_filters("editable_slug", tag_.slug, tag_)
     # end def column_slug
     #// 
     #// @param WP_Term $tag Term object.
     #// @return string
     #//
-    def column_posts(self, tag=None):
+    def column_posts(self, tag_=None):
         
-        count = number_format_i18n(tag.count)
-        tax = get_taxonomy(self.screen.taxonomy)
-        ptype_object = get_post_type_object(self.screen.post_type)
-        if (not ptype_object.show_ui):
-            return count
+        
+        count_ = number_format_i18n(tag_.count)
+        tax_ = get_taxonomy(self.screen.taxonomy)
+        ptype_object_ = get_post_type_object(self.screen.post_type)
+        if (not ptype_object_.show_ui):
+            return count_
         # end if
-        if tax.query_var:
-            args = Array({tax.query_var: tag.slug})
+        if tax_.query_var:
+            args_ = Array({tax_.query_var: tag_.slug})
         else:
-            args = Array({"taxonomy": tax.name, "term": tag.slug})
+            args_ = Array({"taxonomy": tax_.name, "term": tag_.slug})
         # end if
         if "post" != self.screen.post_type:
-            args["post_type"] = self.screen.post_type
+            args_["post_type"] = self.screen.post_type
         # end if
         if "attachment" == self.screen.post_type:
-            return "<a href='" + esc_url(add_query_arg(args, "upload.php")) + str("'>") + str(count) + str("</a>")
+            return "<a href='" + esc_url(add_query_arg(args_, "upload.php")) + str("'>") + str(count_) + str("</a>")
         # end if
-        return "<a href='" + esc_url(add_query_arg(args, "edit.php")) + str("'>") + str(count) + str("</a>")
+        return "<a href='" + esc_url(add_query_arg(args_, "edit.php")) + str("'>") + str(count_) + str("</a>")
     # end def column_posts
     #// 
     #// @param WP_Term $tag Term object.
     #// @return string
     #//
-    def column_links(self, tag=None):
+    def column_links(self, tag_=None):
         
-        count = number_format_i18n(tag.count)
-        if count:
-            count = str("<a href='link-manager.php?cat_id=") + str(tag.term_id) + str("'>") + str(count) + str("</a>")
+        
+        count_ = number_format_i18n(tag_.count)
+        if count_:
+            count_ = str("<a href='link-manager.php?cat_id=") + str(tag_.term_id) + str("'>") + str(count_) + str("</a>")
         # end if
-        return count
+        return count_
     # end def column_links
     #// 
     #// @param WP_Term $tag Term object.
     #// @param string $column_name
     #// @return string
     #//
-    def column_default(self, tag=None, column_name=None):
+    def column_default(self, tag_=None, column_name_=None):
+        
         
         #// 
         #// Filters the displayed columns in the terms list table.
@@ -487,7 +508,7 @@ class WP_Terms_List_Table(WP_List_Table):
         #// @param string $column_name Name of the column.
         #// @param int    $term_id     Term ID.
         #//
-        return apply_filters(str("manage_") + str(self.screen.taxonomy) + str("_custom_column"), "", column_name, tag.term_id)
+        return apply_filters(str("manage_") + str(self.screen.taxonomy) + str("_custom_column"), "", column_name_, tag_.term_id)
     # end def column_default
     #// 
     #// Outputs the hidden row displayed when inline editing
@@ -496,8 +517,9 @@ class WP_Terms_List_Table(WP_List_Table):
     #//
     def inline_edit(self):
         
-        tax = get_taxonomy(self.screen.taxonomy)
-        if (not current_user_can(tax.cap.edit_terms)):
+        
+        tax_ = get_taxonomy(self.screen.taxonomy)
+        if (not current_user_can(tax_.cap.edit_terms)):
             return
         # end if
         php_print("""
@@ -530,19 +552,19 @@ class WP_Terms_List_Table(WP_List_Table):
         php_print("""               </div>
         </fieldset>
         """)
-        core_columns = Array({"cb": True, "description": True, "name": True, "slug": True, "posts": True})
-        columns = self.get_column_info()
-        for column_name,column_display_name in columns:
-            if (php_isset(lambda : core_columns[column_name])):
+        core_columns_ = Array({"cb": True, "description": True, "name": True, "slug": True, "posts": True})
+        columns_ = self.get_column_info()
+        for column_name_,column_display_name_ in columns_:
+            if (php_isset(lambda : core_columns_[column_name_])):
                 continue
             # end if
             #// This action is documented in wp-admin/includes/class-wp-posts-list-table.php
-            do_action("quick_edit_custom_box", column_name, "edit-tags", self.screen.taxonomy)
+            do_action("quick_edit_custom_box", column_name_, "edit-tags", self.screen.taxonomy)
         # end for
         php_print("\n           <div class=\"inline-edit-save submit\">\n               <button type=\"button\" class=\"cancel button alignleft\">")
         _e("Cancel")
         php_print("</button>\n              <button type=\"button\" class=\"save button button-primary alignright\">")
-        php_print(tax.labels.update_item)
+        php_print(tax_.labels.update_item)
         php_print("""</button>
         <span class=\"spinner\"></span>
         """)

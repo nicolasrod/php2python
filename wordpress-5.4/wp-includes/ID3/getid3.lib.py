@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,30 +27,36 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def printhexbytes(self, string=None, hex=True, spaces=True, htmlencoding="UTF-8"):
+    def printhexbytes(self, string_=None, hex_=None, spaces_=None, htmlencoding_="UTF-8"):
+        if hex_ is None:
+            hex_ = True
+        # end if
+        if spaces_ is None:
+            spaces_ = True
+        # end if
         
-        returnstring = ""
-        i = 0
-        while i < php_strlen(string):
+        returnstring_ = ""
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            if hex:
-                returnstring += php_str_pad(dechex(php_ord(string[i])), 2, "0", STR_PAD_LEFT)
+            if hex_:
+                returnstring_ += php_str_pad(dechex(php_ord(string_[i_])), 2, "0", STR_PAD_LEFT)
             else:
-                returnstring += " " + string[i] if php_preg_match("#[ -~]#", string[i]) else "Â¤"
+                returnstring_ += " " + string_[i_] if php_preg_match("#[ -~]#", string_[i_]) else "Â¤"
             # end if
-            if spaces:
-                returnstring += " "
+            if spaces_:
+                returnstring_ += " "
             # end if
-            i += 1
+            i_ += 1
         # end while
-        if (not php_empty(lambda : htmlencoding)):
-            if htmlencoding == True:
-                htmlencoding = "UTF-8"
+        if (not php_empty(lambda : htmlencoding_)):
+            if htmlencoding_ == True:
+                htmlencoding_ = "UTF-8"
                 pass
             # end if
-            returnstring = htmlentities(returnstring, ENT_QUOTES, htmlencoding)
+            returnstring_ = htmlentities(returnstring_, ENT_QUOTES, htmlencoding_)
         # end if
-        return returnstring
+        return returnstring_
     # end def printhexbytes
     #// 
     #// Truncates a floating-point number at the decimal point.
@@ -65,19 +66,20 @@ class getid3_lib():
     #// @return float|int returns int (if possible, otherwise float)
     #//
     @classmethod
-    def trunc(self, floatnumber=None):
+    def trunc(self, floatnumber_=None):
         
-        if floatnumber >= 1:
-            truncatednumber = floor(floatnumber)
-        elif floatnumber <= -1:
-            truncatednumber = ceil(floatnumber)
+        
+        if floatnumber_ >= 1:
+            truncatednumber_ = floor(floatnumber_)
+        elif floatnumber_ <= -1:
+            truncatednumber_ = ceil(floatnumber_)
         else:
-            truncatednumber = 0
+            truncatednumber_ = 0
         # end if
-        if self.intvaluesupported(truncatednumber):
-            truncatednumber = php_int(truncatednumber)
+        if self.intvaluesupported(truncatednumber_):
+            truncatednumber_ = php_int(truncatednumber_)
         # end if
-        return truncatednumber
+        return truncatednumber_
     # end def trunc
     #// 
     #// @param int|null $variable
@@ -86,12 +88,13 @@ class getid3_lib():
     #// @return bool
     #//
     @classmethod
-    def safe_inc(self, variable=None, increment=1):
+    def safe_inc(self, variable_=None, increment_=1):
         
-        if (php_isset(lambda : variable)):
-            variable += increment
+        
+        if (php_isset(lambda : variable_)):
+            variable_ += increment_
         else:
-            variable = increment
+            variable_ = increment_
         # end if
         return True
     # end def safe_inc
@@ -101,19 +104,20 @@ class getid3_lib():
     #// @return int|float
     #//
     @classmethod
-    def castasint(self, floatnum=None):
+    def castasint(self, floatnum_=None):
+        
         
         #// convert to float if not already
-        floatnum = php_float(floatnum)
+        floatnum_ = php_float(floatnum_)
         #// convert a float to type int, only if possible
-        if self.trunc(floatnum) == floatnum:
+        if self.trunc(floatnum_) == floatnum_:
             #// it's not floating point
-            if self.intvaluesupported(floatnum):
+            if self.intvaluesupported(floatnum_):
                 #// it's within int range
-                floatnum = php_int(floatnum)
+                floatnum_ = php_int(floatnum_)
             # end if
         # end if
-        return floatnum
+        return floatnum_
     # end def castasint
     #// 
     #// @param int $num
@@ -121,19 +125,20 @@ class getid3_lib():
     #// @return bool
     #//
     @classmethod
-    def intvaluesupported(self, num=None):
+    def intvaluesupported(self, num_=None):
         
-        intvaluesupported.hasINT64 = None
-        if intvaluesupported.hasINT64 == None:
+        
+        hasINT64_ = None
+        if hasINT64_ == None:
             #// 10x faster than is_null()
-            intvaluesupported.hasINT64 = php_is_int(pow(2, 31))
+            hasINT64_ = php_is_int(pow(2, 31))
             #// 32-bit int are limited to (2^31)-1
-            if (not intvaluesupported.hasINT64) and (not php_defined("PHP_INT_MIN")):
+            if (not hasINT64_) and (not php_defined("PHP_INT_MIN")):
                 php_define("PHP_INT_MIN", (1 << (PHP_INT_MAX).bit_length()) - 1 - PHP_INT_MAX)
             # end if
         # end if
         #// if integers are 64-bit - no other check required
-        if intvaluesupported.hasINT64 or num <= PHP_INT_MAX and num >= PHP_INT_MIN:
+        if hasINT64_ or num_ <= PHP_INT_MAX and num_ >= PHP_INT_MIN:
             return True
         # end if
         return False
@@ -144,10 +149,11 @@ class getid3_lib():
     #// @return float
     #//
     @classmethod
-    def decimalizefraction(self, fraction=None):
+    def decimalizefraction(self, fraction_=None):
         
-        numerator, denominator = php_explode("/", fraction)
-        return numerator / denominator if denominator else 1
+        
+        numerator_, denominator_ = php_explode("/", fraction_)
+        return numerator_ / denominator_ if denominator_ else 1
     # end def decimalizefraction
     #// 
     #// @param string $binarynumerator
@@ -155,11 +161,12 @@ class getid3_lib():
     #// @return float
     #//
     @classmethod
-    def decimalbinary2float(self, binarynumerator=None):
+    def decimalbinary2float(self, binarynumerator_=None):
         
-        numerator = self.bin2dec(binarynumerator)
-        denominator = self.bin2dec("1" + php_str_repeat("0", php_strlen(binarynumerator)))
-        return numerator / denominator
+        
+        numerator_ = self.bin2dec(binarynumerator_)
+        denominator_ = self.bin2dec("1" + php_str_repeat("0", php_strlen(binarynumerator_)))
+        return numerator_ / denominator_
     # end def decimalbinary2float
     #// 
     #// @link http://www.scri.fsu.edu/~jac/MAD3401/Backgrnd/binary.html
@@ -170,31 +177,32 @@ class getid3_lib():
     #// @return array
     #//
     @classmethod
-    def normalizebinarypoint(self, binarypointnumber=None, maxbits=52):
+    def normalizebinarypoint(self, binarypointnumber_=None, maxbits_=52):
         
-        if php_strpos(binarypointnumber, ".") == False:
-            binarypointnumber = "0." + binarypointnumber
-        elif binarypointnumber[0] == ".":
-            binarypointnumber = "0" + binarypointnumber
+        
+        if php_strpos(binarypointnumber_, ".") == False:
+            binarypointnumber_ = "0." + binarypointnumber_
+        elif binarypointnumber_[0] == ".":
+            binarypointnumber_ = "0" + binarypointnumber_
         # end if
-        exponent = 0
+        exponent_ = 0
         while True:
             
-            if not (binarypointnumber[0] != "1" or php_substr(binarypointnumber, 1, 1) != "."):
+            if not (binarypointnumber_[0] != "1" or php_substr(binarypointnumber_, 1, 1) != "."):
                 break
             # end if
-            if php_substr(binarypointnumber, 1, 1) == ".":
-                exponent -= 1
-                binarypointnumber = php_substr(binarypointnumber, 2, 1) + "." + php_substr(binarypointnumber, 3)
+            if php_substr(binarypointnumber_, 1, 1) == ".":
+                exponent_ -= 1
+                binarypointnumber_ = php_substr(binarypointnumber_, 2, 1) + "." + php_substr(binarypointnumber_, 3)
             else:
-                pointpos = php_strpos(binarypointnumber, ".")
-                exponent += pointpos - 1
-                binarypointnumber = php_str_replace(".", "", binarypointnumber)
-                binarypointnumber = binarypointnumber[0] + "." + php_substr(binarypointnumber, 1)
+                pointpos_ = php_strpos(binarypointnumber_, ".")
+                exponent_ += pointpos_ - 1
+                binarypointnumber_ = php_str_replace(".", "", binarypointnumber_)
+                binarypointnumber_ = binarypointnumber_[0] + "." + php_substr(binarypointnumber_, 1)
             # end if
         # end while
-        binarypointnumber = php_str_pad(php_substr(binarypointnumber, 0, maxbits + 2), maxbits + 2, "0", STR_PAD_RIGHT)
-        return Array({"normalized": binarypointnumber, "exponent": php_int(exponent)})
+        binarypointnumber_ = php_str_pad(php_substr(binarypointnumber_, 0, maxbits_ + 2), maxbits_ + 2, "0", STR_PAD_RIGHT)
+        return Array({"normalized": binarypointnumber_, "exponent": php_int(exponent_)})
     # end def normalizebinarypoint
     #// 
     #// @link http://www.scri.fsu.edu/~jac/MAD3401/Backgrnd/binary.html
@@ -204,24 +212,25 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def float2binarydecimal(self, floatvalue=None):
+    def float2binarydecimal(self, floatvalue_=None):
         
-        maxbits = 128
+        
+        maxbits_ = 128
         #// to how many bits of precision should the calculations be taken?
-        intpart = self.trunc(floatvalue)
-        floatpart = abs(floatvalue - intpart)
-        pointbitstring = ""
+        intpart_ = self.trunc(floatvalue_)
+        floatpart_ = abs(floatvalue_ - intpart_)
+        pointbitstring_ = ""
         while True:
             
-            if not (floatpart != 0 and php_strlen(pointbitstring) < maxbits):
+            if not (floatpart_ != 0 and php_strlen(pointbitstring_) < maxbits_):
                 break
             # end if
-            floatpart *= 2
-            pointbitstring += php_str(self.trunc(floatpart))
-            floatpart -= self.trunc(floatpart)
+            floatpart_ *= 2
+            pointbitstring_ += php_str(self.trunc(floatpart_))
+            floatpart_ -= self.trunc(floatpart_)
         # end while
-        binarypointnumber = decbin(intpart) + "." + pointbitstring
-        return binarypointnumber
+        binarypointnumber_ = decbin(intpart_) + "." + pointbitstring_
+        return binarypointnumber_
     # end def float2binarydecimal
     #// 
     #// @link http://www.scri.fsu.edu/~jac/MAD3401/Backgrnd/ieee-expl.html
@@ -232,19 +241,20 @@ class getid3_lib():
     #// @return string|false
     #//
     @classmethod
-    def float2string(self, floatvalue=None, bits=None):
+    def float2string(self, floatvalue_=None, bits_=None):
         
-        exponentbits = 0
-        fractionbits = 0
-        for case in Switch(bits):
+        
+        exponentbits_ = 0
+        fractionbits_ = 0
+        for case in Switch(bits_):
             if case(32):
-                exponentbits = 8
-                fractionbits = 23
+                exponentbits_ = 8
+                fractionbits_ = 23
                 break
             # end if
             if case(64):
-                exponentbits = 11
-                fractionbits = 52
+                exponentbits_ = 11
+                fractionbits_ = 52
                 break
             # end if
             if case():
@@ -252,17 +262,17 @@ class getid3_lib():
                 break
             # end if
         # end for
-        if floatvalue >= 0:
-            signbit = "0"
+        if floatvalue_ >= 0:
+            signbit_ = "0"
         else:
-            signbit = "1"
+            signbit_ = "1"
         # end if
-        normalizedbinary = self.normalizebinarypoint(self.float2binarydecimal(floatvalue), fractionbits)
-        biasedexponent = pow(2, exponentbits - 1) - 1 + normalizedbinary["exponent"]
+        normalizedbinary_ = self.normalizebinarypoint(self.float2binarydecimal(floatvalue_), fractionbits_)
+        biasedexponent_ = pow(2, exponentbits_ - 1) - 1 + normalizedbinary_["exponent"]
         #// (127 or 1023) +/- exponent
-        exponentbitstring = php_str_pad(decbin(biasedexponent), exponentbits, "0", STR_PAD_LEFT)
-        fractionbitstring = php_str_pad(php_substr(normalizedbinary["normalized"], 2), fractionbits, "0", STR_PAD_RIGHT)
-        return self.bigendian2string(self.bin2dec(signbit + exponentbitstring + fractionbitstring), bits % 8, False)
+        exponentbitstring_ = php_str_pad(decbin(biasedexponent_), exponentbits_, "0", STR_PAD_LEFT)
+        fractionbitstring_ = php_str_pad(php_substr(normalizedbinary_["normalized"], 2), fractionbits_, "0", STR_PAD_RIGHT)
+        return self.bigendian2string(self.bin2dec(signbit_ + exponentbitstring_ + fractionbitstring_), bits_ % 8, False)
     # end def float2string
     #// 
     #// @param string $byteword
@@ -270,9 +280,10 @@ class getid3_lib():
     #// @return float|false
     #//
     @classmethod
-    def littleendian2float(self, byteword=None):
+    def littleendian2float(self, byteword_=None):
         
-        return self.bigendian2float(php_strrev(byteword))
+        
+        return self.bigendian2float(php_strrev(byteword_))
     # end def littleendian2float
     #// 
     #// ANSI/IEEE Standard 754-1985, Standard for Binary Floating Point Arithmetic
@@ -285,40 +296,41 @@ class getid3_lib():
     #// @return float|false
     #//
     @classmethod
-    def bigendian2float(self, byteword=None):
+    def bigendian2float(self, byteword_=None):
         
-        bitword = self.bigendian2bin(byteword)
-        if (not bitword):
+        
+        bitword_ = self.bigendian2bin(byteword_)
+        if (not bitword_):
             return 0
         # end if
-        signbit = bitword[0]
-        floatvalue = 0
-        exponentbits = 0
-        fractionbits = 0
-        for case in Switch(php_strlen(byteword) * 8):
+        signbit_ = bitword_[0]
+        floatvalue_ = 0
+        exponentbits_ = 0
+        fractionbits_ = 0
+        for case in Switch(php_strlen(byteword_) * 8):
             if case(32):
-                exponentbits = 8
-                fractionbits = 23
+                exponentbits_ = 8
+                fractionbits_ = 23
                 break
             # end if
             if case(64):
-                exponentbits = 11
-                fractionbits = 52
+                exponentbits_ = 11
+                fractionbits_ = 52
                 break
             # end if
             if case(80):
                 #// 80-bit Apple SANE format
                 #// http://www.mactech.com/articles/mactech/Vol.06/06.01/SANENormalized
-                exponentstring = php_substr(bitword, 1, 15)
-                isnormalized = php_intval(bitword[16])
-                fractionstring = php_substr(bitword, 17, 63)
-                exponent = pow(2, self.bin2dec(exponentstring) - 16383)
-                fraction = isnormalized + self.decimalbinary2float(fractionstring)
-                floatvalue = exponent * fraction
-                if signbit == "1":
-                    floatvalue *= -1
+                exponentstring_ = php_substr(bitword_, 1, 15)
+                isnormalized_ = php_intval(bitword_[16])
+                fractionstring_ = php_substr(bitword_, 17, 63)
+                exponent_ = pow(2, self.bin2dec(exponentstring_) - 16383)
+                fraction_ = isnormalized_ + self.decimalbinary2float(fractionstring_)
+                floatvalue_ = exponent_ * fraction_
+                if signbit_ == "1":
+                    floatvalue_ *= -1
                 # end if
-                return floatvalue
+                return floatvalue_
                 break
             # end if
             if case():
@@ -326,39 +338,39 @@ class getid3_lib():
                 break
             # end if
         # end for
-        exponentstring = php_substr(bitword, 1, exponentbits)
-        fractionstring = php_substr(bitword, exponentbits + 1, fractionbits)
-        exponent = self.bin2dec(exponentstring)
-        fraction = self.bin2dec(fractionstring)
-        if exponent == pow(2, exponentbits) - 1 and fraction != 0:
+        exponentstring_ = php_substr(bitword_, 1, exponentbits_)
+        fractionstring_ = php_substr(bitword_, exponentbits_ + 1, fractionbits_)
+        exponent_ = self.bin2dec(exponentstring_)
+        fraction_ = self.bin2dec(fractionstring_)
+        if exponent_ == pow(2, exponentbits_) - 1 and fraction_ != 0:
             #// Not a Number
-            floatvalue = False
-        elif exponent == pow(2, exponentbits) - 1 and fraction == 0:
-            if signbit == "1":
-                floatvalue = "-infinity"
+            floatvalue_ = False
+        elif exponent_ == pow(2, exponentbits_) - 1 and fraction_ == 0:
+            if signbit_ == "1":
+                floatvalue_ = "-infinity"
             else:
-                floatvalue = "+infinity"
+                floatvalue_ = "+infinity"
             # end if
-        elif exponent == 0 and fraction == 0:
-            if signbit == "1":
-                floatvalue = -0
+        elif exponent_ == 0 and fraction_ == 0:
+            if signbit_ == "1":
+                floatvalue_ = -0
             else:
-                floatvalue = 0
+                floatvalue_ = 0
             # end if
-            floatvalue = 0 if signbit else -0
-        elif exponent == 0 and fraction != 0:
+            floatvalue_ = 0 if signbit_ else -0
+        elif exponent_ == 0 and fraction_ != 0:
             #// These are 'unnormalized' values
-            floatvalue = pow(2, -1 * pow(2, exponentbits - 1) - 2) * self.decimalbinary2float(fractionstring)
-            if signbit == "1":
-                floatvalue *= -1
+            floatvalue_ = pow(2, -1 * pow(2, exponentbits_ - 1) - 2) * self.decimalbinary2float(fractionstring_)
+            if signbit_ == "1":
+                floatvalue_ *= -1
             # end if
-        elif exponent != 0:
-            floatvalue = pow(2, exponent - pow(2, exponentbits - 1) - 1) * 1 + self.decimalbinary2float(fractionstring)
-            if signbit == "1":
-                floatvalue *= -1
+        elif exponent_ != 0:
+            floatvalue_ = pow(2, exponent_ - pow(2, exponentbits_ - 1) - 1) * 1 + self.decimalbinary2float(fractionstring_)
+            if signbit_ == "1":
+                floatvalue_ *= -1
             # end if
         # end if
-        return php_float(floatvalue)
+        return php_float(floatvalue_)
     # end def bigendian2float
     #// 
     #// @param string $byteword
@@ -369,37 +381,43 @@ class getid3_lib():
     #// @throws Exception
     #//
     @classmethod
-    def bigendian2int(self, byteword=None, synchsafe=False, signed=False):
+    def bigendian2int(self, byteword_=None, synchsafe_=None, signed_=None):
+        if synchsafe_ is None:
+            synchsafe_ = False
+        # end if
+        if signed_ is None:
+            signed_ = False
+        # end if
         
-        intvalue = 0
-        bytewordlen = php_strlen(byteword)
-        if bytewordlen == 0:
+        intvalue_ = 0
+        bytewordlen_ = php_strlen(byteword_)
+        if bytewordlen_ == 0:
             return False
         # end if
-        i = 0
-        while i < bytewordlen:
+        i_ = 0
+        while i_ < bytewordlen_:
             
-            if synchsafe:
+            if synchsafe_:
                 #// disregard MSB, effectively 7-bit bytes
                 #// $intvalue = $intvalue | (ord($byteword{$i}) & 0x7F) << (($bytewordlen - 1 - $i) * 7); // faster, but runs into problems past 2^31 on 32-bit systems
-                intvalue += php_ord(byteword[i]) & 127 * pow(2, bytewordlen - 1 - i * 7)
+                intvalue_ += php_ord(byteword_[i_]) & 127 * pow(2, bytewordlen_ - 1 - i_ * 7)
             else:
-                intvalue += php_ord(byteword[i]) * pow(256, bytewordlen - 1 - i)
+                intvalue_ += php_ord(byteword_[i_]) * pow(256, bytewordlen_ - 1 - i_)
             # end if
-            i += 1
+            i_ += 1
         # end while
-        if signed and (not synchsafe):
+        if signed_ and (not synchsafe_):
             #// synchsafe ints are not allowed to be signed
-            if bytewordlen <= PHP_INT_SIZE:
-                signMaskBit = 128 << 8 * bytewordlen - 1
-                if intvalue & signMaskBit:
-                    intvalue = 0 - intvalue & signMaskBit - 1
+            if bytewordlen_ <= PHP_INT_SIZE:
+                signMaskBit_ = 128 << 8 * bytewordlen_ - 1
+                if intvalue_ & signMaskBit_:
+                    intvalue_ = 0 - intvalue_ & signMaskBit_ - 1
                 # end if
             else:
-                raise php_new_class("Exception", lambda : Exception("ERROR: Cannot have signed integers larger than " + 8 * PHP_INT_SIZE + "-bits (" + php_strlen(byteword) + ") in self::BigEndian2Int()"))
+                raise php_new_class("Exception", lambda : Exception("ERROR: Cannot have signed integers larger than " + 8 * PHP_INT_SIZE + "-bits (" + php_strlen(byteword_) + ") in self::BigEndian2Int()"))
             # end if
         # end if
-        return self.castasint(intvalue)
+        return self.castasint(intvalue_)
     # end def bigendian2int
     #// 
     #// @param string $byteword
@@ -408,9 +426,12 @@ class getid3_lib():
     #// @return int|float|false
     #//
     @classmethod
-    def littleendian2int(self, byteword=None, signed=False):
+    def littleendian2int(self, byteword_=None, signed_=None):
+        if signed_ is None:
+            signed_ = False
+        # end if
         
-        return self.bigendian2int(php_strrev(byteword), False, signed)
+        return self.bigendian2int(php_strrev(byteword_), False, signed_)
     # end def littleendian2int
     #// 
     #// @param string $byteword
@@ -418,9 +439,10 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def littleendian2bin(self, byteword=None):
+    def littleendian2bin(self, byteword_=None):
         
-        return self.bigendian2bin(php_strrev(byteword))
+        
+        return self.bigendian2bin(php_strrev(byteword_))
     # end def littleendian2bin
     #// 
     #// @param string $byteword
@@ -428,17 +450,18 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def bigendian2bin(self, byteword=None):
+    def bigendian2bin(self, byteword_=None):
         
-        binvalue = ""
-        bytewordlen = php_strlen(byteword)
-        i = 0
-        while i < bytewordlen:
+        
+        binvalue_ = ""
+        bytewordlen_ = php_strlen(byteword_)
+        i_ = 0
+        while i_ < bytewordlen_:
             
-            binvalue += php_str_pad(decbin(php_ord(byteword[i])), 8, "0", STR_PAD_LEFT)
-            i += 1
+            binvalue_ += php_str_pad(decbin(php_ord(byteword_[i_])), 8, "0", STR_PAD_LEFT)
+            i_ += 1
         # end while
-        return binvalue
+        return binvalue_
     # end def bigendian2bin
     #// 
     #// @param int  $number
@@ -450,29 +473,35 @@ class getid3_lib():
     #// @throws Exception
     #//
     @classmethod
-    def bigendian2string(self, number=None, minbytes=1, synchsafe=False, signed=False):
+    def bigendian2string(self, number_=None, minbytes_=1, synchsafe_=None, signed_=None):
+        if synchsafe_ is None:
+            synchsafe_ = False
+        # end if
+        if signed_ is None:
+            signed_ = False
+        # end if
         
-        if number < 0:
+        if number_ < 0:
             raise php_new_class("Exception", lambda : Exception("ERROR: self::BigEndian2String() does not support negative numbers"))
         # end if
-        maskbyte = 127 if synchsafe or signed else 255
-        intstring = ""
-        if signed:
-            if minbytes > PHP_INT_SIZE:
+        maskbyte_ = 127 if synchsafe_ or signed_ else 255
+        intstring_ = ""
+        if signed_:
+            if minbytes_ > PHP_INT_SIZE:
                 raise php_new_class("Exception", lambda : Exception("ERROR: Cannot have signed integers larger than " + 8 * PHP_INT_SIZE + "-bits in self::BigEndian2String()"))
             # end if
-            number = number & 128 << 8 * minbytes - 1
+            number_ = number_ & 128 << 8 * minbytes_ - 1
         # end if
         while True:
             
-            if not (number != 0):
+            if not (number_ != 0):
                 break
             # end if
-            quotient = number / maskbyte + 1
-            intstring = chr(ceil(quotient - floor(quotient) * maskbyte)) + intstring
-            number = floor(quotient)
+            quotient_ = number_ / maskbyte_ + 1
+            intstring_ = chr(ceil(quotient_ - floor(quotient_) * maskbyte_)) + intstring_
+            number_ = floor(quotient_)
         # end while
-        return php_str_pad(intstring, minbytes, " ", STR_PAD_LEFT)
+        return php_str_pad(intstring_, minbytes_, " ", STR_PAD_LEFT)
     # end def bigendian2string
     #// 
     #// @param int $number
@@ -480,25 +509,26 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def dec2bin(self, number=None):
+    def dec2bin(self, number_=None):
+        
         
         while True:
             
-            if not (number >= 256):
+            if not (number_ >= 256):
                 break
             # end if
-            bytes[-1] = number / 256 - floor(number / 256) * 256
-            number = floor(number / 256)
+            bytes_[-1] = number_ / 256 - floor(number_ / 256) * 256
+            number_ = floor(number_ / 256)
         # end while
-        bytes[-1] = number
-        binstring = ""
-        i = 0
-        while i < php_count(bytes):
+        bytes_[-1] = number_
+        binstring_ = ""
+        i_ = 0
+        while i_ < php_count(bytes_):
             
-            binstring = decbin(bytes[i]) if i == php_count(bytes) - 1 else php_str_pad(decbin(bytes[i]), 8, "0", STR_PAD_LEFT) + binstring
-            i += 1
+            binstring_ = decbin(bytes_[i_]) if i_ == php_count(bytes_) - 1 else php_str_pad(decbin(bytes_[i_]), 8, "0", STR_PAD_LEFT) + binstring_
+            i_ += 1
         # end while
-        return binstring
+        return binstring_
     # end def dec2bin
     #// 
     #// @param string $binstring
@@ -507,23 +537,26 @@ class getid3_lib():
     #// @return int|float
     #//
     @classmethod
-    def bin2dec(self, binstring=None, signed=False):
-        
-        signmult = 1
-        if signed:
-            if binstring[0] == "1":
-                signmult = -1
-            # end if
-            binstring = php_substr(binstring, 1)
+    def bin2dec(self, binstring_=None, signed_=None):
+        if signed_ is None:
+            signed_ = False
         # end if
-        decvalue = 0
-        i = 0
-        while i < php_strlen(binstring):
+        
+        signmult_ = 1
+        if signed_:
+            if binstring_[0] == "1":
+                signmult_ = -1
+            # end if
+            binstring_ = php_substr(binstring_, 1)
+        # end if
+        decvalue_ = 0
+        i_ = 0
+        while i_ < php_strlen(binstring_):
             
-            decvalue += php_int(php_substr(binstring, php_strlen(binstring) - i - 1, 1)) * pow(2, i)
-            i += 1
+            decvalue_ += php_int(php_substr(binstring_, php_strlen(binstring_) - i_ - 1, 1)) * pow(2, i_)
+            i_ += 1
         # end while
-        return self.castasint(decvalue * signmult)
+        return self.castasint(decvalue_ * signmult_)
     # end def bin2dec
     #// 
     #// @param string $binstring
@@ -531,18 +564,19 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def bin2string(self, binstring=None):
+    def bin2string(self, binstring_=None):
+        
         
         #// return 'hi' for input of '0110100001101001'
-        string = ""
-        binstringreversed = php_strrev(binstring)
-        i = 0
-        while i < php_strlen(binstringreversed):
+        string_ = ""
+        binstringreversed_ = php_strrev(binstring_)
+        i_ = 0
+        while i_ < php_strlen(binstringreversed_):
             
-            string = chr(self.bin2dec(php_strrev(php_substr(binstringreversed, i, 8)))) + string
-            i += 8
+            string_ = chr(self.bin2dec(php_strrev(php_substr(binstringreversed_, i_, 8)))) + string_
+            i_ += 8
         # end while
-        return string
+        return string_
     # end def bin2string
     #// 
     #// @param int  $number
@@ -552,23 +586,26 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def littleendian2string(self, number=None, minbytes=1, synchsafe=False):
+    def littleendian2string(self, number_=None, minbytes_=1, synchsafe_=None):
+        if synchsafe_ is None:
+            synchsafe_ = False
+        # end if
         
-        intstring = ""
+        intstring_ = ""
         while True:
             
-            if not (number > 0):
+            if not (number_ > 0):
                 break
             # end if
-            if synchsafe:
-                intstring = intstring + chr(number & 127)
-                number >>= 7
+            if synchsafe_:
+                intstring_ = intstring_ + chr(number_ & 127)
+                number_ >>= 7
             else:
-                intstring = intstring + chr(number & 255)
-                number >>= 8
+                intstring_ = intstring_ + chr(number_ & 255)
+                number_ >>= 8
             # end if
         # end while
-        return php_str_pad(intstring, minbytes, " ", STR_PAD_RIGHT)
+        return php_str_pad(intstring_, minbytes_, " ", STR_PAD_RIGHT)
     # end def littleendian2string
     #// 
     #// @param array $array1
@@ -577,22 +614,23 @@ class getid3_lib():
     #// @return array|false
     #//
     @classmethod
-    def array_merge_clobber(self, array1=None, array2=None):
+    def array_merge_clobber(self, array1_=None, array2_=None):
+        
         
         #// written by kcØhireability*com
         #// taken from http://www.php.net/manual/en/function.array-merge-recursive.php
-        if (not php_is_array(array1)) or (not php_is_array(array2)):
+        if (not php_is_array(array1_)) or (not php_is_array(array2_)):
             return False
         # end if
-        newarray = array1
-        for key,val in array2:
-            if php_is_array(val) and (php_isset(lambda : newarray[key])) and php_is_array(newarray[key]):
-                newarray[key] = self.array_merge_clobber(newarray[key], val)
+        newarray_ = array1_
+        for key_,val_ in array2_:
+            if php_is_array(val_) and (php_isset(lambda : newarray_[key_])) and php_is_array(newarray_[key_]):
+                newarray_[key_] = self.array_merge_clobber(newarray_[key_], val_)
             else:
-                newarray[key] = val
+                newarray_[key_] = val_
             # end if
         # end for
-        return newarray
+        return newarray_
     # end def array_merge_clobber
     #// 
     #// @param array $array1
@@ -601,20 +639,21 @@ class getid3_lib():
     #// @return array|false
     #//
     @classmethod
-    def array_merge_noclobber(self, array1=None, array2=None):
+    def array_merge_noclobber(self, array1_=None, array2_=None):
         
-        if (not php_is_array(array1)) or (not php_is_array(array2)):
+        
+        if (not php_is_array(array1_)) or (not php_is_array(array2_)):
             return False
         # end if
-        newarray = array1
-        for key,val in array2:
-            if php_is_array(val) and (php_isset(lambda : newarray[key])) and php_is_array(newarray[key]):
-                newarray[key] = self.array_merge_noclobber(newarray[key], val)
-            elif (not (php_isset(lambda : newarray[key]))):
-                newarray[key] = val
+        newarray_ = array1_
+        for key_,val_ in array2_:
+            if php_is_array(val_) and (php_isset(lambda : newarray_[key_])) and php_is_array(newarray_[key_]):
+                newarray_[key_] = self.array_merge_noclobber(newarray_[key_], val_)
+            elif (not (php_isset(lambda : newarray_[key_]))):
+                newarray_[key_] = val_
             # end if
         # end for
-        return newarray
+        return newarray_
     # end def array_merge_noclobber
     #// 
     #// @param array $array1
@@ -623,19 +662,20 @@ class getid3_lib():
     #// @return array|false|null
     #//
     @classmethod
-    def flipped_array_merge_noclobber(self, array1=None, array2=None):
+    def flipped_array_merge_noclobber(self, array1_=None, array2_=None):
         
-        if (not php_is_array(array1)) or (not php_is_array(array2)):
+        
+        if (not php_is_array(array1_)) or (not php_is_array(array2_)):
             return False
         # end if
         #// # naturally, this only works non-recursively
-        newarray = php_array_flip(array1)
-        for key,val in php_array_flip(array2):
-            if (not (php_isset(lambda : newarray[key]))):
-                newarray[key] = php_count(newarray)
+        newarray_ = php_array_flip(array1_)
+        for key_,val_ in php_array_flip(array2_):
+            if (not (php_isset(lambda : newarray_[key_]))):
+                newarray_[key_] = php_count(newarray_)
             # end if
         # end for
-        return php_array_flip(newarray)
+        return php_array_flip(newarray_)
     # end def flipped_array_merge_noclobber
     #// 
     #// @param array $theArray
@@ -643,12 +683,13 @@ class getid3_lib():
     #// @return bool
     #//
     @classmethod
-    def ksort_recursive(self, theArray=None):
+    def ksort_recursive(self, theArray_=None):
         
-        ksort(theArray)
-        for key,value in theArray:
-            if php_is_array(value):
-                self.ksort_recursive(theArray[key])
+        
+        ksort(theArray_)
+        for key_,value_ in theArray_:
+            if php_is_array(value_):
+                self.ksort_recursive(theArray_[key_])
             # end if
         # end for
         return True
@@ -660,21 +701,22 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def fileextension(self, filename=None, numextensions=1):
+    def fileextension(self, filename_=None, numextensions_=1):
         
-        if php_strstr(filename, "."):
-            reversedfilename = php_strrev(filename)
-            offset = 0
-            i = 0
-            while i < numextensions:
+        
+        if php_strstr(filename_, "."):
+            reversedfilename_ = php_strrev(filename_)
+            offset_ = 0
+            i_ = 0
+            while i_ < numextensions_:
                 
-                offset = php_strpos(reversedfilename, ".", offset + 1)
-                if offset == False:
+                offset_ = php_strpos(reversedfilename_, ".", offset_ + 1)
+                if offset_ == False:
                     return ""
                 # end if
-                i += 1
+                i_ += 1
             # end while
-            return php_strrev(php_substr(reversedfilename, 0, offset))
+            return php_strrev(php_substr(reversedfilename_, 0, offset_))
         # end if
         return ""
     # end def fileextension
@@ -684,14 +726,15 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def playtimestring(self, seconds=None):
+    def playtimestring(self, seconds_=None):
         
-        sign = "-" if seconds < 0 else ""
-        seconds = round(abs(seconds))
-        H = php_int(floor(seconds / 3600))
-        M = php_int(floor(seconds - 3600 * H / 60))
-        S = php_int(round(seconds - 3600 * H - 60 * M))
-        return sign + H + ":" if H else "" + php_str_pad(M, 2, "0", STR_PAD_LEFT) if H else php_intval(M) + ":" + php_str_pad(S, 2, 0, STR_PAD_LEFT)
+        
+        sign_ = "-" if seconds_ < 0 else ""
+        seconds_ = round(abs(seconds_))
+        H_ = php_int(floor(seconds_ / 3600))
+        M_ = php_int(floor(seconds_ - 3600 * H_ / 60))
+        S_ = php_int(round(seconds_ - 3600 * H_ - 60 * M_))
+        return sign_ + H_ + ":" if H_ else "" + php_str_pad(M_, 2, "0", STR_PAD_LEFT) if H_ else php_intval(M_) + ":" + php_str_pad(S_, 2, 0, STR_PAD_LEFT)
     # end def playtimestring
     #// 
     #// @param int $macdate
@@ -699,11 +742,12 @@ class getid3_lib():
     #// @return int|float
     #//
     @classmethod
-    def datemac2unix(self, macdate=None):
+    def datemac2unix(self, macdate_=None):
+        
         
         #// Macintosh timestamp: seconds since 00:00h January 1, 1904
         #// UNIX timestamp:      seconds since 00:00h January 1, 1970
-        return self.castasint(macdate - 2082844800)
+        return self.castasint(macdate_ - 2082844800)
     # end def datemac2unix
     #// 
     #// @param string $rawdata
@@ -711,9 +755,10 @@ class getid3_lib():
     #// @return float
     #//
     @classmethod
-    def fixedpoint8_8(self, rawdata=None):
+    def fixedpoint8_8(self, rawdata_=None):
         
-        return self.bigendian2int(php_substr(rawdata, 0, 1)) + php_float(self.bigendian2int(php_substr(rawdata, 1, 1)) / pow(2, 8))
+        
+        return self.bigendian2int(php_substr(rawdata_, 0, 1)) + php_float(self.bigendian2int(php_substr(rawdata_, 1, 1)) / pow(2, 8))
     # end def fixedpoint8_8
     #// 
     #// @param string $rawdata
@@ -721,9 +766,10 @@ class getid3_lib():
     #// @return float
     #//
     @classmethod
-    def fixedpoint16_16(self, rawdata=None):
+    def fixedpoint16_16(self, rawdata_=None):
         
-        return self.bigendian2int(php_substr(rawdata, 0, 2)) + php_float(self.bigendian2int(php_substr(rawdata, 2, 2)) / pow(2, 16))
+        
+        return self.bigendian2int(php_substr(rawdata_, 0, 2)) + php_float(self.bigendian2int(php_substr(rawdata_, 2, 2)) / pow(2, 16))
     # end def fixedpoint16_16
     #// 
     #// @param string $rawdata
@@ -731,10 +777,11 @@ class getid3_lib():
     #// @return float
     #//
     @classmethod
-    def fixedpoint2_30(self, rawdata=None):
+    def fixedpoint2_30(self, rawdata_=None):
         
-        binarystring = self.bigendian2bin(rawdata)
-        return self.bin2dec(php_substr(binarystring, 0, 2)) + php_float(self.bin2dec(php_substr(binarystring, 2, 30)) / pow(2, 30))
+        
+        binarystring_ = self.bigendian2bin(rawdata_)
+        return self.bin2dec(php_substr(binarystring_, 0, 2)) + php_float(self.bin2dec(php_substr(binarystring_, 2, 30)) / pow(2, 30))
     # end def fixedpoint2_30
     #// 
     #// @param string $ArrayPath
@@ -744,7 +791,8 @@ class getid3_lib():
     #// @return array
     #//
     @classmethod
-    def createdeeparray(self, ArrayPath=None, Separator=None, Value=None):
+    def createdeeparray(self, ArrayPath_=None, Separator_=None, Value_=None):
+        
         
         #// assigns $Value to a nested array path:
         #// $foo = self::CreateDeepArray('/path/to/my', '/', 'file.txt')
@@ -752,14 +800,14 @@ class getid3_lib():
         #// $foo = array('path'=>array('to'=>'array('my'=>array('file.txt'))));
         #// or
         #// $foo['path']['to']['my'] = 'file.txt';
-        ArrayPath = php_ltrim(ArrayPath, Separator)
-        pos = php_strpos(ArrayPath, Separator)
-        if pos != False:
-            ReturnedArray[php_substr(ArrayPath, 0, pos)] = self.createdeeparray(php_substr(ArrayPath, pos + 1), Separator, Value)
+        ArrayPath_ = php_ltrim(ArrayPath_, Separator_)
+        pos_ = php_strpos(ArrayPath_, Separator_)
+        if pos_ != False:
+            ReturnedArray_[php_substr(ArrayPath_, 0, pos_)] = self.createdeeparray(php_substr(ArrayPath_, pos_ + 1), Separator_, Value_)
         else:
-            ReturnedArray[ArrayPath] = Value
+            ReturnedArray_[ArrayPath_] = Value_
         # end if
-        return ReturnedArray
+        return ReturnedArray_
     # end def createdeeparray
     #// 
     #// @param array $arraydata
@@ -768,19 +816,22 @@ class getid3_lib():
     #// @return int|false
     #//
     @classmethod
-    def array_max(self, arraydata=None, returnkey=False):
+    def array_max(self, arraydata_=None, returnkey_=None):
+        if returnkey_ is None:
+            returnkey_ = False
+        # end if
         
-        maxvalue = False
-        maxkey = False
-        for key,value in arraydata:
-            if (not php_is_array(value)):
-                if value > maxvalue:
-                    maxvalue = value
-                    maxkey = key
+        maxvalue_ = False
+        maxkey_ = False
+        for key_,value_ in arraydata_:
+            if (not php_is_array(value_)):
+                if value_ > maxvalue_:
+                    maxvalue_ = value_
+                    maxkey_ = key_
                 # end if
             # end if
         # end for
-        return maxkey if returnkey else maxvalue
+        return maxkey_ if returnkey_ else maxvalue_
     # end def array_max
     #// 
     #// @param array $arraydata
@@ -789,19 +840,22 @@ class getid3_lib():
     #// @return int|false
     #//
     @classmethod
-    def array_min(self, arraydata=None, returnkey=False):
+    def array_min(self, arraydata_=None, returnkey_=None):
+        if returnkey_ is None:
+            returnkey_ = False
+        # end if
         
-        minvalue = False
-        minkey = False
-        for key,value in arraydata:
-            if (not php_is_array(value)):
-                if value > minvalue:
-                    minvalue = value
-                    minkey = key
+        minvalue_ = False
+        minkey_ = False
+        for key_,value_ in arraydata_:
+            if (not php_is_array(value_)):
+                if value_ > minvalue_:
+                    minvalue_ = value_
+                    minkey_ = key_
                 # end if
             # end if
         # end for
-        return minkey if returnkey else minvalue
+        return minkey_ if returnkey_ else minvalue_
     # end def array_min
     #// 
     #// @param string $XMLstring
@@ -809,15 +863,16 @@ class getid3_lib():
     #// @return array|false
     #//
     @classmethod
-    def xml2array(self, XMLstring=None):
+    def xml2array(self, XMLstring_=None):
+        
         
         if php_function_exists("simplexml_load_string") and php_function_exists("libxml_disable_entity_loader"):
             #// http://websec.io/2012/08/27/Preventing-XEE-in-PHP.html
             #// https://core.trac.wordpress.org/changeset/29378
-            loader = libxml_disable_entity_loader(True)
-            XMLobject = simplexml_load_string(XMLstring, "SimpleXMLElement", LIBXML_NOENT)
-            return_ = self.simplexmlelement2array(XMLobject)
-            libxml_disable_entity_loader(loader)
+            loader_ = libxml_disable_entity_loader(True)
+            XMLobject_ = simplexml_load_string(XMLstring_, "SimpleXMLElement", LIBXML_NOENT)
+            return_ = self.simplexmlelement2array(XMLobject_)
+            libxml_disable_entity_loader(loader_)
             return return_
         # end if
         return False
@@ -828,16 +883,17 @@ class getid3_lib():
     #// @return array
     #//
     @classmethod
-    def simplexmlelement2array(self, XMLobject=None):
+    def simplexmlelement2array(self, XMLobject_=None):
         
-        if (not php_is_object(XMLobject)) and (not php_is_array(XMLobject)):
-            return XMLobject
+        
+        if (not php_is_object(XMLobject_)) and (not php_is_array(XMLobject_)):
+            return XMLobject_
         # end if
-        XMLarray = get_object_vars(XMLobject) if type(XMLobject).__name__ == "SimpleXMLElement" else XMLobject
-        for key,value in XMLarray:
-            XMLarray[key] = self.simplexmlelement2array(value)
+        XMLarray_ = get_object_vars(XMLobject_) if type(XMLobject_).__name__ == "SimpleXMLElement" else XMLobject_
+        for key_,value_ in XMLarray_:
+            XMLarray_[key_] = self.simplexmlelement2array(value_)
         # end for
-        return XMLarray
+        return XMLarray_
     # end def simplexmlelement2array
     #// 
     #// Returns checksum for a file from starting position to absolute end position.
@@ -851,30 +907,31 @@ class getid3_lib():
     #// @throws getid3_exception
     #//
     @classmethod
-    def hash_data(self, file=None, offset=None, end_=None, algorithm=None):
+    def hash_data(self, file_=None, offset_=None, end_=None, algorithm_=None):
+        
         
         if (not self.intvaluesupported(end_)):
             return False
         # end if
-        if (not php_in_array(algorithm, Array("md5", "sha1"))):
-            raise php_new_class("getid3_exception", lambda : getid3_exception("Invalid algorithm (" + algorithm + ") in self::hash_data()"))
+        if (not php_in_array(algorithm_, Array("md5", "sha1"))):
+            raise php_new_class("getid3_exception", lambda : getid3_exception("Invalid algorithm (" + algorithm_ + ") in self::hash_data()"))
         # end if
-        size = end_ - offset
-        fp = fopen(file, "rb")
-        fseek(fp, offset)
-        ctx = hash_init(algorithm)
+        size_ = end_ - offset_
+        fp_ = fopen(file_, "rb")
+        fseek(fp_, offset_)
+        ctx_ = hash_init(algorithm_)
         while True:
             
-            if not (size > 0):
+            if not (size_ > 0):
                 break
             # end if
-            buffer = fread(fp, php_min(size, getID3.FREAD_BUFFER_SIZE))
-            hash_update(ctx, buffer)
-            size -= getID3.FREAD_BUFFER_SIZE
+            buffer_ = fread(fp_, php_min(size_, getID3.FREAD_BUFFER_SIZE))
+            hash_update(ctx_, buffer_)
+            size_ -= getID3.FREAD_BUFFER_SIZE
         # end while
-        hash = hash_final(ctx)
-        php_fclose(fp)
-        return hash
+        hash_ = hash_final(ctx_)
+        php_fclose(fp_)
+        return hash_
     # end def hash_data
     #// 
     #// @param string $filename_source
@@ -888,36 +945,37 @@ class getid3_lib():
     #// @deprecated Unused, may be removed in future versions of getID3
     #//
     @classmethod
-    def copyfileparts(self, filename_source=None, filename_dest=None, offset=None, length=None):
+    def copyfileparts(self, filename_source_=None, filename_dest_=None, offset_=None, length_=None):
         
-        if (not self.intvaluesupported(offset + length)):
+        
+        if (not self.intvaluesupported(offset_ + length_)):
             raise php_new_class("Exception", lambda : Exception("cannot copy file portion, it extends beyond the " + round(PHP_INT_MAX / 1073741824) + "GB limit"))
         # end if
-        fp_src = fopen(filename_source, "rb")
-        if php_is_readable(filename_source) and php_is_file(filename_source) and fp_src:
-            fp_dest = fopen(filename_dest, "wb")
-            if fp_dest:
-                if fseek(fp_src, offset) == 0:
-                    byteslefttowrite = length
+        fp_src_ = fopen(filename_source_, "rb")
+        if php_is_readable(filename_source_) and php_is_file(filename_source_) and fp_src_:
+            fp_dest_ = fopen(filename_dest_, "wb")
+            if fp_dest_:
+                if fseek(fp_src_, offset_) == 0:
+                    byteslefttowrite_ = length_
                     while True:
-                        buffer = fread(fp_src, php_min(byteslefttowrite, getID3.FREAD_BUFFER_SIZE))
-                        if not (byteslefttowrite > 0 and buffer):
+                        buffer_ = fread(fp_src_, php_min(byteslefttowrite_, getID3.FREAD_BUFFER_SIZE))
+                        if not (byteslefttowrite_ > 0 and buffer_):
                             break
                         # end if
-                        byteswritten = fwrite(fp_dest, buffer, byteslefttowrite)
-                        byteslefttowrite -= byteswritten
+                        byteswritten_ = fwrite(fp_dest_, buffer_, byteslefttowrite_)
+                        byteslefttowrite_ -= byteswritten_
                     # end while
-                    php_fclose(fp_dest)
+                    php_fclose(fp_dest_)
                     return True
                 else:
-                    php_fclose(fp_src)
-                    raise php_new_class("Exception", lambda : Exception("failed to seek to offset " + offset + " in " + filename_source))
+                    php_fclose(fp_src_)
+                    raise php_new_class("Exception", lambda : Exception("failed to seek to offset " + offset_ + " in " + filename_source_))
                 # end if
             else:
-                raise php_new_class("Exception", lambda : Exception("failed to create file for writing " + filename_dest))
+                raise php_new_class("Exception", lambda : Exception("failed to create file for writing " + filename_dest_))
             # end if
         else:
-            raise php_new_class("Exception", lambda : Exception("failed to open file for reading " + filename_source))
+            raise php_new_class("Exception", lambda : Exception("failed to open file for reading " + filename_source_))
         # end if
     # end def copyfileparts
     #// 
@@ -926,28 +984,29 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_int_utf8(self, charval=None):
+    def iconv_fallback_int_utf8(self, charval_=None):
         
-        if charval < 128:
+        
+        if charval_ < 128:
             #// 0bbbbbbb
-            newcharstring = chr(charval)
-        elif charval < 2048:
+            newcharstring_ = chr(charval_)
+        elif charval_ < 2048:
             #// 110bbbbb 10bbbbbb
-            newcharstring = chr(charval >> 6 | 192)
-            newcharstring += chr(charval & 63 | 128)
-        elif charval < 65536:
+            newcharstring_ = chr(charval_ >> 6 | 192)
+            newcharstring_ += chr(charval_ & 63 | 128)
+        elif charval_ < 65536:
             #// 1110bbbb 10bbbbbb 10bbbbbb
-            newcharstring = chr(charval >> 12 | 224)
-            newcharstring += chr(charval >> 6 | 192)
-            newcharstring += chr(charval & 63 | 128)
+            newcharstring_ = chr(charval_ >> 12 | 224)
+            newcharstring_ += chr(charval_ >> 6 | 192)
+            newcharstring_ += chr(charval_ & 63 | 128)
         else:
             #// 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
-            newcharstring = chr(charval >> 18 | 240)
-            newcharstring += chr(charval >> 12 | 192)
-            newcharstring += chr(charval >> 6 | 192)
-            newcharstring += chr(charval & 63 | 128)
+            newcharstring_ = chr(charval_ >> 18 | 240)
+            newcharstring_ += chr(charval_ >> 12 | 192)
+            newcharstring_ += chr(charval_ >> 6 | 192)
+            newcharstring_ += chr(charval_ & 63 | 128)
         # end if
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_int_utf8
     #// 
     #// ISO-8859-1 => UTF-8
@@ -958,24 +1017,27 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_iso88591_utf8(self, string=None, bom=False):
+    def iconv_fallback_iso88591_utf8(self, string_=None, bom_=None):
+        if bom_ is None:
+            bom_ = False
+        # end if
         
         if php_function_exists("utf8_encode"):
-            return utf8_encode(string)
+            return utf8_encode(string_)
         # end if
         #// utf8_encode() unavailable, use getID3()'s iconv_fallback() conversions (possibly PHP is compiled without XML support)
-        newcharstring = ""
-        if bom:
-            newcharstring += "ï»¿"
+        newcharstring_ = ""
+        if bom_:
+            newcharstring_ += "ï»¿"
         # end if
-        i = 0
-        while i < php_strlen(string):
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            charval = php_ord(string[i])
-            newcharstring += self.iconv_fallback_int_utf8(charval)
-            i += 1
+            charval_ = php_ord(string_[i_])
+            newcharstring_ += self.iconv_fallback_int_utf8(charval_)
+            i_ += 1
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_iso88591_utf8
     #// 
     #// ISO-8859-1 => UTF-16BE
@@ -986,19 +1048,22 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_iso88591_utf16be(self, string=None, bom=False):
-        
-        newcharstring = ""
-        if bom:
-            newcharstring += "þÿ"
+    def iconv_fallback_iso88591_utf16be(self, string_=None, bom_=None):
+        if bom_ is None:
+            bom_ = False
         # end if
-        i = 0
-        while i < php_strlen(string):
+        
+        newcharstring_ = ""
+        if bom_:
+            newcharstring_ += "þÿ"
+        # end if
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            newcharstring += " " + string[i]
-            i += 1
+            newcharstring_ += " " + string_[i_]
+            i_ += 1
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_iso88591_utf16be
     #// 
     #// ISO-8859-1 => UTF-16LE
@@ -1009,19 +1074,22 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_iso88591_utf16le(self, string=None, bom=False):
-        
-        newcharstring = ""
-        if bom:
-            newcharstring += "ÿþ"
+    def iconv_fallback_iso88591_utf16le(self, string_=None, bom_=None):
+        if bom_ is None:
+            bom_ = False
         # end if
-        i = 0
-        while i < php_strlen(string):
+        
+        newcharstring_ = ""
+        if bom_:
+            newcharstring_ += "ÿþ"
+        # end if
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            newcharstring += string[i] + " "
-            i += 1
+            newcharstring_ += string_[i_] + " "
+            i_ += 1
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_iso88591_utf16le
     #// 
     #// ISO-8859-1 => UTF-16LE (BOM)
@@ -1031,9 +1099,10 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_iso88591_utf16(self, string=None):
+    def iconv_fallback_iso88591_utf16(self, string_=None):
         
-        return self.iconv_fallback_iso88591_utf16le(string, True)
+        
+        return self.iconv_fallback_iso88591_utf16le(string_, True)
     # end def iconv_fallback_iso88591_utf16
     #// 
     #// UTF-8 => ISO-8859-1
@@ -1043,46 +1112,47 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf8_iso88591(self, string=None):
+    def iconv_fallback_utf8_iso88591(self, string_=None):
+        
         
         if php_function_exists("utf8_decode"):
-            return utf8_decode(string)
+            return utf8_decode(string_)
         # end if
         #// utf8_decode() unavailable, use getID3()'s iconv_fallback() conversions (possibly PHP is compiled without XML support)
-        newcharstring = ""
-        offset = 0
-        stringlength = php_strlen(string)
+        newcharstring_ = ""
+        offset_ = 0
+        stringlength_ = php_strlen(string_)
         while True:
             
-            if not (offset < stringlength):
+            if not (offset_ < stringlength_):
                 break
             # end if
-            if php_ord(string[offset]) | 7 == 247:
+            if php_ord(string_[offset_]) | 7 == 247:
                 #// 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 7 << 18 & php_ord(string[offset + 1]) & 63 << 12 & php_ord(string[offset + 2]) & 63 << 6 & php_ord(string[offset + 3]) & 63
-                offset += 4
-            elif php_ord(string[offset]) | 15 == 239:
+                charval_ = php_ord(string_[offset_ + 0]) & 7 << 18 & php_ord(string_[offset_ + 1]) & 63 << 12 & php_ord(string_[offset_ + 2]) & 63 << 6 & php_ord(string_[offset_ + 3]) & 63
+                offset_ += 4
+            elif php_ord(string_[offset_]) | 15 == 239:
                 #// 1110bbbb 10bbbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 15 << 12 & php_ord(string[offset + 1]) & 63 << 6 & php_ord(string[offset + 2]) & 63
-                offset += 3
-            elif php_ord(string[offset]) | 31 == 223:
+                charval_ = php_ord(string_[offset_ + 0]) & 15 << 12 & php_ord(string_[offset_ + 1]) & 63 << 6 & php_ord(string_[offset_ + 2]) & 63
+                offset_ += 3
+            elif php_ord(string_[offset_]) | 31 == 223:
                 #// 110bbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 31 << 6 & php_ord(string[offset + 1]) & 63
-                offset += 2
-            elif php_ord(string[offset]) | 127 == 127:
+                charval_ = php_ord(string_[offset_ + 0]) & 31 << 6 & php_ord(string_[offset_ + 1]) & 63
+                offset_ += 2
+            elif php_ord(string_[offset_]) | 127 == 127:
                 #// 0bbbbbbb
-                charval = php_ord(string[offset])
-                offset += 1
+                charval_ = php_ord(string_[offset_])
+                offset_ += 1
             else:
                 #// error? throw some kind of warning here?
-                charval = False
-                offset += 1
+                charval_ = False
+                offset_ += 1
             # end if
-            if charval != False:
-                newcharstring += chr(charval) if charval < 256 else "?"
+            if charval_ != False:
+                newcharstring_ += chr(charval_) if charval_ < 256 else "?"
             # end if
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_utf8_iso88591
     #// 
     #// UTF-8 => UTF-16BE
@@ -1093,45 +1163,48 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf8_utf16be(self, string=None, bom=False):
-        
-        newcharstring = ""
-        if bom:
-            newcharstring += "þÿ"
+    def iconv_fallback_utf8_utf16be(self, string_=None, bom_=None):
+        if bom_ is None:
+            bom_ = False
         # end if
-        offset = 0
-        stringlength = php_strlen(string)
+        
+        newcharstring_ = ""
+        if bom_:
+            newcharstring_ += "þÿ"
+        # end if
+        offset_ = 0
+        stringlength_ = php_strlen(string_)
         while True:
             
-            if not (offset < stringlength):
+            if not (offset_ < stringlength_):
                 break
             # end if
-            if php_ord(string[offset]) | 7 == 247:
+            if php_ord(string_[offset_]) | 7 == 247:
                 #// 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 7 << 18 & php_ord(string[offset + 1]) & 63 << 12 & php_ord(string[offset + 2]) & 63 << 6 & php_ord(string[offset + 3]) & 63
-                offset += 4
-            elif php_ord(string[offset]) | 15 == 239:
+                charval_ = php_ord(string_[offset_ + 0]) & 7 << 18 & php_ord(string_[offset_ + 1]) & 63 << 12 & php_ord(string_[offset_ + 2]) & 63 << 6 & php_ord(string_[offset_ + 3]) & 63
+                offset_ += 4
+            elif php_ord(string_[offset_]) | 15 == 239:
                 #// 1110bbbb 10bbbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 15 << 12 & php_ord(string[offset + 1]) & 63 << 6 & php_ord(string[offset + 2]) & 63
-                offset += 3
-            elif php_ord(string[offset]) | 31 == 223:
+                charval_ = php_ord(string_[offset_ + 0]) & 15 << 12 & php_ord(string_[offset_ + 1]) & 63 << 6 & php_ord(string_[offset_ + 2]) & 63
+                offset_ += 3
+            elif php_ord(string_[offset_]) | 31 == 223:
                 #// 110bbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 31 << 6 & php_ord(string[offset + 1]) & 63
-                offset += 2
-            elif php_ord(string[offset]) | 127 == 127:
+                charval_ = php_ord(string_[offset_ + 0]) & 31 << 6 & php_ord(string_[offset_ + 1]) & 63
+                offset_ += 2
+            elif php_ord(string_[offset_]) | 127 == 127:
                 #// 0bbbbbbb
-                charval = php_ord(string[offset])
-                offset += 1
+                charval_ = php_ord(string_[offset_])
+                offset_ += 1
             else:
                 #// error? throw some kind of warning here?
-                charval = False
-                offset += 1
+                charval_ = False
+                offset_ += 1
             # end if
-            if charval != False:
-                newcharstring += self.bigendian2string(charval, 2) if charval < 65536 else " " + "?"
+            if charval_ != False:
+                newcharstring_ += self.bigendian2string(charval_, 2) if charval_ < 65536 else " " + "?"
             # end if
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_utf8_utf16be
     #// 
     #// UTF-8 => UTF-16LE
@@ -1142,45 +1215,48 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf8_utf16le(self, string=None, bom=False):
-        
-        newcharstring = ""
-        if bom:
-            newcharstring += "ÿþ"
+    def iconv_fallback_utf8_utf16le(self, string_=None, bom_=None):
+        if bom_ is None:
+            bom_ = False
         # end if
-        offset = 0
-        stringlength = php_strlen(string)
+        
+        newcharstring_ = ""
+        if bom_:
+            newcharstring_ += "ÿþ"
+        # end if
+        offset_ = 0
+        stringlength_ = php_strlen(string_)
         while True:
             
-            if not (offset < stringlength):
+            if not (offset_ < stringlength_):
                 break
             # end if
-            if php_ord(string[offset]) | 7 == 247:
+            if php_ord(string_[offset_]) | 7 == 247:
                 #// 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 7 << 18 & php_ord(string[offset + 1]) & 63 << 12 & php_ord(string[offset + 2]) & 63 << 6 & php_ord(string[offset + 3]) & 63
-                offset += 4
-            elif php_ord(string[offset]) | 15 == 239:
+                charval_ = php_ord(string_[offset_ + 0]) & 7 << 18 & php_ord(string_[offset_ + 1]) & 63 << 12 & php_ord(string_[offset_ + 2]) & 63 << 6 & php_ord(string_[offset_ + 3]) & 63
+                offset_ += 4
+            elif php_ord(string_[offset_]) | 15 == 239:
                 #// 1110bbbb 10bbbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 15 << 12 & php_ord(string[offset + 1]) & 63 << 6 & php_ord(string[offset + 2]) & 63
-                offset += 3
-            elif php_ord(string[offset]) | 31 == 223:
+                charval_ = php_ord(string_[offset_ + 0]) & 15 << 12 & php_ord(string_[offset_ + 1]) & 63 << 6 & php_ord(string_[offset_ + 2]) & 63
+                offset_ += 3
+            elif php_ord(string_[offset_]) | 31 == 223:
                 #// 110bbbbb 10bbbbbb
-                charval = php_ord(string[offset + 0]) & 31 << 6 & php_ord(string[offset + 1]) & 63
-                offset += 2
-            elif php_ord(string[offset]) | 127 == 127:
+                charval_ = php_ord(string_[offset_ + 0]) & 31 << 6 & php_ord(string_[offset_ + 1]) & 63
+                offset_ += 2
+            elif php_ord(string_[offset_]) | 127 == 127:
                 #// 0bbbbbbb
-                charval = php_ord(string[offset])
-                offset += 1
+                charval_ = php_ord(string_[offset_])
+                offset_ += 1
             else:
                 #// error? maybe throw some warning here?
-                charval = False
-                offset += 1
+                charval_ = False
+                offset_ += 1
             # end if
-            if charval != False:
-                newcharstring += self.littleendian2string(charval, 2) if charval < 65536 else "?" + " "
+            if charval_ != False:
+                newcharstring_ += self.littleendian2string(charval_, 2) if charval_ < 65536 else "?" + " "
             # end if
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_utf8_utf16le
     #// 
     #// UTF-8 => UTF-16LE (BOM)
@@ -1190,9 +1266,10 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf8_utf16(self, string=None):
+    def iconv_fallback_utf8_utf16(self, string_=None):
         
-        return self.iconv_fallback_utf8_utf16le(string, True)
+        
+        return self.iconv_fallback_utf8_utf16le(string_, True)
     # end def iconv_fallback_utf8_utf16
     #// 
     #// UTF-16BE => UTF-8
@@ -1202,21 +1279,22 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf16be_utf8(self, string=None):
+    def iconv_fallback_utf16be_utf8(self, string_=None):
         
-        if php_substr(string, 0, 2) == "þÿ":
+        
+        if php_substr(string_, 0, 2) == "þÿ":
             #// strip BOM
-            string = php_substr(string, 2)
+            string_ = php_substr(string_, 2)
         # end if
-        newcharstring = ""
-        i = 0
-        while i < php_strlen(string):
+        newcharstring_ = ""
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            charval = self.bigendian2int(php_substr(string, i, 2))
-            newcharstring += self.iconv_fallback_int_utf8(charval)
-            i += 2
+            charval_ = self.bigendian2int(php_substr(string_, i_, 2))
+            newcharstring_ += self.iconv_fallback_int_utf8(charval_)
+            i_ += 2
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_utf16be_utf8
     #// 
     #// UTF-16LE => UTF-8
@@ -1226,21 +1304,22 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf16le_utf8(self, string=None):
+    def iconv_fallback_utf16le_utf8(self, string_=None):
         
-        if php_substr(string, 0, 2) == "ÿþ":
+        
+        if php_substr(string_, 0, 2) == "ÿþ":
             #// strip BOM
-            string = php_substr(string, 2)
+            string_ = php_substr(string_, 2)
         # end if
-        newcharstring = ""
-        i = 0
-        while i < php_strlen(string):
+        newcharstring_ = ""
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            charval = self.littleendian2int(php_substr(string, i, 2))
-            newcharstring += self.iconv_fallback_int_utf8(charval)
-            i += 2
+            charval_ = self.littleendian2int(php_substr(string_, i_, 2))
+            newcharstring_ += self.iconv_fallback_int_utf8(charval_)
+            i_ += 2
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_utf16le_utf8
     #// 
     #// UTF-16BE => ISO-8859-1
@@ -1250,21 +1329,22 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf16be_iso88591(self, string=None):
+    def iconv_fallback_utf16be_iso88591(self, string_=None):
         
-        if php_substr(string, 0, 2) == "þÿ":
+        
+        if php_substr(string_, 0, 2) == "þÿ":
             #// strip BOM
-            string = php_substr(string, 2)
+            string_ = php_substr(string_, 2)
         # end if
-        newcharstring = ""
-        i = 0
-        while i < php_strlen(string):
+        newcharstring_ = ""
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            charval = self.bigendian2int(php_substr(string, i, 2))
-            newcharstring += chr(charval) if charval < 256 else "?"
-            i += 2
+            charval_ = self.bigendian2int(php_substr(string_, i_, 2))
+            newcharstring_ += chr(charval_) if charval_ < 256 else "?"
+            i_ += 2
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_utf16be_iso88591
     #// 
     #// UTF-16LE => ISO-8859-1
@@ -1274,21 +1354,22 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf16le_iso88591(self, string=None):
+    def iconv_fallback_utf16le_iso88591(self, string_=None):
         
-        if php_substr(string, 0, 2) == "ÿþ":
+        
+        if php_substr(string_, 0, 2) == "ÿþ":
             #// strip BOM
-            string = php_substr(string, 2)
+            string_ = php_substr(string_, 2)
         # end if
-        newcharstring = ""
-        i = 0
-        while i < php_strlen(string):
+        newcharstring_ = ""
+        i_ = 0
+        while i_ < php_strlen(string_):
             
-            charval = self.littleendian2int(php_substr(string, i, 2))
-            newcharstring += chr(charval) if charval < 256 else "?"
-            i += 2
+            charval_ = self.littleendian2int(php_substr(string_, i_, 2))
+            newcharstring_ += chr(charval_) if charval_ < 256 else "?"
+            i_ += 2
         # end while
-        return newcharstring
+        return newcharstring_
     # end def iconv_fallback_utf16le_iso88591
     #// 
     #// UTF-16 (BOM) => ISO-8859-1
@@ -1298,15 +1379,16 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf16_iso88591(self, string=None):
+    def iconv_fallback_utf16_iso88591(self, string_=None):
         
-        bom = php_substr(string, 0, 2)
-        if bom == "þÿ":
-            return self.iconv_fallback_utf16be_iso88591(php_substr(string, 2))
-        elif bom == "ÿþ":
-            return self.iconv_fallback_utf16le_iso88591(php_substr(string, 2))
+        
+        bom_ = php_substr(string_, 0, 2)
+        if bom_ == "þÿ":
+            return self.iconv_fallback_utf16be_iso88591(php_substr(string_, 2))
+        elif bom_ == "ÿþ":
+            return self.iconv_fallback_utf16le_iso88591(php_substr(string_, 2))
         # end if
-        return string
+        return string_
     # end def iconv_fallback_utf16_iso88591
     #// 
     #// UTF-16 (BOM) => UTF-8
@@ -1316,15 +1398,16 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def iconv_fallback_utf16_utf8(self, string=None):
+    def iconv_fallback_utf16_utf8(self, string_=None):
         
-        bom = php_substr(string, 0, 2)
-        if bom == "þÿ":
-            return self.iconv_fallback_utf16be_utf8(php_substr(string, 2))
-        elif bom == "ÿþ":
-            return self.iconv_fallback_utf16le_utf8(php_substr(string, 2))
+        
+        bom_ = php_substr(string_, 0, 2)
+        if bom_ == "þÿ":
+            return self.iconv_fallback_utf16be_utf8(php_substr(string_, 2))
+        elif bom_ == "ÿþ":
+            return self.iconv_fallback_utf16le_utf8(php_substr(string_, 2))
         # end if
-        return string
+        return string_
     # end def iconv_fallback_utf16_utf8
     #// 
     #// @param string $in_charset
@@ -1335,72 +1418,73 @@ class getid3_lib():
     #// @throws Exception
     #//
     @classmethod
-    def iconv_fallback(self, in_charset=None, out_charset=None, string=None):
+    def iconv_fallback(self, in_charset_=None, out_charset_=None, string_=None):
         
-        if in_charset == out_charset:
-            return string
+        
+        if in_charset_ == out_charset_:
+            return string_
         # end if
         #// mb_convert_encoding() available
         if php_function_exists("mb_convert_encoding"):
-            if php_strtoupper(in_charset) == "UTF-16" and php_substr(string, 0, 2) != "þÿ" and php_substr(string, 0, 2) != "ÿþ":
+            if php_strtoupper(in_charset_) == "UTF-16" and php_substr(string_, 0, 2) != "þÿ" and php_substr(string_, 0, 2) != "ÿþ":
                 #// if BOM missing, mb_convert_encoding will mishandle the conversion, assume UTF-16BE and prepend appropriate BOM
-                string = "ÿþ" + string
+                string_ = "ÿþ" + string_
             # end if
-            if php_strtoupper(in_charset) == "UTF-16" and php_strtoupper(out_charset) == "UTF-8":
-                if string == "ÿþ" or string == "þÿ":
+            if php_strtoupper(in_charset_) == "UTF-16" and php_strtoupper(out_charset_) == "UTF-8":
+                if string_ == "ÿþ" or string_ == "þÿ":
                     #// if string consists of only BOM, mb_convert_encoding will return the BOM unmodified
                     return ""
                 # end if
             # end if
-            converted_string = php_no_error(lambda: mb_convert_encoding(string, out_charset, in_charset))
-            if converted_string:
-                for case in Switch(out_charset):
+            converted_string_ = php_no_error(lambda: mb_convert_encoding(string_, out_charset_, in_charset_))
+            if converted_string_:
+                for case in Switch(out_charset_):
                     if case("ISO-8859-1"):
-                        converted_string = php_rtrim(converted_string, " ")
+                        converted_string_ = php_rtrim(converted_string_, " ")
                         break
                     # end if
                 # end for
-                return converted_string
+                return converted_string_
             # end if
-            return string
+            return string_
             pass
         elif php_function_exists("iconv"):
-            converted_string = php_no_error(lambda: iconv(in_charset, out_charset + "//TRANSLIT", string))
-            if converted_string:
-                for case in Switch(out_charset):
+            converted_string_ = php_no_error(lambda: iconv(in_charset_, out_charset_ + "//TRANSLIT", string_))
+            if converted_string_:
+                for case in Switch(out_charset_):
                     if case("ISO-8859-1"):
-                        converted_string = php_rtrim(converted_string, " ")
+                        converted_string_ = php_rtrim(converted_string_, " ")
                         break
                     # end if
                 # end for
-                return converted_string
+                return converted_string_
             # end if
             #// iconv() may sometimes fail with "illegal character in input string" error message
             #// and return an empty string, but returning the unconverted string is more useful
-            return string
+            return string_
         # end if
-        iconv_fallback.ConversionFunctionList = Array()
-        if php_empty(lambda : iconv_fallback.ConversionFunctionList):
-            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-8"] = "iconv_fallback_iso88591_utf8"
-            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-16"] = "iconv_fallback_iso88591_utf16"
-            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-16BE"] = "iconv_fallback_iso88591_utf16be"
-            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-16LE"] = "iconv_fallback_iso88591_utf16le"
-            iconv_fallback.ConversionFunctionList["UTF-8"]["ISO-8859-1"] = "iconv_fallback_utf8_iso88591"
-            iconv_fallback.ConversionFunctionList["UTF-8"]["UTF-16"] = "iconv_fallback_utf8_utf16"
-            iconv_fallback.ConversionFunctionList["UTF-8"]["UTF-16BE"] = "iconv_fallback_utf8_utf16be"
-            iconv_fallback.ConversionFunctionList["UTF-8"]["UTF-16LE"] = "iconv_fallback_utf8_utf16le"
-            iconv_fallback.ConversionFunctionList["UTF-16"]["ISO-8859-1"] = "iconv_fallback_utf16_iso88591"
-            iconv_fallback.ConversionFunctionList["UTF-16"]["UTF-8"] = "iconv_fallback_utf16_utf8"
-            iconv_fallback.ConversionFunctionList["UTF-16LE"]["ISO-8859-1"] = "iconv_fallback_utf16le_iso88591"
-            iconv_fallback.ConversionFunctionList["UTF-16LE"]["UTF-8"] = "iconv_fallback_utf16le_utf8"
-            iconv_fallback.ConversionFunctionList["UTF-16BE"]["ISO-8859-1"] = "iconv_fallback_utf16be_iso88591"
-            iconv_fallback.ConversionFunctionList["UTF-16BE"]["UTF-8"] = "iconv_fallback_utf16be_utf8"
+        ConversionFunctionList_ = Array()
+        if php_empty(lambda : ConversionFunctionList_):
+            ConversionFunctionList_["ISO-8859-1"]["UTF-8"] = "iconv_fallback_iso88591_utf8"
+            ConversionFunctionList_["ISO-8859-1"]["UTF-16"] = "iconv_fallback_iso88591_utf16"
+            ConversionFunctionList_["ISO-8859-1"]["UTF-16BE"] = "iconv_fallback_iso88591_utf16be"
+            ConversionFunctionList_["ISO-8859-1"]["UTF-16LE"] = "iconv_fallback_iso88591_utf16le"
+            ConversionFunctionList_["UTF-8"]["ISO-8859-1"] = "iconv_fallback_utf8_iso88591"
+            ConversionFunctionList_["UTF-8"]["UTF-16"] = "iconv_fallback_utf8_utf16"
+            ConversionFunctionList_["UTF-8"]["UTF-16BE"] = "iconv_fallback_utf8_utf16be"
+            ConversionFunctionList_["UTF-8"]["UTF-16LE"] = "iconv_fallback_utf8_utf16le"
+            ConversionFunctionList_["UTF-16"]["ISO-8859-1"] = "iconv_fallback_utf16_iso88591"
+            ConversionFunctionList_["UTF-16"]["UTF-8"] = "iconv_fallback_utf16_utf8"
+            ConversionFunctionList_["UTF-16LE"]["ISO-8859-1"] = "iconv_fallback_utf16le_iso88591"
+            ConversionFunctionList_["UTF-16LE"]["UTF-8"] = "iconv_fallback_utf16le_utf8"
+            ConversionFunctionList_["UTF-16BE"]["ISO-8859-1"] = "iconv_fallback_utf16be_iso88591"
+            ConversionFunctionList_["UTF-16BE"]["UTF-8"] = "iconv_fallback_utf16be_utf8"
         # end if
-        if (php_isset(lambda : iconv_fallback.ConversionFunctionList[php_strtoupper(in_charset)][php_strtoupper(out_charset)])):
-            ConversionFunction = iconv_fallback.ConversionFunctionList[php_strtoupper(in_charset)][php_strtoupper(out_charset)]
-            return self.conversionfunction(string)
+        if (php_isset(lambda : ConversionFunctionList_[php_strtoupper(in_charset_)][php_strtoupper(out_charset_)])):
+            ConversionFunction_ = ConversionFunctionList_[php_strtoupper(in_charset_)][php_strtoupper(out_charset_)]
+            return self.conversionfunction_(string_)
         # end if
-        raise php_new_class("Exception", lambda : Exception("PHP does not has mb_convert_encoding() or iconv() support - cannot convert from " + in_charset + " to " + out_charset))
+        raise php_new_class("Exception", lambda : Exception("PHP does not has mb_convert_encoding() or iconv() support - cannot convert from " + in_charset_ + " to " + out_charset_))
     # end def iconv_fallback
     #// 
     #// @param mixed  $data
@@ -1409,19 +1493,20 @@ class getid3_lib():
     #// @return mixed
     #//
     @classmethod
-    def recursivemultibytecharstring2html(self, data=None, charset="ISO-8859-1"):
+    def recursivemultibytecharstring2html(self, data_=None, charset_="ISO-8859-1"):
         
-        if php_is_string(data):
-            return self.multibytecharstring2html(data, charset)
-        elif php_is_array(data):
-            return_data = Array()
-            for key,value in data:
-                return_data[key] = self.recursivemultibytecharstring2html(value, charset)
+        
+        if php_is_string(data_):
+            return self.multibytecharstring2html(data_, charset_)
+        elif php_is_array(data_):
+            return_data_ = Array()
+            for key_,value_ in data_:
+                return_data_[key_] = self.recursivemultibytecharstring2html(value_, charset_)
             # end for
-            return return_data
+            return return_data_
         # end if
         #// integer, float, objects, resources, etc
-        return data
+        return data_
     # end def recursivemultibytecharstring2html
     #// 
     #// @param string|int|float $string
@@ -1430,12 +1515,13 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def multibytecharstring2html(self, string=None, charset="ISO-8859-1"):
+    def multibytecharstring2html(self, string_=None, charset_="ISO-8859-1"):
         
-        string = php_str(string)
+        
+        string_ = php_str(string_)
         #// in case trying to pass a numeric (float, int) string, would otherwise return an empty string
-        HTMLstring = ""
-        for case in Switch(php_strtolower(charset)):
+        HTMLstring_ = ""
+        for case in Switch(php_strtolower(charset_)):
             if case("1251"):
                 pass
             # end if
@@ -1515,80 +1601,80 @@ class getid3_lib():
                 pass
             # end if
             if case("windows-1252"):
-                HTMLstring = htmlentities(string, ENT_COMPAT, charset)
+                HTMLstring_ = htmlentities(string_, ENT_COMPAT, charset_)
                 break
             # end if
             if case("utf-8"):
-                strlen = php_strlen(string)
-                i = 0
-                while i < strlen:
+                strlen_ = php_strlen(string_)
+                i_ = 0
+                while i_ < strlen_:
                     
-                    char_ord_val = php_ord(string[i])
-                    charval = 0
-                    if char_ord_val < 128:
-                        charval = char_ord_val
-                    elif char_ord_val & 240 >> 4 == 15 and i + 3 < strlen:
-                        charval = char_ord_val & 7 << 18
-                        i += 1
-                        charval += php_ord(string[i]) & 63 << 12
-                        i += 1
-                        charval += php_ord(string[i]) & 63 << 6
-                        i += 1
-                        charval += php_ord(string[i]) & 63
-                    elif char_ord_val & 224 >> 5 == 7 and i + 2 < strlen:
-                        charval = char_ord_val & 15 << 12
-                        i += 1
-                        charval += php_ord(string[i]) & 63 << 6
-                        i += 1
-                        charval += php_ord(string[i]) & 63
-                    elif char_ord_val & 192 >> 6 == 3 and i + 1 < strlen:
-                        charval = char_ord_val & 31 << 6
-                        i += 1
-                        charval += php_ord(string[i]) & 63
+                    char_ord_val_ = php_ord(string_[i_])
+                    charval_ = 0
+                    if char_ord_val_ < 128:
+                        charval_ = char_ord_val_
+                    elif char_ord_val_ & 240 >> 4 == 15 and i_ + 3 < strlen_:
+                        charval_ = char_ord_val_ & 7 << 18
+                        i_ += 1
+                        charval_ += php_ord(string_[i_]) & 63 << 12
+                        i_ += 1
+                        charval_ += php_ord(string_[i_]) & 63 << 6
+                        i_ += 1
+                        charval_ += php_ord(string_[i_]) & 63
+                    elif char_ord_val_ & 224 >> 5 == 7 and i_ + 2 < strlen_:
+                        charval_ = char_ord_val_ & 15 << 12
+                        i_ += 1
+                        charval_ += php_ord(string_[i_]) & 63 << 6
+                        i_ += 1
+                        charval_ += php_ord(string_[i_]) & 63
+                    elif char_ord_val_ & 192 >> 6 == 3 and i_ + 1 < strlen_:
+                        charval_ = char_ord_val_ & 31 << 6
+                        i_ += 1
+                        charval_ += php_ord(string_[i_]) & 63
                     # end if
-                    if charval >= 32 and charval <= 127:
-                        HTMLstring += htmlentities(chr(charval))
+                    if charval_ >= 32 and charval_ <= 127:
+                        HTMLstring_ += htmlentities(chr(charval_))
                     else:
-                        HTMLstring += "&#" + charval + ";"
+                        HTMLstring_ += "&#" + charval_ + ";"
                     # end if
-                    i += 1
+                    i_ += 1
                 # end while
                 break
             # end if
             if case("utf-16le"):
-                i = 0
-                while i < php_strlen(string):
+                i_ = 0
+                while i_ < php_strlen(string_):
                     
-                    charval = self.littleendian2int(php_substr(string, i, 2))
-                    if charval >= 32 and charval <= 127:
-                        HTMLstring += chr(charval)
+                    charval_ = self.littleendian2int(php_substr(string_, i_, 2))
+                    if charval_ >= 32 and charval_ <= 127:
+                        HTMLstring_ += chr(charval_)
                     else:
-                        HTMLstring += "&#" + charval + ";"
+                        HTMLstring_ += "&#" + charval_ + ";"
                     # end if
-                    i += 2
+                    i_ += 2
                 # end while
                 break
             # end if
             if case("utf-16be"):
-                i = 0
-                while i < php_strlen(string):
+                i_ = 0
+                while i_ < php_strlen(string_):
                     
-                    charval = self.bigendian2int(php_substr(string, i, 2))
-                    if charval >= 32 and charval <= 127:
-                        HTMLstring += chr(charval)
+                    charval_ = self.bigendian2int(php_substr(string_, i_, 2))
+                    if charval_ >= 32 and charval_ <= 127:
+                        HTMLstring_ += chr(charval_)
                     else:
-                        HTMLstring += "&#" + charval + ";"
+                        HTMLstring_ += "&#" + charval_ + ";"
                     # end if
-                    i += 2
+                    i_ += 2
                 # end while
                 break
             # end if
             if case():
-                HTMLstring = "ERROR: Character set \"" + charset + "\" not supported in MultiByteCharString2HTML()"
+                HTMLstring_ = "ERROR: Character set \"" + charset_ + "\" not supported in MultiByteCharString2HTML()"
                 break
             # end if
         # end for
-        return HTMLstring
+        return HTMLstring_
     # end def multibytecharstring2html
     #// 
     #// @param int $namecode
@@ -1596,15 +1682,16 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def rgadnamelookup(self, namecode=None):
+    def rgadnamelookup(self, namecode_=None):
         
-        rgadnamelookup.RGADname = Array()
-        if php_empty(lambda : rgadnamelookup.RGADname):
-            rgadnamelookup.RGADname[0] = "not set"
-            rgadnamelookup.RGADname[1] = "Track Gain Adjustment"
-            rgadnamelookup.RGADname[2] = "Album Gain Adjustment"
+        
+        RGADname_ = Array()
+        if php_empty(lambda : RGADname_):
+            RGADname_[0] = "not set"
+            RGADname_[1] = "Track Gain Adjustment"
+            RGADname_[2] = "Album Gain Adjustment"
         # end if
-        return rgadnamelookup.RGADname[namecode] if (php_isset(lambda : rgadnamelookup.RGADname[namecode])) else ""
+        return RGADname_[namecode_] if (php_isset(lambda : RGADname_[namecode_])) else ""
     # end def rgadnamelookup
     #// 
     #// @param int $originatorcode
@@ -1612,16 +1699,17 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def rgadoriginatorlookup(self, originatorcode=None):
+    def rgadoriginatorlookup(self, originatorcode_=None):
         
-        rgadoriginatorlookup.RGADoriginator = Array()
-        if php_empty(lambda : rgadoriginatorlookup.RGADoriginator):
-            rgadoriginatorlookup.RGADoriginator[0] = "unspecified"
-            rgadoriginatorlookup.RGADoriginator[1] = "pre-set by artist/producer/mastering engineer"
-            rgadoriginatorlookup.RGADoriginator[2] = "set by user"
-            rgadoriginatorlookup.RGADoriginator[3] = "determined automatically"
+        
+        RGADoriginator_ = Array()
+        if php_empty(lambda : RGADoriginator_):
+            RGADoriginator_[0] = "unspecified"
+            RGADoriginator_[1] = "pre-set by artist/producer/mastering engineer"
+            RGADoriginator_[2] = "set by user"
+            RGADoriginator_[3] = "determined automatically"
         # end if
-        return rgadoriginatorlookup.RGADoriginator[originatorcode] if (php_isset(lambda : rgadoriginatorlookup.RGADoriginator[originatorcode])) else ""
+        return RGADoriginator_[originatorcode_] if (php_isset(lambda : RGADoriginator_[originatorcode_])) else ""
     # end def rgadoriginatorlookup
     #// 
     #// @param int $rawadjustment
@@ -1630,13 +1718,14 @@ class getid3_lib():
     #// @return float
     #//
     @classmethod
-    def rgadadjustmentlookup(self, rawadjustment=None, signbit=None):
+    def rgadadjustmentlookup(self, rawadjustment_=None, signbit_=None):
         
-        adjustment = php_float(rawadjustment) / 10
-        if signbit == 1:
-            adjustment *= -1
+        
+        adjustment_ = php_float(rawadjustment_) / 10
+        if signbit_ == 1:
+            adjustment_ *= -1
         # end if
-        return adjustment
+        return adjustment_
     # end def rgadadjustmentlookup
     #// 
     #// @param int $namecode
@@ -1646,19 +1735,20 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def rgadgainstring(self, namecode=None, originatorcode=None, replaygain=None):
+    def rgadgainstring(self, namecode_=None, originatorcode_=None, replaygain_=None):
         
-        if replaygain < 0:
-            signbit = "1"
+        
+        if replaygain_ < 0:
+            signbit_ = "1"
         else:
-            signbit = "0"
+            signbit_ = "0"
         # end if
-        storedreplaygain = php_intval(round(replaygain * 10))
-        gainstring = php_str_pad(decbin(namecode), 3, "0", STR_PAD_LEFT)
-        gainstring += php_str_pad(decbin(originatorcode), 3, "0", STR_PAD_LEFT)
-        gainstring += signbit
-        gainstring += php_str_pad(decbin(storedreplaygain), 9, "0", STR_PAD_LEFT)
-        return gainstring
+        storedreplaygain_ = php_intval(round(replaygain_ * 10))
+        gainstring_ = php_str_pad(decbin(namecode_), 3, "0", STR_PAD_LEFT)
+        gainstring_ += php_str_pad(decbin(originatorcode_), 3, "0", STR_PAD_LEFT)
+        gainstring_ += signbit_
+        gainstring_ += php_str_pad(decbin(storedreplaygain_), 9, "0", STR_PAD_LEFT)
+        return gainstring_
     # end def rgadgainstring
     #// 
     #// @param float $amplitude
@@ -1666,9 +1756,10 @@ class getid3_lib():
     #// @return float
     #//
     @classmethod
-    def rgadamplitude2db(self, amplitude=None):
+    def rgadamplitude2db(self, amplitude_=None):
         
-        return 20 * log10(amplitude)
+        
+        return 20 * log10(amplitude_)
     # end def rgadamplitude2db
     #// 
     #// @param string $imgData
@@ -1677,44 +1768,47 @@ class getid3_lib():
     #// @return array|false
     #//
     @classmethod
-    def getdataimagesize(self, imgData=None, imageinfo=Array()):
+    def getdataimagesize(self, imgData_=None, imageinfo_=None):
+        if imageinfo_ is None:
+            imageinfo_ = Array()
+        # end if
         
-        getdataimagesize.tempdir = ""
-        if php_empty(lambda : getdataimagesize.tempdir):
+        tempdir_ = ""
+        if php_empty(lambda : tempdir_):
             if php_function_exists("sys_get_temp_dir"):
-                getdataimagesize.tempdir = php_sys_get_temp_dir()
+                tempdir_ = php_sys_get_temp_dir()
                 pass
             # end if
             #// yes this is ugly, feel free to suggest a better way
             if php_include_file(php_dirname(__FILE__) + "/getid3.php", once=False):
-                getid3_temp = php_new_class("getID3", lambda : getID3())
-                if getid3_temp:
-                    getid3_temp_tempdir = getid3_temp.getdataimagesize.tempdir
-                    if getid3_temp_tempdir:
-                        getdataimagesize.tempdir = getid3_temp_tempdir
+                getid3_temp_ = php_new_class("getID3", lambda : getID3())
+                if getid3_temp_:
+                    getid3_temp_tempdir_ = getid3_temp_.tempdir
+                    if getid3_temp_tempdir_:
+                        tempdir_ = getid3_temp_tempdir_
                     # end if
-                    getid3_temp = None
-                    getid3_temp_tempdir = None
+                    getid3_temp_ = None
+                    getid3_temp_tempdir_ = None
                 # end if
             # end if
         # end if
-        GetDataImageSize = False
-        tempfilename = php_tempnam(getdataimagesize.tempdir, "gI3")
-        if tempfilename:
-            tmp = fopen(tempfilename, "wb")
-            if php_is_writable(tempfilename) and php_is_file(tempfilename) and tmp:
-                fwrite(tmp, imgData)
-                php_fclose(tmp)
-                GetDataImageSize = php_no_error(lambda: getimagesize(tempfilename, imageinfo))
-                if GetDataImageSize == False or (not (php_isset(lambda : GetDataImageSize[0]))) or (not (php_isset(lambda : GetDataImageSize[1]))):
+        GetDataImageSize_ = False
+        tempfilename_ = php_tempnam(tempdir_, "gI3")
+        if tempfilename_:
+            tmp_ = fopen(tempfilename_, "wb")
+            if php_is_writable(tempfilename_) and php_is_file(tempfilename_) and tmp_:
+                fwrite(tmp_, imgData_)
+                php_fclose(tmp_)
+                GetDataImageSize_ = php_no_error(lambda: getimagesize(tempfilename_, imageinfo_))
+                if GetDataImageSize_ == False or (not (php_isset(lambda : GetDataImageSize_[0]))) or (not (php_isset(lambda : GetDataImageSize_[1]))):
                     return False
                 # end if
-                GetDataImageSize["height"] = GetDataImageSize[0]
-                GetDataImageSize["width"] = GetDataImageSize[1]
+                GetDataImageSize_["height"] = GetDataImageSize_[0]
+                GetDataImageSize_["width"] = GetDataImageSize_[1]
             # end if
-            unlink(tempfilename)
+            unlink(tempfilename_)
         # end if
-        return GetDataImageSize
+        return GetDataImageSize_
     # end def getdataimagesize
     #// 
     #// @param string $mime_type
@@ -1722,10 +1816,11 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def imageextfrommime(self, mime_type=None):
+    def imageextfrommime(self, mime_type_=None):
+        
         
         #// temporary way, works OK for now, but should be reworked in the future
-        return php_str_replace(Array("image/", "x-", "jpeg"), Array("", "", "jpg"), mime_type)
+        return php_str_replace(Array("image/", "x-", "jpeg"), Array("", "", "jpg"), mime_type_)
     # end def imageextfrommime
     #// 
     #// @param array $ThisFileInfo
@@ -1733,43 +1828,44 @@ class getid3_lib():
     #// @return bool
     #//
     @classmethod
-    def copytagstocomments(self, ThisFileInfo=None):
+    def copytagstocomments(self, ThisFileInfo_=None):
+        
         
         #// Copy all entries from ['tags'] into common ['comments']
-        if (not php_empty(lambda : ThisFileInfo["tags"])):
-            for tagtype,tagarray in ThisFileInfo["tags"]:
-                for tagname,tagdata in tagarray:
-                    for key,value in tagdata:
-                        if (not php_empty(lambda : value)):
-                            if php_empty(lambda : ThisFileInfo["comments"][tagname]):
+        if (not php_empty(lambda : ThisFileInfo_["tags"])):
+            for tagtype_,tagarray_ in ThisFileInfo_["tags"]:
+                for tagname_,tagdata_ in tagarray_:
+                    for key_,value_ in tagdata_:
+                        if (not php_empty(lambda : value_)):
+                            if php_empty(lambda : ThisFileInfo_["comments"][tagname_]):
                                 pass
-                            elif tagtype == "id3v1":
-                                newvaluelength = php_strlen(php_trim(value))
-                                for existingkey,existingvalue in ThisFileInfo["comments"][tagname]:
-                                    oldvaluelength = php_strlen(php_trim(existingvalue))
-                                    if newvaluelength <= oldvaluelength and php_substr(existingvalue, 0, newvaluelength) == php_trim(value):
+                            elif tagtype_ == "id3v1":
+                                newvaluelength_ = php_strlen(php_trim(value_))
+                                for existingkey_,existingvalue_ in ThisFileInfo_["comments"][tagname_]:
+                                    oldvaluelength_ = php_strlen(php_trim(existingvalue_))
+                                    if newvaluelength_ <= oldvaluelength_ and php_substr(existingvalue_, 0, newvaluelength_) == php_trim(value_):
                                         break
                                     # end if
                                 # end for
-                            elif (not php_is_array(value)):
-                                newvaluelength = php_strlen(php_trim(value))
-                                for existingkey,existingvalue in ThisFileInfo["comments"][tagname]:
-                                    oldvaluelength = php_strlen(php_trim(existingvalue))
-                                    if php_strlen(existingvalue) > 10 and newvaluelength > oldvaluelength and php_substr(php_trim(value), 0, php_strlen(existingvalue)) == existingvalue:
-                                        ThisFileInfo["comments"][tagname][existingkey] = php_trim(value)
+                            elif (not php_is_array(value_)):
+                                newvaluelength_ = php_strlen(php_trim(value_))
+                                for existingkey_,existingvalue_ in ThisFileInfo_["comments"][tagname_]:
+                                    oldvaluelength_ = php_strlen(php_trim(existingvalue_))
+                                    if php_strlen(existingvalue_) > 10 and newvaluelength_ > oldvaluelength_ and php_substr(php_trim(value_), 0, php_strlen(existingvalue_)) == existingvalue_:
+                                        ThisFileInfo_["comments"][tagname_][existingkey_] = php_trim(value_)
                                         break
                                     # end if
                                 # end for
                             # end if
-                            if php_is_array(value) or php_empty(lambda : ThisFileInfo["comments"][tagname]) or (not php_in_array(php_trim(value), ThisFileInfo["comments"][tagname])):
-                                value = php_trim(value) if php_is_string(value) else value
-                                if (not php_is_int(key)) and (not ctype_digit(key)):
-                                    ThisFileInfo["comments"][tagname][key] = value
+                            if php_is_array(value_) or php_empty(lambda : ThisFileInfo_["comments"][tagname_]) or (not php_in_array(php_trim(value_), ThisFileInfo_["comments"][tagname_])):
+                                value_ = php_trim(value_) if php_is_string(value_) else value_
+                                if (not php_is_int(key_)) and (not ctype_digit(key_)):
+                                    ThisFileInfo_["comments"][tagname_][key_] = value_
                                 else:
-                                    if (php_isset(lambda : ThisFileInfo["comments"][tagname])):
-                                        ThisFileInfo["comments"][tagname] = Array(value)
+                                    if (php_isset(lambda : ThisFileInfo_["comments"][tagname_])):
+                                        ThisFileInfo_["comments"][tagname_] = Array(value_)
                                     else:
-                                        ThisFileInfo["comments"][tagname][-1] = value
+                                        ThisFileInfo_["comments"][tagname_][-1] = value_
                                     # end if
                                 # end if
                             # end if
@@ -1778,24 +1874,24 @@ class getid3_lib():
                 # end for
             # end for
             #// attempt to standardize spelling of returned keys
-            StandardizeFieldNames = Array({"tracknumber": "track_number", "track": "track_number"})
-            for badkey,goodkey in StandardizeFieldNames:
-                if php_array_key_exists(badkey, ThisFileInfo["comments"]) and (not php_array_key_exists(goodkey, ThisFileInfo["comments"])):
-                    ThisFileInfo["comments"][goodkey] = ThisFileInfo["comments"][badkey]
-                    ThisFileInfo["comments"][badkey] = None
+            StandardizeFieldNames_ = Array({"tracknumber": "track_number", "track": "track_number"})
+            for badkey_,goodkey_ in StandardizeFieldNames_:
+                if php_array_key_exists(badkey_, ThisFileInfo_["comments"]) and (not php_array_key_exists(goodkey_, ThisFileInfo_["comments"])):
+                    ThisFileInfo_["comments"][goodkey_] = ThisFileInfo_["comments"][badkey_]
+                    ThisFileInfo_["comments"][badkey_] = None
                 # end if
             # end for
             #// Copy to ['comments_html']
-            if (not php_empty(lambda : ThisFileInfo["comments"])):
-                for field,values in ThisFileInfo["comments"]:
-                    if field == "picture":
+            if (not php_empty(lambda : ThisFileInfo_["comments"])):
+                for field_,values_ in ThisFileInfo_["comments"]:
+                    if field_ == "picture":
                         continue
                     # end if
-                    for index,value in values:
-                        if php_is_array(value):
-                            ThisFileInfo["comments_html"][field][index] = value
+                    for index_,value_ in values_:
+                        if php_is_array(value_):
+                            ThisFileInfo_["comments_html"][field_][index_] = value_
                         else:
-                            ThisFileInfo["comments_html"][field][index] = php_str_replace("&#0;", "", self.multibytecharstring2html(value, ThisFileInfo["encoding"]))
+                            ThisFileInfo_["comments_html"][field_][index_] = php_str_replace("&#0;", "", self.multibytecharstring2html(value_, ThisFileInfo_["encoding"]))
                         # end if
                     # end for
                 # end for
@@ -1813,33 +1909,34 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def embeddedlookup(self, key=None, begin=None, end_=None, file=None, name=None):
+    def embeddedlookup(self, key_=None, begin_=None, end_=None, file_=None, name_=None):
         
-        embeddedlookup.cache = None
-        if (php_isset(lambda : embeddedlookup.cache[file][name])):
-            return embeddedlookup.cache[file][name][key] if (php_isset(lambda : embeddedlookup.cache[file][name][key])) else ""
+        
+        cache_ = None
+        if (php_isset(lambda : cache_[file_][name_])):
+            return cache_[file_][name_][key_] if (php_isset(lambda : cache_[file_][name_][key_])) else ""
         # end if
         #// Init
-        keylength = php_strlen(key)
-        line_count = end_ - begin - 7
+        keylength_ = php_strlen(key_)
+        line_count_ = end_ - begin_ - 7
         #// Open php file
-        fp = fopen(file, "r")
+        fp_ = fopen(file_, "r")
         #// Discard $begin lines
-        i = 0
-        while i < begin + 3:
+        i_ = 0
+        while i_ < begin_ + 3:
             
-            php_fgets(fp, 1024)
-            i += 1
+            php_fgets(fp_, 1024)
+            i_ += 1
         # end while
         #// Loop thru line
         while True:
             
-            if not (0 < line_count):
+            if not (0 < line_count_):
                 break
             # end if
             #// Read line
-            line = php_ltrim(php_fgets(fp, 1024), "  ")
-            line_count -= 1
+            line_ = php_ltrim(php_fgets(fp_, 1024), "    ")
+            line_count_ -= 1
             #// METHOD A: only cache the matching key - less memory but slower on next lookup of not-previously-looked-up key
             #// $keycheck = substr($line, 0, $keylength);
             #// if ($key == $keycheck)  {
@@ -1848,14 +1945,14 @@ class getid3_lib():
             #// }
             #// METHOD B: cache all keys in this lookup - more memory but faster on next lookup of not-previously-looked-up key
             #// $cache[$file][$name][substr($line, 0, $keylength)] = trim(substr($line, $keylength + 1));
-            explodedLine = php_explode("    ", line, 2)
-            ThisKey = explodedLine[0] if (php_isset(lambda : explodedLine[0])) else ""
-            ThisValue = explodedLine[1] if (php_isset(lambda : explodedLine[1])) else ""
-            embeddedlookup.cache[file][name][ThisKey] = php_trim(ThisValue)
+            explodedLine_ = php_explode("   ", line_, 2)
+            ThisKey_ = explodedLine_[0] if (php_isset(lambda : explodedLine_[0])) else ""
+            ThisValue_ = explodedLine_[1] if (php_isset(lambda : explodedLine_[1])) else ""
+            cache_[file_][name_][ThisKey_] = php_trim(ThisValue_)
         # end while
         #// Close and return
-        php_fclose(fp)
-        return embeddedlookup.cache[file][name][key] if (php_isset(lambda : embeddedlookup.cache[file][name][key])) else ""
+        php_fclose(fp_)
+        return cache_[file_][name_][key_] if (php_isset(lambda : cache_[file_][name_][key_])) else ""
     # end def embeddedlookup
     #// 
     #// @param string $filename
@@ -1866,23 +1963,26 @@ class getid3_lib():
     #// @throws Exception
     #//
     @classmethod
-    def includedependency(self, filename=None, sourcefile=None, DieOnFailure=False):
+    def includedependency(self, filename_=None, sourcefile_=None, DieOnFailure_=None):
+        if DieOnFailure_ is None:
+            DieOnFailure_ = False
+        # end if
         
-        global GETID3_ERRORARRAY
-        php_check_if_defined("GETID3_ERRORARRAY")
-        if php_file_exists(filename):
-            if php_include_file(filename, once=False):
+        global GETID3_ERRORARRAY_
+        php_check_if_defined("GETID3_ERRORARRAY_")
+        if php_file_exists(filename_):
+            if php_include_file(filename_, once=False):
                 return True
             else:
-                diemessage = php_basename(sourcefile) + " depends on " + filename + ", which has errors"
+                diemessage_ = php_basename(sourcefile_) + " depends on " + filename_ + ", which has errors"
             # end if
         else:
-            diemessage = php_basename(sourcefile) + " depends on " + filename + ", which is missing"
+            diemessage_ = php_basename(sourcefile_) + " depends on " + filename_ + ", which is missing"
         # end if
-        if DieOnFailure:
-            raise php_new_class("Exception", lambda : Exception(diemessage))
+        if DieOnFailure_:
+            raise php_new_class("Exception", lambda : Exception(diemessage_))
         else:
-            GETID3_ERRORARRAY[-1] = diemessage
+            GETID3_ERRORARRAY_[-1] = diemessage_
         # end if
         return False
     # end def includedependency
@@ -1892,9 +1992,10 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def trimnullbyte(self, string=None):
+    def trimnullbyte(self, string_=None):
         
-        return php_trim(string, " ")
+        
+        return php_trim(string_, " ")
     # end def trimnullbyte
     #// 
     #// @param string $path
@@ -1902,30 +2003,31 @@ class getid3_lib():
     #// @return float|bool
     #//
     @classmethod
-    def getfilesizesyscall(self, path=None):
+    def getfilesizesyscall(self, path_=None):
         
-        filesize = False
+        
+        filesize_ = False
         if GETID3_OS_ISWINDOWS:
             if php_class_exists("COM"):
                 #// From PHP 5.3.15 and 5.4.5, COM and DOTNET is no longer built into the php core.you have to add COM support in php.ini:
-                filesystem = php_new_class("COM", lambda : COM("Scripting.FileSystemObject"))
-                file = filesystem.getfile(path)
-                filesize = file.size()
-                filesystem = None
-                file = None
+                filesystem_ = php_new_class("COM", lambda : COM("Scripting.FileSystemObject"))
+                file_ = filesystem_.getfile(path_)
+                filesize_ = file_.size()
+                filesystem_ = None
+                file_ = None
             else:
-                commandline = "for %I in (" + escapeshellarg(path) + ") do @echo %~zI"
+                commandline_ = "for %I in (" + escapeshellarg(path_) + ") do @echo %~zI"
             # end if
         else:
-            commandline = "ls -l " + escapeshellarg(path) + " | awk '{print $5}'"
+            commandline_ = "ls -l " + escapeshellarg(path_) + " | awk '{print $5}'"
         # end if
-        if (php_isset(lambda : commandline)):
-            output = php_trim(os.system("commandline"))
-            if ctype_digit(output):
-                filesize = php_float(output)
+        if (php_isset(lambda : commandline_)):
+            output_ = php_trim(os.system("commandline_"))
+            if ctype_digit(output_):
+                filesize_ = php_float(output_)
             # end if
         # end if
-        return filesize
+        return filesize_
     # end def getfilesizesyscall
     #// 
     #// @param string $filename
@@ -1933,30 +2035,31 @@ class getid3_lib():
     #// @return string|false
     #//
     @classmethod
-    def truepath(self, filename=None):
+    def truepath(self, filename_=None):
+        
         
         #// 2017-11-08: this could use some improvement, patches welcome
-        if php_preg_match("#^(\\\\\\\\|//)[a-z0-9]#i", filename, matches):
+        if php_preg_match("#^(\\\\\\\\|//)[a-z0-9]#i", filename_, matches_):
             #// PHP's built-in realpath function does not work on UNC Windows shares
-            goodpath = Array()
-            for part in php_explode("/", php_str_replace("\\", "/", filename)):
-                if part == ".":
+            goodpath_ = Array()
+            for part_ in php_explode("/", php_str_replace("\\", "/", filename_)):
+                if part_ == ".":
                     continue
                 # end if
-                if part == "..":
-                    if php_count(goodpath):
-                        php_array_pop(goodpath)
+                if part_ == "..":
+                    if php_count(goodpath_):
+                        php_array_pop(goodpath_)
                     else:
                         #// cannot step above this level, already at top level
                         return False
                     # end if
                 else:
-                    goodpath[-1] = part
+                    goodpath_[-1] = part_
                 # end if
             # end for
-            return php_implode(DIRECTORY_SEPARATOR, goodpath)
+            return php_implode(DIRECTORY_SEPARATOR, goodpath_)
         # end if
-        return php_realpath(filename)
+        return php_realpath(filename_)
     # end def truepath
     #// 
     #// Workaround for Bug #37268 (https://bugs.php.net/bug.php?id=37268)
@@ -1967,9 +2070,10 @@ class getid3_lib():
     #// @return string
     #//
     @classmethod
-    def mb_basename(self, path=None, suffix=None):
+    def mb_basename(self, path_=None, suffix_=None):
         
-        splited = php_preg_split("#/#", php_rtrim(path, "/ "))
-        return php_substr(php_basename("X" + splited[php_count(splited) - 1], suffix), 1)
+        
+        splited_ = php_preg_split("#/#", php_rtrim(path_, "/ "))
+        return php_substr(php_basename("X" + splited_[php_count(splited_) - 1], suffix_), 1)
     # end def mb_basename
 # end class getid3_lib

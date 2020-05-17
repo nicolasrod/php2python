@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,12 +20,54 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 class WP_Recovery_Mode():
     EXIT_ACTION = "exit_recovery_mode"
+    #// 
+    #// Service to handle cookies.
+    #// 
+    #// @since 5.2.0
+    #// @var WP_Recovery_Mode_Cookie_Service
+    #//
     cookie_service = Array()
+    #// 
+    #// Service to generate a recovery mode key.
+    #// 
+    #// @since 5.2.0
+    #// @var WP_Recovery_Mode_Key_Service
+    #//
     key_service = Array()
+    #// 
+    #// Service to generate and validate recovery mode links.
+    #// 
+    #// @since 5.2.0
+    #// @var WP_Recovery_Mode_Link_Service
+    #//
     link_service = Array()
+    #// 
+    #// Service to handle sending an email with a recovery mode link.
+    #// 
+    #// @since 5.2.0
+    #// @var WP_Recovery_Mode_Email_Service
+    #//
     email_service = Array()
+    #// 
+    #// Is recovery mode initialized.
+    #// 
+    #// @since 5.2.0
+    #// @var bool
+    #//
     is_initialized = False
+    #// 
+    #// Is recovery mode active in this session.
+    #// 
+    #// @since 5.2.0
+    #// @var bool
+    #//
     is_active = False
+    #// 
+    #// Get an ID representing the current recovery mode session.
+    #// 
+    #// @since 5.2.0
+    #// @var string
+    #//
     session_id = ""
     #// 
     #// WP_Recovery_Mode constructor.
@@ -38,6 +75,7 @@ class WP_Recovery_Mode():
     #// @since 5.2.0
     #//
     def __init__(self):
+        
         
         self.cookie_service = php_new_class("WP_Recovery_Mode_Cookie_Service", lambda : WP_Recovery_Mode_Cookie_Service())
         self.key_service = php_new_class("WP_Recovery_Mode_Key_Service", lambda : WP_Recovery_Mode_Key_Service())
@@ -50,6 +88,7 @@ class WP_Recovery_Mode():
     #// @since 5.2.0
     #//
     def initialize(self):
+        
         
         self.is_initialized = True
         add_action("wp_logout", Array(self, "exit_recovery_mode"))
@@ -80,6 +119,7 @@ class WP_Recovery_Mode():
     #//
     def is_active(self):
         
+        
         return self.is_active
     # end def is_active
     #// 
@@ -90,6 +130,7 @@ class WP_Recovery_Mode():
     #// @return string The session ID if recovery mode is active, empty string otherwise.
     #//
     def get_session_id(self):
+        
         
         return self.session_id
     # end def get_session_id
@@ -103,6 +144,7 @@ class WP_Recovery_Mode():
     #// @return bool
     #//
     def is_initialized(self):
+        
         
         return self.is_initialized
     # end def is_initialized
@@ -118,10 +160,11 @@ class WP_Recovery_Mode():
     #// Or the request will exit to try and catch multiple errors at once.
     #// WP_Error if an error occurred preventing it from being handled.
     #//
-    def handle_error(self, error=None):
+    def handle_error(self, error_=None):
         
-        extension = self.get_extension_for_error(error)
-        if (not extension) or self.is_network_plugin(extension):
+        
+        extension_ = self.get_extension_for_error(error_)
+        if (not extension_) or self.is_network_plugin(extension_):
             return php_new_class("WP_Error", lambda : WP_Error("invalid_source", __("Error not caused by a plugin or theme.")))
         # end if
         if (not self.is_active()):
@@ -131,9 +174,9 @@ class WP_Recovery_Mode():
             if (not php_function_exists("wp_generate_password")):
                 php_include_file(ABSPATH + WPINC + "/pluggable.php", once=True)
             # end if
-            return self.email_service.maybe_send_recovery_mode_email(self.get_email_rate_limit(), error, extension)
+            return self.email_service.maybe_send_recovery_mode_email(self.get_email_rate_limit(), error_, extension_)
         # end if
-        if (not self.store_error(error)):
+        if (not self.store_error(error_)):
             return php_new_class("WP_Error", lambda : WP_Error("storage_error", __("Failed to store the error.")))
         # end if
         if php_headers_sent():
@@ -149,6 +192,7 @@ class WP_Recovery_Mode():
     #// @return bool True on success, false on failure.
     #//
     def exit_recovery_mode(self):
+        
         
         if (not self.is_active()):
             return False
@@ -166,13 +210,14 @@ class WP_Recovery_Mode():
     #//
     def handle_exit_recovery_mode(self):
         
-        redirect_to = wp_get_referer()
+        
+        redirect_to_ = wp_get_referer()
         #// Safety check in case referrer returns false.
-        if (not redirect_to):
-            redirect_to = admin_url() if is_user_logged_in() else home_url()
+        if (not redirect_to_):
+            redirect_to_ = admin_url() if is_user_logged_in() else home_url()
         # end if
         if (not self.is_active()):
-            wp_safe_redirect(redirect_to)
+            wp_safe_redirect(redirect_to_)
             php_exit(0)
         # end if
         if (not (php_isset(lambda : PHP_REQUEST["action"]))) or self.EXIT_ACTION != PHP_REQUEST["action"]:
@@ -184,7 +229,7 @@ class WP_Recovery_Mode():
         if (not self.exit_recovery_mode()):
             wp_die(__("Failed to exit recovery mode. Please try again later."))
         # end if
-        wp_safe_redirect(redirect_to)
+        wp_safe_redirect(redirect_to_)
         php_exit(0)
     # end def handle_exit_recovery_mode
     #// 
@@ -196,6 +241,7 @@ class WP_Recovery_Mode():
     #//
     def clean_expired_keys(self):
         
+        
         self.key_service.clean_expired_keys(self.get_link_ttl())
     # end def clean_expired_keys
     #// 
@@ -205,20 +251,21 @@ class WP_Recovery_Mode():
     #//
     def handle_cookie(self):
         
-        validated = self.cookie_service.validate_cookie()
-        if is_wp_error(validated):
+        
+        validated_ = self.cookie_service.validate_cookie()
+        if is_wp_error(validated_):
             self.cookie_service.clear_cookie()
-            validated.add_data(Array({"status": 403}))
-            wp_die(validated)
+            validated_.add_data(Array({"status": 403}))
+            wp_die(validated_)
         # end if
-        session_id = self.cookie_service.get_session_id_from_cookie()
-        if is_wp_error(session_id):
+        session_id_ = self.cookie_service.get_session_id_from_cookie()
+        if is_wp_error(session_id_):
             self.cookie_service.clear_cookie()
-            session_id.add_data(Array({"status": 403}))
-            wp_die(session_id)
+            session_id_.add_data(Array({"status": 403}))
+            wp_die(session_id_)
         # end if
         self.is_active = True
-        self.session_id = session_id
+        self.session_id = session_id_
     # end def handle_cookie
     #// 
     #// Gets the rate limit between sending new recovery mode email links.
@@ -228,6 +275,7 @@ class WP_Recovery_Mode():
     #// @return int Rate limit in seconds.
     #//
     def get_email_rate_limit(self):
+        
         
         #// 
         #// Filter the rate limit between sending new recovery mode email links.
@@ -247,8 +295,9 @@ class WP_Recovery_Mode():
     #//
     def get_link_ttl(self):
         
-        rate_limit = self.get_email_rate_limit()
-        valid_for = rate_limit
+        
+        rate_limit_ = self.get_email_rate_limit()
+        valid_for_ = rate_limit_
         #// 
         #// Filter the amount of time the recovery mode email link is valid for.
         #// 
@@ -258,8 +307,8 @@ class WP_Recovery_Mode():
         #// 
         #// @param int $valid_for The number of seconds the link is valid for.
         #//
-        valid_for = apply_filters("recovery_mode_email_link_ttl", valid_for)
-        return php_max(valid_for, rate_limit)
+        valid_for_ = apply_filters("recovery_mode_email_link_ttl", valid_for_)
+        return php_max(valid_for_, rate_limit_)
     # end def get_link_ttl
     #// 
     #// Gets the extension that the error occurred in.
@@ -275,32 +324,33 @@ class WP_Recovery_Mode():
     #// @type string  $type  The extension type. Either 'plugin' or 'theme'.
     #// }
     #//
-    def get_extension_for_error(self, error=None):
+    def get_extension_for_error(self, error_=None):
         
-        global wp_theme_directories
-        php_check_if_defined("wp_theme_directories")
-        if (not (php_isset(lambda : error["file"]))):
+        
+        global wp_theme_directories_
+        php_check_if_defined("wp_theme_directories_")
+        if (not (php_isset(lambda : error_["file"]))):
             return False
         # end if
         if (not php_defined("WP_PLUGIN_DIR")):
             return False
         # end if
-        error_file = wp_normalize_path(error["file"])
-        wp_plugin_dir = wp_normalize_path(WP_PLUGIN_DIR)
-        if 0 == php_strpos(error_file, wp_plugin_dir):
-            path = php_str_replace(wp_plugin_dir + "/", "", error_file)
-            parts = php_explode("/", path)
-            return Array({"type": "plugin", "slug": parts[0]})
+        error_file_ = wp_normalize_path(error_["file"])
+        wp_plugin_dir_ = wp_normalize_path(WP_PLUGIN_DIR)
+        if 0 == php_strpos(error_file_, wp_plugin_dir_):
+            path_ = php_str_replace(wp_plugin_dir_ + "/", "", error_file_)
+            parts_ = php_explode("/", path_)
+            return Array({"type": "plugin", "slug": parts_[0]})
         # end if
-        if php_empty(lambda : wp_theme_directories):
+        if php_empty(lambda : wp_theme_directories_):
             return False
         # end if
-        for theme_directory in wp_theme_directories:
-            theme_directory = wp_normalize_path(theme_directory)
-            if 0 == php_strpos(error_file, theme_directory):
-                path = php_str_replace(theme_directory + "/", "", error_file)
-                parts = php_explode("/", path)
-                return Array({"type": "theme", "slug": parts[0]})
+        for theme_directory_ in wp_theme_directories_:
+            theme_directory_ = wp_normalize_path(theme_directory_)
+            if 0 == php_strpos(error_file_, theme_directory_):
+                path_ = php_str_replace(theme_directory_ + "/", "", error_file_)
+                parts_ = php_explode("/", path_)
+                return Array({"type": "theme", "slug": parts_[0]})
             # end if
         # end for
         return False
@@ -313,17 +363,18 @@ class WP_Recovery_Mode():
     #// @param array $extension Extension data.
     #// @return bool True if network plugin, false otherwise.
     #//
-    def is_network_plugin(self, extension=None):
+    def is_network_plugin(self, extension_=None):
         
-        if "plugin" != extension["type"]:
+        
+        if "plugin" != extension_["type"]:
             return False
         # end if
         if (not is_multisite()):
             return False
         # end if
-        network_plugins = wp_get_active_network_plugins()
-        for plugin in network_plugins:
-            if 0 == php_strpos(plugin, extension["slug"] + "/"):
+        network_plugins_ = wp_get_active_network_plugins()
+        for plugin_ in network_plugins_:
+            if 0 == php_strpos(plugin_, extension_["slug"] + "/"):
                 return True
             # end if
         # end for
@@ -337,18 +388,19 @@ class WP_Recovery_Mode():
     #// @param array $error Error that was triggered.
     #// @return bool True if the error was stored successfully, false otherwise.
     #//
-    def store_error(self, error=None):
+    def store_error(self, error_=None):
         
-        extension = self.get_extension_for_error(error)
-        if (not extension):
+        
+        extension_ = self.get_extension_for_error(error_)
+        if (not extension_):
             return False
         # end if
-        for case in Switch(extension["type"]):
+        for case in Switch(extension_["type"]):
             if case("plugin"):
-                return wp_paused_plugins().set(extension["slug"], error)
+                return wp_paused_plugins().set(extension_["slug"], error_)
             # end if
             if case("theme"):
-                return wp_paused_themes().set(extension["slug"], error)
+                return wp_paused_themes().set(extension_["slug"], error_)
             # end if
             if case():
                 return False
@@ -367,13 +419,14 @@ class WP_Recovery_Mode():
     #//
     def redirect_protected(self):
         
+        
         #// Pluggable is usually loaded after plugins, so we manually include it here for redirection functionality.
         if (not php_function_exists("wp_safe_redirect")):
             php_include_file(ABSPATH + WPINC + "/pluggable.php", once=True)
         # end if
-        scheme = "https://" if is_ssl() else "http://"
-        url = str(scheme) + str(PHP_SERVER["HTTP_HOST"]) + str(PHP_SERVER["REQUEST_URI"])
-        wp_safe_redirect(url)
+        scheme_ = "https://" if is_ssl() else "http://"
+        url_ = str(scheme_) + str(PHP_SERVER["HTTP_HOST"]) + str(PHP_SERVER["REQUEST_URI"])
+        wp_safe_redirect(url_)
         php_exit(0)
     # end def redirect_protected
 # end class WP_Recovery_Mode

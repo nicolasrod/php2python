@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,13 +19,14 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return string The HTTP protocol. Default: HTTP/1.0.
 #//
-def wp_get_server_protocol(*args_):
+def wp_get_server_protocol(*_args_):
     
-    protocol = PHP_SERVER["SERVER_PROTOCOL"] if (php_isset(lambda : PHP_SERVER["SERVER_PROTOCOL"])) else ""
-    if (not php_in_array(protocol, Array("HTTP/1.1", "HTTP/2", "HTTP/2.0"))):
-        protocol = "HTTP/1.0"
+    
+    protocol_ = PHP_SERVER["SERVER_PROTOCOL"] if (php_isset(lambda : PHP_SERVER["SERVER_PROTOCOL"])) else ""
+    if (not php_in_array(protocol_, Array("HTTP/1.1", "HTTP/2", "HTTP/2.0"))):
+        protocol_ = "HTTP/1.0"
     # end if
-    return protocol
+    return protocol_
 # end def wp_get_server_protocol
 #// 
 #// Turn register globals off.
@@ -38,7 +34,8 @@ def wp_get_server_protocol(*args_):
 #// @since 2.1.0
 #// @access private
 #//
-def wp_unregister_GLOBALS(*args_):
+def wp_unregister_GLOBALS(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
     if (not php_ini_get("register_globals")):
@@ -49,11 +46,11 @@ def wp_unregister_GLOBALS(*args_):
         php_exit()
     # end if
     #// Variables that shouldn't be unset.
-    no_unset = Array("GLOBALS", "_GET", "_POST", "_COOKIE", "_REQUEST", "_SERVER", "_ENV", "_FILES", "table_prefix")
-    input = php_array_merge(PHP_REQUEST, PHP_POST, PHP_COOKIE, PHP_SERVER, PHP_ENV, PHP_FILES, PHP_SESSION if (php_isset(lambda : PHP_SESSION)) and php_is_array(PHP_SESSION) else Array())
-    for k,v in input:
-        if (not php_in_array(k, no_unset)) and (php_isset(lambda : PHP_GLOBALS[k])):
-            PHP_GLOBALS[k] = None
+    no_unset_ = Array("GLOBALS", "_GET", "_POST", "_COOKIE", "_REQUEST", "_SERVER", "_ENV", "_FILES", "table_prefix")
+    input_ = php_array_merge(PHP_REQUEST, PHP_POST, PHP_COOKIE, PHP_SERVER, PHP_ENV, PHP_FILES, PHP_SESSION if (php_isset(lambda : PHP_SESSION)) and php_is_array(PHP_SESSION) else Array())
+    for k_,v_ in input_:
+        if (not php_in_array(k_, no_unset_)) and (php_isset(lambda : PHP_GLOBALS[k_])):
+            PHP_GLOBALS[k_] = None
         # end if
     # end for
 # end def wp_unregister_GLOBALS
@@ -66,12 +63,13 @@ def wp_unregister_GLOBALS(*args_):
 #// @global string $PHP_SELF The filename of the currently executing script,
 #// relative to the document root.
 #//
-def wp_fix_server_vars(*args_):
+def wp_fix_server_vars(*_args_):
+    
     global PHP_SERVER
-    global PHP_SELF
-    php_check_if_defined("PHP_SELF")
-    default_server_values = Array({"SERVER_SOFTWARE": "", "REQUEST_URI": ""})
-    PHP_SERVER = php_array_merge(default_server_values, PHP_SERVER)
+    global PHP_SELF_
+    php_check_if_defined("PHP_SELF_")
+    default_server_values_ = Array({"SERVER_SOFTWARE": "", "REQUEST_URI": ""})
+    PHP_SERVER = php_array_merge(default_server_values_, PHP_SERVER)
     #// Fix for IIS when running with PHP ISAPI.
     if php_empty(lambda : PHP_SERVER["REQUEST_URI"]) or PHP_SAPI != "cgi-fcgi" and php_preg_match("/^Microsoft-IIS\\//", PHP_SERVER["SERVER_SOFTWARE"]):
         if (php_isset(lambda : PHP_SERVER["HTTP_X_ORIGINAL_URL"])):
@@ -108,10 +106,10 @@ def wp_fix_server_vars(*args_):
         PHP_SERVER["PATH_INFO"] = None
     # end if
     #// Fix empty PHP_SELF.
-    PHP_SELF = PHP_SERVER["PHP_SELF"]
-    if php_empty(lambda : PHP_SELF):
+    PHP_SELF_ = PHP_SERVER["PHP_SELF"]
+    if php_empty(lambda : PHP_SELF_):
         PHP_SERVER["PHP_SELF"] = php_preg_replace("/(\\?.*)?$/", "", PHP_SERVER["REQUEST_URI"])
-        PHP_SELF = PHP_SERVER["PHP_SELF"]
+        PHP_SELF_ = PHP_SERVER["PHP_SELF"]
     # end if
 # end def wp_fix_server_vars
 #// 
@@ -126,24 +124,26 @@ def wp_fix_server_vars(*args_):
 #// @global string $required_php_version The required PHP version string.
 #// @global string $wp_version           The WordPress version string.
 #//
-def wp_check_php_mysql_versions(*args_):
+def wp_check_php_mysql_versions(*_args_):
     
-    global required_php_version,wp_version
-    php_check_if_defined("required_php_version","wp_version")
-    php_version = php_phpversion()
-    if php_version_compare(required_php_version, php_version, ">"):
-        protocol = wp_get_server_protocol()
-        php_header(php_sprintf("%s 500 Internal Server Error", protocol), True, 500)
+    
+    global required_php_version_
+    global wp_version_
+    php_check_if_defined("required_php_version_","wp_version_")
+    php_version_ = php_phpversion()
+    if php_version_compare(required_php_version_, php_version_, ">"):
+        protocol_ = wp_get_server_protocol()
+        php_header(php_sprintf("%s 500 Internal Server Error", protocol_), True, 500)
         php_header("Content-Type: text/html; charset=utf-8")
-        printf("Your server is running PHP version %1$s but WordPress %2$s requires at least %3$s.", php_version, wp_version, required_php_version)
+        printf("Your server is running PHP version %1$s but WordPress %2$s requires at least %3$s.", php_version_, wp_version_, required_php_version_)
         php_print(1)
         php_exit()
     # end if
     if (not php_extension_loaded("mysql")) and (not php_extension_loaded("mysqli")) and (not php_extension_loaded("mysqlnd")) and (not php_file_exists(WP_CONTENT_DIR + "/db.php")):
         php_include_file(ABSPATH + WPINC + "/functions.php", once=True)
         wp_load_translations_early()
-        args = Array({"exit": False, "code": "mysql_not_found"})
-        wp_die(__("Your PHP installation appears to be missing the MySQL extension which is required by WordPress."), __("Requirements Not Met"), args)
+        args_ = Array({"exit": False, "code": "mysql_not_found"})
+        wp_die(__("Your PHP installation appears to be missing the MySQL extension which is required by WordPress."), __("Requirements Not Met"), args_)
         php_print(1)
         php_exit()
     # end if
@@ -156,7 +156,8 @@ def wp_check_php_mysql_versions(*args_):
 #// @since 3.0.0
 #// @deprecated 5.4.0 Deprecated in favor of do_favicon().
 #//
-def wp_favicon_request(*args_):
+def wp_favicon_request(*_args_):
+    
     
     if "/favicon.ico" == PHP_SERVER["REQUEST_URI"]:
         php_header("Content-Type: image/vnd.microsoft.icon")
@@ -179,16 +180,17 @@ def wp_favicon_request(*args_):
 #// 
 #// @global int $upgrading the unix timestamp marking when upgrading WordPress began.
 #//
-def wp_maintenance(*args_):
+def wp_maintenance(*_args_):
+    
     
     if (not php_file_exists(ABSPATH + ".maintenance")) or wp_installing():
         return
     # end if
-    global upgrading
-    php_check_if_defined("upgrading")
+    global upgrading_
+    php_check_if_defined("upgrading_")
     php_include_file(ABSPATH + ".maintenance", once=False)
     #// If the $upgrading timestamp is older than 10 minutes, don't die.
-    if time() - upgrading >= 600:
+    if time() - upgrading_ >= 600:
         return
     # end if
     #// 
@@ -204,7 +206,7 @@ def wp_maintenance(*args_):
     #// @param bool $enable_checks Whether to enable maintenance mode. Default true.
     #// @param int  $upgrading     The timestamp set in the .maintenance file.
     #//
-    if (not apply_filters("enable_maintenance_mode", True, upgrading)):
+    if (not apply_filters("enable_maintenance_mode", True, upgrading_)):
         return
     # end if
     if php_file_exists(WP_CONTENT_DIR + "/maintenance.php"):
@@ -227,11 +229,12 @@ def wp_maintenance(*args_):
 #// 
 #// @return bool Always returns true.
 #//
-def timer_start(*args_):
+def timer_start(*_args_):
     
-    global timestart
-    php_check_if_defined("timestart")
-    timestart = php_microtime(True)
+    
+    global timestart_
+    php_check_if_defined("timestart_")
+    timestart_ = php_microtime(True)
     return True
 # end def timer_start
 #// 
@@ -249,17 +252,19 @@ def timer_start(*args_):
 #// @return string The "second.microsecond" finished time calculation. The number is formatted
 #// for human consumption, both localized and rounded.
 #//
-def timer_stop(display=0, precision=3, *args_):
+def timer_stop(display_=0, precision_=3, *_args_):
     
-    global timestart,timeend
-    php_check_if_defined("timestart","timeend")
-    timeend = php_microtime(True)
-    timetotal = timeend - timestart
-    r = number_format_i18n(timetotal, precision) if php_function_exists("number_format_i18n") else number_format(timetotal, precision)
-    if display:
-        php_print(r)
+    
+    global timestart_
+    global timeend_
+    php_check_if_defined("timestart_","timeend_")
+    timeend_ = php_microtime(True)
+    timetotal_ = timeend_ - timestart_
+    r_ = number_format_i18n(timetotal_, precision_) if php_function_exists("number_format_i18n") else number_format(timetotal_, precision_)
+    if display_:
+        php_print(r_)
     # end if
-    return r
+    return r_
 # end def timer_stop
 #// 
 #// Set PHP error reporting based on WordPress debug settings.
@@ -293,7 +298,8 @@ def timer_stop(display=0, precision=3, *args_):
 #// @since 5.1.0 `WP_DEBUG_LOG` can be a file path.
 #// @access private
 #//
-def wp_debug_mode(*args_):
+def wp_debug_mode(*_args_):
+    
     
     #// 
     #// Filters whether to allow the debug mode check to occur.
@@ -318,15 +324,15 @@ def wp_debug_mode(*args_):
             php_ini_set("display_errors", 0)
         # end if
         if php_in_array(php_strtolower(php_str(WP_DEBUG_LOG)), Array("true", "1"), True):
-            log_path = WP_CONTENT_DIR + "/debug.log"
+            log_path_ = WP_CONTENT_DIR + "/debug.log"
         elif php_is_string(WP_DEBUG_LOG):
-            log_path = WP_DEBUG_LOG
+            log_path_ = WP_DEBUG_LOG
         else:
-            log_path = False
+            log_path_ = False
         # end if
-        if log_path:
+        if log_path_:
             php_ini_set("log_errors", 1)
-            php_ini_set("error_log", log_path)
+            php_ini_set("error_log", log_path_)
         # end if
     else:
         php_error_reporting(E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR)
@@ -348,7 +354,8 @@ def wp_debug_mode(*args_):
 #// @since 3.0.0
 #// @access private
 #//
-def wp_set_lang_dir(*args_):
+def wp_set_lang_dir(*_args_):
+    
     
     if (not php_defined("WP_LANG_DIR")):
         if php_file_exists(WP_CONTENT_DIR + "/languages") and php_no_error(lambda: php_is_dir(WP_CONTENT_DIR + "/languages")) or (not php_no_error(lambda: php_is_dir(ABSPATH + WPINC + "/languages"))):
@@ -387,22 +394,23 @@ def wp_set_lang_dir(*args_):
 #// 
 #// @global wpdb $wpdb WordPress database abstraction object.
 #//
-def require_wp_db(*args_):
+def require_wp_db(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     php_include_file(ABSPATH + WPINC + "/wp-db.php", once=True)
     if php_file_exists(WP_CONTENT_DIR + "/db.php"):
         php_include_file(WP_CONTENT_DIR + "/db.php", once=True)
     # end if
-    if (php_isset(lambda : wpdb)):
+    if (php_isset(lambda : wpdb_)):
         return
     # end if
-    dbuser = DB_USER if php_defined("DB_USER") else ""
-    dbpassword = DB_PASSWORD if php_defined("DB_PASSWORD") else ""
-    dbname = DB_NAME if php_defined("DB_NAME") else ""
-    dbhost = DB_HOST if php_defined("DB_HOST") else ""
-    wpdb = php_new_class("wpdb", lambda : wpdb(dbuser, dbpassword, dbname, dbhost))
+    dbuser_ = DB_USER if php_defined("DB_USER") else ""
+    dbpassword_ = DB_PASSWORD if php_defined("DB_PASSWORD") else ""
+    dbname_ = DB_NAME if php_defined("DB_NAME") else ""
+    dbhost_ = DB_HOST if php_defined("DB_HOST") else ""
+    wpdb_ = php_new_class("wpdb", lambda : wpdb(dbuser_, dbpassword_, dbname_, dbhost_))
 # end def require_wp_db
 #// 
 #// Set the database table prefix and the format specifiers for database
@@ -416,16 +424,18 @@ def require_wp_db(*args_):
 #// @global wpdb   $wpdb         WordPress database abstraction object.
 #// @global string $table_prefix The database table prefix.
 #//
-def wp_set_wpdb_vars(*args_):
+def wp_set_wpdb_vars(*_args_):
     
-    global wpdb,table_prefix
-    php_check_if_defined("wpdb","table_prefix")
-    if (not php_empty(lambda : wpdb.error)):
+    
+    global wpdb_
+    global table_prefix_
+    php_check_if_defined("wpdb_","table_prefix_")
+    if (not php_empty(lambda : wpdb_.error)):
         dead_db()
     # end if
-    wpdb.field_types = Array({"post_author": "%d", "post_parent": "%d", "menu_order": "%d", "term_id": "%d", "term_group": "%d", "term_taxonomy_id": "%d", "parent": "%d", "count": "%d", "object_id": "%d", "term_order": "%d", "ID": "%d", "comment_ID": "%d", "comment_post_ID": "%d", "comment_parent": "%d", "user_id": "%d", "link_id": "%d", "link_owner": "%d", "link_rating": "%d", "option_id": "%d", "blog_id": "%d", "meta_id": "%d", "post_id": "%d", "user_status": "%d", "umeta_id": "%d", "comment_karma": "%d", "comment_count": "%d", "active": "%d", "cat_id": "%d", "deleted": "%d", "lang_id": "%d", "mature": "%d", "public": "%d", "site_id": "%d", "spam": "%d"})
-    prefix = wpdb.set_prefix(table_prefix)
-    if is_wp_error(prefix):
+    wpdb_.field_types = Array({"post_author": "%d", "post_parent": "%d", "menu_order": "%d", "term_id": "%d", "term_group": "%d", "term_taxonomy_id": "%d", "parent": "%d", "count": "%d", "object_id": "%d", "term_order": "%d", "ID": "%d", "comment_ID": "%d", "comment_post_ID": "%d", "comment_parent": "%d", "user_id": "%d", "link_id": "%d", "link_owner": "%d", "link_rating": "%d", "option_id": "%d", "blog_id": "%d", "meta_id": "%d", "post_id": "%d", "user_status": "%d", "umeta_id": "%d", "comment_karma": "%d", "comment_count": "%d", "active": "%d", "cat_id": "%d", "deleted": "%d", "lang_id": "%d", "mature": "%d", "public": "%d", "site_id": "%d", "spam": "%d"})
+    prefix_ = wpdb_.set_prefix(table_prefix_)
+    if is_wp_error(prefix_):
         wp_load_translations_early()
         wp_die(php_sprintf(__("<strong>Error</strong>: %1$s in %2$s can only contain numbers, letters, and underscores."), "<code>$table_prefix</code>", "<code>wp-config.php</code>"))
     # end if
@@ -441,15 +451,16 @@ def wp_set_wpdb_vars(*args_):
 #// @param bool $using Whether external object cache is being used.
 #// @return bool The current 'using' setting.
 #//
-def wp_using_ext_object_cache(using=None, *args_):
+def wp_using_ext_object_cache(using_=None, *_args_):
     
-    global _wp_using_ext_object_cache
-    php_check_if_defined("_wp_using_ext_object_cache")
-    current_using = _wp_using_ext_object_cache
-    if None != using:
-        _wp_using_ext_object_cache = using
+    
+    global _wp_using_ext_object_cache_
+    php_check_if_defined("_wp_using_ext_object_cache_")
+    current_using_ = _wp_using_ext_object_cache_
+    if None != using_:
+        _wp_using_ext_object_cache_ = using_
     # end if
-    return current_using
+    return current_using_
 # end def wp_using_ext_object_cache
 #// 
 #// Start the WordPress object cache.
@@ -462,13 +473,14 @@ def wp_using_ext_object_cache(using=None, *args_):
 #// 
 #// @global array $wp_filter Stores all of the filters.
 #//
-def wp_start_object_cache(*args_):
+def wp_start_object_cache(*_args_):
     
-    global wp_filter
-    php_check_if_defined("wp_filter")
-    wp_start_object_cache.first_init = True
+    
+    global wp_filter_
+    php_check_if_defined("wp_filter_")
+    first_init_ = True
     #// Only perform the following checks once.
-    if wp_start_object_cache.first_init:
+    if first_init_:
         if (not php_function_exists("wp_cache_init")):
             #// 
             #// This is the normal situation. First-run of this function. No
@@ -484,8 +496,8 @@ def wp_start_object_cache(*args_):
                     wp_using_ext_object_cache(True)
                 # end if
                 #// Re-initialize any hooks added manually by object-cache.php.
-                if wp_filter:
-                    wp_filter = WP_Hook.build_preinitialized_hooks(wp_filter)
+                if wp_filter_:
+                    wp_filter_ = WP_Hook.build_preinitialized_hooks(wp_filter_)
                 # end if
             # end if
         elif (not wp_using_ext_object_cache()) and php_file_exists(WP_CONTENT_DIR + "/object-cache.php"):
@@ -506,7 +518,7 @@ def wp_start_object_cache(*args_):
     #// initialized. Reset signals to the cache that global IDs
     #// have changed and it may need to update keys and cleanup caches.
     #//
-    if (not wp_start_object_cache.first_init) and php_function_exists("wp_cache_switch_to_blog"):
+    if (not first_init_) and php_function_exists("wp_cache_switch_to_blog"):
         wp_cache_switch_to_blog(get_current_blog_id())
     elif php_function_exists("wp_cache_init"):
         wp_cache_init()
@@ -515,7 +527,7 @@ def wp_start_object_cache(*args_):
         wp_cache_add_global_groups(Array("users", "userlogins", "usermeta", "user_meta", "useremail", "userslugs", "site-transient", "site-options", "blog-lookup", "blog-details", "site-details", "rss", "global-posts", "blog-id-cache", "networks", "sites", "blog_meta"))
         wp_cache_add_non_persistent_groups(Array("counts", "plugins"))
     # end if
-    wp_start_object_cache.first_init = False
+    first_init_ = False
 # end def wp_start_object_cache
 #// 
 #// Redirect to the installer if WordPress is not installed.
@@ -525,7 +537,8 @@ def wp_start_object_cache(*args_):
 #// @since 3.0.0
 #// @access private
 #//
-def wp_not_installed(*args_):
+def wp_not_installed(*_args_):
+    
     
     if is_multisite():
         if (not is_blog_installed()) and (not wp_installing()):
@@ -536,8 +549,8 @@ def wp_not_installed(*args_):
         nocache_headers()
         php_include_file(ABSPATH + WPINC + "/kses.php", once=False)
         php_include_file(ABSPATH + WPINC + "/pluggable.php", once=False)
-        link = wp_guess_url() + "/wp-admin/install.php"
-        wp_redirect(link)
+        link_ = wp_guess_url() + "/wp-admin/install.php"
+        wp_redirect(link_)
         php_exit(0)
     # end if
 # end def wp_not_installed
@@ -553,28 +566,29 @@ def wp_not_installed(*args_):
 #// 
 #// @return string[] Array of absolute paths of files to include.
 #//
-def wp_get_mu_plugins(*args_):
+def wp_get_mu_plugins(*_args_):
     
-    mu_plugins = Array()
+    
+    mu_plugins_ = Array()
     if (not php_is_dir(WPMU_PLUGIN_DIR)):
-        return mu_plugins
+        return mu_plugins_
     # end if
-    dh = php_opendir(WPMU_PLUGIN_DIR)
-    if (not dh):
-        return mu_plugins
+    dh_ = php_opendir(WPMU_PLUGIN_DIR)
+    if (not dh_):
+        return mu_plugins_
     # end if
     while True:
-        plugin = php_readdir(dh)
-        if not (plugin != False):
+        plugin_ = php_readdir(dh_)
+        if not (plugin_ != False):
             break
         # end if
-        if php_substr(plugin, -4) == ".php":
-            mu_plugins[-1] = WPMU_PLUGIN_DIR + "/" + plugin
+        if php_substr(plugin_, -4) == ".php":
+            mu_plugins_[-1] = WPMU_PLUGIN_DIR + "/" + plugin_
         # end if
     # end while
-    php_closedir(dh)
-    sort(mu_plugins)
-    return mu_plugins
+    php_closedir(dh_)
+    sort(mu_plugins_)
+    return mu_plugins_
 # end def wp_get_mu_plugins
 #// 
 #// Retrieve an array of active and valid plugin files.
@@ -590,22 +604,23 @@ def wp_get_mu_plugins(*args_):
 #// 
 #// @return string[] $plugin_file Array of paths to plugin files relative to the plugins directory.
 #//
-def wp_get_active_and_valid_plugins(*args_):
+def wp_get_active_and_valid_plugins(*_args_):
     
-    plugins = Array()
-    active_plugins = get_option("active_plugins", Array())
+    
+    plugins_ = Array()
+    active_plugins_ = get_option("active_plugins", Array())
     #// Check for hacks file if the option is enabled.
     if get_option("hack_file") and php_file_exists(ABSPATH + "my-hacks.php"):
         _deprecated_file("my-hacks.php", "1.5.0")
-        array_unshift(plugins, ABSPATH + "my-hacks.php")
+        array_unshift(plugins_, ABSPATH + "my-hacks.php")
     # end if
-    if php_empty(lambda : active_plugins) or wp_installing():
-        return plugins
+    if php_empty(lambda : active_plugins_) or wp_installing():
+        return plugins_
     # end if
-    network_plugins = wp_get_active_network_plugins() if is_multisite() else False
-    for plugin in active_plugins:
-        if (not validate_file(plugin)) and ".php" == php_substr(plugin, -4) and php_file_exists(WP_PLUGIN_DIR + "/" + plugin) and (not network_plugins) or (not php_in_array(WP_PLUGIN_DIR + "/" + plugin, network_plugins)):
-            plugins[-1] = WP_PLUGIN_DIR + "/" + plugin
+    network_plugins_ = wp_get_active_network_plugins() if is_multisite() else False
+    for plugin_ in active_plugins_:
+        if (not validate_file(plugin_)) and ".php" == php_substr(plugin_, -4) and php_file_exists(WP_PLUGIN_DIR + "/" + plugin_) and (not network_plugins_) or (not php_in_array(WP_PLUGIN_DIR + "/" + plugin_, network_plugins_)):
+            plugins_[-1] = WP_PLUGIN_DIR + "/" + plugin_
         # end if
     # end for
     #// 
@@ -613,9 +628,9 @@ def wp_get_active_and_valid_plugins(*args_):
     #// that should be protected against WSODs and the plugin is paused.
     #//
     if wp_is_recovery_mode():
-        plugins = wp_skip_paused_plugins(plugins)
+        plugins_ = wp_skip_paused_plugins(plugins_)
     # end if
-    return plugins
+    return plugins_
 # end def wp_get_active_and_valid_plugins
 #// 
 #// Filters a given list of plugins, removing any paused plugins from it.
@@ -625,21 +640,22 @@ def wp_get_active_and_valid_plugins(*args_):
 #// @param string[] $plugins Array of absolute plugin main file paths.
 #// @return string[] Filtered array of plugins, without any paused plugins.
 #//
-def wp_skip_paused_plugins(plugins=None, *args_):
+def wp_skip_paused_plugins(plugins_=None, *_args_):
+    
     global PHP_GLOBALS
-    paused_plugins = wp_paused_plugins().get_all()
-    if php_empty(lambda : paused_plugins):
-        return plugins
+    paused_plugins_ = wp_paused_plugins().get_all()
+    if php_empty(lambda : paused_plugins_):
+        return plugins_
     # end if
-    for index,plugin in plugins:
-        plugin = php_explode("/", plugin_basename(plugin))
-        if php_array_key_exists(plugin, paused_plugins):
-            plugins[index] = None
+    for index_,plugin_ in plugins_:
+        plugin_ = php_explode("/", plugin_basename(plugin_))
+        if php_array_key_exists(plugin_, paused_plugins_):
+            plugins_[index_] = None
             #// Store list of paused plugins for displaying an admin notice.
-            PHP_GLOBALS["_paused_plugins"][plugin] = paused_plugins[plugin]
+            PHP_GLOBALS["_paused_plugins"][plugin_] = paused_plugins_[plugin_]
         # end if
     # end for
-    return plugins
+    return plugins_
 # end def wp_skip_paused_plugins
 #// 
 #// Retrieves an array of active and valid themes.
@@ -651,30 +667,31 @@ def wp_skip_paused_plugins(plugins=None, *args_):
 #// 
 #// @return string[] Array of absolute paths to theme directories.
 #//
-def wp_get_active_and_valid_themes(*args_):
+def wp_get_active_and_valid_themes(*_args_):
     
-    global pagenow
-    php_check_if_defined("pagenow")
-    themes = Array()
-    if wp_installing() and "wp-activate.php" != pagenow:
-        return themes
+    
+    global pagenow_
+    php_check_if_defined("pagenow_")
+    themes_ = Array()
+    if wp_installing() and "wp-activate.php" != pagenow_:
+        return themes_
     # end if
     if TEMPLATEPATH != STYLESHEETPATH:
-        themes[-1] = STYLESHEETPATH
+        themes_[-1] = STYLESHEETPATH
     # end if
-    themes[-1] = TEMPLATEPATH
+    themes_[-1] = TEMPLATEPATH
     #// 
     #// Remove themes from the list of active themes when we're on an endpoint
     #// that should be protected against WSODs and the theme is paused.
     #//
     if wp_is_recovery_mode():
-        themes = wp_skip_paused_themes(themes)
+        themes_ = wp_skip_paused_themes(themes_)
         #// If no active and valid themes exist, skip loading themes.
-        if php_empty(lambda : themes):
+        if php_empty(lambda : themes_):
             add_filter("wp_using_themes", "__return_false")
         # end if
     # end if
-    return themes
+    return themes_
 # end def wp_get_active_and_valid_themes
 #// 
 #// Filters a given list of themes, removing any paused themes from it.
@@ -684,21 +701,22 @@ def wp_get_active_and_valid_themes(*args_):
 #// @param string[] $themes Array of absolute theme directory paths.
 #// @return string[] Filtered array of absolute paths to themes, without any paused themes.
 #//
-def wp_skip_paused_themes(themes=None, *args_):
+def wp_skip_paused_themes(themes_=None, *_args_):
+    
     global PHP_GLOBALS
-    paused_themes = wp_paused_themes().get_all()
-    if php_empty(lambda : paused_themes):
-        return themes
+    paused_themes_ = wp_paused_themes().get_all()
+    if php_empty(lambda : paused_themes_):
+        return themes_
     # end if
-    for index,theme in themes:
-        theme = php_basename(theme)
-        if php_array_key_exists(theme, paused_themes):
-            themes[index] = None
+    for index_,theme_ in themes_:
+        theme_ = php_basename(theme_)
+        if php_array_key_exists(theme_, paused_themes_):
+            themes_[index_] = None
             #// Store list of paused themes for displaying an admin notice.
-            PHP_GLOBALS["_paused_themes"][theme] = paused_themes[theme]
+            PHP_GLOBALS["_paused_themes"][theme_] = paused_themes_[theme_]
         # end if
     # end for
-    return themes
+    return themes_
 # end def wp_skip_paused_themes
 #// 
 #// Is WordPress in Recovery Mode.
@@ -709,7 +727,8 @@ def wp_skip_paused_themes(themes=None, *args_):
 #// 
 #// @return bool
 #//
-def wp_is_recovery_mode(*args_):
+def wp_is_recovery_mode(*_args_):
+    
     
     return wp_recovery_mode().is_active()
 # end def wp_is_recovery_mode
@@ -720,7 +739,8 @@ def wp_is_recovery_mode(*args_):
 #// 
 #// @return bool True if the current endpoint should be protected.
 #//
-def is_protected_endpoint(*args_):
+def is_protected_endpoint(*_args_):
+    
     
     #// Protect login pages.
     if (php_isset(lambda : PHP_GLOBALS["pagenow"])) and "wp-login.php" == PHP_GLOBALS["pagenow"]:
@@ -754,7 +774,8 @@ def is_protected_endpoint(*args_):
 #// 
 #// @return bool True if the current AJAX action should be protected.
 #//
-def is_protected_ajax_action(*args_):
+def is_protected_ajax_action(*_args_):
+    
     
     if (not wp_doing_ajax()):
         return False
@@ -762,7 +783,7 @@ def is_protected_ajax_action(*args_):
     if (not (php_isset(lambda : PHP_REQUEST["action"]))):
         return False
     # end if
-    actions_to_protect = Array("edit-theme-plugin-file", "heartbeat", "install-plugin", "install-theme", "search-plugins", "search-install-plugins", "update-plugin", "update-theme")
+    actions_to_protect_ = Array("edit-theme-plugin-file", "heartbeat", "install-plugin", "install-theme", "search-plugins", "search-install-plugins", "update-plugin", "update-theme")
     #// 
     #// Filters the array of protected AJAX actions.
     #// 
@@ -772,8 +793,8 @@ def is_protected_ajax_action(*args_):
     #// 
     #// @param string[] $actions_to_protect Array of strings with AJAX actions to protect.
     #//
-    actions_to_protect = apply_filters("wp_protected_ajax_actions", actions_to_protect)
-    if (not php_in_array(PHP_REQUEST["action"], actions_to_protect, True)):
+    actions_to_protect_ = apply_filters("wp_protected_ajax_actions", actions_to_protect_)
+    if (not php_in_array(PHP_REQUEST["action"], actions_to_protect_, True)):
         return False
     # end if
     return True
@@ -787,12 +808,13 @@ def is_protected_ajax_action(*args_):
 #// @since 3.0.0
 #// @access private
 #//
-def wp_set_internal_encoding(*args_):
+def wp_set_internal_encoding(*_args_):
+    
     
     if php_function_exists("mb_internal_encoding"):
-        charset = get_option("blog_charset")
+        charset_ = get_option("blog_charset")
         #// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-        if (not charset) or (not php_no_error(lambda: mb_internal_encoding(charset))):
+        if (not charset_) or (not php_no_error(lambda: mb_internal_encoding(charset_))):
             mb_internal_encoding("UTF-8")
         # end if
     # end if
@@ -806,7 +828,8 @@ def wp_set_internal_encoding(*args_):
 #// @since 3.0.0
 #// @access private
 #//
-def wp_magic_quotes(*args_):
+def wp_magic_quotes(*_args_):
+    
     global PHP_REQUEST, PHP_POST, PHP_COOKIE, PHP_SERVER
     #// Escape with wpdb.
     PHP_REQUEST = add_magic_quotes(PHP_REQUEST)
@@ -832,7 +855,8 @@ def wp_magic_quotes(*args_):
 #// @since 1.2.0
 #// @access private
 #//
-def shutdown_action_hook(*args_):
+def shutdown_action_hook(*_args_):
+    
     
     #// 
     #// Fires just before PHP shuts down execution.
@@ -851,10 +875,11 @@ def shutdown_action_hook(*args_):
 #// @param object $object The object to clone.
 #// @return object The cloned object.
 #//
-def wp_clone(object=None, *args_):
+def wp_clone(object_=None, *_args_):
+    
     
     #// Use parens for clone to accommodate PHP 4. See #17880.
-    return copy.deepcopy(object)
+    return copy.deepcopy(object_)
 # end def wp_clone
 #// 
 #// Determines whether the current request is for an administrative interface page.
@@ -872,7 +897,8 @@ def wp_clone(object=None, *args_):
 #// 
 #// @return bool True if inside WordPress administration interface, false otherwise.
 #//
-def is_admin(*args_):
+def is_admin(*_args_):
+    
     
     if (php_isset(lambda : PHP_GLOBALS["current_screen"])):
         return PHP_GLOBALS["current_screen"].in_admin()
@@ -895,7 +921,8 @@ def is_admin(*args_):
 #// 
 #// @return bool True if inside WordPress blog administration pages.
 #//
-def is_blog_admin(*args_):
+def is_blog_admin(*_args_):
+    
     
     if (php_isset(lambda : PHP_GLOBALS["current_screen"])):
         return PHP_GLOBALS["current_screen"].in_admin("site")
@@ -921,7 +948,8 @@ def is_blog_admin(*args_):
 #// 
 #// @return bool True if inside WordPress network administration pages.
 #//
-def is_network_admin(*args_):
+def is_network_admin(*_args_):
+    
     
     if (php_isset(lambda : PHP_GLOBALS["current_screen"])):
         return PHP_GLOBALS["current_screen"].in_admin("network")
@@ -944,7 +972,8 @@ def is_network_admin(*args_):
 #// 
 #// @return bool True if inside WordPress user administration pages.
 #//
-def is_user_admin(*args_):
+def is_user_admin(*_args_):
+    
     
     if (php_isset(lambda : PHP_GLOBALS["current_screen"])):
         return PHP_GLOBALS["current_screen"].in_admin("user")
@@ -960,7 +989,8 @@ def is_user_admin(*args_):
 #// 
 #// @return bool True if Multisite is enabled, false otherwise.
 #//
-def is_multisite(*args_):
+def is_multisite(*_args_):
+    
     
     if php_defined("MULTISITE"):
         return MULTISITE
@@ -979,11 +1009,12 @@ def is_multisite(*args_):
 #// 
 #// @return int Site ID.
 #//
-def get_current_blog_id(*args_):
+def get_current_blog_id(*_args_):
     
-    global blog_id
-    php_check_if_defined("blog_id")
-    return absint(blog_id)
+    
+    global blog_id_
+    php_check_if_defined("blog_id_")
+    return absint(blog_id_)
 # end def get_current_blog_id
 #// 
 #// Retrieves the current network ID.
@@ -992,16 +1023,17 @@ def get_current_blog_id(*args_):
 #// 
 #// @return int The ID of the current network.
 #//
-def get_current_network_id(*args_):
+def get_current_network_id(*_args_):
+    
     
     if (not is_multisite()):
         return 1
     # end if
-    current_network = get_network()
-    if (not (php_isset(lambda : current_network.id))):
+    current_network_ = get_network()
+    if (not (php_isset(lambda : current_network_.id))):
         return get_main_network_id()
     # end if
-    return absint(current_network.id)
+    return absint(current_network_.id)
 # end def get_current_network_id
 #// 
 #// Attempt an early load of translations.
@@ -1020,15 +1052,16 @@ def get_current_network_id(*args_):
 #// 
 #// @staticvar bool $loaded
 #//
-def wp_load_translations_early(*args_):
+def wp_load_translations_early(*_args_):
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    wp_load_translations_early.loaded = False
-    if wp_load_translations_early.loaded:
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    loaded_ = False
+    if loaded_:
         return
     # end if
-    wp_load_translations_early.loaded = True
+    loaded_ = True
     if php_function_exists("did_action") and did_action("init"):
         return
     # end if
@@ -1041,8 +1074,8 @@ def wp_load_translations_early(*args_):
     php_include_file(ABSPATH + WPINC + "/class-wp-locale-switcher.php", once=True)
     #// General libraries.
     php_include_file(ABSPATH + WPINC + "/plugin.php", once=True)
-    locales = Array()
-    locations = Array()
+    locales_ = Array()
+    locations_ = Array()
     while True:
         
         if not (True):
@@ -1052,36 +1085,36 @@ def wp_load_translations_early(*args_):
             if "" == WPLANG:
                 break
             # end if
-            locales[-1] = WPLANG
+            locales_[-1] = WPLANG
         # end if
-        if (php_isset(lambda : wp_local_package)):
-            locales[-1] = wp_local_package
+        if (php_isset(lambda : wp_local_package_)):
+            locales_[-1] = wp_local_package_
         # end if
-        if (not locales):
+        if (not locales_):
             break
         # end if
         if php_defined("WP_LANG_DIR") and php_no_error(lambda: php_is_dir(WP_LANG_DIR)):
-            locations[-1] = WP_LANG_DIR
+            locations_[-1] = WP_LANG_DIR
         # end if
         if php_defined("WP_CONTENT_DIR") and php_no_error(lambda: php_is_dir(WP_CONTENT_DIR + "/languages")):
-            locations[-1] = WP_CONTENT_DIR + "/languages"
+            locations_[-1] = WP_CONTENT_DIR + "/languages"
         # end if
         if php_no_error(lambda: php_is_dir(ABSPATH + "wp-content/languages")):
-            locations[-1] = ABSPATH + "wp-content/languages"
+            locations_[-1] = ABSPATH + "wp-content/languages"
         # end if
         if php_no_error(lambda: php_is_dir(ABSPATH + WPINC + "/languages")):
-            locations[-1] = ABSPATH + WPINC + "/languages"
+            locations_[-1] = ABSPATH + WPINC + "/languages"
         # end if
-        if (not locations):
+        if (not locations_):
             break
         # end if
-        locations = array_unique(locations)
-        for locale in locales:
-            for location in locations:
-                if php_file_exists(location + "/" + locale + ".mo"):
-                    load_textdomain("default", location + "/" + locale + ".mo")
-                    if php_defined("WP_SETUP_CONFIG") and php_file_exists(location + "/admin-" + locale + ".mo"):
-                        load_textdomain("default", location + "/admin-" + locale + ".mo")
+        locations_ = array_unique(locations_)
+        for locale_ in locales_:
+            for location_ in locations_:
+                if php_file_exists(location_ + "/" + locale_ + ".mo"):
+                    load_textdomain("default", location_ + "/" + locale_ + ".mo")
+                    if php_defined("WP_SETUP_CONFIG") and php_file_exists(location_ + "/admin-" + locale_ + ".mo"):
+                        load_textdomain("default", location_ + "/admin-" + locale_ + ".mo")
                     # end if
                     break
                 # end if
@@ -1089,7 +1122,7 @@ def wp_load_translations_early(*args_):
         # end for
         break
     # end while
-    wp_locale = php_new_class("WP_Locale", lambda : WP_Locale())
+    wp_locale_ = php_new_class("WP_Locale", lambda : WP_Locale())
 # end def wp_load_translations_early
 #// 
 #// Check or set whether WordPress is in "installation" mode.
@@ -1105,19 +1138,20 @@ def wp_load_translations_early(*args_):
 #// @return bool True if WP is installing, otherwise false. When a `$is_installing` is passed, the function will
 #// report whether WP was in installing mode prior to the change to `$is_installing`.
 #//
-def wp_installing(is_installing=None, *args_):
+def wp_installing(is_installing_=None, *_args_):
     
-    wp_installing.installing = None
+    
+    installing_ = None
     #// Support for the `WP_INSTALLING` constant, defined before WP is loaded.
-    if is_null(wp_installing.installing):
-        wp_installing.installing = php_defined("WP_INSTALLING") and WP_INSTALLING
+    if is_null(installing_):
+        installing_ = php_defined("WP_INSTALLING") and WP_INSTALLING
     # end if
-    if (not is_null(is_installing)):
-        old_installing = wp_installing.installing
-        wp_installing.installing = is_installing
-        return php_bool(old_installing)
+    if (not is_null(is_installing_)):
+        old_installing_ = installing_
+        installing_ = is_installing_
+        return php_bool(old_installing_)
     # end if
-    return php_bool(wp_installing.installing)
+    return php_bool(installing_)
 # end def wp_installing
 #// 
 #// Determines if SSL is used.
@@ -1127,7 +1161,8 @@ def wp_installing(is_installing=None, *args_):
 #// 
 #// @return bool True if SSL, otherwise false.
 #//
-def is_ssl(*args_):
+def is_ssl(*_args_):
+    
     
     if (php_isset(lambda : PHP_SERVER["HTTPS"])):
         if "on" == php_strtolower(PHP_SERVER["HTTPS"]):
@@ -1153,19 +1188,20 @@ def is_ssl(*args_):
 #// @param string $value A (PHP ini) byte value, either shorthand or ordinary.
 #// @return int An integer byte value.
 #//
-def wp_convert_hr_to_bytes(value=None, *args_):
+def wp_convert_hr_to_bytes(value_=None, *_args_):
     
-    value = php_strtolower(php_trim(value))
-    bytes = php_int(value)
-    if False != php_strpos(value, "g"):
-        bytes *= GB_IN_BYTES
-    elif False != php_strpos(value, "m"):
-        bytes *= MB_IN_BYTES
-    elif False != php_strpos(value, "k"):
-        bytes *= KB_IN_BYTES
+    
+    value_ = php_strtolower(php_trim(value_))
+    bytes_ = php_int(value_)
+    if False != php_strpos(value_, "g"):
+        bytes_ *= GB_IN_BYTES
+    elif False != php_strpos(value_, "m"):
+        bytes_ *= MB_IN_BYTES
+    elif False != php_strpos(value_, "k"):
+        bytes_ *= KB_IN_BYTES
     # end if
     #// Deal with large (float) values which run into the maximum integer size.
-    return php_min(bytes, PHP_INT_MAX)
+    return php_min(bytes_, PHP_INT_MAX)
 # end def wp_convert_hr_to_bytes
 #// 
 #// Determines whether a PHP ini value is changeable at runtime.
@@ -1179,22 +1215,23 @@ def wp_convert_hr_to_bytes(value=None, *args_):
 #// @param string $setting The name of the ini setting to check.
 #// @return bool True if the value is changeable at runtime. False otherwise.
 #//
-def wp_is_ini_value_changeable(setting=None, *args_):
+def wp_is_ini_value_changeable(setting_=None, *_args_):
     
-    wp_is_ini_value_changeable.ini_all = None
-    if (not (php_isset(lambda : wp_is_ini_value_changeable.ini_all))):
-        wp_is_ini_value_changeable.ini_all = False
+    
+    ini_all_ = None
+    if (not (php_isset(lambda : ini_all_))):
+        ini_all_ = False
         #// Sometimes `ini_get_all()` is disabled via the `disable_functions` option for "security purposes".
         if php_function_exists("ini_get_all"):
-            wp_is_ini_value_changeable.ini_all = php_ini_get_all()
+            ini_all_ = php_ini_get_all()
         # end if
     # end if
     #// Bit operator to workaround https://bugs.php.net/bug.php?id=44936 which changes access level to 63 in PHP 5.2.6 - 5.2.17.
-    if (php_isset(lambda : wp_is_ini_value_changeable.ini_all[setting]["access"])) and INI_ALL == wp_is_ini_value_changeable.ini_all[setting]["access"] & 7 or INI_USER == wp_is_ini_value_changeable.ini_all[setting]["access"] & 7:
+    if (php_isset(lambda : ini_all_[setting_]["access"])) and INI_ALL == ini_all_[setting_]["access"] & 7 or INI_USER == ini_all_[setting_]["access"] & 7:
         return True
     # end if
     #// If we were unable to retrieve the details, fail gracefully to assume it's changeable.
-    if (not php_is_array(wp_is_ini_value_changeable.ini_all)):
+    if (not php_is_array(ini_all_)):
         return True
     # end if
     return False
@@ -1206,7 +1243,8 @@ def wp_is_ini_value_changeable(setting=None, *args_):
 #// 
 #// @return bool True if it's a WordPress Ajax request, false otherwise.
 #//
-def wp_doing_ajax(*args_):
+def wp_doing_ajax(*_args_):
+    
     
     #// 
     #// Filters whether the current request is a WordPress Ajax request.
@@ -1224,7 +1262,8 @@ def wp_doing_ajax(*args_):
 #// 
 #// @return bool True if themes should be used, false otherwise.
 #//
-def wp_using_themes(*args_):
+def wp_using_themes(*_args_):
+    
     
     #// 
     #// Filters whether the current request should use themes.
@@ -1242,7 +1281,8 @@ def wp_using_themes(*args_):
 #// 
 #// @return bool True if it's a WordPress cron request, false otherwise.
 #//
-def wp_doing_cron(*args_):
+def wp_doing_cron(*_args_):
+    
     
     #// 
     #// Filters whether the current request is a WordPress cron request.
@@ -1263,9 +1303,10 @@ def wp_doing_cron(*args_):
 #// @param mixed $thing Check if unknown variable is a WP_Error object.
 #// @return bool True, if WP_Error. False, if not WP_Error.
 #//
-def is_wp_error(thing=None, *args_):
+def is_wp_error(thing_=None, *_args_):
     
-    return type(thing).__name__ == "WP_Error"
+    
+    return type(thing_).__name__ == "WP_Error"
 # end def is_wp_error
 #// 
 #// Determines whether file modifications are allowed.
@@ -1275,7 +1316,8 @@ def is_wp_error(thing=None, *args_):
 #// @param string $context The usage context.
 #// @return bool True if file modification is allowed, false otherwise.
 #//
-def wp_is_file_mod_allowed(context=None, *args_):
+def wp_is_file_mod_allowed(context_=None, *_args_):
+    
     
     #// 
     #// Filters whether file modifications are allowed.
@@ -1285,30 +1327,31 @@ def wp_is_file_mod_allowed(context=None, *args_):
     #// @param bool   $file_mod_allowed Whether file modifications are allowed.
     #// @param string $context          The usage context.
     #//
-    return apply_filters("file_mod_allowed", (not php_defined("DISALLOW_FILE_MODS")) or (not DISALLOW_FILE_MODS), context)
+    return apply_filters("file_mod_allowed", (not php_defined("DISALLOW_FILE_MODS")) or (not DISALLOW_FILE_MODS), context_)
 # end def wp_is_file_mod_allowed
 #// 
 #// Start scraping edited file errors.
 #// 
 #// @since 4.9.0
 #//
-def wp_start_scraping_edited_file_errors(*args_):
+def wp_start_scraping_edited_file_errors(*_args_):
+    
     
     if (not (php_isset(lambda : PHP_REQUEST["wp_scrape_key"]))) or (not (php_isset(lambda : PHP_REQUEST["wp_scrape_nonce"]))):
         return
     # end if
-    key = php_substr(sanitize_key(wp_unslash(PHP_REQUEST["wp_scrape_key"])), 0, 32)
-    nonce = wp_unslash(PHP_REQUEST["wp_scrape_nonce"])
-    if get_transient("scrape_key_" + key) != nonce:
-        php_print(str("###### wp_scraping_result_start:") + str(key) + str(" ######"))
+    key_ = php_substr(sanitize_key(wp_unslash(PHP_REQUEST["wp_scrape_key"])), 0, 32)
+    nonce_ = wp_unslash(PHP_REQUEST["wp_scrape_nonce"])
+    if get_transient("scrape_key_" + key_) != nonce_:
+        php_print(str("###### wp_scraping_result_start:") + str(key_) + str(" ######"))
         php_print(wp_json_encode(Array({"code": "scrape_nonce_failure", "message": __("Scrape nonce check failed. Please try again.")})))
-        php_print(str("###### wp_scraping_result_end:") + str(key) + str(" ######"))
+        php_print(str("###### wp_scraping_result_end:") + str(key_) + str(" ######"))
         php_exit(0)
     # end if
     if (not php_defined("WP_SANDBOX_SCRAPING")):
         php_define("WP_SANDBOX_SCRAPING", True)
     # end if
-    php_register_shutdown_function("wp_finalize_scraping_edited_file_errors", key)
+    php_register_shutdown_function("wp_finalize_scraping_edited_file_errors", key_)
 # end def wp_start_scraping_edited_file_errors
 #// 
 #// Finalize scraping for edited file errors.
@@ -1317,17 +1360,18 @@ def wp_start_scraping_edited_file_errors(*args_):
 #// 
 #// @param string $scrape_key Scrape key.
 #//
-def wp_finalize_scraping_edited_file_errors(scrape_key=None, *args_):
+def wp_finalize_scraping_edited_file_errors(scrape_key_=None, *_args_):
     
-    error = error_get_last()
-    php_print(str("\n###### wp_scraping_result_start:") + str(scrape_key) + str(" ######\n"))
-    if (not php_empty(lambda : error)) and php_in_array(error["type"], Array(E_CORE_ERROR, E_COMPILE_ERROR, E_ERROR, E_PARSE, E_USER_ERROR, E_RECOVERABLE_ERROR), True):
-        error = php_str_replace(ABSPATH, "", error)
-        php_print(wp_json_encode(error))
+    
+    error_ = error_get_last()
+    php_print(str("\n###### wp_scraping_result_start:") + str(scrape_key_) + str(" ######\n"))
+    if (not php_empty(lambda : error_)) and php_in_array(error_["type"], Array(E_CORE_ERROR, E_COMPILE_ERROR, E_ERROR, E_PARSE, E_USER_ERROR, E_RECOVERABLE_ERROR), True):
+        error_ = php_str_replace(ABSPATH, "", error_)
+        php_print(wp_json_encode(error_))
     else:
         php_print(wp_json_encode(True))
     # end if
-    php_print(str("\n###### wp_scraping_result_end:") + str(scrape_key) + str(" ######\n"))
+    php_print(str("\n###### wp_scraping_result_end:") + str(scrape_key_) + str(" ######\n"))
 # end def wp_finalize_scraping_edited_file_errors
 #// 
 #// Checks whether current request is a JSON request, or is expecting a JSON response.
@@ -1337,7 +1381,8 @@ def wp_finalize_scraping_edited_file_errors(scrape_key=None, *args_):
 #// @return bool True if `Accepts` or `Content-Type` headers contain `application/json`.
 #// False otherwise.
 #//
-def wp_is_json_request(*args_):
+def wp_is_json_request(*_args_):
+    
     
     if (php_isset(lambda : PHP_SERVER["HTTP_ACCEPT"])) and False != php_strpos(PHP_SERVER["HTTP_ACCEPT"], "application/json"):
         return True
@@ -1354,7 +1399,8 @@ def wp_is_json_request(*args_):
 #// 
 #// @return bool True if JSONP request, false otherwise.
 #//
-def wp_is_jsonp_request(*args_):
+def wp_is_jsonp_request(*_args_):
+    
     
     if (not (php_isset(lambda : PHP_REQUEST["_jsonp"]))):
         return False
@@ -1362,13 +1408,13 @@ def wp_is_jsonp_request(*args_):
     if (not php_function_exists("wp_check_jsonp_callback")):
         php_include_file(ABSPATH + WPINC + "/functions.php", once=True)
     # end if
-    jsonp_callback = PHP_REQUEST["_jsonp"]
-    if (not wp_check_jsonp_callback(jsonp_callback)):
+    jsonp_callback_ = PHP_REQUEST["_jsonp"]
+    if (not wp_check_jsonp_callback(jsonp_callback_)):
         return False
     # end if
     #// This filter is documented in wp-includes/rest-api/class-wp-rest-server.php
-    jsonp_enabled = apply_filters("rest_jsonp_enabled", True)
-    return jsonp_enabled
+    jsonp_enabled_ = apply_filters("rest_jsonp_enabled", True)
+    return jsonp_enabled_
 # end def wp_is_jsonp_request
 #// 
 #// Checks whether current request is an XML request, or is expecting an XML response.
@@ -1378,17 +1424,18 @@ def wp_is_jsonp_request(*args_):
 #// @return bool True if `Accepts` or `Content-Type` headers contain `text/xml`
 #// or one of the related MIME types. False otherwise.
 #//
-def wp_is_xml_request(*args_):
+def wp_is_xml_request(*_args_):
     
-    accepted = Array("text/xml", "application/rss+xml", "application/atom+xml", "application/rdf+xml", "text/xml+oembed", "application/xml+oembed")
+    
+    accepted_ = Array("text/xml", "application/rss+xml", "application/atom+xml", "application/rdf+xml", "text/xml+oembed", "application/xml+oembed")
     if (php_isset(lambda : PHP_SERVER["HTTP_ACCEPT"])):
-        for type in accepted:
-            if False != php_strpos(PHP_SERVER["HTTP_ACCEPT"], type):
+        for type_ in accepted_:
+            if False != php_strpos(PHP_SERVER["HTTP_ACCEPT"], type_):
                 return True
             # end if
         # end for
     # end if
-    if (php_isset(lambda : PHP_SERVER["CONTENT_TYPE"])) and php_in_array(PHP_SERVER["CONTENT_TYPE"], accepted, True):
+    if (php_isset(lambda : PHP_SERVER["CONTENT_TYPE"])) and php_in_array(PHP_SERVER["CONTENT_TYPE"], accepted_, True):
         return True
     # end if
     return False

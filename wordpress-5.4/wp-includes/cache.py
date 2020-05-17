@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -38,11 +33,12 @@ php_include_file(ABSPATH + WPINC + "/class-wp-object-cache.php", once=True)
 #// Default 0 (no expiration).
 #// @return bool True on success, false if cache key and group already exist.
 #//
-def wp_cache_add(key=None, data=None, group="", expire=0, *args_):
+def wp_cache_add(key_=None, data_=None, group_="", expire_=0, *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.add(key, data, group, php_int(expire))
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.add(key_, data_, group_, php_int(expire_))
 # end def wp_cache_add
 #// 
 #// Closes the cache.
@@ -57,7 +53,8 @@ def wp_cache_add(key=None, data=None, group="", expire=0, *args_):
 #// 
 #// @return true Always returns true.
 #//
-def wp_cache_close(*args_):
+def wp_cache_close(*_args_):
+    
     
     return True
 # end def wp_cache_close
@@ -74,11 +71,12 @@ def wp_cache_close(*args_):
 #// @param string     $group  Optional. The group the key is in. Default empty.
 #// @return int|false The item's new value on success, false on failure.
 #//
-def wp_cache_decr(key=None, offset=1, group="", *args_):
+def wp_cache_decr(key_=None, offset_=1, group_="", *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.decr(key, offset, group)
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.decr(key_, offset_, group_)
 # end def wp_cache_decr
 #// 
 #// Removes the cache contents matching key and group.
@@ -92,11 +90,12 @@ def wp_cache_decr(key=None, offset=1, group="", *args_):
 #// @param string     $group Optional. Where the cache contents are grouped. Default empty.
 #// @return bool True on successful removal, false on failure.
 #//
-def wp_cache_delete(key=None, group="", *args_):
+def wp_cache_delete(key_=None, group_="", *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.delete(key, group)
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.delete(key_, group_)
 # end def wp_cache_delete
 #// 
 #// Removes all cache items.
@@ -108,11 +107,12 @@ def wp_cache_delete(key=None, group="", *args_):
 #// 
 #// @return bool True on success, false on failure.
 #//
-def wp_cache_flush(*args_):
+def wp_cache_flush(*_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.flush()
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.flush()
 # end def wp_cache_flush
 #// 
 #// Retrieves the cache contents from the cache by key and group.
@@ -131,11 +131,14 @@ def wp_cache_flush(*args_):
 #// @return bool|mixed False on failure to retrieve contents or the cache
 #// contents on success
 #//
-def wp_cache_get(key=None, group="", force=False, found=None, *args_):
+def wp_cache_get(key_=None, group_="", force_=None, found_=None, *_args_):
+    if force_ is None:
+        force_ = False
+    # end if
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.get(key, group, force, found)
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.get(key_, group_, force_, found_)
 # end def wp_cache_get
 #// 
 #// Increment numeric cache item's value
@@ -150,11 +153,12 @@ def wp_cache_get(key=None, group="", force=False, found=None, *args_):
 #// @param string     $group  Optional. The group the key is in. Default empty.
 #// @return int|false The item's new value on success, false on failure.
 #//
-def wp_cache_incr(key=None, offset=1, group="", *args_):
+def wp_cache_incr(key_=None, offset_=1, group_="", *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.incr(key, offset, group)
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.incr(key_, offset_, group_)
 # end def wp_cache_incr
 #// 
 #// Sets up Object Cache Global and assigns it.
@@ -163,7 +167,8 @@ def wp_cache_incr(key=None, offset=1, group="", *args_):
 #// 
 #// @global WP_Object_Cache $wp_object_cache
 #//
-def wp_cache_init(*args_):
+def wp_cache_init(*_args_):
+    
     global PHP_GLOBALS
     PHP_GLOBALS["wp_object_cache"] = php_new_class("WP_Object_Cache", lambda : WP_Object_Cache())
 # end def wp_cache_init
@@ -183,11 +188,12 @@ def wp_cache_init(*args_):
 #// Default 0 (no expiration).
 #// @return bool False if original value does not exist, true if contents were replaced
 #//
-def wp_cache_replace(key=None, data=None, group="", expire=0, *args_):
+def wp_cache_replace(key_=None, data_=None, group_="", expire_=0, *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.replace(key, data, group, php_int(expire))
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.replace(key_, data_, group_, php_int(expire_))
 # end def wp_cache_replace
 #// 
 #// Saves the data to the cache.
@@ -207,11 +213,12 @@ def wp_cache_replace(key=None, data=None, group="", expire=0, *args_):
 #// Default 0 (no expiration).
 #// @return bool True on success, false on failure.
 #//
-def wp_cache_set(key=None, data=None, group="", expire=0, *args_):
+def wp_cache_set(key_=None, data_=None, group_="", expire_=0, *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    return wp_object_cache.set(key, data, group, php_int(expire))
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    return wp_object_cache_.set(key_, data_, group_, php_int(expire_))
 # end def wp_cache_set
 #// 
 #// Switches the internal blog ID.
@@ -225,11 +232,12 @@ def wp_cache_set(key=None, data=None, group="", expire=0, *args_):
 #// 
 #// @param int $blog_id Site ID.
 #//
-def wp_cache_switch_to_blog(blog_id=None, *args_):
+def wp_cache_switch_to_blog(blog_id_=None, *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    wp_object_cache.switch_to_blog(blog_id)
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    wp_object_cache_.switch_to_blog(blog_id_)
 # end def wp_cache_switch_to_blog
 #// 
 #// Adds a group or set of groups to the list of global groups.
@@ -241,11 +249,12 @@ def wp_cache_switch_to_blog(blog_id=None, *args_):
 #// 
 #// @param string|array $groups A group or an array of groups to add.
 #//
-def wp_cache_add_global_groups(groups=None, *args_):
+def wp_cache_add_global_groups(groups_=None, *_args_):
     
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    wp_object_cache.add_global_groups(groups)
+    
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    wp_object_cache_.add_global_groups(groups_)
 # end def wp_cache_add_global_groups
 #// 
 #// Adds a group or set of groups to the list of non-persistent groups.
@@ -254,7 +263,8 @@ def wp_cache_add_global_groups(groups=None, *args_):
 #// 
 #// @param string|array $groups A group or an array of groups to add.
 #//
-def wp_cache_add_non_persistent_groups(groups=None, *args_):
+def wp_cache_add_non_persistent_groups(groups_=None, *_args_):
+    
     
     pass
 # end def wp_cache_add_non_persistent_groups
@@ -277,10 +287,11 @@ def wp_cache_add_non_persistent_groups(groups=None, *args_):
 #// 
 #// @global WP_Object_Cache $wp_object_cache Object cache global instance.
 #//
-def wp_cache_reset(*args_):
+def wp_cache_reset(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.5.0", "WP_Object_Cache::reset()")
-    global wp_object_cache
-    php_check_if_defined("wp_object_cache")
-    wp_object_cache.reset()
+    global wp_object_cache_
+    php_check_if_defined("wp_object_cache_")
+    wp_object_cache_.reset()
 # end def wp_cache_reset

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,132 +18,132 @@ php_include_file(__DIR__ + "/admin.php", once=True)
 if (not current_user_can("edit_posts")):
     wp_die("<h1>" + __("You need a higher level of permission.") + "</h1>" + "<p>" + __("Sorry, you are not allowed to edit comments.") + "</p>", 403)
 # end if
-wp_list_table = _get_list_table("WP_Comments_List_Table")
-pagenum = wp_list_table.get_pagenum()
-doaction = wp_list_table.current_action()
-if doaction:
+wp_list_table_ = _get_list_table("WP_Comments_List_Table")
+pagenum_ = wp_list_table_.get_pagenum()
+doaction_ = wp_list_table_.current_action()
+if doaction_:
     check_admin_referer("bulk-comments")
-    if "delete_all" == doaction and (not php_empty(lambda : PHP_REQUEST["pagegen_timestamp"])):
-        comment_status = wp_unslash(PHP_REQUEST["comment_status"])
-        delete_time = wp_unslash(PHP_REQUEST["pagegen_timestamp"])
-        comment_ids = wpdb.get_col(wpdb.prepare(str("SELECT comment_ID FROM ") + str(wpdb.comments) + str(" WHERE comment_approved = %s AND %s > comment_date_gmt"), comment_status, delete_time))
-        doaction = "delete"
+    if "delete_all" == doaction_ and (not php_empty(lambda : PHP_REQUEST["pagegen_timestamp"])):
+        comment_status_ = wp_unslash(PHP_REQUEST["comment_status"])
+        delete_time_ = wp_unslash(PHP_REQUEST["pagegen_timestamp"])
+        comment_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT comment_ID FROM ") + str(wpdb_.comments) + str(" WHERE comment_approved = %s AND %s > comment_date_gmt"), comment_status_, delete_time_))
+        doaction_ = "delete"
     elif (php_isset(lambda : PHP_REQUEST["delete_comments"])):
-        comment_ids = PHP_REQUEST["delete_comments"]
-        doaction = PHP_REQUEST["action"] if -1 != PHP_REQUEST["action"] else PHP_REQUEST["action2"]
+        comment_ids_ = PHP_REQUEST["delete_comments"]
+        doaction_ = PHP_REQUEST["action"] if -1 != PHP_REQUEST["action"] else PHP_REQUEST["action2"]
     elif (php_isset(lambda : PHP_REQUEST["ids"])):
-        comment_ids = php_array_map("absint", php_explode(",", PHP_REQUEST["ids"]))
+        comment_ids_ = php_array_map("absint", php_explode(",", PHP_REQUEST["ids"]))
     elif wp_get_referer():
         wp_safe_redirect(wp_get_referer())
         php_exit(0)
     # end if
-    approved = 0
-    unapproved = 0
-    spammed = 0
-    unspammed = 0
-    trashed = 0
-    untrashed = 0
-    deleted = 0
-    redirect_to = remove_query_arg(Array("trashed", "untrashed", "deleted", "spammed", "unspammed", "approved", "unapproved", "ids"), wp_get_referer())
-    redirect_to = add_query_arg("paged", pagenum, redirect_to)
+    approved_ = 0
+    unapproved_ = 0
+    spammed_ = 0
+    unspammed_ = 0
+    trashed_ = 0
+    untrashed_ = 0
+    deleted_ = 0
+    redirect_to_ = remove_query_arg(Array("trashed", "untrashed", "deleted", "spammed", "unspammed", "approved", "unapproved", "ids"), wp_get_referer())
+    redirect_to_ = add_query_arg("paged", pagenum_, redirect_to_)
     wp_defer_comment_counting(True)
-    for comment_id in comment_ids:
+    for comment_id_ in comment_ids_:
         #// Check the permissions on each.
-        if (not current_user_can("edit_comment", comment_id)):
+        if (not current_user_can("edit_comment", comment_id_)):
             continue
         # end if
-        for case in Switch(doaction):
+        for case in Switch(doaction_):
             if case("approve"):
-                wp_set_comment_status(comment_id, "approve")
-                approved += 1
+                wp_set_comment_status(comment_id_, "approve")
+                approved_ += 1
                 break
             # end if
             if case("unapprove"):
-                wp_set_comment_status(comment_id, "hold")
-                unapproved += 1
+                wp_set_comment_status(comment_id_, "hold")
+                unapproved_ += 1
                 break
             # end if
             if case("spam"):
-                wp_spam_comment(comment_id)
-                spammed += 1
+                wp_spam_comment(comment_id_)
+                spammed_ += 1
                 break
             # end if
             if case("unspam"):
-                wp_unspam_comment(comment_id)
-                unspammed += 1
+                wp_unspam_comment(comment_id_)
+                unspammed_ += 1
                 break
             # end if
             if case("trash"):
-                wp_trash_comment(comment_id)
-                trashed += 1
+                wp_trash_comment(comment_id_)
+                trashed_ += 1
                 break
             # end if
             if case("untrash"):
-                wp_untrash_comment(comment_id)
-                untrashed += 1
+                wp_untrash_comment(comment_id_)
+                untrashed_ += 1
                 break
             # end if
             if case("delete"):
-                wp_delete_comment(comment_id)
-                deleted += 1
+                wp_delete_comment(comment_id_)
+                deleted_ += 1
                 break
             # end if
         # end for
     # end for
-    if (not php_in_array(doaction, Array("approve", "unapprove", "spam", "unspam", "trash", "delete"), True)):
-        screen = get_current_screen().id
+    if (not php_in_array(doaction_, Array("approve", "unapprove", "spam", "unspam", "trash", "delete"), True)):
+        screen_ = get_current_screen().id
         #// This action is documented in wp-admin/edit.php
-        redirect_to = apply_filters(str("handle_bulk_actions-") + str(screen), redirect_to, doaction, comment_ids)
+        redirect_to_ = apply_filters(str("handle_bulk_actions-") + str(screen_), redirect_to_, doaction_, comment_ids_)
         pass
     # end if
     wp_defer_comment_counting(False)
-    if approved:
-        redirect_to = add_query_arg("approved", approved, redirect_to)
+    if approved_:
+        redirect_to_ = add_query_arg("approved", approved_, redirect_to_)
     # end if
-    if unapproved:
-        redirect_to = add_query_arg("unapproved", unapproved, redirect_to)
+    if unapproved_:
+        redirect_to_ = add_query_arg("unapproved", unapproved_, redirect_to_)
     # end if
-    if spammed:
-        redirect_to = add_query_arg("spammed", spammed, redirect_to)
+    if spammed_:
+        redirect_to_ = add_query_arg("spammed", spammed_, redirect_to_)
     # end if
-    if unspammed:
-        redirect_to = add_query_arg("unspammed", unspammed, redirect_to)
+    if unspammed_:
+        redirect_to_ = add_query_arg("unspammed", unspammed_, redirect_to_)
     # end if
-    if trashed:
-        redirect_to = add_query_arg("trashed", trashed, redirect_to)
+    if trashed_:
+        redirect_to_ = add_query_arg("trashed", trashed_, redirect_to_)
     # end if
-    if untrashed:
-        redirect_to = add_query_arg("untrashed", untrashed, redirect_to)
+    if untrashed_:
+        redirect_to_ = add_query_arg("untrashed", untrashed_, redirect_to_)
     # end if
-    if deleted:
-        redirect_to = add_query_arg("deleted", deleted, redirect_to)
+    if deleted_:
+        redirect_to_ = add_query_arg("deleted", deleted_, redirect_to_)
     # end if
-    if trashed or spammed:
-        redirect_to = add_query_arg("ids", join(",", comment_ids), redirect_to)
+    if trashed_ or spammed_:
+        redirect_to_ = add_query_arg("ids", join(",", comment_ids_), redirect_to_)
     # end if
-    wp_safe_redirect(redirect_to)
+    wp_safe_redirect(redirect_to_)
     php_exit(0)
 elif (not php_empty(lambda : PHP_REQUEST["_wp_http_referer"])):
     wp_redirect(remove_query_arg(Array("_wp_http_referer", "_wpnonce"), wp_unslash(PHP_SERVER["REQUEST_URI"])))
     php_exit(0)
 # end if
-wp_list_table.prepare_items()
+wp_list_table_.prepare_items()
 wp_enqueue_script("admin-comments")
 enqueue_comment_hotkeys_js()
-if post_id:
-    comments_count = wp_count_comments(post_id)
-    draft_or_post_title = wp_html_excerpt(_draft_or_post_title(post_id), 50, "&hellip;")
-    if comments_count.moderated > 0:
-        title = php_sprintf(__("Comments (%1$s) on &#8220;%2$s&#8221;"), number_format_i18n(comments_count.moderated), draft_or_post_title)
+if post_id_:
+    comments_count_ = wp_count_comments(post_id_)
+    draft_or_post_title_ = wp_html_excerpt(_draft_or_post_title(post_id_), 50, "&hellip;")
+    if comments_count_.moderated > 0:
+        title_ = php_sprintf(__("Comments (%1$s) on &#8220;%2$s&#8221;"), number_format_i18n(comments_count_.moderated), draft_or_post_title_)
     else:
-        title = php_sprintf(__("Comments on &#8220;%s&#8221;"), draft_or_post_title)
+        title_ = php_sprintf(__("Comments on &#8220;%s&#8221;"), draft_or_post_title_)
     # end if
 else:
-    comments_count = wp_count_comments()
-    if comments_count.moderated > 0:
-        title = php_sprintf(__("Comments (%s)"), number_format_i18n(comments_count.moderated))
+    comments_count_ = wp_count_comments()
+    if comments_count_.moderated > 0:
+        title_ = php_sprintf(__("Comments (%s)"), number_format_i18n(comments_count_.moderated))
     else:
-        title = __("Comments")
+        title_ = __("Comments")
     # end if
 # end if
 add_screen_option("per_page")
@@ -161,8 +156,8 @@ php_print("""
 <div class=\"wrap\">
 <h1 class=\"wp-heading-inline\">
 """)
-if post_id:
-    printf(__("Comments on &#8220;%s&#8221;"), php_sprintf("<a href=\"%1$s\">%2$s</a>", get_edit_post_link(post_id), wp_html_excerpt(_draft_or_post_title(post_id), 50, "&hellip;")))
+if post_id_:
+    printf(__("Comments on &#8220;%s&#8221;"), php_sprintf("<a href=\"%1$s\">%2$s</a>", get_edit_post_link(post_id_), wp_html_excerpt(_draft_or_post_title(post_id_), 50, "&hellip;")))
 else:
     _e("Comments")
 # end if
@@ -176,101 +171,101 @@ php_print("""
 <hr class=\"wp-header-end\">
 """)
 if (php_isset(lambda : PHP_REQUEST["error"])):
-    error = php_int(PHP_REQUEST["error"])
-    error_msg = ""
-    for case in Switch(error):
+    error_ = php_int(PHP_REQUEST["error"])
+    error_msg_ = ""
+    for case in Switch(error_):
         if case(1):
-            error_msg = __("Invalid comment ID.")
+            error_msg_ = __("Invalid comment ID.")
             break
         # end if
         if case(2):
-            error_msg = __("Sorry, you are not allowed to edit comments on this post.")
+            error_msg_ = __("Sorry, you are not allowed to edit comments on this post.")
             break
         # end if
     # end for
-    if error_msg:
-        php_print("<div id=\"moderated\" class=\"error\"><p>" + error_msg + "</p></div>")
+    if error_msg_:
+        php_print("<div id=\"moderated\" class=\"error\"><p>" + error_msg_ + "</p></div>")
     # end if
 # end if
 if (php_isset(lambda : PHP_REQUEST["approved"])) or (php_isset(lambda : PHP_REQUEST["deleted"])) or (php_isset(lambda : PHP_REQUEST["trashed"])) or (php_isset(lambda : PHP_REQUEST["untrashed"])) or (php_isset(lambda : PHP_REQUEST["spammed"])) or (php_isset(lambda : PHP_REQUEST["unspammed"])) or (php_isset(lambda : PHP_REQUEST["same"])):
-    approved = php_int(PHP_REQUEST["approved"]) if (php_isset(lambda : PHP_REQUEST["approved"])) else 0
-    deleted = php_int(PHP_REQUEST["deleted"]) if (php_isset(lambda : PHP_REQUEST["deleted"])) else 0
-    trashed = php_int(PHP_REQUEST["trashed"]) if (php_isset(lambda : PHP_REQUEST["trashed"])) else 0
-    untrashed = php_int(PHP_REQUEST["untrashed"]) if (php_isset(lambda : PHP_REQUEST["untrashed"])) else 0
-    spammed = php_int(PHP_REQUEST["spammed"]) if (php_isset(lambda : PHP_REQUEST["spammed"])) else 0
-    unspammed = php_int(PHP_REQUEST["unspammed"]) if (php_isset(lambda : PHP_REQUEST["unspammed"])) else 0
-    same = php_int(PHP_REQUEST["same"]) if (php_isset(lambda : PHP_REQUEST["same"])) else 0
-    if approved > 0 or deleted > 0 or trashed > 0 or untrashed > 0 or spammed > 0 or unspammed > 0 or same > 0:
-        if approved > 0:
+    approved_ = php_int(PHP_REQUEST["approved"]) if (php_isset(lambda : PHP_REQUEST["approved"])) else 0
+    deleted_ = php_int(PHP_REQUEST["deleted"]) if (php_isset(lambda : PHP_REQUEST["deleted"])) else 0
+    trashed_ = php_int(PHP_REQUEST["trashed"]) if (php_isset(lambda : PHP_REQUEST["trashed"])) else 0
+    untrashed_ = php_int(PHP_REQUEST["untrashed"]) if (php_isset(lambda : PHP_REQUEST["untrashed"])) else 0
+    spammed_ = php_int(PHP_REQUEST["spammed"]) if (php_isset(lambda : PHP_REQUEST["spammed"])) else 0
+    unspammed_ = php_int(PHP_REQUEST["unspammed"]) if (php_isset(lambda : PHP_REQUEST["unspammed"])) else 0
+    same_ = php_int(PHP_REQUEST["same"]) if (php_isset(lambda : PHP_REQUEST["same"])) else 0
+    if approved_ > 0 or deleted_ > 0 or trashed_ > 0 or untrashed_ > 0 or spammed_ > 0 or unspammed_ > 0 or same_ > 0:
+        if approved_ > 0:
             #// translators: %s: Number of comments.
-            messages[-1] = php_sprintf(_n("%s comment approved.", "%s comments approved.", approved), approved)
+            messages_[-1] = php_sprintf(_n("%s comment approved.", "%s comments approved.", approved_), approved_)
         # end if
-        if spammed > 0:
-            ids = PHP_REQUEST["ids"] if (php_isset(lambda : PHP_REQUEST["ids"])) else 0
+        if spammed_ > 0:
+            ids_ = PHP_REQUEST["ids"] if (php_isset(lambda : PHP_REQUEST["ids"])) else 0
             #// translators: %s: Number of comments.
-            messages[-1] = php_sprintf(_n("%s comment marked as spam.", "%s comments marked as spam.", spammed), spammed) + " <a href=\"" + esc_url(wp_nonce_url(str("edit-comments.php?doaction=undo&action=unspam&ids=") + str(ids), "bulk-comments")) + "\">" + __("Undo") + "</a><br />"
+            messages_[-1] = php_sprintf(_n("%s comment marked as spam.", "%s comments marked as spam.", spammed_), spammed_) + " <a href=\"" + esc_url(wp_nonce_url(str("edit-comments.php?doaction=undo&action=unspam&ids=") + str(ids_), "bulk-comments")) + "\">" + __("Undo") + "</a><br />"
         # end if
-        if unspammed > 0:
+        if unspammed_ > 0:
             #// translators: %s: Number of comments.
-            messages[-1] = php_sprintf(_n("%s comment restored from the spam.", "%s comments restored from the spam.", unspammed), unspammed)
+            messages_[-1] = php_sprintf(_n("%s comment restored from the spam.", "%s comments restored from the spam.", unspammed_), unspammed_)
         # end if
-        if trashed > 0:
-            ids = PHP_REQUEST["ids"] if (php_isset(lambda : PHP_REQUEST["ids"])) else 0
+        if trashed_ > 0:
+            ids_ = PHP_REQUEST["ids"] if (php_isset(lambda : PHP_REQUEST["ids"])) else 0
             #// translators: %s: Number of comments.
-            messages[-1] = php_sprintf(_n("%s comment moved to the Trash.", "%s comments moved to the Trash.", trashed), trashed) + " <a href=\"" + esc_url(wp_nonce_url(str("edit-comments.php?doaction=undo&action=untrash&ids=") + str(ids), "bulk-comments")) + "\">" + __("Undo") + "</a><br />"
+            messages_[-1] = php_sprintf(_n("%s comment moved to the Trash.", "%s comments moved to the Trash.", trashed_), trashed_) + " <a href=\"" + esc_url(wp_nonce_url(str("edit-comments.php?doaction=undo&action=untrash&ids=") + str(ids_), "bulk-comments")) + "\">" + __("Undo") + "</a><br />"
         # end if
-        if untrashed > 0:
+        if untrashed_ > 0:
             #// translators: %s: Number of comments.
-            messages[-1] = php_sprintf(_n("%s comment restored from the Trash.", "%s comments restored from the Trash.", untrashed), untrashed)
+            messages_[-1] = php_sprintf(_n("%s comment restored from the Trash.", "%s comments restored from the Trash.", untrashed_), untrashed_)
         # end if
-        if deleted > 0:
+        if deleted_ > 0:
             #// translators: %s: Number of comments.
-            messages[-1] = php_sprintf(_n("%s comment permanently deleted.", "%s comments permanently deleted.", deleted), deleted)
+            messages_[-1] = php_sprintf(_n("%s comment permanently deleted.", "%s comments permanently deleted.", deleted_), deleted_)
         # end if
-        if same > 0:
-            comment = get_comment(same)
-            if comment:
-                for case in Switch(comment.comment_approved):
+        if same_ > 0:
+            comment_ = get_comment(same_)
+            if comment_:
+                for case in Switch(comment_.comment_approved):
                     if case("1"):
-                        messages[-1] = __("This comment is already approved.") + " <a href=\"" + esc_url(admin_url(str("comment.php?action=editcomment&c=") + str(same))) + "\">" + __("Edit comment") + "</a>"
+                        messages_[-1] = __("This comment is already approved.") + " <a href=\"" + esc_url(admin_url(str("comment.php?action=editcomment&c=") + str(same_))) + "\">" + __("Edit comment") + "</a>"
                         break
                     # end if
                     if case("trash"):
-                        messages[-1] = __("This comment is already in the Trash.") + " <a href=\"" + esc_url(admin_url("edit-comments.php?comment_status=trash")) + "\"> " + __("View Trash") + "</a>"
+                        messages_[-1] = __("This comment is already in the Trash.") + " <a href=\"" + esc_url(admin_url("edit-comments.php?comment_status=trash")) + "\"> " + __("View Trash") + "</a>"
                         break
                     # end if
                     if case("spam"):
-                        messages[-1] = __("This comment is already marked as spam.") + " <a href=\"" + esc_url(admin_url(str("comment.php?action=editcomment&c=") + str(same))) + "\">" + __("Edit comment") + "</a>"
+                        messages_[-1] = __("This comment is already marked as spam.") + " <a href=\"" + esc_url(admin_url(str("comment.php?action=editcomment&c=") + str(same_))) + "\">" + __("Edit comment") + "</a>"
                         break
                     # end if
                 # end for
             # end if
         # end if
-        php_print("<div id=\"moderated\" class=\"updated notice is-dismissible\"><p>" + php_implode("<br/>\n", messages) + "</p></div>")
+        php_print("<div id=\"moderated\" class=\"updated notice is-dismissible\"><p>" + php_implode("<br/>\n", messages_) + "</p></div>")
     # end if
 # end if
 php_print("\n")
-wp_list_table.views()
+wp_list_table_.views()
 php_print("""
 <form id=\"comments-form\" method=\"get\">
 """)
-wp_list_table.search_box(__("Search Comments"), "comment")
+wp_list_table_.search_box(__("Search Comments"), "comment")
 php_print("\n")
-if post_id:
+if post_id_:
     php_print("<input type=\"hidden\" name=\"p\" value=\"")
-    php_print(esc_attr(php_intval(post_id)))
+    php_print(esc_attr(php_intval(post_id_)))
     php_print("\" />\n")
 # end if
 php_print("<input type=\"hidden\" name=\"comment_status\" value=\"")
-php_print(esc_attr(comment_status))
+php_print(esc_attr(comment_status_))
 php_print("\" />\n<input type=\"hidden\" name=\"pagegen_timestamp\" value=\"")
 php_print(esc_attr(current_time("mysql", 1)))
 php_print("\" />\n\n<input type=\"hidden\" name=\"_total\" value=\"")
-php_print(esc_attr(wp_list_table.get_pagination_arg("total_items")))
+php_print(esc_attr(wp_list_table_.get_pagination_arg("total_items")))
 php_print("\" />\n<input type=\"hidden\" name=\"_per_page\" value=\"")
-php_print(esc_attr(wp_list_table.get_pagination_arg("per_page")))
+php_print(esc_attr(wp_list_table_.get_pagination_arg("per_page")))
 php_print("\" />\n<input type=\"hidden\" name=\"_page\" value=\"")
-php_print(esc_attr(wp_list_table.get_pagination_arg("page")))
+php_print(esc_attr(wp_list_table_.get_pagination_arg("page")))
 php_print("\" />\n\n")
 if (php_isset(lambda : PHP_REQUEST["paged"])):
     php_print(" <input type=\"hidden\" name=\"paged\" value=\"")
@@ -278,7 +273,7 @@ if (php_isset(lambda : PHP_REQUEST["paged"])):
     php_print("\" />\n")
 # end if
 php_print("\n")
-wp_list_table.display()
+wp_list_table_.display()
 php_print("""</form>
 </div>
 <div id=\"ajax-response\"></div>

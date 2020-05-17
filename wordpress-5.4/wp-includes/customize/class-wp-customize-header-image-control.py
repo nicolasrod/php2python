@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,8 +22,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Image_Control
 #//
 class WP_Customize_Header_Image_Control(WP_Customize_Image_Control):
+    #// 
+    #// Customize control type.
+    #// 
+    #// @since 4.2.0
+    #// @var string
+    #//
     type = "header"
+    #// 
+    #// Uploaded header images.
+    #// 
+    #// @since 3.9.0
+    #// @var string
+    #//
     uploaded_headers = Array()
+    #// 
+    #// Default header images.
+    #// 
+    #// @since 3.9.0
+    #// @var string
+    #//
     default_headers = Array()
     #// 
     #// Constructor.
@@ -37,13 +50,15 @@ class WP_Customize_Header_Image_Control(WP_Customize_Image_Control):
     #// 
     #// @param WP_Customize_Manager $manager Customizer bootstrap instance.
     #//
-    def __init__(self, manager=None):
+    def __init__(self, manager_=None):
         
-        super().__init__(manager, "header_image", Array({"label": __("Header Image"), "settings": Array({"default": "header_image", "data": "header_image_data"})}, {"section": "header_image", "removed": "remove-header", "get_url": "get_header_image"}))
+        
+        super().__init__(manager_, "header_image", Array({"label": __("Header Image"), "settings": Array({"default": "header_image", "data": "header_image_data"})}, {"section": "header_image", "removed": "remove-header", "get_url": "get_header_image"}))
     # end def __init__
     #// 
     #//
     def enqueue(self):
+        
         
         wp_enqueue_media()
         wp_enqueue_script("customize-views")
@@ -56,20 +71,22 @@ class WP_Customize_Header_Image_Control(WP_Customize_Image_Control):
     #//
     def prepare_control(self):
         
-        global custom_image_header
-        php_check_if_defined("custom_image_header")
-        if php_empty(lambda : custom_image_header):
+        
+        global custom_image_header_
+        php_check_if_defined("custom_image_header_")
+        if php_empty(lambda : custom_image_header_):
             return
         # end if
         add_action("customize_controls_print_footer_scripts", Array(self, "print_header_image_template"))
         #// Process default headers and uploaded headers.
-        custom_image_header.process_default_headers()
-        self.default_headers = custom_image_header.get_default_header_images()
-        self.uploaded_headers = custom_image_header.get_uploaded_header_images()
+        custom_image_header_.process_default_headers()
+        self.default_headers = custom_image_header_.get_default_header_images()
+        self.uploaded_headers = custom_image_header_.get_uploaded_header_images()
     # end def prepare_control
     #// 
     #//
     def print_header_image_template(self):
+        
         
         php_print("""       <script type=\"text/template\" id=\"tmpl-header-choice\">
         <# if (data.random) { #>
@@ -127,19 +144,21 @@ class WP_Customize_Header_Image_Control(WP_Customize_Image_Control):
     #//
     def get_current_image_src(self):
         
-        src = self.value()
+        
+        src_ = self.value()
         if (php_isset(lambda : self.get_url)):
-            src = php_call_user_func(self.get_url, src)
-            return src
+            src_ = php_call_user_func(self.get_url, src_)
+            return src_
         # end if
     # end def get_current_image_src
     #// 
     #//
     def render_content(self):
         
-        visibility = "" if self.get_current_image_src() else " style=\"display:none\" "
-        width = absint(get_theme_support("custom-header", "width"))
-        height = absint(get_theme_support("custom-header", "height"))
+        
+        visibility_ = "" if self.get_current_image_src() else " style=\"display:none\" "
+        width_ = absint(get_theme_support("custom-header", "width"))
+        height_ = absint(get_theme_support("custom-header", "height"))
         php_print("     <div class=\"customize-control-content\">\n         ")
         if current_theme_supports("custom-header", "video"):
             php_print("<span class=\"customize-control-title\">" + self.label + "</span>")
@@ -147,12 +166,12 @@ class WP_Customize_Header_Image_Control(WP_Customize_Image_Control):
         php_print("         <div class=\"customize-control-notifications-container\"></div>\n           <p class=\"customizer-section-intro customize-control-description\">\n              ")
         if current_theme_supports("custom-header", "video"):
             _e("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image that matches the size of your video &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit.")
-        elif width and height:
-            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header size of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s &times; %s</strong>", width, height))
-        elif width:
-            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header width of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", width))
+        elif width_ and height_:
+            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header size of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s &times; %s</strong>", width_, height_))
+        elif width_:
+            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header width of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", width_))
         else:
-            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header height of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", height))
+            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header height of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", height_))
         # end if
         php_print("""           </p>
         <div class=\"current\">
@@ -169,7 +188,7 @@ class WP_Customize_Header_Image_Control(WP_Customize_Image_Control):
         """)
         if current_user_can("upload_files"):
             php_print("             <button type=\"button\"")
-            php_print(visibility)
+            php_print(visibility_)
             php_print(" class=\"button remove\" aria-label=\"")
             esc_attr_e("Hide header image")
             php_print("\">")

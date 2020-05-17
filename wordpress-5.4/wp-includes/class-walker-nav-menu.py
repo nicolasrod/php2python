@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,24 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see Walker
 #//
 class Walker_Nav_Menu(Walker):
+    #// 
+    #// What the class handles.
+    #// 
+    #// @since 3.0.0
+    #// @var string
+    #// 
+    #// @see Walker::$tree_type
+    #//
     tree_type = Array("post_type", "taxonomy", "custom")
+    #// 
+    #// Database fields to use.
+    #// 
+    #// @since 3.0.0
+    #// @todo Decouple this.
+    #// @var array
+    #// 
+    #// @see Walker::$db_fields
+    #//
     db_fields = Array({"parent": "menu_item_parent", "id": "db_id"})
     #// 
     #// Starts the list before the elements are added.
@@ -40,18 +52,19 @@ class Walker_Nav_Menu(Walker):
     #// @param int      $depth  Depth of menu item. Used for padding.
     #// @param stdClass $args   An object of wp_nav_menu() arguments.
     #//
-    def start_lvl(self, output=None, depth=0, args=None):
+    def start_lvl(self, output_=None, depth_=0, args_=None):
         
-        if (php_isset(lambda : args.item_spacing)) and "discard" == args.item_spacing:
-            t = ""
-            n = ""
+        
+        if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
+            t_ = ""
+            n_ = ""
         else:
-            t = "   "
-            n = "\n"
+            t_ = "  "
+            n_ = "\n"
         # end if
-        indent = php_str_repeat(t, depth)
+        indent_ = php_str_repeat(t_, depth_)
         #// Default class.
-        classes = Array("sub-menu")
+        classes_ = Array("sub-menu")
         #// 
         #// Filters the CSS class(es) applied to a menu list element.
         #// 
@@ -61,9 +74,9 @@ class Walker_Nav_Menu(Walker):
         #// @param stdClass $args    An object of `wp_nav_menu()` arguments.
         #// @param int      $depth   Depth of menu item. Used for padding.
         #//
-        class_names = join(" ", apply_filters("nav_menu_submenu_css_class", classes, args, depth))
-        class_names = " class=\"" + esc_attr(class_names) + "\"" if class_names else ""
-        output += str(n) + str(indent) + str("<ul") + str(class_names) + str(">") + str(n)
+        class_names_ = join(" ", apply_filters("nav_menu_submenu_css_class", classes_, args_, depth_))
+        class_names_ = " class=\"" + esc_attr(class_names_) + "\"" if class_names_ else ""
+        output_ += str(n_) + str(indent_) + str("<ul") + str(class_names_) + str(">") + str(n_)
     # end def start_lvl
     #// 
     #// Ends the list of after the elements are added.
@@ -76,17 +89,18 @@ class Walker_Nav_Menu(Walker):
     #// @param int      $depth  Depth of menu item. Used for padding.
     #// @param stdClass $args   An object of wp_nav_menu() arguments.
     #//
-    def end_lvl(self, output=None, depth=0, args=None):
+    def end_lvl(self, output_=None, depth_=0, args_=None):
         
-        if (php_isset(lambda : args.item_spacing)) and "discard" == args.item_spacing:
-            t = ""
-            n = ""
+        
+        if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
+            t_ = ""
+            n_ = ""
         else:
-            t = "   "
-            n = "\n"
+            t_ = "  "
+            n_ = "\n"
         # end if
-        indent = php_str_repeat(t, depth)
-        output += str(indent) + str("</ul>") + str(n)
+        indent_ = php_str_repeat(t_, depth_)
+        output_ += str(indent_) + str("</ul>") + str(n_)
     # end def end_lvl
     #// 
     #// Starts the element output.
@@ -102,18 +116,19 @@ class Walker_Nav_Menu(Walker):
     #// @param stdClass $args   An object of wp_nav_menu() arguments.
     #// @param int      $id     Current item ID.
     #//
-    def start_el(self, output=None, item=None, depth=0, args=None, id=0):
+    def start_el(self, output_=None, item_=None, depth_=0, args_=None, id_=0):
         
-        if (php_isset(lambda : args.item_spacing)) and "discard" == args.item_spacing:
-            t = ""
-            n = ""
+        
+        if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
+            t_ = ""
+            n_ = ""
         else:
-            t = "   "
-            n = "\n"
+            t_ = "  "
+            n_ = "\n"
         # end if
-        indent = php_str_repeat(t, depth) if depth else ""
-        classes = Array() if php_empty(lambda : item.classes) else item.classes
-        classes[-1] = "menu-item-" + item.ID
+        indent_ = php_str_repeat(t_, depth_) if depth_ else ""
+        classes_ = Array() if php_empty(lambda : item_.classes) else item_.classes
+        classes_[-1] = "menu-item-" + item_.ID
         #// 
         #// Filters the arguments for a single nav menu item.
         #// 
@@ -123,7 +138,7 @@ class Walker_Nav_Menu(Walker):
         #// @param WP_Post  $item  Menu item data object.
         #// @param int      $depth Depth of menu item. Used for padding.
         #//
-        args = apply_filters("nav_menu_item_args", args, item, depth)
+        args_ = apply_filters("nav_menu_item_args", args_, item_, depth_)
         #// 
         #// Filters the CSS classes applied to a menu item's list item element.
         #// 
@@ -135,8 +150,8 @@ class Walker_Nav_Menu(Walker):
         #// @param stdClass $args    An object of wp_nav_menu() arguments.
         #// @param int      $depth   Depth of menu item. Used for padding.
         #//
-        class_names = join(" ", apply_filters("nav_menu_css_class", php_array_filter(classes), item, args, depth))
-        class_names = " class=\"" + esc_attr(class_names) + "\"" if class_names else ""
+        class_names_ = join(" ", apply_filters("nav_menu_css_class", php_array_filter(classes_), item_, args_, depth_))
+        class_names_ = " class=\"" + esc_attr(class_names_) + "\"" if class_names_ else ""
         #// 
         #// Filters the ID applied to a menu item's list item element.
         #// 
@@ -148,19 +163,19 @@ class Walker_Nav_Menu(Walker):
         #// @param stdClass $args    An object of wp_nav_menu() arguments.
         #// @param int      $depth   Depth of menu item. Used for padding.
         #//
-        id = apply_filters("nav_menu_item_id", "menu-item-" + item.ID, item, args, depth)
-        id = " id=\"" + esc_attr(id) + "\"" if id else ""
-        output += indent + "<li" + id + class_names + ">"
-        atts = Array()
-        atts["title"] = item.attr_title if (not php_empty(lambda : item.attr_title)) else ""
-        atts["target"] = item.target if (not php_empty(lambda : item.target)) else ""
-        if "_blank" == item.target and php_empty(lambda : item.xfn):
-            atts["rel"] = "noopener noreferrer"
+        id_ = apply_filters("nav_menu_item_id", "menu-item-" + item_.ID, item_, args_, depth_)
+        id_ = " id=\"" + esc_attr(id_) + "\"" if id_ else ""
+        output_ += indent_ + "<li" + id_ + class_names_ + ">"
+        atts_ = Array()
+        atts_["title"] = item_.attr_title if (not php_empty(lambda : item_.attr_title)) else ""
+        atts_["target"] = item_.target if (not php_empty(lambda : item_.target)) else ""
+        if "_blank" == item_.target and php_empty(lambda : item_.xfn):
+            atts_["rel"] = "noopener noreferrer"
         else:
-            atts["rel"] = item.xfn
+            atts_["rel"] = item_.xfn
         # end if
-        atts["href"] = item.url if (not php_empty(lambda : item.url)) else ""
-        atts["aria-current"] = "page" if item.current else ""
+        atts_["href"] = item_.url if (not php_empty(lambda : item_.url)) else ""
+        atts_["aria-current"] = "page" if item_.current else ""
         #// 
         #// Filters the HTML attributes applied to a menu item's anchor element.
         #// 
@@ -180,16 +195,16 @@ class Walker_Nav_Menu(Walker):
         #// @param stdClass $args  An object of wp_nav_menu() arguments.
         #// @param int      $depth Depth of menu item. Used for padding.
         #//
-        atts = apply_filters("nav_menu_link_attributes", atts, item, args, depth)
-        attributes = ""
-        for attr,value in atts:
-            if is_scalar(value) and "" != value and False != value:
-                value = esc_url(value) if "href" == attr else esc_attr(value)
-                attributes += " " + attr + "=\"" + value + "\""
+        atts_ = apply_filters("nav_menu_link_attributes", atts_, item_, args_, depth_)
+        attributes_ = ""
+        for attr_,value_ in atts_:
+            if is_scalar(value_) and "" != value_ and False != value_:
+                value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
+                attributes_ += " " + attr_ + "=\"" + value_ + "\""
             # end if
         # end for
         #// This filter is documented in wp-includes/post-template.php
-        title = apply_filters("the_title", item.title, item.ID)
+        title_ = apply_filters("the_title", item_.title, item_.ID)
         #// 
         #// Filters a menu item's title.
         #// 
@@ -200,12 +215,12 @@ class Walker_Nav_Menu(Walker):
         #// @param stdClass $args  An object of wp_nav_menu() arguments.
         #// @param int      $depth Depth of menu item. Used for padding.
         #//
-        title = apply_filters("nav_menu_item_title", title, item, args, depth)
-        item_output = args.before
-        item_output += "<a" + attributes + ">"
-        item_output += args.link_before + title + args.link_after
-        item_output += "</a>"
-        item_output += args.after
+        title_ = apply_filters("nav_menu_item_title", title_, item_, args_, depth_)
+        item_output_ = args_.before
+        item_output_ += "<a" + attributes_ + ">"
+        item_output_ += args_.link_before + title_ + args_.link_after
+        item_output_ += "</a>"
+        item_output_ += args_.after
         #// 
         #// Filters a menu item's starting output.
         #// 
@@ -220,7 +235,7 @@ class Walker_Nav_Menu(Walker):
         #// @param int      $depth       Depth of menu item. Used for padding.
         #// @param stdClass $args        An object of wp_nav_menu() arguments.
         #//
-        output += apply_filters("walker_nav_menu_start_el", item_output, item, depth, args)
+        output_ += apply_filters("walker_nav_menu_start_el", item_output_, item_, depth_, args_)
     # end def start_el
     #// 
     #// Ends the element output, if needed.
@@ -234,15 +249,16 @@ class Walker_Nav_Menu(Walker):
     #// @param int      $depth  Depth of page. Not Used.
     #// @param stdClass $args   An object of wp_nav_menu() arguments.
     #//
-    def end_el(self, output=None, item=None, depth=0, args=None):
+    def end_el(self, output_=None, item_=None, depth_=0, args_=None):
         
-        if (php_isset(lambda : args.item_spacing)) and "discard" == args.item_spacing:
-            t = ""
-            n = ""
+        
+        if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
+            t_ = ""
+            n_ = ""
         else:
-            t = "   "
-            n = "\n"
+            t_ = "  "
+            n_ = "\n"
         # end if
-        output += str("</li>") + str(n)
+        output_ += str("</li>") + str(n_)
     # end def end_el
 # end class Walker_Nav_Menu

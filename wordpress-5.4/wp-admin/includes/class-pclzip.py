@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -89,7 +84,7 @@ if (not php_defined("PCLZIP_TEMPORARY_FILE_RATIO")):
 #// UNDER THIS LINE NOTHING NEEDS TO BE MODIFIED
 #// --------------------------------------------------------------------------------
 #// ----- Global variables
-g_pclzip_version = "2.8.2"
+g_pclzip_version_ = "2.8.2"
 #// ----- Error codes
 #// -1 : Unable to open file in binary write mode
 #// -2 : Unable to open file in binary read mode
@@ -192,10 +187,16 @@ php_define("PCLZIP_CB_POST_ADD", 78004)
 #// properties() : List the properties of the archive
 #// --------------------------------------------------------------------------------
 class PclZip():
+    #// ----- Filename of the zip file
     zipname = ""
+    #// ----- File descriptor of the zip file
     zip_fd = 0
+    #// ----- Internal error handling
     error_code = 1
     error_string = ""
+    #// ----- Current status of the magic_quotes_runtime
+    #// This value store the php configuration for magic_quotes
+    #// The class can then disable the magic_quotes and reset it after
     magic_quotes_status = Array()
     #// --------------------------------------------------------------------------------
     #// Function : PclZip()
@@ -205,7 +206,8 @@ class PclZip():
     #// Note that no real action is taken, if the archive does not exist it is not
     #// created. Use create() for that.
     #// --------------------------------------------------------------------------------
-    def __init__(self, p_zipname=None):
+    def __init__(self, p_zipname_=None):
+        
         
         #// ----- Tests the zlib
         if (not php_function_exists("gzopen")):
@@ -213,15 +215,16 @@ class PclZip():
             php_exit()
         # end if
         #// ----- Set the attributes
-        self.zipname = p_zipname
+        self.zipname = p_zipname_
         self.zip_fd = 0
         self.magic_quotes_status = -1
         #// ----- Return
         return
     # end def __init__
-    def pclzip(self, p_zipname=None):
+    def pclzip(self, p_zipname_=None):
         
-        self.__init__(p_zipname)
+        
+        self.__init__(p_zipname_)
     # end def pclzip
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -261,38 +264,39 @@ class PclZip():
     #// The list of the added files, with a status of the add action.
     #// (see PclZip::listContent() for list entry format)
     #// --------------------------------------------------------------------------------
-    def create(self, p_filelist=None):
+    def create(self, p_filelist_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Set default values
-        v_options = Array()
-        v_options[PCLZIP_OPT_NO_COMPRESSION] = False
+        v_options_ = Array()
+        v_options_[PCLZIP_OPT_NO_COMPRESSION] = False
         #// ----- Look for variable options arguments
-        v_size = php_func_num_args()
+        v_size_ = php_func_num_args()
         #// ----- Look for arguments
-        if v_size > 1:
+        if v_size_ > 1:
             #// ----- Get the arguments
-            v_arg_list = php_func_get_args()
+            v_arg_list_ = php_func_get_args()
             #// ----- Remove from the options list the first argument
-            php_array_shift(v_arg_list)
-            v_size -= 1
+            php_array_shift(v_arg_list_)
+            v_size_ -= 1
             #// ----- Look for first arg
-            if is_integer(v_arg_list[0]) and v_arg_list[0] > 77000:
+            if is_integer(v_arg_list_[0]) and v_arg_list_[0] > 77000:
                 #// ----- Parse the options
-                v_result = self.privparseoptions(v_arg_list, v_size, v_options, Array({PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_ADD: "optional", PCLZIP_CB_POST_ADD: "optional", PCLZIP_OPT_NO_COMPRESSION: "optional", PCLZIP_OPT_COMMENT: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
-                if v_result != 1:
+                v_result_ = self.privparseoptions(v_arg_list_, v_size_, v_options_, Array({PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_ADD: "optional", PCLZIP_CB_POST_ADD: "optional", PCLZIP_OPT_NO_COMPRESSION: "optional", PCLZIP_OPT_COMMENT: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
+                if v_result_ != 1:
                     return 0
                 # end if
             else:
                 #// ----- Get the first argument
-                v_options[PCLZIP_OPT_ADD_PATH] = v_arg_list[0]
+                v_options_[PCLZIP_OPT_ADD_PATH] = v_arg_list_[0]
                 #// ----- Look for the optional second argument
-                if v_size == 2:
-                    v_options[PCLZIP_OPT_REMOVE_PATH] = v_arg_list[1]
+                if v_size_ == 2:
+                    v_options_[PCLZIP_OPT_REMOVE_PATH] = v_arg_list_[1]
                 else:
-                    if v_size > 2:
+                    if v_size_ > 2:
                         PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid number / type of arguments")
                         return 0
                     # end if
@@ -300,58 +304,58 @@ class PclZip():
             # end if
         # end if
         #// ----- Look for default option values
-        self.privoptiondefaultthreshold(v_options)
+        self.privoptiondefaultthreshold(v_options_)
         #// ----- Init
-        v_string_list = Array()
-        v_att_list = Array()
-        v_filedescr_list = Array()
-        p_result_list = Array()
+        v_string_list_ = Array()
+        v_att_list_ = Array()
+        v_filedescr_list_ = Array()
+        p_result_list_ = Array()
         #// ----- Look if the $p_filelist is really an array
-        if php_is_array(p_filelist):
+        if php_is_array(p_filelist_):
             #// ----- Look if the first element is also an array
             #// This will mean that this is a file description entry
-            if (php_isset(lambda : p_filelist[0])) and php_is_array(p_filelist[0]):
-                v_att_list = p_filelist
+            if (php_isset(lambda : p_filelist_[0])) and php_is_array(p_filelist_[0]):
+                v_att_list_ = p_filelist_
             else:
-                v_string_list = p_filelist
+                v_string_list_ = p_filelist_
             # end if
         else:
-            if php_is_string(p_filelist):
+            if php_is_string(p_filelist_):
                 #// ----- Create a list from the string
-                v_string_list = php_explode(PCLZIP_SEPARATOR, p_filelist)
+                v_string_list_ = php_explode(PCLZIP_SEPARATOR, p_filelist_)
             else:
                 PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_filelist")
                 return 0
             # end if
         # end if
         #// ----- Reformat the string list
-        if sizeof(v_string_list) != 0:
-            for v_string in v_string_list:
-                if v_string != "":
-                    v_att_list[-1][PCLZIP_ATT_FILE_NAME] = v_string
+        if sizeof(v_string_list_) != 0:
+            for v_string_ in v_string_list_:
+                if v_string_ != "":
+                    v_att_list_[-1][PCLZIP_ATT_FILE_NAME] = v_string_
                 # end if
             # end for
         # end if
         #// ----- For each file in the list check the attributes
-        v_supported_attributes = Array({PCLZIP_ATT_FILE_NAME: "mandatory", PCLZIP_ATT_FILE_NEW_SHORT_NAME: "optional", PCLZIP_ATT_FILE_NEW_FULL_NAME: "optional", PCLZIP_ATT_FILE_MTIME: "optional", PCLZIP_ATT_FILE_CONTENT: "optional", PCLZIP_ATT_FILE_COMMENT: "optional"})
-        for v_entry in v_att_list:
-            v_result = self.privfiledescrparseatt(v_entry, v_filedescr_list[-1], v_options, v_supported_attributes)
-            if v_result != 1:
+        v_supported_attributes_ = Array({PCLZIP_ATT_FILE_NAME: "mandatory", PCLZIP_ATT_FILE_NEW_SHORT_NAME: "optional", PCLZIP_ATT_FILE_NEW_FULL_NAME: "optional", PCLZIP_ATT_FILE_MTIME: "optional", PCLZIP_ATT_FILE_CONTENT: "optional", PCLZIP_ATT_FILE_COMMENT: "optional"})
+        for v_entry_ in v_att_list_:
+            v_result_ = self.privfiledescrparseatt(v_entry_, v_filedescr_list_[-1], v_options_, v_supported_attributes_)
+            if v_result_ != 1:
                 return 0
             # end if
         # end for
         #// ----- Expand the filelist (expand directories)
-        v_result = self.privfiledescrexpand(v_filedescr_list, v_options)
-        if v_result != 1:
+        v_result_ = self.privfiledescrexpand(v_filedescr_list_, v_options_)
+        if v_result_ != 1:
             return 0
         # end if
         #// ----- Call the create fct
-        v_result = self.privcreate(v_filedescr_list, p_result_list, v_options)
-        if v_result != 1:
+        v_result_ = self.privcreate(v_filedescr_list_, p_result_list_, v_options_)
+        if v_result_ != 1:
             return 0
         # end if
         #// ----- Return
-        return p_result_list
+        return p_result_list_
     # end def create
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -389,38 +393,39 @@ class PclZip():
     #// The list of the added files, with a status of the add action.
     #// (see PclZip::listContent() for list entry format)
     #// --------------------------------------------------------------------------------
-    def add(self, p_filelist=None):
+    def add(self, p_filelist_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Set default values
-        v_options = Array()
-        v_options[PCLZIP_OPT_NO_COMPRESSION] = False
+        v_options_ = Array()
+        v_options_[PCLZIP_OPT_NO_COMPRESSION] = False
         #// ----- Look for variable options arguments
-        v_size = php_func_num_args()
+        v_size_ = php_func_num_args()
         #// ----- Look for arguments
-        if v_size > 1:
+        if v_size_ > 1:
             #// ----- Get the arguments
-            v_arg_list = php_func_get_args()
+            v_arg_list_ = php_func_get_args()
             #// ----- Remove form the options list the first argument
-            php_array_shift(v_arg_list)
-            v_size -= 1
+            php_array_shift(v_arg_list_)
+            v_size_ -= 1
             #// ----- Look for first arg
-            if is_integer(v_arg_list[0]) and v_arg_list[0] > 77000:
+            if is_integer(v_arg_list_[0]) and v_arg_list_[0] > 77000:
                 #// ----- Parse the options
-                v_result = self.privparseoptions(v_arg_list, v_size, v_options, Array({PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_ADD: "optional", PCLZIP_CB_POST_ADD: "optional", PCLZIP_OPT_NO_COMPRESSION: "optional", PCLZIP_OPT_COMMENT: "optional", PCLZIP_OPT_ADD_COMMENT: "optional", PCLZIP_OPT_PREPEND_COMMENT: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
-                if v_result != 1:
+                v_result_ = self.privparseoptions(v_arg_list_, v_size_, v_options_, Array({PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_ADD: "optional", PCLZIP_CB_POST_ADD: "optional", PCLZIP_OPT_NO_COMPRESSION: "optional", PCLZIP_OPT_COMMENT: "optional", PCLZIP_OPT_ADD_COMMENT: "optional", PCLZIP_OPT_PREPEND_COMMENT: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
+                if v_result_ != 1:
                     return 0
                 # end if
             else:
                 #// ----- Get the first argument
-                v_options[PCLZIP_OPT_ADD_PATH] = v_add_path
+                v_options_[PCLZIP_OPT_ADD_PATH] = v_add_path_
                 #// ----- Look for the optional second argument
-                if v_size == 2:
-                    v_options[PCLZIP_OPT_REMOVE_PATH] = v_arg_list[1]
+                if v_size_ == 2:
+                    v_options_[PCLZIP_OPT_REMOVE_PATH] = v_arg_list_[1]
                 else:
-                    if v_size > 2:
+                    if v_size_ > 2:
                         #// ----- Error log
                         PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid number / type of arguments")
                         #// ----- Return
@@ -430,56 +435,56 @@ class PclZip():
             # end if
         # end if
         #// ----- Look for default option values
-        self.privoptiondefaultthreshold(v_options)
+        self.privoptiondefaultthreshold(v_options_)
         #// ----- Init
-        v_string_list = Array()
-        v_att_list = Array()
-        v_filedescr_list = Array()
-        p_result_list = Array()
+        v_string_list_ = Array()
+        v_att_list_ = Array()
+        v_filedescr_list_ = Array()
+        p_result_list_ = Array()
         #// ----- Look if the $p_filelist is really an array
-        if php_is_array(p_filelist):
+        if php_is_array(p_filelist_):
             #// ----- Look if the first element is also an array
             #// This will mean that this is a file description entry
-            if (php_isset(lambda : p_filelist[0])) and php_is_array(p_filelist[0]):
-                v_att_list = p_filelist
+            if (php_isset(lambda : p_filelist_[0])) and php_is_array(p_filelist_[0]):
+                v_att_list_ = p_filelist_
             else:
-                v_string_list = p_filelist
+                v_string_list_ = p_filelist_
             # end if
         else:
-            if php_is_string(p_filelist):
+            if php_is_string(p_filelist_):
                 #// ----- Create a list from the string
-                v_string_list = php_explode(PCLZIP_SEPARATOR, p_filelist)
+                v_string_list_ = php_explode(PCLZIP_SEPARATOR, p_filelist_)
             else:
-                PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type '" + gettype(p_filelist) + "' for p_filelist")
+                PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type '" + gettype(p_filelist_) + "' for p_filelist")
                 return 0
             # end if
         # end if
         #// ----- Reformat the string list
-        if sizeof(v_string_list) != 0:
-            for v_string in v_string_list:
-                v_att_list[-1][PCLZIP_ATT_FILE_NAME] = v_string
+        if sizeof(v_string_list_) != 0:
+            for v_string_ in v_string_list_:
+                v_att_list_[-1][PCLZIP_ATT_FILE_NAME] = v_string_
             # end for
         # end if
         #// ----- For each file in the list check the attributes
-        v_supported_attributes = Array({PCLZIP_ATT_FILE_NAME: "mandatory", PCLZIP_ATT_FILE_NEW_SHORT_NAME: "optional", PCLZIP_ATT_FILE_NEW_FULL_NAME: "optional", PCLZIP_ATT_FILE_MTIME: "optional", PCLZIP_ATT_FILE_CONTENT: "optional", PCLZIP_ATT_FILE_COMMENT: "optional"})
-        for v_entry in v_att_list:
-            v_result = self.privfiledescrparseatt(v_entry, v_filedescr_list[-1], v_options, v_supported_attributes)
-            if v_result != 1:
+        v_supported_attributes_ = Array({PCLZIP_ATT_FILE_NAME: "mandatory", PCLZIP_ATT_FILE_NEW_SHORT_NAME: "optional", PCLZIP_ATT_FILE_NEW_FULL_NAME: "optional", PCLZIP_ATT_FILE_MTIME: "optional", PCLZIP_ATT_FILE_CONTENT: "optional", PCLZIP_ATT_FILE_COMMENT: "optional"})
+        for v_entry_ in v_att_list_:
+            v_result_ = self.privfiledescrparseatt(v_entry_, v_filedescr_list_[-1], v_options_, v_supported_attributes_)
+            if v_result_ != 1:
                 return 0
             # end if
         # end for
         #// ----- Expand the filelist (expand directories)
-        v_result = self.privfiledescrexpand(v_filedescr_list, v_options)
-        if v_result != 1:
+        v_result_ = self.privfiledescrexpand(v_filedescr_list_, v_options_)
+        if v_result_ != 1:
             return 0
         # end if
         #// ----- Call the create fct
-        v_result = self.privadd(v_filedescr_list, p_result_list, v_options)
-        if v_result != 1:
+        v_result_ = self.privadd(v_filedescr_list_, p_result_list_, v_options_)
+        if v_result_ != 1:
             return 0
         # end if
         #// ----- Return
-        return p_result_list
+        return p_result_list_
     # end def add
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -525,7 +530,8 @@ class PclZip():
     #// --------------------------------------------------------------------------------
     def listcontent(self):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Check archive
@@ -533,14 +539,14 @@ class PclZip():
             return 0
         # end if
         #// ----- Call the extracting fct
-        p_list = Array()
-        v_result = self.privlist(p_list)
-        if v_result != 1:
-            p_list = None
+        p_list_ = Array()
+        v_result_ = self.privlist(p_list_)
+        if v_result_ != 1:
+            p_list_ = None
             return 0
         # end if
         #// ----- Return
-        return p_list
+        return p_list_
     # end def listcontent
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -577,7 +583,8 @@ class PclZip():
     #// --------------------------------------------------------------------------------
     def extract(self):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Check archive
@@ -585,51 +592,51 @@ class PclZip():
             return 0
         # end if
         #// ----- Set default values
-        v_options = Array()
+        v_options_ = Array()
         #// $v_path = "./";
-        v_path = ""
-        v_remove_path = ""
-        v_remove_all_path = False
+        v_path_ = ""
+        v_remove_path_ = ""
+        v_remove_all_path_ = False
         #// ----- Look for variable options arguments
-        v_size = php_func_num_args()
+        v_size_ = php_func_num_args()
         #// ----- Default values for option
-        v_options[PCLZIP_OPT_EXTRACT_AS_STRING] = False
+        v_options_[PCLZIP_OPT_EXTRACT_AS_STRING] = False
         #// ----- Look for arguments
-        if v_size > 0:
+        if v_size_ > 0:
             #// ----- Get the arguments
-            v_arg_list = php_func_get_args()
+            v_arg_list_ = php_func_get_args()
             #// ----- Look for first arg
-            if is_integer(v_arg_list[0]) and v_arg_list[0] > 77000:
+            if is_integer(v_arg_list_[0]) and v_arg_list_[0] > 77000:
                 #// ----- Parse the options
-                v_result = self.privparseoptions(v_arg_list, v_size, v_options, Array({PCLZIP_OPT_PATH: "optional", PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_EXTRACT: "optional", PCLZIP_CB_POST_EXTRACT: "optional", PCLZIP_OPT_SET_CHMOD: "optional", PCLZIP_OPT_BY_NAME: "optional", PCLZIP_OPT_BY_EREG: "optional", PCLZIP_OPT_BY_PREG: "optional", PCLZIP_OPT_BY_INDEX: "optional", PCLZIP_OPT_EXTRACT_AS_STRING: "optional", PCLZIP_OPT_EXTRACT_IN_OUTPUT: "optional", PCLZIP_OPT_REPLACE_NEWER: "optional", PCLZIP_OPT_STOP_ON_ERROR: "optional", PCLZIP_OPT_EXTRACT_DIR_RESTRICTION: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
-                if v_result != 1:
+                v_result_ = self.privparseoptions(v_arg_list_, v_size_, v_options_, Array({PCLZIP_OPT_PATH: "optional", PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_EXTRACT: "optional", PCLZIP_CB_POST_EXTRACT: "optional", PCLZIP_OPT_SET_CHMOD: "optional", PCLZIP_OPT_BY_NAME: "optional", PCLZIP_OPT_BY_EREG: "optional", PCLZIP_OPT_BY_PREG: "optional", PCLZIP_OPT_BY_INDEX: "optional", PCLZIP_OPT_EXTRACT_AS_STRING: "optional", PCLZIP_OPT_EXTRACT_IN_OUTPUT: "optional", PCLZIP_OPT_REPLACE_NEWER: "optional", PCLZIP_OPT_STOP_ON_ERROR: "optional", PCLZIP_OPT_EXTRACT_DIR_RESTRICTION: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
+                if v_result_ != 1:
                     return 0
                 # end if
                 #// ----- Set the arguments
-                if (php_isset(lambda : v_options[PCLZIP_OPT_PATH])):
-                    v_path = v_options[PCLZIP_OPT_PATH]
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_PATH])):
+                    v_path_ = v_options_[PCLZIP_OPT_PATH]
                 # end if
-                if (php_isset(lambda : v_options[PCLZIP_OPT_REMOVE_PATH])):
-                    v_remove_path = v_options[PCLZIP_OPT_REMOVE_PATH]
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_REMOVE_PATH])):
+                    v_remove_path_ = v_options_[PCLZIP_OPT_REMOVE_PATH]
                 # end if
-                if (php_isset(lambda : v_options[PCLZIP_OPT_REMOVE_ALL_PATH])):
-                    v_remove_all_path = v_options[PCLZIP_OPT_REMOVE_ALL_PATH]
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_REMOVE_ALL_PATH])):
+                    v_remove_all_path_ = v_options_[PCLZIP_OPT_REMOVE_ALL_PATH]
                 # end if
-                if (php_isset(lambda : v_options[PCLZIP_OPT_ADD_PATH])):
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_ADD_PATH])):
                     #// ----- Check for '/' in last path char
-                    if php_strlen(v_path) > 0 and php_substr(v_path, -1) != "/":
-                        v_path += "/"
+                    if php_strlen(v_path_) > 0 and php_substr(v_path_, -1) != "/":
+                        v_path_ += "/"
                     # end if
-                    v_path += v_options[PCLZIP_OPT_ADD_PATH]
+                    v_path_ += v_options_[PCLZIP_OPT_ADD_PATH]
                 # end if
             else:
                 #// ----- Get the first argument
-                v_path = v_arg_list[0]
+                v_path_ = v_arg_list_[0]
                 #// ----- Look for the optional second argument
-                if v_size == 2:
-                    v_remove_path = v_arg_list[1]
+                if v_size_ == 2:
+                    v_remove_path_ = v_arg_list_[1]
                 else:
-                    if v_size > 2:
+                    if v_size_ > 2:
                         #// ----- Error log
                         PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid number / type of arguments")
                         #// ----- Return
@@ -639,17 +646,17 @@ class PclZip():
             # end if
         # end if
         #// ----- Look for default option values
-        self.privoptiondefaultthreshold(v_options)
+        self.privoptiondefaultthreshold(v_options_)
         #// ----- Trace
         #// ----- Call the extracting fct
-        p_list = Array()
-        v_result = self.privextractbyrule(p_list, v_path, v_remove_path, v_remove_all_path, v_options)
-        if v_result < 1:
-            p_list = None
+        p_list_ = Array()
+        v_result_ = self.privextractbyrule(p_list_, v_path_, v_remove_path_, v_remove_all_path_, v_options_)
+        if v_result_ < 1:
+            p_list_ = None
             return 0
         # end if
         #// ----- Return
-        return p_list
+        return p_list_
     # end def extract
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -689,9 +696,10 @@ class PclZip():
     #// (see PclZip::listContent() for list entry format)
     #// --------------------------------------------------------------------------------
     #// function extractByIndex($p_index, options...)
-    def extractbyindex(self, p_index=None):
+    def extractbyindex(self, p_index_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Check archive
@@ -699,57 +707,57 @@ class PclZip():
             return 0
         # end if
         #// ----- Set default values
-        v_options = Array()
+        v_options_ = Array()
         #// $v_path = "./";
-        v_path = ""
-        v_remove_path = ""
-        v_remove_all_path = False
+        v_path_ = ""
+        v_remove_path_ = ""
+        v_remove_all_path_ = False
         #// ----- Look for variable options arguments
-        v_size = php_func_num_args()
+        v_size_ = php_func_num_args()
         #// ----- Default values for option
-        v_options[PCLZIP_OPT_EXTRACT_AS_STRING] = False
+        v_options_[PCLZIP_OPT_EXTRACT_AS_STRING] = False
         #// ----- Look for arguments
-        if v_size > 1:
+        if v_size_ > 1:
             #// ----- Get the arguments
-            v_arg_list = php_func_get_args()
+            v_arg_list_ = php_func_get_args()
             #// ----- Remove form the options list the first argument
-            php_array_shift(v_arg_list)
-            v_size -= 1
+            php_array_shift(v_arg_list_)
+            v_size_ -= 1
             #// ----- Look for first arg
-            if is_integer(v_arg_list[0]) and v_arg_list[0] > 77000:
+            if is_integer(v_arg_list_[0]) and v_arg_list_[0] > 77000:
                 #// ----- Parse the options
-                v_result = self.privparseoptions(v_arg_list, v_size, v_options, Array({PCLZIP_OPT_PATH: "optional", PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_EXTRACT_AS_STRING: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_EXTRACT: "optional", PCLZIP_CB_POST_EXTRACT: "optional", PCLZIP_OPT_SET_CHMOD: "optional", PCLZIP_OPT_REPLACE_NEWER: "optional", PCLZIP_OPT_STOP_ON_ERROR: "optional", PCLZIP_OPT_EXTRACT_DIR_RESTRICTION: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
-                if v_result != 1:
+                v_result_ = self.privparseoptions(v_arg_list_, v_size_, v_options_, Array({PCLZIP_OPT_PATH: "optional", PCLZIP_OPT_REMOVE_PATH: "optional", PCLZIP_OPT_REMOVE_ALL_PATH: "optional", PCLZIP_OPT_EXTRACT_AS_STRING: "optional", PCLZIP_OPT_ADD_PATH: "optional", PCLZIP_CB_PRE_EXTRACT: "optional", PCLZIP_CB_POST_EXTRACT: "optional", PCLZIP_OPT_SET_CHMOD: "optional", PCLZIP_OPT_REPLACE_NEWER: "optional", PCLZIP_OPT_STOP_ON_ERROR: "optional", PCLZIP_OPT_EXTRACT_DIR_RESTRICTION: "optional", PCLZIP_OPT_TEMP_FILE_THRESHOLD: "optional", PCLZIP_OPT_TEMP_FILE_ON: "optional", PCLZIP_OPT_TEMP_FILE_OFF: "optional"}))
+                if v_result_ != 1:
                     return 0
                 # end if
                 #// ----- Set the arguments
-                if (php_isset(lambda : v_options[PCLZIP_OPT_PATH])):
-                    v_path = v_options[PCLZIP_OPT_PATH]
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_PATH])):
+                    v_path_ = v_options_[PCLZIP_OPT_PATH]
                 # end if
-                if (php_isset(lambda : v_options[PCLZIP_OPT_REMOVE_PATH])):
-                    v_remove_path = v_options[PCLZIP_OPT_REMOVE_PATH]
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_REMOVE_PATH])):
+                    v_remove_path_ = v_options_[PCLZIP_OPT_REMOVE_PATH]
                 # end if
-                if (php_isset(lambda : v_options[PCLZIP_OPT_REMOVE_ALL_PATH])):
-                    v_remove_all_path = v_options[PCLZIP_OPT_REMOVE_ALL_PATH]
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_REMOVE_ALL_PATH])):
+                    v_remove_all_path_ = v_options_[PCLZIP_OPT_REMOVE_ALL_PATH]
                 # end if
-                if (php_isset(lambda : v_options[PCLZIP_OPT_ADD_PATH])):
+                if (php_isset(lambda : v_options_[PCLZIP_OPT_ADD_PATH])):
                     #// ----- Check for '/' in last path char
-                    if php_strlen(v_path) > 0 and php_substr(v_path, -1) != "/":
-                        v_path += "/"
+                    if php_strlen(v_path_) > 0 and php_substr(v_path_, -1) != "/":
+                        v_path_ += "/"
                     # end if
-                    v_path += v_options[PCLZIP_OPT_ADD_PATH]
+                    v_path_ += v_options_[PCLZIP_OPT_ADD_PATH]
                 # end if
-                if (not (php_isset(lambda : v_options[PCLZIP_OPT_EXTRACT_AS_STRING]))):
-                    v_options[PCLZIP_OPT_EXTRACT_AS_STRING] = False
+                if (not (php_isset(lambda : v_options_[PCLZIP_OPT_EXTRACT_AS_STRING]))):
+                    v_options_[PCLZIP_OPT_EXTRACT_AS_STRING] = False
                 # end if
             else:
                 #// ----- Get the first argument
-                v_path = v_arg_list[0]
+                v_path_ = v_arg_list_[0]
                 #// ----- Look for the optional second argument
-                if v_size == 2:
-                    v_remove_path = v_arg_list[1]
+                if v_size_ == 2:
+                    v_remove_path_ = v_arg_list_[1]
                 else:
-                    if v_size > 2:
+                    if v_size_ > 2:
                         #// ----- Error log
                         PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid number / type of arguments")
                         #// ----- Return
@@ -762,22 +770,22 @@ class PclZip():
         #// ----- Trick
         #// Here I want to reuse extractByRule(), so I need to parse the $p_index
         #// with privParseOptions()
-        v_arg_trick = Array(PCLZIP_OPT_BY_INDEX, p_index)
-        v_options_trick = Array()
-        v_result = self.privparseoptions(v_arg_trick, sizeof(v_arg_trick), v_options_trick, Array({PCLZIP_OPT_BY_INDEX: "optional"}))
-        if v_result != 1:
+        v_arg_trick_ = Array(PCLZIP_OPT_BY_INDEX, p_index_)
+        v_options_trick_ = Array()
+        v_result_ = self.privparseoptions(v_arg_trick_, sizeof(v_arg_trick_), v_options_trick_, Array({PCLZIP_OPT_BY_INDEX: "optional"}))
+        if v_result_ != 1:
             return 0
         # end if
-        v_options[PCLZIP_OPT_BY_INDEX] = v_options_trick[PCLZIP_OPT_BY_INDEX]
+        v_options_[PCLZIP_OPT_BY_INDEX] = v_options_trick_[PCLZIP_OPT_BY_INDEX]
         #// ----- Look for default option values
-        self.privoptiondefaultthreshold(v_options)
+        self.privoptiondefaultthreshold(v_options_)
         #// ----- Call the extracting fct
-        v_result = self.privextractbyrule(p_list, v_path, v_remove_path, v_remove_all_path, v_options)
-        if v_result < 1:
+        v_result_ = self.privextractbyrule(p_list_, v_path_, v_remove_path_, v_remove_all_path_, v_options_)
+        if v_result_ < 1:
             return 0
         # end if
         #// ----- Return
-        return p_list
+        return p_list_
     # end def extractbyindex
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -800,7 +808,8 @@ class PclZip():
     #// --------------------------------------------------------------------------------
     def delete(self):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Check archive
@@ -808,33 +817,33 @@ class PclZip():
             return 0
         # end if
         #// ----- Set default values
-        v_options = Array()
+        v_options_ = Array()
         #// ----- Look for variable options arguments
-        v_size = php_func_num_args()
+        v_size_ = php_func_num_args()
         #// ----- Look for arguments
-        if v_size > 0:
+        if v_size_ > 0:
             #// ----- Get the arguments
-            v_arg_list = php_func_get_args()
+            v_arg_list_ = php_func_get_args()
             #// ----- Parse the options
-            v_result = self.privparseoptions(v_arg_list, v_size, v_options, Array({PCLZIP_OPT_BY_NAME: "optional", PCLZIP_OPT_BY_EREG: "optional", PCLZIP_OPT_BY_PREG: "optional", PCLZIP_OPT_BY_INDEX: "optional"}))
-            if v_result != 1:
+            v_result_ = self.privparseoptions(v_arg_list_, v_size_, v_options_, Array({PCLZIP_OPT_BY_NAME: "optional", PCLZIP_OPT_BY_EREG: "optional", PCLZIP_OPT_BY_PREG: "optional", PCLZIP_OPT_BY_INDEX: "optional"}))
+            if v_result_ != 1:
                 return 0
             # end if
         # end if
         #// ----- Magic quotes trick
         self.privdisablemagicquotes()
         #// ----- Call the delete fct
-        v_list = Array()
-        v_result = self.privdeletebyrule(v_list, v_options)
-        if v_result != 1:
+        v_list_ = Array()
+        v_result_ = self.privdeletebyrule(v_list_, v_options_)
+        if v_result_ != 1:
             self.privswapbackmagicquotes()
-            v_list = None
+            v_list_ = None
             return 0
         # end if
         #// ----- Magic quotes trick
         self.privswapbackmagicquotes()
         #// ----- Return
-        return v_list
+        return v_list_
     # end def delete
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -843,11 +852,12 @@ class PclZip():
     #// Deprecated
     #// delete(PCLZIP_OPT_BY_INDEX, $p_index) should be preferred.
     #// --------------------------------------------------------------------------------
-    def deletebyindex(self, p_index=None):
+    def deletebyindex(self, p_index_=None):
         
-        p_list = self.delete(PCLZIP_OPT_BY_INDEX, p_index)
+        
+        p_list_ = self.delete(PCLZIP_OPT_BY_INDEX, p_index_)
         #// ----- Return
-        return p_list
+        return p_list_
     # end def deletebyindex
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -866,6 +876,7 @@ class PclZip():
     #// --------------------------------------------------------------------------------
     def properties(self):
         
+        
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Magic quotes trick
@@ -876,10 +887,10 @@ class PclZip():
             return 0
         # end if
         #// ----- Default properties
-        v_prop = Array()
-        v_prop["comment"] = ""
-        v_prop["nb"] = 0
-        v_prop["status"] = "not_exist"
+        v_prop_ = Array()
+        v_prop_["comment"] = ""
+        v_prop_["nb"] = 0
+        v_prop_["status"] = "not_exist"
         #// ----- Look if file exists
         if php_no_error(lambda: php_is_file(self.zipname)):
             #// ----- Open the zip file
@@ -892,23 +903,23 @@ class PclZip():
                 return 0
             # end if
             #// ----- Read the central directory information
-            v_central_dir = Array()
-            v_result = self.privreadendcentraldir(v_central_dir)
-            if v_result != 1:
+            v_central_dir_ = Array()
+            v_result_ = self.privreadendcentraldir(v_central_dir_)
+            if v_result_ != 1:
                 self.privswapbackmagicquotes()
                 return 0
             # end if
             #// ----- Close the zip file
             self.privclosefd()
             #// ----- Set the user attributes
-            v_prop["comment"] = v_central_dir["comment"]
-            v_prop["nb"] = v_central_dir["entries"]
-            v_prop["status"] = "ok"
+            v_prop_["comment"] = v_central_dir_["comment"]
+            v_prop_["nb"] = v_central_dir_["entries"]
+            v_prop_["status"] = "ok"
         # end if
         #// ----- Magic quotes trick
         self.privswapbackmagicquotes()
         #// ----- Return
-        return v_prop
+        return v_prop_
     # end def properties
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -923,35 +934,36 @@ class PclZip():
     #// 1 on success.
     #// 0 or a negative value on error (error code).
     #// --------------------------------------------------------------------------------
-    def duplicate(self, p_archive=None):
+    def duplicate(self, p_archive_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Look if the $p_archive is a PclZip object
-        if php_is_object(p_archive) and get_class(p_archive) == "pclzip":
+        if php_is_object(p_archive_) and get_class(p_archive_) == "pclzip":
             #// ----- Duplicate the archive
-            v_result = self.privduplicate(p_archive.zipname)
+            v_result_ = self.privduplicate(p_archive_.zipname)
         else:
-            if php_is_string(p_archive):
+            if php_is_string(p_archive_):
                 #// ----- Check that $p_archive is a valid zip file
                 #// TBC : Should also check the archive format
-                if (not php_is_file(p_archive)):
+                if (not php_is_file(p_archive_)):
                     #// ----- Error log
-                    PclZip.priverrorlog(PCLZIP_ERR_MISSING_FILE, "No file with filename '" + p_archive + "'")
-                    v_result = PCLZIP_ERR_MISSING_FILE
+                    PclZip.priverrorlog(PCLZIP_ERR_MISSING_FILE, "No file with filename '" + p_archive_ + "'")
+                    v_result_ = PCLZIP_ERR_MISSING_FILE
                 else:
                     #// ----- Duplicate the archive
-                    v_result = self.privduplicate(p_archive)
+                    v_result_ = self.privduplicate(p_archive_)
                 # end if
             else:
                 #// ----- Error log
                 PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_archive_to_add")
-                v_result = PCLZIP_ERR_INVALID_PARAMETER
+                v_result_ = PCLZIP_ERR_INVALID_PARAMETER
             # end if
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def duplicate
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -968,9 +980,10 @@ class PclZip():
     #// 1 on success,
     #// 0 or negative values on error (see below).
     #// --------------------------------------------------------------------------------
-    def merge(self, p_archive_to_add=None):
+    def merge(self, p_archive_to_add_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Reset the error handler
         self.priverrorreset()
         #// ----- Check archive
@@ -978,23 +991,23 @@ class PclZip():
             return 0
         # end if
         #// ----- Look if the $p_archive_to_add is a PclZip object
-        if php_is_object(p_archive_to_add) and get_class(p_archive_to_add) == "pclzip":
+        if php_is_object(p_archive_to_add_) and get_class(p_archive_to_add_) == "pclzip":
             #// ----- Merge the archive
-            v_result = self.privmerge(p_archive_to_add)
+            v_result_ = self.privmerge(p_archive_to_add_)
         else:
-            if php_is_string(p_archive_to_add):
+            if php_is_string(p_archive_to_add_):
                 #// ----- Create a temporary archive
-                v_object_archive = php_new_class("PclZip", lambda : PclZip(p_archive_to_add))
+                v_object_archive_ = php_new_class("PclZip", lambda : PclZip(p_archive_to_add_))
                 #// ----- Merge the archive
-                v_result = self.privmerge(v_object_archive)
+                v_result_ = self.privmerge(v_object_archive_)
             else:
                 #// ----- Error log
                 PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_archive_to_add")
-                v_result = PCLZIP_ERR_INVALID_PARAMETER
+                v_result_ = PCLZIP_ERR_INVALID_PARAMETER
             # end if
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def merge
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1003,6 +1016,7 @@ class PclZip():
     #// Parameters :
     #// --------------------------------------------------------------------------------
     def errorcode(self):
+        
         
         if PCLZIP_ERROR_EXTERNAL == 1:
             return PclErrorCode()
@@ -1016,18 +1030,21 @@ class PclZip():
     #// Description :
     #// Parameters :
     #// --------------------------------------------------------------------------------
-    def errorname(self, p_with_code=False):
-        
-        v_name = Array({PCLZIP_ERR_NO_ERROR: "PCLZIP_ERR_NO_ERROR", PCLZIP_ERR_WRITE_OPEN_FAIL: "PCLZIP_ERR_WRITE_OPEN_FAIL", PCLZIP_ERR_READ_OPEN_FAIL: "PCLZIP_ERR_READ_OPEN_FAIL", PCLZIP_ERR_INVALID_PARAMETER: "PCLZIP_ERR_INVALID_PARAMETER", PCLZIP_ERR_MISSING_FILE: "PCLZIP_ERR_MISSING_FILE", PCLZIP_ERR_FILENAME_TOO_LONG: "PCLZIP_ERR_FILENAME_TOO_LONG", PCLZIP_ERR_INVALID_ZIP: "PCLZIP_ERR_INVALID_ZIP", PCLZIP_ERR_BAD_EXTRACTED_FILE: "PCLZIP_ERR_BAD_EXTRACTED_FILE", PCLZIP_ERR_DIR_CREATE_FAIL: "PCLZIP_ERR_DIR_CREATE_FAIL", PCLZIP_ERR_BAD_EXTENSION: "PCLZIP_ERR_BAD_EXTENSION", PCLZIP_ERR_BAD_FORMAT: "PCLZIP_ERR_BAD_FORMAT", PCLZIP_ERR_DELETE_FILE_FAIL: "PCLZIP_ERR_DELETE_FILE_FAIL", PCLZIP_ERR_RENAME_FILE_FAIL: "PCLZIP_ERR_RENAME_FILE_FAIL", PCLZIP_ERR_BAD_CHECKSUM: "PCLZIP_ERR_BAD_CHECKSUM", PCLZIP_ERR_INVALID_ARCHIVE_ZIP: "PCLZIP_ERR_INVALID_ARCHIVE_ZIP", PCLZIP_ERR_MISSING_OPTION_VALUE: "PCLZIP_ERR_MISSING_OPTION_VALUE", PCLZIP_ERR_INVALID_OPTION_VALUE: "PCLZIP_ERR_INVALID_OPTION_VALUE", PCLZIP_ERR_UNSUPPORTED_COMPRESSION: "PCLZIP_ERR_UNSUPPORTED_COMPRESSION", PCLZIP_ERR_UNSUPPORTED_ENCRYPTION: "PCLZIP_ERR_UNSUPPORTED_ENCRYPTION", PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE: "PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE", PCLZIP_ERR_DIRECTORY_RESTRICTION: "PCLZIP_ERR_DIRECTORY_RESTRICTION"})
-        if (php_isset(lambda : v_name[self.error_code])):
-            v_value = v_name[self.error_code]
-        else:
-            v_value = "NoName"
+    def errorname(self, p_with_code_=None):
+        if p_with_code_ is None:
+            p_with_code_ = False
         # end if
-        if p_with_code:
-            return v_value + " (" + self.error_code + ")"
+        
+        v_name_ = Array({PCLZIP_ERR_NO_ERROR: "PCLZIP_ERR_NO_ERROR", PCLZIP_ERR_WRITE_OPEN_FAIL: "PCLZIP_ERR_WRITE_OPEN_FAIL", PCLZIP_ERR_READ_OPEN_FAIL: "PCLZIP_ERR_READ_OPEN_FAIL", PCLZIP_ERR_INVALID_PARAMETER: "PCLZIP_ERR_INVALID_PARAMETER", PCLZIP_ERR_MISSING_FILE: "PCLZIP_ERR_MISSING_FILE", PCLZIP_ERR_FILENAME_TOO_LONG: "PCLZIP_ERR_FILENAME_TOO_LONG", PCLZIP_ERR_INVALID_ZIP: "PCLZIP_ERR_INVALID_ZIP", PCLZIP_ERR_BAD_EXTRACTED_FILE: "PCLZIP_ERR_BAD_EXTRACTED_FILE", PCLZIP_ERR_DIR_CREATE_FAIL: "PCLZIP_ERR_DIR_CREATE_FAIL", PCLZIP_ERR_BAD_EXTENSION: "PCLZIP_ERR_BAD_EXTENSION", PCLZIP_ERR_BAD_FORMAT: "PCLZIP_ERR_BAD_FORMAT", PCLZIP_ERR_DELETE_FILE_FAIL: "PCLZIP_ERR_DELETE_FILE_FAIL", PCLZIP_ERR_RENAME_FILE_FAIL: "PCLZIP_ERR_RENAME_FILE_FAIL", PCLZIP_ERR_BAD_CHECKSUM: "PCLZIP_ERR_BAD_CHECKSUM", PCLZIP_ERR_INVALID_ARCHIVE_ZIP: "PCLZIP_ERR_INVALID_ARCHIVE_ZIP", PCLZIP_ERR_MISSING_OPTION_VALUE: "PCLZIP_ERR_MISSING_OPTION_VALUE", PCLZIP_ERR_INVALID_OPTION_VALUE: "PCLZIP_ERR_INVALID_OPTION_VALUE", PCLZIP_ERR_UNSUPPORTED_COMPRESSION: "PCLZIP_ERR_UNSUPPORTED_COMPRESSION", PCLZIP_ERR_UNSUPPORTED_ENCRYPTION: "PCLZIP_ERR_UNSUPPORTED_ENCRYPTION", PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE: "PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE", PCLZIP_ERR_DIRECTORY_RESTRICTION: "PCLZIP_ERR_DIRECTORY_RESTRICTION"})
+        if (php_isset(lambda : v_name_[self.error_code])):
+            v_value_ = v_name_[self.error_code]
         else:
-            return v_value
+            v_value_ = "NoName"
+        # end if
+        if p_with_code_:
+            return v_value_ + " (" + self.error_code + ")"
+        else:
+            return v_value_
         # end if
     # end def errorname
     #// --------------------------------------------------------------------------------
@@ -1036,12 +1053,15 @@ class PclZip():
     #// Description :
     #// Parameters :
     #// --------------------------------------------------------------------------------
-    def errorinfo(self, p_full=False):
+    def errorinfo(self, p_full_=None):
+        if p_full_ is None:
+            p_full_ = False
+        # end if
         
         if PCLZIP_ERROR_EXTERNAL == 1:
             return PclErrorString()
         else:
-            if p_full:
+            if p_full_:
                 return self.errorname(True) + " : " + self.error_string
             else:
                 return self.error_string + " [code " + self.error_code + "]"
@@ -1068,9 +1088,10 @@ class PclZip():
     #// true on success,
     #// false on error, the error code is set.
     #// --------------------------------------------------------------------------------
-    def privcheckformat(self, p_level=0):
+    def privcheckformat(self, p_level_=0):
         
-        v_result = True
+        
+        v_result_ = True
         #// ----- Reset the file system cache
         clearstatcache()
         #// ----- Reset the error handler
@@ -1094,7 +1115,7 @@ class PclZip():
         #// ----- Check each file header
         #// TBC
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privcheckformat
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1112,25 +1133,28 @@ class PclZip():
     #// 1 on success.
     #// 0 on failure.
     #// --------------------------------------------------------------------------------
-    def privparseoptions(self, p_options_list=None, p_size=None, v_result_list=None, v_requested_options=False):
+    def privparseoptions(self, p_options_list_=None, p_size_=None, v_result_list_=None, v_requested_options_=None):
+        if v_requested_options_ is None:
+            v_requested_options_ = False
+        # end if
         
-        v_result = 1
+        v_result_ = 1
         #// ----- Read the options
-        i = 0
+        i_ = 0
         while True:
             
-            if not (i < p_size):
+            if not (i_ < p_size_):
                 break
             # end if
             #// ----- Check if the option is supported
-            if (not (php_isset(lambda : v_requested_options[p_options_list[i]]))):
+            if (not (php_isset(lambda : v_requested_options_[p_options_list_[i_]]))):
                 #// ----- Error log
-                PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid optional parameter '" + p_options_list[i] + "' for this method")
+                PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid optional parameter '" + p_options_list_[i_] + "' for this method")
                 #// ----- Return
                 return PclZip.errorcode()
             # end if
             #// ----- Look for next option
-            for case in Switch(p_options_list[i]):
+            for case in Switch(p_options_list_[i_]):
                 if case(PCLZIP_OPT_PATH):
                     pass
                 # end if
@@ -1139,125 +1163,125 @@ class PclZip():
                 # end if
                 if case(PCLZIP_OPT_ADD_PATH):
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    v_result_list[p_options_list[i]] = PclZipUtilTranslateWinPath(p_options_list[i + 1], False)
-                    i += 1
+                    v_result_list_[p_options_list_[i_]] = PclZipUtilTranslateWinPath(p_options_list_[i_ + 1], False)
+                    i_ += 1
                     break
                 # end if
                 if case(PCLZIP_OPT_TEMP_FILE_THRESHOLD):
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                    if i_ + 1 >= p_size_:
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         return PclZip.errorcode()
                     # end if
                     #// ----- Check for incompatible options
-                    if (php_isset(lambda : v_result_list[PCLZIP_OPT_TEMP_FILE_OFF])):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list[i]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_OFF'")
+                    if (php_isset(lambda : v_result_list_[PCLZIP_OPT_TEMP_FILE_OFF])):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list_[i_]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_OFF'")
                         return PclZip.errorcode()
                     # end if
                     #// ----- Check the value
-                    v_value = p_options_list[i + 1]
-                    if (not is_integer(v_value)) or v_value < 0:
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Integer expected for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                    v_value_ = p_options_list_[i_ + 1]
+                    if (not is_integer(v_value_)) or v_value_ < 0:
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Integer expected for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value (and convert it in bytes)
-                    v_result_list[p_options_list[i]] = v_value * 1048576
-                    i += 1
+                    v_result_list_[p_options_list_[i_]] = v_value_ * 1048576
+                    i_ += 1
                     break
                 # end if
                 if case(PCLZIP_OPT_TEMP_FILE_ON):
                     #// ----- Check for incompatible options
-                    if (php_isset(lambda : v_result_list[PCLZIP_OPT_TEMP_FILE_OFF])):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list[i]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_OFF'")
+                    if (php_isset(lambda : v_result_list_[PCLZIP_OPT_TEMP_FILE_OFF])):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list_[i_]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_OFF'")
                         return PclZip.errorcode()
                     # end if
-                    v_result_list[p_options_list[i]] = True
+                    v_result_list_[p_options_list_[i_]] = True
                     break
                 # end if
                 if case(PCLZIP_OPT_TEMP_FILE_OFF):
                     #// ----- Check for incompatible options
-                    if (php_isset(lambda : v_result_list[PCLZIP_OPT_TEMP_FILE_ON])):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list[i]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_ON'")
+                    if (php_isset(lambda : v_result_list_[PCLZIP_OPT_TEMP_FILE_ON])):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list_[i_]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_ON'")
                         return PclZip.errorcode()
                     # end if
                     #// ----- Check for incompatible options
-                    if (php_isset(lambda : v_result_list[PCLZIP_OPT_TEMP_FILE_THRESHOLD])):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list[i]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_THRESHOLD'")
+                    if (php_isset(lambda : v_result_list_[PCLZIP_OPT_TEMP_FILE_THRESHOLD])):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Option '" + PclZipUtilOptionText(p_options_list_[i_]) + "' can not be used with option 'PCLZIP_OPT_TEMP_FILE_THRESHOLD'")
                         return PclZip.errorcode()
                     # end if
-                    v_result_list[p_options_list[i]] = True
+                    v_result_list_[p_options_list_[i_]] = True
                     break
                 # end if
                 if case(PCLZIP_OPT_EXTRACT_DIR_RESTRICTION):
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    if php_is_string(p_options_list[i + 1]) and p_options_list[i + 1] != "":
-                        v_result_list[p_options_list[i]] = PclZipUtilTranslateWinPath(p_options_list[i + 1], False)
-                        i += 1
+                    if php_is_string(p_options_list_[i_ + 1]) and p_options_list_[i_ + 1] != "":
+                        v_result_list_[p_options_list_[i_]] = PclZipUtilTranslateWinPath(p_options_list_[i_ + 1], False)
+                        i_ += 1
                     # end if
                     break
                 # end if
                 if case(PCLZIP_OPT_BY_NAME):
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    if php_is_string(p_options_list[i + 1]):
-                        v_result_list[p_options_list[i]][0] = p_options_list[i + 1]
+                    if php_is_string(p_options_list_[i_ + 1]):
+                        v_result_list_[p_options_list_[i_]][0] = p_options_list_[i_ + 1]
                     else:
-                        if php_is_array(p_options_list[i + 1]):
-                            v_result_list[p_options_list[i]] = p_options_list[i + 1]
+                        if php_is_array(p_options_list_[i_ + 1]):
+                            v_result_list_[p_options_list_[i_]] = p_options_list_[i_ + 1]
                         else:
                             #// ----- Error log
-                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                             #// ----- Return
                             return PclZip.errorcode()
                         # end if
                     # end if
-                    i += 1
+                    i_ += 1
                     break
                 # end if
                 if case(PCLZIP_OPT_BY_EREG):
                     #// ereg() is deprecated starting with PHP 5.3. Move PCLZIP_OPT_BY_EREG
                     #// to PCLZIP_OPT_BY_PREG
-                    p_options_list[i] = PCLZIP_OPT_BY_PREG
+                    p_options_list_[i_] = PCLZIP_OPT_BY_PREG
                 # end if
                 if case(PCLZIP_OPT_BY_PREG):
                     #// case PCLZIP_OPT_CRYPT :
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    if php_is_string(p_options_list[i + 1]):
-                        v_result_list[p_options_list[i]] = p_options_list[i + 1]
+                    if php_is_string(p_options_list_[i_ + 1]):
+                        v_result_list_[p_options_list_[i_]] = p_options_list_[i_ + 1]
                     else:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
-                    i += 1
+                    i_ += 1
                     break
                 # end if
                 if case(PCLZIP_OPT_COMMENT):
@@ -1268,48 +1292,48 @@ class PclZip():
                 # end if
                 if case(PCLZIP_OPT_PREPEND_COMMENT):
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    if php_is_string(p_options_list[i + 1]):
-                        v_result_list[p_options_list[i]] = p_options_list[i + 1]
+                    if php_is_string(p_options_list_[i_ + 1]):
+                        v_result_list_[p_options_list_[i_]] = p_options_list_[i_ + 1]
                     else:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
-                    i += 1
+                    i_ += 1
                     break
                 # end if
                 if case(PCLZIP_OPT_BY_INDEX):
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    v_work_list = Array()
-                    if php_is_string(p_options_list[i + 1]):
+                    v_work_list_ = Array()
+                    if php_is_string(p_options_list_[i_ + 1]):
                         #// ----- Remove spaces
-                        p_options_list[i + 1] = php_strtr(p_options_list[i + 1], " ", "")
+                        p_options_list_[i_ + 1] = php_strtr(p_options_list_[i_ + 1], " ", "")
                         #// ----- Parse items
-                        v_work_list = php_explode(",", p_options_list[i + 1])
+                        v_work_list_ = php_explode(",", p_options_list_[i_ + 1])
                     else:
-                        if is_integer(p_options_list[i + 1]):
-                            v_work_list[0] = p_options_list[i + 1] + "-" + p_options_list[i + 1]
+                        if is_integer(p_options_list_[i_ + 1]):
+                            v_work_list_[0] = p_options_list_[i_ + 1] + "-" + p_options_list_[i_ + 1]
                         else:
-                            if php_is_array(p_options_list[i + 1]):
-                                v_work_list = p_options_list[i + 1]
+                            if php_is_array(p_options_list_[i_ + 1]):
+                                v_work_list_ = p_options_list_[i_ + 1]
                             else:
                                 #// ----- Error log
-                                PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Value must be integer, string or array for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                                PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Value must be integer, string or array for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                                 #// ----- Return
                                 return PclZip.errorcode()
                             # end if
@@ -1319,49 +1343,49 @@ class PclZip():
                     #// each index item in the list must be a couple with a start and
                     #// an end value : [0,3], [5-5], [8-10], ...
                     #// ----- Check the format of each item
-                    v_sort_flag = False
-                    v_sort_value = 0
-                    j = 0
-                    while j < sizeof(v_work_list):
+                    v_sort_flag_ = False
+                    v_sort_value_ = 0
+                    j_ = 0
+                    while j_ < sizeof(v_work_list_):
                         
                         #// ----- Explode the item
-                        v_item_list = php_explode("-", v_work_list[j])
-                        v_size_item_list = sizeof(v_item_list)
+                        v_item_list_ = php_explode("-", v_work_list_[j_])
+                        v_size_item_list_ = sizeof(v_item_list_)
                         #// ----- TBC : Here we might check that each item is a
                         #// real integer ...
                         #// ----- Look for single value
-                        if v_size_item_list == 1:
+                        if v_size_item_list_ == 1:
                             #// ----- Set the option value
-                            v_result_list[p_options_list[i]][j]["start"] = v_item_list[0]
-                            v_result_list[p_options_list[i]][j]["end"] = v_item_list[0]
-                        elif v_size_item_list == 2:
+                            v_result_list_[p_options_list_[i_]][j_]["start"] = v_item_list_[0]
+                            v_result_list_[p_options_list_[i_]][j_]["end"] = v_item_list_[0]
+                        elif v_size_item_list_ == 2:
                             #// ----- Set the option value
-                            v_result_list[p_options_list[i]][j]["start"] = v_item_list[0]
-                            v_result_list[p_options_list[i]][j]["end"] = v_item_list[1]
+                            v_result_list_[p_options_list_[i_]][j_]["start"] = v_item_list_[0]
+                            v_result_list_[p_options_list_[i_]][j_]["end"] = v_item_list_[1]
                         else:
                             #// ----- Error log
-                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Too many values in index range for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Too many values in index range for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                             #// ----- Return
                             return PclZip.errorcode()
                         # end if
                         #// ----- Look for list sort
-                        if v_result_list[p_options_list[i]][j]["start"] < v_sort_value:
-                            v_sort_flag = True
+                        if v_result_list_[p_options_list_[i_]][j_]["start"] < v_sort_value_:
+                            v_sort_flag_ = True
                             #// ----- TBC : An automatic sort should be written ...
                             #// ----- Error log
-                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Invalid order of index range for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Invalid order of index range for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                             #// ----- Return
                             return PclZip.errorcode()
                         # end if
-                        v_sort_value = v_result_list[p_options_list[i]][j]["start"]
-                        j += 1
+                        v_sort_value_ = v_result_list_[p_options_list_[i_]][j_]["start"]
+                        j_ += 1
                     # end while
                     #// ----- Sort the items
-                    if v_sort_flag:
+                    if v_sort_flag_:
                         pass
                     # end if
                     #// ----- Next option
-                    i += 1
+                    i_ += 1
                     break
                 # end if
                 if case(PCLZIP_OPT_REMOVE_ALL_PATH):
@@ -1380,20 +1404,20 @@ class PclZip():
                     pass
                 # end if
                 if case(PCLZIP_OPT_STOP_ON_ERROR):
-                    v_result_list[p_options_list[i]] = True
+                    v_result_list_[p_options_list_[i_]] = True
                     break
                 # end if
                 if case(PCLZIP_OPT_SET_CHMOD):
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    v_result_list[p_options_list[i]] = p_options_list[i + 1]
-                    i += 1
+                    v_result_list_[p_options_list_[i_]] = p_options_list_[i_ + 1]
+                    i_ += 1
                     break
                 # end if
                 if case(PCLZIP_CB_PRE_EXTRACT):
@@ -1413,60 +1437,60 @@ class PclZip():
                     #// case PCLZIP_CB_POST_LIST :
                     #// 
                     #// ----- Check the number of parameters
-                    if i + 1 >= p_size:
+                    if i_ + 1 >= p_size_:
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Get the value
-                    v_function_name = p_options_list[i + 1]
+                    v_function_name_ = p_options_list_[i_ + 1]
                     #// ----- Check that the value is a valid existing function
-                    if (not php_function_exists(v_function_name)):
+                    if (not php_function_exists(v_function_name_)):
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Function '" + v_function_name + "()' is not an existing function for option '" + PclZipUtilOptionText(p_options_list[i]) + "'")
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Function '" + v_function_name_ + "()' is not an existing function for option '" + PclZipUtilOptionText(p_options_list_[i_]) + "'")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                     #// ----- Set the attribute
-                    v_result_list[p_options_list[i]] = v_function_name
-                    i += 1
+                    v_result_list_[p_options_list_[i_]] = v_function_name_
+                    i_ += 1
                     break
                 # end if
                 if case():
                     #// ----- Error log
-                    PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Unknown parameter '" + p_options_list[i] + "'")
+                    PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Unknown parameter '" + p_options_list_[i_] + "'")
                     #// ----- Return
                     return PclZip.errorcode()
                 # end if
             # end for
             #// ----- Next options
-            i += 1
+            i_ += 1
         # end while
         #// ----- Look for mandatory options
-        if v_requested_options != False:
-            key = reset(v_requested_options)
-            while key:
-                key = key(v_requested_options)
+        if v_requested_options_ != False:
+            key_ = reset(v_requested_options_)
+            while key_:
+                key_ = key(v_requested_options_)
                 #// ----- Look for mandatory option
-                if v_requested_options[key] == "mandatory":
+                if v_requested_options_[key_] == "mandatory":
                     #// ----- Look if present
-                    if (not (php_isset(lambda : v_result_list[key]))):
+                    if (not (php_isset(lambda : v_result_list_[key_]))):
                         #// ----- Error log
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Missing mandatory parameter " + PclZipUtilOptionText(key) + "(" + key + ")")
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Missing mandatory parameter " + PclZipUtilOptionText(key_) + "(" + key_ + ")")
                         #// ----- Return
                         return PclZip.errorcode()
                     # end if
                 # end if
-                key = next(v_requested_options)
+                key_ = next(v_requested_options_)
             # end while
         # end if
         #// ----- Look for default values
-        if (not (php_isset(lambda : v_result_list[PCLZIP_OPT_TEMP_FILE_THRESHOLD]))):
+        if (not (php_isset(lambda : v_result_list_[PCLZIP_OPT_TEMP_FILE_THRESHOLD]))):
             pass
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privparseoptions
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1475,35 +1499,36 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privoptiondefaultthreshold(self, p_options=None):
+    def privoptiondefaultthreshold(self, p_options_=None):
         
-        v_result = 1
-        if (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD])) or (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_OFF])):
-            return v_result
+        
+        v_result_ = 1
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD])) or (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_OFF])):
+            return v_result_
         # end if
         #// ----- Get 'memory_limit' configuration value
-        v_memory_limit = php_ini_get("memory_limit")
-        v_memory_limit = php_trim(v_memory_limit)
-        v_memory_limit_int = php_int(v_memory_limit)
-        last = php_strtolower(php_substr(v_memory_limit, -1))
-        if last == "g":
+        v_memory_limit_ = php_ini_get("memory_limit")
+        v_memory_limit_ = php_trim(v_memory_limit_)
+        v_memory_limit_int_ = php_int(v_memory_limit_)
+        last_ = php_strtolower(php_substr(v_memory_limit_, -1))
+        if last_ == "g":
             #// $v_memory_limit_int = $v_memory_limit_int*1024*1024*1024;
-            v_memory_limit_int = v_memory_limit_int * 1073741824
+            v_memory_limit_int_ = v_memory_limit_int_ * 1073741824
         # end if
-        if last == "m":
+        if last_ == "m":
             #// $v_memory_limit_int = $v_memory_limit_int*1024*1024;
-            v_memory_limit_int = v_memory_limit_int * 1048576
+            v_memory_limit_int_ = v_memory_limit_int_ * 1048576
         # end if
-        if last == "k":
-            v_memory_limit_int = v_memory_limit_int * 1024
+        if last_ == "k":
+            v_memory_limit_int_ = v_memory_limit_int_ * 1024
         # end if
-        p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD] = floor(v_memory_limit_int * PCLZIP_TEMPORARY_FILE_RATIO)
+        p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD] = floor(v_memory_limit_int_ * PCLZIP_TEMPORARY_FILE_RATIO)
         #// ----- Sanity check : No threshold if value lower than 1M
-        if p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD] < 1048576:
-            p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD] = None
+        if p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD] < 1048576:
+            p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD] = None
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privoptiondefaultthreshold
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1514,103 +1539,106 @@ class PclZip():
     #// 1 on success.
     #// 0 on failure.
     #// --------------------------------------------------------------------------------
-    def privfiledescrparseatt(self, p_file_list=None, p_filedescr=None, v_options=None, v_requested_options=False):
+    def privfiledescrparseatt(self, p_file_list_=None, p_filedescr_=None, v_options_=None, v_requested_options_=None):
+        if v_requested_options_ is None:
+            v_requested_options_ = False
+        # end if
         
-        v_result = 1
+        v_result_ = 1
         #// ----- For each file in the list check the attributes
-        for v_key,v_value in p_file_list:
+        for v_key_,v_value_ in p_file_list_:
             #// ----- Check if the option is supported
-            if (not (php_isset(lambda : v_requested_options[v_key]))):
+            if (not (php_isset(lambda : v_requested_options_[v_key_]))):
                 #// ----- Error log
-                PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid file attribute '" + v_key + "' for this file")
+                PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid file attribute '" + v_key_ + "' for this file")
                 #// ----- Return
                 return PclZip.errorcode()
             # end if
             #// ----- Look for attribute
-            for case in Switch(v_key):
+            for case in Switch(v_key_):
                 if case(PCLZIP_ATT_FILE_NAME):
-                    if (not php_is_string(v_value)):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value) + ". String expected for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    if (not php_is_string(v_value_)):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value_) + ". String expected for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
-                    p_filedescr["filename"] = PclZipUtilPathReduction(v_value)
-                    if p_filedescr["filename"] == "":
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid empty filename for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    p_filedescr_["filename"] = PclZipUtilPathReduction(v_value_)
+                    if p_filedescr_["filename"] == "":
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid empty filename for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
                     break
                 # end if
                 if case(PCLZIP_ATT_FILE_NEW_SHORT_NAME):
-                    if (not php_is_string(v_value)):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value) + ". String expected for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    if (not php_is_string(v_value_)):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value_) + ". String expected for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
-                    p_filedescr["new_short_name"] = PclZipUtilPathReduction(v_value)
-                    if p_filedescr["new_short_name"] == "":
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid empty short filename for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    p_filedescr_["new_short_name"] = PclZipUtilPathReduction(v_value_)
+                    if p_filedescr_["new_short_name"] == "":
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid empty short filename for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
                     break
                 # end if
                 if case(PCLZIP_ATT_FILE_NEW_FULL_NAME):
-                    if (not php_is_string(v_value)):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value) + ". String expected for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    if (not php_is_string(v_value_)):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value_) + ". String expected for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
-                    p_filedescr["new_full_name"] = PclZipUtilPathReduction(v_value)
-                    if p_filedescr["new_full_name"] == "":
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid empty full filename for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    p_filedescr_["new_full_name"] = PclZipUtilPathReduction(v_value_)
+                    if p_filedescr_["new_full_name"] == "":
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid empty full filename for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
                     break
                 # end if
                 if case(PCLZIP_ATT_FILE_COMMENT):
-                    if (not php_is_string(v_value)):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value) + ". String expected for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    if (not php_is_string(v_value_)):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value_) + ". String expected for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
-                    p_filedescr["comment"] = v_value
+                    p_filedescr_["comment"] = v_value_
                     break
                 # end if
                 if case(PCLZIP_ATT_FILE_MTIME):
-                    if (not is_integer(v_value)):
-                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value) + ". Integer expected for attribute '" + PclZipUtilOptionText(v_key) + "'")
+                    if (not is_integer(v_value_)):
+                        PclZip.priverrorlog(PCLZIP_ERR_INVALID_ATTRIBUTE_VALUE, "Invalid type " + gettype(v_value_) + ". Integer expected for attribute '" + PclZipUtilOptionText(v_key_) + "'")
                         return PclZip.errorcode()
                     # end if
-                    p_filedescr["mtime"] = v_value
+                    p_filedescr_["mtime"] = v_value_
                     break
                 # end if
                 if case(PCLZIP_ATT_FILE_CONTENT):
-                    p_filedescr["content"] = v_value
+                    p_filedescr_["content"] = v_value_
                     break
                 # end if
                 if case():
                     #// ----- Error log
-                    PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Unknown parameter '" + v_key + "'")
+                    PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Unknown parameter '" + v_key_ + "'")
                     #// ----- Return
                     return PclZip.errorcode()
                 # end if
             # end for
             #// ----- Look for mandatory options
-            if v_requested_options != False:
-                key = reset(v_requested_options)
-                while key:
-                    key = key(v_requested_options)
+            if v_requested_options_ != False:
+                key_ = reset(v_requested_options_)
+                while key_:
+                    key_ = key(v_requested_options_)
                     #// ----- Look for mandatory option
-                    if v_requested_options[key] == "mandatory":
+                    if v_requested_options_[key_] == "mandatory":
                         #// ----- Look if present
-                        if (not (php_isset(lambda : p_file_list[key]))):
-                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Missing mandatory parameter " + PclZipUtilOptionText(key) + "(" + key + ")")
+                        if (not (php_isset(lambda : p_file_list_[key_]))):
+                            PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Missing mandatory parameter " + PclZipUtilOptionText(key_) + "(" + key_ + ")")
                             return PclZip.errorcode()
                         # end if
                     # end if
-                    key = next(v_requested_options)
+                    key_ = next(v_requested_options_)
                 # end while
             # end if
             pass
         # end for
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privfiledescrparseatt
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1627,29 +1655,30 @@ class PclZip():
     #// 1 on success.
     #// 0 on failure.
     #// --------------------------------------------------------------------------------
-    def privfiledescrexpand(self, p_filedescr_list=None, p_options=None):
+    def privfiledescrexpand(self, p_filedescr_list_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Create a result list
-        v_result_list = Array()
+        v_result_list_ = Array()
         #// ----- Look each entry
-        i = 0
-        while i < sizeof(p_filedescr_list):
+        i_ = 0
+        while i_ < sizeof(p_filedescr_list_):
             
             #// ----- Get filedescr
-            v_descr = p_filedescr_list[i]
+            v_descr_ = p_filedescr_list_[i_]
             #// ----- Reduce the filename
-            v_descr["filename"] = PclZipUtilTranslateWinPath(v_descr["filename"], False)
-            v_descr["filename"] = PclZipUtilPathReduction(v_descr["filename"])
+            v_descr_["filename"] = PclZipUtilTranslateWinPath(v_descr_["filename"], False)
+            v_descr_["filename"] = PclZipUtilPathReduction(v_descr_["filename"])
             #// ----- Look for real file or folder
-            if php_file_exists(v_descr["filename"]):
-                if php_no_error(lambda: php_is_file(v_descr["filename"])):
-                    v_descr["type"] = "file"
+            if php_file_exists(v_descr_["filename"]):
+                if php_no_error(lambda: php_is_file(v_descr_["filename"])):
+                    v_descr_["type"] = "file"
                 else:
-                    if php_no_error(lambda: php_is_dir(v_descr["filename"])):
-                        v_descr["type"] = "folder"
+                    if php_no_error(lambda: php_is_dir(v_descr_["filename"])):
+                        v_descr_["type"] = "folder"
                     else:
-                        if php_no_error(lambda: php_is_link(v_descr["filename"])):
+                        if php_no_error(lambda: php_is_link(v_descr_["filename"])):
                             continue
                         else:
                             continue
@@ -1657,71 +1686,71 @@ class PclZip():
                     # end if
                 # end if
             else:
-                if (php_isset(lambda : v_descr["content"])):
-                    v_descr["type"] = "virtual_file"
+                if (php_isset(lambda : v_descr_["content"])):
+                    v_descr_["type"] = "virtual_file"
                 else:
                     #// ----- Error log
-                    PclZip.priverrorlog(PCLZIP_ERR_MISSING_FILE, "File '" + v_descr["filename"] + "' does not exist")
+                    PclZip.priverrorlog(PCLZIP_ERR_MISSING_FILE, "File '" + v_descr_["filename"] + "' does not exist")
                     #// ----- Return
                     return PclZip.errorcode()
                 # end if
             # end if
             #// ----- Calculate the stored filename
-            self.privcalculatestoredfilename(v_descr, p_options)
+            self.privcalculatestoredfilename(v_descr_, p_options_)
             #// ----- Add the descriptor in result list
-            v_result_list[sizeof(v_result_list)] = v_descr
+            v_result_list_[sizeof(v_result_list_)] = v_descr_
             #// ----- Look for folder
-            if v_descr["type"] == "folder":
+            if v_descr_["type"] == "folder":
                 #// ----- List of items in folder
-                v_dirlist_descr = Array()
-                v_dirlist_nb = 0
-                v_folder_handler = php_no_error(lambda: php_opendir(v_descr["filename"]))
-                if v_folder_handler:
+                v_dirlist_descr_ = Array()
+                v_dirlist_nb_ = 0
+                v_folder_handler_ = php_no_error(lambda: php_opendir(v_descr_["filename"]))
+                if v_folder_handler_:
                     while True:
-                        v_item_handler = php_no_error(lambda: php_readdir(v_folder_handler))
-                        if not (v_item_handler != False):
+                        v_item_handler_ = php_no_error(lambda: php_readdir(v_folder_handler_))
+                        if not (v_item_handler_ != False):
                             break
                         # end if
                         #// ----- Skip '.' and '..'
-                        if v_item_handler == "." or v_item_handler == "..":
+                        if v_item_handler_ == "." or v_item_handler_ == "..":
                             continue
                         # end if
                         #// ----- Compose the full filename
-                        v_dirlist_descr[v_dirlist_nb]["filename"] = v_descr["filename"] + "/" + v_item_handler
+                        v_dirlist_descr_[v_dirlist_nb_]["filename"] = v_descr_["filename"] + "/" + v_item_handler_
                         #// ----- Look for different stored filename
                         #// Because the name of the folder was changed, the name of the
                         #// files/sub-folders also change
-                        if v_descr["stored_filename"] != v_descr["filename"] and (not (php_isset(lambda : p_options[PCLZIP_OPT_REMOVE_ALL_PATH]))):
-                            if v_descr["stored_filename"] != "":
-                                v_dirlist_descr[v_dirlist_nb]["new_full_name"] = v_descr["stored_filename"] + "/" + v_item_handler
+                        if v_descr_["stored_filename"] != v_descr_["filename"] and (not (php_isset(lambda : p_options_[PCLZIP_OPT_REMOVE_ALL_PATH]))):
+                            if v_descr_["stored_filename"] != "":
+                                v_dirlist_descr_[v_dirlist_nb_]["new_full_name"] = v_descr_["stored_filename"] + "/" + v_item_handler_
                             else:
-                                v_dirlist_descr[v_dirlist_nb]["new_full_name"] = v_item_handler
+                                v_dirlist_descr_[v_dirlist_nb_]["new_full_name"] = v_item_handler_
                             # end if
                         # end if
-                        v_dirlist_nb += 1
+                        v_dirlist_nb_ += 1
                     # end while
-                    php_no_error(lambda: php_closedir(v_folder_handler))
+                    php_no_error(lambda: php_closedir(v_folder_handler_))
                 else:
                     pass
                 # end if
                 #// ----- Expand each element of the list
-                if v_dirlist_nb != 0:
+                if v_dirlist_nb_ != 0:
                     #// ----- Expand
-                    v_result = self.privfiledescrexpand(v_dirlist_descr, p_options)
-                    if v_result != 1:
-                        return v_result
+                    v_result_ = self.privfiledescrexpand(v_dirlist_descr_, p_options_)
+                    if v_result_ != 1:
+                        return v_result_
                     # end if
                     #// ----- Concat the resulting list
-                    v_result_list = php_array_merge(v_result_list, v_dirlist_descr)
+                    v_result_list_ = php_array_merge(v_result_list_, v_dirlist_descr_)
                 # end if
-                v_dirlist_descr = None
+                v_dirlist_descr_ = None
             # end if
-            i += 1
+            i_ += 1
         # end while
         #// ----- Get the result list
-        p_filedescr_list = v_result_list
+        p_filedescr_list_ = v_result_list_
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privfiledescrexpand
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1730,26 +1759,27 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privcreate(self, p_filedescr_list=None, p_result_list=None, p_options=None):
+    def privcreate(self, p_filedescr_list_=None, p_result_list_=None, p_options_=None):
         
-        v_result = 1
-        v_list_detail = Array()
+        
+        v_result_ = 1
+        v_list_detail_ = Array()
         #// ----- Magic quotes trick
         self.privdisablemagicquotes()
         #// ----- Open the file in write mode
-        v_result = self.privopenfd("wb")
-        if v_result != 1:
+        v_result_ = self.privopenfd("wb")
+        if v_result_ != 1:
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Add the list of files
-        v_result = self.privaddlist(p_filedescr_list, p_result_list, p_options)
+        v_result_ = self.privaddlist(p_filedescr_list_, p_result_list_, p_options_)
         #// ----- Close
         self.privclosefd()
         #// ----- Magic quotes trick
         self.privswapbackmagicquotes()
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privcreate
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1758,143 +1788,144 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privadd(self, p_filedescr_list=None, p_result_list=None, p_options=None):
+    def privadd(self, p_filedescr_list_=None, p_result_list_=None, p_options_=None):
         
-        v_result = 1
-        v_list_detail = Array()
+        
+        v_result_ = 1
+        v_list_detail_ = Array()
         #// ----- Look if the archive exists or is empty
         if (not php_is_file(self.zipname)) or filesize(self.zipname) == 0:
             #// ----- Do a create
-            v_result = self.privcreate(p_filedescr_list, p_result_list, p_options)
+            v_result_ = self.privcreate(p_filedescr_list_, p_result_list_, p_options_)
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Magic quotes trick
         self.privdisablemagicquotes()
         #// ----- Open the zip file
-        v_result = self.privopenfd("rb")
-        if v_result != 1:
+        v_result_ = self.privopenfd("rb")
+        if v_result_ != 1:
             #// ----- Magic quotes trick
             self.privswapbackmagicquotes()
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Read the central directory information
-        v_central_dir = Array()
-        v_result = self.privreadendcentraldir(v_central_dir)
-        if v_result != 1:
+        v_central_dir_ = Array()
+        v_result_ = self.privreadendcentraldir(v_central_dir_)
+        if v_result_ != 1:
             self.privclosefd()
             self.privswapbackmagicquotes()
-            return v_result
+            return v_result_
         # end if
         #// ----- Go to beginning of File
         php_no_error(lambda: rewind(self.zip_fd))
         #// ----- Creates a temporary file
-        v_zip_temp_name = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
+        v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
         #// ----- Open the temporary file in write mode
-        v_zip_temp_fd = php_no_error(lambda: fopen(v_zip_temp_name, "wb"))
-        if v_zip_temp_fd == 0:
+        v_zip_temp_fd_ = php_no_error(lambda: fopen(v_zip_temp_name_, "wb"))
+        if v_zip_temp_fd_ == 0:
             self.privclosefd()
             self.privswapbackmagicquotes()
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_zip_temp_name + "' in binary write mode")
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_zip_temp_name_ + "' in binary write mode")
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Copy the files from the archive to the temporary file
         #// TBC : Here I should better append the file and go back to erase the central dir
-        v_size = v_central_dir["offset"]
+        v_size_ = v_central_dir_["offset"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = fread(self.zip_fd, v_read_size)
-            php_no_error(lambda: fwrite(v_zip_temp_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = fread(self.zip_fd, v_read_size_)
+            php_no_error(lambda: fwrite(v_zip_temp_fd_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Swap the file descriptor
         #// Here is a trick : I swap the temporary fd with the zip fd, in order to use
         #// the following methods on the temporary fil and not the real archive
-        v_swap = self.zip_fd
-        self.zip_fd = v_zip_temp_fd
-        v_zip_temp_fd = v_swap
+        v_swap_ = self.zip_fd
+        self.zip_fd = v_zip_temp_fd_
+        v_zip_temp_fd_ = v_swap_
         #// ----- Add the files
-        v_header_list = Array()
-        v_result = self.privaddfilelist(p_filedescr_list, v_header_list, p_options)
-        if v_result != 1:
-            php_fclose(v_zip_temp_fd)
+        v_header_list_ = Array()
+        v_result_ = self.privaddfilelist(p_filedescr_list_, v_header_list_, p_options_)
+        if v_result_ != 1:
+            php_fclose(v_zip_temp_fd_)
             self.privclosefd()
-            php_no_error(lambda: unlink(v_zip_temp_name))
+            php_no_error(lambda: unlink(v_zip_temp_name_))
             self.privswapbackmagicquotes()
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Store the offset of the central dir
-        v_offset = php_no_error(lambda: ftell(self.zip_fd))
+        v_offset_ = php_no_error(lambda: ftell(self.zip_fd))
         #// ----- Copy the block of file headers from the old archive
-        v_size = v_central_dir["size"]
+        v_size_ = v_central_dir_["size"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: fread(v_zip_temp_fd, v_read_size))
-            php_no_error(lambda: fwrite(self.zip_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: fread(v_zip_temp_fd_, v_read_size_))
+            php_no_error(lambda: fwrite(self.zip_fd, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Create the Central Dir files header
-        i = 0
-        v_count = 0
-        while i < sizeof(v_header_list):
+        i_ = 0
+        v_count_ = 0
+        while i_ < sizeof(v_header_list_):
             
             #// ----- Create the file header
-            if v_header_list[i]["status"] == "ok":
-                v_result = self.privwritecentralfileheader(v_header_list[i])
-                if v_result != 1:
-                    php_fclose(v_zip_temp_fd)
+            if v_header_list_[i_]["status"] == "ok":
+                v_result_ = self.privwritecentralfileheader(v_header_list_[i_])
+                if v_result_ != 1:
+                    php_fclose(v_zip_temp_fd_)
                     self.privclosefd()
-                    php_no_error(lambda: unlink(v_zip_temp_name))
+                    php_no_error(lambda: unlink(v_zip_temp_name_))
                     self.privswapbackmagicquotes()
                     #// ----- Return
-                    return v_result
+                    return v_result_
                 # end if
-                v_count += 1
+                v_count_ += 1
             # end if
             #// ----- Transform the header to a 'usable' info
-            self.privconvertheader2fileinfo(v_header_list[i], p_result_list[i])
-            i += 1
+            self.privconvertheader2fileinfo(v_header_list_[i_], p_result_list_[i_])
+            i_ += 1
         # end while
         #// ----- Zip file comment
-        v_comment = v_central_dir["comment"]
-        if (php_isset(lambda : p_options[PCLZIP_OPT_COMMENT])):
-            v_comment = p_options[PCLZIP_OPT_COMMENT]
+        v_comment_ = v_central_dir_["comment"]
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_COMMENT])):
+            v_comment_ = p_options_[PCLZIP_OPT_COMMENT]
         # end if
-        if (php_isset(lambda : p_options[PCLZIP_OPT_ADD_COMMENT])):
-            v_comment = v_comment + p_options[PCLZIP_OPT_ADD_COMMENT]
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_ADD_COMMENT])):
+            v_comment_ = v_comment_ + p_options_[PCLZIP_OPT_ADD_COMMENT]
         # end if
-        if (php_isset(lambda : p_options[PCLZIP_OPT_PREPEND_COMMENT])):
-            v_comment = p_options[PCLZIP_OPT_PREPEND_COMMENT] + v_comment
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_PREPEND_COMMENT])):
+            v_comment_ = p_options_[PCLZIP_OPT_PREPEND_COMMENT] + v_comment_
         # end if
         #// ----- Calculate the size of the central header
-        v_size = php_no_error(lambda: ftell(self.zip_fd)) - v_offset
+        v_size_ = php_no_error(lambda: ftell(self.zip_fd)) - v_offset_
         #// ----- Create the central dir footer
-        v_result = self.privwritecentralheader(v_count + v_central_dir["entries"], v_size, v_offset, v_comment)
-        if v_result != 1:
-            v_header_list = None
+        v_result_ = self.privwritecentralheader(v_count_ + v_central_dir_["entries"], v_size_, v_offset_, v_comment_)
+        if v_result_ != 1:
+            v_header_list_ = None
             self.privswapbackmagicquotes()
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Swap back the file descriptor
-        v_swap = self.zip_fd
-        self.zip_fd = v_zip_temp_fd
-        v_zip_temp_fd = v_swap
+        v_swap_ = self.zip_fd
+        self.zip_fd = v_zip_temp_fd_
+        v_zip_temp_fd_ = v_swap_
         #// ----- Close
         self.privclosefd()
         #// ----- Close the temporary file
-        php_no_error(lambda: php_fclose(v_zip_temp_fd))
+        php_no_error(lambda: php_fclose(v_zip_temp_fd_))
         #// ----- Magic quotes trick
         self.privswapbackmagicquotes()
         #// ----- Delete the zip file
@@ -1903,9 +1934,9 @@ class PclZip():
         #// ----- Rename the temporary file
         #// TBC : I should test the result ...
         #// @rename($v_zip_temp_name, $this->zipname);
-        PclZipUtilRename(v_zip_temp_name, self.zipname)
+        PclZipUtilRename(v_zip_temp_name_, self.zipname)
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privadd
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1913,9 +1944,10 @@ class PclZip():
     #// Description :
     #// Parameters :
     #// --------------------------------------------------------------------------------
-    def privopenfd(self, p_mode=None):
+    def privopenfd(self, p_mode_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Look if already open
         if self.zip_fd != 0:
             #// ----- Error log
@@ -1924,15 +1956,15 @@ class PclZip():
             return PclZip.errorcode()
         # end if
         #// ----- Open the zip file
-        self.zip_fd = php_no_error(lambda: fopen(self.zipname, p_mode))
+        self.zip_fd = php_no_error(lambda: fopen(self.zipname, p_mode_))
         if self.zip_fd == 0:
             #// ----- Error log
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open archive '" + self.zipname + "' in " + p_mode + " mode")
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open archive '" + self.zipname + "' in " + p_mode_ + " mode")
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privopenfd
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1942,13 +1974,14 @@ class PclZip():
     #// --------------------------------------------------------------------------------
     def privclosefd(self):
         
-        v_result = 1
+        
+        v_result_ = 1
         if self.zip_fd != 0:
             php_no_error(lambda: php_fclose(self.zip_fd))
         # end if
         self.zip_fd = 0
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privclosefd
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -1965,52 +1998,53 @@ class PclZip():
     #// Return Values :
     #// --------------------------------------------------------------------------------
     #// function privAddList($p_list, &$p_result_list, $p_add_dir, $p_remove_dir, $p_remove_all_dir, &$p_options)
-    def privaddlist(self, p_filedescr_list=None, p_result_list=None, p_options=None):
+    def privaddlist(self, p_filedescr_list_=None, p_result_list_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Add the files
-        v_header_list = Array()
-        v_result = self.privaddfilelist(p_filedescr_list, v_header_list, p_options)
-        if v_result != 1:
+        v_header_list_ = Array()
+        v_result_ = self.privaddfilelist(p_filedescr_list_, v_header_list_, p_options_)
+        if v_result_ != 1:
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Store the offset of the central dir
-        v_offset = php_no_error(lambda: ftell(self.zip_fd))
+        v_offset_ = php_no_error(lambda: ftell(self.zip_fd))
         #// ----- Create the Central Dir files header
-        i = 0
-        v_count = 0
-        while i < sizeof(v_header_list):
+        i_ = 0
+        v_count_ = 0
+        while i_ < sizeof(v_header_list_):
             
             #// ----- Create the file header
-            if v_header_list[i]["status"] == "ok":
-                v_result = self.privwritecentralfileheader(v_header_list[i])
-                if v_result != 1:
+            if v_header_list_[i_]["status"] == "ok":
+                v_result_ = self.privwritecentralfileheader(v_header_list_[i_])
+                if v_result_ != 1:
                     #// ----- Return
-                    return v_result
+                    return v_result_
                 # end if
-                v_count += 1
+                v_count_ += 1
             # end if
             #// ----- Transform the header to a 'usable' info
-            self.privconvertheader2fileinfo(v_header_list[i], p_result_list[i])
-            i += 1
+            self.privconvertheader2fileinfo(v_header_list_[i_], p_result_list_[i_])
+            i_ += 1
         # end while
         #// ----- Zip file comment
-        v_comment = ""
-        if (php_isset(lambda : p_options[PCLZIP_OPT_COMMENT])):
-            v_comment = p_options[PCLZIP_OPT_COMMENT]
+        v_comment_ = ""
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_COMMENT])):
+            v_comment_ = p_options_[PCLZIP_OPT_COMMENT]
         # end if
         #// ----- Calculate the size of the central header
-        v_size = php_no_error(lambda: ftell(self.zip_fd)) - v_offset
+        v_size_ = php_no_error(lambda: ftell(self.zip_fd)) - v_offset_
         #// ----- Create the central dir footer
-        v_result = self.privwritecentralheader(v_count, v_size, v_offset, v_comment)
-        if v_result != 1:
-            v_header_list = None
+        v_result_ = self.privwritecentralheader(v_count_, v_size_, v_offset_, v_comment_)
+        if v_result_ != 1:
+            v_header_list_ = None
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privaddlist
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2022,48 +2056,49 @@ class PclZip():
     #// $p_result_list : list of added files with their properties (specially the status field)
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privaddfilelist(self, p_filedescr_list=None, p_result_list=None, p_options=None):
+    def privaddfilelist(self, p_filedescr_list_=None, p_result_list_=None, p_options_=None):
         
-        v_result = 1
-        v_header = Array()
+        
+        v_result_ = 1
+        v_header_ = Array()
         #// ----- Recuperate the current number of elt in list
-        v_nb = sizeof(p_result_list)
+        v_nb_ = sizeof(p_result_list_)
         #// ----- Loop on the files
-        j = 0
-        while j < sizeof(p_filedescr_list) and v_result == 1:
+        j_ = 0
+        while j_ < sizeof(p_filedescr_list_) and v_result_ == 1:
             
             #// ----- Format the filename
-            p_filedescr_list[j]["filename"] = PclZipUtilTranslateWinPath(p_filedescr_list[j]["filename"], False)
+            p_filedescr_list_[j_]["filename"] = PclZipUtilTranslateWinPath(p_filedescr_list_[j_]["filename"], False)
             #// ----- Skip empty file names
             #// TBC : Can this be possible ? not checked in DescrParseAtt ?
-            if p_filedescr_list[j]["filename"] == "":
+            if p_filedescr_list_[j_]["filename"] == "":
                 continue
             # end if
             #// ----- Check the filename
-            if p_filedescr_list[j]["type"] != "virtual_file" and (not php_file_exists(p_filedescr_list[j]["filename"])):
-                PclZip.priverrorlog(PCLZIP_ERR_MISSING_FILE, "File '" + p_filedescr_list[j]["filename"] + "' does not exist")
+            if p_filedescr_list_[j_]["type"] != "virtual_file" and (not php_file_exists(p_filedescr_list_[j_]["filename"])):
+                PclZip.priverrorlog(PCLZIP_ERR_MISSING_FILE, "File '" + p_filedescr_list_[j_]["filename"] + "' does not exist")
                 return PclZip.errorcode()
             # end if
             #// ----- Look if it is a file or a dir with no all path remove option
             #// or a dir with all its path removed
             #// if (   (is_file($p_filedescr_list[$j]['filename']))
             #// || (   is_dir($p_filedescr_list[$j]['filename'])
-            if p_filedescr_list[j]["type"] == "file" or p_filedescr_list[j]["type"] == "virtual_file" or p_filedescr_list[j]["type"] == "folder" and (not (php_isset(lambda : p_options[PCLZIP_OPT_REMOVE_ALL_PATH]))) or (not p_options[PCLZIP_OPT_REMOVE_ALL_PATH]):
+            if p_filedescr_list_[j_]["type"] == "file" or p_filedescr_list_[j_]["type"] == "virtual_file" or p_filedescr_list_[j_]["type"] == "folder" and (not (php_isset(lambda : p_options_[PCLZIP_OPT_REMOVE_ALL_PATH]))) or (not p_options_[PCLZIP_OPT_REMOVE_ALL_PATH]):
                 #// ----- Add the file
-                v_result = self.privaddfile(p_filedescr_list[j], v_header, p_options)
-                if v_result != 1:
-                    return v_result
+                v_result_ = self.privaddfile(p_filedescr_list_[j_], v_header_, p_options_)
+                if v_result_ != 1:
+                    return v_result_
                 # end if
                 #// ----- Store the file infos
-                p_result_list[v_nb] = v_header
-                v_nb += 1
+                p_result_list_[v_nb_] = v_header_
+                v_nb_ += 1
             # end if
-            j += 1
+            j_ += 1
         # end while
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privaddfilelist
-    v_nb += 1
+    v_nb_ += 1
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
     #// Function : privAddFile()
@@ -2071,13 +2106,14 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privaddfile(self, p_filedescr=None, p_header=None, p_options=None):
+    def privaddfile(self, p_filedescr_=None, p_header_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Working variable
-        p_filename = p_filedescr["filename"]
+        p_filename_ = p_filedescr_["filename"]
         #// TBC : Already done in the fileAtt check ... ?
-        if p_filename == "":
+        if p_filename_ == "":
             #// ----- Error log
             PclZip.priverrorlog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid file list parameter (invalid or empty list)")
             #// ----- Return
@@ -2094,191 +2130,191 @@ class PclZip():
         #// 
         #// ----- Set the file properties
         clearstatcache()
-        p_header["version"] = 20
-        p_header["version_extracted"] = 10
-        p_header["flag"] = 0
-        p_header["compression"] = 0
-        p_header["crc"] = 0
-        p_header["compressed_size"] = 0
-        p_header["filename_len"] = php_strlen(p_filename)
-        p_header["extra_len"] = 0
-        p_header["disk"] = 0
-        p_header["internal"] = 0
-        p_header["offset"] = 0
-        p_header["filename"] = p_filename
+        p_header_["version"] = 20
+        p_header_["version_extracted"] = 10
+        p_header_["flag"] = 0
+        p_header_["compression"] = 0
+        p_header_["crc"] = 0
+        p_header_["compressed_size"] = 0
+        p_header_["filename_len"] = php_strlen(p_filename_)
+        p_header_["extra_len"] = 0
+        p_header_["disk"] = 0
+        p_header_["internal"] = 0
+        p_header_["offset"] = 0
+        p_header_["filename"] = p_filename_
         #// TBC : Removed    $p_header['stored_filename'] = $v_stored_filename;
-        p_header["stored_filename"] = p_filedescr["stored_filename"]
-        p_header["extra"] = ""
-        p_header["status"] = "ok"
-        p_header["index"] = -1
+        p_header_["stored_filename"] = p_filedescr_["stored_filename"]
+        p_header_["extra"] = ""
+        p_header_["status"] = "ok"
+        p_header_["index"] = -1
         #// ----- Look for regular file
-        if p_filedescr["type"] == "file":
-            p_header["external"] = 0
-            p_header["size"] = filesize(p_filename)
+        if p_filedescr_["type"] == "file":
+            p_header_["external"] = 0
+            p_header_["size"] = filesize(p_filename_)
         else:
-            if p_filedescr["type"] == "folder":
-                p_header["external"] = 16
-                p_header["mtime"] = filemtime(p_filename)
-                p_header["size"] = filesize(p_filename)
+            if p_filedescr_["type"] == "folder":
+                p_header_["external"] = 16
+                p_header_["mtime"] = filemtime(p_filename_)
+                p_header_["size"] = filesize(p_filename_)
             else:
-                if p_filedescr["type"] == "virtual_file":
-                    p_header["external"] = 0
-                    p_header["size"] = php_strlen(p_filedescr["content"])
+                if p_filedescr_["type"] == "virtual_file":
+                    p_header_["external"] = 0
+                    p_header_["size"] = php_strlen(p_filedescr_["content"])
                 # end if
             # end if
         # end if
         #// ----- Look for filetime
-        if (php_isset(lambda : p_filedescr["mtime"])):
-            p_header["mtime"] = p_filedescr["mtime"]
+        if (php_isset(lambda : p_filedescr_["mtime"])):
+            p_header_["mtime"] = p_filedescr_["mtime"]
         else:
-            if p_filedescr["type"] == "virtual_file":
-                p_header["mtime"] = time()
+            if p_filedescr_["type"] == "virtual_file":
+                p_header_["mtime"] = time()
             else:
-                p_header["mtime"] = filemtime(p_filename)
+                p_header_["mtime"] = filemtime(p_filename_)
             # end if
         # end if
         #// ------ Look for file comment
-        if (php_isset(lambda : p_filedescr["comment"])):
-            p_header["comment_len"] = php_strlen(p_filedescr["comment"])
-            p_header["comment"] = p_filedescr["comment"]
+        if (php_isset(lambda : p_filedescr_["comment"])):
+            p_header_["comment_len"] = php_strlen(p_filedescr_["comment"])
+            p_header_["comment"] = p_filedescr_["comment"]
         else:
-            p_header["comment_len"] = 0
-            p_header["comment"] = ""
+            p_header_["comment_len"] = 0
+            p_header_["comment"] = ""
         # end if
         #// ----- Look for pre-add callback
-        if (php_isset(lambda : p_options[PCLZIP_CB_PRE_ADD])):
+        if (php_isset(lambda : p_options_[PCLZIP_CB_PRE_ADD])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_header, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_header_, v_local_header_)
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
-            v_result = p_options[PCLZIP_CB_PRE_ADD](PCLZIP_CB_PRE_ADD, v_local_header)
-            if v_result == 0:
+            v_result_ = p_options_[PCLZIP_CB_PRE_ADD](PCLZIP_CB_PRE_ADD, v_local_header_)
+            if v_result_ == 0:
                 #// ----- Change the file status
-                p_header["status"] = "skipped"
-                v_result = 1
+                p_header_["status"] = "skipped"
+                v_result_ = 1
             # end if
             #// ----- Update the information
             #// Only some fields can be modified
-            if p_header["stored_filename"] != v_local_header["stored_filename"]:
-                p_header["stored_filename"] = PclZipUtilPathReduction(v_local_header["stored_filename"])
+            if p_header_["stored_filename"] != v_local_header_["stored_filename"]:
+                p_header_["stored_filename"] = PclZipUtilPathReduction(v_local_header_["stored_filename"])
             # end if
         # end if
         #// ----- Look for empty stored filename
-        if p_header["stored_filename"] == "":
-            p_header["status"] = "filtered"
+        if p_header_["stored_filename"] == "":
+            p_header_["status"] = "filtered"
         # end if
         #// ----- Check the path length
-        if php_strlen(p_header["stored_filename"]) > 255:
-            p_header["status"] = "filename_too_long"
+        if php_strlen(p_header_["stored_filename"]) > 255:
+            p_header_["status"] = "filename_too_long"
         # end if
         #// ----- Look if no error, or file not skipped
-        if p_header["status"] == "ok":
+        if p_header_["status"] == "ok":
             #// ----- Look for a file
-            if p_filedescr["type"] == "file":
+            if p_filedescr_["type"] == "file":
                 #// ----- Look for using temporary file to zip
-                if (not (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_OFF]))) and (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_ON])) or (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD])) and p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD] <= p_header["size"]:
-                    v_result = self.privaddfileusingtempfile(p_filedescr, p_header, p_options)
-                    if v_result < PCLZIP_ERR_NO_ERROR:
-                        return v_result
+                if (not (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_OFF]))) and (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_ON])) or (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD])) and p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD] <= p_header_["size"]:
+                    v_result_ = self.privaddfileusingtempfile(p_filedescr_, p_header_, p_options_)
+                    if v_result_ < PCLZIP_ERR_NO_ERROR:
+                        return v_result_
                     # end if
                 else:
                     #// ----- Open the source file
-                    v_file = php_no_error(lambda: fopen(p_filename, "rb"))
-                    if v_file == 0:
-                        PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, str("Unable to open file '") + str(p_filename) + str("' in binary read mode"))
+                    v_file_ = php_no_error(lambda: fopen(p_filename_, "rb"))
+                    if v_file_ == 0:
+                        PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, str("Unable to open file '") + str(p_filename_) + str("' in binary read mode"))
                         return PclZip.errorcode()
                     # end if
                     #// ----- Read the file content
-                    v_content = php_no_error(lambda: fread(v_file, p_header["size"]))
+                    v_content_ = php_no_error(lambda: fread(v_file_, p_header_["size"]))
                     #// ----- Close the file
-                    php_no_error(lambda: php_fclose(v_file))
+                    php_no_error(lambda: php_fclose(v_file_))
                     #// ----- Calculate the CRC
-                    p_header["crc"] = php_no_error(lambda: crc32(v_content))
+                    p_header_["crc"] = php_no_error(lambda: crc32(v_content_))
                     #// ----- Look for no compression
-                    if p_options[PCLZIP_OPT_NO_COMPRESSION]:
+                    if p_options_[PCLZIP_OPT_NO_COMPRESSION]:
                         #// ----- Set header parameters
-                        p_header["compressed_size"] = p_header["size"]
-                        p_header["compression"] = 0
+                        p_header_["compressed_size"] = p_header_["size"]
+                        p_header_["compression"] = 0
                     else:
                         #// ----- Compress the content
-                        v_content = php_no_error(lambda: gzdeflate(v_content))
+                        v_content_ = php_no_error(lambda: gzdeflate(v_content_))
                         #// ----- Set header parameters
-                        p_header["compressed_size"] = php_strlen(v_content)
-                        p_header["compression"] = 8
+                        p_header_["compressed_size"] = php_strlen(v_content_)
+                        p_header_["compression"] = 8
                     # end if
                     #// ----- Call the header generation
-                    v_result = self.privwritefileheader(p_header)
-                    if v_result != 1:
-                        php_no_error(lambda: php_fclose(v_file))
-                        return v_result
+                    v_result_ = self.privwritefileheader(p_header_)
+                    if v_result_ != 1:
+                        php_no_error(lambda: php_fclose(v_file_))
+                        return v_result_
                     # end if
                     #// ----- Write the compressed (or not) content
-                    php_no_error(lambda: fwrite(self.zip_fd, v_content, p_header["compressed_size"]))
+                    php_no_error(lambda: fwrite(self.zip_fd, v_content_, p_header_["compressed_size"]))
                 # end if
             else:
-                if p_filedescr["type"] == "virtual_file":
-                    v_content = p_filedescr["content"]
+                if p_filedescr_["type"] == "virtual_file":
+                    v_content_ = p_filedescr_["content"]
                     #// ----- Calculate the CRC
-                    p_header["crc"] = php_no_error(lambda: crc32(v_content))
+                    p_header_["crc"] = php_no_error(lambda: crc32(v_content_))
                     #// ----- Look for no compression
-                    if p_options[PCLZIP_OPT_NO_COMPRESSION]:
+                    if p_options_[PCLZIP_OPT_NO_COMPRESSION]:
                         #// ----- Set header parameters
-                        p_header["compressed_size"] = p_header["size"]
-                        p_header["compression"] = 0
+                        p_header_["compressed_size"] = p_header_["size"]
+                        p_header_["compression"] = 0
                     else:
                         #// ----- Compress the content
-                        v_content = php_no_error(lambda: gzdeflate(v_content))
+                        v_content_ = php_no_error(lambda: gzdeflate(v_content_))
                         #// ----- Set header parameters
-                        p_header["compressed_size"] = php_strlen(v_content)
-                        p_header["compression"] = 8
+                        p_header_["compressed_size"] = php_strlen(v_content_)
+                        p_header_["compression"] = 8
                     # end if
                     #// ----- Call the header generation
-                    v_result = self.privwritefileheader(p_header)
-                    if v_result != 1:
-                        php_no_error(lambda: php_fclose(v_file))
-                        return v_result
+                    v_result_ = self.privwritefileheader(p_header_)
+                    if v_result_ != 1:
+                        php_no_error(lambda: php_fclose(v_file_))
+                        return v_result_
                     # end if
                     #// ----- Write the compressed (or not) content
-                    php_no_error(lambda: fwrite(self.zip_fd, v_content, p_header["compressed_size"]))
+                    php_no_error(lambda: fwrite(self.zip_fd, v_content_, p_header_["compressed_size"]))
                 else:
-                    if p_filedescr["type"] == "folder":
+                    if p_filedescr_["type"] == "folder":
                         #// ----- Look for directory last '/'
-                        if php_no_error(lambda: php_substr(p_header["stored_filename"], -1)) != "/":
-                            p_header["stored_filename"] += "/"
+                        if php_no_error(lambda: php_substr(p_header_["stored_filename"], -1)) != "/":
+                            p_header_["stored_filename"] += "/"
                         # end if
                         #// ----- Set the file properties
-                        p_header["size"] = 0
+                        p_header_["size"] = 0
                         #// $p_header['external'] = 0x41FF0010;   // Value for a folder : to be checked
-                        p_header["external"] = 16
+                        p_header_["external"] = 16
                         #// Value for a folder : to be checked
                         #// ----- Call the header generation
-                        v_result = self.privwritefileheader(p_header)
-                        if v_result != 1:
-                            return v_result
+                        v_result_ = self.privwritefileheader(p_header_)
+                        if v_result_ != 1:
+                            return v_result_
                         # end if
                     # end if
                 # end if
             # end if
         # end if
         #// ----- Look for post-add callback
-        if (php_isset(lambda : p_options[PCLZIP_CB_POST_ADD])):
+        if (php_isset(lambda : p_options_[PCLZIP_CB_POST_ADD])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_header, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_header_, v_local_header_)
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
-            v_result = p_options[PCLZIP_CB_POST_ADD](PCLZIP_CB_POST_ADD, v_local_header)
-            if v_result == 0:
+            v_result_ = p_options_[PCLZIP_CB_POST_ADD](PCLZIP_CB_POST_ADD, v_local_header_)
+            if v_result_ == 0:
                 #// ----- Ignored
-                v_result = 1
+                v_result_ = 1
             # end if
             pass
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privaddfile
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2287,99 +2323,100 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privaddfileusingtempfile(self, p_filedescr=None, p_header=None, p_options=None):
+    def privaddfileusingtempfile(self, p_filedescr_=None, p_header_=None, p_options_=None):
         
-        v_result = PCLZIP_ERR_NO_ERROR
+        
+        v_result_ = PCLZIP_ERR_NO_ERROR
         #// ----- Working variable
-        p_filename = p_filedescr["filename"]
+        p_filename_ = p_filedescr_["filename"]
         #// ----- Open the source file
-        v_file = php_no_error(lambda: fopen(p_filename, "rb"))
-        if v_file == 0:
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, str("Unable to open file '") + str(p_filename) + str("' in binary read mode"))
+        v_file_ = php_no_error(lambda: fopen(p_filename_, "rb"))
+        if v_file_ == 0:
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, str("Unable to open file '") + str(p_filename_) + str("' in binary read mode"))
             return PclZip.errorcode()
         # end if
         #// ----- Creates a compressed temporary file
-        v_gzip_temp_name = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".gz"
-        v_file_compressed = php_no_error(lambda: gzopen(v_gzip_temp_name, "wb"))
-        if v_file_compressed == 0:
-            php_fclose(v_file)
-            PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name + "' in binary write mode")
+        v_gzip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".gz"
+        v_file_compressed_ = php_no_error(lambda: gzopen(v_gzip_temp_name_, "wb"))
+        if v_file_compressed_ == 0:
+            php_fclose(v_file_)
+            PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name_ + "' in binary write mode")
             return PclZip.errorcode()
         # end if
         #// ----- Read the file by PCLZIP_READ_BLOCK_SIZE octets blocks
-        v_size = filesize(p_filename)
+        v_size_ = filesize(p_filename_)
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: fread(v_file, v_read_size))
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: fread(v_file_, v_read_size_))
             #// $v_binary_data = pack('a'.$v_read_size, $v_buffer);
-            php_no_error(lambda: gzputs(v_file_compressed, v_buffer, v_read_size))
-            v_size -= v_read_size
+            php_no_error(lambda: gzputs(v_file_compressed_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Close the file
-        php_no_error(lambda: php_fclose(v_file))
-        php_no_error(lambda: gzclose(v_file_compressed))
+        php_no_error(lambda: php_fclose(v_file_))
+        php_no_error(lambda: gzclose(v_file_compressed_))
         #// ----- Check the minimum file size
-        if filesize(v_gzip_temp_name) < 18:
-            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "gzip temporary file '" + v_gzip_temp_name + "' has invalid filesize - should be minimum 18 bytes")
+        if filesize(v_gzip_temp_name_) < 18:
+            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "gzip temporary file '" + v_gzip_temp_name_ + "' has invalid filesize - should be minimum 18 bytes")
             return PclZip.errorcode()
         # end if
         #// ----- Extract the compressed attributes
-        v_file_compressed = php_no_error(lambda: fopen(v_gzip_temp_name, "rb"))
-        if v_file_compressed == 0:
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name + "' in binary read mode")
+        v_file_compressed_ = php_no_error(lambda: fopen(v_gzip_temp_name_, "rb"))
+        if v_file_compressed_ == 0:
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name_ + "' in binary read mode")
             return PclZip.errorcode()
         # end if
         #// ----- Read the gzip file header
-        v_binary_data = php_no_error(lambda: fread(v_file_compressed, 10))
-        v_data_header = unpack("a1id1/a1id2/a1cm/a1flag/Vmtime/a1xfl/a1os", v_binary_data)
+        v_binary_data_ = php_no_error(lambda: fread(v_file_compressed_, 10))
+        v_data_header_ = unpack("a1id1/a1id2/a1cm/a1flag/Vmtime/a1xfl/a1os", v_binary_data_)
         #// ----- Check some parameters
-        v_data_header["os"] = bin2hex(v_data_header["os"])
+        v_data_header_["os"] = bin2hex(v_data_header_["os"])
         #// ----- Read the gzip file footer
-        php_no_error(lambda: fseek(v_file_compressed, filesize(v_gzip_temp_name) - 8))
-        v_binary_data = php_no_error(lambda: fread(v_file_compressed, 8))
-        v_data_footer = unpack("Vcrc/Vcompressed_size", v_binary_data)
+        php_no_error(lambda: fseek(v_file_compressed_, filesize(v_gzip_temp_name_) - 8))
+        v_binary_data_ = php_no_error(lambda: fread(v_file_compressed_, 8))
+        v_data_footer_ = unpack("Vcrc/Vcompressed_size", v_binary_data_)
         #// ----- Set the attributes
-        p_header["compression"] = php_ord(v_data_header["cm"])
+        p_header_["compression"] = php_ord(v_data_header_["cm"])
         #// $p_header['mtime'] = $v_data_header['mtime'];
-        p_header["crc"] = v_data_footer["crc"]
-        p_header["compressed_size"] = filesize(v_gzip_temp_name) - 18
+        p_header_["crc"] = v_data_footer_["crc"]
+        p_header_["compressed_size"] = filesize(v_gzip_temp_name_) - 18
         #// ----- Close the file
-        php_no_error(lambda: php_fclose(v_file_compressed))
+        php_no_error(lambda: php_fclose(v_file_compressed_))
         #// ----- Call the header generation
-        v_result = self.privwritefileheader(p_header)
-        if v_result != 1:
-            return v_result
+        v_result_ = self.privwritefileheader(p_header_)
+        if v_result_ != 1:
+            return v_result_
         # end if
         #// ----- Add the compressed data
-        v_file_compressed = php_no_error(lambda: fopen(v_gzip_temp_name, "rb"))
-        if v_file_compressed == 0:
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name + "' in binary read mode")
+        v_file_compressed_ = php_no_error(lambda: fopen(v_gzip_temp_name_, "rb"))
+        if v_file_compressed_ == 0:
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name_ + "' in binary read mode")
             return PclZip.errorcode()
         # end if
         #// ----- Read the file by PCLZIP_READ_BLOCK_SIZE octets blocks
-        fseek(v_file_compressed, 10)
-        v_size = p_header["compressed_size"]
+        fseek(v_file_compressed_, 10)
+        v_size_ = p_header_["compressed_size"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: fread(v_file_compressed, v_read_size))
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: fread(v_file_compressed_, v_read_size_))
             #// $v_binary_data = pack('a'.$v_read_size, $v_buffer);
-            php_no_error(lambda: fwrite(self.zip_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            php_no_error(lambda: fwrite(self.zip_fd, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Close the file
-        php_no_error(lambda: php_fclose(v_file_compressed))
+        php_no_error(lambda: php_fclose(v_file_compressed_))
         #// ----- Unlink the temporary file
-        php_no_error(lambda: unlink(v_gzip_temp_name))
+        php_no_error(lambda: unlink(v_gzip_temp_name_))
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privaddfileusingtempfile
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2390,86 +2427,87 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privcalculatestoredfilename(self, p_filedescr=None, p_options=None):
+    def privcalculatestoredfilename(self, p_filedescr_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Working variables
-        p_filename = p_filedescr["filename"]
-        if (php_isset(lambda : p_options[PCLZIP_OPT_ADD_PATH])):
-            p_add_dir = p_options[PCLZIP_OPT_ADD_PATH]
+        p_filename_ = p_filedescr_["filename"]
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_ADD_PATH])):
+            p_add_dir_ = p_options_[PCLZIP_OPT_ADD_PATH]
         else:
-            p_add_dir = ""
+            p_add_dir_ = ""
         # end if
-        if (php_isset(lambda : p_options[PCLZIP_OPT_REMOVE_PATH])):
-            p_remove_dir = p_options[PCLZIP_OPT_REMOVE_PATH]
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_REMOVE_PATH])):
+            p_remove_dir_ = p_options_[PCLZIP_OPT_REMOVE_PATH]
         else:
-            p_remove_dir = ""
+            p_remove_dir_ = ""
         # end if
-        if (php_isset(lambda : p_options[PCLZIP_OPT_REMOVE_ALL_PATH])):
-            p_remove_all_dir = p_options[PCLZIP_OPT_REMOVE_ALL_PATH]
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_REMOVE_ALL_PATH])):
+            p_remove_all_dir_ = p_options_[PCLZIP_OPT_REMOVE_ALL_PATH]
         else:
-            p_remove_all_dir = 0
+            p_remove_all_dir_ = 0
         # end if
         #// ----- Look for full name change
-        if (php_isset(lambda : p_filedescr["new_full_name"])):
+        if (php_isset(lambda : p_filedescr_["new_full_name"])):
             #// ----- Remove drive letter if any
-            v_stored_filename = PclZipUtilTranslateWinPath(p_filedescr["new_full_name"])
+            v_stored_filename_ = PclZipUtilTranslateWinPath(p_filedescr_["new_full_name"])
         else:
             #// ----- Look for short name change
             #// Its when we change just the filename but not the path
-            if (php_isset(lambda : p_filedescr["new_short_name"])):
-                v_path_info = pathinfo(p_filename)
-                v_dir = ""
-                if v_path_info["dirname"] != "":
-                    v_dir = v_path_info["dirname"] + "/"
+            if (php_isset(lambda : p_filedescr_["new_short_name"])):
+                v_path_info_ = pathinfo(p_filename_)
+                v_dir_ = ""
+                if v_path_info_["dirname"] != "":
+                    v_dir_ = v_path_info_["dirname"] + "/"
                 # end if
-                v_stored_filename = v_dir + p_filedescr["new_short_name"]
+                v_stored_filename_ = v_dir_ + p_filedescr_["new_short_name"]
             else:
                 #// ----- Calculate the stored filename
-                v_stored_filename = p_filename
+                v_stored_filename_ = p_filename_
             # end if
             #// ----- Look for all path to remove
-            if p_remove_all_dir:
-                v_stored_filename = php_basename(p_filename)
+            if p_remove_all_dir_:
+                v_stored_filename_ = php_basename(p_filename_)
             else:
-                if p_remove_dir != "":
-                    if php_substr(p_remove_dir, -1) != "/":
-                        p_remove_dir += "/"
+                if p_remove_dir_ != "":
+                    if php_substr(p_remove_dir_, -1) != "/":
+                        p_remove_dir_ += "/"
                     # end if
-                    if php_substr(p_filename, 0, 2) == "./" or php_substr(p_remove_dir, 0, 2) == "./":
-                        if php_substr(p_filename, 0, 2) == "./" and php_substr(p_remove_dir, 0, 2) != "./":
-                            p_remove_dir = "./" + p_remove_dir
+                    if php_substr(p_filename_, 0, 2) == "./" or php_substr(p_remove_dir_, 0, 2) == "./":
+                        if php_substr(p_filename_, 0, 2) == "./" and php_substr(p_remove_dir_, 0, 2) != "./":
+                            p_remove_dir_ = "./" + p_remove_dir_
                         # end if
-                        if php_substr(p_filename, 0, 2) != "./" and php_substr(p_remove_dir, 0, 2) == "./":
-                            p_remove_dir = php_substr(p_remove_dir, 2)
+                        if php_substr(p_filename_, 0, 2) != "./" and php_substr(p_remove_dir_, 0, 2) == "./":
+                            p_remove_dir_ = php_substr(p_remove_dir_, 2)
                         # end if
                     # end if
-                    v_compare = PclZipUtilPathInclusion(p_remove_dir, v_stored_filename)
-                    if v_compare > 0:
-                        if v_compare == 2:
-                            v_stored_filename = ""
+                    v_compare_ = PclZipUtilPathInclusion(p_remove_dir_, v_stored_filename_)
+                    if v_compare_ > 0:
+                        if v_compare_ == 2:
+                            v_stored_filename_ = ""
                         else:
-                            v_stored_filename = php_substr(v_stored_filename, php_strlen(p_remove_dir))
+                            v_stored_filename_ = php_substr(v_stored_filename_, php_strlen(p_remove_dir_))
                         # end if
                     # end if
                 # end if
             # end if
             #// ----- Remove drive letter if any
-            v_stored_filename = PclZipUtilTranslateWinPath(v_stored_filename)
+            v_stored_filename_ = PclZipUtilTranslateWinPath(v_stored_filename_)
             #// ----- Look for path to add
-            if p_add_dir != "":
-                if php_substr(p_add_dir, -1) == "/":
-                    v_stored_filename = p_add_dir + v_stored_filename
+            if p_add_dir_ != "":
+                if php_substr(p_add_dir_, -1) == "/":
+                    v_stored_filename_ = p_add_dir_ + v_stored_filename_
                 else:
-                    v_stored_filename = p_add_dir + "/" + v_stored_filename
+                    v_stored_filename_ = p_add_dir_ + "/" + v_stored_filename_
                 # end if
             # end if
         # end if
         #// ----- Filename (reduce the path of stored name)
-        v_stored_filename = PclZipUtilPathReduction(v_stored_filename)
-        p_filedescr["stored_filename"] = v_stored_filename
+        v_stored_filename_ = PclZipUtilPathReduction(v_stored_filename_)
+        p_filedescr_["stored_filename"] = v_stored_filename_
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privcalculatestoredfilename
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2478,28 +2516,29 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privwritefileheader(self, p_header=None):
+    def privwritefileheader(self, p_header_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Store the offset position of the file
-        p_header["offset"] = ftell(self.zip_fd)
+        p_header_["offset"] = ftell(self.zip_fd)
         #// ----- Transform UNIX mtime to DOS format mdate/mtime
-        v_date = getdate(p_header["mtime"])
-        v_mtime = v_date["hours"] << 11 + v_date["minutes"] << 5 + v_date["seconds"] / 2
-        v_mdate = v_date["year"] - 1980 << 9 + v_date["mon"] << 5 + v_date["mday"]
+        v_date_ = getdate(p_header_["mtime"])
+        v_mtime_ = v_date_["hours"] << 11 + v_date_["minutes"] << 5 + v_date_["seconds"] / 2
+        v_mdate_ = v_date_["year"] - 1980 << 9 + v_date_["mon"] << 5 + v_date_["mday"]
         #// ----- Packed data
-        v_binary_data = pack("VvvvvvVVVvv", 67324752, p_header["version_extracted"], p_header["flag"], p_header["compression"], v_mtime, v_mdate, p_header["crc"], p_header["compressed_size"], p_header["size"], php_strlen(p_header["stored_filename"]), p_header["extra_len"])
+        v_binary_data_ = pack("VvvvvvVVVvv", 67324752, p_header_["version_extracted"], p_header_["flag"], p_header_["compression"], v_mtime_, v_mdate_, p_header_["crc"], p_header_["compressed_size"], p_header_["size"], php_strlen(p_header_["stored_filename"]), p_header_["extra_len"])
         #// ----- Write the first 148 bytes of the header in the archive
-        fputs(self.zip_fd, v_binary_data, 30)
+        fputs(self.zip_fd, v_binary_data_, 30)
         #// ----- Write the variable fields
-        if php_strlen(p_header["stored_filename"]) != 0:
-            fputs(self.zip_fd, p_header["stored_filename"], php_strlen(p_header["stored_filename"]))
+        if php_strlen(p_header_["stored_filename"]) != 0:
+            fputs(self.zip_fd, p_header_["stored_filename"], php_strlen(p_header_["stored_filename"]))
         # end if
-        if p_header["extra_len"] != 0:
-            fputs(self.zip_fd, p_header["extra"], p_header["extra_len"])
+        if p_header_["extra_len"] != 0:
+            fputs(self.zip_fd, p_header_["extra"], p_header_["extra_len"])
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privwritefileheader
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2508,32 +2547,33 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privwritecentralfileheader(self, p_header=None):
+    def privwritecentralfileheader(self, p_header_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// TBC
         #// for(reset($p_header); $key = key($p_header); next($p_header)) {
         #// }
         #// ----- Transform UNIX mtime to DOS format mdate/mtime
-        v_date = getdate(p_header["mtime"])
-        v_mtime = v_date["hours"] << 11 + v_date["minutes"] << 5 + v_date["seconds"] / 2
-        v_mdate = v_date["year"] - 1980 << 9 + v_date["mon"] << 5 + v_date["mday"]
+        v_date_ = getdate(p_header_["mtime"])
+        v_mtime_ = v_date_["hours"] << 11 + v_date_["minutes"] << 5 + v_date_["seconds"] / 2
+        v_mdate_ = v_date_["year"] - 1980 << 9 + v_date_["mon"] << 5 + v_date_["mday"]
         #// ----- Packed data
-        v_binary_data = pack("VvvvvvvVVVvvvvvVV", 33639248, p_header["version"], p_header["version_extracted"], p_header["flag"], p_header["compression"], v_mtime, v_mdate, p_header["crc"], p_header["compressed_size"], p_header["size"], php_strlen(p_header["stored_filename"]), p_header["extra_len"], p_header["comment_len"], p_header["disk"], p_header["internal"], p_header["external"], p_header["offset"])
+        v_binary_data_ = pack("VvvvvvvVVVvvvvvVV", 33639248, p_header_["version"], p_header_["version_extracted"], p_header_["flag"], p_header_["compression"], v_mtime_, v_mdate_, p_header_["crc"], p_header_["compressed_size"], p_header_["size"], php_strlen(p_header_["stored_filename"]), p_header_["extra_len"], p_header_["comment_len"], p_header_["disk"], p_header_["internal"], p_header_["external"], p_header_["offset"])
         #// ----- Write the 42 bytes of the header in the zip file
-        fputs(self.zip_fd, v_binary_data, 46)
+        fputs(self.zip_fd, v_binary_data_, 46)
         #// ----- Write the variable fields
-        if php_strlen(p_header["stored_filename"]) != 0:
-            fputs(self.zip_fd, p_header["stored_filename"], php_strlen(p_header["stored_filename"]))
+        if php_strlen(p_header_["stored_filename"]) != 0:
+            fputs(self.zip_fd, p_header_["stored_filename"], php_strlen(p_header_["stored_filename"]))
         # end if
-        if p_header["extra_len"] != 0:
-            fputs(self.zip_fd, p_header["extra"], p_header["extra_len"])
+        if p_header_["extra_len"] != 0:
+            fputs(self.zip_fd, p_header_["extra"], p_header_["extra_len"])
         # end if
-        if p_header["comment_len"] != 0:
-            fputs(self.zip_fd, p_header["comment"], p_header["comment_len"])
+        if p_header_["comment_len"] != 0:
+            fputs(self.zip_fd, p_header_["comment"], p_header_["comment_len"])
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privwritecentralfileheader
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2542,19 +2582,20 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privwritecentralheader(self, p_nb_entries=None, p_size=None, p_offset=None, p_comment=None):
+    def privwritecentralheader(self, p_nb_entries_=None, p_size_=None, p_offset_=None, p_comment_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Packed data
-        v_binary_data = pack("VvvvvVVv", 101010256, 0, 0, p_nb_entries, p_nb_entries, p_size, p_offset, php_strlen(p_comment))
+        v_binary_data_ = pack("VvvvvVVv", 101010256, 0, 0, p_nb_entries_, p_nb_entries_, p_size_, p_offset_, php_strlen(p_comment_))
         #// ----- Write the 22 bytes of the header in the zip file
-        fputs(self.zip_fd, v_binary_data, 22)
+        fputs(self.zip_fd, v_binary_data_, 22)
         #// ----- Write the variable fields
-        if php_strlen(p_comment) != 0:
-            fputs(self.zip_fd, p_comment, php_strlen(p_comment))
+        if php_strlen(p_comment_) != 0:
+            fputs(self.zip_fd, p_comment_, php_strlen(p_comment_))
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privwritecentralheader
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2563,9 +2604,10 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privlist(self, p_list=None):
+    def privlist(self, p_list_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Magic quotes trick
         self.privdisablemagicquotes()
         #// ----- Open the zip file
@@ -2579,15 +2621,15 @@ class PclZip():
             return PclZip.errorcode()
         # end if
         #// ----- Read the central directory information
-        v_central_dir = Array()
-        v_result = self.privreadendcentraldir(v_central_dir)
-        if v_result != 1:
+        v_central_dir_ = Array()
+        v_result_ = self.privreadendcentraldir(v_central_dir_)
+        if v_result_ != 1:
             self.privswapbackmagicquotes()
-            return v_result
+            return v_result_
         # end if
         #// ----- Go to beginning of Central Dir
         php_no_error(lambda: rewind(self.zip_fd))
-        if php_no_error(lambda: fseek(self.zip_fd, v_central_dir["offset"])):
+        if php_no_error(lambda: fseek(self.zip_fd, v_central_dir_["offset"])):
             self.privswapbackmagicquotes()
             #// ----- Error log
             PclZip.priverrorlog(PCLZIP_ERR_INVALID_ARCHIVE_ZIP, "Invalid archive size")
@@ -2595,27 +2637,27 @@ class PclZip():
             return PclZip.errorcode()
         # end if
         #// ----- Read each entry
-        i = 0
-        while i < v_central_dir["entries"]:
+        i_ = 0
+        while i_ < v_central_dir_["entries"]:
             
             #// ----- Read the file header
-            v_result = self.privreadcentralfileheader(v_header)
-            if v_result != 1:
+            v_result_ = self.privreadcentralfileheader(v_header_)
+            if v_result_ != 1:
                 self.privswapbackmagicquotes()
-                return v_result
+                return v_result_
             # end if
-            v_header["index"] = i
+            v_header_["index"] = i_
             #// ----- Get the only interesting attributes
-            self.privconvertheader2fileinfo(v_header, p_list[i])
-            v_header = None
-            i += 1
+            self.privconvertheader2fileinfo(v_header_, p_list_[i_])
+            v_header_ = None
+            i_ += 1
         # end while
         #// ----- Close the zip file
         self.privclosefd()
         #// ----- Magic quotes trick
         self.privswapbackmagicquotes()
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privlist
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2637,24 +2679,25 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privconvertheader2fileinfo(self, p_header=None, p_info=None):
+    def privconvertheader2fileinfo(self, p_header_=None, p_info_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Get the interesting attributes
-        v_temp_path = PclZipUtilPathReduction(p_header["filename"])
-        p_info["filename"] = v_temp_path
-        v_temp_path = PclZipUtilPathReduction(p_header["stored_filename"])
-        p_info["stored_filename"] = v_temp_path
-        p_info["size"] = p_header["size"]
-        p_info["compressed_size"] = p_header["compressed_size"]
-        p_info["mtime"] = p_header["mtime"]
-        p_info["comment"] = p_header["comment"]
-        p_info["folder"] = p_header["external"] & 16 == 16
-        p_info["index"] = p_header["index"]
-        p_info["status"] = p_header["status"]
-        p_info["crc"] = p_header["crc"]
+        v_temp_path_ = PclZipUtilPathReduction(p_header_["filename"])
+        p_info_["filename"] = v_temp_path_
+        v_temp_path_ = PclZipUtilPathReduction(p_header_["stored_filename"])
+        p_info_["stored_filename"] = v_temp_path_
+        p_info_["size"] = p_header_["size"]
+        p_info_["compressed_size"] = p_header_["compressed_size"]
+        p_info_["mtime"] = p_header_["mtime"]
+        p_info_["comment"] = p_header_["comment"]
+        p_info_["folder"] = p_header_["external"] & 16 == 16
+        p_info_["index"] = p_header_["index"]
+        p_info_["status"] = p_header_["status"]
+        p_info_["crc"] = p_header_["crc"]
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privconvertheader2fileinfo
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2673,57 +2716,58 @@ class PclZip():
     #// Return Values :
     #// 1 on success,0 or less on error (see error code list)
     #// --------------------------------------------------------------------------------
-    def privextractbyrule(self, p_file_list=None, p_path=None, p_remove_path=None, p_remove_all_path=None, p_options=None):
+    def privextractbyrule(self, p_file_list_=None, p_path_=None, p_remove_path_=None, p_remove_all_path_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Magic quotes trick
         self.privdisablemagicquotes()
         #// ----- Check the path
-        if p_path == "" or php_substr(p_path, 0, 1) != "/" and php_substr(p_path, 0, 3) != "../" and php_substr(p_path, 1, 2) != ":/":
-            p_path = "./" + p_path
+        if p_path_ == "" or php_substr(p_path_, 0, 1) != "/" and php_substr(p_path_, 0, 3) != "../" and php_substr(p_path_, 1, 2) != ":/":
+            p_path_ = "./" + p_path_
         # end if
         #// ----- Reduce the path last (and duplicated) '/'
-        if p_path != "./" and p_path != "/":
+        if p_path_ != "./" and p_path_ != "/":
             #// ----- Look for the path end '/'
             while True:
                 
-                if not (php_substr(p_path, -1) == "/"):
+                if not (php_substr(p_path_, -1) == "/"):
                     break
                 # end if
-                p_path = php_substr(p_path, 0, php_strlen(p_path) - 1)
+                p_path_ = php_substr(p_path_, 0, php_strlen(p_path_) - 1)
             # end while
         # end if
         #// ----- Look for path to remove format (should end by /)
-        if p_remove_path != "" and php_substr(p_remove_path, -1) != "/":
-            p_remove_path += "/"
+        if p_remove_path_ != "" and php_substr(p_remove_path_, -1) != "/":
+            p_remove_path_ += "/"
         # end if
-        p_remove_path_size = php_strlen(p_remove_path)
+        p_remove_path_size_ = php_strlen(p_remove_path_)
         #// ----- Open the zip file
-        v_result = self.privopenfd("rb")
-        if v_result != 1:
+        v_result_ = self.privopenfd("rb")
+        if v_result_ != 1:
             self.privswapbackmagicquotes()
-            return v_result
+            return v_result_
         # end if
         #// ----- Read the central directory information
-        v_central_dir = Array()
-        v_result = self.privreadendcentraldir(v_central_dir)
-        if v_result != 1:
+        v_central_dir_ = Array()
+        v_result_ = self.privreadendcentraldir(v_central_dir_)
+        if v_result_ != 1:
             #// ----- Close the zip file
             self.privclosefd()
             self.privswapbackmagicquotes()
-            return v_result
+            return v_result_
         # end if
         #// ----- Start at beginning of Central Dir
-        v_pos_entry = v_central_dir["offset"]
+        v_pos_entry_ = v_central_dir_["offset"]
         #// ----- Read each entry
-        j_start = 0
-        i = 0
-        v_nb_extracted = 0
-        while i < v_central_dir["entries"]:
+        j_start_ = 0
+        i_ = 0
+        v_nb_extracted_ = 0
+        while i_ < v_central_dir_["entries"]:
             
             #// ----- Read next Central dir entry
             php_no_error(lambda: rewind(self.zip_fd))
-            if php_no_error(lambda: fseek(self.zip_fd, v_pos_entry)):
+            if php_no_error(lambda: fseek(self.zip_fd, v_pos_entry_)):
                 #// ----- Close the zip file
                 self.privclosefd()
                 self.privswapbackmagicquotes()
@@ -2733,101 +2777,102 @@ class PclZip():
                 return PclZip.errorcode()
             # end if
             #// ----- Read the file header
-            v_header = Array()
-            v_result = self.privreadcentralfileheader(v_header)
-            if v_result != 1:
+            v_header_ = Array()
+            v_result_ = self.privreadcentralfileheader(v_header_)
+            if v_result_ != 1:
                 #// ----- Close the zip file
                 self.privclosefd()
                 self.privswapbackmagicquotes()
-                return v_result
+                return v_result_
             # end if
             #// ----- Store the index
-            v_header["index"] = i
+            v_header_["index"] = i_
             #// ----- Store the file position
-            v_pos_entry = ftell(self.zip_fd)
+            v_pos_entry_ = ftell(self.zip_fd)
             #// ----- Look for the specific extract rules
-            v_extract = False
+            v_extract_ = False
             #// ----- Look for extract by name rule
-            if (php_isset(lambda : p_options[PCLZIP_OPT_BY_NAME])) and p_options[PCLZIP_OPT_BY_NAME] != 0:
+            if (php_isset(lambda : p_options_[PCLZIP_OPT_BY_NAME])) and p_options_[PCLZIP_OPT_BY_NAME] != 0:
                 #// ----- Look if the filename is in the list
-                j = 0
-                while j < sizeof(p_options[PCLZIP_OPT_BY_NAME]) and (not v_extract):
+                j_ = 0
+                while j_ < sizeof(p_options_[PCLZIP_OPT_BY_NAME]) and (not v_extract_):
                     
                     #// ----- Look for a directory
-                    if php_substr(p_options[PCLZIP_OPT_BY_NAME][j], -1) == "/":
+                    if php_substr(p_options_[PCLZIP_OPT_BY_NAME][j_], -1) == "/":
                         #// ----- Look if the directory is in the filename path
-                        if php_strlen(v_header["stored_filename"]) > php_strlen(p_options[PCLZIP_OPT_BY_NAME][j]) and php_substr(v_header["stored_filename"], 0, php_strlen(p_options[PCLZIP_OPT_BY_NAME][j])) == p_options[PCLZIP_OPT_BY_NAME][j]:
-                            v_extract = True
+                        if php_strlen(v_header_["stored_filename"]) > php_strlen(p_options_[PCLZIP_OPT_BY_NAME][j_]) and php_substr(v_header_["stored_filename"], 0, php_strlen(p_options_[PCLZIP_OPT_BY_NAME][j_])) == p_options_[PCLZIP_OPT_BY_NAME][j_]:
+                            v_extract_ = True
                         # end if
                         #// ----- Look for a filename
-                    elif v_header["stored_filename"] == p_options[PCLZIP_OPT_BY_NAME][j]:
-                        v_extract = True
+                    elif v_header_["stored_filename"] == p_options_[PCLZIP_OPT_BY_NAME][j_]:
+                        v_extract_ = True
                     # end if
-                    j += 1
+                    j_ += 1
                 # end while
             else:
-                if (php_isset(lambda : p_options[PCLZIP_OPT_BY_PREG])) and p_options[PCLZIP_OPT_BY_PREG] != "":
-                    if php_preg_match(p_options[PCLZIP_OPT_BY_PREG], v_header["stored_filename"]):
-                        v_extract = True
+                if (php_isset(lambda : p_options_[PCLZIP_OPT_BY_PREG])) and p_options_[PCLZIP_OPT_BY_PREG] != "":
+                    if php_preg_match(p_options_[PCLZIP_OPT_BY_PREG], v_header_["stored_filename"]):
+                        v_extract_ = True
                     # end if
                 else:
-                    if (php_isset(lambda : p_options[PCLZIP_OPT_BY_INDEX])) and p_options[PCLZIP_OPT_BY_INDEX] != 0:
+                    if (php_isset(lambda : p_options_[PCLZIP_OPT_BY_INDEX])) and p_options_[PCLZIP_OPT_BY_INDEX] != 0:
                         #// ----- Look if the index is in the list
-                        j = j_start
-                        while j < sizeof(p_options[PCLZIP_OPT_BY_INDEX]) and (not v_extract):
+                        j_ = j_start_
+                        while j_ < sizeof(p_options_[PCLZIP_OPT_BY_INDEX]) and (not v_extract_):
                             
-                            if i >= p_options[PCLZIP_OPT_BY_INDEX][j]["start"] and i <= p_options[PCLZIP_OPT_BY_INDEX][j]["end"]:
-                                v_extract = True
+                            if i_ >= p_options_[PCLZIP_OPT_BY_INDEX][j_]["start"] and i_ <= p_options_[PCLZIP_OPT_BY_INDEX][j_]["end"]:
+                                v_extract_ = True
                             # end if
-                            if i >= p_options[PCLZIP_OPT_BY_INDEX][j]["end"]:
-                                j_start = j + 1
+                            if i_ >= p_options_[PCLZIP_OPT_BY_INDEX][j_]["end"]:
+                                j_start_ = j_ + 1
                             # end if
-                            if p_options[PCLZIP_OPT_BY_INDEX][j]["start"] > i:
+                            if p_options_[PCLZIP_OPT_BY_INDEX][j_]["start"] > i_:
                                 break
                             # end if
-                            j += 1
+                            j_ += 1
                         # end while
                     else:
-                        v_extract = True
+                        v_extract_ = True
                     # end if
                 # end if
             # end if
             #// ----- Check compression method
-            if v_extract and v_header["compression"] != 8 and v_header["compression"] != 0:
-                v_header["status"] = "unsupported_compression"
+            if v_extract_ and v_header_["compression"] != 8 and v_header_["compression"] != 0:
+                v_header_["status"] = "unsupported_compression"
                 #// ----- Look for PCLZIP_OPT_STOP_ON_ERROR
-                if (php_isset(lambda : p_options[PCLZIP_OPT_STOP_ON_ERROR])) and p_options[PCLZIP_OPT_STOP_ON_ERROR] == True:
+                if (php_isset(lambda : p_options_[PCLZIP_OPT_STOP_ON_ERROR])) and p_options_[PCLZIP_OPT_STOP_ON_ERROR] == True:
                     self.privswapbackmagicquotes()
-                    PclZip.priverrorlog(PCLZIP_ERR_UNSUPPORTED_COMPRESSION, "Filename '" + v_header["stored_filename"] + "' is " + "compressed by an unsupported compression " + "method (" + v_header["compression"] + ") ")
+                    PclZip.priverrorlog(PCLZIP_ERR_UNSUPPORTED_COMPRESSION, "Filename '" + v_header_["stored_filename"] + "' is " + "compressed by an unsupported compression " + "method (" + v_header_["compression"] + ") ")
                     return PclZip.errorcode()
                 # end if
             # end if
             #// ----- Check encrypted files
-            if v_extract and v_header["flag"] & 1 == 1:
-                v_header["status"] = "unsupported_encryption"
+            if v_extract_ and v_header_["flag"] & 1 == 1:
+                v_header_["status"] = "unsupported_encryption"
                 #// ----- Look for PCLZIP_OPT_STOP_ON_ERROR
-                if (php_isset(lambda : p_options[PCLZIP_OPT_STOP_ON_ERROR])) and p_options[PCLZIP_OPT_STOP_ON_ERROR] == True:
+                if (php_isset(lambda : p_options_[PCLZIP_OPT_STOP_ON_ERROR])) and p_options_[PCLZIP_OPT_STOP_ON_ERROR] == True:
                     self.privswapbackmagicquotes()
-                    PclZip.priverrorlog(PCLZIP_ERR_UNSUPPORTED_ENCRYPTION, "Unsupported encryption for " + " filename '" + v_header["stored_filename"] + "'")
+                    PclZip.priverrorlog(PCLZIP_ERR_UNSUPPORTED_ENCRYPTION, "Unsupported encryption for " + " filename '" + v_header_["stored_filename"] + "'")
                     return PclZip.errorcode()
                 # end if
             # end if
             #// ----- Look for real extraction
-            if v_extract and v_header["status"] != "ok":
-                v_result = self.privconvertheader2fileinfo(v_header, p_file_list[v_nb_extracted])
-                v_nb_extracted += 1
-                if v_result != 1:
+            if v_extract_ and v_header_["status"] != "ok":
+                v_result_ = self.privconvertheader2fileinfo(v_header_, p_file_list_[v_nb_extracted_])
+                v_nb_extracted_ += 1
+                v_nb_extracted_ += 1
+                if v_result_ != 1:
                     self.privclosefd()
                     self.privswapbackmagicquotes()
-                    return v_result
+                    return v_result_
                 # end if
-                v_extract = False
+                v_extract_ = False
             # end if
             #// ----- Look for real extraction
-            if v_extract:
+            if v_extract_:
                 #// ----- Go to the file position
                 php_no_error(lambda: rewind(self.zip_fd))
-                if php_no_error(lambda: fseek(self.zip_fd, v_header["offset"])):
+                if php_no_error(lambda: fseek(self.zip_fd, v_header_["offset"])):
                     #// ----- Close the zip file
                     self.privclosefd()
                     self.privswapbackmagicquotes()
@@ -2837,84 +2882,90 @@ class PclZip():
                     return PclZip.errorcode()
                 # end if
                 #// ----- Look for extraction as string
-                if p_options[PCLZIP_OPT_EXTRACT_AS_STRING]:
-                    v_string = ""
+                if p_options_[PCLZIP_OPT_EXTRACT_AS_STRING]:
+                    v_string_ = ""
                     #// ----- Extracting the file
-                    v_result1 = self.privextractfileasstring(v_header, v_string, p_options)
-                    if v_result1 < 1:
+                    v_result1_ = self.privextractfileasstring(v_header_, v_string_, p_options_)
+                    if v_result1_ < 1:
                         self.privclosefd()
                         self.privswapbackmagicquotes()
-                        return v_result1
+                        return v_result1_
                     # end if
                     #// ----- Get the only interesting attributes
-                    v_result = self.privconvertheader2fileinfo(v_header, p_file_list[v_nb_extracted])
-                    if v_result != 1:
+                    v_result_ = self.privconvertheader2fileinfo(v_header_, p_file_list_[v_nb_extracted_])
+                    if v_result_ != 1:
                         #// ----- Close the zip file
                         self.privclosefd()
                         self.privswapbackmagicquotes()
-                        return v_result
+                        return v_result_
                     # end if
                     #// ----- Set the file content
-                    p_file_list[v_nb_extracted]["content"] = v_string
+                    p_file_list_[v_nb_extracted_]["content"] = v_string_
                     #// ----- Next extracted file
-                    v_nb_extracted += 1
+                    v_nb_extracted_ += 1
                     #// ----- Look for user callback abort
-                    if v_result1 == 2:
+                    if v_result1_ == 2:
                         break
                     # end if
                     #// ----- Look for extraction in standard output
-                elif (php_isset(lambda : p_options[PCLZIP_OPT_EXTRACT_IN_OUTPUT])) and p_options[PCLZIP_OPT_EXTRACT_IN_OUTPUT]:
+                elif (php_isset(lambda : p_options_[PCLZIP_OPT_EXTRACT_IN_OUTPUT])) and p_options_[PCLZIP_OPT_EXTRACT_IN_OUTPUT]:
                     #// ----- Extracting the file in standard output
-                    v_result1 = self.privextractfileinoutput(v_header, p_options)
-                    if v_result1 < 1:
+                    v_result1_ = self.privextractfileinoutput(v_header_, p_options_)
+                    if v_result1_ < 1:
                         self.privclosefd()
                         self.privswapbackmagicquotes()
-                        return v_result1
+                        return v_result1_
                     # end if
                     #// ----- Get the only interesting attributes
-                    v_result = self.privconvertheader2fileinfo(v_header, p_file_list[v_nb_extracted])
-                    if v_result != 1:
+                    v_result_ = self.privconvertheader2fileinfo(v_header_, p_file_list_[v_nb_extracted_])
+                    v_nb_extracted_ += 1
+                    if v_result_ != 1:
                         self.privclosefd()
                         self.privswapbackmagicquotes()
-                        return v_result
+                        return v_result_
                     # end if
-                    v_nb_extracted += 1
-                    v_nb_extracted += 1
+                    v_nb_extracted_ += 1
+                    v_nb_extracted_ += 1
+                    v_nb_extracted_ += 1
+                    v_nb_extracted_ += 1
                     #// ----- Look for user callback abort
-                    if v_result1 == 2:
+                    if v_result1_ == 2:
                         break
                     # end if
                 else:
                     #// ----- Extracting the file
-                    v_result1 = self.privextractfile(v_header, p_path, p_remove_path, p_remove_all_path, p_options)
-                    if v_result1 < 1:
+                    v_result1_ = self.privextractfile(v_header_, p_path_, p_remove_path_, p_remove_all_path_, p_options_)
+                    if v_result1_ < 1:
                         self.privclosefd()
                         self.privswapbackmagicquotes()
-                        return v_result1
+                        return v_result1_
                     # end if
                     #// ----- Get the only interesting attributes
-                    v_result = self.privconvertheader2fileinfo(v_header, p_file_list[v_nb_extracted])
-                    if v_result != 1:
+                    v_result_ = self.privconvertheader2fileinfo(v_header_, p_file_list_[v_nb_extracted_])
+                    v_nb_extracted_ += 1
+                    if v_result_ != 1:
                         #// ----- Close the zip file
                         self.privclosefd()
                         self.privswapbackmagicquotes()
-                        return v_result
+                        return v_result_
                     # end if
-                    v_nb_extracted += 1
-                    v_nb_extracted += 1
+                    v_nb_extracted_ += 1
+                    v_nb_extracted_ += 1
+                    v_nb_extracted_ += 1
+                    v_nb_extracted_ += 1
                     #// ----- Look for user callback abort
-                    if v_result1 == 2:
+                    if v_result1_ == 2:
                         break
                     # end if
                 # end if
             # end if
-            i += 1
+            i_ += 1
         # end while
         #// ----- Close the zip file
         self.privclosefd()
         self.privswapbackmagicquotes()
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privextractbyrule
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -2926,117 +2977,118 @@ class PclZip():
     #// 1 : ... ?
     #// PCLZIP_ERR_USER_ABORTED(2) : User ask for extraction stop in callback
     #// --------------------------------------------------------------------------------
-    def privextractfile(self, p_entry=None, p_path=None, p_remove_path=None, p_remove_all_path=None, p_options=None):
+    def privextractfile(self, p_entry_=None, p_path_=None, p_remove_path_=None, p_remove_all_path_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Read the file header
-        v_result = self.privreadfileheader(v_header)
-        if v_result != 1:
+        v_result_ = self.privreadfileheader(v_header_)
+        if v_result_ != 1:
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Check that the file header is coherent with $p_entry info
-        if self.privcheckfileheaders(v_header, p_entry) != 1:
+        if self.privcheckfileheaders(v_header_, p_entry_) != 1:
             pass
         # end if
         #// ----- Look for all path to remove
-        if p_remove_all_path == True:
+        if p_remove_all_path_ == True:
             #// ----- Look for folder entry that not need to be extracted
-            if p_entry["external"] & 16 == 16:
-                p_entry["status"] = "filtered"
-                return v_result
+            if p_entry_["external"] & 16 == 16:
+                p_entry_["status"] = "filtered"
+                return v_result_
             # end if
             #// ----- Get the basename of the path
-            p_entry["filename"] = php_basename(p_entry["filename"])
+            p_entry_["filename"] = php_basename(p_entry_["filename"])
         else:
-            if p_remove_path != "":
-                if PclZipUtilPathInclusion(p_remove_path, p_entry["filename"]) == 2:
+            if p_remove_path_ != "":
+                if PclZipUtilPathInclusion(p_remove_path_, p_entry_["filename"]) == 2:
                     #// ----- Change the file status
-                    p_entry["status"] = "filtered"
+                    p_entry_["status"] = "filtered"
                     #// ----- Return
-                    return v_result
+                    return v_result_
                 # end if
-                p_remove_path_size = php_strlen(p_remove_path)
-                if php_substr(p_entry["filename"], 0, p_remove_path_size) == p_remove_path:
+                p_remove_path_size_ = php_strlen(p_remove_path_)
+                if php_substr(p_entry_["filename"], 0, p_remove_path_size_) == p_remove_path_:
                     #// ----- Remove the path
-                    p_entry["filename"] = php_substr(p_entry["filename"], p_remove_path_size)
+                    p_entry_["filename"] = php_substr(p_entry_["filename"], p_remove_path_size_)
                 # end if
             # end if
         # end if
         #// ----- Add the path
-        if p_path != "":
-            p_entry["filename"] = p_path + "/" + p_entry["filename"]
+        if p_path_ != "":
+            p_entry_["filename"] = p_path_ + "/" + p_entry_["filename"]
         # end if
         #// ----- Check a base_dir_restriction
-        if (php_isset(lambda : p_options[PCLZIP_OPT_EXTRACT_DIR_RESTRICTION])):
-            v_inclusion = PclZipUtilPathInclusion(p_options[PCLZIP_OPT_EXTRACT_DIR_RESTRICTION], p_entry["filename"])
-            if v_inclusion == 0:
-                PclZip.priverrorlog(PCLZIP_ERR_DIRECTORY_RESTRICTION, "Filename '" + p_entry["filename"] + "' is " + "outside PCLZIP_OPT_EXTRACT_DIR_RESTRICTION")
+        if (php_isset(lambda : p_options_[PCLZIP_OPT_EXTRACT_DIR_RESTRICTION])):
+            v_inclusion_ = PclZipUtilPathInclusion(p_options_[PCLZIP_OPT_EXTRACT_DIR_RESTRICTION], p_entry_["filename"])
+            if v_inclusion_ == 0:
+                PclZip.priverrorlog(PCLZIP_ERR_DIRECTORY_RESTRICTION, "Filename '" + p_entry_["filename"] + "' is " + "outside PCLZIP_OPT_EXTRACT_DIR_RESTRICTION")
                 return PclZip.errorcode()
             # end if
         # end if
         #// ----- Look for pre-extract callback
-        if (php_isset(lambda : p_options[PCLZIP_CB_PRE_EXTRACT])):
+        if (php_isset(lambda : p_options_[PCLZIP_CB_PRE_EXTRACT])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_entry, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_entry_, v_local_header_)
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
-            v_result = p_options[PCLZIP_CB_PRE_EXTRACT](PCLZIP_CB_PRE_EXTRACT, v_local_header)
-            if v_result == 0:
+            v_result_ = p_options_[PCLZIP_CB_PRE_EXTRACT](PCLZIP_CB_PRE_EXTRACT, v_local_header_)
+            if v_result_ == 0:
                 #// ----- Change the file status
-                p_entry["status"] = "skipped"
-                v_result = 1
+                p_entry_["status"] = "skipped"
+                v_result_ = 1
             # end if
             #// ----- Look for abort result
-            if v_result == 2:
+            if v_result_ == 2:
                 #// ----- This status is internal and will be changed in 'skipped'
-                p_entry["status"] = "aborted"
-                v_result = PCLZIP_ERR_USER_ABORTED
+                p_entry_["status"] = "aborted"
+                v_result_ = PCLZIP_ERR_USER_ABORTED
             # end if
             #// ----- Update the information
             #// Only some fields can be modified
-            p_entry["filename"] = v_local_header["filename"]
+            p_entry_["filename"] = v_local_header_["filename"]
         # end if
         #// ----- Look if extraction should be done
-        if p_entry["status"] == "ok":
+        if p_entry_["status"] == "ok":
             #// ----- Look for specific actions while the file exist
-            if php_file_exists(p_entry["filename"]):
+            if php_file_exists(p_entry_["filename"]):
                 #// ----- Look if file is a directory
-                if php_is_dir(p_entry["filename"]):
+                if php_is_dir(p_entry_["filename"]):
                     #// ----- Change the file status
-                    p_entry["status"] = "already_a_directory"
+                    p_entry_["status"] = "already_a_directory"
                     #// ----- Look for PCLZIP_OPT_STOP_ON_ERROR
                     #// For historical reason first PclZip implementation does not stop
                     #// when this kind of error occurs.
-                    if (php_isset(lambda : p_options[PCLZIP_OPT_STOP_ON_ERROR])) and p_options[PCLZIP_OPT_STOP_ON_ERROR] == True:
-                        PclZip.priverrorlog(PCLZIP_ERR_ALREADY_A_DIRECTORY, "Filename '" + p_entry["filename"] + "' is " + "already used by an existing directory")
+                    if (php_isset(lambda : p_options_[PCLZIP_OPT_STOP_ON_ERROR])) and p_options_[PCLZIP_OPT_STOP_ON_ERROR] == True:
+                        PclZip.priverrorlog(PCLZIP_ERR_ALREADY_A_DIRECTORY, "Filename '" + p_entry_["filename"] + "' is " + "already used by an existing directory")
                         return PclZip.errorcode()
                     # end if
                 else:
-                    if (not is_writeable(p_entry["filename"])):
+                    if (not is_writeable(p_entry_["filename"])):
                         #// ----- Change the file status
-                        p_entry["status"] = "write_protected"
+                        p_entry_["status"] = "write_protected"
                         #// ----- Look for PCLZIP_OPT_STOP_ON_ERROR
                         #// For historical reason first PclZip implementation does not stop
                         #// when this kind of error occurs.
-                        if (php_isset(lambda : p_options[PCLZIP_OPT_STOP_ON_ERROR])) and p_options[PCLZIP_OPT_STOP_ON_ERROR] == True:
-                            PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Filename '" + p_entry["filename"] + "' exists " + "and is write protected")
+                        if (php_isset(lambda : p_options_[PCLZIP_OPT_STOP_ON_ERROR])) and p_options_[PCLZIP_OPT_STOP_ON_ERROR] == True:
+                            PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Filename '" + p_entry_["filename"] + "' exists " + "and is write protected")
                             return PclZip.errorcode()
                         # end if
                     else:
-                        if filemtime(p_entry["filename"]) > p_entry["mtime"]:
+                        if filemtime(p_entry_["filename"]) > p_entry_["mtime"]:
                             #// ----- Change the file status
-                            if (php_isset(lambda : p_options[PCLZIP_OPT_REPLACE_NEWER])) and p_options[PCLZIP_OPT_REPLACE_NEWER] == True:
+                            if (php_isset(lambda : p_options_[PCLZIP_OPT_REPLACE_NEWER])) and p_options_[PCLZIP_OPT_REPLACE_NEWER] == True:
                                 pass
                             else:
-                                p_entry["status"] = "newer_exist"
+                                p_entry_["status"] = "newer_exist"
                                 #// ----- Look for PCLZIP_OPT_STOP_ON_ERROR
                                 #// For historical reason first PclZip implementation does not stop
                                 #// when this kind of error occurs.
-                                if (php_isset(lambda : p_options[PCLZIP_OPT_STOP_ON_ERROR])) and p_options[PCLZIP_OPT_STOP_ON_ERROR] == True:
-                                    PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Newer version of '" + p_entry["filename"] + "' exists " + "and option PCLZIP_OPT_REPLACE_NEWER is not selected")
+                                if (php_isset(lambda : p_options_[PCLZIP_OPT_STOP_ON_ERROR])) and p_options_[PCLZIP_OPT_STOP_ON_ERROR] == True:
+                                    PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Newer version of '" + p_entry_["filename"] + "' exists " + "and option PCLZIP_OPT_REPLACE_NEWER is not selected")
                                     return PclZip.errorcode()
                                 # end if
                             # end if
@@ -3044,126 +3096,126 @@ class PclZip():
                     # end if
                 # end if
             else:
-                if p_entry["external"] & 16 == 16 or php_substr(p_entry["filename"], -1) == "/":
-                    v_dir_to_check = p_entry["filename"]
+                if p_entry_["external"] & 16 == 16 or php_substr(p_entry_["filename"], -1) == "/":
+                    v_dir_to_check_ = p_entry_["filename"]
                 else:
-                    if (not php_strstr(p_entry["filename"], "/")):
-                        v_dir_to_check = ""
+                    if (not php_strstr(p_entry_["filename"], "/")):
+                        v_dir_to_check_ = ""
                     else:
-                        v_dir_to_check = php_dirname(p_entry["filename"])
+                        v_dir_to_check_ = php_dirname(p_entry_["filename"])
                     # end if
                 # end if
-                v_result = self.privdircheck(v_dir_to_check, p_entry["external"] & 16 == 16)
-                if v_result != 1:
+                v_result_ = self.privdircheck(v_dir_to_check_, p_entry_["external"] & 16 == 16)
+                if v_result_ != 1:
                     #// ----- Change the file status
-                    p_entry["status"] = "path_creation_fail"
+                    p_entry_["status"] = "path_creation_fail"
                     #// ----- Return
                     #// return $v_result;
-                    v_result = 1
+                    v_result_ = 1
                 # end if
             # end if
         # end if
         #// ----- Look if extraction should be done
-        if p_entry["status"] == "ok":
+        if p_entry_["status"] == "ok":
             #// ----- Do the extraction (if not a folder)
-            if (not p_entry["external"] & 16 == 16):
+            if (not p_entry_["external"] & 16 == 16):
                 #// ----- Look for not compressed file
-                if p_entry["compression"] == 0:
+                if p_entry_["compression"] == 0:
                     #// ----- Opening destination file
-                    v_dest_file = php_no_error(lambda: fopen(p_entry["filename"], "wb"))
-                    if v_dest_file == 0:
+                    v_dest_file_ = php_no_error(lambda: fopen(p_entry_["filename"], "wb"))
+                    if v_dest_file_ == 0:
                         #// ----- Change the file status
-                        p_entry["status"] = "write_error"
+                        p_entry_["status"] = "write_error"
                         #// ----- Return
-                        return v_result
+                        return v_result_
                     # end if
                     #// ----- Read the file by PCLZIP_READ_BLOCK_SIZE octets blocks
-                    v_size = p_entry["compressed_size"]
+                    v_size_ = p_entry_["compressed_size"]
                     while True:
                         
-                        if not (v_size != 0):
+                        if not (v_size_ != 0):
                             break
                         # end if
-                        v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-                        v_buffer = php_no_error(lambda: fread(self.zip_fd, v_read_size))
+                        v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+                        v_buffer_ = php_no_error(lambda: fread(self.zip_fd, v_read_size_))
                         #// Try to speed up the code
                         #// $v_binary_data = pack('a'.$v_read_size, $v_buffer);
                         #// @fwrite($v_dest_file, $v_binary_data, $v_read_size);
                         #//
-                        php_no_error(lambda: fwrite(v_dest_file, v_buffer, v_read_size))
-                        v_size -= v_read_size
+                        php_no_error(lambda: fwrite(v_dest_file_, v_buffer_, v_read_size_))
+                        v_size_ -= v_read_size_
                     # end while
                     #// ----- Closing the destination file
-                    php_fclose(v_dest_file)
+                    php_fclose(v_dest_file_)
                     #// ----- Change the file mtime
-                    touch(p_entry["filename"], p_entry["mtime"])
+                    touch(p_entry_["filename"], p_entry_["mtime"])
                 else:
                     #// ----- TBC
                     #// Need to be finished
-                    if p_entry["flag"] & 1 == 1:
-                        PclZip.priverrorlog(PCLZIP_ERR_UNSUPPORTED_ENCRYPTION, "File '" + p_entry["filename"] + "' is encrypted. Encrypted files are not supported.")
+                    if p_entry_["flag"] & 1 == 1:
+                        PclZip.priverrorlog(PCLZIP_ERR_UNSUPPORTED_ENCRYPTION, "File '" + p_entry_["filename"] + "' is encrypted. Encrypted files are not supported.")
                         return PclZip.errorcode()
                     # end if
                     #// ----- Look for using temporary file to unzip
-                    if (not (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_OFF]))) and (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_ON])) or (php_isset(lambda : p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD])) and p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD] <= p_entry["size"]:
-                        v_result = self.privextractfileusingtempfile(p_entry, p_options)
-                        if v_result < PCLZIP_ERR_NO_ERROR:
-                            return v_result
+                    if (not (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_OFF]))) and (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_ON])) or (php_isset(lambda : p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD])) and p_options_[PCLZIP_OPT_TEMP_FILE_THRESHOLD] <= p_entry_["size"]:
+                        v_result_ = self.privextractfileusingtempfile(p_entry_, p_options_)
+                        if v_result_ < PCLZIP_ERR_NO_ERROR:
+                            return v_result_
                         # end if
                     else:
                         #// ----- Read the compressed file in a buffer (one shot)
-                        v_buffer = php_no_error(lambda: fread(self.zip_fd, p_entry["compressed_size"]))
+                        v_buffer_ = php_no_error(lambda: fread(self.zip_fd, p_entry_["compressed_size"]))
                         #// ----- Decompress the file
-                        v_file_content = php_no_error(lambda: gzinflate(v_buffer))
-                        v_buffer = None
-                        if v_file_content == False:
+                        v_file_content_ = php_no_error(lambda: gzinflate(v_buffer_))
+                        v_buffer_ = None
+                        if v_file_content_ == False:
                             #// ----- Change the file status
                             #// TBC
-                            p_entry["status"] = "error"
-                            return v_result
+                            p_entry_["status"] = "error"
+                            return v_result_
                         # end if
                         #// ----- Opening destination file
-                        v_dest_file = php_no_error(lambda: fopen(p_entry["filename"], "wb"))
-                        if v_dest_file == 0:
+                        v_dest_file_ = php_no_error(lambda: fopen(p_entry_["filename"], "wb"))
+                        if v_dest_file_ == 0:
                             #// ----- Change the file status
-                            p_entry["status"] = "write_error"
-                            return v_result
+                            p_entry_["status"] = "write_error"
+                            return v_result_
                         # end if
                         #// ----- Write the uncompressed data
-                        php_no_error(lambda: fwrite(v_dest_file, v_file_content, p_entry["size"]))
-                        v_file_content = None
+                        php_no_error(lambda: fwrite(v_dest_file_, v_file_content_, p_entry_["size"]))
+                        v_file_content_ = None
                         #// ----- Closing the destination file
-                        php_no_error(lambda: php_fclose(v_dest_file))
+                        php_no_error(lambda: php_fclose(v_dest_file_))
                     # end if
                     #// ----- Change the file mtime
-                    php_no_error(lambda: touch(p_entry["filename"], p_entry["mtime"]))
+                    php_no_error(lambda: touch(p_entry_["filename"], p_entry_["mtime"]))
                 # end if
                 #// ----- Look for chmod option
-                if (php_isset(lambda : p_options[PCLZIP_OPT_SET_CHMOD])):
+                if (php_isset(lambda : p_options_[PCLZIP_OPT_SET_CHMOD])):
                     #// ----- Change the mode of the file
-                    php_no_error(lambda: chmod(p_entry["filename"], p_options[PCLZIP_OPT_SET_CHMOD]))
+                    php_no_error(lambda: chmod(p_entry_["filename"], p_options_[PCLZIP_OPT_SET_CHMOD]))
                 # end if
             # end if
         # end if
         #// ----- Change abort status
-        if p_entry["status"] == "aborted":
-            p_entry["status"] = "skipped"
+        if p_entry_["status"] == "aborted":
+            p_entry_["status"] = "skipped"
             #// ----- Look for post-extract callback
-        elif (php_isset(lambda : p_options[PCLZIP_CB_POST_EXTRACT])):
+        elif (php_isset(lambda : p_options_[PCLZIP_CB_POST_EXTRACT])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_entry, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_entry_, v_local_header_)
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
-            v_result = p_options[PCLZIP_CB_POST_EXTRACT](PCLZIP_CB_POST_EXTRACT, v_local_header)
+            v_result_ = p_options_[PCLZIP_CB_POST_EXTRACT](PCLZIP_CB_POST_EXTRACT, v_local_header_)
             #// ----- Look for abort result
-            if v_result == 2:
-                v_result = PCLZIP_ERR_USER_ABORTED
+            if v_result_ == 2:
+                v_result_ = PCLZIP_ERR_USER_ABORTED
             # end if
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privextractfile
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3172,71 +3224,72 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privextractfileusingtempfile(self, p_entry=None, p_options=None):
+    def privextractfileusingtempfile(self, p_entry_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Creates a temporary file
-        v_gzip_temp_name = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".gz"
-        v_dest_file = php_no_error(lambda: fopen(v_gzip_temp_name, "wb"))
-        if v_dest_file == 0:
-            php_fclose(v_file)
-            PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name + "' in binary write mode")
+        v_gzip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".gz"
+        v_dest_file_ = php_no_error(lambda: fopen(v_gzip_temp_name_, "wb"))
+        if v_dest_file_ == 0:
+            php_fclose(v_file_)
+            PclZip.priverrorlog(PCLZIP_ERR_WRITE_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name_ + "' in binary write mode")
             return PclZip.errorcode()
         # end if
         #// ----- Write gz file format header
-        v_binary_data = pack("va1a1Va1a1", 35615, Chr(p_entry["compression"]), Chr(0), time(), Chr(0), Chr(3))
-        php_no_error(lambda: fwrite(v_dest_file, v_binary_data, 10))
+        v_binary_data_ = pack("va1a1Va1a1", 35615, Chr(p_entry_["compression"]), Chr(0), time(), Chr(0), Chr(3))
+        php_no_error(lambda: fwrite(v_dest_file_, v_binary_data_, 10))
         #// ----- Read the file by PCLZIP_READ_BLOCK_SIZE octets blocks
-        v_size = p_entry["compressed_size"]
+        v_size_ = p_entry_["compressed_size"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: fread(self.zip_fd, v_read_size))
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: fread(self.zip_fd, v_read_size_))
             #// $v_binary_data = pack('a'.$v_read_size, $v_buffer);
-            php_no_error(lambda: fwrite(v_dest_file, v_buffer, v_read_size))
-            v_size -= v_read_size
+            php_no_error(lambda: fwrite(v_dest_file_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Write gz file format footer
-        v_binary_data = pack("VV", p_entry["crc"], p_entry["size"])
-        php_no_error(lambda: fwrite(v_dest_file, v_binary_data, 8))
+        v_binary_data_ = pack("VV", p_entry_["crc"], p_entry_["size"])
+        php_no_error(lambda: fwrite(v_dest_file_, v_binary_data_, 8))
         #// ----- Close the temporary file
-        php_no_error(lambda: php_fclose(v_dest_file))
+        php_no_error(lambda: php_fclose(v_dest_file_))
         #// ----- Opening destination file
-        v_dest_file = php_no_error(lambda: fopen(p_entry["filename"], "wb"))
-        if v_dest_file == 0:
-            p_entry["status"] = "write_error"
-            return v_result
+        v_dest_file_ = php_no_error(lambda: fopen(p_entry_["filename"], "wb"))
+        if v_dest_file_ == 0:
+            p_entry_["status"] = "write_error"
+            return v_result_
         # end if
         #// ----- Open the temporary gz file
-        v_src_file = php_no_error(lambda: gzopen(v_gzip_temp_name, "rb"))
-        if v_src_file == 0:
-            php_no_error(lambda: php_fclose(v_dest_file))
-            p_entry["status"] = "read_error"
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name + "' in binary read mode")
+        v_src_file_ = php_no_error(lambda: gzopen(v_gzip_temp_name_, "rb"))
+        if v_src_file_ == 0:
+            php_no_error(lambda: php_fclose(v_dest_file_))
+            p_entry_["status"] = "read_error"
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_gzip_temp_name_ + "' in binary read mode")
             return PclZip.errorcode()
         # end if
         #// ----- Read the file by PCLZIP_READ_BLOCK_SIZE octets blocks
-        v_size = p_entry["size"]
+        v_size_ = p_entry_["size"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: gzread(v_src_file, v_read_size))
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: gzread(v_src_file_, v_read_size_))
             #// $v_binary_data = pack('a'.$v_read_size, $v_buffer);
-            php_no_error(lambda: fwrite(v_dest_file, v_buffer, v_read_size))
-            v_size -= v_read_size
+            php_no_error(lambda: fwrite(v_dest_file_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
-        php_no_error(lambda: php_fclose(v_dest_file))
-        php_no_error(lambda: gzclose(v_src_file))
+        php_no_error(lambda: php_fclose(v_dest_file_))
+        php_no_error(lambda: gzclose(v_src_file_))
         #// ----- Delete the temporary file
-        php_no_error(lambda: unlink(v_gzip_temp_name))
+        php_no_error(lambda: unlink(v_gzip_temp_name_))
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privextractfileusingtempfile
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3245,85 +3298,86 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privextractfileinoutput(self, p_entry=None, p_options=None):
+    def privextractfileinoutput(self, p_entry_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Read the file header
-        v_result = self.privreadfileheader(v_header)
-        if v_result != 1:
-            return v_result
+        v_result_ = self.privreadfileheader(v_header_)
+        if v_result_ != 1:
+            return v_result_
         # end if
         #// ----- Check that the file header is coherent with $p_entry info
-        if self.privcheckfileheaders(v_header, p_entry) != 1:
+        if self.privcheckfileheaders(v_header_, p_entry_) != 1:
             pass
         # end if
         #// ----- Look for pre-extract callback
-        if (php_isset(lambda : p_options[PCLZIP_CB_PRE_EXTRACT])):
+        if (php_isset(lambda : p_options_[PCLZIP_CB_PRE_EXTRACT])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_entry, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_entry_, v_local_header_)
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
             #// eval('$v_result = '.$p_options[PCLZIP_CB_PRE_EXTRACT].'(PCLZIP_CB_PRE_EXTRACT, $v_local_header);');
-            v_result = p_options[PCLZIP_CB_PRE_EXTRACT](PCLZIP_CB_PRE_EXTRACT, v_local_header)
-            if v_result == 0:
+            v_result_ = p_options_[PCLZIP_CB_PRE_EXTRACT](PCLZIP_CB_PRE_EXTRACT, v_local_header_)
+            if v_result_ == 0:
                 #// ----- Change the file status
-                p_entry["status"] = "skipped"
-                v_result = 1
+                p_entry_["status"] = "skipped"
+                v_result_ = 1
             # end if
             #// ----- Look for abort result
-            if v_result == 2:
+            if v_result_ == 2:
                 #// ----- This status is internal and will be changed in 'skipped'
-                p_entry["status"] = "aborted"
-                v_result = PCLZIP_ERR_USER_ABORTED
+                p_entry_["status"] = "aborted"
+                v_result_ = PCLZIP_ERR_USER_ABORTED
             # end if
             #// ----- Update the information
             #// Only some fields can be modified
-            p_entry["filename"] = v_local_header["filename"]
+            p_entry_["filename"] = v_local_header_["filename"]
         # end if
         #// ----- Trace
         #// ----- Look if extraction should be done
-        if p_entry["status"] == "ok":
+        if p_entry_["status"] == "ok":
             #// ----- Do the extraction (if not a folder)
-            if (not p_entry["external"] & 16 == 16):
+            if (not p_entry_["external"] & 16 == 16):
                 #// ----- Look for not compressed file
-                if p_entry["compressed_size"] == p_entry["size"]:
+                if p_entry_["compressed_size"] == p_entry_["size"]:
                     #// ----- Read the file in a buffer (one shot)
-                    v_buffer = php_no_error(lambda: fread(self.zip_fd, p_entry["compressed_size"]))
+                    v_buffer_ = php_no_error(lambda: fread(self.zip_fd, p_entry_["compressed_size"]))
                     #// ----- Send the file to the output
-                    php_print(v_buffer)
-                    v_buffer = None
+                    php_print(v_buffer_)
+                    v_buffer_ = None
                 else:
                     #// ----- Read the compressed file in a buffer (one shot)
-                    v_buffer = php_no_error(lambda: fread(self.zip_fd, p_entry["compressed_size"]))
+                    v_buffer_ = php_no_error(lambda: fread(self.zip_fd, p_entry_["compressed_size"]))
                     #// ----- Decompress the file
-                    v_file_content = gzinflate(v_buffer)
-                    v_buffer = None
+                    v_file_content_ = gzinflate(v_buffer_)
+                    v_buffer_ = None
                     #// ----- Send the file to the output
-                    php_print(v_file_content)
-                    v_file_content = None
+                    php_print(v_file_content_)
+                    v_file_content_ = None
                 # end if
             # end if
         # end if
         #// ----- Change abort status
-        if p_entry["status"] == "aborted":
-            p_entry["status"] = "skipped"
+        if p_entry_["status"] == "aborted":
+            p_entry_["status"] = "skipped"
             #// ----- Look for post-extract callback
-        elif (php_isset(lambda : p_options[PCLZIP_CB_POST_EXTRACT])):
+        elif (php_isset(lambda : p_options_[PCLZIP_CB_POST_EXTRACT])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_entry, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_entry_, v_local_header_)
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
-            v_result = p_options[PCLZIP_CB_POST_EXTRACT](PCLZIP_CB_POST_EXTRACT, v_local_header)
+            v_result_ = p_options_[PCLZIP_CB_POST_EXTRACT](PCLZIP_CB_POST_EXTRACT, v_local_header_)
             #// ----- Look for abort result
-            if v_result == 2:
-                v_result = PCLZIP_ERR_USER_ABORTED
+            if v_result_ == 2:
+                v_result_ = PCLZIP_ERR_USER_ABORTED
             # end if
         # end if
-        return v_result
+        return v_result_
     # end def privextractfileinoutput
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3332,59 +3386,60 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privextractfileasstring(self, p_entry=None, p_string=None, p_options=None):
+    def privextractfileasstring(self, p_entry_=None, p_string_=None, p_options_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Read the file header
-        v_header = Array()
-        v_result = self.privreadfileheader(v_header)
-        if v_result != 1:
+        v_header_ = Array()
+        v_result_ = self.privreadfileheader(v_header_)
+        if v_result_ != 1:
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Check that the file header is coherent with $p_entry info
-        if self.privcheckfileheaders(v_header, p_entry) != 1:
+        if self.privcheckfileheaders(v_header_, p_entry_) != 1:
             pass
         # end if
         #// ----- Look for pre-extract callback
-        if (php_isset(lambda : p_options[PCLZIP_CB_PRE_EXTRACT])):
+        if (php_isset(lambda : p_options_[PCLZIP_CB_PRE_EXTRACT])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_entry, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_entry_, v_local_header_)
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
-            v_result = p_options[PCLZIP_CB_PRE_EXTRACT](PCLZIP_CB_PRE_EXTRACT, v_local_header)
-            if v_result == 0:
+            v_result_ = p_options_[PCLZIP_CB_PRE_EXTRACT](PCLZIP_CB_PRE_EXTRACT, v_local_header_)
+            if v_result_ == 0:
                 #// ----- Change the file status
-                p_entry["status"] = "skipped"
-                v_result = 1
+                p_entry_["status"] = "skipped"
+                v_result_ = 1
             # end if
             #// ----- Look for abort result
-            if v_result == 2:
+            if v_result_ == 2:
                 #// ----- This status is internal and will be changed in 'skipped'
-                p_entry["status"] = "aborted"
-                v_result = PCLZIP_ERR_USER_ABORTED
+                p_entry_["status"] = "aborted"
+                v_result_ = PCLZIP_ERR_USER_ABORTED
             # end if
             #// ----- Update the information
             #// Only some fields can be modified
-            p_entry["filename"] = v_local_header["filename"]
+            p_entry_["filename"] = v_local_header_["filename"]
         # end if
         #// ----- Look if extraction should be done
-        if p_entry["status"] == "ok":
+        if p_entry_["status"] == "ok":
             #// ----- Do the extraction (if not a folder)
-            if (not p_entry["external"] & 16 == 16):
+            if (not p_entry_["external"] & 16 == 16):
                 #// ----- Look for not compressed file
                 #// if ($p_entry['compressed_size'] == $p_entry['size'])
-                if p_entry["compression"] == 0:
+                if p_entry_["compression"] == 0:
                     #// ----- Reading the file
-                    p_string = php_no_error(lambda: fread(self.zip_fd, p_entry["compressed_size"]))
+                    p_string_ = php_no_error(lambda: fread(self.zip_fd, p_entry_["compressed_size"]))
                 else:
                     #// ----- Reading the file
-                    v_data = php_no_error(lambda: fread(self.zip_fd, p_entry["compressed_size"]))
+                    v_data_ = php_no_error(lambda: fread(self.zip_fd, p_entry_["compressed_size"]))
                     #// ----- Decompress the file
-                    p_string = php_no_error(lambda: gzinflate(v_data))
-                    if p_string == False:
+                    p_string_ = php_no_error(lambda: gzinflate(v_data_))
+                    if p_string_ == False:
                         pass
                     # end if
                 # end if
@@ -3394,30 +3449,30 @@ class PclZip():
             # end if
         # end if
         #// ----- Change abort status
-        if p_entry["status"] == "aborted":
-            p_entry["status"] = "skipped"
+        if p_entry_["status"] == "aborted":
+            p_entry_["status"] = "skipped"
             #// ----- Look for post-extract callback
-        elif (php_isset(lambda : p_options[PCLZIP_CB_POST_EXTRACT])):
+        elif (php_isset(lambda : p_options_[PCLZIP_CB_POST_EXTRACT])):
             #// ----- Generate a local information
-            v_local_header = Array()
-            self.privconvertheader2fileinfo(p_entry, v_local_header)
+            v_local_header_ = Array()
+            self.privconvertheader2fileinfo(p_entry_, v_local_header_)
             #// ----- Swap the content to header
-            v_local_header["content"] = p_string
-            p_string = ""
+            v_local_header_["content"] = p_string_
+            p_string_ = ""
             #// ----- Call the callback
             #// Here I do not use call_user_func() because I need to send a reference to the
             #// header.
-            v_result = p_options[PCLZIP_CB_POST_EXTRACT](PCLZIP_CB_POST_EXTRACT, v_local_header)
+            v_result_ = p_options_[PCLZIP_CB_POST_EXTRACT](PCLZIP_CB_POST_EXTRACT, v_local_header_)
             #// ----- Swap back the content to header
-            p_string = v_local_header["content"]
-            v_local_header["content"] = None
+            p_string_ = v_local_header_["content"]
+            v_local_header_["content"] = None
             #// ----- Look for abort result
-            if v_result == 2:
-                v_result = PCLZIP_ERR_USER_ABORTED
+            if v_result_ == 2:
+                v_result_ = PCLZIP_ERR_USER_ABORTED
             # end if
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privextractfileasstring
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3426,74 +3481,75 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privreadfileheader(self, p_header=None):
+    def privreadfileheader(self, p_header_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Read the 4 bytes signature
-        v_binary_data = php_no_error(lambda: fread(self.zip_fd, 4))
-        v_data = unpack("Vid", v_binary_data)
+        v_binary_data_ = php_no_error(lambda: fread(self.zip_fd, 4))
+        v_data_ = unpack("Vid", v_binary_data_)
         #// ----- Check signature
-        if v_data["id"] != 67324752:
+        if v_data_["id"] != 67324752:
             #// ----- Error log
             PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid archive structure")
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Read the first 42 bytes of the header
-        v_binary_data = fread(self.zip_fd, 26)
+        v_binary_data_ = fread(self.zip_fd, 26)
         #// ----- Look for invalid block size
-        if php_strlen(v_binary_data) != 26:
-            p_header["filename"] = ""
-            p_header["status"] = "invalid_header"
+        if php_strlen(v_binary_data_) != 26:
+            p_header_["filename"] = ""
+            p_header_["status"] = "invalid_header"
             #// ----- Error log
-            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : " + php_strlen(v_binary_data))
+            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : " + php_strlen(v_binary_data_))
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Extract the values
-        v_data = unpack("vversion/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len", v_binary_data)
+        v_data_ = unpack("vversion/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len", v_binary_data_)
         #// ----- Get filename
-        p_header["filename"] = fread(self.zip_fd, v_data["filename_len"])
+        p_header_["filename"] = fread(self.zip_fd, v_data_["filename_len"])
         #// ----- Get extra_fields
-        if v_data["extra_len"] != 0:
-            p_header["extra"] = fread(self.zip_fd, v_data["extra_len"])
+        if v_data_["extra_len"] != 0:
+            p_header_["extra"] = fread(self.zip_fd, v_data_["extra_len"])
         else:
-            p_header["extra"] = ""
+            p_header_["extra"] = ""
         # end if
         #// ----- Extract properties
-        p_header["version_extracted"] = v_data["version"]
-        p_header["compression"] = v_data["compression"]
-        p_header["size"] = v_data["size"]
-        p_header["compressed_size"] = v_data["compressed_size"]
-        p_header["crc"] = v_data["crc"]
-        p_header["flag"] = v_data["flag"]
-        p_header["filename_len"] = v_data["filename_len"]
+        p_header_["version_extracted"] = v_data_["version"]
+        p_header_["compression"] = v_data_["compression"]
+        p_header_["size"] = v_data_["size"]
+        p_header_["compressed_size"] = v_data_["compressed_size"]
+        p_header_["crc"] = v_data_["crc"]
+        p_header_["flag"] = v_data_["flag"]
+        p_header_["filename_len"] = v_data_["filename_len"]
         #// ----- Recuperate date in UNIX format
-        p_header["mdate"] = v_data["mdate"]
-        p_header["mtime"] = v_data["mtime"]
-        if p_header["mdate"] and p_header["mtime"]:
+        p_header_["mdate"] = v_data_["mdate"]
+        p_header_["mtime"] = v_data_["mtime"]
+        if p_header_["mdate"] and p_header_["mtime"]:
             #// ----- Extract time
-            v_hour = p_header["mtime"] & 63488 >> 11
-            v_minute = p_header["mtime"] & 2016 >> 5
-            v_seconde = p_header["mtime"] & 31 * 2
+            v_hour_ = p_header_["mtime"] & 63488 >> 11
+            v_minute_ = p_header_["mtime"] & 2016 >> 5
+            v_seconde_ = p_header_["mtime"] & 31 * 2
             #// ----- Extract date
-            v_year = p_header["mdate"] & 65024 >> 9 + 1980
-            v_month = p_header["mdate"] & 480 >> 5
-            v_day = p_header["mdate"] & 31
+            v_year_ = p_header_["mdate"] & 65024 >> 9 + 1980
+            v_month_ = p_header_["mdate"] & 480 >> 5
+            v_day_ = p_header_["mdate"] & 31
             #// ----- Get UNIX date format
-            p_header["mtime"] = php_no_error(lambda: mktime(v_hour, v_minute, v_seconde, v_month, v_day, v_year))
+            p_header_["mtime"] = php_no_error(lambda: mktime(v_hour_, v_minute_, v_seconde_, v_month_, v_day_, v_year_))
         else:
-            p_header["mtime"] = time()
+            p_header_["mtime"] = time()
         # end if
         #// TBC
         #// for(reset($v_data); $key = key($v_data); next($v_data)) {
         #// }
         #// ----- Set the stored filename
-        p_header["stored_filename"] = p_header["filename"]
+        p_header_["stored_filename"] = p_header_["filename"]
         #// ----- Set the status field
-        p_header["status"] = "ok"
+        p_header_["status"] = "ok"
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privreadfileheader
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3502,49 +3558,50 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privreadcentralfileheader(self, p_header=None):
+    def privreadcentralfileheader(self, p_header_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Read the 4 bytes signature
-        v_binary_data = php_no_error(lambda: fread(self.zip_fd, 4))
-        v_data = unpack("Vid", v_binary_data)
+        v_binary_data_ = php_no_error(lambda: fread(self.zip_fd, 4))
+        v_data_ = unpack("Vid", v_binary_data_)
         #// ----- Check signature
-        if v_data["id"] != 33639248:
+        if v_data_["id"] != 33639248:
             #// ----- Error log
             PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid archive structure")
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Read the first 42 bytes of the header
-        v_binary_data = fread(self.zip_fd, 42)
+        v_binary_data_ = fread(self.zip_fd, 42)
         #// ----- Look for invalid block size
-        if php_strlen(v_binary_data) != 42:
-            p_header["filename"] = ""
-            p_header["status"] = "invalid_header"
+        if php_strlen(v_binary_data_) != 42:
+            p_header_["filename"] = ""
+            p_header_["status"] = "invalid_header"
             #// ----- Error log
-            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : " + php_strlen(v_binary_data))
+            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : " + php_strlen(v_binary_data_))
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Extract the values
-        p_header = unpack("vversion/vversion_extracted/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len/vcomment_len/vdisk/vinternal/Vexternal/Voffset", v_binary_data)
+        p_header_ = unpack("vversion/vversion_extracted/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len/vcomment_len/vdisk/vinternal/Vexternal/Voffset", v_binary_data_)
         #// ----- Get filename
-        if p_header["filename_len"] != 0:
-            p_header["filename"] = fread(self.zip_fd, p_header["filename_len"])
+        if p_header_["filename_len"] != 0:
+            p_header_["filename"] = fread(self.zip_fd, p_header_["filename_len"])
         else:
-            p_header["filename"] = ""
+            p_header_["filename"] = ""
         # end if
         #// ----- Get extra
-        if p_header["extra_len"] != 0:
-            p_header["extra"] = fread(self.zip_fd, p_header["extra_len"])
+        if p_header_["extra_len"] != 0:
+            p_header_["extra"] = fread(self.zip_fd, p_header_["extra_len"])
         else:
-            p_header["extra"] = ""
+            p_header_["extra"] = ""
         # end if
         #// ----- Get comment
-        if p_header["comment_len"] != 0:
-            p_header["comment"] = fread(self.zip_fd, p_header["comment_len"])
+        if p_header_["comment_len"] != 0:
+            p_header_["comment"] = fread(self.zip_fd, p_header_["comment_len"])
         else:
-            p_header["comment"] = ""
+            p_header_["comment"] = ""
         # end if
         #// ----- Extract properties
         #// ----- Recuperate date in UNIX format
@@ -3552,29 +3609,29 @@ class PclZip():
         #// TBC : bug : this was ignoring time with 0/0/0
         if 1:
             #// ----- Extract time
-            v_hour = p_header["mtime"] & 63488 >> 11
-            v_minute = p_header["mtime"] & 2016 >> 5
-            v_seconde = p_header["mtime"] & 31 * 2
+            v_hour_ = p_header_["mtime"] & 63488 >> 11
+            v_minute_ = p_header_["mtime"] & 2016 >> 5
+            v_seconde_ = p_header_["mtime"] & 31 * 2
             #// ----- Extract date
-            v_year = p_header["mdate"] & 65024 >> 9 + 1980
-            v_month = p_header["mdate"] & 480 >> 5
-            v_day = p_header["mdate"] & 31
+            v_year_ = p_header_["mdate"] & 65024 >> 9 + 1980
+            v_month_ = p_header_["mdate"] & 480 >> 5
+            v_day_ = p_header_["mdate"] & 31
             #// ----- Get UNIX date format
-            p_header["mtime"] = php_no_error(lambda: mktime(v_hour, v_minute, v_seconde, v_month, v_day, v_year))
+            p_header_["mtime"] = php_no_error(lambda: mktime(v_hour_, v_minute_, v_seconde_, v_month_, v_day_, v_year_))
         else:
-            p_header["mtime"] = time()
+            p_header_["mtime"] = time()
         # end if
         #// ----- Set the stored filename
-        p_header["stored_filename"] = p_header["filename"]
+        p_header_["stored_filename"] = p_header_["filename"]
         #// ----- Set default status to ok
-        p_header["status"] = "ok"
+        p_header_["status"] = "ok"
         #// ----- Look if it is a directory
-        if php_substr(p_header["filename"], -1) == "/":
+        if php_substr(p_header_["filename"], -1) == "/":
             #// $p_header['external'] = 0x41FF0010;
-            p_header["external"] = 16
+            p_header_["external"] = 16
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privreadcentralfileheader
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3585,37 +3642,38 @@ class PclZip():
     #// 1 on success,
     #// 0 on error;
     #// --------------------------------------------------------------------------------
-    def privcheckfileheaders(self, p_local_header=None, p_central_header=None):
+    def privcheckfileheaders(self, p_local_header_=None, p_central_header_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Check the static values
         #// TBC
-        if p_local_header["filename"] != p_central_header["filename"]:
+        if p_local_header_["filename"] != p_central_header_["filename"]:
             pass
         # end if
-        if p_local_header["version_extracted"] != p_central_header["version_extracted"]:
+        if p_local_header_["version_extracted"] != p_central_header_["version_extracted"]:
             pass
         # end if
-        if p_local_header["flag"] != p_central_header["flag"]:
+        if p_local_header_["flag"] != p_central_header_["flag"]:
             pass
         # end if
-        if p_local_header["compression"] != p_central_header["compression"]:
+        if p_local_header_["compression"] != p_central_header_["compression"]:
             pass
         # end if
-        if p_local_header["mtime"] != p_central_header["mtime"]:
+        if p_local_header_["mtime"] != p_central_header_["mtime"]:
             pass
         # end if
-        if p_local_header["filename_len"] != p_central_header["filename_len"]:
+        if p_local_header_["filename_len"] != p_central_header_["filename_len"]:
             pass
         # end if
         #// ----- Look for flag bit 3
-        if p_local_header["flag"] & 8 == 8:
-            p_local_header["size"] = p_central_header["size"]
-            p_local_header["compressed_size"] = p_central_header["compressed_size"]
-            p_local_header["crc"] = p_central_header["crc"]
+        if p_local_header_["flag"] & 8 == 8:
+            p_local_header_["size"] = p_central_header_["size"]
+            p_local_header_["compressed_size"] = p_central_header_["compressed_size"]
+            p_local_header_["crc"] = p_central_header_["crc"]
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privcheckfileheaders
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3624,13 +3682,14 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privreadendcentraldir(self, p_central_dir=None):
+    def privreadendcentraldir(self, p_central_dir_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Go to the end of the zip file
-        v_size = filesize(self.zipname)
-        php_no_error(lambda: fseek(self.zip_fd, v_size))
-        if php_no_error(lambda: ftell(self.zip_fd)) != v_size:
+        v_size_ = filesize(self.zipname)
+        php_no_error(lambda: fseek(self.zip_fd, v_size_))
+        if php_no_error(lambda: ftell(self.zip_fd)) != v_size_:
             #// ----- Error log
             PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Unable to go to the end of the archive '" + self.zipname + "'")
             #// ----- Return
@@ -3638,63 +3697,63 @@ class PclZip():
         # end if
         #// ----- First try : look if this is an archive with no commentaries (most of the time)
         #// in this case the end of central dir is at 22 bytes of the file end
-        v_found = 0
-        if v_size > 26:
-            php_no_error(lambda: fseek(self.zip_fd, v_size - 22))
-            v_pos = php_no_error(lambda: ftell(self.zip_fd))
-            if v_pos != v_size - 22:
+        v_found_ = 0
+        if v_size_ > 26:
+            php_no_error(lambda: fseek(self.zip_fd, v_size_ - 22))
+            v_pos_ = php_no_error(lambda: ftell(self.zip_fd))
+            if v_pos_ != v_size_ - 22:
                 #// ----- Error log
                 PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Unable to seek back to the middle of the archive '" + self.zipname + "'")
                 #// ----- Return
                 return PclZip.errorcode()
             # end if
             #// ----- Read for bytes
-            v_binary_data = php_no_error(lambda: fread(self.zip_fd, 4))
-            v_data = php_no_error(lambda: unpack("Vid", v_binary_data))
+            v_binary_data_ = php_no_error(lambda: fread(self.zip_fd, 4))
+            v_data_ = php_no_error(lambda: unpack("Vid", v_binary_data_))
             #// ----- Check signature
-            if v_data["id"] == 101010256:
-                v_found = 1
+            if v_data_["id"] == 101010256:
+                v_found_ = 1
             # end if
-            v_pos = ftell(self.zip_fd)
+            v_pos_ = ftell(self.zip_fd)
         # end if
         #// ----- Go back to the maximum possible size of the Central Dir End Record
-        if (not v_found):
-            v_maximum_size = 65557
+        if (not v_found_):
+            v_maximum_size_ = 65557
             #// 0xFFFF + 22;
-            if v_maximum_size > v_size:
-                v_maximum_size = v_size
+            if v_maximum_size_ > v_size_:
+                v_maximum_size_ = v_size_
             # end if
-            php_no_error(lambda: fseek(self.zip_fd, v_size - v_maximum_size))
-            if php_no_error(lambda: ftell(self.zip_fd)) != v_size - v_maximum_size:
+            php_no_error(lambda: fseek(self.zip_fd, v_size_ - v_maximum_size_))
+            if php_no_error(lambda: ftell(self.zip_fd)) != v_size_ - v_maximum_size_:
                 #// ----- Error log
                 PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Unable to seek back to the middle of the archive '" + self.zipname + "'")
                 #// ----- Return
                 return PclZip.errorcode()
             # end if
             #// ----- Read byte per byte in order to find the signature
-            v_pos = ftell(self.zip_fd)
-            v_bytes = 0
+            v_pos_ = ftell(self.zip_fd)
+            v_bytes_ = 0
             while True:
                 
-                if not (v_pos < v_size):
+                if not (v_pos_ < v_size_):
                     break
                 # end if
                 #// ----- Read a byte
-                v_byte = php_no_error(lambda: fread(self.zip_fd, 1))
+                v_byte_ = php_no_error(lambda: fread(self.zip_fd, 1))
                 #// -----  Add the byte
                 #// $v_bytes = ($v_bytes << 8) | Ord($v_byte);
                 #// Note we mask the old value down such that once shifted we can never end up with more than a 32bit number
                 #// Otherwise on systems where we have 64bit integers the check below for the magic number will fail.
-                v_bytes = v_bytes & 16777215 << 8 | Ord(v_byte)
+                v_bytes_ = v_bytes_ & 16777215 << 8 | Ord(v_byte_)
                 #// ----- Compare the bytes
-                if v_bytes == 1347093766:
-                    v_pos += 1
+                if v_bytes_ == 1347093766:
+                    v_pos_ += 1
                     break
                 # end if
-                v_pos += 1
+                v_pos_ += 1
             # end while
             #// ----- Look if not found end of central dir
-            if v_pos == v_size:
+            if v_pos_ == v_size_:
                 #// ----- Error log
                 PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Unable to find End of Central Dir Record signature")
                 #// ----- Return
@@ -3702,18 +3761,18 @@ class PclZip():
             # end if
         # end if
         #// ----- Read the first 18 bytes of the header
-        v_binary_data = fread(self.zip_fd, 18)
+        v_binary_data_ = fread(self.zip_fd, 18)
         #// ----- Look for invalid block size
-        if php_strlen(v_binary_data) != 18:
+        if php_strlen(v_binary_data_) != 18:
             #// ----- Error log
-            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid End of Central Dir Record size : " + php_strlen(v_binary_data))
+            PclZip.priverrorlog(PCLZIP_ERR_BAD_FORMAT, "Invalid End of Central Dir Record size : " + php_strlen(v_binary_data_))
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Extract the values
-        v_data = unpack("vdisk/vdisk_start/vdisk_entries/ventries/Vsize/Voffset/vcomment_size", v_binary_data)
+        v_data_ = unpack("vdisk/vdisk_start/vdisk_entries/ventries/Vsize/Voffset/vcomment_size", v_binary_data_)
         #// ----- Check the global size
-        if v_pos + v_data["comment_size"] + 18 != v_size:
+        if v_pos_ + v_data_["comment_size"] + 18 != v_size_:
             #// ----- Removed in release 2.2 see readme file
             #// The check of the file size is a little too strict.
             #// Some bugs where found when a zip is encrypted/decrypted with 'crypt'.
@@ -3726,22 +3785,22 @@ class PclZip():
             # end if
         # end if
         #// ----- Get comment
-        if v_data["comment_size"] != 0:
-            p_central_dir["comment"] = fread(self.zip_fd, v_data["comment_size"])
+        if v_data_["comment_size"] != 0:
+            p_central_dir_["comment"] = fread(self.zip_fd, v_data_["comment_size"])
         else:
-            p_central_dir["comment"] = ""
+            p_central_dir_["comment"] = ""
         # end if
-        p_central_dir["entries"] = v_data["entries"]
-        p_central_dir["disk_entries"] = v_data["disk_entries"]
-        p_central_dir["offset"] = v_data["offset"]
-        p_central_dir["size"] = v_data["size"]
-        p_central_dir["disk"] = v_data["disk"]
-        p_central_dir["disk_start"] = v_data["disk_start"]
+        p_central_dir_["entries"] = v_data_["entries"]
+        p_central_dir_["disk_entries"] = v_data_["disk_entries"]
+        p_central_dir_["offset"] = v_data_["offset"]
+        p_central_dir_["size"] = v_data_["size"]
+        p_central_dir_["disk"] = v_data_["disk"]
+        p_central_dir_["disk_start"] = v_data_["disk_start"]
         #// TBC
         #// for(reset($p_central_dir); $key = key($p_central_dir); next($p_central_dir)) {
         #// }
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privreadendcentraldir
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3750,30 +3809,31 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privdeletebyrule(self, p_result_list=None, p_options=None):
+    def privdeletebyrule(self, p_result_list_=None, p_options_=None):
         
-        v_result = 1
-        v_list_detail = Array()
+        
+        v_result_ = 1
+        v_list_detail_ = Array()
         #// ----- Open the zip file
-        v_result = self.privopenfd("rb")
-        if v_result != 1:
+        v_result_ = self.privopenfd("rb")
+        if v_result_ != 1:
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Read the central directory information
-        v_central_dir = Array()
-        v_result = self.privreadendcentraldir(v_central_dir)
-        if v_result != 1:
+        v_central_dir_ = Array()
+        v_result_ = self.privreadendcentraldir(v_central_dir_)
+        if v_result_ != 1:
             self.privclosefd()
-            return v_result
+            return v_result_
         # end if
         #// ----- Go to beginning of File
         php_no_error(lambda: rewind(self.zip_fd))
         #// ----- Scan all the files
         #// ----- Start at beginning of Central Dir
-        v_pos_entry = v_central_dir["offset"]
+        v_pos_entry_ = v_central_dir_["offset"]
         php_no_error(lambda: rewind(self.zip_fd))
-        if php_no_error(lambda: fseek(self.zip_fd, v_pos_entry)):
+        if php_no_error(lambda: fseek(self.zip_fd, v_pos_entry_)):
             #// ----- Close the zip file
             self.privclosefd()
             #// ----- Error log
@@ -3782,184 +3842,184 @@ class PclZip():
             return PclZip.errorcode()
         # end if
         #// ----- Read each entry
-        v_header_list = Array()
-        j_start = 0
-        i = 0
-        v_nb_extracted = 0
-        while i < v_central_dir["entries"]:
+        v_header_list_ = Array()
+        j_start_ = 0
+        i_ = 0
+        v_nb_extracted_ = 0
+        while i_ < v_central_dir_["entries"]:
             
             #// ----- Read the file header
-            v_header_list[v_nb_extracted] = Array()
-            v_result = self.privreadcentralfileheader(v_header_list[v_nb_extracted])
-            if v_result != 1:
+            v_header_list_[v_nb_extracted_] = Array()
+            v_result_ = self.privreadcentralfileheader(v_header_list_[v_nb_extracted_])
+            if v_result_ != 1:
                 #// ----- Close the zip file
                 self.privclosefd()
-                return v_result
+                return v_result_
             # end if
             #// ----- Store the index
-            v_header_list[v_nb_extracted]["index"] = i
+            v_header_list_[v_nb_extracted_]["index"] = i_
             #// ----- Look for the specific extract rules
-            v_found = False
+            v_found_ = False
             #// ----- Look for extract by name rule
-            if (php_isset(lambda : p_options[PCLZIP_OPT_BY_NAME])) and p_options[PCLZIP_OPT_BY_NAME] != 0:
+            if (php_isset(lambda : p_options_[PCLZIP_OPT_BY_NAME])) and p_options_[PCLZIP_OPT_BY_NAME] != 0:
                 #// ----- Look if the filename is in the list
-                j = 0
-                while j < sizeof(p_options[PCLZIP_OPT_BY_NAME]) and (not v_found):
+                j_ = 0
+                while j_ < sizeof(p_options_[PCLZIP_OPT_BY_NAME]) and (not v_found_):
                     
                     #// ----- Look for a directory
-                    if php_substr(p_options[PCLZIP_OPT_BY_NAME][j], -1) == "/":
+                    if php_substr(p_options_[PCLZIP_OPT_BY_NAME][j_], -1) == "/":
                         #// ----- Look if the directory is in the filename path
-                        if php_strlen(v_header_list[v_nb_extracted]["stored_filename"]) > php_strlen(p_options[PCLZIP_OPT_BY_NAME][j]) and php_substr(v_header_list[v_nb_extracted]["stored_filename"], 0, php_strlen(p_options[PCLZIP_OPT_BY_NAME][j])) == p_options[PCLZIP_OPT_BY_NAME][j]:
-                            v_found = True
-                        elif v_header_list[v_nb_extracted]["external"] & 16 == 16 and v_header_list[v_nb_extracted]["stored_filename"] + "/" == p_options[PCLZIP_OPT_BY_NAME][j]:
-                            v_found = True
+                        if php_strlen(v_header_list_[v_nb_extracted_]["stored_filename"]) > php_strlen(p_options_[PCLZIP_OPT_BY_NAME][j_]) and php_substr(v_header_list_[v_nb_extracted_]["stored_filename"], 0, php_strlen(p_options_[PCLZIP_OPT_BY_NAME][j_])) == p_options_[PCLZIP_OPT_BY_NAME][j_]:
+                            v_found_ = True
+                        elif v_header_list_[v_nb_extracted_]["external"] & 16 == 16 and v_header_list_[v_nb_extracted_]["stored_filename"] + "/" == p_options_[PCLZIP_OPT_BY_NAME][j_]:
+                            v_found_ = True
                         # end if
                         #// ----- Look for a filename
-                    elif v_header_list[v_nb_extracted]["stored_filename"] == p_options[PCLZIP_OPT_BY_NAME][j]:
-                        v_found = True
+                    elif v_header_list_[v_nb_extracted_]["stored_filename"] == p_options_[PCLZIP_OPT_BY_NAME][j_]:
+                        v_found_ = True
                     # end if
-                    j += 1
+                    j_ += 1
                 # end while
             else:
-                if (php_isset(lambda : p_options[PCLZIP_OPT_BY_PREG])) and p_options[PCLZIP_OPT_BY_PREG] != "":
-                    if php_preg_match(p_options[PCLZIP_OPT_BY_PREG], v_header_list[v_nb_extracted]["stored_filename"]):
-                        v_found = True
+                if (php_isset(lambda : p_options_[PCLZIP_OPT_BY_PREG])) and p_options_[PCLZIP_OPT_BY_PREG] != "":
+                    if php_preg_match(p_options_[PCLZIP_OPT_BY_PREG], v_header_list_[v_nb_extracted_]["stored_filename"]):
+                        v_found_ = True
                     # end if
                 else:
-                    if (php_isset(lambda : p_options[PCLZIP_OPT_BY_INDEX])) and p_options[PCLZIP_OPT_BY_INDEX] != 0:
+                    if (php_isset(lambda : p_options_[PCLZIP_OPT_BY_INDEX])) and p_options_[PCLZIP_OPT_BY_INDEX] != 0:
                         #// ----- Look if the index is in the list
-                        j = j_start
-                        while j < sizeof(p_options[PCLZIP_OPT_BY_INDEX]) and (not v_found):
+                        j_ = j_start_
+                        while j_ < sizeof(p_options_[PCLZIP_OPT_BY_INDEX]) and (not v_found_):
                             
-                            if i >= p_options[PCLZIP_OPT_BY_INDEX][j]["start"] and i <= p_options[PCLZIP_OPT_BY_INDEX][j]["end"]:
-                                v_found = True
+                            if i_ >= p_options_[PCLZIP_OPT_BY_INDEX][j_]["start"] and i_ <= p_options_[PCLZIP_OPT_BY_INDEX][j_]["end"]:
+                                v_found_ = True
                             # end if
-                            if i >= p_options[PCLZIP_OPT_BY_INDEX][j]["end"]:
-                                j_start = j + 1
+                            if i_ >= p_options_[PCLZIP_OPT_BY_INDEX][j_]["end"]:
+                                j_start_ = j_ + 1
                             # end if
-                            if p_options[PCLZIP_OPT_BY_INDEX][j]["start"] > i:
+                            if p_options_[PCLZIP_OPT_BY_INDEX][j_]["start"] > i_:
                                 break
                             # end if
-                            j += 1
+                            j_ += 1
                         # end while
                     else:
-                        v_found = True
+                        v_found_ = True
                     # end if
                 # end if
             # end if
             #// ----- Look for deletion
-            if v_found:
-                v_header_list[v_nb_extracted] = None
+            if v_found_:
+                v_header_list_[v_nb_extracted_] = None
             else:
-                v_nb_extracted += 1
+                v_nb_extracted_ += 1
             # end if
-            i += 1
+            i_ += 1
         # end while
         #// ----- Look if something need to be deleted
-        if v_nb_extracted > 0:
+        if v_nb_extracted_ > 0:
             #// ----- Creates a temporary file
-            v_zip_temp_name = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
+            v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
             #// ----- Creates a temporary zip archive
-            v_temp_zip = php_new_class("PclZip", lambda : PclZip(v_zip_temp_name))
+            v_temp_zip_ = php_new_class("PclZip", lambda : PclZip(v_zip_temp_name_))
             #// ----- Open the temporary zip file in write mode
-            v_result = v_temp_zip.privopenfd("wb")
-            if v_result != 1:
+            v_result_ = v_temp_zip_.privopenfd("wb")
+            if v_result_ != 1:
                 self.privclosefd()
                 #// ----- Return
-                return v_result
+                return v_result_
             # end if
             #// ----- Look which file need to be kept
-            i = 0
-            while i < sizeof(v_header_list):
+            i_ = 0
+            while i_ < sizeof(v_header_list_):
                 
                 #// ----- Calculate the position of the header
                 php_no_error(lambda: rewind(self.zip_fd))
-                if php_no_error(lambda: fseek(self.zip_fd, v_header_list[i]["offset"])):
+                if php_no_error(lambda: fseek(self.zip_fd, v_header_list_[i_]["offset"])):
                     #// ----- Close the zip file
                     self.privclosefd()
-                    v_temp_zip.privclosefd()
-                    php_no_error(lambda: unlink(v_zip_temp_name))
+                    v_temp_zip_.privclosefd()
+                    php_no_error(lambda: unlink(v_zip_temp_name_))
                     #// ----- Error log
                     PclZip.priverrorlog(PCLZIP_ERR_INVALID_ARCHIVE_ZIP, "Invalid archive size")
                     #// ----- Return
                     return PclZip.errorcode()
                 # end if
                 #// ----- Read the file header
-                v_local_header = Array()
-                v_result = self.privreadfileheader(v_local_header)
-                if v_result != 1:
+                v_local_header_ = Array()
+                v_result_ = self.privreadfileheader(v_local_header_)
+                if v_result_ != 1:
                     #// ----- Close the zip file
                     self.privclosefd()
-                    v_temp_zip.privclosefd()
-                    php_no_error(lambda: unlink(v_zip_temp_name))
+                    v_temp_zip_.privclosefd()
+                    php_no_error(lambda: unlink(v_zip_temp_name_))
                     #// ----- Return
-                    return v_result
+                    return v_result_
                 # end if
                 #// ----- Check that local file header is same as central file header
-                if self.privcheckfileheaders(v_local_header, v_header_list[i]) != 1:
+                if self.privcheckfileheaders(v_local_header_, v_header_list_[i_]) != 1:
                     pass
                 # end if
-                v_local_header = None
+                v_local_header_ = None
                 #// ----- Write the file header
-                v_result = v_temp_zip.privwritefileheader(v_header_list[i])
-                if v_result != 1:
+                v_result_ = v_temp_zip_.privwritefileheader(v_header_list_[i_])
+                if v_result_ != 1:
                     #// ----- Close the zip file
                     self.privclosefd()
-                    v_temp_zip.privclosefd()
-                    php_no_error(lambda: unlink(v_zip_temp_name))
+                    v_temp_zip_.privclosefd()
+                    php_no_error(lambda: unlink(v_zip_temp_name_))
                     #// ----- Return
-                    return v_result
+                    return v_result_
                 # end if
                 #// ----- Read/write the data block
-                v_result = PclZipUtilCopyBlock(self.zip_fd, v_temp_zip.zip_fd, v_header_list[i]["compressed_size"])
-                if v_result != 1:
+                v_result_ = PclZipUtilCopyBlock(self.zip_fd, v_temp_zip_.zip_fd, v_header_list_[i_]["compressed_size"])
+                if v_result_ != 1:
                     #// ----- Close the zip file
                     self.privclosefd()
-                    v_temp_zip.privclosefd()
-                    php_no_error(lambda: unlink(v_zip_temp_name))
+                    v_temp_zip_.privclosefd()
+                    php_no_error(lambda: unlink(v_zip_temp_name_))
                     #// ----- Return
-                    return v_result
+                    return v_result_
                 # end if
-                i += 1
+                i_ += 1
             # end while
             #// ----- Store the offset of the central dir
-            v_offset = php_no_error(lambda: ftell(v_temp_zip.zip_fd))
+            v_offset_ = php_no_error(lambda: ftell(v_temp_zip_.zip_fd))
             #// ----- Re-Create the Central Dir files header
-            i = 0
-            while i < sizeof(v_header_list):
+            i_ = 0
+            while i_ < sizeof(v_header_list_):
                 
                 #// ----- Create the file header
-                v_result = v_temp_zip.privwritecentralfileheader(v_header_list[i])
-                if v_result != 1:
-                    v_temp_zip.privclosefd()
+                v_result_ = v_temp_zip_.privwritecentralfileheader(v_header_list_[i_])
+                if v_result_ != 1:
+                    v_temp_zip_.privclosefd()
                     self.privclosefd()
-                    php_no_error(lambda: unlink(v_zip_temp_name))
+                    php_no_error(lambda: unlink(v_zip_temp_name_))
                     #// ----- Return
-                    return v_result
+                    return v_result_
                 # end if
                 #// ----- Transform the header to a 'usable' info
-                v_temp_zip.privconvertheader2fileinfo(v_header_list[i], p_result_list[i])
-                i += 1
+                v_temp_zip_.privconvertheader2fileinfo(v_header_list_[i_], p_result_list_[i_])
+                i_ += 1
             # end while
             #// ----- Zip file comment
-            v_comment = ""
-            if (php_isset(lambda : p_options[PCLZIP_OPT_COMMENT])):
-                v_comment = p_options[PCLZIP_OPT_COMMENT]
+            v_comment_ = ""
+            if (php_isset(lambda : p_options_[PCLZIP_OPT_COMMENT])):
+                v_comment_ = p_options_[PCLZIP_OPT_COMMENT]
             # end if
             #// ----- Calculate the size of the central header
-            v_size = php_no_error(lambda: ftell(v_temp_zip.zip_fd)) - v_offset
+            v_size_ = php_no_error(lambda: ftell(v_temp_zip_.zip_fd)) - v_offset_
             #// ----- Create the central dir footer
-            v_result = v_temp_zip.privwritecentralheader(sizeof(v_header_list), v_size, v_offset, v_comment)
-            if v_result != 1:
-                v_header_list = None
-                v_temp_zip.privclosefd()
+            v_result_ = v_temp_zip_.privwritecentralheader(sizeof(v_header_list_), v_size_, v_offset_, v_comment_)
+            if v_result_ != 1:
+                v_header_list_ = None
+                v_temp_zip_.privclosefd()
                 self.privclosefd()
-                php_no_error(lambda: unlink(v_zip_temp_name))
+                php_no_error(lambda: unlink(v_zip_temp_name_))
                 #// ----- Return
-                return v_result
+                return v_result_
             # end if
             #// ----- Close
-            v_temp_zip.privclosefd()
+            v_temp_zip_.privclosefd()
             self.privclosefd()
             #// ----- Delete the zip file
             #// TBC : I should test the result ...
@@ -3967,24 +4027,24 @@ class PclZip():
             #// ----- Rename the temporary file
             #// TBC : I should test the result ...
             #// @rename($v_zip_temp_name, $this->zipname);
-            PclZipUtilRename(v_zip_temp_name, self.zipname)
-            v_temp_zip = None
+            PclZipUtilRename(v_zip_temp_name_, self.zipname)
+            v_temp_zip_ = None
         else:
-            if v_central_dir["entries"] != 0:
+            if v_central_dir_["entries"] != 0:
                 self.privclosefd()
-                v_result = self.privopenfd("wb")
-                if v_result != 1:
-                    return v_result
+                v_result_ = self.privopenfd("wb")
+                if v_result_ != 1:
+                    return v_result_
                 # end if
-                v_result = self.privwritecentralheader(0, 0, 0, "")
-                if v_result != 1:
-                    return v_result
+                v_result_ = self.privwritecentralheader(0, 0, 0, "")
+                if v_result_ != 1:
+                    return v_result_
                 # end if
                 self.privclosefd()
             # end if
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privdeletebyrule
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -3998,38 +4058,41 @@ class PclZip():
     #// 1 : OK
     #// -1 : Unable to create directory
     #// --------------------------------------------------------------------------------
-    def privdircheck(self, p_dir=None, p_is_dir=False):
+    def privdircheck(self, p_dir_=None, p_is_dir_=None):
+        if p_is_dir_ is None:
+            p_is_dir_ = False
+        # end if
         
-        v_result = 1
+        v_result_ = 1
         #// ----- Remove the final '/'
-        if p_is_dir and php_substr(p_dir, -1) == "/":
-            p_dir = php_substr(p_dir, 0, php_strlen(p_dir) - 1)
+        if p_is_dir_ and php_substr(p_dir_, -1) == "/":
+            p_dir_ = php_substr(p_dir_, 0, php_strlen(p_dir_) - 1)
         # end if
         #// ----- Check the directory availability
-        if php_is_dir(p_dir) or p_dir == "":
+        if php_is_dir(p_dir_) or p_dir_ == "":
             return 1
         # end if
         #// ----- Extract parent directory
-        p_parent_dir = php_dirname(p_dir)
+        p_parent_dir_ = php_dirname(p_dir_)
         #// ----- Just a check
-        if p_parent_dir != p_dir:
+        if p_parent_dir_ != p_dir_:
             #// ----- Look for parent directory
-            if p_parent_dir != "":
-                v_result = self.privdircheck(p_parent_dir)
-                if v_result != 1:
-                    return v_result
+            if p_parent_dir_ != "":
+                v_result_ = self.privdircheck(p_parent_dir_)
+                if v_result_ != 1:
+                    return v_result_
                 # end if
             # end if
         # end if
         #// ----- Create the directory
-        if (not php_no_error(lambda: mkdir(p_dir, 511))):
+        if (not php_no_error(lambda: mkdir(p_dir_, 511))):
             #// ----- Error log
-            PclZip.priverrorlog(PCLZIP_ERR_DIR_CREATE_FAIL, str("Unable to create directory '") + str(p_dir) + str("'"))
+            PclZip.priverrorlog(PCLZIP_ERR_DIR_CREATE_FAIL, str("Unable to create directory '") + str(p_dir_) + str("'"))
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privdircheck
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -4039,156 +4102,157 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privmerge(self, p_archive_to_add=None):
+    def privmerge(self, p_archive_to_add_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Look if the archive_to_add exists
-        if (not php_is_file(p_archive_to_add.zipname)):
+        if (not php_is_file(p_archive_to_add_.zipname)):
             #// ----- Nothing to merge, so merge is a success
-            v_result = 1
+            v_result_ = 1
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Look if the archive exists
         if (not php_is_file(self.zipname)):
             #// ----- Do a duplicate
-            v_result = self.privduplicate(p_archive_to_add.zipname)
+            v_result_ = self.privduplicate(p_archive_to_add_.zipname)
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Open the zip file
-        v_result = self.privopenfd("rb")
-        if v_result != 1:
+        v_result_ = self.privopenfd("rb")
+        if v_result_ != 1:
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Read the central directory information
-        v_central_dir = Array()
-        v_result = self.privreadendcentraldir(v_central_dir)
-        if v_result != 1:
+        v_central_dir_ = Array()
+        v_result_ = self.privreadendcentraldir(v_central_dir_)
+        if v_result_ != 1:
             self.privclosefd()
-            return v_result
+            return v_result_
         # end if
         #// ----- Go to beginning of File
         php_no_error(lambda: rewind(self.zip_fd))
         #// ----- Open the archive_to_add file
-        v_result = p_archive_to_add.privopenfd("rb")
-        if v_result != 1:
+        v_result_ = p_archive_to_add_.privopenfd("rb")
+        if v_result_ != 1:
             self.privclosefd()
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Read the central directory information
-        v_central_dir_to_add = Array()
-        v_result = p_archive_to_add.privreadendcentraldir(v_central_dir_to_add)
-        if v_result != 1:
+        v_central_dir_to_add_ = Array()
+        v_result_ = p_archive_to_add_.privreadendcentraldir(v_central_dir_to_add_)
+        if v_result_ != 1:
             self.privclosefd()
-            p_archive_to_add.privclosefd()
-            return v_result
+            p_archive_to_add_.privclosefd()
+            return v_result_
         # end if
         #// ----- Go to beginning of File
-        php_no_error(lambda: rewind(p_archive_to_add.zip_fd))
+        php_no_error(lambda: rewind(p_archive_to_add_.zip_fd))
         #// ----- Creates a temporary file
-        v_zip_temp_name = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
+        v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
         #// ----- Open the temporary file in write mode
-        v_zip_temp_fd = php_no_error(lambda: fopen(v_zip_temp_name, "wb"))
-        if v_zip_temp_fd == 0:
+        v_zip_temp_fd_ = php_no_error(lambda: fopen(v_zip_temp_name_, "wb"))
+        if v_zip_temp_fd_ == 0:
             self.privclosefd()
-            p_archive_to_add.privclosefd()
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_zip_temp_name + "' in binary write mode")
+            p_archive_to_add_.privclosefd()
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open temporary file '" + v_zip_temp_name_ + "' in binary write mode")
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Copy the files from the archive to the temporary file
         #// TBC : Here I should better append the file and go back to erase the central dir
-        v_size = v_central_dir["offset"]
+        v_size_ = v_central_dir_["offset"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = fread(self.zip_fd, v_read_size)
-            php_no_error(lambda: fwrite(v_zip_temp_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = fread(self.zip_fd, v_read_size_)
+            php_no_error(lambda: fwrite(v_zip_temp_fd_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Copy the files from the archive_to_add into the temporary file
-        v_size = v_central_dir_to_add["offset"]
+        v_size_ = v_central_dir_to_add_["offset"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = fread(p_archive_to_add.zip_fd, v_read_size)
-            php_no_error(lambda: fwrite(v_zip_temp_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = fread(p_archive_to_add_.zip_fd, v_read_size_)
+            php_no_error(lambda: fwrite(v_zip_temp_fd_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Store the offset of the central dir
-        v_offset = php_no_error(lambda: ftell(v_zip_temp_fd))
+        v_offset_ = php_no_error(lambda: ftell(v_zip_temp_fd_))
         #// ----- Copy the block of file headers from the old archive
-        v_size = v_central_dir["size"]
+        v_size_ = v_central_dir_["size"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: fread(self.zip_fd, v_read_size))
-            php_no_error(lambda: fwrite(v_zip_temp_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: fread(self.zip_fd, v_read_size_))
+            php_no_error(lambda: fwrite(v_zip_temp_fd_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Copy the block of file headers from the archive_to_add
-        v_size = v_central_dir_to_add["size"]
+        v_size_ = v_central_dir_to_add_["size"]
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: fread(p_archive_to_add.zip_fd, v_read_size))
-            php_no_error(lambda: fwrite(v_zip_temp_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: fread(p_archive_to_add_.zip_fd, v_read_size_))
+            php_no_error(lambda: fwrite(v_zip_temp_fd_, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Merge the file comments
-        v_comment = v_central_dir["comment"] + " " + v_central_dir_to_add["comment"]
+        v_comment_ = v_central_dir_["comment"] + " " + v_central_dir_to_add_["comment"]
         #// ----- Calculate the size of the (new) central header
-        v_size = php_no_error(lambda: ftell(v_zip_temp_fd)) - v_offset
+        v_size_ = php_no_error(lambda: ftell(v_zip_temp_fd_)) - v_offset_
         #// ----- Swap the file descriptor
         #// Here is a trick : I swap the temporary fd with the zip fd, in order to use
         #// the following methods on the temporary fil and not the real archive fd
-        v_swap = self.zip_fd
-        self.zip_fd = v_zip_temp_fd
-        v_zip_temp_fd = v_swap
+        v_swap_ = self.zip_fd
+        self.zip_fd = v_zip_temp_fd_
+        v_zip_temp_fd_ = v_swap_
         #// ----- Create the central dir footer
-        v_result = self.privwritecentralheader(v_central_dir["entries"] + v_central_dir_to_add["entries"], v_size, v_offset, v_comment)
-        if v_result != 1:
+        v_result_ = self.privwritecentralheader(v_central_dir_["entries"] + v_central_dir_to_add_["entries"], v_size_, v_offset_, v_comment_)
+        if v_result_ != 1:
             self.privclosefd()
-            p_archive_to_add.privclosefd()
-            php_no_error(lambda: php_fclose(v_zip_temp_fd))
+            p_archive_to_add_.privclosefd()
+            php_no_error(lambda: php_fclose(v_zip_temp_fd_))
             self.zip_fd = None
-            v_header_list = None
+            v_header_list_ = None
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Swap back the file descriptor
-        v_swap = self.zip_fd
-        self.zip_fd = v_zip_temp_fd
-        v_zip_temp_fd = v_swap
+        v_swap_ = self.zip_fd
+        self.zip_fd = v_zip_temp_fd_
+        v_zip_temp_fd_ = v_swap_
         #// ----- Close
         self.privclosefd()
-        p_archive_to_add.privclosefd()
+        p_archive_to_add_.privclosefd()
         #// ----- Close the temporary file
-        php_no_error(lambda: php_fclose(v_zip_temp_fd))
+        php_no_error(lambda: php_fclose(v_zip_temp_fd_))
         #// ----- Delete the zip file
         #// TBC : I should test the result ...
         php_no_error(lambda: unlink(self.zipname))
         #// ----- Rename the temporary file
         #// TBC : I should test the result ...
         #// @rename($v_zip_temp_name, $this->zipname);
-        PclZipUtilRename(v_zip_temp_name, self.zipname)
+        PclZipUtilRename(v_zip_temp_name_, self.zipname)
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privmerge
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -4197,49 +4261,50 @@ class PclZip():
     #// Parameters :
     #// Return Values :
     #// --------------------------------------------------------------------------------
-    def privduplicate(self, p_archive_filename=None):
+    def privduplicate(self, p_archive_filename_=None):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// ----- Look if the $p_archive_filename exists
-        if (not php_is_file(p_archive_filename)):
+        if (not php_is_file(p_archive_filename_)):
             #// ----- Nothing to duplicate, so duplicate is a success.
-            v_result = 1
+            v_result_ = 1
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Open the zip file
-        v_result = self.privopenfd("wb")
-        if v_result != 1:
+        v_result_ = self.privopenfd("wb")
+        if v_result_ != 1:
             #// ----- Return
-            return v_result
+            return v_result_
         # end if
         #// ----- Open the temporary file in write mode
-        v_zip_temp_fd = php_no_error(lambda: fopen(p_archive_filename, "rb"))
-        if v_zip_temp_fd == 0:
+        v_zip_temp_fd_ = php_no_error(lambda: fopen(p_archive_filename_, "rb"))
+        if v_zip_temp_fd_ == 0:
             self.privclosefd()
-            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open archive file '" + p_archive_filename + "' in binary write mode")
+            PclZip.priverrorlog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open archive file '" + p_archive_filename_ + "' in binary write mode")
             #// ----- Return
             return PclZip.errorcode()
         # end if
         #// ----- Copy the files from the archive to the temporary file
         #// TBC : Here I should better append the file and go back to erase the central dir
-        v_size = filesize(p_archive_filename)
+        v_size_ = filesize(p_archive_filename_)
         while True:
             
-            if not (v_size != 0):
+            if not (v_size_ != 0):
                 break
             # end if
-            v_read_size = v_size if v_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = fread(v_zip_temp_fd, v_read_size)
-            php_no_error(lambda: fwrite(self.zip_fd, v_buffer, v_read_size))
-            v_size -= v_read_size
+            v_read_size_ = v_size_ if v_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = fread(v_zip_temp_fd_, v_read_size_)
+            php_no_error(lambda: fwrite(self.zip_fd, v_buffer_, v_read_size_))
+            v_size_ -= v_read_size_
         # end while
         #// ----- Close
         self.privclosefd()
         #// ----- Close the temporary file
-        php_no_error(lambda: php_fclose(v_zip_temp_fd))
+        php_no_error(lambda: php_fclose(v_zip_temp_fd_))
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privduplicate
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -4247,13 +4312,14 @@ class PclZip():
     #// Description :
     #// Parameters :
     #// --------------------------------------------------------------------------------
-    def priverrorlog(self, p_error_code=0, p_error_string=""):
+    def priverrorlog(self, p_error_code_=0, p_error_string_=""):
+        
         
         if PCLZIP_ERROR_EXTERNAL == 1:
-            PclError(p_error_code, p_error_string)
+            PclError(p_error_code_, p_error_string_)
         else:
-            self.error_code = p_error_code
-            self.error_string = p_error_string
+            self.error_code = p_error_code_
+            self.error_string = p_error_string_
         # end if
     # end def priverrorlog
     #// --------------------------------------------------------------------------------
@@ -4263,6 +4329,7 @@ class PclZip():
     #// Parameters :
     #// --------------------------------------------------------------------------------
     def priverrorreset(self):
+        
         
         if PCLZIP_ERROR_EXTERNAL == 1:
             PclErrorReset()
@@ -4280,7 +4347,8 @@ class PclZip():
     #// --------------------------------------------------------------------------------
     def privdisablemagicquotes(self):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// EDIT for WordPress 5.3.0
         #// magic_quote functions are deprecated in PHP 7.4, now assuming it's always off.
         #// 
@@ -4301,7 +4369,7 @@ class PclZip():
         #// }
         #// 
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privdisablemagicquotes
     #// --------------------------------------------------------------------------------
     #// --------------------------------------------------------------------------------
@@ -4312,7 +4380,8 @@ class PclZip():
     #// --------------------------------------------------------------------------------
     def privswapbackmagicquotes(self):
         
-        v_result = 1
+        
+        v_result_ = 1
         #// EDIT for WordPress 5.3.0
         #// magic_quote functions are deprecated in PHP 7.4, now assuming it's always off.
         #// 
@@ -4331,7 +4400,7 @@ class PclZip():
         #// }
         #// 
         #// ----- Return
-        return v_result
+        return v_result_
     # end def privswapbackmagicquotes
     pass
 # end class PclZip
@@ -4343,68 +4412,69 @@ class PclZip():
 #// Parameters :
 #// Return Values :
 #// --------------------------------------------------------------------------------
-def PclZipUtilPathReduction(p_dir=None, *args_):
+def PclZipUtilPathReduction(p_dir_=None, *_args_):
     
-    v_result = ""
+    
+    v_result_ = ""
     #// ----- Look for not empty path
-    if p_dir != "":
+    if p_dir_ != "":
         #// ----- Explode path by directory names
-        v_list = php_explode("/", p_dir)
+        v_list_ = php_explode("/", p_dir_)
         #// ----- Study directories from last to first
-        v_skip = 0
-        i = sizeof(v_list) - 1
-        while i >= 0:
+        v_skip_ = 0
+        i_ = sizeof(v_list_) - 1
+        while i_ >= 0:
             
             #// ----- Look for current path
-            if v_list[i] == ".":
+            if v_list_[i_] == ".":
                 pass
             else:
-                if v_list[i] == "..":
-                    v_skip += 1
+                if v_list_[i_] == "..":
+                    v_skip_ += 1
                 else:
-                    if v_list[i] == "":
+                    if v_list_[i_] == "":
                         #// ----- First '/' i.e. root slash
-                        if i == 0:
-                            v_result = "/" + v_result
-                            if v_skip > 0:
+                        if i_ == 0:
+                            v_result_ = "/" + v_result_
+                            if v_skip_ > 0:
                                 #// ----- It is an invalid path, so the path is not modified
                                 #// TBC
-                                v_result = p_dir
-                                v_skip = 0
+                                v_result_ = p_dir_
+                                v_skip_ = 0
                             # end if
                         else:
-                            if i == sizeof(v_list) - 1:
-                                v_result = v_list[i]
+                            if i_ == sizeof(v_list_) - 1:
+                                v_result_ = v_list_[i_]
                             else:
                                 pass
                             # end if
                         # end if
                     else:
                         #// ----- Look for item to skip
-                        if v_skip > 0:
-                            v_skip -= 1
+                        if v_skip_ > 0:
+                            v_skip_ -= 1
                         else:
-                            v_result = v_list[i] + "/" + v_result if i != sizeof(v_list) - 1 else ""
+                            v_result_ = v_list_[i_] + "/" + v_result_ if i_ != sizeof(v_list_) - 1 else ""
                         # end if
                     # end if
                 # end if
             # end if
-            i -= 1
+            i_ -= 1
         # end while
         #// ----- Look for skip
-        if v_skip > 0:
+        if v_skip_ > 0:
             while True:
                 
-                if not (v_skip > 0):
+                if not (v_skip_ > 0):
                     break
                 # end if
-                v_result = "../" + v_result
-                v_skip -= 1
+                v_result_ = "../" + v_result_
+                v_skip_ -= 1
             # end while
         # end if
     # end if
     #// ----- Return
-    return v_result
+    return v_result_
 # end def PclZipUtilPathReduction
 #// --------------------------------------------------------------------------------
 #// --------------------------------------------------------------------------------
@@ -4422,75 +4492,76 @@ def PclZipUtilPathReduction(p_dir=None, *args_):
 #// 1 if $p_path is inside directory $p_dir
 #// 2 if $p_path is exactly the same as $p_dir
 #// --------------------------------------------------------------------------------
-def PclZipUtilPathInclusion(p_dir=None, p_path=None, *args_):
+def PclZipUtilPathInclusion(p_dir_=None, p_path_=None, *_args_):
     
-    v_result = 1
+    
+    v_result_ = 1
     #// ----- Look for path beginning by .
-    if p_dir == "." or php_strlen(p_dir) >= 2 and php_substr(p_dir, 0, 2) == "./":
-        p_dir = PclZipUtilTranslateWinPath(php_getcwd(), False) + "/" + php_substr(p_dir, 1)
+    if p_dir_ == "." or php_strlen(p_dir_) >= 2 and php_substr(p_dir_, 0, 2) == "./":
+        p_dir_ = PclZipUtilTranslateWinPath(php_getcwd(), False) + "/" + php_substr(p_dir_, 1)
     # end if
-    if p_path == "." or php_strlen(p_path) >= 2 and php_substr(p_path, 0, 2) == "./":
-        p_path = PclZipUtilTranslateWinPath(php_getcwd(), False) + "/" + php_substr(p_path, 1)
+    if p_path_ == "." or php_strlen(p_path_) >= 2 and php_substr(p_path_, 0, 2) == "./":
+        p_path_ = PclZipUtilTranslateWinPath(php_getcwd(), False) + "/" + php_substr(p_path_, 1)
     # end if
     #// ----- Explode dir and path by directory separator
-    v_list_dir = php_explode("/", p_dir)
-    v_list_dir_size = sizeof(v_list_dir)
-    v_list_path = php_explode("/", p_path)
-    v_list_path_size = sizeof(v_list_path)
+    v_list_dir_ = php_explode("/", p_dir_)
+    v_list_dir_size_ = sizeof(v_list_dir_)
+    v_list_path_ = php_explode("/", p_path_)
+    v_list_path_size_ = sizeof(v_list_path_)
     #// ----- Study directories paths
-    i = 0
-    j = 0
+    i_ = 0
+    j_ = 0
     while True:
         
-        if not (i < v_list_dir_size and j < v_list_path_size and v_result):
+        if not (i_ < v_list_dir_size_ and j_ < v_list_path_size_ and v_result_):
             break
         # end if
         #// ----- Look for empty dir (path reduction)
-        if v_list_dir[i] == "":
-            i += 1
+        if v_list_dir_[i_] == "":
+            i_ += 1
             continue
         # end if
-        if v_list_path[j] == "":
-            j += 1
+        if v_list_path_[j_] == "":
+            j_ += 1
             continue
         # end if
         #// ----- Compare the items
-        if v_list_dir[i] != v_list_path[j] and v_list_dir[i] != "" and v_list_path[j] != "":
-            v_result = 0
+        if v_list_dir_[i_] != v_list_path_[j_] and v_list_dir_[i_] != "" and v_list_path_[j_] != "":
+            v_result_ = 0
         # end if
         #// ----- Next items
-        i += 1
-        j += 1
+        i_ += 1
+        j_ += 1
     # end while
     #// ----- Look if everything seems to be the same
-    if v_result:
+    if v_result_:
         #// ----- Skip all the empty items
         while True:
             
-            if not (j < v_list_path_size and v_list_path[j] == ""):
+            if not (j_ < v_list_path_size_ and v_list_path_[j_] == ""):
                 break
             # end if
-            j += 1
+            j_ += 1
         # end while
         while True:
             
-            if not (i < v_list_dir_size and v_list_dir[i] == ""):
+            if not (i_ < v_list_dir_size_ and v_list_dir_[i_] == ""):
                 break
             # end if
-            i += 1
+            i_ += 1
         # end while
-        if i >= v_list_dir_size and j >= v_list_path_size:
+        if i_ >= v_list_dir_size_ and j_ >= v_list_path_size_:
             #// ----- There are exactly the same
-            v_result = 2
+            v_result_ = 2
         else:
-            if i < v_list_dir_size:
+            if i_ < v_list_dir_size_:
                 #// ----- The path is shorter than the dir
-                v_result = 0
+                v_result_ = 0
             # end if
         # end if
     # end if
     #// ----- Return
-    return v_result
+    return v_result_
 # end def PclZipUtilPathInclusion
 #// --------------------------------------------------------------------------------
 #// --------------------------------------------------------------------------------
@@ -4504,62 +4575,63 @@ def PclZipUtilPathInclusion(p_dir=None, p_path=None, *args_):
 #// 3 : src & dest gzip
 #// Return Values :
 #// --------------------------------------------------------------------------------
-def PclZipUtilCopyBlock(p_src=None, p_dest=None, p_size=None, p_mode=0, *args_):
+def PclZipUtilCopyBlock(p_src_=None, p_dest_=None, p_size_=None, p_mode_=0, *_args_):
     
-    v_result = 1
-    if p_mode == 0:
+    
+    v_result_ = 1
+    if p_mode_ == 0:
         while True:
             
-            if not (p_size != 0):
+            if not (p_size_ != 0):
                 break
             # end if
-            v_read_size = p_size if p_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-            v_buffer = php_no_error(lambda: fread(p_src, v_read_size))
-            php_no_error(lambda: fwrite(p_dest, v_buffer, v_read_size))
-            p_size -= v_read_size
+            v_read_size_ = p_size_ if p_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+            v_buffer_ = php_no_error(lambda: fread(p_src_, v_read_size_))
+            php_no_error(lambda: fwrite(p_dest_, v_buffer_, v_read_size_))
+            p_size_ -= v_read_size_
         # end while
     else:
-        if p_mode == 1:
+        if p_mode_ == 1:
             while True:
                 
-                if not (p_size != 0):
+                if not (p_size_ != 0):
                     break
                 # end if
-                v_read_size = p_size if p_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-                v_buffer = php_no_error(lambda: gzread(p_src, v_read_size))
-                php_no_error(lambda: fwrite(p_dest, v_buffer, v_read_size))
-                p_size -= v_read_size
+                v_read_size_ = p_size_ if p_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+                v_buffer_ = php_no_error(lambda: gzread(p_src_, v_read_size_))
+                php_no_error(lambda: fwrite(p_dest_, v_buffer_, v_read_size_))
+                p_size_ -= v_read_size_
             # end while
         else:
-            if p_mode == 2:
+            if p_mode_ == 2:
                 while True:
                     
-                    if not (p_size != 0):
+                    if not (p_size_ != 0):
                         break
                     # end if
-                    v_read_size = p_size if p_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-                    v_buffer = php_no_error(lambda: fread(p_src, v_read_size))
-                    php_no_error(lambda: gzwrite(p_dest, v_buffer, v_read_size))
-                    p_size -= v_read_size
+                    v_read_size_ = p_size_ if p_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+                    v_buffer_ = php_no_error(lambda: fread(p_src_, v_read_size_))
+                    php_no_error(lambda: gzwrite(p_dest_, v_buffer_, v_read_size_))
+                    p_size_ -= v_read_size_
                 # end while
             else:
-                if p_mode == 3:
+                if p_mode_ == 3:
                     while True:
                         
-                        if not (p_size != 0):
+                        if not (p_size_ != 0):
                             break
                         # end if
-                        v_read_size = p_size if p_size < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
-                        v_buffer = php_no_error(lambda: gzread(p_src, v_read_size))
-                        php_no_error(lambda: gzwrite(p_dest, v_buffer, v_read_size))
-                        p_size -= v_read_size
+                        v_read_size_ = p_size_ if p_size_ < PCLZIP_READ_BLOCK_SIZE else PCLZIP_READ_BLOCK_SIZE
+                        v_buffer_ = php_no_error(lambda: gzread(p_src_, v_read_size_))
+                        php_no_error(lambda: gzwrite(p_dest_, v_buffer_, v_read_size_))
+                        p_size_ -= v_read_size_
                     # end while
                 # end if
             # end if
         # end if
     # end if
     #// ----- Return
-    return v_result
+    return v_result_
 # end def PclZipUtilCopyBlock
 #// --------------------------------------------------------------------------------
 #// --------------------------------------------------------------------------------
@@ -4574,22 +4646,23 @@ def PclZipUtilCopyBlock(p_src=None, p_dest=None, p_size=None, p_mode=0, *args_):
 #// Return Values :
 #// 1 on success, 0 on failure.
 #// --------------------------------------------------------------------------------
-def PclZipUtilRename(p_src=None, p_dest=None, *args_):
+def PclZipUtilRename(p_src_=None, p_dest_=None, *_args_):
     
-    v_result = 1
+    
+    v_result_ = 1
     #// ----- Try to rename the files
-    if (not php_no_error(lambda: rename(p_src, p_dest))):
+    if (not php_no_error(lambda: rename(p_src_, p_dest_))):
         #// ----- Try to copy & unlink the src
-        if (not php_no_error(lambda: copy(p_src, p_dest))):
-            v_result = 0
+        if (not php_no_error(lambda: copy(p_src_, p_dest_))):
+            v_result_ = 0
         else:
-            if (not php_no_error(lambda: unlink(p_src))):
-                v_result = 0
+            if (not php_no_error(lambda: unlink(p_src_))):
+                v_result_ = 0
             # end if
         # end if
     # end if
     #// ----- Return
-    return v_result
+    return v_result_
 # end def PclZipUtilRename
 #// --------------------------------------------------------------------------------
 #// --------------------------------------------------------------------------------
@@ -4601,20 +4674,21 @@ def PclZipUtilRename(p_src=None, p_dest=None, *args_):
 #// Return Values :
 #// The option text value.
 #// --------------------------------------------------------------------------------
-def PclZipUtilOptionText(p_option=None, *args_):
+def PclZipUtilOptionText(p_option_=None, *_args_):
     
-    v_list = get_defined_constants()
-    reset(v_list)
-    while v_key:
-        v_key = key(v_list)
-        v_prefix = php_substr(v_key, 0, 10)
-        if v_prefix == "PCLZIP_OPT" or v_prefix == "PCLZIP_CB_" or v_prefix == "PCLZIP_ATT" and v_list[v_key] == p_option:
-            return v_key
+    
+    v_list_ = get_defined_constants()
+    reset(v_list_)
+    while v_key_:
+        v_key_ = key(v_list_)
+        v_prefix_ = php_substr(v_key_, 0, 10)
+        if v_prefix_ == "PCLZIP_OPT" or v_prefix_ == "PCLZIP_CB_" or v_prefix_ == "PCLZIP_ATT" and v_list_[v_key_] == p_option_:
+            return v_key_
         # end if
-        next(v_list)
+        next(v_list_)
     # end while
-    v_result = "Unknown"
-    return v_result
+    v_result_ = "Unknown"
+    return v_result_
 # end def PclZipUtilOptionText
 #// --------------------------------------------------------------------------------
 #// --------------------------------------------------------------------------------
@@ -4628,19 +4702,22 @@ def PclZipUtilOptionText(p_option=None, *args_):
 #// Return Values :
 #// The path translated.
 #// --------------------------------------------------------------------------------
-def PclZipUtilTranslateWinPath(p_path=None, p_remove_disk_letter=True, *args_):
+def PclZipUtilTranslateWinPath(p_path_=None, p_remove_disk_letter_=None, *_args_):
+    if p_remove_disk_letter_ is None:
+        p_remove_disk_letter_ = True
+    # end if
     
     if php_stristr(php_uname(), "windows"):
         #// ----- Look for potential disk letter
-        v_position = php_strpos(p_path, ":")
-        if p_remove_disk_letter and v_position != False:
-            p_path = php_substr(p_path, v_position + 1)
+        v_position_ = php_strpos(p_path_, ":")
+        if p_remove_disk_letter_ and v_position_ != False:
+            p_path_ = php_substr(p_path_, v_position_ + 1)
         # end if
         #// ----- Change potential windows directory separator
-        if php_strpos(p_path, "\\") > 0 or php_substr(p_path, 0, 1) == "\\":
-            p_path = php_strtr(p_path, "\\", "/")
+        if php_strpos(p_path_, "\\") > 0 or php_substr(p_path_, 0, 1) == "\\":
+            p_path_ = php_strtr(p_path_, "\\", "/")
         # end if
     # end if
-    return p_path
+    return p_path_
 # end def PclZipUtilTranslateWinPath
 pass

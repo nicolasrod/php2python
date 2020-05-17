@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,8 +21,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 4.7.0
 #//
 class WP_List_Util():
+    #// 
+    #// The input array.
+    #// 
+    #// @since 4.7.0
+    #// @var array
+    #//
     input = Array()
+    #// 
+    #// The output array.
+    #// 
+    #// @since 4.7.0
+    #// @var array
+    #//
     output = Array()
+    #// 
+    #// Temporary arguments for sorting.
+    #// 
+    #// @since 4.7.0
+    #// @var array
+    #//
     orderby = Array()
     #// 
     #// Constructor.
@@ -38,10 +51,11 @@ class WP_List_Util():
     #// 
     #// @param array $input Array to perform operations on.
     #//
-    def __init__(self, input=None):
+    def __init__(self, input_=None):
         
-        self.output = input
-        self.input = input
+        
+        self.output = input_
+        self.input = input_
     # end def __init__
     #// 
     #// Returns the original input array.
@@ -51,6 +65,7 @@ class WP_List_Util():
     #// @return array The input array.
     #//
     def get_input(self):
+        
         
         return self.input
     # end def get_input
@@ -62,6 +77,7 @@ class WP_List_Util():
     #// @return array The output array.
     #//
     def get_output(self):
+        
         
         return self.output
     # end def get_output
@@ -78,30 +94,33 @@ class WP_List_Util():
     #// match. Default 'AND'.
     #// @return array Array of found values.
     #//
-    def filter(self, args=Array(), operator="AND"):
+    def filter(self, args_=None, operator_="AND"):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if php_empty(lambda : args):
+        if php_empty(lambda : args_):
             return self.output
         # end if
-        operator = php_strtoupper(operator)
-        if (not php_in_array(operator, Array("AND", "OR", "NOT"), True)):
+        operator_ = php_strtoupper(operator_)
+        if (not php_in_array(operator_, Array("AND", "OR", "NOT"), True)):
             return Array()
         # end if
-        count = php_count(args)
-        filtered = Array()
-        for key,obj in self.output:
-            to_match = obj
-            matched = 0
-            for m_key,m_value in args:
-                if php_array_key_exists(m_key, to_match) and m_value == to_match[m_key]:
-                    matched += 1
+        count_ = php_count(args_)
+        filtered_ = Array()
+        for key_,obj_ in self.output:
+            to_match_ = obj_
+            matched_ = 0
+            for m_key_,m_value_ in args_:
+                if php_array_key_exists(m_key_, to_match_) and m_value_ == to_match_[m_key_]:
+                    matched_ += 1
                 # end if
             # end for
-            if "AND" == operator and matched == count or "OR" == operator and matched > 0 or "NOT" == operator and 0 == matched:
-                filtered[key] = obj
+            if "AND" == operator_ and matched_ == count_ or "OR" == operator_ and matched_ > 0 or "NOT" == operator_ and 0 == matched_:
+                filtered_[key_] = obj_
             # end if
         # end for
-        self.output = filtered
+        self.output = filtered_
         return self.output
     # end def filter
     #// 
@@ -119,44 +138,45 @@ class WP_List_Util():
     #// corresponding to `$index_key`. If `$index_key` is null, array keys from the original
     #// `$list` will be preserved in the results.
     #//
-    def pluck(self, field=None, index_key=None):
+    def pluck(self, field_=None, index_key_=None):
         
-        newlist = Array()
-        if (not index_key):
+        
+        newlist_ = Array()
+        if (not index_key_):
             #// 
             #// This is simple. Could at some point wrap array_column()
             #// if we knew we had an array of arrays.
             #//
-            for key,value in self.output:
-                if php_is_object(value):
-                    newlist[key] = value.field
+            for key_,value_ in self.output:
+                if php_is_object(value_):
+                    newlist_[key_] = value_.field_
                 else:
-                    newlist[key] = value[field]
+                    newlist_[key_] = value_[field_]
                 # end if
             # end for
-            self.output = newlist
+            self.output = newlist_
             return self.output
         # end if
         #// 
         #// When index_key is not set for a particular item, push the value
         #// to the end of the stack. This is how array_column() behaves.
         #//
-        for value in self.output:
-            if php_is_object(value):
-                if (php_isset(lambda : value.index_key)):
-                    newlist[value.index_key] = value.field
+        for value_ in self.output:
+            if php_is_object(value_):
+                if (php_isset(lambda : value_.index_key_)):
+                    newlist_[value_.index_key_] = value_.field_
                 else:
-                    newlist[-1] = value.field
+                    newlist_[-1] = value_.field_
                 # end if
             else:
-                if (php_isset(lambda : value[index_key])):
-                    newlist[value[index_key]] = value[field]
+                if (php_isset(lambda : value_[index_key_])):
+                    newlist_[value_[index_key_]] = value_[field_]
                 else:
-                    newlist[-1] = value[field]
+                    newlist_[-1] = value_[field_]
                 # end if
             # end if
         # end for
-        self.output = newlist
+        self.output = newlist_
         return self.output
     # end def pluck
     #// 
@@ -171,19 +191,25 @@ class WP_List_Util():
     #// @param bool         $preserve_keys Optional. Whether to preserve keys. Default false.
     #// @return array The sorted array.
     #//
-    def sort(self, orderby=Array(), order="ASC", preserve_keys=False):
+    def sort(self, orderby_=None, order_="ASC", preserve_keys_=None):
+        if orderby_ is None:
+            orderby_ = Array()
+        # end if
+        if preserve_keys_ is None:
+            preserve_keys_ = False
+        # end if
         
-        if php_empty(lambda : orderby):
+        if php_empty(lambda : orderby_):
             return self.output
         # end if
-        if php_is_string(orderby):
-            orderby = Array({orderby: order})
+        if php_is_string(orderby_):
+            orderby_ = Array({orderby_: order_})
         # end if
-        for field,direction in orderby:
-            orderby[field] = "DESC" if "DESC" == php_strtoupper(direction) else "ASC"
+        for field_,direction_ in orderby_:
+            orderby_[field_] = "DESC" if "DESC" == php_strtoupper(direction_) else "ASC"
         # end for
-        self.orderby = orderby
-        if preserve_keys:
+        self.orderby = orderby_
+        if preserve_keys_:
             uasort(self.output, Array(self, "sort_callback"))
         else:
             usort(self.output, Array(self, "sort_callback"))
@@ -202,25 +228,26 @@ class WP_List_Util():
     #// @param object|array $b The other object to compare.
     #// @return int 0 if both objects equal. -1 if second object should come first, 1 otherwise.
     #//
-    def sort_callback(self, a=None, b=None):
+    def sort_callback(self, a_=None, b_=None):
+        
         
         if php_empty(lambda : self.orderby):
             return 0
         # end if
-        a = a
-        b = b
-        for field,direction in self.orderby:
-            if (not (php_isset(lambda : a[field]))) or (not (php_isset(lambda : b[field]))):
+        a_ = a_
+        b_ = b_
+        for field_,direction_ in self.orderby:
+            if (not (php_isset(lambda : a_[field_]))) or (not (php_isset(lambda : b_[field_]))):
                 continue
             # end if
-            if a[field] == b[field]:
+            if a_[field_] == b_[field_]:
                 continue
             # end if
-            results = Array(1, -1) if "DESC" == direction else Array(-1, 1)
-            if php_is_numeric(a[field]) and php_is_numeric(b[field]):
-                return results[0] if a[field] < b[field] else results[1]
+            results_ = Array(1, -1) if "DESC" == direction_ else Array(-1, 1)
+            if php_is_numeric(a_[field_]) and php_is_numeric(b_[field_]):
+                return results_[0] if a_[field_] < b_[field_] else results_[1]
             # end if
-            return results[0] if 0 > strcmp(a[field], b[field]) else results[1]
+            return results_[0] if 0 > strcmp(a_[field_], b_[field_]) else results_[1]
         # end for
         return 0
     # end def sort_callback

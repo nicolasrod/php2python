@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -54,14 +49,14 @@ else:
     #// Standardize $_SERVER variables across setups.
     wp_fix_server_vars()
     php_include_file(ABSPATH + WPINC + "/functions.php", once=True)
-    path = wp_guess_url() + "/wp-admin/setup-config.php"
+    path_ = wp_guess_url() + "/wp-admin/setup-config.php"
     #// 
     #// We're going to redirect to setup-config.php. While this shouldn't result
     #// in an infinite loop, that's a silly thing to assume, don't you think? If
     #// we're traveling in circles, our last-ditch effort is "Need more help?"
     #//
     if False == php_strpos(PHP_SERVER["REQUEST_URI"], "setup-config"):
-        php_header("Location: " + path)
+        php_header("Location: " + path_)
         php_exit(0)
     # end if
     php_define("WP_CONTENT_DIR", ABSPATH + "wp-content")
@@ -69,9 +64,9 @@ else:
     wp_check_php_mysql_versions()
     wp_load_translations_early()
     #// Die with an error message
-    die = php_sprintf(__("There doesn't seem to be a %s file. I need this before we can get started."), "<code>wp-config.php</code>") + "</p>"
-    die += "<p>" + php_sprintf(__("Need more help? <a href='%s'>We got it</a>."), __("https://wordpress.org/support/article/editing-wp-config-php/")) + "</p>"
-    die += "<p>" + php_sprintf(__("You can create a %s file through a web interface, but this doesn't work for all server setups. The safest way is to manually create the file."), "<code>wp-config.php</code>") + "</p>"
-    die += "<p><a href=\"" + path + "\" class=\"button button-large\">" + __("Create a Configuration File") + "</a>"
-    wp_die(die, __("WordPress &rsaquo; Error"))
+    die_ = php_sprintf(__("There doesn't seem to be a %s file. I need this before we can get started."), "<code>wp-config.php</code>") + "</p>"
+    die_ += "<p>" + php_sprintf(__("Need more help? <a href='%s'>We got it</a>."), __("https://wordpress.org/support/article/editing-wp-config-php/")) + "</p>"
+    die_ += "<p>" + php_sprintf(__("You can create a %s file through a web interface, but this doesn't work for all server setups. The safest way is to manually create the file."), "<code>wp-config.php</code>") + "</p>"
+    die_ += "<p><a href=\"" + path_ + "\" class=\"button button-large\">" + __("Create a Configuration File") + "</a>"
+    wp_die(die_, __("WordPress &rsaquo; Error"))
 # end if

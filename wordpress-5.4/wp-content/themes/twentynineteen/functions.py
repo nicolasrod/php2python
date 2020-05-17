@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,7 +31,8 @@ if (not php_function_exists("twentynineteen_setup")):
     #// runs before the init hook. The init hook is too late for some features, such
     #// as indicating support for post thumbnails.
     #//
-    def twentynineteen_setup(*args_):
+    def twentynineteen_setup(*_args_):
+        
         
         #// 
         #// Make theme available for translation.
@@ -98,7 +94,8 @@ add_action("after_setup_theme", "twentynineteen_setup")
 #// 
 #// @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
 #//
-def twentynineteen_widgets_init(*args_):
+def twentynineteen_widgets_init(*_args_):
+    
     
     register_sidebar(Array({"name": __("Footer", "twentynineteen"), "id": "sidebar-1", "description": __("Add widgets here to appear in your footer.", "twentynineteen"), "before_widget": "<section id=\"%1$s\" class=\"widget %2$s\">", "after_widget": "</section>", "before_title": "<h2 class=\"widget-title\">", "after_title": "</h2>"}))
 # end def twentynineteen_widgets_init
@@ -110,7 +107,8 @@ add_action("widgets_init", "twentynineteen_widgets_init")
 #// 
 #// @global int $content_width Content width.
 #//
-def twentynineteen_content_width(*args_):
+def twentynineteen_content_width(*_args_):
+    
     global PHP_GLOBALS
     #// This variable is intended to be overruled from themes.
     #// Open WPCS issue: {@link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1043}.
@@ -121,7 +119,8 @@ add_action("after_setup_theme", "twentynineteen_content_width", 0)
 #// 
 #// Enqueue scripts and styles.
 #//
-def twentynineteen_scripts(*args_):
+def twentynineteen_scripts(*_args_):
+    
     
     wp_enqueue_style("twentynineteen-style", get_stylesheet_uri(), Array(), wp_get_theme().get("Version"))
     wp_style_add_data("twentynineteen-style", "rtl", "replace")
@@ -143,7 +142,8 @@ add_action("wp_enqueue_scripts", "twentynineteen_scripts")
 #// 
 #// @link https://git.io/vWdr2
 #//
-def twentynineteen_skip_link_focus_fix(*args_):
+def twentynineteen_skip_link_focus_fix(*_args_):
+    
     
     pass
     php_print("""   <script>
@@ -155,7 +155,8 @@ add_action("wp_print_footer_scripts", "twentynineteen_skip_link_focus_fix")
 #// 
 #// Enqueue supplemental block editor styles.
 #//
-def twentynineteen_editor_customizer_styles(*args_):
+def twentynineteen_editor_customizer_styles(*_args_):
+    
     
     wp_enqueue_style("twentynineteen-editor-customizer-styles", get_theme_file_uri("/style-editor-customizer.css"), False, "1.1", "all")
     if "custom" == get_theme_mod("primary_color"):
@@ -168,19 +169,20 @@ add_action("enqueue_block_editor_assets", "twentynineteen_editor_customizer_styl
 #// 
 #// Display custom color CSS in customizer and on frontend.
 #//
-def twentynineteen_colors_css_wrap(*args_):
+def twentynineteen_colors_css_wrap(*_args_):
+    
     
     #// Only include custom colors in customizer or frontend.
     if (not is_customize_preview()) and "default" == get_theme_mod("primary_color", "default") or is_admin():
         return
     # end if
     php_include_file(get_parent_theme_file_path("/inc/color-patterns.php"), once=True)
-    primary_color = 199
+    primary_color_ = 199
     if "default" != get_theme_mod("primary_color", "default"):
-        primary_color = get_theme_mod("primary_color_hue", 199)
+        primary_color_ = get_theme_mod("primary_color_hue", 199)
     # end if
     php_print("\n   <style type=\"text/css\" id=\"custom-theme-colors\" ")
-    php_print("data-hue=\"" + absint(primary_color) + "\"" if is_customize_preview() else "")
+    php_print("data-hue=\"" + absint(primary_color_) + "\"" if is_customize_preview() else "")
     php_print(">\n      ")
     php_print(twentynineteen_custom_colors_css())
     php_print(" </style>\n  ")

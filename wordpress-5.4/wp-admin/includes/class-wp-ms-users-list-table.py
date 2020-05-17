@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,6 +28,7 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #//
     def ajax_user_can(self):
         
+        
         return current_user_can("manage_network_users")
     # end def ajax_user_can
     #// 
@@ -41,29 +37,32 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// @global string $mode
     #//
     def prepare_items(self):
+        
         global PHP_REQUEST
-        global usersearch,role,mode
-        php_check_if_defined("usersearch","role","mode")
-        usersearch = wp_unslash(php_trim(PHP_REQUEST["s"])) if (php_isset(lambda : PHP_REQUEST["s"])) else ""
-        users_per_page = self.get_items_per_page("users_network_per_page")
-        role = PHP_REQUEST["role"] if (php_isset(lambda : PHP_REQUEST["role"])) else ""
-        paged = self.get_pagenum()
-        args = Array({"number": users_per_page, "offset": paged - 1 * users_per_page, "search": usersearch, "blog_id": 0, "fields": "all_with_meta"})
+        global usersearch_
+        global role_
+        global mode_
+        php_check_if_defined("usersearch_","role_","mode_")
+        usersearch_ = wp_unslash(php_trim(PHP_REQUEST["s"])) if (php_isset(lambda : PHP_REQUEST["s"])) else ""
+        users_per_page_ = self.get_items_per_page("users_network_per_page")
+        role_ = PHP_REQUEST["role"] if (php_isset(lambda : PHP_REQUEST["role"])) else ""
+        paged_ = self.get_pagenum()
+        args_ = Array({"number": users_per_page_, "offset": paged_ - 1 * users_per_page_, "search": usersearch_, "blog_id": 0, "fields": "all_with_meta"})
         if wp_is_large_network("users"):
-            args["search"] = php_ltrim(args["search"], "*")
-        elif "" != args["search"]:
-            args["search"] = php_trim(args["search"], "*")
-            args["search"] = "*" + args["search"] + "*"
+            args_["search"] = php_ltrim(args_["search"], "*")
+        elif "" != args_["search"]:
+            args_["search"] = php_trim(args_["search"], "*")
+            args_["search"] = "*" + args_["search"] + "*"
         # end if
-        if "super" == role:
-            args["login__in"] = get_super_admins()
+        if "super" == role_:
+            args_["login__in"] = get_super_admins()
         # end if
         #// 
         #// If the network is large and a search is not being performed,
         #// show only the latest users with no paging in order to avoid
         #// expensive count queries.
         #//
-        if (not usersearch) and wp_is_large_network("users"):
+        if (not usersearch_) and wp_is_large_network("users"):
             if (not (php_isset(lambda : PHP_REQUEST["orderby"]))):
                 PHP_REQUEST["orderby"] = "id"
                 PHP_REQUEST["orderby"] = "id"
@@ -72,43 +71,45 @@ class WP_MS_Users_List_Table(WP_List_Table):
                 PHP_REQUEST["order"] = "DESC"
                 PHP_REQUEST["order"] = "DESC"
             # end if
-            args["count_total"] = False
+            args_["count_total"] = False
         # end if
         if (php_isset(lambda : PHP_REQUEST["orderby"])):
-            args["orderby"] = PHP_REQUEST["orderby"]
+            args_["orderby"] = PHP_REQUEST["orderby"]
         # end if
         if (php_isset(lambda : PHP_REQUEST["order"])):
-            args["order"] = PHP_REQUEST["order"]
+            args_["order"] = PHP_REQUEST["order"]
         # end if
         if (not php_empty(lambda : PHP_REQUEST["mode"])):
-            mode = "excerpt" if "excerpt" == PHP_REQUEST["mode"] else "list"
-            set_user_setting("network_users_list_mode", mode)
+            mode_ = "excerpt" if "excerpt" == PHP_REQUEST["mode"] else "list"
+            set_user_setting("network_users_list_mode", mode_)
         else:
-            mode = get_user_setting("network_users_list_mode", "list")
+            mode_ = get_user_setting("network_users_list_mode", "list")
         # end if
         #// This filter is documented in wp-admin/includes/class-wp-users-list-table.php
-        args = apply_filters("users_list_table_query_args", args)
+        args_ = apply_filters("users_list_table_query_args", args_)
         #// Query the user IDs for this page.
-        wp_user_search = php_new_class("WP_User_Query", lambda : WP_User_Query(args))
-        self.items = wp_user_search.get_results()
-        self.set_pagination_args(Array({"total_items": wp_user_search.get_total(), "per_page": users_per_page}))
+        wp_user_search_ = php_new_class("WP_User_Query", lambda : WP_User_Query(args_))
+        self.items = wp_user_search_.get_results()
+        self.set_pagination_args(Array({"total_items": wp_user_search_.get_total(), "per_page": users_per_page_}))
     # end def prepare_items
     #// 
     #// @return array
     #//
     def get_bulk_actions(self):
         
-        actions = Array()
+        
+        actions_ = Array()
         if current_user_can("delete_users"):
-            actions["delete"] = __("Delete")
+            actions_["delete"] = __("Delete")
         # end if
-        actions["spam"] = _x("Mark as Spam", "user")
-        actions["notspam"] = _x("Not Spam", "user")
-        return actions
+        actions_["spam"] = _x("Mark as Spam", "user")
+        actions_["notspam"] = _x("Not Spam", "user")
+        return actions_
     # end def get_bulk_actions
     #// 
     #//
     def no_items(self):
+        
         
         _e("No users found.")
     # end def no_items
@@ -118,30 +119,32 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #//
     def get_views(self):
         
-        global role
-        php_check_if_defined("role")
-        total_users = get_user_count()
-        super_admins = get_super_admins()
-        total_admins = php_count(super_admins)
-        current_link_attributes = " class=\"current\" aria-current=\"page\"" if "super" != role else ""
-        role_links = Array()
-        role_links["all"] = php_sprintf("<a href=\"%s\"%s>%s</a>", network_admin_url("users.php"), current_link_attributes, php_sprintf(_nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", total_users, "users"), number_format_i18n(total_users)))
-        current_link_attributes = " class=\"current\" aria-current=\"page\"" if "super" == role else ""
-        role_links["super"] = php_sprintf("<a href=\"%s\"%s>%s</a>", network_admin_url("users.php?role=super"), current_link_attributes, php_sprintf(_n("Super Admin <span class=\"count\">(%s)</span>", "Super Admins <span class=\"count\">(%s)</span>", total_admins), number_format_i18n(total_admins)))
-        return role_links
+        
+        global role_
+        php_check_if_defined("role_")
+        total_users_ = get_user_count()
+        super_admins_ = get_super_admins()
+        total_admins_ = php_count(super_admins_)
+        current_link_attributes_ = " class=\"current\" aria-current=\"page\"" if "super" != role_ else ""
+        role_links_ = Array()
+        role_links_["all"] = php_sprintf("<a href=\"%s\"%s>%s</a>", network_admin_url("users.php"), current_link_attributes_, php_sprintf(_nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", total_users_, "users"), number_format_i18n(total_users_)))
+        current_link_attributes_ = " class=\"current\" aria-current=\"page\"" if "super" == role_ else ""
+        role_links_["super"] = php_sprintf("<a href=\"%s\"%s>%s</a>", network_admin_url("users.php?role=super"), current_link_attributes_, php_sprintf(_n("Super Admin <span class=\"count\">(%s)</span>", "Super Admins <span class=\"count\">(%s)</span>", total_admins_), number_format_i18n(total_admins_)))
+        return role_links_
     # end def get_views
     #// 
     #// @global string $mode List table view mode.
     #// 
     #// @param string $which
     #//
-    def pagination(self, which=None):
+    def pagination(self, which_=None):
         
-        global mode
-        php_check_if_defined("mode")
-        super().pagination(which)
-        if "top" == which:
-            self.view_switcher(mode)
+        
+        global mode_
+        php_check_if_defined("mode_")
+        super().pagination(which_)
+        if "top" == which_:
+            self.view_switcher(mode_)
         # end if
     # end def pagination
     #// 
@@ -149,7 +152,8 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #//
     def get_columns(self):
         
-        users_columns = Array({"cb": "<input type=\"checkbox\" />", "username": __("Username"), "name": __("Name"), "email": __("Email"), "registered": _x("Registered", "user"), "blogs": __("Sites")})
+        
+        users_columns_ = Array({"cb": "<input type=\"checkbox\" />", "username": __("Username"), "name": __("Name"), "email": __("Email"), "registered": _x("Registered", "user"), "blogs": __("Sites")})
         #// 
         #// Filters the columns displayed in the Network Admin Users list table.
         #// 
@@ -158,12 +162,13 @@ class WP_MS_Users_List_Table(WP_List_Table):
         #// @param string[] $users_columns An array of user columns. Default 'cb', 'username',
         #// 'name', 'email', 'registered', 'blogs'.
         #//
-        return apply_filters("wpmu_users_columns", users_columns)
+        return apply_filters("wpmu_users_columns", users_columns_)
     # end def get_columns
     #// 
     #// @return array
     #//
     def get_sortable_columns(self):
+        
         
         return Array({"username": "login", "name": "name", "email": "email", "registered": "id"})
     # end def get_sortable_columns
@@ -174,20 +179,21 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// 
     #// @param WP_User $user The current WP_User object.
     #//
-    def column_cb(self, user=None):
+    def column_cb(self, user_=None):
         
-        if is_super_admin(user.ID):
+        
+        if is_super_admin(user_.ID):
             return
         # end if
         php_print("     <label class=\"screen-reader-text\" for=\"blog_")
-        php_print(user.ID)
+        php_print(user_.ID)
         php_print("\">\n            ")
         #// translators: %s: User login.
-        printf(__("Select %s"), user.user_login)
+        printf(__("Select %s"), user_.user_login)
         php_print("     </label>\n      <input type=\"checkbox\" id=\"blog_")
-        php_print(user.ID)
+        php_print(user_.ID)
         php_print("\" name=\"allusers[]\" value=\"")
-        php_print(esc_attr(user.ID))
+        php_print(esc_attr(user_.ID))
         php_print("\" />\n      ")
     # end def column_cb
     #// 
@@ -197,9 +203,10 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// 
     #// @param WP_User $user The current WP_User object.
     #//
-    def column_id(self, user=None):
+    def column_id(self, user_=None):
         
-        php_print(user.ID)
+        
+        php_print(user_.ID)
     # end def column_id
     #// 
     #// Handles the username column output.
@@ -208,20 +215,21 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// 
     #// @param WP_User $user The current WP_User object.
     #//
-    def column_username(self, user=None):
+    def column_username(self, user_=None):
         
-        super_admins = get_super_admins()
-        avatar = get_avatar(user.user_email, 32)
-        php_print(avatar)
-        if current_user_can("edit_user", user.ID):
-            edit_link = esc_url(add_query_arg("wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), get_edit_user_link(user.ID)))
-            edit = str("<a href=\"") + str(edit_link) + str("\">") + str(user.user_login) + str("</a>")
+        
+        super_admins_ = get_super_admins()
+        avatar_ = get_avatar(user_.user_email, 32)
+        php_print(avatar_)
+        if current_user_can("edit_user", user_.ID):
+            edit_link_ = esc_url(add_query_arg("wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), get_edit_user_link(user_.ID)))
+            edit_ = str("<a href=\"") + str(edit_link_) + str("\">") + str(user_.user_login) + str("</a>")
         else:
-            edit = user.user_login
+            edit_ = user_.user_login
         # end if
         php_print("     <strong>\n          ")
-        php_print(edit)
-        if php_in_array(user.user_login, super_admins):
+        php_print(edit_)
+        if php_in_array(user_.user_login, super_admins_):
             php_print(" &mdash; " + __("Super Admin"))
         # end if
         php_print("     </strong>\n     ")
@@ -233,14 +241,15 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// 
     #// @param WP_User $user The current WP_User object.
     #//
-    def column_name(self, user=None):
+    def column_name(self, user_=None):
         
-        if user.first_name and user.last_name:
-            php_print(str(user.first_name) + str(" ") + str(user.last_name))
-        elif user.first_name:
-            php_print(user.first_name)
-        elif user.last_name:
-            php_print(user.last_name)
+        
+        if user_.first_name and user_.last_name:
+            php_print(str(user_.first_name) + str(" ") + str(user_.last_name))
+        elif user_.first_name:
+            php_print(user_.first_name)
+        elif user_.last_name:
+            php_print(user_.last_name)
         else:
             php_print("<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">" + _x("Unknown", "name") + "</span>")
         # end if
@@ -252,9 +261,10 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// 
     #// @param WP_User $user The current WP_User object.
     #//
-    def column_email(self, user=None):
+    def column_email(self, user_=None):
         
-        php_print("<a href='" + esc_url(str("mailto:") + str(user.user_email)) + str("'>") + str(user.user_email) + str("</a>"))
+        
+        php_print("<a href='" + esc_url(str("mailto:") + str(user_.user_email)) + str("'>") + str(user_.user_email) + str("</a>"))
     # end def column_email
     #// 
     #// Handles the registered date column output.
@@ -265,16 +275,17 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// 
     #// @param WP_User $user The current WP_User object.
     #//
-    def column_registered(self, user=None):
+    def column_registered(self, user_=None):
         
-        global mode
-        php_check_if_defined("mode")
-        if "list" == mode:
-            date = __("Y/m/d")
+        
+        global mode_
+        php_check_if_defined("mode_")
+        if "list" == mode_:
+            date_ = __("Y/m/d")
         else:
-            date = __("Y/m/d g:i:s a")
+            date_ = __("Y/m/d g:i:s a")
         # end if
-        php_print(mysql2date(date, user.user_registered))
+        php_print(mysql2date(date_, user_.user_registered))
     # end def column_registered
     #// 
     #// @since 4.3.0
@@ -284,11 +295,12 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// @param string  $data
     #// @param string  $primary
     #//
-    def _column_blogs(self, user=None, classes=None, data=None, primary=None):
+    def _column_blogs(self, user_=None, classes_=None, data_=None, primary_=None):
         
-        php_print("<td class=\"", classes, " has-row-actions\" ", data, ">")
-        php_print(self.column_blogs(user))
-        php_print(self.handle_row_actions(user, "blogs", primary))
+        
+        php_print("<td class=\"", classes_, " has-row-actions\" ", data_, ">")
+        php_print(self.column_blogs(user_))
+        php_print(self.handle_row_actions(user_, "blogs", primary_))
         php_print("</td>")
     # end def _column_blogs
     #// 
@@ -298,18 +310,19 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// 
     #// @param WP_User $user The current WP_User object.
     #//
-    def column_blogs(self, user=None):
+    def column_blogs(self, user_=None):
         
-        blogs = get_blogs_of_user(user.ID, True)
-        if (not php_is_array(blogs)):
+        
+        blogs_ = get_blogs_of_user(user_.ID, True)
+        if (not php_is_array(blogs_)):
             return
         # end if
-        for val in blogs:
-            if (not can_edit_network(val.site_id)):
+        for val_ in blogs_:
+            if (not can_edit_network(val_.site_id)):
                 continue
             # end if
-            path = "" if "/" == val.path else val.path
-            site_classes = Array("site-" + val.site_id)
+            path_ = "" if "/" == val_.path else val_.path
+            site_classes_ = Array("site-" + val_.site_id)
             #// 
             #// Filters the span class for a site listing on the mulisite user list table.
             #// 
@@ -320,31 +333,31 @@ class WP_MS_Users_List_Table(WP_List_Table):
             #// @param int      $network_id   Network ID.
             #// @param WP_User  $user         WP_User object.
             #//
-            site_classes = apply_filters("ms_user_list_site_class", site_classes, val.userblog_id, val.site_id, user)
-            if php_is_array(site_classes) and (not php_empty(lambda : site_classes)):
-                site_classes = php_array_map("sanitize_html_class", array_unique(site_classes))
-                php_print("<span class=\"" + esc_attr(php_implode(" ", site_classes)) + "\">")
+            site_classes_ = apply_filters("ms_user_list_site_class", site_classes_, val_.userblog_id, val_.site_id, user_)
+            if php_is_array(site_classes_) and (not php_empty(lambda : site_classes_)):
+                site_classes_ = php_array_map("sanitize_html_class", array_unique(site_classes_))
+                php_print("<span class=\"" + esc_attr(php_implode(" ", site_classes_)) + "\">")
             else:
                 php_print("<span>")
             # end if
-            php_print("<a href=\"" + esc_url(network_admin_url("site-info.php?id=" + val.userblog_id)) + "\">" + php_str_replace("." + get_network().domain, "", val.domain + path) + "</a>")
+            php_print("<a href=\"" + esc_url(network_admin_url("site-info.php?id=" + val_.userblog_id)) + "\">" + php_str_replace("." + get_network().domain, "", val_.domain + path_) + "</a>")
             php_print(" <small class=\"row-actions\">")
-            actions = Array()
-            actions["edit"] = "<a href=\"" + esc_url(network_admin_url("site-info.php?id=" + val.userblog_id)) + "\">" + __("Edit") + "</a>"
+            actions_ = Array()
+            actions_["edit"] = "<a href=\"" + esc_url(network_admin_url("site-info.php?id=" + val_.userblog_id)) + "\">" + __("Edit") + "</a>"
             class_ = ""
-            if 1 == val.spam:
+            if 1 == val_.spam:
                 class_ += "site-spammed "
             # end if
-            if 1 == val.mature:
+            if 1 == val_.mature:
                 class_ += "site-mature "
             # end if
-            if 1 == val.deleted:
+            if 1 == val_.deleted:
                 class_ += "site-deleted "
             # end if
-            if 1 == val.archived:
+            if 1 == val_.archived:
                 class_ += "site-archived "
             # end if
-            actions["view"] = "<a class=\"" + class_ + "\" href=\"" + esc_url(get_home_url(val.userblog_id)) + "\">" + __("View") + "</a>"
+            actions_["view"] = "<a class=\"" + class_ + "\" href=\"" + esc_url(get_home_url(val_.userblog_id)) + "\">" + __("View") + "</a>"
             #// 
             #// Filters the action links displayed next the sites a user belongs to
             #// in the Network Admin Users list table.
@@ -354,13 +367,13 @@ class WP_MS_Users_List_Table(WP_List_Table):
             #// @param string[] $actions     An array of action links to be displayed. Default 'Edit', 'View'.
             #// @param int      $userblog_id The site ID.
             #//
-            actions = apply_filters("ms_user_list_site_actions", actions, val.userblog_id)
-            i = 0
-            action_count = php_count(actions)
-            for action,link in actions:
-                i += 1
-                sep = "" if i == action_count else " | "
-                php_print(str("<span class='") + str(action) + str("'>") + str(link) + str(sep) + str("</span>"))
+            actions_ = apply_filters("ms_user_list_site_actions", actions_, val_.userblog_id)
+            i_ = 0
+            action_count_ = php_count(actions_)
+            for action_,link_ in actions_:
+                i_ += 1
+                sep_ = "" if i_ == action_count_ else " | "
+                php_print(str("<span class='") + str(action_) + str("'>") + str(link_) + str(sep_) + str("</span>"))
             # end for
             php_print("</small></span><br/>")
         # end for
@@ -373,25 +386,27 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// @param WP_User $user       The current WP_User object.
     #// @param string $column_name The current column name.
     #//
-    def column_default(self, user=None, column_name=None):
+    def column_default(self, user_=None, column_name_=None):
+        
         
         #// This filter is documented in wp-admin/includes/class-wp-users-list-table.php
-        php_print(apply_filters("manage_users_custom_column", "", column_name, user.ID))
+        php_print(apply_filters("manage_users_custom_column", "", column_name_, user_.ID))
     # end def column_default
     def display_rows(self):
         
-        for user in self.items:
+        
+        for user_ in self.items:
             class_ = ""
-            status_list = Array({"spam": "site-spammed", "deleted": "site-deleted"})
-            for status,col in status_list:
-                if user.status:
-                    class_ += str(" ") + str(col)
+            status_list_ = Array({"spam": "site-spammed", "deleted": "site-deleted"})
+            for status_,col_ in status_list_:
+                if user_.status_:
+                    class_ += str(" ") + str(col_)
                 # end if
             # end for
             php_print("         <tr class=\"")
             php_print(php_trim(class_))
             php_print("\">\n                ")
-            self.single_row_columns(user)
+            self.single_row_columns(user_)
             php_print("         </tr>\n         ")
         # end for
     # end def display_rows
@@ -403,6 +418,7 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// @return string Name of the default primary column, in this case, 'username'.
     #//
     def get_default_primary_column_name(self):
+        
         
         return "username"
     # end def get_default_primary_column_name
@@ -417,19 +433,20 @@ class WP_MS_Users_List_Table(WP_List_Table):
     #// @return string Row actions output for users in Multisite, or an empty string
     #// if the current column is not the primary column.
     #//
-    def handle_row_actions(self, user=None, column_name=None, primary=None):
+    def handle_row_actions(self, user_=None, column_name_=None, primary_=None):
         
-        if primary != column_name:
+        
+        if primary_ != column_name_:
             return ""
         # end if
-        super_admins = get_super_admins()
-        actions = Array()
-        if current_user_can("edit_user", user.ID):
-            edit_link = esc_url(add_query_arg("wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), get_edit_user_link(user.ID)))
-            actions["edit"] = "<a href=\"" + edit_link + "\">" + __("Edit") + "</a>"
+        super_admins_ = get_super_admins()
+        actions_ = Array()
+        if current_user_can("edit_user", user_.ID):
+            edit_link_ = esc_url(add_query_arg("wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), get_edit_user_link(user_.ID)))
+            actions_["edit"] = "<a href=\"" + edit_link_ + "\">" + __("Edit") + "</a>"
         # end if
-        if current_user_can("delete_user", user.ID) and (not php_in_array(user.user_login, super_admins)):
-            actions["delete"] = "<a href=\"" + esc_url(network_admin_url(add_query_arg("_wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), wp_nonce_url("users.php", "deleteuser") + "&amp;action=deleteuser&amp;id=" + user.ID))) + "\" class=\"delete\">" + __("Delete") + "</a>"
+        if current_user_can("delete_user", user_.ID) and (not php_in_array(user_.user_login, super_admins_)):
+            actions_["delete"] = "<a href=\"" + esc_url(network_admin_url(add_query_arg("_wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), wp_nonce_url("users.php", "deleteuser") + "&amp;action=deleteuser&amp;id=" + user_.ID))) + "\" class=\"delete\">" + __("Delete") + "</a>"
         # end if
         #// 
         #// Filters the action links displayed under each user in the Network Admin Users list table.
@@ -439,7 +456,7 @@ class WP_MS_Users_List_Table(WP_List_Table):
         #// @param string[] $actions An array of action links to be displayed. Default 'Edit', 'Delete'.
         #// @param WP_User  $user    WP_User object.
         #//
-        actions = apply_filters("ms_user_row_actions", actions, user)
-        return self.row_actions(actions)
+        actions_ = apply_filters("ms_user_row_actions", actions_, user_)
+        return self.row_actions(actions_)
     # end def handle_row_actions
 # end class WP_MS_Users_List_Table

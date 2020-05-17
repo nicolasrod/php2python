@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,25 +21,25 @@ if (not is_multisite()):
 if (not current_user_can("read")):
     wp_die(__("Sorry, you are not allowed to access this page."))
 # end if
-action = PHP_POST["action"] if (php_isset(lambda : PHP_POST["action"])) else "splash"
-blogs = get_blogs_of_user(current_user.ID)
-updated = False
-if "updateblogsettings" == action and (php_isset(lambda : PHP_POST["primary_blog"])):
+action_ = PHP_POST["action"] if (php_isset(lambda : PHP_POST["action"])) else "splash"
+blogs_ = get_blogs_of_user(current_user_.ID)
+updated_ = False
+if "updateblogsettings" == action_ and (php_isset(lambda : PHP_POST["primary_blog"])):
     check_admin_referer("update-my-sites")
-    blog = get_site(php_int(PHP_POST["primary_blog"]))
-    if blog and (php_isset(lambda : blog.domain)):
-        update_user_option(current_user.ID, "primary_blog", php_int(PHP_POST["primary_blog"]), True)
-        updated = True
+    blog_ = get_site(php_int(PHP_POST["primary_blog"]))
+    if blog_ and (php_isset(lambda : blog_.domain)):
+        update_user_option(current_user_.ID, "primary_blog", php_int(PHP_POST["primary_blog"]), True)
+        updated_ = True
     else:
         wp_die(__("The primary site you chose does not exist."))
     # end if
 # end if
-title = __("My Sites")
-parent_file = "index.php"
+title_ = __("My Sites")
+parent_file_ = "index.php"
 get_current_screen().add_help_tab(Array({"id": "overview", "title": __("Overview"), "content": "<p>" + __("This screen shows an individual user all of their sites in this network, and also allows that user to set a primary site. They can use the links under each site to visit either the front end or the dashboard for that site.") + "</p>"}))
 get_current_screen().set_help_sidebar("<p><strong>" + __("For more information:") + "</strong></p>" + "<p>" + __("<a href=\"https://codex.wordpress.org/Dashboard_My_Sites_Screen\">Documentation on My Sites</a>") + "</p>" + "<p>" + __("<a href=\"https://wordpress.org/support/\">Support</a>") + "</p>")
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
-if updated:
+if updated_:
     php_print(" <div id=\"message\" class=\"updated notice is-dismissible\"><p><strong>")
     _e("Settings saved.")
     php_print("</strong></p></div>\n")
@@ -53,14 +48,14 @@ php_print("""
 <div class=\"wrap\">
 <h1 class=\"wp-heading-inline\">
 """)
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("</h1>\n\n")
 if php_in_array(get_site_option("registration"), Array("all", "blog")):
     #// This filter is documented in wp-login.php
-    sign_up_url = apply_filters("wp_signup_location", network_site_url("wp-signup.php"))
-    printf(" <a href=\"%s\" class=\"page-title-action\">%s</a>", esc_url(sign_up_url), esc_html_x("Add New", "site"))
+    sign_up_url_ = apply_filters("wp_signup_location", network_site_url("wp-signup.php"))
+    printf(" <a href=\"%s\" class=\"page-title-action\">%s</a>", esc_url(sign_up_url_), esc_html_x("Add New", "site"))
 # end if
-if php_empty(lambda : blogs):
+if php_empty(lambda : blogs_):
     php_print("<p>")
     _e("You must be a member of at least one site to use this page.")
     php_print("</p>")
@@ -89,19 +84,19 @@ else:
     #// @param string $settings_html The settings HTML markup. Default empty.
     #// @param string $context       Context of the setting (global or site-specific). Default 'global'.
     #//
-    settings_html = apply_filters("myblogs_options", "", "global")
-    if "" != settings_html:
+    settings_html_ = apply_filters("myblogs_options", "", "global")
+    if "" != settings_html_:
         php_print("<h3>" + __("Global Settings") + "</h3>")
-        php_print(settings_html)
+        php_print(settings_html_)
     # end if
-    reset(blogs)
-    for user_blog in blogs:
-        switch_to_blog(user_blog.userblog_id)
+    reset(blogs_)
+    for user_blog_ in blogs_:
+        switch_to_blog(user_blog_.userblog_id)
         php_print("<li>")
-        php_print(str("<h3>") + str(user_blog.blogname) + str("</h3>"))
-        actions = "<a href='" + esc_url(home_url()) + "'>" + __("Visit") + "</a>"
+        php_print(str("<h3>") + str(user_blog_.blogname) + str("</h3>"))
+        actions_ = "<a href='" + esc_url(home_url()) + "'>" + __("Visit") + "</a>"
         if current_user_can("read"):
-            actions += " | <a href='" + esc_url(admin_url()) + "'>" + __("Dashboard") + "</a>"
+            actions_ += " | <a href='" + esc_url(admin_url()) + "'>" + __("Dashboard") + "</a>"
         # end if
         #// 
         #// Filters the row links displayed for each site on the My Sites screen.
@@ -111,15 +106,15 @@ else:
         #// @param string $actions   The HTML site link markup.
         #// @param object $user_blog An object containing the site data.
         #//
-        actions = apply_filters("myblogs_blog_actions", actions, user_blog)
-        php_print("<p class='my-sites-actions'>" + actions + "</p>")
+        actions_ = apply_filters("myblogs_blog_actions", actions_, user_blog_)
+        php_print("<p class='my-sites-actions'>" + actions_ + "</p>")
         #// This filter is documented in wp-admin/my-sites.php
-        php_print(apply_filters("myblogs_options", "", user_blog))
+        php_print(apply_filters("myblogs_options", "", user_blog_))
         php_print("</li>")
         restore_current_blog()
     # end for
     php_print(" </ul>\n ")
-    if php_count(blogs) > 1 or has_action("myblogs_allblogs_options") or has_filter("myblogs_options"):
+    if php_count(blogs_) > 1 or has_action("myblogs_allblogs_options") or has_filter("myblogs_options"):
         php_print("     <input type=\"hidden\" name=\"action\" value=\"updateblogsettings\" />\n        ")
         wp_nonce_field("update-my-sites")
         submit_button()

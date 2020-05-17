@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,9 +15,10 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// If gettext isn't available.
 if (not php_function_exists("_")):
-    def _(string=None, *args_):
+    def _(string_=None, *_args_):
         
-        return string
+        
+        return string_
     # end def _
 # end if
 #// 
@@ -39,17 +35,18 @@ if (not php_function_exists("_")):
 #// false  : Used for testing - return false for future calls to this function
 #// 'reset': Used for testing - restore default behavior of this function
 #//
-def _wp_can_use_pcre_u(set=None, *args_):
+def _wp_can_use_pcre_u(set_=None, *_args_):
     
-    _wp_can_use_pcre_u.utf8_pcre = "reset"
-    if None != set:
-        _wp_can_use_pcre_u.utf8_pcre = set
+    
+    utf8_pcre_ = "reset"
+    if None != set_:
+        utf8_pcre_ = set_
     # end if
-    if "reset" == _wp_can_use_pcre_u.utf8_pcre:
+    if "reset" == utf8_pcre_:
         #// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentional error generated to detect PCRE/u support.
-        _wp_can_use_pcre_u.utf8_pcre = php_no_error(lambda: php_preg_match("/^./u", "a"))
+        utf8_pcre_ = php_no_error(lambda: php_preg_match("/^./u", "a"))
     # end if
-    return _wp_can_use_pcre_u.utf8_pcre
+    return utf8_pcre_
 # end def _wp_can_use_pcre_u
 if (not php_function_exists("mb_substr")):
     #// 
@@ -67,9 +64,10 @@ if (not php_function_exists("mb_substr")):
     #// @param string|null $encoding Optional. Character encoding to use. Default null.
     #// @return string Extracted substring.
     #//
-    def mb_substr(str=None, start=None, length=None, encoding=None, *args_):
+    def mb_substr(str_=None, start_=None, length_=None, encoding_=None, *_args_):
         
-        return _mb_substr(str, start, length, encoding)
+        
+        return _mb_substr(str_, start_, length_, encoding_)
     # end def mb_substr
 # end if
 #// 
@@ -89,25 +87,26 @@ if (not php_function_exists("mb_substr")):
 #// @param string|null $encoding Optional. Character encoding to use. Default null.
 #// @return string Extracted substring.
 #//
-def _mb_substr(str=None, start=None, length=None, encoding=None, *args_):
+def _mb_substr(str_=None, start_=None, length_=None, encoding_=None, *_args_):
     
-    if None == encoding:
-        encoding = get_option("blog_charset")
+    
+    if None == encoding_:
+        encoding_ = get_option("blog_charset")
     # end if
     #// 
     #// The solution below works only for UTF-8, so in case of a different
     #// charset just use built-in substr().
     #//
-    if (not php_in_array(encoding, Array("utf8", "utf-8", "UTF8", "UTF-8"))):
-        return php_substr(str, start) if is_null(length) else php_substr(str, start, length)
+    if (not php_in_array(encoding_, Array("utf8", "utf-8", "UTF8", "UTF-8"))):
+        return php_substr(str_, start_) if is_null(length_) else php_substr(str_, start_, length_)
     # end if
     if _wp_can_use_pcre_u():
         #// Use the regex unicode support to separate the UTF-8 characters into an array.
-        preg_match_all("/./us", str, match)
-        chars = php_array_slice(match[0], start) if is_null(length) else php_array_slice(match[0], start, length)
-        return php_implode("", chars)
+        preg_match_all("/./us", str_, match_)
+        chars_ = php_array_slice(match_[0], start_) if is_null(length_) else php_array_slice(match_[0], start_, length_)
+        return php_implode("", chars_)
     # end if
-    regex = """/(
+    regex_ = """/(
     [\\x00-\\x7F]                  # single-byte sequences   0xxxxxxx
     | [\\xC2-\\xDF][\\x80-\\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
     | \\xE0[\\xA0-\\xBF][\\x80-\\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
@@ -119,23 +118,23 @@ def _mb_substr(str=None, start=None, length=None, encoding=None, *args_):
     | \\xF4[\\x80-\\x8F][\\x80-\\xBF]{2}
     )/x"""
     #// Start with 1 element instead of 0 since the first thing we do is pop.
-    chars = Array("")
+    chars_ = Array("")
     while True:
         #// We had some string left over from the last round, but we counted it in that last round.
-        php_array_pop(chars)
+        php_array_pop(chars_)
         #// 
         #// Split by UTF-8 character, limit to 1000 characters (last array element will contain
         #// the rest of the string).
         #//
-        pieces = php_preg_split(regex, str, 1000, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)
-        chars = php_array_merge(chars, pieces)
+        pieces_ = php_preg_split(regex_, str_, 1000, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)
+        chars_ = php_array_merge(chars_, pieces_)
         pass
-        str = php_array_pop(pieces)
-        if php_count(pieces) > 1 and str:
+        str_ = php_array_pop(pieces_)
+        if php_count(pieces_) > 1 and str_:
             break
         # end if
     # end while
-    return join("", php_array_slice(chars, start, length))
+    return join("", php_array_slice(chars_, start_, length_))
 # end def _mb_substr
 if (not php_function_exists("mb_strlen")):
     #// 
@@ -150,9 +149,10 @@ if (not php_function_exists("mb_strlen")):
     #// @param string|null $encoding Optional. Character encoding to use. Default null.
     #// @return int String length of `$str`.
     #//
-    def mb_strlen(str=None, encoding=None, *args_):
+    def mb_strlen(str_=None, encoding_=None, *_args_):
         
-        return _mb_strlen(str, encoding)
+        
+        return _mb_strlen(str_, encoding_)
     # end def mb_strlen
 # end if
 #// 
@@ -169,24 +169,25 @@ if (not php_function_exists("mb_strlen")):
 #// @param string|null $encoding Optional. Character encoding to use. Default null.
 #// @return int String length of `$str`.
 #//
-def _mb_strlen(str=None, encoding=None, *args_):
+def _mb_strlen(str_=None, encoding_=None, *_args_):
     
-    if None == encoding:
-        encoding = get_option("blog_charset")
+    
+    if None == encoding_:
+        encoding_ = get_option("blog_charset")
     # end if
     #// 
     #// The solution below works only for UTF-8, so in case of a different charset
     #// just use built-in strlen().
     #//
-    if (not php_in_array(encoding, Array("utf8", "utf-8", "UTF8", "UTF-8"))):
-        return php_strlen(str)
+    if (not php_in_array(encoding_, Array("utf8", "utf-8", "UTF8", "UTF-8"))):
+        return php_strlen(str_)
     # end if
     if _wp_can_use_pcre_u():
         #// Use the regex unicode support to separate the UTF-8 characters into an array.
-        preg_match_all("/./us", str, match)
-        return php_count(match[0])
+        preg_match_all("/./us", str_, match_)
+        return php_count(match_[0])
     # end if
-    regex = """/(?:
+    regex_ = """/(?:
     [\\x00-\\x7F]                  # single-byte sequences   0xxxxxxx
     | [\\xC2-\\xDF][\\x80-\\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
     | \\xE0[\\xA0-\\xBF][\\x80-\\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
@@ -198,26 +199,26 @@ def _mb_strlen(str=None, encoding=None, *args_):
     | \\xF4[\\x80-\\x8F][\\x80-\\xBF]{2}
     )/x"""
     #// Start at 1 instead of 0 since the first thing we do is decrement.
-    count = 1
+    count_ = 1
     while True:
         #// We had some string left over from the last round, but we counted it in that last round.
-        count -= 1
+        count_ -= 1
         #// 
         #// Split by UTF-8 character, limit to 1000 characters (last array element will contain
         #// the rest of the string).
         #//
-        pieces = php_preg_split(regex, str, 1000)
+        pieces_ = php_preg_split(regex_, str_, 1000)
         #// Increment.
-        count += php_count(pieces)
+        count_ += php_count(pieces_)
         pass
-        str = php_array_pop(pieces)
-        if str:
+        str_ = php_array_pop(pieces_)
+        if str_:
             break
         # end if
     # end while
     #// Fencepost: preg_split() always returns one extra item in the array.
-    count -= 1
-    return count
+    count_ -= 1
+    return count_
 # end def _mb_strlen
 if (not php_function_exists("hash_hmac")):
     #// 
@@ -243,9 +244,12 @@ if (not php_function_exists("hash_hmac")):
     #// @return string|false The hash in output determined by `$raw_output`. False if `$algo`
     #// is unknown or invalid.
     #//
-    def hash_hmac(algo=None, data=None, key=None, raw_output=False, *args_):
+    def hash_hmac(algo_=None, data_=None, key_=None, raw_output_=None, *_args_):
+        if raw_output_ is None:
+            raw_output_ = False
+        # end if
         
-        return _hash_hmac(algo, data, key, raw_output)
+        return _hash_hmac(algo_, data_, key_, raw_output_)
     # end def hash_hmac
 # end if
 #// 
@@ -262,24 +266,27 @@ if (not php_function_exists("hash_hmac")):
 #// @return string|false The hash in output determined by `$raw_output`. False if `$algo`
 #// is unknown or invalid.
 #//
-def _hash_hmac(algo=None, data=None, key=None, raw_output=False, *args_):
+def _hash_hmac(algo_=None, data_=None, key_=None, raw_output_=None, *_args_):
+    if raw_output_ is None:
+        raw_output_ = False
+    # end if
     
-    packs = Array({"md5": "H32", "sha1": "H40"})
-    if (not (php_isset(lambda : packs[algo]))):
+    packs_ = Array({"md5": "H32", "sha1": "H40"})
+    if (not (php_isset(lambda : packs_[algo_]))):
         return False
     # end if
-    pack = packs[algo]
-    if php_strlen(key) > 64:
-        key = pack(pack, algo(key))
+    pack_ = packs_[algo_]
+    if php_strlen(key_) > 64:
+        key_ = pack(pack_, algo_(key_))
     # end if
-    key = php_str_pad(key, 64, chr(0))
-    ipad = php_substr(key, 0, 64) ^ php_str_repeat(chr(54), 64)
-    opad = php_substr(key, 0, 64) ^ php_str_repeat(chr(92), 64)
-    hmac = algo(opad + pack(pack, algo(ipad + data)))
-    if raw_output:
-        return pack(pack, hmac)
+    key_ = php_str_pad(key_, 64, chr(0))
+    ipad_ = php_substr(key_, 0, 64) ^ php_str_repeat(chr(54), 64)
+    opad_ = php_substr(key_, 0, 64) ^ php_str_repeat(chr(92), 64)
+    hmac_ = algo_(opad_ + pack(pack_, algo_(ipad_ + data_)))
+    if raw_output_:
+        return pack(pack_, hmac_)
     # end if
-    return hmac
+    return hmac_
 # end def _hash_hmac
 if (not php_function_exists("hash_equals")):
     #// 
@@ -302,21 +309,22 @@ if (not php_function_exists("hash_equals")):
     #// @param string $b Actual, user supplied, string.
     #// @return bool Whether strings are equal.
     #//
-    def hash_equals(a=None, b=None, *args_):
+    def hash_equals(a_=None, b_=None, *_args_):
         
-        a_length = php_strlen(a)
-        if php_strlen(b) != a_length:
+        
+        a_length_ = php_strlen(a_)
+        if php_strlen(b_) != a_length_:
             return False
         # end if
-        result = 0
+        result_ = 0
         #// Do not attempt to "optimize" this.
-        i = 0
-        while i < a_length:
+        i_ = 0
+        while i_ < a_length_:
             
-            result |= php_ord(a[i]) ^ php_ord(b[i])
-            i += 1
+            result_ |= php_ord(a_[i_]) ^ php_ord(b_[i_])
+            i_ += 1
         # end while
-        return 0 == result
+        return 0 == result_
     # end def hash_equals
 # end if
 #// random_int() was introduced in PHP 7.0.
@@ -340,9 +348,10 @@ if (not php_function_exists("is_countable")):
     #// 
     #// @return bool True if `$var` is countable, false otherwise.
     #//
-    def is_countable(var=None, *args_):
+    def is_countable(var_=None, *_args_):
         
-        return php_is_array(var) or type(var).__name__ == "Countable" or type(var).__name__ == "SimpleXMLElement" or type(var).__name__ == "ResourceBundle"
+        
+        return php_is_array(var_) or type(var_).__name__ == "Countable" or type(var_).__name__ == "SimpleXMLElement" or type(var_).__name__ == "ResourceBundle"
     # end def is_countable
 # end if
 if (not php_function_exists("is_iterable")):
@@ -358,8 +367,9 @@ if (not php_function_exists("is_iterable")):
     #// 
     #// @return bool True if `$var` is iterable, false otherwise.
     #//
-    def is_iterable(var=None, *args_):
+    def is_iterable(var_=None, *_args_):
         
-        return php_is_array(var) or type(var).__name__ == "Traversable"
+        
+        return php_is_array(var_) or type(var_).__name__ == "Traversable"
     # end def is_iterable
 # end if

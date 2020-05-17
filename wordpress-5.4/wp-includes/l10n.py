@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -39,11 +34,13 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return string The locale of the blog or from the {@see 'locale'} hook.
 #//
-def get_locale(*args_):
+def get_locale(*_args_):
     
-    global locale,wp_local_package
-    php_check_if_defined("locale","wp_local_package")
-    if (php_isset(lambda : locale)):
+    
+    global locale_
+    global wp_local_package_
+    php_check_if_defined("locale_","wp_local_package_")
+    if (php_isset(lambda : locale_)):
         #// 
         #// Filters the locale ID of the WordPress installation.
         #// 
@@ -51,40 +48,40 @@ def get_locale(*args_):
         #// 
         #// @param string $locale The locale ID.
         #//
-        return apply_filters("locale", locale)
+        return apply_filters("locale", locale_)
     # end if
-    if (php_isset(lambda : wp_local_package)):
-        locale = wp_local_package
+    if (php_isset(lambda : wp_local_package_)):
+        locale_ = wp_local_package_
     # end if
     #// WPLANG was defined in wp-config.
     if php_defined("WPLANG"):
-        locale = WPLANG
+        locale_ = WPLANG
     # end if
     #// If multisite, check options.
     if is_multisite():
         #// Don't check blog option when installing.
         if wp_installing():
-            ms_locale = get_site_option("WPLANG")
+            ms_locale_ = get_site_option("WPLANG")
         else:
-            ms_locale = get_option("WPLANG")
-            if False == ms_locale:
-                ms_locale = get_site_option("WPLANG")
+            ms_locale_ = get_option("WPLANG")
+            if False == ms_locale_:
+                ms_locale_ = get_site_option("WPLANG")
             # end if
         # end if
-        if False != ms_locale:
-            locale = ms_locale
+        if False != ms_locale_:
+            locale_ = ms_locale_
         # end if
     else:
-        db_locale = get_option("WPLANG")
-        if False != db_locale:
-            locale = db_locale
+        db_locale_ = get_option("WPLANG")
+        if False != db_locale_:
+            locale_ = db_locale_
         # end if
     # end if
-    if php_empty(lambda : locale):
-        locale = "en_US"
+    if php_empty(lambda : locale_):
+        locale_ = "en_US"
     # end if
     #// This filter is documented in wp-includes/l10n.php
-    return apply_filters("locale", locale)
+    return apply_filters("locale", locale_)
 # end def get_locale
 #// 
 #// Retrieves the locale of a user.
@@ -97,21 +94,22 @@ def get_locale(*args_):
 #// @param int|WP_User $user_id User's ID or a WP_User object. Defaults to current user.
 #// @return string The locale of the user.
 #//
-def get_user_locale(user_id=0, *args_):
+def get_user_locale(user_id_=0, *_args_):
     
-    user = False
-    if 0 == user_id and php_function_exists("wp_get_current_user"):
-        user = wp_get_current_user()
-    elif type(user_id).__name__ == "WP_User":
-        user = user_id
-    elif user_id and php_is_numeric(user_id):
-        user = get_user_by("id", user_id)
+    
+    user_ = False
+    if 0 == user_id_ and php_function_exists("wp_get_current_user"):
+        user_ = wp_get_current_user()
+    elif type(user_id_).__name__ == "WP_User":
+        user_ = user_id_
+    elif user_id_ and php_is_numeric(user_id_):
+        user_ = get_user_by("id", user_id_)
     # end if
-    if (not user):
+    if (not user_):
         return get_locale()
     # end if
-    locale = user.locale
-    return locale if locale else get_locale()
+    locale_ = user_.locale
+    return locale_ if locale_ else get_locale()
 # end def get_user_locale
 #// 
 #// Determine the current locale desired for the request.
@@ -122,7 +120,8 @@ def get_user_locale(user_id=0, *args_):
 #// 
 #// @return string The determined locale.
 #//
-def determine_locale(*args_):
+def determine_locale(*_args_):
+    
     
     #// 
     #// Filters the locale for the current request prior to the default determination process.
@@ -133,19 +132,19 @@ def determine_locale(*args_):
     #// 
     #// @param string|null $locale The locale to return and short-circuit. Default null.
     #//
-    determined_locale = apply_filters("pre_determine_locale", None)
-    if (not php_empty(lambda : determined_locale)) and php_is_string(determined_locale):
-        return determined_locale
+    determined_locale_ = apply_filters("pre_determine_locale", None)
+    if (not php_empty(lambda : determined_locale_)) and php_is_string(determined_locale_):
+        return determined_locale_
     # end if
-    determined_locale = get_locale()
+    determined_locale_ = get_locale()
     if is_admin():
-        determined_locale = get_user_locale()
+        determined_locale_ = get_user_locale()
     # end if
     if (php_isset(lambda : PHP_REQUEST["_locale"])) and "user" == PHP_REQUEST["_locale"] and wp_is_json_request():
-        determined_locale = get_user_locale()
+        determined_locale_ = get_user_locale()
     # end if
     if (not php_empty(lambda : PHP_REQUEST["wp_lang"])) and (not php_empty(lambda : PHP_GLOBALS["pagenow"])) and "wp-login.php" == PHP_GLOBALS["pagenow"]:
-        determined_locale = sanitize_text_field(PHP_REQUEST["wp_lang"])
+        determined_locale_ = sanitize_text_field(PHP_REQUEST["wp_lang"])
     # end if
     #// 
     #// Filters the locale for the current request.
@@ -154,7 +153,7 @@ def determine_locale(*args_):
     #// 
     #// @param string $locale The locale.
     #//
-    return apply_filters("determine_locale", determined_locale)
+    return apply_filters("determine_locale", determined_locale_)
 # end def determine_locale
 #// 
 #// Retrieve the translation of $text.
@@ -170,10 +169,11 @@ def determine_locale(*args_):
 #// Default 'default'.
 #// @return string Translated text.
 #//
-def translate(text=None, domain="default", *args_):
+def translate(text_=None, domain_="default", *_args_):
     
-    translations = get_translations_for_domain(domain)
-    translation = translations.translate(text)
+    
+    translations_ = get_translations_for_domain(domain_)
+    translation_ = translations_.translate(text_)
     #// 
     #// Filters text with its translation.
     #// 
@@ -183,7 +183,7 @@ def translate(text=None, domain="default", *args_):
     #// @param string $text         Text to translate.
     #// @param string $domain       Text domain. Unique identifier for retrieving translated strings.
     #//
-    return apply_filters("gettext", translation, text, domain)
+    return apply_filters("gettext", translation_, text_, domain_)
 # end def translate
 #// 
 #// Remove last item on a pipe-delimited string.
@@ -196,13 +196,14 @@ def translate(text=None, domain="default", *args_):
 #// @param string $string A pipe-delimited string.
 #// @return string Either $string or everything before the last pipe.
 #//
-def before_last_bar(string=None, *args_):
+def before_last_bar(string_=None, *_args_):
     
-    last_bar = php_strrpos(string, "|")
-    if False == last_bar:
-        return string
+    
+    last_bar_ = php_strrpos(string_, "|")
+    if False == last_bar_:
+        return string_
     else:
-        return php_substr(string, 0, last_bar)
+        return php_substr(string_, 0, last_bar_)
     # end if
 # end def before_last_bar
 #// 
@@ -220,10 +221,11 @@ def before_last_bar(string=None, *args_):
 #// Default 'default'.
 #// @return string Translated text on success, original text on failure.
 #//
-def translate_with_gettext_context(text=None, context=None, domain="default", *args_):
+def translate_with_gettext_context(text_=None, context_=None, domain_="default", *_args_):
     
-    translations = get_translations_for_domain(domain)
-    translation = translations.translate(text, context)
+    
+    translations_ = get_translations_for_domain(domain_)
+    translation_ = translations_.translate(text_, context_)
     #// 
     #// Filters text with its translation based on context information.
     #// 
@@ -234,7 +236,7 @@ def translate_with_gettext_context(text=None, context=None, domain="default", *a
     #// @param string $context      Context information for the translators.
     #// @param string $domain       Text domain. Unique identifier for retrieving translated strings.
     #//
-    return apply_filters("gettext_with_context", translation, text, context, domain)
+    return apply_filters("gettext_with_context", translation_, text_, context_, domain_)
 # end def translate_with_gettext_context
 #// 
 #// Retrieve the translation of $text.
@@ -248,9 +250,10 @@ def translate_with_gettext_context(text=None, context=None, domain="default", *a
 #// Default 'default'.
 #// @return string Translated text.
 #//
-def __(text=None, domain="default", *args_):
+def __(text_=None, domain_="default", *_args_):
     
-    return translate(text, domain)
+    
+    return translate(text_, domain_)
 # end def __
 #// 
 #// Retrieve the translation of $text and escapes it for safe use in an attribute.
@@ -264,9 +267,10 @@ def __(text=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string Translated text on success, original text on failure.
 #//
-def esc_attr__(text=None, domain="default", *args_):
+def esc_attr__(text_=None, domain_="default", *_args_):
     
-    return esc_attr(translate(text, domain))
+    
+    return esc_attr(translate(text_, domain_))
 # end def esc_attr__
 #// 
 #// Retrieve the translation of $text and escapes it for safe use in HTML output.
@@ -281,9 +285,10 @@ def esc_attr__(text=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string Translated text.
 #//
-def esc_html__(text=None, domain="default", *args_):
+def esc_html__(text_=None, domain_="default", *_args_):
     
-    return esc_html(translate(text, domain))
+    
+    return esc_html(translate(text_, domain_))
 # end def esc_html__
 #// 
 #// Display translated text.
@@ -294,9 +299,10 @@ def esc_html__(text=None, domain="default", *args_):
 #// @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
 #// Default 'default'.
 #//
-def _e(text=None, domain="default", *args_):
+def _e(text_=None, domain_="default", *_args_):
     
-    php_print(translate(text, domain))
+    
+    php_print(translate(text_, domain_))
 # end def _e
 #// 
 #// Display translated text that has been escaped for safe use in an attribute.
@@ -312,9 +318,10 @@ def _e(text=None, domain="default", *args_):
 #// @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
 #// Default 'default'.
 #//
-def esc_attr_e(text=None, domain="default", *args_):
+def esc_attr_e(text_=None, domain_="default", *_args_):
     
-    php_print(esc_attr(translate(text, domain)))
+    
+    php_print(esc_attr(translate(text_, domain_)))
 # end def esc_attr_e
 #// 
 #// Display translated text that has been escaped for safe use in HTML output.
@@ -330,9 +337,10 @@ def esc_attr_e(text=None, domain="default", *args_):
 #// @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
 #// Default 'default'.
 #//
-def esc_html_e(text=None, domain="default", *args_):
+def esc_html_e(text_=None, domain_="default", *_args_):
     
-    php_print(esc_html(translate(text, domain)))
+    
+    php_print(esc_html(translate(text_, domain_)))
 # end def esc_html_e
 #// 
 #// Retrieve translated string with gettext context.
@@ -351,9 +359,10 @@ def esc_html_e(text=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string Translated context string without pipe.
 #//
-def _x(text=None, context=None, domain="default", *args_):
+def _x(text_=None, context_=None, domain_="default", *_args_):
     
-    return translate_with_gettext_context(text, context, domain)
+    
+    return translate_with_gettext_context(text_, context_, domain_)
 # end def _x
 #// 
 #// Display translated string with gettext context.
@@ -366,9 +375,10 @@ def _x(text=None, context=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string Translated context string without pipe.
 #//
-def _ex(text=None, context=None, domain="default", *args_):
+def _ex(text_=None, context_=None, domain_="default", *_args_):
     
-    php_print(_x(text, context, domain))
+    
+    php_print(_x(text_, context_, domain_))
 # end def _ex
 #// 
 #// Translate string with gettext context, and escapes it for safe use in an attribute.
@@ -384,9 +394,10 @@ def _ex(text=None, context=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string Translated text.
 #//
-def esc_attr_x(text=None, context=None, domain="default", *args_):
+def esc_attr_x(text_=None, context_=None, domain_="default", *_args_):
     
-    return esc_attr(translate_with_gettext_context(text, context, domain))
+    
+    return esc_attr(translate_with_gettext_context(text_, context_, domain_))
 # end def esc_attr_x
 #// 
 #// Translate string with gettext context, and escapes it for safe use in HTML output.
@@ -402,9 +413,10 @@ def esc_attr_x(text=None, context=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string Translated text.
 #//
-def esc_html_x(text=None, context=None, domain="default", *args_):
+def esc_html_x(text_=None, context_=None, domain_="default", *_args_):
     
-    return esc_html(translate_with_gettext_context(text, context, domain))
+    
+    return esc_html(translate_with_gettext_context(text_, context_, domain_))
 # end def esc_html_x
 #// 
 #// Translates and retrieves the singular or plural form based on the supplied number.
@@ -425,10 +437,11 @@ def esc_html_x(text=None, context=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string The translated singular or plural form.
 #//
-def _n(single=None, plural=None, number=None, domain="default", *args_):
+def _n(single_=None, plural_=None, number_=None, domain_="default", *_args_):
     
-    translations = get_translations_for_domain(domain)
-    translation = translations.translate_plural(single, plural, number)
+    
+    translations_ = get_translations_for_domain(domain_)
+    translation_ = translations_.translate_plural(single_, plural_, number_)
     #// 
     #// Filters the singular or plural form of a string.
     #// 
@@ -440,7 +453,7 @@ def _n(single=None, plural=None, number=None, domain="default", *args_):
     #// @param string $number      The number to compare against to use either the singular or plural form.
     #// @param string $domain      Text domain. Unique identifier for retrieving translated strings.
     #//
-    return apply_filters("ngettext", translation, single, plural, number, domain)
+    return apply_filters("ngettext", translation_, single_, plural_, number_, domain_)
 # end def _n
 #// 
 #// Translates and retrieves the singular or plural form based on the supplied number, with gettext context.
@@ -465,10 +478,11 @@ def _n(single=None, plural=None, number=None, domain="default", *args_):
 #// Default 'default'.
 #// @return string The translated singular or plural form.
 #//
-def _nx(single=None, plural=None, number=None, context=None, domain="default", *args_):
+def _nx(single_=None, plural_=None, number_=None, context_=None, domain_="default", *_args_):
     
-    translations = get_translations_for_domain(domain)
-    translation = translations.translate_plural(single, plural, number, context)
+    
+    translations_ = get_translations_for_domain(domain_)
+    translation_ = translations_.translate_plural(single_, plural_, number_, context_)
     #// 
     #// Filters the singular or plural form of a string with gettext context.
     #// 
@@ -481,7 +495,7 @@ def _nx(single=None, plural=None, number=None, context=None, domain="default", *
     #// @param string $context     Context information for the translators.
     #// @param string $domain      Text domain. Unique identifier for retrieving translated strings.
     #//
-    return apply_filters("ngettext_with_context", translation, single, plural, number, context, domain)
+    return apply_filters("ngettext_with_context", translation_, single_, plural_, number_, context_, domain_)
 # end def _nx
 #// 
 #// Registers plural strings in POT file, but does not translate them.
@@ -512,9 +526,10 @@ def _nx(single=None, plural=None, number=None, context=None, domain="default", *
 #// @type string $domain   Text domain.
 #// }
 #//
-def _n_noop(singular=None, plural=None, domain=None, *args_):
+def _n_noop(singular_=None, plural_=None, domain_=None, *_args_):
     
-    return Array({0: singular, 1: plural, "singular": singular, "plural": plural, "context": None, "domain": domain})
+    
+    return Array({0: singular_, 1: plural_, "singular": singular_, "plural": plural_, "context": None, "domain": domain_})
 # end def _n_noop
 #// 
 #// Registers plural strings with gettext context in POT file, but does not translate them.
@@ -551,9 +566,10 @@ def _n_noop(singular=None, plural=None, domain=None, *args_):
 #// @type string $domain   Text domain.
 #// }
 #//
-def _nx_noop(singular=None, plural=None, context=None, domain=None, *args_):
+def _nx_noop(singular_=None, plural_=None, context_=None, domain_=None, *_args_):
     
-    return Array({0: singular, 1: plural, 2: context, "singular": singular, "plural": plural, "context": context, "domain": domain})
+    
+    return Array({0: singular_, 1: plural_, 2: context_, "singular": singular_, "plural": plural_, "context": context_, "domain": domain_})
 # end def _nx_noop
 #// 
 #// Translates and retrieves the singular or plural form of a string that's been registered
@@ -575,15 +591,16 @@ def _nx_noop(singular=None, plural=None, context=None, domain=None, *args_):
 #// a text domain passed to _n_noop() or _nx_noop(), it will override this value. Default 'default'.
 #// @return string Either $single or $plural translated text.
 #//
-def translate_nooped_plural(nooped_plural=None, count=None, domain="default", *args_):
+def translate_nooped_plural(nooped_plural_=None, count_=None, domain_="default", *_args_):
     
-    if nooped_plural["domain"]:
-        domain = nooped_plural["domain"]
+    
+    if nooped_plural_["domain"]:
+        domain_ = nooped_plural_["domain"]
     # end if
-    if nooped_plural["context"]:
-        return _nx(nooped_plural["singular"], nooped_plural["plural"], count, nooped_plural["context"], domain)
+    if nooped_plural_["context"]:
+        return _nx(nooped_plural_["singular"], nooped_plural_["plural"], count_, nooped_plural_["context"], domain_)
     else:
-        return _n(nooped_plural["singular"], nooped_plural["plural"], count, domain)
+        return _n(nooped_plural_["singular"], nooped_plural_["plural"], count_, domain_)
     # end if
 # end def translate_nooped_plural
 #// 
@@ -604,11 +621,13 @@ def translate_nooped_plural(nooped_plural=None, count=None, domain="default", *a
 #// @param string $mofile Path to the .mo file.
 #// @return bool True on success, false on failure.
 #//
-def load_textdomain(domain=None, mofile=None, *args_):
+def load_textdomain(domain_=None, mofile_=None, *_args_):
     
-    global l10n,l10n_unloaded
-    php_check_if_defined("l10n","l10n_unloaded")
-    l10n_unloaded = l10n_unloaded
+    
+    global l10n_
+    global l10n_unloaded_
+    php_check_if_defined("l10n_","l10n_unloaded_")
+    l10n_unloaded_ = l10n_unloaded_
     #// 
     #// Filters whether to override the .mo file loading.
     #// 
@@ -618,9 +637,9 @@ def load_textdomain(domain=None, mofile=None, *args_):
     #// @param string $domain   Text domain. Unique identifier for retrieving translated strings.
     #// @param string $mofile   Path to the MO file.
     #//
-    plugin_override = apply_filters("override_load_textdomain", False, domain, mofile)
-    if True == plugin_override:
-        l10n_unloaded[domain] = None
+    plugin_override_ = apply_filters("override_load_textdomain", False, domain_, mofile_)
+    if True == plugin_override_:
+        l10n_unloaded_[domain_] = None
         return True
     # end if
     #// 
@@ -631,7 +650,7 @@ def load_textdomain(domain=None, mofile=None, *args_):
     #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
     #// @param string $mofile Path to the .mo file.
     #//
-    do_action("load_textdomain", domain, mofile)
+    do_action("load_textdomain", domain_, mofile_)
     #// 
     #// Filters MO file path for loading translations for a specific text domain.
     #// 
@@ -640,19 +659,19 @@ def load_textdomain(domain=None, mofile=None, *args_):
     #// @param string $mofile Path to the MO file.
     #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
     #//
-    mofile = apply_filters("load_textdomain_mofile", mofile, domain)
-    if (not php_is_readable(mofile)):
+    mofile_ = apply_filters("load_textdomain_mofile", mofile_, domain_)
+    if (not php_is_readable(mofile_)):
         return False
     # end if
-    mo = php_new_class("MO", lambda : MO())
-    if (not mo.import_from_file(mofile)):
+    mo_ = php_new_class("MO", lambda : MO())
+    if (not mo_.import_from_file(mofile_)):
         return False
     # end if
-    if (php_isset(lambda : l10n[domain])):
-        mo.merge_with(l10n[domain])
+    if (php_isset(lambda : l10n_[domain_])):
+        mo_.merge_with(l10n_[domain_])
     # end if
-    l10n_unloaded[domain] = None
-    l10n[domain] = mo
+    l10n_unloaded_[domain_] = None
+    l10n_[domain_] = mo_
     return True
 # end def load_textdomain
 #// 
@@ -666,11 +685,13 @@ def load_textdomain(domain=None, mofile=None, *args_):
 #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
 #// @return bool Whether textdomain was unloaded.
 #//
-def unload_textdomain(domain=None, *args_):
+def unload_textdomain(domain_=None, *_args_):
     
-    global l10n,l10n_unloaded
-    php_check_if_defined("l10n","l10n_unloaded")
-    l10n_unloaded = l10n_unloaded
+    
+    global l10n_
+    global l10n_unloaded_
+    php_check_if_defined("l10n_","l10n_unloaded_")
+    l10n_unloaded_ = l10n_unloaded_
     #// 
     #// Filters whether to override the text domain unloading.
     #// 
@@ -679,9 +700,9 @@ def unload_textdomain(domain=None, *args_):
     #// @param bool   $override Whether to override the text domain unloading. Default false.
     #// @param string $domain   Text domain. Unique identifier for retrieving translated strings.
     #//
-    plugin_override = apply_filters("override_unload_textdomain", False, domain)
-    if plugin_override:
-        l10n_unloaded[domain] = True
+    plugin_override_ = apply_filters("override_unload_textdomain", False, domain_)
+    if plugin_override_:
+        l10n_unloaded_[domain_] = True
         return True
     # end if
     #// 
@@ -691,10 +712,10 @@ def unload_textdomain(domain=None, *args_):
     #// 
     #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
     #//
-    do_action("unload_textdomain", domain)
-    if (php_isset(lambda : l10n[domain])):
-        l10n[domain] = None
-        l10n_unloaded[domain] = True
+    do_action("unload_textdomain", domain_)
+    if (php_isset(lambda : l10n_[domain_])):
+        l10n_[domain_] = None
+        l10n_unloaded_[domain_] = True
         return True
     # end if
     return False
@@ -712,23 +733,24 @@ def unload_textdomain(domain=None, *args_):
 #// @param string $locale Optional. Locale to load. Default is the value of get_locale().
 #// @return bool Whether the textdomain was loaded.
 #//
-def load_default_textdomain(locale=None, *args_):
+def load_default_textdomain(locale_=None, *_args_):
     
-    if None == locale:
-        locale = determine_locale()
+    
+    if None == locale_:
+        locale_ = determine_locale()
     # end if
     #// Unload previously loaded strings so we can switch translations.
     unload_textdomain("default")
-    return_ = load_textdomain("default", WP_LANG_DIR + str("/") + str(locale) + str(".mo"))
-    if is_multisite() or php_defined("WP_INSTALLING_NETWORK") and WP_INSTALLING_NETWORK and (not php_file_exists(WP_LANG_DIR + str("/admin-") + str(locale) + str(".mo"))):
-        load_textdomain("default", WP_LANG_DIR + str("/ms-") + str(locale) + str(".mo"))
+    return_ = load_textdomain("default", WP_LANG_DIR + str("/") + str(locale_) + str(".mo"))
+    if is_multisite() or php_defined("WP_INSTALLING_NETWORK") and WP_INSTALLING_NETWORK and (not php_file_exists(WP_LANG_DIR + str("/admin-") + str(locale_) + str(".mo"))):
+        load_textdomain("default", WP_LANG_DIR + str("/ms-") + str(locale_) + str(".mo"))
         return return_
     # end if
     if is_admin() or wp_installing() or php_defined("WP_REPAIRING") and WP_REPAIRING:
-        load_textdomain("default", WP_LANG_DIR + str("/admin-") + str(locale) + str(".mo"))
+        load_textdomain("default", WP_LANG_DIR + str("/admin-") + str(locale_) + str(".mo"))
     # end if
     if is_network_admin() or php_defined("WP_INSTALLING_NETWORK") and WP_INSTALLING_NETWORK:
-        load_textdomain("default", WP_LANG_DIR + str("/admin-network-") + str(locale) + str(".mo"))
+        load_textdomain("default", WP_LANG_DIR + str("/admin-network-") + str(locale_) + str(".mo"))
     # end if
     return return_
 # end def load_default_textdomain
@@ -749,7 +771,13 @@ def load_default_textdomain(locale=None, *args_):
 #// Default false.
 #// @return bool True when textdomain is successfully loaded, false otherwise.
 #//
-def load_plugin_textdomain(domain=None, deprecated=False, plugin_rel_path=False, *args_):
+def load_plugin_textdomain(domain_=None, deprecated_=None, plugin_rel_path_=None, *_args_):
+    if deprecated_ is None:
+        deprecated_ = False
+    # end if
+    if plugin_rel_path_ is None:
+        plugin_rel_path_ = False
+    # end if
     
     #// 
     #// Filters a plugin's locale.
@@ -759,21 +787,21 @@ def load_plugin_textdomain(domain=None, deprecated=False, plugin_rel_path=False,
     #// @param string $locale The plugin's current locale.
     #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
     #//
-    locale = apply_filters("plugin_locale", determine_locale(), domain)
-    mofile = domain + "-" + locale + ".mo"
+    locale_ = apply_filters("plugin_locale", determine_locale(), domain_)
+    mofile_ = domain_ + "-" + locale_ + ".mo"
     #// Try to load from the languages directory first.
-    if load_textdomain(domain, WP_LANG_DIR + "/plugins/" + mofile):
+    if load_textdomain(domain_, WP_LANG_DIR + "/plugins/" + mofile_):
         return True
     # end if
-    if False != plugin_rel_path:
-        path = WP_PLUGIN_DIR + "/" + php_trim(plugin_rel_path, "/")
-    elif False != deprecated:
+    if False != plugin_rel_path_:
+        path_ = WP_PLUGIN_DIR + "/" + php_trim(plugin_rel_path_, "/")
+    elif False != deprecated_:
         _deprecated_argument(__FUNCTION__, "2.7.0")
-        path = ABSPATH + php_trim(deprecated, "/")
+        path_ = ABSPATH + php_trim(deprecated_, "/")
     else:
-        path = WP_PLUGIN_DIR
+        path_ = WP_PLUGIN_DIR
     # end if
-    return load_textdomain(domain, path + "/" + mofile)
+    return load_textdomain(domain_, path_ + "/" + mofile_)
 # end def load_plugin_textdomain
 #// 
 #// Load the translated strings for a plugin residing in the mu-plugins directory.
@@ -786,17 +814,18 @@ def load_plugin_textdomain(domain=None, deprecated=False, plugin_rel_path=False,
 #// file resides. Default empty string.
 #// @return bool True when textdomain is successfully loaded, false otherwise.
 #//
-def load_muplugin_textdomain(domain=None, mu_plugin_rel_path="", *args_):
+def load_muplugin_textdomain(domain_=None, mu_plugin_rel_path_="", *_args_):
+    
     
     #// This filter is documented in wp-includes/l10n.php
-    locale = apply_filters("plugin_locale", determine_locale(), domain)
-    mofile = domain + "-" + locale + ".mo"
+    locale_ = apply_filters("plugin_locale", determine_locale(), domain_)
+    mofile_ = domain_ + "-" + locale_ + ".mo"
     #// Try to load from the languages directory first.
-    if load_textdomain(domain, WP_LANG_DIR + "/plugins/" + mofile):
+    if load_textdomain(domain_, WP_LANG_DIR + "/plugins/" + mofile_):
         return True
     # end if
-    path = WPMU_PLUGIN_DIR + "/" + php_ltrim(mu_plugin_rel_path, "/")
-    return load_textdomain(domain, path + "/" + mofile)
+    path_ = WPMU_PLUGIN_DIR + "/" + php_ltrim(mu_plugin_rel_path_, "/")
+    return load_textdomain(domain_, path_ + "/" + mofile_)
 # end def load_muplugin_textdomain
 #// 
 #// Load the theme's translated strings.
@@ -814,7 +843,10 @@ def load_muplugin_textdomain(domain=None, mu_plugin_rel_path="", *args_):
 #// Default false.
 #// @return bool True when textdomain is successfully loaded, false otherwise.
 #//
-def load_theme_textdomain(domain=None, path=False, *args_):
+def load_theme_textdomain(domain_=None, path_=None, *_args_):
+    if path_ is None:
+        path_ = False
+    # end if
     
     #// 
     #// Filters a theme's locale.
@@ -824,16 +856,16 @@ def load_theme_textdomain(domain=None, path=False, *args_):
     #// @param string $locale The theme's current locale.
     #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
     #//
-    locale = apply_filters("theme_locale", determine_locale(), domain)
-    mofile = domain + "-" + locale + ".mo"
+    locale_ = apply_filters("theme_locale", determine_locale(), domain_)
+    mofile_ = domain_ + "-" + locale_ + ".mo"
     #// Try to load from the languages directory first.
-    if load_textdomain(domain, WP_LANG_DIR + "/themes/" + mofile):
+    if load_textdomain(domain_, WP_LANG_DIR + "/themes/" + mofile_):
         return True
     # end if
-    if (not path):
-        path = get_template_directory()
+    if (not path_):
+        path_ = get_template_directory()
     # end if
-    return load_textdomain(domain, path + "/" + locale + ".mo")
+    return load_textdomain(domain_, path_ + "/" + locale_ + ".mo")
 # end def load_theme_textdomain
 #// 
 #// Load the child themes translated strings.
@@ -850,12 +882,15 @@ def load_theme_textdomain(domain=None, path=False, *args_):
 #// Default false.
 #// @return bool True when the theme textdomain is successfully loaded, false otherwise.
 #//
-def load_child_theme_textdomain(domain=None, path=False, *args_):
-    
-    if (not path):
-        path = get_stylesheet_directory()
+def load_child_theme_textdomain(domain_=None, path_=None, *_args_):
+    if path_ is None:
+        path_ = False
     # end if
-    return load_theme_textdomain(domain, path)
+    
+    if (not path_):
+        path_ = get_stylesheet_directory()
+    # end if
+    return load_theme_textdomain(domain_, path_)
 # end def load_child_theme_textdomain
 #// 
 #// Loads the script translated strings.
@@ -872,67 +907,68 @@ def load_child_theme_textdomain(domain=None, path=False, *args_):
 #// @return string|false False if the script textdomain could not be loaded, the translated strings
 #// in JSON encoding otherwise.
 #//
-def load_script_textdomain(handle=None, domain="default", path=None, *args_):
+def load_script_textdomain(handle_=None, domain_="default", path_=None, *_args_):
     
-    wp_scripts = wp_scripts()
-    if (not (php_isset(lambda : wp_scripts.registered[handle]))):
+    
+    wp_scripts_ = wp_scripts()
+    if (not (php_isset(lambda : wp_scripts_.registered[handle_]))):
         return False
     # end if
-    path = untrailingslashit(path)
-    locale = determine_locale()
+    path_ = untrailingslashit(path_)
+    locale_ = determine_locale()
     #// If a path was given and the handle file exists simply return it.
-    file_base = locale if "default" == domain else domain + "-" + locale
-    handle_filename = file_base + "-" + handle + ".json"
-    if path:
-        translations = load_script_translations(path + "/" + handle_filename, handle, domain)
-        if translations:
-            return translations
+    file_base_ = locale_ if "default" == domain_ else domain_ + "-" + locale_
+    handle_filename_ = file_base_ + "-" + handle_ + ".json"
+    if path_:
+        translations_ = load_script_translations(path_ + "/" + handle_filename_, handle_, domain_)
+        if translations_:
+            return translations_
         # end if
     # end if
-    src = wp_scripts.registered[handle].src
-    if (not php_preg_match("|^(https?:)?//|", src)) and (not wp_scripts.content_url and 0 == php_strpos(src, wp_scripts.content_url)):
-        src = wp_scripts.base_url + src
+    src_ = wp_scripts_.registered[handle_].src
+    if (not php_preg_match("|^(https?:)?//|", src_)) and (not wp_scripts_.content_url and 0 == php_strpos(src_, wp_scripts_.content_url)):
+        src_ = wp_scripts_.base_url + src_
     # end if
-    relative = False
-    languages_path = WP_LANG_DIR
-    src_url = wp_parse_url(src)
-    content_url = wp_parse_url(content_url())
-    plugins_url = wp_parse_url(plugins_url())
-    site_url = wp_parse_url(site_url())
+    relative_ = False
+    languages_path_ = WP_LANG_DIR
+    src_url_ = wp_parse_url(src_)
+    content_url_ = wp_parse_url(content_url())
+    plugins_url_ = wp_parse_url(plugins_url())
+    site_url_ = wp_parse_url(site_url())
     #// If the host is the same or it's a relative URL.
-    if (not (php_isset(lambda : content_url["path"]))) or php_strpos(src_url["path"], content_url["path"]) == 0 and (not (php_isset(lambda : src_url["host"]))) or src_url["host"] == content_url["host"]:
+    if (not (php_isset(lambda : content_url_["path"]))) or php_strpos(src_url_["path"], content_url_["path"]) == 0 and (not (php_isset(lambda : src_url_["host"]))) or src_url_["host"] == content_url_["host"]:
         #// Make the src relative the specific plugin or theme.
-        if (php_isset(lambda : content_url["path"])):
-            relative = php_substr(src_url["path"], php_strlen(content_url["path"]))
+        if (php_isset(lambda : content_url_["path"])):
+            relative_ = php_substr(src_url_["path"], php_strlen(content_url_["path"]))
         else:
-            relative = src_url["path"]
+            relative_ = src_url_["path"]
         # end if
-        relative = php_trim(relative, "/")
-        relative = php_explode("/", relative)
-        languages_path = WP_LANG_DIR + "/" + relative[0]
-        relative = php_array_slice(relative, 2)
+        relative_ = php_trim(relative_, "/")
+        relative_ = php_explode("/", relative_)
+        languages_path_ = WP_LANG_DIR + "/" + relative_[0]
+        relative_ = php_array_slice(relative_, 2)
         #// Remove plugins/<plugin name> or themes/<theme name>.
-        relative = php_implode("/", relative)
-    elif (not (php_isset(lambda : plugins_url["path"]))) or php_strpos(src_url["path"], plugins_url["path"]) == 0 and (not (php_isset(lambda : src_url["host"]))) or src_url["host"] == plugins_url["host"]:
+        relative_ = php_implode("/", relative_)
+    elif (not (php_isset(lambda : plugins_url_["path"]))) or php_strpos(src_url_["path"], plugins_url_["path"]) == 0 and (not (php_isset(lambda : src_url_["host"]))) or src_url_["host"] == plugins_url_["host"]:
         #// Make the src relative the specific plugin.
-        if (php_isset(lambda : plugins_url["path"])):
-            relative = php_substr(src_url["path"], php_strlen(plugins_url["path"]))
+        if (php_isset(lambda : plugins_url_["path"])):
+            relative_ = php_substr(src_url_["path"], php_strlen(plugins_url_["path"]))
         else:
-            relative = src_url["path"]
+            relative_ = src_url_["path"]
         # end if
-        relative = php_trim(relative, "/")
-        relative = php_explode("/", relative)
-        languages_path = WP_LANG_DIR + "/plugins"
-        relative = php_array_slice(relative, 1)
+        relative_ = php_trim(relative_, "/")
+        relative_ = php_explode("/", relative_)
+        languages_path_ = WP_LANG_DIR + "/plugins"
+        relative_ = php_array_slice(relative_, 1)
         #// Remove <plugin name>.
-        relative = php_implode("/", relative)
-    elif (not (php_isset(lambda : src_url["host"]))) or src_url["host"] == site_url["host"]:
-        if (not (php_isset(lambda : site_url["path"]))):
-            relative = php_trim(src_url["path"], "/")
-        elif php_strpos(src_url["path"], trailingslashit(site_url["path"])) == 0:
+        relative_ = php_implode("/", relative_)
+    elif (not (php_isset(lambda : src_url_["host"]))) or src_url_["host"] == site_url_["host"]:
+        if (not (php_isset(lambda : site_url_["path"]))):
+            relative_ = php_trim(src_url_["path"], "/")
+        elif php_strpos(src_url_["path"], trailingslashit(site_url_["path"])) == 0:
             #// Make the src relative to the WP root.
-            relative = php_substr(src_url["path"], php_strlen(site_url["path"]))
-            relative = php_trim(relative, "/")
+            relative_ = php_substr(src_url_["path"], php_strlen(site_url_["path"]))
+            relative_ = php_trim(relative_, "/")
         # end if
     # end if
     #// 
@@ -943,27 +979,27 @@ def load_script_textdomain(handle=None, domain="default", path=None, *args_):
     #// @param string|false $relative The relative path of the script. False if it could not be determined.
     #// @param string       $src      The full source URL of the script.
     #//
-    relative = apply_filters("load_script_textdomain_relative_path", relative, src)
+    relative_ = apply_filters("load_script_textdomain_relative_path", relative_, src_)
     #// If the source is not from WP.
-    if False == relative:
-        return load_script_translations(False, handle, domain)
+    if False == relative_:
+        return load_script_translations(False, handle_, domain_)
     # end if
     #// Translations are always based on the unminified filename.
-    if php_substr(relative, -7) == ".min.js":
-        relative = php_substr(relative, 0, -7) + ".js"
+    if php_substr(relative_, -7) == ".min.js":
+        relative_ = php_substr(relative_, 0, -7) + ".js"
     # end if
-    md5_filename = file_base + "-" + php_md5(relative) + ".json"
-    if path:
-        translations = load_script_translations(path + "/" + md5_filename, handle, domain)
-        if translations:
-            return translations
+    md5_filename_ = file_base_ + "-" + php_md5(relative_) + ".json"
+    if path_:
+        translations_ = load_script_translations(path_ + "/" + md5_filename_, handle_, domain_)
+        if translations_:
+            return translations_
         # end if
     # end if
-    translations = load_script_translations(languages_path + "/" + md5_filename, handle, domain)
-    if translations:
-        return translations
+    translations_ = load_script_translations(languages_path_ + "/" + md5_filename_, handle_, domain_)
+    if translations_:
+        return translations_
     # end if
-    return load_script_translations(False, handle, domain)
+    return load_script_translations(False, handle_, domain_)
 # end def load_script_textdomain
 #// 
 #// Loads the translation data for the given script handle and text domain.
@@ -975,7 +1011,8 @@ def load_script_textdomain(handle=None, domain="default", path=None, *args_):
 #// @param string       $domain The text domain.
 #// @return string|false The JSON-encoded translated strings for the given script handle and text domain. False if there are none.
 #//
-def load_script_translations(file=None, handle=None, domain=None, *args_):
+def load_script_translations(file_=None, handle_=None, domain_=None, *_args_):
+    
     
     #// 
     #// Pre-filters script translations for the given file, script handle and text domain.
@@ -989,9 +1026,9 @@ def load_script_translations(file=None, handle=None, domain=None, *args_):
     #// @param string            $handle       Name of the script to register a translation domain to.
     #// @param string            $domain       The text domain.
     #//
-    translations = apply_filters("pre_load_script_translations", None, file, handle, domain)
-    if None != translations:
-        return translations
+    translations_ = apply_filters("pre_load_script_translations", None, file_, handle_, domain_)
+    if None != translations_:
+        return translations_
     # end if
     #// 
     #// Filters the file path for loading script translations for the given script handle and text domain.
@@ -1002,11 +1039,11 @@ def load_script_translations(file=None, handle=None, domain=None, *args_):
     #// @param string       $handle Name of the script to register a translation domain to.
     #// @param string       $domain The text domain.
     #//
-    file = apply_filters("load_script_translation_file", file, handle, domain)
-    if (not file) or (not php_is_readable(file)):
+    file_ = apply_filters("load_script_translation_file", file_, handle_, domain_)
+    if (not file_) or (not php_is_readable(file_)):
         return False
     # end if
-    translations = php_file_get_contents(file)
+    translations_ = php_file_get_contents(file_)
     #// 
     #// Filters script translations for the given file, script handle and text domain.
     #// 
@@ -1017,7 +1054,7 @@ def load_script_translations(file=None, handle=None, domain=None, *args_):
     #// @param string $handle       Name of the script to register a translation domain to.
     #// @param string $domain       The text domain.
     #//
-    return apply_filters("load_script_translations", translations, file, handle, domain)
+    return apply_filters("load_script_translations", translations_, file_, handle_, domain_)
 # end def load_script_translations
 #// 
 #// Loads plugin and theme textdomains just-in-time.
@@ -1035,20 +1072,21 @@ def load_script_translations(file=None, handle=None, domain=None, *args_):
 #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
 #// @return bool True when the textdomain is successfully loaded, false otherwise.
 #//
-def _load_textdomain_just_in_time(domain=None, *args_):
+def _load_textdomain_just_in_time(domain_=None, *_args_):
     
-    global l10n_unloaded
-    php_check_if_defined("l10n_unloaded")
-    l10n_unloaded = l10n_unloaded
+    
+    global l10n_unloaded_
+    php_check_if_defined("l10n_unloaded_")
+    l10n_unloaded_ = l10n_unloaded_
     #// Short-circuit if domain is 'default' which is reserved for core.
-    if "default" == domain or (php_isset(lambda : l10n_unloaded[domain])):
+    if "default" == domain_ or (php_isset(lambda : l10n_unloaded_[domain_])):
         return False
     # end if
-    translation_path = _get_path_to_translation(domain)
-    if False == translation_path:
+    translation_path_ = _get_path_to_translation(domain_)
+    if False == translation_path_:
         return False
     # end if
-    return load_textdomain(domain, translation_path)
+    return load_textdomain(domain_, translation_path_)
 # end def _load_textdomain_just_in_time
 #// 
 #// Gets the path to a translation file for loading a textdomain just in time.
@@ -1065,16 +1103,19 @@ def _load_textdomain_just_in_time(domain=None, *args_):
 #// @param bool   $reset  Whether to reset the internal cache. Used by the switch to locale functionality.
 #// @return string|false The path to the translation file or false if no translation file was found.
 #//
-def _get_path_to_translation(domain=None, reset=False, *args_):
+def _get_path_to_translation(domain_=None, reset_=None, *_args_):
+    if reset_ is None:
+        reset_ = False
+    # end if
     
-    _get_path_to_translation.available_translations = Array()
-    if True == reset:
-        _get_path_to_translation.available_translations = Array()
+    available_translations_ = Array()
+    if True == reset_:
+        available_translations_ = Array()
     # end if
-    if (not (php_isset(lambda : _get_path_to_translation.available_translations[domain]))):
-        _get_path_to_translation.available_translations[domain] = _get_path_to_translation_from_lang_dir(domain)
+    if (not (php_isset(lambda : available_translations_[domain_]))):
+        available_translations_[domain_] = _get_path_to_translation_from_lang_dir(domain_)
     # end if
-    return _get_path_to_translation.available_translations[domain]
+    return available_translations_[domain_]
 # end def _get_path_to_translation
 #// 
 #// Gets the path to a translation file in the languages directory for the current locale.
@@ -1090,28 +1131,29 @@ def _get_path_to_translation(domain=None, reset=False, *args_):
 #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
 #// @return string|false The path to the translation file or false if no translation file was found.
 #//
-def _get_path_to_translation_from_lang_dir(domain=None, *args_):
+def _get_path_to_translation_from_lang_dir(domain_=None, *_args_):
     
-    _get_path_to_translation_from_lang_dir.cached_mofiles = None
-    if None == _get_path_to_translation_from_lang_dir.cached_mofiles:
-        _get_path_to_translation_from_lang_dir.cached_mofiles = Array()
-        locations = Array(WP_LANG_DIR + "/plugins", WP_LANG_DIR + "/themes")
-        for location in locations:
-            mofiles = glob(location + "/*.mo")
-            if mofiles:
-                _get_path_to_translation_from_lang_dir.cached_mofiles = php_array_merge(_get_path_to_translation_from_lang_dir.cached_mofiles, mofiles)
+    
+    cached_mofiles_ = None
+    if None == cached_mofiles_:
+        cached_mofiles_ = Array()
+        locations_ = Array(WP_LANG_DIR + "/plugins", WP_LANG_DIR + "/themes")
+        for location_ in locations_:
+            mofiles_ = glob(location_ + "/*.mo")
+            if mofiles_:
+                cached_mofiles_ = php_array_merge(cached_mofiles_, mofiles_)
             # end if
         # end for
     # end if
-    locale = determine_locale()
-    mofile = str(domain) + str("-") + str(locale) + str(".mo")
-    path = WP_LANG_DIR + "/plugins/" + mofile
-    if php_in_array(path, _get_path_to_translation_from_lang_dir.cached_mofiles):
-        return path
+    locale_ = determine_locale()
+    mofile_ = str(domain_) + str("-") + str(locale_) + str(".mo")
+    path_ = WP_LANG_DIR + "/plugins/" + mofile_
+    if php_in_array(path_, cached_mofiles_):
+        return path_
     # end if
-    path = WP_LANG_DIR + "/themes/" + mofile
-    if php_in_array(path, _get_path_to_translation_from_lang_dir.cached_mofiles):
-        return path
+    path_ = WP_LANG_DIR + "/themes/" + mofile_
+    if php_in_array(path_, cached_mofiles_):
+        return path_
     # end if
     return False
 # end def _get_path_to_translation_from_lang_dir
@@ -1128,18 +1170,19 @@ def _get_path_to_translation_from_lang_dir(domain=None, *args_):
 #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
 #// @return Translations|NOOP_Translations A Translations instance.
 #//
-def get_translations_for_domain(domain=None, *args_):
+def get_translations_for_domain(domain_=None, *_args_):
     
-    global l10n
-    php_check_if_defined("l10n")
-    if (php_isset(lambda : l10n[domain])) or _load_textdomain_just_in_time(domain) and (php_isset(lambda : l10n[domain])):
-        return l10n[domain]
+    
+    global l10n_
+    php_check_if_defined("l10n_")
+    if (php_isset(lambda : l10n_[domain_])) or _load_textdomain_just_in_time(domain_) and (php_isset(lambda : l10n_[domain_])):
+        return l10n_[domain_]
     # end if
-    get_translations_for_domain.noop_translations = None
-    if None == get_translations_for_domain.noop_translations:
-        get_translations_for_domain.noop_translations = php_new_class("NOOP_Translations", lambda : NOOP_Translations())
+    noop_translations_ = None
+    if None == noop_translations_:
+        noop_translations_ = php_new_class("NOOP_Translations", lambda : NOOP_Translations())
     # end if
-    return get_translations_for_domain.noop_translations
+    return noop_translations_
 # end def get_translations_for_domain
 #// 
 #// Whether there are translations for the text domain.
@@ -1151,11 +1194,12 @@ def get_translations_for_domain(domain=None, *args_):
 #// @param string $domain Text domain. Unique identifier for retrieving translated strings.
 #// @return bool Whether there are translations.
 #//
-def is_textdomain_loaded(domain=None, *args_):
+def is_textdomain_loaded(domain_=None, *_args_):
     
-    global l10n
-    php_check_if_defined("l10n")
-    return (php_isset(lambda : l10n[domain]))
+    
+    global l10n_
+    php_check_if_defined("l10n_")
+    return (php_isset(lambda : l10n_[domain_]))
 # end def is_textdomain_loaded
 #// 
 #// Translates role name.
@@ -1177,9 +1221,10 @@ def is_textdomain_loaded(domain=None, *args_):
 #// Default 'default'.
 #// @return string Translated role name on success, original name on failure.
 #//
-def translate_user_role(name=None, domain="default", *args_):
+def translate_user_role(name_=None, domain_="default", *_args_):
     
-    return translate_with_gettext_context(before_last_bar(name), "User role", domain)
+    
+    return translate_with_gettext_context(before_last_bar(name_), "User role", domain_)
 # end def translate_user_role
 #// 
 #// Get all available languages based on the presence of *.mo files in a given directory.
@@ -1193,15 +1238,16 @@ def translate_user_role(name=None, domain="default", *args_):
 #// Default WP_LANG_DIR.
 #// @return string[] An array of language codes or an empty array if no languages are present. Language codes are formed by stripping the .mo extension from the language file names.
 #//
-def get_available_languages(dir=None, *args_):
+def get_available_languages(dir_=None, *_args_):
     
-    languages = Array()
-    lang_files = glob(WP_LANG_DIR if is_null(dir) else dir + "/*.mo")
-    if lang_files:
-        for lang_file in lang_files:
-            lang_file = php_basename(lang_file, ".mo")
-            if 0 != php_strpos(lang_file, "continents-cities") and 0 != php_strpos(lang_file, "ms-") and 0 != php_strpos(lang_file, "admin-"):
-                languages[-1] = lang_file
+    
+    languages_ = Array()
+    lang_files_ = glob(WP_LANG_DIR if is_null(dir_) else dir_ + "/*.mo")
+    if lang_files_:
+        for lang_file_ in lang_files_:
+            lang_file_ = php_basename(lang_file_, ".mo")
+            if 0 != php_strpos(lang_file_, "continents-cities") and 0 != php_strpos(lang_file_, "ms-") and 0 != php_strpos(lang_file_, "admin-"):
+                languages_[-1] = lang_file_
             # end if
         # end for
     # end if
@@ -1213,7 +1259,7 @@ def get_available_languages(dir=None, *args_):
     #// @param string[] $languages An array of available language codes.
     #// @param string   $dir       The directory where the language files were found.
     #//
-    return apply_filters("get_available_languages", languages, dir)
+    return apply_filters("get_available_languages", languages_, dir_)
 # end def get_available_languages
 #// 
 #// Get installed translations.
@@ -1226,43 +1272,44 @@ def get_available_languages(dir=None, *args_):
 #// @param string $type What to search for. Accepts 'plugins', 'themes', 'core'.
 #// @return array Array of language data.
 #//
-def wp_get_installed_translations(type=None, *args_):
+def wp_get_installed_translations(type_=None, *_args_):
     
-    if "themes" != type and "plugins" != type and "core" != type:
+    
+    if "themes" != type_ and "plugins" != type_ and "core" != type_:
         return Array()
     # end if
-    dir = "" if "core" == type else str("/") + str(type)
+    dir_ = "" if "core" == type_ else str("/") + str(type_)
     if (not php_is_dir(WP_LANG_DIR)):
         return Array()
     # end if
-    if dir and (not php_is_dir(WP_LANG_DIR + dir)):
+    if dir_ and (not php_is_dir(WP_LANG_DIR + dir_)):
         return Array()
     # end if
-    files = scandir(WP_LANG_DIR + dir)
-    if (not files):
+    files_ = scandir(WP_LANG_DIR + dir_)
+    if (not files_):
         return Array()
     # end if
-    language_data = Array()
-    for file in files:
-        if "." == file[0] or php_is_dir(WP_LANG_DIR + str(dir) + str("/") + str(file)):
+    language_data_ = Array()
+    for file_ in files_:
+        if "." == file_[0] or php_is_dir(WP_LANG_DIR + str(dir_) + str("/") + str(file_)):
             continue
         # end if
-        if php_substr(file, -3) != ".po":
+        if php_substr(file_, -3) != ".po":
             continue
         # end if
-        if (not php_preg_match("/(?:(.+)-)?([a-z]{2,3}(?:_[A-Z]{2})?(?:_[a-z0-9]+)?).po/", file, match)):
+        if (not php_preg_match("/(?:(.+)-)?([a-z]{2,3}(?:_[A-Z]{2})?(?:_[a-z0-9]+)?).po/", file_, match_)):
             continue
         # end if
-        if (not php_in_array(php_substr(file, 0, -3) + ".mo", files)):
+        if (not php_in_array(php_substr(file_, 0, -3) + ".mo", files_)):
             continue
         # end if
-        textdomain, language = match
-        if "" == textdomain:
-            textdomain = "default"
+        textdomain_, language_ = match_
+        if "" == textdomain_:
+            textdomain_ = "default"
         # end if
-        language_data[textdomain][language] = wp_get_pomo_file_data(WP_LANG_DIR + str(dir) + str("/") + str(file))
+        language_data_[textdomain_][language_] = wp_get_pomo_file_data(WP_LANG_DIR + str(dir_) + str("/") + str(file_))
     # end for
-    return language_data
+    return language_data_
 # end def wp_get_installed_translations
 #// 
 #// Extract headers from a PO file.
@@ -1272,14 +1319,15 @@ def wp_get_installed_translations(type=None, *args_):
 #// @param string $po_file Path to PO file.
 #// @return string[] Array of PO file header values keyed by header name.
 #//
-def wp_get_pomo_file_data(po_file=None, *args_):
+def wp_get_pomo_file_data(po_file_=None, *_args_):
     
-    headers = get_file_data(po_file, Array({"POT-Creation-Date": "\"POT-Creation-Date", "PO-Revision-Date": "\"PO-Revision-Date", "Project-Id-Version": "\"Project-Id-Version", "X-Generator": "\"X-Generator"}))
-    for header,value in headers:
+    
+    headers_ = get_file_data(po_file_, Array({"POT-Creation-Date": "\"POT-Creation-Date", "PO-Revision-Date": "\"PO-Revision-Date", "Project-Id-Version": "\"Project-Id-Version", "X-Generator": "\"X-Generator"}))
+    for header_,value_ in headers_:
         #// Remove possible contextual '\n' and closing double quote.
-        headers[header] = php_preg_replace("~(\\\\n)?\"$~", "", value)
+        headers_[header_] = php_preg_replace("~(\\\\n)?\"$~", "", value_)
     # end for
-    return headers
+    return headers_
 # end def wp_get_pomo_file_data
 #// 
 #// Language selector.
@@ -1310,73 +1358,76 @@ def wp_get_pomo_file_data(po_file=None, *args_):
 #// }
 #// @return string HTML dropdown list of languages.
 #//
-def wp_dropdown_languages(args=Array(), *args_):
+def wp_dropdown_languages(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    parsed_args = wp_parse_args(args, Array({"id": "locale", "name": "locale", "languages": Array(), "translations": Array(), "selected": "", "echo": 1, "show_available_translations": True, "show_option_site_default": False, "show_option_en_us": True}))
+    parsed_args_ = wp_parse_args(args_, Array({"id": "locale", "name": "locale", "languages": Array(), "translations": Array(), "selected": "", "echo": 1, "show_available_translations": True, "show_option_site_default": False, "show_option_en_us": True}))
     #// Bail if no ID or no name.
-    if (not parsed_args["id"]) or (not parsed_args["name"]):
+    if (not parsed_args_["id"]) or (not parsed_args_["name"]):
         return
     # end if
     #// English (United States) uses an empty string for the value attribute.
-    if "en_US" == parsed_args["selected"]:
-        parsed_args["selected"] = ""
+    if "en_US" == parsed_args_["selected"]:
+        parsed_args_["selected"] = ""
     # end if
-    translations = parsed_args["translations"]
-    if php_empty(lambda : translations):
+    translations_ = parsed_args_["translations"]
+    if php_empty(lambda : translations_):
         php_include_file(ABSPATH + "wp-admin/includes/translation-install.php", once=True)
-        translations = wp_get_available_translations()
+        translations_ = wp_get_available_translations()
     # end if
     #// 
     #// $parsed_args['languages'] should only contain the locales. Find the locale in
     #// $translations to get the native name. Fall back to locale.
     #//
-    languages = Array()
-    for locale in parsed_args["languages"]:
-        if (php_isset(lambda : translations[locale])):
-            translation = translations[locale]
-            languages[-1] = Array({"language": translation["language"], "native_name": translation["native_name"], "lang": current(translation["iso"])})
-            translations[locale] = None
+    languages_ = Array()
+    for locale_ in parsed_args_["languages"]:
+        if (php_isset(lambda : translations_[locale_])):
+            translation_ = translations_[locale_]
+            languages_[-1] = Array({"language": translation_["language"], "native_name": translation_["native_name"], "lang": current(translation_["iso"])})
+            translations_[locale_] = None
         else:
-            languages[-1] = Array({"language": locale, "native_name": locale, "lang": ""})
+            languages_[-1] = Array({"language": locale_, "native_name": locale_, "lang": ""})
         # end if
     # end for
-    translations_available = (not php_empty(lambda : translations)) and parsed_args["show_available_translations"]
+    translations_available_ = (not php_empty(lambda : translations_)) and parsed_args_["show_available_translations"]
     #// Holds the HTML markup.
-    structure = Array()
+    structure_ = Array()
     #// List installed languages.
-    if translations_available:
-        structure[-1] = "<optgroup label=\"" + esc_attr_x("Installed", "translations") + "\">"
+    if translations_available_:
+        structure_[-1] = "<optgroup label=\"" + esc_attr_x("Installed", "translations") + "\">"
     # end if
     #// Site default.
-    if parsed_args["show_option_site_default"]:
-        structure[-1] = php_sprintf("<option value=\"site-default\" data-installed=\"1\"%s>%s</option>", selected("site-default", parsed_args["selected"], False), _x("Site Default", "default site language"))
+    if parsed_args_["show_option_site_default"]:
+        structure_[-1] = php_sprintf("<option value=\"site-default\" data-installed=\"1\"%s>%s</option>", selected("site-default", parsed_args_["selected"], False), _x("Site Default", "default site language"))
     # end if
-    if parsed_args["show_option_en_us"]:
-        structure[-1] = php_sprintf("<option value=\"\" lang=\"en\" data-installed=\"1\"%s>English (United States)</option>", selected("", parsed_args["selected"], False))
+    if parsed_args_["show_option_en_us"]:
+        structure_[-1] = php_sprintf("<option value=\"\" lang=\"en\" data-installed=\"1\"%s>English (United States)</option>", selected("", parsed_args_["selected"], False))
     # end if
     #// List installed languages.
-    for language in languages:
-        structure[-1] = php_sprintf("<option value=\"%s\" lang=\"%s\"%s data-installed=\"1\">%s</option>", esc_attr(language["language"]), esc_attr(language["lang"]), selected(language["language"], parsed_args["selected"], False), esc_html(language["native_name"]))
+    for language_ in languages_:
+        structure_[-1] = php_sprintf("<option value=\"%s\" lang=\"%s\"%s data-installed=\"1\">%s</option>", esc_attr(language_["language"]), esc_attr(language_["lang"]), selected(language_["language"], parsed_args_["selected"], False), esc_html(language_["native_name"]))
     # end for
-    if translations_available:
-        structure[-1] = "</optgroup>"
+    if translations_available_:
+        structure_[-1] = "</optgroup>"
     # end if
     #// List available translations.
-    if translations_available:
-        structure[-1] = "<optgroup label=\"" + esc_attr_x("Available", "translations") + "\">"
-        for translation in translations:
-            structure[-1] = php_sprintf("<option value=\"%s\" lang=\"%s\"%s>%s</option>", esc_attr(translation["language"]), esc_attr(current(translation["iso"])), selected(translation["language"], parsed_args["selected"], False), esc_html(translation["native_name"]))
+    if translations_available_:
+        structure_[-1] = "<optgroup label=\"" + esc_attr_x("Available", "translations") + "\">"
+        for translation_ in translations_:
+            structure_[-1] = php_sprintf("<option value=\"%s\" lang=\"%s\"%s>%s</option>", esc_attr(translation_["language"]), esc_attr(current(translation_["iso"])), selected(translation_["language"], parsed_args_["selected"], False), esc_html(translation_["native_name"]))
         # end for
-        structure[-1] = "</optgroup>"
+        structure_[-1] = "</optgroup>"
     # end if
     #// Combine the output string.
-    output = php_sprintf("<select name=\"%s\" id=\"%s\">", esc_attr(parsed_args["name"]), esc_attr(parsed_args["id"]))
-    output += join("\n", structure)
-    output += "</select>"
-    if parsed_args["echo"]:
-        php_print(output)
+    output_ = php_sprintf("<select name=\"%s\" id=\"%s\">", esc_attr(parsed_args_["name"]), esc_attr(parsed_args_["id"]))
+    output_ += join("\n", structure_)
+    output_ += "</select>"
+    if parsed_args_["echo"]:
+        php_print(output_)
     # end if
-    return output
+    return output_
 # end def wp_dropdown_languages
 #// 
 #// Determines whether the current locale is right-to-left (RTL).
@@ -1391,14 +1442,15 @@ def wp_dropdown_languages(args=Array(), *args_):
 #// 
 #// @return bool Whether locale is RTL.
 #//
-def is_rtl(*args_):
+def is_rtl(*_args_):
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    if (not type(wp_locale).__name__ == "WP_Locale"):
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    if (not type(wp_locale_).__name__ == "WP_Locale"):
         return False
     # end if
-    return wp_locale.is_rtl()
+    return wp_locale_.is_rtl()
 # end def is_rtl
 #// 
 #// Switches the translations according to the given locale.
@@ -1410,12 +1462,13 @@ def is_rtl(*args_):
 #// @param string $locale The locale.
 #// @return bool True on success, false on failure.
 #//
-def switch_to_locale(locale=None, *args_):
+def switch_to_locale(locale_=None, *_args_):
+    
     
     #// @var WP_Locale_Switcher $wp_locale_switcher
-    global wp_locale_switcher
-    php_check_if_defined("wp_locale_switcher")
-    return wp_locale_switcher.switch_to_locale(locale)
+    global wp_locale_switcher_
+    php_check_if_defined("wp_locale_switcher_")
+    return wp_locale_switcher_.switch_to_locale(locale_)
 # end def switch_to_locale
 #// 
 #// Restores the translations according to the previous locale.
@@ -1426,12 +1479,13 @@ def switch_to_locale(locale=None, *args_):
 #// 
 #// @return string|false Locale on success, false on error.
 #//
-def restore_previous_locale(*args_):
+def restore_previous_locale(*_args_):
+    
     
     #// @var WP_Locale_Switcher $wp_locale_switcher
-    global wp_locale_switcher
-    php_check_if_defined("wp_locale_switcher")
-    return wp_locale_switcher.restore_previous_locale()
+    global wp_locale_switcher_
+    php_check_if_defined("wp_locale_switcher_")
+    return wp_locale_switcher_.restore_previous_locale()
 # end def restore_previous_locale
 #// 
 #// Restores the translations according to the original locale.
@@ -1442,12 +1496,13 @@ def restore_previous_locale(*args_):
 #// 
 #// @return string|false Locale on success, false on error.
 #//
-def restore_current_locale(*args_):
+def restore_current_locale(*_args_):
+    
     
     #// @var WP_Locale_Switcher $wp_locale_switcher
-    global wp_locale_switcher
-    php_check_if_defined("wp_locale_switcher")
-    return wp_locale_switcher.restore_current_locale()
+    global wp_locale_switcher_
+    php_check_if_defined("wp_locale_switcher_")
+    return wp_locale_switcher_.restore_current_locale()
 # end def restore_current_locale
 #// 
 #// Whether switch_to_locale() is in effect.
@@ -1458,10 +1513,11 @@ def restore_current_locale(*args_):
 #// 
 #// @return bool True if the locale has been switched, false otherwise.
 #//
-def is_locale_switched(*args_):
+def is_locale_switched(*_args_):
+    
     
     #// @var WP_Locale_Switcher $wp_locale_switcher
-    global wp_locale_switcher
-    php_check_if_defined("wp_locale_switcher")
-    return wp_locale_switcher.is_switched()
+    global wp_locale_switcher_
+    php_check_if_defined("wp_locale_switcher_")
+    return wp_locale_switcher_.is_switched()
 # end def is_locale_switched

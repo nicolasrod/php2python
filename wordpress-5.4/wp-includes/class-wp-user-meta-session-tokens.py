@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,12 +31,13 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #//
     def get_sessions(self):
         
-        sessions = get_user_meta(self.user_id, "session_tokens", True)
-        if (not php_is_array(sessions)):
+        
+        sessions_ = get_user_meta(self.user_id, "session_tokens", True)
+        if (not php_is_array(sessions_)):
             return Array()
         # end if
-        sessions = php_array_map(Array(self, "prepare_session"), sessions)
-        return php_array_filter(sessions, Array(self, "is_still_valid"))
+        sessions_ = php_array_map(Array(self, "prepare_session"), sessions_)
+        return php_array_filter(sessions_, Array(self, "is_still_valid"))
     # end def get_sessions
     #// 
     #// Converts an expiration to an array of session information.
@@ -49,12 +45,13 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #// @param mixed $session Session or expiration.
     #// @return array Session.
     #//
-    def prepare_session(self, session=None):
+    def prepare_session(self, session_=None):
         
-        if php_is_int(session):
-            return Array({"expiration": session})
+        
+        if php_is_int(session_):
+            return Array({"expiration": session_})
         # end if
-        return session
+        return session_
     # end def prepare_session
     #// 
     #// Retrieves a session based on its verifier (token hash).
@@ -64,11 +61,12 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #// @param string $verifier Verifier for the session to retrieve.
     #// @return array|null The session, or null if it does not exist
     #//
-    def get_session(self, verifier=None):
+    def get_session(self, verifier_=None):
         
-        sessions = self.get_sessions()
-        if (php_isset(lambda : sessions[verifier])):
-            return sessions[verifier]
+        
+        sessions_ = self.get_sessions()
+        if (php_isset(lambda : sessions_[verifier_])):
+            return sessions_[verifier_]
         # end if
         return None
     # end def get_session
@@ -80,15 +78,16 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #// @param string $verifier Verifier for the session to update.
     #// @param array  $session  Optional. Session. Omitting this argument destroys the session.
     #//
-    def update_session(self, verifier=None, session=None):
+    def update_session(self, verifier_=None, session_=None):
         
-        sessions = self.get_sessions()
-        if session:
-            sessions[verifier] = session
+        
+        sessions_ = self.get_sessions()
+        if session_:
+            sessions_[verifier_] = session_
         else:
-            sessions[verifier] = None
+            sessions_[verifier_] = None
         # end if
-        self.update_sessions(sessions)
+        self.update_sessions(sessions_)
     # end def update_session
     #// 
     #// Updates the user's sessions in the usermeta table.
@@ -97,10 +96,11 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #// 
     #// @param array $sessions Sessions.
     #//
-    def update_sessions(self, sessions=None):
+    def update_sessions(self, sessions_=None):
         
-        if sessions:
-            update_user_meta(self.user_id, "session_tokens", sessions)
+        
+        if sessions_:
+            update_user_meta(self.user_id, "session_tokens", sessions_)
         else:
             delete_user_meta(self.user_id, "session_tokens")
         # end if
@@ -112,10 +112,11 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #// 
     #// @param string $verifier Verifier of the session to keep.
     #//
-    def destroy_other_sessions(self, verifier=None):
+    def destroy_other_sessions(self, verifier_=None):
         
-        session = self.get_session(verifier)
-        self.update_sessions(Array({verifier: session}))
+        
+        session_ = self.get_session(verifier_)
+        self.update_sessions(Array({verifier_: session_}))
     # end def destroy_other_sessions
     #// 
     #// Destroys all session tokens for the user.
@@ -123,6 +124,7 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #// @since 4.0.0
     #//
     def destroy_all_sessions(self):
+        
         
         self.update_sessions(Array())
     # end def destroy_all_sessions
@@ -133,6 +135,7 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #//
     @classmethod
     def drop_sessions(self):
+        
         
         delete_metadata("user", 0, "session_tokens", False, True)
     # end def drop_sessions

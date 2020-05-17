@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,29 +28,29 @@ if is_multisite() and (not is_network_admin()):
     wp_redirect(network_admin_url("plugin-install.php"))
     php_exit(0)
 # end if
-wp_list_table = _get_list_table("WP_Plugin_Install_List_Table")
-pagenum = wp_list_table.get_pagenum()
+wp_list_table_ = _get_list_table("WP_Plugin_Install_List_Table")
+pagenum_ = wp_list_table_.get_pagenum()
 if (not php_empty(lambda : PHP_REQUEST["_wp_http_referer"])):
-    location = remove_query_arg("_wp_http_referer", wp_unslash(PHP_SERVER["REQUEST_URI"]))
+    location_ = remove_query_arg("_wp_http_referer", wp_unslash(PHP_SERVER["REQUEST_URI"]))
     if (not php_empty(lambda : PHP_REQUEST["paged"])):
-        location = add_query_arg("paged", php_int(PHP_REQUEST["paged"]), location)
+        location_ = add_query_arg("paged", php_int(PHP_REQUEST["paged"]), location_)
     # end if
-    wp_redirect(location)
+    wp_redirect(location_)
     php_exit(0)
 # end if
-wp_list_table.prepare_items()
-total_pages = wp_list_table.get_pagination_arg("total_pages")
-if pagenum > total_pages and total_pages > 0:
-    wp_redirect(add_query_arg("paged", total_pages))
+wp_list_table_.prepare_items()
+total_pages_ = wp_list_table_.get_pagination_arg("total_pages")
+if pagenum_ > total_pages_ and total_pages_ > 0:
+    wp_redirect(add_query_arg("paged", total_pages_))
     php_exit(0)
 # end if
-title = __("Add Plugins")
-parent_file = "plugins.php"
+title_ = __("Add Plugins")
+parent_file_ = "plugins.php"
 wp_enqueue_script("plugin-install")
-if "plugin-information" != tab:
+if "plugin-information" != tab_:
     add_thickbox()
 # end if
-body_id = tab
+body_id_ = tab_
 wp_enqueue_script("updates")
 #// 
 #// Fires before each tab on the Install Plugins screen is loaded.
@@ -65,12 +60,12 @@ wp_enqueue_script("updates")
 #// 
 #// @since 2.7.0
 #//
-do_action(str("install_plugins_pre_") + str(tab))
+do_action(str("install_plugins_pre_") + str(tab_))
 #// 
 #// Call the pre upload action on every non-upload plugin installation screen
 #// because the form is always displayed on these screens.
 #//
-if "upload" != tab:
+if "upload" != tab_:
     #// This action is documented in wp-admin/plugin-install.php
     do_action("install_plugins_pre_upload")
 # end if
@@ -83,12 +78,12 @@ get_current_screen().set_screen_reader_content(Array({"heading_views": __("Filte
 #//
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("<div class=\"wrap ")
-php_print(esc_attr(str("plugin-install-tab-") + str(tab)))
+php_print(esc_attr(str("plugin-install-tab-") + str(tab_)))
 php_print("\">\n<h1 class=\"wp-heading-inline\">\n")
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("</h1>\n\n")
-if (not php_empty(lambda : tabs["upload"])) and current_user_can("upload_plugins"):
-    printf(" <a href=\"%s\" class=\"upload-view-toggle page-title-action\"><span class=\"upload\">%s</span><span class=\"browse\">%s</span></a>", self_admin_url("plugin-install.php") if "upload" == tab else self_admin_url("plugin-install.php?tab=upload"), __("Upload Plugin"), __("Browse Plugins"))
+if (not php_empty(lambda : tabs_["upload"])) and current_user_can("upload_plugins"):
+    printf(" <a href=\"%s\" class=\"upload-view-toggle page-title-action\"><span class=\"upload\">%s</span><span class=\"browse\">%s</span></a>", self_admin_url("plugin-install.php") if "upload" == tab_ else self_admin_url("plugin-install.php?tab=upload"), __("Upload Plugin"), __("Browse Plugins"))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">
@@ -97,12 +92,12 @@ php_print("""
 #// Output the upload plugin form on every non-upload plugin installation screen, so it can be
 #// displayed via JavaScript rather then opening up the devoted upload plugin page.
 #//
-if "upload" != tab:
+if "upload" != tab_:
     php_print(" <div class=\"upload-plugin-wrap\">\n        ")
     #// This action is documented in wp-admin/plugin-install.php
     do_action("install_plugins_upload")
     php_print(" </div>\n    ")
-    wp_list_table.views()
+    wp_list_table_.views()
     php_print("<br class=\"clear\" />")
 # end if
 #// 
@@ -115,7 +110,7 @@ if "upload" != tab:
 #// 
 #// @param int $paged The current page number of the plugins list table.
 #//
-do_action(str("install_plugins_") + str(tab), paged)
+do_action(str("install_plugins_") + str(tab_), paged_)
 php_print("""
 <span class=\"spinner\"></span>
 </div>

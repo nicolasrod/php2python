@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,19 @@ if '__PHP2PY_LOADED__' not in globals():
 class WP_REST_Search_Handler():
     RESULT_IDS = "ids"
     RESULT_TOTAL = "total"
+    #// 
+    #// Object type managed by this search handler.
+    #// 
+    #// @since 5.0.0
+    #// @var string
+    #//
     type = ""
+    #// 
+    #// Object subtypes managed by this search handler.
+    #// 
+    #// @since 5.0.0
+    #// @var array
+    #//
     subtypes = Array()
     #// 
     #// Gets the object type managed by this search handler.
@@ -37,6 +44,7 @@ class WP_REST_Search_Handler():
     #// @return string Object type identifier.
     #//
     def get_type(self):
+        
         
         return self.type
     # end def get_type
@@ -48,6 +56,7 @@ class WP_REST_Search_Handler():
     #// @return array Array of object subtype identifiers.
     #//
     def get_subtypes(self):
+        
         
         return self.subtypes
     # end def get_subtypes
@@ -61,7 +70,8 @@ class WP_REST_Search_Handler():
     #// an array of found IDs and `WP_REST_Search_Handler::RESULT_TOTAL` containing the
     #// total count for the matching search results.
     #//
-    def search_items(self, request=None):
+    def search_items(self, request_=None):
+        
         
         pass
     # end def search_items
@@ -74,7 +84,8 @@ class WP_REST_Search_Handler():
     #// @param array $fields Fields to include for the item.
     #// @return array Associative array containing all fields for the item.
     #//
-    def prepare_item(self, id=None, fields=None):
+    def prepare_item(self, id_=None, fields_=None):
+        
         
         pass
     # end def prepare_item
@@ -86,7 +97,8 @@ class WP_REST_Search_Handler():
     #// @param int $id Item ID.
     #// @return array Links for the given item.
     #//
-    def prepare_item_links(self, id=None):
+    def prepare_item_links(self, id_=None):
+        
         
         pass
     # end def prepare_item_links

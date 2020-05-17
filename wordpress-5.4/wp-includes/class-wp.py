@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -19,14 +14,72 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 2.0.0
 #//
 class WP():
+    #// 
+    #// Public query variables.
+    #// 
+    #// Long list of public query variables.
+    #// 
+    #// @since 2.0.0
+    #// @var string[]
+    #//
     public_query_vars = Array("m", "p", "posts", "w", "cat", "withcomments", "withoutcomments", "s", "search", "exact", "sentence", "calendar", "page", "paged", "more", "tb", "pb", "author", "order", "orderby", "year", "monthnum", "day", "hour", "minute", "second", "name", "category_name", "tag", "feed", "author_name", "pagename", "page_id", "error", "attachment", "attachment_id", "subpost", "subpost_id", "preview", "robots", "favicon", "taxonomy", "term", "cpage", "post_type", "embed")
+    #// 
+    #// Private query variables.
+    #// 
+    #// Long list of private query variables.
+    #// 
+    #// @since 2.0.0
+    #// @var string[]
+    #//
     private_query_vars = Array("offset", "posts_per_page", "posts_per_archive_page", "showposts", "nopaging", "post_type", "post_status", "category__in", "category__not_in", "category__and", "tag__in", "tag__not_in", "tag__and", "tag_slug__in", "tag_slug__and", "tag_id", "post_mime_type", "perm", "comments_per_page", "post__in", "post__not_in", "post_parent", "post_parent__in", "post_parent__not_in", "title", "fields")
+    #// 
+    #// Extra query variables set by the user.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     extra_query_vars = Array()
+    #// 
+    #// Query variables for setting up the WordPress Query Loop.
+    #// 
+    #// @since 2.0.0
+    #// @var array
+    #//
     query_vars = Array()
+    #// 
+    #// String parsed to set the query variables.
+    #// 
+    #// @since 2.0.0
+    #// @var string
+    #//
     query_string = Array()
+    #// 
+    #// The request path, e.g. 2015/05/06.
+    #// 
+    #// @since 2.0.0
+    #// @var string
+    #//
     request = Array()
+    #// 
+    #// Rewrite rule the request matched.
+    #// 
+    #// @since 2.0.0
+    #// @var string
+    #//
     matched_rule = Array()
+    #// 
+    #// Rewrite query the request matched.
+    #// 
+    #// @since 2.0.0
+    #// @var string
+    #//
     matched_query = Array()
+    #// 
+    #// Whether already did the permalink.
+    #// 
+    #// @since 2.0.0
+    #// @var bool
+    #//
     did_permalink = False
     #// 
     #// Add name to list of public query variables.
@@ -35,10 +88,11 @@ class WP():
     #// 
     #// @param string $qv Query variable name.
     #//
-    def add_query_var(self, qv=None):
+    def add_query_var(self, qv_=None):
         
-        if (not php_in_array(qv, self.public_query_vars)):
-            self.public_query_vars[-1] = qv
+        
+        if (not php_in_array(qv_, self.public_query_vars)):
+            self.public_query_vars[-1] = qv_
         # end if
     # end def add_query_var
     #// 
@@ -48,9 +102,10 @@ class WP():
     #// 
     #// @param string $name Query variable name.
     #//
-    def remove_query_var(self, name=None):
+    def remove_query_var(self, name_=None):
         
-        self.public_query_vars = php_array_diff(self.public_query_vars, Array(name))
+        
+        self.public_query_vars = php_array_diff(self.public_query_vars, Array(name_))
     # end def remove_query_var
     #// 
     #// Set the value of a query variable.
@@ -60,9 +115,10 @@ class WP():
     #// @param string $key Query variable name.
     #// @param mixed $value Query variable value.
     #//
-    def set_query_var(self, key=None, value=None):
+    def set_query_var(self, key_=None, value_=None):
         
-        self.query_vars[key] = value
+        
+        self.query_vars[key_] = value_
     # end def set_query_var
     #// 
     #// Parse request to find correct WordPress query.
@@ -76,10 +132,11 @@ class WP():
     #// 
     #// @param array|string $extra_query_vars Set the extra query variables.
     #//
-    def parse_request(self, extra_query_vars=""):
-        global self
-        global wp_rewrite
-        php_check_if_defined("wp_rewrite")
+    def parse_request(self, extra_query_vars_=""):
+        
+        
+        global wp_rewrite_
+        php_check_if_defined("wp_rewrite_")
         #// 
         #// Filters whether to parse the request.
         #// 
@@ -89,111 +146,111 @@ class WP():
         #// @param WP           $this             Current WordPress environment instance.
         #// @param array|string $extra_query_vars Extra passed query variables.
         #//
-        if (not apply_filters("do_parse_request", True, self, extra_query_vars)):
+        if (not apply_filters("do_parse_request", True, self, extra_query_vars_)):
             return
         # end if
         self.query_vars = Array()
-        post_type_query_vars = Array()
-        if php_is_array(extra_query_vars):
-            self.extra_query_vars = extra_query_vars
-        elif (not php_empty(lambda : extra_query_vars)):
-            parse_str(extra_query_vars, self.extra_query_vars)
+        post_type_query_vars_ = Array()
+        if php_is_array(extra_query_vars_):
+            self.extra_query_vars = extra_query_vars_
+        elif (not php_empty(lambda : extra_query_vars_)):
+            parse_str(extra_query_vars_, self.extra_query_vars)
         # end if
         #// Process PATH_INFO, REQUEST_URI, and 404 for permalinks.
         #// Fetch the rewrite rules.
-        rewrite = wp_rewrite.wp_rewrite_rules()
-        if (not php_empty(lambda : rewrite)):
+        rewrite_ = wp_rewrite_.wp_rewrite_rules()
+        if (not php_empty(lambda : rewrite_)):
             #// If we match a rewrite rule, this will be cleared.
-            error = "404"
+            error_ = "404"
             self.did_permalink = True
-            pathinfo = PHP_SERVER["PATH_INFO"] if (php_isset(lambda : PHP_SERVER["PATH_INFO"])) else ""
-            pathinfo = php_explode("?", pathinfo)
-            pathinfo = php_str_replace("%", "%25", pathinfo)
-            req_uri = php_explode("?", PHP_SERVER["REQUEST_URI"])
-            self = PHP_SERVER["PHP_SELF"]
-            home_path = php_trim(php_parse_url(home_url(), PHP_URL_PATH), "/")
-            home_path_regex = php_sprintf("|^%s|i", preg_quote(home_path, "|"))
+            pathinfo_ = PHP_SERVER["PATH_INFO"] if (php_isset(lambda : PHP_SERVER["PATH_INFO"])) else ""
+            pathinfo_ = php_explode("?", pathinfo_)
+            pathinfo_ = php_str_replace("%", "%25", pathinfo_)
+            req_uri_ = php_explode("?", PHP_SERVER["REQUEST_URI"])
+            self_ = PHP_SERVER["PHP_SELF"]
+            home_path_ = php_trim(php_parse_url(home_url(), PHP_URL_PATH), "/")
+            home_path_regex_ = php_sprintf("|^%s|i", preg_quote(home_path_, "|"))
             #// 
             #// Trim path info from the end and the leading home path from the front.
             #// For path info requests, this leaves us with the requesting filename, if any.
             #// For 404 requests, this leaves us with the requested permalink.
             #//
-            req_uri = php_str_replace(pathinfo, "", req_uri)
-            req_uri = php_trim(req_uri, "/")
-            req_uri = php_preg_replace(home_path_regex, "", req_uri)
-            req_uri = php_trim(req_uri, "/")
-            pathinfo = php_trim(pathinfo, "/")
-            pathinfo = php_preg_replace(home_path_regex, "", pathinfo)
-            pathinfo = php_trim(pathinfo, "/")
-            self = php_trim(self, "/")
-            self = php_preg_replace(home_path_regex, "", self)
-            self = php_trim(self, "/")
+            req_uri_ = php_str_replace(pathinfo_, "", req_uri_)
+            req_uri_ = php_trim(req_uri_, "/")
+            req_uri_ = php_preg_replace(home_path_regex_, "", req_uri_)
+            req_uri_ = php_trim(req_uri_, "/")
+            pathinfo_ = php_trim(pathinfo_, "/")
+            pathinfo_ = php_preg_replace(home_path_regex_, "", pathinfo_)
+            pathinfo_ = php_trim(pathinfo_, "/")
+            self_ = php_trim(self_, "/")
+            self_ = php_preg_replace(home_path_regex_, "", self_)
+            self_ = php_trim(self_, "/")
             #// The requested permalink is in $pathinfo for path info requests and
             #// $req_uri for other requests.
-            if (not php_empty(lambda : pathinfo)) and (not php_preg_match("|^.*" + wp_rewrite.index + "$|", pathinfo)):
-                requested_path = pathinfo
+            if (not php_empty(lambda : pathinfo_)) and (not php_preg_match("|^.*" + wp_rewrite_.index + "$|", pathinfo_)):
+                requested_path_ = pathinfo_
             else:
                 #// If the request uri is the index, blank it out so that we don't try to match it against a rule.
-                if req_uri == wp_rewrite.index:
-                    req_uri = ""
+                if req_uri_ == wp_rewrite_.index:
+                    req_uri_ = ""
                 # end if
-                requested_path = req_uri
+                requested_path_ = req_uri_
             # end if
-            requested_file = req_uri
-            self.request = requested_path
+            requested_file_ = req_uri_
+            self.request = requested_path_
             #// Look for matches.
-            request_match = requested_path
-            if php_empty(lambda : request_match):
+            request_match_ = requested_path_
+            if php_empty(lambda : request_match_):
                 #// An empty request could only match against ^$ regex.
-                if (php_isset(lambda : rewrite["$"])):
+                if (php_isset(lambda : rewrite_["$"])):
                     self.matched_rule = "$"
-                    query = rewrite["$"]
-                    matches = Array("")
+                    query_ = rewrite_["$"]
+                    matches_ = Array("")
                 # end if
             else:
-                for match,query in rewrite:
+                for match_,query_ in rewrite_:
                     #// If the requested file is the anchor of the match, prepend it to the path info.
-                    if (not php_empty(lambda : requested_file)) and php_strpos(match, requested_file) == 0 and requested_file != requested_path:
-                        request_match = requested_file + "/" + requested_path
+                    if (not php_empty(lambda : requested_file_)) and php_strpos(match_, requested_file_) == 0 and requested_file_ != requested_path_:
+                        request_match_ = requested_file_ + "/" + requested_path_
                     # end if
-                    if php_preg_match(str("#^") + str(match) + str("#"), request_match, matches) or php_preg_match(str("#^") + str(match) + str("#"), urldecode(request_match), matches):
-                        if wp_rewrite.use_verbose_page_rules and php_preg_match("/pagename=\\$matches\\[([0-9]+)\\]/", query, varmatch):
+                    if php_preg_match(str("#^") + str(match_) + str("#"), request_match_, matches_) or php_preg_match(str("#^") + str(match_) + str("#"), urldecode(request_match_), matches_):
+                        if wp_rewrite_.use_verbose_page_rules and php_preg_match("/pagename=\\$matches\\[([0-9]+)\\]/", query_, varmatch_):
                             #// This is a verbose page match, let's check to be sure about it.
-                            page = get_page_by_path(matches[varmatch[1]])
-                            if (not page):
+                            page_ = get_page_by_path(matches_[varmatch_[1]])
+                            if (not page_):
                                 continue
                             # end if
-                            post_status_obj = get_post_status_object(page.post_status)
-                            if (not post_status_obj.public) and (not post_status_obj.protected) and (not post_status_obj.private) and post_status_obj.exclude_from_search:
+                            post_status_obj_ = get_post_status_object(page_.post_status)
+                            if (not post_status_obj_.public) and (not post_status_obj_.protected) and (not post_status_obj_.private) and post_status_obj_.exclude_from_search:
                                 continue
                             # end if
                         # end if
                         #// Got a match.
-                        self.matched_rule = match
+                        self.matched_rule = match_
                         break
                     # end if
                 # end for
             # end if
             if (php_isset(lambda : self.matched_rule)):
                 #// Trim the query of everything up to the '?'.
-                query = php_preg_replace("!^.+\\?!", "", query)
+                query_ = php_preg_replace("!^.+\\?!", "", query_)
                 #// Substitute the substring matches into the query.
-                query = addslashes(WP_MatchesMapRegex.apply(query, matches))
-                self.matched_query = query
+                query_ = addslashes(WP_MatchesMapRegex.apply(query_, matches_))
+                self.matched_query = query_
                 #// Parse the query.
-                parse_str(query, perma_query_vars)
+                parse_str(query_, perma_query_vars_)
                 #// If we're processing a 404 request, clear the error var since we found something.
-                if "404" == error:
-                    error = None
+                if "404" == error_:
+                    error_ = None
                     PHP_REQUEST["error"] = None
                 # end if
             # end if
             #// If req_uri is empty or if it is a request for ourself, unset error.
-            if php_empty(lambda : requested_path) or requested_file == self or php_strpos(PHP_SERVER["PHP_SELF"], "wp-admin/") != False:
-                error = None
+            if php_empty(lambda : requested_path_) or requested_file_ == self_ or php_strpos(PHP_SERVER["PHP_SELF"], "wp-admin/") != False:
+                error_ = None
                 PHP_REQUEST["error"] = None
-                if (php_isset(lambda : perma_query_vars)) and php_strpos(PHP_SERVER["PHP_SELF"], "wp-admin/") != False:
-                    perma_query_vars = None
+                if (php_isset(lambda : perma_query_vars_)) and php_strpos(PHP_SERVER["PHP_SELF"], "wp-admin/") != False:
+                    perma_query_vars_ = None
                 # end if
                 self.did_permalink = False
             # end if
@@ -210,53 +267,53 @@ class WP():
         #// @param string[] $public_query_vars The array of whitelisted query variable names.
         #//
         self.public_query_vars = apply_filters("query_vars", self.public_query_vars)
-        for post_type,t in get_post_types(Array(), "objects"):
-            if is_post_type_viewable(t) and t.query_var:
-                post_type_query_vars[t.query_var] = post_type
+        for post_type_,t_ in get_post_types(Array(), "objects"):
+            if is_post_type_viewable(t_) and t_.query_var:
+                post_type_query_vars_[t_.query_var] = post_type_
             # end if
         # end for
-        for wpvar in self.public_query_vars:
-            if (php_isset(lambda : self.extra_query_vars[wpvar])):
-                self.query_vars[wpvar] = self.extra_query_vars[wpvar]
-            elif (php_isset(lambda : PHP_REQUEST[wpvar])) and (php_isset(lambda : PHP_POST[wpvar])) and PHP_REQUEST[wpvar] != PHP_POST[wpvar]:
+        for wpvar_ in self.public_query_vars:
+            if (php_isset(lambda : self.extra_query_vars[wpvar_])):
+                self.query_vars[wpvar_] = self.extra_query_vars[wpvar_]
+            elif (php_isset(lambda : PHP_REQUEST[wpvar_])) and (php_isset(lambda : PHP_POST[wpvar_])) and PHP_REQUEST[wpvar_] != PHP_POST[wpvar_]:
                 wp_die(__("A variable mismatch has been detected."), __("Sorry, you are not allowed to view this item."), 400)
-            elif (php_isset(lambda : PHP_POST[wpvar])):
-                self.query_vars[wpvar] = PHP_POST[wpvar]
-            elif (php_isset(lambda : PHP_REQUEST[wpvar])):
-                self.query_vars[wpvar] = PHP_REQUEST[wpvar]
-            elif (php_isset(lambda : perma_query_vars[wpvar])):
-                self.query_vars[wpvar] = perma_query_vars[wpvar]
+            elif (php_isset(lambda : PHP_POST[wpvar_])):
+                self.query_vars[wpvar_] = PHP_POST[wpvar_]
+            elif (php_isset(lambda : PHP_REQUEST[wpvar_])):
+                self.query_vars[wpvar_] = PHP_REQUEST[wpvar_]
+            elif (php_isset(lambda : perma_query_vars_[wpvar_])):
+                self.query_vars[wpvar_] = perma_query_vars_[wpvar_]
             # end if
-            if (not php_empty(lambda : self.query_vars[wpvar])):
-                if (not php_is_array(self.query_vars[wpvar])):
-                    self.query_vars[wpvar] = php_str(self.query_vars[wpvar])
+            if (not php_empty(lambda : self.query_vars[wpvar_])):
+                if (not php_is_array(self.query_vars[wpvar_])):
+                    self.query_vars[wpvar_] = php_str(self.query_vars[wpvar_])
                 else:
-                    for vkey,v in self.query_vars[wpvar]:
-                        if is_scalar(v):
-                            self.query_vars[wpvar][vkey] = php_str(v)
+                    for vkey_,v_ in self.query_vars[wpvar_]:
+                        if is_scalar(v_):
+                            self.query_vars[wpvar_][vkey_] = php_str(v_)
                         # end if
                     # end for
                 # end if
-                if (php_isset(lambda : post_type_query_vars[wpvar])):
-                    self.query_vars["post_type"] = post_type_query_vars[wpvar]
-                    self.query_vars["name"] = self.query_vars[wpvar]
+                if (php_isset(lambda : post_type_query_vars_[wpvar_])):
+                    self.query_vars["post_type"] = post_type_query_vars_[wpvar_]
+                    self.query_vars["name"] = self.query_vars[wpvar_]
                 # end if
             # end if
         # end for
         #// Convert urldecoded spaces back into '+'.
-        for taxonomy,t in get_taxonomies(Array(), "objects"):
-            if t.query_var and (php_isset(lambda : self.query_vars[t.query_var])):
-                self.query_vars[t.query_var] = php_str_replace(" ", "+", self.query_vars[t.query_var])
+        for taxonomy_,t_ in get_taxonomies(Array(), "objects"):
+            if t_.query_var and (php_isset(lambda : self.query_vars[t_.query_var])):
+                self.query_vars[t_.query_var] = php_str_replace(" ", "+", self.query_vars[t_.query_var])
             # end if
         # end for
         #// Don't allow non-publicly queryable taxonomies to be queried from the front end.
         if (not is_admin()):
-            for taxonomy,t in get_taxonomies(Array({"publicly_queryable": False}), "objects"):
+            for taxonomy_,t_ in get_taxonomies(Array({"publicly_queryable": False}), "objects"):
                 #// 
                 #// Disallow when set to the 'taxonomy' query var.
                 #// Non-publicly queryable taxonomies cannot register custom query vars. See register_taxonomy().
                 #//
-                if (php_isset(lambda : self.query_vars["taxonomy"])) and taxonomy == self.query_vars["taxonomy"]:
+                if (php_isset(lambda : self.query_vars["taxonomy"])) and taxonomy_ == self.query_vars["taxonomy"]:
                     self.query_vars["taxonomy"] = None
                     self.query_vars["term"] = None
                 # end if
@@ -264,24 +321,24 @@ class WP():
         # end if
         #// Limit publicly queried post_types to those that are 'publicly_queryable'.
         if (php_isset(lambda : self.query_vars["post_type"])):
-            queryable_post_types = get_post_types(Array({"publicly_queryable": True}))
+            queryable_post_types_ = get_post_types(Array({"publicly_queryable": True}))
             if (not php_is_array(self.query_vars["post_type"])):
-                if (not php_in_array(self.query_vars["post_type"], queryable_post_types)):
+                if (not php_in_array(self.query_vars["post_type"], queryable_post_types_)):
                     self.query_vars["post_type"] = None
                 # end if
             else:
-                self.query_vars["post_type"] = php_array_intersect(self.query_vars["post_type"], queryable_post_types)
+                self.query_vars["post_type"] = php_array_intersect(self.query_vars["post_type"], queryable_post_types_)
             # end if
         # end if
         #// Resolve conflicts between posts with numeric slugs and date archive queries.
         self.query_vars = wp_resolve_numeric_slug_conflicts(self.query_vars)
-        for var in self.private_query_vars:
-            if (php_isset(lambda : self.extra_query_vars[var])):
-                self.query_vars[var] = self.extra_query_vars[var]
+        for var_ in self.private_query_vars:
+            if (php_isset(lambda : self.extra_query_vars[var_])):
+                self.query_vars[var_] = self.extra_query_vars[var_]
             # end if
         # end for
-        if (php_isset(lambda : error)):
-            self.query_vars["error"] = error
+        if (php_isset(lambda : error_)):
+            self.query_vars["error"] = error_
         # end if
         #// 
         #// Filters the array of parsed query variables.
@@ -311,58 +368,59 @@ class WP():
     #//
     def send_headers(self):
         
-        headers = Array()
-        status = None
-        exit_required = False
+        
+        headers_ = Array()
+        status_ = None
+        exit_required_ = False
         if is_user_logged_in():
-            headers = php_array_merge(headers, wp_get_nocache_headers())
+            headers_ = php_array_merge(headers_, wp_get_nocache_headers())
         # end if
         if (not php_empty(lambda : self.query_vars["error"])):
-            status = php_int(self.query_vars["error"])
-            if 404 == status:
+            status_ = php_int(self.query_vars["error"])
+            if 404 == status_:
                 if (not is_user_logged_in()):
-                    headers = php_array_merge(headers, wp_get_nocache_headers())
+                    headers_ = php_array_merge(headers_, wp_get_nocache_headers())
                 # end if
-                headers["Content-Type"] = get_option("html_type") + "; charset=" + get_option("blog_charset")
-            elif php_in_array(status, Array(403, 500, 502, 503)):
-                exit_required = True
+                headers_["Content-Type"] = get_option("html_type") + "; charset=" + get_option("blog_charset")
+            elif php_in_array(status_, Array(403, 500, 502, 503)):
+                exit_required_ = True
             # end if
         elif php_empty(lambda : self.query_vars["feed"]):
-            headers["Content-Type"] = get_option("html_type") + "; charset=" + get_option("blog_charset")
+            headers_["Content-Type"] = get_option("html_type") + "; charset=" + get_option("blog_charset")
         else:
             #// Set the correct content type for feeds.
-            type = self.query_vars["feed"]
+            type_ = self.query_vars["feed"]
             if "feed" == self.query_vars["feed"]:
-                type = get_default_feed()
+                type_ = get_default_feed()
             # end if
-            headers["Content-Type"] = feed_content_type(type) + "; charset=" + get_option("blog_charset")
+            headers_["Content-Type"] = feed_content_type(type_) + "; charset=" + get_option("blog_charset")
             #// We're showing a feed, so WP is indeed the only thing that last changed.
             if (not php_empty(lambda : self.query_vars["withcomments"])) or False != php_strpos(self.query_vars["feed"], "comments-") or php_empty(lambda : self.query_vars["withoutcomments"]) and (not php_empty(lambda : self.query_vars["p"])) or (not php_empty(lambda : self.query_vars["name"])) or (not php_empty(lambda : self.query_vars["page_id"])) or (not php_empty(lambda : self.query_vars["pagename"])) or (not php_empty(lambda : self.query_vars["attachment"])) or (not php_empty(lambda : self.query_vars["attachment_id"])):
-                wp_last_modified = mysql2date("D, d M Y H:i:s", get_lastcommentmodified("GMT"), False)
+                wp_last_modified_ = mysql2date("D, d M Y H:i:s", get_lastcommentmodified("GMT"), False)
             else:
-                wp_last_modified = mysql2date("D, d M Y H:i:s", get_lastpostmodified("GMT"), False)
+                wp_last_modified_ = mysql2date("D, d M Y H:i:s", get_lastpostmodified("GMT"), False)
             # end if
-            if (not wp_last_modified):
-                wp_last_modified = gmdate("D, d M Y H:i:s")
+            if (not wp_last_modified_):
+                wp_last_modified_ = gmdate("D, d M Y H:i:s")
             # end if
-            wp_last_modified += " GMT"
-            wp_etag = "\"" + php_md5(wp_last_modified) + "\""
-            headers["Last-Modified"] = wp_last_modified
-            headers["ETag"] = wp_etag
+            wp_last_modified_ += " GMT"
+            wp_etag_ = "\"" + php_md5(wp_last_modified_) + "\""
+            headers_["Last-Modified"] = wp_last_modified_
+            headers_["ETag"] = wp_etag_
             #// Support for conditional GET.
             if (php_isset(lambda : PHP_SERVER["HTTP_IF_NONE_MATCH"])):
-                client_etag = wp_unslash(PHP_SERVER["HTTP_IF_NONE_MATCH"])
+                client_etag_ = wp_unslash(PHP_SERVER["HTTP_IF_NONE_MATCH"])
             else:
-                client_etag = False
+                client_etag_ = False
             # end if
-            client_last_modified = "" if php_empty(lambda : PHP_SERVER["HTTP_IF_MODIFIED_SINCE"]) else php_trim(PHP_SERVER["HTTP_IF_MODIFIED_SINCE"])
+            client_last_modified_ = "" if php_empty(lambda : PHP_SERVER["HTTP_IF_MODIFIED_SINCE"]) else php_trim(PHP_SERVER["HTTP_IF_MODIFIED_SINCE"])
             #// If string is empty, return 0. If not, attempt to parse into a timestamp.
-            client_modified_timestamp = strtotime(client_last_modified) if client_last_modified else 0
+            client_modified_timestamp_ = strtotime(client_last_modified_) if client_last_modified_ else 0
             #// Make a timestamp for our most recent modification..
-            wp_modified_timestamp = strtotime(wp_last_modified)
-            if client_modified_timestamp >= wp_modified_timestamp and client_etag == wp_etag if client_last_modified and client_etag else client_modified_timestamp >= wp_modified_timestamp or client_etag == wp_etag:
-                status = 304
-                exit_required = True
+            wp_modified_timestamp_ = strtotime(wp_last_modified_)
+            if client_modified_timestamp_ >= wp_modified_timestamp_ and client_etag_ == wp_etag_ if client_last_modified_ and client_etag_ else client_modified_timestamp_ >= wp_modified_timestamp_ or client_etag_ == wp_etag_:
+                status_ = 304
+                exit_required_ = True
             # end if
         # end if
         #// 
@@ -373,23 +431,23 @@ class WP():
         #// @param string[] $headers Associative array of headers to be sent.
         #// @param WP       $this    Current WordPress environment instance.
         #//
-        headers = apply_filters("wp_headers", headers, self)
-        if (not php_empty(lambda : status)):
-            status_header(status)
+        headers_ = apply_filters("wp_headers", headers_, self)
+        if (not php_empty(lambda : status_)):
+            status_header(status_)
         # end if
         #// If Last-Modified is set to false, it should not be sent (no-cache situation).
-        if (php_isset(lambda : headers["Last-Modified"])) and False == headers["Last-Modified"]:
-            headers["Last-Modified"] = None
+        if (php_isset(lambda : headers_["Last-Modified"])) and False == headers_["Last-Modified"]:
+            headers_["Last-Modified"] = None
             if (not php_headers_sent()):
                 php_header_remove("Last-Modified")
             # end if
         # end if
         if (not php_headers_sent()):
-            for name,field_value in headers:
-                php_header(str(name) + str(": ") + str(field_value))
+            for name_,field_value_ in headers_:
+                php_header(str(name_) + str(": ") + str(field_value_))
             # end for
         # end if
-        if exit_required:
+        if exit_required_:
             php_exit(0)
         # end if
         #// 
@@ -411,14 +469,15 @@ class WP():
     #//
     def build_query_string(self):
         
+        
         self.query_string = ""
-        for wpvar in php_array_keys(self.query_vars):
-            if "" != self.query_vars[wpvar]:
+        for wpvar_ in php_array_keys(self.query_vars):
+            if "" != self.query_vars[wpvar_]:
                 self.query_string += "" if php_strlen(self.query_string) < 1 else "&"
-                if (not is_scalar(self.query_vars[wpvar])):
+                if (not is_scalar(self.query_vars[wpvar_])):
                     continue
                 # end if
-                self.query_string += wpvar + "=" + rawurlencode(self.query_vars[wpvar])
+                self.query_string += wpvar_ + "=" + rawurlencode(self.query_vars[wpvar_])
             # end if
         # end for
         if has_filter("query_string"):
@@ -454,23 +513,24 @@ class WP():
     #// @global WP_User      $authordata   Only set, if author archive.
     #//
     def register_globals(self):
+        
         global PHP_GLOBALS
-        global wp_query
-        php_check_if_defined("wp_query")
+        global wp_query_
+        php_check_if_defined("wp_query_")
         #// Extract updated query vars back into global namespace.
-        for key,value in wp_query.query_vars:
-            PHP_GLOBALS[key] = value
+        for key_,value_ in wp_query_.query_vars:
+            PHP_GLOBALS[key_] = value_
         # end for
         PHP_GLOBALS["query_string"] = self.query_string
-        PHP_GLOBALS["posts"] = wp_query.posts
-        PHP_GLOBALS["post"] = wp_query.post if (php_isset(lambda : wp_query.post)) else None
-        PHP_GLOBALS["request"] = wp_query.request
-        if wp_query.is_single() or wp_query.is_page():
+        PHP_GLOBALS["posts"] = wp_query_.posts
+        PHP_GLOBALS["post"] = wp_query_.post if (php_isset(lambda : wp_query_.post)) else None
+        PHP_GLOBALS["request"] = wp_query_.request
+        if wp_query_.is_single() or wp_query_.is_page():
             PHP_GLOBALS["more"] = 1
             PHP_GLOBALS["single"] = 1
         # end if
-        if wp_query.is_author() and (php_isset(lambda : wp_query.post)):
-            PHP_GLOBALS["authordata"] = get_userdata(wp_query.post.post_author)
+        if wp_query_.is_author() and (php_isset(lambda : wp_query_.post)):
+            PHP_GLOBALS["authordata"] = get_userdata(wp_query_.post.post_author)
         # end if
     # end def register_globals
     #// 
@@ -479,6 +539,7 @@ class WP():
     #// @since 2.0.0
     #//
     def init(self):
+        
         
         wp_get_current_user()
     # end def init
@@ -491,10 +552,11 @@ class WP():
     #//
     def query_posts(self):
         
-        global wp_the_query
-        php_check_if_defined("wp_the_query")
+        
+        global wp_the_query_
+        php_check_if_defined("wp_the_query_")
         self.build_query_string()
-        wp_the_query.query(self.query_vars)
+        wp_the_query_.query(self.query_vars)
     # end def query_posts
     #// 
     #// Set the Headers for 404, if nothing is found for requested URL.
@@ -515,8 +577,9 @@ class WP():
     #//
     def handle_404(self):
         
-        global wp_query
-        php_check_if_defined("wp_query")
+        
+        global wp_query_
+        php_check_if_defined("wp_query_")
         #// 
         #// Filters whether to short-circuit default header status handling.
         #// 
@@ -528,7 +591,7 @@ class WP():
         #// @param bool     $preempt  Whether to short-circuit default header status handling. Default false.
         #// @param WP_Query $wp_query WordPress Query object.
         #//
-        if False != apply_filters("pre_handle_404", False, wp_query):
+        if False != apply_filters("pre_handle_404", False, wp_query_):
             return
         # end if
         #// If we've already issued a 404, bail.
@@ -536,25 +599,25 @@ class WP():
             return
         # end if
         #// Never 404 for the admin, robots, favicon, or if we found posts.
-        if is_admin() or is_robots() or is_favicon() or wp_query.posts:
-            success = True
+        if is_admin() or is_robots() or is_favicon() or wp_query_.posts:
+            success_ = True
             if is_singular():
-                p = False
-                if type(wp_query.post).__name__ == "WP_Post":
-                    p = copy.deepcopy(wp_query.post)
+                p_ = False
+                if type(wp_query_.post).__name__ == "WP_Post":
+                    p_ = copy.deepcopy(wp_query_.post)
                 # end if
                 #// Only set X-Pingback for single posts that allow pings.
-                if p and pings_open(p) and (not php_headers_sent()):
+                if p_ and pings_open(p_) and (not php_headers_sent()):
                     php_header("X-Pingback: " + get_bloginfo("pingback_url", "display"))
                 # end if
                 #// Check for paged content that exceeds the max number of pages.
-                next = "<!--nextpage-->"
-                if p and False != php_strpos(p.post_content, next) and (not php_empty(lambda : self.query_vars["page"])):
-                    page = php_trim(self.query_vars["page"], "/")
-                    success = php_int(page) <= php_substr_count(p.post_content, next) + 1
+                next_ = "<!--nextpage-->"
+                if p_ and False != php_strpos(p_.post_content, next_) and (not php_empty(lambda : self.query_vars["page"])):
+                    page_ = php_trim(self.query_vars["page"], "/")
+                    success_ = php_int(page_) <= php_substr_count(p_.post_content, next_) + 1
                 # end if
             # end if
-            if success:
+            if success_:
                 status_header(200)
                 return
             # end if
@@ -562,8 +625,8 @@ class WP():
         #// We will 404 for paged queries, as no posts were found.
         if (not is_paged()):
             #// Don't 404 for authors without posts as long as they matched an author on this site.
-            author = get_query_var("author")
-            if is_author() and php_is_numeric(author) and author > 0 and is_user_member_of_blog(author):
+            author_ = get_query_var("author")
+            if is_author() and php_is_numeric(author_) and author_ > 0 and is_user_member_of_blog(author_):
                 status_header(200)
                 return
             # end if
@@ -579,7 +642,7 @@ class WP():
             # end if
         # end if
         #// Guess it's time to 404.
-        wp_query.set_404()
+        wp_query_.set_404()
         status_header(404)
         nocache_headers()
     # end def handle_404
@@ -594,10 +657,11 @@ class WP():
     #// 
     #// @param string|array $query_args Passed to parse_request().
     #//
-    def main(self, query_args=""):
+    def main(self, query_args_=""):
+        
         
         self.init()
-        self.parse_request(query_args)
+        self.parse_request(query_args_)
         self.send_headers()
         self.query_posts()
         self.handle_404()

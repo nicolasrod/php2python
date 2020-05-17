@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,7 +19,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @since 4.2.0
 #//
-def options_discussion_add_js(*args_):
+def options_discussion_add_js(*_args_):
+    
     
     php_print("""   <script>
     (function($){
@@ -42,7 +38,8 @@ def options_discussion_add_js(*args_):
 #// 
 #// @since 3.5.0
 #//
-def options_general_add_js(*args_):
+def options_general_add_js(*_args_):
+    
     
     php_print("""<script type=\"text/javascript\">
     jQuery(document).ready(function($){
@@ -107,7 +104,8 @@ if ( ! languageSelect.find( 'option:selected' ).data( 'installed' ) ) {
 #// 
 #// @since 3.5.0
 #//
-def options_reading_add_js(*args_):
+def options_reading_add_js(*_args_):
+    
     
     php_print("""<script type=\"text/javascript\">
     jQuery(document).ready(function($){
@@ -128,7 +126,8 @@ def options_reading_add_js(*args_):
 #// 
 #// @since 3.5.0
 #//
-def options_reading_blog_charset(*args_):
+def options_reading_blog_charset(*_args_):
+    
     
     php_print("<input name=\"blog_charset\" type=\"text\" id=\"blog_charset\" value=\"" + esc_attr(get_option("blog_charset")) + "\" class=\"regular-text\" />")
     php_print("<p class=\"description\">" + __("The <a href=\"https://wordpress.org/support/article/glossary/#character-set\">character encoding</a> of your site (UTF-8 is recommended)") + "</p>")

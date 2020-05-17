@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -40,11 +35,11 @@ else:
     the_title("<h2 class=\"entry-title\"><a href=\"" + esc_url(get_permalink()) + "\" rel=\"bookmark\">", "</a></h2>")
 # end if
 php_print(" </header><!-- .entry-header -->\n\n ")
-content = apply_filters("the_content", get_the_content())
-audio = False
+content_ = apply_filters("the_content", get_the_content())
+audio_ = False
 #// Only get audio from the content if a playlist isn't present.
-if False == php_strpos(content, "wp-playlist-script"):
-    audio = get_media_embedded_in_content(content, Array("audio"))
+if False == php_strpos(content_, "wp-playlist-script"):
+    audio_ = get_media_embedded_in_content(content_, Array("audio"))
 # end if
 php_print("\n   ")
 if "" != get_the_post_thumbnail() and (not is_single()):
@@ -59,15 +54,15 @@ php_print("""
 """)
 if (not is_single()):
     #// If not a single post, highlight the audio file.
-    if (not php_empty(lambda : audio)):
-        for audio_html in audio:
+    if (not php_empty(lambda : audio_)):
+        for audio_html_ in audio_:
             php_print("<div class=\"entry-audio\">")
-            php_print(audio_html)
+            php_print(audio_html_)
             php_print("</div><!-- .entry-audio -->")
         # end for
     # end if
 # end if
-if is_single() or php_empty(lambda : audio):
+if is_single() or php_empty(lambda : audio_):
     the_content(php_sprintf(__("Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>", "twentyseventeen"), get_the_title()))
     wp_link_pages(Array({"before": "<div class=\"page-links\">" + __("Pages:", "twentyseventeen"), "after": "</div>", "link_before": "<span class=\"page-number\">", "link_after": "</span>"}))
 # end if

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,7 +60,7 @@ if '__PHP2PY_LOADED__' not in globals():
 class SimplePie_Locator():
     useragent = Array()
     timeout = Array()
-    file = Array()
+    file_ = Array()
     local = Array()
     elsewhere = Array()
     cached_entities = Array()
@@ -75,74 +70,80 @@ class SimplePie_Locator():
     checked_feeds = 0
     max_checked_feeds = 10
     registry = Array()
-    def __init__(self, file=None, timeout=10, useragent=None, max_checked_feeds=10):
+    def __init__(self, file_=None, timeout_=10, useragent_=None, max_checked_feeds_=10):
         
-        self.file = file
-        self.useragent = useragent
-        self.timeout = timeout
-        self.max_checked_feeds = max_checked_feeds
+        
+        self.file_ = file_
+        self.useragent = useragent_
+        self.timeout = timeout_
+        self.max_checked_feeds = max_checked_feeds_
         if php_class_exists("DOMDocument"):
             self.dom = php_new_class("DOMDocument", lambda : DOMDocument())
             set_error_handler(Array("SimplePie_Misc", "silence_errors"))
-            self.dom.loadhtml(self.file.body)
+            self.dom.loadhtml(self.file_.body)
             restore_error_handler()
         else:
             self.dom = None
         # end if
     # end def __init__
-    def set_registry(self, registry=None):
+    def set_registry(self, registry_=None):
         
-        self.registry = registry
+        
+        self.registry = registry_
     # end def set_registry
-    def find(self, type=SIMPLEPIE_LOCATOR_ALL, working=None):
-        
-        if self.is_feed(self.file):
-            return self.file
+    def find(self, type_=None, working_=None):
+        if type_ is None:
+            type_ = SIMPLEPIE_LOCATOR_ALL
         # end if
-        if self.file.method & SIMPLEPIE_FILE_SOURCE_REMOTE:
-            sniffer = self.registry.create("Content_Type_Sniffer", Array(self.file))
-            if sniffer.get_type() != "text/html":
+        
+        if self.is_feed(self.file_):
+            return self.file_
+        # end if
+        if self.file_.method & SIMPLEPIE_FILE_SOURCE_REMOTE:
+            sniffer_ = self.registry.create("Content_Type_Sniffer", Array(self.file_))
+            if sniffer_.get_type() != "text/html":
                 return None
             # end if
         # end if
-        if type & (1 << (SIMPLEPIE_LOCATOR_NONE).bit_length()) - 1 - SIMPLEPIE_LOCATOR_NONE:
+        if type_ & (1 << (SIMPLEPIE_LOCATOR_NONE).bit_length()) - 1 - SIMPLEPIE_LOCATOR_NONE:
             self.get_base()
         # end if
-        working = self.autodiscovery()
-        if type & SIMPLEPIE_LOCATOR_AUTODISCOVERY and working:
-            return working[0]
+        working_ = self.autodiscovery()
+        if type_ & SIMPLEPIE_LOCATOR_AUTODISCOVERY and working_:
+            return working_[0]
         # end if
-        if type & SIMPLEPIE_LOCATOR_LOCAL_EXTENSION | SIMPLEPIE_LOCATOR_LOCAL_BODY | SIMPLEPIE_LOCATOR_REMOTE_EXTENSION | SIMPLEPIE_LOCATOR_REMOTE_BODY and self.get_links():
-            working = self.extension(self.local)
-            if type & SIMPLEPIE_LOCATOR_LOCAL_EXTENSION and working:
-                return working
+        if type_ & SIMPLEPIE_LOCATOR_LOCAL_EXTENSION | SIMPLEPIE_LOCATOR_LOCAL_BODY | SIMPLEPIE_LOCATOR_REMOTE_EXTENSION | SIMPLEPIE_LOCATOR_REMOTE_BODY and self.get_links():
+            working_ = self.extension(self.local)
+            if type_ & SIMPLEPIE_LOCATOR_LOCAL_EXTENSION and working_:
+                return working_
             # end if
-            working = self.body(self.local)
-            if type & SIMPLEPIE_LOCATOR_LOCAL_BODY and working:
-                return working
+            working_ = self.body(self.local)
+            if type_ & SIMPLEPIE_LOCATOR_LOCAL_BODY and working_:
+                return working_
             # end if
-            working = self.extension(self.elsewhere)
-            if type & SIMPLEPIE_LOCATOR_REMOTE_EXTENSION and working:
-                return working
+            working_ = self.extension(self.elsewhere)
+            if type_ & SIMPLEPIE_LOCATOR_REMOTE_EXTENSION and working_:
+                return working_
             # end if
-            working = self.body(self.elsewhere)
-            if type & SIMPLEPIE_LOCATOR_REMOTE_BODY and working:
-                return working
+            working_ = self.body(self.elsewhere)
+            if type_ & SIMPLEPIE_LOCATOR_REMOTE_BODY and working_:
+                return working_
             # end if
         # end if
         return None
     # end def find
-    def is_feed(self, file=None):
+    def is_feed(self, file_=None):
         
-        if file.method & SIMPLEPIE_FILE_SOURCE_REMOTE:
-            sniffer = self.registry.create("Content_Type_Sniffer", Array(file))
-            sniffed = sniffer.get_type()
-            if php_in_array(sniffed, Array("application/rss+xml", "application/rdf+xml", "text/rdf", "application/atom+xml", "text/xml", "application/xml")):
+        
+        if file_.method & SIMPLEPIE_FILE_SOURCE_REMOTE:
+            sniffer_ = self.registry.create("Content_Type_Sniffer", Array(file_))
+            sniffed_ = sniffer_.get_type()
+            if php_in_array(sniffed_, Array("application/rss+xml", "application/rdf+xml", "text/rdf", "application/atom+xml", "text/xml", "application/xml")):
                 return True
             else:
                 return False
             # end if
-        elif file.method & SIMPLEPIE_FILE_SOURCE_LOCAL:
+        elif file_.method & SIMPLEPIE_FILE_SOURCE_LOCAL:
             return True
         else:
             return False
@@ -150,95 +151,99 @@ class SimplePie_Locator():
     # end def is_feed
     def get_base(self):
         
+        
         if self.dom == None:
             raise php_new_class("SimplePie_Exception", lambda : SimplePie_Exception("DOMDocument not found, unable to use locator"))
         # end if
-        self.http_base = self.file.url
+        self.http_base = self.file_.url
         self.base = self.http_base
-        elements = self.dom.getelementsbytagname("base")
-        for element in elements:
-            if element.hasattribute("href"):
-                base = self.registry.call("Misc", "absolutize_url", Array(php_trim(element.getattribute("href")), self.http_base))
-                if base == False:
+        elements_ = self.dom.getelementsbytagname("base")
+        for element_ in elements_:
+            if element_.hasattribute("href"):
+                base_ = self.registry.call("Misc", "absolutize_url", Array(php_trim(element_.getattribute("href")), self.http_base))
+                if base_ == False:
                     continue
                 # end if
-                self.base = base
-                self.base_location = element.getlineno() if php_method_exists(element, "getLineNo") else 0
+                self.base = base_
+                self.base_location = element_.getlineno() if php_method_exists(element_, "getLineNo") else 0
                 break
             # end if
         # end for
     # end def get_base
     def autodiscovery(self):
         
-        done = Array()
-        feeds = Array()
-        feeds = php_array_merge(feeds, self.search_elements_by_tag("link", done, feeds))
-        feeds = php_array_merge(feeds, self.search_elements_by_tag("a", done, feeds))
-        feeds = php_array_merge(feeds, self.search_elements_by_tag("area", done, feeds))
-        if (not php_empty(lambda : feeds)):
-            return php_array_values(feeds)
+        
+        done_ = Array()
+        feeds_ = Array()
+        feeds_ = php_array_merge(feeds_, self.search_elements_by_tag("link", done_, feeds_))
+        feeds_ = php_array_merge(feeds_, self.search_elements_by_tag("a", done_, feeds_))
+        feeds_ = php_array_merge(feeds_, self.search_elements_by_tag("area", done_, feeds_))
+        if (not php_empty(lambda : feeds_)):
+            return php_array_values(feeds_)
         else:
             return None
         # end if
     # end def autodiscovery
-    def search_elements_by_tag(self, name=None, done=None, feeds=None):
+    def search_elements_by_tag(self, name_=None, done_=None, feeds_=None):
+        
         
         if self.dom == None:
             raise php_new_class("SimplePie_Exception", lambda : SimplePie_Exception("DOMDocument not found, unable to use locator"))
         # end if
-        links = self.dom.getelementsbytagname(name)
-        for link in links:
+        links_ = self.dom.getelementsbytagname(name_)
+        for link_ in links_:
             if self.checked_feeds == self.max_checked_feeds:
                 break
             # end if
-            if link.hasattribute("href") and link.hasattribute("rel"):
-                rel = array_unique(self.registry.call("Misc", "space_seperated_tokens", Array(php_strtolower(link.getattribute("rel")))))
-                line = link.getlineno() if php_method_exists(link, "getLineNo") else 1
-                if self.base_location < line:
-                    href = self.registry.call("Misc", "absolutize_url", Array(php_trim(link.getattribute("href")), self.base))
+            if link_.hasattribute("href") and link_.hasattribute("rel"):
+                rel_ = array_unique(self.registry.call("Misc", "space_seperated_tokens", Array(php_strtolower(link_.getattribute("rel")))))
+                line_ = link_.getlineno() if php_method_exists(link_, "getLineNo") else 1
+                if self.base_location < line_:
+                    href_ = self.registry.call("Misc", "absolutize_url", Array(php_trim(link_.getattribute("href")), self.base))
                 else:
-                    href = self.registry.call("Misc", "absolutize_url", Array(php_trim(link.getattribute("href")), self.http_base))
+                    href_ = self.registry.call("Misc", "absolutize_url", Array(php_trim(link_.getattribute("href")), self.http_base))
                 # end if
-                if href == False:
+                if href_ == False:
                     continue
                 # end if
-                if (not php_in_array(href, done)) and php_in_array("feed", rel) or php_in_array("alternate", rel) and (not php_in_array("stylesheet", rel)) and link.hasattribute("type") and php_in_array(php_strtolower(self.registry.call("Misc", "parse_mime", Array(link.getattribute("type")))), Array("application/rss+xml", "application/atom+xml")) and (not (php_isset(lambda : feeds[href]))):
+                if (not php_in_array(href_, done_)) and php_in_array("feed", rel_) or php_in_array("alternate", rel_) and (not php_in_array("stylesheet", rel_)) and link_.hasattribute("type") and php_in_array(php_strtolower(self.registry.call("Misc", "parse_mime", Array(link_.getattribute("type")))), Array("application/rss+xml", "application/atom+xml")) and (not (php_isset(lambda : feeds_[href_]))):
                     self.checked_feeds += 1
-                    headers = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
-                    feed = self.registry.create("File", Array(href, self.timeout, 5, headers, self.useragent))
-                    if feed.success and feed.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or feed.status_code == 200 or feed.status_code > 206 and feed.status_code < 300 and self.is_feed(feed):
-                        feeds[href] = feed
+                    headers_ = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
+                    feed_ = self.registry.create("File", Array(href_, self.timeout, 5, headers_, self.useragent))
+                    if feed_.success and feed_.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or feed_.status_code == 200 or feed_.status_code > 206 and feed_.status_code < 300 and self.is_feed(feed_):
+                        feeds_[href_] = feed_
                     # end if
                 # end if
-                done[-1] = href
+                done_[-1] = href_
             # end if
         # end for
-        return feeds
+        return feeds_
     # end def search_elements_by_tag
     def get_links(self):
+        
         
         if self.dom == None:
             raise php_new_class("SimplePie_Exception", lambda : SimplePie_Exception("DOMDocument not found, unable to use locator"))
         # end if
-        links = self.dom.getelementsbytagname("a")
-        for link in links:
-            if link.hasattribute("href"):
-                href = php_trim(link.getattribute("href"))
-                parsed = self.registry.call("Misc", "parse_url", Array(href))
-                if parsed["scheme"] == "" or php_preg_match("/^(http(s)|feed)?$/i", parsed["scheme"]):
-                    if php_method_exists(link, "getLineNo") and self.base_location < link.getlineno():
-                        href = self.registry.call("Misc", "absolutize_url", Array(php_trim(link.getattribute("href")), self.base))
+        links_ = self.dom.getelementsbytagname("a")
+        for link_ in links_:
+            if link_.hasattribute("href"):
+                href_ = php_trim(link_.getattribute("href"))
+                parsed_ = self.registry.call("Misc", "parse_url", Array(href_))
+                if parsed_["scheme"] == "" or php_preg_match("/^(http(s)|feed)?$/i", parsed_["scheme"]):
+                    if php_method_exists(link_, "getLineNo") and self.base_location < link_.getlineno():
+                        href_ = self.registry.call("Misc", "absolutize_url", Array(php_trim(link_.getattribute("href")), self.base))
                     else:
-                        href = self.registry.call("Misc", "absolutize_url", Array(php_trim(link.getattribute("href")), self.http_base))
+                        href_ = self.registry.call("Misc", "absolutize_url", Array(php_trim(link_.getattribute("href")), self.http_base))
                     # end if
-                    if href == False:
+                    if href_ == False:
                         continue
                     # end if
-                    current = self.registry.call("Misc", "parse_url", Array(self.file.url))
-                    if parsed["authority"] == "" or parsed["authority"] == current["authority"]:
-                        self.local[-1] = href
+                    current_ = self.registry.call("Misc", "parse_url", Array(self.file_.url))
+                    if parsed_["authority"] == "" or parsed_["authority"] == current_["authority"]:
+                        self.local[-1] = href_
                     else:
-                        self.elsewhere[-1] = href
+                        self.elsewhere[-1] = href_
                     # end if
                 # end if
             # end if
@@ -250,39 +255,41 @@ class SimplePie_Locator():
         # end if
         return None
     # end def get_links
-    def extension(self, array=None):
+    def extension(self, array_=None):
         
-        for key,value in array:
+        
+        for key_,value_ in array_:
             if self.checked_feeds == self.max_checked_feeds:
                 break
             # end if
-            if php_in_array(php_strtolower(strrchr(value, ".")), Array(".rss", ".rdf", ".atom", ".xml")):
+            if php_in_array(php_strtolower(strrchr(value_, ".")), Array(".rss", ".rdf", ".atom", ".xml")):
                 self.checked_feeds += 1
-                headers = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
-                feed = self.registry.create("File", Array(value, self.timeout, 5, headers, self.useragent))
-                if feed.success and feed.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or feed.status_code == 200 or feed.status_code > 206 and feed.status_code < 300 and self.is_feed(feed):
-                    return feed
+                headers_ = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
+                feed_ = self.registry.create("File", Array(value_, self.timeout, 5, headers_, self.useragent))
+                if feed_.success and feed_.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or feed_.status_code == 200 or feed_.status_code > 206 and feed_.status_code < 300 and self.is_feed(feed_):
+                    return feed_
                 else:
-                    array[key] = None
+                    array_[key_] = None
                 # end if
             # end if
         # end for
         return None
     # end def extension
-    def body(self, array=None):
+    def body(self, array_=None):
         
-        for key,value in array:
+        
+        for key_,value_ in array_:
             if self.checked_feeds == self.max_checked_feeds:
                 break
             # end if
-            if php_preg_match("/(rss|rdf|atom|xml)/i", value):
+            if php_preg_match("/(rss|rdf|atom|xml)/i", value_):
                 self.checked_feeds += 1
-                headers = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
-                feed = self.registry.create("File", Array(value, self.timeout, 5, None, self.useragent))
-                if feed.success and feed.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or feed.status_code == 200 or feed.status_code > 206 and feed.status_code < 300 and self.is_feed(feed):
-                    return feed
+                headers_ = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
+                feed_ = self.registry.create("File", Array(value_, self.timeout, 5, None, self.useragent))
+                if feed_.success and feed_.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or feed_.status_code == 200 or feed_.status_code > 206 and feed_.status_code < 300 and self.is_feed(feed_):
+                    return feed_
                 else:
-                    array[key] = None
+                    array_[key_] = None
                 # end if
             # end if
         # end for

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,17 +25,17 @@ if Akismet.get_api_key():
     php_print("     ")
 # end if
 php_print("     ")
-if (not php_empty(lambda : notices)):
+if (not php_empty(lambda : notices_)):
     php_print("         ")
-    for notice in notices:
+    for notice_ in notices_:
         php_print("             ")
-        Akismet.view("notice", notice)
+        Akismet.view("notice", notice_)
         php_print("         ")
     # end for
     php_print("     ")
 # end if
 php_print("     ")
-if stat_totals and (php_isset(lambda : stat_totals["all"])) and php_int(stat_totals["all"].spam) > 0:
+if stat_totals_ and (php_isset(lambda : stat_totals_["all"])) and php_int(stat_totals_["all"].spam) > 0:
     php_print("""           <div class=\"akismet-card\">
     <div class=\"akismet-section-header\">
     <div class=\"akismet-section-header__label\">
@@ -66,23 +61,23 @@ if stat_totals and (php_isset(lambda : stat_totals["all"])) and php_int(stat_tot
     <h3>""")
     esc_html_e("Past six months", "akismet")
     php_print("</h3>\n                          <span>")
-    php_print(number_format(stat_totals["6-months"].spam))
+    php_print(number_format(stat_totals_["6-months"].spam))
     php_print("</span>\n                            ")
-    php_print(esc_html(_n("Spam blocked", "Spam blocked", stat_totals["6-months"].spam, "akismet")))
+    php_print(esc_html(_n("Spam blocked", "Spam blocked", stat_totals_["6-months"].spam, "akismet")))
     php_print("                     </li>\n                     <li>\n                          <h3>")
     esc_html_e("All time", "akismet")
     php_print("</h3>\n                          <span>")
-    php_print(number_format(stat_totals["all"].spam))
+    php_print(number_format(stat_totals_["all"].spam))
     php_print("</span>\n                            ")
-    php_print(esc_html(_n("Spam blocked", "Spam blocked", stat_totals["all"].spam, "akismet")))
+    php_print(esc_html(_n("Spam blocked", "Spam blocked", stat_totals_["all"].spam, "akismet")))
     php_print("                     </li>\n                     <li>\n                          <h3>")
     esc_html_e("Accuracy", "akismet")
     php_print("</h3>\n                          <span>")
-    php_print(floatval(stat_totals["all"].accuracy))
+    php_print(floatval(stat_totals_["all"].accuracy))
     php_print("%</span>\n                           ")
-    printf(_n("%s missed spam", "%s missed spam", stat_totals["all"].missed_spam, "akismet"), number_format(stat_totals["all"].missed_spam))
+    printf(_n("%s missed spam", "%s missed spam", stat_totals_["all"].missed_spam, "akismet"), number_format(stat_totals_["all"].missed_spam))
     php_print("                         |\n                         ")
-    printf(_n("%s false positive", "%s false positives", stat_totals["all"].false_positives, "akismet"), number_format(stat_totals["all"].false_positives))
+    printf(_n("%s false positive", "%s false positives", stat_totals_["all"].false_positives, "akismet"), number_format(stat_totals_["all"].false_positives))
     php_print("""                       </li>
     </ul>
     </div>
@@ -90,7 +85,7 @@ if stat_totals and (php_isset(lambda : stat_totals["all"])) and php_int(stat_tot
     """)
 # end if
 php_print("\n       ")
-if akismet_user:
+if akismet_user_:
     php_print("""           <div class=\"akismet-card\">
     <div class=\"akismet-section-header\">
     <div class=\"akismet-section-header__label\">
@@ -115,7 +110,7 @@ if akismet_user:
         <span class=\"api-key\"><input id=\"key\" name=\"key\" type=\"text\" size=\"15\" value=\"""")
         php_print(esc_attr(get_option("wordpress_api_key")))
         php_print("\" class=\"")
-        php_print(esc_attr("regular-text code " + akismet_user.status))
+        php_print(esc_attr("regular-text code " + akismet_user_.status))
         php_print("""\"></span>
         </td>
         </tr>
@@ -136,8 +131,8 @@ if akismet_user:
             php_print("</b> ")
             esc_html_e("Your Web server cannot make SSL requests; contact your Web host and ask them to add support for SSL requests.", "akismet")
         else:
-            ssl_disabled = get_option("akismet_ssl_disabled")
-            if ssl_disabled:
+            ssl_disabled_ = get_option("akismet_ssl_disabled")
+            if ssl_disabled_:
                 php_print("<b>")
                 esc_html_e("Temporarily disabled.", "akismet")
                 php_print("</b> ")
@@ -196,8 +191,8 @@ if akismet_user:
     php_print("</label></p>\n                                       </fieldset>\n                                       <span class=\"akismet-note\"><strong>")
     esc_html_e("Note:", "akismet")
     php_print("</strong>\n                                      ")
-    delete_interval = php_max(1, php_intval(apply_filters("akismet_delete_comment_interval", 15)))
-    printf(_n("Spam in the <a href=\"%1$s\">spam folder</a> older than 1 day is deleted automatically.", "Spam in the <a href=\"%1$s\">spam folder</a> older than %2$d days is deleted automatically.", delete_interval, "akismet"), admin_url("edit-comments.php?comment_status=spam"), delete_interval)
+    delete_interval_ = php_max(1, php_intval(apply_filters("akismet_delete_comment_interval", 15)))
+    printf(_n("Spam in the <a href=\"%1$s\">spam folder</a> older than 1 day is deleted automatically.", "Spam in the <a href=\"%1$s\">spam folder</a> older than %2$d days is deleted automatically.", delete_interval_, "akismet"), admin_url("edit-comments.php?comment_status=spam"), delete_interval_)
     php_print("""                                   </td>
     </tr>
     <tr>
@@ -265,7 +260,7 @@ if akismet_user:
         <td width=\"5%\"/>
         <td align=\"left\">
         <p>""")
-        php_print(esc_html(akismet_user.account_name))
+        php_print(esc_html(akismet_user_.account_name))
         php_print("""</p>
         </td>
         </tr>
@@ -276,13 +271,13 @@ if akismet_user:
         <td width=\"5%\"/>
         <td align=\"left\">
         <p>""")
-        if "cancelled" == akismet_user.status:
+        if "cancelled" == akismet_user_.status:
             esc_html_e("Cancelled", "akismet")
-        elif "suspended" == akismet_user.status:
+        elif "suspended" == akismet_user_.status:
             esc_html_e("Suspended", "akismet")
-        elif "missing" == akismet_user.status:
+        elif "missing" == akismet_user_.status:
             esc_html_e("Missing", "akismet")
-        elif "no-sub" == akismet_user.status:
+        elif "no-sub" == akismet_user_.status:
             esc_html_e("No Subscription Found", "akismet")
         else:
             esc_html_e("Active", "akismet")
@@ -291,14 +286,14 @@ if akismet_user:
         </td>
         </tr>
         """)
-        if akismet_user.next_billing_date:
+        if akismet_user_.next_billing_date:
             php_print("                             <tr>\n                                  <th scope=\"row\" align=\"left\">")
             esc_html_e("Next Billing Date", "akismet")
             php_print("""</th>
             <td width=\"5%\"/>
             <td align=\"left\">
             <p>""")
-            php_print(date("F j, Y", akismet_user.next_billing_date))
+            php_print(date("F j, Y", akismet_user_.next_billing_date))
             php_print("""</p>
             </td>
             </tr>
@@ -309,7 +304,7 @@ if akismet_user:
         <div class=\"akismet-card-actions\">
         <div id=\"publishing-action\">
         """)
-        Akismet.view("get", Array({"text": __("Upgrade", "akismet") if akismet_user.account_type == "free-api-key" and akismet_user.status == "active" else __("Change", "akismet"), "redirect": "upgrade"}))
+        Akismet.view("get", Array({"text": __("Upgrade", "akismet") if akismet_user_.account_type == "free-api-key" and akismet_user_.status == "active" else __("Change", "akismet"), "redirect": "upgrade"}))
         php_print("""                           </div>
         <div class=\"clear\"></div>
         </div>

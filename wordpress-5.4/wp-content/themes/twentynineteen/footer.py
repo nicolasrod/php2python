@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -19,9 +14,9 @@ php_print("""
 """)
 get_template_part("template-parts/footer/footer", "widgets")
 php_print("     <div class=\"site-info\">\n         ")
-blog_info = get_bloginfo("name")
+blog_info_ = get_bloginfo("name")
 php_print("         ")
-if (not php_empty(lambda : blog_info)):
+if (not php_empty(lambda : blog_info_)):
     php_print("             <a class=\"site-name\" href=\"")
     php_print(esc_url(home_url("/")))
     php_print("\" rel=\"home\">")

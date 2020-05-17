@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -86,13 +81,13 @@ add_action("transition_post_status", "_update_posts_count_on_transition_post_sta
 #// Counts.
 add_action("admin_init", "wp_schedule_update_network_counts")
 add_action("update_network_counts", "wp_update_network_counts", 10, 0)
-for action in Array("user_register", "deleted_user", "wpmu_new_user", "make_spam_user", "make_ham_user"):
-    add_action(action, "wp_maybe_update_network_user_counts", 10, 0)
+for action_ in Array("user_register", "deleted_user", "wpmu_new_user", "make_spam_user", "make_ham_user"):
+    add_action(action_, "wp_maybe_update_network_user_counts", 10, 0)
 # end for
-for action in Array("make_spam_blog", "make_ham_blog", "archive_blog", "unarchive_blog", "make_delete_blog", "make_undelete_blog"):
-    add_action(action, "wp_maybe_update_network_site_counts", 10, 0)
+for action_ in Array("make_spam_blog", "make_ham_blog", "archive_blog", "unarchive_blog", "make_delete_blog", "make_undelete_blog"):
+    add_action(action_, "wp_maybe_update_network_site_counts", 10, 0)
 # end for
-action = None
+action_ = None
 #// Files.
 add_filter("wp_upload_bits", "upload_is_file_too_big")
 add_filter("import_upload_size_limit", "fix_import_form_size")

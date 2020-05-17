@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,16 +24,98 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 4.5.0
 #//
 class WP_Customize_Partial():
+    #// 
+    #// Component.
+    #// 
+    #// @since 4.5.0
+    #// @var WP_Customize_Selective_Refresh
+    #//
     component = Array()
+    #// 
+    #// Unique identifier for the partial.
+    #// 
+    #// If the partial is used to display a single setting, this would generally
+    #// be the same as the associated setting's ID.
+    #// 
+    #// @since 4.5.0
+    #// @var string
+    #//
     id = Array()
+    #// 
+    #// Parsed ID.
+    #// 
+    #// @since 4.5.0
+    #// @var array {
+    #// @type string $base ID base.
+    #// @type array  $keys Keys for multidimensional.
+    #// }
+    #//
     id_data = Array()
+    #// 
+    #// Type of this partial.
+    #// 
+    #// @since 4.5.0
+    #// @var string
+    #//
     type = "default"
+    #// 
+    #// The jQuery selector to find the container element for the partial.
+    #// 
+    #// @since 4.5.0
+    #// @var string
+    #//
     selector = Array()
+    #// 
+    #// IDs for settings tied to the partial.
+    #// 
+    #// @since 4.5.0
+    #// @var array
+    #//
     settings = Array()
+    #// 
+    #// The ID for the setting that this partial is primarily responsible for rendering.
+    #// 
+    #// If not supplied, it will default to the ID of the first setting.
+    #// 
+    #// @since 4.5.0
+    #// @var string
+    #//
     primary_setting = Array()
+    #// 
+    #// Capability required to edit this partial.
+    #// 
+    #// Normally this is empty and the capability is derived from the capabilities
+    #// of the associated `$settings`.
+    #// 
+    #// @since 4.5.0
+    #// @var string
+    #//
     capability = Array()
+    #// 
+    #// Render callback.
+    #// 
+    #// @since 4.5.0
+    #// @see WP_Customize_Partial::render()
+    #// @var callable Callback is called with one argument, the instance of
+    #// WP_Customize_Partial. The callback can either echo the
+    #// partial or return the partial as a string, or return false if error.
+    #//
     render_callback = Array()
+    #// 
+    #// Whether the container element is included in the partial, or if only the contents are rendered.
+    #// 
+    #// @since 4.5.0
+    #// @var bool
+    #//
     container_inclusive = False
+    #// 
+    #// Whether to refresh the entire preview in case a partial cannot be refreshed.
+    #// 
+    #// A partial render is considered a failure if the render_callback returns false.
+    #// 
+    #// @since 4.5.0
+    #// @var bool
+    #//
     fallback_refresh = True
     #// 
     #// Constructor.
@@ -57,16 +134,19 @@ class WP_Customize_Partial():
     #// @type array|string $settings All settings IDs tied to the partial. If undefined, `$id` will be used.
     #// }
     #//
-    def __init__(self, component=None, id=None, args=Array()):
+    def __init__(self, component_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        keys = php_array_keys(get_object_vars(self))
-        for key in keys:
-            if (php_isset(lambda : args[key])):
-                self.key = args[key]
+        keys_ = php_array_keys(get_object_vars(self))
+        for key_ in keys_:
+            if (php_isset(lambda : args_[key_])):
+                self.key_ = args_[key_]
             # end if
         # end for
-        self.component = component
-        self.id = id
+        self.component = component_
+        self.id = id_
         self.id_data["keys"] = php_preg_split("/\\[/", php_str_replace("]", "", self.id))
         self.id_data["base"] = php_array_shift(self.id_data["keys"])
         if php_empty(lambda : self.render_callback):
@@ -74,7 +154,7 @@ class WP_Customize_Partial():
         # end if
         #// Process settings.
         if (not (php_isset(lambda : self.settings))):
-            self.settings = Array(id)
+            self.settings = Array(id_)
         elif php_is_string(self.settings):
             self.settings = Array(self.settings)
         # end if
@@ -96,6 +176,7 @@ class WP_Customize_Partial():
     #//
     def id_data(self):
         
+        
         return self.id_data
     # end def id_data
     #// 
@@ -108,22 +189,25 @@ class WP_Customize_Partial():
     #// @return string|array|false The rendered partial as a string, raw data array (for client-side JS template),
     #// or false if no render applied.
     #//
-    def render(self, container_context=Array()):
+    def render(self, container_context_=None):
+        if container_context_ is None:
+            container_context_ = Array()
+        # end if
         
-        partial = self
-        rendered = False
+        partial_ = self
+        rendered_ = False
         if (not php_empty(lambda : self.render_callback)):
             ob_start()
-            return_render = php_call_user_func(self.render_callback, self, container_context)
-            ob_render = ob_get_clean()
-            if None != return_render and "" != ob_render:
+            return_render_ = php_call_user_func(self.render_callback, self, container_context_)
+            ob_render_ = ob_get_clean()
+            if None != return_render_ and "" != ob_render_:
                 _doing_it_wrong(__FUNCTION__, __("Partial render must echo the content or return the content string (or array), but not both."), "4.5.0")
             # end if
             #// 
             #// Note that the string return takes precedence because the $ob_render may just\
 #// include PHP warnings or notices.
             #//
-            rendered = return_render if None != return_render else ob_render
+            rendered_ = return_render_ if None != return_render_ else ob_render_
         # end if
         #// 
         #// Filters partial rendering.
@@ -135,7 +219,7 @@ class WP_Customize_Partial():
         #// @param array                $container_context Optional array of context data associated with
         #// the target container.
         #//
-        rendered = apply_filters("customize_partial_render", rendered, partial, container_context)
+        rendered_ = apply_filters("customize_partial_render", rendered_, partial_, container_context_)
         #// 
         #// Filters partial rendering for a specific partial.
         #// 
@@ -148,8 +232,8 @@ class WP_Customize_Partial():
         #// @param array                $container_context Optional array of context data associated with
         #// the target container.
         #//
-        rendered = apply_filters(str("customize_partial_render_") + str(partial.id), rendered, partial, container_context)
-        return rendered
+        rendered_ = apply_filters(str("customize_partial_render_") + str(partial_.id), rendered_, partial_, container_context_)
+        return rendered_
     # end def render
     #// 
     #// Default callback used when invoking WP_Customize_Control::render().
@@ -169,10 +253,13 @@ class WP_Customize_Partial():
     #// @param array                $context Context.
     #// @return string|array|false
     #//
-    def render_callback(self, partial=None, context=Array()):
+    def render_callback(self, partial_=None, context_=None):
+        if context_ is None:
+            context_ = Array()
+        # end if
         
-        partial = None
-        context = None
+        partial_ = None
+        context_ = None
         return False
     # end def render_callback
     #// 
@@ -184,8 +271,9 @@ class WP_Customize_Partial():
     #//
     def json(self):
         
-        exports = Array({"settings": self.settings, "primarySetting": self.primary_setting, "selector": self.selector, "type": self.type, "fallbackRefresh": self.fallback_refresh, "containerInclusive": self.container_inclusive})
-        return exports
+        
+        exports_ = Array({"settings": self.settings, "primarySetting": self.primary_setting, "selector": self.selector, "type": self.type, "fallbackRefresh": self.fallback_refresh, "containerInclusive": self.container_inclusive})
+        return exports_
     # end def json
     #// 
     #// Checks if the user can refresh this partial.
@@ -200,12 +288,13 @@ class WP_Customize_Partial():
     #//
     def check_capabilities(self):
         
+        
         if (not php_empty(lambda : self.capability)) and (not current_user_can(self.capability)):
             return False
         # end if
-        for setting_id in self.settings:
-            setting = self.component.manager.get_setting(setting_id)
-            if (not setting) or (not setting.check_capabilities()):
+        for setting_id_ in self.settings:
+            setting_ = self.component.manager.get_setting(setting_id_)
+            if (not setting_) or (not setting_.check_capabilities()):
                 return False
             # end if
         # end for

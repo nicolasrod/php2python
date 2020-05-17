@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -73,7 +68,8 @@ class SimplePie_Cache_Base():
     #// @param string $name Unique ID for the cache
     #// @param string $type Either TYPE_FEED for SimplePie data, or TYPE_IMAGE for image data
     #//
-    def __init__(self, location=None, name=None, type=None):
+    def __init__(self, location_=None, name_=None, type_=None):
+        
         
         pass
     # end def __init__
@@ -83,7 +79,8 @@ class SimplePie_Cache_Base():
     #// @param array|SimplePie $data Data to store in the cache. If passed a SimplePie object, only cache the $data property
     #// @return bool Successfulness
     #//
-    def save(self, data=None):
+    def save(self, data_=None):
+        
         
         pass
     # end def save
@@ -94,6 +91,7 @@ class SimplePie_Cache_Base():
     #//
     def load(self):
         
+        
         pass
     # end def load
     #// 
@@ -102,6 +100,7 @@ class SimplePie_Cache_Base():
     #// @return int Timestamp
     #//
     def mtime(self):
+        
         
         pass
     # end def mtime
@@ -112,6 +111,7 @@ class SimplePie_Cache_Base():
     #//
     def touch(self):
         
+        
         pass
     # end def touch
     #// 
@@ -120,6 +120,7 @@ class SimplePie_Cache_Base():
     #// @return bool Success status
     #//
     def unlink(self):
+        
         
         pass
     # end def unlink

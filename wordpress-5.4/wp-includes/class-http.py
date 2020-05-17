@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -149,16 +144,19 @@ class WP_Http():
     #// @return array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
     #// A WP_Error instance upon error.
     #//
-    def request(self, url=None, args=Array()):
-        
-        defaults = Array({"method": "GET", "timeout": apply_filters("http_request_timeout", 5, url), "redirection": apply_filters("http_request_redirection_count", 5, url), "httpversion": apply_filters("http_request_version", "1.0", url), "user-agent": apply_filters("http_headers_useragent", "WordPress/" + get_bloginfo("version") + "; " + get_bloginfo("url"), url), "reject_unsafe_urls": apply_filters("http_request_reject_unsafe_urls", False, url), "blocking": True, "headers": Array(), "cookies": Array(), "body": None, "compress": False, "decompress": True, "sslverify": True, "sslcertificates": ABSPATH + WPINC + "/certificates/ca-bundle.crt", "stream": False, "filename": None, "limit_response_size": None})
-        #// Pre-parse for the HEAD checks.
-        args = wp_parse_args(args)
-        #// By default, HEAD requests do not cause redirections.
-        if (php_isset(lambda : args["method"])) and "HEAD" == args["method"]:
-            defaults["redirection"] = 0
+    def request(self, url_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        parsed_args = wp_parse_args(args, defaults)
+        
+        defaults_ = Array({"method": "GET", "timeout": apply_filters("http_request_timeout", 5, url_), "redirection": apply_filters("http_request_redirection_count", 5, url_), "httpversion": apply_filters("http_request_version", "1.0", url_), "user-agent": apply_filters("http_headers_useragent", "WordPress/" + get_bloginfo("version") + "; " + get_bloginfo("url"), url_), "reject_unsafe_urls": apply_filters("http_request_reject_unsafe_urls", False, url_), "blocking": True, "headers": Array(), "cookies": Array(), "body": None, "compress": False, "decompress": True, "sslverify": True, "sslcertificates": ABSPATH + WPINC + "/certificates/ca-bundle.crt", "stream": False, "filename": None, "limit_response_size": None})
+        #// Pre-parse for the HEAD checks.
+        args_ = wp_parse_args(args_)
+        #// By default, HEAD requests do not cause redirections.
+        if (php_isset(lambda : args_["method"])) and "HEAD" == args_["method"]:
+            defaults_["redirection"] = 0
+        # end if
+        parsed_args_ = wp_parse_args(args_, defaults_)
         #// 
         #// Filters the arguments used in an HTTP request.
         #// 
@@ -167,10 +165,10 @@ class WP_Http():
         #// @param array  $parsed_args An array of HTTP request arguments.
         #// @param string $url         The request URL.
         #//
-        parsed_args = apply_filters("http_request_args", parsed_args, url)
+        parsed_args_ = apply_filters("http_request_args", parsed_args_, url_)
         #// The transports decrement this, store a copy of the original value for loop purposes.
-        if (not (php_isset(lambda : parsed_args["_redirection"]))):
-            parsed_args["_redirection"] = parsed_args["redirection"]
+        if (not (php_isset(lambda : parsed_args_["_redirection"]))):
+            parsed_args_["_redirection"] = parsed_args_["redirection"]
         # end if
         #// 
         #// Filters whether to preempt an HTTP request's return value.
@@ -190,92 +188,92 @@ class WP_Http():
         #// @param array                $parsed_args HTTP request arguments.
         #// @param string               $url         The request URL.
         #//
-        pre = apply_filters("pre_http_request", False, parsed_args, url)
-        if False != pre:
-            return pre
+        pre_ = apply_filters("pre_http_request", False, parsed_args_, url_)
+        if False != pre_:
+            return pre_
         # end if
         if php_function_exists("wp_kses_bad_protocol"):
-            if parsed_args["reject_unsafe_urls"]:
-                url = wp_http_validate_url(url)
+            if parsed_args_["reject_unsafe_urls"]:
+                url_ = wp_http_validate_url(url_)
             # end if
-            if url:
-                url = wp_kses_bad_protocol(url, Array("http", "https", "ssl"))
+            if url_:
+                url_ = wp_kses_bad_protocol(url_, Array("http", "https", "ssl"))
             # end if
         # end if
-        arrURL = php_no_error(lambda: php_parse_url(url))
-        if php_empty(lambda : url) or php_empty(lambda : arrURL["scheme"]):
-            response = php_new_class("WP_Error", lambda : WP_Error("http_request_failed", __("A valid URL was not provided.")))
+        arrURL_ = php_no_error(lambda: php_parse_url(url_))
+        if php_empty(lambda : url_) or php_empty(lambda : arrURL_["scheme"]):
+            response_ = php_new_class("WP_Error", lambda : WP_Error("http_request_failed", __("A valid URL was not provided.")))
             #// This action is documented in wp-includes/class-http.php
-            do_action("http_api_debug", response, "response", "Requests", parsed_args, url)
-            return response
+            do_action("http_api_debug", response_, "response", "Requests", parsed_args_, url_)
+            return response_
         # end if
-        if self.block_request(url):
-            response = php_new_class("WP_Error", lambda : WP_Error("http_request_not_executed", __("User has blocked requests through HTTP.")))
+        if self.block_request(url_):
+            response_ = php_new_class("WP_Error", lambda : WP_Error("http_request_not_executed", __("User has blocked requests through HTTP.")))
             #// This action is documented in wp-includes/class-http.php
-            do_action("http_api_debug", response, "response", "Requests", parsed_args, url)
-            return response
+            do_action("http_api_debug", response_, "response", "Requests", parsed_args_, url_)
+            return response_
         # end if
         #// If we are streaming to a file but no filename was given drop it in the WP temp dir
         #// and pick its name using the basename of the $url.
-        if parsed_args["stream"]:
-            if php_empty(lambda : parsed_args["filename"]):
-                parsed_args["filename"] = get_temp_dir() + php_basename(url)
+        if parsed_args_["stream"]:
+            if php_empty(lambda : parsed_args_["filename"]):
+                parsed_args_["filename"] = get_temp_dir() + php_basename(url_)
             # end if
             #// Force some settings if we are streaming to a file and check for existence
             #// and perms of destination directory.
-            parsed_args["blocking"] = True
-            if (not wp_is_writable(php_dirname(parsed_args["filename"]))):
-                response = php_new_class("WP_Error", lambda : WP_Error("http_request_failed", __("Destination directory for file streaming does not exist or is not writable.")))
+            parsed_args_["blocking"] = True
+            if (not wp_is_writable(php_dirname(parsed_args_["filename"]))):
+                response_ = php_new_class("WP_Error", lambda : WP_Error("http_request_failed", __("Destination directory for file streaming does not exist or is not writable.")))
                 #// This action is documented in wp-includes/class-http.php
-                do_action("http_api_debug", response, "response", "Requests", parsed_args, url)
-                return response
+                do_action("http_api_debug", response_, "response", "Requests", parsed_args_, url_)
+                return response_
             # end if
         # end if
-        if is_null(parsed_args["headers"]):
-            parsed_args["headers"] = Array()
+        if is_null(parsed_args_["headers"]):
+            parsed_args_["headers"] = Array()
         # end if
         #// WP allows passing in headers as a string, weirdly.
-        if (not php_is_array(parsed_args["headers"])):
-            processedHeaders = WP_Http.processheaders(parsed_args["headers"])
-            parsed_args["headers"] = processedHeaders["headers"]
+        if (not php_is_array(parsed_args_["headers"])):
+            processedHeaders_ = WP_Http.processheaders(parsed_args_["headers"])
+            parsed_args_["headers"] = processedHeaders_["headers"]
         # end if
         #// Setup arguments.
-        headers = parsed_args["headers"]
-        data = parsed_args["body"]
-        type = parsed_args["method"]
-        options = Array({"timeout": parsed_args["timeout"], "useragent": parsed_args["user-agent"], "blocking": parsed_args["blocking"], "hooks": php_new_class("WP_HTTP_Requests_Hooks", lambda : WP_HTTP_Requests_Hooks(url, parsed_args))})
+        headers_ = parsed_args_["headers"]
+        data_ = parsed_args_["body"]
+        type_ = parsed_args_["method"]
+        options_ = Array({"timeout": parsed_args_["timeout"], "useragent": parsed_args_["user-agent"], "blocking": parsed_args_["blocking"], "hooks": php_new_class("WP_HTTP_Requests_Hooks", lambda : WP_HTTP_Requests_Hooks(url_, parsed_args_))})
         #// Ensure redirects follow browser behaviour.
-        options["hooks"].register("requests.before_redirect", Array(get_class(), "browser_redirect_compatibility"))
+        options_["hooks"].register("requests.before_redirect", Array(get_class(), "browser_redirect_compatibility"))
         #// Validate redirected URLs.
-        if php_function_exists("wp_kses_bad_protocol") and parsed_args["reject_unsafe_urls"]:
-            options["hooks"].register("requests.before_redirect", Array(get_class(), "validate_redirects"))
+        if php_function_exists("wp_kses_bad_protocol") and parsed_args_["reject_unsafe_urls"]:
+            options_["hooks"].register("requests.before_redirect", Array(get_class(), "validate_redirects"))
         # end if
-        if parsed_args["stream"]:
-            options["filename"] = parsed_args["filename"]
+        if parsed_args_["stream"]:
+            options_["filename"] = parsed_args_["filename"]
         # end if
-        if php_empty(lambda : parsed_args["redirection"]):
-            options["follow_redirects"] = False
+        if php_empty(lambda : parsed_args_["redirection"]):
+            options_["follow_redirects"] = False
         else:
-            options["redirects"] = parsed_args["redirection"]
+            options_["redirects"] = parsed_args_["redirection"]
         # end if
         #// Use byte limit, if we can.
-        if (php_isset(lambda : parsed_args["limit_response_size"])):
-            options["max_bytes"] = parsed_args["limit_response_size"]
+        if (php_isset(lambda : parsed_args_["limit_response_size"])):
+            options_["max_bytes"] = parsed_args_["limit_response_size"]
         # end if
         #// If we've got cookies, use and convert them to Requests_Cookie.
-        if (not php_empty(lambda : parsed_args["cookies"])):
-            options["cookies"] = WP_Http.normalize_cookies(parsed_args["cookies"])
+        if (not php_empty(lambda : parsed_args_["cookies"])):
+            options_["cookies"] = WP_Http.normalize_cookies(parsed_args_["cookies"])
         # end if
         #// SSL certificate handling.
-        if (not parsed_args["sslverify"]):
-            options["verify"] = False
-            options["verifyname"] = False
+        if (not parsed_args_["sslverify"]):
+            options_["verify"] = False
+            options_["verifyname"] = False
         else:
-            options["verify"] = parsed_args["sslcertificates"]
+            options_["verify"] = parsed_args_["sslcertificates"]
         # end if
         #// All non-GET/HEAD requests should put the arguments in the form body.
-        if "HEAD" != type and "GET" != type:
-            options["data_format"] = "body"
+        if "HEAD" != type_ and "GET" != type_:
+            options_["data_format"] = "body"
         # end if
         #// 
         #// Filters whether SSL should be verified for non-local requests.
@@ -286,28 +284,28 @@ class WP_Http():
         #// @param bool   $ssl_verify Whether to verify the SSL connection. Default true.
         #// @param string $url        The request URL.
         #//
-        options["verify"] = apply_filters("https_ssl_verify", options["verify"], url)
+        options_["verify"] = apply_filters("https_ssl_verify", options_["verify"], url_)
         #// Check for proxies.
-        proxy = php_new_class("WP_HTTP_Proxy", lambda : WP_HTTP_Proxy())
-        if proxy.is_enabled() and proxy.send_through_proxy(url):
-            options["proxy"] = php_new_class("Requests_Proxy_HTTP", lambda : Requests_Proxy_HTTP(proxy.host() + ":" + proxy.port()))
-            if proxy.use_authentication():
-                options["proxy"].use_authentication = True
-                options["proxy"].user = proxy.username()
-                options["proxy"].pass_ = proxy.password()
+        proxy_ = php_new_class("WP_HTTP_Proxy", lambda : WP_HTTP_Proxy())
+        if proxy_.is_enabled() and proxy_.send_through_proxy(url_):
+            options_["proxy"] = php_new_class("Requests_Proxy_HTTP", lambda : Requests_Proxy_HTTP(proxy_.host() + ":" + proxy_.port()))
+            if proxy_.use_authentication():
+                options_["proxy"].use_authentication = True
+                options_["proxy"].user = proxy_.username()
+                options_["proxy"].pass_ = proxy_.password()
             # end if
         # end if
         #// Avoid issues where mbstring.func_overload is enabled.
         mbstring_binary_safe_encoding()
         try: 
-            requests_response = Requests.request(url, headers, data, type, options)
+            requests_response_ = Requests.request(url_, headers_, data_, type_, options_)
             #// Convert the response into an array.
-            http_response = php_new_class("WP_HTTP_Requests_Response", lambda : WP_HTTP_Requests_Response(requests_response, parsed_args["filename"]))
-            response = http_response.to_array()
+            http_response_ = php_new_class("WP_HTTP_Requests_Response", lambda : WP_HTTP_Requests_Response(requests_response_, parsed_args_["filename"]))
+            response_ = http_response_.to_array()
             #// Add the original object to the array.
-            response["http_response"] = http_response
-        except Requests_Exception as e:
-            response = php_new_class("WP_Error", lambda : WP_Error("http_request_failed", e.getmessage()))
+            response_["http_response"] = http_response_
+        except Requests_Exception as e_:
+            response_ = php_new_class("WP_Error", lambda : WP_Error("http_request_failed", e_.getmessage()))
         # end try
         reset_mbstring_encoding()
         #// 
@@ -321,11 +319,11 @@ class WP_Http():
         #// @param array          $parsed_args HTTP request arguments.
         #// @param string         $url         The request URL.
         #//
-        do_action("http_api_debug", response, "response", "Requests", parsed_args, url)
-        if is_wp_error(response):
-            return response
+        do_action("http_api_debug", response_, "response", "Requests", parsed_args_, url_)
+        if is_wp_error(response_):
+            return response_
         # end if
-        if (not parsed_args["blocking"]):
+        if (not parsed_args_["blocking"]):
             return Array({"headers": Array(), "body": "", "response": Array({"code": False, "message": False})}, {"cookies": Array(), "http_response": None})
         # end if
         #// 
@@ -337,7 +335,7 @@ class WP_Http():
         #// @param array  $parsed_args HTTP request arguments.
         #// @param string $url         The request URL.
         #//
-        return apply_filters("http_response", response, parsed_args, url)
+        return apply_filters("http_response", response_, parsed_args_, url_)
     # end def request
     #// 
     #// Normalizes cookies for using in Requests.
@@ -348,17 +346,18 @@ class WP_Http():
     #// @return Requests_Cookie_Jar Cookie holder object.
     #//
     @classmethod
-    def normalize_cookies(self, cookies=None):
+    def normalize_cookies(self, cookies_=None):
         
-        cookie_jar = php_new_class("Requests_Cookie_Jar", lambda : Requests_Cookie_Jar())
-        for name,value in cookies:
-            if type(value).__name__ == "WP_Http_Cookie":
-                cookie_jar[value.name] = php_new_class("Requests_Cookie", lambda : Requests_Cookie(value.name, value.value, value.get_attributes(), Array({"host-only": value.host_only})))
-            elif is_scalar(value):
-                cookie_jar[name] = php_new_class("Requests_Cookie", lambda : Requests_Cookie(name, value))
+        
+        cookie_jar_ = php_new_class("Requests_Cookie_Jar", lambda : Requests_Cookie_Jar())
+        for name_,value_ in cookies_:
+            if type(value_).__name__ == "WP_Http_Cookie":
+                cookie_jar_[value_.name] = php_new_class("Requests_Cookie", lambda : Requests_Cookie(value_.name, value_.value, value_.get_attributes(), Array({"host-only": value_.host_only})))
+            elif is_scalar(value_):
+                cookie_jar_[name_] = php_new_class("Requests_Cookie", lambda : Requests_Cookie(name_, value_))
             # end if
         # end for
-        return cookie_jar
+        return cookie_jar_
     # end def normalize_cookies
     #// 
     #// Match redirect behaviour to browser handling.
@@ -376,11 +375,12 @@ class WP_Http():
     #// @param Requests_Response $original Response object.
     #//
     @classmethod
-    def browser_redirect_compatibility(self, location=None, headers=None, data=None, options=None, original=None):
+    def browser_redirect_compatibility(self, location_=None, headers_=None, data_=None, options_=None, original_=None):
+        
         
         #// Browser compatibility.
-        if 302 == original.status_code:
-            options["type"] = Requests.GET
+        if 302 == original_.status_code:
+            options_["type"] = Requests.GET
         # end if
     # end def browser_redirect_compatibility
     #// 
@@ -392,9 +392,10 @@ class WP_Http():
     #// @param string $location URL to redirect to.
     #//
     @classmethod
-    def validate_redirects(self, location=None):
+    def validate_redirects(self, location_=None):
         
-        if (not wp_http_validate_url(location)):
+        
+        if (not wp_http_validate_url(location_)):
             raise php_new_class("Requests_Exception", lambda : Requests_Exception(__("A valid URL was not provided."), "wp_http.redirect_failed_validation"))
         # end if
     # end def validate_redirects
@@ -409,9 +410,10 @@ class WP_Http():
     #// @return string|false Class name for the first transport that claims to support the request.
     #// False if no transport claims to support the request.
     #//
-    def _get_first_available_transport(self, args=None, url=None):
+    def _get_first_available_transport(self, args_=None, url_=None):
         
-        transports = Array("curl", "streams")
+        
+        transports_ = Array("curl", "streams")
         #// 
         #// Filters which HTTP transports are available and in what order.
         #// 
@@ -422,15 +424,15 @@ class WP_Http():
         #// @param array    $args       HTTP request arguments.
         #// @param string   $url        The URL to request.
         #//
-        request_order = apply_filters("http_api_transports", transports, args, url)
+        request_order_ = apply_filters("http_api_transports", transports_, args_, url_)
         #// Loop over each transport on each HTTP request looking for one which will serve this request's needs.
-        for transport in request_order:
-            if php_in_array(transport, transports):
-                transport = ucfirst(transport)
+        for transport_ in request_order_:
+            if php_in_array(transport_, transports_):
+                transport_ = ucfirst(transport_)
             # end if
-            class_ = "WP_Http_" + transport
+            class_ = "WP_Http_" + transport_
             #// Check to see if this transport is a possibility, calls the transport statically.
-            if (not php_call_user_func(Array(class_, "test"), args, url)):
+            if (not php_call_user_func(Array(class_, "test"), args_, url_)):
                 continue
             # end if
             return class_
@@ -456,25 +458,26 @@ class WP_Http():
     #// @return array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
     #// A WP_Error instance upon error.
     #//
-    def _dispatch_request(self, url=None, args=None):
+    def _dispatch_request(self, url_=None, args_=None):
         
-        _dispatch_request.transports = Array()
-        class_ = self._get_first_available_transport(args, url)
+        
+        transports_ = Array()
+        class_ = self._get_first_available_transport(args_, url_)
         if (not class_):
             return php_new_class("WP_Error", lambda : WP_Error("http_failure", __("There are no HTTP transports available which can complete the requested request.")))
         # end if
         #// Transport claims to support request, instantiate it and give it a whirl.
-        if php_empty(lambda : _dispatch_request.transports[class_]):
-            _dispatch_request.transports[class_] = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
+        if php_empty(lambda : transports_[class_]):
+            transports_[class_] = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
         # end if
-        response = _dispatch_request.transports[class_].request(url, args)
+        response_ = transports_[class_].request(url_, args_)
         #// This action is documented in wp-includes/class-http.php
-        do_action("http_api_debug", response, "response", class_, args, url)
-        if is_wp_error(response):
-            return response
+        do_action("http_api_debug", response_, "response", class_, args_, url_)
+        if is_wp_error(response_):
+            return response_
         # end if
         #// This filter is documented in wp-includes/class-http.php
-        return apply_filters("http_response", response, args, url)
+        return apply_filters("http_response", response_, args_, url_)
     # end def _dispatch_request
     #// 
     #// Uses the POST HTTP method.
@@ -488,11 +491,14 @@ class WP_Http():
     #// @return array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
     #// A WP_Error instance upon error.
     #//
-    def post(self, url=None, args=Array()):
+    def post(self, url_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"method": "POST"})
-        parsed_args = wp_parse_args(args, defaults)
-        return self.request(url, parsed_args)
+        defaults_ = Array({"method": "POST"})
+        parsed_args_ = wp_parse_args(args_, defaults_)
+        return self.request(url_, parsed_args_)
     # end def post
     #// 
     #// Uses the GET HTTP method.
@@ -506,11 +512,14 @@ class WP_Http():
     #// @return array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
     #// A WP_Error instance upon error.
     #//
-    def get(self, url=None, args=Array()):
+    def get(self, url_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"method": "GET"})
-        parsed_args = wp_parse_args(args, defaults)
-        return self.request(url, parsed_args)
+        defaults_ = Array({"method": "GET"})
+        parsed_args_ = wp_parse_args(args_, defaults_)
+        return self.request(url_, parsed_args_)
     # end def get
     #// 
     #// Uses the HEAD HTTP method.
@@ -524,11 +533,14 @@ class WP_Http():
     #// @return array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
     #// A WP_Error instance upon error.
     #//
-    def head(self, url=None, args=Array()):
+    def head(self, url_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"method": "HEAD"})
-        parsed_args = wp_parse_args(args, defaults)
-        return self.request(url, parsed_args)
+        defaults_ = Array({"method": "HEAD"})
+        parsed_args_ = wp_parse_args(args_, defaults_)
+        return self.request(url_, parsed_args_)
     # end def head
     #// 
     #// Parses the responses and splits the parts into headers and body.
@@ -544,11 +556,12 @@ class WP_Http():
     #// }
     #//
     @classmethod
-    def processresponse(self, strResponse=None):
+    def processresponse(self, strResponse_=None):
+        
         
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-        res = php_explode("\r\n\r\n", strResponse, 2)
-        return Array({"headers": res[0], "body": res[1] if (php_isset(lambda : res[1])) else ""})
+        res_ = php_explode("\r\n\r\n", strResponse_, 2)
+        return Array({"headers": res_[0], "body": res_[1] if (php_isset(lambda : res_[1])) else ""})
     # end def processresponse
     #// 
     #// Transform header string into an array.
@@ -564,65 +577,66 @@ class WP_Http():
     #// then a numbered array is returned as the value of that header-key.
     #//
     @classmethod
-    def processheaders(self, headers=None, url=""):
+    def processheaders(self, headers_=None, url_=""):
+        
         
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         #// Split headers, one per array element.
-        if php_is_string(headers):
+        if php_is_string(headers_):
             #// Tolerate line terminator: CRLF = LF (RFC 2616 19.3).
-            headers = php_str_replace("\r\n", "\n", headers)
+            headers_ = php_str_replace("\r\n", "\n", headers_)
             #// 
             #// Unfold folded header fields. LWS = [CRLF] 1*( SP | HT ) <US-ASCII SP, space (32)>,
             #// <US-ASCII HT, horizontal-tab (9)> (RFC 2616 2.2).
             #//
-            headers = php_preg_replace("/\\n[ \\t]/", " ", headers)
+            headers_ = php_preg_replace("/\\n[ \\t]/", " ", headers_)
             #// Create the headers array.
-            headers = php_explode("\n", headers)
+            headers_ = php_explode("\n", headers_)
         # end if
-        response = Array({"code": 0, "message": ""})
+        response_ = Array({"code": 0, "message": ""})
         #// 
         #// If a redirection has taken place, The headers for each page request may have been passed.
         #// In this case, determine the final HTTP header and parse from there.
         #//
-        i = php_count(headers) - 1
-        while i >= 0:
+        i_ = php_count(headers_) - 1
+        while i_ >= 0:
             
-            if (not php_empty(lambda : headers[i])) and False == php_strpos(headers[i], ":"):
-                headers = array_splice(headers, i)
+            if (not php_empty(lambda : headers_[i_])) and False == php_strpos(headers_[i_], ":"):
+                headers_ = array_splice(headers_, i_)
                 break
             # end if
-            i -= 1
+            i_ -= 1
         # end while
-        cookies = Array()
-        newheaders = Array()
-        for tempheader in headers:
-            if php_empty(lambda : tempheader):
+        cookies_ = Array()
+        newheaders_ = Array()
+        for tempheader_ in headers_:
+            if php_empty(lambda : tempheader_):
                 continue
             # end if
-            if False == php_strpos(tempheader, ":"):
-                stack = php_explode(" ", tempheader, 3)
-                stack[-1] = ""
-                response["code"], response["message"] = stack
+            if False == php_strpos(tempheader_, ":"):
+                stack_ = php_explode(" ", tempheader_, 3)
+                stack_[-1] = ""
+                response_["code"], response_["message"] = stack_
                 continue
             # end if
-            key, value = php_explode(":", tempheader, 2)
-            key = php_strtolower(key)
-            value = php_trim(value)
-            if (php_isset(lambda : newheaders[key])):
-                if (not php_is_array(newheaders[key])):
-                    newheaders[key] = Array(newheaders[key])
+            key_, value_ = php_explode(":", tempheader_, 2)
+            key_ = php_strtolower(key_)
+            value_ = php_trim(value_)
+            if (php_isset(lambda : newheaders_[key_])):
+                if (not php_is_array(newheaders_[key_])):
+                    newheaders_[key_] = Array(newheaders_[key_])
                 # end if
-                newheaders[key][-1] = value
+                newheaders_[key_][-1] = value_
             else:
-                newheaders[key] = value
+                newheaders_[key_] = value_
             # end if
-            if "set-cookie" == key:
-                cookies[-1] = php_new_class("WP_Http_Cookie", lambda : WP_Http_Cookie(value, url))
+            if "set-cookie" == key_:
+                cookies_[-1] = php_new_class("WP_Http_Cookie", lambda : WP_Http_Cookie(value_, url_))
             # end if
         # end for
         #// Cast the Response Code to an int.
-        response["code"] = php_intval(response["code"])
-        return Array({"response": response, "headers": newheaders, "cookies": cookies})
+        response_["code"] = php_intval(response_["code"])
+        return Array({"response": response_, "headers": newheaders_, "cookies": cookies_})
     # end def processheaders
     #// 
     #// Takes the arguments for a ::request() and checks for the cookie array.
@@ -636,22 +650,23 @@ class WP_Http():
     #// @param array $r Full array of args passed into ::request()
     #//
     @classmethod
-    def buildcookieheader(self, r=None):
+    def buildcookieheader(self, r_=None):
+        
         
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-        if (not php_empty(lambda : r["cookies"])):
+        if (not php_empty(lambda : r_["cookies"])):
             #// Upgrade any name => value cookie pairs to WP_HTTP_Cookie instances.
-            for name,value in r["cookies"]:
-                if (not php_is_object(value)):
-                    r["cookies"][name] = php_new_class("WP_Http_Cookie", lambda : WP_Http_Cookie(Array({"name": name, "value": value})))
+            for name_,value_ in r_["cookies"]:
+                if (not php_is_object(value_)):
+                    r_["cookies"][name_] = php_new_class("WP_Http_Cookie", lambda : WP_Http_Cookie(Array({"name": name_, "value": value_})))
                 # end if
             # end for
-            cookies_header = ""
-            for cookie in r["cookies"]:
-                cookies_header += cookie.getheadervalue() + "; "
+            cookies_header_ = ""
+            for cookie_ in r_["cookies"]:
+                cookies_header_ += cookie_.getheadervalue() + "; "
             # end for
-            cookies_header = php_substr(cookies_header, 0, -2)
-            r["headers"]["cookie"] = cookies_header
+            cookies_header_ = php_substr(cookies_header_, 0, -2)
+            r_["headers"]["cookie"] = cookies_header_
         # end if
     # end def buildcookieheader
     #// 
@@ -667,34 +682,35 @@ class WP_Http():
     #// @return string Chunked decoded body on success or raw body on failure.
     #//
     @classmethod
-    def chunktransferdecode(self, body=None):
+    def chunktransferdecode(self, body_=None):
+        
         
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         #// The body is not chunked encoded or is malformed.
-        if (not php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", php_trim(body))):
-            return body
+        if (not php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", php_trim(body_))):
+            return body_
         # end if
-        parsed_body = ""
+        parsed_body_ = ""
         #// We'll be altering $body, so need a backup in case of error.
-        body_original = body
+        body_original_ = body_
         while True:
             
             if not (True):
                 break
             # end if
-            has_chunk = php_bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", body, match))
-            if (not has_chunk) or php_empty(lambda : match[1]):
-                return body_original
+            has_chunk_ = php_bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", body_, match_))
+            if (not has_chunk_) or php_empty(lambda : match_[1]):
+                return body_original_
             # end if
-            length = hexdec(match[1])
-            chunk_length = php_strlen(match[0])
+            length_ = hexdec(match_[1])
+            chunk_length_ = php_strlen(match_[0])
             #// Parse out the chunk of data.
-            parsed_body += php_substr(body, chunk_length, length)
+            parsed_body_ += php_substr(body_, chunk_length_, length_)
             #// Remove the chunk from the raw data.
-            body = php_substr(body, length + chunk_length)
+            body_ = php_substr(body_, length_ + chunk_length_)
             #// End of the document.
-            if "0" == php_trim(body):
-                return parsed_body
+            if "0" == php_trim(body_):
+                return parsed_body_
             # end if
         # end while
     # end def chunktransferdecode
@@ -720,19 +736,20 @@ class WP_Http():
     #// @param string $uri URI of url.
     #// @return bool True to block, false to allow.
     #//
-    def block_request(self, uri=None):
+    def block_request(self, uri_=None):
+        
         
         #// We don't need to block requests, because nothing is blocked.
         if (not php_defined("WP_HTTP_BLOCK_EXTERNAL")) or (not WP_HTTP_BLOCK_EXTERNAL):
             return False
         # end if
-        check = php_parse_url(uri)
-        if (not check):
+        check_ = php_parse_url(uri_)
+        if (not check_):
             return True
         # end if
-        home = php_parse_url(get_option("siteurl"))
+        home_ = php_parse_url(get_option("siteurl"))
         #// Don't block requests back to ourselves by default.
-        if "localhost" == check["host"] or (php_isset(lambda : home["host"])) and home["host"] == check["host"]:
+        if "localhost" == check_["host"] or (php_isset(lambda : home_["host"])) and home_["host"] == check_["host"]:
             #// 
             #// Filters whether to block local HTTP API requests.
             #// 
@@ -747,22 +764,22 @@ class WP_Http():
         if (not php_defined("WP_ACCESSIBLE_HOSTS")):
             return True
         # end if
-        block_request.accessible_hosts = None
-        block_request.wildcard_regex = Array()
-        if None == block_request.accessible_hosts:
-            block_request.accessible_hosts = php_preg_split("|,\\s*|", WP_ACCESSIBLE_HOSTS)
+        accessible_hosts_ = None
+        wildcard_regex_ = Array()
+        if None == accessible_hosts_:
+            accessible_hosts_ = php_preg_split("|,\\s*|", WP_ACCESSIBLE_HOSTS)
             if False != php_strpos(WP_ACCESSIBLE_HOSTS, "*"):
-                block_request.wildcard_regex = Array()
-                for host in block_request.accessible_hosts:
-                    block_request.wildcard_regex[-1] = php_str_replace("\\*", ".+", preg_quote(host, "/"))
+                wildcard_regex_ = Array()
+                for host_ in accessible_hosts_:
+                    wildcard_regex_[-1] = php_str_replace("\\*", ".+", preg_quote(host_, "/"))
                 # end for
-                block_request.wildcard_regex = "/^(" + php_implode("|", block_request.wildcard_regex) + ")$/i"
+                wildcard_regex_ = "/^(" + php_implode("|", wildcard_regex_) + ")$/i"
             # end if
         # end if
-        if (not php_empty(lambda : block_request.wildcard_regex)):
-            return (not php_preg_match(block_request.wildcard_regex, check["host"]))
+        if (not php_empty(lambda : wildcard_regex_)):
+            return (not php_preg_match(wildcard_regex_, check_["host"]))
         else:
-            return (not php_in_array(check["host"], block_request.accessible_hosts))
+            return (not php_in_array(check_["host"], accessible_hosts_))
             pass
         # end if
     # end def block_request
@@ -776,10 +793,11 @@ class WP_Http():
     #// @return bool|array False on failure; Array of URL components on success;
     #// See parse_url()'s return values.
     #//
-    def parse_url(self, url=None):
+    def parse_url(self, url_=None):
+        
         
         _deprecated_function(__METHOD__, "4.4.0", "wp_parse_url()")
-        return wp_parse_url(url)
+        return wp_parse_url(url_)
     # end def parse_url
     #// 
     #// Converts a relative URL to an absolute URL relative to a given URL.
@@ -793,64 +811,65 @@ class WP_Http():
     #// @return string An Absolute URL, in a failure condition where the URL cannot be parsed, the relative URL will be returned.
     #//
     @classmethod
-    def make_absolute_url(self, maybe_relative_path=None, url=None):
+    def make_absolute_url(self, maybe_relative_path_=None, url_=None):
         
-        if php_empty(lambda : url):
-            return maybe_relative_path
+        
+        if php_empty(lambda : url_):
+            return maybe_relative_path_
         # end if
-        url_parts = wp_parse_url(url)
-        if (not url_parts):
-            return maybe_relative_path
+        url_parts_ = wp_parse_url(url_)
+        if (not url_parts_):
+            return maybe_relative_path_
         # end if
-        relative_url_parts = wp_parse_url(maybe_relative_path)
-        if (not relative_url_parts):
-            return maybe_relative_path
+        relative_url_parts_ = wp_parse_url(maybe_relative_path_)
+        if (not relative_url_parts_):
+            return maybe_relative_path_
         # end if
         #// Check for a scheme on the 'relative' URL.
-        if (not php_empty(lambda : relative_url_parts["scheme"])):
-            return maybe_relative_path
+        if (not php_empty(lambda : relative_url_parts_["scheme"])):
+            return maybe_relative_path_
         # end if
-        absolute_path = url_parts["scheme"] + "://"
+        absolute_path_ = url_parts_["scheme"] + "://"
         #// Schemeless URLs will make it this far, so we check for a host in the relative URL
         #// and convert it to a protocol-URL.
-        if (php_isset(lambda : relative_url_parts["host"])):
-            absolute_path += relative_url_parts["host"]
-            if (php_isset(lambda : relative_url_parts["port"])):
-                absolute_path += ":" + relative_url_parts["port"]
+        if (php_isset(lambda : relative_url_parts_["host"])):
+            absolute_path_ += relative_url_parts_["host"]
+            if (php_isset(lambda : relative_url_parts_["port"])):
+                absolute_path_ += ":" + relative_url_parts_["port"]
             # end if
         else:
-            absolute_path += url_parts["host"]
-            if (php_isset(lambda : url_parts["port"])):
-                absolute_path += ":" + url_parts["port"]
+            absolute_path_ += url_parts_["host"]
+            if (php_isset(lambda : url_parts_["port"])):
+                absolute_path_ += ":" + url_parts_["port"]
             # end if
         # end if
         #// Start off with the absolute URL path.
-        path = url_parts["path"] if (not php_empty(lambda : url_parts["path"])) else "/"
+        path_ = url_parts_["path"] if (not php_empty(lambda : url_parts_["path"])) else "/"
         #// If it's a root-relative path, then great.
-        if (not php_empty(lambda : relative_url_parts["path"])) and "/" == relative_url_parts["path"][0]:
-            path = relative_url_parts["path"]
+        if (not php_empty(lambda : relative_url_parts_["path"])) and "/" == relative_url_parts_["path"][0]:
+            path_ = relative_url_parts_["path"]
             pass
-        elif (not php_empty(lambda : relative_url_parts["path"])):
+        elif (not php_empty(lambda : relative_url_parts_["path"])):
             #// Strip off any file components from the absolute path.
-            path = php_substr(path, 0, php_strrpos(path, "/") + 1)
+            path_ = php_substr(path_, 0, php_strrpos(path_, "/") + 1)
             #// Build the new path.
-            path += relative_url_parts["path"]
+            path_ += relative_url_parts_["path"]
             #// Strip all /path/../ out of the path.
             while True:
                 
-                if not (php_strpos(path, "../") > 1):
+                if not (php_strpos(path_, "../") > 1):
                     break
                 # end if
-                path = php_preg_replace("![^/]+/\\.\\./!", "", path)
+                path_ = php_preg_replace("![^/]+/\\.\\./!", "", path_)
             # end while
             #// Strip any final leading ../ from the path.
-            path = php_preg_replace("!^/(\\.\\./)+!", "", path)
+            path_ = php_preg_replace("!^/(\\.\\./)+!", "", path_)
         # end if
         #// Add the query string.
-        if (not php_empty(lambda : relative_url_parts["query"])):
-            path += "?" + relative_url_parts["query"]
+        if (not php_empty(lambda : relative_url_parts_["query"])):
+            path_ += "?" + relative_url_parts_["query"]
         # end if
-        return absolute_path + "/" + php_ltrim(path, "/")
+        return absolute_path_ + "/" + php_ltrim(path_, "/")
     # end def make_absolute_url
     #// 
     #// Handles an HTTP redirect and follows it if appropriate.
@@ -864,42 +883,43 @@ class WP_Http():
     #// false if no redirect is present, or a WP_Error object if there's an error.
     #//
     @classmethod
-    def handle_redirects(self, url=None, args=None, response=None):
+    def handle_redirects(self, url_=None, args_=None, response_=None):
+        
         
         #// If no redirects are present, or, redirects were not requested, perform no action.
-        if (not (php_isset(lambda : response["headers"]["location"]))) or 0 == args["_redirection"]:
+        if (not (php_isset(lambda : response_["headers"]["location"]))) or 0 == args_["_redirection"]:
             return False
         # end if
         #// Only perform redirections on redirection http codes.
-        if response["response"]["code"] > 399 or response["response"]["code"] < 300:
+        if response_["response"]["code"] > 399 or response_["response"]["code"] < 300:
             return False
         # end if
         #// Don't redirect if we've run out of redirects.
-        if args["redirection"] <= 0:
+        if args_["redirection"] <= 0:
             return php_new_class("WP_Error", lambda : WP_Error("http_request_failed", __("Too many redirects.")))
         # end if
-        args["redirection"] -= 1
-        redirect_location = response["headers"]["location"]
+        args_["redirection"] -= 1
+        redirect_location_ = response_["headers"]["location"]
         #// If there were multiple Location headers, use the last header specified.
-        if php_is_array(redirect_location):
-            redirect_location = php_array_pop(redirect_location)
+        if php_is_array(redirect_location_):
+            redirect_location_ = php_array_pop(redirect_location_)
         # end if
-        redirect_location = WP_Http.make_absolute_url(redirect_location, url)
+        redirect_location_ = WP_Http.make_absolute_url(redirect_location_, url_)
         #// POST requests should not POST to a redirected location.
-        if "POST" == args["method"]:
-            if php_in_array(response["response"]["code"], Array(302, 303)):
-                args["method"] = "GET"
+        if "POST" == args_["method"]:
+            if php_in_array(response_["response"]["code"], Array(302, 303)):
+                args_["method"] = "GET"
             # end if
         # end if
         #// Include valid cookies in the redirect process.
-        if (not php_empty(lambda : response["cookies"])):
-            for cookie in response["cookies"]:
-                if cookie.test(redirect_location):
-                    args["cookies"][-1] = cookie
+        if (not php_empty(lambda : response_["cookies"])):
+            for cookie_ in response_["cookies"]:
+                if cookie_.test(redirect_location_):
+                    args_["cookies"][-1] = cookie_
                 # end if
             # end for
         # end if
-        return wp_remote_request(redirect_location, args)
+        return wp_remote_request(redirect_location_, args_)
     # end def handle_redirects
     #// 
     #// Determines if a specified string represents an IP address or not.
@@ -917,12 +937,13 @@ class WP_Http():
     #// @return integer|bool Upon success, '4' or '6' to represent a IPv4 or IPv6 address, false upon failure
     #//
     @classmethod
-    def is_ip_address(self, maybe_ip=None):
+    def is_ip_address(self, maybe_ip_=None):
         
-        if php_preg_match("/^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/", maybe_ip):
+        
+        if php_preg_match("/^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/", maybe_ip_):
             return 4
         # end if
-        if False != php_strpos(maybe_ip, ":") and php_preg_match("/^(((?=.*(::))(?!.*\\3.+\\3))\\3?|([\\dA-F]{1,4}(\\3|:\\b|$)|\\2))(?4){5}((?4){2}|(((2[0-4]|1\\d|[1-9])?\\d|25[0-5])\\.?\\b){4})$/i", php_trim(maybe_ip, " []")):
+        if False != php_strpos(maybe_ip_, ":") and php_preg_match("/^(((?=.*(::))(?!.*\\3.+\\3))\\3?|([\\dA-F]{1,4}(\\3|:\\b|$)|\\2))(?4){5}((?4){2}|(((2[0-4]|1\\d|[1-9])?\\d|25[0-5])\\.?\\b){4})$/i", php_trim(maybe_ip_, " []")):
             return 6
         # end if
         return False

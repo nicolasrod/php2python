@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -21,10 +16,10 @@ if '__PHP2PY_LOADED__' not in globals():
 #// WordPress Administration Bootstrap
 php_include_file(__DIR__ + "/admin.php", once=True)
 php_include_file(__DIR__ + "/includes/credits.php", once=True)
-title = __("Credits")
-display_version = php_explode("-", get_bloginfo("version"))
+title_ = __("Credits")
+display_version_ = php_explode("-", get_bloginfo("version"))
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
-credits = wp_credits()
+credits_ = wp_credits()
 php_print("""<div class=\"wrap about__container\">
 <div class=\"about__header\">
 <div class=\"about__header-title\">
@@ -32,7 +27,7 @@ php_print("""<div class=\"wrap about__container\">
 """)
 _e("WordPress")
 php_print("             <span>")
-php_print(display_version)
+php_print(display_version_)
 php_print("""</span>
 </p>
 </div>
@@ -60,7 +55,7 @@ php_print("""</a>
 <h1>""")
 _e("Credits")
 php_print("</h1>\n\n            ")
-if (not credits):
+if (not credits_):
     php_print("\n           <p>\n               ")
     printf(__("WordPress is created by a <a href=\"%1$s\">worldwide team</a> of passionate individuals. <a href=\"%2$s\">Get involved in WordPress</a>."), __("https://wordpress.org/about/"), __("https://make.wordpress.org/"))
     php_print("         </p>\n\n            ")
@@ -77,7 +72,7 @@ php_print("""       </div>
 </div>
 </div>
 """)
-if (not credits):
+if (not credits_):
     php_print("</div>")
     php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
     php_exit(0)
@@ -87,31 +82,31 @@ php_print("""
 <div class=\"about__section\">
 <div class=\"column has-subtle-background-color\">
 """)
-wp_credits_section_title(credits["groups"]["core-developers"])
+wp_credits_section_title(credits_["groups"]["core-developers"])
 php_print("         ")
-wp_credits_section_list(credits, "core-developers")
+wp_credits_section_list(credits_, "core-developers")
 php_print("         ")
-wp_credits_section_list(credits, "contributing-developers")
+wp_credits_section_list(credits_, "contributing-developers")
 php_print("""       </div>
 </div>
 <hr />
 <div class=\"about__section\">
 <div class=\"column\">
 """)
-wp_credits_section_title(credits["groups"]["props"])
+wp_credits_section_title(credits_["groups"]["props"])
 php_print("         ")
-wp_credits_section_list(credits, "props")
+wp_credits_section_list(credits_, "props")
 php_print("""       </div>
 </div>
 <hr />
 """)
-if (php_isset(lambda : credits["groups"]["translators"])) or (php_isset(lambda : credits["groups"]["validators"])):
+if (php_isset(lambda : credits_["groups"]["translators"])) or (php_isset(lambda : credits_["groups"]["validators"])):
     php_print(" <div class=\"about__section\">\n        <div class=\"column\">\n            ")
-    wp_credits_section_title(credits["groups"]["validators"])
+    wp_credits_section_title(credits_["groups"]["validators"])
     php_print("         ")
-    wp_credits_section_list(credits, "validators")
+    wp_credits_section_list(credits_, "validators")
     php_print("         ")
-    wp_credits_section_list(credits, "translators")
+    wp_credits_section_list(credits_, "translators")
     php_print("""       </div>
     </div>
     <hr />
@@ -121,9 +116,9 @@ php_print("""
 <div class=\"about__section\">
 <div class=\"column\">
 """)
-wp_credits_section_title(credits["groups"]["libraries"])
+wp_credits_section_title(credits_["groups"]["libraries"])
 php_print("         ")
-wp_credits_section_list(credits, "libraries")
+wp_credits_section_list(credits_, "libraries")
 php_print("""       </div>
 </div>
 </div>

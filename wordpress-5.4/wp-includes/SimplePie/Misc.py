@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -61,34 +56,36 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 class SimplePie_Misc():
     @classmethod
-    def time_hms(self, seconds=None):
+    def time_hms(self, seconds_=None):
         
-        time = ""
-        hours = floor(seconds / 3600)
-        remainder = seconds % 3600
-        if hours > 0:
-            time += hours + ":"
+        
+        time_ = ""
+        hours_ = floor(seconds_ / 3600)
+        remainder_ = seconds_ % 3600
+        if hours_ > 0:
+            time_ += hours_ + ":"
         # end if
-        minutes = floor(remainder / 60)
-        seconds = remainder % 60
-        if minutes < 10 and hours > 0:
-            minutes = "0" + minutes
+        minutes_ = floor(remainder_ / 60)
+        seconds_ = remainder_ % 60
+        if minutes_ < 10 and hours_ > 0:
+            minutes_ = "0" + minutes_
         # end if
-        if seconds < 10:
-            seconds = "0" + seconds
+        if seconds_ < 10:
+            seconds_ = "0" + seconds_
         # end if
-        time += minutes + ":"
-        time += seconds
-        return time
+        time_ += minutes_ + ":"
+        time_ += seconds_
+        return time_
     # end def time_hms
     @classmethod
-    def absolutize_url(self, relative=None, base=None):
+    def absolutize_url(self, relative_=None, base_=None):
         
-        iri = SimplePie_IRI.absolutize(php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(base)), relative)
-        if iri == False:
+        
+        iri_ = SimplePie_IRI.absolutize(php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(base_)), relative_)
+        if iri_ == False:
             return False
         # end if
-        return iri.get_uri()
+        return iri_.get_uri()
     # end def absolutize_url
     #// 
     #// Get a HTML/XML element from a HTML string
@@ -99,145 +96,153 @@ class SimplePie_Misc():
     #// @return array
     #//
     @classmethod
-    def get_element(self, realname=None, string=None):
+    def get_element(self, realname_=None, string_=None):
+        
         
         return_ = Array()
-        name = preg_quote(realname, "/")
-        if preg_match_all(str("/<(") + str(name) + str(")") + SIMPLEPIE_PCRE_HTML_ATTRIBUTE + str("(>(.*)<\\/") + str(name) + str(">|(\\/)?>)/siU"), string, matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE):
-            i = 0
-            total_matches = php_count(matches)
-            while i < total_matches:
+        name_ = preg_quote(realname_, "/")
+        if preg_match_all(str("/<(") + str(name_) + str(")") + SIMPLEPIE_PCRE_HTML_ATTRIBUTE + str("(>(.*)<\\/") + str(name_) + str(">|(\\/)?>)/siU"), string_, matches_, PREG_SET_ORDER | PREG_OFFSET_CAPTURE):
+            i_ = 0
+            total_matches_ = php_count(matches_)
+            while i_ < total_matches_:
                 
-                return_[i]["tag"] = realname
-                return_[i]["full"] = matches[i][0][0]
-                return_[i]["offset"] = matches[i][0][1]
-                if php_strlen(matches[i][3][0]) <= 2:
-                    return_[i]["self_closing"] = True
+                return_[i_]["tag"] = realname_
+                return_[i_]["full"] = matches_[i_][0][0]
+                return_[i_]["offset"] = matches_[i_][0][1]
+                if php_strlen(matches_[i_][3][0]) <= 2:
+                    return_[i_]["self_closing"] = True
                 else:
-                    return_[i]["self_closing"] = False
-                    return_[i]["content"] = matches[i][4][0]
+                    return_[i_]["self_closing"] = False
+                    return_[i_]["content"] = matches_[i_][4][0]
                 # end if
-                return_[i]["attribs"] = Array()
-                if (php_isset(lambda : matches[i][2][0])) and preg_match_all("/[\\x09\\x0A\\x0B\\x0C\\x0D\\x20]+([^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x2F\\x3E][^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x2F\\x3D\\x3E]*)(?:[\\x09\\x0A\\x0B\\x0C\\x0D\\x20]*=[\\x09\\x0A\\x0B\\x0C\\x0D\\x20]*(?:\"([^\"]*)\"|'([^']*)'|([^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x22\\x27\\x3E][^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x3E]*)?))?/", " " + matches[i][2][0] + " ", attribs, PREG_SET_ORDER):
-                    j = 0
-                    total_attribs = php_count(attribs)
-                    while j < total_attribs:
+                return_[i_]["attribs"] = Array()
+                if (php_isset(lambda : matches_[i_][2][0])) and preg_match_all("/[\\x09\\x0A\\x0B\\x0C\\x0D\\x20]+([^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x2F\\x3E][^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x2F\\x3D\\x3E]*)(?:[\\x09\\x0A\\x0B\\x0C\\x0D\\x20]*=[\\x09\\x0A\\x0B\\x0C\\x0D\\x20]*(?:\"([^\"]*)\"|'([^']*)'|([^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x22\\x27\\x3E][^\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\x3E]*)?))?/", " " + matches_[i_][2][0] + " ", attribs_, PREG_SET_ORDER):
+                    j_ = 0
+                    total_attribs_ = php_count(attribs_)
+                    while j_ < total_attribs_:
                         
-                        if php_count(attribs[j]) == 2:
-                            attribs[j][2] = attribs[j][1]
+                        if php_count(attribs_[j_]) == 2:
+                            attribs_[j_][2] = attribs_[j_][1]
                         # end if
-                        return_[i]["attribs"][php_strtolower(attribs[j][1])]["data"] = SimplePie_Misc.entities_decode(php_end(attribs[j]))
-                        j += 1
+                        return_[i_]["attribs"][php_strtolower(attribs_[j_][1])]["data"] = SimplePie_Misc.entities_decode(php_end(attribs_[j_]))
+                        j_ += 1
                     # end while
                 # end if
-                i += 1
+                i_ += 1
             # end while
         # end if
         return return_
     # end def get_element
     @classmethod
-    def element_implode(self, element=None):
+    def element_implode(self, element_=None):
         
-        full = str("<") + str(element["tag"])
-        for key,value in element["attribs"]:
-            key = php_strtolower(key)
-            full += str(" ") + str(key) + str("=\"") + htmlspecialchars(value["data"]) + "\""
+        
+        full_ = str("<") + str(element_["tag"])
+        for key_,value_ in element_["attribs"]:
+            key_ = php_strtolower(key_)
+            full_ += str(" ") + str(key_) + str("=\"") + htmlspecialchars(value_["data"]) + "\""
         # end for
-        if element["self_closing"]:
-            full += " />"
+        if element_["self_closing"]:
+            full_ += " />"
         else:
-            full += str(">") + str(element["content"]) + str("</") + str(element["tag"]) + str(">")
+            full_ += str(">") + str(element_["content"]) + str("</") + str(element_["tag"]) + str(">")
         # end if
-        return full
+        return full_
     # end def element_implode
     @classmethod
-    def error(self, message=None, level=None, file=None, line=None):
+    def error(self, message_=None, level_=None, file_=None, line_=None):
         
-        if php_ini_get("error_reporting") & level > 0:
-            for case in Switch(level):
+        
+        if php_ini_get("error_reporting") & level_ > 0:
+            for case in Switch(level_):
                 if case(E_USER_ERROR):
-                    note = "PHP Error"
+                    note_ = "PHP Error"
                     break
                 # end if
                 if case(E_USER_WARNING):
-                    note = "PHP Warning"
+                    note_ = "PHP Warning"
                     break
                 # end if
                 if case(E_USER_NOTICE):
-                    note = "PHP Notice"
+                    note_ = "PHP Notice"
                     break
                 # end if
                 if case():
-                    note = "Unknown Error"
+                    note_ = "Unknown Error"
                     break
                 # end if
             # end for
-            log_error = True
+            log_error_ = True
             if (not php_function_exists("error_log")):
-                log_error = False
+                log_error_ = False
             # end if
-            log_file = php_no_error(lambda: php_ini_get("error_log"))
-            if (not php_empty(lambda : log_file)) and "syslog" != log_file and (not php_no_error(lambda: php_is_writable(log_file))):
-                log_error = False
+            log_file_ = php_no_error(lambda: php_ini_get("error_log"))
+            if (not php_empty(lambda : log_file_)) and "syslog" != log_file_ and (not php_no_error(lambda: php_is_writable(log_file_))):
+                log_error_ = False
             # end if
-            if log_error:
-                php_no_error(lambda: php_error_log(str(note) + str(": ") + str(message) + str(" in ") + str(file) + str(" on line ") + str(line), 0))
+            if log_error_:
+                php_no_error(lambda: php_error_log(str(note_) + str(": ") + str(message_) + str(" in ") + str(file_) + str(" on line ") + str(line_), 0))
             # end if
         # end if
-        return message
+        return message_
     # end def error
     @classmethod
-    def fix_protocol(self, url=None, http=1):
+    def fix_protocol(self, url_=None, http_=1):
         
-        url = SimplePie_Misc.normalize_url(url)
-        parsed = SimplePie_Misc.parse_url(url)
-        if parsed["scheme"] != "" and parsed["scheme"] != "http" and parsed["scheme"] != "https":
-            return SimplePie_Misc.fix_protocol(SimplePie_Misc.compress_parse_url("http", parsed["authority"], parsed["path"], parsed["query"], parsed["fragment"]), http)
+        
+        url_ = SimplePie_Misc.normalize_url(url_)
+        parsed_ = SimplePie_Misc.parse_url(url_)
+        if parsed_["scheme"] != "" and parsed_["scheme"] != "http" and parsed_["scheme"] != "https":
+            return SimplePie_Misc.fix_protocol(SimplePie_Misc.compress_parse_url("http", parsed_["authority"], parsed_["path"], parsed_["query"], parsed_["fragment"]), http_)
         # end if
-        if parsed["scheme"] == "" and parsed["authority"] == "" and (not php_file_exists(url)):
-            return SimplePie_Misc.fix_protocol(SimplePie_Misc.compress_parse_url("http", parsed["path"], "", parsed["query"], parsed["fragment"]), http)
+        if parsed_["scheme"] == "" and parsed_["authority"] == "" and (not php_file_exists(url_)):
+            return SimplePie_Misc.fix_protocol(SimplePie_Misc.compress_parse_url("http", parsed_["path"], "", parsed_["query"], parsed_["fragment"]), http_)
         # end if
-        if http == 2 and parsed["scheme"] != "":
-            return str("feed:") + str(url)
-        elif http == 3 and php_strtolower(parsed["scheme"]) == "http":
-            return php_substr_replace(url, "podcast", 0, 4)
-        elif http == 4 and php_strtolower(parsed["scheme"]) == "http":
-            return php_substr_replace(url, "itpc", 0, 4)
+        if http_ == 2 and parsed_["scheme"] != "":
+            return str("feed:") + str(url_)
+        elif http_ == 3 and php_strtolower(parsed_["scheme"]) == "http":
+            return php_substr_replace(url_, "podcast", 0, 4)
+        elif http_ == 4 and php_strtolower(parsed_["scheme"]) == "http":
+            return php_substr_replace(url_, "itpc", 0, 4)
         else:
-            return url
+            return url_
         # end if
     # end def fix_protocol
     @classmethod
-    def parse_url(self, url=None):
+    def parse_url(self, url_=None):
         
-        iri = php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(url))
-        return Array({"scheme": php_str(iri.scheme), "authority": php_str(iri.authority), "path": php_str(iri.path), "query": php_str(iri.query), "fragment": php_str(iri.fragment)})
+        
+        iri_ = php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(url_))
+        return Array({"scheme": php_str(iri_.scheme), "authority": php_str(iri_.authority), "path": php_str(iri_.path), "query": php_str(iri_.query), "fragment": php_str(iri_.fragment)})
     # end def parse_url
     @classmethod
-    def compress_parse_url(self, scheme="", authority="", path="", query="", fragment=""):
+    def compress_parse_url(self, scheme_="", authority_="", path_="", query_="", fragment_=""):
         
-        iri = php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(""))
-        iri.scheme = scheme
-        iri.authority = authority
-        iri.path = path
-        iri.query = query
-        iri.fragment = fragment
-        return iri.get_uri()
+        
+        iri_ = php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(""))
+        iri_.scheme = scheme_
+        iri_.authority = authority_
+        iri_.path = path_
+        iri_.query = query_
+        iri_.fragment = fragment_
+        return iri_.get_uri()
     # end def compress_parse_url
     @classmethod
-    def normalize_url(self, url=None):
+    def normalize_url(self, url_=None):
         
-        iri = php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(url))
-        return iri.get_uri()
+        
+        iri_ = php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(url_))
+        return iri_.get_uri()
     # end def normalize_url
     @classmethod
-    def percent_encoding_normalization(self, match=None):
+    def percent_encoding_normalization(self, match_=None):
         
-        integer = hexdec(match[1])
-        if integer >= 65 and integer <= 90 or integer >= 97 and integer <= 122 or integer >= 48 and integer <= 57 or integer == 45 or integer == 46 or integer == 95 or integer == 126:
-            return chr(integer)
+        
+        integer_ = hexdec(match_[1])
+        if integer_ >= 65 and integer_ <= 90 or integer_ >= 97 and integer_ <= 122 or integer_ >= 48 and integer_ <= 57 or integer_ == 45 or integer_ == 46 or integer_ == 95 or integer_ == 126:
+            return chr(integer_)
         else:
-            return php_strtoupper(match[0])
+            return php_strtoupper(match_[0])
         # end if
     # end def percent_encoding_normalization
     #// 
@@ -248,10 +253,11 @@ class SimplePie_Misc():
     #// @return string UTF-8 encoded string
     #//
     @classmethod
-    def windows_1252_to_utf8(self, string=None):
+    def windows_1252_to_utf8(self, string_=None):
         
-        windows_1252_to_utf8.convert_table = Array({"": "â¬", "": "ï¿½", "": "â", "": "Æ", "": "â", "": "â¦", "": "â ", "": "â¡", "": "Ë", "": "â°", "": "Å ", "": "â¹", "": "Å", "": "ï¿½", "": "Å½", "": "ï¿½", "": "ï¿½", "": "â", "": "â", "": "â", "": "â", "": "â¢", "": "â", "": "â", "": "Ë", "": "â¢", "": "Å¡", "": "âº", "": "Å", "": "ï¿½", "": "Å¾", "": "Å¸", " ": "Â ", "¡": "Â¡", "¢": "Â¢", "£": "Â£", "¤": "Â¤", "¥": "Â¥", "¦": "Â¦", "§": "Â§", "¨": "Â¨", "©": "Â©", "ª": "Âª", "«": "Â«", "¬": "Â¬", "­": "Â­", "®": "Â®", "¯": "Â¯", "°": "Â°", "±": "Â±", "²": "Â²", "³": "Â³", "´": "Â´", "µ": "Âµ", "¶": "Â¶", "·": "Â·", "¸": "Â¸", "¹": "Â¹", "º": "Âº", "»": "Â»", "¼": "Â¼", "½": "Â½", "¾": "Â¾", "¿": "Â¿", "À": "Ã", "Á": "Ã", "Â": "Ã", "Ã": "Ã", "Ä": "Ã", "Å": "Ã", "Æ": "Ã", "Ç": "Ã", "È": "Ã", "É": "Ã", "Ê": "Ã", "Ë": "Ã", "Ì": "Ã", "Í": "Ã", "Î": "Ã", "Ï": "Ã", "Ð": "Ã", "Ñ": "Ã", "Ò": "Ã", "Ó": "Ã", "Ô": "Ã", "Õ": "Ã", "Ö": "Ã", "×": "Ã", "Ø": "Ã", "Ù": "Ã", "Ú": "Ã", "Û": "Ã", "Ü": "Ã", "Ý": "Ã", "Þ": "Ã", "ß": "Ã", "à": "Ã ", "á": "Ã¡", "â": "Ã¢", "ã": "Ã£", "ä": "Ã¤", "å": "Ã¥", "æ": "Ã¦", "ç": "Ã§", "è": "Ã¨", "é": "Ã©", "ê": "Ãª", "ë": "Ã«", "ì": "Ã¬", "í": "Ã­", "î": "Ã®", "ï": "Ã¯", "ð": "Ã°", "ñ": "Ã±", "ò": "Ã²", "ó": "Ã³", "ô": "Ã´", "õ": "Ãµ", "ö": "Ã¶", "÷": "Ã·", "ø": "Ã¸", "ù": "Ã¹", "ú": "Ãº", "û": "Ã»", "ü": "Ã¼", "ý": "Ã½", "þ": "Ã¾", "ÿ": "Ã¿"})
-        return php_strtr(string, windows_1252_to_utf8.convert_table)
+        
+        convert_table_ = Array({"": "â¬", "": "ï¿½", "": "â", "": "Æ", "": "â", "": "â¦", "": "â ", "": "â¡", "": "Ë", "": "â°", "": "Å ", "": "â¹", "": "Å", "": "ï¿½", "": "Å½", "": "ï¿½", "": "ï¿½", "": "â", "": "â", "": "â", "": "â", "": "â¢", "": "â", "": "â", "": "Ë", "": "â¢", "": "Å¡", "": "âº", "": "Å", "": "ï¿½", "": "Å¾", "": "Å¸", " ": "Â ", "¡": "Â¡", "¢": "Â¢", "£": "Â£", "¤": "Â¤", "¥": "Â¥", "¦": "Â¦", "§": "Â§", "¨": "Â¨", "©": "Â©", "ª": "Âª", "«": "Â«", "¬": "Â¬", "­": "Â­", "®": "Â®", "¯": "Â¯", "°": "Â°", "±": "Â±", "²": "Â²", "³": "Â³", "´": "Â´", "µ": "Âµ", "¶": "Â¶", "·": "Â·", "¸": "Â¸", "¹": "Â¹", "º": "Âº", "»": "Â»", "¼": "Â¼", "½": "Â½", "¾": "Â¾", "¿": "Â¿", "À": "Ã", "Á": "Ã", "Â": "Ã", "Ã": "Ã", "Ä": "Ã", "Å": "Ã", "Æ": "Ã", "Ç": "Ã", "È": "Ã", "É": "Ã", "Ê": "Ã", "Ë": "Ã", "Ì": "Ã", "Í": "Ã", "Î": "Ã", "Ï": "Ã", "Ð": "Ã", "Ñ": "Ã", "Ò": "Ã", "Ó": "Ã", "Ô": "Ã", "Õ": "Ã", "Ö": "Ã", "×": "Ã", "Ø": "Ã", "Ù": "Ã", "Ú": "Ã", "Û": "Ã", "Ü": "Ã", "Ý": "Ã", "Þ": "Ã", "ß": "Ã", "à": "Ã ", "á": "Ã¡", "â": "Ã¢", "ã": "Ã£", "ä": "Ã¤", "å": "Ã¥", "æ": "Ã¦", "ç": "Ã§", "è": "Ã¨", "é": "Ã©", "ê": "Ãª", "ë": "Ã«", "ì": "Ã¬", "í": "Ã­", "î": "Ã®", "ï": "Ã¯", "ð": "Ã°", "ñ": "Ã±", "ò": "Ã²", "ó": "Ã³", "ô": "Ã´", "õ": "Ãµ", "ö": "Ã¶", "÷": "Ã·", "ø": "Ã¸", "ù": "Ã¹", "ú": "Ãº", "û": "Ã»", "ü": "Ã¼", "ý": "Ã½", "þ": "Ã¾", "ÿ": "Ã¿"})
+        return php_strtr(string_, convert_table_)
     # end def windows_1252_to_utf8
     #// 
     #// Change a string from one encoding to another
@@ -262,69 +268,72 @@ class SimplePie_Misc():
     #// @return string|boolean False if we can't convert it
     #//
     @classmethod
-    def change_encoding(self, data=None, input=None, output=None):
+    def change_encoding(self, data_=None, input_=None, output_=None):
         
-        input = SimplePie_Misc.encoding(input)
-        output = SimplePie_Misc.encoding(output)
+        
+        input_ = SimplePie_Misc.encoding(input_)
+        output_ = SimplePie_Misc.encoding(output_)
         #// We fail to fail on non US-ASCII bytes
-        if input == "US-ASCII":
-            change_encoding.non_ascii_octects = ""
-            if (not change_encoding.non_ascii_octects):
-                i = 128
-                while i <= 255:
+        if input_ == "US-ASCII":
+            non_ascii_octects_ = ""
+            if (not non_ascii_octects_):
+                i_ = 128
+                while i_ <= 255:
                     
-                    change_encoding.non_ascii_octects += chr(i)
-                    i += 1
+                    non_ascii_octects_ += chr(i_)
+                    i_ += 1
                 # end while
             # end if
-            data = php_substr(data, 0, strcspn(data, change_encoding.non_ascii_octects))
+            data_ = php_substr(data_, 0, strcspn(data_, non_ascii_octects_))
         # end if
         #// This is first, as behaviour of this is completely predictable
-        if input == "windows-1252" and output == "UTF-8":
-            return SimplePie_Misc.windows_1252_to_utf8(data)
+        if input_ == "windows-1252" and output_ == "UTF-8":
+            return SimplePie_Misc.windows_1252_to_utf8(data_)
             #// This is second, as behaviour of this varies only with PHP version (the middle part of this expression checks the encoding is supported).
-        elif php_function_exists("mb_convert_encoding") and SimplePie_Misc.change_encoding_mbstring(data, input, output):
-            return_ = SimplePie_Misc.change_encoding_mbstring(data, input, output)
+        elif php_function_exists("mb_convert_encoding") and SimplePie_Misc.change_encoding_mbstring(data_, input_, output_):
+            return_ = SimplePie_Misc.change_encoding_mbstring(data_, input_, output_)
             return return_
             #// This is last, as behaviour of this varies with OS userland and PHP version
-        elif php_function_exists("iconv") and SimplePie_Misc.change_encoding_iconv(data, input, output):
-            return_ = SimplePie_Misc.change_encoding_iconv(data, input, output)
+        elif php_function_exists("iconv") and SimplePie_Misc.change_encoding_iconv(data_, input_, output_):
+            return_ = SimplePie_Misc.change_encoding_iconv(data_, input_, output_)
             return return_
         else:
             return False
         # end if
     # end def change_encoding
-    def change_encoding_mbstring(self, data=None, input=None, output=None):
+    def change_encoding_mbstring(self, data_=None, input_=None, output_=None):
         
-        if input == "windows-949":
-            input = "EUC-KR"
+        
+        if input_ == "windows-949":
+            input_ = "EUC-KR"
         # end if
-        if output == "windows-949":
-            output = "EUC-KR"
+        if output_ == "windows-949":
+            output_ = "EUC-KR"
         # end if
-        if input == "Windows-31J":
-            input = "SJIS"
+        if input_ == "Windows-31J":
+            input_ = "SJIS"
         # end if
-        if output == "Windows-31J":
-            output = "SJIS"
+        if output_ == "Windows-31J":
+            output_ = "SJIS"
         # end if
         #// Check that the encoding is supported
-        if php_no_error(lambda: mb_convert_encoding("", "UTF-16BE", input)) == " ":
+        if php_no_error(lambda: mb_convert_encoding("", "UTF-16BE", input_)) == " ":
             return False
         # end if
-        if (not php_in_array(input, mb_list_encodings())):
+        if (not php_in_array(input_, mb_list_encodings())):
             return False
         # end if
         #// Let's do some conversion
-        return_ = php_no_error(lambda: mb_convert_encoding(data, output, input))
+        return_ = php_no_error(lambda: mb_convert_encoding(data_, output_, input_))
         if return_:
             return return_
         # end if
         return False
     # end def change_encoding_mbstring
-    def change_encoding_iconv(self, data=None, input=None, output=None):
+    def change_encoding_iconv(self, data_=None, input_=None, output_=None):
         
-        return php_no_error(lambda: iconv(input, output, data))
+        
+        return php_no_error(lambda: iconv(input_, output_, data_))
     # end def change_encoding_iconv
     #// 
     #// Normalize an encoding name
@@ -338,10 +347,11 @@ class SimplePie_Misc():
     #// @return string Standardised name
     #//
     @classmethod
-    def encoding(self, charset=None):
+    def encoding(self, charset_=None):
+        
         
         #// Normalization from UTS #22
-        for case in Switch(php_strtolower(php_preg_replace("/(?:[^a-zA-Z0-9]+|([^0-9])0+)/", "\\1", charset))):
+        for case in Switch(php_strtolower(php_preg_replace("/(?:[^a-zA-Z0-9]+|([^0-9])0+)/", "\\1", charset_))):
             if case("adobestandardencoding"):
                 pass
             # end if
@@ -2764,24 +2774,25 @@ class SimplePie_Misc():
                 return "windows-1258"
             # end if
             if case():
-                return charset
+                return charset_
             # end if
         # end for
     # end def encoding
     @classmethod
     def get_curl_version(self):
         
-        curl = curl_version()
-        if php_is_array(curl):
-            curl = curl["version"]
-        elif php_substr(curl, 0, 5) == "curl/":
-            curl = php_substr(curl, 5, strcspn(curl, "  \n\r", 5))
-        elif php_substr(curl, 0, 8) == "libcurl/":
-            curl = php_substr(curl, 8, strcspn(curl, "  \n\r", 8))
+        
+        curl_ = curl_version()
+        if php_is_array(curl_):
+            curl_ = curl_["version"]
+        elif php_substr(curl_, 0, 5) == "curl/":
+            curl_ = php_substr(curl_, 5, strcspn(curl_, "   \n\r", 5))
+        elif php_substr(curl_, 0, 8) == "libcurl/":
+            curl_ = php_substr(curl_, 8, strcspn(curl_, "   \n\r", 8))
         else:
-            curl = 0
+            curl_ = 0
         # end if
-        return curl
+        return curl_
     # end def get_curl_version
     #// 
     #// Strip HTML comments
@@ -2790,29 +2801,31 @@ class SimplePie_Misc():
     #// @return string Comment stripped string
     #//
     @classmethod
-    def strip_comments(self, data=None):
+    def strip_comments(self, data_=None):
         
-        output = ""
+        
+        output_ = ""
         while True:
-            start = php_strpos(data, "<!--")
-            if not (start != False):
+            start_ = php_strpos(data_, "<!--")
+            if not (start_ != False):
                 break
             # end if
-            output += php_substr(data, 0, start)
-            end_ = php_strpos(data, "-->", start)
+            output_ += php_substr(data_, 0, start_)
+            end_ = php_strpos(data_, "-->", start_)
             if end_ != False:
-                data = php_substr_replace(data, "", 0, end_ + 3)
+                data_ = php_substr_replace(data_, "", 0, end_ + 3)
             else:
-                data = ""
+                data_ = ""
             # end if
         # end while
-        return output + data
+        return output_ + data_
     # end def strip_comments
     @classmethod
-    def parse_date(self, dt=None):
+    def parse_date(self, dt_=None):
         
-        parser = SimplePie_Parse_Date.get()
-        return parser.parse(dt)
+        
+        parser_ = SimplePie_Parse_Date.get()
+        return parser_.parse(dt_)
     # end def parse_date
     #// 
     #// Decode HTML entities
@@ -2822,10 +2835,11 @@ class SimplePie_Misc():
     #// @return string Output data
     #//
     @classmethod
-    def entities_decode(self, data=None):
+    def entities_decode(self, data_=None):
         
-        decoder = php_new_class("SimplePie_Decode_HTML_Entities", lambda : SimplePie_Decode_HTML_Entities(data))
-        return decoder.parse()
+        
+        decoder_ = php_new_class("SimplePie_Decode_HTML_Entities", lambda : SimplePie_Decode_HTML_Entities(data_))
+        return decoder_.parse()
     # end def entities_decode
     #// 
     #// Remove RFC822 comments
@@ -2834,105 +2848,109 @@ class SimplePie_Misc():
     #// @return string Comment stripped string
     #//
     @classmethod
-    def uncomment_rfc822(self, string=None):
+    def uncomment_rfc822(self, string_=None):
         
-        string = php_str(string)
-        position = 0
-        length = php_strlen(string)
-        depth = 0
-        output = ""
+        
+        string_ = php_str(string_)
+        position_ = 0
+        length_ = php_strlen(string_)
+        depth_ = 0
+        output_ = ""
         while True:
-            pos = php_strpos(string, "(", position)
-            if not (position < length and pos != False):
+            pos_ = php_strpos(string_, "(", position_)
+            if not (position_ < length_ and pos_ != False):
                 break
             # end if
-            output += php_substr(string, position, pos - position)
-            position = pos + 1
-            if string[pos - 1] != "\\":
-                depth += 1
+            output_ += php_substr(string_, position_, pos_ - position_)
+            position_ = pos_ + 1
+            if string_[pos_ - 1] != "\\":
+                depth_ += 1
                 while True:
                     
-                    if not (depth and position < length):
+                    if not (depth_ and position_ < length_):
                         break
                     # end if
-                    position += strcspn(string, "()", position)
-                    if string[position - 1] == "\\":
-                        position += 1
+                    position_ += strcspn(string_, "()", position_)
+                    if string_[position_ - 1] == "\\":
+                        position_ += 1
                         continue
-                    elif (php_isset(lambda : string[position])):
-                        for case in Switch(string[position]):
+                    elif (php_isset(lambda : string_[position_])):
+                        for case in Switch(string_[position_]):
                             if case("("):
-                                depth += 1
+                                depth_ += 1
                                 break
                             # end if
                             if case(")"):
-                                depth -= 1
+                                depth_ -= 1
                                 break
                             # end if
                         # end for
-                        position += 1
+                        position_ += 1
                     else:
                         break
                     # end if
                 # end while
             else:
-                output += "("
+                output_ += "("
             # end if
         # end while
-        output += php_substr(string, position)
-        return output
+        output_ += php_substr(string_, position_)
+        return output_
     # end def uncomment_rfc822
     @classmethod
-    def parse_mime(self, mime=None):
+    def parse_mime(self, mime_=None):
         
-        pos = php_strpos(mime, ";")
-        if pos == False:
-            return php_trim(mime)
+        
+        pos_ = php_strpos(mime_, ";")
+        if pos_ == False:
+            return php_trim(mime_)
         else:
-            return php_trim(php_substr(mime, 0, pos))
+            return php_trim(php_substr(mime_, 0, pos_))
         # end if
     # end def parse_mime
     @classmethod
-    def atom_03_construct_type(self, attribs=None):
+    def atom_03_construct_type(self, attribs_=None):
         
-        if (php_isset(lambda : attribs[""]["mode"])) and php_strtolower(php_trim(attribs[""]["mode"]) == "base64"):
-            mode = SIMPLEPIE_CONSTRUCT_BASE64
+        
+        if (php_isset(lambda : attribs_[""]["mode"])) and php_strtolower(php_trim(attribs_[""]["mode"]) == "base64"):
+            mode_ = SIMPLEPIE_CONSTRUCT_BASE64
         else:
-            mode = SIMPLEPIE_CONSTRUCT_NONE
+            mode_ = SIMPLEPIE_CONSTRUCT_NONE
         # end if
-        if (php_isset(lambda : attribs[""]["type"])):
-            for case in Switch(php_strtolower(php_trim(attribs[""]["type"]))):
+        if (php_isset(lambda : attribs_[""]["type"])):
+            for case in Switch(php_strtolower(php_trim(attribs_[""]["type"]))):
                 if case("text"):
                     pass
                 # end if
                 if case("text/plain"):
-                    return SIMPLEPIE_CONSTRUCT_TEXT | mode
+                    return SIMPLEPIE_CONSTRUCT_TEXT | mode_
                 # end if
                 if case("html"):
                     pass
                 # end if
                 if case("text/html"):
-                    return SIMPLEPIE_CONSTRUCT_HTML | mode
+                    return SIMPLEPIE_CONSTRUCT_HTML | mode_
                 # end if
                 if case("xhtml"):
                     pass
                 # end if
                 if case("application/xhtml+xml"):
-                    return SIMPLEPIE_CONSTRUCT_XHTML | mode
+                    return SIMPLEPIE_CONSTRUCT_XHTML | mode_
                 # end if
                 if case():
-                    return SIMPLEPIE_CONSTRUCT_NONE | mode
+                    return SIMPLEPIE_CONSTRUCT_NONE | mode_
                 # end if
             # end for
         else:
-            return SIMPLEPIE_CONSTRUCT_TEXT | mode
+            return SIMPLEPIE_CONSTRUCT_TEXT | mode_
         # end if
     # end def atom_03_construct_type
     @classmethod
-    def atom_10_construct_type(self, attribs=None):
+    def atom_10_construct_type(self, attribs_=None):
         
-        if (php_isset(lambda : attribs[""]["type"])):
-            for case in Switch(php_strtolower(php_trim(attribs[""]["type"]))):
+        
+        if (php_isset(lambda : attribs_[""]["type"])):
+            for case in Switch(php_strtolower(php_trim(attribs_[""]["type"]))):
                 if case("text"):
                     return SIMPLEPIE_CONSTRUCT_TEXT
                 # end if
@@ -2950,11 +2968,12 @@ class SimplePie_Misc():
         return SIMPLEPIE_CONSTRUCT_TEXT
     # end def atom_10_construct_type
     @classmethod
-    def atom_10_content_construct_type(self, attribs=None):
+    def atom_10_content_construct_type(self, attribs_=None):
         
-        if (php_isset(lambda : attribs[""]["type"])):
-            type = php_strtolower(php_trim(attribs[""]["type"]))
-            for case in Switch(type):
+        
+        if (php_isset(lambda : attribs_[""]["type"])):
+            type_ = php_strtolower(php_trim(attribs_[""]["type"]))
+            for case in Switch(type_):
                 if case("text"):
                     return SIMPLEPIE_CONSTRUCT_TEXT
                 # end if
@@ -2965,7 +2984,7 @@ class SimplePie_Misc():
                     return SIMPLEPIE_CONSTRUCT_XHTML
                 # end if
             # end for
-            if php_in_array(php_substr(type, -4), Array("+xml", "/xml")) or php_substr(type, 0, 5) == "text/":
+            if php_in_array(php_substr(type_, -4), Array("+xml", "/xml")) or php_substr(type_, 0, 5) == "text/":
                 return SIMPLEPIE_CONSTRUCT_NONE
             else:
                 return SIMPLEPIE_CONSTRUCT_BASE64
@@ -2975,28 +2994,30 @@ class SimplePie_Misc():
         # end if
     # end def atom_10_content_construct_type
     @classmethod
-    def is_isegment_nz_nc(self, string=None):
+    def is_isegment_nz_nc(self, string_=None):
         
-        return php_bool(php_preg_match("/^([A-Za-z0-9\\-._~\\x{A0}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFEF}\\x{10000}-\\x{1FFFD}\\x{20000}-\\x{2FFFD}\\x{30000}-\\x{3FFFD}\\x{40000}-\\x{4FFFD}\\x{50000}-\\x{5FFFD}\\x{60000}-\\x{6FFFD}\\x{70000}-\\x{7FFFD}\\x{80000}-\\x{8FFFD}\\x{90000}-\\x{9FFFD}\\x{A0000}-\\x{AFFFD}\\x{B0000}-\\x{BFFFD}\\x{C0000}-\\x{CFFFD}\\x{D0000}-\\x{DFFFD}\\x{E1000}-\\x{EFFFD}!$&'()*+,;=@]|(%[0-9ABCDEF]{2}))+$/u", string))
+        
+        return php_bool(php_preg_match("/^([A-Za-z0-9\\-._~\\x{A0}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFEF}\\x{10000}-\\x{1FFFD}\\x{20000}-\\x{2FFFD}\\x{30000}-\\x{3FFFD}\\x{40000}-\\x{4FFFD}\\x{50000}-\\x{5FFFD}\\x{60000}-\\x{6FFFD}\\x{70000}-\\x{7FFFD}\\x{80000}-\\x{8FFFD}\\x{90000}-\\x{9FFFD}\\x{A0000}-\\x{AFFFD}\\x{B0000}-\\x{BFFFD}\\x{C0000}-\\x{CFFFD}\\x{D0000}-\\x{DFFFD}\\x{E1000}-\\x{EFFFD}!$&'()*+,;=@]|(%[0-9ABCDEF]{2}))+$/u", string_))
     # end def is_isegment_nz_nc
     @classmethod
-    def space_seperated_tokens(self, string=None):
+    def space_seperated_tokens(self, string_=None):
         
-        space_characters = "    \n\r"
-        string_length = php_strlen(string)
-        position = strspn(string, space_characters)
-        tokens = Array()
+        
+        space_characters_ = "   \n\r"
+        string_length_ = php_strlen(string_)
+        position_ = strspn(string_, space_characters_)
+        tokens_ = Array()
         while True:
             
-            if not (position < string_length):
+            if not (position_ < string_length_):
                 break
             # end if
-            len = strcspn(string, space_characters, position)
-            tokens[-1] = php_substr(string, position, len)
-            position += len
-            position += strspn(string, space_characters, position)
+            len_ = strcspn(string_, space_characters_, position_)
+            tokens_[-1] = php_substr(string_, position_, len_)
+            position_ += len_
+            position_ += strspn(string_, space_characters_, position_)
         # end while
-        return tokens
+        return tokens_
     # end def space_seperated_tokens
     #// 
     #// Converts a unicode codepoint to a UTF-8 character
@@ -3006,23 +3027,24 @@ class SimplePie_Misc():
     #// @return string UTF-8 character
     #//
     @classmethod
-    def codepoint_to_utf8(self, codepoint=None):
+    def codepoint_to_utf8(self, codepoint_=None):
         
-        codepoint = php_int(codepoint)
-        if codepoint < 0:
+        
+        codepoint_ = php_int(codepoint_)
+        if codepoint_ < 0:
             return False
         else:
-            if codepoint <= 127:
-                return chr(codepoint)
+            if codepoint_ <= 127:
+                return chr(codepoint_)
             else:
-                if codepoint <= 2047:
-                    return chr(192 | codepoint >> 6) + chr(128 | codepoint & 63)
+                if codepoint_ <= 2047:
+                    return chr(192 | codepoint_ >> 6) + chr(128 | codepoint_ & 63)
                 else:
-                    if codepoint <= 65535:
-                        return chr(224 | codepoint >> 12) + chr(128 | codepoint >> 6 & 63) + chr(128 | codepoint & 63)
+                    if codepoint_ <= 65535:
+                        return chr(224 | codepoint_ >> 12) + chr(128 | codepoint_ >> 6 & 63) + chr(128 | codepoint_ & 63)
                     else:
-                        if codepoint <= 1114111:
-                            return chr(240 | codepoint >> 18) + chr(128 | codepoint >> 12 & 63) + chr(128 | codepoint >> 6 & 63) + chr(128 | codepoint & 63)
+                        if codepoint_ <= 1114111:
+                            return chr(240 | codepoint_ >> 18) + chr(128 | codepoint_ >> 12 & 63) + chr(128 | codepoint_ >> 6 & 63) + chr(128 | codepoint_ & 63)
                         else:
                             #// U+FFFD REPLACEMENT CHARACTER
                             return "ï¿½"
@@ -3043,16 +3065,17 @@ class SimplePie_Misc():
     #// @return array
     #//
     @classmethod
-    def parse_str(self, str=None):
+    def parse_str(self, str_=None):
+        
         
         return_ = Array()
-        str = php_explode("&", str)
-        for section in str:
-            if php_strpos(section, "=") != False:
-                name, value = php_explode("=", section, 2)
-                return_[urldecode(name)][-1] = urldecode(value)
+        str_ = php_explode("&", str_)
+        for section_ in str_:
+            if php_strpos(section_, "=") != False:
+                name_, value_ = php_explode("=", section_, 2)
+                return_[urldecode(name_)][-1] = urldecode(value_)
             else:
-                return_[urldecode(section)][-1] = None
+                return_[urldecode(section_)][-1] = None
             # end if
         # end for
         return return_
@@ -3066,80 +3089,82 @@ class SimplePie_Misc():
     #// @return array Possible encodings
     #//
     @classmethod
-    def xml_encoding(self, data=None, registry=None):
+    def xml_encoding(self, data_=None, registry_=None):
+        
         
         #// UTF-32 Big Endian BOM
-        if php_substr(data, 0, 4) == "  þÿ":
-            encoding[-1] = "UTF-32BE"
+        if php_substr(data_, 0, 4) == "  þÿ":
+            encoding_[-1] = "UTF-32BE"
             #// UTF-32 Little Endian BOM
-        elif php_substr(data, 0, 4) == "ÿþ  ":
-            encoding[-1] = "UTF-32LE"
+        elif php_substr(data_, 0, 4) == "ÿþ  ":
+            encoding_[-1] = "UTF-32LE"
             #// UTF-16 Big Endian BOM
-        elif php_substr(data, 0, 2) == "þÿ":
-            encoding[-1] = "UTF-16BE"
+        elif php_substr(data_, 0, 2) == "þÿ":
+            encoding_[-1] = "UTF-16BE"
             #// UTF-16 Little Endian BOM
-        elif php_substr(data, 0, 2) == "ÿþ":
-            encoding[-1] = "UTF-16LE"
+        elif php_substr(data_, 0, 2) == "ÿþ":
+            encoding_[-1] = "UTF-16LE"
             #// UTF-8 BOM
-        elif php_substr(data, 0, 3) == "ï»¿":
-            encoding[-1] = "UTF-8"
+        elif php_substr(data_, 0, 3) == "ï»¿":
+            encoding_[-1] = "UTF-8"
             #// UTF-32 Big Endian Without BOM
-        elif php_substr(data, 0, 20) == "   <   ?   x   m   l":
-            pos = php_strpos(data, "   ?   >")
-            if pos:
-                parser = registry.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data, 20, pos - 20), "UTF-32BE", "UTF-8")))
-                if parser.parse():
-                    encoding[-1] = parser.encoding
+        elif php_substr(data_, 0, 20) == "   <   ?   x   m   l":
+            pos_ = php_strpos(data_, "   ?   >")
+            if pos_:
+                parser_ = registry_.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data_, 20, pos_ - 20), "UTF-32BE", "UTF-8")))
+                if parser_.parse():
+                    encoding_[-1] = parser_.encoding
                 # end if
             # end if
-            encoding[-1] = "UTF-32BE"
+            encoding_[-1] = "UTF-32BE"
             #// UTF-32 Little Endian Without BOM
-        elif php_substr(data, 0, 20) == "<   ?   x   m   l   ":
-            pos = php_strpos(data, "?   >   ")
-            if pos:
-                parser = registry.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data, 20, pos - 20), "UTF-32LE", "UTF-8")))
-                if parser.parse():
-                    encoding[-1] = parser.encoding
+        elif php_substr(data_, 0, 20) == "<   ?   x   m   l   ":
+            pos_ = php_strpos(data_, "?   >   ")
+            if pos_:
+                parser_ = registry_.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data_, 20, pos_ - 20), "UTF-32LE", "UTF-8")))
+                if parser_.parse():
+                    encoding_[-1] = parser_.encoding
                 # end if
             # end if
-            encoding[-1] = "UTF-32LE"
+            encoding_[-1] = "UTF-32LE"
             #// UTF-16 Big Endian Without BOM
-        elif php_substr(data, 0, 10) == " < ? x m l":
-            pos = php_strpos(data, " ? >")
-            if pos:
-                parser = registry.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data, 20, pos - 10), "UTF-16BE", "UTF-8")))
-                if parser.parse():
-                    encoding[-1] = parser.encoding
+        elif php_substr(data_, 0, 10) == " < ? x m l":
+            pos_ = php_strpos(data_, " ? >")
+            if pos_:
+                parser_ = registry_.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data_, 20, pos_ - 10), "UTF-16BE", "UTF-8")))
+                if parser_.parse():
+                    encoding_[-1] = parser_.encoding
                 # end if
             # end if
-            encoding[-1] = "UTF-16BE"
+            encoding_[-1] = "UTF-16BE"
             #// UTF-16 Little Endian Without BOM
-        elif php_substr(data, 0, 10) == "< ? x m l ":
-            pos = php_strpos(data, "? > ")
-            if pos:
-                parser = registry.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data, 20, pos - 10), "UTF-16LE", "UTF-8")))
-                if parser.parse():
-                    encoding[-1] = parser.encoding
+        elif php_substr(data_, 0, 10) == "< ? x m l ":
+            pos_ = php_strpos(data_, "? > ")
+            if pos_:
+                parser_ = registry_.create("XML_Declaration_Parser", Array(SimplePie_Misc.change_encoding(php_substr(data_, 20, pos_ - 10), "UTF-16LE", "UTF-8")))
+                if parser_.parse():
+                    encoding_[-1] = parser_.encoding
                 # end if
             # end if
-            encoding[-1] = "UTF-16LE"
+            encoding_[-1] = "UTF-16LE"
             #// US-ASCII (or superset)
-        elif php_substr(data, 0, 5) == "<?xml":
-            pos = php_strpos(data, "?>")
-            if pos:
-                parser = registry.create("XML_Declaration_Parser", Array(php_substr(data, 5, pos - 5)))
-                if parser.parse():
-                    encoding[-1] = parser.encoding
+        elif php_substr(data_, 0, 5) == "<?xml":
+            pos_ = php_strpos(data_, "?>")
+            if pos_:
+                parser_ = registry_.create("XML_Declaration_Parser", Array(php_substr(data_, 5, pos_ - 5)))
+                if parser_.parse():
+                    encoding_[-1] = parser_.encoding
                 # end if
             # end if
-            encoding[-1] = "UTF-8"
+            encoding_[-1] = "UTF-8"
         else:
-            encoding[-1] = "UTF-8"
+            encoding_[-1] = "UTF-8"
         # end if
-        return encoding
+        return encoding_
     # end def xml_encoding
     @classmethod
     def output_javascript(self):
+        
         
         if php_function_exists("ob_gzhandler"):
             ob_start("ob_gzhandler")
@@ -3176,18 +3201,19 @@ class SimplePie_Misc():
     @classmethod
     def get_build(self):
         
-        root = php_dirname(php_dirname(__FILE__))
-        if php_file_exists(root + "/.git/index"):
-            return filemtime(root + "/.git/index")
-        elif php_file_exists(root + "/SimplePie"):
-            time = 0
-            for file in glob(root + "/SimplePie/*.php"):
-                mtime = filemtime(file)
-                if mtime > time:
-                    time = mtime
+        
+        root_ = php_dirname(php_dirname(__FILE__))
+        if php_file_exists(root_ + "/.git/index"):
+            return filemtime(root_ + "/.git/index")
+        elif php_file_exists(root_ + "/SimplePie"):
+            time_ = 0
+            for file_ in glob(root_ + "/SimplePie/*.php"):
+                mtime_ = filemtime(file_)
+                if mtime_ > time_:
+                    time_ = mtime_
                 # end if
             # end for
-            return time
+            return time_
         elif php_file_exists(php_dirname(__FILE__) + "/Core.php"):
             return filemtime(php_dirname(__FILE__) + "/Core.php")
         else:
@@ -3198,51 +3224,53 @@ class SimplePie_Misc():
     #// Format debugging information
     #//
     @classmethod
-    def debug(self, sp=None):
+    def debug(self, sp_=None):
         
-        info = "SimplePie " + SIMPLEPIE_VERSION + " Build " + SIMPLEPIE_BUILD + "\n"
-        info += "PHP " + PHP_VERSION + "\n"
-        if sp.error() != None:
-            info += "Error occurred: " + sp.error() + "\n"
+        
+        info_ = "SimplePie " + SIMPLEPIE_VERSION + " Build " + SIMPLEPIE_BUILD + "\n"
+        info_ += "PHP " + PHP_VERSION + "\n"
+        if sp_.error() != None:
+            info_ += "Error occurred: " + sp_.error() + "\n"
         else:
-            info += "No error found.\n"
+            info_ += "No error found.\n"
         # end if
-        info += "Extensions:\n"
-        extensions = Array("pcre", "curl", "zlib", "mbstring", "iconv", "xmlreader", "xml")
-        for ext in extensions:
-            if php_extension_loaded(ext):
-                info += str("    ") + str(ext) + str(" loaded\n")
-                for case in Switch(ext):
+        info_ += "Extensions:\n"
+        extensions_ = Array("pcre", "curl", "zlib", "mbstring", "iconv", "xmlreader", "xml")
+        for ext_ in extensions_:
+            if php_extension_loaded(ext_):
+                info_ += str("    ") + str(ext_) + str(" loaded\n")
+                for case in Switch(ext_):
                     if case("pcre"):
-                        info += "      Version " + PCRE_VERSION + "\n"
+                        info_ += "      Version " + PCRE_VERSION + "\n"
                         break
                     # end if
                     if case("curl"):
-                        version = curl_version()
-                        info += "      Version " + version["version"] + "\n"
+                        version_ = curl_version()
+                        info_ += "      Version " + version_["version"] + "\n"
                         break
                     # end if
                     if case("mbstring"):
-                        info += "      Overloading: " + mb_get_info("func_overload") + "\n"
+                        info_ += "      Overloading: " + mb_get_info("func_overload") + "\n"
                         break
                     # end if
                     if case("iconv"):
-                        info += "      Version " + ICONV_VERSION + "\n"
+                        info_ += "      Version " + ICONV_VERSION + "\n"
                         break
                     # end if
                     if case("xml"):
-                        info += "      Version " + LIBXML_DOTTED_VERSION + "\n"
+                        info_ += "      Version " + LIBXML_DOTTED_VERSION + "\n"
                         break
                     # end if
                 # end for
             else:
-                info += str("    ") + str(ext) + str(" not loaded\n")
+                info_ += str("    ") + str(ext_) + str(" not loaded\n")
             # end if
         # end for
-        return info
+        return info_
     # end def debug
     @classmethod
-    def silence_errors(self, num=None, str=None):
+    def silence_errors(self, num_=None, str_=None):
+        
         
         pass
     # end def silence_errors

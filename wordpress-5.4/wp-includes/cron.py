@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -43,13 +38,16 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param array  $args       Optional. Array containing each separate argument to pass to the hook's callback function.
 #// @return bool True if event successfully scheduled. False for failure.
 #//
-def wp_schedule_single_event(timestamp=None, hook=None, args=Array(), *args_):
+def wp_schedule_single_event(timestamp_=None, hook_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Make sure timestamp is a positive integer.
-    if (not php_is_numeric(timestamp)) or timestamp <= 0:
+    if (not php_is_numeric(timestamp_)) or timestamp_ <= 0:
         return False
     # end if
-    event = Array({"hook": hook, "timestamp": timestamp, "schedule": False, "args": args})
+    event_ = Array({"hook": hook_, "timestamp": timestamp_, "schedule": False, "args": args_})
     #// 
     #// Filter to preflight or hijack scheduling an event.
     #// 
@@ -80,9 +78,9 @@ def wp_schedule_single_event(timestamp=None, hook=None, args=Array(), *args_):
     #// @type int          $interval  The interval time in seconds for the schedule. Only present for recurring events.
     #// }
     #//
-    pre = apply_filters("pre_schedule_event", None, event)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_schedule_event", None, event_)
+    if None != pre_:
+        return pre_
     # end if
     #// 
     #// Check for a duplicated event.
@@ -97,32 +95,32 @@ def wp_schedule_single_event(timestamp=None, hook=None, args=Array(), *args_):
     #// current time) all events scheduled within the next ten minutes
     #// are considered duplicates.
     #//
-    crons = _get_cron_array()
-    key = php_md5(serialize(event.args))
-    duplicate = False
-    if event.timestamp < time() + 10 * MINUTE_IN_SECONDS:
-        min_timestamp = 0
+    crons_ = _get_cron_array()
+    key_ = php_md5(serialize(event_.args))
+    duplicate_ = False
+    if event_.timestamp < time() + 10 * MINUTE_IN_SECONDS:
+        min_timestamp_ = 0
     else:
-        min_timestamp = event.timestamp - 10 * MINUTE_IN_SECONDS
+        min_timestamp_ = event_.timestamp - 10 * MINUTE_IN_SECONDS
     # end if
-    if event.timestamp < time():
-        max_timestamp = time() + 10 * MINUTE_IN_SECONDS
+    if event_.timestamp < time():
+        max_timestamp_ = time() + 10 * MINUTE_IN_SECONDS
     else:
-        max_timestamp = event.timestamp + 10 * MINUTE_IN_SECONDS
+        max_timestamp_ = event_.timestamp + 10 * MINUTE_IN_SECONDS
     # end if
-    for event_timestamp,cron in crons:
-        if event_timestamp < min_timestamp:
+    for event_timestamp_,cron_ in crons_:
+        if event_timestamp_ < min_timestamp_:
             continue
         # end if
-        if event_timestamp > max_timestamp:
+        if event_timestamp_ > max_timestamp_:
             break
         # end if
-        if (php_isset(lambda : cron[event.hook][key])):
-            duplicate = True
+        if (php_isset(lambda : cron_[event_.hook][key_])):
+            duplicate_ = True
             break
         # end if
     # end for
-    if duplicate:
+    if duplicate_:
         return False
     # end if
     #// 
@@ -140,14 +138,14 @@ def wp_schedule_single_event(timestamp=None, hook=None, args=Array(), *args_):
     #// @type int          $interval  The interval time in seconds for the schedule. Only present for recurring events.
     #// }
     #//
-    event = apply_filters("schedule_event", event)
+    event_ = apply_filters("schedule_event", event_)
     #// A plugin disallowed this event.
-    if (not event):
+    if (not event_):
         return False
     # end if
-    crons[event.timestamp][event.hook][key] = Array({"schedule": event.schedule, "args": event.args})
-    uksort(crons, "strnatcasecmp")
-    return _set_cron_array(crons)
+    crons_[event_.timestamp][event_.hook][key_] = Array({"schedule": event_.schedule, "args": event_.args})
+    uksort(crons_, "strnatcasecmp")
+    return _set_cron_array(crons_)
 # end def wp_schedule_single_event
 #// 
 #// Schedules a recurring event.
@@ -179,33 +177,36 @@ def wp_schedule_single_event(timestamp=None, hook=None, args=Array(), *args_):
 #// @param array  $args       Optional. Array containing each separate argument to pass to the hook's callback function.
 #// @return bool True if event successfully scheduled. False for failure.
 #//
-def wp_schedule_event(timestamp=None, recurrence=None, hook=None, args=Array(), *args_):
+def wp_schedule_event(timestamp_=None, recurrence_=None, hook_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Make sure timestamp is a positive integer.
-    if (not php_is_numeric(timestamp)) or timestamp <= 0:
+    if (not php_is_numeric(timestamp_)) or timestamp_ <= 0:
         return False
     # end if
-    schedules = wp_get_schedules()
-    if (not (php_isset(lambda : schedules[recurrence]))):
+    schedules_ = wp_get_schedules()
+    if (not (php_isset(lambda : schedules_[recurrence_]))):
         return False
     # end if
-    event = Array({"hook": hook, "timestamp": timestamp, "schedule": recurrence, "args": args, "interval": schedules[recurrence]["interval"]})
+    event_ = Array({"hook": hook_, "timestamp": timestamp_, "schedule": recurrence_, "args": args_, "interval": schedules_[recurrence_]["interval"]})
     #// This filter is documented in wp-includes/cron.php
-    pre = apply_filters("pre_schedule_event", None, event)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_schedule_event", None, event_)
+    if None != pre_:
+        return pre_
     # end if
     #// This filter is documented in wp-includes/cron.php
-    event = apply_filters("schedule_event", event)
+    event_ = apply_filters("schedule_event", event_)
     #// A plugin disallowed this event.
-    if (not event):
+    if (not event_):
         return False
     # end if
-    key = php_md5(serialize(event.args))
-    crons = _get_cron_array()
-    crons[event.timestamp][event.hook][key] = Array({"schedule": event.schedule, "args": event.args, "interval": event.interval})
-    uksort(crons, "strnatcasecmp")
-    return _set_cron_array(crons)
+    key_ = php_md5(serialize(event_.args))
+    crons_ = _get_cron_array()
+    crons_[event_.timestamp][event_.hook][key_] = Array({"schedule": event_.schedule, "args": event_.args, "interval": event_.interval})
+    uksort(crons_, "strnatcasecmp")
+    return _set_cron_array(crons_)
 # end def wp_schedule_event
 #// 
 #// Reschedules a recurring event.
@@ -226,26 +227,29 @@ def wp_schedule_event(timestamp=None, recurrence=None, hook=None, args=Array(), 
 #// @param array  $args       Optional. Array containing each separate argument to pass to the hook's callback function.
 #// @return bool True if event successfully rescheduled. False for failure.
 #//
-def wp_reschedule_event(timestamp=None, recurrence=None, hook=None, args=Array(), *args_):
+def wp_reschedule_event(timestamp_=None, recurrence_=None, hook_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Make sure timestamp is a positive integer.
-    if (not php_is_numeric(timestamp)) or timestamp <= 0:
+    if (not php_is_numeric(timestamp_)) or timestamp_ <= 0:
         return False
     # end if
-    schedules = wp_get_schedules()
-    interval = 0
+    schedules_ = wp_get_schedules()
+    interval_ = 0
     #// First we try to get the interval from the schedule.
-    if (php_isset(lambda : schedules[recurrence])):
-        interval = schedules[recurrence]["interval"]
+    if (php_isset(lambda : schedules_[recurrence_])):
+        interval_ = schedules_[recurrence_]["interval"]
     # end if
     #// Now we try to get it from the saved interval in case the schedule disappears.
-    if 0 == interval:
-        scheduled_event = wp_get_scheduled_event(hook, args, timestamp)
-        if scheduled_event and (php_isset(lambda : scheduled_event.interval)):
-            interval = scheduled_event.interval
+    if 0 == interval_:
+        scheduled_event_ = wp_get_scheduled_event(hook_, args_, timestamp_)
+        if scheduled_event_ and (php_isset(lambda : scheduled_event_.interval)):
+            interval_ = scheduled_event_.interval
         # end if
     # end if
-    event = Array({"hook": hook, "timestamp": timestamp, "schedule": recurrence, "args": args, "interval": interval})
+    event_ = Array({"hook": hook_, "timestamp": timestamp_, "schedule": recurrence_, "args": args_, "interval": interval_})
     #// 
     #// Filter to preflight or hijack rescheduling of events.
     #// 
@@ -268,21 +272,21 @@ def wp_reschedule_event(timestamp=None, recurrence=None, hook=None, args=Array()
     #// @type int          $interval  The interval time in seconds for the schedule. Only present for recurring events.
     #// }
     #//
-    pre = apply_filters("pre_reschedule_event", None, event)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_reschedule_event", None, event_)
+    if None != pre_:
+        return pre_
     # end if
     #// Now we assume something is wrong and fail to schedule.
-    if 0 == interval:
+    if 0 == interval_:
         return False
     # end if
-    now = time()
-    if timestamp >= now:
-        timestamp = now + interval
+    now_ = time()
+    if timestamp_ >= now_:
+        timestamp_ = now_ + interval_
     else:
-        timestamp = now + interval - now - timestamp % interval
+        timestamp_ = now_ + interval_ - now_ - timestamp_ % interval_
     # end if
-    return wp_schedule_event(timestamp, recurrence, hook, args)
+    return wp_schedule_event(timestamp_, recurrence_, hook_, args_)
 # end def wp_reschedule_event
 #// 
 #// Unschedule a previously scheduled event.
@@ -301,10 +305,13 @@ def wp_reschedule_event(timestamp=None, recurrence=None, hook=None, args=Array()
 #// event, so they should be the same as those used when originally scheduling the event.
 #// @return bool True if event successfully unscheduled. False for failure.
 #//
-def wp_unschedule_event(timestamp=None, hook=None, args=Array(), *args_):
+def wp_unschedule_event(timestamp_=None, hook_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Make sure timestamp is a positive integer.
-    if (not php_is_numeric(timestamp)) or timestamp <= 0:
+    if (not php_is_numeric(timestamp_)) or timestamp_ <= 0:
         return False
     # end if
     #// 
@@ -323,20 +330,20 @@ def wp_unschedule_event(timestamp=None, hook=None, args=Array(), *args_):
     #// @param string    $hook      Action hook, the execution of which will be unscheduled.
     #// @param array     $args      Arguments to pass to the hook's callback function.
     #//
-    pre = apply_filters("pre_unschedule_event", None, timestamp, hook, args)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_unschedule_event", None, timestamp_, hook_, args_)
+    if None != pre_:
+        return pre_
     # end if
-    crons = _get_cron_array()
-    key = php_md5(serialize(args))
-    crons[timestamp][hook][key] = None
-    if php_empty(lambda : crons[timestamp][hook]):
-        crons[timestamp][hook] = None
+    crons_ = _get_cron_array()
+    key_ = php_md5(serialize(args_))
+    crons_[timestamp_][hook_][key_] = None
+    if php_empty(lambda : crons_[timestamp_][hook_]):
+        crons_[timestamp_][hook_] = None
     # end if
-    if php_empty(lambda : crons[timestamp]):
-        crons[timestamp] = None
+    if php_empty(lambda : crons_[timestamp_]):
+        crons_[timestamp_] = None
     # end if
-    return _set_cron_array(crons)
+    return _set_cron_array(crons_)
 # end def wp_unschedule_event
 #// 
 #// Unschedules all events attached to the hook with the specified arguments.
@@ -356,13 +363,16 @@ def wp_unschedule_event(timestamp=None, hook=None, args=Array(), *args_):
 #// events were registered with the hook and arguments combination), false if
 #// unscheduling one or more events fail.
 #//
-def wp_clear_scheduled_hook(hook=None, args=Array(), *args_):
+def wp_clear_scheduled_hook(hook_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Backward compatibility.
     #// Previously, this function took the arguments as discrete vars rather than an array like the rest of the API.
-    if (not php_is_array(args)):
+    if (not php_is_array(args_)):
         _deprecated_argument(__FUNCTION__, "3.0.0", __("This argument has changed to an array to match the behavior of the other cron functions."))
-        args = php_array_slice(php_func_get_args(), 1)
+        args_ = php_array_slice(php_func_get_args(), 1)
     # end if
     #// 
     #// Filter to preflight or hijack clearing a scheduled hook.
@@ -380,30 +390,30 @@ def wp_clear_scheduled_hook(hook=None, args=Array(), *args_):
     #// @param string         $hook Action hook, the execution of which will be unscheduled.
     #// @param array          $args Arguments to pass to the hook's callback function.
     #//
-    pre = apply_filters("pre_clear_scheduled_hook", None, hook, args)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_clear_scheduled_hook", None, hook_, args_)
+    if None != pre_:
+        return pre_
     # end if
     #// 
     #// This logic duplicates wp_next_scheduled().
     #// It's required due to a scenario where wp_unschedule_event() fails due to update_option() failing,
     #// and, wp_next_scheduled() returns the same schedule in an infinite loop.
     #//
-    crons = _get_cron_array()
-    if php_empty(lambda : crons):
+    crons_ = _get_cron_array()
+    if php_empty(lambda : crons_):
         return 0
     # end if
-    results = Array()
-    key = php_md5(serialize(args))
-    for timestamp,cron in crons:
-        if (php_isset(lambda : cron[hook][key])):
-            results[-1] = wp_unschedule_event(timestamp, hook, args)
+    results_ = Array()
+    key_ = php_md5(serialize(args_))
+    for timestamp_,cron_ in crons_:
+        if (php_isset(lambda : cron_[hook_][key_])):
+            results_[-1] = wp_unschedule_event(timestamp_, hook_, args_)
         # end if
     # end for
-    if php_in_array(False, results, True):
+    if php_in_array(False, results_, True):
         return False
     # end if
-    return php_count(results)
+    return php_count(results_)
 # end def wp_clear_scheduled_hook
 #// 
 #// Unschedules all events attached to the hook.
@@ -422,7 +432,8 @@ def wp_clear_scheduled_hook(hook=None, args=Array(), *args_):
 #// @return int|false On success an integer indicating number of events unscheduled (0 indicates no
 #// events were registered on the hook), false if unscheduling fails.
 #//
-def wp_unschedule_hook(hook=None, *args_):
+def wp_unschedule_hook(hook_=None, *_args_):
+    
     
     #// 
     #// Filter to preflight or hijack clearing all events attached to the hook.
@@ -439,33 +450,33 @@ def wp_unschedule_hook(hook=None, *args_):
     #// @param null|int|false $pre  Value to return instead. Default null to continue unscheduling the hook.
     #// @param string         $hook Action hook, the execution of which will be unscheduled.
     #//
-    pre = apply_filters("pre_unschedule_hook", None, hook)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_unschedule_hook", None, hook_)
+    if None != pre_:
+        return pre_
     # end if
-    crons = _get_cron_array()
-    if php_empty(lambda : crons):
+    crons_ = _get_cron_array()
+    if php_empty(lambda : crons_):
         return 0
     # end if
-    results = Array()
-    for timestamp,args in crons:
-        if (not php_empty(lambda : crons[timestamp][hook])):
-            results[-1] = php_count(crons[timestamp][hook])
+    results_ = Array()
+    for timestamp_,args_ in crons_:
+        if (not php_empty(lambda : crons_[timestamp_][hook_])):
+            results_[-1] = php_count(crons_[timestamp_][hook_])
         # end if
-        crons[timestamp][hook] = None
-        if php_empty(lambda : crons[timestamp]):
-            crons[timestamp] = None
+        crons_[timestamp_][hook_] = None
+        if php_empty(lambda : crons_[timestamp_]):
+            crons_[timestamp_] = None
         # end if
     # end for
     #// 
     #// If the results are empty (zero events to unschedule), no attempt
     #// to update the cron array is required.
     #//
-    if php_empty(lambda : results):
+    if php_empty(lambda : results_):
         return 0
     # end if
-    if _set_cron_array(crons):
-        return array_sum(results)
+    if _set_cron_array(crons_):
+        return array_sum(results_)
     # end if
     return False
 # end def wp_unschedule_hook
@@ -484,7 +495,10 @@ def wp_unschedule_hook(hook=None, *args_):
 #// @param int|null $timestamp Optional. Unix timestamp (UTC) of the event. If not specified, the next scheduled event is returned.
 #// @return object|false The event object. False if the event does not exist.
 #//
-def wp_get_scheduled_event(hook=None, args=Array(), timestamp=None, *args_):
+def wp_get_scheduled_event(hook_=None, args_=None, timestamp_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// 
     #// Filter to preflight or hijack retrieving a scheduled event.
@@ -504,39 +518,39 @@ def wp_get_scheduled_event(hook=None, args=Array(), timestamp=None, *args_):
     #// the event.
     #// @param int|null  $timestamp Unix timestamp (UTC) of the event. Null to retrieve next scheduled event.
     #//
-    pre = apply_filters("pre_get_scheduled_event", None, hook, args, timestamp)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_get_scheduled_event", None, hook_, args_, timestamp_)
+    if None != pre_:
+        return pre_
     # end if
-    if None != timestamp and (not php_is_numeric(timestamp)):
+    if None != timestamp_ and (not php_is_numeric(timestamp_)):
         return False
     # end if
-    crons = _get_cron_array()
-    if php_empty(lambda : crons):
+    crons_ = _get_cron_array()
+    if php_empty(lambda : crons_):
         return False
     # end if
-    key = php_md5(serialize(args))
-    if (not timestamp):
+    key_ = php_md5(serialize(args_))
+    if (not timestamp_):
         #// Get next event.
-        next = False
-        for timestamp,cron in crons:
-            if (php_isset(lambda : cron[hook][key])):
-                next = timestamp
+        next_ = False
+        for timestamp_,cron_ in crons_:
+            if (php_isset(lambda : cron_[hook_][key_])):
+                next_ = timestamp_
                 break
             # end if
         # end for
-        if (not next):
+        if (not next_):
             return False
         # end if
-        timestamp = next
-    elif (not (php_isset(lambda : crons[timestamp][hook][key]))):
+        timestamp_ = next_
+    elif (not (php_isset(lambda : crons_[timestamp_][hook_][key_]))):
         return False
     # end if
-    event = Array({"hook": hook, "timestamp": timestamp, "schedule": crons[timestamp][hook][key]["schedule"], "args": args})
-    if (php_isset(lambda : crons[timestamp][hook][key]["interval"])):
-        event.interval = crons[timestamp][hook][key]["interval"]
+    event_ = Array({"hook": hook_, "timestamp": timestamp_, "schedule": crons_[timestamp_][hook_][key_]["schedule"], "args": args_})
+    if (php_isset(lambda : crons_[timestamp_][hook_][key_]["interval"])):
+        event_.interval = crons_[timestamp_][hook_][key_]["interval"]
     # end if
-    return event
+    return event_
 # end def wp_get_scheduled_event
 #// 
 #// Retrieve the next timestamp for an event.
@@ -549,13 +563,16 @@ def wp_get_scheduled_event(hook=None, args=Array(), timestamp=None, *args_):
 #// event, so they should be the same as those used when originally scheduling the event.
 #// @return int|false The Unix timestamp of the next time the event will occur. False if the event doesn't exist.
 #//
-def wp_next_scheduled(hook=None, args=Array(), *args_):
+def wp_next_scheduled(hook_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    next_event = wp_get_scheduled_event(hook, args)
-    if (not next_event):
+    next_event_ = wp_get_scheduled_event(hook_, args_)
+    if (not next_event_):
         return False
     # end if
-    return next_event.timestamp
+    return next_event_.timestamp
 # end def wp_next_scheduled
 #// 
 #// Sends a request to run cron through HTTP request that doesn't halt page loading.
@@ -566,10 +583,11 @@ def wp_next_scheduled(hook=None, args=Array(), *args_):
 #// @param int $gmt_time Optional. Unix timestamp (UTC). Default 0 (current time is used).
 #// @return bool True if spawned, false if no events spawned.
 #//
-def spawn_cron(gmt_time=0, *args_):
+def spawn_cron(gmt_time_=0, *_args_):
     
-    if (not gmt_time):
-        gmt_time = php_microtime(True)
+    
+    if (not gmt_time_):
+        gmt_time_ = php_microtime(True)
     # end if
     if php_defined("DOING_CRON") or (php_isset(lambda : PHP_REQUEST["doing_wp_cron"])):
         return False
@@ -581,31 +599,31 @@ def spawn_cron(gmt_time=0, *args_):
     #// Multiple processes on multiple web servers can run this code concurrently,
     #// this lock attempts to make spawning as atomic as possible.
     #//
-    lock = get_transient("doing_cron")
-    if lock > gmt_time + 10 * MINUTE_IN_SECONDS:
-        lock = 0
+    lock_ = get_transient("doing_cron")
+    if lock_ > gmt_time_ + 10 * MINUTE_IN_SECONDS:
+        lock_ = 0
     # end if
     #// Don't run if another process is currently running it or more than once every 60 sec.
-    if lock + WP_CRON_LOCK_TIMEOUT > gmt_time:
+    if lock_ + WP_CRON_LOCK_TIMEOUT > gmt_time_:
         return False
     # end if
     #// Sanity check.
-    crons = wp_get_ready_cron_jobs()
-    if php_empty(lambda : crons):
+    crons_ = wp_get_ready_cron_jobs()
+    if php_empty(lambda : crons_):
         return False
     # end if
-    keys = php_array_keys(crons)
-    if (php_isset(lambda : keys[0])) and keys[0] > gmt_time:
+    keys_ = php_array_keys(crons_)
+    if (php_isset(lambda : keys_[0])) and keys_[0] > gmt_time_:
         return False
     # end if
     if php_defined("ALTERNATE_WP_CRON") and ALTERNATE_WP_CRON:
         if "GET" != PHP_SERVER["REQUEST_METHOD"] or php_defined("DOING_AJAX") or php_defined("XMLRPC_REQUEST"):
             return False
         # end if
-        doing_wp_cron = php_sprintf("%.22F", gmt_time)
-        set_transient("doing_cron", doing_wp_cron)
+        doing_wp_cron_ = php_sprintf("%.22F", gmt_time_)
+        set_transient("doing_cron", doing_wp_cron_)
         ob_start()
-        wp_redirect(add_query_arg("doing_wp_cron", doing_wp_cron, wp_unslash(PHP_SERVER["REQUEST_URI"])))
+        wp_redirect(add_query_arg("doing_wp_cron", doing_wp_cron_, wp_unslash(PHP_SERVER["REQUEST_URI"])))
         php_print(" ")
         #// Flush any buffers and send the headers.
         wp_ob_end_flush_all()
@@ -614,8 +632,8 @@ def spawn_cron(gmt_time=0, *args_):
         return True
     # end if
     #// Set the cron lock with the current unix timestamp, when the cron is being spawned.
-    doing_wp_cron = php_sprintf("%.22F", gmt_time)
-    set_transient("doing_cron", doing_wp_cron)
+    doing_wp_cron_ = php_sprintf("%.22F", gmt_time_)
+    set_transient("doing_cron", doing_wp_cron_)
     #// 
     #// Filters the cron request arguments.
     #// 
@@ -637,9 +655,9 @@ def spawn_cron(gmt_time=0, *args_):
     #// }
     #// @param string $doing_wp_cron The unix timestamp of the cron lock.
     #//
-    cron_request = apply_filters("cron_request", Array({"url": add_query_arg("doing_wp_cron", doing_wp_cron, site_url("wp-cron.php")), "key": doing_wp_cron, "args": Array({"timeout": 0.01, "blocking": False, "sslverify": apply_filters("https_local_ssl_verify", False)})}), doing_wp_cron)
-    result = wp_remote_post(cron_request["url"], cron_request["args"])
-    return (not is_wp_error(result))
+    cron_request_ = apply_filters("cron_request", Array({"url": add_query_arg("doing_wp_cron", doing_wp_cron_, site_url("wp-cron.php")), "key": doing_wp_cron_, "args": Array({"timeout": 0.01, "blocking": False, "sslverify": apply_filters("https_local_ssl_verify", False)})}), doing_wp_cron_)
+    result_ = wp_remote_post(cron_request_["url"], cron_request_["args"])
+    return (not is_wp_error(result_))
 # end def spawn_cron
 #// 
 #// Run scheduled callbacks or spawn cron for all scheduled events.
@@ -655,39 +673,40 @@ def spawn_cron(gmt_time=0, *args_):
 #// @return bool|int On success an integer indicating number of events spawned (0 indicates no
 #// events needed to be spawned), false if spawning fails for one or more events.
 #//
-def wp_cron(*args_):
+def wp_cron(*_args_):
+    
     
     #// Prevent infinite loops caused by lack of wp-cron.php.
     if php_strpos(PHP_SERVER["REQUEST_URI"], "/wp-cron.php") != False or php_defined("DISABLE_WP_CRON") and DISABLE_WP_CRON:
         return 0
     # end if
-    crons = wp_get_ready_cron_jobs()
-    if php_empty(lambda : crons):
+    crons_ = wp_get_ready_cron_jobs()
+    if php_empty(lambda : crons_):
         return 0
     # end if
-    gmt_time = php_microtime(True)
-    keys = php_array_keys(crons)
-    if (php_isset(lambda : keys[0])) and keys[0] > gmt_time:
+    gmt_time_ = php_microtime(True)
+    keys_ = php_array_keys(crons_)
+    if (php_isset(lambda : keys_[0])) and keys_[0] > gmt_time_:
         return 0
     # end if
-    schedules = wp_get_schedules()
-    results = Array()
-    for timestamp,cronhooks in crons:
-        if timestamp > gmt_time:
+    schedules_ = wp_get_schedules()
+    results_ = Array()
+    for timestamp_,cronhooks_ in crons_:
+        if timestamp_ > gmt_time_:
             break
         # end if
-        for hook,args in cronhooks:
-            if (php_isset(lambda : schedules[hook]["callback"])) and (not php_call_user_func(schedules[hook]["callback"])):
+        for hook_,args_ in cronhooks_:
+            if (php_isset(lambda : schedules_[hook_]["callback"])) and (not php_call_user_func(schedules_[hook_]["callback"])):
                 continue
             # end if
-            results[-1] = spawn_cron(gmt_time)
+            results_[-1] = spawn_cron(gmt_time_)
             break
         # end for
     # end for
-    if php_in_array(False, results, True):
+    if php_in_array(False, results_, True):
         return False
     # end if
-    return php_count(results)
+    return php_count(results_)
 # end def wp_cron
 #// 
 #// Retrieve supported event recurrence schedules.
@@ -719,9 +738,10 @@ def wp_cron(*args_):
 #// 
 #// @return array
 #//
-def wp_get_schedules(*args_):
+def wp_get_schedules(*_args_):
     
-    schedules = Array({"hourly": Array({"interval": HOUR_IN_SECONDS, "display": __("Once Hourly")})}, {"twicedaily": Array({"interval": 12 * HOUR_IN_SECONDS, "display": __("Twice Daily")})}, {"daily": Array({"interval": DAY_IN_SECONDS, "display": __("Once Daily")})}, {"weekly": Array({"interval": WEEK_IN_SECONDS, "display": __("Once Weekly")})})
+    
+    schedules_ = Array({"hourly": Array({"interval": HOUR_IN_SECONDS, "display": __("Once Hourly")})}, {"twicedaily": Array({"interval": 12 * HOUR_IN_SECONDS, "display": __("Twice Daily")})}, {"daily": Array({"interval": DAY_IN_SECONDS, "display": __("Once Daily")})}, {"weekly": Array({"interval": WEEK_IN_SECONDS, "display": __("Once Weekly")})})
     #// 
     #// Filters the non-default cron schedules.
     #// 
@@ -729,7 +749,7 @@ def wp_get_schedules(*args_):
     #// 
     #// @param array $new_schedules An array of non-default cron schedules. Default empty.
     #//
-    return php_array_merge(apply_filters("cron_schedules", Array()), schedules)
+    return php_array_merge(apply_filters("cron_schedules", Array()), schedules_)
 # end def wp_get_schedules
 #// 
 #// Retrieve the recurrence schedule for an event.
@@ -743,12 +763,15 @@ def wp_get_schedules(*args_):
 #// @param array $args Optional. Arguments passed to the event's callback function.
 #// @return string|false False, if no schedule. Schedule name on success.
 #//
-def wp_get_schedule(hook=None, args=Array(), *args_):
+def wp_get_schedule(hook_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    schedule = False
-    event = wp_get_scheduled_event(hook, args)
-    if event:
-        schedule = event.schedule
+    schedule_ = False
+    event_ = wp_get_scheduled_event(hook_, args_)
+    if event_:
+        schedule_ = event_.schedule
     # end if
     #// 
     #// Filter the schedule for a hook.
@@ -759,7 +782,7 @@ def wp_get_schedule(hook=None, args=Array(), *args_):
     #// @param string      $hook     Action hook to execute when cron is run.
     #// @param array       $args     Optional. Arguments to pass to the hook's callback function.
     #//
-    return apply_filters("get_schedule", schedule, hook, args)
+    return apply_filters("get_schedule", schedule_, hook_, args_)
 # end def wp_get_schedule
 #// 
 #// Retrieve cron jobs ready to be run.
@@ -771,7 +794,8 @@ def wp_get_schedule(hook=None, args=Array(), *args_):
 #// 
 #// @return array Cron jobs ready to be run.
 #//
-def wp_get_ready_cron_jobs(*args_):
+def wp_get_ready_cron_jobs(*_args_):
+    
     
     #// 
     #// Filter to preflight or hijack retrieving ready cron jobs.
@@ -784,27 +808,27 @@ def wp_get_ready_cron_jobs(*args_):
     #// @param null|array $pre Array of ready cron tasks to return instead. Default null
     #// to continue using results from _get_cron_array().
     #//
-    pre = apply_filters("pre_get_ready_cron_jobs", None)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_get_ready_cron_jobs", None)
+    if None != pre_:
+        return pre_
     # end if
-    crons = _get_cron_array()
-    if False == crons:
+    crons_ = _get_cron_array()
+    if False == crons_:
         return Array()
     # end if
-    gmt_time = php_microtime(True)
-    keys = php_array_keys(crons)
-    if (php_isset(lambda : keys[0])) and keys[0] > gmt_time:
+    gmt_time_ = php_microtime(True)
+    keys_ = php_array_keys(crons_)
+    if (php_isset(lambda : keys_[0])) and keys_[0] > gmt_time_:
         return Array()
     # end if
-    results = Array()
-    for timestamp,cronhooks in crons:
-        if timestamp > gmt_time:
+    results_ = Array()
+    for timestamp_,cronhooks_ in crons_:
+        if timestamp_ > gmt_time_:
             break
         # end if
-        results[timestamp] = cronhooks
+        results_[timestamp_] = cronhooks_
     # end for
-    return results
+    return results_
 # end def wp_get_ready_cron_jobs
 #// 
 #// Private functions.
@@ -817,17 +841,18 @@ def wp_get_ready_cron_jobs(*args_):
 #// 
 #// @return array|false CRON info array.
 #//
-def _get_cron_array(*args_):
+def _get_cron_array(*_args_):
     
-    cron = get_option("cron")
-    if (not php_is_array(cron)):
+    
+    cron_ = get_option("cron")
+    if (not php_is_array(cron_)):
         return False
     # end if
-    if (not (php_isset(lambda : cron["version"]))):
-        cron = _upgrade_cron_array(cron)
+    if (not (php_isset(lambda : cron_["version"]))):
+        cron_ = _upgrade_cron_array(cron_)
     # end if
-    cron["version"] = None
-    return cron
+    cron_["version"] = None
+    return cron_
 # end def _get_cron_array
 #// 
 #// Updates the CRON option with the new CRON array.
@@ -840,10 +865,11 @@ def _get_cron_array(*args_):
 #// @param array $cron Cron info array from _get_cron_array().
 #// @return bool True if cron array updated, false on failure.
 #//
-def _set_cron_array(cron=None, *args_):
+def _set_cron_array(cron_=None, *_args_):
     
-    cron["version"] = 2
-    return update_option("cron", cron)
+    
+    cron_["version"] = 2
+    return update_option("cron", cron_)
 # end def _set_cron_array
 #// 
 #// Upgrade a Cron info array.
@@ -856,19 +882,20 @@ def _set_cron_array(cron=None, *args_):
 #// @param array $cron Cron info array from _get_cron_array().
 #// @return array An upgraded Cron info array.
 #//
-def _upgrade_cron_array(cron=None, *args_):
+def _upgrade_cron_array(cron_=None, *_args_):
     
-    if (php_isset(lambda : cron["version"])) and 2 == cron["version"]:
-        return cron
+    
+    if (php_isset(lambda : cron_["version"])) and 2 == cron_["version"]:
+        return cron_
     # end if
-    new_cron = Array()
-    for timestamp,hooks in cron:
-        for hook,args in hooks:
-            key = php_md5(serialize(args["args"]))
-            new_cron[timestamp][hook][key] = args
+    new_cron_ = Array()
+    for timestamp_,hooks_ in cron_:
+        for hook_,args_ in hooks_:
+            key_ = php_md5(serialize(args_["args"]))
+            new_cron_[timestamp_][hook_][key_] = args_
         # end for
     # end for
-    new_cron["version"] = 2
-    update_option("cron", new_cron)
-    return new_cron
+    new_cron_["version"] = 2
+    update_option("cron", new_cron_)
+    return new_cron_
 # end def _upgrade_cron_array

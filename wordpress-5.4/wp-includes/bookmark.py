@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -31,45 +26,48 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param string $filter Optional, default is 'raw'.
 #// @return array|object|null Type returned depends on $output value.
 #//
-def get_bookmark(bookmark=None, output=OBJECT, filter="raw", *args_):
+def get_bookmark(bookmark_=None, output_=None, filter_="raw", *_args_):
+    if output_ is None:
+        output_ = OBJECT
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if php_empty(lambda : bookmark):
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if php_empty(lambda : bookmark_):
         if (php_isset(lambda : PHP_GLOBALS["link"])):
-            _bookmark = PHP_GLOBALS["link"]
+            _bookmark_ = PHP_GLOBALS["link"]
         else:
-            _bookmark = None
+            _bookmark_ = None
         # end if
-    elif php_is_object(bookmark):
-        wp_cache_add(bookmark.link_id, bookmark, "bookmark")
-        _bookmark = bookmark
+    elif php_is_object(bookmark_):
+        wp_cache_add(bookmark_.link_id, bookmark_, "bookmark")
+        _bookmark_ = bookmark_
     else:
-        if (php_isset(lambda : PHP_GLOBALS["link"])) and PHP_GLOBALS["link"].link_id == bookmark:
-            _bookmark = PHP_GLOBALS["link"]
+        if (php_isset(lambda : PHP_GLOBALS["link"])) and PHP_GLOBALS["link"].link_id == bookmark_:
+            _bookmark_ = PHP_GLOBALS["link"]
         else:
-            _bookmark = wp_cache_get(bookmark, "bookmark")
-            if (not _bookmark):
-                _bookmark = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.links) + str(" WHERE link_id = %d LIMIT 1"), bookmark))
-                if _bookmark:
-                    _bookmark.link_category = array_unique(wp_get_object_terms(_bookmark.link_id, "link_category", Array({"fields": "ids"})))
-                    wp_cache_add(_bookmark.link_id, _bookmark, "bookmark")
+            _bookmark_ = wp_cache_get(bookmark_, "bookmark")
+            if (not _bookmark_):
+                _bookmark_ = wpdb_.get_row(wpdb_.prepare(str("SELECT * FROM ") + str(wpdb_.links) + str(" WHERE link_id = %d LIMIT 1"), bookmark_))
+                if _bookmark_:
+                    _bookmark_.link_category = array_unique(wp_get_object_terms(_bookmark_.link_id, "link_category", Array({"fields": "ids"})))
+                    wp_cache_add(_bookmark_.link_id, _bookmark_, "bookmark")
                 # end if
             # end if
         # end if
     # end if
-    if (not _bookmark):
-        return _bookmark
+    if (not _bookmark_):
+        return _bookmark_
     # end if
-    _bookmark = sanitize_bookmark(_bookmark, filter)
-    if OBJECT == output:
-        return _bookmark
-    elif ARRAY_A == output:
-        return get_object_vars(_bookmark)
-    elif ARRAY_N == output:
-        return php_array_values(get_object_vars(_bookmark))
+    _bookmark_ = sanitize_bookmark(_bookmark_, filter_)
+    if OBJECT == output_:
+        return _bookmark_
+    elif ARRAY_A == output_:
+        return get_object_vars(_bookmark_)
+    elif ARRAY_N == output_:
+        return php_array_values(get_object_vars(_bookmark_))
     else:
-        return _bookmark
+        return _bookmark_
     # end if
 # end def get_bookmark
 #// 
@@ -82,20 +80,21 @@ def get_bookmark(bookmark=None, output=OBJECT, filter="raw", *args_):
 #// @param string $context Optional. The context of how the field will be used.
 #// @return string|WP_Error
 #//
-def get_bookmark_field(field=None, bookmark=None, context="display", *args_):
+def get_bookmark_field(field_=None, bookmark_=None, context_="display", *_args_):
     
-    bookmark = php_int(bookmark)
-    bookmark = get_bookmark(bookmark)
-    if is_wp_error(bookmark):
-        return bookmark
+    
+    bookmark_ = php_int(bookmark_)
+    bookmark_ = get_bookmark(bookmark_)
+    if is_wp_error(bookmark_):
+        return bookmark_
     # end if
-    if (not php_is_object(bookmark)):
+    if (not php_is_object(bookmark_)):
         return ""
     # end if
-    if (not (php_isset(lambda : bookmark.field))):
+    if (not (php_isset(lambda : bookmark_.field_))):
         return ""
     # end if
-    return sanitize_bookmark_field(field, bookmark.field, bookmark.link_id, context)
+    return sanitize_bookmark_field(field_, bookmark_.field_, bookmark_.link_id, context_)
 # end def get_bookmark_field
 #// 
 #// Retrieves the list of bookmarks
@@ -136,17 +135,18 @@ def get_bookmark_field(field=None, bookmark=None, context="display", *args_):
 #// }
 #// @return object[] List of bookmark row objects.
 #//
-def get_bookmarks(args="", *args_):
+def get_bookmarks(args_="", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    defaults = Array({"orderby": "name", "order": "ASC", "limit": -1, "category": "", "category_name": "", "hide_invisible": 1, "show_updated": 0, "include": "", "exclude": "", "search": ""})
-    parsed_args = wp_parse_args(args, defaults)
-    key = php_md5(serialize(parsed_args))
-    cache = wp_cache_get("get_bookmarks", "bookmark")
-    if "rand" != parsed_args["orderby"] and cache:
-        if php_is_array(cache) and (php_isset(lambda : cache[key])):
-            bookmarks = cache[key]
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    defaults_ = Array({"orderby": "name", "order": "ASC", "limit": -1, "category": "", "category_name": "", "hide_invisible": 1, "show_updated": 0, "include": "", "exclude": "", "search": ""})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    key_ = php_md5(serialize(parsed_args_))
+    cache_ = wp_cache_get("get_bookmarks", "bookmark")
+    if "rand" != parsed_args_["orderby"] and cache_:
+        if php_is_array(cache_) and (php_isset(lambda : cache_[key_])):
+            bookmarks_ = cache_[key_]
             #// 
             #// Filters the returned list of bookmarks.
             #// 
@@ -162,141 +162,141 @@ def get_bookmarks(args="", *args_):
             #// @param array $bookmarks   List of the cached bookmarks.
             #// @param array $parsed_args An array of bookmark query arguments.
             #//
-            return apply_filters("get_bookmarks", bookmarks, parsed_args)
+            return apply_filters("get_bookmarks", bookmarks_, parsed_args_)
         # end if
     # end if
-    if (not php_is_array(cache)):
-        cache = Array()
+    if (not php_is_array(cache_)):
+        cache_ = Array()
     # end if
-    inclusions = ""
-    if (not php_empty(lambda : parsed_args["include"])):
-        parsed_args["exclude"] = ""
+    inclusions_ = ""
+    if (not php_empty(lambda : parsed_args_["include"])):
+        parsed_args_["exclude"] = ""
         #// Ignore exclude, category, and category_name params if using include.
-        parsed_args["category"] = ""
-        parsed_args["category_name"] = ""
-        inclinks = wp_parse_id_list(parsed_args["include"])
-        if php_count(inclinks):
-            for inclink in inclinks:
-                if php_empty(lambda : inclusions):
-                    inclusions = " AND ( link_id = " + inclink + " "
+        parsed_args_["category"] = ""
+        parsed_args_["category_name"] = ""
+        inclinks_ = wp_parse_id_list(parsed_args_["include"])
+        if php_count(inclinks_):
+            for inclink_ in inclinks_:
+                if php_empty(lambda : inclusions_):
+                    inclusions_ = " AND ( link_id = " + inclink_ + " "
                 else:
-                    inclusions += " OR link_id = " + inclink + " "
+                    inclusions_ += " OR link_id = " + inclink_ + " "
                 # end if
             # end for
         # end if
     # end if
-    if (not php_empty(lambda : inclusions)):
-        inclusions += ")"
+    if (not php_empty(lambda : inclusions_)):
+        inclusions_ += ")"
     # end if
-    exclusions = ""
-    if (not php_empty(lambda : parsed_args["exclude"])):
-        exlinks = wp_parse_id_list(parsed_args["exclude"])
-        if php_count(exlinks):
-            for exlink in exlinks:
-                if php_empty(lambda : exclusions):
-                    exclusions = " AND ( link_id <> " + exlink + " "
+    exclusions_ = ""
+    if (not php_empty(lambda : parsed_args_["exclude"])):
+        exlinks_ = wp_parse_id_list(parsed_args_["exclude"])
+        if php_count(exlinks_):
+            for exlink_ in exlinks_:
+                if php_empty(lambda : exclusions_):
+                    exclusions_ = " AND ( link_id <> " + exlink_ + " "
                 else:
-                    exclusions += " AND link_id <> " + exlink + " "
+                    exclusions_ += " AND link_id <> " + exlink_ + " "
                 # end if
             # end for
         # end if
     # end if
-    if (not php_empty(lambda : exclusions)):
-        exclusions += ")"
+    if (not php_empty(lambda : exclusions_)):
+        exclusions_ += ")"
     # end if
-    if (not php_empty(lambda : parsed_args["category_name"])):
-        parsed_args["category"] = get_term_by("name", parsed_args["category_name"], "link_category")
-        if parsed_args["category"]:
-            parsed_args["category"] = parsed_args["category"].term_id
+    if (not php_empty(lambda : parsed_args_["category_name"])):
+        parsed_args_["category"] = get_term_by("name", parsed_args_["category_name"], "link_category")
+        if parsed_args_["category"]:
+            parsed_args_["category"] = parsed_args_["category"].term_id
         else:
-            cache[key] = Array()
-            wp_cache_set("get_bookmarks", cache, "bookmark")
+            cache_[key_] = Array()
+            wp_cache_set("get_bookmarks", cache_, "bookmark")
             #// This filter is documented in wp-includes/bookmark.php
-            return apply_filters("get_bookmarks", Array(), parsed_args)
+            return apply_filters("get_bookmarks", Array(), parsed_args_)
         # end if
     # end if
-    search = ""
-    if (not php_empty(lambda : parsed_args["search"])):
-        like = "%" + wpdb.esc_like(parsed_args["search"]) + "%"
-        search = wpdb.prepare(" AND ( (link_url LIKE %s) OR (link_name LIKE %s) OR (link_description LIKE %s) ) ", like, like, like)
+    search_ = ""
+    if (not php_empty(lambda : parsed_args_["search"])):
+        like_ = "%" + wpdb_.esc_like(parsed_args_["search"]) + "%"
+        search_ = wpdb_.prepare(" AND ( (link_url LIKE %s) OR (link_name LIKE %s) OR (link_description LIKE %s) ) ", like_, like_, like_)
     # end if
-    category_query = ""
-    join = ""
-    if (not php_empty(lambda : parsed_args["category"])):
-        incategories = wp_parse_id_list(parsed_args["category"])
-        if php_count(incategories):
-            for incat in incategories:
-                if php_empty(lambda : category_query):
-                    category_query = " AND ( tt.term_id = " + incat + " "
+    category_query_ = ""
+    join_ = ""
+    if (not php_empty(lambda : parsed_args_["category"])):
+        incategories_ = wp_parse_id_list(parsed_args_["category"])
+        if php_count(incategories_):
+            for incat_ in incategories_:
+                if php_empty(lambda : category_query_):
+                    category_query_ = " AND ( tt.term_id = " + incat_ + " "
                 else:
-                    category_query += " OR tt.term_id = " + incat + " "
+                    category_query_ += " OR tt.term_id = " + incat_ + " "
                 # end if
             # end for
         # end if
     # end if
-    if (not php_empty(lambda : category_query)):
-        category_query += ") AND taxonomy = 'link_category'"
-        join = str(" INNER JOIN ") + str(wpdb.term_relationships) + str(" AS tr ON (") + str(wpdb.links) + str(".link_id = tr.object_id) INNER JOIN ") + str(wpdb.term_taxonomy) + str(" as tt ON tt.term_taxonomy_id = tr.term_taxonomy_id")
+    if (not php_empty(lambda : category_query_)):
+        category_query_ += ") AND taxonomy = 'link_category'"
+        join_ = str(" INNER JOIN ") + str(wpdb_.term_relationships) + str(" AS tr ON (") + str(wpdb_.links) + str(".link_id = tr.object_id) INNER JOIN ") + str(wpdb_.term_taxonomy) + str(" as tt ON tt.term_taxonomy_id = tr.term_taxonomy_id")
     # end if
-    if parsed_args["show_updated"]:
-        recently_updated_test = ", IF (DATE_ADD(link_updated, INTERVAL 120 MINUTE) >= NOW(), 1,0) as recently_updated "
+    if parsed_args_["show_updated"]:
+        recently_updated_test_ = ", IF (DATE_ADD(link_updated, INTERVAL 120 MINUTE) >= NOW(), 1,0) as recently_updated "
     else:
-        recently_updated_test = ""
+        recently_updated_test_ = ""
     # end if
-    get_updated = ", UNIX_TIMESTAMP(link_updated) AS link_updated_f " if parsed_args["show_updated"] else ""
-    orderby = php_strtolower(parsed_args["orderby"])
-    length = ""
-    for case in Switch(orderby):
+    get_updated_ = ", UNIX_TIMESTAMP(link_updated) AS link_updated_f " if parsed_args_["show_updated"] else ""
+    orderby_ = php_strtolower(parsed_args_["orderby"])
+    length_ = ""
+    for case in Switch(orderby_):
         if case("length"):
-            length = ", CHAR_LENGTH(link_name) AS length"
+            length_ = ", CHAR_LENGTH(link_name) AS length"
             break
         # end if
         if case("rand"):
-            orderby = "rand()"
+            orderby_ = "rand()"
             break
         # end if
         if case("link_id"):
-            orderby = str(wpdb.links) + str(".link_id")
+            orderby_ = str(wpdb_.links) + str(".link_id")
             break
         # end if
         if case():
-            orderparams = Array()
-            keys = Array("link_id", "link_name", "link_url", "link_visible", "link_rating", "link_owner", "link_updated", "link_notes", "link_description")
-            for ordparam in php_explode(",", orderby):
-                ordparam = php_trim(ordparam)
-                if php_in_array("link_" + ordparam, keys):
-                    orderparams[-1] = "link_" + ordparam
-                elif php_in_array(ordparam, keys):
-                    orderparams[-1] = ordparam
+            orderparams_ = Array()
+            keys_ = Array("link_id", "link_name", "link_url", "link_visible", "link_rating", "link_owner", "link_updated", "link_notes", "link_description")
+            for ordparam_ in php_explode(",", orderby_):
+                ordparam_ = php_trim(ordparam_)
+                if php_in_array("link_" + ordparam_, keys_):
+                    orderparams_[-1] = "link_" + ordparam_
+                elif php_in_array(ordparam_, keys_):
+                    orderparams_[-1] = ordparam_
                 # end if
             # end for
-            orderby = php_implode(",", orderparams)
+            orderby_ = php_implode(",", orderparams_)
         # end if
     # end for
-    if php_empty(lambda : orderby):
-        orderby = "link_name"
+    if php_empty(lambda : orderby_):
+        orderby_ = "link_name"
     # end if
-    order = php_strtoupper(parsed_args["order"])
-    if "" != order and (not php_in_array(order, Array("ASC", "DESC"))):
-        order = "ASC"
+    order_ = php_strtoupper(parsed_args_["order"])
+    if "" != order_ and (not php_in_array(order_, Array("ASC", "DESC"))):
+        order_ = "ASC"
     # end if
-    visible = ""
-    if parsed_args["hide_invisible"]:
-        visible = "AND link_visible = 'Y'"
+    visible_ = ""
+    if parsed_args_["hide_invisible"]:
+        visible_ = "AND link_visible = 'Y'"
     # end if
-    query = str("SELECT * ") + str(length) + str(" ") + str(recently_updated_test) + str(" ") + str(get_updated) + str(" FROM ") + str(wpdb.links) + str(" ") + str(join) + str(" WHERE 1=1 ") + str(visible) + str(" ") + str(category_query)
-    query += str(" ") + str(exclusions) + str(" ") + str(inclusions) + str(" ") + str(search)
-    query += str(" ORDER BY ") + str(orderby) + str(" ") + str(order)
-    if -1 != parsed_args["limit"]:
-        query += " LIMIT " + parsed_args["limit"]
+    query_ = str("SELECT * ") + str(length_) + str(" ") + str(recently_updated_test_) + str(" ") + str(get_updated_) + str(" FROM ") + str(wpdb_.links) + str(" ") + str(join_) + str(" WHERE 1=1 ") + str(visible_) + str(" ") + str(category_query_)
+    query_ += str(" ") + str(exclusions_) + str(" ") + str(inclusions_) + str(" ") + str(search_)
+    query_ += str(" ORDER BY ") + str(orderby_) + str(" ") + str(order_)
+    if -1 != parsed_args_["limit"]:
+        query_ += " LIMIT " + parsed_args_["limit"]
     # end if
-    results = wpdb.get_results(query)
-    if "rand()" != orderby:
-        cache[key] = results
-        wp_cache_set("get_bookmarks", cache, "bookmark")
+    results_ = wpdb_.get_results(query_)
+    if "rand()" != orderby_:
+        cache_[key_] = results_
+        wp_cache_set("get_bookmarks", cache_, "bookmark")
     # end if
     #// This filter is documented in wp-includes/bookmark.php
-    return apply_filters("get_bookmarks", results, parsed_args)
+    return apply_filters("get_bookmarks", results_, parsed_args_)
 # end def get_bookmarks
 #// 
 #// Sanitizes all bookmark fields
@@ -308,28 +308,29 @@ def get_bookmarks(args="", *args_):
 #// fields
 #// @return stdClass|array Same type as $bookmark but with fields sanitized.
 #//
-def sanitize_bookmark(bookmark=None, context="display", *args_):
+def sanitize_bookmark(bookmark_=None, context_="display", *_args_):
     
-    fields = Array("link_id", "link_url", "link_name", "link_image", "link_target", "link_category", "link_description", "link_visible", "link_owner", "link_rating", "link_updated", "link_rel", "link_notes", "link_rss")
-    if php_is_object(bookmark):
-        do_object = True
-        link_id = bookmark.link_id
+    
+    fields_ = Array("link_id", "link_url", "link_name", "link_image", "link_target", "link_category", "link_description", "link_visible", "link_owner", "link_rating", "link_updated", "link_rel", "link_notes", "link_rss")
+    if php_is_object(bookmark_):
+        do_object_ = True
+        link_id_ = bookmark_.link_id
     else:
-        do_object = False
-        link_id = bookmark["link_id"]
+        do_object_ = False
+        link_id_ = bookmark_["link_id"]
     # end if
-    for field in fields:
-        if do_object:
-            if (php_isset(lambda : bookmark.field)):
-                bookmark.field = sanitize_bookmark_field(field, bookmark.field, link_id, context)
+    for field_ in fields_:
+        if do_object_:
+            if (php_isset(lambda : bookmark_.field_)):
+                bookmark_.field_ = sanitize_bookmark_field(field_, bookmark_.field_, link_id_, context_)
             # end if
         else:
-            if (php_isset(lambda : bookmark[field])):
-                bookmark[field] = sanitize_bookmark_field(field, bookmark[field], link_id, context)
+            if (php_isset(lambda : bookmark_[field_])):
+                bookmark_[field_] = sanitize_bookmark_field(field_, bookmark_[field_], link_id_, context_)
             # end if
         # end if
     # end for
-    return bookmark
+    return bookmark_
 # end def sanitize_bookmark
 #// 
 #// Sanitizes a bookmark field.
@@ -355,62 +356,63 @@ def sanitize_bookmark(bookmark=None, context="display", *args_):
 #// 'js', 'db', or 'display'
 #// @return mixed The filtered value.
 #//
-def sanitize_bookmark_field(field=None, value=None, bookmark_id=None, context=None, *args_):
+def sanitize_bookmark_field(field_=None, value_=None, bookmark_id_=None, context_=None, *_args_):
     
-    for case in Switch(field):
+    
+    for case in Switch(field_):
         if case("link_id"):
             pass
         # end if
         if case("link_rating"):
-            value = php_int(value)
+            value_ = php_int(value_)
             break
         # end if
         if case("link_category"):
             #// array( ints )
-            value = php_array_map("absint", value)
+            value_ = php_array_map("absint", value_)
             #// We return here so that the categories aren't filtered.
             #// The 'link_category' filter is for the name of a link category, not an array of a link's link categories.
-            return value
+            return value_
         # end if
         if case("link_visible"):
             #// bool stored as Y|N
-            value = php_preg_replace("/[^YNyn]/", "", value)
+            value_ = php_preg_replace("/[^YNyn]/", "", value_)
             break
         # end if
         if case("link_target"):
             #// "enum"
-            targets = Array("_top", "_blank")
-            if (not php_in_array(value, targets)):
-                value = ""
+            targets_ = Array("_top", "_blank")
+            if (not php_in_array(value_, targets_)):
+                value_ = ""
             # end if
             break
         # end if
     # end for
-    if "raw" == context:
-        return value
+    if "raw" == context_:
+        return value_
     # end if
-    if "edit" == context:
+    if "edit" == context_:
         #// This filter is documented in wp-includes/post.php
-        value = apply_filters(str("edit_") + str(field), value, bookmark_id)
-        if "link_notes" == field:
-            value = esc_html(value)
+        value_ = apply_filters(str("edit_") + str(field_), value_, bookmark_id_)
+        if "link_notes" == field_:
+            value_ = esc_html(value_)
             pass
         else:
-            value = esc_attr(value)
+            value_ = esc_attr(value_)
         # end if
-    elif "db" == context:
+    elif "db" == context_:
         #// This filter is documented in wp-includes/post.php
-        value = apply_filters(str("pre_") + str(field), value)
+        value_ = apply_filters(str("pre_") + str(field_), value_)
     else:
         #// This filter is documented in wp-includes/post.php
-        value = apply_filters(str(field), value, bookmark_id, context)
-        if "attribute" == context:
-            value = esc_attr(value)
-        elif "js" == context:
-            value = esc_js(value)
+        value_ = apply_filters(str(field_), value_, bookmark_id_, context_)
+        if "attribute" == context_:
+            value_ = esc_attr(value_)
+        elif "js" == context_:
+            value_ = esc_js(value_)
         # end if
     # end if
-    return value
+    return value_
 # end def sanitize_bookmark_field
 #// 
 #// Deletes the bookmark cache.
@@ -419,9 +421,10 @@ def sanitize_bookmark_field(field=None, value=None, bookmark_id=None, context=No
 #// 
 #// @param int $bookmark_id Bookmark ID.
 #//
-def clean_bookmark_cache(bookmark_id=None, *args_):
+def clean_bookmark_cache(bookmark_id_=None, *_args_):
     
-    wp_cache_delete(bookmark_id, "bookmark")
+    
+    wp_cache_delete(bookmark_id_, "bookmark")
     wp_cache_delete("get_bookmarks", "bookmark")
-    clean_object_term_cache(bookmark_id, "link")
+    clean_object_term_cache(bookmark_id_, "link")
 # end def clean_bookmark_cache

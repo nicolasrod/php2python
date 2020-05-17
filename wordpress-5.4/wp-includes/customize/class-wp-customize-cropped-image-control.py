@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,10 +22,40 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Image_Control
 #//
 class WP_Customize_Cropped_Image_Control(WP_Customize_Image_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "cropped_image"
+    #// 
+    #// Suggested width for cropped image.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #//
     width = 150
+    #// 
+    #// Suggested height for cropped image.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #//
     height = 150
+    #// 
+    #// Whether the width is flexible.
+    #// 
+    #// @since 4.3.0
+    #// @var bool
+    #//
     flex_width = False
+    #// 
+    #// Whether the height is flexible.
+    #// 
+    #// @since 4.3.0
+    #// @var bool
+    #//
     flex_height = False
     #// 
     #// Enqueue control related scripts/styles.
@@ -38,6 +63,7 @@ class WP_Customize_Cropped_Image_Control(WP_Customize_Image_Control):
     #// @since 4.3.0
     #//
     def enqueue(self):
+        
         
         wp_enqueue_script("customize-views")
         super().enqueue()
@@ -50,6 +76,7 @@ class WP_Customize_Cropped_Image_Control(WP_Customize_Image_Control):
     #// @see WP_Customize_Control::to_json()
     #//
     def to_json(self):
+        
         
         super().to_json()
         self.json["width"] = absint(self.width)

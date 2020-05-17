@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,10 +60,40 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage API
 #//
 class SimplePie_Caption():
+    #// 
+    #// Content type
+    #// 
+    #// @var string
+    #// @see get_type()
+    #//
     type = Array()
+    #// 
+    #// Language
+    #// 
+    #// @var string
+    #// @see get_language()
+    #//
     lang = Array()
+    #// 
+    #// Start time
+    #// 
+    #// @var string
+    #// @see get_starttime()
+    #//
     startTime = Array()
+    #// 
+    #// End time
+    #// 
+    #// @var string
+    #// @see get_endtime()
+    #//
     endTime = Array()
+    #// 
+    #// Caption text
+    #// 
+    #// @var string
+    #// @see get_text()
+    #//
     text = Array()
     #// 
     #// Constructor, used to input the data
@@ -76,13 +101,14 @@ class SimplePie_Caption():
     #// For documentation on all the parameters, see the corresponding
     #// properties and their accessors
     #//
-    def __init__(self, type=None, lang=None, startTime=None, endTime=None, text=None):
+    def __init__(self, type_=None, lang_=None, startTime_=None, endTime_=None, text_=None):
         
-        self.type = type
-        self.lang = lang
-        self.startTime = startTime
-        self.endTime = endTime
-        self.text = text
+        
+        self.type = type_
+        self.lang = lang_
+        self.startTime = startTime_
+        self.endTime = endTime_
+        self.text = text_
     # end def __init__
     #// 
     #// String-ified version
@@ -90,6 +116,7 @@ class SimplePie_Caption():
     #// @return string
     #//
     def __tostring(self):
+        
         
         #// There is no $this->data here
         return php_md5(serialize(self))
@@ -100,6 +127,7 @@ class SimplePie_Caption():
     #// @return string|null Time in the format 'hh:mm:ss.SSS'
     #//
     def get_endtime(self):
+        
         
         if self.endTime != None:
             return self.endTime
@@ -115,6 +143,7 @@ class SimplePie_Caption():
     #//
     def get_language(self):
         
+        
         if self.lang != None:
             return self.lang
         else:
@@ -127,6 +156,7 @@ class SimplePie_Caption():
     #// @return string|null Time in the format 'hh:mm:ss.SSS'
     #//
     def get_starttime(self):
+        
         
         if self.startTime != None:
             return self.startTime
@@ -141,6 +171,7 @@ class SimplePie_Caption():
     #//
     def get_text(self):
         
+        
         if self.text != None:
             return self.text
         else:
@@ -153,6 +184,7 @@ class SimplePie_Caption():
     #// @return string|null Either 'text' or 'html'
     #//
     def get_type(self):
+        
         
         if self.type != None:
             return self.type

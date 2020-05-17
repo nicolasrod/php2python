@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,12 +22,43 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_User_Query::prepare_query() for information on accepted arguments.
 #//
 class WP_User_Query():
+    #// 
+    #// Query vars, after parsing
+    #// 
+    #// @since 3.5.0
+    #// @var array
+    #//
     query_vars = Array()
+    #// 
+    #// List of found user ids
+    #// 
+    #// @since 3.1.0
+    #// @var array
+    #//
     results = Array()
+    #// 
+    #// Total number of found users for the current query
+    #// 
+    #// @since 3.1.0
+    #// @var int
+    #//
     total_users = 0
+    #// 
+    #// Metadata query container.
+    #// 
+    #// @since 4.2.0
+    #// @var WP_Meta_Query
+    #//
     meta_query = False
+    #// 
+    #// The SQL query used to fetch matching users.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     request = Array()
     compat_fields = Array("results", "total_users")
+    #// SQL clauses.
     query_fields = Array()
     query_from = Array()
     query_where = Array()
@@ -45,10 +71,11 @@ class WP_User_Query():
     #// 
     #// @param null|string|array $query Optional. The query variables.
     #//
-    def __init__(self, query=None):
+    def __init__(self, query_=None):
         
-        if (not php_empty(lambda : query)):
-            self.prepare_query(query)
+        
+        if (not php_empty(lambda : query_)):
+            self.prepare_query(query_)
             self.query()
         # end if
     # end def __init__
@@ -61,10 +88,11 @@ class WP_User_Query():
     #// @return array Complete query variables with undefined ones filled in with defaults.
     #//
     @classmethod
-    def fill_query_vars(self, args=None):
+    def fill_query_vars(self, args_=None):
         
-        defaults = Array({"blog_id": get_current_blog_id(), "role": "", "role__in": Array(), "role__not_in": Array(), "meta_key": "", "meta_value": "", "meta_compare": "", "include": Array(), "exclude": Array(), "search": "", "search_columns": Array(), "orderby": "login", "order": "ASC", "offset": "", "number": "", "paged": 1, "count_total": True, "fields": "all", "who": "", "has_published_posts": None, "nicename": "", "nicename__in": Array(), "nicename__not_in": Array(), "login": "", "login__in": Array(), "login__not_in": Array()})
-        return wp_parse_args(args, defaults)
+        
+        defaults_ = Array({"blog_id": get_current_blog_id(), "role": "", "role__in": Array(), "role__not_in": Array(), "meta_key": "", "meta_value": "", "meta_compare": "", "include": Array(), "exclude": Array(), "search": "", "search_columns": Array(), "orderby": "login", "order": "ASC", "offset": "", "number": "", "paged": 1, "count_total": True, "fields": "all", "who": "", "has_published_posts": None, "nicename": "", "nicename__in": Array(), "nicename__not_in": Array(), "login": "", "login__in": Array(), "login__not_in": Array()})
+        return wp_parse_args(args_, defaults_)
     # end def fill_query_vars
     #// 
     #// Prepare the query variables.
@@ -154,13 +182,16 @@ class WP_User_Query():
     #// logins will not be included in results. Default empty array.
     #// }
     #//
-    def prepare_query(self, query=Array()):
+    def prepare_query(self, query_=None):
+        if query_ is None:
+            query_ = Array()
+        # end if
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        if php_empty(lambda : self.query_vars) or (not php_empty(lambda : query)):
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        if php_empty(lambda : self.query_vars) or (not php_empty(lambda : query_)):
             self.query_limit = None
-            self.query_vars = self.fill_query_vars(query)
+            self.query_vars = self.fill_query_vars(query_)
         # end if
         #// 
         #// Fires before the WP_User_Query has been parsed.
@@ -175,234 +206,234 @@ class WP_User_Query():
         #//
         do_action("pre_get_users", self)
         #// Ensure that query vars are filled after 'pre_get_users'.
-        qv = self.query_vars
-        qv = self.fill_query_vars(qv)
-        if php_is_array(qv["fields"]):
-            qv["fields"] = array_unique(qv["fields"])
+        qv_ = self.query_vars
+        qv_ = self.fill_query_vars(qv_)
+        if php_is_array(qv_["fields"]):
+            qv_["fields"] = array_unique(qv_["fields"])
             self.query_fields = Array()
-            for field in qv["fields"]:
-                field = "ID" if "ID" == field else sanitize_key(field)
-                self.query_fields[-1] = str(wpdb.users) + str(".") + str(field)
+            for field_ in qv_["fields"]:
+                field_ = "ID" if "ID" == field_ else sanitize_key(field_)
+                self.query_fields[-1] = str(wpdb_.users) + str(".") + str(field_)
             # end for
             self.query_fields = php_implode(",", self.query_fields)
-        elif "all" == qv["fields"]:
-            self.query_fields = str(wpdb.users) + str(".*")
+        elif "all" == qv_["fields"]:
+            self.query_fields = str(wpdb_.users) + str(".*")
         else:
-            self.query_fields = str(wpdb.users) + str(".ID")
+            self.query_fields = str(wpdb_.users) + str(".ID")
         # end if
-        if (php_isset(lambda : qv["count_total"])) and qv["count_total"]:
+        if (php_isset(lambda : qv_["count_total"])) and qv_["count_total"]:
             self.query_fields = "SQL_CALC_FOUND_ROWS " + self.query_fields
         # end if
-        self.query_from = str("FROM ") + str(wpdb.users)
+        self.query_from = str("FROM ") + str(wpdb_.users)
         self.query_where = "WHERE 1=1"
         #// Parse and sanitize 'include', for use by 'orderby' as well as 'include' below.
-        if (not php_empty(lambda : qv["include"])):
-            include = wp_parse_id_list(qv["include"])
+        if (not php_empty(lambda : qv_["include"])):
+            include_ = wp_parse_id_list(qv_["include"])
         else:
-            include = False
+            include_ = False
         # end if
-        blog_id = 0
-        if (php_isset(lambda : qv["blog_id"])):
-            blog_id = absint(qv["blog_id"])
+        blog_id_ = 0
+        if (php_isset(lambda : qv_["blog_id"])):
+            blog_id_ = absint(qv_["blog_id"])
         # end if
-        if qv["has_published_posts"] and blog_id:
-            if True == qv["has_published_posts"]:
-                post_types = get_post_types(Array({"public": True}))
+        if qv_["has_published_posts"] and blog_id_:
+            if True == qv_["has_published_posts"]:
+                post_types_ = get_post_types(Array({"public": True}))
             else:
-                post_types = qv["has_published_posts"]
+                post_types_ = qv_["has_published_posts"]
             # end if
-            for post_type in post_types:
-                post_type = wpdb.prepare("%s", post_type)
+            for post_type_ in post_types_:
+                post_type_ = wpdb_.prepare("%s", post_type_)
             # end for
-            posts_table = wpdb.get_blog_prefix(blog_id) + "posts"
-            self.query_where += str(" AND ") + str(wpdb.users) + str(".ID IN ( SELECT DISTINCT ") + str(posts_table) + str(".post_author FROM ") + str(posts_table) + str(" WHERE ") + str(posts_table) + str(".post_status = 'publish' AND ") + str(posts_table) + str(".post_type IN ( ") + join(", ", post_types) + " ) )"
+            posts_table_ = wpdb_.get_blog_prefix(blog_id_) + "posts"
+            self.query_where += str(" AND ") + str(wpdb_.users) + str(".ID IN ( SELECT DISTINCT ") + str(posts_table_) + str(".post_author FROM ") + str(posts_table_) + str(" WHERE ") + str(posts_table_) + str(".post_status = 'publish' AND ") + str(posts_table_) + str(".post_type IN ( ") + join(", ", post_types_) + " ) )"
         # end if
         #// nicename
-        if "" != qv["nicename"]:
-            self.query_where += wpdb.prepare(" AND user_nicename = %s", qv["nicename"])
+        if "" != qv_["nicename"]:
+            self.query_where += wpdb_.prepare(" AND user_nicename = %s", qv_["nicename"])
         # end if
-        if (not php_empty(lambda : qv["nicename__in"])):
-            sanitized_nicename__in = php_array_map("esc_sql", qv["nicename__in"])
-            nicename__in = php_implode("','", sanitized_nicename__in)
-            self.query_where += str(" AND user_nicename IN ( '") + str(nicename__in) + str("' )")
+        if (not php_empty(lambda : qv_["nicename__in"])):
+            sanitized_nicename__in_ = php_array_map("esc_sql", qv_["nicename__in"])
+            nicename__in_ = php_implode("','", sanitized_nicename__in_)
+            self.query_where += str(" AND user_nicename IN ( '") + str(nicename__in_) + str("' )")
         # end if
-        if (not php_empty(lambda : qv["nicename__not_in"])):
-            sanitized_nicename__not_in = php_array_map("esc_sql", qv["nicename__not_in"])
-            nicename__not_in = php_implode("','", sanitized_nicename__not_in)
-            self.query_where += str(" AND user_nicename NOT IN ( '") + str(nicename__not_in) + str("' )")
+        if (not php_empty(lambda : qv_["nicename__not_in"])):
+            sanitized_nicename__not_in_ = php_array_map("esc_sql", qv_["nicename__not_in"])
+            nicename__not_in_ = php_implode("','", sanitized_nicename__not_in_)
+            self.query_where += str(" AND user_nicename NOT IN ( '") + str(nicename__not_in_) + str("' )")
         # end if
         #// login
-        if "" != qv["login"]:
-            self.query_where += wpdb.prepare(" AND user_login = %s", qv["login"])
+        if "" != qv_["login"]:
+            self.query_where += wpdb_.prepare(" AND user_login = %s", qv_["login"])
         # end if
-        if (not php_empty(lambda : qv["login__in"])):
-            sanitized_login__in = php_array_map("esc_sql", qv["login__in"])
-            login__in = php_implode("','", sanitized_login__in)
-            self.query_where += str(" AND user_login IN ( '") + str(login__in) + str("' )")
+        if (not php_empty(lambda : qv_["login__in"])):
+            sanitized_login__in_ = php_array_map("esc_sql", qv_["login__in"])
+            login__in_ = php_implode("','", sanitized_login__in_)
+            self.query_where += str(" AND user_login IN ( '") + str(login__in_) + str("' )")
         # end if
-        if (not php_empty(lambda : qv["login__not_in"])):
-            sanitized_login__not_in = php_array_map("esc_sql", qv["login__not_in"])
-            login__not_in = php_implode("','", sanitized_login__not_in)
-            self.query_where += str(" AND user_login NOT IN ( '") + str(login__not_in) + str("' )")
+        if (not php_empty(lambda : qv_["login__not_in"])):
+            sanitized_login__not_in_ = php_array_map("esc_sql", qv_["login__not_in"])
+            login__not_in_ = php_implode("','", sanitized_login__not_in_)
+            self.query_where += str(" AND user_login NOT IN ( '") + str(login__not_in_) + str("' )")
         # end if
         #// Meta query.
         self.meta_query = php_new_class("WP_Meta_Query", lambda : WP_Meta_Query())
-        self.meta_query.parse_query_vars(qv)
-        if (php_isset(lambda : qv["who"])) and "authors" == qv["who"] and blog_id:
-            who_query = Array({"key": wpdb.get_blog_prefix(blog_id) + "user_level", "value": 0, "compare": "!="})
+        self.meta_query.parse_query_vars(qv_)
+        if (php_isset(lambda : qv_["who"])) and "authors" == qv_["who"] and blog_id_:
+            who_query_ = Array({"key": wpdb_.get_blog_prefix(blog_id_) + "user_level", "value": 0, "compare": "!="})
             #// Prevent extra meta query.
-            qv["blog_id"] = 0
-            blog_id = 0
+            qv_["blog_id"] = 0
+            blog_id_ = 0
             if php_empty(lambda : self.meta_query.queries):
-                self.meta_query.queries = Array(who_query)
+                self.meta_query.queries = Array(who_query_)
             else:
                 #// Append the cap query to the original queries and reparse the query.
-                self.meta_query.queries = Array({"relation": "AND"}, Array(self.meta_query.queries, who_query))
+                self.meta_query.queries = Array({"relation": "AND"}, Array(self.meta_query.queries, who_query_))
             # end if
             self.meta_query.parse_query_vars(self.meta_query.queries)
         # end if
-        roles = Array()
-        if (php_isset(lambda : qv["role"])):
-            if php_is_array(qv["role"]):
-                roles = qv["role"]
-            elif php_is_string(qv["role"]) and (not php_empty(lambda : qv["role"])):
-                roles = php_array_map("trim", php_explode(",", qv["role"]))
+        roles_ = Array()
+        if (php_isset(lambda : qv_["role"])):
+            if php_is_array(qv_["role"]):
+                roles_ = qv_["role"]
+            elif php_is_string(qv_["role"]) and (not php_empty(lambda : qv_["role"])):
+                roles_ = php_array_map("trim", php_explode(",", qv_["role"]))
             # end if
         # end if
-        role__in = Array()
-        if (php_isset(lambda : qv["role__in"])):
-            role__in = qv["role__in"]
+        role__in_ = Array()
+        if (php_isset(lambda : qv_["role__in"])):
+            role__in_ = qv_["role__in"]
         # end if
-        role__not_in = Array()
-        if (php_isset(lambda : qv["role__not_in"])):
-            role__not_in = qv["role__not_in"]
+        role__not_in_ = Array()
+        if (php_isset(lambda : qv_["role__not_in"])):
+            role__not_in_ = qv_["role__not_in"]
         # end if
-        if blog_id and (not php_empty(lambda : roles)) or (not php_empty(lambda : role__in)) or (not php_empty(lambda : role__not_in)) or is_multisite():
-            role_queries = Array()
-            roles_clauses = Array({"relation": "AND"})
-            if (not php_empty(lambda : roles)):
-                for role in roles:
-                    roles_clauses[-1] = Array({"key": wpdb.get_blog_prefix(blog_id) + "capabilities", "value": "\"" + role + "\"", "compare": "LIKE"})
+        if blog_id_ and (not php_empty(lambda : roles_)) or (not php_empty(lambda : role__in_)) or (not php_empty(lambda : role__not_in_)) or is_multisite():
+            role_queries_ = Array()
+            roles_clauses_ = Array({"relation": "AND"})
+            if (not php_empty(lambda : roles_)):
+                for role_ in roles_:
+                    roles_clauses_[-1] = Array({"key": wpdb_.get_blog_prefix(blog_id_) + "capabilities", "value": "\"" + role_ + "\"", "compare": "LIKE"})
                 # end for
-                role_queries[-1] = roles_clauses
+                role_queries_[-1] = roles_clauses_
             # end if
-            role__in_clauses = Array({"relation": "OR"})
-            if (not php_empty(lambda : role__in)):
-                for role in role__in:
-                    role__in_clauses[-1] = Array({"key": wpdb.get_blog_prefix(blog_id) + "capabilities", "value": "\"" + role + "\"", "compare": "LIKE"})
+            role__in_clauses_ = Array({"relation": "OR"})
+            if (not php_empty(lambda : role__in_)):
+                for role_ in role__in_:
+                    role__in_clauses_[-1] = Array({"key": wpdb_.get_blog_prefix(blog_id_) + "capabilities", "value": "\"" + role_ + "\"", "compare": "LIKE"})
                 # end for
-                role_queries[-1] = role__in_clauses
+                role_queries_[-1] = role__in_clauses_
             # end if
-            role__not_in_clauses = Array({"relation": "AND"})
-            if (not php_empty(lambda : role__not_in)):
-                for role in role__not_in:
-                    role__not_in_clauses[-1] = Array({"key": wpdb.get_blog_prefix(blog_id) + "capabilities", "value": "\"" + role + "\"", "compare": "NOT LIKE"})
+            role__not_in_clauses_ = Array({"relation": "AND"})
+            if (not php_empty(lambda : role__not_in_)):
+                for role_ in role__not_in_:
+                    role__not_in_clauses_[-1] = Array({"key": wpdb_.get_blog_prefix(blog_id_) + "capabilities", "value": "\"" + role_ + "\"", "compare": "NOT LIKE"})
                 # end for
-                role_queries[-1] = role__not_in_clauses
+                role_queries_[-1] = role__not_in_clauses_
             # end if
             #// If there are no specific roles named, make sure the user is a member of the site.
-            if php_empty(lambda : role_queries):
-                role_queries[-1] = Array({"key": wpdb.get_blog_prefix(blog_id) + "capabilities", "compare": "EXISTS"})
+            if php_empty(lambda : role_queries_):
+                role_queries_[-1] = Array({"key": wpdb_.get_blog_prefix(blog_id_) + "capabilities", "compare": "EXISTS"})
             # end if
             #// Specify that role queries should be joined with AND.
-            role_queries["relation"] = "AND"
+            role_queries_["relation"] = "AND"
             if php_empty(lambda : self.meta_query.queries):
-                self.meta_query.queries = role_queries
+                self.meta_query.queries = role_queries_
             else:
                 #// Append the cap query to the original queries and reparse the query.
-                self.meta_query.queries = Array({"relation": "AND"}, Array(self.meta_query.queries, role_queries))
+                self.meta_query.queries = Array({"relation": "AND"}, Array(self.meta_query.queries, role_queries_))
             # end if
             self.meta_query.parse_query_vars(self.meta_query.queries)
         # end if
         if (not php_empty(lambda : self.meta_query.queries)):
-            clauses = self.meta_query.get_sql("user", wpdb.users, "ID", self)
-            self.query_from += clauses["join"]
-            self.query_where += clauses["where"]
+            clauses_ = self.meta_query.get_sql("user", wpdb_.users, "ID", self)
+            self.query_from += clauses_["join"]
+            self.query_where += clauses_["where"]
             if self.meta_query.has_or_relation():
                 self.query_fields = "DISTINCT " + self.query_fields
             # end if
         # end if
         #// Sorting.
-        qv["order"] = php_strtoupper(qv["order"]) if (php_isset(lambda : qv["order"])) else ""
-        order = self.parse_order(qv["order"])
-        if php_empty(lambda : qv["orderby"]):
+        qv_["order"] = php_strtoupper(qv_["order"]) if (php_isset(lambda : qv_["order"])) else ""
+        order_ = self.parse_order(qv_["order"])
+        if php_empty(lambda : qv_["orderby"]):
             #// Default order is by 'user_login'.
-            ordersby = Array({"user_login": order})
-        elif php_is_array(qv["orderby"]):
-            ordersby = qv["orderby"]
+            ordersby_ = Array({"user_login": order_})
+        elif php_is_array(qv_["orderby"]):
+            ordersby_ = qv_["orderby"]
         else:
             #// 'orderby' values may be a comma- or space-separated list.
-            ordersby = php_preg_split("/[,\\s]+/", qv["orderby"])
+            ordersby_ = php_preg_split("/[,\\s]+/", qv_["orderby"])
         # end if
-        orderby_array = Array()
-        for _key,_value in ordersby:
-            if (not _value):
+        orderby_array_ = Array()
+        for _key_,_value_ in ordersby_:
+            if (not _value_):
                 continue
             # end if
-            if php_is_int(_key):
+            if php_is_int(_key_):
                 #// Integer key means this is a flat array of 'orderby' fields.
-                _orderby = _value
-                _order = order
+                _orderby_ = _value_
+                _order_ = order_
             else:
                 #// Non-integer key means this the key is the field and the value is ASC/DESC.
-                _orderby = _key
-                _order = _value
+                _orderby_ = _key_
+                _order_ = _value_
             # end if
-            parsed = self.parse_orderby(_orderby)
-            if (not parsed):
+            parsed_ = self.parse_orderby(_orderby_)
+            if (not parsed_):
                 continue
             # end if
-            if "nicename__in" == _orderby or "login__in" == _orderby:
-                orderby_array[-1] = parsed
+            if "nicename__in" == _orderby_ or "login__in" == _orderby_:
+                orderby_array_[-1] = parsed_
             else:
-                orderby_array[-1] = parsed + " " + self.parse_order(_order)
+                orderby_array_[-1] = parsed_ + " " + self.parse_order(_order_)
             # end if
         # end for
         #// If no valid clauses were found, order by user_login.
-        if php_empty(lambda : orderby_array):
-            orderby_array[-1] = str("user_login ") + str(order)
+        if php_empty(lambda : orderby_array_):
+            orderby_array_[-1] = str("user_login ") + str(order_)
         # end if
-        self.query_orderby = "ORDER BY " + php_implode(", ", orderby_array)
+        self.query_orderby = "ORDER BY " + php_implode(", ", orderby_array_)
         #// Limit.
-        if (php_isset(lambda : qv["number"])) and qv["number"] > 0:
-            if qv["offset"]:
-                self.query_limit = wpdb.prepare("LIMIT %d, %d", qv["offset"], qv["number"])
+        if (php_isset(lambda : qv_["number"])) and qv_["number"] > 0:
+            if qv_["offset"]:
+                self.query_limit = wpdb_.prepare("LIMIT %d, %d", qv_["offset"], qv_["number"])
             else:
-                self.query_limit = wpdb.prepare("LIMIT %d, %d", qv["number"] * qv["paged"] - 1, qv["number"])
+                self.query_limit = wpdb_.prepare("LIMIT %d, %d", qv_["number"] * qv_["paged"] - 1, qv_["number"])
             # end if
         # end if
-        search = ""
-        if (php_isset(lambda : qv["search"])):
-            search = php_trim(qv["search"])
+        search_ = ""
+        if (php_isset(lambda : qv_["search"])):
+            search_ = php_trim(qv_["search"])
         # end if
-        if search:
-            leading_wild = php_ltrim(search, "*") != search
-            trailing_wild = php_rtrim(search, "*") != search
-            if leading_wild and trailing_wild:
-                wild = "both"
-            elif leading_wild:
-                wild = "leading"
-            elif trailing_wild:
-                wild = "trailing"
+        if search_:
+            leading_wild_ = php_ltrim(search_, "*") != search_
+            trailing_wild_ = php_rtrim(search_, "*") != search_
+            if leading_wild_ and trailing_wild_:
+                wild_ = "both"
+            elif leading_wild_:
+                wild_ = "leading"
+            elif trailing_wild_:
+                wild_ = "trailing"
             else:
-                wild = False
+                wild_ = False
             # end if
-            if wild:
-                search = php_trim(search, "*")
+            if wild_:
+                search_ = php_trim(search_, "*")
             # end if
-            search_columns = Array()
-            if qv["search_columns"]:
-                search_columns = php_array_intersect(qv["search_columns"], Array("ID", "user_login", "user_email", "user_url", "user_nicename", "display_name"))
+            search_columns_ = Array()
+            if qv_["search_columns"]:
+                search_columns_ = php_array_intersect(qv_["search_columns"], Array("ID", "user_login", "user_email", "user_url", "user_nicename", "display_name"))
             # end if
-            if (not search_columns):
-                if False != php_strpos(search, "@"):
-                    search_columns = Array("user_email")
-                elif php_is_numeric(search):
-                    search_columns = Array("user_login", "ID")
-                elif php_preg_match("|^https?://|", search) and (not is_multisite() and wp_is_large_network("users")):
-                    search_columns = Array("user_url")
+            if (not search_columns_):
+                if False != php_strpos(search_, "@"):
+                    search_columns_ = Array("user_email")
+                elif php_is_numeric(search_):
+                    search_columns_ = Array("user_login", "ID")
+                elif php_preg_match("|^https?://|", search_) and (not is_multisite() and wp_is_large_network("users")):
+                    search_columns_ = Array("user_url")
                 else:
-                    search_columns = Array("user_login", "user_url", "user_email", "user_nicename", "display_name")
+                    search_columns_ = Array("user_login", "user_url", "user_email", "user_nicename", "display_name")
                 # end if
             # end if
             #// 
@@ -417,21 +448,21 @@ class WP_User_Query():
             #// @param string        $search         Text being searched.
             #// @param WP_User_Query $this           The current WP_User_Query instance.
             #//
-            search_columns = apply_filters("user_search_columns", search_columns, search, self)
-            self.query_where += self.get_search_sql(search, search_columns, wild)
+            search_columns_ = apply_filters("user_search_columns", search_columns_, search_, self)
+            self.query_where += self.get_search_sql(search_, search_columns_, wild_)
         # end if
-        if (not php_empty(lambda : include)):
+        if (not php_empty(lambda : include_)):
             #// Sanitized earlier.
-            ids = php_implode(",", include)
-            self.query_where += str(" AND ") + str(wpdb.users) + str(".ID IN (") + str(ids) + str(")")
-        elif (not php_empty(lambda : qv["exclude"])):
-            ids = php_implode(",", wp_parse_id_list(qv["exclude"]))
-            self.query_where += str(" AND ") + str(wpdb.users) + str(".ID NOT IN (") + str(ids) + str(")")
+            ids_ = php_implode(",", include_)
+            self.query_where += str(" AND ") + str(wpdb_.users) + str(".ID IN (") + str(ids_) + str(")")
+        elif (not php_empty(lambda : qv_["exclude"])):
+            ids_ = php_implode(",", wp_parse_id_list(qv_["exclude"]))
+            self.query_where += str(" AND ") + str(wpdb_.users) + str(".ID NOT IN (") + str(ids_) + str(")")
         # end if
         #// Date queries are allowed for the user_registered field.
-        if (not php_empty(lambda : qv["date_query"])) and php_is_array(qv["date_query"]):
-            date_query = php_new_class("WP_Date_Query", lambda : WP_Date_Query(qv["date_query"], "user_registered"))
-            self.query_where += date_query.get_sql()
+        if (not php_empty(lambda : qv_["date_query"])) and php_is_array(qv_["date_query"]):
+            date_query_ = php_new_class("WP_Date_Query", lambda : WP_Date_Query(qv_["date_query"], "user_registered"))
+            self.query_where += date_query_.get_sql()
         # end if
         #// 
         #// Fires after the WP_User_Query has been parsed, and before
@@ -456,9 +487,10 @@ class WP_User_Query():
     #//
     def query(self):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        qv = self.query_vars
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        qv_ = self.query_vars
         #// 
         #// Filters the users array before the query takes place.
         #// 
@@ -477,12 +509,12 @@ class WP_User_Query():
         self.results = apply_filters_ref_array("users_pre_query", Array(None, self))
         if None == self.results:
             self.request = str("SELECT ") + str(self.query_fields) + str(" ") + str(self.query_from) + str(" ") + str(self.query_where) + str(" ") + str(self.query_orderby) + str(" ") + str(self.query_limit)
-            if php_is_array(qv["fields"]) or "all" == qv["fields"]:
-                self.results = wpdb.get_results(self.request)
+            if php_is_array(qv_["fields"]) or "all" == qv_["fields"]:
+                self.results = wpdb_.get_results(self.request)
             else:
-                self.results = wpdb.get_col(self.request)
+                self.results = wpdb_.get_col(self.request)
             # end if
-            if (php_isset(lambda : qv["count_total"])) and qv["count_total"]:
+            if (php_isset(lambda : qv_["count_total"])) and qv_["count_total"]:
                 #// 
                 #// Filters SELECT FOUND_ROWS() query for the current WP_User_Query instance.
                 #// 
@@ -494,23 +526,23 @@ class WP_User_Query():
                 #// @param string $sql         The SELECT FOUND_ROWS() query for the current WP_User_Query.
                 #// @param WP_User_Query $this The current WP_User_Query instance.
                 #//
-                found_users_query = apply_filters("found_users_query", "SELECT FOUND_ROWS()", self)
-                self.total_users = php_int(wpdb.get_var(found_users_query))
+                found_users_query_ = apply_filters("found_users_query", "SELECT FOUND_ROWS()", self)
+                self.total_users = php_int(wpdb_.get_var(found_users_query_))
             # end if
         # end if
         if (not self.results):
             return
         # end if
-        if "all_with_meta" == qv["fields"]:
+        if "all_with_meta" == qv_["fields"]:
             cache_users(self.results)
-            r = Array()
-            for userid in self.results:
-                r[userid] = php_new_class("WP_User", lambda : WP_User(userid, "", qv["blog_id"]))
+            r_ = Array()
+            for userid_ in self.results:
+                r_[userid_] = php_new_class("WP_User", lambda : WP_User(userid_, "", qv_["blog_id"]))
             # end for
-            self.results = r
-        elif "all" == qv["fields"]:
-            for key,user in self.results:
-                self.results[key] = php_new_class("WP_User", lambda : WP_User(user, "", qv["blog_id"]))
+            self.results = r_
+        elif "all" == qv_["fields"]:
+            for key_,user_ in self.results:
+                self.results[key_] = php_new_class("WP_User", lambda : WP_User(user_, "", qv_["blog_id"]))
             # end for
         # end if
     # end def query
@@ -522,10 +554,11 @@ class WP_User_Query():
     #// @param string $query_var Query variable key.
     #// @return mixed
     #//
-    def get(self, query_var=None):
+    def get(self, query_var_=None):
         
-        if (php_isset(lambda : self.query_vars[query_var])):
-            return self.query_vars[query_var]
+        
+        if (php_isset(lambda : self.query_vars[query_var_])):
+            return self.query_vars[query_var_]
         # end if
         return None
     # end def get
@@ -537,9 +570,10 @@ class WP_User_Query():
     #// @param string $query_var Query variable key.
     #// @param mixed $value Query variable value.
     #//
-    def set(self, query_var=None, value=None):
+    def set(self, query_var_=None, value_=None):
         
-        self.query_vars[query_var] = value
+        
+        self.query_vars[query_var_] = value_
     # end def set
     #// 
     #// Used internally to generate an SQL string for searching across multiple columns
@@ -554,22 +588,25 @@ class WP_User_Query():
     #// Single site allows leading and trailing wildcards, Network Admin only trailing.
     #// @return string
     #//
-    def get_search_sql(self, string=None, cols=None, wild=False):
+    def get_search_sql(self, string_=None, cols_=None, wild_=None):
+        if wild_ is None:
+            wild_ = False
+        # end if
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        searches = Array()
-        leading_wild = "%" if "leading" == wild or "both" == wild else ""
-        trailing_wild = "%" if "trailing" == wild or "both" == wild else ""
-        like = leading_wild + wpdb.esc_like(string) + trailing_wild
-        for col in cols:
-            if "ID" == col:
-                searches[-1] = wpdb.prepare(str(col) + str(" = %s"), string)
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        searches_ = Array()
+        leading_wild_ = "%" if "leading" == wild_ or "both" == wild_ else ""
+        trailing_wild_ = "%" if "trailing" == wild_ or "both" == wild_ else ""
+        like_ = leading_wild_ + wpdb_.esc_like(string_) + trailing_wild_
+        for col_ in cols_:
+            if "ID" == col_:
+                searches_[-1] = wpdb_.prepare(str(col_) + str(" = %s"), string_)
             else:
-                searches[-1] = wpdb.prepare(str(col) + str(" LIKE %s"), like)
+                searches_[-1] = wpdb_.prepare(str(col_) + str(" LIKE %s"), like_)
             # end if
         # end for
-        return " AND (" + php_implode(" OR ", searches) + ")"
+        return " AND (" + php_implode(" OR ", searches_) + ")"
     # end def get_search_sql
     #// 
     #// Return the list of users.
@@ -579,6 +616,7 @@ class WP_User_Query():
     #// @return array Array of results.
     #//
     def get_results(self):
+        
         
         return self.results
     # end def get_results
@@ -590,6 +628,7 @@ class WP_User_Query():
     #// @return int Number of total users.
     #//
     def get_total(self):
+        
         
         return self.total_users
     # end def get_total
@@ -603,46 +642,47 @@ class WP_User_Query():
     #// @param string $orderby Alias for the field to order by.
     #// @return string Value to used in the ORDER clause, if `$orderby` is valid.
     #//
-    def parse_orderby(self, orderby=None):
+    def parse_orderby(self, orderby_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        meta_query_clauses = self.meta_query.get_clauses()
-        _orderby = ""
-        if php_in_array(orderby, Array("login", "nicename", "email", "url", "registered")):
-            _orderby = "user_" + orderby
-        elif php_in_array(orderby, Array("user_login", "user_nicename", "user_email", "user_url", "user_registered")):
-            _orderby = orderby
-        elif "name" == orderby or "display_name" == orderby:
-            _orderby = "display_name"
-        elif "post_count" == orderby:
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        meta_query_clauses_ = self.meta_query.get_clauses()
+        _orderby_ = ""
+        if php_in_array(orderby_, Array("login", "nicename", "email", "url", "registered")):
+            _orderby_ = "user_" + orderby_
+        elif php_in_array(orderby_, Array("user_login", "user_nicename", "user_email", "user_url", "user_registered")):
+            _orderby_ = orderby_
+        elif "name" == orderby_ or "display_name" == orderby_:
+            _orderby_ = "display_name"
+        elif "post_count" == orderby_:
             #// @todo Avoid the JOIN.
-            where = get_posts_by_author_sql("post")
-            self.query_from += str(" LEFT OUTER JOIN (\n                SELECT post_author, COUNT(*) as post_count\n                FROM ") + str(wpdb.posts) + str("\n             ") + str(where) + str("\n               GROUP BY post_author\n          ) p ON (") + str(wpdb.users) + str(".ID = p.post_author)\n          ")
-            _orderby = "post_count"
-        elif "ID" == orderby or "id" == orderby:
-            _orderby = "ID"
-        elif "meta_value" == orderby or self.get("meta_key") == orderby:
-            _orderby = str(wpdb.usermeta) + str(".meta_value")
-        elif "meta_value_num" == orderby:
-            _orderby = str(wpdb.usermeta) + str(".meta_value+0")
-        elif "include" == orderby and (not php_empty(lambda : self.query_vars["include"])):
-            include = wp_parse_id_list(self.query_vars["include"])
-            include_sql = php_implode(",", include)
-            _orderby = str("FIELD( ") + str(wpdb.users) + str(".ID, ") + str(include_sql) + str(" )")
-        elif "nicename__in" == orderby:
-            sanitized_nicename__in = php_array_map("esc_sql", self.query_vars["nicename__in"])
-            nicename__in = php_implode("','", sanitized_nicename__in)
-            _orderby = str("FIELD( user_nicename, '") + str(nicename__in) + str("' )")
-        elif "login__in" == orderby:
-            sanitized_login__in = php_array_map("esc_sql", self.query_vars["login__in"])
-            login__in = php_implode("','", sanitized_login__in)
-            _orderby = str("FIELD( user_login, '") + str(login__in) + str("' )")
-        elif (php_isset(lambda : meta_query_clauses[orderby])):
-            meta_clause = meta_query_clauses[orderby]
-            _orderby = php_sprintf("CAST(%s.meta_value AS %s)", esc_sql(meta_clause["alias"]), esc_sql(meta_clause["cast"]))
+            where_ = get_posts_by_author_sql("post")
+            self.query_from += str(" LEFT OUTER JOIN (\n                SELECT post_author, COUNT(*) as post_count\n                FROM ") + str(wpdb_.posts) + str("\n                ") + str(where_) + str("\n              GROUP BY post_author\n          ) p ON (") + str(wpdb_.users) + str(".ID = p.post_author)\n         ")
+            _orderby_ = "post_count"
+        elif "ID" == orderby_ or "id" == orderby_:
+            _orderby_ = "ID"
+        elif "meta_value" == orderby_ or self.get("meta_key") == orderby_:
+            _orderby_ = str(wpdb_.usermeta) + str(".meta_value")
+        elif "meta_value_num" == orderby_:
+            _orderby_ = str(wpdb_.usermeta) + str(".meta_value+0")
+        elif "include" == orderby_ and (not php_empty(lambda : self.query_vars["include"])):
+            include_ = wp_parse_id_list(self.query_vars["include"])
+            include_sql_ = php_implode(",", include_)
+            _orderby_ = str("FIELD( ") + str(wpdb_.users) + str(".ID, ") + str(include_sql_) + str(" )")
+        elif "nicename__in" == orderby_:
+            sanitized_nicename__in_ = php_array_map("esc_sql", self.query_vars["nicename__in"])
+            nicename__in_ = php_implode("','", sanitized_nicename__in_)
+            _orderby_ = str("FIELD( user_nicename, '") + str(nicename__in_) + str("' )")
+        elif "login__in" == orderby_:
+            sanitized_login__in_ = php_array_map("esc_sql", self.query_vars["login__in"])
+            login__in_ = php_implode("','", sanitized_login__in_)
+            _orderby_ = str("FIELD( user_login, '") + str(login__in_) + str("' )")
+        elif (php_isset(lambda : meta_query_clauses_[orderby_])):
+            meta_clause_ = meta_query_clauses_[orderby_]
+            _orderby_ = php_sprintf("CAST(%s.meta_value AS %s)", esc_sql(meta_clause_["alias"]), esc_sql(meta_clause_["cast"]))
         # end if
-        return _orderby
+        return _orderby_
     # end def parse_orderby
     #// 
     #// Parse an 'order' query variable and cast it to ASC or DESC as necessary.
@@ -652,12 +692,13 @@ class WP_User_Query():
     #// @param string $order The 'order' query variable.
     #// @return string The sanitized 'order' query variable.
     #//
-    def parse_order(self, order=None):
+    def parse_order(self, order_=None):
         
-        if (not php_is_string(order)) or php_empty(lambda : order):
+        
+        if (not php_is_string(order_)) or php_empty(lambda : order_):
             return "DESC"
         # end if
-        if "ASC" == php_strtoupper(order):
+        if "ASC" == php_strtoupper(order_):
             return "ASC"
         else:
             return "DESC"
@@ -671,10 +712,11 @@ class WP_User_Query():
     #// @param string $name Property to get.
     #// @return mixed Property.
     #//
-    def __get(self, name=None):
+    def __get(self, name_=None):
         
-        if php_in_array(name, self.compat_fields):
-            return self.name
+        
+        if php_in_array(name_, self.compat_fields):
+            return self.name_
         # end if
     # end def __get
     #// 
@@ -686,11 +728,12 @@ class WP_User_Query():
     #// @param mixed  $value Property value.
     #// @return mixed Newly-set property.
     #//
-    def __set(self, name=None, value=None):
+    def __set(self, name_=None, value_=None):
         
-        if php_in_array(name, self.compat_fields):
-            self.name = value
-            return self.name
+        
+        if php_in_array(name_, self.compat_fields):
+            self.name_ = value_
+            return self.name_
         # end if
     # end def __set
     #// 
@@ -701,10 +744,11 @@ class WP_User_Query():
     #// @param string $name Property to check if set.
     #// @return bool Whether the property is set.
     #//
-    def __isset(self, name=None):
+    def __isset(self, name_=None):
         
-        if php_in_array(name, self.compat_fields):
-            return (php_isset(lambda : self.name))
+        
+        if php_in_array(name_, self.compat_fields):
+            return (php_isset(lambda : self.name_))
         # end if
     # end def __isset
     #// 
@@ -714,10 +758,11 @@ class WP_User_Query():
     #// 
     #// @param string $name Property to unset.
     #//
-    def __unset(self, name=None):
+    def __unset(self, name_=None):
         
-        if php_in_array(name, self.compat_fields):
-            self.name = None
+        
+        if php_in_array(name_, self.compat_fields):
+            self.name_ = None
         # end if
     # end def __unset
     #// 
@@ -729,10 +774,11 @@ class WP_User_Query():
     #// @param array    $arguments Arguments to pass when calling.
     #// @return mixed Return value of the callback, false otherwise.
     #//
-    def __call(self, name=None, arguments=None):
+    def __call(self, name_=None, arguments_=None):
         
-        if "get_search_sql" == name:
-            return self.get_search_sql(arguments)
+        
+        if "get_search_sql" == name_:
+            return self.get_search_sql(arguments_)
         # end if
         return False
     # end def __call

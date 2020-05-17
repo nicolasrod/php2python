@@ -12,18 +12,19 @@ import itertools
 import random
 import functools
 import base64
+import json
 
+from goto import with_goto
 from datetime import datetime
 from urllib.parse import urlparse
 from contextlib import redirect_stdout
-import json
 
 _PHP_INCLUDES = {}
-__DIR__ = os.getcwd()
-__FILE__ = os.path.join(__DIR__, os.path.basename(__file__))
+__FILE__ = os.path.realpath(__file__)
+__DIR__ = os.path.dirname(__FILE__)
 _HEADERS = {}
 _HEADERS_PRINTED = False
-_AUTOLOAD_FN = None
+_AUTOLOAD_FN = []
 
 
 def php_yield(var_):
@@ -97,21 +98,29 @@ def php_get_include_retval():
 
 
 def php_include_file(fname, once=True, redirect=False):
-    global __DIR__, __FILE__
+    global __DIR__
+    global __FILE__
 
-    filename = fix_ext(fname)
     old_dir = __DIR__
     old_file = __FILE__
 
-    __DIR__ = os.path.dirname(os.path.realpath(filename))
-    __FILE__ = os.path.join(__DIR__, os.path.basename(filename))
+    filename = fix_ext(fname)
 
-    if __FILE__ in _PHP_INCLUDES:
+    if fname.startswith('/'):  # absolute path
+        __FILE__ = os.path.realpath(filename)
+    else:
+        __FILE__ = os.path.join(__DIR__, filename)
+
+    __DIR__ = os.path.dirname(__FILE__)
+
+    if __FILE__ in _PHP_INCLUDES and once:
         return None
 
     _PHP_INCLUDES[__FILE__] = True
 
-    with open(filename) as src:
+    print(f'>>> INCLUDING: {__FILE__}')
+
+    with open(__FILE__) as src:
         code = compile(src.read().replace("\x00", ""), filename, "exec")
 
     try:
@@ -130,7 +139,6 @@ def php_include_file(fname, once=True, redirect=False):
     finally:
         __DIR__ = old_dir
         __FILE__ = old_file
-
 
 # -----------------------------------------------------------------------------------
 # PHP globals
@@ -270,6 +278,7 @@ class HandleObj:
 # =============================================================0
 # Load "PHP" INI file
 
+
 _src = os.path.dirname(os.getenv('PHP2PY_COMPAT', __file__))
 
 with open(os.path.join(_src, 'php_compat.ini'), 'r') as f:
@@ -278,8 +287,8 @@ with open(os.path.join(_src, 'php_compat.ini'), 'r') as f:
 
 _PHP_INI_FILE = Array(_ini_json)
 _PHP_INI_FILE_DETAILS = Array(dict(
-    [(k, Array({'global_value': v, 'local_value': v, 'access': 7})) 
-    for k, v in _ini_json.items()]))
+    [(k, Array({'global_value': v, 'local_value': v, 'access': 7}))
+     for k, v in _ini_json.items()]))
 
 # =============================================================0
 
@@ -381,7 +390,7 @@ STR_PAD_RIGHT = _Id()
 STREAM_CLIENT_CONNECT = _Id()
 ZLIB_ENCODING_RAW = _Id()
 
-JSON_ERROR_NONE	= _Id()
+JSON_ERROR_NONE = _Id()
 JSON_ERROR_DEPTH = _Id()
 JSON_ERROR_STATE_MISMATCH = _Id()
 JSON_ERROR_CTRL_CHAR = _Id()
@@ -394,7 +403,8 @@ JSON_ERROR_INVALID_PROPERTY_NAME = _Id()
 JSON_ERROR_UTF16 = _Id()
 
 # --------------------------------------------------------------------------------------------
-#@@ Patch compile-time transformations
+# @@ Patch compile-time transformations
+
 
 def to_python(fn, args):
     if f"php_{fn}" in globals():
@@ -431,9 +441,8 @@ class Switch(object):
 
 def php_new_class(klass, ctr):
     if not klass in globals():
-        print(">>>", _AUTOLOAD_FN, klass, ctr)
-        php_call_user_func(_AUTOLOAD_FN, klass)
-
+        for alfn in _AUTOLOAD_FN:
+            php_call_user_func(alfn, klass)
     return ctr()
 
 
@@ -668,7 +677,7 @@ def php_array_intersect(_array1, *args):
     >>> array2 = Array({"b": "green"}, "yellow", "red")
     >>> php_array_intersect(array1, array2)
     {'a': 'green', 0: 'red'}
-    
+
     >>> array1 = Array(2, 4, 6, 8, 10, 12)
     >>> array2 = Array(1, 2, 3, 4, 5, 6)
     >>> php_array_intersect(array1, array2)
@@ -764,7 +773,7 @@ def php_array_map(fn, _array1, *args):
     >>> c = Array('uno', 'dos', 'tres', 'cuatro', 'cinco')
     >>> php_array_map(None, a, b, c)
     {0: {0: 1, 1: 'one', 2: 'uno'}, 1: {0: 2, 1: 'two', 2: 'dos'}, 2: {0: 3, 1: 'three', 2: 'tres'}, 3: {0: 4, 1: 'four', 2: 'cuatro'}, 4: {0: 5, 1: 'five', 2: 'cinco'}}
-    
+
     >>> array = Array(1, 2, 3)
     >>> php_array_map(None, array)
     {0: 1, 1: 2, 2: 3}
@@ -797,7 +806,7 @@ def php_array_merge(*args):
     >>> array2 = Array({1: "data"})
     >>> php_array_merge(array1, array2)
     {0: 'data'}
-    
+
     >>> beginning = 'foo'
     >>> end = Array({1: 'bar'})
     >>> php_array_merge(beginning, end)
@@ -977,6 +986,7 @@ def php_call_user_func(_fn, *args):
         return getattr(fn, method)(*args)
     else:
         fn = globals()[_fn]
+
     return fn(*args)
 
 
@@ -995,7 +1005,7 @@ def php_chdir(_directory):
 
 
 def php_class_exists(_class_name, _autoload=True):
-    return _class_name in globals()  #@
+    return _class_name in globals()  # @
 
 
 def php_closedir(dh):
@@ -1006,7 +1016,7 @@ def php_count(item, _mode=COUNT_NORMAL):
     """
     >>> php_count(Array({0: 1, 1: 3, 2: 5}))
     3
-    
+
     >>> php_count(Array({0: 7, 5: 9, 10: 11}))
     3
 
@@ -1026,8 +1036,10 @@ def php_count(item, _mode=COUNT_NORMAL):
     8
     """
 
-    if item is None: return 0
-    if isinstance(item, bool): return 1
+    if item is None:
+        return 0
+    if isinstance(item, bool):
+        return 1
     if _mode == COUNT_NORMAL:
         return len(item)
 
@@ -1212,7 +1224,7 @@ def php_implode(*args):
 
     assert len(args) == 2
     assert (isinstance(args[0], str) and isinstance(args[1], Array)) or \
-            (isinstance(args[1], str) and isinstance(args[0], Array))
+        (isinstance(args[1], str) and isinstance(args[0], Array))
 
     _glue = args[0] if isinstance(args[0], str) else args[1]
     _array = args[1] if isinstance(args[1], Array) else args[0]
@@ -1260,7 +1272,7 @@ def php_intval(_var, _base=10):
 
 
 def php_is_a(_object, _class_name, _allow_string=False):
-    return type(_object).__name__ == _class_name  #@
+    return type(_object).__name__ == _class_name  # @
 
 
 def php_is_array(_var):
@@ -1329,7 +1341,7 @@ def php_json_decode(_json, _assoc=False, _depth=512, _options=0):
     >>> php_json_decode('{"a":1,"b":2,"c":3,"d":4,"e":5}')
     {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5}
     >>> php_json_decode("{ 'bar': 'baz' }")
-    
+
     """
     import json
     try:
@@ -1339,6 +1351,7 @@ def php_json_decode(_json, _assoc=False, _depth=512, _options=0):
     except json.JSONDecodeError as err:
         php_json_last_error.value = err
         return None
+
 
 def php_json_encode(_value, _options=0, _depth=512):
     """
@@ -1357,6 +1370,8 @@ def php_json_encode(_value, _options=0, _depth=512):
         return False
 
 # TODO: Convert JSON errors to PHP constants
+
+
 def php_json_last_error():
     if hasattr(php_json_last_error, 'value'):
         return php_json_last_error.value
@@ -1367,7 +1382,7 @@ def php_ltrim(_str, _character_mask=None):
     return _str.lstrip()
 
 
-def php_max(_values, *args):    
+def php_max(_values, *args):
     """
     >> php_max(2, 3, 1, 6, 7)
     7
@@ -1378,7 +1393,7 @@ def php_max(_values, *args):
     0
     >> php_max('hello', 0)
     0
-    
+
     # TODO: finish implementing this!
     php_max('hello', -1) => 'hello'
 
@@ -1404,8 +1419,8 @@ def php_max(_values, *args):
         if len(_values) == 0:
             return False
         return max(_values)
-    print(">>>>",tuple([_values, args]), type(_values).__name__)
-    print(args, type(args).__name__)
+    #print(">>>>",tuple([_values, args]), type(_values).__name__)
+    #print(args, type(args).__name__)
     return max(tuple([_values, args]))
 
 
@@ -1465,7 +1480,12 @@ def php_mysqli_real_connect(dbh_,
 
 
 def php_mysqli_init():
-    return Array()
+    dbh = HandleObj()
+    for it in ['affected_rows', 'connect_errno', 'connect_error', 'errno', 'error_list', 'error', 'field_count',
+               'client_info', 'client_version', 'host_info', 'protocol_version', 'server_info', 'server_version',
+               'info', 'insert_id', 'sqlstate', 'thread_id', 'warning_count']:
+        setattr(dbh, it, None)
+    return dbh
 
 
 def php_mysqli_connect(host, user, pwd, db):
@@ -1567,19 +1587,24 @@ def php_rtrim(_str, _character_mask=None):
 def php_spl_autoload_unregister(_fn, _throw=True, _prepend=False):
     global _AUTOLOAD_FN
 
-    _AUTOLOAD_FN = None
+    for fn in _AUTOLOAD_FN:
+        if fn == _fn:
+            del _AUTOLOAD_FN[fn]
+            break
 
 
 def php_spl_autoload_register(_fn, _throw=True, _prepend=False):
     global _AUTOLOAD_FN
 
     if isinstance(_fn, str):
-        _AUTOLOAD_FN = _fn
+        _AUTOLOAD_FN.append(_fn)
     elif type(_fn).__name__ == "Array":
-        _AUTOLOAD_FN = ".".join(_fn.get_list())
+        _AUTOLOAD_FN.append(".".join(_fn.get_list()))
+    elif callable(_fn):
+        _AUTOLOAD_FN.append(_fn)
     else:
-        _AUTOLOAD_FN = _fn
-        
+        assert False, "[-] Invalid type for autoload function!"
+
 
 def php_sprintf(_format, *args):
     return _format % args
@@ -1781,8 +1806,24 @@ def php_substr(_string, _start, _length=None):
 
 
 def php_substr_count(_haystack, _needle, _offset=0, _length=None):
-    assert False
-    return _haystack.count(_needle)
+    """
+    >>> text = 'This is a test'
+    >>> php_strlen(text)
+    14
+    >>> php_substr_count(text, 'is')
+    2
+    >>> php_substr_count(text, 'is', 3)
+    1
+    >>> php_substr_count(text, 'is', 3, 3)
+    0
+    >>> php_substr_count(text, 'is', 5, 10)
+    1
+    >>> php_substr_count('gcdgcdgcd', 'gcdgcd')
+    1
+    """
+    if _length is None:
+        _length = len(_haystack)
+    return _haystack.count(_needle, _offset, _offset + _length)
 
 
 def php_substr_replace(_string, _replacement, _start, _length):
@@ -1895,12 +1936,12 @@ def php_func_get_arg(_arg_num):
     parent = _get_caller_data()
     varname = parent.args_name[_arg_num]
     return parent.locals[varname]
-    
+
 
 def php_func_get_args():
     parent = _get_caller_data()
     return parent.args_name
-    
+
 
 def php_func_num_args():
     parent = _get_caller_data()
@@ -1913,12 +1954,13 @@ def _get_caller_data():
 
     frame = inspect.currentframe().f_back.f_back
     fcode = frame.f_code
-    CallerInfo = namedtuple('CallerInfo', 'name, num_args, args_name, locals, globals')
+    CallerInfo = namedtuple(
+        'CallerInfo', 'name, num_args, args_name, locals, globals')
     return CallerInfo(name=fcode.co_name,
-                num_args=fcode.co_argcount,
-                args_name=fcode.co_varnames[:fcode.co_argcount],
-                locals=frame.f_locals,
-                globals=frame.f_globals)
+                      num_args=fcode.co_argcount,
+                      args_name=fcode.co_varnames[:fcode.co_argcount],
+                      locals=frame.f_locals,
+                      globals=frame.f_globals)
 
 
 def php_register_shutdown_function(_callback, *args):
@@ -1935,8 +1977,8 @@ def php_register_shutdown_function(_callback, *args):
 
     if isinstance(_callback, Array):
         # parts of a static method!
-        print(type(_callback).__name__)
-        print(_callback)
+        # print(type(_callback).__name__)
+        # print(_callback)
         """
 $scheduler->registerShutdownEvent(array($scheduler, 'dynamicTest'));
 // try with a static call:
@@ -1948,7 +1990,10 @@ $scheduler->registerShutdownEvent('scheduler::staticTest');
 
 
 def php_date_default_timezone_get(): pass
+
+
 def php_date_default_timezone_set(_timezone_identifier): pass
+
 
 def php_strncmp(s1, s2, l):
     """
@@ -1964,7 +2009,7 @@ def php_strncmp(s1, s2, l):
 
     if _s1 < _s2:
         return -1
-    
+
     if _s1 > _s2:
         return 1
 
@@ -1974,8 +2019,10 @@ def php_strncmp(s1, s2, l):
 def php_bool(v):
     pass
 
+
 def php_float(v):
     return float(v)
+
 
 def php_int(v, base=10):
     """
@@ -2007,7 +2054,7 @@ def php_int(v, base=10):
     0
     >>> php_int(True)
     1
-    
+
     php_int(042) => 34
     php_int('1e10'); => 1
     # TODO: handle overflow!
@@ -2029,10 +2076,48 @@ def php_int(v, base=10):
     except:
         return int(''.join([x for x in str(v) if not x.isalpha()]))
 
+
 def php_str(v):
     return str(v)
 
+
+def php_random_int():
+    assert False, "Not Implemented!"
+
+
+def php_sodium_crypto_box():
+    assert False, "Not Implemented!"
+
+
+def php_compact(*names):
+    """
+    >>> city = 'San Francisco'
+    >>> state = 'CA'
+    >>> event = 'SIGGRAPH'
+    >>> location_vars = Array('city', 'state')
+    >>> php_compact('event', location_vars)
+    {'event': 'SIGGRAPH', 'city': 'San Francisco', 'state': 'CA'}
+    """
+
+    def _item(x):
+        if isinstance(x, (Array, dict)):
+            return x.values()
+        return [x]
+
+    import inspect
+
+    caller = inspect.stack()[1][0]  # caller of compact()
+    vars = {}
+    arr = list(itertools.chain.from_iterable([_item(x) for x in names]))
+    for n in arr:
+        if n in caller.f_locals:
+            vars[n] = caller.f_locals[n]
+        elif n in caller.f_globals:
+            vars[n] = caller.f_globals[n]
+    return vars
+
 # ========================================================================================
+
 
 defs = locals().copy()
 PHP_FUNCTIONS = [

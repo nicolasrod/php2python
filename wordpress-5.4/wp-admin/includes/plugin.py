@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -77,32 +72,38 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @type string $RequiresPHP Minimum required version of PHP.
 #// }
 #//
-def get_plugin_data(plugin_file=None, markup=True, translate=True, *args_):
+def get_plugin_data(plugin_file_=None, markup_=None, translate_=None, *_args_):
+    if markup_ is None:
+        markup_ = True
+    # end if
+    if translate_ is None:
+        translate_ = True
+    # end if
     
-    default_headers = Array({"Name": "Plugin Name", "PluginURI": "Plugin URI", "Version": "Version", "Description": "Description", "Author": "Author", "AuthorURI": "Author URI", "TextDomain": "Text Domain", "DomainPath": "Domain Path", "Network": "Network", "RequiresWP": "Requires at least", "RequiresPHP": "Requires PHP", "_sitewide": "Site Wide Only"})
-    plugin_data = get_file_data(plugin_file, default_headers, "plugin")
+    default_headers_ = Array({"Name": "Plugin Name", "PluginURI": "Plugin URI", "Version": "Version", "Description": "Description", "Author": "Author", "AuthorURI": "Author URI", "TextDomain": "Text Domain", "DomainPath": "Domain Path", "Network": "Network", "RequiresWP": "Requires at least", "RequiresPHP": "Requires PHP", "_sitewide": "Site Wide Only"})
+    plugin_data_ = get_file_data(plugin_file_, default_headers_, "plugin")
     #// Site Wide Only is the old header for Network.
-    if (not plugin_data["Network"]) and plugin_data["_sitewide"]:
+    if (not plugin_data_["Network"]) and plugin_data_["_sitewide"]:
         #// translators: 1: Site Wide Only: true, 2: Network: true
         _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The %1$s plugin header is deprecated. Use %2$s instead."), "<code>Site Wide Only: true</code>", "<code>Network: true</code>"))
-        plugin_data["Network"] = plugin_data["_sitewide"]
+        plugin_data_["Network"] = plugin_data_["_sitewide"]
     # end if
-    plugin_data["Network"] = "true" == php_strtolower(plugin_data["Network"])
-    plugin_data["_sitewide"] = None
+    plugin_data_["Network"] = "true" == php_strtolower(plugin_data_["Network"])
+    plugin_data_["_sitewide"] = None
     #// If no text domain is defined fall back to the plugin slug.
-    if (not plugin_data["TextDomain"]):
-        plugin_slug = php_dirname(plugin_basename(plugin_file))
-        if "." != plugin_slug and False == php_strpos(plugin_slug, "/"):
-            plugin_data["TextDomain"] = plugin_slug
+    if (not plugin_data_["TextDomain"]):
+        plugin_slug_ = php_dirname(plugin_basename(plugin_file_))
+        if "." != plugin_slug_ and False == php_strpos(plugin_slug_, "/"):
+            plugin_data_["TextDomain"] = plugin_slug_
         # end if
     # end if
-    if markup or translate:
-        plugin_data = _get_plugin_data_markup_translate(plugin_file, plugin_data, markup, translate)
+    if markup_ or translate_:
+        plugin_data_ = _get_plugin_data_markup_translate(plugin_file_, plugin_data_, markup_, translate_)
     else:
-        plugin_data["Title"] = plugin_data["Name"]
-        plugin_data["AuthorName"] = plugin_data["Author"]
+        plugin_data_["Title"] = plugin_data_["Name"]
+        plugin_data_["AuthorName"] = plugin_data_["Author"]
     # end if
-    return plugin_data
+    return plugin_data_
 # end def get_plugin_data
 #// 
 #// Sanitizes plugin data, optionally adds markup, optionally translates.
@@ -132,59 +133,65 @@ def get_plugin_data(plugin_file=None, markup=True, translate=True, *args_):
 #// @type bool   $Network     Whether the plugin can only be activated network-wide.
 #// }
 #//
-def _get_plugin_data_markup_translate(plugin_file=None, plugin_data=None, markup=True, translate=True, *args_):
+def _get_plugin_data_markup_translate(plugin_file_=None, plugin_data_=None, markup_=None, translate_=None, *_args_):
+    if markup_ is None:
+        markup_ = True
+    # end if
+    if translate_ is None:
+        translate_ = True
+    # end if
     
     #// Sanitize the plugin filename to a WP_PLUGIN_DIR relative path.
-    plugin_file = plugin_basename(plugin_file)
+    plugin_file_ = plugin_basename(plugin_file_)
     #// Translate fields.
-    if translate:
-        textdomain = plugin_data["TextDomain"]
-        if textdomain:
-            if (not is_textdomain_loaded(textdomain)):
-                if plugin_data["DomainPath"]:
-                    load_plugin_textdomain(textdomain, False, php_dirname(plugin_file) + plugin_data["DomainPath"])
+    if translate_:
+        textdomain_ = plugin_data_["TextDomain"]
+        if textdomain_:
+            if (not is_textdomain_loaded(textdomain_)):
+                if plugin_data_["DomainPath"]:
+                    load_plugin_textdomain(textdomain_, False, php_dirname(plugin_file_) + plugin_data_["DomainPath"])
                 else:
-                    load_plugin_textdomain(textdomain, False, php_dirname(plugin_file))
+                    load_plugin_textdomain(textdomain_, False, php_dirname(plugin_file_))
                 # end if
             # end if
-        elif "hello.php" == php_basename(plugin_file):
-            textdomain = "default"
+        elif "hello.php" == php_basename(plugin_file_):
+            textdomain_ = "default"
         # end if
-        if textdomain:
-            for field in Array("Name", "PluginURI", "Description", "Author", "AuthorURI", "Version"):
+        if textdomain_:
+            for field_ in Array("Name", "PluginURI", "Description", "Author", "AuthorURI", "Version"):
                 #// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.NonSingularStringLiteralDomain
-                plugin_data[field] = translate(plugin_data[field], textdomain)
+                plugin_data_[field_] = translate(plugin_data_[field_], textdomain_)
             # end for
         # end if
     # end if
     #// Sanitize fields.
-    allowed_tags_in_links = Array({"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
-    allowed_tags = allowed_tags_in_links
-    allowed_tags["a"] = Array({"href": True, "title": True})
+    allowed_tags_in_links_ = Array({"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
+    allowed_tags_ = allowed_tags_in_links_
+    allowed_tags_["a"] = Array({"href": True, "title": True})
     #// Name is marked up inside <a> tags. Don't allow these.
     #// Author is too, but some plugins have used <a> here (omitting Author URI).
-    plugin_data["Name"] = wp_kses(plugin_data["Name"], allowed_tags_in_links)
-    plugin_data["Author"] = wp_kses(plugin_data["Author"], allowed_tags)
-    plugin_data["Description"] = wp_kses(plugin_data["Description"], allowed_tags)
-    plugin_data["Version"] = wp_kses(plugin_data["Version"], allowed_tags)
-    plugin_data["PluginURI"] = esc_url(plugin_data["PluginURI"])
-    plugin_data["AuthorURI"] = esc_url(plugin_data["AuthorURI"])
-    plugin_data["Title"] = plugin_data["Name"]
-    plugin_data["AuthorName"] = plugin_data["Author"]
+    plugin_data_["Name"] = wp_kses(plugin_data_["Name"], allowed_tags_in_links_)
+    plugin_data_["Author"] = wp_kses(plugin_data_["Author"], allowed_tags_)
+    plugin_data_["Description"] = wp_kses(plugin_data_["Description"], allowed_tags_)
+    plugin_data_["Version"] = wp_kses(plugin_data_["Version"], allowed_tags_)
+    plugin_data_["PluginURI"] = esc_url(plugin_data_["PluginURI"])
+    plugin_data_["AuthorURI"] = esc_url(plugin_data_["AuthorURI"])
+    plugin_data_["Title"] = plugin_data_["Name"]
+    plugin_data_["AuthorName"] = plugin_data_["Author"]
     #// Apply markup.
-    if markup:
-        if plugin_data["PluginURI"] and plugin_data["Name"]:
-            plugin_data["Title"] = "<a href=\"" + plugin_data["PluginURI"] + "\">" + plugin_data["Name"] + "</a>"
+    if markup_:
+        if plugin_data_["PluginURI"] and plugin_data_["Name"]:
+            plugin_data_["Title"] = "<a href=\"" + plugin_data_["PluginURI"] + "\">" + plugin_data_["Name"] + "</a>"
         # end if
-        if plugin_data["AuthorURI"] and plugin_data["Author"]:
-            plugin_data["Author"] = "<a href=\"" + plugin_data["AuthorURI"] + "\">" + plugin_data["Author"] + "</a>"
+        if plugin_data_["AuthorURI"] and plugin_data_["Author"]:
+            plugin_data_["Author"] = "<a href=\"" + plugin_data_["AuthorURI"] + "\">" + plugin_data_["Author"] + "</a>"
         # end if
-        plugin_data["Description"] = wptexturize(plugin_data["Description"])
-        if plugin_data["Author"]:
-            plugin_data["Description"] += php_sprintf(" <cite>" + __("By %s.") + "</cite>", plugin_data["Author"])
+        plugin_data_["Description"] = wptexturize(plugin_data_["Description"])
+        if plugin_data_["Author"]:
+            plugin_data_["Description"] += php_sprintf(" <cite>" + __("By %s.") + "</cite>", plugin_data_["Author"])
         # end if
     # end if
-    return plugin_data
+    return plugin_data_
 # end def _get_plugin_data_markup_translate
 #// 
 #// Get a list of a plugin's files.
@@ -194,12 +201,13 @@ def _get_plugin_data_markup_translate(plugin_file=None, plugin_data=None, markup
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return string[] Array of file names relative to the plugin root.
 #//
-def get_plugin_files(plugin=None, *args_):
+def get_plugin_files(plugin_=None, *_args_):
     
-    plugin_file = WP_PLUGIN_DIR + "/" + plugin
-    dir = php_dirname(plugin_file)
-    plugin_files = Array(plugin_basename(plugin_file))
-    if php_is_dir(dir) and WP_PLUGIN_DIR != dir:
+    
+    plugin_file_ = WP_PLUGIN_DIR + "/" + plugin_
+    dir_ = php_dirname(plugin_file_)
+    plugin_files_ = Array(plugin_basename(plugin_file_))
+    if php_is_dir(dir_) and WP_PLUGIN_DIR != dir_:
         #// 
         #// Filters the array of excluded directories and files while scanning the folder.
         #// 
@@ -207,13 +215,13 @@ def get_plugin_files(plugin=None, *args_):
         #// 
         #// @param string[] $exclusions Array of excluded directories and files.
         #//
-        exclusions = apply_filters("plugin_files_exclusions", Array("CVS", "node_modules", "vendor", "bower_components"))
-        list_files = list_files(dir, 100, exclusions)
-        list_files = php_array_map("plugin_basename", list_files)
-        plugin_files = php_array_merge(plugin_files, list_files)
-        plugin_files = php_array_values(array_unique(plugin_files))
+        exclusions_ = apply_filters("plugin_files_exclusions", Array("CVS", "node_modules", "vendor", "bower_components"))
+        list_files_ = list_files(dir_, 100, exclusions_)
+        list_files_ = php_array_map("plugin_basename", list_files_)
+        plugin_files_ = php_array_merge(plugin_files_, list_files_)
+        plugin_files_ = php_array_values(array_unique(plugin_files_))
     # end if
-    return plugin_files
+    return plugin_files_
 # end def get_plugin_files
 #// 
 #// Check the plugins directory and retrieve all plugin files with plugin data.
@@ -235,75 +243,76 @@ def get_plugin_files(plugin=None, *args_):
 #// @param string $plugin_folder Optional. Relative path to single plugin folder.
 #// @return array[] Array of arrays of plugin data, keyed by plugin file name. See `get_plugin_data()`.
 #//
-def get_plugins(plugin_folder="", *args_):
+def get_plugins(plugin_folder_="", *_args_):
     
-    cache_plugins = wp_cache_get("plugins", "plugins")
-    if (not cache_plugins):
-        cache_plugins = Array()
+    
+    cache_plugins_ = wp_cache_get("plugins", "plugins")
+    if (not cache_plugins_):
+        cache_plugins_ = Array()
     # end if
-    if (php_isset(lambda : cache_plugins[plugin_folder])):
-        return cache_plugins[plugin_folder]
+    if (php_isset(lambda : cache_plugins_[plugin_folder_])):
+        return cache_plugins_[plugin_folder_]
     # end if
-    wp_plugins = Array()
-    plugin_root = WP_PLUGIN_DIR
-    if (not php_empty(lambda : plugin_folder)):
-        plugin_root += plugin_folder
+    wp_plugins_ = Array()
+    plugin_root_ = WP_PLUGIN_DIR
+    if (not php_empty(lambda : plugin_folder_)):
+        plugin_root_ += plugin_folder_
     # end if
     #// Files in wp-content/plugins directory.
-    plugins_dir = php_no_error(lambda: php_opendir(plugin_root))
-    plugin_files = Array()
-    if plugins_dir:
+    plugins_dir_ = php_no_error(lambda: php_opendir(plugin_root_))
+    plugin_files_ = Array()
+    if plugins_dir_:
         while True:
-            file = php_readdir(plugins_dir)
-            if not (file != False):
+            file_ = php_readdir(plugins_dir_)
+            if not (file_ != False):
                 break
             # end if
-            if php_substr(file, 0, 1) == ".":
+            if php_substr(file_, 0, 1) == ".":
                 continue
             # end if
-            if php_is_dir(plugin_root + "/" + file):
-                plugins_subdir = php_no_error(lambda: php_opendir(plugin_root + "/" + file))
-                if plugins_subdir:
+            if php_is_dir(plugin_root_ + "/" + file_):
+                plugins_subdir_ = php_no_error(lambda: php_opendir(plugin_root_ + "/" + file_))
+                if plugins_subdir_:
                     while True:
-                        subfile = php_readdir(plugins_subdir)
-                        if not (subfile != False):
+                        subfile_ = php_readdir(plugins_subdir_)
+                        if not (subfile_ != False):
                             break
                         # end if
-                        if php_substr(subfile, 0, 1) == ".":
+                        if php_substr(subfile_, 0, 1) == ".":
                             continue
                         # end if
-                        if php_substr(subfile, -4) == ".php":
-                            plugin_files[-1] = str(file) + str("/") + str(subfile)
+                        if php_substr(subfile_, -4) == ".php":
+                            plugin_files_[-1] = str(file_) + str("/") + str(subfile_)
                         # end if
                     # end while
-                    php_closedir(plugins_subdir)
+                    php_closedir(plugins_subdir_)
                 # end if
             else:
-                if php_substr(file, -4) == ".php":
-                    plugin_files[-1] = file
+                if php_substr(file_, -4) == ".php":
+                    plugin_files_[-1] = file_
                 # end if
             # end if
         # end while
-        php_closedir(plugins_dir)
+        php_closedir(plugins_dir_)
     # end if
-    if php_empty(lambda : plugin_files):
-        return wp_plugins
+    if php_empty(lambda : plugin_files_):
+        return wp_plugins_
     # end if
-    for plugin_file in plugin_files:
-        if (not php_is_readable(str(plugin_root) + str("/") + str(plugin_file))):
+    for plugin_file_ in plugin_files_:
+        if (not php_is_readable(str(plugin_root_) + str("/") + str(plugin_file_))):
             continue
         # end if
         #// Do not apply markup/translate as it will be cached.
-        plugin_data = get_plugin_data(str(plugin_root) + str("/") + str(plugin_file), False, False)
-        if php_empty(lambda : plugin_data["Name"]):
+        plugin_data_ = get_plugin_data(str(plugin_root_) + str("/") + str(plugin_file_), False, False)
+        if php_empty(lambda : plugin_data_["Name"]):
             continue
         # end if
-        wp_plugins[plugin_basename(plugin_file)] = plugin_data
+        wp_plugins_[plugin_basename(plugin_file_)] = plugin_data_
     # end for
-    uasort(wp_plugins, "_sort_uname_callback")
-    cache_plugins[plugin_folder] = wp_plugins
-    wp_cache_set("plugins", cache_plugins, "plugins")
-    return wp_plugins
+    uasort(wp_plugins_, "_sort_uname_callback")
+    cache_plugins_[plugin_folder_] = wp_plugins_
+    wp_cache_set("plugins", cache_plugins_, "plugins")
+    return wp_plugins_
 # end def get_plugins
 #// 
 #// Check the mu-plugins directory and retrieve all mu-plugin files with any plugin data.
@@ -313,48 +322,49 @@ def get_plugins(plugin_folder="", *args_):
 #// @since 3.0.0
 #// @return array[] Array of arrays of mu-plugin data, keyed by plugin file name. See `get_plugin_data()`.
 #//
-def get_mu_plugins(*args_):
+def get_mu_plugins(*_args_):
     
-    wp_plugins = Array()
-    plugin_files = Array()
+    
+    wp_plugins_ = Array()
+    plugin_files_ = Array()
     if (not php_is_dir(WPMU_PLUGIN_DIR)):
-        return wp_plugins
+        return wp_plugins_
     # end if
     #// Files in wp-content/mu-plugins directory.
-    plugins_dir = php_no_error(lambda: php_opendir(WPMU_PLUGIN_DIR))
-    if plugins_dir:
+    plugins_dir_ = php_no_error(lambda: php_opendir(WPMU_PLUGIN_DIR))
+    if plugins_dir_:
         while True:
-            file = php_readdir(plugins_dir)
-            if not (file != False):
+            file_ = php_readdir(plugins_dir_)
+            if not (file_ != False):
                 break
             # end if
-            if php_substr(file, -4) == ".php":
-                plugin_files[-1] = file
+            if php_substr(file_, -4) == ".php":
+                plugin_files_[-1] = file_
             # end if
         # end while
     else:
-        return wp_plugins
+        return wp_plugins_
     # end if
-    php_closedir(plugins_dir)
-    if php_empty(lambda : plugin_files):
-        return wp_plugins
+    php_closedir(plugins_dir_)
+    if php_empty(lambda : plugin_files_):
+        return wp_plugins_
     # end if
-    for plugin_file in plugin_files:
-        if (not php_is_readable(WPMU_PLUGIN_DIR + str("/") + str(plugin_file))):
+    for plugin_file_ in plugin_files_:
+        if (not php_is_readable(WPMU_PLUGIN_DIR + str("/") + str(plugin_file_))):
             continue
         # end if
         #// Do not apply markup/translate as it will be cached.
-        plugin_data = get_plugin_data(WPMU_PLUGIN_DIR + str("/") + str(plugin_file), False, False)
-        if php_empty(lambda : plugin_data["Name"]):
-            plugin_data["Name"] = plugin_file
+        plugin_data_ = get_plugin_data(WPMU_PLUGIN_DIR + str("/") + str(plugin_file_), False, False)
+        if php_empty(lambda : plugin_data_["Name"]):
+            plugin_data_["Name"] = plugin_file_
         # end if
-        wp_plugins[plugin_file] = plugin_data
+        wp_plugins_[plugin_file_] = plugin_data_
     # end for
-    if (php_isset(lambda : wp_plugins["index.php"])) and filesize(WPMU_PLUGIN_DIR + "/index.php") <= 30:
-        wp_plugins["index.php"] = None
+    if (php_isset(lambda : wp_plugins_["index.php"])) and filesize(WPMU_PLUGIN_DIR + "/index.php") <= 30:
+        wp_plugins_["index.php"] = None
     # end if
-    uasort(wp_plugins, "_sort_uname_callback")
-    return wp_plugins
+    uasort(wp_plugins_, "_sort_uname_callback")
+    return wp_plugins_
 # end def get_mu_plugins
 #// 
 #// Callback to sort array by a 'Name' key.
@@ -367,9 +377,10 @@ def get_mu_plugins(*args_):
 #// @param array $b array with 'Name' key.
 #// @return int Return 0 or 1 based on two string comparison.
 #//
-def _sort_uname_callback(a=None, b=None, *args_):
+def _sort_uname_callback(a_=None, b_=None, *_args_):
     
-    return strnatcasecmp(a["Name"], b["Name"])
+    
+    return strnatcasecmp(a_["Name"], b_["Name"])
 # end def _sort_uname_callback
 #// 
 #// Check the wp-content directory and retrieve all drop-ins with any plugin data.
@@ -377,43 +388,44 @@ def _sort_uname_callback(a=None, b=None, *args_):
 #// @since 3.0.0
 #// @return array[] Array of arrays of dropin plugin data, keyed by plugin file name. See `get_plugin_data()`.
 #//
-def get_dropins(*args_):
+def get_dropins(*_args_):
     
-    dropins = Array()
-    plugin_files = Array()
-    _dropins = _get_dropins()
+    
+    dropins_ = Array()
+    plugin_files_ = Array()
+    _dropins_ = _get_dropins()
     #// Files in wp-content directory.
-    plugins_dir = php_no_error(lambda: php_opendir(WP_CONTENT_DIR))
-    if plugins_dir:
+    plugins_dir_ = php_no_error(lambda: php_opendir(WP_CONTENT_DIR))
+    if plugins_dir_:
         while True:
-            file = php_readdir(plugins_dir)
-            if not (file != False):
+            file_ = php_readdir(plugins_dir_)
+            if not (file_ != False):
                 break
             # end if
-            if (php_isset(lambda : _dropins[file])):
-                plugin_files[-1] = file
+            if (php_isset(lambda : _dropins_[file_])):
+                plugin_files_[-1] = file_
             # end if
         # end while
     else:
-        return dropins
+        return dropins_
     # end if
-    php_closedir(plugins_dir)
-    if php_empty(lambda : plugin_files):
-        return dropins
+    php_closedir(plugins_dir_)
+    if php_empty(lambda : plugin_files_):
+        return dropins_
     # end if
-    for plugin_file in plugin_files:
-        if (not php_is_readable(WP_CONTENT_DIR + str("/") + str(plugin_file))):
+    for plugin_file_ in plugin_files_:
+        if (not php_is_readable(WP_CONTENT_DIR + str("/") + str(plugin_file_))):
             continue
         # end if
         #// Do not apply markup/translate as it will be cached.
-        plugin_data = get_plugin_data(WP_CONTENT_DIR + str("/") + str(plugin_file), False, False)
-        if php_empty(lambda : plugin_data["Name"]):
-            plugin_data["Name"] = plugin_file
+        plugin_data_ = get_plugin_data(WP_CONTENT_DIR + str("/") + str(plugin_file_), False, False)
+        if php_empty(lambda : plugin_data_["Name"]):
+            plugin_data_["Name"] = plugin_file_
         # end if
-        dropins[plugin_file] = plugin_data
+        dropins_[plugin_file_] = plugin_data_
     # end for
-    uksort(dropins, "strnatcasecmp")
-    return dropins
+    uksort(dropins_, "strnatcasecmp")
+    return dropins_
 # end def get_dropins
 #// 
 #// Returns drop-ins that WordPress uses.
@@ -425,20 +437,21 @@ def get_dropins(*args_):
 #// purpose of the drop-in and the second value the name of the constant that must be
 #// true for the drop-in to be used, or true if no constant is required.
 #//
-def _get_dropins(*args_):
+def _get_dropins(*_args_):
     
-    dropins = Array({"advanced-cache.php": Array(__("Advanced caching plugin."), "WP_CACHE"), "db.php": Array(__("Custom database class."), True), "db-error.php": Array(__("Custom database error message."), True), "install.php": Array(__("Custom installation script."), True), "maintenance.php": Array(__("Custom maintenance message."), True), "object-cache.php": Array(__("External object cache."), True), "php-error.php": Array(__("Custom PHP error message."), True), "fatal-error-handler.php": Array(__("Custom PHP fatal error handler."), True)})
+    
+    dropins_ = Array({"advanced-cache.php": Array(__("Advanced caching plugin."), "WP_CACHE"), "db.php": Array(__("Custom database class."), True), "db-error.php": Array(__("Custom database error message."), True), "install.php": Array(__("Custom installation script."), True), "maintenance.php": Array(__("Custom maintenance message."), True), "object-cache.php": Array(__("External object cache."), True), "php-error.php": Array(__("Custom PHP error message."), True), "fatal-error-handler.php": Array(__("Custom PHP fatal error handler."), True)})
     if is_multisite():
-        dropins["sunrise.php"] = Array(__("Executed before Multisite is loaded."), "SUNRISE")
+        dropins_["sunrise.php"] = Array(__("Executed before Multisite is loaded."), "SUNRISE")
         #// SUNRISE
-        dropins["blog-deleted.php"] = Array(__("Custom site deleted message."), True)
+        dropins_["blog-deleted.php"] = Array(__("Custom site deleted message."), True)
         #// Auto on deleted blog.
-        dropins["blog-inactive.php"] = Array(__("Custom site inactive message."), True)
+        dropins_["blog-inactive.php"] = Array(__("Custom site inactive message."), True)
         #// Auto on inactive blog.
-        dropins["blog-suspended.php"] = Array(__("Custom site suspended message."), True)
+        dropins_["blog-suspended.php"] = Array(__("Custom site suspended message."), True)
         pass
     # end if
-    return dropins
+    return dropins_
 # end def _get_dropins
 #// 
 #// Determines whether a plugin is active.
@@ -457,9 +470,10 @@ def _get_dropins(*args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return bool True, if in the active plugins list. False, not in the list.
 #//
-def is_plugin_active(plugin=None, *args_):
+def is_plugin_active(plugin_=None, *_args_):
     
-    return php_in_array(plugin, get_option("active_plugins", Array())) or is_plugin_active_for_network(plugin)
+    
+    return php_in_array(plugin_, get_option("active_plugins", Array())) or is_plugin_active_for_network(plugin_)
 # end def is_plugin_active
 #// 
 #// Determines whether the plugin is inactive.
@@ -476,9 +490,10 @@ def is_plugin_active(plugin=None, *args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return bool True if inactive. False if active.
 #//
-def is_plugin_inactive(plugin=None, *args_):
+def is_plugin_inactive(plugin_=None, *_args_):
     
-    return (not is_plugin_active(plugin))
+    
+    return (not is_plugin_active(plugin_))
 # end def is_plugin_inactive
 #// 
 #// Determines whether the plugin is active for the entire network.
@@ -497,13 +512,14 @@ def is_plugin_inactive(plugin=None, *args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return bool True if active for the network, otherwise false.
 #//
-def is_plugin_active_for_network(plugin=None, *args_):
+def is_plugin_active_for_network(plugin_=None, *_args_):
+    
     
     if (not is_multisite()):
         return False
     # end if
-    plugins = get_site_option("active_sitewide_plugins")
-    if (php_isset(lambda : plugins[plugin])):
+    plugins_ = get_site_option("active_sitewide_plugins")
+    if (php_isset(lambda : plugins_[plugin_])):
         return True
     # end if
     return False
@@ -520,11 +536,12 @@ def is_plugin_active_for_network(plugin=None, *args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return bool True if plugin is network only, false otherwise.
 #//
-def is_network_only_plugin(plugin=None, *args_):
+def is_network_only_plugin(plugin_=None, *_args_):
     
-    plugin_data = get_plugin_data(WP_PLUGIN_DIR + "/" + plugin)
-    if plugin_data:
-        return plugin_data["Network"]
+    
+    plugin_data_ = get_plugin_data(WP_PLUGIN_DIR + "/" + plugin_)
+    if plugin_data_:
+        return plugin_data_["Network"]
     # end if
     return False
 # end def is_network_only_plugin
@@ -556,40 +573,46 @@ def is_network_only_plugin(plugin=None, *args_):
 #// @param bool   $silent       Optional. Whether to prevent calling activation hooks. Default false.
 #// @return null|WP_Error Null on success, WP_Error on invalid file.
 #//
-def activate_plugin(plugin=None, redirect="", network_wide=False, silent=False, *args_):
+def activate_plugin(plugin_=None, redirect_="", network_wide_=None, silent_=None, *_args_):
+    if network_wide_ is None:
+        network_wide_ = False
+    # end if
+    if silent_ is None:
+        silent_ = False
+    # end if
     global PHP_REQUEST
-    plugin = plugin_basename(php_trim(plugin))
-    if is_multisite() and network_wide or is_network_only_plugin(plugin):
-        network_wide = True
-        current = get_site_option("active_sitewide_plugins", Array())
+    plugin_ = plugin_basename(php_trim(plugin_))
+    if is_multisite() and network_wide_ or is_network_only_plugin(plugin_):
+        network_wide_ = True
+        current_ = get_site_option("active_sitewide_plugins", Array())
         PHP_REQUEST["networkwide"] = 1
         pass
     else:
-        current = get_option("active_plugins", Array())
+        current_ = get_option("active_plugins", Array())
     # end if
-    valid = validate_plugin(plugin)
-    if is_wp_error(valid):
-        return valid
+    valid_ = validate_plugin(plugin_)
+    if is_wp_error(valid_):
+        return valid_
     # end if
-    requirements = validate_plugin_requirements(plugin)
-    if is_wp_error(requirements):
-        return requirements
+    requirements_ = validate_plugin_requirements(plugin_)
+    if is_wp_error(requirements_):
+        return requirements_
     # end if
-    if network_wide and (not (php_isset(lambda : current[plugin]))) or (not network_wide) and (not php_in_array(plugin, current)):
-        if (not php_empty(lambda : redirect)):
+    if network_wide_ and (not (php_isset(lambda : current_[plugin_]))) or (not network_wide_) and (not php_in_array(plugin_, current_)):
+        if (not php_empty(lambda : redirect_)):
             #// We'll override this later if the plugin can be included without fatal error.
-            wp_redirect(add_query_arg("_error_nonce", wp_create_nonce("plugin-activation-error_" + plugin), redirect))
+            wp_redirect(add_query_arg("_error_nonce", wp_create_nonce("plugin-activation-error_" + plugin_), redirect_))
         # end if
         ob_start()
-        wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + plugin)
-        _wp_plugin_file = plugin
+        wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + plugin_)
+        _wp_plugin_file_ = plugin_
         if (not php_defined("WP_SANDBOX_SCRAPING")):
             php_define("WP_SANDBOX_SCRAPING", True)
         # end if
-        php_include_file(WP_PLUGIN_DIR + "/" + plugin, once=False)
-        plugin = _wp_plugin_file
+        php_include_file(WP_PLUGIN_DIR + "/" + plugin_, once=False)
+        plugin_ = _wp_plugin_file_
         #// Avoid stomping of the $plugin variable in a plugin.
-        if (not silent):
+        if (not silent_):
             #// 
             #// Fires before a plugin is activated.
             #// 
@@ -602,7 +625,7 @@ def activate_plugin(plugin=None, redirect="", network_wide=False, silent=False, 
             #// @param bool   $network_wide Whether to enable the plugin for all sites in the network
             #// or just the current site. Multisite only. Default is false.
             #//
-            do_action("activate_plugin", plugin, network_wide)
+            do_action("activate_plugin", plugin_, network_wide_)
             #// 
             #// Fires as a specific plugin is being activated.
             #// 
@@ -616,19 +639,19 @@ def activate_plugin(plugin=None, redirect="", network_wide=False, silent=False, 
             #// @param bool $network_wide Whether to enable the plugin for all sites in the network
             #// or just the current site. Multisite only. Default is false.
             #//
-            do_action(str("activate_") + str(plugin), network_wide)
+            do_action(str("activate_") + str(plugin_), network_wide_)
         # end if
-        if network_wide:
-            current = get_site_option("active_sitewide_plugins", Array())
-            current[plugin] = time()
-            update_site_option("active_sitewide_plugins", current)
+        if network_wide_:
+            current_ = get_site_option("active_sitewide_plugins", Array())
+            current_[plugin_] = time()
+            update_site_option("active_sitewide_plugins", current_)
         else:
-            current = get_option("active_plugins", Array())
-            current[-1] = plugin
-            sort(current)
-            update_option("active_plugins", current)
+            current_ = get_option("active_plugins", Array())
+            current_[-1] = plugin_
+            sort(current_)
+            update_option("active_plugins", current_)
         # end if
-        if (not silent):
+        if (not silent_):
             #// 
             #// Fires after a plugin has been activated.
             #// 
@@ -641,11 +664,11 @@ def activate_plugin(plugin=None, redirect="", network_wide=False, silent=False, 
             #// @param bool   $network_wide Whether to enable the plugin for all sites in the network
             #// or just the current site. Multisite only. Default is false.
             #//
-            do_action("activated_plugin", plugin, network_wide)
+            do_action("activated_plugin", plugin_, network_wide_)
         # end if
         if ob_get_length() > 0:
-            output = ob_get_clean()
-            return php_new_class("WP_Error", lambda : WP_Error("unexpected_output", __("The plugin generated unexpected output."), output))
+            output_ = ob_get_clean()
+            return php_new_class("WP_Error", lambda : WP_Error("unexpected_output", __("The plugin generated unexpected output."), output_))
         # end if
         ob_end_clean()
     # end if
@@ -665,21 +688,24 @@ def activate_plugin(plugin=None, redirect="", network_wide=False, silent=False, 
 #// A value of null will deactivate plugins for both the network
 #// and the current site. Multisite only. Default null.
 #//
-def deactivate_plugins(plugins=None, silent=False, network_wide=None, *args_):
+def deactivate_plugins(plugins_=None, silent_=None, network_wide_=None, *_args_):
+    if silent_ is None:
+        silent_ = False
+    # end if
     
     if is_multisite():
-        network_current = get_site_option("active_sitewide_plugins", Array())
+        network_current_ = get_site_option("active_sitewide_plugins", Array())
     # end if
-    current = get_option("active_plugins", Array())
-    do_blog = False
-    do_network = False
-    for plugin in plugins:
-        plugin = plugin_basename(php_trim(plugin))
-        if (not is_plugin_active(plugin)):
+    current_ = get_option("active_plugins", Array())
+    do_blog_ = False
+    do_network_ = False
+    for plugin_ in plugins_:
+        plugin_ = plugin_basename(php_trim(plugin_))
+        if (not is_plugin_active(plugin_)):
             continue
         # end if
-        network_deactivating = False != network_wide and is_plugin_active_for_network(plugin)
-        if (not silent):
+        network_deactivating_ = False != network_wide_ and is_plugin_active_for_network(plugin_)
+        if (not silent_):
             #// 
             #// Fires before a plugin is deactivated.
             #// 
@@ -692,28 +718,28 @@ def deactivate_plugins(plugins=None, silent=False, network_wide=None, *args_):
             #// @param bool   $network_deactivating Whether the plugin is deactivated for all sites in the network
             #// or just the current site. Multisite only. Default false.
             #//
-            do_action("deactivate_plugin", plugin, network_deactivating)
+            do_action("deactivate_plugin", plugin_, network_deactivating_)
         # end if
-        if False != network_wide:
-            if is_plugin_active_for_network(plugin):
-                do_network = True
-                network_current[plugin] = None
-            elif network_wide:
+        if False != network_wide_:
+            if is_plugin_active_for_network(plugin_):
+                do_network_ = True
+                network_current_[plugin_] = None
+            elif network_wide_:
                 continue
             # end if
         # end if
-        if True != network_wide:
-            key = php_array_search(plugin, current)
-            if False != key:
-                do_blog = True
-                current[key] = None
+        if True != network_wide_:
+            key_ = php_array_search(plugin_, current_)
+            if False != key_:
+                do_blog_ = True
+                current_[key_] = None
             # end if
         # end if
-        if do_blog and wp_is_recovery_mode():
-            extension = php_explode("/", plugin)
-            wp_paused_plugins().delete(extension)
+        if do_blog_ and wp_is_recovery_mode():
+            extension_ = php_explode("/", plugin_)
+            wp_paused_plugins().delete(extension_)
         # end if
-        if (not silent):
+        if (not silent_):
             #// 
             #// Fires as a specific plugin is being deactivated.
             #// 
@@ -727,7 +753,7 @@ def deactivate_plugins(plugins=None, silent=False, network_wide=None, *args_):
             #// @param bool $network_deactivating Whether the plugin is deactivated for all sites in the network
             #// or just the current site. Multisite only. Default false.
             #//
-            do_action(str("deactivate_") + str(plugin), network_deactivating)
+            do_action(str("deactivate_") + str(plugin_), network_deactivating_)
             #// 
             #// Fires after a plugin is deactivated.
             #// 
@@ -740,14 +766,14 @@ def deactivate_plugins(plugins=None, silent=False, network_wide=None, *args_):
             #// @param bool   $network_deactivating Whether the plugin is deactivated for all sites in the network
             #// or just the current site. Multisite only. Default false.
             #//
-            do_action("deactivated_plugin", plugin, network_deactivating)
+            do_action("deactivated_plugin", plugin_, network_deactivating_)
         # end if
     # end for
-    if do_blog:
-        update_option("active_plugins", current)
+    if do_blog_:
+        update_option("active_plugins", current_)
     # end if
-    if do_network:
-        update_site_option("active_sitewide_plugins", network_current)
+    if do_network_:
+        update_site_option("active_sitewide_plugins", network_current_)
     # end if
 # end def deactivate_plugins
 #// 
@@ -767,23 +793,29 @@ def deactivate_plugins(plugins=None, silent=False, network_wide=None, *args_):
 #// @param bool $silent                  Prevent calling activation hooks. Default false.
 #// @return bool|WP_Error True when finished or WP_Error if there were errors during a plugin activation.
 #//
-def activate_plugins(plugins=None, redirect="", network_wide=False, silent=False, *args_):
-    
-    if (not php_is_array(plugins)):
-        plugins = Array(plugins)
+def activate_plugins(plugins_=None, redirect_="", network_wide_=None, silent_=None, *_args_):
+    if network_wide_ is None:
+        network_wide_ = False
     # end if
-    errors = Array()
-    for plugin in plugins:
-        if (not php_empty(lambda : redirect)):
-            redirect = add_query_arg("plugin", plugin, redirect)
+    if silent_ is None:
+        silent_ = False
+    # end if
+    
+    if (not php_is_array(plugins_)):
+        plugins_ = Array(plugins_)
+    # end if
+    errors_ = Array()
+    for plugin_ in plugins_:
+        if (not php_empty(lambda : redirect_)):
+            redirect_ = add_query_arg("plugin", plugin_, redirect_)
         # end if
-        result = activate_plugin(plugin, redirect, network_wide, silent)
-        if is_wp_error(result):
-            errors[plugin] = result
+        result_ = activate_plugin(plugin_, redirect_, network_wide_, silent_)
+        if is_wp_error(result_):
+            errors_[plugin_] = result_
         # end if
     # end for
-    if (not php_empty(lambda : errors)):
-        return php_new_class("WP_Error", lambda : WP_Error("plugins_invalid", __("One of the plugins is invalid."), errors))
+    if (not php_empty(lambda : errors_)):
+        return php_new_class("WP_Error", lambda : WP_Error("plugins_invalid", __("One of the plugins is invalid."), errors_))
     # end if
     return True
 # end def activate_plugins
@@ -799,61 +831,62 @@ def activate_plugins(plugins=None, redirect="", network_wide=False, silent=False
 #// @return bool|null|WP_Error True on success, false if `$plugins` is empty, `WP_Error` on failure.
 #// `null` if filesystem credentials are required to proceed.
 #//
-def delete_plugins(plugins=None, deprecated="", *args_):
+def delete_plugins(plugins_=None, deprecated_="", *_args_):
     
-    global wp_filesystem
-    php_check_if_defined("wp_filesystem")
-    if php_empty(lambda : plugins):
+    
+    global wp_filesystem_
+    php_check_if_defined("wp_filesystem_")
+    if php_empty(lambda : plugins_):
         return False
     # end if
-    checked = Array()
-    for plugin in plugins:
-        checked[-1] = "checked[]=" + plugin
+    checked_ = Array()
+    for plugin_ in plugins_:
+        checked_[-1] = "checked[]=" + plugin_
     # end for
-    url = wp_nonce_url("plugins.php?action=delete-selected&verify-delete=1&" + php_implode("&", checked), "bulk-plugins")
+    url_ = wp_nonce_url("plugins.php?action=delete-selected&verify-delete=1&" + php_implode("&", checked_), "bulk-plugins")
     ob_start()
-    credentials = request_filesystem_credentials(url)
-    data = ob_get_clean()
-    if False == credentials:
-        if (not php_empty(lambda : data)):
+    credentials_ = request_filesystem_credentials(url_)
+    data_ = ob_get_clean()
+    if False == credentials_:
+        if (not php_empty(lambda : data_)):
             php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
-            php_print(data)
+            php_print(data_)
             php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
             php_exit(0)
         # end if
         return
     # end if
-    if (not WP_Filesystem(credentials)):
+    if (not WP_Filesystem(credentials_)):
         ob_start()
         #// Failed to connect. Error and request again.
-        request_filesystem_credentials(url, "", True)
-        data = ob_get_clean()
-        if (not php_empty(lambda : data)):
+        request_filesystem_credentials(url_, "", True)
+        data_ = ob_get_clean()
+        if (not php_empty(lambda : data_)):
             php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
-            php_print(data)
+            php_print(data_)
             php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
             php_exit(0)
         # end if
         return
     # end if
-    if (not php_is_object(wp_filesystem)):
+    if (not php_is_object(wp_filesystem_)):
         return php_new_class("WP_Error", lambda : WP_Error("fs_unavailable", __("Could not access filesystem.")))
     # end if
-    if is_wp_error(wp_filesystem.errors) and wp_filesystem.errors.has_errors():
-        return php_new_class("WP_Error", lambda : WP_Error("fs_error", __("Filesystem error."), wp_filesystem.errors))
+    if is_wp_error(wp_filesystem_.errors) and wp_filesystem_.errors.has_errors():
+        return php_new_class("WP_Error", lambda : WP_Error("fs_error", __("Filesystem error."), wp_filesystem_.errors))
     # end if
     #// Get the base plugin folder.
-    plugins_dir = wp_filesystem.wp_plugins_dir()
-    if php_empty(lambda : plugins_dir):
+    plugins_dir_ = wp_filesystem_.wp_plugins_dir()
+    if php_empty(lambda : plugins_dir_):
         return php_new_class("WP_Error", lambda : WP_Error("fs_no_plugins_dir", __("Unable to locate WordPress plugin directory.")))
     # end if
-    plugins_dir = trailingslashit(plugins_dir)
-    plugin_translations = wp_get_installed_translations("plugins")
-    errors = Array()
-    for plugin_file in plugins:
+    plugins_dir_ = trailingslashit(plugins_dir_)
+    plugin_translations_ = wp_get_installed_translations("plugins")
+    errors_ = Array()
+    for plugin_file_ in plugins_:
         #// Run Uninstall hook.
-        if is_uninstallable_plugin(plugin_file):
-            uninstall_plugin(plugin_file)
+        if is_uninstallable_plugin(plugin_file_):
+            uninstall_plugin(plugin_file_)
         # end if
         #// 
         #// Fires immediately before a plugin deletion attempt.
@@ -862,14 +895,14 @@ def delete_plugins(plugins=None, deprecated="", *args_):
         #// 
         #// @param string $plugin_file Path to the plugin file relative to the plugins directory.
         #//
-        do_action("delete_plugin", plugin_file)
-        this_plugin_dir = trailingslashit(php_dirname(plugins_dir + plugin_file))
+        do_action("delete_plugin", plugin_file_)
+        this_plugin_dir_ = trailingslashit(php_dirname(plugins_dir_ + plugin_file_))
         #// If plugin is in its own directory, recursively delete the directory.
         #// Base check on if plugin includes directory separator AND that it's not the root plugin folder.
-        if php_strpos(plugin_file, "/") and this_plugin_dir != plugins_dir:
-            deleted = wp_filesystem.delete(this_plugin_dir, True)
+        if php_strpos(plugin_file_, "/") and this_plugin_dir_ != plugins_dir_:
+            deleted_ = wp_filesystem_.delete(this_plugin_dir_, True)
         else:
-            deleted = wp_filesystem.delete(plugins_dir + plugin_file)
+            deleted_ = wp_filesystem_.delete(plugins_dir_ + plugin_file_)
         # end if
         #// 
         #// Fires immediately after a plugin deletion attempt.
@@ -879,44 +912,44 @@ def delete_plugins(plugins=None, deprecated="", *args_):
         #// @param string $plugin_file Path to the plugin file relative to the plugins directory.
         #// @param bool   $deleted     Whether the plugin deletion was successful.
         #//
-        do_action("deleted_plugin", plugin_file, deleted)
-        if (not deleted):
-            errors[-1] = plugin_file
+        do_action("deleted_plugin", plugin_file_, deleted_)
+        if (not deleted_):
+            errors_[-1] = plugin_file_
             continue
         # end if
         #// Remove language files, silently.
-        plugin_slug = php_dirname(plugin_file)
-        if "." != plugin_slug and (not php_empty(lambda : plugin_translations[plugin_slug])):
-            translations = plugin_translations[plugin_slug]
-            for translation,data in translations:
-                wp_filesystem.delete(WP_LANG_DIR + "/plugins/" + plugin_slug + "-" + translation + ".po")
-                wp_filesystem.delete(WP_LANG_DIR + "/plugins/" + plugin_slug + "-" + translation + ".mo")
-                json_translation_files = glob(WP_LANG_DIR + "/plugins/" + plugin_slug + "-" + translation + "-*.json")
-                if json_translation_files:
-                    php_array_map(Array(wp_filesystem, "delete"), json_translation_files)
+        plugin_slug_ = php_dirname(plugin_file_)
+        if "." != plugin_slug_ and (not php_empty(lambda : plugin_translations_[plugin_slug_])):
+            translations_ = plugin_translations_[plugin_slug_]
+            for translation_,data_ in translations_:
+                wp_filesystem_.delete(WP_LANG_DIR + "/plugins/" + plugin_slug_ + "-" + translation_ + ".po")
+                wp_filesystem_.delete(WP_LANG_DIR + "/plugins/" + plugin_slug_ + "-" + translation_ + ".mo")
+                json_translation_files_ = glob(WP_LANG_DIR + "/plugins/" + plugin_slug_ + "-" + translation_ + "-*.json")
+                if json_translation_files_:
+                    php_array_map(Array(wp_filesystem_, "delete"), json_translation_files_)
                 # end if
             # end for
         # end if
     # end for
     #// Remove deleted plugins from the plugin updates list.
-    current = get_site_transient("update_plugins")
-    if current:
+    current_ = get_site_transient("update_plugins")
+    if current_:
         #// Don't remove the plugins that weren't deleted.
-        deleted = php_array_diff(plugins, errors)
-        for plugin_file in deleted:
-            current.response[plugin_file] = None
+        deleted_ = php_array_diff(plugins_, errors_)
+        for plugin_file_ in deleted_:
+            current_.response[plugin_file_] = None
         # end for
-        set_site_transient("update_plugins", current)
+        set_site_transient("update_plugins", current_)
     # end if
-    if (not php_empty(lambda : errors)):
-        if 1 == php_count(errors):
+    if (not php_empty(lambda : errors_)):
+        if 1 == php_count(errors_):
             #// translators: %s: Plugin filename.
-            message = __("Could not fully remove the plugin %s.")
+            message_ = __("Could not fully remove the plugin %s.")
         else:
             #// translators: %s: Comma-separated list of plugin filenames.
-            message = __("Could not fully remove the plugins %s.")
+            message_ = __("Could not fully remove the plugins %s.")
         # end if
-        return php_new_class("WP_Error", lambda : WP_Error("could_not_remove_plugin", php_sprintf(message, php_implode(", ", errors))))
+        return php_new_class("WP_Error", lambda : WP_Error("could_not_remove_plugin", php_sprintf(message_, php_implode(", ", errors_))))
     # end if
     return True
 # end def delete_plugins
@@ -929,31 +962,32 @@ def delete_plugins(plugins=None, deprecated="", *args_):
 #// @since 2.5.0
 #// @return WP_Error[] Array of plugin errors keyed by plugin file name.
 #//
-def validate_active_plugins(*args_):
+def validate_active_plugins(*_args_):
     
-    plugins = get_option("active_plugins", Array())
+    
+    plugins_ = get_option("active_plugins", Array())
     #// Validate vartype: array.
-    if (not php_is_array(plugins)):
+    if (not php_is_array(plugins_)):
         update_option("active_plugins", Array())
-        plugins = Array()
+        plugins_ = Array()
     # end if
     if is_multisite() and current_user_can("manage_network_plugins"):
-        network_plugins = get_site_option("active_sitewide_plugins", Array())
-        plugins = php_array_merge(plugins, php_array_keys(network_plugins))
+        network_plugins_ = get_site_option("active_sitewide_plugins", Array())
+        plugins_ = php_array_merge(plugins_, php_array_keys(network_plugins_))
     # end if
-    if php_empty(lambda : plugins):
+    if php_empty(lambda : plugins_):
         return Array()
     # end if
-    invalid = Array()
+    invalid_ = Array()
     #// Invalid plugins get deactivated.
-    for plugin in plugins:
-        result = validate_plugin(plugin)
-        if is_wp_error(result):
-            invalid[plugin] = result
-            deactivate_plugins(plugin, True)
+    for plugin_ in plugins_:
+        result_ = validate_plugin(plugin_)
+        if is_wp_error(result_):
+            invalid_[plugin_] = result_
+            deactivate_plugins(plugin_, True)
         # end if
     # end for
-    return invalid
+    return invalid_
 # end def validate_active_plugins
 #// 
 #// Validate the plugin path.
@@ -965,16 +999,17 @@ def validate_active_plugins(*args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return int|WP_Error 0 on success, WP_Error on failure.
 #//
-def validate_plugin(plugin=None, *args_):
+def validate_plugin(plugin_=None, *_args_):
     
-    if validate_file(plugin):
+    
+    if validate_file(plugin_):
         return php_new_class("WP_Error", lambda : WP_Error("plugin_invalid", __("Invalid plugin path.")))
     # end if
-    if (not php_file_exists(WP_PLUGIN_DIR + "/" + plugin)):
+    if (not php_file_exists(WP_PLUGIN_DIR + "/" + plugin_)):
         return php_new_class("WP_Error", lambda : WP_Error("plugin_not_found", __("Plugin file does not exist.")))
     # end if
-    installed_plugins = get_plugins()
-    if (not (php_isset(lambda : installed_plugins[plugin]))):
+    installed_plugins_ = get_plugins()
+    if (not (php_isset(lambda : installed_plugins_[plugin_]))):
         return php_new_class("WP_Error", lambda : WP_Error("no_plugin_header", __("The plugin does not have a valid header.")))
     # end if
     return 0
@@ -987,25 +1022,26 @@ def validate_plugin(plugin=None, *args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return true|WP_Error True if requirements are met, WP_Error on failure.
 #//
-def validate_plugin_requirements(plugin=None, *args_):
+def validate_plugin_requirements(plugin_=None, *_args_):
     
-    readme_file = WP_PLUGIN_DIR + "/" + php_dirname(plugin) + "/readme.txt"
-    plugin_data = Array({"requires": "", "requires_php": ""})
-    if php_file_exists(readme_file):
-        plugin_data = get_file_data(readme_file, Array({"requires": "Requires at least", "requires_php": "Requires PHP"}), "plugin")
+    
+    readme_file_ = WP_PLUGIN_DIR + "/" + php_dirname(plugin_) + "/readme.txt"
+    plugin_data_ = Array({"requires": "", "requires_php": ""})
+    if php_file_exists(readme_file_):
+        plugin_data_ = get_file_data(readme_file_, Array({"requires": "Requires at least", "requires_php": "Requires PHP"}), "plugin")
     # end if
-    plugin_data = php_array_merge(plugin_data, get_plugin_data(WP_PLUGIN_DIR + "/" + plugin))
+    plugin_data_ = php_array_merge(plugin_data_, get_plugin_data(WP_PLUGIN_DIR + "/" + plugin_))
     #// Check for headers in the plugin's PHP file, give precedence to the plugin headers.
-    plugin_data["requires"] = plugin_data["RequiresWP"] if (not php_empty(lambda : plugin_data["RequiresWP"])) else plugin_data["requires"]
-    plugin_data["requires_php"] = plugin_data["RequiresPHP"] if (not php_empty(lambda : plugin_data["RequiresPHP"])) else plugin_data["requires_php"]
-    plugin_data["wp_compatible"] = is_wp_version_compatible(plugin_data["requires"])
-    plugin_data["php_compatible"] = is_php_version_compatible(plugin_data["requires_php"])
-    if (not plugin_data["wp_compatible"]) and (not plugin_data["php_compatible"]):
-        return php_new_class("WP_Error", lambda : WP_Error("plugin_wp_php_incompatible", php_sprintf(__("<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s."), plugin_data["Name"])))
-    elif (not plugin_data["php_compatible"]):
-        return php_new_class("WP_Error", lambda : WP_Error("plugin_php_incompatible", php_sprintf(__("<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s."), plugin_data["Name"])))
-    elif (not plugin_data["wp_compatible"]):
-        return php_new_class("WP_Error", lambda : WP_Error("plugin_wp_incompatible", php_sprintf(__("<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s."), plugin_data["Name"])))
+    plugin_data_["requires"] = plugin_data_["RequiresWP"] if (not php_empty(lambda : plugin_data_["RequiresWP"])) else plugin_data_["requires"]
+    plugin_data_["requires_php"] = plugin_data_["RequiresPHP"] if (not php_empty(lambda : plugin_data_["RequiresPHP"])) else plugin_data_["requires_php"]
+    plugin_data_["wp_compatible"] = is_wp_version_compatible(plugin_data_["requires"])
+    plugin_data_["php_compatible"] = is_php_version_compatible(plugin_data_["requires_php"])
+    if (not plugin_data_["wp_compatible"]) and (not plugin_data_["php_compatible"]):
+        return php_new_class("WP_Error", lambda : WP_Error("plugin_wp_php_incompatible", php_sprintf(__("<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s."), plugin_data_["Name"])))
+    elif (not plugin_data_["php_compatible"]):
+        return php_new_class("WP_Error", lambda : WP_Error("plugin_php_incompatible", php_sprintf(__("<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s."), plugin_data_["Name"])))
+    elif (not plugin_data_["wp_compatible"]):
+        return php_new_class("WP_Error", lambda : WP_Error("plugin_wp_incompatible", php_sprintf(__("<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s."), plugin_data_["Name"])))
     # end if
     return True
 # end def validate_plugin_requirements
@@ -1017,11 +1053,12 @@ def validate_plugin_requirements(plugin=None, *args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return bool Whether plugin can be uninstalled.
 #//
-def is_uninstallable_plugin(plugin=None, *args_):
+def is_uninstallable_plugin(plugin_=None, *_args_):
     
-    file = plugin_basename(plugin)
-    uninstallable_plugins = get_option("uninstall_plugins")
-    if (php_isset(lambda : uninstallable_plugins[file])) or php_file_exists(WP_PLUGIN_DIR + "/" + php_dirname(file) + "/uninstall.php"):
+    
+    file_ = plugin_basename(plugin_)
+    uninstallable_plugins_ = get_option("uninstall_plugins")
+    if (php_isset(lambda : uninstallable_plugins_[file_])) or php_file_exists(WP_PLUGIN_DIR + "/" + php_dirname(file_) + "/uninstall.php"):
         return True
     # end if
     return False
@@ -1036,10 +1073,11 @@ def is_uninstallable_plugin(plugin=None, *args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return true True if a plugin's uninstall.php file has been found and included.
 #//
-def uninstall_plugin(plugin=None, *args_):
+def uninstall_plugin(plugin_=None, *_args_):
     
-    file = plugin_basename(plugin)
-    uninstallable_plugins = get_option("uninstall_plugins")
+    
+    file_ = plugin_basename(plugin_)
+    uninstallable_plugins_ = get_option("uninstall_plugins")
     #// 
     #// Fires in uninstall_plugin() immediately before the plugin is uninstalled.
     #// 
@@ -1048,26 +1086,26 @@ def uninstall_plugin(plugin=None, *args_):
     #// @param string $plugin                Path to the plugin file relative to the plugins directory.
     #// @param array  $uninstallable_plugins Uninstallable plugins.
     #//
-    do_action("pre_uninstall_plugin", plugin, uninstallable_plugins)
-    if php_file_exists(WP_PLUGIN_DIR + "/" + php_dirname(file) + "/uninstall.php"):
-        if (php_isset(lambda : uninstallable_plugins[file])):
-            uninstallable_plugins[file] = None
-            update_option("uninstall_plugins", uninstallable_plugins)
+    do_action("pre_uninstall_plugin", plugin_, uninstallable_plugins_)
+    if php_file_exists(WP_PLUGIN_DIR + "/" + php_dirname(file_) + "/uninstall.php"):
+        if (php_isset(lambda : uninstallable_plugins_[file_])):
+            uninstallable_plugins_[file_] = None
+            update_option("uninstall_plugins", uninstallable_plugins_)
         # end if
-        uninstallable_plugins = None
-        php_define("WP_UNINSTALL_PLUGIN", file)
-        wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + file)
-        php_include_file(WP_PLUGIN_DIR + "/" + php_dirname(file) + "/uninstall.php", once=False)
+        uninstallable_plugins_ = None
+        php_define("WP_UNINSTALL_PLUGIN", file_)
+        wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + file_)
+        php_include_file(WP_PLUGIN_DIR + "/" + php_dirname(file_) + "/uninstall.php", once=False)
         return True
     # end if
-    if (php_isset(lambda : uninstallable_plugins[file])):
-        callable = uninstallable_plugins[file]
-        uninstallable_plugins[file] = None
-        update_option("uninstall_plugins", uninstallable_plugins)
-        uninstallable_plugins = None
-        wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + file)
-        php_include_file(WP_PLUGIN_DIR + "/" + file, once=False)
-        add_action(str("uninstall_") + str(file), callable)
+    if (php_isset(lambda : uninstallable_plugins_[file_])):
+        callable_ = uninstallable_plugins_[file_]
+        uninstallable_plugins_[file_] = None
+        update_option("uninstall_plugins", uninstallable_plugins_)
+        uninstallable_plugins_ = None
+        wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + file_)
+        php_include_file(WP_PLUGIN_DIR + "/" + file_, once=False)
+        add_action(str("uninstall_") + str(file_), callable_)
         #// 
         #// Fires in uninstall_plugin() once the plugin has been uninstalled.
         #// 
@@ -1076,7 +1114,7 @@ def uninstall_plugin(plugin=None, *args_):
         #// 
         #// @since 2.7.0
         #//
-        do_action(str("uninstall_") + str(file))
+        do_action(str("uninstall_") + str(file_))
     # end if
 # end def uninstall_plugin
 #// 
@@ -1114,36 +1152,40 @@ def uninstall_plugin(plugin=None, *args_):
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string The resulting page's hook_suffix.
 #//
-def add_menu_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", icon_url="", position=None, *args_):
+def add_menu_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", icon_url_="", position_=None, *_args_):
     
-    global menu,admin_page_hooks,_registered_pages,_parent_pages
-    php_check_if_defined("menu","admin_page_hooks","_registered_pages","_parent_pages")
-    menu_slug = plugin_basename(menu_slug)
-    admin_page_hooks[menu_slug] = sanitize_title(menu_title)
-    hookname = get_plugin_page_hookname(menu_slug, "")
-    if (not php_empty(lambda : function)) and (not php_empty(lambda : hookname)) and current_user_can(capability):
-        add_action(hookname, function)
+    
+    global menu_
+    global admin_page_hooks_
+    global _registered_pages_
+    global _parent_pages_
+    php_check_if_defined("menu_","admin_page_hooks_","_registered_pages_","_parent_pages_")
+    menu_slug_ = plugin_basename(menu_slug_)
+    admin_page_hooks_[menu_slug_] = sanitize_title(menu_title_)
+    hookname_ = get_plugin_page_hookname(menu_slug_, "")
+    if (not php_empty(lambda : function_)) and (not php_empty(lambda : hookname_)) and current_user_can(capability_):
+        add_action(hookname_, function_)
     # end if
-    if php_empty(lambda : icon_url):
-        icon_url = "dashicons-admin-generic"
-        icon_class = "menu-icon-generic "
+    if php_empty(lambda : icon_url_):
+        icon_url_ = "dashicons-admin-generic"
+        icon_class_ = "menu-icon-generic "
     else:
-        icon_url = set_url_scheme(icon_url)
-        icon_class = ""
+        icon_url_ = set_url_scheme(icon_url_)
+        icon_class_ = ""
     # end if
-    new_menu = Array(menu_title, capability, menu_slug, page_title, "menu-top " + icon_class + hookname, hookname, icon_url)
-    if None == position:
-        menu[-1] = new_menu
-    elif (php_isset(lambda : menu[str(position)])):
-        position = position + php_substr(base_convert(php_md5(menu_slug + menu_title), 16, 10), -5) * 1e-05
-        menu[str(position)] = new_menu
+    new_menu_ = Array(menu_title_, capability_, menu_slug_, page_title_, "menu-top " + icon_class_ + hookname_, hookname_, icon_url_)
+    if None == position_:
+        menu_[-1] = new_menu_
+    elif (php_isset(lambda : menu_[str(position_)])):
+        position_ = position_ + php_substr(base_convert(php_md5(menu_slug_ + menu_title_), 16, 10), -5) * 1e-05
+        menu_[str(position_)] = new_menu_
     else:
-        menu[position] = new_menu
+        menu_[position_] = new_menu_
     # end if
-    _registered_pages[hookname] = True
+    _registered_pages_[hookname_] = True
     #// No parent as top level.
-    _parent_pages[menu_slug] = False
-    return hookname
+    _parent_pages_[menu_slug_] = False
+    return hookname_
 # end def add_menu_page
 #// 
 #// Add a submenu page.
@@ -1177,17 +1219,23 @@ def add_menu_page(page_title=None, menu_title=None, capability=None, menu_slug=N
 #// @param int      $position    The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_submenu_page(parent_slug=None, page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_submenu_page(parent_slug_=None, page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    global submenu,menu,_wp_real_parent_file,_wp_submenu_nopriv,_registered_pages,_parent_pages
-    php_check_if_defined("submenu","menu","_wp_real_parent_file","_wp_submenu_nopriv","_registered_pages","_parent_pages")
-    menu_slug = plugin_basename(menu_slug)
-    parent_slug = plugin_basename(parent_slug)
-    if (php_isset(lambda : _wp_real_parent_file[parent_slug])):
-        parent_slug = _wp_real_parent_file[parent_slug]
+    
+    global submenu_
+    global menu_
+    global _wp_real_parent_file_
+    global _wp_submenu_nopriv_
+    global _registered_pages_
+    global _parent_pages_
+    php_check_if_defined("submenu_","menu_","_wp_real_parent_file_","_wp_submenu_nopriv_","_registered_pages_","_parent_pages_")
+    menu_slug_ = plugin_basename(menu_slug_)
+    parent_slug_ = plugin_basename(parent_slug_)
+    if (php_isset(lambda : _wp_real_parent_file_[parent_slug_])):
+        parent_slug_ = _wp_real_parent_file_[parent_slug_]
     # end if
-    if (not current_user_can(capability)):
-        _wp_submenu_nopriv[parent_slug][menu_slug] = True
+    if (not current_user_can(capability_)):
+        _wp_submenu_nopriv_[parent_slug_][menu_slug_] = True
         return False
     # end if
     #// 
@@ -1196,59 +1244,59 @@ def add_submenu_page(parent_slug=None, page_title=None, menu_title=None, capabil
     #// parent file someone is trying to link back to the parent manually. In
     #// this case, don't automatically add a link back to avoid duplication.
     #//
-    if (not (php_isset(lambda : submenu[parent_slug]))) and menu_slug != parent_slug:
-        for parent_menu in menu:
-            if parent_menu[2] == parent_slug and current_user_can(parent_menu[1]):
-                submenu[parent_slug][-1] = php_array_slice(parent_menu, 0, 4)
+    if (not (php_isset(lambda : submenu_[parent_slug_]))) and menu_slug_ != parent_slug_:
+        for parent_menu_ in menu_:
+            if parent_menu_[2] == parent_slug_ and current_user_can(parent_menu_[1]):
+                submenu_[parent_slug_][-1] = php_array_slice(parent_menu_, 0, 4)
             # end if
         # end for
     # end if
-    new_sub_menu = Array(menu_title, capability, menu_slug, page_title)
-    if (not php_is_int(position)):
-        if None != position:
+    new_sub_menu_ = Array(menu_title_, capability_, menu_slug_, page_title_)
+    if (not php_is_int(position_)):
+        if None != position_:
             _doing_it_wrong(__FUNCTION__, php_sprintf(__("The seventh parameter passed to %s should be an integer representing menu position."), "<code>add_submenu_page()</code>"), "5.3.0")
         # end if
-        submenu[parent_slug][-1] = new_sub_menu
+        submenu_[parent_slug_][-1] = new_sub_menu_
     else:
         #// Append the submenu if the parent item is not present in the submenu,
         #// or if position is equal or higher than the number of items in the array.
-        if (not (php_isset(lambda : submenu[parent_slug]))) or position >= php_count(submenu[parent_slug]):
-            submenu[parent_slug][-1] = new_sub_menu
+        if (not (php_isset(lambda : submenu_[parent_slug_]))) or position_ >= php_count(submenu_[parent_slug_]):
+            submenu_[parent_slug_][-1] = new_sub_menu_
         else:
             #// Test for a negative position.
-            position = php_max(position, 0)
-            if 0 == position:
+            position_ = php_max(position_, 0)
+            if 0 == position_:
                 #// For negative or `0` positions, prepend the submenu.
-                array_unshift(submenu[parent_slug], new_sub_menu)
+                array_unshift(submenu_[parent_slug_], new_sub_menu_)
             else:
                 #// Grab all of the items before the insertion point.
-                before_items = php_array_slice(submenu[parent_slug], 0, position, True)
+                before_items_ = php_array_slice(submenu_[parent_slug_], 0, position_, True)
                 #// Grab all of the items after the insertion point.
-                after_items = php_array_slice(submenu[parent_slug], position, None, True)
+                after_items_ = php_array_slice(submenu_[parent_slug_], position_, None, True)
                 #// Add the new item.
-                before_items[-1] = new_sub_menu
+                before_items_[-1] = new_sub_menu_
                 #// Merge the items.
-                submenu[parent_slug] = php_array_merge(before_items, after_items)
+                submenu_[parent_slug_] = php_array_merge(before_items_, after_items_)
             # end if
         # end if
     # end if
     #// Sort the parent array.
-    ksort(submenu[parent_slug])
-    hookname = get_plugin_page_hookname(menu_slug, parent_slug)
-    if (not php_empty(lambda : function)) and (not php_empty(lambda : hookname)):
-        add_action(hookname, function)
+    ksort(submenu_[parent_slug_])
+    hookname_ = get_plugin_page_hookname(menu_slug_, parent_slug_)
+    if (not php_empty(lambda : function_)) and (not php_empty(lambda : hookname_)):
+        add_action(hookname_, function_)
     # end if
-    _registered_pages[hookname] = True
+    _registered_pages_[hookname_] = True
     #// 
     #// Backward-compatibility for plugins using add_management_page().
     #// See wp-admin/admin.php for redirect from edit.php to tools.php.
     #//
-    if "tools.php" == parent_slug:
-        _registered_pages[get_plugin_page_hookname(menu_slug, "edit.php")] = True
+    if "tools.php" == parent_slug_:
+        _registered_pages_[get_plugin_page_hookname(menu_slug_, "edit.php")] = True
     # end if
     #// No parent as top level.
-    _parent_pages[menu_slug] = parent_slug
-    return hookname
+    _parent_pages_[menu_slug_] = parent_slug_
+    return hookname_
 # end def add_submenu_page
 #// 
 #// Add submenu page to the Tools main menu.
@@ -1270,9 +1318,10 @@ def add_submenu_page(parent_slug=None, page_title=None, menu_title=None, capabil
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_management_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_management_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("tools.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("tools.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_management_page
 #// 
 #// Add submenu page to the Settings main menu.
@@ -1294,9 +1343,10 @@ def add_management_page(page_title=None, menu_title=None, capability=None, menu_
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_options_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_options_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("options-general.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("options-general.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_options_page
 #// 
 #// Add submenu page to the Appearance main menu.
@@ -1318,9 +1368,10 @@ def add_options_page(page_title=None, menu_title=None, capability=None, menu_slu
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_theme_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_theme_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("themes.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("themes.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_theme_page
 #// 
 #// Add submenu page to the Plugins main menu.
@@ -1342,9 +1393,10 @@ def add_theme_page(page_title=None, menu_title=None, capability=None, menu_slug=
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_plugins_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_plugins_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("plugins.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("plugins.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_plugins_page
 #// 
 #// Add submenu page to the Users/Profile main menu.
@@ -1366,14 +1418,15 @@ def add_plugins_page(page_title=None, menu_title=None, capability=None, menu_slu
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_users_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_users_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
+    
     
     if current_user_can("edit_users"):
-        parent = "users.php"
+        parent_ = "users.php"
     else:
-        parent = "profile.php"
+        parent_ = "profile.php"
     # end if
-    return add_submenu_page(parent, page_title, menu_title, capability, menu_slug, function, position)
+    return add_submenu_page(parent_, page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_users_page
 #// 
 #// Add submenu page to the Dashboard main menu.
@@ -1395,9 +1448,10 @@ def add_users_page(page_title=None, menu_title=None, capability=None, menu_slug=
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_dashboard_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_dashboard_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("index.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("index.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_dashboard_page
 #// 
 #// Add submenu page to the Posts main menu.
@@ -1419,9 +1473,10 @@ def add_dashboard_page(page_title=None, menu_title=None, capability=None, menu_s
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_posts_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_posts_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("edit.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("edit.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_posts_page
 #// 
 #// Add submenu page to the Media main menu.
@@ -1443,9 +1498,10 @@ def add_posts_page(page_title=None, menu_title=None, capability=None, menu_slug=
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_media_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_media_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("upload.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("upload.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_media_page
 #// 
 #// Add submenu page to the Links main menu.
@@ -1467,9 +1523,10 @@ def add_media_page(page_title=None, menu_title=None, capability=None, menu_slug=
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_links_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_links_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("link-manager.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("link-manager.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_links_page
 #// 
 #// Add submenu page to the Pages main menu.
@@ -1491,9 +1548,10 @@ def add_links_page(page_title=None, menu_title=None, capability=None, menu_slug=
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_pages_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_pages_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("edit.php?post_type=page", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("edit.php?post_type=page", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_pages_page
 #// 
 #// Add submenu page to the Comments main menu.
@@ -1515,9 +1573,10 @@ def add_pages_page(page_title=None, menu_title=None, capability=None, menu_slug=
 #// @param int      $position   The position in the menu order this item should appear.
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
-def add_comments_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", position=None, *args_):
+def add_comments_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
     
-    return add_submenu_page("edit-comments.php", page_title, menu_title, capability, menu_slug, function, position)
+    
+    return add_submenu_page("edit-comments.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_comments_page
 #// 
 #// Remove a top-level admin menu.
@@ -1529,14 +1588,15 @@ def add_comments_page(page_title=None, menu_title=None, capability=None, menu_sl
 #// @param string $menu_slug The slug of the menu.
 #// @return array|bool The removed menu on success, false if not found.
 #//
-def remove_menu_page(menu_slug=None, *args_):
+def remove_menu_page(menu_slug_=None, *_args_):
     
-    global menu
-    php_check_if_defined("menu")
-    for i,item in menu:
-        if menu_slug == item[2]:
-            menu[i] = None
-            return item
+    
+    global menu_
+    php_check_if_defined("menu_")
+    for i_,item_ in menu_:
+        if menu_slug_ == item_[2]:
+            menu_[i_] = None
+            return item_
         # end if
     # end for
     return False
@@ -1552,17 +1612,18 @@ def remove_menu_page(menu_slug=None, *args_):
 #// @param string $submenu_slug The slug of the submenu.
 #// @return array|bool The removed submenu on success, false if not found.
 #//
-def remove_submenu_page(menu_slug=None, submenu_slug=None, *args_):
+def remove_submenu_page(menu_slug_=None, submenu_slug_=None, *_args_):
     
-    global submenu
-    php_check_if_defined("submenu")
-    if (not (php_isset(lambda : submenu[menu_slug]))):
+    
+    global submenu_
+    php_check_if_defined("submenu_")
+    if (not (php_isset(lambda : submenu_[menu_slug_]))):
         return False
     # end if
-    for i,item in submenu[menu_slug]:
-        if submenu_slug == item[2]:
-            submenu[menu_slug][i] = None
-            return item
+    for i_,item_ in submenu_[menu_slug_]:
+        if submenu_slug_ == item_[2]:
+            submenu_[menu_slug_][i_] = None
+            return item_
         # end if
     # end for
     return False
@@ -1580,25 +1641,28 @@ def remove_submenu_page(menu_slug=None, submenu_slug=None, *args_):
 #// @param bool   $echo      Whether or not to echo the URL. Default true.
 #// @return string The menu page URL.
 #//
-def menu_page_url(menu_slug=None, echo=True, *args_):
+def menu_page_url(menu_slug_=None, echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    global _parent_pages
-    php_check_if_defined("_parent_pages")
-    if (php_isset(lambda : _parent_pages[menu_slug])):
-        parent_slug = _parent_pages[menu_slug]
-        if parent_slug and (not (php_isset(lambda : _parent_pages[parent_slug]))):
-            url = admin_url(add_query_arg("page", menu_slug, parent_slug))
+    global _parent_pages_
+    php_check_if_defined("_parent_pages_")
+    if (php_isset(lambda : _parent_pages_[menu_slug_])):
+        parent_slug_ = _parent_pages_[menu_slug_]
+        if parent_slug_ and (not (php_isset(lambda : _parent_pages_[parent_slug_]))):
+            url_ = admin_url(add_query_arg("page", menu_slug_, parent_slug_))
         else:
-            url = admin_url("admin.php?page=" + menu_slug)
+            url_ = admin_url("admin.php?page=" + menu_slug_)
         # end if
     else:
-        url = ""
+        url_ = ""
     # end if
-    url = esc_url(url)
-    if echo:
-        php_print(url)
+    url_ = esc_url(url_)
+    if echo_:
+        php_print(url_)
     # end if
-    return url
+    return url_
 # end def menu_page_url
 #// 
 #// Pluggable Menu Support -- Private.
@@ -1620,60 +1684,69 @@ def menu_page_url(menu_slug=None, echo=True, *args_):
 #// 
 #// @return string The parent file of the current admin page.
 #//
-def get_admin_page_parent(parent="", *args_):
+def get_admin_page_parent(parent_="", *_args_):
     
-    global parent_file,menu,submenu,pagenow,typenow,plugin_page,_wp_real_parent_file,_wp_menu_nopriv,_wp_submenu_nopriv
-    php_check_if_defined("parent_file","menu","submenu","pagenow","typenow","plugin_page","_wp_real_parent_file","_wp_menu_nopriv","_wp_submenu_nopriv")
-    if (not php_empty(lambda : parent)) and "admin.php" != parent:
-        if (php_isset(lambda : _wp_real_parent_file[parent])):
-            parent = _wp_real_parent_file[parent]
+    
+    global parent_file_
+    global menu_
+    global submenu_
+    global pagenow_
+    global typenow_
+    global plugin_page_
+    global _wp_real_parent_file_
+    global _wp_menu_nopriv_
+    global _wp_submenu_nopriv_
+    php_check_if_defined("parent_file_","menu_","submenu_","pagenow_","typenow_","plugin_page_","_wp_real_parent_file_","_wp_menu_nopriv_","_wp_submenu_nopriv_")
+    if (not php_empty(lambda : parent_)) and "admin.php" != parent_:
+        if (php_isset(lambda : _wp_real_parent_file_[parent_])):
+            parent_ = _wp_real_parent_file_[parent_]
         # end if
-        return parent
+        return parent_
     # end if
-    if "admin.php" == pagenow and (php_isset(lambda : plugin_page)):
-        for parent_menu in menu:
-            if parent_menu[2] == plugin_page:
-                parent_file = plugin_page
-                if (php_isset(lambda : _wp_real_parent_file[parent_file])):
-                    parent_file = _wp_real_parent_file[parent_file]
+    if "admin.php" == pagenow_ and (php_isset(lambda : plugin_page_)):
+        for parent_menu_ in menu_:
+            if parent_menu_[2] == plugin_page_:
+                parent_file_ = plugin_page_
+                if (php_isset(lambda : _wp_real_parent_file_[parent_file_])):
+                    parent_file_ = _wp_real_parent_file_[parent_file_]
                 # end if
-                return parent_file
+                return parent_file_
             # end if
         # end for
-        if (php_isset(lambda : _wp_menu_nopriv[plugin_page])):
-            parent_file = plugin_page
-            if (php_isset(lambda : _wp_real_parent_file[parent_file])):
-                parent_file = _wp_real_parent_file[parent_file]
+        if (php_isset(lambda : _wp_menu_nopriv_[plugin_page_])):
+            parent_file_ = plugin_page_
+            if (php_isset(lambda : _wp_real_parent_file_[parent_file_])):
+                parent_file_ = _wp_real_parent_file_[parent_file_]
             # end if
-            return parent_file
+            return parent_file_
         # end if
     # end if
-    if (php_isset(lambda : plugin_page)) and (php_isset(lambda : _wp_submenu_nopriv[pagenow][plugin_page])):
-        parent_file = pagenow
-        if (php_isset(lambda : _wp_real_parent_file[parent_file])):
-            parent_file = _wp_real_parent_file[parent_file]
+    if (php_isset(lambda : plugin_page_)) and (php_isset(lambda : _wp_submenu_nopriv_[pagenow_][plugin_page_])):
+        parent_file_ = pagenow_
+        if (php_isset(lambda : _wp_real_parent_file_[parent_file_])):
+            parent_file_ = _wp_real_parent_file_[parent_file_]
         # end if
-        return parent_file
+        return parent_file_
     # end if
-    for parent in php_array_keys(submenu):
-        for submenu_array in submenu[parent]:
-            if (php_isset(lambda : _wp_real_parent_file[parent])):
-                parent = _wp_real_parent_file[parent]
+    for parent_ in php_array_keys(submenu_):
+        for submenu_array_ in submenu_[parent_]:
+            if (php_isset(lambda : _wp_real_parent_file_[parent_])):
+                parent_ = _wp_real_parent_file_[parent_]
             # end if
-            if (not php_empty(lambda : typenow)) and str(pagenow) + str("?post_type=") + str(typenow) == submenu_array[2]:
-                parent_file = parent
-                return parent
-            elif submenu_array[2] == pagenow and php_empty(lambda : typenow) and php_empty(lambda : parent_file) or False == php_strpos(parent_file, "?"):
-                parent_file = parent
-                return parent
-            elif (php_isset(lambda : plugin_page)) and plugin_page == submenu_array[2]:
-                parent_file = parent
-                return parent
+            if (not php_empty(lambda : typenow_)) and str(pagenow_) + str("?post_type=") + str(typenow_) == submenu_array_[2]:
+                parent_file_ = parent_
+                return parent_
+            elif submenu_array_[2] == pagenow_ and php_empty(lambda : typenow_) and php_empty(lambda : parent_file_) or False == php_strpos(parent_file_, "?"):
+                parent_file_ = parent_
+                return parent_
+            elif (php_isset(lambda : plugin_page_)) and plugin_page_ == submenu_array_[2]:
+                parent_file_ = parent_
+                return parent_
             # end if
         # end for
     # end for
-    if php_empty(lambda : parent_file):
-        parent_file = ""
+    if php_empty(lambda : parent_file_):
+        parent_file_ = ""
     # end if
     return ""
 # end def get_admin_page_parent
@@ -1691,60 +1764,66 @@ def get_admin_page_parent(parent="", *args_):
 #// 
 #// @return string The title of the current admin page.
 #//
-def get_admin_page_title(*args_):
+def get_admin_page_title(*_args_):
     
-    global title,menu,submenu,pagenow,plugin_page,typenow
-    php_check_if_defined("title","menu","submenu","pagenow","plugin_page","typenow")
-    if (not php_empty(lambda : title)):
-        return title
+    
+    global title_
+    global menu_
+    global submenu_
+    global pagenow_
+    global plugin_page_
+    global typenow_
+    php_check_if_defined("title_","menu_","submenu_","pagenow_","plugin_page_","typenow_")
+    if (not php_empty(lambda : title_)):
+        return title_
     # end if
-    hook = get_plugin_page_hook(plugin_page, pagenow)
-    parent = get_admin_page_parent()
-    parent1 = parent
-    if php_empty(lambda : parent):
-        for menu_array in menu:
-            if (php_isset(lambda : menu_array[3])):
-                if menu_array[2] == pagenow:
-                    title = menu_array[3]
-                    return menu_array[3]
-                elif (php_isset(lambda : plugin_page)) and plugin_page == menu_array[2] and hook == menu_array[3]:
-                    title = menu_array[3]
-                    return menu_array[3]
+    hook_ = get_plugin_page_hook(plugin_page_, pagenow_)
+    parent_ = get_admin_page_parent()
+    parent1_ = parent_
+    if php_empty(lambda : parent_):
+        for menu_array_ in menu_:
+            if (php_isset(lambda : menu_array_[3])):
+                if menu_array_[2] == pagenow_:
+                    title_ = menu_array_[3]
+                    return menu_array_[3]
+                elif (php_isset(lambda : plugin_page_)) and plugin_page_ == menu_array_[2] and hook_ == menu_array_[3]:
+                    title_ = menu_array_[3]
+                    return menu_array_[3]
                 # end if
             else:
-                title = menu_array[0]
-                return title
+                title_ = menu_array_[0]
+                return title_
             # end if
         # end for
     else:
-        for parent in php_array_keys(submenu):
-            for submenu_array in submenu[parent]:
-                if (php_isset(lambda : plugin_page)) and plugin_page == submenu_array[2] and parent == pagenow or parent == plugin_page or plugin_page == hook or "admin.php" == pagenow and parent1 != submenu_array[2] or (not php_empty(lambda : typenow)) and parent == pagenow + "?post_type=" + typenow:
-                    title = submenu_array[3]
-                    return submenu_array[3]
+        for parent_ in php_array_keys(submenu_):
+            for submenu_array_ in submenu_[parent_]:
+                if (php_isset(lambda : plugin_page_)) and plugin_page_ == submenu_array_[2] and parent_ == pagenow_ or parent_ == plugin_page_ or plugin_page_ == hook_ or "admin.php" == pagenow_ and parent1_ != submenu_array_[2] or (not php_empty(lambda : typenow_)) and parent_ == pagenow_ + "?post_type=" + typenow_:
+                    title_ = submenu_array_[3]
+                    return submenu_array_[3]
                 # end if
-                if submenu_array[2] != pagenow or (php_isset(lambda : PHP_REQUEST["page"])):
+                if submenu_array_[2] != pagenow_ or (php_isset(lambda : PHP_REQUEST["page"])):
                     continue
                 # end if
-                if (php_isset(lambda : submenu_array[3])):
-                    title = submenu_array[3]
-                    return submenu_array[3]
+                if (php_isset(lambda : submenu_array_[3])):
+                    title_ = submenu_array_[3]
+                    return submenu_array_[3]
                 else:
-                    title = submenu_array[0]
-                    return title
+                    title_ = submenu_array_[0]
+                    return title_
                 # end if
             # end for
         # end for
-        if php_empty(lambda : title):
-            for menu_array in menu:
-                if (php_isset(lambda : plugin_page)) and plugin_page == menu_array[2] and "admin.php" == pagenow and parent1 == menu_array[2]:
-                    title = menu_array[3]
-                    return menu_array[3]
+        if php_empty(lambda : title_):
+            for menu_array_ in menu_:
+                if (php_isset(lambda : plugin_page_)) and plugin_page_ == menu_array_[2] and "admin.php" == pagenow_ and parent1_ == menu_array_[2]:
+                    title_ = menu_array_[3]
+                    return menu_array_[3]
                 # end if
             # end for
         # end if
     # end if
-    return title
+    return title_
 # end def get_admin_page_title
 #// 
 #// Gets the hook attached to the administrative page of a plugin.
@@ -1756,11 +1835,12 @@ def get_admin_page_title(*args_):
 #// WordPress admin page).
 #// @return string|null Hook attached to the plugin page, null otherwise.
 #//
-def get_plugin_page_hook(plugin_page=None, parent_page=None, *args_):
+def get_plugin_page_hook(plugin_page_=None, parent_page_=None, *_args_):
     
-    hook = get_plugin_page_hookname(plugin_page, parent_page)
-    if has_action(hook):
-        return hook
+    
+    hook_ = get_plugin_page_hookname(plugin_page_, parent_page_)
+    if has_action(hook_):
+        return hook_
     else:
         return None
     # end if
@@ -1777,23 +1857,24 @@ def get_plugin_page_hook(plugin_page=None, parent_page=None, *args_):
 #// WordPress admin page).
 #// @return string Hook name for the plugin page.
 #//
-def get_plugin_page_hookname(plugin_page=None, parent_page=None, *args_):
+def get_plugin_page_hookname(plugin_page_=None, parent_page_=None, *_args_):
     
-    global admin_page_hooks
-    php_check_if_defined("admin_page_hooks")
-    parent = get_admin_page_parent(parent_page)
-    page_type = "admin"
-    if php_empty(lambda : parent_page) or "admin.php" == parent_page or (php_isset(lambda : admin_page_hooks[plugin_page])):
-        if (php_isset(lambda : admin_page_hooks[plugin_page])):
-            page_type = "toplevel"
-        elif (php_isset(lambda : admin_page_hooks[parent])):
-            page_type = admin_page_hooks[parent]
+    
+    global admin_page_hooks_
+    php_check_if_defined("admin_page_hooks_")
+    parent_ = get_admin_page_parent(parent_page_)
+    page_type_ = "admin"
+    if php_empty(lambda : parent_page_) or "admin.php" == parent_page_ or (php_isset(lambda : admin_page_hooks_[plugin_page_])):
+        if (php_isset(lambda : admin_page_hooks_[plugin_page_])):
+            page_type_ = "toplevel"
+        elif (php_isset(lambda : admin_page_hooks_[parent_])):
+            page_type_ = admin_page_hooks_[parent_]
         # end if
-    elif (php_isset(lambda : admin_page_hooks[parent])):
-        page_type = admin_page_hooks[parent]
+    elif (php_isset(lambda : admin_page_hooks_[parent_])):
+        page_type_ = admin_page_hooks_[parent_]
     # end if
-    plugin_name = php_preg_replace("!\\.php!", "", plugin_page)
-    return page_type + "_page_" + plugin_name
+    plugin_name_ = php_preg_replace("!\\.php!", "", plugin_page_)
+    return page_type_ + "_page_" + plugin_name_
 # end def get_plugin_page_hookname
 #// 
 #// Determines whether the current user can access the current admin page.
@@ -1810,59 +1891,66 @@ def get_plugin_page_hookname(plugin_page=None, parent_page=None, *args_):
 #// 
 #// @return bool True if the current user can access the admin page, false otherwise.
 #//
-def user_can_access_admin_page(*args_):
+def user_can_access_admin_page(*_args_):
     
-    global pagenow,menu,submenu,_wp_menu_nopriv,_wp_submenu_nopriv,plugin_page,_registered_pages
-    php_check_if_defined("pagenow","menu","submenu","_wp_menu_nopriv","_wp_submenu_nopriv","plugin_page","_registered_pages")
-    parent = get_admin_page_parent()
-    if (not (php_isset(lambda : plugin_page))) and (php_isset(lambda : _wp_submenu_nopriv[parent][pagenow])):
+    
+    global pagenow_
+    global menu_
+    global submenu_
+    global _wp_menu_nopriv_
+    global _wp_submenu_nopriv_
+    global plugin_page_
+    global _registered_pages_
+    php_check_if_defined("pagenow_","menu_","submenu_","_wp_menu_nopriv_","_wp_submenu_nopriv_","plugin_page_","_registered_pages_")
+    parent_ = get_admin_page_parent()
+    if (not (php_isset(lambda : plugin_page_))) and (php_isset(lambda : _wp_submenu_nopriv_[parent_][pagenow_])):
         return False
     # end if
-    if (php_isset(lambda : plugin_page)):
-        if (php_isset(lambda : _wp_submenu_nopriv[parent][plugin_page])):
+    if (php_isset(lambda : plugin_page_)):
+        if (php_isset(lambda : _wp_submenu_nopriv_[parent_][plugin_page_])):
             return False
         # end if
-        hookname = get_plugin_page_hookname(plugin_page, parent)
-        if (not (php_isset(lambda : _registered_pages[hookname]))):
+        hookname_ = get_plugin_page_hookname(plugin_page_, parent_)
+        if (not (php_isset(lambda : _registered_pages_[hookname_]))):
             return False
         # end if
     # end if
-    if php_empty(lambda : parent):
-        if (php_isset(lambda : _wp_menu_nopriv[pagenow])):
+    if php_empty(lambda : parent_):
+        if (php_isset(lambda : _wp_menu_nopriv_[pagenow_])):
             return False
         # end if
-        if (php_isset(lambda : _wp_submenu_nopriv[pagenow][pagenow])):
+        if (php_isset(lambda : _wp_submenu_nopriv_[pagenow_][pagenow_])):
             return False
         # end if
-        if (php_isset(lambda : plugin_page)) and (php_isset(lambda : _wp_submenu_nopriv[pagenow][plugin_page])):
+        if (php_isset(lambda : plugin_page_)) and (php_isset(lambda : _wp_submenu_nopriv_[pagenow_][plugin_page_])):
             return False
         # end if
-        if (php_isset(lambda : plugin_page)) and (php_isset(lambda : _wp_menu_nopriv[plugin_page])):
+        if (php_isset(lambda : plugin_page_)) and (php_isset(lambda : _wp_menu_nopriv_[plugin_page_])):
             return False
         # end if
-        for key in php_array_keys(_wp_submenu_nopriv):
-            if (php_isset(lambda : _wp_submenu_nopriv[key][pagenow])):
+        for key_ in php_array_keys(_wp_submenu_nopriv_):
+            if (php_isset(lambda : _wp_submenu_nopriv_[key_][pagenow_])):
                 return False
             # end if
-            if (php_isset(lambda : plugin_page)) and (php_isset(lambda : _wp_submenu_nopriv[key][plugin_page])):
+            if (php_isset(lambda : plugin_page_)) and (php_isset(lambda : _wp_submenu_nopriv_[key_][plugin_page_])):
                 return False
             # end if
         # end for
         return True
     # end if
-    if (php_isset(lambda : plugin_page)) and plugin_page == parent and (php_isset(lambda : _wp_menu_nopriv[plugin_page])):
+    if (php_isset(lambda : plugin_page_)) and plugin_page_ == parent_ and (php_isset(lambda : _wp_menu_nopriv_[plugin_page_])):
         return False
     # end if
-    if (php_isset(lambda : submenu[parent])):
-        for submenu_array in submenu[parent]:
-            if (php_isset(lambda : plugin_page)) and submenu_array[2] == plugin_page:
-                if current_user_can(submenu_array[1]):
+    if (php_isset(lambda : submenu_[parent_])):
+        for submenu_array_ in submenu_[parent_]:
+            if (php_isset(lambda : plugin_page_)) and submenu_array_[2] == plugin_page_:
+                if current_user_can(submenu_array_[1]):
                     return True
                 else:
                     return False
                 # end if
-            elif submenu_array[2] == pagenow:
-                if current_user_can(submenu_array[1]):
+            elif submenu_array_[2] == pagenow_:
+                if current_user_can(submenu_array_[1]):
                     return True
                 else:
                     return False
@@ -1870,9 +1958,9 @@ def user_can_access_admin_page(*args_):
             # end if
         # end for
     # end if
-    for menu_array in menu:
-        if menu_array[2] == parent:
-            if current_user_can(menu_array[1]):
+    for menu_array_ in menu_:
+        if menu_array_[2] == parent_:
+            if current_user_can(menu_array_[1]):
                 return True
             else:
                 return False
@@ -1894,14 +1982,15 @@ def user_can_access_admin_page(*args_):
 #// @param array $options
 #// @return array
 #//
-def option_update_filter(options=None, *args_):
+def option_update_filter(options_=None, *_args_):
     
-    global new_whitelist_options
-    php_check_if_defined("new_whitelist_options")
-    if php_is_array(new_whitelist_options):
-        options = add_option_whitelist(new_whitelist_options, options)
+    
+    global new_whitelist_options_
+    php_check_if_defined("new_whitelist_options_")
+    if php_is_array(new_whitelist_options_):
+        options_ = add_option_whitelist(new_whitelist_options_, options_)
     # end if
-    return options
+    return options_
 # end def option_update_filter
 #// 
 #// Adds an array of options to the options whitelist.
@@ -1914,28 +2003,29 @@ def option_update_filter(options=None, *args_):
 #// @param string|array $options
 #// @return array
 #//
-def add_option_whitelist(new_options=None, options="", *args_):
+def add_option_whitelist(new_options_=None, options_="", *_args_):
     
-    if "" == options:
-        global whitelist_options
-        php_check_if_defined("whitelist_options")
+    
+    if "" == options_:
+        global whitelist_options_
+        php_check_if_defined("whitelist_options_")
     else:
-        whitelist_options = options
+        whitelist_options_ = options_
     # end if
-    for page,keys in new_options:
-        for key in keys:
-            if (not (php_isset(lambda : whitelist_options[page]))) or (not php_is_array(whitelist_options[page])):
-                whitelist_options[page] = Array()
-                whitelist_options[page][-1] = key
+    for page_,keys_ in new_options_:
+        for key_ in keys_:
+            if (not (php_isset(lambda : whitelist_options_[page_]))) or (not php_is_array(whitelist_options_[page_])):
+                whitelist_options_[page_] = Array()
+                whitelist_options_[page_][-1] = key_
             else:
-                pos = php_array_search(key, whitelist_options[page])
-                if False == pos:
-                    whitelist_options[page][-1] = key
+                pos_ = php_array_search(key_, whitelist_options_[page_])
+                if False == pos_:
+                    whitelist_options_[page_][-1] = key_
                 # end if
             # end if
         # end for
     # end for
-    return whitelist_options
+    return whitelist_options_
 # end def add_option_whitelist
 #// 
 #// Removes a list of options from the options whitelist.
@@ -1948,25 +2038,26 @@ def add_option_whitelist(new_options=None, options="", *args_):
 #// @param string|array $options
 #// @return array
 #//
-def remove_option_whitelist(del_options=None, options="", *args_):
+def remove_option_whitelist(del_options_=None, options_="", *_args_):
     
-    if "" == options:
-        global whitelist_options
-        php_check_if_defined("whitelist_options")
+    
+    if "" == options_:
+        global whitelist_options_
+        php_check_if_defined("whitelist_options_")
     else:
-        whitelist_options = options
+        whitelist_options_ = options_
     # end if
-    for page,keys in del_options:
-        for key in keys:
-            if (php_isset(lambda : whitelist_options[page])) and php_is_array(whitelist_options[page]):
-                pos = php_array_search(key, whitelist_options[page])
-                if False != pos:
-                    whitelist_options[page][pos] = None
+    for page_,keys_ in del_options_:
+        for key_ in keys_:
+            if (php_isset(lambda : whitelist_options_[page_])) and php_is_array(whitelist_options_[page_]):
+                pos_ = php_array_search(key_, whitelist_options_[page_])
+                if False != pos_:
+                    whitelist_options_[page_][pos_] = None
                 # end if
             # end if
         # end for
     # end for
-    return whitelist_options
+    return whitelist_options_
 # end def remove_option_whitelist
 #// 
 #// Output nonce, action, and option_page fields for a settings page.
@@ -1976,11 +2067,12 @@ def remove_option_whitelist(del_options=None, options="", *args_):
 #// @param string $option_group A settings group name. This should match the group name
 #// used in register_setting().
 #//
-def settings_fields(option_group=None, *args_):
+def settings_fields(option_group_=None, *_args_):
     
-    php_print("<input type='hidden' name='option_page' value='" + esc_attr(option_group) + "' />")
+    
+    php_print("<input type='hidden' name='option_page' value='" + esc_attr(option_group_) + "' />")
     php_print("<input type=\"hidden\" name=\"action\" value=\"update\" />")
-    wp_nonce_field(str(option_group) + str("-options"))
+    wp_nonce_field(str(option_group_) + str("-options"))
 # end def settings_fields
 #// 
 #// Clears the plugins cache used by get_plugins() and by default, the plugin updates cache.
@@ -1989,9 +2081,12 @@ def settings_fields(option_group=None, *args_):
 #// 
 #// @param bool $clear_update_cache Whether to clear the plugin updates cache. Default true.
 #//
-def wp_clean_plugins_cache(clear_update_cache=True, *args_):
+def wp_clean_plugins_cache(clear_update_cache_=None, *_args_):
+    if clear_update_cache_ is None:
+        clear_update_cache_ = True
+    # end if
     
-    if clear_update_cache:
+    if clear_update_cache_:
         delete_site_transient("update_plugins")
     # end if
     wp_cache_delete("plugins", "plugins")
@@ -2004,13 +2099,14 @@ def wp_clean_plugins_cache(clear_update_cache=True, *args_):
 #// 
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #//
-def plugin_sandbox_scrape(plugin=None, *args_):
+def plugin_sandbox_scrape(plugin_=None, *_args_):
+    
     
     if (not php_defined("WP_SANDBOX_SCRAPING")):
         php_define("WP_SANDBOX_SCRAPING", True)
     # end if
-    wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + plugin)
-    php_include_file(WP_PLUGIN_DIR + "/" + plugin, once=False)
+    wp_register_plugin_realpath(WP_PLUGIN_DIR + "/" + plugin_)
+    php_include_file(WP_PLUGIN_DIR + "/" + plugin_, once=False)
 # end def plugin_sandbox_scrape
 #// 
 #// Helper function for adding content to the Privacy Policy Guide.
@@ -2038,7 +2134,8 @@ def plugin_sandbox_scrape(plugin=None, *args_):
 #// for the site's privacy policy.
 #// @param string $policy_text The suggested content for inclusion in the policy.
 #//
-def wp_add_privacy_policy_content(plugin_name=None, policy_text=None, *args_):
+def wp_add_privacy_policy_content(plugin_name_=None, policy_text_=None, *_args_):
+    
     
     if (not is_admin()):
         _doing_it_wrong(__FUNCTION__, php_sprintf(__("The suggested privacy policy content should be added only in wp-admin by using the %s (or later) action."), "<code>admin_init</code>"), "4.9.7")
@@ -2050,7 +2147,7 @@ def wp_add_privacy_policy_content(plugin_name=None, policy_text=None, *args_):
     if (not php_class_exists("WP_Privacy_Policy_Content")):
         php_include_file(ABSPATH + "wp-admin/includes/class-wp-privacy-policy-content.php", once=True)
     # end if
-    WP_Privacy_Policy_Content.add(plugin_name, policy_text)
+    WP_Privacy_Policy_Content.add(plugin_name_, policy_text_)
 # end def wp_add_privacy_policy_content
 #// 
 #// Determines whether a plugin is technically active but was paused while
@@ -2065,16 +2162,17 @@ def wp_add_privacy_policy_content(plugin_name=None, policy_text=None, *args_):
 #// @param string $plugin Path to the plugin file relative to the plugins directory.
 #// @return bool True, if in the list of paused plugins. False, if not in the list.
 #//
-def is_plugin_paused(plugin=None, *args_):
+def is_plugin_paused(plugin_=None, *_args_):
+    
     
     if (not (php_isset(lambda : PHP_GLOBALS["_paused_plugins"]))):
         return False
     # end if
-    if (not is_plugin_active(plugin)):
+    if (not is_plugin_active(plugin_)):
         return False
     # end if
-    plugin = php_explode("/", plugin)
-    return php_array_key_exists(plugin, PHP_GLOBALS["_paused_plugins"])
+    plugin_ = php_explode("/", plugin_)
+    return php_array_key_exists(plugin_, PHP_GLOBALS["_paused_plugins"])
 # end def is_plugin_paused
 #// 
 #// Gets the error that was recorded for a paused plugin.
@@ -2085,16 +2183,17 @@ def is_plugin_paused(plugin=None, *args_):
 #// @return array|false Array of error information as returned by `error_get_last()`,
 #// or false if none was recorded.
 #//
-def wp_get_plugin_error(plugin=None, *args_):
+def wp_get_plugin_error(plugin_=None, *_args_):
+    
     
     if (not (php_isset(lambda : PHP_GLOBALS["_paused_plugins"]))):
         return False
     # end if
-    plugin = php_explode("/", plugin)
-    if (not php_array_key_exists(plugin, PHP_GLOBALS["_paused_plugins"])):
+    plugin_ = php_explode("/", plugin_)
+    if (not php_array_key_exists(plugin_, PHP_GLOBALS["_paused_plugins"])):
         return False
     # end if
-    return PHP_GLOBALS["_paused_plugins"][plugin]
+    return PHP_GLOBALS["_paused_plugins"][plugin_]
 # end def wp_get_plugin_error
 #// 
 #// Tries to resume a single plugin.
@@ -2113,22 +2212,23 @@ def wp_get_plugin_error(plugin=None, *args_):
 #// @return bool|WP_Error True on success, false if `$plugin` was not paused,
 #// `WP_Error` on failure.
 #//
-def resume_plugin(plugin=None, redirect="", *args_):
+def resume_plugin(plugin_=None, redirect_="", *_args_):
+    
     
     #// 
     #// We'll override this later if the plugin could be resumed without
     #// creating a fatal error.
     #//
-    if (not php_empty(lambda : redirect)):
-        wp_redirect(add_query_arg("_error_nonce", wp_create_nonce("plugin-resume-error_" + plugin), redirect))
+    if (not php_empty(lambda : redirect_)):
+        wp_redirect(add_query_arg("_error_nonce", wp_create_nonce("plugin-resume-error_" + plugin_), redirect_))
         #// Load the plugin to test whether it throws a fatal error.
         ob_start()
-        plugin_sandbox_scrape(plugin)
+        plugin_sandbox_scrape(plugin_)
         ob_clean()
     # end if
-    extension = php_explode("/", plugin)
-    result = wp_paused_plugins().delete(extension)
-    if (not result):
+    extension_ = php_explode("/", plugin_)
+    result_ = wp_paused_plugins().delete(extension_)
+    if (not result_):
         return php_new_class("WP_Error", lambda : WP_Error("could_not_resume_plugin", __("Could not resume the plugin.")))
     # end if
     return True
@@ -2138,7 +2238,8 @@ def resume_plugin(plugin=None, redirect="", *args_):
 #// 
 #// @since 5.2.0
 #//
-def paused_plugins_notice(*args_):
+def paused_plugins_notice(*_args_):
+    
     
     if "plugins.php" == PHP_GLOBALS["pagenow"]:
         return

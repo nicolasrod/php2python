@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,7 +25,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @since Twenty Nineteen 1.0.0
 #//
-def twentynineteen_switch_theme(*args_):
+def twentynineteen_switch_theme(*_args_):
+    
     
     switch_theme(WP_DEFAULT_THEME)
     PHP_REQUEST["activated"] = None
@@ -47,11 +43,12 @@ add_action("after_switch_theme", "twentynineteen_switch_theme")
 #// 
 #// @global string $wp_version WordPress version.
 #//
-def twentynineteen_upgrade_notice(*args_):
+def twentynineteen_upgrade_notice(*_args_):
+    
     
     #// translators: %s: WordPress version.
-    message = php_sprintf(__("Twenty Nineteen requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.", "twentynineteen"), PHP_GLOBALS["wp_version"])
-    printf("<div class=\"error\"><p>%s</p></div>", message)
+    message_ = php_sprintf(__("Twenty Nineteen requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.", "twentynineteen"), PHP_GLOBALS["wp_version"])
+    printf("<div class=\"error\"><p>%s</p></div>", message_)
 # end def twentynineteen_upgrade_notice
 #// 
 #// Prevents the Customizer from being loaded on WordPress versions prior to 4.7.
@@ -60,7 +57,8 @@ def twentynineteen_upgrade_notice(*args_):
 #// 
 #// @global string $wp_version WordPress version.
 #//
-def twentynineteen_customize(*args_):
+def twentynineteen_customize(*_args_):
+    
     
     wp_die(php_sprintf(__("Twenty Nineteen requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.", "twentynineteen"), PHP_GLOBALS["wp_version"]), "", Array({"back_link": True}))
 # end def twentynineteen_customize
@@ -72,7 +70,8 @@ add_action("load-customize.php", "twentynineteen_customize")
 #// 
 #// @global string $wp_version WordPress version.
 #//
-def twentynineteen_preview(*args_):
+def twentynineteen_preview(*_args_):
+    
     
     if (php_isset(lambda : PHP_REQUEST["preview"])):
         #// translators: %s: WordPress version.

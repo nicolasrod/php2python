@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,11 +21,11 @@ if (not current_user_can("manage_privacy_options")):
 if (not php_class_exists("WP_Privacy_Policy_Content")):
     php_include_file(ABSPATH + "wp-admin/includes/class-wp-privacy-policy-content.php", once=False)
 # end if
-title = __("Privacy Policy Guide")
+title_ = __("Privacy Policy Guide")
 wp_enqueue_script("privacy-tools")
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("<div class=\"wrap\">\n   <h1>")
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("""</h1>
 <div class=\"wp-privacy-policy-guide\">
 """)

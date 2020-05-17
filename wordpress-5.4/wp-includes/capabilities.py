@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -47,16 +42,17 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param mixed  ...$args Optional further parameters, typically starting with an object ID.
 #// @return string[] Actual capabilities for meta capability.
 #//
-def map_meta_cap(cap=None, user_id=None, *args):
+def map_meta_cap(cap_=None, user_id_=None, *args_):
     
-    caps = Array()
-    for case in Switch(cap):
+    
+    caps_ = Array()
+    for case in Switch(cap_):
         if case("remove_user"):
             #// In multisite the user must be a super admin to remove themselves.
-            if (php_isset(lambda : args[0])) and user_id == args[0] and (not is_super_admin(user_id)):
-                caps[-1] = "do_not_allow"
+            if (php_isset(lambda : args_[0])) and user_id_ == args_[0] and (not is_super_admin(user_id_)):
+                caps_[-1] = "do_not_allow"
             else:
-                caps[-1] = "remove_users"
+                caps_[-1] = "remove_users"
             # end if
             break
         # end if
@@ -64,7 +60,7 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("add_users"):
-            caps[-1] = "promote_users"
+            caps_[-1] = "promote_users"
             break
         # end if
         if case("edit_user"):
@@ -72,14 +68,14 @@ def map_meta_cap(cap=None, user_id=None, *args):
         # end if
         if case("edit_users"):
             #// Allow user to edit themselves.
-            if "edit_user" == cap and (php_isset(lambda : args[0])) and user_id == args[0]:
+            if "edit_user" == cap_ and (php_isset(lambda : args_[0])) and user_id_ == args_[0]:
                 break
             # end if
             #// In multisite the user must have manage_network_users caps. If editing a super admin, the user must be a super admin.
-            if is_multisite() and (not is_super_admin(user_id)) and "edit_user" == cap and is_super_admin(args[0]) or (not user_can(user_id, "manage_network_users")):
-                caps[-1] = "do_not_allow"
+            if is_multisite() and (not is_super_admin(user_id_)) and "edit_user" == cap_ and is_super_admin(args_[0]) or (not user_can(user_id_, "manage_network_users")):
+                caps_[-1] = "do_not_allow"
             else:
-                caps[-1] = "edit_users"
+                caps_[-1] = "edit_users"
                 pass
             # end if
             break
@@ -88,66 +84,66 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("delete_page"):
-            post = get_post(args[0])
-            if (not post):
-                caps[-1] = "do_not_allow"
+            post_ = get_post(args_[0])
+            if (not post_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            if "revision" == post.post_type:
-                caps[-1] = "do_not_allow"
+            if "revision" == post_.post_type:
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            if get_option("page_for_posts") == post.ID or get_option("page_on_front") == post.ID:
-                caps[-1] = "manage_options"
+            if get_option("page_for_posts") == post_.ID or get_option("page_on_front") == post_.ID:
+                caps_[-1] = "manage_options"
                 break
             # end if
-            post_type = get_post_type_object(post.post_type)
-            if (not post_type):
+            post_type_ = get_post_type_object(post_.post_type)
+            if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post.post_type, cap), "4.4.0")
-                caps[-1] = "edit_others_posts"
+                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                caps_[-1] = "edit_others_posts"
                 break
             # end if
-            if (not post_type.map_meta_cap):
-                caps[-1] = post_type.cap.cap
+            if (not post_type_.map_meta_cap):
+                caps_[-1] = post_type_.cap.cap_
                 #// Prior to 3.1 we would re-call map_meta_cap here.
-                if "delete_post" == cap:
-                    cap = post_type.cap.cap
+                if "delete_post" == cap_:
+                    cap_ = post_type_.cap.cap_
                 # end if
                 break
             # end if
             #// If the post author is set and the user is the author...
-            if post.post_author and user_id == post.post_author:
+            if post_.post_author and user_id_ == post_.post_author:
                 #// If the post is published or scheduled...
-                if php_in_array(post.post_status, Array("publish", "future"), True):
-                    caps[-1] = post_type.cap.delete_published_posts
-                elif "trash" == post.post_status:
-                    status = get_post_meta(post.ID, "_wp_trash_meta_status", True)
-                    if php_in_array(status, Array("publish", "future"), True):
-                        caps[-1] = post_type.cap.delete_published_posts
+                if php_in_array(post_.post_status, Array("publish", "future"), True):
+                    caps_[-1] = post_type_.cap.delete_published_posts
+                elif "trash" == post_.post_status:
+                    status_ = get_post_meta(post_.ID, "_wp_trash_meta_status", True)
+                    if php_in_array(status_, Array("publish", "future"), True):
+                        caps_[-1] = post_type_.cap.delete_published_posts
                     else:
-                        caps[-1] = post_type.cap.delete_posts
+                        caps_[-1] = post_type_.cap.delete_posts
                     # end if
                 else:
                     #// If the post is draft...
-                    caps[-1] = post_type.cap.delete_posts
+                    caps_[-1] = post_type_.cap.delete_posts
                 # end if
             else:
                 #// The user is trying to edit someone else's post.
-                caps[-1] = post_type.cap.delete_others_posts
+                caps_[-1] = post_type_.cap.delete_others_posts
                 #// The post is published or scheduled, extra cap required.
-                if php_in_array(post.post_status, Array("publish", "future"), True):
-                    caps[-1] = post_type.cap.delete_published_posts
-                elif "private" == post.post_status:
-                    caps[-1] = post_type.cap.delete_private_posts
+                if php_in_array(post_.post_status, Array("publish", "future"), True):
+                    caps_[-1] = post_type_.cap.delete_published_posts
+                elif "private" == post_.post_status:
+                    caps_[-1] = post_type_.cap.delete_private_posts
                 # end if
             # end if
             #// 
             #// Setting the privacy policy page requires `manage_privacy_options`,
             #// so deleting it should require that too.
             #//
-            if php_int(get_option("wp_page_for_privacy_policy")) == post.ID:
-                caps = php_array_merge(caps, map_meta_cap("manage_privacy_options", user_id))
+            if php_int(get_option("wp_page_for_privacy_policy")) == post_.ID:
+                caps_ = php_array_merge(caps_, map_meta_cap("manage_privacy_options", user_id_))
             # end if
             break
         # end if
@@ -155,65 +151,65 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("edit_page"):
-            post = get_post(args[0])
-            if (not post):
-                caps[-1] = "do_not_allow"
+            post_ = get_post(args_[0])
+            if (not post_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            if "revision" == post.post_type:
-                post = get_post(post.post_parent)
-                if (not post):
-                    caps[-1] = "do_not_allow"
+            if "revision" == post_.post_type:
+                post_ = get_post(post_.post_parent)
+                if (not post_):
+                    caps_[-1] = "do_not_allow"
                     break
                 # end if
             # end if
-            post_type = get_post_type_object(post.post_type)
-            if (not post_type):
+            post_type_ = get_post_type_object(post_.post_type)
+            if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post.post_type, cap), "4.4.0")
-                caps[-1] = "edit_others_posts"
+                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                caps_[-1] = "edit_others_posts"
                 break
             # end if
-            if (not post_type.map_meta_cap):
-                caps[-1] = post_type.cap.cap
+            if (not post_type_.map_meta_cap):
+                caps_[-1] = post_type_.cap.cap_
                 #// Prior to 3.1 we would re-call map_meta_cap here.
-                if "edit_post" == cap:
-                    cap = post_type.cap.cap
+                if "edit_post" == cap_:
+                    cap_ = post_type_.cap.cap_
                 # end if
                 break
             # end if
             #// If the post author is set and the user is the author...
-            if post.post_author and user_id == post.post_author:
+            if post_.post_author and user_id_ == post_.post_author:
                 #// If the post is published or scheduled...
-                if php_in_array(post.post_status, Array("publish", "future"), True):
-                    caps[-1] = post_type.cap.edit_published_posts
-                elif "trash" == post.post_status:
-                    status = get_post_meta(post.ID, "_wp_trash_meta_status", True)
-                    if php_in_array(status, Array("publish", "future"), True):
-                        caps[-1] = post_type.cap.edit_published_posts
+                if php_in_array(post_.post_status, Array("publish", "future"), True):
+                    caps_[-1] = post_type_.cap.edit_published_posts
+                elif "trash" == post_.post_status:
+                    status_ = get_post_meta(post_.ID, "_wp_trash_meta_status", True)
+                    if php_in_array(status_, Array("publish", "future"), True):
+                        caps_[-1] = post_type_.cap.edit_published_posts
                     else:
-                        caps[-1] = post_type.cap.edit_posts
+                        caps_[-1] = post_type_.cap.edit_posts
                     # end if
                 else:
                     #// If the post is draft...
-                    caps[-1] = post_type.cap.edit_posts
+                    caps_[-1] = post_type_.cap.edit_posts
                 # end if
             else:
                 #// The user is trying to edit someone else's post.
-                caps[-1] = post_type.cap.edit_others_posts
+                caps_[-1] = post_type_.cap.edit_others_posts
                 #// The post is published or scheduled, extra cap required.
-                if php_in_array(post.post_status, Array("publish", "future"), True):
-                    caps[-1] = post_type.cap.edit_published_posts
-                elif "private" == post.post_status:
-                    caps[-1] = post_type.cap.edit_private_posts
+                if php_in_array(post_.post_status, Array("publish", "future"), True):
+                    caps_[-1] = post_type_.cap.edit_published_posts
+                elif "private" == post_.post_status:
+                    caps_[-1] = post_type_.cap.edit_private_posts
                 # end if
             # end if
             #// 
             #// Setting the privacy policy page requires `manage_privacy_options`,
             #// so editing it should require that too.
             #//
-            if php_int(get_option("wp_page_for_privacy_policy")) == post.ID:
-                caps = php_array_merge(caps, map_meta_cap("manage_privacy_options", user_id))
+            if php_int(get_option("wp_page_for_privacy_policy")) == post_.ID:
+                caps_ = php_array_merge(caps_, map_meta_cap("manage_privacy_options", user_id_))
             # end if
             break
         # end if
@@ -221,67 +217,67 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("read_page"):
-            post = get_post(args[0])
-            if (not post):
-                caps[-1] = "do_not_allow"
+            post_ = get_post(args_[0])
+            if (not post_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            if "revision" == post.post_type:
-                post = get_post(post.post_parent)
-                if (not post):
-                    caps[-1] = "do_not_allow"
+            if "revision" == post_.post_type:
+                post_ = get_post(post_.post_parent)
+                if (not post_):
+                    caps_[-1] = "do_not_allow"
                     break
                 # end if
             # end if
-            post_type = get_post_type_object(post.post_type)
-            if (not post_type):
+            post_type_ = get_post_type_object(post_.post_type)
+            if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post.post_type, cap), "4.4.0")
-                caps[-1] = "edit_others_posts"
+                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                caps_[-1] = "edit_others_posts"
                 break
             # end if
-            if (not post_type.map_meta_cap):
-                caps[-1] = post_type.cap.cap
+            if (not post_type_.map_meta_cap):
+                caps_[-1] = post_type_.cap.cap_
                 #// Prior to 3.1 we would re-call map_meta_cap here.
-                if "read_post" == cap:
-                    cap = post_type.cap.cap
+                if "read_post" == cap_:
+                    cap_ = post_type_.cap.cap_
                 # end if
                 break
             # end if
-            status_obj = get_post_status_object(post.post_status)
-            if (not status_obj):
+            status_obj_ = get_post_status_object(post_.post_status)
+            if (not status_obj_):
                 #// translators: 1: Post status, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post status %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post with that status."), post.post_status, cap), "5.4.0")
-                caps[-1] = "edit_others_posts"
+                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post status %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post with that status."), post_.post_status, cap_), "5.4.0")
+                caps_[-1] = "edit_others_posts"
                 break
             # end if
-            if status_obj.public:
-                caps[-1] = post_type.cap.read
+            if status_obj_.public:
+                caps_[-1] = post_type_.cap.read
                 break
             # end if
-            if post.post_author and user_id == post.post_author:
-                caps[-1] = post_type.cap.read
-            elif status_obj.private:
-                caps[-1] = post_type.cap.read_private_posts
+            if post_.post_author and user_id_ == post_.post_author:
+                caps_[-1] = post_type_.cap.read
+            elif status_obj_.private:
+                caps_[-1] = post_type_.cap.read_private_posts
             else:
-                caps = map_meta_cap("edit_post", user_id, post.ID)
+                caps_ = map_meta_cap("edit_post", user_id_, post_.ID)
             # end if
             break
         # end if
         if case("publish_post"):
-            post = get_post(args[0])
-            if (not post):
-                caps[-1] = "do_not_allow"
+            post_ = get_post(args_[0])
+            if (not post_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            post_type = get_post_type_object(post.post_type)
-            if (not post_type):
+            post_type_ = get_post_type_object(post_.post_type)
+            if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post.post_type, cap), "4.4.0")
-                caps[-1] = "edit_others_posts"
+                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                caps_[-1] = "edit_others_posts"
                 break
             # end if
-            caps[-1] = post_type.cap.publish_posts
+            caps_[-1] = post_type_.cap.publish_posts
             break
         # end if
         if case("edit_post_meta"):
@@ -318,18 +314,18 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("add_user_meta"):
-            _, object_type, _ = php_explode("_", cap)
-            object_id = php_int(args[0])
-            object_subtype = get_object_subtype(object_type, object_id)
-            if php_empty(lambda : object_subtype):
-                caps[-1] = "do_not_allow"
+            __, object_type_, __ = php_explode("_", cap_)
+            object_id_ = php_int(args_[0])
+            object_subtype_ = get_object_subtype(object_type_, object_id_)
+            if php_empty(lambda : object_subtype_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            caps = map_meta_cap(str("edit_") + str(object_type), user_id, object_id)
-            meta_key = args[1] if (php_isset(lambda : args[1])) else False
-            if meta_key:
-                allowed = (not is_protected_meta(meta_key, object_type))
-                if (not php_empty(lambda : object_subtype)) and has_filter(str("auth_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype)):
+            caps_ = map_meta_cap(str("edit_") + str(object_type_), user_id_, object_id_)
+            meta_key_ = args_[1] if (php_isset(lambda : args_[1])) else False
+            if meta_key_:
+                allowed_ = (not is_protected_meta(meta_key_, object_type_))
+                if (not php_empty(lambda : object_subtype_)) and has_filter(str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_)):
                     #// 
                     #// Filters whether the user is allowed to edit a specific meta key of a specific object type and subtype.
                     #// 
@@ -346,7 +342,7 @@ def map_meta_cap(cap=None, user_id=None, *args):
                     #// @param string   $cap       Capability name.
                     #// @param string[] $caps      Array of the user's capabilities.
                     #//
-                    allowed = apply_filters(str("auth_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype), allowed, meta_key, object_id, user_id, cap, caps)
+                    allowed_ = apply_filters(str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_), allowed_, meta_key_, object_id_, user_id_, cap_, caps_)
                 else:
                     #// 
                     #// Filters whether the user is allowed to edit a specific meta key of a specific object type.
@@ -366,9 +362,9 @@ def map_meta_cap(cap=None, user_id=None, *args):
                     #// @param string   $cap       Capability name.
                     #// @param string[] $caps      Array of the user's capabilities.
                     #//
-                    allowed = apply_filters(str("auth_") + str(object_type) + str("_meta_") + str(meta_key), allowed, meta_key, object_id, user_id, cap, caps)
+                    allowed_ = apply_filters(str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_), allowed_, meta_key_, object_id_, user_id_, cap_, caps_)
                 # end if
-                if (not php_empty(lambda : object_subtype)):
+                if (not php_empty(lambda : object_subtype_)):
                     #// 
                     #// Filters whether the user is allowed to edit meta for specific object types/subtypes.
                     #// 
@@ -390,37 +386,37 @@ def map_meta_cap(cap=None, user_id=None, *args):
                     #// @param string   $cap       Capability name.
                     #// @param string[] $caps      Array of the user's capabilities.
                     #//
-                    allowed = apply_filters_deprecated(str("auth_") + str(object_type) + str("_") + str(object_subtype) + str("_meta_") + str(meta_key), Array(allowed, meta_key, object_id, user_id, cap, caps), "4.9.8", str("auth_") + str(object_type) + str("_meta_") + str(meta_key) + str("_for_") + str(object_subtype))
+                    allowed_ = apply_filters_deprecated(str("auth_") + str(object_type_) + str("_") + str(object_subtype_) + str("_meta_") + str(meta_key_), Array(allowed_, meta_key_, object_id_, user_id_, cap_, caps_), "4.9.8", str("auth_") + str(object_type_) + str("_meta_") + str(meta_key_) + str("_for_") + str(object_subtype_))
                 # end if
-                if (not allowed):
-                    caps[-1] = cap
+                if (not allowed_):
+                    caps_[-1] = cap_
                 # end if
             # end if
             break
         # end if
         if case("edit_comment"):
-            comment = get_comment(args[0])
-            if (not comment):
-                caps[-1] = "do_not_allow"
+            comment_ = get_comment(args_[0])
+            if (not comment_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            post = get_post(comment.comment_post_ID)
+            post_ = get_post(comment_.comment_post_ID)
             #// 
             #// If the post doesn't exist, we have an orphaned comment.
             #// Fall back to the edit_posts capability, instead.
             #//
-            if post:
-                caps = map_meta_cap("edit_post", user_id, post.ID)
+            if post_:
+                caps_ = map_meta_cap("edit_post", user_id_, post_.ID)
             else:
-                caps = map_meta_cap("edit_posts", user_id)
+                caps_ = map_meta_cap("edit_posts", user_id_)
             # end if
             break
         # end if
         if case("unfiltered_upload"):
-            if php_defined("ALLOW_UNFILTERED_UPLOADS") and ALLOW_UNFILTERED_UPLOADS and (not is_multisite()) or is_super_admin(user_id):
-                caps[-1] = cap
+            if php_defined("ALLOW_UNFILTERED_UPLOADS") and ALLOW_UNFILTERED_UPLOADS and (not is_multisite()) or is_super_admin(user_id_):
+                caps_[-1] = cap_
             else:
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
             # end if
             break
         # end if
@@ -430,11 +426,11 @@ def map_meta_cap(cap=None, user_id=None, *args):
         if case("unfiltered_html"):
             #// Disallow unfiltered_html for all users, even admins and super admins.
             if php_defined("DISALLOW_UNFILTERED_HTML") and DISALLOW_UNFILTERED_HTML:
-                caps[-1] = "do_not_allow"
-            elif is_multisite() and (not is_super_admin(user_id)):
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
+            elif is_multisite() and (not is_super_admin(user_id_)):
+                caps_[-1] = "do_not_allow"
             else:
-                caps[-1] = "unfiltered_html"
+                caps_[-1] = "unfiltered_html"
             # end if
             break
         # end if
@@ -447,13 +443,13 @@ def map_meta_cap(cap=None, user_id=None, *args):
         if case("edit_themes"):
             #// Disallow the file editors.
             if php_defined("DISALLOW_FILE_EDIT") and DISALLOW_FILE_EDIT:
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
             elif (not wp_is_file_mod_allowed("capability_edit_themes")):
-                caps[-1] = "do_not_allow"
-            elif is_multisite() and (not is_super_admin(user_id)):
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
+            elif is_multisite() and (not is_super_admin(user_id_)):
+                caps_[-1] = "do_not_allow"
             else:
-                caps[-1] = cap
+                caps_[-1] = cap_
             # end if
             break
         # end if
@@ -485,15 +481,15 @@ def map_meta_cap(cap=None, user_id=None, *args):
             #// Disallow anything that creates, deletes, or updates core, plugin, or theme files.
             #// Files in uploads are excepted.
             if (not wp_is_file_mod_allowed("capability_update_core")):
-                caps[-1] = "do_not_allow"
-            elif is_multisite() and (not is_super_admin(user_id)):
-                caps[-1] = "do_not_allow"
-            elif "upload_themes" == cap:
-                caps[-1] = "install_themes"
-            elif "upload_plugins" == cap:
-                caps[-1] = "install_plugins"
+                caps_[-1] = "do_not_allow"
+            elif is_multisite() and (not is_super_admin(user_id_)):
+                caps_[-1] = "do_not_allow"
+            elif "upload_themes" == cap_:
+                caps_[-1] = "install_themes"
+            elif "upload_plugins" == cap_:
+                caps_[-1] = "install_plugins"
             else:
-                caps[-1] = cap
+                caps_[-1] = cap_
             # end if
             break
         # end if
@@ -502,11 +498,11 @@ def map_meta_cap(cap=None, user_id=None, *args):
         # end if
         if case("update_languages"):
             if (not wp_is_file_mod_allowed("can_install_language_pack")):
-                caps[-1] = "do_not_allow"
-            elif is_multisite() and (not is_super_admin(user_id)):
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
+            elif is_multisite() and (not is_super_admin(user_id_)):
+                caps_[-1] = "do_not_allow"
             else:
-                caps[-1] = "install_languages"
+                caps_[-1] = "install_languages"
             # end if
             break
         # end if
@@ -520,22 +516,22 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("deactivate_plugin"):
-            caps[-1] = "activate_plugins"
+            caps_[-1] = "activate_plugins"
             if is_multisite():
                 #// update_, install_, and delete_ are handled above with is_super_admin().
-                menu_perms = get_site_option("menu_items", Array())
-                if php_empty(lambda : menu_perms["plugins"]):
-                    caps[-1] = "manage_network_plugins"
+                menu_perms_ = get_site_option("menu_items", Array())
+                if php_empty(lambda : menu_perms_["plugins"]):
+                    caps_[-1] = "manage_network_plugins"
                 # end if
             # end if
             break
         # end if
         if case("resume_plugin"):
-            caps[-1] = "resume_plugins"
+            caps_[-1] = "resume_plugins"
             break
         # end if
         if case("resume_theme"):
-            caps[-1] = "resume_themes"
+            caps_[-1] = "resume_themes"
             break
         # end if
         if case("delete_user"):
@@ -543,41 +539,41 @@ def map_meta_cap(cap=None, user_id=None, *args):
         # end if
         if case("delete_users"):
             #// If multisite only super admins can delete users.
-            if is_multisite() and (not is_super_admin(user_id)):
-                caps[-1] = "do_not_allow"
+            if is_multisite() and (not is_super_admin(user_id_)):
+                caps_[-1] = "do_not_allow"
             else:
-                caps[-1] = "delete_users"
+                caps_[-1] = "delete_users"
                 pass
             # end if
             break
         # end if
         if case("create_users"):
             if (not is_multisite()):
-                caps[-1] = cap
-            elif is_super_admin(user_id) or get_site_option("add_new_users"):
-                caps[-1] = cap
+                caps_[-1] = cap_
+            elif is_super_admin(user_id_) or get_site_option("add_new_users"):
+                caps_[-1] = cap_
             else:
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
             # end if
             break
         # end if
         if case("manage_links"):
             if get_option("link_manager_enabled"):
-                caps[-1] = cap
+                caps_[-1] = cap_
             else:
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
             # end if
             break
         # end if
         if case("customize"):
-            caps[-1] = "edit_theme_options"
+            caps_[-1] = "edit_theme_options"
             break
         # end if
         if case("delete_site"):
             if is_multisite():
-                caps[-1] = "manage_options"
+                caps_[-1] = "manage_options"
             else:
-                caps[-1] = "do_not_allow"
+                caps_[-1] = "do_not_allow"
             # end if
             break
         # end if
@@ -588,23 +584,23 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("assign_term"):
-            term_id = php_int(args[0])
-            term = get_term(term_id)
-            if (not term) or is_wp_error(term):
-                caps[-1] = "do_not_allow"
+            term_id_ = php_int(args_[0])
+            term_ = get_term(term_id_)
+            if (not term_) or is_wp_error(term_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            tax = get_taxonomy(term.taxonomy)
-            if (not tax):
-                caps[-1] = "do_not_allow"
+            tax_ = get_taxonomy(term_.taxonomy)
+            if (not tax_):
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            if "delete_term" == cap and get_option("default_" + term.taxonomy) == term.term_id:
-                caps[-1] = "do_not_allow"
+            if "delete_term" == cap_ and get_option("default_" + term_.taxonomy) == term_.term_id:
+                caps_[-1] = "do_not_allow"
                 break
             # end if
-            taxo_cap = cap + "s"
-            caps = map_meta_cap(tax.cap.taxo_cap, user_id, term_id)
+            taxo_cap_ = cap_ + "s"
+            caps_ = map_meta_cap(tax_.cap.taxo_cap_, user_id_, term_id_)
             break
         # end if
         if case("manage_post_tags"):
@@ -620,14 +616,14 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("delete_post_tags"):
-            caps[-1] = "manage_categories"
+            caps_[-1] = "manage_categories"
             break
         # end if
         if case("assign_categories"):
             pass
         # end if
         if case("assign_post_tags"):
-            caps[-1] = "edit_posts"
+            caps_[-1] = "edit_posts"
             break
         # end if
         if case("create_sites"):
@@ -655,22 +651,22 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("upgrade_network"):
-            caps[-1] = cap
+            caps_[-1] = cap_
             break
         # end if
         if case("setup_network"):
             if is_multisite():
-                caps[-1] = "manage_network_options"
+                caps_[-1] = "manage_network_options"
             else:
-                caps[-1] = "manage_options"
+                caps_[-1] = "manage_options"
             # end if
             break
         # end if
         if case("update_php"):
-            if is_multisite() and (not is_super_admin(user_id)):
-                caps[-1] = "do_not_allow"
+            if is_multisite() and (not is_super_admin(user_id_)):
+                caps_[-1] = "do_not_allow"
             else:
-                caps[-1] = "update_core"
+                caps_[-1] = "update_core"
             # end if
             break
         # end if
@@ -681,23 +677,23 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("manage_privacy_options"):
-            caps[-1] = "manage_network" if is_multisite() else "manage_options"
+            caps_[-1] = "manage_network" if is_multisite() else "manage_options"
             break
         # end if
         if case():
             #// Handle meta capabilities for custom post types.
-            global post_type_meta_caps
-            php_check_if_defined("post_type_meta_caps")
-            if (php_isset(lambda : post_type_meta_caps[cap])):
-                return map_meta_cap(post_type_meta_caps[cap], user_id, args)
+            global post_type_meta_caps_
+            php_check_if_defined("post_type_meta_caps_")
+            if (php_isset(lambda : post_type_meta_caps_[cap_])):
+                return map_meta_cap(post_type_meta_caps_[cap_], user_id_, args_)
             # end if
             #// Block capabilities map to their post equivalent.
-            block_caps = Array("edit_blocks", "edit_others_blocks", "publish_blocks", "read_private_blocks", "delete_blocks", "delete_private_blocks", "delete_published_blocks", "delete_others_blocks", "edit_private_blocks", "edit_published_blocks")
-            if php_in_array(cap, block_caps, True):
-                cap = php_str_replace("_blocks", "_posts", cap)
+            block_caps_ = Array("edit_blocks", "edit_others_blocks", "publish_blocks", "read_private_blocks", "delete_blocks", "delete_private_blocks", "delete_published_blocks", "delete_others_blocks", "edit_private_blocks", "edit_published_blocks")
+            if php_in_array(cap_, block_caps_, True):
+                cap_ = php_str_replace("_blocks", "_posts", cap_)
             # end if
             #// If no meta caps match, return the original cap.
-            caps[-1] = cap
+            caps_[-1] = cap_
         # end if
     # end for
     #// 
@@ -710,7 +706,7 @@ def map_meta_cap(cap=None, user_id=None, *args):
     #// @param int      $user_id The user ID.
     #// @param array    $args    Adds the context to the cap. Typically the object ID.
     #//
-    return apply_filters("map_meta_cap", caps, cap, user_id, args)
+    return apply_filters("map_meta_cap", caps_, cap_, user_id_, args_)
 # end def map_meta_cap
 #// 
 #// Returns whether the current user has the specified capability.
@@ -742,13 +738,14 @@ def map_meta_cap(cap=None, user_id=None, *args):
 #// @return bool Whether the current user has the given capability. If `$capability` is a meta cap and `$object_id` is
 #// passed, whether the current user has the given meta capability for the given object.
 #//
-def current_user_can(capability=None, *args):
+def current_user_can(capability_=None, *args_):
     
-    current_user = wp_get_current_user()
-    if php_empty(lambda : current_user):
+    
+    current_user_ = wp_get_current_user()
+    if php_empty(lambda : current_user_):
         return False
     # end if
-    return current_user.has_cap(capability, args)
+    return current_user_.has_cap(capability_, args_)
 # end def current_user_can
 #// 
 #// Returns whether the current user has the specified capability for a given site.
@@ -772,21 +769,22 @@ def current_user_can(capability=None, *args):
 #// @param mixed  ...$args    Optional further parameters, typically starting with an object ID.
 #// @return bool Whether the user has the given capability.
 #//
-def current_user_can_for_blog(blog_id=None, capability=None, *args):
+def current_user_can_for_blog(blog_id_=None, capability_=None, *args_):
     
-    switched = switch_to_blog(blog_id) if is_multisite() else False
-    current_user = wp_get_current_user()
-    if php_empty(lambda : current_user):
-        if switched:
+    
+    switched_ = switch_to_blog(blog_id_) if is_multisite() else False
+    current_user_ = wp_get_current_user()
+    if php_empty(lambda : current_user_):
+        if switched_:
             restore_current_blog()
         # end if
         return False
     # end if
-    can = current_user.has_cap(capability, args)
-    if switched:
+    can_ = current_user_.has_cap(capability_, args_)
+    if switched_:
         restore_current_blog()
     # end if
-    return can
+    return can_
 # end def current_user_can_for_blog
 #// 
 #// Returns whether the author of the supplied post has the specified capability.
@@ -810,17 +808,18 @@ def current_user_can_for_blog(blog_id=None, capability=None, *args):
 #// @param mixed       ...$args    Optional further parameters, typically starting with an object ID.
 #// @return bool Whether the post author has the given capability.
 #//
-def author_can(post=None, capability=None, *args):
+def author_can(post_=None, capability_=None, *args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    author = get_userdata(post.post_author)
-    if (not author):
+    author_ = get_userdata(post_.post_author)
+    if (not author_):
         return False
     # end if
-    return author.has_cap(capability, args)
+    return author_.has_cap(capability_, args_)
 # end def author_can
 #// 
 #// Returns whether a particular user has the specified capability.
@@ -844,15 +843,16 @@ def author_can(post=None, capability=None, *args):
 #// @param mixed       ...$args    Optional further parameters, typically starting with an object ID.
 #// @return bool Whether the user has the given capability.
 #//
-def user_can(user=None, capability=None, *args):
+def user_can(user_=None, capability_=None, *args_):
     
-    if (not php_is_object(user)):
-        user = get_userdata(user)
+    
+    if (not php_is_object(user_)):
+        user_ = get_userdata(user_)
     # end if
-    if (not user) or (not user.exists()):
+    if (not user_) or (not user_.exists()):
         return False
     # end if
-    return user.has_cap(capability, args)
+    return user_.has_cap(capability_, args_)
 # end def user_can
 #// 
 #// Retrieves the global WP_Roles instance and instantiates it if necessary.
@@ -863,14 +863,15 @@ def user_can(user=None, capability=None, *args):
 #// 
 #// @return WP_Roles WP_Roles global instance if not already instantiated.
 #//
-def wp_roles(*args_):
+def wp_roles(*_args_):
     
-    global wp_roles
-    php_check_if_defined("wp_roles")
-    if (not (php_isset(lambda : wp_roles))):
-        wp_roles = php_new_class("WP_Roles", lambda : WP_Roles())
+    
+    global wp_roles_
+    php_check_if_defined("wp_roles_")
+    if (not (php_isset(lambda : wp_roles_))):
+        wp_roles_ = php_new_class("WP_Roles", lambda : WP_Roles())
     # end if
-    return wp_roles
+    return wp_roles_
 # end def wp_roles
 #// 
 #// Retrieve role object.
@@ -880,9 +881,10 @@ def wp_roles(*args_):
 #// @param string $role Role name.
 #// @return WP_Role|null WP_Role object if found, null if the role does not exist.
 #//
-def get_role(role=None, *args_):
+def get_role(role_=None, *_args_):
     
-    return wp_roles().get_role(role)
+    
+    return wp_roles().get_role(role_)
 # end def get_role
 #// 
 #// Add role, if it does not exist.
@@ -895,12 +897,15 @@ def get_role(role=None, *args_):
 #// e.g. array( 'edit_posts' => true, 'delete_posts' => false ).
 #// @return WP_Role|null WP_Role object if role is added, null if already exists.
 #//
-def add_role(role=None, display_name=None, capabilities=Array(), *args_):
+def add_role(role_=None, display_name_=None, capabilities_=None, *_args_):
+    if capabilities_ is None:
+        capabilities_ = Array()
+    # end if
     
-    if php_empty(lambda : role):
+    if php_empty(lambda : role_):
         return
     # end if
-    return wp_roles().add_role(role, display_name, capabilities)
+    return wp_roles().add_role(role_, display_name_, capabilities_)
 # end def add_role
 #// 
 #// Remove role, if it exists.
@@ -909,9 +914,10 @@ def add_role(role=None, display_name=None, capabilities=Array(), *args_):
 #// 
 #// @param string $role Role name.
 #//
-def remove_role(role=None, *args_):
+def remove_role(role_=None, *_args_):
     
-    wp_roles().remove_role(role)
+    
+    wp_roles().remove_role(role_)
 # end def remove_role
 #// 
 #// Retrieve a list of super admins.
@@ -922,12 +928,13 @@ def remove_role(role=None, *args_):
 #// 
 #// @return string[] List of super admin logins.
 #//
-def get_super_admins(*args_):
+def get_super_admins(*_args_):
     
-    global super_admins
-    php_check_if_defined("super_admins")
-    if (php_isset(lambda : super_admins)):
-        return super_admins
+    
+    global super_admins_
+    php_check_if_defined("super_admins_")
+    if (php_isset(lambda : super_admins_)):
+        return super_admins_
     else:
         return get_site_option("site_admins", Array("admin"))
     # end if
@@ -940,23 +947,26 @@ def get_super_admins(*args_):
 #// @param int $user_id (Optional) The ID of a user. Defaults to the current user.
 #// @return bool True if the user is a site admin.
 #//
-def is_super_admin(user_id=False, *args_):
-    
-    if (not user_id) or get_current_user_id() == user_id:
-        user = wp_get_current_user()
-    else:
-        user = get_userdata(user_id)
+def is_super_admin(user_id_=None, *_args_):
+    if user_id_ is None:
+        user_id_ = False
     # end if
-    if (not user) or (not user.exists()):
+    
+    if (not user_id_) or get_current_user_id() == user_id_:
+        user_ = wp_get_current_user()
+    else:
+        user_ = get_userdata(user_id_)
+    # end if
+    if (not user_) or (not user_.exists()):
         return False
     # end if
     if is_multisite():
-        super_admins = get_super_admins()
-        if php_is_array(super_admins) and php_in_array(user.user_login, super_admins):
+        super_admins_ = get_super_admins()
+        if php_is_array(super_admins_) and php_in_array(user_.user_login, super_admins_):
             return True
         # end if
     else:
-        if user.has_cap("delete_users"):
+        if user_.has_cap("delete_users"):
             return True
         # end if
     # end if
@@ -973,7 +983,8 @@ def is_super_admin(user_id=False, *args_):
 #// @return bool True on success, false on failure. This can fail when the user is
 #// already a super admin or when the `$super_admins` global is defined.
 #//
-def grant_super_admin(user_id=None, *args_):
+def grant_super_admin(user_id_=None, *_args_):
+    
     
     #// If global super_admins override is defined, there is nothing to do here.
     if (php_isset(lambda : PHP_GLOBALS["super_admins"])) or (not is_multisite()):
@@ -986,13 +997,13 @@ def grant_super_admin(user_id=None, *args_):
     #// 
     #// @param int $user_id ID of the user that is about to be granted Super Admin privileges.
     #//
-    do_action("grant_super_admin", user_id)
+    do_action("grant_super_admin", user_id_)
     #// Directly fetch site_admins instead of using get_super_admins().
-    super_admins = get_site_option("site_admins", Array("admin"))
-    user = get_userdata(user_id)
-    if user and (not php_in_array(user.user_login, super_admins)):
-        super_admins[-1] = user.user_login
-        update_site_option("site_admins", super_admins)
+    super_admins_ = get_site_option("site_admins", Array("admin"))
+    user_ = get_userdata(user_id_)
+    if user_ and (not php_in_array(user_.user_login, super_admins_)):
+        super_admins_[-1] = user_.user_login
+        update_site_option("site_admins", super_admins_)
         #// 
         #// Fires after the user is granted Super Admin privileges.
         #// 
@@ -1000,7 +1011,7 @@ def grant_super_admin(user_id=None, *args_):
         #// 
         #// @param int $user_id ID of the user that was granted Super Admin privileges.
         #//
-        do_action("granted_super_admin", user_id)
+        do_action("granted_super_admin", user_id_)
         return True
     # end if
     return False
@@ -1016,7 +1027,8 @@ def grant_super_admin(user_id=None, *args_):
 #// @return bool True on success, false on failure. This can fail when the user's email
 #// is the network admin email or when the `$super_admins` global is defined.
 #//
-def revoke_super_admin(user_id=None, *args_):
+def revoke_super_admin(user_id_=None, *_args_):
+    
     
     #// If global super_admins override is defined, there is nothing to do here.
     if (php_isset(lambda : PHP_GLOBALS["super_admins"])) or (not is_multisite()):
@@ -1029,15 +1041,15 @@ def revoke_super_admin(user_id=None, *args_):
     #// 
     #// @param int $user_id ID of the user Super Admin privileges are being revoked from.
     #//
-    do_action("revoke_super_admin", user_id)
+    do_action("revoke_super_admin", user_id_)
     #// Directly fetch site_admins instead of using get_super_admins().
-    super_admins = get_site_option("site_admins", Array("admin"))
-    user = get_userdata(user_id)
-    if user and 0 != strcasecmp(user.user_email, get_site_option("admin_email")):
-        key = php_array_search(user.user_login, super_admins)
-        if False != key:
-            super_admins[key] = None
-            update_site_option("site_admins", super_admins)
+    super_admins_ = get_site_option("site_admins", Array("admin"))
+    user_ = get_userdata(user_id_)
+    if user_ and 0 != strcasecmp(user_.user_email, get_site_option("admin_email")):
+        key_ = php_array_search(user_.user_login, super_admins_)
+        if False != key_:
+            super_admins_[key_] = None
+            update_site_option("site_admins", super_admins_)
             #// 
             #// Fires after the user's Super Admin privileges are revoked.
             #// 
@@ -1045,7 +1057,7 @@ def revoke_super_admin(user_id=None, *args_):
             #// 
             #// @param int $user_id ID of the user Super Admin privileges were revoked from.
             #//
-            do_action("revoked_super_admin", user_id)
+            do_action("revoked_super_admin", user_id_)
             return True
         # end if
     # end if
@@ -1062,12 +1074,13 @@ def revoke_super_admin(user_id=None, *args_):
 #// @param bool[] $allcaps An array of all the user's capabilities.
 #// @return bool[] Filtered array of the user's capabilities.
 #//
-def wp_maybe_grant_install_languages_cap(allcaps=None, *args_):
+def wp_maybe_grant_install_languages_cap(allcaps_=None, *_args_):
     
-    if (not php_empty(lambda : allcaps["update_core"])) or (not php_empty(lambda : allcaps["install_plugins"])) or (not php_empty(lambda : allcaps["install_themes"])):
-        allcaps["install_languages"] = True
+    
+    if (not php_empty(lambda : allcaps_["update_core"])) or (not php_empty(lambda : allcaps_["install_plugins"])) or (not php_empty(lambda : allcaps_["install_themes"])):
+        allcaps_["install_languages"] = True
     # end if
-    return allcaps
+    return allcaps_
 # end def wp_maybe_grant_install_languages_cap
 #// 
 #// Filters the user capabilities to grant the 'resume_plugins' and 'resume_themes' capabilities as necessary.
@@ -1077,17 +1090,18 @@ def wp_maybe_grant_install_languages_cap(allcaps=None, *args_):
 #// @param bool[] $allcaps An array of all the user's capabilities.
 #// @return bool[] Filtered array of the user's capabilities.
 #//
-def wp_maybe_grant_resume_extensions_caps(allcaps=None, *args_):
+def wp_maybe_grant_resume_extensions_caps(allcaps_=None, *_args_):
+    
     
     #// Even in a multisite, regular administrators should be able to resume plugins.
-    if (not php_empty(lambda : allcaps["activate_plugins"])):
-        allcaps["resume_plugins"] = True
+    if (not php_empty(lambda : allcaps_["activate_plugins"])):
+        allcaps_["resume_plugins"] = True
     # end if
     #// Even in a multisite, regular administrators should be able to resume themes.
-    if (not php_empty(lambda : allcaps["switch_themes"])):
-        allcaps["resume_themes"] = True
+    if (not php_empty(lambda : allcaps_["switch_themes"])):
+        allcaps_["resume_themes"] = True
     # end if
-    return allcaps
+    return allcaps_
 # end def wp_maybe_grant_resume_extensions_caps
 #// 
 #// Filters the user capabilities to grant the 'view_site_health_checks' capabilities as necessary.
@@ -1106,12 +1120,13 @@ def wp_maybe_grant_resume_extensions_caps(allcaps=None, *args_):
 #// @param WP_User  $user    The user object.
 #// @return bool[] Filtered array of the user's capabilities.
 #//
-def wp_maybe_grant_site_health_caps(allcaps=None, caps=None, args=None, user=None, *args_):
+def wp_maybe_grant_site_health_caps(allcaps_=None, caps_=None, args_=None, user_=None, *_args_):
     
-    if (not php_empty(lambda : allcaps["install_plugins"])) and (not is_multisite()) or is_super_admin(user.ID):
-        allcaps["view_site_health_checks"] = True
+    
+    if (not php_empty(lambda : allcaps_["install_plugins"])) and (not is_multisite()) or is_super_admin(user_.ID):
+        allcaps_["view_site_health_checks"] = True
     # end if
-    return allcaps
+    return allcaps_
 # end def wp_maybe_grant_site_health_caps
 sys.exit(-1)
 #// Dummy gettext calls to get strings in the catalog.

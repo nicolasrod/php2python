@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,9 +20,10 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @since 3.9.0
 #//
-def wp_underscore_audio_template(*args_):
+def wp_underscore_audio_template(*_args_):
     
-    audio_types = wp_get_audio_extensions()
+    
+    audio_types_ = wp_get_audio_extensions()
     php_print("""<audio style=\"visibility: hidden\"
     controls
 class=\"wp-audio-shortcode\"
@@ -35,13 +31,13 @@ class=\"wp-audio-shortcode\"
     preload=\"{{ _.isUndefined( data.model.preload ) ? 'none' : data.model.preload }}\"
     <#
     """)
-    for attr in Array("autoplay", "loop"):
+    for attr_ in Array("autoplay", "loop"):
         php_print(" if ( ! _.isUndefined( data.model.")
-        php_print(attr)
+        php_print(attr_)
         php_print(" ) && data.model.")
-        php_print(attr)
+        php_print(attr_)
         php_print(" ) {\n       #> ")
-        php_print(attr)
+        php_print(attr_)
         php_print("<#\n }\n ")
     # end for
     php_print("""#>
@@ -50,13 +46,13 @@ class=\"wp-audio-shortcode\"
     <source src=\"{{ data.model.src }}\" type=\"{{ wp.media.view.settings.embedMimes[ data.model.src.split('.').pop() ] }}\" />
     <# } #>
     """)
-    for type in audio_types:
+    for type_ in audio_types_:
         php_print(" <# if ( ! _.isEmpty( data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" ) ) { #>\n  <source src=\"{{ data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" }}\" type=\"{{ wp.media.view.settings.embedMimes[ '")
-        php_print(type)
+        php_print(type_)
         php_print("' ] }}\" />\n    <# } #>\n       ")
     # end for
     php_print("</audio>\n   ")
@@ -67,9 +63,10 @@ class=\"wp-audio-shortcode\"
 #// 
 #// @since 3.9.0
 #//
-def wp_underscore_video_template(*args_):
+def wp_underscore_video_template(*_args_):
     
-    video_types = wp_get_video_extensions()
+    
+    video_types_ = wp_get_video_extensions()
     php_print("""<#  var w_rule = '', classes = [],
     w, h, settings = wp.media.view.settings,
     isYouTube = isVimeo = false;
@@ -103,37 +100,37 @@ class=\"wp-video-shortcode {{ classes.join( ' ' ) }}\"
     <# if ( w ) { #>width=\"{{ w }}\"<# } #>
     <# if ( h ) { #>height=\"{{ h }}\"<# } #>
     """)
-    props = Array({"poster": "", "preload": "metadata"})
-    for key,value in props:
-        if php_empty(lambda : value):
+    props_ = Array({"poster": "", "preload": "metadata"})
+    for key_,value_ in props_:
+        if php_empty(lambda : value_):
             php_print("     <#\n        if ( ! _.isUndefined( data.model.")
-            php_print(key)
+            php_print(key_)
             php_print(" ) && data.model.")
-            php_print(key)
+            php_print(key_)
             php_print(" ) {\n           #> ")
-            php_print(key)
+            php_print(key_)
             php_print("=\"{{ data.model.")
-            php_print(key)
+            php_print(key_)
             php_print(" }}\"<#\n        } #>\n          ")
         else:
-            php_print(key)
+            php_print(key_)
             php_print("         =\"{{ _.isUndefined( data.model.")
-            php_print(key)
+            php_print(key_)
             php_print(" ) ? '")
-            php_print(value)
+            php_print(value_)
             php_print("' : data.model.")
-            php_print(key)
+            php_print(key_)
             php_print(" }}\"\n          ")
         # end if
     # end for
     php_print(" <#\n    ")
-    for attr in Array("autoplay", "loop"):
+    for attr_ in Array("autoplay", "loop"):
         php_print(" if ( ! _.isUndefined( data.model.")
-        php_print(attr)
+        php_print(attr_)
         php_print(" ) && data.model.")
-        php_print(attr)
+        php_print(attr_)
         php_print(" ) {\n       #> ")
-        php_print(attr)
+        php_print(attr_)
         php_print("<#\n }\n ")
     # end for
     php_print("""#>
@@ -148,13 +145,13 @@ if ( isYouTube ) { #>
     <# }
     } #>
     """)
-    for type in video_types:
+    for type_ in video_types_:
         php_print(" <# if ( data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" ) { #>\n    <source src=\"{{ data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" }}\" type=\"{{ settings.embedMimes[ '")
-        php_print(type)
+        php_print(type_)
         php_print("' ] }}\" />\n    <# } #>\n   ")
     # end for
     php_print("""   {{{ data.model.content }}}
@@ -169,15 +166,16 @@ if ( isYouTube ) { #>
 #// 
 #// @global bool $is_IE
 #//
-def wp_print_media_templates(*args_):
+def wp_print_media_templates(*_args_):
     
-    global is_IE
-    php_check_if_defined("is_IE")
+    
+    global is_IE_
+    php_check_if_defined("is_IE_")
     class_ = "media-modal wp-core-ui"
-    if is_IE and php_strpos(PHP_SERVER["HTTP_USER_AGENT"], "MSIE 7") != False:
+    if is_IE_ and php_strpos(PHP_SERVER["HTTP_USER_AGENT"], "MSIE 7") != False:
         class_ += " ie7"
     # end if
-    alt_text_description = php_sprintf(__("<a href=\"%1$s\" %2$s>Describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative."), esc_url("https://www.w3.org/WAI/tutorials/images/decision-tree"), "target=\"_blank\" rel=\"noopener noreferrer\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
+    alt_text_description_ = php_sprintf(__("<a href=\"%1$s\" %2$s>Describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative."), esc_url("https://www.w3.org/WAI/tutorials/images/decision-tree"), "target=\"_blank\" rel=\"noopener noreferrer\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
     php_print("\n   ")
     pass
     php_print(" <script type=\"text/html\" id=\"tmpl-media-frame\">\n       <div class=\"media-frame-title\" id=\"media-frame-title\"></div>\n      <h2 class=\"media-frame-menu-heading\">")
@@ -280,12 +278,12 @@ def wp_print_media_templates(*args_):
             do_action("post-plupload-upload-ui")
             pass
         # end if
-        max_upload_size = wp_max_upload_size()
-        if (not max_upload_size):
-            max_upload_size = 0
+        max_upload_size_ = wp_max_upload_size()
+        if (not max_upload_size_):
+            max_upload_size_ = 0
         # end if
         php_print("\n               <p class=\"max-upload-size\">\n             ")
-        printf(__("Maximum upload file size: %s."), esc_html(size_format(max_upload_size)))
+        printf(__("Maximum upload file size: %s."), esc_html(size_format(max_upload_size_)))
         php_print("""               </p>
         <# if ( data.suggestedWidth && data.suggestedHeight ) { #>
         <p class=\"suggested-dimensions\">
@@ -468,7 +466,7 @@ if ( data.width ) {
     <input type=\"text\" id=\"attachment-details-two-column-alt-text\" value=\"{{ data.alt }}\" aria-describedby=\"alt-text-description\" {{ maybeReadOnly }} />
     </span>
     <p class=\"description\" id=\"alt-text-description\">""")
-    php_print(alt_text_description)
+    php_print(alt_text_description_)
     php_print("</p>\n               <# } #>\n               ")
     if post_type_supports("attachment", "title"):
         php_print("             <span class=\"setting\" data-setting=\"title\">\n                   <label for=\"attachment-details-two-column-title\" class=\"name\">")
@@ -479,19 +477,19 @@ if ( data.width ) {
         """)
     # end if
     php_print("             <# if ( 'audio' === data.type ) { #>\n              ")
-    for key,label in Array({"artist": __("Artist"), "album": __("Album")}):
+    for key_,label_ in Array({"artist": __("Artist"), "album": __("Album")}):
         php_print("             <span class=\"setting\" data-setting=\"")
-        php_print(esc_attr(key))
+        php_print(esc_attr(key_))
         php_print("\">\n                    <label for=\"attachment-details-two-column-")
-        php_print(esc_attr(key))
+        php_print(esc_attr(key_))
         php_print("\" class=\"name\">")
-        php_print(label)
+        php_print(label_)
         php_print("</label>\n                   <input type=\"text\" id=\"attachment-details-two-column-")
-        php_print(esc_attr(key))
+        php_print(esc_attr(key_))
         php_print("\" value=\"{{ data.")
-        php_print(key)
+        php_print(key_)
         php_print(" || data.meta.")
-        php_print(key)
+        php_print(key_)
         php_print(" || '' }}\" />\n             </span>\n               ")
     # end for
     php_print("             <# } #>\n               <span class=\"setting\" data-setting=\"caption\">\n                 <label for=\"attachment-details-two-column-caption\" class=\"name\">")
@@ -701,7 +699,7 @@ if ( 'image' === data.type ) { #>
     <input type=\"text\" id=\"attachment-details-alt-text\" value=\"{{ data.alt }}\" aria-describedby=\"alt-text-description\" {{ maybeReadOnly }} />
     </span>
     <p class=\"description\" id=\"alt-text-description\">""")
-    php_print(alt_text_description)
+    php_print(alt_text_description_)
     php_print("</p>\n       <# } #>\n       ")
     if post_type_supports("attachment", "title"):
         php_print("     <span class=\"setting\" data-setting=\"title\">\n           <label for=\"attachment-details-title\" class=\"name\">")
@@ -712,19 +710,19 @@ if ( 'image' === data.type ) { #>
         """)
     # end if
     php_print("     <# if ( 'audio' === data.type ) { #>\n      ")
-    for key,label in Array({"artist": __("Artist"), "album": __("Album")}):
+    for key_,label_ in Array({"artist": __("Artist"), "album": __("Album")}):
         php_print("     <span class=\"setting\" data-setting=\"")
-        php_print(esc_attr(key))
+        php_print(esc_attr(key_))
         php_print("\">\n            <label for=\"attachment-details-")
-        php_print(esc_attr(key))
+        php_print(esc_attr(key_))
         php_print("\" class=\"name\">")
-        php_print(label)
+        php_print(label_)
         php_print("</label>\n           <input type=\"text\" id=\"attachment-details-")
-        php_print(esc_attr(key))
+        php_print(esc_attr(key_))
         php_print("\" value=\"{{ data.")
-        php_print(key)
+        php_print(key_)
         php_print(" || data.meta.")
-        php_print(key)
+        php_print(key_)
         php_print(" || '' }}\" />\n     </span>\n       ")
     # end for
     php_print("     <# } #>\n       <span class=\"setting\" data-setting=\"caption\">\n         <label for=\"attachment-details-caption\" class=\"name\">")
@@ -859,16 +857,16 @@ if ( 'image' === data.type ) { #>
     <# } #>>
     """)
     #// This filter is documented in wp-admin/includes/media.php
-    sizes = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
-    for value,name in sizes:
+    sizes_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
+    for value_,name_ in sizes_:
         php_print("                     <#\n                        var size = data.sizes['")
-        php_print(esc_js(value))
+        php_print(esc_js(value_))
         php_print("'];\n                        if ( size ) { #>\n                          <option value=\"")
-        php_print(esc_attr(value))
+        php_print(esc_attr(value_))
         php_print("\" ")
-        selected(value, "full")
+        selected(value_, "full")
         php_print(">\n                              ")
-        php_print(esc_html(name))
+        php_print(esc_html(name_))
         php_print(""" &ndash; {{ size.width }} &times; {{ size.height }}
         </option>
         <# } #>
@@ -911,17 +909,17 @@ if ( 'image' === data.type ) { #>
     <select id=\"gallery-settings-columns\" class=\"columns\" name=\"columns\"
     data-setting=\"columns\">
     """)
-    i = 1
-    while i <= 9:
+    i_ = 1
+    while i_ <= 9:
         
         php_print("                 <option value=\"")
-        php_print(esc_attr(i))
+        php_print(esc_attr(i_))
         php_print("\" <#\n                      if ( ")
-        php_print(i)
+        php_print(i_)
         php_print(" == wp.media.galleryDefaults.columns ) { #>selected=\"selected\"<# }\n                   #>>\n                       ")
-        php_print(esc_html(i))
+        php_print(esc_html(i_))
         php_print("                 </option>\n             ")
-        i += 1
+        i_ += 1
     # end while
     php_print("""           </select>
     </span>
@@ -943,12 +941,12 @@ if ( 'image' === data.type ) { #>
     >
     """)
     #// This filter is documented in wp-admin/includes/media.php
-    size_names = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
-    for size,label in size_names:
+    size_names_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
+    for size_,label_ in size_names_:
         php_print("                 <option value=\"")
-        php_print(esc_attr(size))
+        php_print(esc_attr(size_))
         php_print("\">\n                        ")
-        php_print(esc_html(label))
+        php_print(esc_html(label_))
         php_print("                 </option>\n             ")
     # end for
     php_print("""           </select>
@@ -1021,7 +1019,7 @@ if ( 'image' === data.type ) { #>
     <input type=\"text\" id=\"embed-image-settings-alt-text\" data-setting=\"alt\" aria-describedby=\"alt-text-description\" />
     </span>
     <p class=\"description\" id=\"alt-text-description\">""")
-    php_print(alt_text_description)
+    php_print(alt_text_description_)
     php_print("</p>\n\n     ")
     #// This filter is documented in wp-admin/includes/media.php
     if (not apply_filters("disable_captions", "")):
@@ -1087,7 +1085,7 @@ if ( 'image' === data.type ) { #>
     <input type=\"text\" id=\"image-details-alt-text\" data-setting=\"alt\" value=\"{{ data.model.alt }}\" aria-describedby=\"alt-text-description\" />
     </span>
     <p class=\"description\" id=\"alt-text-description\">""")
-    php_print(alt_text_description)
+    php_print(alt_text_description_)
     php_print("</p>\n\n                 ")
     #// This filter is documented in wp-admin/includes/media.php
     if (not apply_filters("disable_captions", "")):
@@ -1131,14 +1129,14 @@ if ( 'image' === data.type ) { #>
     <# } #>>
     """)
     #// This filter is documented in wp-admin/includes/media.php
-    sizes = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
-    for value,name in sizes:
+    sizes_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
+    for value_,name_ in sizes_:
         php_print("                                     <#\n                                        var size = data.sizes['")
-        php_print(esc_js(value))
+        php_print(esc_js(value_))
         php_print("'];\n                                        if ( size ) { #>\n                                          <option value=\"")
-        php_print(esc_attr(value))
+        php_print(esc_attr(value_))
         php_print("\">\n                                                ")
-        php_print(esc_html(name))
+        php_print(esc_html(name_))
         php_print(""" &ndash; {{ size.width }} &times; {{ size.height }}
         </option>
         <# } #>
@@ -1276,7 +1274,7 @@ if ( 'image' === data.type ) { #>
     ogg: wp.media.view.settings.embedMimes.ogg
     }; #>
     """)
-    audio_types = wp_get_audio_extensions()
+    audio_types_ = wp_get_audio_extensions()
     php_print("     <div class=\"media-embed media-embed-details\">\n           <div class=\"embed-media-settings embed-audio-settings\">\n             ")
     wp_underscore_audio_template()
     php_print("""
@@ -1295,27 +1293,27 @@ if ( html5types[ ext ] ) {
     </span>
     <# } #>
     """)
-    for type in audio_types:
+    for type_ in audio_types_:
         php_print("             <# if ( ! _.isEmpty( data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" ) ) {\n                 if ( ! _.isUndefined( html5types.")
-        php_print(type)
+        php_print(type_)
         php_print(" ) ) {\n                     delete html5types.")
-        php_print(type)
+        php_print(type_)
         php_print(""";
         }
         #>
         <span class=\"setting\">
         <label for=\"audio-details-""")
-        php_print(type + "-source")
+        php_print(type_ + "-source")
         php_print("\" class=\"name\">")
-        php_print(php_strtoupper(type))
+        php_print(php_strtoupper(type_))
         php_print("</label>\n                   <input type=\"text\" id=\"audio-details-")
-        php_print(type + "-source")
+        php_print(type_ + "-source")
         php_print("\" readonly data-setting=\"")
-        php_print(type)
+        php_print(type_)
         php_print("\" value=\"{{ data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" }}\" />\n                   <button type=\"button\" class=\"button-link remove-setting\">")
         _e("Remove audio source")
         php_print("""</button>
@@ -1380,7 +1378,7 @@ if ( html5types[ ext ] ) {
     webm: wp.media.view.settings.embedMimes.webm
     }; #>
     """)
-    video_types = wp_get_video_extensions()
+    video_types_ = wp_get_video_extensions()
     php_print("""       <div class=\"media-embed media-embed-details\">
     <div class=\"embed-media-settings embed-video-settings\">
     <div class=\"wp-video-holder\">
@@ -1409,27 +1407,27 @@ if ( html5types[ ext ] ) {
     </span>
     <# } #>
     """)
-    for type in video_types:
+    for type_ in video_types_:
         php_print("             <# if ( ! _.isEmpty( data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" ) ) {\n                 if ( ! _.isUndefined( html5types.")
-        php_print(type)
+        php_print(type_)
         php_print(" ) ) {\n                     delete html5types.")
-        php_print(type)
+        php_print(type_)
         php_print(""";
         }
         #>
         <span class=\"setting\">
         <label for=\"video-details-""")
-        php_print(type + "-source")
+        php_print(type_ + "-source")
         php_print("\" class=\"name\">")
-        php_print(php_strtoupper(type))
+        php_print(php_strtoupper(type_))
         php_print("</label>\n                   <input type=\"text\" id=\"video-details-")
-        php_print(type + "-source")
+        php_print(type_ + "-source")
         php_print("\" readonly data-setting=\"")
-        php_print(type)
+        php_print(type_)
         php_print("\" value=\"{{ data.model.")
-        php_print(type)
+        php_print(type_)
         php_print(" }}\" />\n                   <button type=\"button\" class=\"button-link remove-setting\">")
         _e("Remove video source")
         php_print("""</button>

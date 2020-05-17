@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,7 +30,8 @@ if php_version_compare(PHP_GLOBALS["wp_version"], "4.7-alpha", "<"):
 #// runs before the init hook. The init hook is too late for some features, such
 #// as indicating support for post thumbnails.
 #//
-def twentyseventeen_setup(*args_):
+def twentyseventeen_setup(*_args_):
+    
     global PHP_GLOBALS
     #// 
     #// Make theme available for translation.
@@ -92,7 +88,7 @@ def twentyseventeen_setup(*args_):
     #// Add support for responsive embeds.
     add_theme_support("responsive-embeds")
     #// Define and register starter content to showcase the theme on new sites.
-    starter_content = Array({"widgets": Array({"sidebar-1": Array("text_business_info", "search", "text_about"), "sidebar-2": Array("text_business_info"), "sidebar-3": Array("text_about", "search")})}, {"posts": Array("home", {"about": Array({"thumbnail": "{{image-sandwich}}"})}, {"contact": Array({"thumbnail": "{{image-espresso}}"})}, {"blog": Array({"thumbnail": "{{image-coffee}}"})}, {"homepage-section": Array({"thumbnail": "{{image-espresso}}"})})}, {"attachments": Array({"image-espresso": Array({"post_title": _x("Espresso", "Theme starter content", "twentyseventeen"), "file": "assets/images/espresso.jpg"})}, {"image-sandwich": Array({"post_title": _x("Sandwich", "Theme starter content", "twentyseventeen"), "file": "assets/images/sandwich.jpg"})}, {"image-coffee": Array({"post_title": _x("Coffee", "Theme starter content", "twentyseventeen"), "file": "assets/images/coffee.jpg"})})}, {"options": Array({"show_on_front": "page", "page_on_front": "{{home}}"}, {"page_for_posts": "{{blog}}"})}, {"theme_mods": Array({"panel_1": "{{homepage-section}}"}, {"panel_2": "{{about}}"}, {"panel_3": "{{blog}}"}, {"panel_4": "{{contact}}"})}, {"nav_menus": Array({"top": Array({"name": __("Top Menu", "twentyseventeen"), "items": Array("link_home", "page_about", "page_blog", "page_contact")})}, {"social": Array({"name": __("Social Links Menu", "twentyseventeen"), "items": Array("link_yelp", "link_facebook", "link_twitter", "link_instagram", "link_email")})})})
+    starter_content_ = Array({"widgets": Array({"sidebar-1": Array("text_business_info", "search", "text_about"), "sidebar-2": Array("text_business_info"), "sidebar-3": Array("text_about", "search")})}, {"posts": Array("home", {"about": Array({"thumbnail": "{{image-sandwich}}"})}, {"contact": Array({"thumbnail": "{{image-espresso}}"})}, {"blog": Array({"thumbnail": "{{image-coffee}}"})}, {"homepage-section": Array({"thumbnail": "{{image-espresso}}"})})}, {"attachments": Array({"image-espresso": Array({"post_title": _x("Espresso", "Theme starter content", "twentyseventeen"), "file": "assets/images/espresso.jpg"})}, {"image-sandwich": Array({"post_title": _x("Sandwich", "Theme starter content", "twentyseventeen"), "file": "assets/images/sandwich.jpg"})}, {"image-coffee": Array({"post_title": _x("Coffee", "Theme starter content", "twentyseventeen"), "file": "assets/images/coffee.jpg"})})}, {"options": Array({"show_on_front": "page", "page_on_front": "{{home}}"}, {"page_for_posts": "{{blog}}"})}, {"theme_mods": Array({"panel_1": "{{homepage-section}}"}, {"panel_2": "{{about}}"}, {"panel_3": "{{blog}}"}, {"panel_4": "{{contact}}"})}, {"nav_menus": Array({"top": Array({"name": __("Top Menu", "twentyseventeen"), "items": Array("link_home", "page_about", "page_blog", "page_contact")})}, {"social": Array({"name": __("Social Links Menu", "twentyseventeen"), "items": Array("link_yelp", "link_facebook", "link_twitter", "link_instagram", "link_email")})})})
     #// 
     #// Filters Twenty Seventeen array of starter content.
     #// 
@@ -100,8 +96,8 @@ def twentyseventeen_setup(*args_):
     #// 
     #// @param array $starter_content Array of starter content.
     #//
-    starter_content = apply_filters("twentyseventeen_starter_content", starter_content)
-    add_theme_support("starter-content", starter_content)
+    starter_content_ = apply_filters("twentyseventeen_starter_content", starter_content_)
+    add_theme_support("starter-content", starter_content_)
 # end def twentyseventeen_setup
 add_action("after_setup_theme", "twentyseventeen_setup")
 #// 
@@ -111,22 +107,23 @@ add_action("after_setup_theme", "twentyseventeen_setup")
 #// 
 #// @global int $content_width
 #//
-def twentyseventeen_content_width(*args_):
+def twentyseventeen_content_width(*_args_):
+    
     global PHP_GLOBALS
-    content_width = PHP_GLOBALS["content_width"]
+    content_width_ = PHP_GLOBALS["content_width"]
     #// Get layout.
-    page_layout = get_theme_mod("page_layout")
+    page_layout_ = get_theme_mod("page_layout")
     #// Check if layout is one column.
-    if "one-column" == page_layout:
+    if "one-column" == page_layout_:
         if twentyseventeen_is_frontpage():
-            content_width = 644
+            content_width_ = 644
         elif is_page():
-            content_width = 740
+            content_width_ = 740
         # end if
     # end if
     #// Check if is single post and there is no sidebar.
     if is_single() and (not is_active_sidebar("sidebar-1")):
-        content_width = 740
+        content_width_ = 740
     # end if
     #// 
     #// Filter Twenty Seventeen content width of the theme.
@@ -135,27 +132,28 @@ def twentyseventeen_content_width(*args_):
     #// 
     #// @param int $content_width Content width in pixels.
     #//
-    PHP_GLOBALS["content_width"] = apply_filters("twentyseventeen_content_width", content_width)
+    PHP_GLOBALS["content_width"] = apply_filters("twentyseventeen_content_width", content_width_)
 # end def twentyseventeen_content_width
 add_action("template_redirect", "twentyseventeen_content_width", 0)
 #// 
 #// Register custom fonts.
 #//
-def twentyseventeen_fonts_url(*args_):
+def twentyseventeen_fonts_url(*_args_):
     
-    fonts_url = ""
+    
+    fonts_url_ = ""
     #// 
     #// translators: If there are characters in your language that are not supported
     #// by Libre Franklin, translate this to 'off'. Do not translate into your own language.
     #//
-    libre_franklin = _x("on", "Libre Franklin font: on or off", "twentyseventeen")
-    if "off" != libre_franklin:
-        font_families = Array()
-        font_families[-1] = "Libre Franklin:300,300i,400,400i,600,600i,800,800i"
-        query_args = Array({"family": urlencode(php_implode("|", font_families)), "subset": urlencode("latin,latin-ext"), "display": urlencode("fallback")})
-        fonts_url = add_query_arg(query_args, "https://fonts.googleapis.com/css")
+    libre_franklin_ = _x("on", "Libre Franklin font: on or off", "twentyseventeen")
+    if "off" != libre_franklin_:
+        font_families_ = Array()
+        font_families_[-1] = "Libre Franklin:300,300i,400,400i,600,600i,800,800i"
+        query_args_ = Array({"family": urlencode(php_implode("|", font_families_)), "subset": urlencode("latin,latin-ext"), "display": urlencode("fallback")})
+        fonts_url_ = add_query_arg(query_args_, "https://fonts.googleapis.com/css")
     # end if
-    return esc_url_raw(fonts_url)
+    return esc_url_raw(fonts_url_)
 # end def twentyseventeen_fonts_url
 #// 
 #// Add preconnect for Google Fonts.
@@ -166,12 +164,13 @@ def twentyseventeen_fonts_url(*args_):
 #// @param string $relation_type  The relation type the URLs are printed.
 #// @return array $urls           URLs to print for resource hints.
 #//
-def twentyseventeen_resource_hints(urls=None, relation_type=None, *args_):
+def twentyseventeen_resource_hints(urls_=None, relation_type_=None, *_args_):
     
-    if wp_style_is("twentyseventeen-fonts", "queue") and "preconnect" == relation_type:
-        urls[-1] = Array({"href": "https://fonts.gstatic.com"}, "crossorigin")
+    
+    if wp_style_is("twentyseventeen-fonts", "queue") and "preconnect" == relation_type_:
+        urls_[-1] = Array({"href": "https://fonts.gstatic.com"}, "crossorigin")
     # end if
-    return urls
+    return urls_
 # end def twentyseventeen_resource_hints
 add_filter("wp_resource_hints", "twentyseventeen_resource_hints", 10, 2)
 #// 
@@ -179,7 +178,8 @@ add_filter("wp_resource_hints", "twentyseventeen_resource_hints", 10, 2)
 #// 
 #// @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
 #//
-def twentyseventeen_widgets_init(*args_):
+def twentyseventeen_widgets_init(*_args_):
+    
     
     register_sidebar(Array({"name": __("Blog Sidebar", "twentyseventeen"), "id": "sidebar-1", "description": __("Add widgets here to appear in your sidebar on blog posts and archive pages.", "twentyseventeen"), "before_widget": "<section id=\"%1$s\" class=\"widget %2$s\">", "after_widget": "</section>", "before_title": "<h2 class=\"widget-title\">", "after_title": "</h2>"}))
     register_sidebar(Array({"name": __("Footer 1", "twentyseventeen"), "id": "sidebar-2", "description": __("Add widgets here to appear in your footer.", "twentyseventeen"), "before_widget": "<section id=\"%1$s\" class=\"widget %2$s\">", "after_widget": "</section>", "before_title": "<h2 class=\"widget-title\">", "after_title": "</h2>"}))
@@ -195,13 +195,14 @@ add_action("widgets_init", "twentyseventeen_widgets_init")
 #// @param string $link Link to single post/page.
 #// @return string 'Continue reading' link prepended with an ellipsis.
 #//
-def twentyseventeen_excerpt_more(link=None, *args_):
+def twentyseventeen_excerpt_more(link_=None, *_args_):
+    
     
     if is_admin():
-        return link
+        return link_
     # end if
-    link = php_sprintf("<p class=\"link-more\"><a href=\"%1$s\" class=\"more-link\">%2$s</a></p>", esc_url(get_permalink(get_the_ID())), php_sprintf(__("Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>", "twentyseventeen"), get_the_title(get_the_ID())))
-    return " &hellip; " + link
+    link_ = php_sprintf("<p class=\"link-more\"><a href=\"%1$s\" class=\"more-link\">%2$s</a></p>", esc_url(get_permalink(get_the_ID())), php_sprintf(__("Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>", "twentyseventeen"), get_the_title(get_the_ID())))
+    return " &hellip; " + link_
 # end def twentyseventeen_excerpt_more
 add_filter("excerpt_more", "twentyseventeen_excerpt_more")
 #// 
@@ -211,7 +212,8 @@ add_filter("excerpt_more", "twentyseventeen_excerpt_more")
 #// 
 #// @since Twenty Seventeen 1.0
 #//
-def twentyseventeen_javascript_detection(*args_):
+def twentyseventeen_javascript_detection(*_args_):
+    
     
     php_print("<script>(function(html){html.className = html.className.replace(/\\bno-js\\b/,'js')})(document.documentElement);</script>\n")
 # end def twentyseventeen_javascript_detection
@@ -219,7 +221,8 @@ add_action("wp_head", "twentyseventeen_javascript_detection", 0)
 #// 
 #// Add a pingback url auto-discovery header for singularly identifiable articles.
 #//
-def twentyseventeen_pingback_header(*args_):
+def twentyseventeen_pingback_header(*_args_):
+    
     
     if is_singular() and pings_open():
         printf("<link rel=\"pingback\" href=\"%s\">" + "\n", esc_url(get_bloginfo("pingback_url")))
@@ -229,19 +232,20 @@ add_action("wp_head", "twentyseventeen_pingback_header")
 #// 
 #// Display custom color CSS.
 #//
-def twentyseventeen_colors_css_wrap(*args_):
+def twentyseventeen_colors_css_wrap(*_args_):
+    
     
     if "custom" != get_theme_mod("colorscheme") and (not is_customize_preview()):
         return
     # end if
     php_include_file(get_parent_theme_file_path("/inc/color-patterns.php"), once=True)
-    hue = absint(get_theme_mod("colorscheme_hue", 250))
-    customize_preview_data_hue = ""
+    hue_ = absint(get_theme_mod("colorscheme_hue", 250))
+    customize_preview_data_hue_ = ""
     if is_customize_preview():
-        customize_preview_data_hue = "data-hue=\"" + hue + "\""
+        customize_preview_data_hue_ = "data-hue=\"" + hue_ + "\""
     # end if
     php_print(" <style type=\"text/css\" id=\"custom-theme-colors\" ")
-    php_print(customize_preview_data_hue)
+    php_print(customize_preview_data_hue_)
     php_print(">\n      ")
     php_print(twentyseventeen_custom_colors_css())
     php_print(" </style>\n  ")
@@ -250,7 +254,8 @@ add_action("wp_head", "twentyseventeen_colors_css_wrap")
 #// 
 #// Enqueues scripts and styles.
 #//
-def twentyseventeen_scripts(*args_):
+def twentyseventeen_scripts(*_args_):
+    
     
     #// Add custom fonts, used in the main stylesheet.
     wp_enqueue_style("twentyseventeen-fonts", twentyseventeen_fonts_url(), Array(), None)
@@ -274,16 +279,16 @@ def twentyseventeen_scripts(*args_):
     wp_enqueue_script("html5", get_theme_file_uri("/assets/js/html5.js"), Array(), "20161020")
     wp_script_add_data("html5", "conditional", "lt IE 9")
     wp_enqueue_script("twentyseventeen-skip-link-focus-fix", get_theme_file_uri("/assets/js/skip-link-focus-fix.js"), Array(), "20161114", True)
-    twentyseventeen_l10n = Array({"quote": twentyseventeen_get_svg(Array({"icon": "quote-right"}))})
+    twentyseventeen_l10n_ = Array({"quote": twentyseventeen_get_svg(Array({"icon": "quote-right"}))})
     if has_nav_menu("top"):
         wp_enqueue_script("twentyseventeen-navigation", get_theme_file_uri("/assets/js/navigation.js"), Array("jquery"), "20161203", True)
-        twentyseventeen_l10n["expand"] = __("Expand child menu", "twentyseventeen")
-        twentyseventeen_l10n["collapse"] = __("Collapse child menu", "twentyseventeen")
-        twentyseventeen_l10n["icon"] = twentyseventeen_get_svg(Array({"icon": "angle-down", "fallback": True}))
+        twentyseventeen_l10n_["expand"] = __("Expand child menu", "twentyseventeen")
+        twentyseventeen_l10n_["collapse"] = __("Collapse child menu", "twentyseventeen")
+        twentyseventeen_l10n_["icon"] = twentyseventeen_get_svg(Array({"icon": "angle-down", "fallback": True}))
     # end if
     wp_enqueue_script("twentyseventeen-global", get_theme_file_uri("/assets/js/global.js"), Array("jquery"), "20190121", True)
     wp_enqueue_script("jquery-scrollto", get_theme_file_uri("/assets/js/jquery.scrollTo.js"), Array("jquery"), "2.1.2", True)
-    wp_localize_script("twentyseventeen-skip-link-focus-fix", "twentyseventeenScreenReaderText", twentyseventeen_l10n)
+    wp_localize_script("twentyseventeen-skip-link-focus-fix", "twentyseventeenScreenReaderText", twentyseventeen_l10n_)
     if is_singular() and comments_open() and get_option("thread_comments"):
         wp_enqueue_script("comment-reply")
     # end if
@@ -294,7 +299,8 @@ add_action("wp_enqueue_scripts", "twentyseventeen_scripts")
 #// 
 #// @since Twenty Seventeen 1.8
 #//
-def twentyseventeen_block_editor_styles(*args_):
+def twentyseventeen_block_editor_styles(*_args_):
+    
     
     #// Block styles.
     wp_enqueue_style("twentyseventeen-block-editor-style", get_theme_file_uri("/assets/css/editor-blocks.css"), Array(), "20190328")
@@ -313,18 +319,19 @@ add_action("enqueue_block_editor_assets", "twentyseventeen_block_editor_styles")
 #// values in pixels (in that order).
 #// @return string A source size value for use in a content image 'sizes' attribute.
 #//
-def twentyseventeen_content_image_sizes_attr(sizes=None, size=None, *args_):
+def twentyseventeen_content_image_sizes_attr(sizes_=None, size_=None, *_args_):
     
-    width = size[0]
-    if 740 <= width:
-        sizes = "(max-width: 706px) 89vw, (max-width: 767px) 82vw, 740px"
+    
+    width_ = size_[0]
+    if 740 <= width_:
+        sizes_ = "(max-width: 706px) 89vw, (max-width: 767px) 82vw, 740px"
     # end if
     if is_active_sidebar("sidebar-1") or is_archive() or is_search() or is_home() or is_page():
-        if (not is_page() and "one-column" == get_theme_mod("page_options")) and 767 <= width:
-            sizes = "(max-width: 767px) 89vw, (max-width: 1000px) 54vw, (max-width: 1071px) 543px, 580px"
+        if (not is_page() and "one-column" == get_theme_mod("page_options")) and 767 <= width_:
+            sizes_ = "(max-width: 767px) 89vw, (max-width: 1000px) 54vw, (max-width: 1071px) 543px, 580px"
         # end if
     # end if
-    return sizes
+    return sizes_
 # end def twentyseventeen_content_image_sizes_attr
 add_filter("wp_calculate_image_sizes", "twentyseventeen_content_image_sizes_attr", 10, 2)
 #// 
@@ -337,12 +344,13 @@ add_filter("wp_calculate_image_sizes", "twentyseventeen_content_image_sizes_attr
 #// @param array  $attr   Array of the attributes for the image tag.
 #// @return string The filtered header image HTML.
 #//
-def twentyseventeen_header_image_tag(html=None, header=None, attr=None, *args_):
+def twentyseventeen_header_image_tag(html_=None, header_=None, attr_=None, *_args_):
     
-    if (php_isset(lambda : attr["sizes"])):
-        html = php_str_replace(attr["sizes"], "100vw", html)
+    
+    if (php_isset(lambda : attr_["sizes"])):
+        html_ = php_str_replace(attr_["sizes"], "100vw", html_)
     # end if
-    return html
+    return html_
 # end def twentyseventeen_header_image_tag
 add_filter("get_header_image_tag", "twentyseventeen_header_image_tag", 10, 3)
 #// 
@@ -356,14 +364,15 @@ add_filter("get_header_image_tag", "twentyseventeen_header_image_tag", 10, 3)
 #// @param array $size       Registered image size or flat array of height and width dimensions.
 #// @return array The filtered attributes for the image markup.
 #//
-def twentyseventeen_post_thumbnail_sizes_attr(attr=None, attachment=None, size=None, *args_):
+def twentyseventeen_post_thumbnail_sizes_attr(attr_=None, attachment_=None, size_=None, *_args_):
+    
     
     if is_archive() or is_search() or is_home():
-        attr["sizes"] = "(max-width: 767px) 89vw, (max-width: 1000px) 54vw, (max-width: 1071px) 543px, 580px"
+        attr_["sizes"] = "(max-width: 767px) 89vw, (max-width: 1000px) 54vw, (max-width: 1071px) 543px, 580px"
     else:
-        attr["sizes"] = "100vw"
+        attr_["sizes"] = "100vw"
     # end if
-    return attr
+    return attr_
 # end def twentyseventeen_post_thumbnail_sizes_attr
 add_filter("wp_get_attachment_image_attributes", "twentyseventeen_post_thumbnail_sizes_attr", 10, 3)
 #// 
@@ -375,9 +384,10 @@ add_filter("wp_get_attachment_image_attributes", "twentyseventeen_post_thumbnail
 #// 
 #// @return string The template to be used: blank if is_home() is true (defaults to index.php), else $template.
 #//
-def twentyseventeen_front_page_template(template=None, *args_):
+def twentyseventeen_front_page_template(template_=None, *_args_):
     
-    return "" if is_home() else template
+    
+    return "" if is_home() else template_
 # end def twentyseventeen_front_page_template
 add_filter("frontpage_template", "twentyseventeen_front_page_template")
 #// 
@@ -389,13 +399,14 @@ add_filter("frontpage_template", "twentyseventeen_front_page_template")
 #// @param array $args Arguments for tag cloud widget.
 #// @return array The filtered arguments for tag cloud widget.
 #//
-def twentyseventeen_widget_tag_cloud_args(args=None, *args_):
+def twentyseventeen_widget_tag_cloud_args(args_=None, *_args_):
     
-    args["largest"] = 1
-    args["smallest"] = 1
-    args["unit"] = "em"
-    args["format"] = "list"
-    return args
+    
+    args_["largest"] = 1
+    args_["smallest"] = 1
+    args_["unit"] = "em"
+    args_["format"] = "list"
+    return args_
 # end def twentyseventeen_widget_tag_cloud_args
 add_filter("widget_tag_cloud_args", "twentyseventeen_widget_tag_cloud_args")
 #// 
@@ -414,14 +425,16 @@ add_filter("widget_tag_cloud_args", "twentyseventeen_widget_tag_cloud_args")
 #// @param string $prefix Prefix for the returned ID.
 #// @return string Unique ID.
 #//
-def twentyseventeen_unique_id(prefix="", *args_):
+def twentyseventeen_unique_id(prefix_="", *_args_):
     
-    twentyseventeen_unique_id.id_counter = 0
+    
+    id_counter_ = 0
     if php_function_exists("wp_unique_id"):
-        return wp_unique_id(prefix)
+        return wp_unique_id(prefix_)
     # end if
-    twentyseventeen_unique_id.id_counter += 1
-    return prefix + php_str(twentyseventeen_unique_id.id_counter)
+    id_counter_ += 1
+    id_counter_ += 1
+    return prefix_ + php_str(id_counter_)
 # end def twentyseventeen_unique_id
 #// 
 #// Implement the Custom Header feature.

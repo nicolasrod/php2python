@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,12 +22,54 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Network_Query::__construct() for accepted arguments.
 #//
 class WP_Network_Query():
+    #// 
+    #// SQL for database query.
+    #// 
+    #// @since 4.6.0
+    #// @var string
+    #//
     request = Array()
+    #// 
+    #// SQL query clauses.
+    #// 
+    #// @since 4.6.0
+    #// @var array
+    #//
     sql_clauses = Array({"select": "", "from": "", "where": Array(), "groupby": "", "orderby": "", "limits": ""})
+    #// 
+    #// Query vars set by the user.
+    #// 
+    #// @since 4.6.0
+    #// @var array
+    #//
     query_vars = Array()
+    #// 
+    #// Default values for query vars.
+    #// 
+    #// @since 4.6.0
+    #// @var array
+    #//
     query_var_defaults = Array()
+    #// 
+    #// List of networks located by the query.
+    #// 
+    #// @since 4.6.0
+    #// @var array
+    #//
     networks = Array()
+    #// 
+    #// The amount of found networks for the current query.
+    #// 
+    #// @since 4.6.0
+    #// @var int
+    #//
     found_networks = 0
+    #// 
+    #// The number of pages.
+    #// 
+    #// @since 4.6.0
+    #// @var int
+    #//
     max_num_pages = 0
     #// 
     #// Constructor.
@@ -68,11 +105,12 @@ class WP_Network_Query():
     #// @type bool         $update_network_cache Whether to prime the cache for found networks. Default true.
     #// }
     #//
-    def __init__(self, query=""):
+    def __init__(self, query_=""):
+        
         
         self.query_var_defaults = Array({"network__in": "", "network__not_in": "", "count": False, "fields": "", "number": "", "offset": "", "no_found_rows": True, "orderby": "id", "order": "ASC", "domain": "", "domain__in": "", "domain__not_in": "", "path": "", "path__in": "", "path__not_in": "", "search": "", "update_network_cache": True})
-        if (not php_empty(lambda : query)):
-            self.query(query)
+        if (not php_empty(lambda : query_)):
+            self.query(query_)
         # end if
     # end def __init__
     #// 
@@ -82,12 +120,13 @@ class WP_Network_Query():
     #// 
     #// @param string|array $query WP_Network_Query arguments. See WP_Network_Query::__construct()
     #//
-    def parse_query(self, query=""):
+    def parse_query(self, query_=""):
         
-        if php_empty(lambda : query):
-            query = self.query_vars
+        
+        if php_empty(lambda : query_):
+            query_ = self.query_vars
         # end if
-        self.query_vars = wp_parse_args(query, self.query_var_defaults)
+        self.query_vars = wp_parse_args(query_, self.query_var_defaults)
         #// 
         #// Fires after the network query vars have been parsed.
         #// 
@@ -106,9 +145,10 @@ class WP_Network_Query():
     #// @return array|int List of WP_Network objects, a list of network ids when 'fields' is set to 'ids',
     #// or the number of networks when 'count' is passed as a query var.
     #//
-    def query(self, query=None):
+    def query(self, query_=None):
         
-        self.query_vars = wp_parse_args(query)
+        
+        self.query_vars = wp_parse_args(query_)
         return self.get_networks()
     # end def query
     #// 
@@ -121,6 +161,7 @@ class WP_Network_Query():
     #//
     def get_networks(self):
         
+        
         self.parse_query()
         #// 
         #// Fires before networks are retrieved.
@@ -130,7 +171,7 @@ class WP_Network_Query():
         #// @param WP_Network_Query $this Current instance of WP_Network_Query (passed by reference).
         #//
         do_action_ref_array("pre_get_networks", Array(self))
-        network_data = None
+        network_data_ = None
         #// 
         #// Filter the network data before the query takes place.
         #// 
@@ -148,27 +189,27 @@ class WP_Network_Query():
         #// or null to allow WP to run its normal queries.
         #// @param WP_Network_Query $this         The WP_Network_Query instance, passed by reference.
         #//
-        network_data = apply_filters_ref_array("networks_pre_query", Array(network_data, self))
-        if None != network_data:
-            return network_data
+        network_data_ = apply_filters_ref_array("networks_pre_query", Array(network_data_, self))
+        if None != network_data_:
+            return network_data_
         # end if
         #// $args can include anything. Only use the args defined in the query_var_defaults to compute the key.
-        _args = wp_array_slice_assoc(self.query_vars, php_array_keys(self.query_var_defaults))
-        _args["fields"] = None
-        key = php_md5(serialize(_args))
-        last_changed = wp_cache_get_last_changed("networks")
-        cache_key = str("get_network_ids:") + str(key) + str(":") + str(last_changed)
-        cache_value = wp_cache_get(cache_key, "networks")
-        if False == cache_value:
-            network_ids = self.get_network_ids()
-            if network_ids:
+        _args_ = wp_array_slice_assoc(self.query_vars, php_array_keys(self.query_var_defaults))
+        _args_["fields"] = None
+        key_ = php_md5(serialize(_args_))
+        last_changed_ = wp_cache_get_last_changed("networks")
+        cache_key_ = str("get_network_ids:") + str(key_) + str(":") + str(last_changed_)
+        cache_value_ = wp_cache_get(cache_key_, "networks")
+        if False == cache_value_:
+            network_ids_ = self.get_network_ids()
+            if network_ids_:
                 self.set_found_networks()
             # end if
-            cache_value = Array({"network_ids": network_ids, "found_networks": self.found_networks})
-            wp_cache_add(cache_key, cache_value, "networks")
+            cache_value_ = Array({"network_ids": network_ids_, "found_networks": self.found_networks})
+            wp_cache_add(cache_key_, cache_value_, "networks")
         else:
-            network_ids = cache_value["network_ids"]
-            self.found_networks = cache_value["found_networks"]
+            network_ids_ = cache_value_["network_ids"]
+            self.found_networks = cache_value_["found_networks"]
         # end if
         if self.found_networks and self.query_vars["number"]:
             self.max_num_pages = ceil(self.found_networks / self.query_vars["number"])
@@ -176,22 +217,22 @@ class WP_Network_Query():
         #// If querying for a count only, there's nothing more to do.
         if self.query_vars["count"]:
             #// $network_ids is actually a count in this case.
-            return php_intval(network_ids)
+            return php_intval(network_ids_)
         # end if
-        network_ids = php_array_map("intval", network_ids)
+        network_ids_ = php_array_map("intval", network_ids_)
         if "ids" == self.query_vars["fields"]:
-            self.networks = network_ids
+            self.networks = network_ids_
             return self.networks
         # end if
         if self.query_vars["update_network_cache"]:
-            _prime_network_caches(network_ids)
+            _prime_network_caches(network_ids_)
         # end if
         #// Fetch full network objects from the primed cache.
-        _networks = Array()
-        for network_id in network_ids:
-            _network = get_network(network_id)
-            if _network:
-                _networks[-1] = _network
+        _networks_ = Array()
+        for network_id_ in network_ids_:
+            _network_ = get_network(network_id_)
+            if _network_:
+                _networks_[-1] = _network_
             # end if
         # end for
         #// 
@@ -202,9 +243,9 @@ class WP_Network_Query():
         #// @param WP_Network[]     $_networks An array of WP_Network objects.
         #// @param WP_Network_Query $this      Current instance of WP_Network_Query (passed by reference).
         #//
-        _networks = apply_filters_ref_array("the_networks", Array(_networks, self))
+        _networks_ = apply_filters_ref_array("the_networks", Array(_networks_, self))
         #// Convert to WP_Network instances.
-        self.networks = php_array_map("get_network", _networks)
+        self.networks = php_array_map("get_network", _networks_)
         return self.networks
     # end def get_networks
     #// 
@@ -218,93 +259,94 @@ class WP_Network_Query():
     #//
     def get_network_ids(self):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        order = self.parse_order(self.query_vars["order"])
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        order_ = self.parse_order(self.query_vars["order"])
         #// Disable ORDER BY with 'none', an empty array, or boolean false.
         if php_in_array(self.query_vars["orderby"], Array("none", Array(), False), True):
-            orderby = ""
+            orderby_ = ""
         elif (not php_empty(lambda : self.query_vars["orderby"])):
-            ordersby = self.query_vars["orderby"] if php_is_array(self.query_vars["orderby"]) else php_preg_split("/[,\\s]/", self.query_vars["orderby"])
-            orderby_array = Array()
-            for _key,_value in ordersby:
-                if (not _value):
+            ordersby_ = self.query_vars["orderby"] if php_is_array(self.query_vars["orderby"]) else php_preg_split("/[,\\s]/", self.query_vars["orderby"])
+            orderby_array_ = Array()
+            for _key_,_value_ in ordersby_:
+                if (not _value_):
                     continue
                 # end if
-                if php_is_int(_key):
-                    _orderby = _value
-                    _order = order
+                if php_is_int(_key_):
+                    _orderby_ = _value_
+                    _order_ = order_
                 else:
-                    _orderby = _key
-                    _order = _value
+                    _orderby_ = _key_
+                    _order_ = _value_
                 # end if
-                parsed = self.parse_orderby(_orderby)
-                if (not parsed):
+                parsed_ = self.parse_orderby(_orderby_)
+                if (not parsed_):
                     continue
                 # end if
-                if "network__in" == _orderby:
-                    orderby_array[-1] = parsed
+                if "network__in" == _orderby_:
+                    orderby_array_[-1] = parsed_
                     continue
                 # end if
-                orderby_array[-1] = parsed + " " + self.parse_order(_order)
+                orderby_array_[-1] = parsed_ + " " + self.parse_order(_order_)
             # end for
-            orderby = php_implode(", ", orderby_array)
+            orderby_ = php_implode(", ", orderby_array_)
         else:
-            orderby = str(wpdb.site) + str(".id ") + str(order)
+            orderby_ = str(wpdb_.site) + str(".id ") + str(order_)
         # end if
-        number = absint(self.query_vars["number"])
-        offset = absint(self.query_vars["offset"])
-        limits = ""
-        if (not php_empty(lambda : number)):
-            if offset:
-                limits = "LIMIT " + offset + "," + number
+        number_ = absint(self.query_vars["number"])
+        offset_ = absint(self.query_vars["offset"])
+        limits_ = ""
+        if (not php_empty(lambda : number_)):
+            if offset_:
+                limits_ = "LIMIT " + offset_ + "," + number_
             else:
-                limits = "LIMIT " + number
+                limits_ = "LIMIT " + number_
             # end if
         # end if
         if self.query_vars["count"]:
-            fields = "COUNT(*)"
+            fields_ = "COUNT(*)"
         else:
-            fields = str(wpdb.site) + str(".id")
+            fields_ = str(wpdb_.site) + str(".id")
         # end if
         #// Parse network IDs for an IN clause.
         if (not php_empty(lambda : self.query_vars["network__in"])):
-            self.sql_clauses["where"]["network__in"] = str(wpdb.site) + str(".id IN ( ") + php_implode(",", wp_parse_id_list(self.query_vars["network__in"])) + " )"
+            self.sql_clauses["where"]["network__in"] = str(wpdb_.site) + str(".id IN ( ") + php_implode(",", wp_parse_id_list(self.query_vars["network__in"])) + " )"
         # end if
         #// Parse network IDs for a NOT IN clause.
         if (not php_empty(lambda : self.query_vars["network__not_in"])):
-            self.sql_clauses["where"]["network__not_in"] = str(wpdb.site) + str(".id NOT IN ( ") + php_implode(",", wp_parse_id_list(self.query_vars["network__not_in"])) + " )"
+            self.sql_clauses["where"]["network__not_in"] = str(wpdb_.site) + str(".id NOT IN ( ") + php_implode(",", wp_parse_id_list(self.query_vars["network__not_in"])) + " )"
         # end if
         if (not php_empty(lambda : self.query_vars["domain"])):
-            self.sql_clauses["where"]["domain"] = wpdb.prepare(str(wpdb.site) + str(".domain = %s"), self.query_vars["domain"])
+            self.sql_clauses["where"]["domain"] = wpdb_.prepare(str(wpdb_.site) + str(".domain = %s"), self.query_vars["domain"])
         # end if
         #// Parse network domain for an IN clause.
         if php_is_array(self.query_vars["domain__in"]):
-            self.sql_clauses["where"]["domain__in"] = str(wpdb.site) + str(".domain IN ( '") + php_implode("', '", wpdb._escape(self.query_vars["domain__in"])) + "' )"
+            self.sql_clauses["where"]["domain__in"] = str(wpdb_.site) + str(".domain IN ( '") + php_implode("', '", wpdb_._escape(self.query_vars["domain__in"])) + "' )"
         # end if
         #// Parse network domain for a NOT IN clause.
         if php_is_array(self.query_vars["domain__not_in"]):
-            self.sql_clauses["where"]["domain__not_in"] = str(wpdb.site) + str(".domain NOT IN ( '") + php_implode("', '", wpdb._escape(self.query_vars["domain__not_in"])) + "' )"
+            self.sql_clauses["where"]["domain__not_in"] = str(wpdb_.site) + str(".domain NOT IN ( '") + php_implode("', '", wpdb_._escape(self.query_vars["domain__not_in"])) + "' )"
         # end if
         if (not php_empty(lambda : self.query_vars["path"])):
-            self.sql_clauses["where"]["path"] = wpdb.prepare(str(wpdb.site) + str(".path = %s"), self.query_vars["path"])
+            self.sql_clauses["where"]["path"] = wpdb_.prepare(str(wpdb_.site) + str(".path = %s"), self.query_vars["path"])
         # end if
         #// Parse network path for an IN clause.
         if php_is_array(self.query_vars["path__in"]):
-            self.sql_clauses["where"]["path__in"] = str(wpdb.site) + str(".path IN ( '") + php_implode("', '", wpdb._escape(self.query_vars["path__in"])) + "' )"
+            self.sql_clauses["where"]["path__in"] = str(wpdb_.site) + str(".path IN ( '") + php_implode("', '", wpdb_._escape(self.query_vars["path__in"])) + "' )"
         # end if
         #// Parse network path for a NOT IN clause.
         if php_is_array(self.query_vars["path__not_in"]):
-            self.sql_clauses["where"]["path__not_in"] = str(wpdb.site) + str(".path NOT IN ( '") + php_implode("', '", wpdb._escape(self.query_vars["path__not_in"])) + "' )"
+            self.sql_clauses["where"]["path__not_in"] = str(wpdb_.site) + str(".path NOT IN ( '") + php_implode("', '", wpdb_._escape(self.query_vars["path__not_in"])) + "' )"
         # end if
         #// Falsey search strings are ignored.
         if php_strlen(self.query_vars["search"]):
-            self.sql_clauses["where"]["search"] = self.get_search_sql(self.query_vars["search"], Array(str(wpdb.site) + str(".domain"), str(wpdb.site) + str(".path")))
+            self.sql_clauses["where"]["search"] = self.get_search_sql(self.query_vars["search"], Array(str(wpdb_.site) + str(".domain"), str(wpdb_.site) + str(".path")))
         # end if
-        join = ""
-        where = php_implode(" AND ", self.sql_clauses["where"])
-        groupby = ""
-        pieces = Array("fields", "join", "where", "orderby", "limits", "groupby")
+        join_ = ""
+        where_ = php_implode(" AND ", self.sql_clauses["where"])
+        groupby_ = ""
+        pieces_ = Array("fields", "join", "where", "orderby", "limits", "groupby")
         #// 
         #// Filters the network query clauses.
         #// 
@@ -313,37 +355,37 @@ class WP_Network_Query():
         #// @param string[]         $pieces An associative array of network query clauses.
         #// @param WP_Network_Query $this   Current instance of WP_Network_Query (passed by reference).
         #//
-        clauses = apply_filters_ref_array("networks_clauses", Array(compact(pieces), self))
-        fields = clauses["fields"] if (php_isset(lambda : clauses["fields"])) else ""
-        join = clauses["join"] if (php_isset(lambda : clauses["join"])) else ""
-        where = clauses["where"] if (php_isset(lambda : clauses["where"])) else ""
-        orderby = clauses["orderby"] if (php_isset(lambda : clauses["orderby"])) else ""
-        limits = clauses["limits"] if (php_isset(lambda : clauses["limits"])) else ""
-        groupby = clauses["groupby"] if (php_isset(lambda : clauses["groupby"])) else ""
-        if where:
-            where = "WHERE " + where
+        clauses_ = apply_filters_ref_array("networks_clauses", Array(php_compact(pieces_), self))
+        fields_ = clauses_["fields"] if (php_isset(lambda : clauses_["fields"])) else ""
+        join_ = clauses_["join"] if (php_isset(lambda : clauses_["join"])) else ""
+        where_ = clauses_["where"] if (php_isset(lambda : clauses_["where"])) else ""
+        orderby_ = clauses_["orderby"] if (php_isset(lambda : clauses_["orderby"])) else ""
+        limits_ = clauses_["limits"] if (php_isset(lambda : clauses_["limits"])) else ""
+        groupby_ = clauses_["groupby"] if (php_isset(lambda : clauses_["groupby"])) else ""
+        if where_:
+            where_ = "WHERE " + where_
         # end if
-        if groupby:
-            groupby = "GROUP BY " + groupby
+        if groupby_:
+            groupby_ = "GROUP BY " + groupby_
         # end if
-        if orderby:
-            orderby = str("ORDER BY ") + str(orderby)
+        if orderby_:
+            orderby_ = str("ORDER BY ") + str(orderby_)
         # end if
-        found_rows = ""
+        found_rows_ = ""
         if (not self.query_vars["no_found_rows"]):
-            found_rows = "SQL_CALC_FOUND_ROWS"
+            found_rows_ = "SQL_CALC_FOUND_ROWS"
         # end if
-        self.sql_clauses["select"] = str("SELECT ") + str(found_rows) + str(" ") + str(fields)
-        self.sql_clauses["from"] = str("FROM ") + str(wpdb.site) + str(" ") + str(join)
-        self.sql_clauses["groupby"] = groupby
-        self.sql_clauses["orderby"] = orderby
-        self.sql_clauses["limits"] = limits
-        self.request = str(self.sql_clauses["select"]) + str(" ") + str(self.sql_clauses["from"]) + str(" ") + str(where) + str(" ") + str(self.sql_clauses["groupby"]) + str(" ") + str(self.sql_clauses["orderby"]) + str(" ") + str(self.sql_clauses["limits"])
+        self.sql_clauses["select"] = str("SELECT ") + str(found_rows_) + str(" ") + str(fields_)
+        self.sql_clauses["from"] = str("FROM ") + str(wpdb_.site) + str(" ") + str(join_)
+        self.sql_clauses["groupby"] = groupby_
+        self.sql_clauses["orderby"] = orderby_
+        self.sql_clauses["limits"] = limits_
+        self.request = str(self.sql_clauses["select"]) + str(" ") + str(self.sql_clauses["from"]) + str(" ") + str(where_) + str(" ") + str(self.sql_clauses["groupby"]) + str(" ") + str(self.sql_clauses["orderby"]) + str(" ") + str(self.sql_clauses["limits"])
         if self.query_vars["count"]:
-            return php_intval(wpdb.get_var(self.request))
+            return php_intval(wpdb_.get_var(self.request))
         # end if
-        network_ids = wpdb.get_col(self.request)
-        return php_array_map("intval", network_ids)
+        network_ids_ = wpdb_.get_col(self.request)
+        return php_array_map("intval", network_ids_)
     # end def get_network_ids
     #// 
     #// Populates found_networks and max_num_pages properties for the current query
@@ -355,8 +397,9 @@ class WP_Network_Query():
     #//
     def set_found_networks(self):
         
-        global wpdb
-        php_check_if_defined("wpdb")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
         if self.query_vars["number"] and (not self.query_vars["no_found_rows"]):
             #// 
             #// Filters the query used to retrieve found network count.
@@ -366,8 +409,8 @@ class WP_Network_Query():
             #// @param string           $found_networks_query SQL query. Default 'SELECT FOUND_ROWS()'.
             #// @param WP_Network_Query $network_query        The `WP_Network_Query` instance.
             #//
-            found_networks_query = apply_filters("found_networks_query", "SELECT FOUND_ROWS()", self)
-            self.found_networks = php_int(wpdb.get_var(found_networks_query))
+            found_networks_query_ = apply_filters("found_networks_query", "SELECT FOUND_ROWS()", self)
+            self.found_networks = php_int(wpdb_.get_var(found_networks_query_))
         # end if
     # end def set_found_networks
     #// 
@@ -382,16 +425,17 @@ class WP_Network_Query():
     #// 
     #// @return string Search SQL.
     #//
-    def get_search_sql(self, string=None, columns=None):
+    def get_search_sql(self, string_=None, columns_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        like = "%" + wpdb.esc_like(string) + "%"
-        searches = Array()
-        for column in columns:
-            searches[-1] = wpdb.prepare(str(column) + str(" LIKE %s"), like)
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        like_ = "%" + wpdb_.esc_like(string_) + "%"
+        searches_ = Array()
+        for column_ in columns_:
+            searches_[-1] = wpdb_.prepare(str(column_) + str(" LIKE %s"), like_)
         # end for
-        return "(" + php_implode(" OR ", searches) + ")"
+        return "(" + php_implode(" OR ", searches_) + ")"
     # end def get_search_sql
     #// 
     #// Parses and sanitizes 'orderby' keys passed to the network query.
@@ -403,22 +447,23 @@ class WP_Network_Query():
     #// @param string $orderby Alias for the field to order by.
     #// @return string|false Value to used in the ORDER clause. False otherwise.
     #//
-    def parse_orderby(self, orderby=None):
+    def parse_orderby(self, orderby_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        allowed_keys = Array("id", "domain", "path")
-        parsed = False
-        if "network__in" == orderby:
-            network__in = php_implode(",", php_array_map("absint", self.query_vars["network__in"]))
-            parsed = str("FIELD( ") + str(wpdb.site) + str(".id, ") + str(network__in) + str(" )")
-        elif "domain_length" == orderby or "path_length" == orderby:
-            field = php_substr(orderby, 0, -7)
-            parsed = str("CHAR_LENGTH(") + str(wpdb.site) + str(".") + str(field) + str(")")
-        elif php_in_array(orderby, allowed_keys):
-            parsed = str(wpdb.site) + str(".") + str(orderby)
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        allowed_keys_ = Array("id", "domain", "path")
+        parsed_ = False
+        if "network__in" == orderby_:
+            network__in_ = php_implode(",", php_array_map("absint", self.query_vars["network__in"]))
+            parsed_ = str("FIELD( ") + str(wpdb_.site) + str(".id, ") + str(network__in_) + str(" )")
+        elif "domain_length" == orderby_ or "path_length" == orderby_:
+            field_ = php_substr(orderby_, 0, -7)
+            parsed_ = str("CHAR_LENGTH(") + str(wpdb_.site) + str(".") + str(field_) + str(")")
+        elif php_in_array(orderby_, allowed_keys_):
+            parsed_ = str(wpdb_.site) + str(".") + str(orderby_)
         # end if
-        return parsed
+        return parsed_
     # end def parse_orderby
     #// 
     #// Parses an 'order' query variable and cast it to 'ASC' or 'DESC' as necessary.
@@ -428,12 +473,13 @@ class WP_Network_Query():
     #// @param string $order The 'order' query variable.
     #// @return string The sanitized 'order' query variable.
     #//
-    def parse_order(self, order=None):
+    def parse_order(self, order_=None):
         
-        if (not php_is_string(order)) or php_empty(lambda : order):
+        
+        if (not php_is_string(order_)) or php_empty(lambda : order_):
             return "ASC"
         # end if
-        if "ASC" == php_strtoupper(order):
+        if "ASC" == php_strtoupper(order_):
             return "ASC"
         else:
             return "DESC"

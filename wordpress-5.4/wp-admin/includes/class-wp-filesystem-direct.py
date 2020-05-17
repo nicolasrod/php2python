@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,7 +28,8 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// 
     #// @param mixed $arg Not used.
     #//
-    def __init__(self, arg=None):
+    def __init__(self, arg_=None):
+        
         
         self.method = "direct"
         self.errors = php_new_class("WP_Error", lambda : WP_Error())
@@ -46,9 +42,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Name of the file to read.
     #// @return string|false Read data on success, false on failure.
     #//
-    def get_contents(self, file=None):
+    def get_contents(self, file_=None):
         
-        return php_no_error(lambda: php_file_get_contents(file))
+        
+        return php_no_error(lambda: php_file_get_contents(file_))
     # end def get_contents
     #// 
     #// Reads entire file into an array.
@@ -58,9 +55,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return array|false File contents in an array on success, false on failure.
     #//
-    def get_contents_array(self, file=None):
+    def get_contents_array(self, file_=None):
         
-        return php_no_error(lambda: file(file))
+        
+        return php_no_error(lambda: file(file_))
     # end def get_contents_array
     #// 
     #// Writes a string to a file.
@@ -73,21 +71,24 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def put_contents(self, file=None, contents=None, mode=False):
+    def put_contents(self, file_=None, contents_=None, mode_=None):
+        if mode_ is None:
+            mode_ = False
+        # end if
         
-        fp = php_no_error(lambda: fopen(file, "wb"))
-        if (not fp):
+        fp_ = php_no_error(lambda: fopen(file_, "wb"))
+        if (not fp_):
             return False
         # end if
         mbstring_binary_safe_encoding()
-        data_length = php_strlen(contents)
-        bytes_written = fwrite(fp, contents)
+        data_length_ = php_strlen(contents_)
+        bytes_written_ = fwrite(fp_, contents_)
         reset_mbstring_encoding()
-        php_fclose(fp)
-        if data_length != bytes_written:
+        php_fclose(fp_)
+        if data_length_ != bytes_written_:
             return False
         # end if
-        self.chmod(file, mode)
+        self.chmod(file_, mode_)
         return True
     # end def put_contents
     #// 
@@ -99,6 +100,7 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #//
     def cwd(self):
         
+        
         return php_getcwd()
     # end def cwd
     #// 
@@ -109,9 +111,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $dir The new current directory.
     #// @return bool True on success, false on failure.
     #//
-    def chdir(self, dir=None):
+    def chdir(self, dir_=None):
         
-        return php_no_error(lambda: php_chdir(dir))
+        
+        return php_no_error(lambda: php_chdir(dir_))
     # end def chdir
     #// 
     #// Changes the file group.
@@ -124,22 +127,25 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def chgrp(self, file=None, group=None, recursive=False):
+    def chgrp(self, file_=None, group_=None, recursive_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if (not self.exists(file)):
+        if (not self.exists(file_)):
             return False
         # end if
-        if (not recursive):
-            return chgrp(file, group)
+        if (not recursive_):
+            return chgrp(file_, group_)
         # end if
-        if (not self.is_dir(file)):
-            return chgrp(file, group)
+        if (not self.is_dir(file_)):
+            return chgrp(file_, group_)
         # end if
         #// Is a directory, and we want recursive.
-        file = trailingslashit(file)
-        filelist = self.dirlist(file)
-        for filename in filelist:
-            self.chgrp(file + filename, group, recursive)
+        file_ = trailingslashit(file_)
+        filelist_ = self.dirlist(file_)
+        for filename_ in filelist_:
+            self.chgrp(file_ + filename_, group_, recursive_)
         # end for
         return True
     # end def chgrp
@@ -155,25 +161,31 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def chmod(self, file=None, mode=False, recursive=False):
+    def chmod(self, file_=None, mode_=None, recursive_=None):
+        if mode_ is None:
+            mode_ = False
+        # end if
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if (not mode):
-            if self.is_file(file):
-                mode = FS_CHMOD_FILE
-            elif self.is_dir(file):
-                mode = FS_CHMOD_DIR
+        if (not mode_):
+            if self.is_file(file_):
+                mode_ = FS_CHMOD_FILE
+            elif self.is_dir(file_):
+                mode_ = FS_CHMOD_DIR
             else:
                 return False
             # end if
         # end if
-        if (not recursive) or (not self.is_dir(file)):
-            return chmod(file, mode)
+        if (not recursive_) or (not self.is_dir(file_)):
+            return chmod(file_, mode_)
         # end if
         #// Is a directory, and we want recursive.
-        file = trailingslashit(file)
-        filelist = self.dirlist(file)
-        for filename,filemeta in filelist:
-            self.chmod(file + filename, mode, recursive)
+        file_ = trailingslashit(file_)
+        filelist_ = self.dirlist(file_)
+        for filename_,filemeta_ in filelist_:
+            self.chmod(file_ + filename_, mode_, recursive_)
         # end for
         return True
     # end def chmod
@@ -188,21 +200,24 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def chown(self, file=None, owner=None, recursive=False):
+    def chown(self, file_=None, owner_=None, recursive_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if (not self.exists(file)):
+        if (not self.exists(file_)):
             return False
         # end if
-        if (not recursive):
-            return chown(file, owner)
+        if (not recursive_):
+            return chown(file_, owner_)
         # end if
-        if (not self.is_dir(file)):
-            return chown(file, owner)
+        if (not self.is_dir(file_)):
+            return chown(file_, owner_)
         # end if
         #// Is a directory, and we want recursive.
-        filelist = self.dirlist(file)
-        for filename in filelist:
-            self.chown(file + "/" + filename, owner, recursive)
+        filelist_ = self.dirlist(file_)
+        for filename_ in filelist_:
+            self.chown(file_ + "/" + filename_, owner_, recursive_)
         # end for
         return True
     # end def chown
@@ -214,17 +229,18 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string|false Username of the owner on success, false on failure.
     #//
-    def owner(self, file=None):
+    def owner(self, file_=None):
         
-        owneruid = php_no_error(lambda: fileowner(file))
-        if (not owneruid):
+        
+        owneruid_ = php_no_error(lambda: fileowner(file_))
+        if (not owneruid_):
             return False
         # end if
         if (not php_function_exists("posix_getpwuid")):
-            return owneruid
+            return owneruid_
         # end if
-        ownerarray = posix_getpwuid(owneruid)
-        return ownerarray["name"]
+        ownerarray_ = posix_getpwuid(owneruid_)
+        return ownerarray_["name"]
     # end def owner
     #// 
     #// Gets the permissions of the specified file or filepath in their octal format.
@@ -236,9 +252,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string Mode of the file (the last 3 digits).
     #//
-    def getchmod(self, file=None):
+    def getchmod(self, file_=None):
         
-        return php_substr(decoct(php_no_error(lambda: fileperms(file))), -3)
+        
+        return php_substr(decoct(php_no_error(lambda: fileperms(file_))), -3)
     # end def getchmod
     #// 
     #// Gets the file's group.
@@ -248,17 +265,18 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string|false The group on success, false on failure.
     #//
-    def group(self, file=None):
+    def group(self, file_=None):
         
-        gid = php_no_error(lambda: filegroup(file))
-        if (not gid):
+        
+        gid_ = php_no_error(lambda: filegroup(file_))
+        if (not gid_):
             return False
         # end if
         if (not php_function_exists("posix_getgrgid")):
-            return gid
+            return gid_
         # end if
-        grouparray = posix_getgrgid(gid)
-        return grouparray["name"]
+        grouparray_ = posix_getgrgid(gid_)
+        return grouparray_["name"]
     # end def group
     #// 
     #// Copies a file.
@@ -273,16 +291,22 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// 0755 for dirs. Default false.
     #// @return bool True on success, false on failure.
     #//
-    def copy(self, source=None, destination=None, overwrite=False, mode=False):
+    def copy(self, source_=None, destination_=None, overwrite_=None, mode_=None):
+        if overwrite_ is None:
+            overwrite_ = False
+        # end if
+        if mode_ is None:
+            mode_ = False
+        # end if
         
-        if (not overwrite) and self.exists(destination):
+        if (not overwrite_) and self.exists(destination_):
             return False
         # end if
-        rtval = copy(source, destination)
-        if mode:
-            self.chmod(destination, mode)
+        rtval_ = copy(source_, destination_)
+        if mode_:
+            self.chmod(destination_, mode_)
         # end if
-        return rtval
+        return rtval_
     # end def copy
     #// 
     #// Moves a file.
@@ -295,17 +319,20 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def move(self, source=None, destination=None, overwrite=False):
+    def move(self, source_=None, destination_=None, overwrite_=None):
+        if overwrite_ is None:
+            overwrite_ = False
+        # end if
         
-        if (not overwrite) and self.exists(destination):
+        if (not overwrite_) and self.exists(destination_):
             return False
         # end if
         #// Try using rename first. if that fails (for example, source is read only) try copy.
-        if php_no_error(lambda: rename(source, destination)):
+        if php_no_error(lambda: rename(source_, destination_)):
             return True
         # end if
-        if self.copy(source, destination, overwrite) and self.exists(destination):
-            self.delete(source)
+        if self.copy(source_, destination_, overwrite_) and self.exists(destination_):
+            self.delete(source_)
             return True
         else:
             return False
@@ -323,35 +350,41 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def delete(self, file=None, recursive=False, type=False):
+    def delete(self, file_=None, recursive_=None, type_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
+        if type_ is None:
+            type_ = False
+        # end if
         
-        if php_empty(lambda : file):
+        if php_empty(lambda : file_):
             #// Some filesystems report this as /, which can cause non-expected recursive deletion of all files in the filesystem.
             return False
         # end if
-        file = php_str_replace("\\", "/", file)
+        file_ = php_str_replace("\\", "/", file_)
         #// For Win32, occasional problems deleting files otherwise.
-        if "f" == type or self.is_file(file):
-            return php_no_error(lambda: unlink(file))
+        if "f" == type_ or self.is_file(file_):
+            return php_no_error(lambda: unlink(file_))
         # end if
-        if (not recursive) and self.is_dir(file):
-            return php_no_error(lambda: rmdir(file))
+        if (not recursive_) and self.is_dir(file_):
+            return php_no_error(lambda: rmdir(file_))
         # end if
         #// At this point it's a folder, and we're in recursive mode.
-        file = trailingslashit(file)
-        filelist = self.dirlist(file, True)
-        retval = True
-        if php_is_array(filelist):
-            for filename,fileinfo in filelist:
-                if (not self.delete(file + filename, recursive, fileinfo["type"])):
-                    retval = False
+        file_ = trailingslashit(file_)
+        filelist_ = self.dirlist(file_, True)
+        retval_ = True
+        if php_is_array(filelist_):
+            for filename_,fileinfo_ in filelist_:
+                if (not self.delete(file_ + filename_, recursive_, fileinfo_["type"])):
+                    retval_ = False
                 # end if
             # end for
         # end if
-        if php_file_exists(file) and (not php_no_error(lambda: rmdir(file))):
-            retval = False
+        if php_file_exists(file_) and (not php_no_error(lambda: rmdir(file_))):
+            retval_ = False
         # end if
-        return retval
+        return retval_
     # end def delete
     #// 
     #// Checks if a file or directory exists.
@@ -361,9 +394,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to file or directory.
     #// @return bool Whether $file exists or not.
     #//
-    def exists(self, file=None):
+    def exists(self, file_=None):
         
-        return php_no_error(lambda: php_file_exists(file))
+        
+        return php_no_error(lambda: php_file_exists(file_))
     # end def exists
     #// 
     #// Checks if resource is a file.
@@ -373,9 +407,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file File path.
     #// @return bool Whether $file is a file.
     #//
-    def is_file(self, file=None):
+    def is_file(self, file_=None):
         
-        return php_no_error(lambda: php_is_file(file))
+        
+        return php_no_error(lambda: php_is_file(file_))
     # end def is_file
     #// 
     #// Checks if resource is a directory.
@@ -385,9 +420,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $path Directory path.
     #// @return bool Whether $path is a directory.
     #//
-    def is_dir(self, path=None):
+    def is_dir(self, path_=None):
         
-        return php_no_error(lambda: php_is_dir(path))
+        
+        return php_no_error(lambda: php_is_dir(path_))
     # end def is_dir
     #// 
     #// Checks if a file is readable.
@@ -397,9 +433,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return bool Whether $file is readable.
     #//
-    def is_readable(self, file=None):
+    def is_readable(self, file_=None):
         
-        return php_no_error(lambda: php_is_readable(file))
+        
+        return php_no_error(lambda: php_is_readable(file_))
     # end def is_readable
     #// 
     #// Checks if a file or directory is writable.
@@ -409,9 +446,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to file or directory.
     #// @return bool Whether $file is writable.
     #//
-    def is_writable(self, file=None):
+    def is_writable(self, file_=None):
         
-        return php_no_error(lambda: php_is_writable(file))
+        
+        return php_no_error(lambda: php_is_writable(file_))
     # end def is_writable
     #// 
     #// Gets the file's last access time.
@@ -421,9 +459,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Unix timestamp representing last access time, false on failure.
     #//
-    def atime(self, file=None):
+    def atime(self, file_=None):
         
-        return php_no_error(lambda: fileatime(file))
+        
+        return php_no_error(lambda: fileatime(file_))
     # end def atime
     #// 
     #// Gets the file modification time.
@@ -433,9 +472,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Unix timestamp representing modification time, false on failure.
     #//
-    def mtime(self, file=None):
+    def mtime(self, file_=None):
         
-        return php_no_error(lambda: filemtime(file))
+        
+        return php_no_error(lambda: filemtime(file_))
     # end def mtime
     #// 
     #// Gets the file size (in bytes).
@@ -445,9 +485,10 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Size of the file in bytes on success, false on failure.
     #//
-    def size(self, file=None):
+    def size(self, file_=None):
         
-        return php_no_error(lambda: filesize(file))
+        
+        return php_no_error(lambda: filesize(file_))
     # end def size
     #// 
     #// Sets the access and modification times of a file.
@@ -463,15 +504,16 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default 0.
     #// @return bool True on success, false on failure.
     #//
-    def touch(self, file=None, time=0, atime=0):
+    def touch(self, file_=None, time_=0, atime_=0):
         
-        if 0 == time:
-            time = time()
+        
+        if 0 == time_:
+            time_ = time()
         # end if
-        if 0 == atime:
-            atime = time()
+        if 0 == atime_:
+            atime_ = time()
         # end if
-        return touch(file, time, atime)
+        return touch(file_, time_, atime_)
     # end def touch
     #// 
     #// Creates a directory.
@@ -487,25 +529,34 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def mkdir(self, path=None, chmod=False, chown=False, chgrp=False):
+    def mkdir(self, path_=None, chmod_=None, chown_=None, chgrp_=None):
+        if chmod_ is None:
+            chmod_ = False
+        # end if
+        if chown_ is None:
+            chown_ = False
+        # end if
+        if chgrp_ is None:
+            chgrp_ = False
+        # end if
         
         #// Safe mode fails with a trailing slash under certain PHP versions.
-        path = untrailingslashit(path)
-        if php_empty(lambda : path):
+        path_ = untrailingslashit(path_)
+        if php_empty(lambda : path_):
             return False
         # end if
-        if (not chmod):
-            chmod = FS_CHMOD_DIR
+        if (not chmod_):
+            chmod_ = FS_CHMOD_DIR
         # end if
-        if (not php_no_error(lambda: mkdir(path))):
+        if (not php_no_error(lambda: mkdir(path_))):
             return False
         # end if
-        self.chmod(path, chmod)
-        if chown:
-            self.chown(path, chown)
+        self.chmod(path_, chmod_)
+        if chown_:
+            self.chown(path_, chown_)
         # end if
-        if chgrp:
-            self.chgrp(path, chgrp)
+        if chgrp_:
+            self.chgrp(path_, chgrp_)
         # end if
         return True
     # end def mkdir
@@ -519,9 +570,12 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def rmdir(self, path=None, recursive=False):
+    def rmdir(self, path_=None, recursive_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        return self.delete(path, recursive)
+        return self.delete(path_, recursive_)
     # end def rmdir
     #// 
     #// Gets details for files in a directory or a specific file.
@@ -548,59 +602,65 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
     #// @type mixed  $files       If a directory and $recursive is true, contains another array of files.
     #// }
     #//
-    def dirlist(self, path=None, include_hidden=True, recursive=False):
+    def dirlist(self, path_=None, include_hidden_=None, recursive_=None):
+        if include_hidden_ is None:
+            include_hidden_ = True
+        # end if
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if self.is_file(path):
-            limit_file = php_basename(path)
-            path = php_dirname(path)
+        if self.is_file(path_):
+            limit_file_ = php_basename(path_)
+            path_ = php_dirname(path_)
         else:
-            limit_file = False
+            limit_file_ = False
         # end if
-        if (not self.is_dir(path)) or (not self.is_readable(path)):
+        if (not self.is_dir(path_)) or (not self.is_readable(path_)):
             return False
         # end if
-        dir = dir(path)
-        if (not dir):
+        dir_ = dir(path_)
+        if (not dir_):
             return False
         # end if
-        ret = Array()
+        ret_ = Array()
         while True:
-            entry = dir.read()
-            if not (False != entry):
+            entry_ = dir_.read()
+            if not (False != entry_):
                 break
             # end if
-            struc = Array()
-            struc["name"] = entry
-            if "." == struc["name"] or ".." == struc["name"]:
+            struc_ = Array()
+            struc_["name"] = entry_
+            if "." == struc_["name"] or ".." == struc_["name"]:
                 continue
             # end if
-            if (not include_hidden) and "." == struc["name"][0]:
+            if (not include_hidden_) and "." == struc_["name"][0]:
                 continue
             # end if
-            if limit_file and struc["name"] != limit_file:
+            if limit_file_ and struc_["name"] != limit_file_:
                 continue
             # end if
-            struc["perms"] = self.gethchmod(path + "/" + entry)
-            struc["permsn"] = self.getnumchmodfromh(struc["perms"])
-            struc["number"] = False
-            struc["owner"] = self.owner(path + "/" + entry)
-            struc["group"] = self.group(path + "/" + entry)
-            struc["size"] = self.size(path + "/" + entry)
-            struc["lastmodunix"] = self.mtime(path + "/" + entry)
-            struc["lastmod"] = gmdate("M j", struc["lastmodunix"])
-            struc["time"] = gmdate("h:i:s", struc["lastmodunix"])
-            struc["type"] = "d" if self.is_dir(path + "/" + entry) else "f"
-            if "d" == struc["type"]:
-                if recursive:
-                    struc["files"] = self.dirlist(path + "/" + struc["name"], include_hidden, recursive)
+            struc_["perms"] = self.gethchmod(path_ + "/" + entry_)
+            struc_["permsn"] = self.getnumchmodfromh(struc_["perms"])
+            struc_["number"] = False
+            struc_["owner"] = self.owner(path_ + "/" + entry_)
+            struc_["group"] = self.group(path_ + "/" + entry_)
+            struc_["size"] = self.size(path_ + "/" + entry_)
+            struc_["lastmodunix"] = self.mtime(path_ + "/" + entry_)
+            struc_["lastmod"] = gmdate("M j", struc_["lastmodunix"])
+            struc_["time"] = gmdate("h:i:s", struc_["lastmodunix"])
+            struc_["type"] = "d" if self.is_dir(path_ + "/" + entry_) else "f"
+            if "d" == struc_["type"]:
+                if recursive_:
+                    struc_["files"] = self.dirlist(path_ + "/" + struc_["name"], include_hidden_, recursive_)
                 else:
-                    struc["files"] = Array()
+                    struc_["files"] = Array()
                 # end if
             # end if
-            ret[struc["name"]] = struc
+            ret_[struc_["name"]] = struc_
         # end while
-        dir.close()
-        dir = None
-        return ret
+        dir_.close()
+        dir_ = None
+        return ret_
     # end def dirlist
 # end class WP_Filesystem_Direct

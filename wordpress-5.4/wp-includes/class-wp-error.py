@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,7 +25,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 2.1.0
 #//
 class WP_Error():
+    #// 
+    #// Stores the list of errors.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     errors = Array()
+    #// 
+    #// Stores the list of data for error codes.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     error_data = Array()
     #// 
     #// Initialize the error.
@@ -49,14 +56,15 @@ class WP_Error():
     #// @param string $message Error message
     #// @param mixed $data Optional. Error data.
     #//
-    def __init__(self, code="", message="", data=""):
+    def __init__(self, code_="", message_="", data_=""):
         
-        if php_empty(lambda : code):
+        
+        if php_empty(lambda : code_):
             return
         # end if
-        self.errors[code][-1] = message
-        if (not php_empty(lambda : data)):
-            self.error_data[code] = data
+        self.errors[code_][-1] = message_
+        if (not php_empty(lambda : data_)):
+            self.error_data[code_] = data_
         # end if
     # end def __init__
     #// 
@@ -67,6 +75,7 @@ class WP_Error():
     #// @return array List of error codes, if available.
     #//
     def get_error_codes(self):
+        
         
         if (not self.has_errors()):
             return Array()
@@ -82,11 +91,12 @@ class WP_Error():
     #//
     def get_error_code(self):
         
-        codes = self.get_error_codes()
-        if php_empty(lambda : codes):
+        
+        codes_ = self.get_error_codes()
+        if php_empty(lambda : codes_):
             return ""
         # end if
-        return codes[0]
+        return codes_[0]
     # end def get_error_code
     #// 
     #// Retrieve all error messages or error messages matching code.
@@ -96,18 +106,19 @@ class WP_Error():
     #// @param string|int $code Optional. Retrieve messages matching code, if exists.
     #// @return array Error strings on success, or empty array on failure (if using code parameter).
     #//
-    def get_error_messages(self, code=""):
+    def get_error_messages(self, code_=""):
+        
         
         #// Return all messages if no code specified.
-        if php_empty(lambda : code):
-            all_messages = Array()
-            for code,messages in self.errors:
-                all_messages = php_array_merge(all_messages, messages)
+        if php_empty(lambda : code_):
+            all_messages_ = Array()
+            for code_,messages_ in self.errors:
+                all_messages_ = php_array_merge(all_messages_, messages_)
             # end for
-            return all_messages
+            return all_messages_
         # end if
-        if (php_isset(lambda : self.errors[code])):
-            return self.errors[code]
+        if (php_isset(lambda : self.errors[code_])):
+            return self.errors[code_]
         else:
             return Array()
         # end if
@@ -123,16 +134,17 @@ class WP_Error():
     #// @param string|int $code Optional. Error code to retrieve message.
     #// @return string
     #//
-    def get_error_message(self, code=""):
+    def get_error_message(self, code_=""):
         
-        if php_empty(lambda : code):
-            code = self.get_error_code()
+        
+        if php_empty(lambda : code_):
+            code_ = self.get_error_code()
         # end if
-        messages = self.get_error_messages(code)
-        if php_empty(lambda : messages):
+        messages_ = self.get_error_messages(code_)
+        if php_empty(lambda : messages_):
             return ""
         # end if
-        return messages[0]
+        return messages_[0]
     # end def get_error_message
     #// 
     #// Retrieve error data for error code.
@@ -142,13 +154,14 @@ class WP_Error():
     #// @param string|int $code Optional. Error code.
     #// @return mixed Error data, if it exists.
     #//
-    def get_error_data(self, code=""):
+    def get_error_data(self, code_=""):
         
-        if php_empty(lambda : code):
-            code = self.get_error_code()
+        
+        if php_empty(lambda : code_):
+            code_ = self.get_error_code()
         # end if
-        if (php_isset(lambda : self.error_data[code])):
-            return self.error_data[code]
+        if (php_isset(lambda : self.error_data[code_])):
+            return self.error_data[code_]
         # end if
     # end def get_error_data
     #// 
@@ -159,6 +172,7 @@ class WP_Error():
     #// @return bool
     #//
     def has_errors(self):
+        
         
         if (not php_empty(lambda : self.errors)):
             return True
@@ -174,11 +188,12 @@ class WP_Error():
     #// @param string $message Error message.
     #// @param mixed $data Optional. Error data.
     #//
-    def add(self, code=None, message=None, data=""):
+    def add(self, code_=None, message_=None, data_=""):
         
-        self.errors[code][-1] = message
-        if (not php_empty(lambda : data)):
-            self.error_data[code] = data
+        
+        self.errors[code_][-1] = message_
+        if (not php_empty(lambda : data_)):
+            self.error_data[code_] = data_
         # end if
     # end def add
     #// 
@@ -191,12 +206,13 @@ class WP_Error():
     #// @param mixed $data Error data.
     #// @param string|int $code Error code.
     #//
-    def add_data(self, data=None, code=""):
+    def add_data(self, data_=None, code_=""):
         
-        if php_empty(lambda : code):
-            code = self.get_error_code()
+        
+        if php_empty(lambda : code_):
+            code_ = self.get_error_code()
         # end if
-        self.error_data[code] = data
+        self.error_data[code_] = data_
     # end def add_data
     #// 
     #// Removes the specified error.
@@ -208,9 +224,10 @@ class WP_Error():
     #// 
     #// @param string|int $code Error code.
     #//
-    def remove(self, code=None):
+    def remove(self, code_=None):
         
-        self.errors[code] = None
-        self.error_data[code] = None
+        
+        self.errors[code_] = None
+        self.error_data[code_] = None
     # end def remove
 # end class WP_Error

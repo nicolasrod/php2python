@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -51,7 +46,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @var array
 #// @global array $shortcode_tags
 #//
-shortcode_tags = Array()
+shortcode_tags_ = Array()
 #// 
 #// Adds a new shortcode.
 #// 
@@ -71,22 +66,23 @@ shortcode_tags = Array()
 #// or null if not set (`$content`), and finally the shortcode tag
 #// itself (`$shortcode_tag`), in that order.
 #//
-def add_shortcode(tag=None, callback=None, *args_):
+def add_shortcode(tag_=None, callback_=None, *_args_):
     
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
-    if "" == php_trim(tag):
-        message = __("Invalid shortcode name: Empty name given.")
-        _doing_it_wrong(__FUNCTION__, message, "4.4.0")
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
+    if "" == php_trim(tag_):
+        message_ = __("Invalid shortcode name: Empty name given.")
+        _doing_it_wrong(__FUNCTION__, message_, "4.4.0")
         return
     # end if
-    if 0 != php_preg_match("@[<>&/\\[\\]\\x00-\\x20=]@", tag):
+    if 0 != php_preg_match("@[<>&/\\[\\]\\x00-\\x20=]@", tag_):
         #// translators: 1: Shortcode name, 2: Space-separated list of reserved characters.
-        message = php_sprintf(__("Invalid shortcode name: %1$s. Do not use spaces or reserved characters: %2$s"), tag, "& / < > [ ] =")
-        _doing_it_wrong(__FUNCTION__, message, "4.4.0")
+        message_ = php_sprintf(__("Invalid shortcode name: %1$s. Do not use spaces or reserved characters: %2$s"), tag_, "& / < > [ ] =")
+        _doing_it_wrong(__FUNCTION__, message_, "4.4.0")
         return
     # end if
-    shortcode_tags[tag] = callback
+    shortcode_tags_[tag_] = callback_
 # end def add_shortcode
 #// 
 #// Removes hook for shortcode.
@@ -97,11 +93,12 @@ def add_shortcode(tag=None, callback=None, *args_):
 #// 
 #// @param string $tag Shortcode tag to remove hook for.
 #//
-def remove_shortcode(tag=None, *args_):
+def remove_shortcode(tag_=None, *_args_):
     
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
-    shortcode_tags[tag] = None
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
+    shortcode_tags_[tag_] = None
 # end def remove_shortcode
 #// 
 #// Clear all shortcodes.
@@ -114,11 +111,12 @@ def remove_shortcode(tag=None, *args_):
 #// 
 #// @global array $shortcode_tags
 #//
-def remove_all_shortcodes(*args_):
+def remove_all_shortcodes(*_args_):
     
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
-    shortcode_tags = Array()
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
+    shortcode_tags_ = Array()
 # end def remove_all_shortcodes
 #// 
 #// Whether a registered shortcode exists named $tag
@@ -130,11 +128,12 @@ def remove_all_shortcodes(*args_):
 #// @param string $tag Shortcode tag to check.
 #// @return bool Whether the given shortcode exists.
 #//
-def shortcode_exists(tag=None, *args_):
+def shortcode_exists(tag_=None, *_args_):
     
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
-    return php_array_key_exists(tag, shortcode_tags)
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
+    return php_array_key_exists(tag_, shortcode_tags_)
 # end def shortcode_exists
 #// 
 #// Whether the passed content contains the specified shortcode
@@ -147,20 +146,21 @@ def shortcode_exists(tag=None, *args_):
 #// @param string $tag     Shortcode tag to check.
 #// @return bool Whether the passed content contains the given shortcode.
 #//
-def has_shortcode(content=None, tag=None, *args_):
+def has_shortcode(content_=None, tag_=None, *_args_):
     
-    if False == php_strpos(content, "["):
+    
+    if False == php_strpos(content_, "["):
         return False
     # end if
-    if shortcode_exists(tag):
-        preg_match_all("/" + get_shortcode_regex() + "/", content, matches, PREG_SET_ORDER)
-        if php_empty(lambda : matches):
+    if shortcode_exists(tag_):
+        preg_match_all("/" + get_shortcode_regex() + "/", content_, matches_, PREG_SET_ORDER)
+        if php_empty(lambda : matches_):
             return False
         # end if
-        for shortcode in matches:
-            if tag == shortcode[2]:
+        for shortcode_ in matches_:
+            if tag_ == shortcode_[2]:
                 return True
-            elif (not php_empty(lambda : shortcode[5])) and has_shortcode(shortcode[5], tag):
+            elif (not php_empty(lambda : shortcode_[5])) and has_shortcode(shortcode_[5], tag_):
                 return True
             # end if
         # end for
@@ -181,9 +181,12 @@ def has_shortcode(content=None, tag=None, *args_):
 #// Default false.
 #// @return string Content with shortcodes filtered out.
 #//
-def apply_shortcodes(content=None, ignore_html=False, *args_):
+def apply_shortcodes(content_=None, ignore_html_=None, *_args_):
+    if ignore_html_ is None:
+        ignore_html_ = False
+    # end if
     
-    return do_shortcode(content, ignore_html)
+    return do_shortcode(content_, ignore_html_)
 # end def apply_shortcodes
 #// 
 #// Search content for shortcodes and filter shortcodes through their hooks.
@@ -201,28 +204,31 @@ def apply_shortcodes(content=None, ignore_html=False, *args_):
 #// Default false.
 #// @return string Content with shortcodes filtered out.
 #//
-def do_shortcode(content=None, ignore_html=False, *args_):
-    
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
-    if False == php_strpos(content, "["):
-        return content
+def do_shortcode(content_=None, ignore_html_=None, *_args_):
+    if ignore_html_ is None:
+        ignore_html_ = False
     # end if
-    if php_empty(lambda : shortcode_tags) or (not php_is_array(shortcode_tags)):
-        return content
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
+    if False == php_strpos(content_, "["):
+        return content_
+    # end if
+    if php_empty(lambda : shortcode_tags_) or (not php_is_array(shortcode_tags_)):
+        return content_
     # end if
     #// Find all registered tag names in $content.
-    preg_match_all("@\\[([^<>&/\\[\\]\\x00-\\x20=]++)@", content, matches)
-    tagnames = php_array_intersect(php_array_keys(shortcode_tags), matches[1])
-    if php_empty(lambda : tagnames):
-        return content
+    preg_match_all("@\\[([^<>&/\\[\\]\\x00-\\x20=]++)@", content_, matches_)
+    tagnames_ = php_array_intersect(php_array_keys(shortcode_tags_), matches_[1])
+    if php_empty(lambda : tagnames_):
+        return content_
     # end if
-    content = do_shortcodes_in_html_tags(content, ignore_html, tagnames)
-    pattern = get_shortcode_regex(tagnames)
-    content = preg_replace_callback(str("/") + str(pattern) + str("/"), "do_shortcode_tag", content)
+    content_ = do_shortcodes_in_html_tags(content_, ignore_html_, tagnames_)
+    pattern_ = get_shortcode_regex(tagnames_)
+    content_ = preg_replace_callback(str("/") + str(pattern_) + str("/"), "do_shortcode_tag", content_)
     #// Always restore square braces so we don't break things like <!--[if IE ]>.
-    content = unescape_invalid_shortcodes(content)
-    return content
+    content_ = unescape_invalid_shortcodes(content_)
+    return content_
 # end def do_shortcode
 #// 
 #// Retrieve the shortcode regular expression for searching.
@@ -247,18 +253,19 @@ def do_shortcode(content=None, ignore_html=False, *args_):
 #// @param array $tagnames Optional. List of shortcodes to find. Defaults to all registered shortcodes.
 #// @return string The shortcode search regular expression
 #//
-def get_shortcode_regex(tagnames=None, *args_):
+def get_shortcode_regex(tagnames_=None, *_args_):
     
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
-    if php_empty(lambda : tagnames):
-        tagnames = php_array_keys(shortcode_tags)
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
+    if php_empty(lambda : tagnames_):
+        tagnames_ = php_array_keys(shortcode_tags_)
     # end if
-    tagregexp = join("|", php_array_map("preg_quote", tagnames))
+    tagregexp_ = join("|", php_array_map("preg_quote", tagnames_))
     #// WARNING! Do not change this regex without changing do_shortcode_tag() and strip_shortcode_tag().
     #// Also, see shortcode_unautop() and shortcode.js.
     #// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
-    return "\\[" + "(\\[?)" + str("(") + str(tagregexp) + str(")") + "(?![\\w-])" + "(" + "[^\\]\\/]*" + "(?:" + "\\/(?!\\])" + "[^\\]\\/]*" + ")*?" + ")" + "(?:" + "(\\/)" + "\\]" + "|" + "\\]" + "(?:" + "(" + "[^\\[]*+" + "(?:" + "\\[(?!\\/\\2\\])" + "[^\\[]*+" + ")*+" + ")" + "\\[\\/\\2\\]" + ")?" + ")" + "(\\]?)"
+    return "\\[" + "(\\[?)" + str("(") + str(tagregexp_) + str(")") + "(?![\\w-])" + "(" + "[^\\]\\/]*" + "(?:" + "\\/(?!\\])" + "[^\\]\\/]*" + ")*?" + ")" + "(?:" + "(\\/)" + "\\]" + "|" + "\\]" + "(?:" + "(" + "[^\\[]*+" + "(?:" + "\\[(?!\\/\\2\\])" + "[^\\[]*+" + ")*+" + ")" + "\\[\\/\\2\\]" + ")?" + ")" + "(\\]?)"
     pass
 # end def get_shortcode_regex
 #// 
@@ -274,21 +281,22 @@ def get_shortcode_regex(tagnames=None, *args_):
 #// @param array $m Regular expression match array
 #// @return string|false False on failure.
 #//
-def do_shortcode_tag(m=None, *args_):
+def do_shortcode_tag(m_=None, *_args_):
     
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
     #// Allow [[foo]] syntax for escaping a tag.
-    if "[" == m[1] and "]" == m[6]:
-        return php_substr(m[0], 1, -1)
+    if "[" == m_[1] and "]" == m_[6]:
+        return php_substr(m_[0], 1, -1)
     # end if
-    tag = m[2]
-    attr = shortcode_parse_atts(m[3])
-    if (not php_is_callable(shortcode_tags[tag])):
+    tag_ = m_[2]
+    attr_ = shortcode_parse_atts(m_[3])
+    if (not php_is_callable(shortcode_tags_[tag_])):
         #// translators: %s: Shortcode tag.
-        message = php_sprintf(__("Attempting to parse a shortcode without a valid callback: %s"), tag)
-        _doing_it_wrong(__FUNCTION__, message, "4.3.0")
-        return m[0]
+        message_ = php_sprintf(__("Attempting to parse a shortcode without a valid callback: %s"), tag_)
+        _doing_it_wrong(__FUNCTION__, message_, "4.3.0")
+        return m_[0]
     # end if
     #// 
     #// Filters whether to call a shortcode callback.
@@ -303,12 +311,12 @@ def do_shortcode_tag(m=None, *args_):
     #// @param array|string $attr        Shortcode attributes array or empty string.
     #// @param array        $m           Regular expression match array.
     #//
-    return_ = apply_filters("pre_do_shortcode_tag", False, tag, attr, m)
+    return_ = apply_filters("pre_do_shortcode_tag", False, tag_, attr_, m_)
     if False != return_:
         return return_
     # end if
-    content = m[5] if (php_isset(lambda : m[5])) else None
-    output = m[1] + php_call_user_func(shortcode_tags[tag], attr, content, tag) + m[6]
+    content_ = m_[5] if (php_isset(lambda : m_[5])) else None
+    output_ = m_[1] + php_call_user_func(shortcode_tags_[tag_], attr_, content_, tag_) + m_[6]
     #// 
     #// Filters the output created by a shortcode callback.
     #// 
@@ -319,7 +327,7 @@ def do_shortcode_tag(m=None, *args_):
     #// @param array|string $attr   Shortcode attributes array or empty string.
     #// @param array        $m      Regular expression match array.
     #//
-    return apply_filters("do_shortcode_tag", output, tag, attr, m)
+    return apply_filters("do_shortcode_tag", output_, tag_, attr_, m_)
 # end def do_shortcode_tag
 #// 
 #// Search only inside HTML elements for shortcodes and process them.
@@ -336,88 +344,89 @@ def do_shortcode_tag(m=None, *args_):
 #// @param array $tagnames List of shortcodes to find.
 #// @return string Content with shortcodes filtered out.
 #//
-def do_shortcodes_in_html_tags(content=None, ignore_html=None, tagnames=None, *args_):
+def do_shortcodes_in_html_tags(content_=None, ignore_html_=None, tagnames_=None, *_args_):
+    
     
     #// Normalize entities in unfiltered HTML before adding placeholders.
-    trans = Array({"&#91;": "&#091;", "&#93;": "&#093;"})
-    content = php_strtr(content, trans)
-    trans = Array({"[": "&#91;", "]": "&#93;"})
-    pattern = get_shortcode_regex(tagnames)
-    textarr = wp_html_split(content)
-    for element in textarr:
-        if "" == element or "<" != element[0]:
+    trans_ = Array({"&#91;": "&#091;", "&#93;": "&#093;"})
+    content_ = php_strtr(content_, trans_)
+    trans_ = Array({"[": "&#91;", "]": "&#93;"})
+    pattern_ = get_shortcode_regex(tagnames_)
+    textarr_ = wp_html_split(content_)
+    for element_ in textarr_:
+        if "" == element_ or "<" != element_[0]:
             continue
         # end if
-        noopen = False == php_strpos(element, "[")
-        noclose = False == php_strpos(element, "]")
-        if noopen or noclose:
+        noopen_ = False == php_strpos(element_, "[")
+        noclose_ = False == php_strpos(element_, "]")
+        if noopen_ or noclose_:
             #// This element does not contain shortcodes.
-            if bool(noopen) != bool(noclose):
+            if bool(noopen_) != bool(noclose_):
                 #// Need to encode stray '[' or ']' chars.
-                element = php_strtr(element, trans)
+                element_ = php_strtr(element_, trans_)
             # end if
             continue
         # end if
-        if ignore_html or "<!--" == php_substr(element, 0, 4) or "<![CDATA[" == php_substr(element, 0, 9):
+        if ignore_html_ or "<!--" == php_substr(element_, 0, 4) or "<![CDATA[" == php_substr(element_, 0, 9):
             #// Encode all '[' and ']' chars.
-            element = php_strtr(element, trans)
+            element_ = php_strtr(element_, trans_)
             continue
         # end if
-        attributes = wp_kses_attr_parse(element)
-        if False == attributes:
+        attributes_ = wp_kses_attr_parse(element_)
+        if False == attributes_:
             #// Some plugins are doing things like [name] <[email]>.
-            if 1 == php_preg_match("%^<\\s*\\[\\[?[^\\[\\]]+\\]%", element):
-                element = preg_replace_callback(str("/") + str(pattern) + str("/"), "do_shortcode_tag", element)
+            if 1 == php_preg_match("%^<\\s*\\[\\[?[^\\[\\]]+\\]%", element_):
+                element_ = preg_replace_callback(str("/") + str(pattern_) + str("/"), "do_shortcode_tag", element_)
             # end if
             #// Looks like we found some crazy unfiltered HTML. Skipping it for sanity.
-            element = php_strtr(element, trans)
+            element_ = php_strtr(element_, trans_)
             continue
         # end if
         #// Get element name.
-        front = php_array_shift(attributes)
-        back = php_array_pop(attributes)
-        matches = Array()
-        php_preg_match("%[a-zA-Z0-9]+%", front, matches)
-        elname = matches[0]
+        front_ = php_array_shift(attributes_)
+        back_ = php_array_pop(attributes_)
+        matches_ = Array()
+        php_preg_match("%[a-zA-Z0-9]+%", front_, matches_)
+        elname_ = matches_[0]
         #// Look for shortcodes in each attribute separately.
-        for attr in attributes:
-            open_ = php_strpos(attr, "[")
-            close = php_strpos(attr, "]")
-            if False == open_ or False == close:
+        for attr_ in attributes_:
+            open_ = php_strpos(attr_, "[")
+            close_ = php_strpos(attr_, "]")
+            if False == open_ or False == close_:
                 continue
                 pass
             # end if
-            double = php_strpos(attr, "\"")
-            single = php_strpos(attr, "'")
-            if False == single or open_ < single and False == double or open_ < double:
+            double_ = php_strpos(attr_, "\"")
+            single_ = php_strpos(attr_, "'")
+            if False == single_ or open_ < single_ and False == double_ or open_ < double_:
                 #// 
                 #// $attr like '[shortcode]' or 'name = [shortcode]' implies unfiltered_html.
                 #// In this specific situation we assume KSES did not run because the input
                 #// was written by an administrator, so we should avoid changing the output
                 #// and we do not need to run KSES here.
                 #//
-                attr = preg_replace_callback(str("/") + str(pattern) + str("/"), "do_shortcode_tag", attr)
+                attr_ = preg_replace_callback(str("/") + str(pattern_) + str("/"), "do_shortcode_tag", attr_)
             else:
                 #// $attr like 'name = "[shortcode]"' or "name = '[shortcode]'".
                 #// We do not know if $content was unfiltered. Assume KSES ran before shortcodes.
-                count = 0
-                new_attr = preg_replace_callback(str("/") + str(pattern) + str("/"), "do_shortcode_tag", attr, -1, count)
-                if count > 0:
+                count_ = 0
+                new_attr_ = preg_replace_callback(str("/") + str(pattern_) + str("/"), "do_shortcode_tag", attr_, -1, count_)
+                if count_ > 0:
                     #// Sanitize the shortcode output using KSES.
-                    new_attr = wp_kses_one_attr(new_attr, elname)
-                    if "" != php_trim(new_attr):
+                    new_attr_ = wp_kses_one_attr(new_attr_, elname_)
+                    if "" != php_trim(new_attr_):
                         #// The shortcode is safe to use now.
-                        attr = new_attr
+                        attr_ = new_attr_
                     # end if
                 # end if
             # end if
         # end for
-        element = front + php_implode("", attributes) + back
+        element_ = front_ + php_implode("", attributes_) + back_
         #// Now encode any remaining '[' or ']' chars.
-        element = php_strtr(element, trans)
+        element_ = php_strtr(element_, trans_)
     # end for
-    content = php_implode("", textarr)
-    return content
+    content_ = php_implode("", textarr_)
+    return content_
 # end def do_shortcodes_in_html_tags
 #// 
 #// Remove placeholders added by do_shortcodes_in_html_tags().
@@ -427,12 +436,13 @@ def do_shortcodes_in_html_tags(content=None, ignore_html=None, tagnames=None, *a
 #// @param string $content Content to search for placeholders.
 #// @return string Content with placeholders removed.
 #//
-def unescape_invalid_shortcodes(content=None, *args_):
+def unescape_invalid_shortcodes(content_=None, *_args_):
+    
     
     #// Clean up entire string, avoids re-parsing HTML.
-    trans = Array({"&#91;": "[", "&#93;": "]"})
-    content = php_strtr(content, trans)
-    return content
+    trans_ = Array({"&#91;": "[", "&#93;": "]"})
+    content_ = php_strtr(content_, trans_)
+    return content_
 # end def unescape_invalid_shortcodes
 #// 
 #// Retrieve the shortcode attributes regex.
@@ -441,7 +451,8 @@ def unescape_invalid_shortcodes(content=None, *args_):
 #// 
 #// @return string The shortcode attribute regular expression
 #//
-def get_shortcode_atts_regex(*args_):
+def get_shortcode_atts_regex(*_args_):
+    
     
     return "/([\\w-]+)\\s*=\\s*\"([^\"]*)\"(?:\\s|$)|([\\w-]+)\\s*=\\s*'([^']*)'(?:\\s|$)|([\\w-]+)\\s*=\\s*([^\\s'\"]+)(?:\\s|$)|\"([^\"]*)\"(?:\\s|$)|'([^']*)'(?:\\s|$)|(\\S+)(?:\\s|$)/"
 # end def get_shortcode_atts_regex
@@ -460,39 +471,40 @@ def get_shortcode_atts_regex(*args_):
 #// Returns empty string if trim( $text ) == ''.
 #// All other matches are checked for not empty().
 #//
-def shortcode_parse_atts(text=None, *args_):
+def shortcode_parse_atts(text_=None, *_args_):
     
-    atts = Array()
-    pattern = get_shortcode_atts_regex()
-    text = php_preg_replace("/[\\x{00a0}\\x{200b}]+/u", " ", text)
-    if preg_match_all(pattern, text, match, PREG_SET_ORDER):
-        for m in match:
-            if (not php_empty(lambda : m[1])):
-                atts[php_strtolower(m[1])] = stripcslashes(m[2])
-            elif (not php_empty(lambda : m[3])):
-                atts[php_strtolower(m[3])] = stripcslashes(m[4])
-            elif (not php_empty(lambda : m[5])):
-                atts[php_strtolower(m[5])] = stripcslashes(m[6])
-            elif (php_isset(lambda : m[7])) and php_strlen(m[7]):
-                atts[-1] = stripcslashes(m[7])
-            elif (php_isset(lambda : m[8])) and php_strlen(m[8]):
-                atts[-1] = stripcslashes(m[8])
-            elif (php_isset(lambda : m[9])):
-                atts[-1] = stripcslashes(m[9])
+    
+    atts_ = Array()
+    pattern_ = get_shortcode_atts_regex()
+    text_ = php_preg_replace("/[\\x{00a0}\\x{200b}]+/u", " ", text_)
+    if preg_match_all(pattern_, text_, match_, PREG_SET_ORDER):
+        for m_ in match_:
+            if (not php_empty(lambda : m_[1])):
+                atts_[php_strtolower(m_[1])] = stripcslashes(m_[2])
+            elif (not php_empty(lambda : m_[3])):
+                atts_[php_strtolower(m_[3])] = stripcslashes(m_[4])
+            elif (not php_empty(lambda : m_[5])):
+                atts_[php_strtolower(m_[5])] = stripcslashes(m_[6])
+            elif (php_isset(lambda : m_[7])) and php_strlen(m_[7]):
+                atts_[-1] = stripcslashes(m_[7])
+            elif (php_isset(lambda : m_[8])) and php_strlen(m_[8]):
+                atts_[-1] = stripcslashes(m_[8])
+            elif (php_isset(lambda : m_[9])):
+                atts_[-1] = stripcslashes(m_[9])
             # end if
         # end for
         #// Reject any unclosed HTML elements.
-        for value in atts:
-            if False != php_strpos(value, "<"):
-                if 1 != php_preg_match("/^[^<]*+(?:<[^>]*+>[^<]*+)*+$/", value):
-                    value = ""
+        for value_ in atts_:
+            if False != php_strpos(value_, "<"):
+                if 1 != php_preg_match("/^[^<]*+(?:<[^>]*+>[^<]*+)*+$/", value_):
+                    value_ = ""
                 # end if
             # end if
         # end for
     else:
-        atts = php_ltrim(text)
+        atts_ = php_ltrim(text_)
     # end if
-    return atts
+    return atts_
 # end def shortcode_parse_atts
 #// 
 #// Combine user attributes with known attributes and fill in defaults when needed.
@@ -511,18 +523,19 @@ def shortcode_parse_atts(text=None, *args_):
 #// @param string $shortcode Optional. The name of the shortcode, provided for context to enable filtering
 #// @return array Combined and filtered attribute list.
 #//
-def shortcode_atts(pairs=None, atts=None, shortcode="", *args_):
+def shortcode_atts(pairs_=None, atts_=None, shortcode_="", *_args_):
     
-    atts = atts
-    out = Array()
-    for name,default in pairs:
-        if php_array_key_exists(name, atts):
-            out[name] = atts[name]
+    
+    atts_ = atts_
+    out_ = Array()
+    for name_,default_ in pairs_:
+        if php_array_key_exists(name_, atts_):
+            out_[name_] = atts_[name_]
         else:
-            out[name] = default
+            out_[name_] = default_
         # end if
     # end for
-    if shortcode:
+    if shortcode_:
         #// 
         #// Filters shortcode attributes.
         #// 
@@ -537,9 +550,9 @@ def shortcode_atts(pairs=None, atts=None, shortcode="", *args_):
         #// @param array  $atts      The user defined shortcode attributes.
         #// @param string $shortcode The shortcode name.
         #//
-        out = apply_filters(str("shortcode_atts_") + str(shortcode), out, pairs, atts, shortcode)
+        out_ = apply_filters(str("shortcode_atts_") + str(shortcode_), out_, pairs_, atts_, shortcode_)
     # end if
-    return out
+    return out_
 # end def shortcode_atts
 #// 
 #// Remove all shortcode tags from the given content.
@@ -551,19 +564,20 @@ def shortcode_atts(pairs=None, atts=None, shortcode="", *args_):
 #// @param string $content Content to remove shortcode tags.
 #// @return string Content without shortcode tags.
 #//
-def strip_shortcodes(content=None, *args_):
+def strip_shortcodes(content_=None, *_args_):
     
-    global shortcode_tags
-    php_check_if_defined("shortcode_tags")
-    if False == php_strpos(content, "["):
-        return content
+    
+    global shortcode_tags_
+    php_check_if_defined("shortcode_tags_")
+    if False == php_strpos(content_, "["):
+        return content_
     # end if
-    if php_empty(lambda : shortcode_tags) or (not php_is_array(shortcode_tags)):
-        return content
+    if php_empty(lambda : shortcode_tags_) or (not php_is_array(shortcode_tags_)):
+        return content_
     # end if
     #// Find all registered tag names in $content.
-    preg_match_all("@\\[([^<>&/\\[\\]\\x00-\\x20=]++)@", content, matches)
-    tags_to_remove = php_array_keys(shortcode_tags)
+    preg_match_all("@\\[([^<>&/\\[\\]\\x00-\\x20=]++)@", content_, matches_)
+    tags_to_remove_ = php_array_keys(shortcode_tags_)
     #// 
     #// Filters the list of shortcode tags to remove from the content.
     #// 
@@ -572,17 +586,17 @@ def strip_shortcodes(content=None, *args_):
     #// @param array  $tags_to_remove Array of shortcode tags to remove.
     #// @param string $content        Content shortcodes are being removed from.
     #//
-    tags_to_remove = apply_filters("strip_shortcodes_tagnames", tags_to_remove, content)
-    tagnames = php_array_intersect(tags_to_remove, matches[1])
-    if php_empty(lambda : tagnames):
-        return content
+    tags_to_remove_ = apply_filters("strip_shortcodes_tagnames", tags_to_remove_, content_)
+    tagnames_ = php_array_intersect(tags_to_remove_, matches_[1])
+    if php_empty(lambda : tagnames_):
+        return content_
     # end if
-    content = do_shortcodes_in_html_tags(content, True, tagnames)
-    pattern = get_shortcode_regex(tagnames)
-    content = preg_replace_callback(str("/") + str(pattern) + str("/"), "strip_shortcode_tag", content)
+    content_ = do_shortcodes_in_html_tags(content_, True, tagnames_)
+    pattern_ = get_shortcode_regex(tagnames_)
+    content_ = preg_replace_callback(str("/") + str(pattern_) + str("/"), "strip_shortcode_tag", content_)
     #// Always restore square braces so we don't break things like <!--[if IE ]>.
-    content = unescape_invalid_shortcodes(content)
-    return content
+    content_ = unescape_invalid_shortcodes(content_)
+    return content_
 # end def strip_shortcodes
 #// 
 #// Strips a shortcode tag based on RegEx matches against post content.
@@ -592,11 +606,12 @@ def strip_shortcodes(content=None, *args_):
 #// @param array $m RegEx matches against post content.
 #// @return string|false The content stripped of the tag, otherwise false.
 #//
-def strip_shortcode_tag(m=None, *args_):
+def strip_shortcode_tag(m_=None, *_args_):
+    
     
     #// Allow [[foo]] syntax for escaping a tag.
-    if "[" == m[1] and "]" == m[6]:
-        return php_substr(m[0], 1, -1)
+    if "[" == m_[1] and "]" == m_[6]:
+        return php_substr(m_[0], 1, -1)
     # end if
-    return m[1] + m[6]
+    return m_[1] + m_[6]
 # end def strip_shortcode_tag

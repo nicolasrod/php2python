@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,7 +24,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Customize_Nav_Menu_Location_Control(WP_Customize_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "nav_menu_location"
+    #// 
+    #// Location ID.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     location_id = ""
     #// 
     #// Refresh the parameters passed to JavaScript via JSON.
@@ -39,6 +46,7 @@ class WP_Customize_Nav_Menu_Location_Control(WP_Customize_Control):
     #// @see WP_Customize_Control::to_json()
     #//
     def to_json(self):
+        
         
         super().to_json()
         self.json["locationId"] = self.location_id
@@ -51,15 +59,16 @@ class WP_Customize_Nav_Menu_Location_Control(WP_Customize_Control):
     #//
     def render_content(self):
         
+        
         if php_empty(lambda : self.choices):
             return
         # end if
-        value_hidden_class = ""
-        no_value_hidden_class = ""
+        value_hidden_class_ = ""
+        no_value_hidden_class_ = ""
         if self.value():
-            value_hidden_class = " hidden"
+            value_hidden_class_ = " hidden"
         else:
-            no_value_hidden_class = " hidden"
+            no_value_hidden_class_ = " hidden"
         # end if
         php_print("     <label>\n           ")
         if (not php_empty(lambda : self.label)):
@@ -76,11 +85,11 @@ class WP_Customize_Nav_Menu_Location_Control(WP_Customize_Control):
         php_print("\n           <select ")
         self.link()
         php_print(">\n              ")
-        for value,label in self.choices:
-            php_print("<option value=\"" + esc_attr(value) + "\"" + selected(self.value(), value, False) + ">" + label + "</option>")
+        for value_,label_ in self.choices:
+            php_print("<option value=\"" + esc_attr(value_) + "\"" + selected(self.value(), value_, False) + ">" + label_ + "</option>")
         # end for
         php_print("         </select>\n     </label>\n      <button type=\"button\" class=\"button-link create-menu")
-        php_print(value_hidden_class)
+        php_print(value_hidden_class_)
         php_print("\" data-location-id=\"")
         php_print(esc_attr(self.location_id))
         php_print("\" aria-label=\"")
@@ -88,7 +97,7 @@ class WP_Customize_Nav_Menu_Location_Control(WP_Customize_Control):
         php_print("\">")
         _e("+ Create New Menu")
         php_print("</button>\n      <button type=\"button\" class=\"button-link edit-menu")
-        php_print(no_value_hidden_class)
+        php_print(no_value_hidden_class_)
         php_print("\" aria-label=\"")
         esc_attr_e("Edit selected menu")
         php_print("\">")

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -28,13 +23,64 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see _WP_Dependency
 #//
 class WP_Dependencies():
+    #// 
+    #// An array of registered handle objects.
+    #// 
+    #// @since 2.6.8
+    #// @var array
+    #//
     registered = Array()
+    #// 
+    #// An array of handles of queued objects.
+    #// 
+    #// @since 2.6.8
+    #// @var string[]
+    #//
     queue = Array()
+    #// 
+    #// An array of handles of objects to queue.
+    #// 
+    #// @since 2.6.0
+    #// @var string[]
+    #//
     to_do = Array()
+    #// 
+    #// An array of handles of objects already queued.
+    #// 
+    #// @since 2.6.0
+    #// @var string[]
+    #//
     done = Array()
+    #// 
+    #// An array of additional arguments passed when a handle is registered.
+    #// 
+    #// Arguments are appended to the item query string.
+    #// 
+    #// @since 2.6.0
+    #// @var array
+    #//
     args = Array()
+    #// 
+    #// An array of handle groups to enqueue.
+    #// 
+    #// @since 2.8.0
+    #// @var array
+    #//
     groups = Array()
+    #// 
+    #// A handle group to enqueue.
+    #// 
+    #// @since 2.8.0
+    #// @deprecated 4.5.0
+    #// @var int
+    #//
     group = 0
+    #// 
+    #// Cached lookup array of flattened queued items and dependencies.
+    #// 
+    #// @since 5.4.0
+    #// @var array
+    #//
     all_queued_deps = Array()
     #// 
     #// Processes the items and dependencies.
@@ -50,26 +96,32 @@ class WP_Dependencies():
     #// @param int|false             $group   Optional. Group level: level (int), no groups (false).
     #// @return string[] Array of handles of items that have been processed.
     #//
-    def do_items(self, handles=False, group=False):
+    def do_items(self, handles_=None, group_=None):
+        if handles_ is None:
+            handles_ = False
+        # end if
+        if group_ is None:
+            group_ = False
+        # end if
         
         #// 
         #// If nothing is passed, print the queue. If a string is passed,
         #// print that item. If an array is passed, print those items.
         #//
-        handles = self.queue if False == handles else handles
-        self.all_deps(handles)
-        for key,handle in self.to_do:
-            if (not php_in_array(handle, self.done, True)) and (php_isset(lambda : self.registered[handle])):
+        handles_ = self.queue if False == handles_ else handles_
+        self.all_deps(handles_)
+        for key_,handle_ in self.to_do:
+            if (not php_in_array(handle_, self.done, True)) and (php_isset(lambda : self.registered[handle_])):
                 #// 
                 #// Attempt to process the item. If successful,
                 #// add the handle to the done array.
                 #// 
                 #// Unset the item from the to_do array.
                 #//
-                if self.do_item(handle, group):
-                    self.done[-1] = handle
+                if self.do_item(handle_, group_):
+                    self.done[-1] = handle_
                 # end if
-                self.to_do[key] = None
+                self.to_do[key_] = None
             # end if
         # end for
         return self.done
@@ -82,9 +134,10 @@ class WP_Dependencies():
     #// @param string $handle Name of the item. Should be unique.
     #// @return bool True on success, false if not set.
     #//
-    def do_item(self, handle=None):
+    def do_item(self, handle_=None):
         
-        return (php_isset(lambda : self.registered[handle]))
+        
+        return (php_isset(lambda : self.registered[handle_]))
     # end def do_item
     #// 
     #// Determines dependencies.
@@ -103,38 +156,44 @@ class WP_Dependencies():
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def all_deps(self, handles=None, recursion=False, group=False):
+    def all_deps(self, handles_=None, recursion_=None, group_=None):
+        if recursion_ is None:
+            recursion_ = False
+        # end if
+        if group_ is None:
+            group_ = False
+        # end if
         
-        handles = handles
-        if (not handles):
+        handles_ = handles_
+        if (not handles_):
             return False
         # end if
-        for handle in handles:
-            handle_parts = php_explode("?", handle)
-            handle = handle_parts[0]
-            queued = php_in_array(handle, self.to_do, True)
-            if php_in_array(handle, self.done, True):
+        for handle_ in handles_:
+            handle_parts_ = php_explode("?", handle_)
+            handle_ = handle_parts_[0]
+            queued_ = php_in_array(handle_, self.to_do, True)
+            if php_in_array(handle_, self.done, True):
                 continue
             # end if
-            moved = self.set_group(handle, recursion, group)
-            new_group = self.groups[handle]
-            if queued and (not moved):
+            moved_ = self.set_group(handle_, recursion_, group_)
+            new_group_ = self.groups[handle_]
+            if queued_ and (not moved_):
                 continue
             # end if
-            keep_going = True
-            if (not (php_isset(lambda : self.registered[handle]))):
-                keep_going = False
+            keep_going_ = True
+            if (not (php_isset(lambda : self.registered[handle_]))):
+                keep_going_ = False
                 pass
-            elif self.registered[handle].deps and php_array_diff(self.registered[handle].deps, php_array_keys(self.registered)):
-                keep_going = False
+            elif self.registered[handle_].deps and php_array_diff(self.registered[handle_].deps, php_array_keys(self.registered)):
+                keep_going_ = False
                 pass
-            elif self.registered[handle].deps and (not self.all_deps(self.registered[handle].deps, True, new_group)):
-                keep_going = False
+            elif self.registered[handle_].deps and (not self.all_deps(self.registered[handle_].deps, True, new_group_)):
+                keep_going_ = False
                 pass
             # end if
-            if (not keep_going):
+            if (not keep_going_):
                 #// Either item or its dependencies don't exist.
-                if recursion:
+                if recursion_:
                     return False
                     pass
                 else:
@@ -142,13 +201,13 @@ class WP_Dependencies():
                     pass
                 # end if
             # end if
-            if queued:
+            if queued_:
                 continue
             # end if
-            if (php_isset(lambda : handle_parts[1])):
-                self.args[handle] = handle_parts[1]
+            if (php_isset(lambda : handle_parts_[1])):
+                self.args[handle_] = handle_parts_[1]
             # end if
-            self.to_do[-1] = handle
+            self.to_do[-1] = handle_
         # end for
         return True
     # end def all_deps
@@ -175,12 +234,18 @@ class WP_Dependencies():
     #// Examples: $media, $in_footer.
     #// @return bool Whether the item has been registered. True on success, false on failure.
     #//
-    def add(self, handle=None, src=None, deps=Array(), ver=False, args=None):
+    def add(self, handle_=None, src_=None, deps_=None, ver_=None, args_=None):
+        if deps_ is None:
+            deps_ = Array()
+        # end if
+        if ver_ is None:
+            ver_ = False
+        # end if
         
-        if (php_isset(lambda : self.registered[handle])):
+        if (php_isset(lambda : self.registered[handle_])):
             return False
         # end if
-        self.registered[handle] = php_new_class("_WP_Dependency", lambda : _WP_Dependency(handle, src, deps, ver, args))
+        self.registered[handle_] = php_new_class("_WP_Dependency", lambda : _WP_Dependency(handle_, src_, deps_, ver_, args_))
         return True
     # end def add
     #// 
@@ -195,12 +260,13 @@ class WP_Dependencies():
     #// @param mixed  $value  The data value.
     #// @return bool True on success, false on failure.
     #//
-    def add_data(self, handle=None, key=None, value=None):
+    def add_data(self, handle_=None, key_=None, value_=None):
         
-        if (not (php_isset(lambda : self.registered[handle]))):
+        
+        if (not (php_isset(lambda : self.registered[handle_]))):
             return False
         # end if
-        return self.registered[handle].add_data(key, value)
+        return self.registered[handle_].add_data(key_, value_)
     # end def add_data
     #// 
     #// Get extra item data.
@@ -213,15 +279,16 @@ class WP_Dependencies():
     #// @param string $key    The data key.
     #// @return mixed Extra item data (string), false otherwise.
     #//
-    def get_data(self, handle=None, key=None):
+    def get_data(self, handle_=None, key_=None):
         
-        if (not (php_isset(lambda : self.registered[handle]))):
+        
+        if (not (php_isset(lambda : self.registered[handle_]))):
             return False
         # end if
-        if (not (php_isset(lambda : self.registered[handle].extra[key]))):
+        if (not (php_isset(lambda : self.registered[handle_].extra[key_]))):
             return False
         # end if
-        return self.registered[handle].extra[key]
+        return self.registered[handle_].extra[key_]
     # end def get_data
     #// 
     #// Un-register an item or items.
@@ -231,10 +298,11 @@ class WP_Dependencies():
     #// 
     #// @param string|string[] $handles Item handle (string) or item handles (array of strings).
     #//
-    def remove(self, handles=None):
+    def remove(self, handles_=None):
         
-        for handle in handles:
-            self.registered[handle] = None
+        
+        for handle_ in handles_:
+            self.registered[handle_] = None
         # end for
     # end def remove
     #// 
@@ -250,16 +318,17 @@ class WP_Dependencies():
     #// 
     #// @param string|string[] $handles Item handle (string) or item handles (array of strings).
     #//
-    def enqueue(self, handles=None):
+    def enqueue(self, handles_=None):
         
-        for handle in handles:
-            handle = php_explode("?", handle)
-            if (not php_in_array(handle[0], self.queue, True)) and (php_isset(lambda : self.registered[handle[0]])):
-                self.queue[-1] = handle[0]
+        
+        for handle_ in handles_:
+            handle_ = php_explode("?", handle_)
+            if (not php_in_array(handle_[0], self.queue, True)) and (php_isset(lambda : self.registered[handle_[0]])):
+                self.queue[-1] = handle_[0]
                 #// Reset all dependencies so they must be recalculated in recurse_deps().
                 self.all_queued_deps = None
-                if (php_isset(lambda : handle[1])):
-                    self.args[handle[0]] = handle[1]
+                if (php_isset(lambda : handle_[1])):
+                    self.args[handle_[0]] = handle_[1]
                 # end if
             # end if
         # end for
@@ -275,16 +344,17 @@ class WP_Dependencies():
     #// 
     #// @param string|string[] $handles Item handle (string) or item handles (array of strings).
     #//
-    def dequeue(self, handles=None):
+    def dequeue(self, handles_=None):
         
-        for handle in handles:
-            handle = php_explode("?", handle)
-            key = php_array_search(handle[0], self.queue, True)
-            if False != key:
+        
+        for handle_ in handles_:
+            handle_ = php_explode("?", handle_)
+            key_ = php_array_search(handle_[0], self.queue, True)
+            if False != key_:
                 #// Reset all dependencies so they must be recalculated in recurse_deps().
                 self.all_queued_deps = None
-                self.queue[key] = None
-                self.args[handle[0]] = None
+                self.queue[key_] = None
+                self.args[handle_[0]] = None
             # end if
         # end for
     # end def dequeue
@@ -297,33 +367,34 @@ class WP_Dependencies():
     #// @param string   $handle Name of the item. Should be unique.
     #// @return bool Whether the handle is found after recursively searching the dependency tree.
     #//
-    def recurse_deps(self, queue=None, handle=None):
+    def recurse_deps(self, queue_=None, handle_=None):
+        
         
         if (php_isset(lambda : self.all_queued_deps)):
-            return (php_isset(lambda : self.all_queued_deps[handle]))
+            return (php_isset(lambda : self.all_queued_deps[handle_]))
         # end if
-        all_deps = php_array_fill_keys(queue, True)
-        queues = Array()
-        done = Array()
+        all_deps_ = php_array_fill_keys(queue_, True)
+        queues_ = Array()
+        done_ = Array()
         while True:
             
-            if not (queue):
+            if not (queue_):
                 break
             # end if
-            for queued in queue:
-                if (not (php_isset(lambda : done[queued]))) and (php_isset(lambda : self.registered[queued])):
-                    deps = self.registered[queued].deps
-                    if deps:
-                        all_deps += php_array_fill_keys(deps, True)
-                        php_array_push(queues, deps)
+            for queued_ in queue_:
+                if (not (php_isset(lambda : done_[queued_]))) and (php_isset(lambda : self.registered[queued_])):
+                    deps_ = self.registered[queued_].deps
+                    if deps_:
+                        all_deps_ += php_array_fill_keys(deps_, True)
+                        php_array_push(queues_, deps_)
                     # end if
-                    done[queued] = True
+                    done_[queued_] = True
                 # end if
             # end for
-            queue = php_array_pop(queues)
+            queue_ = php_array_pop(queues_)
         # end while
-        self.all_queued_deps = all_deps
-        return (php_isset(lambda : self.all_queued_deps[handle]))
+        self.all_queued_deps = all_deps_
+        return (php_isset(lambda : self.all_queued_deps[handle_]))
     # end def recurse_deps
     #// 
     #// Query list for an item.
@@ -335,16 +406,17 @@ class WP_Dependencies():
     #// @param string $list   Optional. Property name of list array. Default 'registered'.
     #// @return bool|_WP_Dependency Found, or object Item data.
     #//
-    def query(self, handle=None, list="registered"):
+    def query(self, handle_=None, list_="registered"):
         
-        for case in Switch(list):
+        
+        for case in Switch(list_):
             if case("registered"):
                 pass
             # end if
             if case("scripts"):
                 #// Back compat.
-                if (php_isset(lambda : self.registered[handle])):
-                    return self.registered[handle]
+                if (php_isset(lambda : self.registered[handle_])):
+                    return self.registered[handle_]
                 # end if
                 return False
             # end if
@@ -352,24 +424,24 @@ class WP_Dependencies():
                 pass
             # end if
             if case("queue"):
-                if php_in_array(handle, self.queue, True):
+                if php_in_array(handle_, self.queue, True):
                     return True
                 # end if
-                return self.recurse_deps(self.queue, handle)
+                return self.recurse_deps(self.queue, handle_)
             # end if
             if case("to_do"):
                 pass
             # end if
             if case("to_print"):
                 #// Back compat.
-                return php_in_array(handle, self.to_do, True)
+                return php_in_array(handle_, self.to_do, True)
             # end if
             if case("done"):
                 pass
             # end if
             if case("printed"):
                 #// Back compat.
-                return php_in_array(handle, self.done, True)
+                return php_in_array(handle_, self.done, True)
             # end if
         # end for
         return False
@@ -384,13 +456,14 @@ class WP_Dependencies():
     #// @param int|false $group     Group level: level (int), no groups (false).
     #// @return bool Not already in the group or a lower group.
     #//
-    def set_group(self, handle=None, recursion=None, group=None):
+    def set_group(self, handle_=None, recursion_=None, group_=None):
         
-        group = php_int(group)
-        if (php_isset(lambda : self.groups[handle])) and self.groups[handle] <= group:
+        
+        group_ = php_int(group_)
+        if (php_isset(lambda : self.groups[handle_])) and self.groups[handle_] <= group_:
             return False
         # end if
-        self.groups[handle] = group
+        self.groups[handle_] = group_
         return True
     # end def set_group
 # end class WP_Dependencies

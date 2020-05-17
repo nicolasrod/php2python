@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,7 +29,16 @@ class Requests_Transport():
     #// @param array $options Request options, see {@see Requests::response()} for documentation
     #// @return string Raw HTTP result
     #//
-    def request(self, url=None, headers=Array(), data=Array(), options=Array()):
+    def request(self, url_=None, headers_=None, data_=None, options_=None):
+        if headers_ is None:
+            headers_ = Array()
+        # end if
+        if data_ is None:
+            data_ = Array()
+        # end if
+        if options_ is None:
+            options_ = Array()
+        # end if
         
         pass
     # end def request
@@ -45,7 +49,8 @@ class Requests_Transport():
     #// @param array $options Global options, see {@see Requests::response()} for documentation
     #// @return array Array of Requests_Response objects (may contain Requests_Exception or string responses as well)
     #//
-    def request_multiple(self, requests=None, options=None):
+    def request_multiple(self, requests_=None, options_=None):
+        
         
         pass
     # end def request_multiple
@@ -55,6 +60,7 @@ class Requests_Transport():
     #//
     @classmethod
     def test(self):
+        
         
         pass
     # end def test

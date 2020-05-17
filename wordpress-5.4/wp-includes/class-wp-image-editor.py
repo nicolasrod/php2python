@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,7 +19,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 3.5.0
 #//
 class WP_Image_Editor():
-    file = None
+    file_ = None
     size = None
     mime_type = None
     default_mime_type = "image/jpeg"
@@ -35,9 +30,10 @@ class WP_Image_Editor():
     #// 
     #// @param string $file Path to the file to load.
     #//
-    def __init__(self, file=None):
+    def __init__(self, file_=None):
         
-        self.file = file
+        
+        self.file_ = file_
     # end def __init__
     #// 
     #// Checks to see if current environment supports the editor chosen.
@@ -51,7 +47,10 @@ class WP_Image_Editor():
     #// @return bool
     #//
     @classmethod
-    def test(self, args=Array()):
+    def test(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         return False
     # end def test
@@ -67,7 +66,8 @@ class WP_Image_Editor():
     #// @return bool
     #//
     @classmethod
-    def supports_mime_type(self, mime_type=None):
+    def supports_mime_type(self, mime_type_=None):
+        
         
         return False
     # end def supports_mime_type
@@ -81,6 +81,7 @@ class WP_Image_Editor():
     #//
     def load(self):
         
+        
         pass
     # end def load
     #// 
@@ -93,7 +94,8 @@ class WP_Image_Editor():
     #// @param string $mime_type
     #// @return array|WP_Error {'path'=>string, 'file'=>string, 'width'=>int, 'height'=>int, 'mime-type'=>string}
     #//
-    def save(self, destfilename=None, mime_type=None):
+    def save(self, destfilename_=None, mime_type_=None):
+        
         
         pass
     # end def save
@@ -112,7 +114,10 @@ class WP_Image_Editor():
     #// @param  bool     $crop
     #// @return bool|WP_Error
     #//
-    def resize(self, max_w=None, max_h=None, crop=False):
+    def resize(self, max_w_=None, max_h_=None, crop_=None):
+        if crop_ is None:
+            crop_ = False
+        # end if
         
         pass
     # end def resize
@@ -133,7 +138,8 @@ class WP_Image_Editor():
     #// }
     #// @return array An array of resized images metadata by size.
     #//
-    def multi_resize(self, sizes=None):
+    def multi_resize(self, sizes_=None):
+        
         
         pass
     # end def multi_resize
@@ -152,7 +158,10 @@ class WP_Image_Editor():
     #// @param bool $src_abs Optional. If the source crop points are absolute.
     #// @return bool|WP_Error
     #//
-    def crop(self, src_x=None, src_y=None, src_w=None, src_h=None, dst_w=None, dst_h=None, src_abs=False):
+    def crop(self, src_x_=None, src_y_=None, src_w_=None, src_h_=None, dst_w_=None, dst_h_=None, src_abs_=None):
+        if src_abs_ is None:
+            src_abs_ = False
+        # end if
         
         pass
     # end def crop
@@ -165,7 +174,8 @@ class WP_Image_Editor():
     #// @param float $angle
     #// @return bool|WP_Error
     #//
-    def rotate(self, angle=None):
+    def rotate(self, angle_=None):
+        
         
         pass
     # end def rotate
@@ -179,7 +189,8 @@ class WP_Image_Editor():
     #// @param bool $vert Flip along Vertical Axis
     #// @return bool|WP_Error
     #//
-    def flip(self, horz=None, vert=None):
+    def flip(self, horz_=None, vert_=None):
+        
         
         pass
     # end def flip
@@ -192,7 +203,8 @@ class WP_Image_Editor():
     #// @param string $mime_type The mime type of the image.
     #// @return bool|WP_Error True on success, WP_Error object or false on failure.
     #//
-    def stream(self, mime_type=None):
+    def stream(self, mime_type_=None):
+        
         
         pass
     # end def stream
@@ -210,6 +222,7 @@ class WP_Image_Editor():
     #//
     def get_size(self):
         
+        
         return self.size
     # end def get_size
     #// 
@@ -221,9 +234,10 @@ class WP_Image_Editor():
     #// @param int $height
     #// @return true
     #//
-    def update_size(self, width=None, height=None):
+    def update_size(self, width_=None, height_=None):
         
-        self.size = Array({"width": php_int(width), "height": php_int(height)})
+        
+        self.size = Array({"width": php_int(width_), "height": php_int(height_)})
         return True
     # end def update_size
     #// 
@@ -234,6 +248,7 @@ class WP_Image_Editor():
     #// @return int $quality Compression Quality. Range: [1,100]
     #//
     def get_quality(self):
+        
         
         if (not self.quality):
             self.set_quality()
@@ -248,9 +263,10 @@ class WP_Image_Editor():
     #// @param int $quality Compression Quality. Range: [1,100]
     #// @return true|WP_Error True if set successfully; WP_Error on failure.
     #//
-    def set_quality(self, quality=None):
+    def set_quality(self, quality_=None):
         
-        if None == quality:
+        
+        if None == quality_:
             #// 
             #// Filters the default image compression quality setting.
             #// 
@@ -264,7 +280,7 @@ class WP_Image_Editor():
             #// @param int    $quality   Quality level between 1 (low) and 100 (high).
             #// @param string $mime_type Image mime type.
             #//
-            quality = apply_filters("wp_editor_set_quality", self.default_quality, self.mime_type)
+            quality_ = apply_filters("wp_editor_set_quality", self.default_quality, self.mime_type)
             if "image/jpeg" == self.mime_type:
                 #// 
                 #// Filters the JPEG compression quality for backward-compatibility.
@@ -282,18 +298,18 @@ class WP_Image_Editor():
                 #// @param int    $quality Quality level between 0 (low) and 100 (high) of the JPEG.
                 #// @param string $context Context of the filter.
                 #//
-                quality = apply_filters("jpeg_quality", quality, "image_resize")
+                quality_ = apply_filters("jpeg_quality", quality_, "image_resize")
             # end if
-            if quality < 0 or quality > 100:
-                quality = self.default_quality
+            if quality_ < 0 or quality_ > 100:
+                quality_ = self.default_quality
             # end if
         # end if
         #// Allow 0, but squash to 1 due to identical images in GD, and for backward compatibility.
-        if 0 == quality:
-            quality = 1
+        if 0 == quality_:
+            quality_ = 1
         # end if
-        if quality >= 1 and quality <= 100:
-            self.quality = quality
+        if quality_ >= 1 and quality_ <= 100:
+            self.quality = quality_
             return True
         else:
             return php_new_class("WP_Error", lambda : WP_Error("invalid_image_quality", __("Attempted to set image quality outside of the range [1,100].")))
@@ -313,30 +329,31 @@ class WP_Image_Editor():
     #// @param string $mime_type
     #// @return array { filename|null, extension, mime-type }
     #//
-    def get_output_format(self, filename=None, mime_type=None):
+    def get_output_format(self, filename_=None, mime_type_=None):
         
-        new_ext = None
+        
+        new_ext_ = None
         #// By default, assume specified type takes priority.
-        if mime_type:
-            new_ext = self.get_extension(mime_type)
+        if mime_type_:
+            new_ext_ = self.get_extension(mime_type_)
         # end if
-        if filename:
-            file_ext = php_strtolower(pathinfo(filename, PATHINFO_EXTENSION))
-            file_mime = self.get_mime_type(file_ext)
+        if filename_:
+            file_ext_ = php_strtolower(pathinfo(filename_, PATHINFO_EXTENSION))
+            file_mime_ = self.get_mime_type(file_ext_)
         else:
             #// If no file specified, grab editor's current extension and mime-type.
-            file_ext = php_strtolower(pathinfo(self.file, PATHINFO_EXTENSION))
-            file_mime = self.mime_type
+            file_ext_ = php_strtolower(pathinfo(self.file_, PATHINFO_EXTENSION))
+            file_mime_ = self.mime_type
         # end if
         #// Check to see if specified mime-type is the same as type implied by
         #// file extension. If so, prefer extension from file.
-        if (not mime_type) or file_mime == mime_type:
-            mime_type = file_mime
-            new_ext = file_ext
+        if (not mime_type_) or file_mime_ == mime_type_:
+            mime_type_ = file_mime_
+            new_ext_ = file_ext_
         # end if
         #// Double-check that the mime-type selected is supported by the editor.
         #// If not, choose a default instead.
-        if (not self.supports_mime_type(mime_type)):
+        if (not self.supports_mime_type(mime_type_)):
             #// 
             #// Filters default mime type prior to getting the file extension.
             #// 
@@ -346,15 +363,15 @@ class WP_Image_Editor():
             #// 
             #// @param string $mime_type Mime type string.
             #//
-            mime_type = apply_filters("image_editor_default_mime_type", self.default_mime_type)
-            new_ext = self.get_extension(mime_type)
+            mime_type_ = apply_filters("image_editor_default_mime_type", self.default_mime_type)
+            new_ext_ = self.get_extension(mime_type_)
         # end if
-        if filename:
-            dir = pathinfo(filename, PATHINFO_DIRNAME)
-            ext = pathinfo(filename, PATHINFO_EXTENSION)
-            filename = trailingslashit(dir) + wp_basename(filename, str(".") + str(ext)) + str(".") + str(new_ext)
+        if filename_:
+            dir_ = pathinfo(filename_, PATHINFO_DIRNAME)
+            ext_ = pathinfo(filename_, PATHINFO_EXTENSION)
+            filename_ = trailingslashit(dir_) + wp_basename(filename_, str(".") + str(ext_)) + str(".") + str(new_ext_)
         # end if
-        return Array(filename, new_ext, mime_type)
+        return Array(filename_, new_ext_, mime_type_)
     # end def get_output_format
     #// 
     #// Builds an output filename based on current file, and adding proper suffix
@@ -366,23 +383,24 @@ class WP_Image_Editor():
     #// @param string $extension
     #// @return string filename
     #//
-    def generate_filename(self, suffix=None, dest_path=None, extension=None):
+    def generate_filename(self, suffix_=None, dest_path_=None, extension_=None):
+        
         
         #// $suffix will be appended to the destination filename, just before the extension.
-        if (not suffix):
-            suffix = self.get_suffix()
+        if (not suffix_):
+            suffix_ = self.get_suffix()
         # end if
-        dir = pathinfo(self.file, PATHINFO_DIRNAME)
-        ext = pathinfo(self.file, PATHINFO_EXTENSION)
-        name = wp_basename(self.file, str(".") + str(ext))
-        new_ext = php_strtolower(extension if extension else ext)
-        if (not is_null(dest_path)):
-            _dest_path = php_realpath(dest_path)
-            if _dest_path:
-                dir = _dest_path
+        dir_ = pathinfo(self.file_, PATHINFO_DIRNAME)
+        ext_ = pathinfo(self.file_, PATHINFO_EXTENSION)
+        name_ = wp_basename(self.file_, str(".") + str(ext_))
+        new_ext_ = php_strtolower(extension_ if extension_ else ext_)
+        if (not is_null(dest_path_)):
+            _dest_path_ = php_realpath(dest_path_)
+            if _dest_path_:
+                dir_ = _dest_path_
             # end if
         # end if
-        return trailingslashit(dir) + str(name) + str("-") + str(suffix) + str(".") + str(new_ext)
+        return trailingslashit(dir_) + str(name_) + str("-") + str(suffix_) + str(".") + str(new_ext_)
     # end def generate_filename
     #// 
     #// Builds and returns proper suffix for file based on height and width.
@@ -392,6 +410,7 @@ class WP_Image_Editor():
     #// @return string|false suffix
     #//
     def get_suffix(self):
+        
         
         if (not self.get_size()):
             return False
@@ -408,11 +427,12 @@ class WP_Image_Editor():
     #//
     def maybe_exif_rotate(self):
         
-        orientation = None
+        
+        orientation_ = None
         if php_is_callable("exif_read_data") and "image/jpeg" == self.mime_type:
-            exif_data = php_no_error(lambda: exif_read_data(self.file))
-            if (not php_empty(lambda : exif_data["Orientation"])):
-                orientation = php_int(exif_data["Orientation"])
+            exif_data_ = php_no_error(lambda: exif_read_data(self.file_))
+            if (not php_empty(lambda : exif_data_["Orientation"])):
+                orientation_ = php_int(exif_data_["Orientation"])
             # end if
         # end if
         #// 
@@ -423,55 +443,55 @@ class WP_Image_Editor():
         #// @param int    $orientation EXIF Orientation value as retrieved from the image file.
         #// @param string $file        Path to the image file.
         #//
-        orientation = apply_filters("wp_image_maybe_exif_rotate", orientation, self.file)
-        if (not orientation) or 1 == orientation:
+        orientation_ = apply_filters("wp_image_maybe_exif_rotate", orientation_, self.file_)
+        if (not orientation_) or 1 == orientation_:
             return False
         # end if
-        for case in Switch(orientation):
+        for case in Switch(orientation_):
             if case(2):
                 #// Flip horizontally.
-                result = self.flip(True, False)
+                result_ = self.flip(True, False)
                 break
             # end if
             if case(3):
                 #// Rotate 180 degrees or flip horizontally and vertically.
                 #// Flipping seems faster and uses less resources.
-                result = self.flip(True, True)
+                result_ = self.flip(True, True)
                 break
             # end if
             if case(4):
                 #// Flip vertically.
-                result = self.flip(False, True)
+                result_ = self.flip(False, True)
                 break
             # end if
             if case(5):
                 #// Rotate 90 degrees counter-clockwise and flip vertically.
-                result = self.rotate(90)
-                if (not is_wp_error(result)):
-                    result = self.flip(False, True)
+                result_ = self.rotate(90)
+                if (not is_wp_error(result_)):
+                    result_ = self.flip(False, True)
                 # end if
                 break
             # end if
             if case(6):
                 #// Rotate 90 degrees clockwise (270 counter-clockwise).
-                result = self.rotate(270)
+                result_ = self.rotate(270)
                 break
             # end if
             if case(7):
                 #// Rotate 90 degrees counter-clockwise and flip horizontally.
-                result = self.rotate(90)
-                if (not is_wp_error(result)):
-                    result = self.flip(True, False)
+                result_ = self.rotate(90)
+                if (not is_wp_error(result_)):
+                    result_ = self.flip(True, False)
                 # end if
                 break
             # end if
             if case(8):
                 #// Rotate 90 degrees counter-clockwise.
-                result = self.rotate(90)
+                result_ = self.rotate(90)
                 break
             # end if
         # end for
-        return result
+        return result_
     # end def maybe_exif_rotate
     #// 
     #// Either calls editor's save function or handles file as a stream.
@@ -483,30 +503,31 @@ class WP_Image_Editor():
     #// @param array $arguments
     #// @return bool
     #//
-    def make_image(self, filename=None, function=None, arguments=None):
+    def make_image(self, filename_=None, function_=None, arguments_=None):
         
-        stream = wp_is_stream(filename)
-        if stream:
+        
+        stream_ = wp_is_stream(filename_)
+        if stream_:
             ob_start()
         else:
             #// The directory containing the original file may no longer exist when using a replication plugin.
-            wp_mkdir_p(php_dirname(filename))
+            wp_mkdir_p(php_dirname(filename_))
         # end if
-        result = call_user_func_array(function, arguments)
-        if result and stream:
-            contents = ob_get_contents()
-            fp = fopen(filename, "w")
-            if (not fp):
+        result_ = call_user_func_array(function_, arguments_)
+        if result_ and stream_:
+            contents_ = ob_get_contents()
+            fp_ = fopen(filename_, "w")
+            if (not fp_):
                 ob_end_clean()
                 return False
             # end if
-            fwrite(fp, contents)
-            php_fclose(fp)
+            fwrite(fp_, contents_)
+            php_fclose(fp_)
         # end if
-        if stream:
+        if stream_:
             ob_end_clean()
         # end if
-        return result
+        return result_
     # end def make_image
     #// 
     #// Returns first matched mime-type from extension,
@@ -517,16 +538,17 @@ class WP_Image_Editor():
     #// @param string $extension
     #// @return string|false
     #//
-    def get_mime_type(self, extension=None):
+    def get_mime_type(self, extension_=None):
         
-        if (not extension):
+        
+        if (not extension_):
             return False
         # end if
-        mime_types = wp_get_mime_types()
-        extensions = php_array_keys(mime_types)
-        for _extension in extensions:
-            if php_preg_match(str("/") + str(extension) + str("/i"), _extension):
-                return mime_types[_extension]
+        mime_types_ = wp_get_mime_types()
+        extensions_ = php_array_keys(mime_types_)
+        for _extension_ in extensions_:
+            if php_preg_match(str("/") + str(extension_) + str("/i"), _extension_):
+                return mime_types_[_extension_]
             # end if
         # end for
         return False
@@ -540,12 +562,13 @@ class WP_Image_Editor():
     #// @param string $mime_type
     #// @return string|false
     #//
-    def get_extension(self, mime_type=None):
+    def get_extension(self, mime_type_=None):
         
-        extensions = php_explode("|", php_array_search(mime_type, wp_get_mime_types()))
-        if php_empty(lambda : extensions[0]):
+        
+        extensions_ = php_explode("|", php_array_search(mime_type_, wp_get_mime_types()))
+        if php_empty(lambda : extensions_[0]):
             return False
         # end if
-        return extensions[0]
+        return extensions_[0]
     # end def get_extension
 # end class WP_Image_Editor

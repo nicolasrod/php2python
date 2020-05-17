@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,6 +22,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Customize_Nav_Menu_Control(WP_Customize_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "nav_menu"
     #// 
     #// Don't render the control's content - it uses a JS template instead.
@@ -34,6 +35,7 @@ class WP_Customize_Nav_Menu_Control(WP_Customize_Control):
     #// @since 4.3.0
     #//
     def render_content(self):
+        
         
         pass
     # end def render_content
@@ -44,13 +46,14 @@ class WP_Customize_Nav_Menu_Control(WP_Customize_Control):
     #//
     def content_template(self):
         
-        add_items = __("Add Items")
+        
+        add_items_ = __("Add Items")
         php_print("     <p class=\"new-menu-item-invitation\">\n            ")
-        printf(__("Time to add some links! Click &#8220;%s&#8221; to start putting pages, categories, and custom links in your menu. Add as many things as you&#8217;d like."), add_items)
+        printf(__("Time to add some links! Click &#8220;%s&#8221; to start putting pages, categories, and custom links in your menu. Add as many things as you&#8217;d like."), add_items_)
         php_print("     </p>\n      <div class=\"customize-control-nav_menu-buttons\">\n            <button type=\"button\" class=\"button add-new-menu-item\" aria-label=\"")
         esc_attr_e("Add or remove menu items")
         php_print("\" aria-expanded=\"false\" aria-controls=\"available-menu-items\">\n             ")
-        php_print(add_items)
+        php_print(add_items_)
         php_print("         </button>\n         <button type=\"button\" class=\"button-link reorder-toggle\" aria-label=\"")
         esc_attr_e("Reorder menu items")
         php_print("\" aria-describedby=\"reorder-items-desc-{{ data.menu_id }}\">\n             <span class=\"reorder\">")
@@ -73,8 +76,9 @@ class WP_Customize_Nav_Menu_Control(WP_Customize_Control):
     #//
     def json(self):
         
-        exported = super().json()
-        exported["menu_id"] = self.setting.term_id
-        return exported
+        
+        exported_ = super().json()
+        exported_["menu_id"] = self.setting.term_id
+        return exported_
     # end def json
 # end class WP_Customize_Nav_Menu_Control

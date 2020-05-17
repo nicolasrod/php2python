@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -75,130 +70,133 @@ class SimplePie_File():
     redirects = 0
     error = Array()
     method = SIMPLEPIE_FILE_SOURCE_NONE
-    def __init__(self, url=None, timeout=10, redirects=5, headers=None, useragent=None, force_fsockopen=False):
+    def __init__(self, url_=None, timeout_=10, redirects_=5, headers_=None, useragent_=None, force_fsockopen_=None):
+        if force_fsockopen_ is None:
+            force_fsockopen_ = False
+        # end if
         
         if php_class_exists("idna_convert"):
-            idn = php_new_class("idna_convert", lambda : idna_convert())
-            parsed = SimplePie_Misc.parse_url(url)
-            url = SimplePie_Misc.compress_parse_url(parsed["scheme"], idn.encode(parsed["authority"]), parsed["path"], parsed["query"], parsed["fragment"])
+            idn_ = php_new_class("idna_convert", lambda : idna_convert())
+            parsed_ = SimplePie_Misc.parse_url(url_)
+            url_ = SimplePie_Misc.compress_parse_url(parsed_["scheme"], idn_.encode(parsed_["authority"]), parsed_["path"], parsed_["query"], parsed_["fragment"])
         # end if
-        self.url = url
-        self.useragent = useragent
-        if php_preg_match("/^http(s)?:\\/\\//i", url):
-            if useragent == None:
-                useragent = php_ini_get("user_agent")
-                self.useragent = useragent
+        self.url = url_
+        self.useragent = useragent_
+        if php_preg_match("/^http(s)?:\\/\\//i", url_):
+            if useragent_ == None:
+                useragent_ = php_ini_get("user_agent")
+                self.useragent = useragent_
             # end if
-            if (not php_is_array(headers)):
-                headers = Array()
+            if (not php_is_array(headers_)):
+                headers_ = Array()
             # end if
-            if (not force_fsockopen) and php_function_exists("curl_exec"):
+            if (not force_fsockopen_) and php_function_exists("curl_exec"):
                 self.method = SIMPLEPIE_FILE_SOURCE_REMOTE | SIMPLEPIE_FILE_SOURCE_CURL
-                fp = curl_init()
-                headers2 = Array()
-                for key,value in headers:
-                    headers2[-1] = str(key) + str(": ") + str(value)
+                fp_ = curl_init()
+                headers2_ = Array()
+                for key_,value_ in headers_:
+                    headers2_[-1] = str(key_) + str(": ") + str(value_)
                 # end for
                 if php_version_compare(SimplePie_Misc.get_curl_version(), "7.10.5", ">="):
-                    curl_setopt(fp, CURLOPT_ENCODING, "")
+                    curl_setopt(fp_, CURLOPT_ENCODING, "")
                 # end if
-                curl_setopt(fp, CURLOPT_URL, url)
-                curl_setopt(fp, CURLOPT_HEADER, 1)
-                curl_setopt(fp, CURLOPT_RETURNTRANSFER, 1)
-                curl_setopt(fp, CURLOPT_TIMEOUT, timeout)
-                curl_setopt(fp, CURLOPT_CONNECTTIMEOUT, timeout)
-                curl_setopt(fp, CURLOPT_REFERER, url)
-                curl_setopt(fp, CURLOPT_USERAGENT, useragent)
-                curl_setopt(fp, CURLOPT_HTTPHEADER, headers2)
+                curl_setopt(fp_, CURLOPT_URL, url_)
+                curl_setopt(fp_, CURLOPT_HEADER, 1)
+                curl_setopt(fp_, CURLOPT_RETURNTRANSFER, 1)
+                curl_setopt(fp_, CURLOPT_TIMEOUT, timeout_)
+                curl_setopt(fp_, CURLOPT_CONNECTTIMEOUT, timeout_)
+                curl_setopt(fp_, CURLOPT_REFERER, url_)
+                curl_setopt(fp_, CURLOPT_USERAGENT, useragent_)
+                curl_setopt(fp_, CURLOPT_HTTPHEADER, headers2_)
                 if (not php_ini_get("open_basedir")) and (not php_ini_get("safe_mode")) and php_version_compare(SimplePie_Misc.get_curl_version(), "7.15.2", ">="):
-                    curl_setopt(fp, CURLOPT_FOLLOWLOCATION, 1)
-                    curl_setopt(fp, CURLOPT_MAXREDIRS, redirects)
+                    curl_setopt(fp_, CURLOPT_FOLLOWLOCATION, 1)
+                    curl_setopt(fp_, CURLOPT_MAXREDIRS, redirects_)
                 # end if
-                self.headers = curl_exec(fp)
-                if curl_errno(fp) == 23 or curl_errno(fp) == 61:
-                    curl_setopt(fp, CURLOPT_ENCODING, "none")
-                    self.headers = curl_exec(fp)
+                self.headers = curl_exec(fp_)
+                if curl_errno(fp_) == 23 or curl_errno(fp_) == 61:
+                    curl_setopt(fp_, CURLOPT_ENCODING, "none")
+                    self.headers = curl_exec(fp_)
                 # end if
-                if curl_errno(fp):
-                    self.error = "cURL error " + curl_errno(fp) + ": " + curl_error(fp)
+                if curl_errno(fp_):
+                    self.error = "cURL error " + curl_errno(fp_) + ": " + curl_error(fp_)
                     self.success = False
                 else:
-                    info = curl_getinfo(fp)
-                    curl_close(fp)
-                    self.headers = php_explode("\r\n\r\n", self.headers, info["redirect_count"] + 1)
+                    info_ = curl_getinfo(fp_)
+                    curl_close(fp_)
+                    self.headers = php_explode("\r\n\r\n", self.headers, info_["redirect_count"] + 1)
                     self.headers = php_array_pop(self.headers)
-                    parser = php_new_class("SimplePie_HTTP_Parser", lambda : SimplePie_HTTP_Parser(self.headers))
-                    if parser.parse():
-                        self.headers = parser.headers
-                        self.body = parser.body
-                        self.status_code = parser.status_code
-                        if php_in_array(self.status_code, Array(300, 301, 302, 303, 307)) or self.status_code > 307 and self.status_code < 400 and (php_isset(lambda : self.headers["location"])) and self.redirects < redirects:
+                    parser_ = php_new_class("SimplePie_HTTP_Parser", lambda : SimplePie_HTTP_Parser(self.headers))
+                    if parser_.parse():
+                        self.headers = parser_.headers
+                        self.body = parser_.body
+                        self.status_code = parser_.status_code
+                        if php_in_array(self.status_code, Array(300, 301, 302, 303, 307)) or self.status_code > 307 and self.status_code < 400 and (php_isset(lambda : self.headers["location"])) and self.redirects < redirects_:
                             self.redirects += 1
-                            location = SimplePie_Misc.absolutize_url(self.headers["location"], url)
-                            return self.__init__(location, timeout, redirects, headers, useragent, force_fsockopen)
+                            location_ = SimplePie_Misc.absolutize_url(self.headers["location"], url_)
+                            return self.__init__(location_, timeout_, redirects_, headers_, useragent_, force_fsockopen_)
                         # end if
                     # end if
                 # end if
             else:
                 self.method = SIMPLEPIE_FILE_SOURCE_REMOTE | SIMPLEPIE_FILE_SOURCE_FSOCKOPEN
-                url_parts = php_parse_url(url)
-                socket_host = url_parts["host"]
-                if (php_isset(lambda : url_parts["scheme"])) and php_strtolower(url_parts["scheme"]) == "https":
-                    socket_host = str("ssl://") + str(url_parts["host"])
-                    url_parts["port"] = 443
+                url_parts_ = php_parse_url(url_)
+                socket_host_ = url_parts_["host"]
+                if (php_isset(lambda : url_parts_["scheme"])) and php_strtolower(url_parts_["scheme"]) == "https":
+                    socket_host_ = str("ssl://") + str(url_parts_["host"])
+                    url_parts_["port"] = 443
                 # end if
-                if (not (php_isset(lambda : url_parts["port"]))):
-                    url_parts["port"] = 80
+                if (not (php_isset(lambda : url_parts_["port"]))):
+                    url_parts_["port"] = 80
                 # end if
-                fp = php_no_error(lambda: fsockopen(socket_host, url_parts["port"], errno, errstr, timeout))
-                if (not fp):
-                    self.error = "fsockopen error: " + errstr
+                fp_ = php_no_error(lambda: fsockopen(socket_host_, url_parts_["port"], errno_, errstr_, timeout_))
+                if (not fp_):
+                    self.error = "fsockopen error: " + errstr_
                     self.success = False
                 else:
-                    stream_set_timeout(fp, timeout)
-                    if (php_isset(lambda : url_parts["path"])):
-                        if (php_isset(lambda : url_parts["query"])):
-                            get = str(url_parts["path"]) + str("?") + str(url_parts["query"])
+                    stream_set_timeout(fp_, timeout_)
+                    if (php_isset(lambda : url_parts_["path"])):
+                        if (php_isset(lambda : url_parts_["query"])):
+                            get_ = str(url_parts_["path"]) + str("?") + str(url_parts_["query"])
                         else:
-                            get = url_parts["path"]
+                            get_ = url_parts_["path"]
                         # end if
                     else:
-                        get = "/"
+                        get_ = "/"
                     # end if
-                    out = str("GET ") + str(get) + str(" HTTP/1.1\r\n")
-                    out += str("Host: ") + str(url_parts["host"]) + str("\r\n")
-                    out += str("User-Agent: ") + str(useragent) + str("\r\n")
+                    out_ = str("GET ") + str(get_) + str(" HTTP/1.1\r\n")
+                    out_ += str("Host: ") + str(url_parts_["host"]) + str("\r\n")
+                    out_ += str("User-Agent: ") + str(useragent_) + str("\r\n")
                     if php_extension_loaded("zlib"):
-                        out += "Accept-Encoding: x-gzip,gzip,deflate\r\n"
+                        out_ += "Accept-Encoding: x-gzip,gzip,deflate\r\n"
                     # end if
-                    if (php_isset(lambda : url_parts["user"])) and (php_isset(lambda : url_parts["pass"])):
-                        out += "Authorization: Basic " + php_base64_encode(str(url_parts["user"]) + str(":") + str(url_parts["pass"])) + "\r\n"
+                    if (php_isset(lambda : url_parts_["user"])) and (php_isset(lambda : url_parts_["pass"])):
+                        out_ += "Authorization: Basic " + php_base64_encode(str(url_parts_["user"]) + str(":") + str(url_parts_["pass"])) + "\r\n"
                     # end if
-                    for key,value in headers:
-                        out += str(key) + str(": ") + str(value) + str("\r\n")
+                    for key_,value_ in headers_:
+                        out_ += str(key_) + str(": ") + str(value_) + str("\r\n")
                     # end for
-                    out += "Connection: Close\r\n\r\n"
-                    fwrite(fp, out)
-                    info = stream_get_meta_data(fp)
+                    out_ += "Connection: Close\r\n\r\n"
+                    fwrite(fp_, out_)
+                    info_ = stream_get_meta_data(fp_)
                     self.headers = ""
                     while True:
                         
-                        if not ((not info["eof"]) and (not info["timed_out"])):
+                        if not ((not info_["eof"]) and (not info_["timed_out"])):
                             break
                         # end if
-                        self.headers += fread(fp, 1160)
-                        info = stream_get_meta_data(fp)
+                        self.headers += fread(fp_, 1160)
+                        info_ = stream_get_meta_data(fp_)
                     # end while
-                    if (not info["timed_out"]):
-                        parser = php_new_class("SimplePie_HTTP_Parser", lambda : SimplePie_HTTP_Parser(self.headers))
-                        if parser.parse():
-                            self.headers = parser.headers
-                            self.body = parser.body
-                            self.status_code = parser.status_code
-                            if php_in_array(self.status_code, Array(300, 301, 302, 303, 307)) or self.status_code > 307 and self.status_code < 400 and (php_isset(lambda : self.headers["location"])) and self.redirects < redirects:
+                    if (not info_["timed_out"]):
+                        parser_ = php_new_class("SimplePie_HTTP_Parser", lambda : SimplePie_HTTP_Parser(self.headers))
+                        if parser_.parse():
+                            self.headers = parser_.headers
+                            self.body = parser_.body
+                            self.status_code = parser_.status_code
+                            if php_in_array(self.status_code, Array(300, 301, 302, 303, 307)) or self.status_code > 307 and self.status_code < 400 and (php_isset(lambda : self.headers["location"])) and self.redirects < redirects_:
                                 self.redirects += 1
-                                location = SimplePie_Misc.absolutize_url(self.headers["location"], url)
-                                return self.__init__(location, timeout, redirects, headers, useragent, force_fsockopen)
+                                location_ = SimplePie_Misc.absolutize_url(self.headers["location"], url_)
+                                return self.__init__(location_, timeout_, redirects_, headers_, useragent_, force_fsockopen_)
                             # end if
                             if (php_isset(lambda : self.headers["content-encoding"])):
                                 #// Hey, we act dumb elsewhere, so let's do that here too
@@ -207,27 +205,27 @@ class SimplePie_File():
                                         pass
                                     # end if
                                     if case("x-gzip"):
-                                        decoder = php_new_class("SimplePie_gzdecode", lambda : SimplePie_gzdecode(self.body))
-                                        if (not decoder.parse()):
+                                        decoder_ = php_new_class("SimplePie_gzdecode", lambda : SimplePie_gzdecode(self.body))
+                                        if (not decoder_.parse()):
                                             self.error = "Unable to decode HTTP \"gzip\" stream"
                                             self.success = False
                                         else:
-                                            self.body = decoder.data
+                                            self.body = decoder_.data
                                         # end if
                                         break
                                     # end if
                                     if case("deflate"):
-                                        decompressed = gzinflate(self.body)
-                                        if decompressed != False:
-                                            self.body = decompressed
+                                        decompressed_ = gzinflate(self.body)
+                                        if decompressed_ != False:
+                                            self.body = decompressed_
                                         else:
-                                            decompressed = gzuncompress(self.body)
-                                            if decompressed != False:
-                                                self.body = decompressed
+                                            decompressed_ = gzuncompress(self.body)
+                                            if decompressed_ != False:
+                                                self.body = decompressed_
                                             else:
-                                                decompressed = gzdecode(self.body)
-                                                if php_function_exists("gzdecode") and decompressed != False:
-                                                    self.body = decompressed
+                                                decompressed_ = gzdecode(self.body)
+                                                if php_function_exists("gzdecode") and decompressed_ != False:
+                                                    self.body = decompressed_
                                                 else:
                                                     self.error = "Unable to decode HTTP \"deflate\" stream"
                                                     self.success = False
@@ -247,12 +245,12 @@ class SimplePie_File():
                         self.error = "fsocket timed out"
                         self.success = False
                     # end if
-                    php_fclose(fp)
+                    php_fclose(fp_)
                 # end if
             # end if
         else:
             self.method = SIMPLEPIE_FILE_SOURCE_LOCAL | SIMPLEPIE_FILE_SOURCE_FILE_GET_CONTENTS
-            self.body = php_file_get_contents(url)
+            self.body = php_file_get_contents(url_)
             if (not self.body):
                 self.error = "file_get_contents could not read the file"
                 self.success = False

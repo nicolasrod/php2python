@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -42,25 +37,28 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param string|bool $secure_cookie Optional. Whether to use secure cookie.
 #// @return WP_User|WP_Error WP_User on success, WP_Error on failure.
 #//
-def wp_signon(credentials=Array(), secure_cookie="", *args_):
+def wp_signon(credentials_=None, secure_cookie_="", *_args_):
+    if credentials_ is None:
+        credentials_ = Array()
+    # end if
     
-    if php_empty(lambda : credentials):
-        credentials = Array()
+    if php_empty(lambda : credentials_):
+        credentials_ = Array()
         #// Back-compat for plugins passing an empty string.
         if (not php_empty(lambda : PHP_POST["log"])):
-            credentials["user_login"] = wp_unslash(PHP_POST["log"])
+            credentials_["user_login"] = wp_unslash(PHP_POST["log"])
         # end if
         if (not php_empty(lambda : PHP_POST["pwd"])):
-            credentials["user_password"] = PHP_POST["pwd"]
+            credentials_["user_password"] = PHP_POST["pwd"]
         # end if
         if (not php_empty(lambda : PHP_POST["rememberme"])):
-            credentials["remember"] = PHP_POST["rememberme"]
+            credentials_["remember"] = PHP_POST["rememberme"]
         # end if
     # end if
-    if (not php_empty(lambda : credentials["remember"])):
-        credentials["remember"] = True
+    if (not php_empty(lambda : credentials_["remember"])):
+        credentials_["remember"] = True
     else:
-        credentials["remember"] = False
+        credentials_["remember"] = False
     # end if
     #// 
     #// Fires before the user is authenticated.
@@ -75,9 +73,9 @@ def wp_signon(credentials=Array(), secure_cookie="", *args_):
     #// @param string $user_login    Username (passed by reference).
     #// @param string $user_password User password (passed by reference).
     #//
-    do_action_ref_array("wp_authenticate", Array(credentials["user_login"], credentials["user_password"]))
-    if "" == secure_cookie:
-        secure_cookie = is_ssl()
+    do_action_ref_array("wp_authenticate", Array(credentials_["user_login"], credentials_["user_password"]))
+    if "" == secure_cookie_:
+        secure_cookie_ = is_ssl()
     # end if
     #// 
     #// Filters whether to use a secure sign-on cookie.
@@ -94,17 +92,17 @@ def wp_signon(credentials=Array(), secure_cookie="", *args_):
     #// that the cookie will be kept. Default false.
     #// }
     #//
-    secure_cookie = apply_filters("secure_signon_cookie", secure_cookie, credentials)
-    global auth_secure_cookie
-    php_check_if_defined("auth_secure_cookie")
+    secure_cookie_ = apply_filters("secure_signon_cookie", secure_cookie_, credentials_)
+    global auth_secure_cookie_
+    php_check_if_defined("auth_secure_cookie_")
     #// XXX ugly hack to pass this to wp_authenticate_cookie().
-    auth_secure_cookie = secure_cookie
+    auth_secure_cookie_ = secure_cookie_
     add_filter("authenticate", "wp_authenticate_cookie", 30, 3)
-    user = wp_authenticate(credentials["user_login"], credentials["user_password"])
-    if is_wp_error(user):
-        return user
+    user_ = wp_authenticate(credentials_["user_login"], credentials_["user_password"])
+    if is_wp_error(user_):
+        return user_
     # end if
-    wp_set_auth_cookie(user.ID, credentials["remember"], secure_cookie)
+    wp_set_auth_cookie(user_.ID, credentials_["remember"], secure_cookie_)
     #// 
     #// Fires after the user has successfully logged in.
     #// 
@@ -113,8 +111,8 @@ def wp_signon(credentials=Array(), secure_cookie="", *args_):
     #// @param string  $user_login Username.
     #// @param WP_User $user       WP_User object of the logged-in user.
     #//
-    do_action("wp_login", user.user_login, user)
-    return user
+    do_action("wp_login", user_.user_login, user_)
+    return user_
 # end def wp_signon
 #// 
 #// Authenticate a user, confirming the username and password are valid.
@@ -126,26 +124,27 @@ def wp_signon(credentials=Array(), secure_cookie="", *args_):
 #// @param string                $password Password for authentication.
 #// @return WP_User|WP_Error WP_User on success, WP_Error on failure.
 #//
-def wp_authenticate_username_password(user=None, username=None, password=None, *args_):
+def wp_authenticate_username_password(user_=None, username_=None, password_=None, *_args_):
     
-    if type(user).__name__ == "WP_User":
-        return user
+    
+    if type(user_).__name__ == "WP_User":
+        return user_
     # end if
-    if php_empty(lambda : username) or php_empty(lambda : password):
-        if is_wp_error(user):
-            return user
+    if php_empty(lambda : username_) or php_empty(lambda : password_):
+        if is_wp_error(user_):
+            return user_
         # end if
-        error = php_new_class("WP_Error", lambda : WP_Error())
-        if php_empty(lambda : username):
-            error.add("empty_username", __("<strong>Error</strong>: The username field is empty."))
+        error_ = php_new_class("WP_Error", lambda : WP_Error())
+        if php_empty(lambda : username_):
+            error_.add("empty_username", __("<strong>Error</strong>: The username field is empty."))
         # end if
-        if php_empty(lambda : password):
-            error.add("empty_password", __("<strong>Error</strong>: The password field is empty."))
+        if php_empty(lambda : password_):
+            error_.add("empty_password", __("<strong>Error</strong>: The password field is empty."))
         # end if
-        return error
+        return error_
     # end if
-    user = get_user_by("login", username)
-    if (not user):
+    user_ = get_user_by("login", username_)
+    if (not user_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_username", __("Unknown username. Check again or try your email address.")))
     # end if
     #// 
@@ -157,14 +156,14 @@ def wp_authenticate_username_password(user=None, username=None, password=None, *
     #// callback failed authentication.
     #// @param string           $password Password to check against the user.
     #//
-    user = apply_filters("wp_authenticate_user", user, password)
-    if is_wp_error(user):
-        return user
+    user_ = apply_filters("wp_authenticate_user", user_, password_)
+    if is_wp_error(user_):
+        return user_
     # end if
-    if (not wp_check_password(password, user.user_pass, user.ID)):
-        return php_new_class("WP_Error", lambda : WP_Error("incorrect_password", php_sprintf(__("<strong>Error</strong>: The password you entered for the username %s is incorrect."), "<strong>" + username + "</strong>") + " <a href=\"" + wp_lostpassword_url() + "\">" + __("Lost your password?") + "</a>"))
+    if (not wp_check_password(password_, user_.user_pass, user_.ID)):
+        return php_new_class("WP_Error", lambda : WP_Error("incorrect_password", php_sprintf(__("<strong>Error</strong>: The password you entered for the username %s is incorrect."), "<strong>" + username_ + "</strong>") + " <a href=\"" + wp_lostpassword_url() + "\">" + __("Lost your password?") + "</a>"))
     # end if
-    return user
+    return user_
 # end def wp_authenticate_username_password
 #// 
 #// Authenticates a user using the email and password.
@@ -177,41 +176,42 @@ def wp_authenticate_username_password(user=None, username=None, password=None, *
 #// @param string                $password Password for authentication.
 #// @return WP_User|WP_Error WP_User on success, WP_Error on failure.
 #//
-def wp_authenticate_email_password(user=None, email=None, password=None, *args_):
+def wp_authenticate_email_password(user_=None, email_=None, password_=None, *_args_):
     
-    if type(user).__name__ == "WP_User":
-        return user
+    
+    if type(user_).__name__ == "WP_User":
+        return user_
     # end if
-    if php_empty(lambda : email) or php_empty(lambda : password):
-        if is_wp_error(user):
-            return user
+    if php_empty(lambda : email_) or php_empty(lambda : password_):
+        if is_wp_error(user_):
+            return user_
         # end if
-        error = php_new_class("WP_Error", lambda : WP_Error())
-        if php_empty(lambda : email):
+        error_ = php_new_class("WP_Error", lambda : WP_Error())
+        if php_empty(lambda : email_):
             #// Uses 'empty_username' for back-compat with wp_signon().
-            error.add("empty_username", __("<strong>Error</strong>: The email field is empty."))
+            error_.add("empty_username", __("<strong>Error</strong>: The email field is empty."))
         # end if
-        if php_empty(lambda : password):
-            error.add("empty_password", __("<strong>Error</strong>: The password field is empty."))
+        if php_empty(lambda : password_):
+            error_.add("empty_password", __("<strong>Error</strong>: The password field is empty."))
         # end if
-        return error
+        return error_
     # end if
-    if (not is_email(email)):
-        return user
+    if (not is_email(email_)):
+        return user_
     # end if
-    user = get_user_by("email", email)
-    if (not user):
+    user_ = get_user_by("email", email_)
+    if (not user_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_email", __("Unknown email address. Check again or try your username.")))
     # end if
     #// This filter is documented in wp-includes/user.php
-    user = apply_filters("wp_authenticate_user", user, password)
-    if is_wp_error(user):
-        return user
+    user_ = apply_filters("wp_authenticate_user", user_, password_)
+    if is_wp_error(user_):
+        return user_
     # end if
-    if (not wp_check_password(password, user.user_pass, user.ID)):
-        return php_new_class("WP_Error", lambda : WP_Error("incorrect_password", php_sprintf(__("<strong>Error</strong>: The password you entered for the email address %s is incorrect."), "<strong>" + email + "</strong>") + " <a href=\"" + wp_lostpassword_url() + "\">" + __("Lost your password?") + "</a>"))
+    if (not wp_check_password(password_, user_.user_pass, user_.ID)):
+        return php_new_class("WP_Error", lambda : WP_Error("incorrect_password", php_sprintf(__("<strong>Error</strong>: The password you entered for the email address %s is incorrect."), "<strong>" + email_ + "</strong>") + " <a href=\"" + wp_lostpassword_url() + "\">" + __("Lost your password?") + "</a>"))
     # end if
-    return user
+    return user_
 # end def wp_authenticate_email_password
 #// 
 #// Authenticate the user using the WordPress auth cookie.
@@ -225,29 +225,30 @@ def wp_authenticate_email_password(user=None, email=None, password=None, *args_)
 #// @param string                $password Password. If not empty, cancels the cookie authentication.
 #// @return WP_User|WP_Error WP_User on success, WP_Error on failure.
 #//
-def wp_authenticate_cookie(user=None, username=None, password=None, *args_):
+def wp_authenticate_cookie(user_=None, username_=None, password_=None, *_args_):
     
-    if type(user).__name__ == "WP_User":
-        return user
+    
+    if type(user_).__name__ == "WP_User":
+        return user_
     # end if
-    if php_empty(lambda : username) and php_empty(lambda : password):
-        user_id = wp_validate_auth_cookie()
-        if user_id:
-            return php_new_class("WP_User", lambda : WP_User(user_id))
+    if php_empty(lambda : username_) and php_empty(lambda : password_):
+        user_id_ = wp_validate_auth_cookie()
+        if user_id_:
+            return php_new_class("WP_User", lambda : WP_User(user_id_))
         # end if
-        global auth_secure_cookie
-        php_check_if_defined("auth_secure_cookie")
-        if auth_secure_cookie:
-            auth_cookie = SECURE_AUTH_COOKIE
+        global auth_secure_cookie_
+        php_check_if_defined("auth_secure_cookie_")
+        if auth_secure_cookie_:
+            auth_cookie_ = SECURE_AUTH_COOKIE
         else:
-            auth_cookie = AUTH_COOKIE
+            auth_cookie_ = AUTH_COOKIE
         # end if
-        if (not php_empty(lambda : PHP_COOKIE[auth_cookie])):
+        if (not php_empty(lambda : PHP_COOKIE[auth_cookie_])):
             return php_new_class("WP_Error", lambda : WP_Error("expired_session", __("Please log in again.")))
         # end if
         pass
     # end if
-    return user
+    return user_
 # end def wp_authenticate_cookie
 #// 
 #// For Multisite blogs, check if the authenticated user has been marked as a
@@ -258,9 +259,10 @@ def wp_authenticate_cookie(user=None, username=None, password=None, *args_):
 #// @param WP_User|WP_Error|null $user WP_User or WP_Error object from a previous callback. Default null.
 #// @return WP_User|WP_Error WP_User on success, WP_Error if the user is considered a spammer.
 #//
-def wp_authenticate_spam_check(user=None, *args_):
+def wp_authenticate_spam_check(user_=None, *_args_):
     
-    if type(user).__name__ == "WP_User" and is_multisite():
+    
+    if type(user_).__name__ == "WP_User" and is_multisite():
         #// 
         #// Filters whether the user has been marked as a spammer.
         #// 
@@ -269,12 +271,12 @@ def wp_authenticate_spam_check(user=None, *args_):
         #// @param bool    $spammed Whether the user is considered a spammer.
         #// @param WP_User $user    User to check against.
         #//
-        spammed = apply_filters("check_is_user_spammed", is_user_spammy(user), user)
-        if spammed:
+        spammed_ = apply_filters("check_is_user_spammed", is_user_spammy(user_), user_)
+        if spammed_:
             return php_new_class("WP_Error", lambda : WP_Error("spammer_account", __("<strong>Error</strong>: Your account has been marked as a spammer.")))
         # end if
     # end if
-    return user
+    return user_
 # end def wp_authenticate_spam_check
 #// 
 #// Validates the logged-in cookie.
@@ -291,10 +293,11 @@ def wp_authenticate_spam_check(user=None, *args_):
 #// @return int|false User ID if validated, false otherwise. If a user ID from
 #// an earlier filter callback is received, that value is returned.
 #//
-def wp_validate_logged_in_cookie(user_id=None, *args_):
+def wp_validate_logged_in_cookie(user_id_=None, *_args_):
     
-    if user_id:
-        return user_id
+    
+    if user_id_:
+        return user_id_
     # end if
     if is_blog_admin() or is_network_admin() or php_empty(lambda : PHP_COOKIE[LOGGED_IN_COOKIE]):
         return False
@@ -316,12 +319,15 @@ def wp_validate_logged_in_cookie(user_id=None, *args_):
 #// @param bool         $public_only Optional. Whether to only return counts for public posts. Default false.
 #// @return string Number of posts the user has written in this post type.
 #//
-def count_user_posts(userid=None, post_type="post", public_only=False, *args_):
+def count_user_posts(userid_=None, post_type_="post", public_only_=None, *_args_):
+    if public_only_ is None:
+        public_only_ = False
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    where = get_posts_by_author_sql(post_type, True, userid, public_only)
-    count = wpdb.get_var(str("SELECT COUNT(*) FROM ") + str(wpdb.posts) + str(" ") + str(where))
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    where_ = get_posts_by_author_sql(post_type_, True, userid_, public_only_)
+    count_ = wpdb_.get_var(str("SELECT COUNT(*) FROM ") + str(wpdb_.posts) + str(" ") + str(where_))
     #// 
     #// Filters the number of posts a user has written.
     #// 
@@ -334,7 +340,7 @@ def count_user_posts(userid=None, post_type="post", public_only=False, *args_):
     #// @param string|array $post_type   Single post type or array of post types to count the number of posts for.
     #// @param bool         $public_only Whether to limit counted posts to public posts.
     #//
-    return apply_filters("get_usernumposts", count, userid, post_type, public_only)
+    return apply_filters("get_usernumposts", count_, userid_, post_type_, public_only_)
 # end def count_user_posts
 #// 
 #// Number of posts written by a list of users.
@@ -348,26 +354,29 @@ def count_user_posts(userid=None, post_type="post", public_only=False, *args_):
 #// @param bool            $public_only Optional. Only return counts for public posts.  Defaults to false.
 #// @return string[] Amount of posts each user has written, as strings, keyed by user ID.
 #//
-def count_many_users_posts(users=None, post_type="post", public_only=False, *args_):
-    
-    global wpdb
-    php_check_if_defined("wpdb")
-    count = Array()
-    if php_empty(lambda : users) or (not php_is_array(users)):
-        return count
+def count_many_users_posts(users_=None, post_type_="post", public_only_=None, *_args_):
+    if public_only_ is None:
+        public_only_ = False
     # end if
-    userlist = php_implode(",", php_array_map("absint", users))
-    where = get_posts_by_author_sql(post_type, True, None, public_only)
-    result = wpdb.get_results(str("SELECT post_author, COUNT(*) FROM ") + str(wpdb.posts) + str(" ") + str(where) + str(" AND post_author IN (") + str(userlist) + str(") GROUP BY post_author"), ARRAY_N)
-    for row in result:
-        count[row[0]] = row[1]
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    count_ = Array()
+    if php_empty(lambda : users_) or (not php_is_array(users_)):
+        return count_
+    # end if
+    userlist_ = php_implode(",", php_array_map("absint", users_))
+    where_ = get_posts_by_author_sql(post_type_, True, None, public_only_)
+    result_ = wpdb_.get_results(str("SELECT post_author, COUNT(*) FROM ") + str(wpdb_.posts) + str(" ") + str(where_) + str(" AND post_author IN (") + str(userlist_) + str(") GROUP BY post_author"), ARRAY_N)
+    for row_ in result_:
+        count_[row_[0]] = row_[1]
     # end for
-    for id in users:
-        if (not (php_isset(lambda : count[id]))):
-            count[id] = 0
+    for id_ in users_:
+        if (not (php_isset(lambda : count_[id_]))):
+            count_[id_] = 0
         # end if
     # end for
-    return count
+    return count_
 # end def count_many_users_posts
 #// 
 #// User option functions.
@@ -379,13 +388,14 @@ def count_many_users_posts(users=None, post_type="post", public_only=False, *arg
 #// 
 #// @return int The current user's ID, or 0 if no user is logged in.
 #//
-def get_current_user_id(*args_):
+def get_current_user_id(*_args_):
+    
     
     if (not php_function_exists("wp_get_current_user")):
         return 0
     # end if
-    user = wp_get_current_user()
-    return php_int(user.ID) if (php_isset(lambda : user.ID)) else 0
+    user_ = wp_get_current_user()
+    return php_int(user_.ID) if (php_isset(lambda : user_.ID)) else 0
 # end def get_current_user_id
 #// 
 #// Retrieve user option that can be either per Site or per Network.
@@ -406,29 +416,30 @@ def get_current_user_id(*args_):
 #// @param string $deprecated Use get_option() to check for an option in the options table.
 #// @return mixed User option value on success, false on failure.
 #//
-def get_user_option(option=None, user=0, deprecated="", *args_):
+def get_user_option(option_=None, user_=0, deprecated_="", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not php_empty(lambda : deprecated)):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "3.0.0")
     # end if
-    if php_empty(lambda : user):
-        user = get_current_user_id()
+    if php_empty(lambda : user_):
+        user_ = get_current_user_id()
     # end if
-    user = get_userdata(user)
-    if (not user):
+    user_ = get_userdata(user_)
+    if (not user_):
         return False
     # end if
-    prefix = wpdb.get_blog_prefix()
-    if user.has_prop(prefix + option):
+    prefix_ = wpdb_.get_blog_prefix()
+    if user_.has_prop(prefix_ + option_):
         #// Blog-specific.
-        result = user.get(prefix + option)
-    elif user.has_prop(option):
+        result_ = user_.get(prefix_ + option_)
+    elif user_.has_prop(option_):
         #// User-specific and cross-blog.
-        result = user.get(option)
+        result_ = user_.get(option_)
     else:
-        result = False
+        result_ = False
     # end if
     #// 
     #// Filters a specific user option value.
@@ -441,7 +452,7 @@ def get_user_option(option=None, user=0, deprecated="", *args_):
     #// @param string  $option Name of the option being retrieved.
     #// @param WP_User $user   WP_User object of the user whose option is being retrieved.
     #//
-    return apply_filters(str("get_user_option_") + str(option), result, option, user)
+    return apply_filters(str("get_user_option_") + str(option_), result_, option_, user_)
 # end def get_user_option
 #// 
 #// Update user option with global blog capability.
@@ -464,14 +475,17 @@ def get_user_option(option=None, user=0, deprecated="", *args_):
 #// @return int|bool User meta ID if the option didn't exist, true on successful update,
 #// false on failure.
 #//
-def update_user_option(user_id=None, option_name=None, newvalue=None, global_=False, *args_):
-    
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not global_):
-        option_name = wpdb.get_blog_prefix() + option_name
+def update_user_option(user_id_=None, option_name_=None, newvalue_=None, global_=None, *_args_):
+    if global_ is None:
+        global_ = False
     # end if
-    return update_user_meta(user_id, option_name, newvalue)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not global_):
+        option_name_ = wpdb_.get_blog_prefix() + option_name_
+    # end if
+    return update_user_meta(user_id_, option_name_, newvalue_)
 # end def update_user_option
 #// 
 #// Delete user option with global blog capability.
@@ -490,14 +504,17 @@ def update_user_option(user_id=None, option_name=None, newvalue=None, global_=Fa
 #// Default false (blog specific).
 #// @return bool True on success, false on failure.
 #//
-def delete_user_option(user_id=None, option_name=None, global_=False, *args_):
-    
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not global_):
-        option_name = wpdb.get_blog_prefix() + option_name
+def delete_user_option(user_id_=None, option_name_=None, global_=None, *_args_):
+    if global_ is None:
+        global_ = False
     # end if
-    return delete_user_meta(user_id, option_name)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not global_):
+        option_name_ = wpdb_.get_blog_prefix() + option_name_
+    # end if
+    return delete_user_meta(user_id_, option_name_)
 # end def delete_user_option
 #// 
 #// Retrieve list of users matching criteria.
@@ -510,12 +527,15 @@ def delete_user_option(user_id=None, option_name=None, global_=False, *args_):
 #// for more information on accepted arguments.
 #// @return array List of users.
 #//
-def get_users(args=Array(), *args_):
+def get_users(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    args = wp_parse_args(args)
-    args["count_total"] = False
-    user_search = php_new_class("WP_User_Query", lambda : WP_User_Query(args))
-    return user_search.get_results()
+    args_ = wp_parse_args(args_)
+    args_["count_total"] = False
+    user_search_ = php_new_class("WP_User_Query", lambda : WP_User_Query(args_))
+    return user_search_.get_results()
 # end def get_users
 #// 
 #// Get the sites a user belongs to.
@@ -531,13 +551,16 @@ def get_users(args=Array(), *args_):
 #// @return array A list of the user's sites. An empty array if the user doesn't exist
 #// or belongs to no sites.
 #//
-def get_blogs_of_user(user_id=None, all=False, *args_):
+def get_blogs_of_user(user_id_=None, all_=None, *_args_):
+    if all_ is None:
+        all_ = False
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    user_id = php_int(user_id)
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    user_id_ = php_int(user_id_)
     #// Logged out users can't have sites.
-    if php_empty(lambda : user_id):
+    if php_empty(lambda : user_id_):
         return Array()
     # end if
     #// 
@@ -553,58 +576,58 @@ def get_blogs_of_user(user_id=None, all=False, *args_):
     #// @param bool       $all     Whether the returned array should contain all sites, including
     #// those marked 'deleted', 'archived', or 'spam'. Default false.
     #//
-    sites = apply_filters("pre_get_blogs_of_user", None, user_id, all)
-    if None != sites:
-        return sites
+    sites_ = apply_filters("pre_get_blogs_of_user", None, user_id_, all_)
+    if None != sites_:
+        return sites_
     # end if
-    keys = get_user_meta(user_id)
-    if php_empty(lambda : keys):
+    keys_ = get_user_meta(user_id_)
+    if php_empty(lambda : keys_):
         return Array()
     # end if
     if (not is_multisite()):
-        site_id = get_current_blog_id()
-        sites = Array({site_id: php_new_class("stdClass", lambda : stdClass())})
-        sites[site_id].userblog_id = site_id
-        sites[site_id].blogname = get_option("blogname")
-        sites[site_id].domain = ""
-        sites[site_id].path = ""
-        sites[site_id].site_id = 1
-        sites[site_id].siteurl = get_option("siteurl")
-        sites[site_id].archived = 0
-        sites[site_id].spam = 0
-        sites[site_id].deleted = 0
-        return sites
+        site_id_ = get_current_blog_id()
+        sites_ = Array({site_id_: php_new_class("stdClass", lambda : stdClass())})
+        sites_[site_id_].userblog_id = site_id_
+        sites_[site_id_].blogname = get_option("blogname")
+        sites_[site_id_].domain = ""
+        sites_[site_id_].path = ""
+        sites_[site_id_].site_id = 1
+        sites_[site_id_].siteurl = get_option("siteurl")
+        sites_[site_id_].archived = 0
+        sites_[site_id_].spam = 0
+        sites_[site_id_].deleted = 0
+        return sites_
     # end if
-    site_ids = Array()
-    if (php_isset(lambda : keys[wpdb.base_prefix + "capabilities"])) and php_defined("MULTISITE"):
-        site_ids[-1] = 1
-        keys[wpdb.base_prefix + "capabilities"] = None
+    site_ids_ = Array()
+    if (php_isset(lambda : keys_[wpdb_.base_prefix + "capabilities"])) and php_defined("MULTISITE"):
+        site_ids_[-1] = 1
+        keys_[wpdb_.base_prefix + "capabilities"] = None
     # end if
-    keys = php_array_keys(keys)
-    for key in keys:
-        if "capabilities" != php_substr(key, -12):
+    keys_ = php_array_keys(keys_)
+    for key_ in keys_:
+        if "capabilities" != php_substr(key_, -12):
             continue
         # end if
-        if wpdb.base_prefix and 0 != php_strpos(key, wpdb.base_prefix):
+        if wpdb_.base_prefix and 0 != php_strpos(key_, wpdb_.base_prefix):
             continue
         # end if
-        site_id = php_str_replace(Array(wpdb.base_prefix, "_capabilities"), "", key)
-        if (not php_is_numeric(site_id)):
+        site_id_ = php_str_replace(Array(wpdb_.base_prefix, "_capabilities"), "", key_)
+        if (not php_is_numeric(site_id_)):
             continue
         # end if
-        site_ids[-1] = php_int(site_id)
+        site_ids_[-1] = php_int(site_id_)
     # end for
-    sites = Array()
-    if (not php_empty(lambda : site_ids)):
-        args = Array({"number": "", "site__in": site_ids, "update_site_meta_cache": False})
-        if (not all):
-            args["archived"] = 0
-            args["spam"] = 0
-            args["deleted"] = 0
+    sites_ = Array()
+    if (not php_empty(lambda : site_ids_)):
+        args_ = Array({"number": "", "site__in": site_ids_, "update_site_meta_cache": False})
+        if (not all_):
+            args_["archived"] = 0
+            args_["spam"] = 0
+            args_["deleted"] = 0
         # end if
-        _sites = get_sites(args)
-        for site in _sites:
-            sites[site.id] = Array({"userblog_id": site.id, "blogname": site.blogname, "domain": site.domain, "path": site.path, "site_id": site.network_id, "siteurl": site.siteurl, "archived": site.archived, "mature": site.mature, "spam": site.spam, "deleted": site.deleted})
+        _sites_ = get_sites(args_)
+        for site_ in _sites_:
+            sites_[site_.id] = Array({"userblog_id": site_.id, "blogname": site_.blogname, "domain": site_.domain, "path": site_.path, "site_id": site_.network_id, "siteurl": site_.siteurl, "archived": site_.archived, "mature": site_.mature, "spam": site_.spam, "deleted": site_.deleted})
         # end for
     # end if
     #// 
@@ -617,7 +640,7 @@ def get_blogs_of_user(user_id=None, all=False, *args_):
     #// @param bool  $all     Whether the returned sites array should contain all sites, including
     #// those marked 'deleted', 'archived', or 'spam'. Default false.
     #//
-    return apply_filters("get_blogs_of_user", sites, user_id, all)
+    return apply_filters("get_blogs_of_user", sites_, user_id_, all_)
 # end def get_blogs_of_user
 #// 
 #// Find out whether a user is a member of a given blog.
@@ -630,46 +653,47 @@ def get_blogs_of_user(user_id=None, all=False, *args_):
 #// @param int $blog_id Optional. ID of the blog to check. Defaults to the current site.
 #// @return bool
 #//
-def is_user_member_of_blog(user_id=0, blog_id=0, *args_):
+def is_user_member_of_blog(user_id_=0, blog_id_=0, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    user_id = php_int(user_id)
-    blog_id = php_int(blog_id)
-    if php_empty(lambda : user_id):
-        user_id = get_current_user_id()
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    user_id_ = php_int(user_id_)
+    blog_id_ = php_int(blog_id_)
+    if php_empty(lambda : user_id_):
+        user_id_ = get_current_user_id()
     # end if
     #// Technically not needed, but does save calls to get_site() and get_user_meta()
     #// in the event that the function is called when a user isn't logged in.
-    if php_empty(lambda : user_id):
+    if php_empty(lambda : user_id_):
         return False
     else:
-        user = get_userdata(user_id)
-        if (not type(user).__name__ == "WP_User"):
+        user_ = get_userdata(user_id_)
+        if (not type(user_).__name__ == "WP_User"):
             return False
         # end if
     # end if
     if (not is_multisite()):
         return True
     # end if
-    if php_empty(lambda : blog_id):
-        blog_id = get_current_blog_id()
+    if php_empty(lambda : blog_id_):
+        blog_id_ = get_current_blog_id()
     # end if
-    blog = get_site(blog_id)
-    if (not blog) or (not (php_isset(lambda : blog.domain))) or blog.archived or blog.spam or blog.deleted:
+    blog_ = get_site(blog_id_)
+    if (not blog_) or (not (php_isset(lambda : blog_.domain))) or blog_.archived or blog_.spam or blog_.deleted:
         return False
     # end if
-    keys = get_user_meta(user_id)
-    if php_empty(lambda : keys):
+    keys_ = get_user_meta(user_id_)
+    if php_empty(lambda : keys_):
         return False
     # end if
     #// No underscore before capabilities in $base_capabilities_key.
-    base_capabilities_key = wpdb.base_prefix + "capabilities"
-    site_capabilities_key = wpdb.base_prefix + blog_id + "_capabilities"
-    if (php_isset(lambda : keys[base_capabilities_key])) and 1 == blog_id:
+    base_capabilities_key_ = wpdb_.base_prefix + "capabilities"
+    site_capabilities_key_ = wpdb_.base_prefix + blog_id_ + "_capabilities"
+    if (php_isset(lambda : keys_[base_capabilities_key_])) and 1 == blog_id_:
         return True
     # end if
-    if (php_isset(lambda : keys[site_capabilities_key])):
+    if (php_isset(lambda : keys_[site_capabilities_key_])):
         return True
     # end if
     return False
@@ -685,9 +709,12 @@ def is_user_member_of_blog(user_id=0, blog_id=0, *args_):
 #// @param bool   $unique     Optional. Whether the same key should not be added. Default false.
 #// @return int|false Meta ID on success, false on failure.
 #//
-def add_user_meta(user_id=None, meta_key=None, meta_value=None, unique=False, *args_):
+def add_user_meta(user_id_=None, meta_key_=None, meta_value_=None, unique_=None, *_args_):
+    if unique_ is None:
+        unique_ = False
+    # end if
     
-    return add_metadata("user", user_id, meta_key, meta_value, unique)
+    return add_metadata("user", user_id_, meta_key_, meta_value_, unique_)
 # end def add_user_meta
 #// 
 #// Remove metadata matching criteria from a user.
@@ -704,9 +731,10 @@ def add_user_meta(user_id=None, meta_key=None, meta_value=None, unique=False, *a
 #// @param mixed  $meta_value Optional. Metadata value.
 #// @return bool True on success, false on failure.
 #//
-def delete_user_meta(user_id=None, meta_key=None, meta_value="", *args_):
+def delete_user_meta(user_id_=None, meta_key_=None, meta_value_="", *_args_):
     
-    return delete_metadata("user", user_id, meta_key, meta_value)
+    
+    return delete_metadata("user", user_id_, meta_key_, meta_value_)
 # end def delete_user_meta
 #// 
 #// Retrieve user meta field for a user.
@@ -719,9 +747,12 @@ def delete_user_meta(user_id=None, meta_key=None, meta_value="", *args_):
 #// @param bool   $single  Whether to return a single value.
 #// @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
 #//
-def get_user_meta(user_id=None, key="", single=False, *args_):
+def get_user_meta(user_id_=None, key_="", single_=None, *_args_):
+    if single_ is None:
+        single_ = False
+    # end if
     
-    return get_metadata("user", user_id, key, single)
+    return get_metadata("user", user_id_, key_, single_)
 # end def get_user_meta
 #// 
 #// Update user meta field based on user ID.
@@ -740,9 +771,10 @@ def get_user_meta(user_id=None, key="", single=False, *args_):
 #// @param mixed  $prev_value Optional. Previous value to check before removing.
 #// @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
 #//
-def update_user_meta(user_id=None, meta_key=None, meta_value=None, prev_value="", *args_):
+def update_user_meta(user_id_=None, meta_key_=None, meta_value_=None, prev_value_="", *_args_):
     
-    return update_metadata("user", user_id, meta_key, meta_value, prev_value)
+    
+    return update_metadata("user", user_id_, meta_key_, meta_value_, prev_value_)
 # end def update_user_meta
 #// 
 #// Count number of users who have each of the user roles.
@@ -768,13 +800,14 @@ def update_user_meta(user_id=None, meta_key=None, meta_value=None, prev_value=""
 #// @type int[] $avail_roles Array of user counts keyed by user role.
 #// }
 #//
-def count_users(strategy="time", site_id=None, *args_):
+def count_users(strategy_="time", site_id_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     #// Initialize.
-    if (not site_id):
-        site_id = get_current_blog_id()
+    if (not site_id_):
+        site_id_ = get_current_blog_id()
     # end if
     #// 
     #// Filter the user count before queries are run. Return a non-null value to cause count_users()
@@ -787,68 +820,70 @@ def count_users(strategy="time", site_id=None, *args_):
     #// Accepts either 'time' or 'memory'. Default 'time'.
     #// @param int|null    $site_id  Optional. The site ID to count users for. Defaults to the current site.
     #//
-    pre = apply_filters("pre_count_users", None, strategy, site_id)
-    if None != pre:
-        return pre
+    pre_ = apply_filters("pre_count_users", None, strategy_, site_id_)
+    if None != pre_:
+        return pre_
     # end if
-    blog_prefix = wpdb.get_blog_prefix(site_id)
-    result = Array()
-    if "time" == strategy:
-        if is_multisite() and get_current_blog_id() != site_id:
-            switch_to_blog(site_id)
-            avail_roles = wp_roles().get_names()
+    blog_prefix_ = wpdb_.get_blog_prefix(site_id_)
+    result_ = Array()
+    if "time" == strategy_:
+        if is_multisite() and get_current_blog_id() != site_id_:
+            switch_to_blog(site_id_)
+            avail_roles_ = wp_roles().get_names()
             restore_current_blog()
         else:
-            avail_roles = wp_roles().get_names()
+            avail_roles_ = wp_roles().get_names()
         # end if
         #// Build a CPU-intensive query that will return concise information.
-        select_count = Array()
-        for this_role,name in avail_roles:
-            select_count[-1] = wpdb.prepare("COUNT(NULLIF(`meta_value` LIKE %s, false))", "%" + wpdb.esc_like("\"" + this_role + "\"") + "%")
+        select_count_ = Array()
+        for this_role_,name_ in avail_roles_:
+            select_count_[-1] = wpdb_.prepare("COUNT(NULLIF(`meta_value` LIKE %s, false))", "%" + wpdb_.esc_like("\"" + this_role_ + "\"") + "%")
         # end for
-        select_count[-1] = "COUNT(NULLIF(`meta_value` = 'a:0:{}', false))"
-        select_count = php_implode(", ", select_count)
+        select_count_[-1] = "COUNT(NULLIF(`meta_value` = 'a:0:{}', false))"
+        select_count_ = php_implode(", ", select_count_)
         #// Add the meta_value index to the selection list, then run the query.
-        row = wpdb.get_row(str("\n          SELECT ") + str(select_count) + str(", COUNT(*)\n           FROM ") + str(wpdb.usermeta) + str("\n          INNER JOIN ") + str(wpdb.users) + str(" ON user_id = ID\n           WHERE meta_key = '") + str(blog_prefix) + str("capabilities'\n      "), ARRAY_N)
+        row_ = wpdb_.get_row(str("\n            SELECT ") + str(select_count_) + str(", COUNT(*)\n          FROM ") + str(wpdb_.usermeta) + str("\n         INNER JOIN ") + str(wpdb_.users) + str(" ON user_id = ID\n          WHERE meta_key = '") + str(blog_prefix_) + str("capabilities'\n     "), ARRAY_N)
         #// Run the previous loop again to associate results with role names.
-        col = 0
-        role_counts = Array()
-        for this_role,name in avail_roles:
-            count = php_int(row[col])
-            col += 1
-            if count > 0:
-                role_counts[this_role] = count
+        col_ = 0
+        role_counts_ = Array()
+        for this_role_,name_ in avail_roles_:
+            count_ = php_int(row_[col_])
+            col_ += 1
+            col_ += 1
+            if count_ > 0:
+                role_counts_[this_role_] = count_
             # end if
         # end for
-        role_counts["none"] = php_int(row[col])
-        col += 1
+        role_counts_["none"] = php_int(row_[col_])
+        col_ += 1
+        col_ += 1
         #// Get the meta_value index from the end of the result set.
-        total_users = php_int(row[col])
-        result["total_users"] = total_users
-        result["avail_roles"] = role_counts
+        total_users_ = php_int(row_[col_])
+        result_["total_users"] = total_users_
+        result_["avail_roles"] = role_counts_
     else:
-        avail_roles = Array({"none": 0})
-        users_of_blog = wpdb.get_col(str("\n            SELECT meta_value\n         FROM ") + str(wpdb.usermeta) + str("\n          INNER JOIN ") + str(wpdb.users) + str(" ON user_id = ID\n           WHERE meta_key = '") + str(blog_prefix) + str("capabilities'\n      "))
-        for caps_meta in users_of_blog:
-            b_roles = maybe_unserialize(caps_meta)
-            if (not php_is_array(b_roles)):
+        avail_roles_ = Array({"none": 0})
+        users_of_blog_ = wpdb_.get_col(str("\n          SELECT meta_value\n         FROM ") + str(wpdb_.usermeta) + str("\n         INNER JOIN ") + str(wpdb_.users) + str(" ON user_id = ID\n          WHERE meta_key = '") + str(blog_prefix_) + str("capabilities'\n     "))
+        for caps_meta_ in users_of_blog_:
+            b_roles_ = maybe_unserialize(caps_meta_)
+            if (not php_is_array(b_roles_)):
                 continue
             # end if
-            if php_empty(lambda : b_roles):
-                avail_roles["none"] += 1
+            if php_empty(lambda : b_roles_):
+                avail_roles_["none"] += 1
             # end if
-            for b_role,val in b_roles:
-                if (php_isset(lambda : avail_roles[b_role])):
-                    avail_roles[b_role] += 1
+            for b_role_,val_ in b_roles_:
+                if (php_isset(lambda : avail_roles_[b_role_])):
+                    avail_roles_[b_role_] += 1
                 else:
-                    avail_roles[b_role] = 1
+                    avail_roles_[b_role_] = 1
                 # end if
             # end for
         # end for
-        result["total_users"] = php_count(users_of_blog)
-        result["avail_roles"] = avail_roles
+        result_["total_users"] = php_count(users_of_blog_)
+        result_["avail_roles"] = avail_roles_
     # end if
-    return result
+    return result_
 # end def count_users
 #// 
 #// Private helper functions.
@@ -870,31 +905,38 @@ def count_users(strategy="time", site_id=None, *args_):
 #// 
 #// @param int $for_user_id Optional. User ID to set up global data. Default 0.
 #//
-def setup_userdata(for_user_id=0, *args_):
+def setup_userdata(for_user_id_=0, *_args_):
     
-    global user_login,userdata,user_level,user_ID,user_email,user_url,user_identity
-    php_check_if_defined("user_login","userdata","user_level","user_ID","user_email","user_url","user_identity")
-    if (not for_user_id):
-        for_user_id = get_current_user_id()
+    
+    global user_login_
+    global userdata_
+    global user_level_
+    global user_ID_
+    global user_email_
+    global user_url_
+    global user_identity_
+    php_check_if_defined("user_login_","userdata_","user_level_","user_ID_","user_email_","user_url_","user_identity_")
+    if (not for_user_id_):
+        for_user_id_ = get_current_user_id()
     # end if
-    user = get_userdata(for_user_id)
-    if (not user):
-        user_ID = 0
-        user_level = 0
-        userdata = None
-        user_login = ""
-        user_email = ""
-        user_url = ""
-        user_identity = ""
+    user_ = get_userdata(for_user_id_)
+    if (not user_):
+        user_ID_ = 0
+        user_level_ = 0
+        userdata_ = None
+        user_login_ = ""
+        user_email_ = ""
+        user_url_ = ""
+        user_identity_ = ""
         return
     # end if
-    user_ID = php_int(user.ID)
-    user_level = php_int(user.user_level)
-    userdata = user
-    user_login = user.user_login
-    user_email = user.user_email
-    user_url = user.user_url
-    user_identity = user.display_name
+    user_ID_ = php_int(user_.ID)
+    user_level_ = php_int(user_.user_level)
+    userdata_ = user_
+    user_login_ = user_.user_login
+    user_email_ = user_.user_email
+    user_url_ = user_.user_url
+    user_identity_ = user_.display_name
 # end def setup_userdata
 #// 
 #// Create dropdown HTML content of users.
@@ -959,23 +1001,24 @@ def setup_userdata(for_user_id=0, *args_):
 #// }
 #// @return string HTML dropdown list of users.
 #//
-def wp_dropdown_users(args="", *args_):
+def wp_dropdown_users(args_="", *_args_):
     
-    defaults = Array({"show_option_all": "", "show_option_none": "", "hide_if_only_one_author": "", "orderby": "display_name", "order": "ASC", "include": "", "exclude": "", "multi": 0, "show": "display_name", "echo": 1, "selected": 0, "name": "user", "class": "", "id": "", "blog_id": get_current_blog_id(), "who": "", "include_selected": False, "option_none_value": -1, "role": "", "role__in": Array(), "role__not_in": Array()})
-    defaults["selected"] = get_query_var("author") if is_author() else 0
-    parsed_args = wp_parse_args(args, defaults)
-    query_args = wp_array_slice_assoc(parsed_args, Array("blog_id", "include", "exclude", "orderby", "order", "who", "role", "role__in", "role__not_in"))
-    fields = Array("ID", "user_login")
-    show = parsed_args["show"] if (not php_empty(lambda : parsed_args["show"])) else "display_name"
-    if "display_name_with_login" == show:
-        fields[-1] = "display_name"
+    
+    defaults_ = Array({"show_option_all": "", "show_option_none": "", "hide_if_only_one_author": "", "orderby": "display_name", "order": "ASC", "include": "", "exclude": "", "multi": 0, "show": "display_name", "echo": 1, "selected": 0, "name": "user", "class": "", "id": "", "blog_id": get_current_blog_id(), "who": "", "include_selected": False, "option_none_value": -1, "role": "", "role__in": Array(), "role__not_in": Array()})
+    defaults_["selected"] = get_query_var("author") if is_author() else 0
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    query_args_ = wp_array_slice_assoc(parsed_args_, Array("blog_id", "include", "exclude", "orderby", "order", "who", "role", "role__in", "role__not_in"))
+    fields_ = Array("ID", "user_login")
+    show_ = parsed_args_["show"] if (not php_empty(lambda : parsed_args_["show"])) else "display_name"
+    if "display_name_with_login" == show_:
+        fields_[-1] = "display_name"
     else:
-        fields[-1] = show
+        fields_[-1] = show_
     # end if
-    query_args["fields"] = fields
-    show_option_all = parsed_args["show_option_all"]
-    show_option_none = parsed_args["show_option_none"]
-    option_none_value = parsed_args["option_none_value"]
+    query_args_["fields"] = fields_
+    show_option_all_ = parsed_args_["show_option_all"]
+    show_option_none_ = parsed_args_["show_option_none"]
+    option_none_value_ = parsed_args_["option_none_value"]
     #// 
     #// Filters the query arguments for the list of users in the dropdown.
     #// 
@@ -984,50 +1027,50 @@ def wp_dropdown_users(args="", *args_):
     #// @param array $query_args  The query arguments for get_users().
     #// @param array $parsed_args The arguments passed to wp_dropdown_users() combined with the defaults.
     #//
-    query_args = apply_filters("wp_dropdown_users_args", query_args, parsed_args)
-    users = get_users(query_args)
-    output = ""
-    if (not php_empty(lambda : users)) and php_empty(lambda : parsed_args["hide_if_only_one_author"]) or php_count(users) > 1:
-        name = esc_attr(parsed_args["name"])
-        if parsed_args["multi"] and (not parsed_args["id"]):
-            id = ""
+    query_args_ = apply_filters("wp_dropdown_users_args", query_args_, parsed_args_)
+    users_ = get_users(query_args_)
+    output_ = ""
+    if (not php_empty(lambda : users_)) and php_empty(lambda : parsed_args_["hide_if_only_one_author"]) or php_count(users_) > 1:
+        name_ = esc_attr(parsed_args_["name"])
+        if parsed_args_["multi"] and (not parsed_args_["id"]):
+            id_ = ""
         else:
-            id = " id='" + esc_attr(parsed_args["id"]) + "'" if parsed_args["id"] else str(" id='") + str(name) + str("'")
+            id_ = " id='" + esc_attr(parsed_args_["id"]) + "'" if parsed_args_["id"] else str(" id='") + str(name_) + str("'")
         # end if
-        output = str("<select name='") + str(name) + str("'") + str(id) + str(" class='") + parsed_args["class"] + "'>\n"
-        if show_option_all:
-            output += str(" <option value='0'>") + str(show_option_all) + str("</option>\n")
+        output_ = str("<select name='") + str(name_) + str("'") + str(id_) + str(" class='") + parsed_args_["class"] + "'>\n"
+        if show_option_all_:
+            output_ += str("    <option value='0'>") + str(show_option_all_) + str("</option>\n")
         # end if
-        if show_option_none:
-            _selected = selected(option_none_value, parsed_args["selected"], False)
-            output += " <option value='" + esc_attr(option_none_value) + str("'") + str(_selected) + str(">") + str(show_option_none) + str("</option>\n")
+        if show_option_none_:
+            _selected_ = selected(option_none_value_, parsed_args_["selected"], False)
+            output_ += "    <option value='" + esc_attr(option_none_value_) + str("'") + str(_selected_) + str(">") + str(show_option_none_) + str("</option>\n")
         # end if
-        if parsed_args["include_selected"] and parsed_args["selected"] > 0:
-            found_selected = False
-            parsed_args["selected"] = php_int(parsed_args["selected"])
-            for user in users:
-                user.ID = php_int(user.ID)
-                if user.ID == parsed_args["selected"]:
-                    found_selected = True
+        if parsed_args_["include_selected"] and parsed_args_["selected"] > 0:
+            found_selected_ = False
+            parsed_args_["selected"] = php_int(parsed_args_["selected"])
+            for user_ in users_:
+                user_.ID = php_int(user_.ID)
+                if user_.ID == parsed_args_["selected"]:
+                    found_selected_ = True
                 # end if
             # end for
-            if (not found_selected):
-                users[-1] = get_userdata(parsed_args["selected"])
+            if (not found_selected_):
+                users_[-1] = get_userdata(parsed_args_["selected"])
             # end if
         # end if
-        for user in users:
-            if "display_name_with_login" == show:
+        for user_ in users_:
+            if "display_name_with_login" == show_:
                 #// translators: 1: User's display name, 2: User login.
-                display = php_sprintf(_x("%1$s (%2$s)", "user dropdown"), user.display_name, user.user_login)
-            elif (not php_empty(lambda : user.show)):
-                display = user.show
+                display_ = php_sprintf(_x("%1$s (%2$s)", "user dropdown"), user_.display_name, user_.user_login)
+            elif (not php_empty(lambda : user_.show_)):
+                display_ = user_.show_
             else:
-                display = "(" + user.user_login + ")"
+                display_ = "(" + user_.user_login + ")"
             # end if
-            _selected = selected(user.ID, parsed_args["selected"], False)
-            output += str(" <option value='") + str(user.ID) + str("'") + str(_selected) + str(">") + esc_html(display) + "</option>\n"
+            _selected_ = selected(user_.ID, parsed_args_["selected"], False)
+            output_ += str("    <option value='") + str(user_.ID) + str("'") + str(_selected_) + str(">") + esc_html(display_) + "</option>\n"
         # end for
-        output += "</select>"
+        output_ += "</select>"
     # end if
     #// 
     #// Filters the wp_dropdown_users() HTML output.
@@ -1036,11 +1079,11 @@ def wp_dropdown_users(args="", *args_):
     #// 
     #// @param string $output HTML output generated by wp_dropdown_users().
     #//
-    html = apply_filters("wp_dropdown_users", output)
-    if parsed_args["echo"]:
-        php_print(html)
+    html_ = apply_filters("wp_dropdown_users", output_)
+    if parsed_args_["echo"]:
+        php_print(html_)
     # end if
-    return html
+    return html_
 # end def wp_dropdown_users
 #// 
 #// Sanitize user field based on context.
@@ -1058,23 +1101,24 @@ def wp_dropdown_users(args="", *args_):
 #// 'attribute' and 'js'.
 #// @return mixed Sanitized value.
 #//
-def sanitize_user_field(field=None, value=None, user_id=None, context=None, *args_):
+def sanitize_user_field(field_=None, value_=None, user_id_=None, context_=None, *_args_):
     
-    int_fields = Array("ID")
-    if php_in_array(field, int_fields):
-        value = php_int(value)
+    
+    int_fields_ = Array("ID")
+    if php_in_array(field_, int_fields_):
+        value_ = php_int(value_)
     # end if
-    if "raw" == context:
-        return value
+    if "raw" == context_:
+        return value_
     # end if
-    if (not php_is_string(value)) and (not php_is_numeric(value)):
-        return value
+    if (not php_is_string(value_)) and (not php_is_numeric(value_)):
+        return value_
     # end if
-    prefixed = False != php_strpos(field, "user_")
-    if "edit" == context:
-        if prefixed:
+    prefixed_ = False != php_strpos(field_, "user_")
+    if "edit" == context_:
+        if prefixed_:
             #// This filter is documented in wp-includes/post.php
-            value = apply_filters(str("edit_") + str(field), value, user_id)
+            value_ = apply_filters(str("edit_") + str(field_), value_, user_id_)
         else:
             #// 
             #// Filters a user field value in the 'edit' context.
@@ -1087,18 +1131,18 @@ def sanitize_user_field(field=None, value=None, user_id=None, context=None, *arg
             #// @param mixed $value   Value of the prefixed user field.
             #// @param int   $user_id User ID.
             #//
-            value = apply_filters(str("edit_user_") + str(field), value, user_id)
+            value_ = apply_filters(str("edit_user_") + str(field_), value_, user_id_)
         # end if
-        if "description" == field:
-            value = esc_html(value)
+        if "description" == field_:
+            value_ = esc_html(value_)
             pass
         else:
-            value = esc_attr(value)
+            value_ = esc_attr(value_)
         # end if
-    elif "db" == context:
-        if prefixed:
+    elif "db" == context_:
+        if prefixed_:
             #// This filter is documented in wp-includes/post.php
-            value = apply_filters(str("pre_") + str(field), value)
+            value_ = apply_filters(str("pre_") + str(field_), value_)
         else:
             #// 
             #// Filters the value of a user field in the 'db' context.
@@ -1110,13 +1154,13 @@ def sanitize_user_field(field=None, value=None, user_id=None, context=None, *arg
             #// 
             #// @param mixed $value Value of the prefixed user field.
             #//
-            value = apply_filters(str("pre_user_") + str(field), value)
+            value_ = apply_filters(str("pre_user_") + str(field_), value_)
         # end if
     else:
         #// Use display filters by default.
-        if prefixed:
+        if prefixed_:
             #// This filter is documented in wp-includes/post.php
-            value = apply_filters(str(field), value, user_id, context)
+            value_ = apply_filters(str(field_), value_, user_id_, context_)
         else:
             #// 
             #// Filters the value of a user field in a standard context.
@@ -1130,18 +1174,18 @@ def sanitize_user_field(field=None, value=None, user_id=None, context=None, *arg
             #// @param int    $user_id User ID.
             #// @param string $context The context to filter within.
             #//
-            value = apply_filters(str("user_") + str(field), value, user_id, context)
+            value_ = apply_filters(str("user_") + str(field_), value_, user_id_, context_)
         # end if
     # end if
-    if "user_url" == field:
-        value = esc_url(value)
+    if "user_url" == field_:
+        value_ = esc_url(value_)
     # end if
-    if "attribute" == context:
-        value = esc_attr(value)
-    elif "js" == context:
-        value = esc_js(value)
+    if "attribute" == context_:
+        value_ = esc_attr(value_)
+    elif "js" == context_:
+        value_ = esc_js(value_)
     # end if
-    return value
+    return value_
 # end def sanitize_user_field
 #// 
 #// Update all user caches
@@ -1151,18 +1195,19 @@ def sanitize_user_field(field=None, value=None, user_id=None, context=None, *arg
 #// @param WP_User $user User object to be cached
 #// @return bool|null Returns false on failure.
 #//
-def update_user_caches(user=None, *args_):
+def update_user_caches(user_=None, *_args_):
     
-    if type(user).__name__ == "WP_User":
-        if (not user.exists()):
+    
+    if type(user_).__name__ == "WP_User":
+        if (not user_.exists()):
             return False
         # end if
-        user = user.data
+        user_ = user_.data
     # end if
-    wp_cache_add(user.ID, user, "users")
-    wp_cache_add(user.user_login, user.ID, "userlogins")
-    wp_cache_add(user.user_email, user.ID, "useremail")
-    wp_cache_add(user.user_nicename, user.ID, "userslugs")
+    wp_cache_add(user_.ID, user_, "users")
+    wp_cache_add(user_.user_login, user_.ID, "userlogins")
+    wp_cache_add(user_.user_email, user_.ID, "useremail")
+    wp_cache_add(user_.user_nicename, user_.ID, "userslugs")
 # end def update_user_caches
 #// 
 #// Clean all user caches
@@ -1172,18 +1217,19 @@ def update_user_caches(user=None, *args_):
 #// 
 #// @param WP_User|int $user User object or ID to be cleaned from the cache
 #//
-def clean_user_cache(user=None, *args_):
+def clean_user_cache(user_=None, *_args_):
     
-    if php_is_numeric(user):
-        user = php_new_class("WP_User", lambda : WP_User(user))
+    
+    if php_is_numeric(user_):
+        user_ = php_new_class("WP_User", lambda : WP_User(user_))
     # end if
-    if (not user.exists()):
+    if (not user_.exists()):
         return
     # end if
-    wp_cache_delete(user.ID, "users")
-    wp_cache_delete(user.user_login, "userlogins")
-    wp_cache_delete(user.user_email, "useremail")
-    wp_cache_delete(user.user_nicename, "userslugs")
+    wp_cache_delete(user_.ID, "users")
+    wp_cache_delete(user_.user_login, "userlogins")
+    wp_cache_delete(user_.user_email, "useremail")
+    wp_cache_delete(user_.user_nicename, "userslugs")
     #// 
     #// Fires immediately after the given user's cache is cleaned.
     #// 
@@ -1192,7 +1238,7 @@ def clean_user_cache(user=None, *args_):
     #// @param int     $user_id User ID.
     #// @param WP_User $user    User object.
     #//
-    do_action("clean_user_cache", user.ID, user)
+    do_action("clean_user_cache", user_.ID, user_)
 # end def clean_user_cache
 #// 
 #// Determines whether the given username exists.
@@ -1206,13 +1252,14 @@ def clean_user_cache(user=None, *args_):
 #// @param string $username Username.
 #// @return int|false The user's ID on success, and false on failure.
 #//
-def username_exists(username=None, *args_):
+def username_exists(username_=None, *_args_):
     
-    user = get_user_by("login", username)
-    if user:
-        user_id = user.ID
+    
+    user_ = get_user_by("login", username_)
+    if user_:
+        user_id_ = user_.ID
     else:
-        user_id = False
+        user_id_ = False
     # end if
     #// 
     #// Filters whether the given username exists or not.
@@ -1222,7 +1269,7 @@ def username_exists(username=None, *args_):
     #// @param int|false $user_id  The user's ID on success, and false on failure.
     #// @param string    $username Username to check.
     #//
-    return apply_filters("username_exists", user_id, username)
+    return apply_filters("username_exists", user_id_, username_)
 # end def username_exists
 #// 
 #// Determines whether the given email exists.
@@ -1236,11 +1283,12 @@ def username_exists(username=None, *args_):
 #// @param string $email Email.
 #// @return int|false The user's ID on success, and false on failure.
 #//
-def email_exists(email=None, *args_):
+def email_exists(email_=None, *_args_):
     
-    user = get_user_by("email", email)
-    if user:
-        return user.ID
+    
+    user_ = get_user_by("email", email_)
+    if user_:
+        return user_.ID
     # end if
     return False
 # end def email_exists
@@ -1253,10 +1301,11 @@ def email_exists(email=None, *args_):
 #// @param string $username Username.
 #// @return bool Whether username given is valid
 #//
-def validate_username(username=None, *args_):
+def validate_username(username_=None, *_args_):
     
-    sanitized = sanitize_user(username, True)
-    valid = sanitized == username and (not php_empty(lambda : sanitized))
+    
+    sanitized_ = sanitize_user(username_, True)
+    valid_ = sanitized_ == username_ and (not php_empty(lambda : sanitized_))
     #// 
     #// Filters whether the provided username is valid or not.
     #// 
@@ -1265,7 +1314,7 @@ def validate_username(username=None, *args_):
     #// @param bool   $valid    Whether given username is valid.
     #// @param string $username Username to check.
     #//
-    return apply_filters("validate_username", valid, username)
+    return apply_filters("validate_username", valid_, username_)
 # end def validate_username
 #// 
 #// Insert a user into the database.
@@ -1330,31 +1379,32 @@ def validate_username(username=None, *args_):
 #// @return int|WP_Error The newly created user's ID or a WP_Error object if the user could not
 #// be created.
 #//
-def wp_insert_user(userdata=None, *args_):
+def wp_insert_user(userdata_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if type(userdata).__name__ == "stdClass":
-        userdata = get_object_vars(userdata)
-    elif type(userdata).__name__ == "WP_User":
-        userdata = userdata.to_array()
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if type(userdata_).__name__ == "stdClass":
+        userdata_ = get_object_vars(userdata_)
+    elif type(userdata_).__name__ == "WP_User":
+        userdata_ = userdata_.to_array()
     # end if
     #// Are we updating or creating?
-    if (not php_empty(lambda : userdata["ID"])):
-        ID = php_int(userdata["ID"])
-        update = True
-        old_user_data = get_userdata(ID)
-        if (not old_user_data):
+    if (not php_empty(lambda : userdata_["ID"])):
+        ID_ = php_int(userdata_["ID"])
+        update_ = True
+        old_user_data_ = get_userdata(ID_)
+        if (not old_user_data_):
             return php_new_class("WP_Error", lambda : WP_Error("invalid_user_id", __("Invalid user ID.")))
         # end if
         #// hashed in wp_update_user(), plaintext if called directly.
-        user_pass = userdata["user_pass"] if (not php_empty(lambda : userdata["user_pass"])) else old_user_data.user_pass
+        user_pass_ = userdata_["user_pass"] if (not php_empty(lambda : userdata_["user_pass"])) else old_user_data_.user_pass
     else:
-        update = False
+        update_ = False
         #// Hash the password.
-        user_pass = wp_hash_password(userdata["user_pass"])
+        user_pass_ = wp_hash_password(userdata_["user_pass"])
     # end if
-    sanitized_user_login = sanitize_user(userdata["user_login"], True)
+    sanitized_user_login_ = sanitize_user(userdata_["user_login"], True)
     #// 
     #// Filters a username after it has been sanitized.
     #// 
@@ -1364,16 +1414,16 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $sanitized_user_login Username after it has been sanitized.
     #//
-    pre_user_login = apply_filters("pre_user_login", sanitized_user_login)
+    pre_user_login_ = apply_filters("pre_user_login", sanitized_user_login_)
     #// Remove any non-printable chars from the login string to see if we have ended up with an empty username.
-    user_login = php_trim(pre_user_login)
+    user_login_ = php_trim(pre_user_login_)
     #// user_login must be between 0 and 60 characters.
-    if php_empty(lambda : user_login):
+    if php_empty(lambda : user_login_):
         return php_new_class("WP_Error", lambda : WP_Error("empty_user_login", __("Cannot create a user with an empty login name.")))
-    elif php_mb_strlen(user_login) > 60:
+    elif php_mb_strlen(user_login_) > 60:
         return php_new_class("WP_Error", lambda : WP_Error("user_login_too_long", __("Username may not be longer than 60 characters.")))
     # end if
-    if (not update) and username_exists(user_login):
+    if (not update_) and username_exists(user_login_):
         return php_new_class("WP_Error", lambda : WP_Error("existing_user_login", __("Sorry, that username already exists!")))
     # end if
     #// 
@@ -1383,23 +1433,23 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param array $usernames Array of blacklisted usernames.
     #//
-    illegal_logins = apply_filters("illegal_user_logins", Array())
-    if php_in_array(php_strtolower(user_login), php_array_map("strtolower", illegal_logins), True):
+    illegal_logins_ = apply_filters("illegal_user_logins", Array())
+    if php_in_array(php_strtolower(user_login_), php_array_map("strtolower", illegal_logins_), True):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_username", __("Sorry, that username is not allowed.")))
     # end if
     #// 
     #// If a nicename is provided, remove unsafe user characters before using it.
     #// Otherwise build a nicename from the user_login.
     #//
-    if (not php_empty(lambda : userdata["user_nicename"])):
-        user_nicename = sanitize_user(userdata["user_nicename"], True)
-        if php_mb_strlen(user_nicename) > 50:
+    if (not php_empty(lambda : userdata_["user_nicename"])):
+        user_nicename_ = sanitize_user(userdata_["user_nicename"], True)
+        if php_mb_strlen(user_nicename_) > 50:
             return php_new_class("WP_Error", lambda : WP_Error("user_nicename_too_long", __("Nicename may not be longer than 50 characters.")))
         # end if
     else:
-        user_nicename = php_mb_substr(user_login, 0, 50)
+        user_nicename_ = php_mb_substr(user_login_, 0, 50)
     # end if
-    user_nicename = sanitize_title(user_nicename)
+    user_nicename_ = sanitize_title(user_nicename_)
     #// 
     #// Filters a user's nicename before the user is created or updated.
     #// 
@@ -1407,24 +1457,24 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $user_nicename The user's nicename.
     #//
-    user_nicename = apply_filters("pre_user_nicename", user_nicename)
-    user_nicename_check = wpdb.get_var(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.users) + str(" WHERE user_nicename = %s AND user_login != %s LIMIT 1"), user_nicename, user_login))
-    if user_nicename_check:
-        suffix = 2
+    user_nicename_ = apply_filters("pre_user_nicename", user_nicename_)
+    user_nicename_check_ = wpdb_.get_var(wpdb_.prepare(str("SELECT ID FROM ") + str(wpdb_.users) + str(" WHERE user_nicename = %s AND user_login != %s LIMIT 1"), user_nicename_, user_login_))
+    if user_nicename_check_:
+        suffix_ = 2
         while True:
             
-            if not (user_nicename_check):
+            if not (user_nicename_check_):
                 break
             # end if
             #// user_nicename allows 50 chars. Subtract one for a hyphen, plus the length of the suffix.
-            base_length = 49 - php_mb_strlen(suffix)
-            alt_user_nicename = php_mb_substr(user_nicename, 0, base_length) + str("-") + str(suffix)
-            user_nicename_check = wpdb.get_var(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.users) + str(" WHERE user_nicename = %s AND user_login != %s LIMIT 1"), alt_user_nicename, user_login))
-            suffix += 1
+            base_length_ = 49 - php_mb_strlen(suffix_)
+            alt_user_nicename_ = php_mb_substr(user_nicename_, 0, base_length_) + str("-") + str(suffix_)
+            user_nicename_check_ = wpdb_.get_var(wpdb_.prepare(str("SELECT ID FROM ") + str(wpdb_.users) + str(" WHERE user_nicename = %s AND user_login != %s LIMIT 1"), alt_user_nicename_, user_login_))
+            suffix_ += 1
         # end while
-        user_nicename = alt_user_nicename
+        user_nicename_ = alt_user_nicename_
     # end if
-    raw_user_email = "" if php_empty(lambda : userdata["user_email"]) else userdata["user_email"]
+    raw_user_email_ = "" if php_empty(lambda : userdata_["user_email"]) else userdata_["user_email"]
     #// 
     #// Filters a user's email before the user is created or updated.
     #// 
@@ -1432,16 +1482,16 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $raw_user_email The user's email.
     #//
-    user_email = apply_filters("pre_user_email", raw_user_email)
+    user_email_ = apply_filters("pre_user_email", raw_user_email_)
     #// 
     #// If there is no update, just check for `email_exists`. If there is an update,
     #// check if current email and new email are the same, or not, and check `email_exists`
     #// accordingly.
     #//
-    if (not update) or (not php_empty(lambda : old_user_data)) and 0 != strcasecmp(user_email, old_user_data.user_email) and (not php_defined("WP_IMPORTING")) and email_exists(user_email):
+    if (not update_) or (not php_empty(lambda : old_user_data_)) and 0 != strcasecmp(user_email_, old_user_data_.user_email) and (not php_defined("WP_IMPORTING")) and email_exists(user_email_):
         return php_new_class("WP_Error", lambda : WP_Error("existing_user_email", __("Sorry, that email address is already used!")))
     # end if
-    raw_user_url = "" if php_empty(lambda : userdata["user_url"]) else userdata["user_url"]
+    raw_user_url_ = "" if php_empty(lambda : userdata_["user_url"]) else userdata_["user_url"]
     #// 
     #// Filters a user's URL before the user is created or updated.
     #// 
@@ -1449,16 +1499,16 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $raw_user_url The user's URL.
     #//
-    user_url = apply_filters("pre_user_url", raw_user_url)
-    user_registered = gmdate("Y-m-d H:i:s") if php_empty(lambda : userdata["user_registered"]) else userdata["user_registered"]
-    user_activation_key = "" if php_empty(lambda : userdata["user_activation_key"]) else userdata["user_activation_key"]
-    if (not php_empty(lambda : userdata["spam"])) and (not is_multisite()):
+    user_url_ = apply_filters("pre_user_url", raw_user_url_)
+    user_registered_ = gmdate("Y-m-d H:i:s") if php_empty(lambda : userdata_["user_registered"]) else userdata_["user_registered"]
+    user_activation_key_ = "" if php_empty(lambda : userdata_["user_activation_key"]) else userdata_["user_activation_key"]
+    if (not php_empty(lambda : userdata_["spam"])) and (not is_multisite()):
         return php_new_class("WP_Error", lambda : WP_Error("no_spam", __("Sorry, marking a user as spam is only supported on Multisite.")))
     # end if
-    spam = 0 if php_empty(lambda : userdata["spam"]) else php_bool(userdata["spam"])
+    spam_ = 0 if php_empty(lambda : userdata_["spam"]) else php_bool(userdata_["spam"])
     #// Store values to save in user meta.
-    meta = Array()
-    nickname = user_login if php_empty(lambda : userdata["nickname"]) else userdata["nickname"]
+    meta_ = Array()
+    nickname_ = user_login_ if php_empty(lambda : userdata_["nickname"]) else userdata_["nickname"]
     #// 
     #// Filters a user's nickname before the user is created or updated.
     #// 
@@ -1466,8 +1516,8 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $nickname The user's nickname.
     #//
-    meta["nickname"] = apply_filters("pre_user_nickname", nickname)
-    first_name = "" if php_empty(lambda : userdata["first_name"]) else userdata["first_name"]
+    meta_["nickname"] = apply_filters("pre_user_nickname", nickname_)
+    first_name_ = "" if php_empty(lambda : userdata_["first_name"]) else userdata_["first_name"]
     #// 
     #// Filters a user's first name before the user is created or updated.
     #// 
@@ -1475,8 +1525,8 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $first_name The user's first name.
     #//
-    meta["first_name"] = apply_filters("pre_user_first_name", first_name)
-    last_name = "" if php_empty(lambda : userdata["last_name"]) else userdata["last_name"]
+    meta_["first_name"] = apply_filters("pre_user_first_name", first_name_)
+    last_name_ = "" if php_empty(lambda : userdata_["last_name"]) else userdata_["last_name"]
     #// 
     #// Filters a user's last name before the user is created or updated.
     #// 
@@ -1484,22 +1534,22 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $last_name The user's last name.
     #//
-    meta["last_name"] = apply_filters("pre_user_last_name", last_name)
-    if php_empty(lambda : userdata["display_name"]):
-        if update:
-            display_name = user_login
-        elif meta["first_name"] and meta["last_name"]:
+    meta_["last_name"] = apply_filters("pre_user_last_name", last_name_)
+    if php_empty(lambda : userdata_["display_name"]):
+        if update_:
+            display_name_ = user_login_
+        elif meta_["first_name"] and meta_["last_name"]:
             #// translators: 1: User's first name, 2: Last name.
-            display_name = php_sprintf(_x("%1$s %2$s", "Display name based on first name and last name"), meta["first_name"], meta["last_name"])
-        elif meta["first_name"]:
-            display_name = meta["first_name"]
-        elif meta["last_name"]:
-            display_name = meta["last_name"]
+            display_name_ = php_sprintf(_x("%1$s %2$s", "Display name based on first name and last name"), meta_["first_name"], meta_["last_name"])
+        elif meta_["first_name"]:
+            display_name_ = meta_["first_name"]
+        elif meta_["last_name"]:
+            display_name_ = meta_["last_name"]
         else:
-            display_name = user_login
+            display_name_ = user_login_
         # end if
     else:
-        display_name = userdata["display_name"]
+        display_name_ = userdata_["display_name"]
     # end if
     #// 
     #// Filters a user's display name before the user is created or updated.
@@ -1508,8 +1558,8 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $display_name The user's display name.
     #//
-    display_name = apply_filters("pre_user_display_name", display_name)
-    description = "" if php_empty(lambda : userdata["description"]) else userdata["description"]
+    display_name_ = apply_filters("pre_user_display_name", display_name_)
+    description_ = "" if php_empty(lambda : userdata_["description"]) else userdata_["description"]
     #// 
     #// Filters a user's description before the user is created or updated.
     #// 
@@ -1517,22 +1567,22 @@ def wp_insert_user(userdata=None, *args_):
     #// 
     #// @param string $description The user's description.
     #//
-    meta["description"] = apply_filters("pre_user_description", description)
-    meta["rich_editing"] = "true" if php_empty(lambda : userdata["rich_editing"]) else userdata["rich_editing"]
-    meta["syntax_highlighting"] = "true" if php_empty(lambda : userdata["syntax_highlighting"]) else userdata["syntax_highlighting"]
-    meta["comment_shortcuts"] = "false" if php_empty(lambda : userdata["comment_shortcuts"]) or "false" == userdata["comment_shortcuts"] else "true"
-    admin_color = "fresh" if php_empty(lambda : userdata["admin_color"]) else userdata["admin_color"]
-    meta["admin_color"] = php_preg_replace("|[^a-z0-9 _.\\-@]|i", "", admin_color)
-    meta["use_ssl"] = 0 if php_empty(lambda : userdata["use_ssl"]) else php_bool(userdata["use_ssl"])
-    meta["show_admin_bar_front"] = "true" if php_empty(lambda : userdata["show_admin_bar_front"]) else userdata["show_admin_bar_front"]
-    meta["locale"] = userdata["locale"] if (php_isset(lambda : userdata["locale"])) else ""
-    compacted = compact("user_pass", "user_nicename", "user_email", "user_url", "user_registered", "user_activation_key", "display_name")
-    data = wp_unslash(compacted)
-    if (not update):
-        data = data + compact("user_login")
+    meta_["description"] = apply_filters("pre_user_description", description_)
+    meta_["rich_editing"] = "true" if php_empty(lambda : userdata_["rich_editing"]) else userdata_["rich_editing"]
+    meta_["syntax_highlighting"] = "true" if php_empty(lambda : userdata_["syntax_highlighting"]) else userdata_["syntax_highlighting"]
+    meta_["comment_shortcuts"] = "false" if php_empty(lambda : userdata_["comment_shortcuts"]) or "false" == userdata_["comment_shortcuts"] else "true"
+    admin_color_ = "fresh" if php_empty(lambda : userdata_["admin_color"]) else userdata_["admin_color"]
+    meta_["admin_color"] = php_preg_replace("|[^a-z0-9 _.\\-@]|i", "", admin_color_)
+    meta_["use_ssl"] = 0 if php_empty(lambda : userdata_["use_ssl"]) else php_bool(userdata_["use_ssl"])
+    meta_["show_admin_bar_front"] = "true" if php_empty(lambda : userdata_["show_admin_bar_front"]) else userdata_["show_admin_bar_front"]
+    meta_["locale"] = userdata_["locale"] if (php_isset(lambda : userdata_["locale"])) else ""
+    compacted_ = php_compact("user_pass", "user_nicename", "user_email", "user_url", "user_registered", "user_activation_key", "display_name")
+    data_ = wp_unslash(compacted_)
+    if (not update_):
+        data_ = data_ + php_compact("user_login")
     # end if
     if is_multisite():
-        data = data + compact("spam")
+        data_ = data_ + php_compact("spam")
     # end if
     #// 
     #// Filters user data before the record is created or updated.
@@ -1556,21 +1606,21 @@ def wp_insert_user(userdata=None, *args_):
     #// @param bool     $update Whether the user is being updated rather than created.
     #// @param int|null $id     ID of the user to be updated, or NULL if the user is being created.
     #//
-    data = apply_filters("wp_pre_insert_user_data", data, update, php_int(ID) if update else None)
-    if php_empty(lambda : data) or (not php_is_array(data)):
+    data_ = apply_filters("wp_pre_insert_user_data", data_, update_, php_int(ID_) if update_ else None)
+    if php_empty(lambda : data_) or (not php_is_array(data_)):
         return php_new_class("WP_Error", lambda : WP_Error("empty_data", __("Not enough data to create this user.")))
     # end if
-    if update:
-        if user_email != old_user_data.user_email:
-            data["user_activation_key"] = ""
+    if update_:
+        if user_email_ != old_user_data_.user_email:
+            data_["user_activation_key"] = ""
         # end if
-        wpdb.update(wpdb.users, data, compact("ID"))
-        user_id = php_int(ID)
+        wpdb_.update(wpdb_.users, data_, php_compact("ID"))
+        user_id_ = php_int(ID_)
     else:
-        wpdb.insert(wpdb.users, data)
-        user_id = php_int(wpdb.insert_id)
+        wpdb_.insert(wpdb_.users, data_)
+        user_id_ = php_int(wpdb_.insert_id)
     # end if
-    user = php_new_class("WP_User", lambda : WP_User(user_id))
+    user_ = php_new_class("WP_User", lambda : WP_User(user_id_))
     #// 
     #// Filters a user's meta values and keys immediately after the user is created or updated
     #// and before any user meta is inserted or updated.
@@ -1599,23 +1649,23 @@ def wp_insert_user(userdata=None, *args_):
     #// @param WP_User $user   User object.
     #// @param bool    $update Whether the user is being updated rather than created.
     #//
-    meta = apply_filters("insert_user_meta", meta, user, update)
+    meta_ = apply_filters("insert_user_meta", meta_, user_, update_)
     #// Update user meta.
-    for key,value in meta:
-        update_user_meta(user_id, key, value)
+    for key_,value_ in meta_:
+        update_user_meta(user_id_, key_, value_)
     # end for
-    for key,value in wp_get_user_contact_methods(user):
-        if (php_isset(lambda : userdata[key])):
-            update_user_meta(user_id, key, userdata[key])
+    for key_,value_ in wp_get_user_contact_methods(user_):
+        if (php_isset(lambda : userdata_[key_])):
+            update_user_meta(user_id_, key_, userdata_[key_])
         # end if
     # end for
-    if (php_isset(lambda : userdata["role"])):
-        user.set_role(userdata["role"])
-    elif (not update):
-        user.set_role(get_option("default_role"))
+    if (php_isset(lambda : userdata_["role"])):
+        user_.set_role(userdata_["role"])
+    elif (not update_):
+        user_.set_role(get_option("default_role"))
     # end if
-    clean_user_cache(user_id)
-    if update:
+    clean_user_cache(user_id_)
+    if update_:
         #// 
         #// Fires immediately after an existing user is updated.
         #// 
@@ -1624,9 +1674,9 @@ def wp_insert_user(userdata=None, *args_):
         #// @param int     $user_id       User ID.
         #// @param WP_User $old_user_data Object containing user's data prior to update.
         #//
-        do_action("profile_update", user_id, old_user_data)
-        if (php_isset(lambda : userdata["spam"])) and userdata["spam"] != old_user_data.spam:
-            if 1 == userdata["spam"]:
+        do_action("profile_update", user_id_, old_user_data_)
+        if (php_isset(lambda : userdata_["spam"])) and userdata_["spam"] != old_user_data_.spam:
+            if 1 == userdata_["spam"]:
                 #// 
                 #// Fires after the user is marked as a SPAM user.
                 #// 
@@ -1634,7 +1684,7 @@ def wp_insert_user(userdata=None, *args_):
                 #// 
                 #// @param int $user_id ID of the user marked as SPAM.
                 #//
-                do_action("make_spam_user", user_id)
+                do_action("make_spam_user", user_id_)
             else:
                 #// 
                 #// Fires after the user is marked as a HAM user. Opposite of SPAM.
@@ -1643,7 +1693,7 @@ def wp_insert_user(userdata=None, *args_):
                 #// 
                 #// @param int $user_id ID of the user marked as HAM.
                 #//
-                do_action("make_ham_user", user_id)
+                do_action("make_ham_user", user_id_)
             # end if
         # end if
     else:
@@ -1654,9 +1704,9 @@ def wp_insert_user(userdata=None, *args_):
         #// 
         #// @param int $user_id User ID.
         #//
-        do_action("user_register", user_id)
+        do_action("user_register", user_id_)
     # end if
-    return user_id
+    return user_id_
 # end def wp_insert_user
 #// 
 #// Update a user in the database.
@@ -1674,33 +1724,34 @@ def wp_insert_user(userdata=None, *args_):
 #// @param array|object|WP_User $userdata An array of user data or a user object of type stdClass or WP_User.
 #// @return int|WP_Error The updated user's ID or a WP_Error object if the user could not be updated.
 #//
-def wp_update_user(userdata=None, *args_):
+def wp_update_user(userdata_=None, *_args_):
     
-    if type(userdata).__name__ == "stdClass":
-        userdata = get_object_vars(userdata)
-    elif type(userdata).__name__ == "WP_User":
-        userdata = userdata.to_array()
+    
+    if type(userdata_).__name__ == "stdClass":
+        userdata_ = get_object_vars(userdata_)
+    elif type(userdata_).__name__ == "WP_User":
+        userdata_ = userdata_.to_array()
     # end if
-    ID = php_int(userdata["ID"]) if (php_isset(lambda : userdata["ID"])) else 0
-    if (not ID):
+    ID_ = php_int(userdata_["ID"]) if (php_isset(lambda : userdata_["ID"])) else 0
+    if (not ID_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_user_id", __("Invalid user ID.")))
     # end if
     #// First, get all of the original fields.
-    user_obj = get_userdata(ID)
-    if (not user_obj):
+    user_obj_ = get_userdata(ID_)
+    if (not user_obj_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_user_id", __("Invalid user ID.")))
     # end if
-    user = user_obj.to_array()
+    user_ = user_obj_.to_array()
     #// Add additional custom fields.
-    for key in _get_additional_user_keys(user_obj):
-        user[key] = get_user_meta(ID, key, True)
+    for key_ in _get_additional_user_keys(user_obj_):
+        user_[key_] = get_user_meta(ID_, key_, True)
     # end for
     #// Escape data pulled from DB.
-    user = add_magic_quotes(user)
-    if (not php_empty(lambda : userdata["user_pass"])) and userdata["user_pass"] != user_obj.user_pass:
+    user_ = add_magic_quotes(user_)
+    if (not php_empty(lambda : userdata_["user_pass"])) and userdata_["user_pass"] != user_obj_.user_pass:
         #// If password is changing, hash it now.
-        plaintext_pass = userdata["user_pass"]
-        userdata["user_pass"] = wp_hash_password(userdata["user_pass"])
+        plaintext_pass_ = userdata_["user_pass"]
+        userdata_["user_pass"] = wp_hash_password(userdata_["user_pass"])
         #// 
         #// Filters whether to send the password change email.
         #// 
@@ -1712,9 +1763,9 @@ def wp_update_user(userdata=None, *args_):
         #// @param array $user     The original user array.
         #// @param array $userdata The updated user array.
         #//
-        send_password_change_email = apply_filters("send_password_change_email", True, user, userdata)
+        send_password_change_email_ = apply_filters("send_password_change_email", True, user_, userdata_)
     # end if
-    if (php_isset(lambda : userdata["user_email"])) and user["user_email"] != userdata["user_email"]:
+    if (php_isset(lambda : userdata_["user_email"])) and user_["user_email"] != userdata_["user_email"]:
         #// 
         #// Filters whether to send the email change email.
         #// 
@@ -1726,21 +1777,21 @@ def wp_update_user(userdata=None, *args_):
         #// @param array $user     The original user array.
         #// @param array $userdata The updated user array.
         #//
-        send_email_change_email = apply_filters("send_email_change_email", True, user, userdata)
+        send_email_change_email_ = apply_filters("send_email_change_email", True, user_, userdata_)
     # end if
-    clean_user_cache(user_obj)
+    clean_user_cache(user_obj_)
     #// Merge old and new fields with new fields overwriting old ones.
-    userdata = php_array_merge(user, userdata)
-    user_id = wp_insert_user(userdata)
-    if (not is_wp_error(user_id)):
-        blog_name = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
-        switched_locale = False
-        if (not php_empty(lambda : send_password_change_email)) or (not php_empty(lambda : send_email_change_email)):
-            switched_locale = switch_to_locale(get_user_locale(user_id))
+    userdata_ = php_array_merge(user_, userdata_)
+    user_id_ = wp_insert_user(userdata_)
+    if (not is_wp_error(user_id_)):
+        blog_name_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+        switched_locale_ = False
+        if (not php_empty(lambda : send_password_change_email_)) or (not php_empty(lambda : send_email_change_email_)):
+            switched_locale_ = switch_to_locale(get_user_locale(user_id_))
         # end if
-        if (not php_empty(lambda : send_password_change_email)):
+        if (not php_empty(lambda : send_password_change_email_)):
             #// translators: Do not translate USERNAME, ADMIN_EMAIL, EMAIL, SITENAME, SITEURL: those are placeholders.
-            pass_change_text = __("""Hi ###USERNAME###,
+            pass_change_text_ = __("""Hi ###USERNAME###,
             This notice confirms that your password was changed on ###SITENAME###.
             If you did not change your password, please contact the Site Administrator at
             ###ADMIN_EMAIL###
@@ -1748,7 +1799,7 @@ def wp_update_user(userdata=None, *args_):
             Regards,
             All at ###SITENAME###
             ###SITEURL###""")
-            pass_change_email = Array({"to": user["user_email"], "subject": __("[%s] Password Changed"), "message": pass_change_text, "headers": ""})
+            pass_change_email_ = Array({"to": user_["user_email"], "subject": __("[%s] Password Changed"), "message": pass_change_text_, "headers": ""})
             #// 
             #// Filters the contents of the email sent when the user's password is changed.
             #// 
@@ -1770,17 +1821,17 @@ def wp_update_user(userdata=None, *args_):
             #// @param array $user     The original user array.
             #// @param array $userdata The updated user array.
             #//
-            pass_change_email = apply_filters("password_change_email", pass_change_email, user, userdata)
-            pass_change_email["message"] = php_str_replace("###USERNAME###", user["user_login"], pass_change_email["message"])
-            pass_change_email["message"] = php_str_replace("###ADMIN_EMAIL###", get_option("admin_email"), pass_change_email["message"])
-            pass_change_email["message"] = php_str_replace("###EMAIL###", user["user_email"], pass_change_email["message"])
-            pass_change_email["message"] = php_str_replace("###SITENAME###", blog_name, pass_change_email["message"])
-            pass_change_email["message"] = php_str_replace("###SITEURL###", home_url(), pass_change_email["message"])
-            wp_mail(pass_change_email["to"], php_sprintf(pass_change_email["subject"], blog_name), pass_change_email["message"], pass_change_email["headers"])
+            pass_change_email_ = apply_filters("password_change_email", pass_change_email_, user_, userdata_)
+            pass_change_email_["message"] = php_str_replace("###USERNAME###", user_["user_login"], pass_change_email_["message"])
+            pass_change_email_["message"] = php_str_replace("###ADMIN_EMAIL###", get_option("admin_email"), pass_change_email_["message"])
+            pass_change_email_["message"] = php_str_replace("###EMAIL###", user_["user_email"], pass_change_email_["message"])
+            pass_change_email_["message"] = php_str_replace("###SITENAME###", blog_name_, pass_change_email_["message"])
+            pass_change_email_["message"] = php_str_replace("###SITEURL###", home_url(), pass_change_email_["message"])
+            wp_mail(pass_change_email_["to"], php_sprintf(pass_change_email_["subject"], blog_name_), pass_change_email_["message"], pass_change_email_["headers"])
         # end if
-        if (not php_empty(lambda : send_email_change_email)):
+        if (not php_empty(lambda : send_email_change_email_)):
             #// translators: Do not translate USERNAME, ADMIN_EMAIL, NEW_EMAIL, EMAIL, SITENAME, SITEURL: those are placeholders.
-            email_change_text = __("""Hi ###USERNAME###,
+            email_change_text_ = __("""Hi ###USERNAME###,
             This notice confirms that your email address on ###SITENAME### was changed to ###NEW_EMAIL###.
             If you did not change your email, please contact the Site Administrator at
             ###ADMIN_EMAIL###
@@ -1788,7 +1839,7 @@ def wp_update_user(userdata=None, *args_):
             Regards,
             All at ###SITENAME###
             ###SITEURL###""")
-            email_change_email = Array({"to": user["user_email"], "subject": __("[%s] Email Changed"), "message": email_change_text, "headers": ""})
+            email_change_email_ = Array({"to": user_["user_email"], "subject": __("[%s] Email Changed"), "message": email_change_text_, "headers": ""})
             #// 
             #// Filters the contents of the email sent when the user's email is changed.
             #// 
@@ -1811,37 +1862,37 @@ def wp_update_user(userdata=None, *args_):
             #// @param array $user The original user array.
             #// @param array $userdata The updated user array.
             #//
-            email_change_email = apply_filters("email_change_email", email_change_email, user, userdata)
-            email_change_email["message"] = php_str_replace("###USERNAME###", user["user_login"], email_change_email["message"])
-            email_change_email["message"] = php_str_replace("###ADMIN_EMAIL###", get_option("admin_email"), email_change_email["message"])
-            email_change_email["message"] = php_str_replace("###NEW_EMAIL###", userdata["user_email"], email_change_email["message"])
-            email_change_email["message"] = php_str_replace("###EMAIL###", user["user_email"], email_change_email["message"])
-            email_change_email["message"] = php_str_replace("###SITENAME###", blog_name, email_change_email["message"])
-            email_change_email["message"] = php_str_replace("###SITEURL###", home_url(), email_change_email["message"])
-            wp_mail(email_change_email["to"], php_sprintf(email_change_email["subject"], blog_name), email_change_email["message"], email_change_email["headers"])
+            email_change_email_ = apply_filters("email_change_email", email_change_email_, user_, userdata_)
+            email_change_email_["message"] = php_str_replace("###USERNAME###", user_["user_login"], email_change_email_["message"])
+            email_change_email_["message"] = php_str_replace("###ADMIN_EMAIL###", get_option("admin_email"), email_change_email_["message"])
+            email_change_email_["message"] = php_str_replace("###NEW_EMAIL###", userdata_["user_email"], email_change_email_["message"])
+            email_change_email_["message"] = php_str_replace("###EMAIL###", user_["user_email"], email_change_email_["message"])
+            email_change_email_["message"] = php_str_replace("###SITENAME###", blog_name_, email_change_email_["message"])
+            email_change_email_["message"] = php_str_replace("###SITEURL###", home_url(), email_change_email_["message"])
+            wp_mail(email_change_email_["to"], php_sprintf(email_change_email_["subject"], blog_name_), email_change_email_["message"], email_change_email_["headers"])
         # end if
-        if switched_locale:
+        if switched_locale_:
             restore_previous_locale()
         # end if
     # end if
     #// Update the cookies if the password changed.
-    current_user = wp_get_current_user()
-    if current_user.ID == ID:
-        if (php_isset(lambda : plaintext_pass)):
+    current_user_ = wp_get_current_user()
+    if current_user_.ID == ID_:
+        if (php_isset(lambda : plaintext_pass_)):
             wp_clear_auth_cookie()
             #// Here we calculate the expiration length of the current auth cookie and compare it to the default expiration.
             #// If it's greater than this, then we know the user checked 'Remember Me' when they logged in.
-            logged_in_cookie = wp_parse_auth_cookie("", "logged_in")
+            logged_in_cookie_ = wp_parse_auth_cookie("", "logged_in")
             #// This filter is documented in wp-includes/pluggable.php
-            default_cookie_life = apply_filters("auth_cookie_expiration", 2 * DAY_IN_SECONDS, ID, False)
-            remember = False
-            if False != logged_in_cookie and logged_in_cookie["expiration"] - time() > default_cookie_life:
-                remember = True
+            default_cookie_life_ = apply_filters("auth_cookie_expiration", 2 * DAY_IN_SECONDS, ID_, False)
+            remember_ = False
+            if False != logged_in_cookie_ and logged_in_cookie_["expiration"] - time() > default_cookie_life_:
+                remember_ = True
             # end if
-            wp_set_auth_cookie(ID, remember)
+            wp_set_auth_cookie(ID_, remember_)
         # end if
     # end if
-    return user_id
+    return user_id_
 # end def wp_update_user
 #// 
 #// A simpler way of inserting a user into the database.
@@ -1858,13 +1909,14 @@ def wp_update_user(userdata=None, *args_):
 #// @return int|WP_Error The newly created user's ID or a WP_Error object if the user could not
 #// be created.
 #//
-def wp_create_user(username=None, password=None, email="", *args_):
+def wp_create_user(username_=None, password_=None, email_="", *_args_):
     
-    user_login = wp_slash(username)
-    user_email = wp_slash(email)
-    user_pass = password
-    userdata = compact("user_login", "user_email", "user_pass")
-    return wp_insert_user(userdata)
+    
+    user_login_ = wp_slash(username_)
+    user_email_ = wp_slash(email_)
+    user_pass_ = password_
+    userdata_ = php_compact("user_login", "user_email", "user_pass")
+    return wp_insert_user(userdata_)
 # end def wp_create_user
 #// 
 #// Returns a list of meta keys to be (maybe) populated in wp_update_user().
@@ -1878,10 +1930,11 @@ def wp_create_user(username=None, password=None, email="", *args_):
 #// @param WP_User $user WP_User instance.
 #// @return string[] List of user keys to be populated in wp_update_user().
 #//
-def _get_additional_user_keys(user=None, *args_):
+def _get_additional_user_keys(user_=None, *_args_):
     
-    keys = Array("first_name", "last_name", "nickname", "description", "rich_editing", "syntax_highlighting", "comment_shortcuts", "admin_color", "use_ssl", "show_admin_bar_front", "locale")
-    return php_array_merge(keys, php_array_keys(wp_get_user_contact_methods(user)))
+    
+    keys_ = Array("first_name", "last_name", "nickname", "description", "rich_editing", "syntax_highlighting", "comment_shortcuts", "admin_color", "use_ssl", "show_admin_bar_front", "locale")
+    return php_array_merge(keys_, php_array_keys(wp_get_user_contact_methods(user_)))
 # end def _get_additional_user_keys
 #// 
 #// Set up the user contact methods.
@@ -1893,11 +1946,12 @@ def _get_additional_user_keys(user=None, *args_):
 #// @param WP_User $user Optional. WP_User object.
 #// @return string[] Array of contact method labels keyed by contact method.
 #//
-def wp_get_user_contact_methods(user=None, *args_):
+def wp_get_user_contact_methods(user_=None, *_args_):
     
-    methods = Array()
+    
+    methods_ = Array()
     if get_site_option("initial_db_version") < 23588:
-        methods = Array({"aim": __("AIM"), "yim": __("Yahoo IM"), "jabber": __("Jabber / Google Talk")})
+        methods_ = Array({"aim": __("AIM"), "yim": __("Yahoo IM"), "jabber": __("Jabber / Google Talk")})
     # end if
     #// 
     #// Filters the user contact methods.
@@ -1907,7 +1961,7 @@ def wp_get_user_contact_methods(user=None, *args_):
     #// @param string[] $methods Array of contact method labels keyed by contact method.
     #// @param WP_User  $user    WP_User object.
     #//
-    return apply_filters("user_contactmethods", methods, user)
+    return apply_filters("user_contactmethods", methods_, user_)
 # end def wp_get_user_contact_methods
 #// 
 #// The old private function for setting up user contact methods.
@@ -1920,9 +1974,10 @@ def wp_get_user_contact_methods(user=None, *args_):
 #// @param WP_User $user Optional. WP_User object. Default null.
 #// @return string[] Array of contact method labels keyed by contact method.
 #//
-def _wp_get_user_contactmethods(user=None, *args_):
+def _wp_get_user_contactmethods(user_=None, *_args_):
     
-    return wp_get_user_contact_methods(user)
+    
+    return wp_get_user_contact_methods(user_)
 # end def _wp_get_user_contactmethods
 #// 
 #// Gets the text suggesting how to create strong passwords.
@@ -1931,9 +1986,10 @@ def _wp_get_user_contactmethods(user=None, *args_):
 #// 
 #// @return string The password hint text.
 #//
-def wp_get_password_hint(*args_):
+def wp_get_password_hint(*_args_):
     
-    hint = __("Hint: The password should be at least twelve characters long. To make it stronger, use upper and lower case letters, numbers, and symbols like ! \" ? $ % ^ &amp; ).")
+    
+    hint_ = __("Hint: The password should be at least twelve characters long. To make it stronger, use upper and lower case letters, numbers, and symbols like ! \" ? $ % ^ &amp; ).")
     #// 
     #// Filters the text describing the site's password complexity policy.
     #// 
@@ -1941,7 +1997,7 @@ def wp_get_password_hint(*args_):
     #// 
     #// @param string $hint The password hint text.
     #//
-    return apply_filters("password_hint", hint)
+    return apply_filters("password_hint", hint_)
 # end def wp_get_password_hint
 #// 
 #// Creates, stores, then returns a password reset key for user.
@@ -1954,11 +2010,12 @@ def wp_get_password_hint(*args_):
 #// 
 #// @return string|WP_Error Password reset key on success. WP_Error on error.
 #//
-def get_password_reset_key(user=None, *args_):
+def get_password_reset_key(user_=None, *_args_):
     
-    global wp_hasher
-    php_check_if_defined("wp_hasher")
-    if (not type(user).__name__ == "WP_User"):
+    
+    global wp_hasher_
+    php_check_if_defined("wp_hasher_")
+    if (not type(user_).__name__ == "WP_User"):
         return php_new_class("WP_Error", lambda : WP_Error("invalidcombo", __("<strong>Error</strong>: There is no account with that username or email address.")))
     # end if
     #// 
@@ -1971,7 +2028,7 @@ def get_password_reset_key(user=None, *args_):
     #// 
     #// @param string $user_login The user login name.
     #//
-    do_action_deprecated("retreive_password", Array(user.user_login), "1.5.1", "retrieve_password")
+    do_action_deprecated("retreive_password", Array(user_.user_login), "1.5.1", "retrieve_password")
     #// 
     #// Fires before a new password is retrieved.
     #// 
@@ -1979,10 +2036,10 @@ def get_password_reset_key(user=None, *args_):
     #// 
     #// @param string $user_login The user login name.
     #//
-    do_action("retrieve_password", user.user_login)
-    allow = True
-    if is_multisite() and is_user_spammy(user):
-        allow = False
+    do_action("retrieve_password", user_.user_login)
+    allow_ = True
+    if is_multisite() and is_user_spammy(user_):
+        allow_ = False
     # end if
     #// 
     #// Filters whether to allow a password to be reset.
@@ -1992,14 +2049,14 @@ def get_password_reset_key(user=None, *args_):
     #// @param bool $allow         Whether to allow the password to be reset. Default true.
     #// @param int  $user_data->ID The ID of the user attempting to reset a password.
     #//
-    allow = apply_filters("allow_password_reset", allow, user.ID)
-    if (not allow):
+    allow_ = apply_filters("allow_password_reset", allow_, user_.ID)
+    if (not allow_):
         return php_new_class("WP_Error", lambda : WP_Error("no_password_reset", __("Password reset is not allowed for this user")))
-    elif is_wp_error(allow):
-        return allow
+    elif is_wp_error(allow_):
+        return allow_
     # end if
     #// Generate something random for a password reset key.
-    key = wp_generate_password(20, False)
+    key_ = wp_generate_password(20, False)
     #// 
     #// Fires when a password reset key is generated.
     #// 
@@ -2008,18 +2065,18 @@ def get_password_reset_key(user=None, *args_):
     #// @param string $user_login The username for the user.
     #// @param string $key        The generated password reset key.
     #//
-    do_action("retrieve_password_key", user.user_login, key)
+    do_action("retrieve_password_key", user_.user_login, key_)
     #// Now insert the key, hashed, into the DB.
-    if php_empty(lambda : wp_hasher):
+    if php_empty(lambda : wp_hasher_):
         php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
-        wp_hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+        wp_hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
     # end if
-    hashed = time() + ":" + wp_hasher.hashpassword(key)
-    key_saved = wp_update_user(Array({"ID": user.ID, "user_activation_key": hashed}))
-    if is_wp_error(key_saved):
-        return key_saved
+    hashed_ = time() + ":" + wp_hasher_.hashpassword(key_)
+    key_saved_ = wp_update_user(Array({"ID": user_.ID, "user_activation_key": hashed_}))
+    if is_wp_error(key_saved_):
+        return key_saved_
     # end if
-    return key
+    return key_
 # end def get_password_reset_key
 #// 
 #// Retrieves a user row based on password reset key and login
@@ -2038,24 +2095,26 @@ def get_password_reset_key(user=None, *args_):
 #// @param string $login     The user login.
 #// @return WP_User|WP_Error WP_User object on success, WP_Error object for invalid or expired keys.
 #//
-def check_password_reset_key(key=None, login=None, *args_):
+def check_password_reset_key(key_=None, login_=None, *_args_):
     
-    global wpdb,wp_hasher
-    php_check_if_defined("wpdb","wp_hasher")
-    key = php_preg_replace("/[^a-z0-9]/i", "", key)
-    if php_empty(lambda : key) or (not php_is_string(key)):
+    
+    global wpdb_
+    global wp_hasher_
+    php_check_if_defined("wpdb_","wp_hasher_")
+    key_ = php_preg_replace("/[^a-z0-9]/i", "", key_)
+    if php_empty(lambda : key_) or (not php_is_string(key_)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))
     # end if
-    if php_empty(lambda : login) or (not php_is_string(login)):
+    if php_empty(lambda : login_) or (not php_is_string(login_)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))
     # end if
-    user = get_user_by("login", login)
-    if (not user):
+    user_ = get_user_by("login", login_)
+    if (not user_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))
     # end if
-    if php_empty(lambda : wp_hasher):
+    if php_empty(lambda : wp_hasher_):
         php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
-        wp_hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+        wp_hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
     # end if
     #// 
     #// Filters the expiration time of password reset keys.
@@ -2064,27 +2123,27 @@ def check_password_reset_key(key=None, login=None, *args_):
     #// 
     #// @param int $expiration The expiration time in seconds.
     #//
-    expiration_duration = apply_filters("password_reset_expiration", DAY_IN_SECONDS)
-    if False != php_strpos(user.user_activation_key, ":"):
-        pass_request_time, pass_key = php_explode(":", user.user_activation_key, 2)
-        expiration_time = pass_request_time + expiration_duration
+    expiration_duration_ = apply_filters("password_reset_expiration", DAY_IN_SECONDS)
+    if False != php_strpos(user_.user_activation_key, ":"):
+        pass_request_time_, pass_key_ = php_explode(":", user_.user_activation_key, 2)
+        expiration_time_ = pass_request_time_ + expiration_duration_
     else:
-        pass_key = user.user_activation_key
-        expiration_time = False
+        pass_key_ = user_.user_activation_key
+        expiration_time_ = False
     # end if
-    if (not pass_key):
+    if (not pass_key_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))
     # end if
-    hash_is_correct = wp_hasher.checkpassword(key, pass_key)
-    if hash_is_correct and expiration_time and time() < expiration_time:
-        return user
-    elif hash_is_correct and expiration_time:
+    hash_is_correct_ = wp_hasher_.checkpassword(key_, pass_key_)
+    if hash_is_correct_ and expiration_time_ and time() < expiration_time_:
+        return user_
+    elif hash_is_correct_ and expiration_time_:
         #// Key has an expiration time that's passed.
         return php_new_class("WP_Error", lambda : WP_Error("expired_key", __("Invalid key.")))
     # end if
-    if hash_equals(user.user_activation_key, key) or hash_is_correct and (not expiration_time):
+    if hash_equals(user_.user_activation_key, key_) or hash_is_correct_ and (not expiration_time_):
         return_ = php_new_class("WP_Error", lambda : WP_Error("expired_key", __("Invalid key.")))
-        user_id = user.ID
+        user_id_ = user_.ID
         #// 
         #// Filters the return value of check_password_reset_key() when an
         #// old-style key is used.
@@ -2096,7 +2155,7 @@ def check_password_reset_key(key=None, login=None, *args_):
         #// Return a WP_User object to validate the key.
         #// @param int      $user_id The matched user ID.
         #//
-        return apply_filters("password_reset_key_expired", return_, user_id)
+        return apply_filters("password_reset_key_expired", return_, user_id_)
     # end if
     return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))
 # end def check_password_reset_key
@@ -2108,7 +2167,8 @@ def check_password_reset_key(key=None, login=None, *args_):
 #// @param WP_User $user     The user
 #// @param string $new_pass New password for the user in plaintext
 #//
-def reset_password(user=None, new_pass=None, *args_):
+def reset_password(user_=None, new_pass_=None, *_args_):
+    
     
     #// 
     #// Fires before the user's password is reset.
@@ -2118,9 +2178,9 @@ def reset_password(user=None, new_pass=None, *args_):
     #// @param WP_User $user     The user.
     #// @param string  $new_pass New user password.
     #//
-    do_action("password_reset", user, new_pass)
-    wp_set_password(new_pass, user.ID)
-    update_user_option(user.ID, "default_password_nag", False, True)
+    do_action("password_reset", user_, new_pass_)
+    wp_set_password(new_pass_, user_.ID)
+    update_user_option(user_.ID, "default_password_nag", False, True)
     #// 
     #// Fires after the user's password is reset.
     #// 
@@ -2129,7 +2189,7 @@ def reset_password(user=None, new_pass=None, *args_):
     #// @param WP_User $user     The user.
     #// @param string  $new_pass New user password.
     #//
-    do_action("after_password_reset", user, new_pass)
+    do_action("after_password_reset", user_, new_pass_)
 # end def reset_password
 #// 
 #// Handles registering a new user.
@@ -2140,10 +2200,11 @@ def reset_password(user=None, new_pass=None, *args_):
 #// @param string $user_email User's email address to send password and add
 #// @return int|WP_Error Either user's ID or error on failure.
 #//
-def register_new_user(user_login=None, user_email=None, *args_):
+def register_new_user(user_login_=None, user_email_=None, *_args_):
     
-    errors = php_new_class("WP_Error", lambda : WP_Error())
-    sanitized_user_login = sanitize_user(user_login)
+    
+    errors_ = php_new_class("WP_Error", lambda : WP_Error())
+    sanitized_user_login_ = sanitize_user(user_login_)
     #// 
     #// Filters the email address of a user being registered.
     #// 
@@ -2151,30 +2212,30 @@ def register_new_user(user_login=None, user_email=None, *args_):
     #// 
     #// @param string $user_email The email address of the new user.
     #//
-    user_email = apply_filters("user_registration_email", user_email)
+    user_email_ = apply_filters("user_registration_email", user_email_)
     #// Check the username.
-    if "" == sanitized_user_login:
-        errors.add("empty_username", __("<strong>Error</strong>: Please enter a username."))
-    elif (not validate_username(user_login)):
-        errors.add("invalid_username", __("<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username."))
-        sanitized_user_login = ""
-    elif username_exists(sanitized_user_login):
-        errors.add("username_exists", __("<strong>Error</strong>: This username is already registered. Please choose another one."))
+    if "" == sanitized_user_login_:
+        errors_.add("empty_username", __("<strong>Error</strong>: Please enter a username."))
+    elif (not validate_username(user_login_)):
+        errors_.add("invalid_username", __("<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username."))
+        sanitized_user_login_ = ""
+    elif username_exists(sanitized_user_login_):
+        errors_.add("username_exists", __("<strong>Error</strong>: This username is already registered. Please choose another one."))
     else:
         #// This filter is documented in wp-includes/user.php
-        illegal_user_logins = apply_filters("illegal_user_logins", Array())
-        if php_in_array(php_strtolower(sanitized_user_login), php_array_map("strtolower", illegal_user_logins), True):
-            errors.add("invalid_username", __("<strong>Error</strong>: Sorry, that username is not allowed."))
+        illegal_user_logins_ = apply_filters("illegal_user_logins", Array())
+        if php_in_array(php_strtolower(sanitized_user_login_), php_array_map("strtolower", illegal_user_logins_), True):
+            errors_.add("invalid_username", __("<strong>Error</strong>: Sorry, that username is not allowed."))
         # end if
     # end if
     #// Check the email address.
-    if "" == user_email:
-        errors.add("empty_email", __("<strong>Error</strong>: Please type your email address."))
-    elif (not is_email(user_email)):
-        errors.add("invalid_email", __("<strong>Error</strong>: The email address isn&#8217;t correct."))
-        user_email = ""
-    elif email_exists(user_email):
-        errors.add("email_exists", __("<strong>Error</strong>: This email is already registered, please choose another one."))
+    if "" == user_email_:
+        errors_.add("empty_email", __("<strong>Error</strong>: Please type your email address."))
+    elif (not is_email(user_email_)):
+        errors_.add("invalid_email", __("<strong>Error</strong>: The email address isn&#8217;t correct."))
+        user_email_ = ""
+    elif email_exists(user_email_):
+        errors_.add("email_exists", __("<strong>Error</strong>: This email is already registered, please choose another one."))
     # end if
     #// 
     #// Fires when submitting registration form data, before the user is created.
@@ -2187,7 +2248,7 @@ def register_new_user(user_login=None, user_email=None, *args_):
     #// e.g., an empty field, an invalid username or email,
     #// or an existing username or email.
     #//
-    do_action("register_post", sanitized_user_login, user_email, errors)
+    do_action("register_post", sanitized_user_login_, user_email_, errors_)
     #// 
     #// Filters the errors encountered when a new user is being registered.
     #// 
@@ -2204,17 +2265,17 @@ def register_new_user(user_login=None, user_email=None, *args_):
     #// @param string   $sanitized_user_login User's username after it has been sanitized.
     #// @param string   $user_email           User's email.
     #//
-    errors = apply_filters("registration_errors", errors, sanitized_user_login, user_email)
-    if errors.has_errors():
-        return errors
+    errors_ = apply_filters("registration_errors", errors_, sanitized_user_login_, user_email_)
+    if errors_.has_errors():
+        return errors_
     # end if
-    user_pass = wp_generate_password(12, False)
-    user_id = wp_create_user(sanitized_user_login, user_pass, user_email)
-    if (not user_id) or is_wp_error(user_id):
-        errors.add("registerfail", php_sprintf(__("<strong>Error</strong>: Couldn&#8217;t register you&hellip; please contact the <a href=\"mailto:%s\">webmaster</a> !"), get_option("admin_email")))
-        return errors
+    user_pass_ = wp_generate_password(12, False)
+    user_id_ = wp_create_user(sanitized_user_login_, user_pass_, user_email_)
+    if (not user_id_) or is_wp_error(user_id_):
+        errors_.add("registerfail", php_sprintf(__("<strong>Error</strong>: Couldn&#8217;t register you&hellip; please contact the <a href=\"mailto:%s\">webmaster</a> !"), get_option("admin_email")))
+        return errors_
     # end if
-    update_user_option(user_id, "default_password_nag", True, True)
+    update_user_option(user_id_, "default_password_nag", True, True)
     #// Set up the password change nag.
     #// 
     #// Fires after a new user registration has been recorded.
@@ -2223,8 +2284,8 @@ def register_new_user(user_login=None, user_email=None, *args_):
     #// 
     #// @param int $user_id ID of the newly registered user.
     #//
-    do_action("register_new_user", user_id)
-    return user_id
+    do_action("register_new_user", user_id_)
+    return user_id_
 # end def register_new_user
 #// 
 #// Initiates email notifications related to the creation of new users.
@@ -2240,9 +2301,10 @@ def register_new_user(user_login=None, user_email=None, *args_):
 #// or an empty string (admin only), 'user', or 'both' (admin and user).
 #// Default 'both'.
 #//
-def wp_send_new_user_notifications(user_id=None, notify="both", *args_):
+def wp_send_new_user_notifications(user_id_=None, notify_="both", *_args_):
     
-    wp_new_user_notification(user_id, None, notify)
+    
+    wp_new_user_notification(user_id_, None, notify_)
 # end def wp_send_new_user_notifications
 #// 
 #// Retrieve the current session token from the logged_in cookie.
@@ -2251,10 +2313,11 @@ def wp_send_new_user_notifications(user_id=None, notify="both", *args_):
 #// 
 #// @return string Token.
 #//
-def wp_get_session_token(*args_):
+def wp_get_session_token(*_args_):
     
-    cookie = wp_parse_auth_cookie("", "logged_in")
-    return cookie["token"] if (not php_empty(lambda : cookie["token"])) else ""
+    
+    cookie_ = wp_parse_auth_cookie("", "logged_in")
+    return cookie_["token"] if (not php_empty(lambda : cookie_["token"])) else ""
 # end def wp_get_session_token
 #// 
 #// Retrieve a list of sessions for the current user.
@@ -2262,22 +2325,24 @@ def wp_get_session_token(*args_):
 #// @since 4.0.0
 #// @return array Array of sessions.
 #//
-def wp_get_all_sessions(*args_):
+def wp_get_all_sessions(*_args_):
     
-    manager = WP_Session_Tokens.get_instance(get_current_user_id())
-    return manager.get_all()
+    
+    manager_ = WP_Session_Tokens.get_instance(get_current_user_id())
+    return manager_.get_all()
 # end def wp_get_all_sessions
 #// 
 #// Remove the current session token from the database.
 #// 
 #// @since 4.0.0
 #//
-def wp_destroy_current_session(*args_):
+def wp_destroy_current_session(*_args_):
     
-    token = wp_get_session_token()
-    if token:
-        manager = WP_Session_Tokens.get_instance(get_current_user_id())
-        manager.destroy(token)
+    
+    token_ = wp_get_session_token()
+    if token_:
+        manager_ = WP_Session_Tokens.get_instance(get_current_user_id())
+        manager_.destroy(token_)
     # end if
 # end def wp_destroy_current_session
 #// 
@@ -2285,12 +2350,13 @@ def wp_destroy_current_session(*args_):
 #// 
 #// @since 4.0.0
 #//
-def wp_destroy_other_sessions(*args_):
+def wp_destroy_other_sessions(*_args_):
     
-    token = wp_get_session_token()
-    if token:
-        manager = WP_Session_Tokens.get_instance(get_current_user_id())
-        manager.destroy_others(token)
+    
+    token_ = wp_get_session_token()
+    if token_:
+        manager_ = WP_Session_Tokens.get_instance(get_current_user_id())
+        manager_.destroy_others(token_)
     # end if
 # end def wp_destroy_other_sessions
 #// 
@@ -2298,10 +2364,11 @@ def wp_destroy_other_sessions(*args_):
 #// 
 #// @since 4.0.0
 #//
-def wp_destroy_all_sessions(*args_):
+def wp_destroy_all_sessions(*_args_):
     
-    manager = WP_Session_Tokens.get_instance(get_current_user_id())
-    manager.destroy_all()
+    
+    manager_ = WP_Session_Tokens.get_instance(get_current_user_id())
+    manager_.destroy_all()
 # end def wp_destroy_all_sessions
 #// 
 #// Get the user IDs of all users with no role on this site.
@@ -2312,25 +2379,26 @@ def wp_destroy_all_sessions(*args_):
 #// @param int|null $site_id Optional. The site ID to get users with no role for. Defaults to the current site.
 #// @return string[] Array of user IDs as strings.
 #//
-def wp_get_users_with_no_role(site_id=None, *args_):
+def wp_get_users_with_no_role(site_id_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not site_id):
-        site_id = get_current_blog_id()
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not site_id_):
+        site_id_ = get_current_blog_id()
     # end if
-    prefix = wpdb.get_blog_prefix(site_id)
-    if is_multisite() and get_current_blog_id() != site_id:
-        switch_to_blog(site_id)
-        role_names = wp_roles().get_names()
+    prefix_ = wpdb_.get_blog_prefix(site_id_)
+    if is_multisite() and get_current_blog_id() != site_id_:
+        switch_to_blog(site_id_)
+        role_names_ = wp_roles().get_names()
         restore_current_blog()
     else:
-        role_names = wp_roles().get_names()
+        role_names_ = wp_roles().get_names()
     # end if
-    regex = php_implode("|", php_array_keys(role_names))
-    regex = php_preg_replace("/[^a-zA-Z_\\|-]/", "", regex)
-    users = wpdb.get_col(wpdb.prepare(str("\n       SELECT user_id\n        FROM ") + str(wpdb.usermeta) + str("\n      WHERE meta_key = '") + str(prefix) + str("capabilities'\n       AND meta_value NOT REGEXP %s\n  "), regex))
-    return users
+    regex_ = php_implode("|", php_array_keys(role_names_))
+    regex_ = php_preg_replace("/[^a-zA-Z_\\|-]/", "", regex_)
+    users_ = wpdb_.get_col(wpdb_.prepare(str("\n        SELECT user_id\n        FROM ") + str(wpdb_.usermeta) + str("\n     WHERE meta_key = '") + str(prefix_) + str("capabilities'\n      AND meta_value NOT REGEXP %s\n  "), regex_))
+    return users_
 # end def wp_get_users_with_no_role
 #// 
 #// Retrieves the current user object.
@@ -2351,29 +2419,30 @@ def wp_get_users_with_no_role(site_id=None, *args_):
 #// 
 #// @return WP_User Current WP_User instance.
 #//
-def _wp_get_current_user(*args_):
+def _wp_get_current_user(*_args_):
     
-    global current_user
-    php_check_if_defined("current_user")
-    if (not php_empty(lambda : current_user)):
-        if type(current_user).__name__ == "WP_User":
-            return current_user
+    
+    global current_user_
+    php_check_if_defined("current_user_")
+    if (not php_empty(lambda : current_user_)):
+        if type(current_user_).__name__ == "WP_User":
+            return current_user_
         # end if
         #// Upgrade stdClass to WP_User.
-        if php_is_object(current_user) and (php_isset(lambda : current_user.ID)):
-            cur_id = current_user.ID
-            current_user = None
-            wp_set_current_user(cur_id)
-            return current_user
+        if php_is_object(current_user_) and (php_isset(lambda : current_user_.ID)):
+            cur_id_ = current_user_.ID
+            current_user_ = None
+            wp_set_current_user(cur_id_)
+            return current_user_
         # end if
         #// $current_user has a junk value. Force to WP_User with ID 0.
-        current_user = None
+        current_user_ = None
         wp_set_current_user(0)
-        return current_user
+        return current_user_
     # end if
     if php_defined("XMLRPC_REQUEST") and XMLRPC_REQUEST:
         wp_set_current_user(0)
-        return current_user
+        return current_user_
     # end if
     #// 
     #// Filters the current user.
@@ -2388,13 +2457,13 @@ def _wp_get_current_user(*args_):
     #// 
     #// @param int|bool $user_id User ID if one has been determined, false otherwise.
     #//
-    user_id = apply_filters("determine_current_user", False)
-    if (not user_id):
+    user_id_ = apply_filters("determine_current_user", False)
+    if (not user_id_):
         wp_set_current_user(0)
-        return current_user
+        return current_user_
     # end if
-    wp_set_current_user(user_id)
-    return current_user
+    wp_set_current_user(user_id_)
+    return current_user_
 # end def _wp_get_current_user
 #// 
 #// Send a confirmation request email when a change of user email address is attempted.
@@ -2404,33 +2473,34 @@ def _wp_get_current_user(*args_):
 #// 
 #// @global WP_Error $errors WP_Error object.
 #//
-def send_confirmation_on_profile_email(*args_):
+def send_confirmation_on_profile_email(*_args_):
+    
     global PHP_POST
-    global errors
-    php_check_if_defined("errors")
-    current_user = wp_get_current_user()
-    if (not php_is_object(errors)):
-        errors = php_new_class("WP_Error", lambda : WP_Error())
+    global errors_
+    php_check_if_defined("errors_")
+    current_user_ = wp_get_current_user()
+    if (not php_is_object(errors_)):
+        errors_ = php_new_class("WP_Error", lambda : WP_Error())
     # end if
-    if current_user.ID != PHP_POST["user_id"]:
+    if current_user_.ID != PHP_POST["user_id"]:
         return False
     # end if
-    if current_user.user_email != PHP_POST["email"]:
+    if current_user_.user_email != PHP_POST["email"]:
         if (not is_email(PHP_POST["email"])):
-            errors.add("user_email", __("<strong>Error</strong>: The email address isn&#8217;t correct."), Array({"form-field": "email"}))
+            errors_.add("user_email", __("<strong>Error</strong>: The email address isn&#8217;t correct."), Array({"form-field": "email"}))
             return
         # end if
         if email_exists(PHP_POST["email"]):
-            errors.add("user_email", __("<strong>Error</strong>: The email address is already used."), Array({"form-field": "email"}))
-            delete_user_meta(current_user.ID, "_new_email")
+            errors_.add("user_email", __("<strong>Error</strong>: The email address is already used."), Array({"form-field": "email"}))
+            delete_user_meta(current_user_.ID, "_new_email")
             return
         # end if
-        hash = php_md5(PHP_POST["email"] + time() + wp_rand())
-        new_user_email = Array({"hash": hash, "newemail": PHP_POST["email"]})
-        update_user_meta(current_user.ID, "_new_email", new_user_email)
-        sitename = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+        hash_ = php_md5(PHP_POST["email"] + time() + wp_rand())
+        new_user_email_ = Array({"hash": hash_, "newemail": PHP_POST["email"]})
+        update_user_meta(current_user_.ID, "_new_email", new_user_email_)
+        sitename_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
         #// translators: Do not translate USERNAME, ADMIN_URL, EMAIL, SITENAME, SITEURL: those are placeholders.
-        email_text = __("""Howdy ###USERNAME###,
+        email_text_ = __("""Howdy ###USERNAME###,
         You recently requested to have the email address on your account changed.
         If this is correct, please click on the following link to change it:
         ###ADMIN_URL###
@@ -2461,15 +2531,15 @@ def send_confirmation_on_profile_email(*args_):
         #// @type string $newemail The proposed new email address.
         #// }
         #//
-        content = apply_filters("new_user_email_content", email_text, new_user_email)
-        content = php_str_replace("###USERNAME###", current_user.user_login, content)
-        content = php_str_replace("###ADMIN_URL###", esc_url(admin_url("profile.php?newuseremail=" + hash)), content)
-        content = php_str_replace("###EMAIL###", PHP_POST["email"], content)
-        content = php_str_replace("###SITENAME###", sitename, content)
-        content = php_str_replace("###SITEURL###", home_url(), content)
+        content_ = apply_filters("new_user_email_content", email_text_, new_user_email_)
+        content_ = php_str_replace("###USERNAME###", current_user_.user_login, content_)
+        content_ = php_str_replace("###ADMIN_URL###", esc_url(admin_url("profile.php?newuseremail=" + hash_)), content_)
+        content_ = php_str_replace("###EMAIL###", PHP_POST["email"], content_)
+        content_ = php_str_replace("###SITENAME###", sitename_, content_)
+        content_ = php_str_replace("###SITEURL###", home_url(), content_)
         #// translators: New email address notification email subject. %s: Site title.
-        wp_mail(PHP_POST["email"], php_sprintf(__("[%s] Email Change Request"), sitename), content)
-        PHP_POST["email"] = current_user.user_email
+        wp_mail(PHP_POST["email"], php_sprintf(__("[%s] Email Change Request"), sitename_), content_)
+        PHP_POST["email"] = current_user_.user_email
     # end if
 # end def send_confirmation_on_profile_email
 #// 
@@ -2481,15 +2551,16 @@ def send_confirmation_on_profile_email(*args_):
 #// 
 #// @global string $pagenow
 #//
-def new_user_email_admin_notice(*args_):
+def new_user_email_admin_notice(*_args_):
     
-    global pagenow
-    php_check_if_defined("pagenow")
-    if "profile.php" == pagenow and (php_isset(lambda : PHP_REQUEST["updated"])):
-        email = get_user_meta(get_current_user_id(), "_new_email", True)
-        if email:
+    
+    global pagenow_
+    php_check_if_defined("pagenow_")
+    if "profile.php" == pagenow_ and (php_isset(lambda : PHP_REQUEST["updated"])):
+        email_ = get_user_meta(get_current_user_id(), "_new_email", True)
+        if email_:
             #// translators: %s: New email address.
-            php_print("<div class=\"notice notice-info\"><p>" + php_sprintf(__("Your email address has not been updated yet. Please check your inbox at %s for a confirmation email."), "<code>" + esc_html(email["newemail"]) + "</code>") + "</p></div>")
+            php_print("<div class=\"notice notice-info\"><p>" + php_sprintf(__("Your email address has not been updated yet. Please check your inbox at %s for a confirmation email."), "<code>" + esc_html(email_["newemail"]) + "</code>") + "</p></div>")
         # end if
     # end if
 # end def new_user_email_admin_notice
@@ -2501,7 +2572,8 @@ def new_user_email_admin_notice(*args_):
 #// 
 #// @return array List of core privacy action types.
 #//
-def _wp_privacy_action_request_types(*args_):
+def _wp_privacy_action_request_types(*_args_):
+    
     
     return Array("export_personal_data", "remove_personal_data")
 # end def _wp_privacy_action_request_types
@@ -2513,10 +2585,11 @@ def _wp_privacy_action_request_types(*args_):
 #// @param array $exporters  An array of personal data exporters.
 #// @return array An array of personal data exporters.
 #//
-def wp_register_user_personal_data_exporter(exporters=None, *args_):
+def wp_register_user_personal_data_exporter(exporters_=None, *_args_):
     
-    exporters["wordpress-user"] = Array({"exporter_friendly_name": __("WordPress User"), "callback": "wp_user_personal_data_exporter"})
-    return exporters
+    
+    exporters_["wordpress-user"] = Array({"exporter_friendly_name": __("WordPress User"), "callback": "wp_user_personal_data_exporter"})
+    return exporters_
 # end def wp_register_user_personal_data_exporter
 #// 
 #// Finds and exports personal data associated with an email address from the user and user_meta table.
@@ -2528,20 +2601,21 @@ def wp_register_user_personal_data_exporter(exporters=None, *args_):
 #// @param string $email_address  The user's email address.
 #// @return array An array of personal data.
 #//
-def wp_user_personal_data_exporter(email_address=None, *args_):
+def wp_user_personal_data_exporter(email_address_=None, *_args_):
     
-    email_address = php_trim(email_address)
-    data_to_export = Array()
-    user = get_user_by("email", email_address)
-    if (not user):
+    
+    email_address_ = php_trim(email_address_)
+    data_to_export_ = Array()
+    user_ = get_user_by("email", email_address_)
+    if (not user_):
         return Array({"data": Array(), "done": True})
     # end if
-    user_meta = get_user_meta(user.ID)
-    user_props_to_export = Array({"ID": __("User ID"), "user_login": __("User Login Name"), "user_nicename": __("User Nice Name"), "user_email": __("User Email"), "user_url": __("User URL"), "user_registered": __("User Registration Date"), "display_name": __("User Display Name"), "nickname": __("User Nickname"), "first_name": __("User First Name"), "last_name": __("User Last Name"), "description": __("User Description")})
-    user_data_to_export = Array()
-    for key,name in user_props_to_export:
-        value = ""
-        for case in Switch(key):
+    user_meta_ = get_user_meta(user_.ID)
+    user_props_to_export_ = Array({"ID": __("User ID"), "user_login": __("User Login Name"), "user_nicename": __("User Nice Name"), "user_email": __("User Email"), "user_url": __("User URL"), "user_registered": __("User Registration Date"), "display_name": __("User Display Name"), "nickname": __("User Nickname"), "first_name": __("User First Name"), "last_name": __("User Last Name"), "description": __("User Description")})
+    user_data_to_export_ = Array()
+    for key_,name_ in user_props_to_export_:
+        value_ = ""
+        for case in Switch(key_):
             if case("ID"):
                 pass
             # end if
@@ -2561,7 +2635,7 @@ def wp_user_personal_data_exporter(email_address=None, *args_):
                 pass
             # end if
             if case("display_name"):
-                value = user.data.key
+                value_ = user_.data.key_
                 break
             # end if
             if case("nickname"):
@@ -2574,16 +2648,16 @@ def wp_user_personal_data_exporter(email_address=None, *args_):
                 pass
             # end if
             if case("description"):
-                value = user_meta[key][0]
+                value_ = user_meta_[key_][0]
                 break
             # end if
         # end for
-        if (not php_empty(lambda : value)):
-            user_data_to_export[-1] = Array({"name": name, "value": value})
+        if (not php_empty(lambda : value_)):
+            user_data_to_export_[-1] = Array({"name": name_, "value": value_})
         # end if
     # end for
     #// Get the list of reserved names.
-    reserved_names = php_array_values(user_props_to_export)
+    reserved_names_ = php_array_values(user_props_to_export_)
     #// 
     #// Filter to extend the user's profile data for the privacy exporter.
     #// 
@@ -2599,47 +2673,47 @@ def wp_user_personal_data_exporter(email_address=None, *args_):
     #// @param string[] $reserved_names An array of reserved names. Any item in `$additional_user_data`
     #// that uses one of these for its `name` will not be included in the export.
     #//
-    _extra_data = apply_filters("wp_privacy_additional_user_profile_data", Array(), user, reserved_names)
-    if php_is_array(_extra_data) and (not php_empty(lambda : _extra_data)):
+    _extra_data_ = apply_filters("wp_privacy_additional_user_profile_data", Array(), user_, reserved_names_)
+    if php_is_array(_extra_data_) and (not php_empty(lambda : _extra_data_)):
         #// Remove items that use reserved names.
-        extra_data = php_array_filter(_extra_data, (lambda item = None:  (not php_in_array(item["name"], reserved_names, True))))
-        if php_count(extra_data) != php_count(_extra_data):
+        extra_data_ = php_array_filter(_extra_data_, (lambda item_=None:  (not php_in_array(item_["name"], reserved_names_, True))))
+        if php_count(extra_data_) != php_count(_extra_data_):
             _doing_it_wrong(__FUNCTION__, php_sprintf(__("Filter %s returned items with reserved names."), "<code>wp_privacy_additional_user_profile_data</code>"), "5.4.0")
         # end if
-        if (not php_empty(lambda : extra_data)):
-            user_data_to_export = php_array_merge(user_data_to_export, extra_data)
+        if (not php_empty(lambda : extra_data_)):
+            user_data_to_export_ = php_array_merge(user_data_to_export_, extra_data_)
         # end if
     # end if
-    data_to_export[-1] = Array({"group_id": "user", "group_label": __("User"), "group_description": __("User&#8217;s profile data."), "item_id": str("user-") + str(user.ID), "data": user_data_to_export})
-    if (php_isset(lambda : user_meta["community-events-location"])):
-        location = maybe_unserialize(user_meta["community-events-location"][0])
-        location_props_to_export = Array({"description": __("City"), "country": __("Country"), "latitude": __("Latitude"), "longitude": __("Longitude"), "ip": __("IP")})
-        location_data_to_export = Array()
-        for key,name in location_props_to_export:
-            if (not php_empty(lambda : location[key])):
-                location_data_to_export[-1] = Array({"name": name, "value": location[key]})
+    data_to_export_[-1] = Array({"group_id": "user", "group_label": __("User"), "group_description": __("User&#8217;s profile data."), "item_id": str("user-") + str(user_.ID), "data": user_data_to_export_})
+    if (php_isset(lambda : user_meta_["community-events-location"])):
+        location_ = maybe_unserialize(user_meta_["community-events-location"][0])
+        location_props_to_export_ = Array({"description": __("City"), "country": __("Country"), "latitude": __("Latitude"), "longitude": __("Longitude"), "ip": __("IP")})
+        location_data_to_export_ = Array()
+        for key_,name_ in location_props_to_export_:
+            if (not php_empty(lambda : location_[key_])):
+                location_data_to_export_[-1] = Array({"name": name_, "value": location_[key_]})
             # end if
         # end for
-        data_to_export[-1] = Array({"group_id": "community-events-location", "group_label": __("Community Events Location"), "group_description": __("User&#8217;s location data used for the Community Events in the WordPress Events and News dashboard widget."), "item_id": str("community-events-location-") + str(user.ID), "data": location_data_to_export})
+        data_to_export_[-1] = Array({"group_id": "community-events-location", "group_label": __("Community Events Location"), "group_description": __("User&#8217;s location data used for the Community Events in the WordPress Events and News dashboard widget."), "item_id": str("community-events-location-") + str(user_.ID), "data": location_data_to_export_})
     # end if
-    if (php_isset(lambda : user_meta["session_tokens"])):
-        session_tokens = maybe_unserialize(user_meta["session_tokens"][0])
-        session_tokens_props_to_export = Array({"expiration": __("Expiration"), "ip": __("IP"), "ua": __("User Agent"), "login": __("Last Login")})
-        for token_key,session_token in session_tokens:
-            session_tokens_data_to_export = Array()
-            for key,name in session_tokens_props_to_export:
-                if (not php_empty(lambda : session_token[key])):
-                    value = session_token[key]
-                    if php_in_array(key, Array("expiration", "login")):
-                        value = date_i18n("F d, Y H:i A", value)
+    if (php_isset(lambda : user_meta_["session_tokens"])):
+        session_tokens_ = maybe_unserialize(user_meta_["session_tokens"][0])
+        session_tokens_props_to_export_ = Array({"expiration": __("Expiration"), "ip": __("IP"), "ua": __("User Agent"), "login": __("Last Login")})
+        for token_key_,session_token_ in session_tokens_:
+            session_tokens_data_to_export_ = Array()
+            for key_,name_ in session_tokens_props_to_export_:
+                if (not php_empty(lambda : session_token_[key_])):
+                    value_ = session_token_[key_]
+                    if php_in_array(key_, Array("expiration", "login")):
+                        value_ = date_i18n("F d, Y H:i A", value_)
                     # end if
-                    session_tokens_data_to_export[-1] = Array({"name": name, "value": value})
+                    session_tokens_data_to_export_[-1] = Array({"name": name_, "value": value_})
                 # end if
             # end for
-            data_to_export[-1] = Array({"group_id": "session-tokens", "group_label": __("Session Tokens"), "group_description": __("User&#8217;s Session Tokens data."), "item_id": str("session-tokens-") + str(user.ID) + str("-") + str(token_key), "data": session_tokens_data_to_export})
+            data_to_export_[-1] = Array({"group_id": "session-tokens", "group_label": __("Session Tokens"), "group_description": __("User&#8217;s Session Tokens data."), "item_id": str("session-tokens-") + str(user_.ID) + str("-") + str(token_key_), "data": session_tokens_data_to_export_})
         # end for
     # end if
-    return Array({"data": data_to_export, "done": True})
+    return Array({"data": data_to_export_, "done": True})
 # end def wp_user_personal_data_exporter
 #// 
 #// Update log when privacy request is confirmed.
@@ -2649,17 +2723,18 @@ def wp_user_personal_data_exporter(email_address=None, *args_):
 #// 
 #// @param int $request_id ID of the request.
 #//
-def _wp_privacy_account_request_confirmed(request_id=None, *args_):
+def _wp_privacy_account_request_confirmed(request_id_=None, *_args_):
     
-    request = wp_get_user_request(request_id)
-    if (not request):
+    
+    request_ = wp_get_user_request(request_id_)
+    if (not request_):
         return
     # end if
-    if (not php_in_array(request.status, Array("request-pending", "request-failed"), True)):
+    if (not php_in_array(request_.status, Array("request-pending", "request-failed"), True)):
         return
     # end if
-    update_post_meta(request_id, "_wp_user_request_confirmed_timestamp", time())
-    wp_update_post(Array({"ID": request_id, "post_status": "request-confirmed"}))
+    update_post_meta(request_id_, "_wp_user_request_confirmed_timestamp", time())
+    wp_update_post(Array({"ID": request_id_, "post_status": "request-confirmed"}))
 # end def _wp_privacy_account_request_confirmed
 #// 
 #// Notify the site administrator via email when a request is confirmed.
@@ -2671,22 +2746,23 @@ def _wp_privacy_account_request_confirmed(request_id=None, *args_):
 #// 
 #// @param int $request_id The ID of the request.
 #//
-def _wp_privacy_send_request_confirmation_notification(request_id=None, *args_):
+def _wp_privacy_send_request_confirmation_notification(request_id_=None, *_args_):
     
-    request = wp_get_user_request(request_id)
-    if (not php_is_a(request, "WP_User_Request")) or "request-confirmed" != request.status:
+    
+    request_ = wp_get_user_request(request_id_)
+    if (not php_is_a(request_, "WP_User_Request")) or "request-confirmed" != request_.status:
         return
     # end if
-    already_notified = php_bool(get_post_meta(request_id, "_wp_admin_notified", True))
-    if already_notified:
+    already_notified_ = php_bool(get_post_meta(request_id_, "_wp_admin_notified", True))
+    if already_notified_:
         return
     # end if
-    if "export_personal_data" == request.action_name:
-        manage_url = admin_url("export-personal-data.php")
-    elif "remove_personal_data" == request.action_name:
-        manage_url = admin_url("erase-personal-data.php")
+    if "export_personal_data" == request_.action_name:
+        manage_url_ = admin_url("export-personal-data.php")
+    elif "remove_personal_data" == request_.action_name:
+        manage_url_ = admin_url("erase-personal-data.php")
     # end if
-    action_description = wp_user_request_action_description(request.action_name)
+    action_description_ = wp_user_request_action_description(request_.action_name)
     #// 
     #// Filters the recipient of the data request confirmation notification.
     #// 
@@ -2701,10 +2777,10 @@ def _wp_privacy_send_request_confirmation_notification(request_id=None, *args_):
     #// @param string          $admin_email The email address of the notification recipient.
     #// @param WP_User_Request $request     The request that is initiating the notification.
     #//
-    admin_email = apply_filters("user_request_confirmed_email_to", get_site_option("admin_email"), request)
-    email_data = Array({"request": request, "user_email": request.email, "description": action_description, "manage_url": manage_url, "sitename": wp_specialchars_decode(get_option("blogname"), ENT_QUOTES), "siteurl": home_url(), "admin_email": admin_email})
+    admin_email_ = apply_filters("user_request_confirmed_email_to", get_site_option("admin_email"), request_)
+    email_data_ = Array({"request": request_, "user_email": request_.email, "description": action_description_, "manage_url": manage_url_, "sitename": wp_specialchars_decode(get_option("blogname"), ENT_QUOTES), "siteurl": home_url(), "admin_email": admin_email_})
     #// translators: Do not translate SITENAME, USER_EMAIL, DESCRIPTION, MANAGE_URL, SITEURL; those are placeholders.
-    email_text = __("""Howdy,
+    email_text_ = __("""Howdy,
     A user data privacy request has been confirmed on ###SITENAME###:
     User: ###USER_EMAIL###
     Request: ###DESCRIPTION###
@@ -2740,13 +2816,13 @@ def _wp_privacy_send_request_confirmation_notification(request_id=None, *args_):
     #// @type string          $admin_email The administrator email receiving the mail.
     #// }
     #//
-    content = apply_filters("user_confirmed_action_email_content", email_text, email_data)
-    content = php_str_replace("###SITENAME###", email_data["sitename"], content)
-    content = php_str_replace("###USER_EMAIL###", email_data["user_email"], content)
-    content = php_str_replace("###DESCRIPTION###", email_data["description"], content)
-    content = php_str_replace("###MANAGE_URL###", esc_url_raw(email_data["manage_url"]), content)
-    content = php_str_replace("###SITEURL###", esc_url_raw(email_data["siteurl"]), content)
-    subject = php_sprintf(__("[%1$s] Action Confirmed: %2$s"), email_data["sitename"], action_description)
+    content_ = apply_filters("user_confirmed_action_email_content", email_text_, email_data_)
+    content_ = php_str_replace("###SITENAME###", email_data_["sitename"], content_)
+    content_ = php_str_replace("###USER_EMAIL###", email_data_["user_email"], content_)
+    content_ = php_str_replace("###DESCRIPTION###", email_data_["description"], content_)
+    content_ = php_str_replace("###MANAGE_URL###", esc_url_raw(email_data_["manage_url"]), content_)
+    content_ = php_str_replace("###SITEURL###", esc_url_raw(email_data_["siteurl"]), content_)
+    subject_ = php_sprintf(__("[%1$s] Action Confirmed: %2$s"), email_data_["sitename"], action_description_)
     #// 
     #// Filters the subject of the user request confirmation email.
     #// 
@@ -2766,8 +2842,8 @@ def _wp_privacy_send_request_confirmation_notification(request_id=None, *args_):
     #// @type string          $admin_email The administrator email receiving the mail.
     #// }
     #//
-    subject = apply_filters("user_request_confirmed_email_subject", subject, email_data["sitename"], email_data)
-    headers = ""
+    subject_ = apply_filters("user_request_confirmed_email_subject", subject_, email_data_["sitename"], email_data_)
+    headers_ = ""
     #// 
     #// Filters the headers of the user request confirmation email.
     #// 
@@ -2789,10 +2865,10 @@ def _wp_privacy_send_request_confirmation_notification(request_id=None, *args_):
     #// @type string          $admin_email The administrator email receiving the mail.
     #// }
     #//
-    headers = apply_filters("user_request_confirmed_email_headers", headers, subject, content, request_id, email_data)
-    email_sent = wp_mail(email_data["admin_email"], subject, content, headers)
-    if email_sent:
-        update_post_meta(request_id, "_wp_admin_notified", True)
+    headers_ = apply_filters("user_request_confirmed_email_headers", headers_, subject_, content_, request_id_, email_data_)
+    email_sent_ = wp_mail(email_data_["admin_email"], subject_, content_, headers_)
+    if email_sent_:
+        update_post_meta(request_id_, "_wp_admin_notified", True)
     # end if
 # end def _wp_privacy_send_request_confirmation_notification
 #// 
@@ -2804,23 +2880,24 @@ def _wp_privacy_send_request_confirmation_notification(request_id=None, *args_):
 #// 
 #// @param int $request_id The privacy request post ID associated with this request.
 #//
-def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
+def _wp_privacy_send_erasure_fulfillment_notification(request_id_=None, *_args_):
     
-    request = wp_get_user_request(request_id)
-    if (not php_is_a(request, "WP_User_Request")) or "request-completed" != request.status:
+    
+    request_ = wp_get_user_request(request_id_)
+    if (not php_is_a(request_, "WP_User_Request")) or "request-completed" != request_.status:
         return
     # end if
-    already_notified = php_bool(get_post_meta(request_id, "_wp_user_notified", True))
-    if already_notified:
+    already_notified_ = php_bool(get_post_meta(request_id_, "_wp_user_notified", True))
+    if already_notified_:
         return
     # end if
     #// Localize message content for user; fallback to site default for visitors.
-    if (not php_empty(lambda : request.user_id)):
-        locale = get_user_locale(request.user_id)
+    if (not php_empty(lambda : request_.user_id)):
+        locale_ = get_user_locale(request_.user_id)
     else:
-        locale = get_locale()
+        locale_ = get_locale()
     # end if
-    switched_locale = switch_to_locale(locale)
+    switched_locale_ = switch_to_locale(locale_)
     #// 
     #// Filters the recipient of the data erasure fulfillment notification.
     #// 
@@ -2829,9 +2906,9 @@ def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
     #// @param string          $user_email The email address of the notification recipient.
     #// @param WP_User_Request $request    The request that is initiating the notification.
     #//
-    user_email = apply_filters("user_erasure_fulfillment_email_to", request.email, request)
-    email_data = Array({"request": request, "message_recipient": user_email, "privacy_policy_url": get_privacy_policy_url(), "sitename": wp_specialchars_decode(get_option("blogname"), ENT_QUOTES), "siteurl": home_url()})
-    subject = php_sprintf(__("[%s] Erasure Request Fulfilled"), email_data["sitename"])
+    user_email_ = apply_filters("user_erasure_fulfillment_email_to", request_.email, request_)
+    email_data_ = Array({"request": request_, "message_recipient": user_email_, "privacy_policy_url": get_privacy_policy_url(), "sitename": wp_specialchars_decode(get_option("blogname"), ENT_QUOTES), "siteurl": home_url()})
+    subject_ = php_sprintf(__("[%s] Erasure Request Fulfilled"), email_data_["sitename"])
     #// 
     #// Filters the subject of the email sent when an erasure request is completed.
     #// 
@@ -2851,10 +2928,10 @@ def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
     #// @type string          $siteurl            The site URL sending the mail.
     #// }
     #//
-    subject = apply_filters("user_erasure_complete_email_subject", subject, email_data["sitename"], email_data)
-    if php_empty(lambda : email_data["privacy_policy_url"]):
+    subject_ = apply_filters("user_erasure_complete_email_subject", subject_, email_data_["sitename"], email_data_)
+    if php_empty(lambda : email_data_["privacy_policy_url"]):
         #// translators: Do not translate SITENAME, SITEURL; those are placeholders.
-        email_text = __("""Howdy,
+        email_text_ = __("""Howdy,
         Your request to erase your personal data on ###SITENAME### has been completed.
         If you have any follow-up questions or concerns, please contact the site administrator.
         Regards,
@@ -2862,7 +2939,7 @@ def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
         ###SITEURL###""")
     else:
         #// translators: Do not translate SITENAME, SITEURL, PRIVACY_POLICY_URL; those are placeholders.
-        email_text = __("""Howdy,
+        email_text_ = __("""Howdy,
         Your request to erase your personal data on ###SITENAME### has been completed.
         If you have any follow-up questions or concerns, please contact the site administrator.
         For more information, you can also read our privacy policy: ###PRIVACY_POLICY_URL###
@@ -2897,11 +2974,11 @@ def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
     #// @type string          $siteurl            The site URL sending the mail.
     #// }
     #//
-    content = apply_filters("user_confirmed_action_email_content", email_text, email_data)
-    content = php_str_replace("###SITENAME###", email_data["sitename"], content)
-    content = php_str_replace("###PRIVACY_POLICY_URL###", email_data["privacy_policy_url"], content)
-    content = php_str_replace("###SITEURL###", esc_url_raw(email_data["siteurl"]), content)
-    headers = ""
+    content_ = apply_filters("user_confirmed_action_email_content", email_text_, email_data_)
+    content_ = php_str_replace("###SITENAME###", email_data_["sitename"], content_)
+    content_ = php_str_replace("###PRIVACY_POLICY_URL###", email_data_["privacy_policy_url"], content_)
+    content_ = php_str_replace("###SITEURL###", esc_url_raw(email_data_["siteurl"]), content_)
+    headers_ = ""
     #// 
     #// Filters the headers of the data erasure fulfillment notification.
     #// 
@@ -2923,13 +3000,13 @@ def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
     #// @type string          $siteurl            The site URL sending the mail.
     #// }
     #//
-    headers = apply_filters("user_erasure_complete_email_headers", headers, subject, content, request_id, email_data)
-    email_sent = wp_mail(user_email, subject, content, headers)
-    if switched_locale:
+    headers_ = apply_filters("user_erasure_complete_email_headers", headers_, subject_, content_, request_id_, email_data_)
+    email_sent_ = wp_mail(user_email_, subject_, content_, headers_)
+    if switched_locale_:
         restore_previous_locale()
     # end if
-    if email_sent:
-        update_post_meta(request_id, "_wp_user_notified", True)
+    if email_sent_:
+        update_post_meta(request_id_, "_wp_user_notified", True)
     # end if
 # end def _wp_privacy_send_erasure_fulfillment_notification
 #// 
@@ -2941,18 +3018,19 @@ def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
 #// @param int $request_id The request ID being confirmed.
 #// @return string $message The confirmation message.
 #//
-def _wp_privacy_account_request_confirmed_message(request_id=None, *args_):
+def _wp_privacy_account_request_confirmed_message(request_id_=None, *_args_):
     
-    request = wp_get_user_request(request_id)
-    message = "<p class=\"success\">" + __("Action has been confirmed.") + "</p>"
-    message += "<p>" + __("The site administrator has been notified and will fulfill your request as soon as possible.") + "</p>"
-    if request and php_in_array(request.action_name, _wp_privacy_action_request_types(), True):
-        if "export_personal_data" == request.action_name:
-            message = "<p class=\"success\">" + __("Thanks for confirming your export request.") + "</p>"
-            message += "<p>" + __("The site administrator has been notified. You will receive a link to download your export via email when they fulfill your request.") + "</p>"
-        elif "remove_personal_data" == request.action_name:
-            message = "<p class=\"success\">" + __("Thanks for confirming your erasure request.") + "</p>"
-            message += "<p>" + __("The site administrator has been notified. You will receive an email confirmation when they erase your data.") + "</p>"
+    
+    request_ = wp_get_user_request(request_id_)
+    message_ = "<p class=\"success\">" + __("Action has been confirmed.") + "</p>"
+    message_ += "<p>" + __("The site administrator has been notified and will fulfill your request as soon as possible.") + "</p>"
+    if request_ and php_in_array(request_.action_name, _wp_privacy_action_request_types(), True):
+        if "export_personal_data" == request_.action_name:
+            message_ = "<p class=\"success\">" + __("Thanks for confirming your export request.") + "</p>"
+            message_ += "<p>" + __("The site administrator has been notified. You will receive a link to download your export via email when they fulfill your request.") + "</p>"
+        elif "remove_personal_data" == request_.action_name:
+            message_ = "<p class=\"success\">" + __("Thanks for confirming your erasure request.") + "</p>"
+            message_ += "<p>" + __("The site administrator has been notified. You will receive an email confirmation when they erase your data.") + "</p>"
         # end if
     # end if
     #// 
@@ -2963,8 +3041,8 @@ def _wp_privacy_account_request_confirmed_message(request_id=None, *args_):
     #// @param string $message    The message to the user.
     #// @param int    $request_id The ID of the request being confirmed.
     #//
-    message = apply_filters("user_request_action_confirmed_message", message, request_id)
-    return message
+    message_ = apply_filters("user_request_action_confirmed_message", message_, request_id_)
+    return message_
 # end def _wp_privacy_account_request_confirmed_message
 #// 
 #// Create and log a user request to perform a specific action.
@@ -2979,25 +3057,28 @@ def _wp_privacy_account_request_confirmed_message(request_id=None, *args_):
 #// @param array  $request_data  Misc data you want to send with the verification request and pass to the actions once the request is confirmed.
 #// @return int|WP_Error Returns the request ID if successful, or a WP_Error object on failure.
 #//
-def wp_create_user_request(email_address="", action_name="", request_data=Array(), *args_):
+def wp_create_user_request(email_address_="", action_name_="", request_data_=None, *_args_):
+    if request_data_ is None:
+        request_data_ = Array()
+    # end if
     
-    email_address = sanitize_email(email_address)
-    action_name = sanitize_key(action_name)
-    if (not is_email(email_address)):
+    email_address_ = sanitize_email(email_address_)
+    action_name_ = sanitize_key(action_name_)
+    if (not is_email(email_address_)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_email", __("Invalid email address.")))
     # end if
-    if (not action_name):
+    if (not action_name_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_action", __("Invalid action name.")))
     # end if
-    user = get_user_by("email", email_address)
-    user_id = user.ID if user and (not is_wp_error(user)) else 0
+    user_ = get_user_by("email", email_address_)
+    user_id_ = user_.ID if user_ and (not is_wp_error(user_)) else 0
     #// Check for duplicates.
-    requests_query = php_new_class("WP_Query", lambda : WP_Query(Array({"post_type": "user_request", "post_name__in": Array(action_name), "title": email_address, "post_status": Array("request-pending", "request-confirmed"), "fields": "ids"})))
-    if requests_query.found_posts:
+    requests_query_ = php_new_class("WP_Query", lambda : WP_Query(Array({"post_type": "user_request", "post_name__in": Array(action_name_), "title": email_address_, "post_status": Array("request-pending", "request-confirmed"), "fields": "ids"})))
+    if requests_query_.found_posts:
         return php_new_class("WP_Error", lambda : WP_Error("duplicate_request", __("An incomplete request for this email address already exists.")))
     # end if
-    request_id = wp_insert_post(Array({"post_author": user_id, "post_name": action_name, "post_title": email_address, "post_content": wp_json_encode(request_data), "post_status": "request-pending", "post_type": "user_request", "post_date": current_time("mysql", False), "post_date_gmt": current_time("mysql", True)}), True)
-    return request_id
+    request_id_ = wp_insert_post(Array({"post_author": user_id_, "post_name": action_name_, "post_title": email_address_, "post_content": wp_json_encode(request_data_), "post_status": "request-pending", "post_type": "user_request", "post_date": current_time("mysql", False), "post_date_gmt": current_time("mysql", True)}), True)
+    return request_id_
 # end def wp_create_user_request
 #// 
 #// Get action description from the name and return a string.
@@ -3007,20 +3088,21 @@ def wp_create_user_request(email_address="", action_name="", request_data=Array(
 #// @param string $action_name Action name of the request.
 #// @return string Human readable action name.
 #//
-def wp_user_request_action_description(action_name=None, *args_):
+def wp_user_request_action_description(action_name_=None, *_args_):
     
-    for case in Switch(action_name):
+    
+    for case in Switch(action_name_):
         if case("export_personal_data"):
-            description = __("Export Personal Data")
+            description_ = __("Export Personal Data")
             break
         # end if
         if case("remove_personal_data"):
-            description = __("Erase Personal Data")
+            description_ = __("Erase Personal Data")
             break
         # end if
         if case():
             #// translators: %s: Action name.
-            description = php_sprintf(__("Confirm the \"%s\" action"), action_name)
+            description_ = php_sprintf(__("Confirm the \"%s\" action"), action_name_)
             break
         # end if
     # end for
@@ -3032,7 +3114,7 @@ def wp_user_request_action_description(action_name=None, *args_):
     #// @param string $description The default description.
     #// @param string $action_name The name of the request.
     #//
-    return apply_filters("user_request_action_description", description, action_name)
+    return apply_filters("user_request_action_description", description_, action_name_)
 # end def wp_user_request_action_description
 #// 
 #// Send a confirmation request email to confirm an action.
@@ -3044,23 +3126,24 @@ def wp_user_request_action_description(action_name=None, *args_):
 #// @param string $request_id ID of the request created via wp_create_user_request().
 #// @return bool|WP_Error True on success, `WP_Error` on failure.
 #//
-def wp_send_user_request(request_id=None, *args_):
+def wp_send_user_request(request_id_=None, *_args_):
     
-    request_id = absint(request_id)
-    request = wp_get_user_request(request_id)
-    if (not request):
+    
+    request_id_ = absint(request_id_)
+    request_ = wp_get_user_request(request_id_)
+    if (not request_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_request", __("Invalid user request.")))
     # end if
     #// Localize message content for user; fallback to site default for visitors.
-    if (not php_empty(lambda : request.user_id)):
-        locale = get_user_locale(request.user_id)
+    if (not php_empty(lambda : request_.user_id)):
+        locale_ = get_user_locale(request_.user_id)
     else:
-        locale = get_locale()
+        locale_ = get_locale()
     # end if
-    switched_locale = switch_to_locale(locale)
-    email_data = Array({"request": request, "email": request.email, "description": wp_user_request_action_description(request.action_name), "confirm_url": add_query_arg(Array({"action": "confirmaction", "request_id": request_id, "confirm_key": wp_generate_user_request_key(request_id)}), wp_login_url())}, {"sitename": wp_specialchars_decode(get_option("blogname"), ENT_QUOTES), "siteurl": home_url()})
+    switched_locale_ = switch_to_locale(locale_)
+    email_data_ = Array({"request": request_, "email": request_.email, "description": wp_user_request_action_description(request_.action_name), "confirm_url": add_query_arg(Array({"action": "confirmaction", "request_id": request_id_, "confirm_key": wp_generate_user_request_key(request_id_)}), wp_login_url())}, {"sitename": wp_specialchars_decode(get_option("blogname"), ENT_QUOTES), "siteurl": home_url()})
     #// translators: Do not translate DESCRIPTION, CONFIRM_URL, SITENAME, SITEURL: those are placeholders.
-    email_text = __("""Howdy,
+    email_text_ = __("""Howdy,
     A request has been made to perform the following action on your account:
     ###DESCRIPTION###
     To confirm this, please click on the following link:
@@ -3094,14 +3177,14 @@ def wp_send_user_request(request_id=None, *args_):
     #// @type string          $siteurl     The site URL sending the mail.
     #// }
     #//
-    content = apply_filters("user_request_action_email_content", email_text, email_data)
-    content = php_str_replace("###DESCRIPTION###", email_data["description"], content)
-    content = php_str_replace("###CONFIRM_URL###", esc_url_raw(email_data["confirm_url"]), content)
-    content = php_str_replace("###EMAIL###", email_data["email"], content)
-    content = php_str_replace("###SITENAME###", email_data["sitename"], content)
-    content = php_str_replace("###SITEURL###", esc_url_raw(email_data["siteurl"]), content)
+    content_ = apply_filters("user_request_action_email_content", email_text_, email_data_)
+    content_ = php_str_replace("###DESCRIPTION###", email_data_["description"], content_)
+    content_ = php_str_replace("###CONFIRM_URL###", esc_url_raw(email_data_["confirm_url"]), content_)
+    content_ = php_str_replace("###EMAIL###", email_data_["email"], content_)
+    content_ = php_str_replace("###SITENAME###", email_data_["sitename"], content_)
+    content_ = php_str_replace("###SITEURL###", esc_url_raw(email_data_["siteurl"]), content_)
     #// translators: Confirm privacy data request notification email subject. 1: Site title, 2: Name of the action.
-    subject = php_sprintf(__("[%1$s] Confirm Action: %2$s"), email_data["sitename"], email_data["description"])
+    subject_ = php_sprintf(__("[%1$s] Confirm Action: %2$s"), email_data_["sitename"], email_data_["description"])
     #// 
     #// Filters the subject of the email sent when an account action is attempted.
     #// 
@@ -3120,8 +3203,8 @@ def wp_send_user_request(request_id=None, *args_):
     #// @type string          $siteurl     The site URL sending the mail.
     #// }
     #//
-    subject = apply_filters("user_request_action_email_subject", subject, email_data["sitename"], email_data)
-    headers = ""
+    subject_ = apply_filters("user_request_action_email_subject", subject_, email_data_["sitename"], email_data_)
+    headers_ = ""
     #// 
     #// Filters the headers of the email sent when an account action is attempted.
     #// 
@@ -3142,12 +3225,12 @@ def wp_send_user_request(request_id=None, *args_):
     #// @type string          $siteurl     The site URL sending the mail.
     #// }
     #//
-    headers = apply_filters("user_request_action_email_headers", headers, subject, content, request_id, email_data)
-    email_sent = wp_mail(email_data["email"], subject, content, headers)
-    if switched_locale:
+    headers_ = apply_filters("user_request_action_email_headers", headers_, subject_, content_, request_id_, email_data_)
+    email_sent_ = wp_mail(email_data_["email"], subject_, content_, headers_)
+    if switched_locale_:
         restore_previous_locale()
     # end if
-    if (not email_sent):
+    if (not email_sent_):
         return php_new_class("WP_Error", lambda : WP_Error("privacy_email_error", __("Unable to send personal data export confirmation email.")))
     # end if
     return True
@@ -3160,19 +3243,20 @@ def wp_send_user_request(request_id=None, *args_):
 #// @param int $request_id Request ID.
 #// @return string Confirmation key.
 #//
-def wp_generate_user_request_key(request_id=None, *args_):
+def wp_generate_user_request_key(request_id_=None, *_args_):
     
-    global wp_hasher
-    php_check_if_defined("wp_hasher")
+    
+    global wp_hasher_
+    php_check_if_defined("wp_hasher_")
     #// Generate something random for a confirmation key.
-    key = wp_generate_password(20, False)
+    key_ = wp_generate_password(20, False)
     #// Return the key, hashed.
-    if php_empty(lambda : wp_hasher):
+    if php_empty(lambda : wp_hasher_):
         php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
-        wp_hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+        wp_hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
     # end if
-    wp_update_post(Array({"ID": request_id, "post_status": "request-pending", "post_password": wp_hasher.hashpassword(key)}))
-    return key
+    wp_update_post(Array({"ID": request_id_, "post_status": "request-pending", "post_password": wp_hasher_.hashpassword(key_)}))
+    return key_
 # end def wp_generate_user_request_key
 #// 
 #// Validate a user request by comparing the key with the request's key.
@@ -3183,31 +3267,32 @@ def wp_generate_user_request_key(request_id=None, *args_):
 #// @param string $key        Provided key to validate.
 #// @return bool|WP_Error True on success, WP_Error on failure.
 #//
-def wp_validate_user_request_key(request_id=None, key=None, *args_):
+def wp_validate_user_request_key(request_id_=None, key_=None, *_args_):
     
-    global wp_hasher
-    php_check_if_defined("wp_hasher")
-    request_id = absint(request_id)
-    request = wp_get_user_request(request_id)
-    if (not request):
+    
+    global wp_hasher_
+    php_check_if_defined("wp_hasher_")
+    request_id_ = absint(request_id_)
+    request_ = wp_get_user_request(request_id_)
+    if (not request_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_request", __("Invalid request.")))
     # end if
-    if (not php_in_array(request.status, Array("request-pending", "request-failed"), True)):
+    if (not php_in_array(request_.status, Array("request-pending", "request-failed"), True)):
         return php_new_class("WP_Error", lambda : WP_Error("expired_link", __("This link has expired.")))
     # end if
-    if php_empty(lambda : key):
+    if php_empty(lambda : key_):
         return php_new_class("WP_Error", lambda : WP_Error("missing_key", __("Missing confirm key.")))
     # end if
-    if php_empty(lambda : wp_hasher):
+    if php_empty(lambda : wp_hasher_):
         php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
-        wp_hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+        wp_hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
     # end if
-    key_request_time = request.modified_timestamp
-    saved_key = request.confirm_key
-    if (not saved_key):
+    key_request_time_ = request_.modified_timestamp
+    saved_key_ = request_.confirm_key
+    if (not saved_key_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))
     # end if
-    if (not key_request_time):
+    if (not key_request_time_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid action.")))
     # end if
     #// 
@@ -3217,12 +3302,12 @@ def wp_validate_user_request_key(request_id=None, key=None, *args_):
     #// 
     #// @param int $expiration The expiration time in seconds.
     #//
-    expiration_duration = php_int(apply_filters("user_request_key_expiration", DAY_IN_SECONDS))
-    expiration_time = key_request_time + expiration_duration
-    if (not wp_hasher.checkpassword(key, saved_key)):
+    expiration_duration_ = php_int(apply_filters("user_request_key_expiration", DAY_IN_SECONDS))
+    expiration_time_ = key_request_time_ + expiration_duration_
+    if (not wp_hasher_.checkpassword(key_, saved_key_)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))
     # end if
-    if (not expiration_time) or time() > expiration_time:
+    if (not expiration_time_) or time() > expiration_time_:
         return php_new_class("WP_Error", lambda : WP_Error("expired_key", __("The confirmation email has expired.")))
     # end if
     return True
@@ -3235,12 +3320,13 @@ def wp_validate_user_request_key(request_id=None, key=None, *args_):
 #// @param int $request_id The ID of the user request.
 #// @return WP_User_Request|false
 #//
-def wp_get_user_request(request_id=None, *args_):
+def wp_get_user_request(request_id_=None, *_args_):
     
-    request_id = absint(request_id)
-    post = get_post(request_id)
-    if (not post) or "user_request" != post.post_type:
+    
+    request_id_ = absint(request_id_)
+    post_ = get_post(request_id_)
+    if (not post_) or "user_request" != post_.post_type:
         return False
     # end if
-    return php_new_class("WP_User_Request", lambda : WP_User_Request(post))
+    return php_new_class("WP_User_Request", lambda : WP_User_Request(post_))
 # end def wp_get_user_request

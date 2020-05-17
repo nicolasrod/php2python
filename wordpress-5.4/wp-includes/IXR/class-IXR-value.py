@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,37 +19,44 @@ class IXR_Value():
     #// 
     #// PHP5 constructor.
     #//
-    def __init__(self, data=None, type=False):
-        
-        self.data = data
-        if (not type):
-            type = self.calculatetype()
+    def __init__(self, data_=None, type_=None):
+        if type_ is None:
+            type_ = False
         # end if
-        self.type = type
-        if type == "struct":
+        
+        self.data = data_
+        if (not type_):
+            type_ = self.calculatetype()
+        # end if
+        self.type = type_
+        if type_ == "struct":
             #// Turn all the values in the array in to new IXR_Value objects
-            for key,value in self.data:
-                self.data[key] = php_new_class("IXR_Value", lambda : IXR_Value(value))
+            for key_,value_ in self.data:
+                self.data[key_] = php_new_class("IXR_Value", lambda : IXR_Value(value_))
             # end for
         # end if
-        if type == "array":
-            i = 0
-            j = php_count(self.data)
-            while i < j:
+        if type_ == "array":
+            i_ = 0
+            j_ = php_count(self.data)
+            while i_ < j_:
                 
-                self.data[i] = php_new_class("IXR_Value", lambda : IXR_Value(self.data[i]))
-                i += 1
+                self.data[i_] = php_new_class("IXR_Value", lambda : IXR_Value(self.data[i_]))
+                i_ += 1
             # end while
         # end if
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def ixr_value(self, data=None, type=False):
+    def ixr_value(self, data_=None, type_=None):
+        if type_ is None:
+            type_ = False
+        # end if
         
-        self.__init__(data, type)
+        self.__init__(data_, type_)
     # end def ixr_value
     def calculatetype(self):
+        
         
         if self.data == True or self.data == False:
             return "boolean"
@@ -89,6 +91,7 @@ class IXR_Value():
     # end def calculatetype
     def getxml(self):
         
+        
         #// Return XML for this value
         for case in Switch(self.type):
             if case("boolean"):
@@ -109,8 +112,8 @@ class IXR_Value():
             # end if
             if case("array"):
                 return_ = "<array><data>" + "\n"
-                for item in self.data:
-                    return_ += "  <value>" + item.getxml() + "</value>\n"
+                for item_ in self.data:
+                    return_ += "  <value>" + item_.getxml() + "</value>\n"
                 # end for
                 return_ += "</data></array>"
                 return return_
@@ -118,10 +121,10 @@ class IXR_Value():
             # end if
             if case("struct"):
                 return_ = "<struct>" + "\n"
-                for name,value in self.data:
-                    name = htmlspecialchars(name)
-                    return_ += str("  <member><name>") + str(name) + str("</name><value>")
-                    return_ += value.getxml() + "</value></member>\n"
+                for name_,value_ in self.data:
+                    name_ = htmlspecialchars(name_)
+                    return_ += str("  <member><name>") + str(name_) + str("</name><value>")
+                    return_ += value_.getxml() + "</value></member>\n"
                 # end for
                 return_ += "</struct>"
                 return return_
@@ -143,14 +146,15 @@ class IXR_Value():
     #// @param array $array
     #// @return bool
     #//
-    def isstruct(self, array=None):
+    def isstruct(self, array_=None):
         
-        expected = 0
-        for key,value in array:
-            if php_str(key) != php_str(expected):
+        
+        expected_ = 0
+        for key_,value_ in array_:
+            if php_str(key_) != php_str(expected_):
                 return True
             # end if
-            expected += 1
+            expected_ += 1
         # end for
         return False
     # end def isstruct

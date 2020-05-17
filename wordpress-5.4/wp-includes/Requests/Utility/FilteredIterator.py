@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,6 +20,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Utilities
 #//
 class Requests_Utility_FilteredIterator(ArrayIterator):
+    #// 
+    #// Callback to run as a filter
+    #// 
+    #// @var callable
+    #//
     callback = Array()
     #// 
     #// Create a new iterator
@@ -32,10 +32,11 @@ class Requests_Utility_FilteredIterator(ArrayIterator):
     #// @param array $data
     #// @param callable $callback Callback to be called on each value
     #//
-    def __init__(self, data=None, callback=None):
+    def __init__(self, data_=None, callback_=None):
         
-        super().__init__(data)
-        self.callback = callback
+        
+        super().__init__(data_)
+        self.callback = callback_
     # end def __init__
     #// 
     #// Get the current item's value after filtering
@@ -44,8 +45,9 @@ class Requests_Utility_FilteredIterator(ArrayIterator):
     #//
     def current(self):
         
-        value = super().current()
-        value = php_call_user_func(self.callback, value)
-        return value
+        
+        value_ = super().current()
+        value_ = php_call_user_func(self.callback, value_)
+        return value_
     # end def current
 # end class Requests_Utility_FilteredIterator

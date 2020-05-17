@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -21,8 +16,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// WordPress Administration Bootstrap
 php_include_file(__DIR__ + "/admin.php", once=True)
 #// translators: Page title of the About WordPress page in the admin.
-title = _x("About", "page title")
-display_version = php_explode("-", get_bloginfo("version"))
+title_ = _x("About", "page title")
+display_version_ = php_explode("-", get_bloginfo("version"))
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("""   <div class=\"wrap about__container\">
 <div class=\"about__header\">
@@ -31,7 +26,7 @@ php_print("""   <div class=\"wrap about__container\">
 """)
 _e("WordPress")
 php_print("                 <span>")
-php_print(display_version)
+php_print(display_version_)
 php_print("""</span>
 </p>
 </div>
@@ -65,7 +60,7 @@ php_print("""</p>
 <div class=\"about__section has-2-columns has-subtle-background-color\">
 <h2 class=\"is-section-header\">
 """)
-printf(__("Welcome to WordPress %s."), display_version)
+printf(__("Welcome to WordPress %s."), display_version_)
 php_print("""           </h2>
 <div class=\"column\">
 <p>

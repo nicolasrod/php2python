@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,8 +31,9 @@ class WP_Widget_Meta(WP_Widget):
     #//
     def __init__(self):
         
-        widget_ops = Array({"classname": "widget_meta", "description": __("Login, RSS, &amp; WordPress.org links."), "customize_selective_refresh": True})
-        super().__init__("meta", __("Meta"), widget_ops)
+        
+        widget_ops_ = Array({"classname": "widget_meta", "description": __("Login, RSS, &amp; WordPress.org links."), "customize_selective_refresh": True})
+        super().__init__("meta", __("Meta"), widget_ops_)
     # end def __init__
     #// 
     #// Outputs the content for the current Meta widget instance.
@@ -48,14 +44,15 @@ class WP_Widget_Meta(WP_Widget):
     #// 'before_widget', and 'after_widget'.
     #// @param array $instance Settings for the current Meta widget instance.
     #//
-    def widget(self, args=None, instance=None):
+    def widget(self, args_=None, instance_=None):
         
-        title = instance["title"] if (not php_empty(lambda : instance["title"])) else __("Meta")
+        
+        title_ = instance_["title"] if (not php_empty(lambda : instance_["title"])) else __("Meta")
         #// This filter is documented in wp-includes/widgets/class-wp-widget-pages.php
-        title = apply_filters("widget_title", title, instance, self.id_base)
-        php_print(args["before_widget"])
-        if title:
-            php_print(args["before_title"] + title + args["after_title"])
+        title_ = apply_filters("widget_title", title_, instance_, self.id_base)
+        php_print(args_["before_widget"])
+        if title_:
+            php_print(args_["before_title"] + title_ + args_["after_title"])
         # end if
         php_print("         <ul>\n          ")
         wp_register()
@@ -79,10 +76,10 @@ class WP_Widget_Meta(WP_Widget):
         #// @param string $html     Default HTML for the WordPress.org list item.
         #// @param array  $instance Array of settings for the current widget.
         #//
-        php_print(apply_filters("widget_meta_poweredby", php_sprintf("<li><a href=\"%1$s\">%2$s</a></li>", esc_url(__("https://wordpress.org/")), __("WordPress.org")), instance))
+        php_print(apply_filters("widget_meta_poweredby", php_sprintf("<li><a href=\"%1$s\">%2$s</a></li>", esc_url(__("https://wordpress.org/")), __("WordPress.org")), instance_))
         wp_meta()
         php_print("         </ul>\n         ")
-        php_print(args["after_widget"])
+        php_print(args_["after_widget"])
     # end def widget
     #// 
     #// Handles updating settings for the current Meta widget instance.
@@ -94,11 +91,12 @@ class WP_Widget_Meta(WP_Widget):
     #// @param array $old_instance Old settings for this instance.
     #// @return array Updated settings to save.
     #//
-    def update(self, new_instance=None, old_instance=None):
+    def update(self, new_instance_=None, old_instance_=None):
         
-        instance = old_instance
-        instance["title"] = sanitize_text_field(new_instance["title"])
-        return instance
+        
+        instance_ = old_instance_
+        instance_["title"] = sanitize_text_field(new_instance_["title"])
+        return instance_
     # end def update
     #// 
     #// Outputs the settings form for the Meta widget.
@@ -107,9 +105,10 @@ class WP_Widget_Meta(WP_Widget):
     #// 
     #// @param array $instance Current settings.
     #//
-    def form(self, instance=None):
+    def form(self, instance_=None):
         
-        instance = wp_parse_args(instance, Array({"title": ""}))
+        
+        instance_ = wp_parse_args(instance_, Array({"title": ""}))
         php_print("         <p><label for=\"")
         php_print(self.get_field_id("title"))
         php_print("\">")
@@ -119,7 +118,7 @@ class WP_Widget_Meta(WP_Widget):
         php_print("\" name=\"")
         php_print(self.get_field_name("title"))
         php_print("\" type=\"text\" value=\"")
-        php_print(esc_attr(instance["title"]))
+        php_print(esc_attr(instance_["title"]))
         php_print("\" /></p>\n      ")
     # end def form
 # end class WP_Widget_Meta

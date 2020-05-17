@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,8 +22,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Customize_Media_Control(WP_Customize_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.2.0
+    #// @var string
+    #//
     type = "media"
+    #// 
+    #// Media control mime type.
+    #// 
+    #// @since 4.2.0
+    #// @var string
+    #//
     mime_type = ""
+    #// 
+    #// Button labels.
+    #// 
+    #// @since 4.2.0
+    #// @var array
+    #//
     button_labels = Array()
     #// 
     #// Constructor.
@@ -44,9 +57,12 @@ class WP_Customize_Media_Control(WP_Customize_Control):
     #// See WP_Customize_Control::__construct() for information
     #// on accepted arguments. Default empty array.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        super().__init__(manager, id, args)
+        super().__init__(manager_, id_, args_)
         self.button_labels = wp_parse_args(self.button_labels, self.get_default_button_labels())
     # end def __init__
     #// 
@@ -56,6 +72,7 @@ class WP_Customize_Media_Control(WP_Customize_Control):
     #// @since 4.2.0 Moved from WP_Customize_Upload_Control.
     #//
     def enqueue(self):
+        
         
         wp_enqueue_media()
     # end def enqueue
@@ -69,28 +86,29 @@ class WP_Customize_Media_Control(WP_Customize_Control):
     #//
     def to_json(self):
         
+        
         super().to_json()
         self.json["label"] = html_entity_decode(self.label, ENT_QUOTES, get_bloginfo("charset"))
         self.json["mime_type"] = self.mime_type
         self.json["button_labels"] = self.button_labels
         self.json["canUpload"] = current_user_can("upload_files")
-        value = self.value()
+        value_ = self.value()
         if php_is_object(self.setting):
             if self.setting.default:
                 #// Fake an attachment model - needs all fields used by template.
                 #// Note that the default value must be a URL, NOT an attachment ID.
-                type = "image" if php_in_array(php_substr(self.setting.default, -3), Array("jpg", "png", "gif", "bmp")) else "document"
-                default_attachment = Array({"id": 1, "url": self.setting.default, "type": type, "icon": wp_mime_type_icon(type), "title": wp_basename(self.setting.default)})
-                if "image" == type:
-                    default_attachment["sizes"] = Array({"full": Array({"url": self.setting.default})})
+                type_ = "image" if php_in_array(php_substr(self.setting.default, -3), Array("jpg", "png", "gif", "bmp")) else "document"
+                default_attachment_ = Array({"id": 1, "url": self.setting.default, "type": type_, "icon": wp_mime_type_icon(type_), "title": wp_basename(self.setting.default)})
+                if "image" == type_:
+                    default_attachment_["sizes"] = Array({"full": Array({"url": self.setting.default})})
                 # end if
-                self.json["defaultAttachment"] = default_attachment
+                self.json["defaultAttachment"] = default_attachment_
             # end if
-            if value and self.setting.default and value == self.setting.default:
+            if value_ and self.setting.default and value_ == self.setting.default:
                 #// Set the default as the attachment.
                 self.json["attachment"] = self.json["defaultAttachment"]
-            elif value:
-                self.json["attachment"] = wp_prepare_attachment_for_js(value)
+            elif value_:
+                self.json["attachment"] = wp_prepare_attachment_for_js(value_)
             # end if
         # end if
     # end def to_json
@@ -104,6 +122,7 @@ class WP_Customize_Media_Control(WP_Customize_Control):
     #//
     def render_content(self):
         
+        
         pass
     # end def render_content
     #// 
@@ -113,6 +132,7 @@ class WP_Customize_Media_Control(WP_Customize_Control):
     #// @since 4.2.0 Moved from WP_Customize_Upload_Control.
     #//
     def content_template(self):
+        
         
         php_print("""       <#
         var descriptionId = _.uniqueId( 'customize-media-control-description-' );
@@ -192,9 +212,10 @@ class WP_Customize_Media_Control(WP_Customize_Control):
     #//
     def get_default_button_labels(self):
         
+        
         #// Get just the mime type and strip the mime subtype if present.
-        mime_type = strtok(php_ltrim(self.mime_type, "/"), "/") if (not php_empty(lambda : self.mime_type)) else "default"
-        for case in Switch(mime_type):
+        mime_type_ = strtok(php_ltrim(self.mime_type, "/"), "/") if (not php_empty(lambda : self.mime_type)) else "default"
+        for case in Switch(mime_type_):
             if case("video"):
                 return Array({"select": __("Select video"), "change": __("Change video"), "default": __("Default"), "remove": __("Remove"), "placeholder": __("No video selected"), "frame_title": __("Select video"), "frame_button": __("Choose video")})
             # end if

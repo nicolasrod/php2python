@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,10 +19,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #// Version: 1.7.2
 #// Author URI: http://ma.tt
 #//
-def hello_dolly_get_lyric(*args_):
+def hello_dolly_get_lyric(*_args_):
+    
     
     #// These are the lyrics to Hello Dolly
-    lyrics = """Hello, Dolly
+    lyrics_ = """Hello, Dolly
     Well, hello, Dolly
     It's so nice to have you back where you belong
     You're lookin' swell, Dolly
@@ -55,24 +51,26 @@ def hello_dolly_get_lyric(*args_):
     Promise, you'll never go away
     Dolly'll never go away again"""
     #// Here we split it into lines.
-    lyrics = php_explode("\n", lyrics)
+    lyrics_ = php_explode("\n", lyrics_)
     #// And then randomly choose a line.
-    return wptexturize(lyrics[mt_rand(0, php_count(lyrics) - 1)])
+    return wptexturize(lyrics_[mt_rand(0, php_count(lyrics_) - 1)])
 # end def hello_dolly_get_lyric
 #// This just echoes the chosen line, we'll position it later.
-def hello_dolly(*args_):
+def hello_dolly(*_args_):
     
-    chosen = hello_dolly_get_lyric()
-    lang = ""
+    
+    chosen_ = hello_dolly_get_lyric()
+    lang_ = ""
     if "en_" != php_substr(get_user_locale(), 0, 3):
-        lang = " lang=\"en\""
+        lang_ = " lang=\"en\""
     # end if
-    printf("<p id=\"dolly\"><span class=\"screen-reader-text\">%s </span><span dir=\"ltr\"%s>%s</span></p>", __("Quote from Hello Dolly song, by Jerry Herman:"), lang, chosen)
+    printf("<p id=\"dolly\"><span class=\"screen-reader-text\">%s </span><span dir=\"ltr\"%s>%s</span></p>", __("Quote from Hello Dolly song, by Jerry Herman:"), lang_, chosen_)
 # end def hello_dolly
 #// Now we set that function up to execute when the admin_notices action is called.
 add_action("admin_notices", "hello_dolly")
 #// We need some CSS to position the paragraph.
-def dolly_css(*args_):
+def dolly_css(*_args_):
+    
     
     php_print("""
     <style type='text/css'>

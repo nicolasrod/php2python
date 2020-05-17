@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -28,7 +23,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @since 2.9.0
 #//
-def create_initial_post_types(*args_):
+def create_initial_post_types(*_args_):
+    
     
     register_post_type("post", Array({"labels": Array({"name_admin_bar": _x("Post", "add new from admin bar")})}, {"public": True, "_builtin": True, "_edit_link": "post.php?post=%d", "capability_type": "post", "map_meta_cap": True, "menu_position": 5, "menu_icon": "dashicons-admin-post", "hierarchical": False, "rewrite": False, "query_var": False, "delete_with_user": True, "supports": Array("title", "editor", "author", "thumbnail", "excerpt", "trackbacks", "custom-fields", "comments", "revisions", "post-formats"), "show_in_rest": True, "rest_base": "posts", "rest_controller_class": "WP_REST_Posts_Controller"}))
     register_post_type("page", Array({"labels": Array({"name_admin_bar": _x("Page", "add new from admin bar")})}, {"public": True, "publicly_queryable": False, "_builtin": True, "_edit_link": "post.php?post=%d", "capability_type": "page", "map_meta_cap": True, "menu_position": 20, "menu_icon": "dashicons-admin-page", "hierarchical": True, "rewrite": False, "query_var": False, "delete_with_user": True, "supports": Array("title", "editor", "author", "thumbnail", "page-attributes", "custom-fields", "comments", "revisions"), "show_in_rest": True, "rest_base": "pages", "rest_controller_class": "WP_REST_Posts_Controller"}))
@@ -73,18 +69,21 @@ def create_initial_post_types(*args_):
 #// @param bool $unfiltered    Optional. Whether to apply filters. Default false.
 #// @return string|false The file path to where the attached file should be, false otherwise.
 #//
-def get_attached_file(attachment_id=None, unfiltered=False, *args_):
+def get_attached_file(attachment_id_=None, unfiltered_=None, *_args_):
+    if unfiltered_ is None:
+        unfiltered_ = False
+    # end if
     
-    file = get_post_meta(attachment_id, "_wp_attached_file", True)
+    file_ = get_post_meta(attachment_id_, "_wp_attached_file", True)
     #// If the file is relative, prepend upload dir.
-    if file and 0 != php_strpos(file, "/") and (not php_preg_match("|^.:\\\\|", file)):
-        uploads = wp_get_upload_dir()
-        if False == uploads["error"]:
-            file = uploads["basedir"] + str("/") + str(file)
+    if file_ and 0 != php_strpos(file_, "/") and (not php_preg_match("|^.:\\\\|", file_)):
+        uploads_ = wp_get_upload_dir()
+        if False == uploads_["error"]:
+            file_ = uploads_["basedir"] + str("/") + str(file_)
         # end if
     # end if
-    if unfiltered:
-        return file
+    if unfiltered_:
+        return file_
     # end if
     #// 
     #// Filters the attached file based on the given ID.
@@ -94,7 +93,7 @@ def get_attached_file(attachment_id=None, unfiltered=False, *args_):
     #// @param string $file          Path to attached file.
     #// @param int    $attachment_id Attachment ID.
     #//
-    return apply_filters("get_attached_file", file, attachment_id)
+    return apply_filters("get_attached_file", file_, attachment_id_)
 # end def get_attached_file
 #// 
 #// Update attachment file path based on attachment ID.
@@ -108,9 +107,10 @@ def get_attached_file(attachment_id=None, unfiltered=False, *args_):
 #// @param string $file          File path for the attachment.
 #// @return bool True on success, false on failure.
 #//
-def update_attached_file(attachment_id=None, file=None, *args_):
+def update_attached_file(attachment_id_=None, file_=None, *_args_):
     
-    if (not get_post(attachment_id)):
+    
+    if (not get_post(attachment_id_)):
         return False
     # end if
     #// 
@@ -121,12 +121,12 @@ def update_attached_file(attachment_id=None, file=None, *args_):
     #// @param string $file          Path to the attached file to update.
     #// @param int    $attachment_id Attachment ID.
     #//
-    file = apply_filters("update_attached_file", file, attachment_id)
-    file = _wp_relative_upload_path(file)
-    if file:
-        return update_post_meta(attachment_id, "_wp_attached_file", file)
+    file_ = apply_filters("update_attached_file", file_, attachment_id_)
+    file_ = _wp_relative_upload_path(file_)
+    if file_:
+        return update_post_meta(attachment_id_, "_wp_attached_file", file_)
     else:
-        return delete_post_meta(attachment_id, "_wp_attached_file")
+        return delete_post_meta(attachment_id_, "_wp_attached_file")
     # end if
 # end def update_attached_file
 #// 
@@ -140,13 +140,14 @@ def update_attached_file(attachment_id=None, file=None, *args_):
 #// @param string $path Full path to the file.
 #// @return string Relative path on success, unchanged path on failure.
 #//
-def _wp_relative_upload_path(path=None, *args_):
+def _wp_relative_upload_path(path_=None, *_args_):
     
-    new_path = path
-    uploads = wp_get_upload_dir()
-    if 0 == php_strpos(new_path, uploads["basedir"]):
-        new_path = php_str_replace(uploads["basedir"], "", new_path)
-        new_path = php_ltrim(new_path, "/")
+    
+    new_path_ = path_
+    uploads_ = wp_get_upload_dir()
+    if 0 == php_strpos(new_path_, uploads_["basedir"]):
+        new_path_ = php_str_replace(uploads_["basedir"], "", new_path_)
+        new_path_ = php_ltrim(new_path_, "/")
     # end if
     #// 
     #// Filters the relative path to an uploaded file.
@@ -156,7 +157,7 @@ def _wp_relative_upload_path(path=None, *args_):
     #// @param string $new_path Relative path to the file.
     #// @param string $path     Full path to the file.
     #//
-    return apply_filters("_wp_relative_upload_path", new_path, path)
+    return apply_filters("_wp_relative_upload_path", new_path_, path_)
 # end def _wp_relative_upload_path
 #// 
 #// Retrieve all children of the post parent ID.
@@ -208,49 +209,52 @@ def _wp_relative_upload_path(path=None, *args_):
 #// a WP_Post object, an associative array, or a numeric array, respectively. Default OBJECT.
 #// @return WP_Post[]|int[] Array of post objects or post IDs.
 #//
-def get_children(args="", output=OBJECT, *args_):
+def get_children(args_="", output_=None, *_args_):
+    if output_ is None:
+        output_ = OBJECT
+    # end if
     
-    kids = Array()
-    if php_empty(lambda : args):
+    kids_ = Array()
+    if php_empty(lambda : args_):
         if (php_isset(lambda : PHP_GLOBALS["post"])):
-            args = Array({"post_parent": php_int(PHP_GLOBALS["post"].post_parent)})
+            args_ = Array({"post_parent": php_int(PHP_GLOBALS["post"].post_parent)})
         else:
-            return kids
+            return kids_
         # end if
-    elif php_is_object(args):
-        args = Array({"post_parent": php_int(args.post_parent)})
-    elif php_is_numeric(args):
-        args = Array({"post_parent": php_int(args)})
+    elif php_is_object(args_):
+        args_ = Array({"post_parent": php_int(args_.post_parent)})
+    elif php_is_numeric(args_):
+        args_ = Array({"post_parent": php_int(args_)})
     # end if
-    defaults = Array({"numberposts": -1, "post_type": "any", "post_status": "any", "post_parent": 0})
-    parsed_args = wp_parse_args(args, defaults)
-    children = get_posts(parsed_args)
-    if (not children):
-        return kids
+    defaults_ = Array({"numberposts": -1, "post_type": "any", "post_status": "any", "post_parent": 0})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    children_ = get_posts(parsed_args_)
+    if (not children_):
+        return kids_
     # end if
-    if (not php_empty(lambda : parsed_args["fields"])):
-        return children
+    if (not php_empty(lambda : parsed_args_["fields"])):
+        return children_
     # end if
-    update_post_cache(children)
-    for key,child in children:
-        kids[child.ID] = children[key]
+    update_post_cache(children_)
+    for key_,child_ in children_:
+        kids_[child_.ID] = children_[key_]
     # end for
-    if OBJECT == output:
-        return kids
-    elif ARRAY_A == output:
-        weeuns = Array()
-        for kid in kids:
-            weeuns[kid.ID] = get_object_vars(kids[kid.ID])
+    if OBJECT == output_:
+        return kids_
+    elif ARRAY_A == output_:
+        weeuns_ = Array()
+        for kid_ in kids_:
+            weeuns_[kid_.ID] = get_object_vars(kids_[kid_.ID])
         # end for
-        return weeuns
-    elif ARRAY_N == output:
-        babes = Array()
-        for kid in kids:
-            babes[kid.ID] = php_array_values(get_object_vars(kids[kid.ID]))
+        return weeuns_
+    elif ARRAY_N == output_:
+        babes_ = Array()
+        for kid_ in kids_:
+            babes_[kid_.ID] = php_array_values(get_object_vars(kids_[kid_.ID]))
         # end for
-        return babes
+        return babes_
     else:
-        return kids
+        return kids_
     # end if
 # end def get_children
 #// 
@@ -275,22 +279,23 @@ def get_children(args="", output=OBJECT, *args_):
 #// @type string $more_text Custom read more text, or empty string.
 #// }
 #//
-def get_extended(post=None, *args_):
+def get_extended(post_=None, *_args_):
+    
     
     #// Match the new style more links.
-    if php_preg_match("/<!--more(.*?)?-->/", post, matches):
-        main, extended = php_explode(matches[0], post, 2)
-        more_text = matches[1]
+    if php_preg_match("/<!--more(.*?)?-->/", post_, matches_):
+        main_, extended_ = php_explode(matches_[0], post_, 2)
+        more_text_ = matches_[1]
     else:
-        main = post
-        extended = ""
-        more_text = ""
+        main_ = post_
+        extended_ = ""
+        more_text_ = ""
     # end if
     #// Leading and trailing whitespace.
-    main = php_preg_replace("/^[\\s]*(.*)[\\s]*$/", "\\1", main)
-    extended = php_preg_replace("/^[\\s]*(.*)[\\s]*$/", "\\1", extended)
-    more_text = php_preg_replace("/^[\\s]*(.*)[\\s]*$/", "\\1", more_text)
-    return Array({"main": main, "extended": extended, "more_text": more_text})
+    main_ = php_preg_replace("/^[\\s]*(.*)[\\s]*$/", "\\1", main_)
+    extended_ = php_preg_replace("/^[\\s]*(.*)[\\s]*$/", "\\1", extended_)
+    more_text_ = php_preg_replace("/^[\\s]*(.*)[\\s]*$/", "\\1", more_text_)
+    return Array({"main": main_, "extended": extended_, "more_text": more_text_})
 # end def get_extended
 #// 
 #// Retrieves post data given a post ID or post object.
@@ -310,35 +315,38 @@ def get_extended(post=None, *args_):
 #// @return WP_Post|array|null Type corresponding to $output on success or null on failure.
 #// When $output is OBJECT, a `WP_Post` instance is returned.
 #//
-def get_post(post=None, output=OBJECT, filter="raw", *args_):
-    
-    if php_empty(lambda : post) and (php_isset(lambda : PHP_GLOBALS["post"])):
-        post = PHP_GLOBALS["post"]
+def get_post(post_=None, output_=None, filter_="raw", *_args_):
+    if output_ is None:
+        output_ = OBJECT
     # end if
-    if type(post).__name__ == "WP_Post":
-        _post = post
-    elif php_is_object(post):
-        if php_empty(lambda : post.filter):
-            _post = sanitize_post(post, "raw")
-            _post = php_new_class("WP_Post", lambda : WP_Post(_post))
-        elif "raw" == post.filter:
-            _post = php_new_class("WP_Post", lambda : WP_Post(post))
+    
+    if php_empty(lambda : post_) and (php_isset(lambda : PHP_GLOBALS["post"])):
+        post_ = PHP_GLOBALS["post"]
+    # end if
+    if type(post_).__name__ == "WP_Post":
+        _post_ = post_
+    elif php_is_object(post_):
+        if php_empty(lambda : post_.filter):
+            _post_ = sanitize_post(post_, "raw")
+            _post_ = php_new_class("WP_Post", lambda : WP_Post(_post_))
+        elif "raw" == post_.filter:
+            _post_ = php_new_class("WP_Post", lambda : WP_Post(post_))
         else:
-            _post = WP_Post.get_instance(post.ID)
+            _post_ = WP_Post.get_instance(post_.ID)
         # end if
     else:
-        _post = WP_Post.get_instance(post)
+        _post_ = WP_Post.get_instance(post_)
     # end if
-    if (not _post):
+    if (not _post_):
         return None
     # end if
-    _post = _post.filter(filter)
-    if ARRAY_A == output:
-        return _post.to_array()
-    elif ARRAY_N == output:
-        return php_array_values(_post.to_array())
+    _post_ = _post_.filter(filter_)
+    if ARRAY_A == output_:
+        return _post_.to_array()
+    elif ARRAY_N == output_:
+        return php_array_values(_post_.to_array())
     # end if
-    return _post
+    return _post_
 # end def get_post
 #// 
 #// Retrieve ancestors of a post.
@@ -348,28 +356,29 @@ def get_post(post=None, output=OBJECT, filter="raw", *args_):
 #// @param int|WP_Post $post Post ID or post object.
 #// @return int[] Ancestor IDs or empty array if none are found.
 #//
-def get_post_ancestors(post=None, *args_):
+def get_post_ancestors(post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post) or php_empty(lambda : post.post_parent) or post.post_parent == post.ID:
+    
+    post_ = get_post(post_)
+    if (not post_) or php_empty(lambda : post_.post_parent) or post_.post_parent == post_.ID:
         return Array()
     # end if
-    ancestors = Array()
-    id = post.post_parent
-    ancestors[-1] = id
+    ancestors_ = Array()
+    id_ = post_.post_parent
+    ancestors_[-1] = id_
     while True:
-        ancestor = get_post(id)
-        if not (ancestor):
+        ancestor_ = get_post(id_)
+        if not (ancestor_):
             break
         # end if
         #// Loop detection: If the ancestor has been seen before, break.
-        if php_empty(lambda : ancestor.post_parent) or ancestor.post_parent == post.ID or php_in_array(ancestor.post_parent, ancestors):
+        if php_empty(lambda : ancestor_.post_parent) or ancestor_.post_parent == post_.ID or php_in_array(ancestor_.post_parent, ancestors_):
             break
         # end if
-        id = ancestor.post_parent
-        ancestors[-1] = id
+        id_ = ancestor_.post_parent
+        ancestors_[-1] = id_
     # end while
-    return ancestors
+    return ancestors_
 # end def get_post_ancestors
 #// 
 #// Retrieve data from a post field based on Post ID.
@@ -391,16 +400,17 @@ def get_post_ancestors(post=None, *args_):
 #// or 'display'. Default 'display'.
 #// @return string The value of the post field on success, empty string on failure.
 #//
-def get_post_field(field=None, post=None, context="display", *args_):
+def get_post_field(field_=None, post_=None, context_="display", *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return ""
     # end if
-    if (not (php_isset(lambda : post.field))):
+    if (not (php_isset(lambda : post_.field_))):
         return ""
     # end if
-    return sanitize_post_field(field, post.field, post.ID, context)
+    return sanitize_post_field(field_, post_.field_, post_.ID, context_)
 # end def get_post_field
 #// 
 #// Retrieve the mime type of an attachment based on the ID.
@@ -413,11 +423,12 @@ def get_post_field(field=None, post=None, context="display", *args_):
 #// @param int|WP_Post $post Optional. Post ID or post object. Defaults to global $post.
 #// @return string|false The mime type on success, false on failure.
 #//
-def get_post_mime_type(post=None, *args_):
+def get_post_mime_type(post_=None, *_args_):
     
-    post = get_post(post)
-    if php_is_object(post):
-        return post.post_mime_type
+    
+    post_ = get_post(post_)
+    if php_is_object(post_):
+        return post_.post_mime_type
     # end if
     return False
 # end def get_post_mime_type
@@ -432,27 +443,28 @@ def get_post_mime_type(post=None, *args_):
 #// @param int|WP_Post $post Optional. Post ID or post object. Defaults to global $post..
 #// @return string|false Post status on success, false on failure.
 #//
-def get_post_status(post=None, *args_):
+def get_post_status(post_=None, *_args_):
     
-    post = get_post(post)
-    if (not php_is_object(post)):
+    
+    post_ = get_post(post_)
+    if (not php_is_object(post_)):
         return False
     # end if
-    if "attachment" == post.post_type:
-        if "private" == post.post_status:
+    if "attachment" == post_.post_type:
+        if "private" == post_.post_status:
             return "private"
         # end if
         #// Unattached attachments are assumed to be published.
-        if "inherit" == post.post_status and 0 == post.post_parent:
+        if "inherit" == post_.post_status and 0 == post_.post_parent:
             return "publish"
         # end if
         #// Inherit status from the parent.
-        if post.post_parent and post.ID != post.post_parent:
-            parent_post_status = get_post_status(post.post_parent)
-            if "trash" == parent_post_status:
-                return get_post_meta(post.post_parent, "_wp_trash_meta_status", True)
+        if post_.post_parent and post_.ID != post_.post_parent:
+            parent_post_status_ = get_post_status(post_.post_parent)
+            if "trash" == parent_post_status_:
+                return get_post_meta(post_.post_parent, "_wp_trash_meta_status", True)
             else:
-                return parent_post_status
+                return parent_post_status_
             # end if
         # end if
     # end if
@@ -464,7 +476,7 @@ def get_post_status(post=None, *args_):
     #// @param string  $post_status The post status.
     #// @param WP_Post $post        The post object.
     #//
-    return apply_filters("get_post_status", post.post_status, post)
+    return apply_filters("get_post_status", post_.post_status, post_)
 # end def get_post_status
 #// 
 #// Retrieve all of the WordPress supported post statuses.
@@ -476,10 +488,11 @@ def get_post_status(post=None, *args_):
 #// 
 #// @return string[] Array of post status labels keyed by their status.
 #//
-def get_post_statuses(*args_):
+def get_post_statuses(*_args_):
     
-    status = Array({"draft": __("Draft"), "pending": __("Pending Review"), "private": __("Private"), "publish": __("Published")})
-    return status
+    
+    status_ = Array({"draft": __("Draft"), "pending": __("Pending Review"), "private": __("Private"), "publish": __("Published")})
+    return status_
 # end def get_post_statuses
 #// 
 #// Retrieve all of the WordPress support page statuses.
@@ -491,10 +504,11 @@ def get_post_statuses(*args_):
 #// 
 #// @return string[] Array of page status labels keyed by their status.
 #//
-def get_page_statuses(*args_):
+def get_page_statuses(*_args_):
     
-    status = Array({"draft": __("Draft"), "private": __("Private"), "publish": __("Published")})
-    return status
+    
+    status_ = Array({"draft": __("Draft"), "private": __("Private"), "publish": __("Published")})
+    return status_
 # end def get_page_statuses
 #// 
 #// Return statuses for privacy requests.
@@ -504,7 +518,8 @@ def get_page_statuses(*args_):
 #// 
 #// @return array
 #//
-def _wp_privacy_statuses(*args_):
+def _wp_privacy_statuses(*_args_):
+    
     
     return Array({"request-pending": __("Pending"), "request-confirmed": __("Confirmed"), "request-failed": __("Failed"), "request-completed": __("Completed")})
 # end def _wp_privacy_statuses
@@ -554,59 +569,62 @@ def _wp_privacy_statuses(*args_):
 #// }
 #// @return object
 #//
-def register_post_status(post_status=None, args=Array(), *args_):
+def register_post_status(post_status_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_post_statuses
-    php_check_if_defined("wp_post_statuses")
-    if (not php_is_array(wp_post_statuses)):
-        wp_post_statuses = Array()
+    global wp_post_statuses_
+    php_check_if_defined("wp_post_statuses_")
+    if (not php_is_array(wp_post_statuses_)):
+        wp_post_statuses_ = Array()
     # end if
     #// Args prefixed with an underscore are reserved for internal use.
-    defaults = Array({"label": False, "label_count": False, "exclude_from_search": None, "_builtin": False, "public": None, "internal": None, "protected": None, "private": None, "publicly_queryable": None, "show_in_admin_status_list": None, "show_in_admin_all_list": None, "date_floating": None})
-    args = wp_parse_args(args, defaults)
-    args = args
-    post_status = sanitize_key(post_status)
-    args.name = post_status
+    defaults_ = Array({"label": False, "label_count": False, "exclude_from_search": None, "_builtin": False, "public": None, "internal": None, "protected": None, "private": None, "publicly_queryable": None, "show_in_admin_status_list": None, "show_in_admin_all_list": None, "date_floating": None})
+    args_ = wp_parse_args(args_, defaults_)
+    args_ = args_
+    post_status_ = sanitize_key(post_status_)
+    args_.name = post_status_
     #// Set various defaults.
-    if None == args.public and None == args.internal and None == args.protected and None == args.private:
-        args.internal = True
+    if None == args_.public and None == args_.internal and None == args_.protected and None == args_.private:
+        args_.internal = True
     # end if
-    if None == args.public:
-        args.public = False
+    if None == args_.public:
+        args_.public = False
     # end if
-    if None == args.private:
-        args.private = False
+    if None == args_.private:
+        args_.private = False
     # end if
-    if None == args.protected:
-        args.protected = False
+    if None == args_.protected:
+        args_.protected = False
     # end if
-    if None == args.internal:
-        args.internal = False
+    if None == args_.internal:
+        args_.internal = False
     # end if
-    if None == args.publicly_queryable:
-        args.publicly_queryable = args.public
+    if None == args_.publicly_queryable:
+        args_.publicly_queryable = args_.public
     # end if
-    if None == args.exclude_from_search:
-        args.exclude_from_search = args.internal
+    if None == args_.exclude_from_search:
+        args_.exclude_from_search = args_.internal
     # end if
-    if None == args.show_in_admin_all_list:
-        args.show_in_admin_all_list = (not args.internal)
+    if None == args_.show_in_admin_all_list:
+        args_.show_in_admin_all_list = (not args_.internal)
     # end if
-    if None == args.show_in_admin_status_list:
-        args.show_in_admin_status_list = (not args.internal)
+    if None == args_.show_in_admin_status_list:
+        args_.show_in_admin_status_list = (not args_.internal)
     # end if
-    if None == args.date_floating:
-        args.date_floating = False
+    if None == args_.date_floating:
+        args_.date_floating = False
     # end if
-    if False == args.label:
-        args.label = post_status
+    if False == args_.label:
+        args_.label = post_status_
     # end if
-    if False == args.label_count:
+    if False == args_.label_count:
         #// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralSingle,WordPress.WP.I18n.NonSingularStringLiteralPlural
-        args.label_count = _n_noop(args.label, args.label)
+        args_.label_count = _n_noop(args_.label, args_.label)
     # end if
-    wp_post_statuses[post_status] = args
-    return args
+    wp_post_statuses_[post_status_] = args_
+    return args_
 # end def register_post_status
 #// 
 #// Retrieve a post status object by name.
@@ -620,14 +638,15 @@ def register_post_status(post_status=None, args=Array(), *args_):
 #// @param string $post_status The name of a registered post status.
 #// @return object|null A post status object.
 #//
-def get_post_status_object(post_status=None, *args_):
+def get_post_status_object(post_status_=None, *_args_):
     
-    global wp_post_statuses
-    php_check_if_defined("wp_post_statuses")
-    if php_empty(lambda : wp_post_statuses[post_status]):
+    
+    global wp_post_statuses_
+    php_check_if_defined("wp_post_statuses_")
+    if php_empty(lambda : wp_post_statuses_[post_status_]):
         return None
     # end if
-    return wp_post_statuses[post_status]
+    return wp_post_statuses_[post_status_]
 # end def get_post_status_object
 #// 
 #// Get a list of post statuses.
@@ -646,12 +665,15 @@ def get_post_status_object(post_status=None, *args_):
 #// Default 'and'.
 #// @return array A list of post status names or objects.
 #//
-def get_post_stati(args=Array(), output="names", operator="and", *args_):
+def get_post_stati(args_=None, output_="names", operator_="and", *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_post_statuses
-    php_check_if_defined("wp_post_statuses")
-    field = "name" if "names" == output else False
-    return wp_filter_object_list(wp_post_statuses, args, operator, field)
+    global wp_post_statuses_
+    php_check_if_defined("wp_post_statuses_")
+    field_ = "name" if "names" == output_ else False
+    return wp_filter_object_list(wp_post_statuses_, args_, operator_, field_)
 # end def get_post_stati
 #// 
 #// Whether the post type is hierarchical.
@@ -665,13 +687,14 @@ def get_post_stati(args=Array(), output="names", operator="and", *args_):
 #// @param string $post_type Post type name
 #// @return bool Whether post type is hierarchical.
 #//
-def is_post_type_hierarchical(post_type=None, *args_):
+def is_post_type_hierarchical(post_type_=None, *_args_):
     
-    if (not post_type_exists(post_type)):
+    
+    if (not post_type_exists(post_type_)):
         return False
     # end if
-    post_type = get_post_type_object(post_type)
-    return post_type.hierarchical
+    post_type_ = get_post_type_object(post_type_)
+    return post_type_.hierarchical
 # end def is_post_type_hierarchical
 #// 
 #// Determines whether a post type is registered.
@@ -687,9 +710,10 @@ def is_post_type_hierarchical(post_type=None, *args_):
 #// @param string $post_type Post type name.
 #// @return bool Whether post type is registered.
 #//
-def post_type_exists(post_type=None, *args_):
+def post_type_exists(post_type_=None, *_args_):
     
-    return php_bool(get_post_type_object(post_type))
+    
+    return php_bool(get_post_type_object(post_type_))
 # end def post_type_exists
 #// 
 #// Retrieves the post type of the current post or of a given post.
@@ -699,11 +723,12 @@ def post_type_exists(post_type=None, *args_):
 #// @param int|WP_Post|null $post Optional. Post ID or post object. Default is global $post.
 #// @return string|false          Post type on success, false on failure.
 #//
-def get_post_type(post=None, *args_):
+def get_post_type(post_=None, *_args_):
     
-    post = get_post(post)
-    if post:
-        return post.post_type
+    
+    post_ = get_post(post_)
+    if post_:
+        return post_.post_type
     # end if
     return False
 # end def get_post_type
@@ -720,14 +745,15 @@ def get_post_type(post=None, *args_):
 #// @param string $post_type The name of a registered post type.
 #// @return WP_Post_Type|null WP_Post_Type object if it exists, null otherwise.
 #//
-def get_post_type_object(post_type=None, *args_):
+def get_post_type_object(post_type_=None, *_args_):
     
-    global wp_post_types
-    php_check_if_defined("wp_post_types")
-    if (not is_scalar(post_type)) or php_empty(lambda : wp_post_types[post_type]):
+    
+    global wp_post_types_
+    php_check_if_defined("wp_post_types_")
+    if (not is_scalar(post_type_)) or php_empty(lambda : wp_post_types_[post_type_]):
         return None
     # end if
-    return wp_post_types[post_type]
+    return wp_post_types_[post_type_]
 # end def get_post_type_object
 #// 
 #// Get a list of all registered post type objects.
@@ -747,12 +773,15 @@ def get_post_type_object(post_type=None, *args_):
 #// must match; 'not' means no elements may match. Default 'and'.
 #// @return string[]|WP_Post_Type[] An array of post type names or objects.
 #//
-def get_post_types(args=Array(), output="names", operator="and", *args_):
+def get_post_types(args_=None, output_="names", operator_="and", *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_post_types
-    php_check_if_defined("wp_post_types")
-    field = "name" if "names" == output else False
-    return wp_filter_object_list(wp_post_types, args, operator, field)
+    global wp_post_types_
+    php_check_if_defined("wp_post_types_")
+    field_ = "name" if "names" == output_ else False
+    return wp_filter_object_list(wp_post_types_, args_, operator_, field_)
 # end def get_post_types
 #// 
 #// Registers a post type.
@@ -896,26 +925,29 @@ def get_post_types(args=Array(), output="names", operator="and", *args_):
 #// @return WP_Post_Type|WP_Error The registered post type object on success,
 #// WP_Error object on failure.
 #//
-def register_post_type(post_type=None, args=Array(), *args_):
+def register_post_type(post_type_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_post_types
-    php_check_if_defined("wp_post_types")
-    if (not php_is_array(wp_post_types)):
-        wp_post_types = Array()
+    global wp_post_types_
+    php_check_if_defined("wp_post_types_")
+    if (not php_is_array(wp_post_types_)):
+        wp_post_types_ = Array()
     # end if
     #// Sanitize post type name.
-    post_type = sanitize_key(post_type)
-    if php_empty(lambda : post_type) or php_strlen(post_type) > 20:
+    post_type_ = sanitize_key(post_type_)
+    if php_empty(lambda : post_type_) or php_strlen(post_type_) > 20:
         _doing_it_wrong(__FUNCTION__, __("Post type names must be between 1 and 20 characters in length."), "4.2.0")
         return php_new_class("WP_Error", lambda : WP_Error("post_type_length_invalid", __("Post type names must be between 1 and 20 characters in length.")))
     # end if
-    post_type_object = php_new_class("WP_Post_Type", lambda : WP_Post_Type(post_type, args))
-    post_type_object.add_supports()
-    post_type_object.add_rewrite_rules()
-    post_type_object.register_meta_boxes()
-    wp_post_types[post_type] = post_type_object
-    post_type_object.add_hooks()
-    post_type_object.register_taxonomies()
+    post_type_object_ = php_new_class("WP_Post_Type", lambda : WP_Post_Type(post_type_, args_))
+    post_type_object_.add_supports()
+    post_type_object_.add_rewrite_rules()
+    post_type_object_.register_meta_boxes()
+    wp_post_types_[post_type_] = post_type_object_
+    post_type_object_.add_hooks()
+    post_type_object_.register_taxonomies()
     #// 
     #// Fires after a post type is registered.
     #// 
@@ -925,8 +957,8 @@ def register_post_type(post_type=None, args=Array(), *args_):
     #// @param string       $post_type        Post type.
     #// @param WP_Post_Type $post_type_object Arguments used to register the post type.
     #//
-    do_action("registered_post_type", post_type, post_type_object)
-    return post_type_object
+    do_action("registered_post_type", post_type_, post_type_object_)
+    return post_type_object_
 # end def register_post_type
 #// 
 #// Unregisters a post type.
@@ -940,24 +972,25 @@ def register_post_type(post_type=None, args=Array(), *args_):
 #// @param string $post_type Post type to unregister.
 #// @return bool|WP_Error True on success, WP_Error on failure or if the post type doesn't exist.
 #//
-def unregister_post_type(post_type=None, *args_):
+def unregister_post_type(post_type_=None, *_args_):
     
-    global wp_post_types
-    php_check_if_defined("wp_post_types")
-    if (not post_type_exists(post_type)):
+    
+    global wp_post_types_
+    php_check_if_defined("wp_post_types_")
+    if (not post_type_exists(post_type_)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_post_type", __("Invalid post type.")))
     # end if
-    post_type_object = get_post_type_object(post_type)
+    post_type_object_ = get_post_type_object(post_type_)
     #// Do not allow unregistering internal post types.
-    if post_type_object._builtin:
+    if post_type_object_._builtin:
         return php_new_class("WP_Error", lambda : WP_Error("invalid_post_type", __("Unregistering a built-in post type is not allowed")))
     # end if
-    post_type_object.remove_supports()
-    post_type_object.remove_rewrite_rules()
-    post_type_object.unregister_meta_boxes()
-    post_type_object.remove_hooks()
-    post_type_object.unregister_taxonomies()
-    wp_post_types[post_type] = None
+    post_type_object_.remove_supports()
+    post_type_object_.remove_rewrite_rules()
+    post_type_object_.unregister_meta_boxes()
+    post_type_object_.remove_hooks()
+    post_type_object_.unregister_taxonomies()
+    wp_post_types_[post_type_] = None
     #// 
     #// Fires after a post type was unregistered.
     #// 
@@ -965,7 +998,7 @@ def unregister_post_type(post_type=None, *args_):
     #// 
     #// @param string $post_type Post type key.
     #//
-    do_action("unregistered_post_type", post_type)
+    do_action("unregistered_post_type", post_type_)
     return True
 # end def unregister_post_type
 #// 
@@ -1024,29 +1057,30 @@ def unregister_post_type(post_type=None, *args_):
 #// @param object $args Post type registration arguments.
 #// @return object Object with all the capabilities as member variables.
 #//
-def get_post_type_capabilities(args=None, *args_):
+def get_post_type_capabilities(args_=None, *_args_):
     
-    if (not php_is_array(args.capability_type)):
-        args.capability_type = Array(args.capability_type, args.capability_type + "s")
+    
+    if (not php_is_array(args_.capability_type)):
+        args_.capability_type = Array(args_.capability_type, args_.capability_type + "s")
     # end if
     #// Singular base for meta capabilities, plural base for primitive capabilities.
-    singular_base, plural_base = args.capability_type
-    default_capabilities = Array({"edit_post": "edit_" + singular_base, "read_post": "read_" + singular_base, "delete_post": "delete_" + singular_base, "edit_posts": "edit_" + plural_base, "edit_others_posts": "edit_others_" + plural_base, "delete_posts": "delete_" + plural_base, "publish_posts": "publish_" + plural_base, "read_private_posts": "read_private_" + plural_base})
+    singular_base_, plural_base_ = args_.capability_type
+    default_capabilities_ = Array({"edit_post": "edit_" + singular_base_, "read_post": "read_" + singular_base_, "delete_post": "delete_" + singular_base_, "edit_posts": "edit_" + plural_base_, "edit_others_posts": "edit_others_" + plural_base_, "delete_posts": "delete_" + plural_base_, "publish_posts": "publish_" + plural_base_, "read_private_posts": "read_private_" + plural_base_})
     #// Primitive capabilities used within map_meta_cap():
-    if args.map_meta_cap:
-        default_capabilities_for_mapping = Array({"read": "read", "delete_private_posts": "delete_private_" + plural_base, "delete_published_posts": "delete_published_" + plural_base, "delete_others_posts": "delete_others_" + plural_base, "edit_private_posts": "edit_private_" + plural_base, "edit_published_posts": "edit_published_" + plural_base})
-        default_capabilities = php_array_merge(default_capabilities, default_capabilities_for_mapping)
+    if args_.map_meta_cap:
+        default_capabilities_for_mapping_ = Array({"read": "read", "delete_private_posts": "delete_private_" + plural_base_, "delete_published_posts": "delete_published_" + plural_base_, "delete_others_posts": "delete_others_" + plural_base_, "edit_private_posts": "edit_private_" + plural_base_, "edit_published_posts": "edit_published_" + plural_base_})
+        default_capabilities_ = php_array_merge(default_capabilities_, default_capabilities_for_mapping_)
     # end if
-    capabilities = php_array_merge(default_capabilities, args.capabilities)
+    capabilities_ = php_array_merge(default_capabilities_, args_.capabilities)
     #// Post creation capability simply maps to edit_posts by default:
-    if (not (php_isset(lambda : capabilities["create_posts"]))):
-        capabilities["create_posts"] = capabilities["edit_posts"]
+    if (not (php_isset(lambda : capabilities_["create_posts"]))):
+        capabilities_["create_posts"] = capabilities_["edit_posts"]
     # end if
     #// Remember meta capabilities for future reference.
-    if args.map_meta_cap:
-        _post_type_meta_capabilities(capabilities)
+    if args_.map_meta_cap:
+        _post_type_meta_capabilities(capabilities_)
     # end if
-    return capabilities
+    return capabilities_
 # end def get_post_type_capabilities
 #// 
 #// Store or return a list of post type meta caps for map_meta_cap().
@@ -1058,13 +1092,14 @@ def get_post_type_capabilities(args=None, *args_):
 #// 
 #// @param string[] $capabilities Post type meta capabilities.
 #//
-def _post_type_meta_capabilities(capabilities=None, *args_):
+def _post_type_meta_capabilities(capabilities_=None, *_args_):
     
-    global post_type_meta_caps
-    php_check_if_defined("post_type_meta_caps")
-    for core,custom in capabilities:
-        if php_in_array(core, Array("read_post", "delete_post", "edit_post")):
-            post_type_meta_caps[custom] = core
+    
+    global post_type_meta_caps_
+    php_check_if_defined("post_type_meta_caps_")
+    for core_,custom_ in capabilities_:
+        if php_in_array(core_, Array("read_post", "delete_post", "edit_post")):
+            post_type_meta_caps_[custom_] = core_
         # end if
     # end for
 # end def _post_type_meta_capabilities
@@ -1135,13 +1170,14 @@ def _post_type_meta_capabilities(capabilities=None, *args_):
 #// @param object|WP_Post_Type $post_type_object Post type object.
 #// @return object Object with all the labels as member variables.
 #//
-def get_post_type_labels(post_type_object=None, *args_):
+def get_post_type_labels(post_type_object_=None, *_args_):
     
-    nohier_vs_hier_defaults = Array({"name": Array(_x("Posts", "post type general name"), _x("Pages", "post type general name")), "singular_name": Array(_x("Post", "post type singular name"), _x("Page", "post type singular name")), "add_new": Array(_x("Add New", "post"), _x("Add New", "page")), "add_new_item": Array(__("Add New Post"), __("Add New Page")), "edit_item": Array(__("Edit Post"), __("Edit Page")), "new_item": Array(__("New Post"), __("New Page")), "view_item": Array(__("View Post"), __("View Page")), "view_items": Array(__("View Posts"), __("View Pages")), "search_items": Array(__("Search Posts"), __("Search Pages")), "not_found": Array(__("No posts found."), __("No pages found.")), "not_found_in_trash": Array(__("No posts found in Trash."), __("No pages found in Trash.")), "parent_item_colon": Array(None, __("Parent Page:")), "all_items": Array(__("All Posts"), __("All Pages")), "archives": Array(__("Post Archives"), __("Page Archives")), "attributes": Array(__("Post Attributes"), __("Page Attributes")), "insert_into_item": Array(__("Insert into post"), __("Insert into page")), "uploaded_to_this_item": Array(__("Uploaded to this post"), __("Uploaded to this page")), "featured_image": Array(_x("Featured image", "post"), _x("Featured image", "page")), "set_featured_image": Array(_x("Set featured image", "post"), _x("Set featured image", "page")), "remove_featured_image": Array(_x("Remove featured image", "post"), _x("Remove featured image", "page")), "use_featured_image": Array(_x("Use as featured image", "post"), _x("Use as featured image", "page")), "filter_items_list": Array(__("Filter posts list"), __("Filter pages list")), "items_list_navigation": Array(__("Posts list navigation"), __("Pages list navigation")), "items_list": Array(__("Posts list"), __("Pages list")), "item_published": Array(__("Post published."), __("Page published.")), "item_published_privately": Array(__("Post published privately."), __("Page published privately.")), "item_reverted_to_draft": Array(__("Post reverted to draft."), __("Page reverted to draft.")), "item_scheduled": Array(__("Post scheduled."), __("Page scheduled.")), "item_updated": Array(__("Post updated."), __("Page updated."))})
-    nohier_vs_hier_defaults["menu_name"] = nohier_vs_hier_defaults["name"]
-    labels = _get_custom_object_labels(post_type_object, nohier_vs_hier_defaults)
-    post_type = post_type_object.name
-    default_labels = copy.deepcopy(labels)
+    
+    nohier_vs_hier_defaults_ = Array({"name": Array(_x("Posts", "post type general name"), _x("Pages", "post type general name")), "singular_name": Array(_x("Post", "post type singular name"), _x("Page", "post type singular name")), "add_new": Array(_x("Add New", "post"), _x("Add New", "page")), "add_new_item": Array(__("Add New Post"), __("Add New Page")), "edit_item": Array(__("Edit Post"), __("Edit Page")), "new_item": Array(__("New Post"), __("New Page")), "view_item": Array(__("View Post"), __("View Page")), "view_items": Array(__("View Posts"), __("View Pages")), "search_items": Array(__("Search Posts"), __("Search Pages")), "not_found": Array(__("No posts found."), __("No pages found.")), "not_found_in_trash": Array(__("No posts found in Trash."), __("No pages found in Trash.")), "parent_item_colon": Array(None, __("Parent Page:")), "all_items": Array(__("All Posts"), __("All Pages")), "archives": Array(__("Post Archives"), __("Page Archives")), "attributes": Array(__("Post Attributes"), __("Page Attributes")), "insert_into_item": Array(__("Insert into post"), __("Insert into page")), "uploaded_to_this_item": Array(__("Uploaded to this post"), __("Uploaded to this page")), "featured_image": Array(_x("Featured image", "post"), _x("Featured image", "page")), "set_featured_image": Array(_x("Set featured image", "post"), _x("Set featured image", "page")), "remove_featured_image": Array(_x("Remove featured image", "post"), _x("Remove featured image", "page")), "use_featured_image": Array(_x("Use as featured image", "post"), _x("Use as featured image", "page")), "filter_items_list": Array(__("Filter posts list"), __("Filter pages list")), "items_list_navigation": Array(__("Posts list navigation"), __("Pages list navigation")), "items_list": Array(__("Posts list"), __("Pages list")), "item_published": Array(__("Post published."), __("Page published.")), "item_published_privately": Array(__("Post published privately."), __("Page published privately.")), "item_reverted_to_draft": Array(__("Post reverted to draft."), __("Page reverted to draft.")), "item_scheduled": Array(__("Post scheduled."), __("Page scheduled.")), "item_updated": Array(__("Post updated."), __("Page updated."))})
+    nohier_vs_hier_defaults_["menu_name"] = nohier_vs_hier_defaults_["name"]
+    labels_ = _get_custom_object_labels(post_type_object_, nohier_vs_hier_defaults_)
+    post_type_ = post_type_object_.name
+    default_labels_ = copy.deepcopy(labels_)
     #// 
     #// Filters the labels of a specific post type.
     #// 
@@ -1154,10 +1190,10 @@ def get_post_type_labels(post_type_object=None, *args_):
     #// 
     #// @param object $labels Object with labels for the post type as member variables.
     #//
-    labels = apply_filters(str("post_type_labels_") + str(post_type), labels)
+    labels_ = apply_filters(str("post_type_labels_") + str(post_type_), labels_)
     #// Ensure that the filtered labels contain all required default values.
-    labels = php_array_merge(default_labels, labels)
-    return labels
+    labels_ = php_array_merge(default_labels_, labels_)
+    return labels_
 # end def get_post_type_labels
 #// 
 #// Build an object with custom-something object (post type, taxonomy) labels
@@ -1170,34 +1206,35 @@ def get_post_type_labels(post_type_object=None, *args_):
 #// @param array  $nohier_vs_hier_defaults Hierarchical vs non-hierarchical default labels.
 #// @return object Object containing labels for the given custom-something object.
 #//
-def _get_custom_object_labels(object=None, nohier_vs_hier_defaults=None, *args_):
+def _get_custom_object_labels(object_=None, nohier_vs_hier_defaults_=None, *_args_):
     
-    object.labels = object.labels
-    if (php_isset(lambda : object.label)) and php_empty(lambda : object.labels["name"]):
-        object.labels["name"] = object.label
+    
+    object_.labels = object_.labels
+    if (php_isset(lambda : object_.label)) and php_empty(lambda : object_.labels["name"]):
+        object_.labels["name"] = object_.label
     # end if
-    if (not (php_isset(lambda : object.labels["singular_name"]))) and (php_isset(lambda : object.labels["name"])):
-        object.labels["singular_name"] = object.labels["name"]
+    if (not (php_isset(lambda : object_.labels["singular_name"]))) and (php_isset(lambda : object_.labels["name"])):
+        object_.labels["singular_name"] = object_.labels["name"]
     # end if
-    if (not (php_isset(lambda : object.labels["name_admin_bar"]))):
-        object.labels["name_admin_bar"] = object.labels["singular_name"] if (php_isset(lambda : object.labels["singular_name"])) else object.name
+    if (not (php_isset(lambda : object_.labels["name_admin_bar"]))):
+        object_.labels["name_admin_bar"] = object_.labels["singular_name"] if (php_isset(lambda : object_.labels["singular_name"])) else object_.name
     # end if
-    if (not (php_isset(lambda : object.labels["menu_name"]))) and (php_isset(lambda : object.labels["name"])):
-        object.labels["menu_name"] = object.labels["name"]
+    if (not (php_isset(lambda : object_.labels["menu_name"]))) and (php_isset(lambda : object_.labels["name"])):
+        object_.labels["menu_name"] = object_.labels["name"]
     # end if
-    if (not (php_isset(lambda : object.labels["all_items"]))) and (php_isset(lambda : object.labels["menu_name"])):
-        object.labels["all_items"] = object.labels["menu_name"]
+    if (not (php_isset(lambda : object_.labels["all_items"]))) and (php_isset(lambda : object_.labels["menu_name"])):
+        object_.labels["all_items"] = object_.labels["menu_name"]
     # end if
-    if (not (php_isset(lambda : object.labels["archives"]))) and (php_isset(lambda : object.labels["all_items"])):
-        object.labels["archives"] = object.labels["all_items"]
+    if (not (php_isset(lambda : object_.labels["archives"]))) and (php_isset(lambda : object_.labels["all_items"])):
+        object_.labels["archives"] = object_.labels["all_items"]
     # end if
-    defaults = Array()
-    for key,value in nohier_vs_hier_defaults:
-        defaults[key] = value[1] if object.hierarchical else value[0]
+    defaults_ = Array()
+    for key_,value_ in nohier_vs_hier_defaults_:
+        defaults_[key_] = value_[1] if object_.hierarchical else value_[0]
     # end for
-    labels = php_array_merge(defaults, object.labels)
-    object.labels = object.labels
-    return labels
+    labels_ = php_array_merge(defaults_, object_.labels)
+    object_.labels = object_.labels
+    return labels_
 # end def _get_custom_object_labels
 #// 
 #// Add submenus for post types.
@@ -1205,15 +1242,16 @@ def _get_custom_object_labels(object=None, nohier_vs_hier_defaults=None, *args_)
 #// @access private
 #// @since 3.1.0
 #//
-def _add_post_type_submenus(*args_):
+def _add_post_type_submenus(*_args_):
     
-    for ptype in get_post_types(Array({"show_ui": True})):
-        ptype_obj = get_post_type_object(ptype)
+    
+    for ptype_ in get_post_types(Array({"show_ui": True})):
+        ptype_obj_ = get_post_type_object(ptype_)
         #// Sub-menus only.
-        if (not ptype_obj.show_in_menu) or True == ptype_obj.show_in_menu:
+        if (not ptype_obj_.show_in_menu) or True == ptype_obj_.show_in_menu:
             continue
         # end if
-        add_submenu_page(ptype_obj.show_in_menu, ptype_obj.labels.name, ptype_obj.labels.all_items, ptype_obj.cap.edit_posts, str("edit.php?post_type=") + str(ptype))
+        add_submenu_page(ptype_obj_.show_in_menu, ptype_obj_.labels.name, ptype_obj_.labels.all_items, ptype_obj_.cap.edit_posts, str("edit.php?post_type=") + str(ptype_))
     # end for
 # end def _add_post_type_submenus
 #// 
@@ -1252,16 +1290,17 @@ def _add_post_type_submenus(*args_):
 #// feature strings or a single string.
 #// @param mixed        ...$args   Optional extra arguments to pass along with certain features.
 #//
-def add_post_type_support(post_type=None, feature=None, *args):
+def add_post_type_support(post_type_=None, feature_=None, *args_):
     
-    global _wp_post_type_features
-    php_check_if_defined("_wp_post_type_features")
-    features = feature
-    for feature in features:
-        if args:
-            _wp_post_type_features[post_type][feature] = args
+    
+    global _wp_post_type_features_
+    php_check_if_defined("_wp_post_type_features_")
+    features_ = feature_
+    for feature_ in features_:
+        if args_:
+            _wp_post_type_features_[post_type_][feature_] = args_
         else:
-            _wp_post_type_features[post_type][feature] = True
+            _wp_post_type_features_[post_type_][feature_] = True
         # end if
     # end for
 # end def add_post_type_support
@@ -1275,11 +1314,12 @@ def add_post_type_support(post_type=None, feature=None, *args):
 #// @param string $post_type The post type for which to remove the feature.
 #// @param string $feature   The feature being removed.
 #//
-def remove_post_type_support(post_type=None, feature=None, *args_):
+def remove_post_type_support(post_type_=None, feature_=None, *_args_):
     
-    global _wp_post_type_features
-    php_check_if_defined("_wp_post_type_features")
-    _wp_post_type_features[post_type][feature] = None
+    
+    global _wp_post_type_features_
+    php_check_if_defined("_wp_post_type_features_")
+    _wp_post_type_features_[post_type_][feature_] = None
 # end def remove_post_type_support
 #// 
 #// Get all the post type features
@@ -1291,12 +1331,13 @@ def remove_post_type_support(post_type=None, feature=None, *args_):
 #// @param string $post_type The post type.
 #// @return array Post type supports list.
 #//
-def get_all_post_type_supports(post_type=None, *args_):
+def get_all_post_type_supports(post_type_=None, *_args_):
     
-    global _wp_post_type_features
-    php_check_if_defined("_wp_post_type_features")
-    if (php_isset(lambda : _wp_post_type_features[post_type])):
-        return _wp_post_type_features[post_type]
+    
+    global _wp_post_type_features_
+    php_check_if_defined("_wp_post_type_features_")
+    if (php_isset(lambda : _wp_post_type_features_[post_type_])):
+        return _wp_post_type_features_[post_type_]
     # end if
     return Array()
 # end def get_all_post_type_supports
@@ -1311,11 +1352,12 @@ def get_all_post_type_supports(post_type=None, *args_):
 #// @param string $feature   The feature being checked.
 #// @return bool Whether the post type supports the given feature.
 #//
-def post_type_supports(post_type=None, feature=None, *args_):
+def post_type_supports(post_type_=None, feature_=None, *_args_):
     
-    global _wp_post_type_features
-    php_check_if_defined("_wp_post_type_features")
-    return (php_isset(lambda : _wp_post_type_features[post_type][feature]))
+    
+    global _wp_post_type_features_
+    php_check_if_defined("_wp_post_type_features_")
+    return (php_isset(lambda : _wp_post_type_features_[post_type_][feature_]))
 # end def post_type_supports
 #// 
 #// Retrieves a list of post type names that support a specific feature.
@@ -1331,12 +1373,13 @@ def post_type_supports(post_type=None, feature=None, *args_):
 #// match. Default 'and'.
 #// @return string[] A list of post type names.
 #//
-def get_post_types_by_support(feature=None, operator="and", *args_):
+def get_post_types_by_support(feature_=None, operator_="and", *_args_):
     
-    global _wp_post_type_features
-    php_check_if_defined("_wp_post_type_features")
-    features = php_array_fill_keys(feature, True)
-    return php_array_keys(wp_filter_object_list(_wp_post_type_features, features, operator))
+    
+    global _wp_post_type_features_
+    php_check_if_defined("_wp_post_type_features_")
+    features_ = php_array_fill_keys(feature_, True)
+    return php_array_keys(wp_filter_object_list(_wp_post_type_features_, features_, operator_))
 # end def get_post_types_by_support
 #// 
 #// Update the post type for the post ID.
@@ -1352,13 +1395,14 @@ def get_post_types_by_support(feature=None, operator="and", *args_):
 #// name a few. Default 'post'.
 #// @return int|false Amount of rows changed. Should be 1 for success and 0 for failure.
 #//
-def set_post_type(post_id=0, post_type="post", *args_):
+def set_post_type(post_id_=0, post_type_="post", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post_type = sanitize_post_field("post_type", post_type, post_id, "db")
-    return_ = wpdb.update(wpdb.posts, Array({"post_type": post_type}), Array({"ID": post_id}))
-    clean_post_cache(post_id)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_type_ = sanitize_post_field("post_type", post_type_, post_id_, "db")
+    return_ = wpdb_.update(wpdb_.posts, Array({"post_type": post_type_}), Array({"ID": post_id_}))
+    clean_post_cache(post_id_)
     return return_
 # end def set_post_type
 #// 
@@ -1374,15 +1418,16 @@ def set_post_type(post_id=0, post_type="post", *args_):
 #// @param string|WP_Post_Type $post_type Post type name or object.
 #// @return bool Whether the post type should be considered viewable.
 #//
-def is_post_type_viewable(post_type=None, *args_):
+def is_post_type_viewable(post_type_=None, *_args_):
     
-    if is_scalar(post_type):
-        post_type = get_post_type_object(post_type)
-        if (not post_type):
+    
+    if is_scalar(post_type_):
+        post_type_ = get_post_type_object(post_type_)
+        if (not post_type_):
             return False
         # end if
     # end if
-    return post_type.publicly_queryable or post_type._builtin and post_type.public
+    return post_type_.publicly_queryable or post_type_._builtin and post_type_.public
 # end def is_post_type_viewable
 #// 
 #// Retrieves an array of the latest posts, or posts matching the given criteria.
@@ -1408,31 +1453,32 @@ def is_post_type_viewable(post_type=None, *args_):
 #// }
 #// @return WP_Post[]|int[] Array of post objects or post IDs.
 #//
-def get_posts(args=None, *args_):
+def get_posts(args_=None, *_args_):
     
-    defaults = Array({"numberposts": 5, "category": 0, "orderby": "date", "order": "DESC", "include": Array(), "exclude": Array(), "meta_key": "", "meta_value": "", "post_type": "post", "suppress_filters": True})
-    parsed_args = wp_parse_args(args, defaults)
-    if php_empty(lambda : parsed_args["post_status"]):
-        parsed_args["post_status"] = "inherit" if "attachment" == parsed_args["post_type"] else "publish"
+    
+    defaults_ = Array({"numberposts": 5, "category": 0, "orderby": "date", "order": "DESC", "include": Array(), "exclude": Array(), "meta_key": "", "meta_value": "", "post_type": "post", "suppress_filters": True})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    if php_empty(lambda : parsed_args_["post_status"]):
+        parsed_args_["post_status"] = "inherit" if "attachment" == parsed_args_["post_type"] else "publish"
     # end if
-    if (not php_empty(lambda : parsed_args["numberposts"])) and php_empty(lambda : parsed_args["posts_per_page"]):
-        parsed_args["posts_per_page"] = parsed_args["numberposts"]
+    if (not php_empty(lambda : parsed_args_["numberposts"])) and php_empty(lambda : parsed_args_["posts_per_page"]):
+        parsed_args_["posts_per_page"] = parsed_args_["numberposts"]
     # end if
-    if (not php_empty(lambda : parsed_args["category"])):
-        parsed_args["cat"] = parsed_args["category"]
+    if (not php_empty(lambda : parsed_args_["category"])):
+        parsed_args_["cat"] = parsed_args_["category"]
     # end if
-    if (not php_empty(lambda : parsed_args["include"])):
-        incposts = wp_parse_id_list(parsed_args["include"])
-        parsed_args["posts_per_page"] = php_count(incposts)
+    if (not php_empty(lambda : parsed_args_["include"])):
+        incposts_ = wp_parse_id_list(parsed_args_["include"])
+        parsed_args_["posts_per_page"] = php_count(incposts_)
         #// Only the number of posts included.
-        parsed_args["post__in"] = incposts
-    elif (not php_empty(lambda : parsed_args["exclude"])):
-        parsed_args["post__not_in"] = wp_parse_id_list(parsed_args["exclude"])
+        parsed_args_["post__in"] = incposts_
+    elif (not php_empty(lambda : parsed_args_["exclude"])):
+        parsed_args_["post__not_in"] = wp_parse_id_list(parsed_args_["exclude"])
     # end if
-    parsed_args["ignore_sticky_posts"] = True
-    parsed_args["no_found_rows"] = True
-    get_posts = php_new_class("WP_Query", lambda : WP_Query())
-    return get_posts.query(parsed_args)
+    parsed_args_["ignore_sticky_posts"] = True
+    parsed_args_["no_found_rows"] = True
+    get_posts_ = php_new_class("WP_Query", lambda : WP_Query())
+    return get_posts_.query(parsed_args_)
 # end def get_posts
 #// 
 #// Post meta functions.
@@ -1451,14 +1497,17 @@ def get_posts(args=None, *args_):
 #// Default false.
 #// @return int|false Meta ID on success, false on failure.
 #//
-def add_post_meta(post_id=None, meta_key=None, meta_value=None, unique=False, *args_):
+def add_post_meta(post_id_=None, meta_key_=None, meta_value_=None, unique_=None, *_args_):
+    if unique_ is None:
+        unique_ = False
+    # end if
     
     #// Make sure meta is added to the post, not a revision.
-    the_post = wp_is_post_revision(post_id)
-    if the_post:
-        post_id = the_post
+    the_post_ = wp_is_post_revision(post_id_)
+    if the_post_:
+        post_id_ = the_post_
     # end if
-    return add_metadata("post", post_id, meta_key, meta_value, unique)
+    return add_metadata("post", post_id_, meta_key_, meta_value_, unique_)
 # end def add_post_meta
 #// 
 #// Deletes a post meta field for the given post ID.
@@ -1475,14 +1524,15 @@ def add_post_meta(post_id=None, meta_key=None, meta_value=None, unique=False, *a
 #// non-scalar. Default empty.
 #// @return bool True on success, false on failure.
 #//
-def delete_post_meta(post_id=None, meta_key=None, meta_value="", *args_):
+def delete_post_meta(post_id_=None, meta_key_=None, meta_value_="", *_args_):
+    
     
     #// Make sure meta is added to the post, not a revision.
-    the_post = wp_is_post_revision(post_id)
-    if the_post:
-        post_id = the_post
+    the_post_ = wp_is_post_revision(post_id_)
+    if the_post_:
+        post_id_ = the_post_
     # end if
-    return delete_metadata("post", post_id, meta_key, meta_value)
+    return delete_metadata("post", post_id_, meta_key_, meta_value_)
 # end def delete_post_meta
 #// 
 #// Retrieves a post meta field for the given post ID.
@@ -1497,9 +1547,12 @@ def delete_post_meta(post_id=None, meta_key=None, meta_value="", *args_):
 #// @return mixed Will be an array if $single is false. Will be value of the meta
 #// field if $single is true.
 #//
-def get_post_meta(post_id=None, key="", single=False, *args_):
+def get_post_meta(post_id_=None, key_="", single_=None, *_args_):
+    if single_ is None:
+        single_ = False
+    # end if
     
-    return get_metadata("post", post_id, key, single)
+    return get_metadata("post", post_id_, key_, single_)
 # end def get_post_meta
 #// 
 #// Updates a post meta field based on the given post ID.
@@ -1520,14 +1573,15 @@ def get_post_meta(post_id=None, key="", single=False, *args_):
 #// @return int|bool The new meta field ID if a field with the given key didn't exist and was
 #// therefore added, true on successful update, false on failure.
 #//
-def update_post_meta(post_id=None, meta_key=None, meta_value=None, prev_value="", *args_):
+def update_post_meta(post_id_=None, meta_key_=None, meta_value_=None, prev_value_="", *_args_):
+    
     
     #// Make sure meta is added to the post, not a revision.
-    the_post = wp_is_post_revision(post_id)
-    if the_post:
-        post_id = the_post
+    the_post_ = wp_is_post_revision(post_id_)
+    if the_post_:
+        post_id_ = the_post_
     # end if
-    return update_metadata("post", post_id, meta_key, meta_value, prev_value)
+    return update_metadata("post", post_id_, meta_key_, meta_value_, prev_value_)
 # end def update_post_meta
 #// 
 #// Deletes everything from post meta matching the given meta key.
@@ -1537,9 +1591,10 @@ def update_post_meta(post_id=None, meta_key=None, meta_value=None, prev_value=""
 #// @param string $post_meta_key Key to search for when deleting.
 #// @return bool Whether the post meta key was deleted from the database.
 #//
-def delete_post_meta_by_key(post_meta_key=None, *args_):
+def delete_post_meta_by_key(post_meta_key_=None, *_args_):
     
-    return delete_metadata("post", None, post_meta_key, "", True)
+    
+    return delete_metadata("post", None, post_meta_key_, "", True)
 # end def delete_post_meta_by_key
 #// 
 #// Registers a meta key for posts.
@@ -1553,10 +1608,11 @@ def delete_post_meta_by_key(post_meta_key=None, *args_):
 #// {@see register_meta()} for a list of supported arguments.
 #// @return bool True if the meta key was successfully registered, false if not.
 #//
-def register_post_meta(post_type=None, meta_key=None, args=None, *args_):
+def register_post_meta(post_type_=None, meta_key_=None, args_=None, *_args_):
     
-    args["object_subtype"] = post_type
-    return register_meta("post", meta_key, args)
+    
+    args_["object_subtype"] = post_type_
+    return register_meta("post", meta_key_, args_)
 # end def register_post_meta
 #// 
 #// Unregisters a meta key for posts.
@@ -1569,9 +1625,10 @@ def register_post_meta(post_type=None, meta_key=None, args=None, *args_):
 #// @param string $meta_key  The meta key to unregister.
 #// @return bool True on success, false if the meta key was not previously registered.
 #//
-def unregister_post_meta(post_type=None, meta_key=None, *args_):
+def unregister_post_meta(post_type_=None, meta_key_=None, *_args_):
     
-    return unregister_meta_key("post", meta_key, post_type)
+    
+    return unregister_meta_key("post", meta_key_, post_type_)
 # end def unregister_post_meta
 #// 
 #// Retrieve post meta fields, based on post ID.
@@ -1584,13 +1641,14 @@ def unregister_post_meta(post_type=None, meta_key=None, *args_):
 #// @param int $post_id Optional. Post ID. Default is ID of the global $post.
 #// @return array Post meta for the given post.
 #//
-def get_post_custom(post_id=0, *args_):
+def get_post_custom(post_id_=0, *_args_):
     
-    post_id = absint(post_id)
-    if (not post_id):
-        post_id = get_the_ID()
+    
+    post_id_ = absint(post_id_)
+    if (not post_id_):
+        post_id_ = get_the_ID()
     # end if
-    return get_post_meta(post_id)
+    return get_post_meta(post_id_)
 # end def get_post_custom
 #// 
 #// Retrieve meta field names for a post.
@@ -1602,15 +1660,16 @@ def get_post_custom(post_id=0, *args_):
 #// @param int $post_id Optional. Post ID. Default is ID of the global $post.
 #// @return array|void Array of the keys, if retrieved.
 #//
-def get_post_custom_keys(post_id=0, *args_):
+def get_post_custom_keys(post_id_=0, *_args_):
     
-    custom = get_post_custom(post_id)
-    if (not php_is_array(custom)):
+    
+    custom_ = get_post_custom(post_id_)
+    if (not php_is_array(custom_)):
         return
     # end if
-    keys = php_array_keys(custom)
-    if keys:
-        return keys
+    keys_ = php_array_keys(custom_)
+    if keys_:
+        return keys_
     # end if
 # end def get_post_custom_keys
 #// 
@@ -1625,13 +1684,14 @@ def get_post_custom_keys(post_id=0, *args_):
 #// @param int    $post_id Optional. Post ID. Default is ID of the global $post.
 #// @return array|null Meta field values.
 #//
-def get_post_custom_values(key="", post_id=0, *args_):
+def get_post_custom_values(key_="", post_id_=0, *_args_):
     
-    if (not key):
+    
+    if (not key_):
         return None
     # end if
-    custom = get_post_custom(post_id)
-    return custom[key] if (php_isset(lambda : custom[key])) else None
+    custom_ = get_post_custom(post_id_)
+    return custom_[key_] if (php_isset(lambda : custom_[key_])) else None
 # end def get_post_custom_values
 #// 
 #// Determines whether a post is sticky.
@@ -1648,14 +1708,15 @@ def get_post_custom_values(key="", post_id=0, *args_):
 #// @param int $post_id Optional. Post ID. Default is ID of the global $post.
 #// @return bool Whether post is sticky.
 #//
-def is_sticky(post_id=0, *args_):
+def is_sticky(post_id_=0, *_args_):
     
-    post_id = absint(post_id)
-    if (not post_id):
-        post_id = get_the_ID()
+    
+    post_id_ = absint(post_id_)
+    if (not post_id_):
+        post_id_ = get_the_ID()
     # end if
-    stickies = get_option("sticky_posts")
-    is_sticky = php_is_array(stickies) and php_in_array(post_id, stickies)
+    stickies_ = get_option("sticky_posts")
+    is_sticky_ = php_is_array(stickies_) and php_in_array(post_id_, stickies_)
     #// 
     #// Filters whether a post is sticky.
     #// 
@@ -1664,7 +1725,7 @@ def is_sticky(post_id=0, *args_):
     #// @param bool $is_sticky Whether a post is sticky.
     #// @param int  $post_id   Post ID.
     #//
-    return apply_filters("is_sticky", is_sticky, post_id)
+    return apply_filters("is_sticky", is_sticky_, post_id_)
 # end def is_sticky
 #// 
 #// Sanitize every post field.
@@ -1683,34 +1744,35 @@ def is_sticky(post_id=0, *args_):
 #// @return object|WP_Post|array The now sanitized Post Object or Array (will be the
 #// same type as $post).
 #//
-def sanitize_post(post=None, context="display", *args_):
+def sanitize_post(post_=None, context_="display", *_args_):
     
-    if php_is_object(post):
+    
+    if php_is_object(post_):
         #// Check if post already filtered for this context.
-        if (php_isset(lambda : post.filter)) and context == post.filter:
-            return post
+        if (php_isset(lambda : post_.filter)) and context_ == post_.filter:
+            return post_
         # end if
-        if (not (php_isset(lambda : post.ID))):
-            post.ID = 0
+        if (not (php_isset(lambda : post_.ID))):
+            post_.ID = 0
         # end if
-        for field in php_array_keys(get_object_vars(post)):
-            post.field = sanitize_post_field(field, post.field, post.ID, context)
+        for field_ in php_array_keys(get_object_vars(post_)):
+            post_.field_ = sanitize_post_field(field_, post_.field_, post_.ID, context_)
         # end for
-        post.filter = context
-    elif php_is_array(post):
+        post_.filter = context_
+    elif php_is_array(post_):
         #// Check if post already filtered for this context.
-        if (php_isset(lambda : post["filter"])) and context == post["filter"]:
-            return post
+        if (php_isset(lambda : post_["filter"])) and context_ == post_["filter"]:
+            return post_
         # end if
-        if (not (php_isset(lambda : post["ID"]))):
-            post["ID"] = 0
+        if (not (php_isset(lambda : post_["ID"]))):
+            post_["ID"] = 0
         # end if
-        for field in php_array_keys(post):
-            post[field] = sanitize_post_field(field, post[field], post["ID"], context)
+        for field_ in php_array_keys(post_):
+            post_[field_] = sanitize_post_field(field_, post_[field_], post_["ID"], context_)
         # end for
-        post["filter"] = context
+        post_["filter"] = context_
     # end if
-    return post
+    return post_
 # end def sanitize_post
 #// 
 #// Sanitize post field based on context.
@@ -1729,29 +1791,30 @@ def sanitize_post(post=None, context="display", *args_):
 #// 'db', 'display', 'attribute' and 'js'. Default 'display'.
 #// @return mixed Sanitized value.
 #//
-def sanitize_post_field(field=None, value=None, post_id=None, context="display", *args_):
+def sanitize_post_field(field_=None, value_=None, post_id_=None, context_="display", *_args_):
     
-    int_fields = Array("ID", "post_parent", "menu_order")
-    if php_in_array(field, int_fields):
-        value = php_int(value)
+    
+    int_fields_ = Array("ID", "post_parent", "menu_order")
+    if php_in_array(field_, int_fields_):
+        value_ = php_int(value_)
     # end if
     #// Fields which contain arrays of integers.
-    array_int_fields = Array("ancestors")
-    if php_in_array(field, array_int_fields):
-        value = php_array_map("absint", value)
-        return value
+    array_int_fields_ = Array("ancestors")
+    if php_in_array(field_, array_int_fields_):
+        value_ = php_array_map("absint", value_)
+        return value_
     # end if
-    if "raw" == context:
-        return value
+    if "raw" == context_:
+        return value_
     # end if
-    prefixed = False
-    if False != php_strpos(field, "post_"):
-        prefixed = True
-        field_no_prefix = php_str_replace("post_", "", field)
+    prefixed_ = False
+    if False != php_strpos(field_, "post_"):
+        prefixed_ = True
+        field_no_prefix_ = php_str_replace("post_", "", field_)
     # end if
-    if "edit" == context:
-        format_to_edit = Array("post_content", "post_excerpt", "post_title", "post_password")
-        if prefixed:
+    if "edit" == context_:
+        format_to_edit_ = Array("post_content", "post_excerpt", "post_title", "post_password")
+        if prefixed_:
             #// 
             #// Filters the value of a specific post field to edit.
             #// 
@@ -1763,7 +1826,7 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
             #// @param mixed $value   Value of the post field.
             #// @param int   $post_id Post ID.
             #//
-            value = apply_filters(str("edit_") + str(field), value, post_id)
+            value_ = apply_filters(str("edit_") + str(field_), value_, post_id_)
             #// 
             #// Filters the value of a specific post field to edit.
             #// 
@@ -1775,21 +1838,21 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
             #// @param mixed $value   Value of the post field.
             #// @param int   $post_id Post ID.
             #//
-            value = apply_filters(str(field_no_prefix) + str("_edit_pre"), value, post_id)
+            value_ = apply_filters(str(field_no_prefix_) + str("_edit_pre"), value_, post_id_)
         else:
-            value = apply_filters(str("edit_post_") + str(field), value, post_id)
+            value_ = apply_filters(str("edit_post_") + str(field_), value_, post_id_)
         # end if
-        if php_in_array(field, format_to_edit):
-            if "post_content" == field:
-                value = format_to_edit(value, user_can_richedit())
+        if php_in_array(field_, format_to_edit_):
+            if "post_content" == field_:
+                value_ = format_to_edit(value_, user_can_richedit())
             else:
-                value = format_to_edit(value)
+                value_ = format_to_edit(value_)
             # end if
         else:
-            value = esc_attr(value)
+            value_ = esc_attr(value_)
         # end if
-    elif "db" == context:
-        if prefixed:
+    elif "db" == context_:
+        if prefixed_:
             #// 
             #// Filters the value of a specific post field before saving.
             #// 
@@ -1800,7 +1863,7 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
             #// 
             #// @param mixed $value Value of the post field.
             #//
-            value = apply_filters(str("pre_") + str(field), value)
+            value_ = apply_filters(str("pre_") + str(field_), value_)
             #// 
             #// Filters the value of a specific field before saving.
             #// 
@@ -1811,9 +1874,9 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
             #// 
             #// @param mixed $value Value of the post field.
             #//
-            value = apply_filters(str(field_no_prefix) + str("_save_pre"), value)
+            value_ = apply_filters(str(field_no_prefix_) + str("_save_pre"), value_)
         else:
-            value = apply_filters(str("pre_post_") + str(field), value)
+            value_ = apply_filters(str("pre_post_") + str(field_), value_)
             #// 
             #// Filters the value of a specific post field before saving.
             #// 
@@ -1824,11 +1887,11 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
             #// 
             #// @param mixed $value Value of the post field.
             #//
-            value = apply_filters(str(field) + str("_pre"), value)
+            value_ = apply_filters(str(field_) + str("_pre"), value_)
         # end if
     else:
         #// Use display filters by default.
-        if prefixed:
+        if prefixed_:
             #// 
             #// Filters the value of a specific post field for display.
             #// 
@@ -1843,17 +1906,17 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
             #// values include 'raw', 'edit', 'db', 'display',
             #// 'attribute' and 'js'.
             #//
-            value = apply_filters(str(field), value, post_id, context)
+            value_ = apply_filters(str(field_), value_, post_id_, context_)
         else:
-            value = apply_filters(str("post_") + str(field), value, post_id, context)
+            value_ = apply_filters(str("post_") + str(field_), value_, post_id_, context_)
         # end if
-        if "attribute" == context:
-            value = esc_attr(value)
-        elif "js" == context:
-            value = esc_js(value)
+        if "attribute" == context_:
+            value_ = esc_attr(value_)
+        elif "js" == context_:
+            value_ = esc_js(value_)
         # end if
     # end if
-    return value
+    return value_
 # end def sanitize_post_field
 #// 
 #// Make a post sticky.
@@ -1864,17 +1927,18 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
 #// 
 #// @param int $post_id Post ID.
 #//
-def stick_post(post_id=None, *args_):
+def stick_post(post_id_=None, *_args_):
     
-    stickies = get_option("sticky_posts")
-    if (not php_is_array(stickies)):
-        stickies = Array(post_id)
+    
+    stickies_ = get_option("sticky_posts")
+    if (not php_is_array(stickies_)):
+        stickies_ = Array(post_id_)
     # end if
-    if (not php_in_array(post_id, stickies)):
-        stickies[-1] = post_id
+    if (not php_in_array(post_id_, stickies_)):
+        stickies_[-1] = post_id_
     # end if
-    updated = update_option("sticky_posts", stickies)
-    if updated:
+    updated_ = update_option("sticky_posts", stickies_)
+    if updated_:
         #// 
         #// Fires once a post has been added to the sticky list.
         #// 
@@ -1882,7 +1946,7 @@ def stick_post(post_id=None, *args_):
         #// 
         #// @param int $post_id ID of the post that was stuck.
         #//
-        do_action("post_stuck", post_id)
+        do_action("post_stuck", post_id_)
     # end if
 # end def stick_post
 #// 
@@ -1894,22 +1958,23 @@ def stick_post(post_id=None, *args_):
 #// 
 #// @param int $post_id Post ID.
 #//
-def unstick_post(post_id=None, *args_):
+def unstick_post(post_id_=None, *_args_):
     
-    stickies = get_option("sticky_posts")
-    if (not php_is_array(stickies)):
+    
+    stickies_ = get_option("sticky_posts")
+    if (not php_is_array(stickies_)):
         return
     # end if
-    if (not php_in_array(post_id, stickies)):
+    if (not php_in_array(post_id_, stickies_)):
         return
     # end if
-    offset = php_array_search(post_id, stickies)
-    if False == offset:
+    offset_ = php_array_search(post_id_, stickies_)
+    if False == offset_:
         return
     # end if
-    array_splice(stickies, offset, 1)
-    updated = update_option("sticky_posts", stickies)
-    if updated:
+    array_splice(stickies_, offset_, 1)
+    updated_ = update_option("sticky_posts", stickies_)
+    if updated_:
         #// 
         #// Fires once a post has been removed from the sticky list.
         #// 
@@ -1917,7 +1982,7 @@ def unstick_post(post_id=None, *args_):
         #// 
         #// @param int $post_id ID of the post that was unstuck.
         #//
-        do_action("post_unstuck", post_id)
+        do_action("post_unstuck", post_id_)
     # end if
 # end def unstick_post
 #// 
@@ -1930,16 +1995,17 @@ def unstick_post(post_id=None, *args_):
 #// @param string $perm Optional. 'readable' or empty. Default empty.
 #// @return string The cache key.
 #//
-def _count_posts_cache_key(type="post", perm="", *args_):
+def _count_posts_cache_key(type_="post", perm_="", *_args_):
     
-    cache_key = "posts-" + type
-    if "readable" == perm and is_user_logged_in():
-        post_type_object = get_post_type_object(type)
-        if post_type_object and (not current_user_can(post_type_object.cap.read_private_posts)):
-            cache_key += "_" + perm + "_" + get_current_user_id()
+    
+    cache_key_ = "posts-" + type_
+    if "readable" == perm_ and is_user_logged_in():
+        post_type_object_ = get_post_type_object(type_)
+        if post_type_object_ and (not current_user_can(post_type_object_.cap.read_private_posts)):
+            cache_key_ += "_" + perm_ + "_" + get_current_user_id()
         # end if
     # end if
-    return cache_key
+    return cache_key_
 # end def _count_posts_cache_key
 #// 
 #// Count number of posts of a post type and if user has permissions to view.
@@ -1960,34 +2026,35 @@ def _count_posts_cache_key(type="post", perm="", *args_):
 #// @param string $perm Optional. 'readable' or empty. Default empty.
 #// @return object Number of posts for each status.
 #//
-def wp_count_posts(type="post", perm="", *args_):
+def wp_count_posts(type_="post", perm_="", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not post_type_exists(type)):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not post_type_exists(type_)):
         return php_new_class("stdClass", lambda : stdClass())
     # end if
-    cache_key = _count_posts_cache_key(type, perm)
-    counts = wp_cache_get(cache_key, "counts")
-    if False != counts:
+    cache_key_ = _count_posts_cache_key(type_, perm_)
+    counts_ = wp_cache_get(cache_key_, "counts")
+    if False != counts_:
         #// This filter is documented in wp-includes/post.php
-        return apply_filters("wp_count_posts", counts, type, perm)
+        return apply_filters("wp_count_posts", counts_, type_, perm_)
     # end if
-    query = str("SELECT post_status, COUNT( * ) AS num_posts FROM ") + str(wpdb.posts) + str(" WHERE post_type = %s")
-    if "readable" == perm and is_user_logged_in():
-        post_type_object = get_post_type_object(type)
-        if (not current_user_can(post_type_object.cap.read_private_posts)):
-            query += wpdb.prepare(" AND (post_status != 'private' OR ( post_author = %d AND post_status = 'private' ))", get_current_user_id())
+    query_ = str("SELECT post_status, COUNT( * ) AS num_posts FROM ") + str(wpdb_.posts) + str(" WHERE post_type = %s")
+    if "readable" == perm_ and is_user_logged_in():
+        post_type_object_ = get_post_type_object(type_)
+        if (not current_user_can(post_type_object_.cap.read_private_posts)):
+            query_ += wpdb_.prepare(" AND (post_status != 'private' OR ( post_author = %d AND post_status = 'private' ))", get_current_user_id())
         # end if
     # end if
-    query += " GROUP BY post_status"
-    results = wpdb.get_results(wpdb.prepare(query, type), ARRAY_A)
-    counts = php_array_fill_keys(get_post_stati(), 0)
-    for row in results:
-        counts[row["post_status"]] = row["num_posts"]
+    query_ += " GROUP BY post_status"
+    results_ = wpdb_.get_results(wpdb_.prepare(query_, type_), ARRAY_A)
+    counts_ = php_array_fill_keys(get_post_stati(), 0)
+    for row_ in results_:
+        counts_[row_["post_status"]] = row_["num_posts"]
     # end for
-    counts = counts
-    wp_cache_set(cache_key, counts, "counts")
+    counts_ = counts_
+    wp_cache_set(cache_key_, counts_, "counts")
     #// 
     #// Modify returned post counts by status for the current post type.
     #// 
@@ -1999,7 +2066,7 @@ def wp_count_posts(type="post", perm="", *args_):
     #// @param string $perm   The permission to determine if the posts are 'readable'
     #// by the current user.
     #//
-    return apply_filters("wp_count_posts", counts, type, perm)
+    return apply_filters("wp_count_posts", counts_, type_, perm_)
 # end def wp_count_posts
 #// 
 #// Count number of attachments for the mime type(s).
@@ -2017,17 +2084,18 @@ def wp_count_posts(type="post", perm="", *args_):
 #// MIME patterns. Default empty.
 #// @return object An object containing the attachment counts by mime type.
 #//
-def wp_count_attachments(mime_type="", *args_):
+def wp_count_attachments(mime_type_="", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    and_ = wp_post_mime_type_where(mime_type)
-    count = wpdb.get_results(str("SELECT post_mime_type, COUNT( * ) AS num_posts FROM ") + str(wpdb.posts) + str(" WHERE post_type = 'attachment' AND post_status != 'trash' ") + str(and_) + str(" GROUP BY post_mime_type"), ARRAY_A)
-    counts = Array()
-    for row in count:
-        counts[row["post_mime_type"]] = row["num_posts"]
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    and_ = wp_post_mime_type_where(mime_type_)
+    count_ = wpdb_.get_results(str("SELECT post_mime_type, COUNT( * ) AS num_posts FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'attachment' AND post_status != 'trash' ") + str(and_) + str(" GROUP BY post_mime_type"), ARRAY_A)
+    counts_ = Array()
+    for row_ in count_:
+        counts_[row_["post_mime_type"]] = row_["num_posts"]
     # end for
-    counts["trash"] = wpdb.get_var(str("SELECT COUNT( * ) FROM ") + str(wpdb.posts) + str(" WHERE post_type = 'attachment' AND post_status = 'trash' ") + str(and_))
+    counts_["trash"] = wpdb_.get_var(str("SELECT COUNT( * ) FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'attachment' AND post_status = 'trash' ") + str(and_))
     #// 
     #// Modify returned attachment counts by mime type.
     #// 
@@ -2038,7 +2106,7 @@ def wp_count_attachments(mime_type="", *args_):
     #// @param string $mime_type The mime type pattern used to filter the attachments
     #// counted.
     #//
-    return apply_filters("wp_count_attachments", counts, mime_type)
+    return apply_filters("wp_count_attachments", counts_, mime_type_)
 # end def wp_count_attachments
 #// 
 #// Get default post mime types.
@@ -2048,31 +2116,32 @@ def wp_count_attachments(mime_type="", *args_):
 #// 
 #// @return array List of post mime types.
 #//
-def get_post_mime_types(*args_):
+def get_post_mime_types(*_args_):
     
-    post_mime_types = Array({"image": Array(__("Images"), __("Manage Images"), _n_noop("Image <span class=\"count\">(%s)</span>", "Images <span class=\"count\">(%s)</span>")), "audio": Array(__("Audio"), __("Manage Audio"), _n_noop("Audio <span class=\"count\">(%s)</span>", "Audio <span class=\"count\">(%s)</span>")), "video": Array(__("Video"), __("Manage Video"), _n_noop("Video <span class=\"count\">(%s)</span>", "Video <span class=\"count\">(%s)</span>")), "document": Array(__("Documents"), __("Manage Documents"), _n_noop("Document <span class=\"count\">(%s)</span>", "Documents <span class=\"count\">(%s)</span>")), "spreadsheet": Array(__("Spreadsheets"), __("Manage Spreadsheets"), _n_noop("Spreadsheet <span class=\"count\">(%s)</span>", "Spreadsheets <span class=\"count\">(%s)</span>")), "archive": Array(_x("Archives", "file type group"), __("Manage Archives"), _n_noop("Archive <span class=\"count\">(%s)</span>", "Archives <span class=\"count\">(%s)</span>"))})
-    ext_types = wp_get_ext_types()
-    mime_types = wp_get_mime_types()
-    for group,labels in post_mime_types:
-        if php_in_array(group, Array("image", "audio", "video")):
+    
+    post_mime_types_ = Array({"image": Array(__("Images"), __("Manage Images"), _n_noop("Image <span class=\"count\">(%s)</span>", "Images <span class=\"count\">(%s)</span>")), "audio": Array(__("Audio"), __("Manage Audio"), _n_noop("Audio <span class=\"count\">(%s)</span>", "Audio <span class=\"count\">(%s)</span>")), "video": Array(__("Video"), __("Manage Video"), _n_noop("Video <span class=\"count\">(%s)</span>", "Video <span class=\"count\">(%s)</span>")), "document": Array(__("Documents"), __("Manage Documents"), _n_noop("Document <span class=\"count\">(%s)</span>", "Documents <span class=\"count\">(%s)</span>")), "spreadsheet": Array(__("Spreadsheets"), __("Manage Spreadsheets"), _n_noop("Spreadsheet <span class=\"count\">(%s)</span>", "Spreadsheets <span class=\"count\">(%s)</span>")), "archive": Array(_x("Archives", "file type group"), __("Manage Archives"), _n_noop("Archive <span class=\"count\">(%s)</span>", "Archives <span class=\"count\">(%s)</span>"))})
+    ext_types_ = wp_get_ext_types()
+    mime_types_ = wp_get_mime_types()
+    for group_,labels_ in post_mime_types_:
+        if php_in_array(group_, Array("image", "audio", "video")):
             continue
         # end if
-        if (not (php_isset(lambda : ext_types[group]))):
-            post_mime_types[group] = None
+        if (not (php_isset(lambda : ext_types_[group_]))):
+            post_mime_types_[group_] = None
             continue
         # end if
-        group_mime_types = Array()
-        for extension in ext_types[group]:
-            for exts,mime in mime_types:
-                if php_preg_match("!^(" + exts + ")$!i", extension):
-                    group_mime_types[-1] = mime
+        group_mime_types_ = Array()
+        for extension_ in ext_types_[group_]:
+            for exts_,mime_ in mime_types_:
+                if php_preg_match("!^(" + exts_ + ")$!i", extension_):
+                    group_mime_types_[-1] = mime_
                     break
                 # end if
             # end for
         # end for
-        group_mime_types = php_implode(",", array_unique(group_mime_types))
-        post_mime_types[group_mime_types] = labels
-        post_mime_types[group] = None
+        group_mime_types_ = php_implode(",", array_unique(group_mime_types_))
+        post_mime_types_[group_mime_types_] = labels_
+        post_mime_types_[group_] = None
     # end for
     #// 
     #// Filters the default list of post mime types.
@@ -2081,7 +2150,7 @@ def get_post_mime_types(*args_):
     #// 
     #// @param array $post_mime_types Default list of post mime types.
     #//
-    return apply_filters("post_mime_types", post_mime_types)
+    return apply_filters("post_mime_types", post_mime_types_)
 # end def get_post_mime_types
 #// 
 #// Check a MIME-Type against a list.
@@ -2097,39 +2166,40 @@ def get_post_mime_types(*args_):
 #// @param string|array $real_mime_types     Real post mime type values.
 #// @return array array(wildcard=>array(real types)).
 #//
-def wp_match_mime_types(wildcard_mime_types=None, real_mime_types=None, *args_):
+def wp_match_mime_types(wildcard_mime_types_=None, real_mime_types_=None, *_args_):
     
-    matches = Array()
-    if php_is_string(wildcard_mime_types):
-        wildcard_mime_types = php_array_map("trim", php_explode(",", wildcard_mime_types))
+    
+    matches_ = Array()
+    if php_is_string(wildcard_mime_types_):
+        wildcard_mime_types_ = php_array_map("trim", php_explode(",", wildcard_mime_types_))
     # end if
-    if php_is_string(real_mime_types):
-        real_mime_types = php_array_map("trim", php_explode(",", real_mime_types))
+    if php_is_string(real_mime_types_):
+        real_mime_types_ = php_array_map("trim", php_explode(",", real_mime_types_))
     # end if
-    patternses = Array()
-    wild = "[-._a-z0-9]*"
-    for type in wildcard_mime_types:
-        mimes = php_array_map("trim", php_explode(",", type))
-        for mime in mimes:
-            regex = php_str_replace("__wildcard__", wild, preg_quote(php_str_replace("*", "__wildcard__", mime)))
-            patternses[-1][type] = str("^") + str(regex) + str("$")
-            if False == php_strpos(mime, "/"):
-                patternses[-1][type] = str("^") + str(regex) + str("/")
-                patternses[-1][type] = regex
+    patternses_ = Array()
+    wild_ = "[-._a-z0-9]*"
+    for type_ in wildcard_mime_types_:
+        mimes_ = php_array_map("trim", php_explode(",", type_))
+        for mime_ in mimes_:
+            regex_ = php_str_replace("__wildcard__", wild_, preg_quote(php_str_replace("*", "__wildcard__", mime_)))
+            patternses_[-1][type_] = str("^") + str(regex_) + str("$")
+            if False == php_strpos(mime_, "/"):
+                patternses_[-1][type_] = str("^") + str(regex_) + str("/")
+                patternses_[-1][type_] = regex_
             # end if
         # end for
     # end for
-    asort(patternses)
-    for patterns in patternses:
-        for type,pattern in patterns:
-            for real in real_mime_types:
-                if php_preg_match(str("#") + str(pattern) + str("#"), real) and php_empty(lambda : matches[type]) or False == php_array_search(real, matches[type]):
-                    matches[type][-1] = real
+    asort(patternses_)
+    for patterns_ in patternses_:
+        for type_,pattern_ in patterns_:
+            for real_ in real_mime_types_:
+                if php_preg_match(str("#") + str(pattern_) + str("#"), real_) and php_empty(lambda : matches_[type_]) or False == php_array_search(real_, matches_[type_]):
+                    matches_[type_][-1] = real_
                 # end if
             # end for
         # end for
     # end for
-    return matches
+    return matches_
 # end def wp_match_mime_types
 #// 
 #// Convert MIME types into SQL.
@@ -2142,46 +2212,47 @@ def wp_match_mime_types(wildcard_mime_types=None, real_mime_types=None, *args_):
 #// Default empty.
 #// @return string The SQL AND clause for mime searching.
 #//
-def wp_post_mime_type_where(post_mime_types=None, table_alias="", *args_):
+def wp_post_mime_type_where(post_mime_types_=None, table_alias_="", *_args_):
     
-    where = ""
-    wildcards = Array("", "%", "%/%")
-    if php_is_string(post_mime_types):
-        post_mime_types = php_array_map("trim", php_explode(",", post_mime_types))
+    
+    where_ = ""
+    wildcards_ = Array("", "%", "%/%")
+    if php_is_string(post_mime_types_):
+        post_mime_types_ = php_array_map("trim", php_explode(",", post_mime_types_))
     # end if
-    wheres = Array()
-    for mime_type in post_mime_types:
-        mime_type = php_preg_replace("/\\s/", "", mime_type)
-        slashpos = php_strpos(mime_type, "/")
-        if False != slashpos:
-            mime_group = php_preg_replace("/[^-*.a-zA-Z0-9]/", "", php_substr(mime_type, 0, slashpos))
-            mime_subgroup = php_preg_replace("/[^-*.+a-zA-Z0-9]/", "", php_substr(mime_type, slashpos + 1))
-            if php_empty(lambda : mime_subgroup):
-                mime_subgroup = "*"
+    wheres_ = Array()
+    for mime_type_ in post_mime_types_:
+        mime_type_ = php_preg_replace("/\\s/", "", mime_type_)
+        slashpos_ = php_strpos(mime_type_, "/")
+        if False != slashpos_:
+            mime_group_ = php_preg_replace("/[^-*.a-zA-Z0-9]/", "", php_substr(mime_type_, 0, slashpos_))
+            mime_subgroup_ = php_preg_replace("/[^-*.+a-zA-Z0-9]/", "", php_substr(mime_type_, slashpos_ + 1))
+            if php_empty(lambda : mime_subgroup_):
+                mime_subgroup_ = "*"
             else:
-                mime_subgroup = php_str_replace("/", "", mime_subgroup)
+                mime_subgroup_ = php_str_replace("/", "", mime_subgroup_)
             # end if
-            mime_pattern = str(mime_group) + str("/") + str(mime_subgroup)
+            mime_pattern_ = str(mime_group_) + str("/") + str(mime_subgroup_)
         else:
-            mime_pattern = php_preg_replace("/[^-*.a-zA-Z0-9]/", "", mime_type)
-            if False == php_strpos(mime_pattern, "*"):
-                mime_pattern += "/*"
+            mime_pattern_ = php_preg_replace("/[^-*.a-zA-Z0-9]/", "", mime_type_)
+            if False == php_strpos(mime_pattern_, "*"):
+                mime_pattern_ += "/*"
             # end if
         # end if
-        mime_pattern = php_preg_replace("/\\*+/", "%", mime_pattern)
-        if php_in_array(mime_type, wildcards):
+        mime_pattern_ = php_preg_replace("/\\*+/", "%", mime_pattern_)
+        if php_in_array(mime_type_, wildcards_):
             return ""
         # end if
-        if False != php_strpos(mime_pattern, "%"):
-            wheres[-1] = str("post_mime_type LIKE '") + str(mime_pattern) + str("'") if php_empty(lambda : table_alias) else str(table_alias) + str(".post_mime_type LIKE '") + str(mime_pattern) + str("'")
+        if False != php_strpos(mime_pattern_, "%"):
+            wheres_[-1] = str("post_mime_type LIKE '") + str(mime_pattern_) + str("'") if php_empty(lambda : table_alias_) else str(table_alias_) + str(".post_mime_type LIKE '") + str(mime_pattern_) + str("'")
         else:
-            wheres[-1] = str("post_mime_type = '") + str(mime_pattern) + str("'") if php_empty(lambda : table_alias) else str(table_alias) + str(".post_mime_type = '") + str(mime_pattern) + str("'")
+            wheres_[-1] = str("post_mime_type = '") + str(mime_pattern_) + str("'") if php_empty(lambda : table_alias_) else str(table_alias_) + str(".post_mime_type = '") + str(mime_pattern_) + str("'")
         # end if
     # end for
-    if (not php_empty(lambda : wheres)):
-        where = " AND (" + join(" OR ", wheres) + ") "
+    if (not php_empty(lambda : wheres_)):
+        where_ = " AND (" + join(" OR ", wheres_) + ") "
     # end if
-    return where
+    return where_
 # end def wp_post_mime_type_where
 #// 
 #// Trash or delete a post or page.
@@ -2204,20 +2275,23 @@ def wp_post_mime_type_where(post_mime_types=None, table_alias="", *args_):
 #// Default false.
 #// @return WP_Post|false|null Post data on success, false or null on failure.
 #//
-def wp_delete_post(postid=0, force_delete=False, *args_):
+def wp_delete_post(postid_=0, force_delete_=None, *_args_):
+    if force_delete_ is None:
+        force_delete_ = False
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.posts) + str(" WHERE ID = %d"), postid))
-    if (not post):
-        return post
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = wpdb_.get_row(wpdb_.prepare(str("SELECT * FROM ") + str(wpdb_.posts) + str(" WHERE ID = %d"), postid_))
+    if (not post_):
+        return post_
     # end if
-    post = get_post(post)
-    if (not force_delete) and "post" == post.post_type or "page" == post.post_type and "trash" != get_post_status(postid) and EMPTY_TRASH_DAYS:
-        return wp_trash_post(postid)
+    post_ = get_post(post_)
+    if (not force_delete_) and "post" == post_.post_type or "page" == post_.post_type and "trash" != get_post_status(postid_) and EMPTY_TRASH_DAYS:
+        return wp_trash_post(postid_)
     # end if
-    if "attachment" == post.post_type:
-        return wp_delete_attachment(postid, force_delete)
+    if "attachment" == post_.post_type:
+        return wp_delete_attachment(postid_, force_delete_)
     # end if
     #// 
     #// Filters whether a post deletion should take place.
@@ -2228,9 +2302,9 @@ def wp_delete_post(postid=0, force_delete=False, *args_):
     #// @param WP_Post   $post         Post object.
     #// @param bool      $force_delete Whether to bypass the Trash.
     #//
-    check = apply_filters("pre_delete_post", None, post, force_delete)
-    if None != check:
-        return check
+    check_ = apply_filters("pre_delete_post", None, post_, force_delete_)
+    if None != check_:
+        return check_
     # end if
     #// 
     #// Fires before a post is deleted, at the start of wp_delete_post().
@@ -2241,37 +2315,37 @@ def wp_delete_post(postid=0, force_delete=False, *args_):
     #// 
     #// @param int $postid Post ID.
     #//
-    do_action("before_delete_post", postid)
-    delete_post_meta(postid, "_wp_trash_meta_status")
-    delete_post_meta(postid, "_wp_trash_meta_time")
-    wp_delete_object_term_relationships(postid, get_object_taxonomies(post.post_type))
-    parent_data = Array({"post_parent": post.post_parent})
-    parent_where = Array({"post_parent": postid})
-    if is_post_type_hierarchical(post.post_type):
+    do_action("before_delete_post", postid_)
+    delete_post_meta(postid_, "_wp_trash_meta_status")
+    delete_post_meta(postid_, "_wp_trash_meta_time")
+    wp_delete_object_term_relationships(postid_, get_object_taxonomies(post_.post_type))
+    parent_data_ = Array({"post_parent": post_.post_parent})
+    parent_where_ = Array({"post_parent": postid_})
+    if is_post_type_hierarchical(post_.post_type):
         #// Point children of this page to its parent, also clean the cache of affected children.
-        children_query = wpdb.prepare(str("SELECT * FROM ") + str(wpdb.posts) + str(" WHERE post_parent = %d AND post_type = %s"), postid, post.post_type)
-        children = wpdb.get_results(children_query)
-        if children:
-            wpdb.update(wpdb.posts, parent_data, parent_where + Array({"post_type": post.post_type}))
+        children_query_ = wpdb_.prepare(str("SELECT * FROM ") + str(wpdb_.posts) + str(" WHERE post_parent = %d AND post_type = %s"), postid_, post_.post_type)
+        children_ = wpdb_.get_results(children_query_)
+        if children_:
+            wpdb_.update(wpdb_.posts, parent_data_, parent_where_ + Array({"post_type": post_.post_type}))
         # end if
     # end if
     #// Do raw query. wp_get_post_revisions() is filtered.
-    revision_ids = wpdb.get_col(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.posts) + str(" WHERE post_parent = %d AND post_type = 'revision'"), postid))
+    revision_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT ID FROM ") + str(wpdb_.posts) + str(" WHERE post_parent = %d AND post_type = 'revision'"), postid_))
     #// Use wp_delete_post (via wp_delete_post_revision) again. Ensures any meta/misplaced data gets cleaned up.
-    for revision_id in revision_ids:
-        wp_delete_post_revision(revision_id)
+    for revision_id_ in revision_ids_:
+        wp_delete_post_revision(revision_id_)
     # end for
     #// Point all attachments to this post up one level.
-    wpdb.update(wpdb.posts, parent_data, parent_where + Array({"post_type": "attachment"}))
+    wpdb_.update(wpdb_.posts, parent_data_, parent_where_ + Array({"post_type": "attachment"}))
     wp_defer_comment_counting(True)
-    comment_ids = wpdb.get_col(wpdb.prepare(str("SELECT comment_ID FROM ") + str(wpdb.comments) + str(" WHERE comment_post_ID = %d"), postid))
-    for comment_id in comment_ids:
-        wp_delete_comment(comment_id, True)
+    comment_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT comment_ID FROM ") + str(wpdb_.comments) + str(" WHERE comment_post_ID = %d"), postid_))
+    for comment_id_ in comment_ids_:
+        wp_delete_comment(comment_id_, True)
     # end for
     wp_defer_comment_counting(False)
-    post_meta_ids = wpdb.get_col(wpdb.prepare(str("SELECT meta_id FROM ") + str(wpdb.postmeta) + str(" WHERE post_id = %d "), postid))
-    for mid in post_meta_ids:
-        delete_metadata_by_mid("post", mid)
+    post_meta_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT meta_id FROM ") + str(wpdb_.postmeta) + str(" WHERE post_id = %d "), postid_))
+    for mid_ in post_meta_ids_:
+        delete_metadata_by_mid("post", mid_)
     # end for
     #// 
     #// Fires immediately before a post is deleted from the database.
@@ -2280,9 +2354,9 @@ def wp_delete_post(postid=0, force_delete=False, *args_):
     #// 
     #// @param int $postid Post ID.
     #//
-    do_action("delete_post", postid)
-    result = wpdb.delete(wpdb.posts, Array({"ID": postid}))
-    if (not result):
+    do_action("delete_post", postid_)
+    result_ = wpdb_.delete(wpdb_.posts, Array({"ID": postid_}))
+    if (not result_):
         return False
     # end if
     #// 
@@ -2292,14 +2366,14 @@ def wp_delete_post(postid=0, force_delete=False, *args_):
     #// 
     #// @param int $postid Post ID.
     #//
-    do_action("deleted_post", postid)
-    clean_post_cache(post)
-    if is_post_type_hierarchical(post.post_type) and children:
-        for child in children:
-            clean_post_cache(child)
+    do_action("deleted_post", postid_)
+    clean_post_cache(post_)
+    if is_post_type_hierarchical(post_.post_type) and children_:
+        for child_ in children_:
+            clean_post_cache(child_)
         # end for
     # end if
-    wp_clear_scheduled_hook("publish_future_post", Array(postid))
+    wp_clear_scheduled_hook("publish_future_post", Array(postid_))
     #// 
     #// Fires after a post is deleted, at the conclusion of wp_delete_post().
     #// 
@@ -2309,8 +2383,8 @@ def wp_delete_post(postid=0, force_delete=False, *args_):
     #// 
     #// @param int $postid Post ID.
     #//
-    do_action("after_delete_post", postid)
-    return post
+    do_action("after_delete_post", postid_)
+    return post_
 # end def wp_delete_post
 #// 
 #// Reset the page_on_front, show_on_front, and page_for_post settings when
@@ -2323,23 +2397,24 @@ def wp_delete_post(postid=0, force_delete=False, *args_):
 #// 
 #// @param int $post_id Post ID.
 #//
-def _reset_front_page_settings_for_post(post_id=None, *args_):
+def _reset_front_page_settings_for_post(post_id_=None, *_args_):
     
-    post = get_post(post_id)
-    if "page" == post.post_type:
+    
+    post_ = get_post(post_id_)
+    if "page" == post_.post_type:
         #// 
         #// If the page is defined in option page_on_front or post_for_posts,
         #// adjust the corresponding options.
         #//
-        if get_option("page_on_front") == post.ID:
+        if get_option("page_on_front") == post_.ID:
             update_option("show_on_front", "posts")
             update_option("page_on_front", 0)
         # end if
-        if get_option("page_for_posts") == post.ID:
+        if get_option("page_for_posts") == post_.ID:
             update_option("page_for_posts", 0)
         # end if
     # end if
-    unstick_post(post.ID)
+    unstick_post(post_.ID)
 # end def _reset_front_page_settings_for_post
 #// 
 #// Move a post or page to the Trash
@@ -2354,16 +2429,17 @@ def _reset_front_page_settings_for_post(post_id=None, *args_):
 #// if EMPTY_TRASH_DAYS equals true.
 #// @return WP_Post|false|null Post data on success, false or null on failure.
 #//
-def wp_trash_post(post_id=0, *args_):
+def wp_trash_post(post_id_=0, *_args_):
+    
     
     if (not EMPTY_TRASH_DAYS):
-        return wp_delete_post(post_id, True)
+        return wp_delete_post(post_id_, True)
     # end if
-    post = get_post(post_id)
-    if (not post):
-        return post
+    post_ = get_post(post_id_)
+    if (not post_):
+        return post_
     # end if
-    if "trash" == post.post_status:
+    if "trash" == post_.post_status:
         return False
     # end if
     #// 
@@ -2374,9 +2450,9 @@ def wp_trash_post(post_id=0, *args_):
     #// @param bool|null $trash Whether to go forward with trashing.
     #// @param WP_Post   $post  Post object.
     #//
-    check = apply_filters("pre_trash_post", None, post)
-    if None != check:
-        return check
+    check_ = apply_filters("pre_trash_post", None, post_)
+    if None != check_:
+        return check_
     # end if
     #// 
     #// Fires before a post is sent to the Trash.
@@ -2385,14 +2461,14 @@ def wp_trash_post(post_id=0, *args_):
     #// 
     #// @param int $post_id Post ID.
     #//
-    do_action("wp_trash_post", post_id)
-    add_post_meta(post_id, "_wp_trash_meta_status", post.post_status)
-    add_post_meta(post_id, "_wp_trash_meta_time", time())
-    post_updated = wp_update_post(Array({"ID": post_id, "post_status": "trash"}))
-    if (not post_updated):
+    do_action("wp_trash_post", post_id_)
+    add_post_meta(post_id_, "_wp_trash_meta_status", post_.post_status)
+    add_post_meta(post_id_, "_wp_trash_meta_time", time())
+    post_updated_ = wp_update_post(Array({"ID": post_id_, "post_status": "trash"}))
+    if (not post_updated_):
         return False
     # end if
-    wp_trash_post_comments(post_id)
+    wp_trash_post_comments(post_id_)
     #// 
     #// Fires after a post is sent to the Trash.
     #// 
@@ -2400,8 +2476,8 @@ def wp_trash_post(post_id=0, *args_):
     #// 
     #// @param int $post_id Post ID.
     #//
-    do_action("trashed_post", post_id)
-    return post
+    do_action("trashed_post", post_id_)
+    return post_
 # end def wp_trash_post
 #// 
 #// Restore a post or page from the Trash.
@@ -2411,13 +2487,14 @@ def wp_trash_post(post_id=0, *args_):
 #// @param int $post_id Optional. Post ID. Default is ID of the global $post.
 #// @return WP_Post|false|null Post data on success, false or null on failure.
 #//
-def wp_untrash_post(post_id=0, *args_):
+def wp_untrash_post(post_id_=0, *_args_):
     
-    post = get_post(post_id)
-    if (not post):
-        return post
+    
+    post_ = get_post(post_id_)
+    if (not post_):
+        return post_
     # end if
-    if "trash" != post.post_status:
+    if "trash" != post_.post_status:
         return False
     # end if
     #// 
@@ -2428,9 +2505,9 @@ def wp_untrash_post(post_id=0, *args_):
     #// @param bool|null $untrash Whether to go forward with untrashing.
     #// @param WP_Post   $post    Post object.
     #//
-    check = apply_filters("pre_untrash_post", None, post)
-    if None != check:
-        return check
+    check_ = apply_filters("pre_untrash_post", None, post_)
+    if None != check_:
+        return check_
     # end if
     #// 
     #// Fires before a post is restored from the Trash.
@@ -2439,15 +2516,15 @@ def wp_untrash_post(post_id=0, *args_):
     #// 
     #// @param int $post_id Post ID.
     #//
-    do_action("untrash_post", post_id)
-    post_status = get_post_meta(post_id, "_wp_trash_meta_status", True)
-    delete_post_meta(post_id, "_wp_trash_meta_status")
-    delete_post_meta(post_id, "_wp_trash_meta_time")
-    post_updated = wp_update_post(Array({"ID": post_id, "post_status": post_status}))
-    if (not post_updated):
+    do_action("untrash_post", post_id_)
+    post_status_ = get_post_meta(post_id_, "_wp_trash_meta_status", True)
+    delete_post_meta(post_id_, "_wp_trash_meta_status")
+    delete_post_meta(post_id_, "_wp_trash_meta_time")
+    post_updated_ = wp_update_post(Array({"ID": post_id_, "post_status": post_status_}))
+    if (not post_updated_):
         return False
     # end if
-    wp_untrash_post_comments(post_id)
+    wp_untrash_post_comments(post_id_)
     #// 
     #// Fires after a post is restored from the Trash.
     #// 
@@ -2455,8 +2532,8 @@ def wp_untrash_post(post_id=0, *args_):
     #// 
     #// @param int $post_id Post ID.
     #//
-    do_action("untrashed_post", post_id)
-    return post
+    do_action("untrashed_post", post_id_)
+    return post_
 # end def wp_untrash_post
 #// 
 #// Moves comments for a post to the Trash.
@@ -2468,15 +2545,16 @@ def wp_untrash_post(post_id=0, *args_):
 #// @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
 #// @return mixed|void False on failure.
 #//
-def wp_trash_post_comments(post=None, *args_):
+def wp_trash_post_comments(post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post(post)
-    if php_empty(lambda : post):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post(post_)
+    if php_empty(lambda : post_):
         return
     # end if
-    post_id = post.ID
+    post_id_ = post_.ID
     #// 
     #// Fires before comments are sent to the Trash.
     #// 
@@ -2484,20 +2562,20 @@ def wp_trash_post_comments(post=None, *args_):
     #// 
     #// @param int $post_id Post ID.
     #//
-    do_action("trash_post_comments", post_id)
-    comments = wpdb.get_results(wpdb.prepare(str("SELECT comment_ID, comment_approved FROM ") + str(wpdb.comments) + str(" WHERE comment_post_ID = %d"), post_id))
-    if php_empty(lambda : comments):
+    do_action("trash_post_comments", post_id_)
+    comments_ = wpdb_.get_results(wpdb_.prepare(str("SELECT comment_ID, comment_approved FROM ") + str(wpdb_.comments) + str(" WHERE comment_post_ID = %d"), post_id_))
+    if php_empty(lambda : comments_):
         return
     # end if
     #// Cache current status for each comment.
-    statuses = Array()
-    for comment in comments:
-        statuses[comment.comment_ID] = comment.comment_approved
+    statuses_ = Array()
+    for comment_ in comments_:
+        statuses_[comment_.comment_ID] = comment_.comment_approved
     # end for
-    add_post_meta(post_id, "_wp_trash_meta_comments_status", statuses)
+    add_post_meta(post_id_, "_wp_trash_meta_comments_status", statuses_)
     #// Set status for all comments to post-trashed.
-    result = wpdb.update(wpdb.comments, Array({"comment_approved": "post-trashed"}), Array({"comment_post_ID": post_id}))
-    clean_comment_cache(php_array_keys(statuses))
+    result_ = wpdb_.update(wpdb_.comments, Array({"comment_approved": "post-trashed"}), Array({"comment_post_ID": post_id_}))
+    clean_comment_cache(php_array_keys(statuses_))
     #// 
     #// Fires after comments are sent to the Trash.
     #// 
@@ -2506,8 +2584,8 @@ def wp_trash_post_comments(post=None, *args_):
     #// @param int   $post_id  Post ID.
     #// @param array $statuses Array of comment statuses.
     #//
-    do_action("trashed_post_comments", post_id, statuses)
-    return result
+    do_action("trashed_post_comments", post_id_, statuses_)
+    return result_
 # end def wp_trash_post_comments
 #// 
 #// Restore comments for a post from the Trash.
@@ -2519,17 +2597,18 @@ def wp_trash_post_comments(post=None, *args_):
 #// @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
 #// @return true|void
 #//
-def wp_untrash_post_comments(post=None, *args_):
+def wp_untrash_post_comments(post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post(post)
-    if php_empty(lambda : post):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post(post_)
+    if php_empty(lambda : post_):
         return
     # end if
-    post_id = post.ID
-    statuses = get_post_meta(post_id, "_wp_trash_meta_comments_status", True)
-    if php_empty(lambda : statuses):
+    post_id_ = post_.ID
+    statuses_ = get_post_meta(post_id_, "_wp_trash_meta_comments_status", True)
+    if php_empty(lambda : statuses_):
         return True
     # end if
     #// 
@@ -2539,22 +2618,22 @@ def wp_untrash_post_comments(post=None, *args_):
     #// 
     #// @param int $post_id Post ID.
     #//
-    do_action("untrash_post_comments", post_id)
+    do_action("untrash_post_comments", post_id_)
     #// Restore each comment to its original status.
-    group_by_status = Array()
-    for comment_id,comment_status in statuses:
-        group_by_status[comment_status][-1] = comment_id
+    group_by_status_ = Array()
+    for comment_id_,comment_status_ in statuses_:
+        group_by_status_[comment_status_][-1] = comment_id_
     # end for
-    for status,comments in group_by_status:
+    for status_,comments_ in group_by_status_:
         #// Sanity check. This shouldn't happen.
-        if "post-trashed" == status:
-            status = "0"
+        if "post-trashed" == status_:
+            status_ = "0"
         # end if
-        comments_in = php_implode(", ", php_array_map("intval", comments))
-        wpdb.query(wpdb.prepare(str("UPDATE ") + str(wpdb.comments) + str(" SET comment_approved = %s WHERE comment_ID IN (") + str(comments_in) + str(")"), status))
+        comments_in_ = php_implode(", ", php_array_map("intval", comments_))
+        wpdb_.query(wpdb_.prepare(str("UPDATE ") + str(wpdb_.comments) + str(" SET comment_approved = %s WHERE comment_ID IN (") + str(comments_in_) + str(")"), status_))
     # end for
-    clean_comment_cache(php_array_keys(statuses))
-    delete_post_meta(post_id, "_wp_trash_meta_comments_status")
+    clean_comment_cache(php_array_keys(statuses_))
+    delete_post_meta(post_id_, "_wp_trash_meta_comments_status")
     #// 
     #// Fires after comments are restored for a post from the Trash.
     #// 
@@ -2562,7 +2641,7 @@ def wp_untrash_post_comments(post=None, *args_):
     #// 
     #// @param int $post_id Post ID.
     #//
-    do_action("untrashed_post_comments", post_id)
+    do_action("untrashed_post_comments", post_id_)
 # end def wp_untrash_post_comments
 #// 
 #// Retrieve the list of categories for a post.
@@ -2583,13 +2662,16 @@ def wp_untrash_post_comments(post=None, *args_):
 #// is 'ids', an array of category ids. If `$fields` is 'names', an array of category names.
 #// WP_Error object if 'category' taxonomy doesn't exist.
 #//
-def wp_get_post_categories(post_id=0, args=Array(), *args_):
+def wp_get_post_categories(post_id_=0, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    post_id = php_int(post_id)
-    defaults = Array({"fields": "ids"})
-    args = wp_parse_args(args, defaults)
-    cats = wp_get_object_terms(post_id, "category", args)
-    return cats
+    post_id_ = php_int(post_id_)
+    defaults_ = Array({"fields": "ids"})
+    args_ = wp_parse_args(args_, defaults_)
+    cats_ = wp_get_object_terms(post_id_, "category", args_)
+    return cats_
 # end def wp_get_post_categories
 #// 
 #// Retrieve the tags for a post.
@@ -2607,9 +2689,12 @@ def wp_get_post_categories(post_id=0, args=Array(), *args_):
 #// @return array|WP_Error Array of WP_Term objects on success or empty array if no tags were found.
 #// WP_Error object if 'post_tag' taxonomy doesn't exist.
 #//
-def wp_get_post_tags(post_id=0, args=Array(), *args_):
+def wp_get_post_tags(post_id_=0, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    return wp_get_post_terms(post_id, "post_tag", args)
+    return wp_get_post_terms(post_id_, "post_tag", args_)
 # end def wp_get_post_tags
 #// 
 #// Retrieves the terms for a post.
@@ -2628,13 +2713,16 @@ def wp_get_post_tags(post_id=0, args=Array(), *args_):
 #// @return array|WP_Error Array of WP_Term objects on success or empty array if no terms were found.
 #// WP_Error object if `$taxonomy` doesn't exist.
 #//
-def wp_get_post_terms(post_id=0, taxonomy="post_tag", args=Array(), *args_):
+def wp_get_post_terms(post_id_=0, taxonomy_="post_tag", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    post_id = php_int(post_id)
-    defaults = Array({"fields": "all"})
-    args = wp_parse_args(args, defaults)
-    tags = wp_get_object_terms(post_id, taxonomy, args)
-    return tags
+    post_id_ = php_int(post_id_)
+    defaults_ = Array({"fields": "all"})
+    args_ = wp_parse_args(args_, defaults_)
+    tags_ = wp_get_object_terms(post_id_, taxonomy_, args_)
+    return tags_
 # end def wp_get_post_terms
 #// 
 #// Retrieve a number of recent posts.
@@ -2649,24 +2737,30 @@ def wp_get_post_terms(post_id=0, taxonomy="post_tag", args=Array(), *args_):
 #// @return array|false Array of recent posts, where the type of each element is determined by $output parameter.
 #// Empty array on failure.
 #//
-def wp_get_recent_posts(args=Array(), output=ARRAY_A, *args_):
+def wp_get_recent_posts(args_=None, output_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
+    if output_ is None:
+        output_ = ARRAY_A
+    # end if
     
-    if php_is_numeric(args):
+    if php_is_numeric(args_):
         _deprecated_argument(__FUNCTION__, "3.1.0", __("Passing an integer number of posts is deprecated. Pass an array of arguments instead."))
-        args = Array({"numberposts": absint(args)})
+        args_ = Array({"numberposts": absint(args_)})
     # end if
     #// Set default arguments.
-    defaults = Array({"numberposts": 10, "offset": 0, "category": 0, "orderby": "post_date", "order": "DESC", "include": "", "exclude": "", "meta_key": "", "meta_value": "", "post_type": "post", "post_status": "draft, publish, future, pending, private", "suppress_filters": True})
-    parsed_args = wp_parse_args(args, defaults)
-    results = get_posts(parsed_args)
+    defaults_ = Array({"numberposts": 10, "offset": 0, "category": 0, "orderby": "post_date", "order": "DESC", "include": "", "exclude": "", "meta_key": "", "meta_value": "", "post_type": "post", "post_status": "draft, publish, future, pending, private", "suppress_filters": True})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    results_ = get_posts(parsed_args_)
     #// Backward compatibility. Prior to 3.1 expected posts to be returned in array.
-    if ARRAY_A == output:
-        for key,result in results:
-            results[key] = get_object_vars(result)
+    if ARRAY_A == output_:
+        for key_,result_ in results_:
+            results_[key_] = get_object_vars(result_)
         # end for
-        return results if results else Array()
+        return results_ if results_ else Array()
     # end if
-    return results if results else False
+    return results_ if results_ else False
 # end def wp_get_recent_posts
 #// 
 #// Insert or update a post.
@@ -2728,46 +2822,49 @@ def wp_get_recent_posts(args=Array(), output=ARRAY_A, *args_):
 #// @param bool  $wp_error Optional. Whether to return a WP_Error on failure. Default false.
 #// @return int|WP_Error The post ID on success. The value 0 or WP_Error on failure.
 #//
-def wp_insert_post(postarr=None, wp_error=False, *args_):
+def wp_insert_post(postarr_=None, wp_error_=None, *_args_):
+    if wp_error_ is None:
+        wp_error_ = False
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    user_id = get_current_user_id()
-    defaults = Array({"post_author": user_id, "post_content": "", "post_content_filtered": "", "post_title": "", "post_excerpt": "", "post_status": "draft", "post_type": "post", "comment_status": "", "ping_status": "", "post_password": "", "to_ping": "", "pinged": "", "post_parent": 0, "menu_order": 0, "guid": "", "import_id": 0, "context": ""})
-    postarr = wp_parse_args(postarr, defaults)
-    postarr["filter"] = None
-    postarr = sanitize_post(postarr, "db")
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    user_id_ = get_current_user_id()
+    defaults_ = Array({"post_author": user_id_, "post_content": "", "post_content_filtered": "", "post_title": "", "post_excerpt": "", "post_status": "draft", "post_type": "post", "comment_status": "", "ping_status": "", "post_password": "", "to_ping": "", "pinged": "", "post_parent": 0, "menu_order": 0, "guid": "", "import_id": 0, "context": ""})
+    postarr_ = wp_parse_args(postarr_, defaults_)
+    postarr_["filter"] = None
+    postarr_ = sanitize_post(postarr_, "db")
     #// Are we updating or creating?
-    post_ID = 0
-    update = False
-    guid = postarr["guid"]
-    if (not php_empty(lambda : postarr["ID"])):
-        update = True
+    post_ID_ = 0
+    update_ = False
+    guid_ = postarr_["guid"]
+    if (not php_empty(lambda : postarr_["ID"])):
+        update_ = True
         #// Get the post ID and GUID.
-        post_ID = postarr["ID"]
-        post_before = get_post(post_ID)
-        if is_null(post_before):
-            if wp_error:
+        post_ID_ = postarr_["ID"]
+        post_before_ = get_post(post_ID_)
+        if is_null(post_before_):
+            if wp_error_:
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_post", __("Invalid post ID.")))
             # end if
             return 0
         # end if
-        guid = get_post_field("guid", post_ID)
-        previous_status = get_post_field("post_status", post_ID)
+        guid_ = get_post_field("guid", post_ID_)
+        previous_status_ = get_post_field("post_status", post_ID_)
     else:
-        previous_status = "new"
+        previous_status_ = "new"
     # end if
-    post_type = "post" if php_empty(lambda : postarr["post_type"]) else postarr["post_type"]
-    post_title = postarr["post_title"]
-    post_content = postarr["post_content"]
-    post_excerpt = postarr["post_excerpt"]
-    if (php_isset(lambda : postarr["post_name"])):
-        post_name = postarr["post_name"]
-    elif update:
+    post_type_ = "post" if php_empty(lambda : postarr_["post_type"]) else postarr_["post_type"]
+    post_title_ = postarr_["post_title"]
+    post_content_ = postarr_["post_content"]
+    post_excerpt_ = postarr_["post_excerpt"]
+    if (php_isset(lambda : postarr_["post_name"])):
+        post_name_ = postarr_["post_name"]
+    elif update_:
         #// For an update, don't modify the post_name if it wasn't supplied as an argument.
-        post_name = post_before.post_name
+        post_name_ = post_before_.post_name
     # end if
-    maybe_empty = "attachment" != post_type and (not post_content) and (not post_title) and (not post_excerpt) and post_type_supports(post_type, "editor") and post_type_supports(post_type, "title") and post_type_supports(post_type, "excerpt")
+    maybe_empty_ = "attachment" != post_type_ and (not post_content_) and (not post_title_) and (not post_excerpt_) and post_type_supports(post_type_, "editor") and post_type_supports(post_type_, "title") and post_type_supports(post_type_, "excerpt")
     #// 
     #// Filters whether the post should be considered "empty".
     #// 
@@ -2784,28 +2881,28 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     #// @param bool  $maybe_empty Whether the post should be considered "empty".
     #// @param array $postarr     Array of post data.
     #//
-    if apply_filters("wp_insert_post_empty_content", maybe_empty, postarr):
-        if wp_error:
+    if apply_filters("wp_insert_post_empty_content", maybe_empty_, postarr_):
+        if wp_error_:
             return php_new_class("WP_Error", lambda : WP_Error("empty_content", __("Content, title, and excerpt are empty.")))
         else:
             return 0
         # end if
     # end if
-    post_status = "draft" if php_empty(lambda : postarr["post_status"]) else postarr["post_status"]
-    if "attachment" == post_type and (not php_in_array(post_status, Array("inherit", "private", "trash", "auto-draft"), True)):
-        post_status = "inherit"
+    post_status_ = "draft" if php_empty(lambda : postarr_["post_status"]) else postarr_["post_status"]
+    if "attachment" == post_type_ and (not php_in_array(post_status_, Array("inherit", "private", "trash", "auto-draft"), True)):
+        post_status_ = "inherit"
     # end if
-    if (not php_empty(lambda : postarr["post_category"])):
+    if (not php_empty(lambda : postarr_["post_category"])):
         #// Filter out empty terms.
-        post_category = php_array_filter(postarr["post_category"])
+        post_category_ = php_array_filter(postarr_["post_category"])
     # end if
     #// Make sure we set a valid category.
-    if php_empty(lambda : post_category) or 0 == php_count(post_category) or (not php_is_array(post_category)):
+    if php_empty(lambda : post_category_) or 0 == php_count(post_category_) or (not php_is_array(post_category_)):
         #// 'post' requires at least one category.
-        if "post" == post_type and "auto-draft" != post_status:
-            post_category = Array(get_option("default_category"))
+        if "post" == post_type_ and "auto-draft" != post_status_:
+            post_category_ = Array(get_option("default_category"))
         else:
-            post_category = Array()
+            post_category_ = Array()
         # end if
     # end if
     #// 
@@ -2813,121 +2910,121 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     #// 
     #// For new posts check the primitive capability, for updates check the meta capability.
     #//
-    post_type_object = get_post_type_object(post_type)
-    if (not update) and "pending" == post_status and (not current_user_can(post_type_object.cap.publish_posts)):
-        post_name = ""
-    elif update and "pending" == post_status and (not current_user_can("publish_post", post_ID)):
-        post_name = ""
+    post_type_object_ = get_post_type_object(post_type_)
+    if (not update_) and "pending" == post_status_ and (not current_user_can(post_type_object_.cap.publish_posts)):
+        post_name_ = ""
+    elif update_ and "pending" == post_status_ and (not current_user_can("publish_post", post_ID_)):
+        post_name_ = ""
     # end if
     #// 
     #// Create a valid post name. Drafts and pending posts are allowed to have
     #// an empty post name.
     #//
-    if php_empty(lambda : post_name):
-        if (not php_in_array(post_status, Array("draft", "pending", "auto-draft"))):
-            post_name = sanitize_title(post_title)
+    if php_empty(lambda : post_name_):
+        if (not php_in_array(post_status_, Array("draft", "pending", "auto-draft"))):
+            post_name_ = sanitize_title(post_title_)
         else:
-            post_name = ""
+            post_name_ = ""
         # end if
     else:
         #// On updates, we need to check to see if it's using the old, fixed sanitization context.
-        check_name = sanitize_title(post_name, "", "old-save")
-        if update and php_strtolower(urlencode(post_name)) == check_name and get_post_field("post_name", post_ID) == check_name:
-            post_name = check_name
+        check_name_ = sanitize_title(post_name_, "", "old-save")
+        if update_ and php_strtolower(urlencode(post_name_)) == check_name_ and get_post_field("post_name", post_ID_) == check_name_:
+            post_name_ = check_name_
         else:
             #// new post, or slug has changed.
-            post_name = sanitize_title(post_name)
+            post_name_ = sanitize_title(post_name_)
         # end if
     # end if
     #// 
     #// If the post date is empty (due to having been new or a draft) and status
     #// is not 'draft' or 'pending', set date to now.
     #//
-    if php_empty(lambda : postarr["post_date"]) or "0000-00-00 00:00:00" == postarr["post_date"]:
-        if php_empty(lambda : postarr["post_date_gmt"]) or "0000-00-00 00:00:00" == postarr["post_date_gmt"]:
-            post_date = current_time("mysql")
+    if php_empty(lambda : postarr_["post_date"]) or "0000-00-00 00:00:00" == postarr_["post_date"]:
+        if php_empty(lambda : postarr_["post_date_gmt"]) or "0000-00-00 00:00:00" == postarr_["post_date_gmt"]:
+            post_date_ = current_time("mysql")
         else:
-            post_date = get_date_from_gmt(postarr["post_date_gmt"])
+            post_date_ = get_date_from_gmt(postarr_["post_date_gmt"])
         # end if
     else:
-        post_date = postarr["post_date"]
+        post_date_ = postarr_["post_date"]
     # end if
     #// Validate the date.
-    mm = php_substr(post_date, 5, 2)
-    jj = php_substr(post_date, 8, 2)
-    aa = php_substr(post_date, 0, 4)
-    valid_date = wp_checkdate(mm, jj, aa, post_date)
-    if (not valid_date):
-        if wp_error:
+    mm_ = php_substr(post_date_, 5, 2)
+    jj_ = php_substr(post_date_, 8, 2)
+    aa_ = php_substr(post_date_, 0, 4)
+    valid_date_ = wp_checkdate(mm_, jj_, aa_, post_date_)
+    if (not valid_date_):
+        if wp_error_:
             return php_new_class("WP_Error", lambda : WP_Error("invalid_date", __("Invalid date.")))
         else:
             return 0
         # end if
     # end if
-    if php_empty(lambda : postarr["post_date_gmt"]) or "0000-00-00 00:00:00" == postarr["post_date_gmt"]:
-        if (not php_in_array(post_status, get_post_stati(Array({"date_floating": True})), True)):
-            post_date_gmt = get_gmt_from_date(post_date)
+    if php_empty(lambda : postarr_["post_date_gmt"]) or "0000-00-00 00:00:00" == postarr_["post_date_gmt"]:
+        if (not php_in_array(post_status_, get_post_stati(Array({"date_floating": True})), True)):
+            post_date_gmt_ = get_gmt_from_date(post_date_)
         else:
-            post_date_gmt = "0000-00-00 00:00:00"
+            post_date_gmt_ = "0000-00-00 00:00:00"
         # end if
     else:
-        post_date_gmt = postarr["post_date_gmt"]
+        post_date_gmt_ = postarr_["post_date_gmt"]
     # end if
-    if update or "0000-00-00 00:00:00" == post_date:
-        post_modified = current_time("mysql")
-        post_modified_gmt = current_time("mysql", 1)
+    if update_ or "0000-00-00 00:00:00" == post_date_:
+        post_modified_ = current_time("mysql")
+        post_modified_gmt_ = current_time("mysql", 1)
     else:
-        post_modified = post_date
-        post_modified_gmt = post_date_gmt
+        post_modified_ = post_date_
+        post_modified_gmt_ = post_date_gmt_
     # end if
-    if "attachment" != post_type:
-        now = gmdate("Y-m-d H:i:s")
-        if "publish" == post_status:
-            if strtotime(post_date_gmt) - strtotime(now) >= MINUTE_IN_SECONDS:
-                post_status = "future"
+    if "attachment" != post_type_:
+        now_ = gmdate("Y-m-d H:i:s")
+        if "publish" == post_status_:
+            if strtotime(post_date_gmt_) - strtotime(now_) >= MINUTE_IN_SECONDS:
+                post_status_ = "future"
             # end if
-        elif "future" == post_status:
-            if strtotime(post_date_gmt) - strtotime(now) < MINUTE_IN_SECONDS:
-                post_status = "publish"
+        elif "future" == post_status_:
+            if strtotime(post_date_gmt_) - strtotime(now_) < MINUTE_IN_SECONDS:
+                post_status_ = "publish"
             # end if
         # end if
     # end if
     #// Comment status.
-    if php_empty(lambda : postarr["comment_status"]):
-        if update:
-            comment_status = "closed"
+    if php_empty(lambda : postarr_["comment_status"]):
+        if update_:
+            comment_status_ = "closed"
         else:
-            comment_status = get_default_comment_status(post_type)
+            comment_status_ = get_default_comment_status(post_type_)
         # end if
     else:
-        comment_status = postarr["comment_status"]
+        comment_status_ = postarr_["comment_status"]
     # end if
     #// These variables are needed by compact() later.
-    post_content_filtered = postarr["post_content_filtered"]
-    post_author = postarr["post_author"] if (php_isset(lambda : postarr["post_author"])) else user_id
-    ping_status = get_default_comment_status(post_type, "pingback") if php_empty(lambda : postarr["ping_status"]) else postarr["ping_status"]
-    to_ping = sanitize_trackback_urls(postarr["to_ping"]) if (php_isset(lambda : postarr["to_ping"])) else ""
-    pinged = postarr["pinged"] if (php_isset(lambda : postarr["pinged"])) else ""
-    import_id = postarr["import_id"] if (php_isset(lambda : postarr["import_id"])) else 0
+    post_content_filtered_ = postarr_["post_content_filtered"]
+    post_author_ = postarr_["post_author"] if (php_isset(lambda : postarr_["post_author"])) else user_id_
+    ping_status_ = get_default_comment_status(post_type_, "pingback") if php_empty(lambda : postarr_["ping_status"]) else postarr_["ping_status"]
+    to_ping_ = sanitize_trackback_urls(postarr_["to_ping"]) if (php_isset(lambda : postarr_["to_ping"])) else ""
+    pinged_ = postarr_["pinged"] if (php_isset(lambda : postarr_["pinged"])) else ""
+    import_id_ = postarr_["import_id"] if (php_isset(lambda : postarr_["import_id"])) else 0
     #// 
     #// The 'wp_insert_post_parent' filter expects all variables to be present.
     #// Previously, these variables would have already been extracted
     #//
-    if (php_isset(lambda : postarr["menu_order"])):
-        menu_order = php_int(postarr["menu_order"])
+    if (php_isset(lambda : postarr_["menu_order"])):
+        menu_order_ = php_int(postarr_["menu_order"])
     else:
-        menu_order = 0
+        menu_order_ = 0
     # end if
-    post_password = postarr["post_password"] if (php_isset(lambda : postarr["post_password"])) else ""
-    if "private" == post_status:
-        post_password = ""
+    post_password_ = postarr_["post_password"] if (php_isset(lambda : postarr_["post_password"])) else ""
+    if "private" == post_status_:
+        post_password_ = ""
     # end if
-    if (php_isset(lambda : postarr["post_parent"])):
-        post_parent = php_int(postarr["post_parent"])
+    if (php_isset(lambda : postarr_["post_parent"])):
+        post_parent_ = php_int(postarr_["post_parent"])
     else:
-        post_parent = 0
+        post_parent_ = 0
     # end if
-    new_postarr = php_array_merge(Array({"ID": post_ID}), compact(php_array_diff(php_array_keys(defaults), Array("context", "filter"))))
+    new_postarr_ = php_array_merge(Array({"ID": post_ID_}), php_compact(php_array_diff(php_array_keys(defaults_), Array("context", "filter"))))
     #// 
     #// Filters the post parent -- used to check for and prevent hierarchy loops.
     #// 
@@ -2938,20 +3035,20 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     #// @param array $new_postarr Array of parsed post data.
     #// @param array $postarr     Array of sanitized, but otherwise unmodified post data.
     #//
-    post_parent = apply_filters("wp_insert_post_parent", post_parent, post_ID, new_postarr, postarr)
+    post_parent_ = apply_filters("wp_insert_post_parent", post_parent_, post_ID_, new_postarr_, postarr_)
     #// 
     #// If the post is being untrashed and it has a desired slug stored in post meta,
     #// reassign it.
     #//
-    if "trash" == previous_status and "trash" != post_status:
-        desired_post_slug = get_post_meta(post_ID, "_wp_desired_post_slug", True)
-        if desired_post_slug:
-            delete_post_meta(post_ID, "_wp_desired_post_slug")
-            post_name = desired_post_slug
+    if "trash" == previous_status_ and "trash" != post_status_:
+        desired_post_slug_ = get_post_meta(post_ID_, "_wp_desired_post_slug", True)
+        if desired_post_slug_:
+            delete_post_meta(post_ID_, "_wp_desired_post_slug")
+            post_name_ = desired_post_slug_
         # end if
     # end if
     #// If a trashed post has the desired slug, change it and let this post have it.
-    if "trash" != post_status and post_name:
+    if "trash" != post_status_ and post_name_:
         #// 
         #// Filters whether or not to add a `__trashed` suffix to trashed posts that match the name of the updated post.
         #// 
@@ -2961,30 +3058,30 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// @param string $post_name          The name of the post being updated.
         #// @param int    $post_ID            Post ID.
         #//
-        add_trashed_suffix = apply_filters("add_trashed_suffix_to_trashed_posts", True, post_name, post_ID)
-        if add_trashed_suffix:
-            wp_add_trashed_suffix_to_post_name_for_trashed_posts(post_name, post_ID)
+        add_trashed_suffix_ = apply_filters("add_trashed_suffix_to_trashed_posts", True, post_name_, post_ID_)
+        if add_trashed_suffix_:
+            wp_add_trashed_suffix_to_post_name_for_trashed_posts(post_name_, post_ID_)
         # end if
     # end if
     #// When trashing an existing post, change its slug to allow non-trashed posts to use it.
-    if "trash" == post_status and "trash" != previous_status and "new" != previous_status:
-        post_name = wp_add_trashed_suffix_to_post_name_for_post(post_ID)
+    if "trash" == post_status_ and "trash" != previous_status_ and "new" != previous_status_:
+        post_name_ = wp_add_trashed_suffix_to_post_name_for_post(post_ID_)
     # end if
-    post_name = wp_unique_post_slug(post_name, post_ID, post_status, post_type, post_parent)
+    post_name_ = wp_unique_post_slug(post_name_, post_ID_, post_status_, post_type_, post_parent_)
     #// Don't unslash.
-    post_mime_type = postarr["post_mime_type"] if (php_isset(lambda : postarr["post_mime_type"])) else ""
+    post_mime_type_ = postarr_["post_mime_type"] if (php_isset(lambda : postarr_["post_mime_type"])) else ""
     #// Expected_slashed (everything!).
-    data = compact("post_author", "post_date", "post_date_gmt", "post_content", "post_content_filtered", "post_title", "post_excerpt", "post_status", "post_type", "comment_status", "ping_status", "post_password", "post_name", "to_ping", "pinged", "post_modified", "post_modified_gmt", "post_parent", "menu_order", "post_mime_type", "guid")
-    emoji_fields = Array("post_title", "post_content", "post_excerpt")
-    for emoji_field in emoji_fields:
-        if (php_isset(lambda : data[emoji_field])):
-            charset = wpdb.get_col_charset(wpdb.posts, emoji_field)
-            if "utf8" == charset:
-                data[emoji_field] = wp_encode_emoji(data[emoji_field])
+    data_ = php_compact("post_author", "post_date", "post_date_gmt", "post_content", "post_content_filtered", "post_title", "post_excerpt", "post_status", "post_type", "comment_status", "ping_status", "post_password", "post_name", "to_ping", "pinged", "post_modified", "post_modified_gmt", "post_parent", "menu_order", "post_mime_type", "guid")
+    emoji_fields_ = Array("post_title", "post_content", "post_excerpt")
+    for emoji_field_ in emoji_fields_:
+        if (php_isset(lambda : data_[emoji_field_])):
+            charset_ = wpdb_.get_col_charset(wpdb_.posts, emoji_field_)
+            if "utf8" == charset_:
+                data_[emoji_field_] = wp_encode_emoji(data_[emoji_field_])
             # end if
         # end if
     # end for
-    if "attachment" == post_type:
+    if "attachment" == post_type_:
         #// 
         #// Filters attachment post data before it is updated in or added to the database.
         #// 
@@ -2993,7 +3090,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// @param array $data    An array of sanitized attachment post data.
         #// @param array $postarr An array of unsanitized attachment post data.
         #//
-        data = apply_filters("wp_insert_attachment_data", data, postarr)
+        data_ = apply_filters("wp_insert_attachment_data", data_, postarr_)
     else:
         #// 
         #// Filters slashed post data just before it is inserted into the database.
@@ -3003,11 +3100,11 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// @param array $data    An array of slashed post data.
         #// @param array $postarr An array of sanitized, but otherwise unmodified post data.
         #//
-        data = apply_filters("wp_insert_post_data", data, postarr)
+        data_ = apply_filters("wp_insert_post_data", data_, postarr_)
     # end if
-    data = wp_unslash(data)
-    where = Array({"ID": post_ID})
-    if update:
+    data_ = wp_unslash(data_)
+    where_ = Array({"ID": post_ID_})
+    if update_:
         #// 
         #// Fires immediately before an existing post is updated in the database.
         #// 
@@ -3016,117 +3113,117 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// @param int   $post_ID Post ID.
         #// @param array $data    Array of unslashed post data.
         #//
-        do_action("pre_post_update", post_ID, data)
-        if False == wpdb.update(wpdb.posts, data, where):
-            if wp_error:
-                return php_new_class("WP_Error", lambda : WP_Error("db_update_error", __("Could not update post in the database"), wpdb.last_error))
+        do_action("pre_post_update", post_ID_, data_)
+        if False == wpdb_.update(wpdb_.posts, data_, where_):
+            if wp_error_:
+                return php_new_class("WP_Error", lambda : WP_Error("db_update_error", __("Could not update post in the database"), wpdb_.last_error))
             else:
                 return 0
             # end if
         # end if
     else:
         #// If there is a suggested ID, use it if not already present.
-        if (not php_empty(lambda : import_id)):
-            import_id = php_int(import_id)
-            if (not wpdb.get_var(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.posts) + str(" WHERE ID = %d"), import_id))):
-                data["ID"] = import_id
+        if (not php_empty(lambda : import_id_)):
+            import_id_ = php_int(import_id_)
+            if (not wpdb_.get_var(wpdb_.prepare(str("SELECT ID FROM ") + str(wpdb_.posts) + str(" WHERE ID = %d"), import_id_))):
+                data_["ID"] = import_id_
             # end if
         # end if
-        if False == wpdb.insert(wpdb.posts, data):
-            if wp_error:
-                return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not insert post into the database"), wpdb.last_error))
+        if False == wpdb_.insert(wpdb_.posts, data_):
+            if wp_error_:
+                return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not insert post into the database"), wpdb_.last_error))
             else:
                 return 0
             # end if
         # end if
-        post_ID = php_int(wpdb.insert_id)
+        post_ID_ = php_int(wpdb_.insert_id)
         #// Use the newly generated $post_ID.
-        where = Array({"ID": post_ID})
+        where_ = Array({"ID": post_ID_})
     # end if
-    if php_empty(lambda : data["post_name"]) and (not php_in_array(data["post_status"], Array("draft", "pending", "auto-draft"))):
-        data["post_name"] = wp_unique_post_slug(sanitize_title(data["post_title"], post_ID), post_ID, data["post_status"], post_type, post_parent)
-        wpdb.update(wpdb.posts, Array({"post_name": data["post_name"]}), where)
-        clean_post_cache(post_ID)
+    if php_empty(lambda : data_["post_name"]) and (not php_in_array(data_["post_status"], Array("draft", "pending", "auto-draft"))):
+        data_["post_name"] = wp_unique_post_slug(sanitize_title(data_["post_title"], post_ID_), post_ID_, data_["post_status"], post_type_, post_parent_)
+        wpdb_.update(wpdb_.posts, Array({"post_name": data_["post_name"]}), where_)
+        clean_post_cache(post_ID_)
     # end if
-    if is_object_in_taxonomy(post_type, "category"):
-        wp_set_post_categories(post_ID, post_category)
+    if is_object_in_taxonomy(post_type_, "category"):
+        wp_set_post_categories(post_ID_, post_category_)
     # end if
-    if (php_isset(lambda : postarr["tags_input"])) and is_object_in_taxonomy(post_type, "post_tag"):
-        wp_set_post_tags(post_ID, postarr["tags_input"])
+    if (php_isset(lambda : postarr_["tags_input"])) and is_object_in_taxonomy(post_type_, "post_tag"):
+        wp_set_post_tags(post_ID_, postarr_["tags_input"])
     # end if
     #// New-style support for all custom taxonomies.
-    if (not php_empty(lambda : postarr["tax_input"])):
-        for taxonomy,tags in postarr["tax_input"]:
-            taxonomy_obj = get_taxonomy(taxonomy)
-            if (not taxonomy_obj):
+    if (not php_empty(lambda : postarr_["tax_input"])):
+        for taxonomy_,tags_ in postarr_["tax_input"]:
+            taxonomy_obj_ = get_taxonomy(taxonomy_)
+            if (not taxonomy_obj_):
                 #// translators: %s: Taxonomy name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("Invalid taxonomy: %s."), taxonomy), "4.4.0")
+                _doing_it_wrong(__FUNCTION__, php_sprintf(__("Invalid taxonomy: %s."), taxonomy_), "4.4.0")
                 continue
             # end if
             #// array = hierarchical, string = non-hierarchical.
-            if php_is_array(tags):
-                tags = php_array_filter(tags)
+            if php_is_array(tags_):
+                tags_ = php_array_filter(tags_)
             # end if
-            if current_user_can(taxonomy_obj.cap.assign_terms):
-                wp_set_post_terms(post_ID, tags, taxonomy)
+            if current_user_can(taxonomy_obj_.cap.assign_terms):
+                wp_set_post_terms(post_ID_, tags_, taxonomy_)
             # end if
         # end for
     # end if
-    if (not php_empty(lambda : postarr["meta_input"])):
-        for field,value in postarr["meta_input"]:
-            update_post_meta(post_ID, field, value)
+    if (not php_empty(lambda : postarr_["meta_input"])):
+        for field_,value_ in postarr_["meta_input"]:
+            update_post_meta(post_ID_, field_, value_)
         # end for
     # end if
-    current_guid = get_post_field("guid", post_ID)
+    current_guid_ = get_post_field("guid", post_ID_)
     #// Set GUID.
-    if (not update) and "" == current_guid:
-        wpdb.update(wpdb.posts, Array({"guid": get_permalink(post_ID)}), where)
+    if (not update_) and "" == current_guid_:
+        wpdb_.update(wpdb_.posts, Array({"guid": get_permalink(post_ID_)}), where_)
     # end if
-    if "attachment" == postarr["post_type"]:
-        if (not php_empty(lambda : postarr["file"])):
-            update_attached_file(post_ID, postarr["file"])
+    if "attachment" == postarr_["post_type"]:
+        if (not php_empty(lambda : postarr_["file"])):
+            update_attached_file(post_ID_, postarr_["file"])
         # end if
-        if (not php_empty(lambda : postarr["context"])):
-            add_post_meta(post_ID, "_wp_attachment_context", postarr["context"], True)
+        if (not php_empty(lambda : postarr_["context"])):
+            add_post_meta(post_ID_, "_wp_attachment_context", postarr_["context"], True)
         # end if
     # end if
     #// Set or remove featured image.
-    if (php_isset(lambda : postarr["_thumbnail_id"])):
-        thumbnail_support = current_theme_supports("post-thumbnails", post_type) and post_type_supports(post_type, "thumbnail") or "revision" == post_type
-        if (not thumbnail_support) and "attachment" == post_type and post_mime_type:
-            if wp_attachment_is("audio", post_ID):
-                thumbnail_support = post_type_supports("attachment:audio", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:audio")
-            elif wp_attachment_is("video", post_ID):
-                thumbnail_support = post_type_supports("attachment:video", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:video")
+    if (php_isset(lambda : postarr_["_thumbnail_id"])):
+        thumbnail_support_ = current_theme_supports("post-thumbnails", post_type_) and post_type_supports(post_type_, "thumbnail") or "revision" == post_type_
+        if (not thumbnail_support_) and "attachment" == post_type_ and post_mime_type_:
+            if wp_attachment_is("audio", post_ID_):
+                thumbnail_support_ = post_type_supports("attachment:audio", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:audio")
+            elif wp_attachment_is("video", post_ID_):
+                thumbnail_support_ = post_type_supports("attachment:video", "thumbnail") or current_theme_supports("post-thumbnails", "attachment:video")
             # end if
         # end if
-        if thumbnail_support:
-            thumbnail_id = php_intval(postarr["_thumbnail_id"])
-            if -1 == thumbnail_id:
-                delete_post_thumbnail(post_ID)
+        if thumbnail_support_:
+            thumbnail_id_ = php_intval(postarr_["_thumbnail_id"])
+            if -1 == thumbnail_id_:
+                delete_post_thumbnail(post_ID_)
             else:
-                set_post_thumbnail(post_ID, thumbnail_id)
+                set_post_thumbnail(post_ID_, thumbnail_id_)
             # end if
         # end if
     # end if
-    clean_post_cache(post_ID)
-    post = get_post(post_ID)
-    if (not php_empty(lambda : postarr["page_template"])):
-        post.page_template = postarr["page_template"]
-        page_templates = wp_get_theme().get_page_templates(post)
-        if "default" != postarr["page_template"] and (not (php_isset(lambda : page_templates[postarr["page_template"]]))):
-            if wp_error:
+    clean_post_cache(post_ID_)
+    post_ = get_post(post_ID_)
+    if (not php_empty(lambda : postarr_["page_template"])):
+        post_.page_template = postarr_["page_template"]
+        page_templates_ = wp_get_theme().get_page_templates(post_)
+        if "default" != postarr_["page_template"] and (not (php_isset(lambda : page_templates_[postarr_["page_template"]]))):
+            if wp_error_:
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_page_template", __("Invalid page template.")))
             # end if
-            update_post_meta(post_ID, "_wp_page_template", "default")
+            update_post_meta(post_ID_, "_wp_page_template", "default")
         else:
-            update_post_meta(post_ID, "_wp_page_template", postarr["page_template"])
+            update_post_meta(post_ID_, "_wp_page_template", postarr_["page_template"])
         # end if
     # end if
-    if "attachment" != postarr["post_type"]:
-        wp_transition_post_status(data["post_status"], previous_status, post)
+    if "attachment" != postarr_["post_type"]:
+        wp_transition_post_status(data_["post_status"], previous_status_, post_)
     else:
-        if update:
+        if update_:
             #// 
             #// Fires once an existing attachment has been updated.
             #// 
@@ -3134,8 +3231,8 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
             #// 
             #// @param int $post_ID Attachment ID.
             #//
-            do_action("edit_attachment", post_ID)
-            post_after = get_post(post_ID)
+            do_action("edit_attachment", post_ID_)
+            post_after_ = get_post(post_ID_)
             #// 
             #// Fires once an existing attachment has been updated.
             #// 
@@ -3145,7 +3242,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
             #// @param WP_Post $post_after   Post object following the update.
             #// @param WP_Post $post_before  Post object before the update.
             #//
-            do_action("attachment_updated", post_ID, post_after, post_before)
+            do_action("attachment_updated", post_ID_, post_after_, post_before_)
         else:
             #// 
             #// Fires once an attachment has been added.
@@ -3154,11 +3251,11 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
             #// 
             #// @param int $post_ID Attachment ID.
             #//
-            do_action("add_attachment", post_ID)
+            do_action("add_attachment", post_ID_)
         # end if
-        return post_ID
+        return post_ID_
     # end if
-    if update:
+    if update_:
         #// 
         #// Fires once an existing post has been updated.
         #// 
@@ -3170,7 +3267,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// @param int     $post_ID Post ID.
         #// @param WP_Post $post    Post object.
         #//
-        do_action(str("edit_post_") + str(post.post_type), post_ID, post)
+        do_action(str("edit_post_") + str(post_.post_type), post_ID_, post_)
         #// 
         #// Fires once an existing post has been updated.
         #// 
@@ -3179,8 +3276,8 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// @param int     $post_ID Post ID.
         #// @param WP_Post $post    Post object.
         #//
-        do_action("edit_post", post_ID, post)
-        post_after = get_post(post_ID)
+        do_action("edit_post", post_ID_, post_)
+        post_after_ = get_post(post_ID_)
         #// 
         #// Fires once an existing post has been updated.
         #// 
@@ -3190,7 +3287,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// @param WP_Post $post_after   Post object following the update.
         #// @param WP_Post $post_before  Post object before the update.
         #//
-        do_action("post_updated", post_ID, post_after, post_before)
+        do_action("post_updated", post_ID_, post_after_, post_before_)
     # end if
     #// 
     #// Fires once a post has been saved.
@@ -3204,7 +3301,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     #// @param WP_Post $post    Post object.
     #// @param bool    $update  Whether this is an existing post being updated or not.
     #//
-    do_action(str("save_post_") + str(post.post_type), post_ID, post, update)
+    do_action(str("save_post_") + str(post_.post_type), post_ID_, post_, update_)
     #// 
     #// Fires once a post has been saved.
     #// 
@@ -3214,7 +3311,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     #// @param WP_Post $post    Post object.
     #// @param bool    $update  Whether this is an existing post being updated or not.
     #//
-    do_action("save_post", post_ID, post, update)
+    do_action("save_post", post_ID_, post_, update_)
     #// 
     #// Fires once a post has been saved.
     #// 
@@ -3224,8 +3321,8 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     #// @param WP_Post $post    Post object.
     #// @param bool    $update  Whether this is an existing post being updated or not.
     #//
-    do_action("wp_insert_post", post_ID, post, update)
-    return post_ID
+    do_action("wp_insert_post", post_ID_, post_, update_)
+    return post_ID_
 # end def wp_insert_post
 #// 
 #// Update a post with new post data.
@@ -3240,57 +3337,63 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
 #// @param bool         $wp_error Optional. Allow return of WP_Error on failure. Default false.
 #// @return int|WP_Error The post ID on success. The value 0 or WP_Error on failure.
 #//
-def wp_update_post(postarr=Array(), wp_error=False, *args_):
+def wp_update_post(postarr_=None, wp_error_=None, *_args_):
+    if postarr_ is None:
+        postarr_ = Array()
+    # end if
+    if wp_error_ is None:
+        wp_error_ = False
+    # end if
     
-    if php_is_object(postarr):
+    if php_is_object(postarr_):
         #// Non-escaped post was passed.
-        postarr = get_object_vars(postarr)
-        postarr = wp_slash(postarr)
+        postarr_ = get_object_vars(postarr_)
+        postarr_ = wp_slash(postarr_)
     # end if
     #// First, get all of the original fields.
-    post = get_post(postarr["ID"], ARRAY_A)
-    if is_null(post):
-        if wp_error:
+    post_ = get_post(postarr_["ID"], ARRAY_A)
+    if is_null(post_):
+        if wp_error_:
             return php_new_class("WP_Error", lambda : WP_Error("invalid_post", __("Invalid post ID.")))
         # end if
         return 0
     # end if
     #// Escape data pulled from DB.
-    post = wp_slash(post)
+    post_ = wp_slash(post_)
     #// Passed post category list overwrites existing category list if not empty.
-    if (php_isset(lambda : postarr["post_category"])) and php_is_array(postarr["post_category"]) and 0 != php_count(postarr["post_category"]):
-        post_cats = postarr["post_category"]
+    if (php_isset(lambda : postarr_["post_category"])) and php_is_array(postarr_["post_category"]) and 0 != php_count(postarr_["post_category"]):
+        post_cats_ = postarr_["post_category"]
     else:
-        post_cats = post["post_category"]
+        post_cats_ = post_["post_category"]
     # end if
     #// Drafts shouldn't be assigned a date unless explicitly done so by the user.
-    if (php_isset(lambda : post["post_status"])) and php_in_array(post["post_status"], Array("draft", "pending", "auto-draft")) and php_empty(lambda : postarr["edit_date"]) and "0000-00-00 00:00:00" == post["post_date_gmt"]:
-        clear_date = True
+    if (php_isset(lambda : post_["post_status"])) and php_in_array(post_["post_status"], Array("draft", "pending", "auto-draft")) and php_empty(lambda : postarr_["edit_date"]) and "0000-00-00 00:00:00" == post_["post_date_gmt"]:
+        clear_date_ = True
     else:
-        clear_date = False
+        clear_date_ = False
     # end if
     #// Merge old and new fields with new fields overwriting old ones.
-    postarr = php_array_merge(post, postarr)
-    postarr["post_category"] = post_cats
-    if clear_date:
-        postarr["post_date"] = current_time("mysql")
-        postarr["post_date_gmt"] = ""
+    postarr_ = php_array_merge(post_, postarr_)
+    postarr_["post_category"] = post_cats_
+    if clear_date_:
+        postarr_["post_date"] = current_time("mysql")
+        postarr_["post_date_gmt"] = ""
     # end if
-    if "attachment" == postarr["post_type"]:
-        return wp_insert_attachment(postarr, False, 0, wp_error)
+    if "attachment" == postarr_["post_type"]:
+        return wp_insert_attachment(postarr_, False, 0, wp_error_)
     # end if
     #// Discard 'tags_input' parameter if it's the same as existing post tags.
-    if (php_isset(lambda : postarr["tags_input"])) and is_object_in_taxonomy(postarr["post_type"], "post_tag"):
-        tags = get_the_terms(postarr["ID"], "post_tag")
-        tag_names = Array()
-        if tags and (not is_wp_error(tags)):
-            tag_names = wp_list_pluck(tags, "name")
+    if (php_isset(lambda : postarr_["tags_input"])) and is_object_in_taxonomy(postarr_["post_type"], "post_tag"):
+        tags_ = get_the_terms(postarr_["ID"], "post_tag")
+        tag_names_ = Array()
+        if tags_ and (not is_wp_error(tags_)):
+            tag_names_ = wp_list_pluck(tags_, "name")
         # end if
-        if postarr["tags_input"] == tag_names:
-            postarr["tags_input"] = None
+        if postarr_["tags_input"] == tag_names_:
+            postarr_["tags_input"] = None
         # end if
     # end if
-    return wp_insert_post(postarr, wp_error)
+    return wp_insert_post(postarr_, wp_error_)
 # end def wp_update_post
 #// 
 #// Publish a post by transitioning the post status.
@@ -3301,32 +3404,33 @@ def wp_update_post(postarr=Array(), wp_error=False, *args_):
 #// 
 #// @param int|WP_Post $post Post ID or post object.
 #//
-def wp_publish_post(post=None, *args_):
+def wp_publish_post(post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post(post)
-    if (not post):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post(post_)
+    if (not post_):
         return
     # end if
-    if "publish" == post.post_status:
+    if "publish" == post_.post_status:
         return
     # end if
-    wpdb.update(wpdb.posts, Array({"post_status": "publish"}), Array({"ID": post.ID}))
-    clean_post_cache(post.ID)
-    old_status = post.post_status
-    post.post_status = "publish"
-    wp_transition_post_status("publish", old_status, post)
+    wpdb_.update(wpdb_.posts, Array({"post_status": "publish"}), Array({"ID": post_.ID}))
+    clean_post_cache(post_.ID)
+    old_status_ = post_.post_status
+    post_.post_status = "publish"
+    wp_transition_post_status("publish", old_status_, post_)
     #// This action is documented in wp-includes/post.php
-    do_action(str("edit_post_") + str(post.post_type), post.ID, post)
+    do_action(str("edit_post_") + str(post_.post_type), post_.ID, post_)
     #// This action is documented in wp-includes/post.php
-    do_action("edit_post", post.ID, post)
+    do_action("edit_post", post_.ID, post_)
     #// This action is documented in wp-includes/post.php
-    do_action(str("save_post_") + str(post.post_type), post.ID, post, True)
+    do_action(str("save_post_") + str(post_.post_type), post_.ID, post_, True)
     #// This action is documented in wp-includes/post.php
-    do_action("save_post", post.ID, post, True)
+    do_action("save_post", post_.ID, post_, True)
     #// This action is documented in wp-includes/post.php
-    do_action("wp_insert_post", post.ID, post, True)
+    do_action("wp_insert_post", post_.ID, post_, True)
 # end def wp_publish_post
 #// 
 #// Publish future post and make sure post ID has future post status.
@@ -3338,25 +3442,26 @@ def wp_publish_post(post=None, *args_):
 #// 
 #// @param int|WP_Post $post_id Post ID or post object.
 #//
-def check_and_publish_future_post(post_id=None, *args_):
+def check_and_publish_future_post(post_id_=None, *_args_):
     
-    post = get_post(post_id)
-    if php_empty(lambda : post):
+    
+    post_ = get_post(post_id_)
+    if php_empty(lambda : post_):
         return
     # end if
-    if "future" != post.post_status:
+    if "future" != post_.post_status:
         return
     # end if
-    time = strtotime(post.post_date_gmt + " GMT")
+    time_ = strtotime(post_.post_date_gmt + " GMT")
     #// Uh oh, someone jumped the gun!
-    if time > time():
-        wp_clear_scheduled_hook("publish_future_post", Array(post_id))
+    if time_ > time():
+        wp_clear_scheduled_hook("publish_future_post", Array(post_id_))
         #// Clear anything else in the system.
-        wp_schedule_single_event(time, "publish_future_post", Array(post_id))
+        wp_schedule_single_event(time_, "publish_future_post", Array(post_id_))
         return
     # end if
     #// wp_publish_post() returns no meaningful value.
-    wp_publish_post(post_id)
+    wp_publish_post(post_id_)
 # end def check_and_publish_future_post
 #// 
 #// Computes a unique slug for the post, when given the desired slug and some post details.
@@ -3373,10 +3478,11 @@ def check_and_publish_future_post(post_id=None, *args_):
 #// @param int    $post_parent Post parent ID.
 #// @return string Unique slug for the post, based on $post_name (with a -1, -2, etc. suffix)
 #//
-def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=None, post_parent=None, *args_):
+def wp_unique_post_slug(slug_=None, post_ID_=None, post_status_=None, post_type_=None, post_parent_=None, *_args_):
     
-    if php_in_array(post_status, Array("draft", "pending", "auto-draft")) or "inherit" == post_status and "revision" == post_type or "user_request" == post_type:
-        return slug
+    
+    if php_in_array(post_status_, Array("draft", "pending", "auto-draft")) or "inherit" == post_status_ and "revision" == post_type_ or "user_request" == post_type_:
+        return slug_
     # end if
     #// 
     #// Filters the post slug before it is generated to be unique.
@@ -3393,21 +3499,22 @@ def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=Non
     #// @param string      $post_type     Post type.
     #// @param int         $post_parent   Post parent ID.
     #//
-    override_slug = apply_filters("pre_wp_unique_post_slug", None, slug, post_ID, post_status, post_type, post_parent)
-    if None != override_slug:
-        return override_slug
+    override_slug_ = apply_filters("pre_wp_unique_post_slug", None, slug_, post_ID_, post_status_, post_type_, post_parent_)
+    if None != override_slug_:
+        return override_slug_
     # end if
-    global wpdb,wp_rewrite
-    php_check_if_defined("wpdb","wp_rewrite")
-    original_slug = slug
-    feeds = wp_rewrite.feeds
-    if (not php_is_array(feeds)):
-        feeds = Array()
+    global wpdb_
+    global wp_rewrite_
+    php_check_if_defined("wpdb_","wp_rewrite_")
+    original_slug_ = slug_
+    feeds_ = wp_rewrite_.feeds
+    if (not php_is_array(feeds_)):
+        feeds_ = Array()
     # end if
-    if "attachment" == post_type:
+    if "attachment" == post_type_:
         #// Attachment slugs must be unique across all types.
-        check_sql = str("SELECT post_name FROM ") + str(wpdb.posts) + str(" WHERE post_name = %s AND ID != %d LIMIT 1")
-        post_name_check = wpdb.get_var(wpdb.prepare(check_sql, slug, post_ID))
+        check_sql_ = str("SELECT post_name FROM ") + str(wpdb_.posts) + str(" WHERE post_name = %s AND ID != %d LIMIT 1")
+        post_name_check_ = wpdb_.get_var(wpdb_.prepare(check_sql_, slug_, post_ID_))
         #// 
         #// Filters whether the post slug would make a bad attachment slug.
         #// 
@@ -3416,29 +3523,29 @@ def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=Non
         #// @param bool   $bad_slug Whether the slug would be bad as an attachment slug.
         #// @param string $slug     The post slug.
         #//
-        if post_name_check or php_in_array(slug, feeds) or "embed" == slug or apply_filters("wp_unique_post_slug_is_bad_attachment_slug", False, slug):
-            suffix = 2
+        if post_name_check_ or php_in_array(slug_, feeds_) or "embed" == slug_ or apply_filters("wp_unique_post_slug_is_bad_attachment_slug", False, slug_):
+            suffix_ = 2
             while True:
-                alt_post_name = _truncate_post_slug(slug, 200 - php_strlen(suffix) + 1) + str("-") + str(suffix)
-                post_name_check = wpdb.get_var(wpdb.prepare(check_sql, alt_post_name, post_ID))
-                suffix += 1
+                alt_post_name_ = _truncate_post_slug(slug_, 200 - php_strlen(suffix_) + 1) + str("-") + str(suffix_)
+                post_name_check_ = wpdb_.get_var(wpdb_.prepare(check_sql_, alt_post_name_, post_ID_))
+                suffix_ += 1
                 
-                if post_name_check:
+                if post_name_check_:
                     break
                 # end if
             # end while
-            slug = alt_post_name
+            slug_ = alt_post_name_
         # end if
-    elif is_post_type_hierarchical(post_type):
-        if "nav_menu_item" == post_type:
-            return slug
+    elif is_post_type_hierarchical(post_type_):
+        if "nav_menu_item" == post_type_:
+            return slug_
         # end if
         #// 
         #// Page slugs must be unique within their own trees. Pages are in a separate
         #// namespace than posts so page slugs are allowed to overlap post slugs.
         #//
-        check_sql = str("SELECT post_name FROM ") + str(wpdb.posts) + str(" WHERE post_name = %s AND post_type IN ( %s, 'attachment' ) AND ID != %d AND post_parent = %d LIMIT 1")
-        post_name_check = wpdb.get_var(wpdb.prepare(check_sql, slug, post_type, post_ID, post_parent))
+        check_sql_ = str("SELECT post_name FROM ") + str(wpdb_.posts) + str(" WHERE post_name = %s AND post_type IN ( %s, 'attachment' ) AND ID != %d AND post_parent = %d LIMIT 1")
+        post_name_check_ = wpdb_.get_var(wpdb_.prepare(check_sql_, slug_, post_type_, post_ID_, post_parent_))
         #// 
         #// Filters whether the post slug would make a bad hierarchical post slug.
         #// 
@@ -3449,31 +3556,31 @@ def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=Non
         #// @param string $post_type   Post type.
         #// @param int    $post_parent Post parent ID.
         #//
-        if post_name_check or php_in_array(slug, feeds) or "embed" == slug or php_preg_match(str("@^(") + str(wp_rewrite.pagination_base) + str(")?\\d+$@"), slug) or apply_filters("wp_unique_post_slug_is_bad_hierarchical_slug", False, slug, post_type, post_parent):
-            suffix = 2
+        if post_name_check_ or php_in_array(slug_, feeds_) or "embed" == slug_ or php_preg_match(str("@^(") + str(wp_rewrite_.pagination_base) + str(")?\\d+$@"), slug_) or apply_filters("wp_unique_post_slug_is_bad_hierarchical_slug", False, slug_, post_type_, post_parent_):
+            suffix_ = 2
             while True:
-                alt_post_name = _truncate_post_slug(slug, 200 - php_strlen(suffix) + 1) + str("-") + str(suffix)
-                post_name_check = wpdb.get_var(wpdb.prepare(check_sql, alt_post_name, post_type, post_ID, post_parent))
-                suffix += 1
+                alt_post_name_ = _truncate_post_slug(slug_, 200 - php_strlen(suffix_) + 1) + str("-") + str(suffix_)
+                post_name_check_ = wpdb_.get_var(wpdb_.prepare(check_sql_, alt_post_name_, post_type_, post_ID_, post_parent_))
+                suffix_ += 1
                 
-                if post_name_check:
+                if post_name_check_:
                     break
                 # end if
             # end while
-            slug = alt_post_name
+            slug_ = alt_post_name_
         # end if
     else:
         #// Post slugs must be unique across all posts.
-        check_sql = str("SELECT post_name FROM ") + str(wpdb.posts) + str(" WHERE post_name = %s AND post_type = %s AND ID != %d LIMIT 1")
-        post_name_check = wpdb.get_var(wpdb.prepare(check_sql, slug, post_type, post_ID))
+        check_sql_ = str("SELECT post_name FROM ") + str(wpdb_.posts) + str(" WHERE post_name = %s AND post_type = %s AND ID != %d LIMIT 1")
+        post_name_check_ = wpdb_.get_var(wpdb_.prepare(check_sql_, slug_, post_type_, post_ID_))
         #// Prevent new post slugs that could result in URLs that conflict with date archives.
-        post = get_post(post_ID)
-        conflicts_with_date_archive = False
-        if "post" == post_type and (not post) or post.post_name != slug and php_preg_match("/^[0-9]+$/", slug):
-            slug_num = php_intval(slug)
-            if slug_num:
-                permastructs = php_array_values(php_array_filter(php_explode("/", get_option("permalink_structure"))))
-                postname_index = php_array_search("%postname%", permastructs)
+        post_ = get_post(post_ID_)
+        conflicts_with_date_archive_ = False
+        if "post" == post_type_ and (not post_) or post_.post_name != slug_ and php_preg_match("/^[0-9]+$/", slug_):
+            slug_num_ = php_intval(slug_)
+            if slug_num_:
+                permastructs_ = php_array_values(php_array_filter(php_explode("/", get_option("permalink_structure"))))
+                postname_index_ = php_array_search("%postname%", permastructs_)
                 #// 
                 #// Potential date clashes are as follows:
                 #// 
@@ -3481,8 +3588,8 @@ def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=Non
                 #// - An integer between 1 and 12 that follows 'year' conflicts with 'monthnum'.
                 #// - An integer between 1 and 31 that follows 'monthnum' conflicts with 'day'.
                 #//
-                if 0 == postname_index or postname_index and "%year%" == permastructs[postname_index - 1] and 13 > slug_num or postname_index and "%monthnum%" == permastructs[postname_index - 1] and 32 > slug_num:
-                    conflicts_with_date_archive = True
+                if 0 == postname_index_ or postname_index_ and "%year%" == permastructs_[postname_index_ - 1] and 13 > slug_num_ or postname_index_ and "%monthnum%" == permastructs_[postname_index_ - 1] and 32 > slug_num_:
+                    conflicts_with_date_archive_ = True
                 # end if
             # end if
         # end if
@@ -3495,18 +3602,18 @@ def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=Non
         #// @param string $slug      The post slug.
         #// @param string $post_type Post type.
         #//
-        if post_name_check or php_in_array(slug, feeds) or "embed" == slug or conflicts_with_date_archive or apply_filters("wp_unique_post_slug_is_bad_flat_slug", False, slug, post_type):
-            suffix = 2
+        if post_name_check_ or php_in_array(slug_, feeds_) or "embed" == slug_ or conflicts_with_date_archive_ or apply_filters("wp_unique_post_slug_is_bad_flat_slug", False, slug_, post_type_):
+            suffix_ = 2
             while True:
-                alt_post_name = _truncate_post_slug(slug, 200 - php_strlen(suffix) + 1) + str("-") + str(suffix)
-                post_name_check = wpdb.get_var(wpdb.prepare(check_sql, alt_post_name, post_type, post_ID))
-                suffix += 1
+                alt_post_name_ = _truncate_post_slug(slug_, 200 - php_strlen(suffix_) + 1) + str("-") + str(suffix_)
+                post_name_check_ = wpdb_.get_var(wpdb_.prepare(check_sql_, alt_post_name_, post_type_, post_ID_))
+                suffix_ += 1
                 
-                if post_name_check:
+                if post_name_check_:
                     break
                 # end if
             # end while
-            slug = alt_post_name
+            slug_ = alt_post_name_
         # end if
     # end if
     #// 
@@ -3521,7 +3628,7 @@ def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=Non
     #// @param int    $post_parent   Post parent ID
     #// @param string $original_slug The original post slug.
     #//
-    return apply_filters("wp_unique_post_slug", slug, post_ID, post_status, post_type, post_parent, original_slug)
+    return apply_filters("wp_unique_post_slug", slug_, post_ID_, post_status_, post_type_, post_parent_, original_slug_)
 # end def wp_unique_post_slug
 #// 
 #// Truncate a post slug.
@@ -3535,17 +3642,18 @@ def wp_unique_post_slug(slug=None, post_ID=None, post_status=None, post_type=Non
 #// @param int    $length Optional. Max length of the slug. Default 200 (characters).
 #// @return string The truncated slug.
 #//
-def _truncate_post_slug(slug=None, length=200, *args_):
+def _truncate_post_slug(slug_=None, length_=200, *_args_):
     
-    if php_strlen(slug) > length:
-        decoded_slug = urldecode(slug)
-        if decoded_slug == slug:
-            slug = php_substr(slug, 0, length)
+    
+    if php_strlen(slug_) > length_:
+        decoded_slug_ = urldecode(slug_)
+        if decoded_slug_ == slug_:
+            slug_ = php_substr(slug_, 0, length_)
         else:
-            slug = utf8_uri_encode(decoded_slug, length)
+            slug_ = utf8_uri_encode(decoded_slug_, length_)
         # end if
     # end if
-    return php_rtrim(slug, "-")
+    return php_rtrim(slug_, "-")
 # end def _truncate_post_slug
 #// 
 #// Add tags to a post.
@@ -3559,9 +3667,10 @@ def _truncate_post_slug(slug=None, length=200, *args_):
 #// separated by commas. Default empty.
 #// @return array|false|WP_Error Array of affected term IDs. WP_Error or false on failure.
 #//
-def wp_add_post_tags(post_id=0, tags="", *args_):
+def wp_add_post_tags(post_id_=0, tags_="", *_args_):
     
-    return wp_set_post_tags(post_id, tags, True)
+    
+    return wp_set_post_tags(post_id_, tags_, True)
 # end def wp_add_post_tags
 #// 
 #// Set the tags for a post.
@@ -3577,9 +3686,12 @@ def wp_add_post_tags(post_id=0, tags="", *args_):
 #// replace the tags with the new tags. Default false.
 #// @return array|false|WP_Error Array of term taxonomy IDs of affected terms. WP_Error or false on failure.
 #//
-def wp_set_post_tags(post_id=0, tags="", append=False, *args_):
+def wp_set_post_tags(post_id_=0, tags_="", append_=None, *_args_):
+    if append_ is None:
+        append_ = False
+    # end if
     
-    return wp_set_post_terms(post_id, tags, "post_tag", append)
+    return wp_set_post_terms(post_id_, tags_, "post_tag", append_)
 # end def wp_set_post_tags
 #// 
 #// Set the terms for a post.
@@ -3598,30 +3710,33 @@ def wp_set_post_tags(post_id=0, tags="", append=False, *args_):
 #// replace the terms with the new terms. Default false.
 #// @return array|false|WP_Error Array of term taxonomy IDs of affected terms. WP_Error or false on failure.
 #//
-def wp_set_post_terms(post_id=0, tags="", taxonomy="post_tag", append=False, *args_):
+def wp_set_post_terms(post_id_=0, tags_="", taxonomy_="post_tag", append_=None, *_args_):
+    if append_ is None:
+        append_ = False
+    # end if
     
-    post_id = php_int(post_id)
-    if (not post_id):
+    post_id_ = php_int(post_id_)
+    if (not post_id_):
         return False
     # end if
-    if php_empty(lambda : tags):
-        tags = Array()
+    if php_empty(lambda : tags_):
+        tags_ = Array()
     # end if
-    if (not php_is_array(tags)):
-        comma = _x(",", "tag delimiter")
-        if "," != comma:
-            tags = php_str_replace(comma, ",", tags)
+    if (not php_is_array(tags_)):
+        comma_ = _x(",", "tag delimiter")
+        if "," != comma_:
+            tags_ = php_str_replace(comma_, ",", tags_)
         # end if
-        tags = php_explode(",", php_trim(tags, " \n \r ,"))
+        tags_ = php_explode(",", php_trim(tags_, " \n   \r ,"))
     # end if
     #// 
     #// Hierarchical taxonomies must always pass IDs rather than names so that
     #// children with the same names but different parents aren't confused.
     #//
-    if is_taxonomy_hierarchical(taxonomy):
-        tags = array_unique(php_array_map("intval", tags))
+    if is_taxonomy_hierarchical(taxonomy_):
+        tags_ = array_unique(php_array_map("intval", tags_))
     # end if
-    return wp_set_object_terms(post_id, tags, taxonomy, append)
+    return wp_set_object_terms(post_id_, tags_, taxonomy_, append_)
 # end def wp_set_post_terms
 #// 
 #// Set categories for a post.
@@ -3639,24 +3754,30 @@ def wp_set_post_terms(post_id=0, tags="", taxonomy="post_tag", append=False, *ar
 #// If false, replace the categories with the new categories.
 #// @return array|false|WP_Error Array of term taxonomy IDs of affected categories. WP_Error or false on failure.
 #//
-def wp_set_post_categories(post_ID=0, post_categories=Array(), append=False, *args_):
+def wp_set_post_categories(post_ID_=0, post_categories_=None, append_=None, *_args_):
+    if post_categories_ is None:
+        post_categories_ = Array()
+    # end if
+    if append_ is None:
+        append_ = False
+    # end if
     
-    post_ID = php_int(post_ID)
-    post_type = get_post_type(post_ID)
-    post_status = get_post_status(post_ID)
+    post_ID_ = php_int(post_ID_)
+    post_type_ = get_post_type(post_ID_)
+    post_status_ = get_post_status(post_ID_)
     #// If $post_categories isn't already an array, make it one:
-    post_categories = post_categories
-    if php_empty(lambda : post_categories):
-        if "post" == post_type and "auto-draft" != post_status:
-            post_categories = Array(get_option("default_category"))
-            append = False
+    post_categories_ = post_categories_
+    if php_empty(lambda : post_categories_):
+        if "post" == post_type_ and "auto-draft" != post_status_:
+            post_categories_ = Array(get_option("default_category"))
+            append_ = False
         else:
-            post_categories = Array()
+            post_categories_ = Array()
         # end if
-    elif 1 == php_count(post_categories) and "" == reset(post_categories):
+    elif 1 == php_count(post_categories_) and "" == reset(post_categories_):
         return True
     # end if
-    return wp_set_post_terms(post_ID, post_categories, "category", append)
+    return wp_set_post_terms(post_ID_, post_categories_, "category", append_)
 # end def wp_set_post_categories
 #// 
 #// Fires actions related to the transitioning of a post's status.
@@ -3679,7 +3800,8 @@ def wp_set_post_categories(post_ID=0, post_categories=Array(), append=False, *ar
 #// @param string  $old_status Previous post status.
 #// @param WP_Post $post Post data.
 #//
-def wp_transition_post_status(new_status=None, old_status=None, post=None, *args_):
+def wp_transition_post_status(new_status_=None, old_status_=None, post_=None, *_args_):
+    
     
     #// 
     #// Fires when a post is transitioned from one status to another.
@@ -3690,7 +3812,7 @@ def wp_transition_post_status(new_status=None, old_status=None, post=None, *args
     #// @param string  $old_status Old post status.
     #// @param WP_Post $post       Post object.
     #//
-    do_action("transition_post_status", new_status, old_status, post)
+    do_action("transition_post_status", new_status_, old_status_, post_)
     #// 
     #// Fires when a post is transitioned from one status to another.
     #// 
@@ -3701,7 +3823,7 @@ def wp_transition_post_status(new_status=None, old_status=None, post=None, *args
     #// 
     #// @param WP_Post $post Post object.
     #//
-    do_action(str(old_status) + str("_to_") + str(new_status), post)
+    do_action(str(old_status_) + str("_to_") + str(new_status_), post_)
     #// 
     #// Fires when a post is transitioned from one status to another.
     #// 
@@ -3721,7 +3843,7 @@ def wp_transition_post_status(new_status=None, old_status=None, post=None, *args
     #// @param int     $post_id Post ID.
     #// @param WP_Post $post    Post object.
     #//
-    do_action(str(new_status) + str("_") + str(post.post_type), post.ID, post)
+    do_action(str(new_status_) + str("_") + str(post_.post_type), post_.ID, post_)
 # end def wp_transition_post_status
 #// 
 #// Comment, trackback, and pingback functions.
@@ -3739,22 +3861,23 @@ def wp_transition_post_status(new_status=None, old_status=None, post=None, *args
 #// @param string|array $uri     Ping URI or array of URIs.
 #// @return int|false How many rows were updated.
 #//
-def add_ping(post_id=None, uri=None, *args_):
+def add_ping(post_id_=None, uri_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post(post_id)
-    if (not post):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post(post_id_)
+    if (not post_):
         return False
     # end if
-    pung = php_trim(post.pinged)
-    pung = php_preg_split("/\\s/", pung)
-    if php_is_array(uri):
-        pung = php_array_merge(pung, uri)
+    pung_ = php_trim(post_.pinged)
+    pung_ = php_preg_split("/\\s/", pung_)
+    if php_is_array(uri_):
+        pung_ = php_array_merge(pung_, uri_)
     else:
-        pung[-1] = uri
+        pung_[-1] = uri_
     # end if
-    new = php_implode("\n", pung)
+    new_ = php_implode("\n", pung_)
     #// 
     #// Filters the new ping URL to add for the given post.
     #// 
@@ -3762,9 +3885,9 @@ def add_ping(post_id=None, uri=None, *args_):
     #// 
     #// @param string $new New ping URL to add.
     #//
-    new = apply_filters("add_ping", new)
-    return_ = wpdb.update(wpdb.posts, Array({"pinged": new}), Array({"ID": post.ID}))
-    clean_post_cache(post.ID)
+    new_ = apply_filters("add_ping", new_)
+    return_ = wpdb_.update(wpdb_.posts, Array({"pinged": new_}), Array({"ID": post_.ID}))
+    clean_post_cache(post_.ID)
     return return_
 # end def add_ping
 #// 
@@ -3775,20 +3898,21 @@ def add_ping(post_id=None, uri=None, *args_):
 #// @param int $post_id Post ID.
 #// @return string[] Array of enclosures for the given post.
 #//
-def get_enclosed(post_id=None, *args_):
+def get_enclosed(post_id_=None, *_args_):
     
-    custom_fields = get_post_custom(post_id)
-    pung = Array()
-    if (not php_is_array(custom_fields)):
-        return pung
+    
+    custom_fields_ = get_post_custom(post_id_)
+    pung_ = Array()
+    if (not php_is_array(custom_fields_)):
+        return pung_
     # end if
-    for key,val in custom_fields:
-        if "enclosure" != key or (not php_is_array(val)):
+    for key_,val_ in custom_fields_:
+        if "enclosure" != key_ or (not php_is_array(val_)):
             continue
         # end if
-        for enc in val:
-            enclosure = php_explode("\n", enc)
-            pung[-1] = php_trim(enclosure[0])
+        for enc_ in val_:
+            enclosure_ = php_explode("\n", enc_)
+            pung_[-1] = php_trim(enclosure_[0])
         # end for
     # end for
     #// 
@@ -3799,7 +3923,7 @@ def get_enclosed(post_id=None, *args_):
     #// @param string[] $pung    Array of enclosures for the given post.
     #// @param int      $post_id Post ID.
     #//
-    return apply_filters("get_enclosed", pung, post_id)
+    return apply_filters("get_enclosed", pung_, post_id_)
 # end def get_enclosed
 #// 
 #// Retrieve URLs already pinged for a post.
@@ -3811,14 +3935,15 @@ def get_enclosed(post_id=None, *args_):
 #// @param int|WP_Post $post_id Post ID or object.
 #// @return bool|string[] Array of URLs already pinged for the given post, false if the post is not found.
 #//
-def get_pung(post_id=None, *args_):
+def get_pung(post_id_=None, *_args_):
     
-    post = get_post(post_id)
-    if (not post):
+    
+    post_ = get_post(post_id_)
+    if (not post_):
         return False
     # end if
-    pung = php_trim(post.pinged)
-    pung = php_preg_split("/\\s/", pung)
+    pung_ = php_trim(post_.pinged)
+    pung_ = php_preg_split("/\\s/", pung_)
     #// 
     #// Filters the list of already-pinged URLs for the given post.
     #// 
@@ -3826,7 +3951,7 @@ def get_pung(post_id=None, *args_):
     #// 
     #// @param string[] $pung Array of URLs already pinged for the given post.
     #//
-    return apply_filters("get_pung", pung)
+    return apply_filters("get_pung", pung_)
 # end def get_pung
 #// 
 #// Retrieve URLs that need to be pinged.
@@ -3837,14 +3962,15 @@ def get_pung(post_id=None, *args_):
 #// @param int|WP_Post $post_id Post Object or ID
 #// @param string[] List of URLs yet to ping.
 #//
-def get_to_ping(post_id=None, *args_):
+def get_to_ping(post_id_=None, *_args_):
     
-    post = get_post(post_id)
-    if (not post):
+    
+    post_ = get_post(post_id_)
+    if (not post_):
         return False
     # end if
-    to_ping = sanitize_trackback_urls(post.to_ping)
-    to_ping = php_preg_split("/\\s/", to_ping, -1, PREG_SPLIT_NO_EMPTY)
+    to_ping_ = sanitize_trackback_urls(post_.to_ping)
+    to_ping_ = php_preg_split("/\\s/", to_ping_, -1, PREG_SPLIT_NO_EMPTY)
     #// 
     #// Filters the list of URLs yet to ping for the given post.
     #// 
@@ -3852,7 +3978,7 @@ def get_to_ping(post_id=None, *args_):
     #// 
     #// @param string[] $to_ping List of URLs yet to ping.
     #//
-    return apply_filters("get_to_ping", to_ping)
+    return apply_filters("get_to_ping", to_ping_)
 # end def get_to_ping
 #// 
 #// Do trackbacks for a list of URLs.
@@ -3862,20 +3988,21 @@ def get_to_ping(post_id=None, *args_):
 #// @param string $tb_list Comma separated list of URLs.
 #// @param int    $post_id Post ID.
 #//
-def trackback_url_list(tb_list=None, post_id=None, *args_):
+def trackback_url_list(tb_list_=None, post_id_=None, *_args_):
     
-    if (not php_empty(lambda : tb_list)):
+    
+    if (not php_empty(lambda : tb_list_)):
         #// Get post data.
-        postdata = get_post(post_id, ARRAY_A)
+        postdata_ = get_post(post_id_, ARRAY_A)
         #// Form an excerpt.
-        excerpt = strip_tags(postdata["post_excerpt"] if postdata["post_excerpt"] else postdata["post_content"])
-        if php_strlen(excerpt) > 255:
-            excerpt = php_substr(excerpt, 0, 252) + "&hellip;"
+        excerpt_ = strip_tags(postdata_["post_excerpt"] if postdata_["post_excerpt"] else postdata_["post_content"])
+        if php_strlen(excerpt_) > 255:
+            excerpt_ = php_substr(excerpt_, 0, 252) + "&hellip;"
         # end if
-        trackback_urls = php_explode(",", tb_list)
-        for tb_url in trackback_urls:
-            tb_url = php_trim(tb_url)
-            trackback(tb_url, wp_unslash(postdata["post_title"]), excerpt, post_id)
+        trackback_urls_ = php_explode(",", tb_list_)
+        for tb_url_ in trackback_urls_:
+            tb_url_ = php_trim(tb_url_)
+            trackback(tb_url_, wp_unslash(postdata_["post_title"]), excerpt_, post_id_)
         # end for
     # end if
 # end def trackback_url_list
@@ -3891,16 +4018,17 @@ def trackback_url_list(tb_list=None, post_id=None, *args_):
 #// 
 #// @return string[] List of page IDs as strings.
 #//
-def get_all_page_ids(*args_):
+def get_all_page_ids(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    page_ids = wp_cache_get("all_page_ids", "posts")
-    if (not php_is_array(page_ids)):
-        page_ids = wpdb.get_col(str("SELECT ID FROM ") + str(wpdb.posts) + str(" WHERE post_type = 'page'"))
-        wp_cache_add("all_page_ids", page_ids, "posts")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    page_ids_ = wp_cache_get("all_page_ids", "posts")
+    if (not php_is_array(page_ids_)):
+        page_ids_ = wpdb_.get_col(str("SELECT ID FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'page'"))
+        wp_cache_add("all_page_ids", page_ids_, "posts")
     # end if
-    return page_ids
+    return page_ids_
 # end def get_all_page_ids
 #// 
 #// Retrieves page data given a page ID or page object.
@@ -3917,9 +4045,12 @@ def get_all_page_ids(*args_):
 #// 'edit', 'db', 'display'. Default 'raw'.
 #// @return WP_Post|array|null WP_Post or array on success, null on failure.
 #//
-def get_page(page=None, output=OBJECT, filter="raw", *args_):
+def get_page(page_=None, output_=None, filter_="raw", *_args_):
+    if output_ is None:
+        output_ = OBJECT
+    # end if
     
-    return get_post(page, output, filter)
+    return get_post(page_, output_, filter_)
 # end def get_page
 #// 
 #// Retrieves a page given its path.
@@ -3934,72 +4065,75 @@ def get_page(page=None, output=OBJECT, filter="raw", *args_):
 #// @param string|array $post_type Optional. Post type or array of post types. Default 'page'.
 #// @return WP_Post|array|null WP_Post (or array) on success, or null on failure.
 #//
-def get_page_by_path(page_path=None, output=OBJECT, post_type="page", *args_):
+def get_page_by_path(page_path_=None, output_=None, post_type_="page", *_args_):
+    if output_ is None:
+        output_ = OBJECT
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    last_changed = wp_cache_get_last_changed("posts")
-    hash = php_md5(page_path + serialize(post_type))
-    cache_key = str("get_page_by_path:") + str(hash) + str(":") + str(last_changed)
-    cached = wp_cache_get(cache_key, "posts")
-    if False != cached:
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    last_changed_ = wp_cache_get_last_changed("posts")
+    hash_ = php_md5(page_path_ + serialize(post_type_))
+    cache_key_ = str("get_page_by_path:") + str(hash_) + str(":") + str(last_changed_)
+    cached_ = wp_cache_get(cache_key_, "posts")
+    if False != cached_:
         #// Special case: '0' is a bad `$page_path`.
-        if "0" == cached or 0 == cached:
+        if "0" == cached_ or 0 == cached_:
             return
         else:
-            return get_post(cached, output)
+            return get_post(cached_, output_)
         # end if
     # end if
-    page_path = rawurlencode(urldecode(page_path))
-    page_path = php_str_replace("%2F", "/", page_path)
-    page_path = php_str_replace("%20", " ", page_path)
-    parts = php_explode("/", php_trim(page_path, "/"))
-    parts = php_array_map("sanitize_title_for_query", parts)
-    escaped_parts = esc_sql(parts)
-    in_string = "'" + php_implode("','", escaped_parts) + "'"
-    if php_is_array(post_type):
-        post_types = post_type
+    page_path_ = rawurlencode(urldecode(page_path_))
+    page_path_ = php_str_replace("%2F", "/", page_path_)
+    page_path_ = php_str_replace("%20", " ", page_path_)
+    parts_ = php_explode("/", php_trim(page_path_, "/"))
+    parts_ = php_array_map("sanitize_title_for_query", parts_)
+    escaped_parts_ = esc_sql(parts_)
+    in_string_ = "'" + php_implode("','", escaped_parts_) + "'"
+    if php_is_array(post_type_):
+        post_types_ = post_type_
     else:
-        post_types = Array(post_type, "attachment")
+        post_types_ = Array(post_type_, "attachment")
     # end if
-    post_types = esc_sql(post_types)
-    post_type_in_string = "'" + php_implode("','", post_types) + "'"
-    sql = str("\n       SELECT ID, post_name, post_parent, post_type\n      FROM ") + str(wpdb.posts) + str("\n     WHERE post_name IN (") + str(in_string) + str(")\n      AND post_type IN (") + str(post_type_in_string) + str(")\n  ")
-    pages = wpdb.get_results(sql, OBJECT_K)
-    revparts = array_reverse(parts)
-    foundid = 0
-    for page in pages:
-        if page.post_name == revparts[0]:
-            count = 0
-            p = page
+    post_types_ = esc_sql(post_types_)
+    post_type_in_string_ = "'" + php_implode("','", post_types_) + "'"
+    sql_ = str("\n      SELECT ID, post_name, post_parent, post_type\n      FROM ") + str(wpdb_.posts) + str("\n        WHERE post_name IN (") + str(in_string_) + str(")\n     AND post_type IN (") + str(post_type_in_string_) + str(")\n ")
+    pages_ = wpdb_.get_results(sql_, OBJECT_K)
+    revparts_ = array_reverse(parts_)
+    foundid_ = 0
+    for page_ in pages_:
+        if page_.post_name == revparts_[0]:
+            count_ = 0
+            p_ = page_
             #// 
             #// Loop through the given path parts from right to left,
             #// ensuring each matches the post ancestry.
             #//
             while True:
                 
-                if not (0 != p.post_parent and (php_isset(lambda : pages[p.post_parent]))):
+                if not (0 != p_.post_parent and (php_isset(lambda : pages_[p_.post_parent]))):
                     break
                 # end if
-                count += 1
-                parent = pages[p.post_parent]
-                if (not (php_isset(lambda : revparts[count]))) or parent.post_name != revparts[count]:
+                count_ += 1
+                parent_ = pages_[p_.post_parent]
+                if (not (php_isset(lambda : revparts_[count_]))) or parent_.post_name != revparts_[count_]:
                     break
                 # end if
-                p = parent
+                p_ = parent_
             # end while
-            if 0 == p.post_parent and php_count(revparts) == count + 1 and p.post_name == revparts[count]:
-                foundid = page.ID
-                if page.post_type == post_type:
+            if 0 == p_.post_parent and php_count(revparts_) == count_ + 1 and p_.post_name == revparts_[count_]:
+                foundid_ = page_.ID
+                if page_.post_type == post_type_:
                     break
                 # end if
             # end if
         # end if
     # end for
     #// We cache misses as well as hits.
-    wp_cache_set(cache_key, foundid, "posts")
-    if foundid:
-        return get_post(foundid, output)
+    wp_cache_set(cache_key_, foundid_, "posts")
+    if foundid_:
+        return get_post(foundid_, output_)
     # end if
 # end def get_page_by_path
 #// 
@@ -4023,20 +4157,23 @@ def get_page_by_path(page_path=None, output=OBJECT, post_type="page", *args_):
 #// @param string|array $post_type  Optional. Post type or array of post types. Default 'page'.
 #// @return WP_Post|array|null WP_Post (or array) on success, or null on failure.
 #//
-def get_page_by_title(page_title=None, output=OBJECT, post_type="page", *args_):
-    
-    global wpdb
-    php_check_if_defined("wpdb")
-    if php_is_array(post_type):
-        post_type = esc_sql(post_type)
-        post_type_in_string = "'" + php_implode("','", post_type) + "'"
-        sql = wpdb.prepare(str("\n          SELECT ID\n         FROM ") + str(wpdb.posts) + str("\n         WHERE post_title = %s\n         AND post_type IN (") + str(post_type_in_string) + str(")\n      "), page_title)
-    else:
-        sql = wpdb.prepare(str("\n          SELECT ID\n         FROM ") + str(wpdb.posts) + str("""\n           WHERE post_title = %s\n         AND post_type = %s\n        """), page_title, post_type)
+def get_page_by_title(page_title_=None, output_=None, post_type_="page", *_args_):
+    if output_ is None:
+        output_ = OBJECT
     # end if
-    page = wpdb.get_var(sql)
-    if page:
-        return get_post(page, output)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if php_is_array(post_type_):
+        post_type_ = esc_sql(post_type_)
+        post_type_in_string_ = "'" + php_implode("','", post_type_) + "'"
+        sql_ = wpdb_.prepare(str("\n            SELECT ID\n         FROM ") + str(wpdb_.posts) + str("\n            WHERE post_title = %s\n         AND post_type IN (") + str(post_type_in_string_) + str(")\n     "), page_title_)
+    else:
+        sql_ = wpdb_.prepare(str("\n            SELECT ID\n         FROM ") + str(wpdb_.posts) + str("""\n          WHERE post_title = %s\n         AND post_type = %s\n        """), page_title_, post_type_)
+    # end if
+    page_ = wpdb_.get_var(sql_)
+    if page_:
+        return get_post(page_, output_)
     # end if
 # end def get_page_by_title
 #// 
@@ -4050,34 +4187,35 @@ def get_page_by_title(page_title=None, output=OBJECT, post_type="page", *args_):
 #// @param array $pages   List of page objects from which descendants should be identified.
 #// @return array List of page children.
 #//
-def get_page_children(page_id=None, pages=None, *args_):
+def get_page_children(page_id_=None, pages_=None, *_args_):
+    
     
     #// Build a hash of ID -> children.
-    children = Array()
-    for page in pages:
-        children[php_intval(page.post_parent)][-1] = page
+    children_ = Array()
+    for page_ in pages_:
+        children_[php_intval(page_.post_parent)][-1] = page_
     # end for
-    page_list = Array()
+    page_list_ = Array()
     #// Start the search by looking at immediate children.
-    if (php_isset(lambda : children[page_id])):
+    if (php_isset(lambda : children_[page_id_])):
         #// Always start at the end of the stack in order to preserve original `$pages` order.
-        to_look = array_reverse(children[page_id])
+        to_look_ = array_reverse(children_[page_id_])
         while True:
             
-            if not (to_look):
+            if not (to_look_):
                 break
             # end if
-            p = php_array_pop(to_look)
-            page_list[-1] = p
-            if (php_isset(lambda : children[p.ID])):
-                for child in array_reverse(children[p.ID]):
+            p_ = php_array_pop(to_look_)
+            page_list_[-1] = p_
+            if (php_isset(lambda : children_[p_.ID])):
+                for child_ in array_reverse(children_[p_.ID]):
                     #// Append to the `$to_look` stack to descend the tree.
-                    to_look[-1] = child
+                    to_look_[-1] = child_
                 # end for
             # end if
         # end while
     # end if
-    return page_list
+    return page_list_
 # end def get_page_children
 #// 
 #// Order the pages with children under parents in a flat list.
@@ -4091,19 +4229,20 @@ def get_page_children(page_id=None, pages=None, *args_):
 #// @param int       $page_id Optional. Parent page ID. Default 0.
 #// @return string[] Array of post names keyed by ID and arranged by hierarchy. Children immediately follow their parents.
 #//
-def get_page_hierarchy(pages=None, page_id=0, *args_):
+def get_page_hierarchy(pages_=None, page_id_=0, *_args_):
     
-    if php_empty(lambda : pages):
+    
+    if php_empty(lambda : pages_):
         return Array()
     # end if
-    children = Array()
-    for p in pages:
-        parent_id = php_intval(p.post_parent)
-        children[parent_id][-1] = p
+    children_ = Array()
+    for p_ in pages_:
+        parent_id_ = php_intval(p_.post_parent)
+        children_[parent_id_][-1] = p_
     # end for
-    result = Array()
-    _page_traverse_name(page_id, children, result)
-    return result
+    result_ = Array()
+    _page_traverse_name(page_id_, children_, result_)
+    return result_
 # end def get_page_hierarchy
 #// 
 #// Traverse and return all the nested children post names of a root page.
@@ -4119,12 +4258,13 @@ def get_page_hierarchy(pages=None, page_id=0, *args_):
 #// @param array    $children Parent-children relations (passed by reference).
 #// @param string[] $result   Array of page names keyed by ID (passed by reference).
 #//
-def _page_traverse_name(page_id=None, children=None, result=None, *args_):
+def _page_traverse_name(page_id_=None, children_=None, result_=None, *_args_):
     
-    if (php_isset(lambda : children[page_id])):
-        for child in children[page_id]:
-            result[child.ID] = child.post_name
-            _page_traverse_name(child.ID, children, result)
+    
+    if (php_isset(lambda : children_[page_id_])):
+        for child_ in children_[page_id_]:
+            result_[child_.ID] = child_.post_name
+            _page_traverse_name(child_.ID, children_, result_)
         # end for
     # end if
 # end def _page_traverse_name
@@ -4139,19 +4279,20 @@ def _page_traverse_name(page_id=None, children=None, result=None, *args_):
 #// @param WP_Post|object|int $page Optional. Page ID or WP_Post object. Default is global $post.
 #// @return string|false Page URI, false on error.
 #//
-def get_page_uri(page=0, *args_):
+def get_page_uri(page_=0, *_args_):
     
-    if (not type(page).__name__ == "WP_Post"):
-        page = get_post(page)
+    
+    if (not type(page_).__name__ == "WP_Post"):
+        page_ = get_post(page_)
     # end if
-    if (not page):
+    if (not page_):
         return False
     # end if
-    uri = page.post_name
-    for parent in page.ancestors:
-        parent = get_post(parent)
-        if parent and parent.post_name:
-            uri = parent.post_name + "/" + uri
+    uri_ = page_.post_name
+    for parent_ in page_.ancestors:
+        parent_ = get_post(parent_)
+        if parent_ and parent_.post_name:
+            uri_ = parent_.post_name + "/" + uri_
         # end if
     # end for
     #// 
@@ -4162,7 +4303,7 @@ def get_page_uri(page=0, *args_):
     #// @param string  $uri  Page URI.
     #// @param WP_Post $page Page object.
     #//
-    return apply_filters("get_page_uri", uri, page)
+    return apply_filters("get_page_uri", uri_, page_)
 # end def get_page_uri
 #// 
 #// Retrieve a list of pages (or hierarchical post type items).
@@ -4206,213 +4347,216 @@ def get_page_uri(page=0, *args_):
 #// }
 #// @return array|false List of pages matching defaults or `$args`.
 #//
-def get_pages(args=Array(), *args_):
+def get_pages(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    defaults = Array({"child_of": 0, "sort_order": "ASC", "sort_column": "post_title", "hierarchical": 1, "exclude": Array(), "include": Array(), "meta_key": "", "meta_value": "", "authors": "", "parent": -1, "exclude_tree": Array(), "number": "", "offset": 0, "post_type": "page", "post_status": "publish"})
-    parsed_args = wp_parse_args(args, defaults)
-    number = php_int(parsed_args["number"])
-    offset = php_int(parsed_args["offset"])
-    child_of = php_int(parsed_args["child_of"])
-    hierarchical = parsed_args["hierarchical"]
-    exclude = parsed_args["exclude"]
-    meta_key = parsed_args["meta_key"]
-    meta_value = parsed_args["meta_value"]
-    parent = parsed_args["parent"]
-    post_status = parsed_args["post_status"]
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    defaults_ = Array({"child_of": 0, "sort_order": "ASC", "sort_column": "post_title", "hierarchical": 1, "exclude": Array(), "include": Array(), "meta_key": "", "meta_value": "", "authors": "", "parent": -1, "exclude_tree": Array(), "number": "", "offset": 0, "post_type": "page", "post_status": "publish"})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    number_ = php_int(parsed_args_["number"])
+    offset_ = php_int(parsed_args_["offset"])
+    child_of_ = php_int(parsed_args_["child_of"])
+    hierarchical_ = parsed_args_["hierarchical"]
+    exclude_ = parsed_args_["exclude"]
+    meta_key_ = parsed_args_["meta_key"]
+    meta_value_ = parsed_args_["meta_value"]
+    parent_ = parsed_args_["parent"]
+    post_status_ = parsed_args_["post_status"]
     #// Make sure the post type is hierarchical.
-    hierarchical_post_types = get_post_types(Array({"hierarchical": True}))
-    if (not php_in_array(parsed_args["post_type"], hierarchical_post_types)):
+    hierarchical_post_types_ = get_post_types(Array({"hierarchical": True}))
+    if (not php_in_array(parsed_args_["post_type"], hierarchical_post_types_)):
         return False
     # end if
-    if parent > 0 and (not child_of):
-        hierarchical = False
+    if parent_ > 0 and (not child_of_):
+        hierarchical_ = False
     # end if
     #// Make sure we have a valid post status.
-    if (not php_is_array(post_status)):
-        post_status = php_explode(",", post_status)
+    if (not php_is_array(post_status_)):
+        post_status_ = php_explode(",", post_status_)
     # end if
-    if php_array_diff(post_status, get_post_stati()):
+    if php_array_diff(post_status_, get_post_stati()):
         return False
     # end if
     #// $args can be whatever, only use the args defined in defaults to compute the key.
-    key = php_md5(serialize(wp_array_slice_assoc(parsed_args, php_array_keys(defaults))))
-    last_changed = wp_cache_get_last_changed("posts")
-    cache_key = str("get_pages:") + str(key) + str(":") + str(last_changed)
-    cache = wp_cache_get(cache_key, "posts")
-    if False != cache:
+    key_ = php_md5(serialize(wp_array_slice_assoc(parsed_args_, php_array_keys(defaults_))))
+    last_changed_ = wp_cache_get_last_changed("posts")
+    cache_key_ = str("get_pages:") + str(key_) + str(":") + str(last_changed_)
+    cache_ = wp_cache_get(cache_key_, "posts")
+    if False != cache_:
         #// Convert to WP_Post instances.
-        pages = php_array_map("get_post", cache)
+        pages_ = php_array_map("get_post", cache_)
         #// This filter is documented in wp-includes/post.php
-        pages = apply_filters("get_pages", pages, parsed_args)
-        return pages
+        pages_ = apply_filters("get_pages", pages_, parsed_args_)
+        return pages_
     # end if
-    inclusions = ""
-    if (not php_empty(lambda : parsed_args["include"])):
-        child_of = 0
+    inclusions_ = ""
+    if (not php_empty(lambda : parsed_args_["include"])):
+        child_of_ = 0
         #// Ignore child_of, parent, exclude, meta_key, and meta_value params if using include.
-        parent = -1
-        exclude = ""
-        meta_key = ""
-        meta_value = ""
-        hierarchical = False
-        incpages = wp_parse_id_list(parsed_args["include"])
-        if (not php_empty(lambda : incpages)):
-            inclusions = " AND ID IN (" + php_implode(",", incpages) + ")"
+        parent_ = -1
+        exclude_ = ""
+        meta_key_ = ""
+        meta_value_ = ""
+        hierarchical_ = False
+        incpages_ = wp_parse_id_list(parsed_args_["include"])
+        if (not php_empty(lambda : incpages_)):
+            inclusions_ = " AND ID IN (" + php_implode(",", incpages_) + ")"
         # end if
     # end if
-    exclusions = ""
-    if (not php_empty(lambda : exclude)):
-        expages = wp_parse_id_list(exclude)
-        if (not php_empty(lambda : expages)):
-            exclusions = " AND ID NOT IN (" + php_implode(",", expages) + ")"
+    exclusions_ = ""
+    if (not php_empty(lambda : exclude_)):
+        expages_ = wp_parse_id_list(exclude_)
+        if (not php_empty(lambda : expages_)):
+            exclusions_ = " AND ID NOT IN (" + php_implode(",", expages_) + ")"
         # end if
     # end if
-    author_query = ""
-    if (not php_empty(lambda : parsed_args["authors"])):
-        post_authors = wp_parse_list(parsed_args["authors"])
-        if (not php_empty(lambda : post_authors)):
-            for post_author in post_authors:
+    author_query_ = ""
+    if (not php_empty(lambda : parsed_args_["authors"])):
+        post_authors_ = wp_parse_list(parsed_args_["authors"])
+        if (not php_empty(lambda : post_authors_)):
+            for post_author_ in post_authors_:
                 #// Do we have an author id or an author login?
-                if 0 == php_intval(post_author):
-                    post_author = get_user_by("login", post_author)
-                    if php_empty(lambda : post_author):
+                if 0 == php_intval(post_author_):
+                    post_author_ = get_user_by("login", post_author_)
+                    if php_empty(lambda : post_author_):
                         continue
                     # end if
-                    if php_empty(lambda : post_author.ID):
+                    if php_empty(lambda : post_author_.ID):
                         continue
                     # end if
-                    post_author = post_author.ID
+                    post_author_ = post_author_.ID
                 # end if
-                if "" == author_query:
-                    author_query = wpdb.prepare(" post_author = %d ", post_author)
+                if "" == author_query_:
+                    author_query_ = wpdb_.prepare(" post_author = %d ", post_author_)
                 else:
-                    author_query += wpdb.prepare(" OR post_author = %d ", post_author)
+                    author_query_ += wpdb_.prepare(" OR post_author = %d ", post_author_)
                 # end if
             # end for
-            if "" != author_query:
-                author_query = str(" AND (") + str(author_query) + str(")")
+            if "" != author_query_:
+                author_query_ = str(" AND (") + str(author_query_) + str(")")
             # end if
         # end if
     # end if
-    join = ""
-    where = str(exclusions) + str(" ") + str(inclusions) + str(" ")
-    if "" != meta_key or "" != meta_value:
-        join = str(" LEFT JOIN ") + str(wpdb.postmeta) + str(" ON ( ") + str(wpdb.posts) + str(".ID = ") + str(wpdb.postmeta) + str(".post_id )")
+    join_ = ""
+    where_ = str(exclusions_) + str(" ") + str(inclusions_) + str(" ")
+    if "" != meta_key_ or "" != meta_value_:
+        join_ = str(" LEFT JOIN ") + str(wpdb_.postmeta) + str(" ON ( ") + str(wpdb_.posts) + str(".ID = ") + str(wpdb_.postmeta) + str(".post_id )")
         #// meta_key and meta_value might be slashed.
-        meta_key = wp_unslash(meta_key)
-        meta_value = wp_unslash(meta_value)
-        if "" != meta_key:
-            where += wpdb.prepare(str(" AND ") + str(wpdb.postmeta) + str(".meta_key = %s"), meta_key)
+        meta_key_ = wp_unslash(meta_key_)
+        meta_value_ = wp_unslash(meta_value_)
+        if "" != meta_key_:
+            where_ += wpdb_.prepare(str(" AND ") + str(wpdb_.postmeta) + str(".meta_key = %s"), meta_key_)
         # end if
-        if "" != meta_value:
-            where += wpdb.prepare(str(" AND ") + str(wpdb.postmeta) + str(".meta_value = %s"), meta_value)
+        if "" != meta_value_:
+            where_ += wpdb_.prepare(str(" AND ") + str(wpdb_.postmeta) + str(".meta_value = %s"), meta_value_)
         # end if
     # end if
-    if php_is_array(parent):
-        post_parent__in = php_implode(",", php_array_map("absint", parent))
-        if (not php_empty(lambda : post_parent__in)):
-            where += str(" AND post_parent IN (") + str(post_parent__in) + str(")")
+    if php_is_array(parent_):
+        post_parent__in_ = php_implode(",", php_array_map("absint", parent_))
+        if (not php_empty(lambda : post_parent__in_)):
+            where_ += str(" AND post_parent IN (") + str(post_parent__in_) + str(")")
         # end if
-    elif parent >= 0:
-        where += wpdb.prepare(" AND post_parent = %d ", parent)
+    elif parent_ >= 0:
+        where_ += wpdb_.prepare(" AND post_parent = %d ", parent_)
     # end if
-    if 1 == php_count(post_status):
-        where_post_type = wpdb.prepare("post_type = %s AND post_status = %s", parsed_args["post_type"], reset(post_status))
+    if 1 == php_count(post_status_):
+        where_post_type_ = wpdb_.prepare("post_type = %s AND post_status = %s", parsed_args_["post_type"], reset(post_status_))
     else:
-        post_status = php_implode("', '", post_status)
-        where_post_type = wpdb.prepare(str("post_type = %s AND post_status IN ('") + str(post_status) + str("')"), parsed_args["post_type"])
+        post_status_ = php_implode("', '", post_status_)
+        where_post_type_ = wpdb_.prepare(str("post_type = %s AND post_status IN ('") + str(post_status_) + str("')"), parsed_args_["post_type"])
     # end if
-    orderby_array = Array()
-    allowed_keys = Array("author", "post_author", "date", "post_date", "title", "post_title", "name", "post_name", "modified", "post_modified", "modified_gmt", "post_modified_gmt", "menu_order", "parent", "post_parent", "ID", "rand", "comment_count")
-    for orderby in php_explode(",", parsed_args["sort_column"]):
-        orderby = php_trim(orderby)
-        if (not php_in_array(orderby, allowed_keys)):
+    orderby_array_ = Array()
+    allowed_keys_ = Array("author", "post_author", "date", "post_date", "title", "post_title", "name", "post_name", "modified", "post_modified", "modified_gmt", "post_modified_gmt", "menu_order", "parent", "post_parent", "ID", "rand", "comment_count")
+    for orderby_ in php_explode(",", parsed_args_["sort_column"]):
+        orderby_ = php_trim(orderby_)
+        if (not php_in_array(orderby_, allowed_keys_)):
             continue
         # end if
-        for case in Switch(orderby):
+        for case in Switch(orderby_):
             if case("menu_order"):
                 break
             # end if
             if case("ID"):
-                orderby = str(wpdb.posts) + str(".ID")
+                orderby_ = str(wpdb_.posts) + str(".ID")
                 break
             # end if
             if case("rand"):
-                orderby = "RAND()"
+                orderby_ = "RAND()"
                 break
             # end if
             if case("comment_count"):
-                orderby = str(wpdb.posts) + str(".comment_count")
+                orderby_ = str(wpdb_.posts) + str(".comment_count")
                 break
             # end if
             if case():
-                if 0 == php_strpos(orderby, "post_"):
-                    orderby = str(wpdb.posts) + str(".") + orderby
+                if 0 == php_strpos(orderby_, "post_"):
+                    orderby_ = str(wpdb_.posts) + str(".") + orderby_
                 else:
-                    orderby = str(wpdb.posts) + str(".post_") + orderby
+                    orderby_ = str(wpdb_.posts) + str(".post_") + orderby_
                 # end if
             # end if
         # end for
-        orderby_array[-1] = orderby
+        orderby_array_[-1] = orderby_
     # end for
-    sort_column = php_implode(",", orderby_array) if (not php_empty(lambda : orderby_array)) else str(wpdb.posts) + str(".post_title")
-    sort_order = php_strtoupper(parsed_args["sort_order"])
-    if "" != sort_order and (not php_in_array(sort_order, Array("ASC", "DESC"))):
-        sort_order = "ASC"
+    sort_column_ = php_implode(",", orderby_array_) if (not php_empty(lambda : orderby_array_)) else str(wpdb_.posts) + str(".post_title")
+    sort_order_ = php_strtoupper(parsed_args_["sort_order"])
+    if "" != sort_order_ and (not php_in_array(sort_order_, Array("ASC", "DESC"))):
+        sort_order_ = "ASC"
     # end if
-    query = str("SELECT * FROM ") + str(wpdb.posts) + str(" ") + str(join) + str(" WHERE (") + str(where_post_type) + str(") ") + str(where) + str(" ")
-    query += author_query
-    query += " ORDER BY " + sort_column + " " + sort_order
-    if (not php_empty(lambda : number)):
-        query += " LIMIT " + offset + "," + number
+    query_ = str("SELECT * FROM ") + str(wpdb_.posts) + str(" ") + str(join_) + str(" WHERE (") + str(where_post_type_) + str(") ") + str(where_) + str(" ")
+    query_ += author_query_
+    query_ += " ORDER BY " + sort_column_ + " " + sort_order_
+    if (not php_empty(lambda : number_)):
+        query_ += " LIMIT " + offset_ + "," + number_
     # end if
-    pages = wpdb.get_results(query)
-    if php_empty(lambda : pages):
-        wp_cache_set(cache_key, Array(), "posts")
+    pages_ = wpdb_.get_results(query_)
+    if php_empty(lambda : pages_):
+        wp_cache_set(cache_key_, Array(), "posts")
         #// This filter is documented in wp-includes/post.php
-        pages = apply_filters("get_pages", Array(), parsed_args)
-        return pages
+        pages_ = apply_filters("get_pages", Array(), parsed_args_)
+        return pages_
     # end if
     #// Sanitize before caching so it'll only get done once.
-    num_pages = php_count(pages)
-    i = 0
-    while i < num_pages:
+    num_pages_ = php_count(pages_)
+    i_ = 0
+    while i_ < num_pages_:
         
-        pages[i] = sanitize_post(pages[i], "raw")
-        i += 1
+        pages_[i_] = sanitize_post(pages_[i_], "raw")
+        i_ += 1
     # end while
     #// Update cache.
-    update_post_cache(pages)
-    if child_of or hierarchical:
-        pages = get_page_children(child_of, pages)
+    update_post_cache(pages_)
+    if child_of_ or hierarchical_:
+        pages_ = get_page_children(child_of_, pages_)
     # end if
-    if (not php_empty(lambda : parsed_args["exclude_tree"])):
-        exclude = wp_parse_id_list(parsed_args["exclude_tree"])
-        for id in exclude:
-            children = get_page_children(id, pages)
-            for child in children:
-                exclude[-1] = child.ID
+    if (not php_empty(lambda : parsed_args_["exclude_tree"])):
+        exclude_ = wp_parse_id_list(parsed_args_["exclude_tree"])
+        for id_ in exclude_:
+            children_ = get_page_children(id_, pages_)
+            for child_ in children_:
+                exclude_[-1] = child_.ID
             # end for
         # end for
-        num_pages = php_count(pages)
-        i = 0
-        while i < num_pages:
+        num_pages_ = php_count(pages_)
+        i_ = 0
+        while i_ < num_pages_:
             
-            if php_in_array(pages[i].ID, exclude):
-                pages[i] = None
+            if php_in_array(pages_[i_].ID, exclude_):
+                pages_[i_] = None
             # end if
-            i += 1
+            i_ += 1
         # end while
     # end if
-    page_structure = Array()
-    for page in pages:
-        page_structure[-1] = page.ID
+    page_structure_ = Array()
+    for page_ in pages_:
+        page_structure_[-1] = page_.ID
     # end for
-    wp_cache_set(cache_key, page_structure, "posts")
+    wp_cache_set(cache_key_, page_structure_, "posts")
     #// Convert to WP_Post instances.
-    pages = php_array_map("get_post", pages)
+    pages_ = php_array_map("get_post", pages_)
     #// 
     #// Filters the retrieved list of pages.
     #// 
@@ -4421,7 +4565,7 @@ def get_pages(args=Array(), *args_):
     #// @param WP_Post[] $pages       Array of page objects.
     #// @param array     $parsed_args Array of get_pages() arguments.
     #//
-    return apply_filters("get_pages", pages, parsed_args)
+    return apply_filters("get_pages", pages_, parsed_args_)
 # end def get_pages
 #// 
 #// Attachment functions.
@@ -4438,18 +4582,19 @@ def get_pages(args=Array(), *args_):
 #// @param string $url URL to check
 #// @return bool True on success, false on failure.
 #//
-def is_local_attachment(url=None, *args_):
+def is_local_attachment(url_=None, *_args_):
     
-    if php_strpos(url, home_url()) == False:
+    
+    if php_strpos(url_, home_url()) == False:
         return False
     # end if
-    if php_strpos(url, home_url("/?attachment_id=")) != False:
+    if php_strpos(url_, home_url("/?attachment_id=")) != False:
         return True
     # end if
-    id = url_to_postid(url)
-    if id:
-        post = get_post(id)
-        if "attachment" == post.post_type:
+    id_ = url_to_postid(url_)
+    if id_:
+        post_ = get_post(id_)
+        if "attachment" == post_.post_type:
             return True
         # end if
     # end if
@@ -4480,15 +4625,21 @@ def is_local_attachment(url=None, *args_):
 #// @param bool         $wp_error Optional. Whether to return a WP_Error on failure. Default false.
 #// @return int|WP_Error The attachment ID on success. The value 0 or WP_Error on failure.
 #//
-def wp_insert_attachment(args=None, file=False, parent=0, wp_error=False, *args_):
-    
-    defaults = Array({"file": file, "post_parent": 0})
-    data = wp_parse_args(args, defaults)
-    if (not php_empty(lambda : parent)):
-        data["post_parent"] = parent
+def wp_insert_attachment(args_=None, file_=None, parent_=0, wp_error_=None, *_args_):
+    if file_ is None:
+        file_ = False
     # end if
-    data["post_type"] = "attachment"
-    return wp_insert_post(data, wp_error)
+    if wp_error_ is None:
+        wp_error_ = False
+    # end if
+    
+    defaults_ = Array({"file": file_, "post_parent": 0})
+    data_ = wp_parse_args(args_, defaults_)
+    if (not php_empty(lambda : parent_)):
+        data_["post_parent"] = parent_
+    # end if
+    data_["post_type"] = "attachment"
+    return wp_insert_post(data_, wp_error_)
 # end def wp_insert_attachment
 #// 
 #// Trash or delete an attachment.
@@ -4509,26 +4660,29 @@ def wp_insert_attachment(args=None, file=False, parent=0, wp_error=False, *args_
 #// Default false.
 #// @return WP_Post|false|null Post data on success, false or null on failure.
 #//
-def wp_delete_attachment(post_id=None, force_delete=False, *args_):
-    
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.posts) + str(" WHERE ID = %d"), post_id))
-    if (not post):
-        return post
+def wp_delete_attachment(post_id_=None, force_delete_=None, *_args_):
+    if force_delete_ is None:
+        force_delete_ = False
     # end if
-    post = get_post(post)
-    if "attachment" != post.post_type:
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = wpdb_.get_row(wpdb_.prepare(str("SELECT * FROM ") + str(wpdb_.posts) + str(" WHERE ID = %d"), post_id_))
+    if (not post_):
+        return post_
+    # end if
+    post_ = get_post(post_)
+    if "attachment" != post_.post_type:
         return False
     # end if
-    if (not force_delete) and EMPTY_TRASH_DAYS and MEDIA_TRASH and "trash" != post.post_status:
-        return wp_trash_post(post_id)
+    if (not force_delete_) and EMPTY_TRASH_DAYS and MEDIA_TRASH and "trash" != post_.post_status:
+        return wp_trash_post(post_id_)
     # end if
-    delete_post_meta(post_id, "_wp_trash_meta_status")
-    delete_post_meta(post_id, "_wp_trash_meta_time")
-    meta = wp_get_attachment_metadata(post_id)
-    backup_sizes = get_post_meta(post.ID, "_wp_attachment_backup_sizes", True)
-    file = get_attached_file(post_id)
+    delete_post_meta(post_id_, "_wp_trash_meta_status")
+    delete_post_meta(post_id_, "_wp_trash_meta_time")
+    meta_ = wp_get_attachment_metadata(post_id_)
+    backup_sizes_ = get_post_meta(post_.ID, "_wp_attachment_backup_sizes", True)
+    file_ = get_attached_file(post_id_)
     if is_multisite():
         delete_transient("dirsize_cache")
     # end if
@@ -4539,32 +4693,32 @@ def wp_delete_attachment(post_id=None, force_delete=False, *args_):
     #// 
     #// @param int $post_id Attachment ID.
     #//
-    do_action("delete_attachment", post_id)
-    wp_delete_object_term_relationships(post_id, Array("category", "post_tag"))
-    wp_delete_object_term_relationships(post_id, get_object_taxonomies(post.post_type))
+    do_action("delete_attachment", post_id_)
+    wp_delete_object_term_relationships(post_id_, Array("category", "post_tag"))
+    wp_delete_object_term_relationships(post_id_, get_object_taxonomies(post_.post_type))
     #// Delete all for any posts.
-    delete_metadata("post", None, "_thumbnail_id", post_id, True)
+    delete_metadata("post", None, "_thumbnail_id", post_id_, True)
     wp_defer_comment_counting(True)
-    comment_ids = wpdb.get_col(wpdb.prepare(str("SELECT comment_ID FROM ") + str(wpdb.comments) + str(" WHERE comment_post_ID = %d"), post_id))
-    for comment_id in comment_ids:
-        wp_delete_comment(comment_id, True)
+    comment_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT comment_ID FROM ") + str(wpdb_.comments) + str(" WHERE comment_post_ID = %d"), post_id_))
+    for comment_id_ in comment_ids_:
+        wp_delete_comment(comment_id_, True)
     # end for
     wp_defer_comment_counting(False)
-    post_meta_ids = wpdb.get_col(wpdb.prepare(str("SELECT meta_id FROM ") + str(wpdb.postmeta) + str(" WHERE post_id = %d "), post_id))
-    for mid in post_meta_ids:
-        delete_metadata_by_mid("post", mid)
+    post_meta_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT meta_id FROM ") + str(wpdb_.postmeta) + str(" WHERE post_id = %d "), post_id_))
+    for mid_ in post_meta_ids_:
+        delete_metadata_by_mid("post", mid_)
     # end for
     #// This action is documented in wp-includes/post.php
-    do_action("delete_post", post_id)
-    result = wpdb.delete(wpdb.posts, Array({"ID": post_id}))
-    if (not result):
+    do_action("delete_post", post_id_)
+    result_ = wpdb_.delete(wpdb_.posts, Array({"ID": post_id_}))
+    if (not result_):
         return False
     # end if
     #// This action is documented in wp-includes/post.php
-    do_action("deleted_post", post_id)
-    wp_delete_attachment_files(post_id, meta, backup_sizes, file)
-    clean_post_cache(post)
-    return post
+    do_action("deleted_post", post_id_)
+    wp_delete_attachment_files(post_id_, meta_, backup_sizes_, file_)
+    clean_post_cache(post_)
+    return post_
 # end def wp_delete_attachment
 #// 
 #// Deletes all files that belong to the given attachment.
@@ -4577,66 +4731,67 @@ def wp_delete_attachment(post_id=None, force_delete=False, *args_):
 #// @param string $file         Absolute path to the attachment's file.
 #// @return bool True on success, false on failure.
 #//
-def wp_delete_attachment_files(post_id=None, meta=None, backup_sizes=None, file=None, *args_):
+def wp_delete_attachment_files(post_id_=None, meta_=None, backup_sizes_=None, file_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    uploadpath = wp_get_upload_dir()
-    deleted = True
-    if (not php_empty(lambda : meta["thumb"])):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    uploadpath_ = wp_get_upload_dir()
+    deleted_ = True
+    if (not php_empty(lambda : meta_["thumb"])):
         #// Don't delete the thumb if another attachment uses it.
-        if (not wpdb.get_row(wpdb.prepare(str("SELECT meta_id FROM ") + str(wpdb.postmeta) + str(" WHERE meta_key = '_wp_attachment_metadata' AND meta_value LIKE %s AND post_id <> %d"), "%" + wpdb.esc_like(meta["thumb"]) + "%", post_id))):
-            thumbfile = php_str_replace(wp_basename(file), meta["thumb"], file)
-            if (not php_empty(lambda : thumbfile)):
-                thumbfile = path_join(uploadpath["basedir"], thumbfile)
-                thumbdir = path_join(uploadpath["basedir"], php_dirname(file))
-                if (not wp_delete_file_from_directory(thumbfile, thumbdir)):
-                    deleted = False
+        if (not wpdb_.get_row(wpdb_.prepare(str("SELECT meta_id FROM ") + str(wpdb_.postmeta) + str(" WHERE meta_key = '_wp_attachment_metadata' AND meta_value LIKE %s AND post_id <> %d"), "%" + wpdb_.esc_like(meta_["thumb"]) + "%", post_id_))):
+            thumbfile_ = php_str_replace(wp_basename(file_), meta_["thumb"], file_)
+            if (not php_empty(lambda : thumbfile_)):
+                thumbfile_ = path_join(uploadpath_["basedir"], thumbfile_)
+                thumbdir_ = path_join(uploadpath_["basedir"], php_dirname(file_))
+                if (not wp_delete_file_from_directory(thumbfile_, thumbdir_)):
+                    deleted_ = False
                 # end if
             # end if
         # end if
     # end if
     #// Remove intermediate and backup images if there are any.
-    if (php_isset(lambda : meta["sizes"])) and php_is_array(meta["sizes"]):
-        intermediate_dir = path_join(uploadpath["basedir"], php_dirname(file))
-        for size,sizeinfo in meta["sizes"]:
-            intermediate_file = php_str_replace(wp_basename(file), sizeinfo["file"], file)
-            if (not php_empty(lambda : intermediate_file)):
-                intermediate_file = path_join(uploadpath["basedir"], intermediate_file)
-                if (not wp_delete_file_from_directory(intermediate_file, intermediate_dir)):
-                    deleted = False
+    if (php_isset(lambda : meta_["sizes"])) and php_is_array(meta_["sizes"]):
+        intermediate_dir_ = path_join(uploadpath_["basedir"], php_dirname(file_))
+        for size_,sizeinfo_ in meta_["sizes"]:
+            intermediate_file_ = php_str_replace(wp_basename(file_), sizeinfo_["file"], file_)
+            if (not php_empty(lambda : intermediate_file_)):
+                intermediate_file_ = path_join(uploadpath_["basedir"], intermediate_file_)
+                if (not wp_delete_file_from_directory(intermediate_file_, intermediate_dir_)):
+                    deleted_ = False
                 # end if
             # end if
         # end for
     # end if
-    if (not php_empty(lambda : meta["original_image"])):
-        if php_empty(lambda : intermediate_dir):
-            intermediate_dir = path_join(uploadpath["basedir"], php_dirname(file))
+    if (not php_empty(lambda : meta_["original_image"])):
+        if php_empty(lambda : intermediate_dir_):
+            intermediate_dir_ = path_join(uploadpath_["basedir"], php_dirname(file_))
         # end if
-        original_image = php_str_replace(wp_basename(file), meta["original_image"], file)
-        if (not php_empty(lambda : original_image)):
-            original_image = path_join(uploadpath["basedir"], original_image)
-            if (not wp_delete_file_from_directory(original_image, intermediate_dir)):
-                deleted = False
+        original_image_ = php_str_replace(wp_basename(file_), meta_["original_image"], file_)
+        if (not php_empty(lambda : original_image_)):
+            original_image_ = path_join(uploadpath_["basedir"], original_image_)
+            if (not wp_delete_file_from_directory(original_image_, intermediate_dir_)):
+                deleted_ = False
             # end if
         # end if
     # end if
-    if php_is_array(backup_sizes):
-        del_dir = path_join(uploadpath["basedir"], php_dirname(meta["file"]))
-        for size in backup_sizes:
-            del_file = path_join(php_dirname(meta["file"]), size["file"])
-            if (not php_empty(lambda : del_file)):
-                del_file = path_join(uploadpath["basedir"], del_file)
-                if (not wp_delete_file_from_directory(del_file, del_dir)):
-                    deleted = False
+    if php_is_array(backup_sizes_):
+        del_dir_ = path_join(uploadpath_["basedir"], php_dirname(meta_["file"]))
+        for size_ in backup_sizes_:
+            del_file_ = path_join(php_dirname(meta_["file"]), size_["file"])
+            if (not php_empty(lambda : del_file_)):
+                del_file_ = path_join(uploadpath_["basedir"], del_file_)
+                if (not wp_delete_file_from_directory(del_file_, del_dir_)):
+                    deleted_ = False
                 # end if
             # end if
         # end for
     # end if
-    if (not wp_delete_file_from_directory(file, uploadpath["basedir"])):
-        deleted = False
+    if (not wp_delete_file_from_directory(file_, uploadpath_["basedir"])):
+        deleted_ = False
     # end if
-    return deleted
+    return deleted_
 # end def wp_delete_attachment_files
 #// 
 #// Retrieve attachment meta field for attachment ID.
@@ -4647,16 +4802,19 @@ def wp_delete_attachment_files(post_id=None, meta=None, backup_sizes=None, file=
 #// @param bool $unfiltered    Optional. If true, filters are not run. Default false.
 #// @return mixed Attachment meta field. False on failure.
 #//
-def wp_get_attachment_metadata(attachment_id=0, unfiltered=False, *args_):
+def wp_get_attachment_metadata(attachment_id_=0, unfiltered_=None, *_args_):
+    if unfiltered_ is None:
+        unfiltered_ = False
+    # end if
     
-    attachment_id = php_int(attachment_id)
-    post = get_post(attachment_id)
-    if (not post):
+    attachment_id_ = php_int(attachment_id_)
+    post_ = get_post(attachment_id_)
+    if (not post_):
         return False
     # end if
-    data = get_post_meta(post.ID, "_wp_attachment_metadata", True)
-    if unfiltered:
-        return data
+    data_ = get_post_meta(post_.ID, "_wp_attachment_metadata", True)
+    if unfiltered_:
+        return data_
     # end if
     #// 
     #// Filters the attachment meta data.
@@ -4667,7 +4825,7 @@ def wp_get_attachment_metadata(attachment_id=0, unfiltered=False, *args_):
     #// if the object does not exist.
     #// @param int        $attachment_id Attachment post ID.
     #//
-    return apply_filters("wp_get_attachment_metadata", data, post.ID)
+    return apply_filters("wp_get_attachment_metadata", data_, post_.ID)
 # end def wp_get_attachment_metadata
 #// 
 #// Update metadata for an attachment.
@@ -4678,11 +4836,12 @@ def wp_get_attachment_metadata(attachment_id=0, unfiltered=False, *args_):
 #// @param array $data          Attachment meta data.
 #// @return int|bool False if $post is invalid.
 #//
-def wp_update_attachment_metadata(attachment_id=None, data=None, *args_):
+def wp_update_attachment_metadata(attachment_id_=None, data_=None, *_args_):
     
-    attachment_id = php_int(attachment_id)
-    post = get_post(attachment_id)
-    if (not post):
+    
+    attachment_id_ = php_int(attachment_id_)
+    post_ = get_post(attachment_id_)
+    if (not post_):
         return False
     # end if
     #// 
@@ -4693,11 +4852,11 @@ def wp_update_attachment_metadata(attachment_id=None, data=None, *args_):
     #// @param array $data          Array of updated attachment meta data.
     #// @param int   $attachment_id Attachment post ID.
     #//
-    data = apply_filters("wp_update_attachment_metadata", data, post.ID)
-    if data:
-        return update_post_meta(post.ID, "_wp_attachment_metadata", data)
+    data_ = apply_filters("wp_update_attachment_metadata", data_, post_.ID)
+    if data_:
+        return update_post_meta(post_.ID, "_wp_attachment_metadata", data_)
     else:
-        return delete_post_meta(post.ID, "_wp_attachment_metadata")
+        return delete_post_meta(post_.ID, "_wp_attachment_metadata")
     # end if
 # end def wp_update_attachment_metadata
 #// 
@@ -4710,33 +4869,34 @@ def wp_update_attachment_metadata(attachment_id=None, data=None, *args_):
 #// @param int $attachment_id Optional. Attachment post ID. Defaults to global $post.
 #// @return string|false Attachment URL, otherwise false.
 #//
-def wp_get_attachment_url(attachment_id=0, *args_):
+def wp_get_attachment_url(attachment_id_=0, *_args_):
     
-    attachment_id = php_int(attachment_id)
-    post = get_post(attachment_id)
-    if (not post):
+    
+    attachment_id_ = php_int(attachment_id_)
+    post_ = get_post(attachment_id_)
+    if (not post_):
         return False
     # end if
-    if "attachment" != post.post_type:
+    if "attachment" != post_.post_type:
         return False
     # end if
-    url = ""
+    url_ = ""
     #// Get attached file.
-    file = get_post_meta(post.ID, "_wp_attached_file", True)
-    if file:
+    file_ = get_post_meta(post_.ID, "_wp_attached_file", True)
+    if file_:
         #// Get upload directory.
-        uploads = wp_get_upload_dir()
-        if uploads and False == uploads["error"]:
+        uploads_ = wp_get_upload_dir()
+        if uploads_ and False == uploads_["error"]:
             #// Check that the upload base exists in the file location.
-            if 0 == php_strpos(file, uploads["basedir"]):
+            if 0 == php_strpos(file_, uploads_["basedir"]):
                 #// Replace file location with url location.
-                url = php_str_replace(uploads["basedir"], uploads["baseurl"], file)
-            elif False != php_strpos(file, "wp-content/uploads"):
+                url_ = php_str_replace(uploads_["basedir"], uploads_["baseurl"], file_)
+            elif False != php_strpos(file_, "wp-content/uploads"):
                 #// Get the directory name relative to the basedir (back compat for pre-2.7 uploads).
-                url = trailingslashit(uploads["baseurl"] + "/" + _wp_get_attachment_relative_path(file)) + wp_basename(file)
+                url_ = trailingslashit(uploads_["baseurl"] + "/" + _wp_get_attachment_relative_path(file_)) + wp_basename(file_)
             else:
                 #// It's a newly-uploaded file, therefore $file is relative to the basedir.
-                url = uploads["baseurl"] + str("/") + str(file)
+                url_ = uploads_["baseurl"] + str("/") + str(file_)
             # end if
         # end if
     # end if
@@ -4744,12 +4904,12 @@ def wp_get_attachment_url(attachment_id=0, *args_):
     #// If any of the above options failed, Fallback on the GUID as used pre-2.7,
     #// not recommended to rely upon this.
     #//
-    if php_empty(lambda : url):
-        url = get_the_guid(post.ID)
+    if php_empty(lambda : url_):
+        url_ = get_the_guid(post_.ID)
     # end if
     #// On SSL front end, URLs should be HTTPS.
     if is_ssl() and (not is_admin()) and "wp-login.php" != PHP_GLOBALS["pagenow"]:
-        url = set_url_scheme(url)
+        url_ = set_url_scheme(url_)
     # end if
     #// 
     #// Filters the attachment URL.
@@ -4759,11 +4919,11 @@ def wp_get_attachment_url(attachment_id=0, *args_):
     #// @param string $url           URL for the given attachment.
     #// @param int    $attachment_id Attachment post ID.
     #//
-    url = apply_filters("wp_get_attachment_url", url, post.ID)
-    if php_empty(lambda : url):
+    url_ = apply_filters("wp_get_attachment_url", url_, post_.ID)
+    if php_empty(lambda : url_):
         return False
     # end if
-    return url
+    return url_
 # end def wp_get_attachment_url
 #// 
 #// Retrieves the caption for an attachment.
@@ -4773,17 +4933,18 @@ def wp_get_attachment_url(attachment_id=0, *args_):
 #// @param int $post_id Optional. Attachment ID. Default is the ID of the global `$post`.
 #// @return string|false False on failure. Attachment caption on success.
 #//
-def wp_get_attachment_caption(post_id=0, *args_):
+def wp_get_attachment_caption(post_id_=0, *_args_):
     
-    post_id = php_int(post_id)
-    post = get_post(post_id)
-    if (not post):
+    
+    post_id_ = php_int(post_id_)
+    post_ = get_post(post_id_)
+    if (not post_):
         return False
     # end if
-    if "attachment" != post.post_type:
+    if "attachment" != post_.post_type:
         return False
     # end if
-    caption = post.post_excerpt
+    caption_ = post_.post_excerpt
     #// 
     #// Filters the attachment caption.
     #// 
@@ -4792,7 +4953,7 @@ def wp_get_attachment_caption(post_id=0, *args_):
     #// @param string $caption Caption for the given attachment.
     #// @param int    $post_id Attachment ID.
     #//
-    return apply_filters("wp_get_attachment_caption", caption, post.ID)
+    return apply_filters("wp_get_attachment_caption", caption_, post_.ID)
 # end def wp_get_attachment_caption
 #// 
 #// Retrieve thumbnail for an attachment.
@@ -4802,21 +4963,22 @@ def wp_get_attachment_caption(post_id=0, *args_):
 #// @param int $post_id Optional. Attachment ID. Default 0.
 #// @return string|false False on failure. Thumbnail file path on success.
 #//
-def wp_get_attachment_thumb_file(post_id=0, *args_):
+def wp_get_attachment_thumb_file(post_id_=0, *_args_):
     
-    post_id = php_int(post_id)
-    post = get_post(post_id)
-    if (not post):
+    
+    post_id_ = php_int(post_id_)
+    post_ = get_post(post_id_)
+    if (not post_):
         return False
     # end if
-    imagedata = wp_get_attachment_metadata(post.ID)
-    if (not php_is_array(imagedata)):
+    imagedata_ = wp_get_attachment_metadata(post_.ID)
+    if (not php_is_array(imagedata_)):
         return False
     # end if
-    file = get_attached_file(post.ID)
-    if (not php_empty(lambda : imagedata["thumb"])):
-        thumbfile = php_str_replace(wp_basename(file), imagedata["thumb"], file)
-        if php_file_exists(thumbfile):
+    file_ = get_attached_file(post_.ID)
+    if (not php_empty(lambda : imagedata_["thumb"])):
+        thumbfile_ = php_str_replace(wp_basename(file_), imagedata_["thumb"], file_)
+        if php_file_exists(thumbfile_):
             #// 
             #// Filters the attachment thumbnail file path.
             #// 
@@ -4825,7 +4987,7 @@ def wp_get_attachment_thumb_file(post_id=0, *args_):
             #// @param string $thumbfile File path to the attachment thumbnail.
             #// @param int    $post_id   Attachment ID.
             #//
-            return apply_filters("wp_get_attachment_thumb_file", thumbfile, post.ID)
+            return apply_filters("wp_get_attachment_thumb_file", thumbfile_, post_.ID)
         # end if
     # end if
     return False
@@ -4838,26 +5000,27 @@ def wp_get_attachment_thumb_file(post_id=0, *args_):
 #// @param int $post_id Optional. Attachment ID. Default 0.
 #// @return string|false False on failure. Thumbnail URL on success.
 #//
-def wp_get_attachment_thumb_url(post_id=0, *args_):
+def wp_get_attachment_thumb_url(post_id_=0, *_args_):
     
-    post_id = php_int(post_id)
-    post = get_post(post_id)
-    if (not post):
+    
+    post_id_ = php_int(post_id_)
+    post_ = get_post(post_id_)
+    if (not post_):
         return False
     # end if
-    url = wp_get_attachment_url(post.ID)
-    if (not url):
+    url_ = wp_get_attachment_url(post_.ID)
+    if (not url_):
         return False
     # end if
-    sized = image_downsize(post_id, "thumbnail")
-    if sized:
-        return sized[0]
+    sized_ = image_downsize(post_id_, "thumbnail")
+    if sized_:
+        return sized_[0]
     # end if
-    thumb = wp_get_attachment_thumb_file(post.ID)
-    if (not thumb):
+    thumb_ = wp_get_attachment_thumb_file(post_.ID)
+    if (not thumb_):
         return False
     # end if
-    url = php_str_replace(wp_basename(url), wp_basename(thumb), url)
+    url_ = php_str_replace(wp_basename(url_), wp_basename(thumb_), url_)
     #// 
     #// Filters the attachment thumbnail URL.
     #// 
@@ -4866,7 +5029,7 @@ def wp_get_attachment_thumb_url(post_id=0, *args_):
     #// @param string $url     URL for the attachment thumbnail.
     #// @param int    $post_id Attachment ID.
     #//
-    return apply_filters("wp_get_attachment_thumb_url", url, post.ID)
+    return apply_filters("wp_get_attachment_thumb_url", url_, post_.ID)
 # end def wp_get_attachment_thumb_url
 #// 
 #// Verifies an attachment is of a given type.
@@ -4877,40 +5040,41 @@ def wp_get_attachment_thumb_url(post_id=0, *args_):
 #// @param int|WP_Post $post Optional. Attachment ID or object. Default is global $post.
 #// @return bool True if one of the accepted types, false otherwise.
 #//
-def wp_attachment_is(type=None, post=None, *args_):
+def wp_attachment_is(type_=None, post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    file = get_attached_file(post.ID)
-    if (not file):
+    file_ = get_attached_file(post_.ID)
+    if (not file_):
         return False
     # end if
-    if 0 == php_strpos(post.post_mime_type, type + "/"):
+    if 0 == php_strpos(post_.post_mime_type, type_ + "/"):
         return True
     # end if
-    check = wp_check_filetype(file)
-    if php_empty(lambda : check["ext"]):
+    check_ = wp_check_filetype(file_)
+    if php_empty(lambda : check_["ext"]):
         return False
     # end if
-    ext = check["ext"]
-    if "import" != post.post_mime_type:
-        return type == ext
+    ext_ = check_["ext"]
+    if "import" != post_.post_mime_type:
+        return type_ == ext_
     # end if
-    for case in Switch(type):
+    for case in Switch(type_):
         if case("image"):
-            image_exts = Array("jpg", "jpeg", "jpe", "gif", "png")
-            return php_in_array(ext, image_exts)
+            image_exts_ = Array("jpg", "jpeg", "jpe", "gif", "png")
+            return php_in_array(ext_, image_exts_)
         # end if
         if case("audio"):
-            return php_in_array(ext, wp_get_audio_extensions())
+            return php_in_array(ext_, wp_get_audio_extensions())
         # end if
         if case("video"):
-            return php_in_array(ext, wp_get_video_extensions())
+            return php_in_array(ext_, wp_get_video_extensions())
         # end if
         if case():
-            return type == ext
+            return type_ == ext_
         # end if
     # end for
 # end def wp_attachment_is
@@ -4928,9 +5092,10 @@ def wp_attachment_is(type=None, post=None, *args_):
 #// @param int|WP_Post $post Optional. Attachment ID or object. Default is global $post.
 #// @return bool Whether the attachment is an image.
 #//
-def wp_attachment_is_image(post=None, *args_):
+def wp_attachment_is_image(post_=None, *_args_):
     
-    return wp_attachment_is("image", post)
+    
+    return wp_attachment_is("image", post_)
 # end def wp_attachment_is_image
 #// 
 #// Retrieve the icon for a MIME type or attachment.
@@ -4940,37 +5105,38 @@ def wp_attachment_is_image(post=None, *args_):
 #// @param string|int $mime MIME type or attachment ID.
 #// @return string|false Icon, false otherwise.
 #//
-def wp_mime_type_icon(mime=0, *args_):
+def wp_mime_type_icon(mime_=0, *_args_):
     
-    if (not php_is_numeric(mime)):
-        icon = wp_cache_get(str("mime_type_icon_") + str(mime))
+    
+    if (not php_is_numeric(mime_)):
+        icon_ = wp_cache_get(str("mime_type_icon_") + str(mime_))
     # end if
-    post_id = 0
-    if php_empty(lambda : icon):
-        post_mimes = Array()
-        if php_is_numeric(mime):
-            mime = php_int(mime)
-            post = get_post(mime)
-            if post:
-                post_id = php_int(post.ID)
-                file = get_attached_file(post_id)
-                ext = php_preg_replace("/^.+?\\.([^.]+)$/", "$1", file)
-                if (not php_empty(lambda : ext)):
-                    post_mimes[-1] = ext
-                    ext_type = wp_ext2type(ext)
-                    if ext_type:
-                        post_mimes[-1] = ext_type
+    post_id_ = 0
+    if php_empty(lambda : icon_):
+        post_mimes_ = Array()
+        if php_is_numeric(mime_):
+            mime_ = php_int(mime_)
+            post_ = get_post(mime_)
+            if post_:
+                post_id_ = php_int(post_.ID)
+                file_ = get_attached_file(post_id_)
+                ext_ = php_preg_replace("/^.+?\\.([^.]+)$/", "$1", file_)
+                if (not php_empty(lambda : ext_)):
+                    post_mimes_[-1] = ext_
+                    ext_type_ = wp_ext2type(ext_)
+                    if ext_type_:
+                        post_mimes_[-1] = ext_type_
                     # end if
                 # end if
-                mime = post.post_mime_type
+                mime_ = post_.post_mime_type
             else:
-                mime = 0
+                mime_ = 0
             # end if
         else:
-            post_mimes[-1] = mime
+            post_mimes_[-1] = mime_
         # end if
-        icon_files = wp_cache_get("icon_files")
-        if (not php_is_array(icon_files)):
+        icon_files_ = wp_cache_get("icon_files")
+        if (not php_is_array(icon_files_)):
             #// 
             #// Filters the icon directory path.
             #// 
@@ -4978,7 +5144,7 @@ def wp_mime_type_icon(mime=0, *args_):
             #// 
             #// @param string $path Icon directory absolute path.
             #//
-            icon_dir = apply_filters("icon_dir", ABSPATH + WPINC + "/images/media")
+            icon_dir_ = apply_filters("icon_dir", ABSPATH + WPINC + "/images/media")
             #// 
             #// Filters the icon directory URI.
             #// 
@@ -4986,7 +5152,7 @@ def wp_mime_type_icon(mime=0, *args_):
             #// 
             #// @param string $uri Icon directory URI.
             #//
-            icon_dir_uri = apply_filters("icon_dir_uri", includes_url("images/media"))
+            icon_dir_uri_ = apply_filters("icon_dir_uri", includes_url("images/media"))
             #// 
             #// Filters the array of icon directory URIs.
             #// 
@@ -4994,60 +5160,60 @@ def wp_mime_type_icon(mime=0, *args_):
             #// 
             #// @param string[] $uris Array of icon directory URIs keyed by directory absolute path.
             #//
-            dirs = apply_filters("icon_dirs", Array({icon_dir: icon_dir_uri}))
-            icon_files = Array()
+            dirs_ = apply_filters("icon_dirs", Array({icon_dir_: icon_dir_uri_}))
+            icon_files_ = Array()
             while True:
                 
-                if not (dirs):
+                if not (dirs_):
                     break
                 # end if
-                keys = php_array_keys(dirs)
-                dir = php_array_shift(keys)
-                uri = php_array_shift(dirs)
-                dh = php_opendir(dir)
-                if dh:
+                keys_ = php_array_keys(dirs_)
+                dir_ = php_array_shift(keys_)
+                uri_ = php_array_shift(dirs_)
+                dh_ = php_opendir(dir_)
+                if dh_:
                     while True:
-                        file = php_readdir(dh)
-                        if not (False != file):
+                        file_ = php_readdir(dh_)
+                        if not (False != file_):
                             break
                         # end if
-                        file = wp_basename(file)
-                        if php_substr(file, 0, 1) == ".":
+                        file_ = wp_basename(file_)
+                        if php_substr(file_, 0, 1) == ".":
                             continue
                         # end if
-                        if (not php_in_array(php_strtolower(php_substr(file, -4)), Array(".png", ".gif", ".jpg"))):
-                            if php_is_dir(str(dir) + str("/") + str(file)):
-                                dirs[str(dir) + str("/") + str(file)] = str(uri) + str("/") + str(file)
+                        if (not php_in_array(php_strtolower(php_substr(file_, -4)), Array(".png", ".gif", ".jpg"))):
+                            if php_is_dir(str(dir_) + str("/") + str(file_)):
+                                dirs_[str(dir_) + str("/") + str(file_)] = str(uri_) + str("/") + str(file_)
                             # end if
                             continue
                         # end if
-                        icon_files[str(dir) + str("/") + str(file)] = str(uri) + str("/") + str(file)
+                        icon_files_[str(dir_) + str("/") + str(file_)] = str(uri_) + str("/") + str(file_)
                     # end while
-                    php_closedir(dh)
+                    php_closedir(dh_)
                 # end if
             # end while
-            wp_cache_add("icon_files", icon_files, "default", 600)
+            wp_cache_add("icon_files", icon_files_, "default", 600)
         # end if
-        types = Array()
+        types_ = Array()
         #// Icon wp_basename - extension = MIME wildcard.
-        for file,uri in icon_files:
-            types[php_preg_replace("/^([^.]*).*$/", "$1", wp_basename(file))] = icon_files[file]
+        for file_,uri_ in icon_files_:
+            types_[php_preg_replace("/^([^.]*).*$/", "$1", wp_basename(file_))] = icon_files_[file_]
         # end for
-        if (not php_empty(lambda : mime)):
-            post_mimes[-1] = php_substr(mime, 0, php_strpos(mime, "/"))
-            post_mimes[-1] = php_substr(mime, php_strpos(mime, "/") + 1)
-            post_mimes[-1] = php_str_replace("/", "_", mime)
+        if (not php_empty(lambda : mime_)):
+            post_mimes_[-1] = php_substr(mime_, 0, php_strpos(mime_, "/"))
+            post_mimes_[-1] = php_substr(mime_, php_strpos(mime_, "/") + 1)
+            post_mimes_[-1] = php_str_replace("/", "_", mime_)
         # end if
-        matches = wp_match_mime_types(php_array_keys(types), post_mimes)
-        matches["default"] = Array("default")
-        for match,wilds in matches:
-            for wild in wilds:
-                if (not (php_isset(lambda : types[wild]))):
+        matches_ = wp_match_mime_types(php_array_keys(types_), post_mimes_)
+        matches_["default"] = Array("default")
+        for match_,wilds_ in matches_:
+            for wild_ in wilds_:
+                if (not (php_isset(lambda : types_[wild_]))):
                     continue
                 # end if
-                icon = types[wild]
-                if (not php_is_numeric(mime)):
-                    wp_cache_add(str("mime_type_icon_") + str(mime), icon)
+                icon_ = types_[wild_]
+                if (not php_is_numeric(mime_)):
+                    wp_cache_add(str("mime_type_icon_") + str(mime_), icon_)
                 # end if
                 break
             # end for
@@ -5063,7 +5229,7 @@ def wp_mime_type_icon(mime=0, *args_):
     #// @param int    $post_id Attachment ID. Will equal 0 if the function passed
     #// the mime type.
     #//
-    return apply_filters("wp_mime_type_icon", icon, mime, post_id)
+    return apply_filters("wp_mime_type_icon", icon_, mime_, post_id_)
 # end def wp_mime_type_icon
 #// 
 #// Check for changed slugs for published post objects and save the old slug.
@@ -5084,24 +5250,25 @@ def wp_mime_type_icon(mime=0, *args_):
 #// @param WP_Post $post        The Post Object
 #// @param WP_Post $post_before The Previous Post Object
 #//
-def wp_check_for_changed_slugs(post_id=None, post=None, post_before=None, *args_):
+def wp_check_for_changed_slugs(post_id_=None, post_=None, post_before_=None, *_args_):
+    
     
     #// Don't bother if it hasn't changed.
-    if post.post_name == post_before.post_name:
+    if post_.post_name == post_before_.post_name:
         return
     # end if
     #// We're only concerned with published, non-hierarchical objects.
-    if (not "publish" == post.post_status or "attachment" == get_post_type(post) and "inherit" == post.post_status) or is_post_type_hierarchical(post.post_type):
+    if (not "publish" == post_.post_status or "attachment" == get_post_type(post_) and "inherit" == post_.post_status) or is_post_type_hierarchical(post_.post_type):
         return
     # end if
-    old_slugs = get_post_meta(post_id, "_wp_old_slug")
+    old_slugs_ = get_post_meta(post_id_, "_wp_old_slug")
     #// If we haven't added this old slug before, add it now.
-    if (not php_empty(lambda : post_before.post_name)) and (not php_in_array(post_before.post_name, old_slugs)):
-        add_post_meta(post_id, "_wp_old_slug", post_before.post_name)
+    if (not php_empty(lambda : post_before_.post_name)) and (not php_in_array(post_before_.post_name, old_slugs_)):
+        add_post_meta(post_id_, "_wp_old_slug", post_before_.post_name)
     # end if
     #// If the new slug was used previously, delete it from the list.
-    if php_in_array(post.post_name, old_slugs):
-        delete_post_meta(post_id, "_wp_old_slug", post.post_name)
+    if php_in_array(post_.post_name, old_slugs_):
+        delete_post_meta(post_id_, "_wp_old_slug", post_.post_name)
     # end if
 # end def wp_check_for_changed_slugs
 #// 
@@ -5123,26 +5290,27 @@ def wp_check_for_changed_slugs(post_id=None, post=None, post_before=None, *args_
 #// @param WP_Post $post        The Post Object
 #// @param WP_Post $post_before The Previous Post Object
 #//
-def wp_check_for_changed_dates(post_id=None, post=None, post_before=None, *args_):
+def wp_check_for_changed_dates(post_id_=None, post_=None, post_before_=None, *_args_):
     
-    previous_date = gmdate("Y-m-d", strtotime(post_before.post_date))
-    new_date = gmdate("Y-m-d", strtotime(post.post_date))
+    
+    previous_date_ = gmdate("Y-m-d", strtotime(post_before_.post_date))
+    new_date_ = gmdate("Y-m-d", strtotime(post_.post_date))
     #// Don't bother if it hasn't changed.
-    if new_date == previous_date:
+    if new_date_ == previous_date_:
         return
     # end if
     #// We're only concerned with published, non-hierarchical objects.
-    if (not "publish" == post.post_status or "attachment" == get_post_type(post) and "inherit" == post.post_status) or is_post_type_hierarchical(post.post_type):
+    if (not "publish" == post_.post_status or "attachment" == get_post_type(post_) and "inherit" == post_.post_status) or is_post_type_hierarchical(post_.post_type):
         return
     # end if
-    old_dates = get_post_meta(post_id, "_wp_old_date")
+    old_dates_ = get_post_meta(post_id_, "_wp_old_date")
     #// If we haven't added this old date before, add it now.
-    if (not php_empty(lambda : previous_date)) and (not php_in_array(previous_date, old_dates)):
-        add_post_meta(post_id, "_wp_old_date", previous_date)
+    if (not php_empty(lambda : previous_date_)) and (not php_in_array(previous_date_, old_dates_)):
+        add_post_meta(post_id_, "_wp_old_date", previous_date_)
     # end if
     #// If the new slug was used previously, delete it from the list.
-    if php_in_array(new_date, old_dates):
-        delete_post_meta(post_id, "_wp_old_date", new_date)
+    if php_in_array(new_date_, old_dates_):
+        delete_post_meta(post_id_, "_wp_old_date", new_date_)
     # end if
 # end def wp_check_for_changed_dates
 #// 
@@ -5159,9 +5327,10 @@ def wp_check_for_changed_dates(post_id=None, post=None, post_before=None, *args_
 #// @param string|array $post_type Single post type or an array of post types. Currently only supports 'post' or 'page'.
 #// @return string SQL code that can be added to a where clause.
 #//
-def get_private_posts_cap_sql(post_type=None, *args_):
+def get_private_posts_cap_sql(post_type_=None, *_args_):
     
-    return get_posts_by_author_sql(post_type, False)
+    
+    return get_posts_by_author_sql(post_type_, False)
 # end def get_private_posts_cap_sql
 #// 
 #// Retrieve the post SQL based on capability, author, and type.
@@ -5180,19 +5349,25 @@ def get_private_posts_cap_sql(post_type=None, *args_):
 #// $current_user.  Default false.
 #// @return string SQL WHERE code that can be added to a query.
 #//
-def get_posts_by_author_sql(post_type=None, full=True, post_author=None, public_only=False, *args_):
-    
-    global wpdb
-    php_check_if_defined("wpdb")
-    if php_is_array(post_type):
-        post_types = post_type
-    else:
-        post_types = Array(post_type)
+def get_posts_by_author_sql(post_type_=None, full_=None, post_author_=None, public_only_=None, *_args_):
+    if full_ is None:
+        full_ = True
     # end if
-    post_type_clauses = Array()
-    for post_type in post_types:
-        post_type_obj = get_post_type_object(post_type)
-        if (not post_type_obj):
+    if public_only_ is None:
+        public_only_ = False
+    # end if
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if php_is_array(post_type_):
+        post_types_ = post_type_
+    else:
+        post_types_ = Array(post_type_)
+    # end if
+    post_type_clauses_ = Array()
+    for post_type_ in post_types_:
+        post_type_obj_ = get_post_type_object(post_type_)
+        if (not post_type_obj_):
             continue
         # end if
         #// 
@@ -5204,41 +5379,41 @@ def get_posts_by_author_sql(post_type=None, full=True, post_author=None, public_
         #// 
         #// @param string $cap Capability.
         #//
-        cap = apply_filters_deprecated("pub_priv_sql_capability", Array(""), "3.2.0")
-        if (not cap):
-            cap = current_user_can(post_type_obj.cap.read_private_posts)
+        cap_ = apply_filters_deprecated("pub_priv_sql_capability", Array(""), "3.2.0")
+        if (not cap_):
+            cap_ = current_user_can(post_type_obj_.cap.read_private_posts)
         # end if
         #// Only need to check the cap if $public_only is false.
-        post_status_sql = "post_status = 'publish'"
-        if False == public_only:
-            if cap:
+        post_status_sql_ = "post_status = 'publish'"
+        if False == public_only_:
+            if cap_:
                 #// Does the user have the capability to view private posts? Guess so.
-                post_status_sql += " OR post_status = 'private'"
+                post_status_sql_ += " OR post_status = 'private'"
             elif is_user_logged_in():
                 #// Users can view their own private posts.
-                id = get_current_user_id()
-                if None == post_author or (not full):
-                    post_status_sql += str(" OR post_status = 'private' AND post_author = ") + str(id)
-                elif id == php_int(post_author):
-                    post_status_sql += " OR post_status = 'private'"
+                id_ = get_current_user_id()
+                if None == post_author_ or (not full_):
+                    post_status_sql_ += str(" OR post_status = 'private' AND post_author = ") + str(id_)
+                elif id_ == php_int(post_author_):
+                    post_status_sql_ += " OR post_status = 'private'"
                 # end if
                 pass
             # end if
             pass
         # end if
-        post_type_clauses[-1] = "( post_type = '" + post_type + str("' AND ( ") + str(post_status_sql) + str(" ) )")
+        post_type_clauses_[-1] = "( post_type = '" + post_type_ + str("' AND ( ") + str(post_status_sql_) + str(" ) )")
     # end for
-    if php_empty(lambda : post_type_clauses):
-        return "WHERE 1 = 0" if full else "1 = 0"
+    if php_empty(lambda : post_type_clauses_):
+        return "WHERE 1 = 0" if full_ else "1 = 0"
     # end if
-    sql = "( " + php_implode(" OR ", post_type_clauses) + " )"
-    if None != post_author:
-        sql += wpdb.prepare(" AND post_author = %d", post_author)
+    sql_ = "( " + php_implode(" OR ", post_type_clauses_) + " )"
+    if None != post_author_:
+        sql_ += wpdb_.prepare(" AND post_author = %d", post_author_)
     # end if
-    if full:
-        sql = "WHERE " + sql
+    if full_:
+        sql_ = "WHERE " + sql_
     # end if
-    return sql
+    return sql_
 # end def get_posts_by_author_sql
 #// 
 #// Retrieves the most recent time that a post on the site was published.
@@ -5258,7 +5433,8 @@ def get_posts_by_author_sql(post_type=None, full=True, post_author=None, public_
 #// @param string $post_type Optional. The post type to check. Default 'any'.
 #// @return string The date of the last post, or false on failure.
 #//
-def get_lastpostdate(timezone="server", post_type="any", *args_):
+def get_lastpostdate(timezone_="server", post_type_="any", *_args_):
+    
     
     #// 
     #// Filters the most recent time that a post on the site was published.
@@ -5269,7 +5445,7 @@ def get_lastpostdate(timezone="server", post_type="any", *args_):
     #// @param string       $timezone Location to use for getting the post published date.
     #// See get_lastpostdate() for accepted `$timezone` values.
     #//
-    return apply_filters("get_lastpostdate", _get_last_post_time(timezone, "date", post_type), timezone)
+    return apply_filters("get_lastpostdate", _get_last_post_time(timezone_, "date", post_type_), timezone_)
 # end def get_lastpostdate
 #// 
 #// Get the most recent time that a post on the site was modified.
@@ -5287,7 +5463,8 @@ def get_lastpostdate(timezone="server", post_type="any", *args_):
 #// @param string $post_type Optional. The post type to check. Default 'any'.
 #// @return string The timestamp in 'Y-m-d H:i:s' format, or false on failure.
 #//
-def get_lastpostmodified(timezone="server", post_type="any", *args_):
+def get_lastpostmodified(timezone_="server", post_type_="any", *_args_):
+    
     
     #// 
     #// Pre-filter the return value of get_lastpostmodified() before the query is run.
@@ -5300,14 +5477,14 @@ def get_lastpostmodified(timezone="server", post_type="any", *args_):
     #// See get_lastpostdate() for accepted `$timezone` values.
     #// @param string       $post_type        The post type to check.
     #//
-    lastpostmodified = apply_filters("pre_get_lastpostmodified", False, timezone, post_type)
-    if False != lastpostmodified:
-        return lastpostmodified
+    lastpostmodified_ = apply_filters("pre_get_lastpostmodified", False, timezone_, post_type_)
+    if False != lastpostmodified_:
+        return lastpostmodified_
     # end if
-    lastpostmodified = _get_last_post_time(timezone, "modified", post_type)
-    lastpostdate = get_lastpostdate(timezone)
-    if lastpostdate > lastpostmodified:
-        lastpostmodified = lastpostdate
+    lastpostmodified_ = _get_last_post_time(timezone_, "modified", post_type_)
+    lastpostdate_ = get_lastpostdate(timezone_)
+    if lastpostdate_ > lastpostmodified_:
+        lastpostmodified_ = lastpostdate_
     # end if
     #// 
     #// Filters the most recent time that a post was modified.
@@ -5319,7 +5496,7 @@ def get_lastpostmodified(timezone="server", post_type="any", *args_):
     #// @param string       $timezone         Location to use for getting the post modified date.
     #// See get_lastpostdate() for accepted `$timezone` values.
     #//
-    return apply_filters("get_lastpostmodified", lastpostmodified, timezone)
+    return apply_filters("get_lastpostmodified", lastpostmodified_, timezone_)
 # end def get_lastpostmodified
 #// 
 #// Gets the timestamp of the last time any post was modified or published.
@@ -5336,47 +5513,48 @@ def get_lastpostmodified(timezone="server", post_type="any", *args_):
 #// @param string $post_type Optional. The post type to check. Default 'any'.
 #// @return string|false The timestamp in 'Y-m-d H:i:s' format, or false on failure.
 #//
-def _get_last_post_time(timezone=None, field=None, post_type="any", *args_):
+def _get_last_post_time(timezone_=None, field_=None, post_type_="any", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if (not php_in_array(field, Array("date", "modified"))):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if (not php_in_array(field_, Array("date", "modified"))):
         return False
     # end if
-    timezone = php_strtolower(timezone)
-    key = str("lastpost") + str(field) + str(":") + str(timezone)
-    if "any" != post_type:
-        key += ":" + sanitize_key(post_type)
+    timezone_ = php_strtolower(timezone_)
+    key_ = str("lastpost") + str(field_) + str(":") + str(timezone_)
+    if "any" != post_type_:
+        key_ += ":" + sanitize_key(post_type_)
     # end if
-    date = wp_cache_get(key, "timeinfo")
-    if False != date:
-        return date
+    date_ = wp_cache_get(key_, "timeinfo")
+    if False != date_:
+        return date_
     # end if
-    if "any" == post_type:
-        post_types = get_post_types(Array({"public": True}))
-        array_walk(post_types, Array(wpdb, "escape_by_ref"))
-        post_types = "'" + php_implode("', '", post_types) + "'"
+    if "any" == post_type_:
+        post_types_ = get_post_types(Array({"public": True}))
+        array_walk(post_types_, Array(wpdb_, "escape_by_ref"))
+        post_types_ = "'" + php_implode("', '", post_types_) + "'"
     else:
-        post_types = "'" + sanitize_key(post_type) + "'"
+        post_types_ = "'" + sanitize_key(post_type_) + "'"
     # end if
-    for case in Switch(timezone):
+    for case in Switch(timezone_):
         if case("gmt"):
-            date = wpdb.get_var(str("SELECT post_") + str(field) + str("_gmt FROM ") + str(wpdb.posts) + str(" WHERE post_status = 'publish' AND post_type IN (") + str(post_types) + str(") ORDER BY post_") + str(field) + str("_gmt DESC LIMIT 1"))
+            date_ = wpdb_.get_var(str("SELECT post_") + str(field_) + str("_gmt FROM ") + str(wpdb_.posts) + str(" WHERE post_status = 'publish' AND post_type IN (") + str(post_types_) + str(") ORDER BY post_") + str(field_) + str("_gmt DESC LIMIT 1"))
             break
         # end if
         if case("blog"):
-            date = wpdb.get_var(str("SELECT post_") + str(field) + str(" FROM ") + str(wpdb.posts) + str(" WHERE post_status = 'publish' AND post_type IN (") + str(post_types) + str(") ORDER BY post_") + str(field) + str("_gmt DESC LIMIT 1"))
+            date_ = wpdb_.get_var(str("SELECT post_") + str(field_) + str(" FROM ") + str(wpdb_.posts) + str(" WHERE post_status = 'publish' AND post_type IN (") + str(post_types_) + str(") ORDER BY post_") + str(field_) + str("_gmt DESC LIMIT 1"))
             break
         # end if
         if case("server"):
-            add_seconds_server = gmdate("Z")
-            date = wpdb.get_var(str("SELECT DATE_ADD(post_") + str(field) + str("_gmt, INTERVAL '") + str(add_seconds_server) + str("' SECOND) FROM ") + str(wpdb.posts) + str(" WHERE post_status = 'publish' AND post_type IN (") + str(post_types) + str(") ORDER BY post_") + str(field) + str("_gmt DESC LIMIT 1"))
+            add_seconds_server_ = gmdate("Z")
+            date_ = wpdb_.get_var(str("SELECT DATE_ADD(post_") + str(field_) + str("_gmt, INTERVAL '") + str(add_seconds_server_) + str("' SECOND) FROM ") + str(wpdb_.posts) + str(" WHERE post_status = 'publish' AND post_type IN (") + str(post_types_) + str(") ORDER BY post_") + str(field_) + str("_gmt DESC LIMIT 1"))
             break
         # end if
     # end for
-    if date:
-        wp_cache_set(key, date, "timeinfo")
-        return date
+    if date_:
+        wp_cache_set(key_, date_, "timeinfo")
+        return date_
     # end if
     return False
 # end def _get_last_post_time
@@ -5387,13 +5565,14 @@ def _get_last_post_time(timezone=None, field=None, post_type="any", *args_):
 #// 
 #// @param WP_Post[] $posts Array of post objects (passed by reference).
 #//
-def update_post_cache(posts=None, *args_):
+def update_post_cache(posts_=None, *_args_):
     
-    if (not posts):
+    
+    if (not posts_):
         return
     # end if
-    for post in posts:
-        wp_cache_add(post.ID, post, "posts")
+    for post_ in posts_:
+        wp_cache_add(post_.ID, post_, "posts")
     # end for
 # end def update_post_cache
 #// 
@@ -5411,20 +5590,21 @@ def update_post_cache(posts=None, *args_):
 #// 
 #// @param int|WP_Post $post Post ID or post object to remove from the cache.
 #//
-def clean_post_cache(post=None, *args_):
+def clean_post_cache(post_=None, *_args_):
     
-    global _wp_suspend_cache_invalidation
-    php_check_if_defined("_wp_suspend_cache_invalidation")
-    if (not php_empty(lambda : _wp_suspend_cache_invalidation)):
+    
+    global _wp_suspend_cache_invalidation_
+    php_check_if_defined("_wp_suspend_cache_invalidation_")
+    if (not php_empty(lambda : _wp_suspend_cache_invalidation_)):
         return
     # end if
-    post = get_post(post)
-    if php_empty(lambda : post):
+    post_ = get_post(post_)
+    if php_empty(lambda : post_):
         return
     # end if
-    wp_cache_delete(post.ID, "posts")
-    wp_cache_delete(post.ID, "post_meta")
-    clean_object_term_cache(post.ID, post.post_type)
+    wp_cache_delete(post_.ID, "posts")
+    wp_cache_delete(post_.ID, "post_meta")
+    clean_object_term_cache(post_.ID, post_.post_type)
     wp_cache_delete("wp_get_archives", "general")
     #// 
     #// Fires immediately after the given post's cache is cleaned.
@@ -5434,8 +5614,8 @@ def clean_post_cache(post=None, *args_):
     #// @param int     $post_id Post ID.
     #// @param WP_Post $post    Post object.
     #//
-    do_action("clean_post_cache", post.ID, post)
-    if "page" == post.post_type:
+    do_action("clean_post_cache", post_.ID, post_)
+    if "page" == post_.post_type:
         wp_cache_delete("all_page_ids", "posts")
         #// 
         #// Fires immediately after the given page's cache is cleaned.
@@ -5444,7 +5624,7 @@ def clean_post_cache(post=None, *args_):
         #// 
         #// @param int $post_id Post ID.
         #//
-        do_action("clean_page_cache", post.ID)
+        do_action("clean_page_cache", post_.ID)
     # end if
     wp_cache_set("last_changed", php_microtime(), "posts")
 # end def clean_post_cache
@@ -5458,39 +5638,45 @@ def clean_post_cache(post=None, *args_):
 #// @param bool      $update_term_cache Optional. Whether to update the term cache. Default true.
 #// @param bool      $update_meta_cache Optional. Whether to update the meta cache. Default true.
 #//
-def update_post_caches(posts=None, post_type="post", update_term_cache=True, update_meta_cache=True, *args_):
+def update_post_caches(posts_=None, post_type_="post", update_term_cache_=None, update_meta_cache_=None, *_args_):
+    if update_term_cache_ is None:
+        update_term_cache_ = True
+    # end if
+    if update_meta_cache_ is None:
+        update_meta_cache_ = True
+    # end if
     
     #// No point in doing all this work if we didn't match any posts.
-    if (not posts):
+    if (not posts_):
         return
     # end if
-    update_post_cache(posts)
-    post_ids = Array()
-    for post in posts:
-        post_ids[-1] = post.ID
+    update_post_cache(posts_)
+    post_ids_ = Array()
+    for post_ in posts_:
+        post_ids_[-1] = post_.ID
     # end for
-    if (not post_type):
-        post_type = "any"
+    if (not post_type_):
+        post_type_ = "any"
     # end if
-    if update_term_cache:
-        if php_is_array(post_type):
-            ptypes = post_type
-        elif "any" == post_type:
-            ptypes = Array()
+    if update_term_cache_:
+        if php_is_array(post_type_):
+            ptypes_ = post_type_
+        elif "any" == post_type_:
+            ptypes_ = Array()
             #// Just use the post_types in the supplied posts.
-            for post in posts:
-                ptypes[-1] = post.post_type
+            for post_ in posts_:
+                ptypes_[-1] = post_.post_type
             # end for
-            ptypes = array_unique(ptypes)
+            ptypes_ = array_unique(ptypes_)
         else:
-            ptypes = Array(post_type)
+            ptypes_ = Array(post_type_)
         # end if
-        if (not php_empty(lambda : ptypes)):
-            update_object_term_cache(post_ids, ptypes)
+        if (not php_empty(lambda : ptypes_)):
+            update_object_term_cache(post_ids_, ptypes_)
         # end if
     # end if
-    if update_meta_cache:
-        update_postmeta_cache(post_ids)
+    if update_meta_cache_:
+        update_postmeta_cache(post_ids_)
     # end if
 # end def update_post_caches
 #// 
@@ -5506,9 +5692,10 @@ def update_post_caches(posts=None, post_type="post", update_term_cache=True, upd
 #// @return array|false Returns false if there is nothing to update or an array
 #// of metadata.
 #//
-def update_postmeta_cache(post_ids=None, *args_):
+def update_postmeta_cache(post_ids_=None, *_args_):
     
-    return update_meta_cache("post", post_ids)
+    
+    return update_meta_cache("post", post_ids_)
 # end def update_postmeta_cache
 #// 
 #// Will clean the attachment in the cache.
@@ -5525,18 +5712,21 @@ def update_postmeta_cache(post_ids=None, *args_):
 #// @param int  $id          The attachment ID in the cache to clean.
 #// @param bool $clean_terms Optional. Whether to clean terms cache. Default false.
 #//
-def clean_attachment_cache(id=None, clean_terms=False, *args_):
+def clean_attachment_cache(id_=None, clean_terms_=None, *_args_):
+    if clean_terms_ is None:
+        clean_terms_ = False
+    # end if
     
-    global _wp_suspend_cache_invalidation
-    php_check_if_defined("_wp_suspend_cache_invalidation")
-    if (not php_empty(lambda : _wp_suspend_cache_invalidation)):
+    global _wp_suspend_cache_invalidation_
+    php_check_if_defined("_wp_suspend_cache_invalidation_")
+    if (not php_empty(lambda : _wp_suspend_cache_invalidation_)):
         return
     # end if
-    id = php_int(id)
-    wp_cache_delete(id, "posts")
-    wp_cache_delete(id, "post_meta")
-    if clean_terms:
-        clean_object_term_cache(id, "attachment")
+    id_ = php_int(id_)
+    wp_cache_delete(id_, "posts")
+    wp_cache_delete(id_, "post_meta")
+    if clean_terms_:
+        clean_object_term_cache(id_, "attachment")
     # end if
     #// 
     #// Fires after the given attachment's cache is cleaned.
@@ -5545,7 +5735,7 @@ def clean_attachment_cache(id=None, clean_terms=False, *args_):
     #// 
     #// @param int $id Attachment ID.
     #//
-    do_action("clean_attachment_cache", id)
+    do_action("clean_attachment_cache", id_)
 # end def clean_attachment_cache
 #// 
 #// Hooks.
@@ -5563,14 +5753,15 @@ def clean_attachment_cache(id=None, clean_terms=False, *args_):
 #// @param string  $old_status Previous post status.
 #// @param WP_Post $post       Post object.
 #//
-def _transition_post_status(new_status=None, old_status=None, post=None, *args_):
+def _transition_post_status(new_status_=None, old_status_=None, post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    if "publish" != old_status and "publish" == new_status:
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    if "publish" != old_status_ and "publish" == new_status_:
         #// Reset GUID if transitioning to publish and it is empty.
-        if "" == get_the_guid(post.ID):
-            wpdb.update(wpdb.posts, Array({"guid": get_permalink(post.ID)}), Array({"ID": post.ID}))
+        if "" == get_the_guid(post_.ID):
+            wpdb_.update(wpdb_.posts, Array({"guid": get_permalink(post_.ID)}), Array({"ID": post_.ID}))
         # end if
         #// 
         #// Fires when a post's status is transitioned from private to published.
@@ -5580,22 +5771,22 @@ def _transition_post_status(new_status=None, old_status=None, post=None, *args_)
         #// 
         #// @param int $post_id Post ID.
         #//
-        do_action_deprecated("private_to_published", Array(post.ID), "2.3.0", "private_to_publish")
+        do_action_deprecated("private_to_published", Array(post_.ID), "2.3.0", "private_to_publish")
     # end if
     #// If published posts changed clear the lastpostmodified cache.
-    if "publish" == new_status or "publish" == old_status:
-        for timezone in Array("server", "gmt", "blog"):
-            wp_cache_delete(str("lastpostmodified:") + str(timezone), "timeinfo")
-            wp_cache_delete(str("lastpostdate:") + str(timezone), "timeinfo")
-            wp_cache_delete(str("lastpostdate:") + str(timezone) + str(":") + str(post.post_type), "timeinfo")
+    if "publish" == new_status_ or "publish" == old_status_:
+        for timezone_ in Array("server", "gmt", "blog"):
+            wp_cache_delete(str("lastpostmodified:") + str(timezone_), "timeinfo")
+            wp_cache_delete(str("lastpostdate:") + str(timezone_), "timeinfo")
+            wp_cache_delete(str("lastpostdate:") + str(timezone_) + str(":") + str(post_.post_type), "timeinfo")
         # end for
     # end if
-    if new_status != old_status:
-        wp_cache_delete(_count_posts_cache_key(post.post_type), "counts")
-        wp_cache_delete(_count_posts_cache_key(post.post_type, "readable"), "counts")
+    if new_status_ != old_status_:
+        wp_cache_delete(_count_posts_cache_key(post_.post_type), "counts")
+        wp_cache_delete(_count_posts_cache_key(post_.post_type, "readable"), "counts")
     # end if
     #// Always clears the hook in case the post status bounced from future to draft.
-    wp_clear_scheduled_hook("publish_future_post", Array(post.ID))
+    wp_clear_scheduled_hook("publish_future_post", Array(post_.ID))
 # end def _transition_post_status
 #// 
 #// Hook used to schedule publication for a post marked for the future.
@@ -5610,10 +5801,11 @@ def _transition_post_status(new_status=None, old_status=None, post=None, *args_)
 #// wp_transition_post_status() and the default filter for _future_post_hook().
 #// @param WP_Post $post       Post object.
 #//
-def _future_post_hook(deprecated=None, post=None, *args_):
+def _future_post_hook(deprecated_=None, post_=None, *_args_):
     
-    wp_clear_scheduled_hook("publish_future_post", Array(post.ID))
-    wp_schedule_single_event(strtotime(get_gmt_from_date(post.post_date) + " GMT"), "publish_future_post", Array(post.ID))
+    
+    wp_clear_scheduled_hook("publish_future_post", Array(post_.ID))
+    wp_schedule_single_event(strtotime(get_gmt_from_date(post_.post_date) + " GMT"), "publish_future_post", Array(post_.ID))
 # end def _future_post_hook
 #// 
 #// Hook to schedule pings and enclosures when a post is published.
@@ -5625,7 +5817,8 @@ def _future_post_hook(deprecated=None, post=None, *args_):
 #// 
 #// @param int $post_id The ID in the database table of the post being published.
 #//
-def _publish_post_hook(post_id=None, *args_):
+def _publish_post_hook(post_id_=None, *_args_):
+    
     
     if php_defined("XMLRPC_REQUEST"):
         #// 
@@ -5635,18 +5828,18 @@ def _publish_post_hook(post_id=None, *args_):
         #// 
         #// @param int $post_id Post ID.
         #//
-        do_action("xmlrpc_publish_post", post_id)
+        do_action("xmlrpc_publish_post", post_id_)
     # end if
     if php_defined("WP_IMPORTING"):
         return
     # end if
     if get_option("default_pingback_flag"):
-        add_post_meta(post_id, "_pingme", "1", True)
+        add_post_meta(post_id_, "_pingme", "1", True)
     # end if
-    add_post_meta(post_id, "_encloseme", "1", True)
-    to_ping = get_to_ping(post_id)
-    if (not php_empty(lambda : to_ping)):
-        add_post_meta(post_id, "_trackbackme", "1")
+    add_post_meta(post_id_, "_encloseme", "1", True)
+    to_ping_ = get_to_ping(post_id_)
+    if (not php_empty(lambda : to_ping_)):
+        add_post_meta(post_id_, "_trackbackme", "1")
     # end if
     if (not wp_next_scheduled("do_pings")):
         wp_schedule_single_event(time(), "do_pings")
@@ -5660,13 +5853,14 @@ def _publish_post_hook(post_id=None, *args_):
 #// @param int|WP_Post $post Post ID or post object. Defaults to global $post.
 #// @return int|false Post parent ID (which can be 0 if there is no parent), or false if the post does not exist.
 #//
-def wp_get_post_parent_id(post=None, *args_):
+def wp_get_post_parent_id(post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post) or is_wp_error(post):
+    
+    post_ = get_post(post_)
+    if (not post_) or is_wp_error(post_):
         return False
     # end if
-    return php_int(post.post_parent)
+    return php_int(post_.post_parent)
 # end def wp_get_post_parent_id
 #// 
 #// Check the given subset of the post hierarchy for hierarchy loops.
@@ -5682,35 +5876,36 @@ def wp_get_post_parent_id(post=None, *args_):
 #// @param int $post_ID     ID of the post we're checking.
 #// @return int The new post_parent for the post, 0 otherwise.
 #//
-def wp_check_post_hierarchy_for_loops(post_parent=None, post_ID=None, *args_):
+def wp_check_post_hierarchy_for_loops(post_parent_=None, post_ID_=None, *_args_):
+    
     
     #// Nothing fancy here - bail.
-    if (not post_parent):
+    if (not post_parent_):
         return 0
     # end if
     #// New post can't cause a loop.
-    if php_empty(lambda : post_ID):
-        return post_parent
+    if php_empty(lambda : post_ID_):
+        return post_parent_
     # end if
     #// Can't be its own parent.
-    if post_parent == post_ID:
+    if post_parent_ == post_ID_:
         return 0
     # end if
     #// Now look for larger loops.
-    loop = wp_find_hierarchy_loop("wp_get_post_parent_id", post_ID, post_parent)
-    if (not loop):
-        return post_parent
+    loop_ = wp_find_hierarchy_loop("wp_get_post_parent_id", post_ID_, post_parent_)
+    if (not loop_):
+        return post_parent_
         pass
     # end if
     #// Setting $post_parent to the given value causes a loop.
-    if (php_isset(lambda : loop[post_ID])):
+    if (php_isset(lambda : loop_[post_ID_])):
         return 0
     # end if
     #// There's a loop, but it doesn't contain $post_ID. Break the loop.
-    for loop_member in php_array_keys(loop):
-        wp_update_post(Array({"ID": loop_member, "post_parent": 0}))
+    for loop_member_ in php_array_keys(loop_):
+        wp_update_post(Array({"ID": loop_member_, "post_parent": 0}))
     # end for
-    return post_parent
+    return post_parent_
 # end def wp_check_post_hierarchy_for_loops
 #// 
 #// Sets the post thumbnail (featured image) for the given post.
@@ -5721,15 +5916,16 @@ def wp_check_post_hierarchy_for_loops(post_parent=None, post_ID=None, *args_):
 #// @param int         $thumbnail_id Thumbnail to attach.
 #// @return int|bool True on success, false on failure.
 #//
-def set_post_thumbnail(post=None, thumbnail_id=None, *args_):
+def set_post_thumbnail(post_=None, thumbnail_id_=None, *_args_):
     
-    post = get_post(post)
-    thumbnail_id = absint(thumbnail_id)
-    if post and thumbnail_id and get_post(thumbnail_id):
-        if wp_get_attachment_image(thumbnail_id, "thumbnail"):
-            return update_post_meta(post.ID, "_thumbnail_id", thumbnail_id)
+    
+    post_ = get_post(post_)
+    thumbnail_id_ = absint(thumbnail_id_)
+    if post_ and thumbnail_id_ and get_post(thumbnail_id_):
+        if wp_get_attachment_image(thumbnail_id_, "thumbnail"):
+            return update_post_meta(post_.ID, "_thumbnail_id", thumbnail_id_)
         else:
-            return delete_post_meta(post.ID, "_thumbnail_id")
+            return delete_post_meta(post_.ID, "_thumbnail_id")
         # end if
     # end if
     return False
@@ -5742,11 +5938,12 @@ def set_post_thumbnail(post=None, thumbnail_id=None, *args_):
 #// @param int|WP_Post $post Post ID or post object from which the thumbnail should be removed.
 #// @return bool True on success, false on failure.
 #//
-def delete_post_thumbnail(post=None, *args_):
+def delete_post_thumbnail(post_=None, *_args_):
     
-    post = get_post(post)
-    if post:
-        return delete_post_meta(post.ID, "_thumbnail_id")
+    
+    post_ = get_post(post_)
+    if post_:
+        return delete_post_meta(post_.ID, "_thumbnail_id")
     # end if
     return False
 # end def delete_post_thumbnail
@@ -5757,15 +5954,16 @@ def delete_post_thumbnail(post=None, *args_):
 #// 
 #// @global wpdb $wpdb WordPress database abstraction object.
 #//
-def wp_delete_auto_drafts(*args_):
+def wp_delete_auto_drafts(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     #// Cleanup old auto-drafts more than 7 days old.
-    old_posts = wpdb.get_col(str("SELECT ID FROM ") + str(wpdb.posts) + str(" WHERE post_status = 'auto-draft' AND DATE_SUB( NOW(), INTERVAL 7 DAY ) > post_date"))
-    for delete in old_posts:
+    old_posts_ = wpdb_.get_col(str("SELECT ID FROM ") + str(wpdb_.posts) + str(" WHERE post_status = 'auto-draft' AND DATE_SUB( NOW(), INTERVAL 7 DAY ) > post_date"))
+    for delete_ in old_posts_:
         #// Force delete.
-        wp_delete_post(delete, True)
+        wp_delete_post(delete_, True)
     # end for
 # end def wp_delete_auto_drafts
 #// 
@@ -5775,32 +5973,33 @@ def wp_delete_auto_drafts(*args_):
 #// 
 #// @param array $posts Array of WP_Post objects.
 #//
-def wp_queue_posts_for_term_meta_lazyload(posts=None, *args_):
+def wp_queue_posts_for_term_meta_lazyload(posts_=None, *_args_):
     
-    post_type_taxonomies = Array()
-    term_ids = Array()
-    for post in posts:
-        if (not type(post).__name__ == "WP_Post"):
+    
+    post_type_taxonomies_ = Array()
+    term_ids_ = Array()
+    for post_ in posts_:
+        if (not type(post_).__name__ == "WP_Post"):
             continue
         # end if
-        if (not (php_isset(lambda : post_type_taxonomies[post.post_type]))):
-            post_type_taxonomies[post.post_type] = get_object_taxonomies(post.post_type)
+        if (not (php_isset(lambda : post_type_taxonomies_[post_.post_type]))):
+            post_type_taxonomies_[post_.post_type] = get_object_taxonomies(post_.post_type)
         # end if
-        for taxonomy in post_type_taxonomies[post.post_type]:
+        for taxonomy_ in post_type_taxonomies_[post_.post_type]:
             #// Term cache should already be primed by `update_post_term_cache()`.
-            terms = get_object_term_cache(post.ID, taxonomy)
-            if False != terms:
-                for term in terms:
-                    if (not (php_isset(lambda : term_ids[term.term_id]))):
-                        term_ids[-1] = term.term_id
+            terms_ = get_object_term_cache(post_.ID, taxonomy_)
+            if False != terms_:
+                for term_ in terms_:
+                    if (not (php_isset(lambda : term_ids_[term_.term_id]))):
+                        term_ids_[-1] = term_.term_id
                     # end if
                 # end for
             # end if
         # end for
     # end for
-    if term_ids:
-        lazyloader = wp_metadata_lazyloader()
-        lazyloader.queue_objects("term", term_ids)
+    if term_ids_:
+        lazyloader_ = wp_metadata_lazyloader()
+        lazyloader_.queue_objects("term", term_ids_)
     # end if
 # end def wp_queue_posts_for_term_meta_lazyload
 #// 
@@ -5816,12 +6015,13 @@ def wp_queue_posts_for_term_meta_lazyload(posts=None, *args_):
 #// @param string  $old_status Old post status.
 #// @param WP_Post $post       Post object.
 #//
-def _update_term_count_on_transition_post_status(new_status=None, old_status=None, post=None, *args_):
+def _update_term_count_on_transition_post_status(new_status_=None, old_status_=None, post_=None, *_args_):
+    
     
     #// Update counts for the post's terms.
-    for taxonomy in get_object_taxonomies(post.post_type):
-        tt_ids = wp_get_object_terms(post.ID, taxonomy, Array({"fields": "tt_ids"}))
-        wp_update_term_count(tt_ids, taxonomy)
+    for taxonomy_ in get_object_taxonomies(post_.post_type):
+        tt_ids_ = wp_get_object_terms(post_.ID, taxonomy_, Array({"fields": "tt_ids"}))
+        wp_update_term_count(tt_ids_, taxonomy_)
     # end for
 # end def _update_term_count_on_transition_post_status
 #// 
@@ -5838,14 +6038,20 @@ def _update_term_count_on_transition_post_status(new_status=None, old_status=Non
 #// @param bool  $update_term_cache Optional. Whether to update the term cache. Default true.
 #// @param bool  $update_meta_cache Optional. Whether to update the meta cache. Default true.
 #//
-def _prime_post_caches(ids=None, update_term_cache=True, update_meta_cache=True, *args_):
+def _prime_post_caches(ids_=None, update_term_cache_=None, update_meta_cache_=None, *_args_):
+    if update_term_cache_ is None:
+        update_term_cache_ = True
+    # end if
+    if update_meta_cache_ is None:
+        update_meta_cache_ = True
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    non_cached_ids = _get_non_cached_ids(ids, "posts")
-    if (not php_empty(lambda : non_cached_ids)):
-        fresh_posts = wpdb.get_results(php_sprintf(str("SELECT ") + str(wpdb.posts) + str(".* FROM ") + str(wpdb.posts) + str(" WHERE ID IN (%s)"), join(",", non_cached_ids)))
-        update_post_caches(fresh_posts, "any", update_term_cache, update_meta_cache)
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    non_cached_ids_ = _get_non_cached_ids(ids_, "posts")
+    if (not php_empty(lambda : non_cached_ids_)):
+        fresh_posts_ = wpdb_.get_results(php_sprintf(str("SELECT ") + str(wpdb_.posts) + str(".* FROM ") + str(wpdb_.posts) + str(" WHERE ID IN (%s)"), join(",", non_cached_ids_)))
+        update_post_caches(fresh_posts_, "any", update_term_cache_, update_meta_cache_)
     # end if
 # end def _prime_post_caches
 #// 
@@ -5862,12 +6068,13 @@ def _prime_post_caches(ids=None, update_term_cache=True, update_meta_cache=True,
 #// @param string $post_name Slug.
 #// @param string $post_ID   Optional. Post ID that should be ignored. Default 0.
 #//
-def wp_add_trashed_suffix_to_post_name_for_trashed_posts(post_name=None, post_ID=0, *args_):
+def wp_add_trashed_suffix_to_post_name_for_trashed_posts(post_name_=None, post_ID_=0, *_args_):
     
-    trashed_posts_with_desired_slug = get_posts(Array({"name": post_name, "post_status": "trash", "post_type": "any", "nopaging": True, "post__not_in": Array(post_ID)}))
-    if (not php_empty(lambda : trashed_posts_with_desired_slug)):
-        for _post in trashed_posts_with_desired_slug:
-            wp_add_trashed_suffix_to_post_name_for_post(_post)
+    
+    trashed_posts_with_desired_slug_ = get_posts(Array({"name": post_name_, "post_status": "trash", "post_type": "any", "nopaging": True, "post__not_in": Array(post_ID_)}))
+    if (not php_empty(lambda : trashed_posts_with_desired_slug_)):
+        for _post_ in trashed_posts_with_desired_slug_:
+            wp_add_trashed_suffix_to_post_name_for_post(_post_)
         # end for
     # end if
 # end def wp_add_trashed_suffix_to_post_name_for_trashed_posts
@@ -5885,19 +6092,20 @@ def wp_add_trashed_suffix_to_post_name_for_trashed_posts(post_name=None, post_ID
 #// @param WP_Post $post The post.
 #// @return string New slug for the post.
 #//
-def wp_add_trashed_suffix_to_post_name_for_post(post=None, *args_):
+def wp_add_trashed_suffix_to_post_name_for_post(post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post(post)
-    if "__trashed" == php_substr(post.post_name, -9):
-        return post.post_name
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post(post_)
+    if "__trashed" == php_substr(post_.post_name, -9):
+        return post_.post_name
     # end if
-    add_post_meta(post.ID, "_wp_desired_post_slug", post.post_name)
-    post_name = _truncate_post_slug(post.post_name, 191) + "__trashed"
-    wpdb.update(wpdb.posts, Array({"post_name": post_name}), Array({"ID": post.ID}))
-    clean_post_cache(post.ID)
-    return post_name
+    add_post_meta(post_.ID, "_wp_desired_post_slug", post_.post_name)
+    post_name_ = _truncate_post_slug(post_.post_name, 191) + "__trashed"
+    wpdb_.update(wpdb_.posts, Array({"post_name": post_name_}), Array({"ID": post_.ID}))
+    clean_post_cache(post_.ID)
+    return post_name_
 # end def wp_add_trashed_suffix_to_post_name_for_post
 #// 
 #// Filter the SQL clauses of an attachment query to include filenames.
@@ -5911,23 +6119,25 @@ def wp_add_trashed_suffix_to_post_name_for_post(post=None, *args_):
 #// DISTINCT, fields (SELECT), and LIMITS clauses.
 #// @return string[] The modified array of clauses.
 #//
-def _filter_query_attachment_filenames(clauses=None, *args_):
+def _filter_query_attachment_filenames(clauses_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     remove_filter("posts_clauses", __FUNCTION__)
     #// Add a LEFT JOIN of the postmeta table so we don't trample existing JOINs.
-    clauses["join"] += str(" LEFT JOIN ") + str(wpdb.postmeta) + str(" AS sq1 ON ( ") + str(wpdb.posts) + str(".ID = sq1.post_id AND sq1.meta_key = '_wp_attached_file' )")
-    clauses["groupby"] = str(wpdb.posts) + str(".ID")
-    clauses["where"] = php_preg_replace(str("/\\(") + str(wpdb.posts) + str(".post_content (NOT LIKE|LIKE) (\\'[^']+\\')\\)/"), "$0 OR ( sq1.meta_value $1 $2 )", clauses["where"])
-    return clauses
+    clauses_["join"] += str(" LEFT JOIN ") + str(wpdb_.postmeta) + str(" AS sq1 ON ( ") + str(wpdb_.posts) + str(".ID = sq1.post_id AND sq1.meta_key = '_wp_attached_file' )")
+    clauses_["groupby"] = str(wpdb_.posts) + str(".ID")
+    clauses_["where"] = php_preg_replace(str("/\\(") + str(wpdb_.posts) + str(".post_content (NOT LIKE|LIKE) (\\'[^']+\\')\\)/"), "$0 OR ( sq1.meta_value $1 $2 )", clauses_["where"])
+    return clauses_
 # end def _filter_query_attachment_filenames
 #// 
 #// Sets the last changed time for the 'posts' cache group.
 #// 
 #// @since 5.0.0
 #//
-def wp_cache_set_posts_last_changed(*args_):
+def wp_cache_set_posts_last_changed(*_args_):
+    
     
     wp_cache_set("last_changed", php_microtime(), "posts")
 # end def wp_cache_set_posts_last_changed
@@ -5941,12 +6151,13 @@ def wp_cache_set_posts_last_changed(*args_):
 #// @param string $type
 #// @return mixed
 #//
-def get_available_post_mime_types(type="attachment", *args_):
+def get_available_post_mime_types(type_="attachment", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    types = wpdb.get_col(wpdb.prepare(str("SELECT DISTINCT post_mime_type FROM ") + str(wpdb.posts) + str(" WHERE post_type = %s"), type))
-    return types
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    types_ = wpdb_.get_col(wpdb_.prepare(str("SELECT DISTINCT post_mime_type FROM ") + str(wpdb_.posts) + str(" WHERE post_type = %s"), type_))
+    return types_
 # end def get_available_post_mime_types
 #// 
 #// Retrieves the path to an uploaded image file.
@@ -5963,17 +6174,20 @@ def get_available_post_mime_types(type="attachment", *args_):
 #// @param bool $unfiltered Optional. Passed through to `get_attached_file()`. Default false.
 #// @return string|false Path to the original image file or false if the attachment is not an image.
 #//
-def wp_get_original_image_path(attachment_id=None, unfiltered=False, *args_):
+def wp_get_original_image_path(attachment_id_=None, unfiltered_=None, *_args_):
+    if unfiltered_ is None:
+        unfiltered_ = False
+    # end if
     
-    if (not wp_attachment_is_image(attachment_id)):
+    if (not wp_attachment_is_image(attachment_id_)):
         return False
     # end if
-    image_meta = wp_get_attachment_metadata(attachment_id)
-    image_file = get_attached_file(attachment_id, unfiltered)
-    if php_empty(lambda : image_meta["original_image"]):
-        original_image = image_file
+    image_meta_ = wp_get_attachment_metadata(attachment_id_)
+    image_file_ = get_attached_file(attachment_id_, unfiltered_)
+    if php_empty(lambda : image_meta_["original_image"]):
+        original_image_ = image_file_
     else:
-        original_image = path_join(php_dirname(image_file), image_meta["original_image"])
+        original_image_ = path_join(php_dirname(image_file_), image_meta_["original_image"])
     # end if
     #// 
     #// Filters the path to the original image.
@@ -5983,7 +6197,7 @@ def wp_get_original_image_path(attachment_id=None, unfiltered=False, *args_):
     #// @param string $original_image Path to original image file.
     #// @param int    $attachment_id  Attachment ID.
     #//
-    return apply_filters("wp_get_original_image_path", original_image, attachment_id)
+    return apply_filters("wp_get_original_image_path", original_image_, attachment_id_)
 # end def wp_get_original_image_path
 #// 
 #// Retrieve the URL to an original attachment image.
@@ -5997,20 +6211,21 @@ def wp_get_original_image_path(attachment_id=None, unfiltered=False, *args_):
 #// @param int $attachment_id Attachment post ID.
 #// @return string|false Attachment image URL, false on error or if the attachment is not an image.
 #//
-def wp_get_original_image_url(attachment_id=None, *args_):
+def wp_get_original_image_url(attachment_id_=None, *_args_):
     
-    if (not wp_attachment_is_image(attachment_id)):
+    
+    if (not wp_attachment_is_image(attachment_id_)):
         return False
     # end if
-    image_url = wp_get_attachment_url(attachment_id)
-    if php_empty(lambda : image_url):
+    image_url_ = wp_get_attachment_url(attachment_id_)
+    if php_empty(lambda : image_url_):
         return False
     # end if
-    image_meta = wp_get_attachment_metadata(attachment_id)
-    if php_empty(lambda : image_meta["original_image"]):
-        original_image_url = image_url
+    image_meta_ = wp_get_attachment_metadata(attachment_id_)
+    if php_empty(lambda : image_meta_["original_image"]):
+        original_image_url_ = image_url_
     else:
-        original_image_url = path_join(php_dirname(image_url), image_meta["original_image"])
+        original_image_url_ = path_join(php_dirname(image_url_), image_meta_["original_image"])
     # end if
     #// 
     #// Filters the URL to the original attachment image.
@@ -6020,5 +6235,5 @@ def wp_get_original_image_url(attachment_id=None, *args_):
     #// @param string $original_image_url URL to original image.
     #// @param int    $attachment_id      Attachment ID.
     #//
-    return apply_filters("wp_get_original_image_url", original_image_url, attachment_id)
+    return apply_filters("wp_get_original_image_url", original_image_url_, attachment_id_)
 # end def wp_get_original_image_url

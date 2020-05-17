@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -40,10 +35,11 @@ if (not php_function_exists("set_current_user")):
     #// @param string $name Optional. The user's username
     #// @return WP_User returns wp_set_current_user()
     #//
-    def set_current_user(id=None, name="", *args_):
+    def set_current_user(id_=None, name_="", *_args_):
+        
         
         _deprecated_function(__FUNCTION__, "3.0.0", "wp_set_current_user()")
-        return wp_set_current_user(id, name)
+        return wp_set_current_user(id_, name_)
     # end def set_current_user
 # end if
 if (not php_function_exists("get_currentuserinfo")):
@@ -56,7 +52,8 @@ if (not php_function_exists("get_currentuserinfo")):
     #// 
     #// @return bool|WP_User False on XMLRPC Request and invalid auth cookie, WP_User instance otherwise.
     #//
-    def get_currentuserinfo(*args_):
+    def get_currentuserinfo(*_args_):
+        
         
         _deprecated_function(__FUNCTION__, "4.5.0", "wp_get_current_user()")
         return _wp_get_current_user()
@@ -73,10 +70,11 @@ if (not php_function_exists("get_userdatabylogin")):
     #// @param string $user_login User's username
     #// @return bool|object False on failure, User DB row object
     #//
-    def get_userdatabylogin(user_login=None, *args_):
+    def get_userdatabylogin(user_login_=None, *_args_):
+        
         
         _deprecated_function(__FUNCTION__, "3.3.0", "get_user_by('login')")
-        return get_user_by("login", user_login)
+        return get_user_by("login", user_login_)
     # end def get_userdatabylogin
 # end if
 if (not php_function_exists("get_user_by_email")):
@@ -90,10 +88,11 @@ if (not php_function_exists("get_user_by_email")):
     #// @param string $email User's email address
     #// @return bool|object False on failure, User DB row object
     #//
-    def get_user_by_email(email=None, *args_):
+    def get_user_by_email(email_=None, *_args_):
+        
         
         _deprecated_function(__FUNCTION__, "3.3.0", "get_user_by('email')")
-        return get_user_by("email", email)
+        return get_user_by("email", email_)
     # end def get_user_by_email
 # end if
 if (not php_function_exists("wp_setcookie")):
@@ -111,11 +110,17 @@ if (not php_function_exists("wp_setcookie")):
     #// @param string $siteurl Optional. Will be used instead of SITECOOKIEPATH if set
     #// @param bool $remember Optional. Remember that the user is logged in
     #//
-    def wp_setcookie(username=None, password="", already_md5=False, home="", siteurl="", remember=False, *args_):
+    def wp_setcookie(username_=None, password_="", already_md5_=None, home_="", siteurl_="", remember_=None, *_args_):
+        if already_md5_ is None:
+            already_md5_ = False
+        # end if
+        if remember_ is None:
+            remember_ = False
+        # end if
         
         _deprecated_function(__FUNCTION__, "2.5.0", "wp_set_auth_cookie()")
-        user = get_user_by("login", username)
-        wp_set_auth_cookie(user.ID, remember)
+        user_ = get_user_by("login", username_)
+        wp_set_auth_cookie(user_.ID, remember_)
     # end def wp_setcookie
 else:
     _deprecated_function("wp_setcookie", "2.5.0", "wp_set_auth_cookie()")
@@ -128,7 +133,8 @@ if (not php_function_exists("wp_clearcookie")):
     #// @deprecated 2.5.0 Use wp_clear_auth_cookie()
     #// @see wp_clear_auth_cookie()
     #//
-    def wp_clearcookie(*args_):
+    def wp_clearcookie(*_args_):
+        
         
         _deprecated_function(__FUNCTION__, "2.5.0", "wp_clear_auth_cookie()")
         wp_clear_auth_cookie()
@@ -148,7 +154,8 @@ if (not php_function_exists("wp_get_cookie_login")):
     #// 
     #// @return bool Always returns false
     #//
-    def wp_get_cookie_login(*args_):
+    def wp_get_cookie_login(*_args_):
+        
         
         _deprecated_function(__FUNCTION__, "2.5.0")
         return False
@@ -178,16 +185,17 @@ if (not php_function_exists("wp_login")):
     #// @param string $deprecated Not used
     #// @return bool True on successful check, false on login failure.
     #//
-    def wp_login(username=None, password=None, deprecated="", *args_):
+    def wp_login(username_=None, password_=None, deprecated_="", *_args_):
+        
         
         _deprecated_function(__FUNCTION__, "2.5.0", "wp_signon()")
-        global error
-        php_check_if_defined("error")
-        user = wp_authenticate(username, password)
-        if (not is_wp_error(user)):
+        global error_
+        php_check_if_defined("error_")
+        user_ = wp_authenticate(username_, password_)
+        if (not is_wp_error(user_)):
             return True
         # end if
-        error = user.get_error_message()
+        error_ = user_.get_error_message()
         return False
     # end def wp_login
 else:
@@ -206,14 +214,16 @@ else:
 #//
 if (not php_class_exists("wp_atom_server", False)):
     class wp_atom_server():
-        def __call(self, name=None, arguments=None):
+        def __call(self, name_=None, arguments_=None):
             
-            _deprecated_function(__CLASS__ + "::" + name, "3.5.0", "the Atom Publishing Protocol plugin")
+            
+            _deprecated_function(__CLASS__ + "::" + name_, "3.5.0", "the Atom Publishing Protocol plugin")
         # end def __call
         @classmethod
-        def __callstatic(self, name=None, arguments=None):
+        def __callstatic(self, name_=None, arguments_=None):
             
-            _deprecated_function(__CLASS__ + "::" + name, "3.5.0", "the Atom Publishing Protocol plugin")
+            
+            _deprecated_function(__CLASS__ + "::" + name_, "3.5.0", "the Atom Publishing Protocol plugin")
         # end def __callstatic
     # end class wp_atom_server
 # end if

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,15 +20,16 @@ class IXR_Request():
     #// 
     #// PHP5 constructor.
     #//
-    def __init__(self, method=None, args=None):
+    def __init__(self, method_=None, args_=None):
         
-        self.method = method
-        self.args = args
+        
+        self.method = method_
+        self.args = args_
         self.xml = str("<?xml version=\"1.0\"?>\n<methodCall>\n<methodName>") + str(self.method) + str("</methodName>\n<params>\n")
-        for arg in self.args:
+        for arg_ in self.args:
             self.xml += "<param><value>"
-            v = php_new_class("IXR_Value", lambda : IXR_Value(arg))
-            self.xml += v.getxml()
+            v_ = php_new_class("IXR_Value", lambda : IXR_Value(arg_))
+            self.xml += v_.getxml()
             self.xml += "</value></param>\n"
         # end for
         self.xml += "</params></methodCall>"
@@ -41,15 +37,18 @@ class IXR_Request():
     #// 
     #// PHP4 constructor.
     #//
-    def ixr_request(self, method=None, args=None):
+    def ixr_request(self, method_=None, args_=None):
         
-        self.__init__(method, args)
+        
+        self.__init__(method_, args_)
     # end def ixr_request
     def getlength(self):
+        
         
         return php_strlen(self.xml)
     # end def getlength
     def getxml(self):
+        
         
         return self.xml
     # end def getxml

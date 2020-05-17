@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,8 +20,8 @@ if (php_isset(lambda : PHP_REQUEST["privacy-notice"])):
     wp_redirect(admin_url("privacy.php"), 301)
     php_exit(0)
 # end if
-title = __("Freedoms")
-display_version = php_explode("-", get_bloginfo("version"))
+title_ = __("Freedoms")
+display_version_ = php_explode("-", get_bloginfo("version"))
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("""<div class=\"wrap about__container\">
 <div class=\"about__header\">
@@ -35,7 +30,7 @@ php_print("""<div class=\"wrap about__container\">
 """)
 _e("WordPress")
 php_print("             <span>")
-php_print(display_version)
+php_print(display_version_)
 php_print("""</span>
 </p>
 </div>
@@ -111,9 +106,9 @@ printf(__("WordPress grows when people like you tell their friends about it, and
 php_print("""           </p>
 <p>
 """)
-plugins_url = admin_url("plugins.php") if current_user_can("activate_plugins") else __("https://wordpress.org/plugins/")
-themes_url = admin_url("themes.php") if current_user_can("switch_themes") else __("https://wordpress.org/themes/")
-printf(__("Every plugin and theme in WordPress.org&#8217;s directory is 100%% GPL or a similarly free and compatible license, so you can feel safe finding <a href=\"%1$s\">plugins</a> and <a href=\"%2$s\">themes</a> there. If you get a plugin or theme from another source, make sure to <a href=\"%3$s\">ask them if it&#8217;s GPL</a> first. If they don&#8217;t respect the WordPress license, we don&#8217;t recommend them."), plugins_url, themes_url, __("https://wordpress.org/about/license/"))
+plugins_url_ = admin_url("plugins.php") if current_user_can("activate_plugins") else __("https://wordpress.org/plugins/")
+themes_url_ = admin_url("themes.php") if current_user_can("switch_themes") else __("https://wordpress.org/themes/")
+printf(__("Every plugin and theme in WordPress.org&#8217;s directory is 100%% GPL or a similarly free and compatible license, so you can feel safe finding <a href=\"%1$s\">plugins</a> and <a href=\"%2$s\">themes</a> there. If you get a plugin or theme from another source, make sure to <a href=\"%3$s\">ask them if it&#8217;s GPL</a> first. If they don&#8217;t respect the WordPress license, we don&#8217;t recommend them."), plugins_url_, themes_url_, __("https://wordpress.org/about/license/"))
 php_print("         </p>\n\n            <p>")
 _e("Don&#8217;t you wish all software came with these freedoms? So do we! For more information, check out the <a href=\"https://www.fsf.org/\">Free Software Foundation</a>.")
 php_print("""</p>

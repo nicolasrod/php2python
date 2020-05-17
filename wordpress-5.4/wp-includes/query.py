@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,11 +30,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param mixed  $default   Optional. Value to return if the query variable is not set. Default empty.
 #// @return mixed Contents of the query variable.
 #//
-def get_query_var(var=None, default="", *args_):
+def get_query_var(var_=None, default_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.get(var, default)
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.get(var_, default_)
 # end def get_query_var
 #// 
 #// Retrieve the currently-queried object.
@@ -52,11 +48,12 @@ def get_query_var(var=None, default="", *args_):
 #// 
 #// @return object Queried object.
 #//
-def get_queried_object(*args_):
+def get_queried_object(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.get_queried_object()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.get_queried_object()
 # end def get_queried_object
 #// 
 #// Retrieve ID of the current queried object.
@@ -69,11 +66,12 @@ def get_queried_object(*args_):
 #// 
 #// @return int ID of the queried object.
 #//
-def get_queried_object_id(*args_):
+def get_queried_object_id(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.get_queried_object_id()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.get_queried_object_id()
 # end def get_queried_object_id
 #// 
 #// Set query variable.
@@ -85,11 +83,12 @@ def get_queried_object_id(*args_):
 #// @param string $var   Query variable key.
 #// @param mixed  $value Query variable value.
 #//
-def set_query_var(var=None, value=None, *args_):
+def set_query_var(var_=None, value_=None, *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    wp_query.set(var, value)
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    wp_query_.set(var_, value_)
 # end def set_query_var
 #// 
 #// Sets up The Loop with query parameters.
@@ -109,10 +108,11 @@ def set_query_var(var=None, value=None, *args_):
 #// @param array|string $query Array or string of WP_Query arguments.
 #// @return WP_Post[]|int[] Array of post objects or post IDs.
 #//
-def query_posts(query=None, *args_):
+def query_posts(query_=None, *_args_):
+    
     global PHP_GLOBALS
     PHP_GLOBALS["wp_query"] = php_new_class("WP_Query", lambda : WP_Query())
-    return PHP_GLOBALS["wp_query"].query(query)
+    return PHP_GLOBALS["wp_query"].query(query_)
 # end def query_posts
 #// 
 #// Destroys the previous query and sets up a new query.
@@ -126,7 +126,8 @@ def query_posts(query=None, *args_):
 #// @global WP_Query $wp_query     WordPress Query object.
 #// @global WP_Query $wp_the_query Copy of the global WP_Query instance created during wp_reset_query().
 #//
-def wp_reset_query(*args_):
+def wp_reset_query(*_args_):
+    
     global PHP_GLOBALS
     PHP_GLOBALS["wp_query"] = PHP_GLOBALS["wp_the_query"]
     wp_reset_postdata()
@@ -139,12 +140,13 @@ def wp_reset_query(*args_):
 #// 
 #// @global WP_Query $wp_query WordPress Query object.
 #//
-def wp_reset_postdata(*args_):
+def wp_reset_postdata(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (php_isset(lambda : wp_query)):
-        wp_query.reset_postdata()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (php_isset(lambda : wp_query_)):
+        wp_query_.reset_postdata()
     # end if
 # end def wp_reset_postdata
 #// 
@@ -165,15 +167,16 @@ def wp_reset_postdata(*args_):
 #// 
 #// @return bool
 #//
-def is_archive(*args_):
+def is_archive(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_archive()
+    return wp_query_.is_archive()
 # end def is_archive
 #// 
 #// Determines whether the query is for an existing post type archive page.
@@ -190,15 +193,16 @@ def is_archive(*args_):
 #// to check against. Default empty.
 #// @return bool
 #//
-def is_post_type_archive(post_types="", *args_):
+def is_post_type_archive(post_types_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_post_type_archive(post_types)
+    return wp_query_.is_post_type_archive(post_types_)
 # end def is_post_type_archive
 #// 
 #// Determines whether the query is for an existing attachment page.
@@ -215,15 +219,16 @@ def is_post_type_archive(post_types="", *args_):
 #// to check against. Default empty.
 #// @return bool
 #//
-def is_attachment(attachment="", *args_):
+def is_attachment(attachment_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_attachment(attachment)
+    return wp_query_.is_attachment(attachment_)
 # end def is_attachment
 #// 
 #// Determines whether the query is for an existing author archive page.
@@ -243,15 +248,16 @@ def is_attachment(attachment="", *args_):
 #// to check against. Default empty.
 #// @return bool
 #//
-def is_author(author="", *args_):
+def is_author(author_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_author(author)
+    return wp_query_.is_author(author_)
 # end def is_author
 #// 
 #// Determines whether the query is for an existing category archive page.
@@ -271,15 +277,16 @@ def is_author(author="", *args_):
 #// to check against. Default empty.
 #// @return bool
 #//
-def is_category(category="", *args_):
+def is_category(category_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_category(category)
+    return wp_query_.is_category(category_)
 # end def is_category
 #// 
 #// Determines whether the query is for an existing tag archive page.
@@ -299,15 +306,16 @@ def is_category(category="", *args_):
 #// to check against. Default empty.
 #// @return bool
 #//
-def is_tag(tag="", *args_):
+def is_tag(tag_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_tag(tag)
+    return wp_query_.is_tag(tag_)
 # end def is_tag
 #// 
 #// Determines whether the query is for an existing custom taxonomy archive page.
@@ -334,15 +342,16 @@ def is_tag(tag="", *args_):
 #// @return bool True for custom taxonomy archive pages, false for built-in taxonomies
 #// (category and tag archives).
 #//
-def is_tax(taxonomy="", term="", *args_):
+def is_tax(taxonomy_="", term_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_tax(taxonomy, term)
+    return wp_query_.is_tax(taxonomy_, term_)
 # end def is_tax
 #// 
 #// Determines whether the query is for an existing date archive.
@@ -357,15 +366,16 @@ def is_tax(taxonomy="", term="", *args_):
 #// 
 #// @return bool
 #//
-def is_date(*args_):
+def is_date(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_date()
+    return wp_query_.is_date()
 # end def is_date
 #// 
 #// Determines whether the query is for an existing day archive.
@@ -382,15 +392,16 @@ def is_date(*args_):
 #// 
 #// @return bool
 #//
-def is_day(*args_):
+def is_day(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_day()
+    return wp_query_.is_day()
 # end def is_day
 #// 
 #// Determines whether the query is for a feed.
@@ -407,15 +418,16 @@ def is_day(*args_):
 #// to check against. Default empty.
 #// @return bool
 #//
-def is_feed(feeds="", *args_):
+def is_feed(feeds_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_feed(feeds)
+    return wp_query_.is_feed(feeds_)
 # end def is_feed
 #// 
 #// Is the query for a comments feed?
@@ -426,15 +438,16 @@ def is_feed(feeds="", *args_):
 #// 
 #// @return bool
 #//
-def is_comment_feed(*args_):
+def is_comment_feed(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_comment_feed()
+    return wp_query_.is_comment_feed()
 # end def is_comment_feed
 #// 
 #// Determines whether the query is for the front page of the site.
@@ -458,15 +471,16 @@ def is_comment_feed(*args_):
 #// 
 #// @return bool True, if front of site.
 #//
-def is_front_page(*args_):
+def is_front_page(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_front_page()
+    return wp_query_.is_front_page()
 # end def is_front_page
 #// 
 #// Determines whether the query is for the blog homepage.
@@ -490,15 +504,16 @@ def is_front_page(*args_):
 #// 
 #// @return bool True if blog view homepage, otherwise false.
 #//
-def is_home(*args_):
+def is_home(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_home()
+    return wp_query_.is_home()
 # end def is_home
 #// 
 #// Determines whether the query is for the Privacy Policy page.
@@ -519,15 +534,16 @@ def is_home(*args_):
 #// 
 #// @return bool
 #//
-def is_privacy_policy(*args_):
+def is_privacy_policy(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_privacy_policy()
+    return wp_query_.is_privacy_policy()
 # end def is_privacy_policy
 #// 
 #// Determines whether the query is for an existing month archive.
@@ -542,15 +558,16 @@ def is_privacy_policy(*args_):
 #// 
 #// @return bool
 #//
-def is_month(*args_):
+def is_month(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_month()
+    return wp_query_.is_month()
 # end def is_month
 #// 
 #// Determines whether the query is for an existing single page.
@@ -573,15 +590,16 @@ def is_month(*args_):
 #// to check against. Default empty.
 #// @return bool Whether the query is for an existing single page.
 #//
-def is_page(page="", *args_):
+def is_page(page_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_page(page)
+    return wp_query_.is_page(page_)
 # end def is_page
 #// 
 #// Determines whether the query is for paged results and not for the first page.
@@ -596,15 +614,16 @@ def is_page(page="", *args_):
 #// 
 #// @return bool
 #//
-def is_paged(*args_):
+def is_paged(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_paged()
+    return wp_query_.is_paged()
 # end def is_paged
 #// 
 #// Determines whether the query is for a post or page preview.
@@ -619,15 +638,16 @@ def is_paged(*args_):
 #// 
 #// @return bool
 #//
-def is_preview(*args_):
+def is_preview(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_preview()
+    return wp_query_.is_preview()
 # end def is_preview
 #// 
 #// Is the query for the robots.txt file?
@@ -638,15 +658,16 @@ def is_preview(*args_):
 #// 
 #// @return bool
 #//
-def is_robots(*args_):
+def is_robots(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_robots()
+    return wp_query_.is_robots()
 # end def is_robots
 #// 
 #// Is the query for the favicon.ico file?
@@ -657,15 +678,16 @@ def is_robots(*args_):
 #// 
 #// @return bool
 #//
-def is_favicon(*args_):
+def is_favicon(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_favicon()
+    return wp_query_.is_favicon()
 # end def is_favicon
 #// 
 #// Determines whether the query is for a search.
@@ -680,15 +702,16 @@ def is_favicon(*args_):
 #// 
 #// @return bool
 #//
-def is_search(*args_):
+def is_search(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_search()
+    return wp_query_.is_search()
 # end def is_search
 #// 
 #// Determines whether the query is for an existing single post.
@@ -713,15 +736,16 @@ def is_search(*args_):
 #// to check against. Default empty.
 #// @return bool Whether the query is for an existing single post.
 #//
-def is_single(post="", *args_):
+def is_single(post_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_single(post)
+    return wp_query_.is_single(post_)
 # end def is_single
 #// 
 #// Determines whether the query is for an existing single post of any post type
@@ -746,15 +770,16 @@ def is_single(post="", *args_):
 #// @return bool Whether the query is for an existing single post
 #// or any of the given post types.
 #//
-def is_singular(post_types="", *args_):
+def is_singular(post_types_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_singular(post_types)
+    return wp_query_.is_singular(post_types_)
 # end def is_singular
 #// 
 #// Determines whether the query is for a specific time.
@@ -769,15 +794,16 @@ def is_singular(post_types="", *args_):
 #// 
 #// @return bool
 #//
-def is_time(*args_):
+def is_time(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_time()
+    return wp_query_.is_time()
 # end def is_time
 #// 
 #// Determines whether the query is for a trackback endpoint call.
@@ -792,15 +818,16 @@ def is_time(*args_):
 #// 
 #// @return bool
 #//
-def is_trackback(*args_):
+def is_trackback(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_trackback()
+    return wp_query_.is_trackback()
 # end def is_trackback
 #// 
 #// Determines whether the query is for an existing year archive.
@@ -815,15 +842,16 @@ def is_trackback(*args_):
 #// 
 #// @return bool
 #//
-def is_year(*args_):
+def is_year(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_year()
+    return wp_query_.is_year()
 # end def is_year
 #// 
 #// Determines whether the query has resulted in a 404 (returns no results).
@@ -838,15 +866,16 @@ def is_year(*args_):
 #// 
 #// @return bool
 #//
-def is_404(*args_):
+def is_404(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_404()
+    return wp_query_.is_404()
 # end def is_404
 #// 
 #// Is the query for an embedded post?
@@ -857,15 +886,16 @@ def is_404(*args_):
 #// 
 #// @return bool Whether we're in an embedded post or not.
 #//
-def is_embed(*args_):
+def is_embed(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not (php_isset(lambda : wp_query))):
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not (php_isset(lambda : wp_query_))):
         _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
-    return wp_query.is_embed()
+    return wp_query_.is_embed()
 # end def is_embed
 #// 
 #// Determines whether the query is the main query.
@@ -880,15 +910,16 @@ def is_embed(*args_):
 #// 
 #// @return bool
 #//
-def is_main_query(*args_):
+def is_main_query(*_args_):
+    
     
     if "pre_get_posts" == current_filter():
-        message = php_sprintf(__("In %1$s, use the %2$s method, not the %3$s function. See %4$s."), "<code>pre_get_posts</code>", "<code>WP_Query->is_main_query()</code>", "<code>is_main_query()</code>", __("https://codex.wordpress.org/Function_Reference/is_main_query"))
-        _doing_it_wrong(__FUNCTION__, message, "3.7.0")
+        message_ = php_sprintf(__("In %1$s, use the %2$s method, not the %3$s function. See %4$s."), "<code>pre_get_posts</code>", "<code>WP_Query->is_main_query()</code>", "<code>is_main_query()</code>", __("https://codex.wordpress.org/Function_Reference/is_main_query"))
+        _doing_it_wrong(__FUNCTION__, message_, "3.7.0")
     # end if
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.is_main_query()
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.is_main_query()
 # end def is_main_query
 #// 
 #// The Loop. Post loop control.
@@ -902,11 +933,12 @@ def is_main_query(*args_):
 #// 
 #// @return bool
 #//
-def have_posts(*args_):
+def have_posts(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.have_posts()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.have_posts()
 # end def have_posts
 #// 
 #// Determines whether the caller is in the Loop.
@@ -921,11 +953,12 @@ def have_posts(*args_):
 #// 
 #// @return bool True if caller is within loop, false if loop hasn't started or ended.
 #//
-def in_the_loop(*args_):
+def in_the_loop(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.in_the_loop
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.in_the_loop
 # end def in_the_loop
 #// 
 #// Rewind the loop posts.
@@ -934,11 +967,12 @@ def in_the_loop(*args_):
 #// 
 #// @global WP_Query $wp_query WordPress Query object.
 #//
-def rewind_posts(*args_):
+def rewind_posts(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    wp_query.rewind_posts()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    wp_query_.rewind_posts()
 # end def rewind_posts
 #// 
 #// Iterate the post index in the loop.
@@ -947,11 +981,12 @@ def rewind_posts(*args_):
 #// 
 #// @global WP_Query $wp_query WordPress Query object.
 #//
-def the_post(*args_):
+def the_post(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    wp_query.the_post()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    wp_query_.the_post()
 # end def the_post
 #// 
 #// Comments loop.
@@ -965,11 +1000,12 @@ def the_post(*args_):
 #// 
 #// @return bool
 #//
-def have_comments(*args_):
+def have_comments(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.have_comments()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.have_comments()
 # end def have_comments
 #// 
 #// Iterate comment index in the comment loop.
@@ -980,11 +1016,12 @@ def have_comments(*args_):
 #// 
 #// @return object
 #//
-def the_comment(*args_):
+def the_comment(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    return wp_query.the_comment()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    return wp_query_.the_comment()
 # end def the_comment
 #// 
 #// Redirect old slugs to the correct permalink.
@@ -993,32 +1030,33 @@ def the_comment(*args_):
 #// 
 #// @since 2.1.0
 #//
-def wp_old_slug_redirect(*args_):
+def wp_old_slug_redirect(*_args_):
+    
     
     if is_404() and "" != get_query_var("name"):
         #// Guess the current post type based on the query vars.
         if get_query_var("post_type"):
-            post_type = get_query_var("post_type")
+            post_type_ = get_query_var("post_type")
         elif get_query_var("attachment"):
-            post_type = "attachment"
+            post_type_ = "attachment"
         elif get_query_var("pagename"):
-            post_type = "page"
+            post_type_ = "page"
         else:
-            post_type = "post"
+            post_type_ = "post"
         # end if
-        if php_is_array(post_type):
-            if php_count(post_type) > 1:
+        if php_is_array(post_type_):
+            if php_count(post_type_) > 1:
                 return
             # end if
-            post_type = reset(post_type)
+            post_type_ = reset(post_type_)
         # end if
         #// Do not attempt redirect for hierarchical post types.
-        if is_post_type_hierarchical(post_type):
+        if is_post_type_hierarchical(post_type_):
             return
         # end if
-        id = _find_post_by_old_slug(post_type)
-        if (not id):
-            id = _find_post_by_old_date(post_type)
+        id_ = _find_post_by_old_slug(post_type_)
+        if (not id_):
+            id_ = _find_post_by_old_date(post_type_)
         # end if
         #// 
         #// Filters the old slug redirect post ID.
@@ -1027,15 +1065,15 @@ def wp_old_slug_redirect(*args_):
         #// 
         #// @param int $id The redirect post ID.
         #//
-        id = apply_filters("old_slug_redirect_post_id", id)
-        if (not id):
+        id_ = apply_filters("old_slug_redirect_post_id", id_)
+        if (not id_):
             return
         # end if
-        link = get_permalink(id)
+        link_ = get_permalink(id_)
         if get_query_var("paged") > 1:
-            link = user_trailingslashit(trailingslashit(link) + "page/" + get_query_var("paged"))
+            link_ = user_trailingslashit(trailingslashit(link_) + "page/" + get_query_var("paged"))
         elif is_embed():
-            link = user_trailingslashit(trailingslashit(link) + "embed")
+            link_ = user_trailingslashit(trailingslashit(link_) + "embed")
         # end if
         #// 
         #// Filters the old slug redirect URL.
@@ -1044,11 +1082,11 @@ def wp_old_slug_redirect(*args_):
         #// 
         #// @param string $link The redirect URL.
         #//
-        link = apply_filters("old_slug_redirect_url", link)
-        if (not link):
+        link_ = apply_filters("old_slug_redirect_url", link_)
+        if (not link_):
             return
         # end if
-        wp_redirect(link, 301)
+        wp_redirect(link_, 301)
         #// Permanent redirect.
         php_exit(0)
     # end if
@@ -1066,24 +1104,25 @@ def wp_old_slug_redirect(*args_):
 #// @param string $post_type The current post type based on the query vars.
 #// @return int $id The Post ID.
 #//
-def _find_post_by_old_slug(post_type=None, *args_):
+def _find_post_by_old_slug(post_type_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    query = wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(", ") + str(wpdb.posts) + str(" WHERE ID = post_id AND post_type = %s AND meta_key = '_wp_old_slug' AND meta_value = %s"), post_type, get_query_var("name"))
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    query_ = wpdb_.prepare(str("SELECT post_id FROM ") + str(wpdb_.postmeta) + str(", ") + str(wpdb_.posts) + str(" WHERE ID = post_id AND post_type = %s AND meta_key = '_wp_old_slug' AND meta_value = %s"), post_type_, get_query_var("name"))
     #// If year, monthnum, or day have been specified, make our query more precise
     #// just in case there are multiple identical _wp_old_slug values.
     if get_query_var("year"):
-        query += wpdb.prepare(" AND YEAR(post_date) = %d", get_query_var("year"))
+        query_ += wpdb_.prepare(" AND YEAR(post_date) = %d", get_query_var("year"))
     # end if
     if get_query_var("monthnum"):
-        query += wpdb.prepare(" AND MONTH(post_date) = %d", get_query_var("monthnum"))
+        query_ += wpdb_.prepare(" AND MONTH(post_date) = %d", get_query_var("monthnum"))
     # end if
     if get_query_var("day"):
-        query += wpdb.prepare(" AND DAYOFMONTH(post_date) = %d", get_query_var("day"))
+        query_ += wpdb_.prepare(" AND DAYOFMONTH(post_date) = %d", get_query_var("day"))
     # end if
-    id = php_int(wpdb.get_var(query))
-    return id
+    id_ = php_int(wpdb_.get_var(query_))
+    return id_
 # end def _find_post_by_old_slug
 #// 
 #// Find the post ID for redirecting an old date.
@@ -1098,29 +1137,30 @@ def _find_post_by_old_slug(post_type=None, *args_):
 #// @param string $post_type The current post type based on the query vars.
 #// @return int $id The Post ID.
 #//
-def _find_post_by_old_date(post_type=None, *args_):
+def _find_post_by_old_date(post_type_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    date_query = ""
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    date_query_ = ""
     if get_query_var("year"):
-        date_query += wpdb.prepare(" AND YEAR(pm_date.meta_value) = %d", get_query_var("year"))
+        date_query_ += wpdb_.prepare(" AND YEAR(pm_date.meta_value) = %d", get_query_var("year"))
     # end if
     if get_query_var("monthnum"):
-        date_query += wpdb.prepare(" AND MONTH(pm_date.meta_value) = %d", get_query_var("monthnum"))
+        date_query_ += wpdb_.prepare(" AND MONTH(pm_date.meta_value) = %d", get_query_var("monthnum"))
     # end if
     if get_query_var("day"):
-        date_query += wpdb.prepare(" AND DAYOFMONTH(pm_date.meta_value) = %d", get_query_var("day"))
+        date_query_ += wpdb_.prepare(" AND DAYOFMONTH(pm_date.meta_value) = %d", get_query_var("day"))
     # end if
-    id = 0
-    if date_query:
-        id = php_int(wpdb.get_var(wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(" AS pm_date, ") + str(wpdb.posts) + str(" WHERE ID = post_id AND post_type = %s AND meta_key = '_wp_old_date' AND post_name = %s") + date_query, post_type, get_query_var("name"))))
-        if (not id):
+    id_ = 0
+    if date_query_:
+        id_ = php_int(wpdb_.get_var(wpdb_.prepare(str("SELECT post_id FROM ") + str(wpdb_.postmeta) + str(" AS pm_date, ") + str(wpdb_.posts) + str(" WHERE ID = post_id AND post_type = %s AND meta_key = '_wp_old_date' AND post_name = %s") + date_query_, post_type_, get_query_var("name"))))
+        if (not id_):
             #// Check to see if an old slug matches the old date.
-            id = php_int(wpdb.get_var(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.posts) + str(", ") + str(wpdb.postmeta) + str(" AS pm_slug, ") + str(wpdb.postmeta) + str(" AS pm_date WHERE ID = pm_slug.post_id AND ID = pm_date.post_id AND post_type = %s AND pm_slug.meta_key = '_wp_old_slug' AND pm_slug.meta_value = %s AND pm_date.meta_key = '_wp_old_date'") + date_query, post_type, get_query_var("name"))))
+            id_ = php_int(wpdb_.get_var(wpdb_.prepare(str("SELECT ID FROM ") + str(wpdb_.posts) + str(", ") + str(wpdb_.postmeta) + str(" AS pm_slug, ") + str(wpdb_.postmeta) + str(" AS pm_date WHERE ID = pm_slug.post_id AND ID = pm_date.post_id AND post_type = %s AND pm_slug.meta_key = '_wp_old_slug' AND pm_slug.meta_value = %s AND pm_date.meta_key = '_wp_old_date'") + date_query_, post_type_, get_query_var("name"))))
         # end if
     # end if
-    return id
+    return id_
 # end def _find_post_by_old_date
 #// 
 #// Set up global post data.
@@ -1133,12 +1173,13 @@ def _find_post_by_old_date(post_type=None, *args_):
 #// @param WP_Post|object|int $post WP_Post instance or Post ID/object.
 #// @return bool True when finished.
 #//
-def setup_postdata(post=None, *args_):
+def setup_postdata(post_=None, *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not php_empty(lambda : wp_query)) and type(wp_query).__name__ == "WP_Query":
-        return wp_query.setup_postdata(post)
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not php_empty(lambda : wp_query_)) and type(wp_query_).__name__ == "WP_Query":
+        return wp_query_.setup_postdata(post_)
     # end if
     return False
 # end def setup_postdata
@@ -1152,12 +1193,13 @@ def setup_postdata(post=None, *args_):
 #// @param WP_Post|object|int $post WP_Post instance or Post ID/object.
 #// @return array|bool Elements of post, or false on failure.
 #//
-def generate_postdata(post=None, *args_):
+def generate_postdata(post_=None, *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if (not php_empty(lambda : wp_query)) and type(wp_query).__name__ == "WP_Query":
-        return wp_query.generate_postdata(post)
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if (not php_empty(lambda : wp_query_)) and type(wp_query_).__name__ == "WP_Query":
+        return wp_query_.generate_postdata(post_)
     # end if
     return False
 # end def generate_postdata

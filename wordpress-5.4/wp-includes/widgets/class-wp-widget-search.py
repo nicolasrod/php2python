@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,8 +29,9 @@ class WP_Widget_Search(WP_Widget):
     #//
     def __init__(self):
         
-        widget_ops = Array({"classname": "widget_search", "description": __("A search form for your site."), "customize_selective_refresh": True})
-        super().__init__("search", _x("Search", "Search widget"), widget_ops)
+        
+        widget_ops_ = Array({"classname": "widget_search", "description": __("A search form for your site."), "customize_selective_refresh": True})
+        super().__init__("search", _x("Search", "Search widget"), widget_ops_)
     # end def __init__
     #// 
     #// Outputs the content for the current Search widget instance.
@@ -46,18 +42,19 @@ class WP_Widget_Search(WP_Widget):
     #// 'before_widget', and 'after_widget'.
     #// @param array $instance Settings for the current Search widget instance.
     #//
-    def widget(self, args=None, instance=None):
+    def widget(self, args_=None, instance_=None):
         
-        title = instance["title"] if (not php_empty(lambda : instance["title"])) else ""
+        
+        title_ = instance_["title"] if (not php_empty(lambda : instance_["title"])) else ""
         #// This filter is documented in wp-includes/widgets/class-wp-widget-pages.php
-        title = apply_filters("widget_title", title, instance, self.id_base)
-        php_print(args["before_widget"])
-        if title:
-            php_print(args["before_title"] + title + args["after_title"])
+        title_ = apply_filters("widget_title", title_, instance_, self.id_base)
+        php_print(args_["before_widget"])
+        if title_:
+            php_print(args_["before_title"] + title_ + args_["after_title"])
         # end if
         #// Use current theme search form if it exists.
         get_search_form()
-        php_print(args["after_widget"])
+        php_print(args_["after_widget"])
     # end def widget
     #// 
     #// Outputs the settings form for the Search widget.
@@ -66,10 +63,11 @@ class WP_Widget_Search(WP_Widget):
     #// 
     #// @param array $instance Current settings.
     #//
-    def form(self, instance=None):
+    def form(self, instance_=None):
         
-        instance = wp_parse_args(instance, Array({"title": ""}))
-        title = instance["title"]
+        
+        instance_ = wp_parse_args(instance_, Array({"title": ""}))
+        title_ = instance_["title"]
         php_print("     <p><label for=\"")
         php_print(self.get_field_id("title"))
         php_print("\">")
@@ -79,7 +77,7 @@ class WP_Widget_Search(WP_Widget):
         php_print("\" name=\"")
         php_print(self.get_field_name("title"))
         php_print("\" type=\"text\" value=\"")
-        php_print(esc_attr(title))
+        php_print(esc_attr(title_))
         php_print("\" /></label></p>\n      ")
     # end def form
     #// 
@@ -92,11 +90,12 @@ class WP_Widget_Search(WP_Widget):
     #// @param array $old_instance Old settings for this instance.
     #// @return array Updated settings.
     #//
-    def update(self, new_instance=None, old_instance=None):
+    def update(self, new_instance_=None, old_instance_=None):
         
-        instance = old_instance
-        new_instance = wp_parse_args(new_instance, Array({"title": ""}))
-        instance["title"] = sanitize_text_field(new_instance["title"])
-        return instance
+        
+        instance_ = old_instance_
+        new_instance_ = wp_parse_args(new_instance_, Array({"title": ""}))
+        instance_["title"] = sanitize_text_field(new_instance_["title"])
+        return instance_
     # end def update
 # end class WP_Widget_Search

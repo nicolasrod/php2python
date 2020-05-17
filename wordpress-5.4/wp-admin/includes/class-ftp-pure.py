@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -38,88 +33,101 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @license LGPL https://opensource.org/licenses/lgpl-license.html
 #//
 class ftp_pure(ftp_base):
-    def __init__(self, verb=False, le=False):
+    def __init__(self, verb_=None, le_=None):
+        if verb_ is None:
+            verb_ = False
+        # end if
+        if le_ is None:
+            le_ = False
+        # end if
         
-        super().__init__(False, verb, le)
+        super().__init__(False, verb_, le_)
     # end def __init__
     #// <!-- --------------------------------------------------------------------------------------- -->
     #// <!--       Private functions                                                                 -->
     #// <!-- --------------------------------------------------------------------------------------- -->
-    def _settimeout(self, sock=None):
+    def _settimeout(self, sock_=None):
         
-        if (not php_no_error(lambda: stream_set_timeout(sock, self._timeout))):
+        
+        if (not php_no_error(lambda: stream_set_timeout(sock_, self._timeout))):
             self.pusherror("_settimeout", "socket set send timeout")
             self._quit()
             return False
         # end if
         return True
     # end def _settimeout
-    def _connect(self, host=None, port=None):
+    def _connect(self, host_=None, port_=None):
+        
         
         self.sendmsg("Creating socket")
-        sock = php_no_error(lambda: fsockopen(host, port, errno, errstr, self._timeout))
-        if (not sock):
-            self.pusherror("_connect", "socket connect failed", errstr + " (" + errno + ")")
+        sock_ = php_no_error(lambda: fsockopen(host_, port_, errno_, errstr_, self._timeout))
+        if (not sock_):
+            self.pusherror("_connect", "socket connect failed", errstr_ + " (" + errno_ + ")")
             return False
         # end if
         self._connected = True
-        return sock
+        return sock_
     # end def _connect
-    def _readmsg(self, fnction="_readmsg"):
+    def _readmsg(self, fnction_="_readmsg"):
+        
         
         if (not self._connected):
-            self.pusherror(fnction, "Connect first")
+            self.pusherror(fnction_, "Connect first")
             return False
         # end if
-        result = True
+        result_ = True
         self._message = ""
         self._code = 0
-        go = True
+        go_ = True
         while True:
-            tmp = php_no_error(lambda: php_fgets(self._ftp_control_sock, 512))
-            if tmp == False:
-                go = result
-                self.pusherror(fnction, "Read failed")
+            tmp_ = php_no_error(lambda: php_fgets(self._ftp_control_sock, 512))
+            if tmp_ == False:
+                go_ = result_
+                self.pusherror(fnction_, "Read failed")
             else:
-                self._message += tmp
-                if php_preg_match("/^([0-9]{3})(-(.*[" + CRLF + "]{1,2})+\\1)? [^" + CRLF + "]+[" + CRLF + "]{1,2}$/", self._message, regs):
-                    go = False
+                self._message += tmp_
+                if php_preg_match("/^([0-9]{3})(-(.*[" + CRLF + "]{1,2})+\\1)? [^" + CRLF + "]+[" + CRLF + "]{1,2}$/", self._message, regs_):
+                    go_ = False
                 # end if
             # end if
             
-            if go:
+            if go_:
                 break
             # end if
         # end while
         if self.LocalEcho:
             php_print("GET < " + php_rtrim(self._message, CRLF) + CRLF)
         # end if
-        self._code = php_int(regs[1])
-        return result
+        self._code = php_int(regs_[1])
+        return result_
     # end def _readmsg
-    def _exec(self, cmd=None, fnction="_exec"):
+    def _exec(self, cmd_=None, fnction_="_exec"):
+        
         
         if (not self._ready):
-            self.pusherror(fnction, "Connect first")
+            self.pusherror(fnction_, "Connect first")
             return False
         # end if
         if self.LocalEcho:
-            php_print("PUT > ", cmd, CRLF)
+            php_print("PUT > ", cmd_, CRLF)
         # end if
-        status = php_no_error(lambda: fputs(self._ftp_control_sock, cmd + CRLF))
-        if status == False:
-            self.pusherror(fnction, "socket write failed")
+        status_ = php_no_error(lambda: fputs(self._ftp_control_sock, cmd_ + CRLF))
+        if status_ == False:
+            self.pusherror(fnction_, "socket write failed")
             return False
         # end if
         self._lastaction = time()
-        if (not self._readmsg(fnction)):
+        if (not self._readmsg(fnction_)):
             return False
         # end if
         return True
     # end def _exec
-    def _data_prepare(self, mode=FTP_ASCII):
+    def _data_prepare(self, mode_=None):
+        if mode_ is None:
+            mode_ = FTP_ASCII
+        # end if
         
-        if (not self._settype(mode)):
+        if (not self._settype(mode_)):
             return False
         # end if
         if self._passive:
@@ -131,13 +139,13 @@ class ftp_pure(ftp_base):
                 self._data_close()
                 return False
             # end if
-            ip_port = php_explode(",", php_preg_replace("/^.+ \\(?([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]+,[0-9]+)\\)?.*$/s", "\\1", self._message))
-            self._datahost = ip_port[0] + "." + ip_port[1] + "." + ip_port[2] + "." + ip_port[3]
-            self._dataport = php_int(ip_port[4]) << 8 + php_int(ip_port[5])
+            ip_port_ = php_explode(",", php_preg_replace("/^.+ \\(?([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]+,[0-9]+)\\)?.*$/s", "\\1", self._message))
+            self._datahost = ip_port_[0] + "." + ip_port_[1] + "." + ip_port_[2] + "." + ip_port_[3]
+            self._dataport = php_int(ip_port_[4]) << 8 + php_int(ip_port_[5])
             self.sendmsg("Connecting to " + self._datahost + ":" + self._dataport)
-            self._ftp_data_sock = php_no_error(lambda: fsockopen(self._datahost, self._dataport, errno, errstr, self._timeout))
+            self._ftp_data_sock = php_no_error(lambda: fsockopen(self._datahost, self._dataport, errno_, errstr_, self._timeout))
             if (not self._ftp_data_sock):
-                self.pusherror("_data_prepare", "fsockopen fails", errstr + " (" + errno + ")")
+                self.pusherror("_data_prepare", "fsockopen fails", errstr_ + " (" + errno_ + ")")
                 self._data_close()
                 return False
             else:
@@ -149,12 +157,15 @@ class ftp_pure(ftp_base):
         # end if
         return True
     # end def _data_prepare
-    def _data_read(self, mode=FTP_ASCII, fp=None):
+    def _data_read(self, mode_=None, fp_=None):
+        if mode_ is None:
+            mode_ = FTP_ASCII
+        # end if
         
-        if is_resource(fp):
-            out = 0
+        if is_resource(fp_):
+            out_ = 0
         else:
-            out = ""
+            out_ = ""
         # end if
         if (not self._passive):
             self.sendmsg("Only passive connections available!")
@@ -165,59 +176,63 @@ class ftp_pure(ftp_base):
             if not ((not php_feof(self._ftp_data_sock))):
                 break
             # end if
-            block = fread(self._ftp_data_sock, self._ftp_buff_size)
-            if mode != FTP_BINARY:
-                block = php_preg_replace("/\r\n|\r|\n/", self._eol_code[self.OS_local], block)
+            block_ = fread(self._ftp_data_sock, self._ftp_buff_size)
+            if mode_ != FTP_BINARY:
+                block_ = php_preg_replace("/\r\n|\r|\n/", self._eol_code[self.OS_local], block_)
             # end if
-            if is_resource(fp):
-                out += fwrite(fp, block, php_strlen(block))
+            if is_resource(fp_):
+                out_ += fwrite(fp_, block_, php_strlen(block_))
             else:
-                out += block
+                out_ += block_
             # end if
         # end while
-        return out
+        return out_
     # end def _data_read
-    def _data_write(self, mode=FTP_ASCII, fp=None):
+    def _data_write(self, mode_=None, fp_=None):
+        if mode_ is None:
+            mode_ = FTP_ASCII
+        # end if
         
-        if is_resource(fp):
-            out = 0
+        if is_resource(fp_):
+            out_ = 0
         else:
-            out = ""
+            out_ = ""
         # end if
         if (not self._passive):
             self.sendmsg("Only passive connections available!")
             return False
         # end if
-        if is_resource(fp):
+        if is_resource(fp_):
             while True:
                 
-                if not ((not php_feof(fp))):
+                if not ((not php_feof(fp_))):
                     break
                 # end if
-                block = fread(fp, self._ftp_buff_size)
-                if (not self._data_write_block(mode, block)):
+                block_ = fread(fp_, self._ftp_buff_size)
+                if (not self._data_write_block(mode_, block_)):
                     return False
                 # end if
             # end while
-        elif (not self._data_write_block(mode, fp)):
+        elif (not self._data_write_block(mode_, fp_)):
             return False
         # end if
         return True
     # end def _data_write
-    def _data_write_block(self, mode=None, block=None):
+    def _data_write_block(self, mode_=None, block_=None):
         
-        if mode != FTP_BINARY:
-            block = php_preg_replace("/\r\n|\r|\n/", self._eol_code[self.OS_remote], block)
+        
+        if mode_ != FTP_BINARY:
+            block_ = php_preg_replace("/\r\n|\r|\n/", self._eol_code[self.OS_remote], block_)
         # end if
         while True:
-            t = php_no_error(lambda: fwrite(self._ftp_data_sock, block))
-            if t == False:
+            t_ = php_no_error(lambda: fwrite(self._ftp_data_sock, block_))
+            if t_ == False:
                 self.pusherror("_data_write", "Can't write to socket")
                 return False
             # end if
-            block = php_substr(block, t)
+            block_ = php_substr(block_, t_)
             
-            if (not php_empty(lambda : block)):
+            if (not php_empty(lambda : block_)):
                 break
             # end if
         # end while
@@ -225,13 +240,17 @@ class ftp_pure(ftp_base):
     # end def _data_write_block
     def _data_close(self):
         
+        
         php_no_error(lambda: php_fclose(self._ftp_data_sock))
         self.sendmsg("Disconnected data from remote host")
         return True
     # end def _data_close
-    def _quit(self, force=False):
+    def _quit(self, force_=None):
+        if force_ is None:
+            force_ = False
+        # end if
         
-        if self._connected or force:
+        if self._connected or force_:
             php_no_error(lambda: php_fclose(self._ftp_control_sock))
             self._connected = False
             self.sendmsg("Socket closed")

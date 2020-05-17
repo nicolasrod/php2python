@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,15 +29,15 @@ if (php_isset(lambda : PHP_REQUEST["action"])) and "add-user" == PHP_REQUEST["ac
     if (not php_is_array(PHP_POST["user"])):
         wp_die(__("Cannot create an empty user."))
     # end if
-    user = wp_unslash(PHP_POST["user"])
-    user_details = wpmu_validate_user_signup(user["username"], user["email"])
-    if is_wp_error(user_details["errors"]) and user_details["errors"].has_errors():
-        add_user_errors = user_details["errors"]
+    user_ = wp_unslash(PHP_POST["user"])
+    user_details_ = wpmu_validate_user_signup(user_["username"], user_["email"])
+    if is_wp_error(user_details_["errors"]) and user_details_["errors"].has_errors():
+        add_user_errors_ = user_details_["errors"]
     else:
-        password = wp_generate_password(12, False)
-        user_id = wpmu_create_user(esc_html(php_strtolower(user["username"])), password, sanitize_email(user["email"]))
-        if (not user_id):
-            add_user_errors = php_new_class("WP_Error", lambda : WP_Error("add_user_fail", __("Cannot add user.")))
+        password_ = wp_generate_password(12, False)
+        user_id_ = wpmu_create_user(esc_html(php_strtolower(user_["username"])), password_, sanitize_email(user_["email"]))
+        if (not user_id_):
+            add_user_errors_ = php_new_class("WP_Error", lambda : WP_Error("add_user_fail", __("Cannot add user.")))
         else:
             #// 
             #// Fires after a new user has been created via the network user-new.php page.
@@ -51,44 +46,44 @@ if (php_isset(lambda : PHP_REQUEST["action"])) and "add-user" == PHP_REQUEST["ac
             #// 
             #// @param int $user_id ID of the newly created user.
             #//
-            do_action("network_user_new_created_user", user_id)
-            wp_redirect(add_query_arg(Array({"update": "added", "user_id": user_id}), "user-new.php"))
+            do_action("network_user_new_created_user", user_id_)
+            wp_redirect(add_query_arg(Array({"update": "added", "user_id": user_id_}), "user-new.php"))
             php_exit(0)
         # end if
     # end if
 # end if
 if (php_isset(lambda : PHP_REQUEST["update"])):
-    messages = Array()
+    messages_ = Array()
     if "added" == PHP_REQUEST["update"]:
-        edit_link = ""
+        edit_link_ = ""
         if (php_isset(lambda : PHP_REQUEST["user_id"])):
-            user_id_new = absint(PHP_REQUEST["user_id"])
-            if user_id_new:
-                edit_link = esc_url(add_query_arg("wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), get_edit_user_link(user_id_new)))
+            user_id_new_ = absint(PHP_REQUEST["user_id"])
+            if user_id_new_:
+                edit_link_ = esc_url(add_query_arg("wp_http_referer", urlencode(wp_unslash(PHP_SERVER["REQUEST_URI"])), get_edit_user_link(user_id_new_)))
             # end if
         # end if
-        message = __("User added.")
-        if edit_link:
-            message += php_sprintf(" <a href=\"%s\">%s</a>", edit_link, __("Edit user"))
+        message_ = __("User added.")
+        if edit_link_:
+            message_ += php_sprintf(" <a href=\"%s\">%s</a>", edit_link_, __("Edit user"))
         # end if
-        messages[-1] = message
+        messages_[-1] = message_
     # end if
 # end if
-title = __("Add New User")
-parent_file = "users.php"
+title_ = __("Add New User")
+parent_file_ = "users.php"
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("\n<div class=\"wrap\">\n<h1 id=\"add-new-user\">")
 _e("Add New User")
 php_print("</h1>\n")
-if (not php_empty(lambda : messages)):
-    for msg in messages:
-        php_print("<div id=\"message\" class=\"updated notice is-dismissible\"><p>" + msg + "</p></div>")
+if (not php_empty(lambda : messages_)):
+    for msg_ in messages_:
+        php_print("<div id=\"message\" class=\"updated notice is-dismissible\"><p>" + msg_ + "</p></div>")
     # end for
 # end if
-if (php_isset(lambda : add_user_errors)) and is_wp_error(add_user_errors):
+if (php_isset(lambda : add_user_errors_)) and is_wp_error(add_user_errors_):
     php_print(" <div class=\"error\">\n     ")
-    for message in add_user_errors.get_error_messages():
-        php_print(str("<p>") + str(message) + str("</p>"))
+    for message_ in add_user_errors_.get_error_messages():
+        php_print(str("<p>") + str(message_) + str("</p>"))
     # end for
     php_print(" </div>\n")
 # end if

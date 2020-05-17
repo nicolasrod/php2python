@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,8 +24,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
 #//
 class File_Upload_Upgrader():
+    #// 
+    #// The full path to the file package.
+    #// 
+    #// @since 2.8.0
+    #// @var string $package
+    #//
     package = Array()
+    #// 
+    #// The name of the file.
+    #// 
+    #// @since 2.8.0
+    #// @var string $filename
+    #//
     filename = Array()
+    #// 
+    #// The ID of the attachment post for this file.
+    #// 
+    #// @since 3.3.0
+    #// @var int $id
+    #//
     id = 0
     #// 
     #// Construct the upgrader for a form.
@@ -40,44 +53,45 @@ class File_Upload_Upgrader():
     #// @param string $form      The name of the form the file was uploaded from.
     #// @param string $urlholder The name of the `GET` parameter that holds the filename.
     #//
-    def __init__(self, form=None, urlholder=None):
+    def __init__(self, form_=None, urlholder_=None):
         
-        if php_empty(lambda : PHP_FILES[form]["name"]) and php_empty(lambda : PHP_REQUEST[urlholder]):
+        
+        if php_empty(lambda : PHP_FILES[form_]["name"]) and php_empty(lambda : PHP_REQUEST[urlholder_]):
             wp_die(__("Please select a file"))
         # end if
         #// Handle a newly uploaded file. Else, assume it's already been uploaded.
         if (not php_empty(lambda : PHP_FILES)):
-            overrides = Array({"test_form": False, "test_type": False})
-            file = wp_handle_upload(PHP_FILES[form], overrides)
-            if (php_isset(lambda : file["error"])):
-                wp_die(file["error"])
+            overrides_ = Array({"test_form": False, "test_type": False})
+            file_ = wp_handle_upload(PHP_FILES[form_], overrides_)
+            if (php_isset(lambda : file_["error"])):
+                wp_die(file_["error"])
             # end if
-            self.filename = PHP_FILES[form]["name"]
-            self.package = file["file"]
+            self.filename = PHP_FILES[form_]["name"]
+            self.package = file_["file"]
             #// Construct the object array.
-            object = Array({"post_title": self.filename, "post_content": file["url"], "post_mime_type": file["type"], "guid": file["url"], "context": "upgrader", "post_status": "private"})
+            object_ = Array({"post_title": self.filename, "post_content": file_["url"], "post_mime_type": file_["type"], "guid": file_["url"], "context": "upgrader", "post_status": "private"})
             #// Save the data.
-            self.id = wp_insert_attachment(object, file["file"])
+            self.id = wp_insert_attachment(object_, file_["file"])
             #// Schedule a cleanup for 2 hours from now in case of failed installation.
             wp_schedule_single_event(time() + 2 * HOUR_IN_SECONDS, "upgrader_scheduled_cleanup", Array(self.id))
-        elif php_is_numeric(PHP_REQUEST[urlholder]):
+        elif php_is_numeric(PHP_REQUEST[urlholder_]):
             #// Numeric Package = previously uploaded file, see above.
-            self.id = php_int(PHP_REQUEST[urlholder])
-            attachment = get_post(self.id)
-            if php_empty(lambda : attachment):
+            self.id = php_int(PHP_REQUEST[urlholder_])
+            attachment_ = get_post(self.id)
+            if php_empty(lambda : attachment_):
                 wp_die(__("Please select a file"))
             # end if
-            self.filename = attachment.post_title
-            self.package = get_attached_file(attachment.ID)
+            self.filename = attachment_.post_title
+            self.package = get_attached_file(attachment_.ID)
         else:
             #// Else, It's set to something, Back compat for plugins using the old (pre-3.3) File_Uploader handler.
-            uploads = wp_upload_dir()
-            if (not uploads and False == uploads["error"]):
-                wp_die(uploads["error"])
+            uploads_ = wp_upload_dir()
+            if (not uploads_ and False == uploads_["error"]):
+                wp_die(uploads_["error"])
             # end if
-            self.filename = sanitize_file_name(PHP_REQUEST[urlholder])
-            self.package = uploads["basedir"] + "/" + self.filename
-            if 0 != php_strpos(php_realpath(self.package), php_realpath(uploads["basedir"])):
+            self.filename = sanitize_file_name(PHP_REQUEST[urlholder_])
+            self.package = uploads_["basedir"] + "/" + self.filename
+            if 0 != php_strpos(php_realpath(self.package), php_realpath(uploads_["basedir"])):
                 wp_die(__("Please select a file"))
             # end if
         # end if
@@ -90,6 +104,7 @@ class File_Upload_Upgrader():
     #// @return bool Whether the cleanup was successful.
     #//
     def cleanup(self):
+        
         
         if self.id:
             wp_delete_attachment(self.id)

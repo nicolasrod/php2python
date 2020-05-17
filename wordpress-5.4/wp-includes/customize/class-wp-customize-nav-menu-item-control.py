@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Customize_Nav_Menu_Item_Control(WP_Customize_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = "nav_menu_item"
+    #// 
+    #// The nav menu item setting.
+    #// 
+    #// @since 4.3.0
+    #// @var WP_Customize_Nav_Menu_Item_Setting
+    #//
     setting = Array()
     #// 
     #// Constructor.
@@ -42,9 +49,12 @@ class WP_Customize_Nav_Menu_Item_Control(WP_Customize_Control):
     #// See WP_Customize_Control::__construct() for information
     #// on accepted arguments. Default empty array.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        super().__init__(manager, id, args)
+        super().__init__(manager_, id_, args_)
     # end def __init__
     #// 
     #// Don't render the control's content - it's rendered with a JS template.
@@ -52,6 +62,7 @@ class WP_Customize_Nav_Menu_Item_Control(WP_Customize_Control):
     #// @since 4.3.0
     #//
     def render_content(self):
+        
         
         pass
     # end def render_content
@@ -61,6 +72,7 @@ class WP_Customize_Nav_Menu_Item_Control(WP_Customize_Control):
     #// @since 4.3.0
     #//
     def content_template(self):
+        
         
         php_print("""       <div class=\"menu-item-bar\">
         <div class=\"menu-item-handle\">
@@ -178,8 +190,9 @@ class WP_Customize_Nav_Menu_Item_Control(WP_Customize_Control):
     #//
     def json(self):
         
-        exported = super().json()
-        exported["menu_item_id"] = self.setting.post_id
-        return exported
+        
+        exported_ = super().json()
+        exported_["menu_item_id"] = self.setting.post_id
+        return exported_
     # end def json
 # end class WP_Customize_Nav_Menu_Item_Control

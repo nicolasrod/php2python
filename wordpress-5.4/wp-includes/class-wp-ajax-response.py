@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -19,6 +14,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 2.1.0
 #//
 class WP_Ajax_Response():
+    #// 
+    #// Store XML responses to send.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     responses = Array()
     #// 
     #// Constructor - Passes args to WP_Ajax_Response::add().
@@ -28,10 +29,11 @@ class WP_Ajax_Response():
     #// 
     #// @param string|array $args Optional. Will be passed to add() method.
     #//
-    def __init__(self, args=""):
+    def __init__(self, args_=""):
         
-        if (not php_empty(lambda : args)):
-            self.add(args)
+        
+        if (not php_empty(lambda : args_)):
+            self.add(args_)
         # end if
     # end def __init__
     #// 
@@ -68,66 +70,67 @@ class WP_Ajax_Response():
     #// }
     #// @return string XML response.
     #//
-    def add(self, args=""):
+    def add(self, args_=""):
         
-        defaults = Array({"what": "object", "action": False, "id": "0", "old_id": False, "position": 1, "data": "", "supplemental": Array()})
-        parsed_args = wp_parse_args(args, defaults)
-        position = php_preg_replace("/[^a-z0-9:_-]/i", "", parsed_args["position"])
-        id = parsed_args["id"]
-        what = parsed_args["what"]
-        action = parsed_args["action"]
-        old_id = parsed_args["old_id"]
-        data = parsed_args["data"]
-        if is_wp_error(id):
-            data = id
-            id = 0
+        
+        defaults_ = Array({"what": "object", "action": False, "id": "0", "old_id": False, "position": 1, "data": "", "supplemental": Array()})
+        parsed_args_ = wp_parse_args(args_, defaults_)
+        position_ = php_preg_replace("/[^a-z0-9:_-]/i", "", parsed_args_["position"])
+        id_ = parsed_args_["id"]
+        what_ = parsed_args_["what"]
+        action_ = parsed_args_["action"]
+        old_id_ = parsed_args_["old_id"]
+        data_ = parsed_args_["data"]
+        if is_wp_error(id_):
+            data_ = id_
+            id_ = 0
         # end if
-        response = ""
-        if is_wp_error(data):
-            for code in data.get_error_codes():
-                response += str("<wp_error code='") + str(code) + str("'><![CDATA[") + data.get_error_message(code) + "]]></wp_error>"
-                error_data = data.get_error_data(code)
-                if (not error_data):
+        response_ = ""
+        if is_wp_error(data_):
+            for code_ in data_.get_error_codes():
+                response_ += str("<wp_error code='") + str(code_) + str("'><![CDATA[") + data_.get_error_message(code_) + "]]></wp_error>"
+                error_data_ = data_.get_error_data(code_)
+                if (not error_data_):
                     continue
                 # end if
                 class_ = ""
-                if php_is_object(error_data):
-                    class_ = " class=\"" + get_class(error_data) + "\""
-                    error_data = get_object_vars(error_data)
+                if php_is_object(error_data_):
+                    class_ = " class=\"" + get_class(error_data_) + "\""
+                    error_data_ = get_object_vars(error_data_)
                 # end if
-                response += str("<wp_error_data code='") + str(code) + str("'") + str(class_) + str(">")
-                if is_scalar(error_data):
-                    response += str("<![CDATA[") + str(error_data) + str("]]>")
-                elif php_is_array(error_data):
-                    for k,v in error_data:
-                        response += str("<") + str(k) + str("><![CDATA[") + str(v) + str("]]></") + str(k) + str(">")
+                response_ += str("<wp_error_data code='") + str(code_) + str("'") + str(class_) + str(">")
+                if is_scalar(error_data_):
+                    response_ += str("<![CDATA[") + str(error_data_) + str("]]>")
+                elif php_is_array(error_data_):
+                    for k_,v_ in error_data_:
+                        response_ += str("<") + str(k_) + str("><![CDATA[") + str(v_) + str("]]></") + str(k_) + str(">")
                     # end for
                 # end if
-                response += "</wp_error_data>"
+                response_ += "</wp_error_data>"
             # end for
         else:
-            response = str("<response_data><![CDATA[") + str(data) + str("]]></response_data>")
+            response_ = str("<response_data><![CDATA[") + str(data_) + str("]]></response_data>")
         # end if
-        s = ""
-        if php_is_array(parsed_args["supplemental"]):
-            for k,v in parsed_args["supplemental"]:
-                s += str("<") + str(k) + str("><![CDATA[") + str(v) + str("]]></") + str(k) + str(">")
+        s_ = ""
+        if php_is_array(parsed_args_["supplemental"]):
+            for k_,v_ in parsed_args_["supplemental"]:
+                s_ += str("<") + str(k_) + str("><![CDATA[") + str(v_) + str("]]></") + str(k_) + str(">")
             # end for
-            s = str("<supplemental>") + str(s) + str("</supplemental>")
+            s_ = str("<supplemental>") + str(s_) + str("</supplemental>")
         # end if
-        if False == action:
-            action = PHP_POST["action"]
+        if False == action_:
+            action_ = PHP_POST["action"]
         # end if
-        x = ""
-        x += str("<response action='") + str(action) + str("_") + str(id) + str("'>")
+        x_ = ""
+        x_ += str("<response action='") + str(action_) + str("_") + str(id_) + str("'>")
         #// The action attribute in the xml output is formatted like a nonce action.
-        x += str("<") + str(what) + str(" id='") + str(id) + str("' ") + "" if False == old_id else str("old_id='") + str(old_id) + str("' ") + str("position='") + str(position) + str("'>")
-        x += response
-        x += s
-        x += str("</") + str(what) + str(">")
-        x += "</response>"
-        self.responses[-1] = x
-        return x
+        x_ += str("<") + str(what_) + str(" id='") + str(id_) + str("' ") + "" if False == old_id_ else str("old_id='") + str(old_id_) + str("' ") + str("position='") + str(position_) + str("'>")
+        x_ += response_
+        x_ += s_
+        x_ += str("</") + str(what_) + str(">")
+        x_ += "</response>"
+        self.responses[-1] = x_
+        return x_
     # end def add
     #// 
     #// Display XML formatted responses.
@@ -138,10 +141,11 @@ class WP_Ajax_Response():
     #//
     def send(self):
         
+        
         php_header("Content-Type: text/xml; charset=" + get_option("blog_charset"))
         php_print("<?xml version='1.0' encoding='" + get_option("blog_charset") + "' standalone='yes'?><wp_ajax>")
-        for response in self.responses:
-            php_print(response)
+        for response_ in self.responses:
+            php_print(response_)
         # end for
         php_print("</wp_ajax>")
         if wp_doing_ajax():

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,10 +27,11 @@ class ParagonIE_Sodium_Core32_XSalsa20(ParagonIE_Sodium_Core32_HSalsa20):
     #// @throws TypeError
     #//
     @classmethod
-    def xsalsa20(self, len=None, nonce=None, key=None):
+    def xsalsa20(self, len_=None, nonce_=None, key_=None):
         
-        ret = self.salsa20(len, self.substr(nonce, 16, 8), self.hsalsa20(nonce, key))
-        return ret
+        
+        ret_ = self.salsa20(len_, self.substr(nonce_, 16, 8), self.hsalsa20(nonce_, key_))
+        return ret_
     # end def xsalsa20
     #// 
     #// Encrypt a string with XSalsa20. Doesn't provide integrity.
@@ -50,8 +46,9 @@ class ParagonIE_Sodium_Core32_XSalsa20(ParagonIE_Sodium_Core32_HSalsa20):
     #// @throws TypeError
     #//
     @classmethod
-    def xsalsa20_xor(self, message=None, nonce=None, key=None):
+    def xsalsa20_xor(self, message_=None, nonce_=None, key_=None):
         
-        return self.xorstrings(message, self.xsalsa20(self.strlen(message), nonce, key))
+        
+        return self.xorstrings(message_, self.xsalsa20(self.strlen(message_), nonce_, key_))
     # end def xsalsa20_xor
 # end class ParagonIE_Sodium_Core32_XSalsa20

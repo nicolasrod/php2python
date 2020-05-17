@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -17,8 +12,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @package WordPress
 #//
-if (not (php_isset(lambda : wp_did_header))):
-    wp_did_header = True
+if (not (php_isset(lambda : wp_did_header_))):
+    wp_did_header_ = True
     #// Load the WordPress library.
     php_include_file(__DIR__ + "/wp-load.php", once=True)
     #// Set up the WordPress query.

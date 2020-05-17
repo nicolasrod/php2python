@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,10 +20,54 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 3.8.0
 #//
 class WP_Block_Parser_Block():
+    #// 
+    #// Name of block
+    #// 
+    #// @example "core/paragraph"
+    #// 
+    #// @since 3.8.0
+    #// @var string
+    #//
     blockName = Array()
+    #// 
+    #// Optional set of attributes from block comment delimiters
+    #// 
+    #// @example null
+    #// @example array( 'columns' => 3 )
+    #// 
+    #// @since 3.8.0
+    #// @var array|null
+    #//
     attrs = Array()
+    #// 
+    #// List of inner blocks (of this same class)
+    #// 
+    #// @since 3.8.0
+    #// @var WP_Block_Parser_Block[]
+    #//
     innerBlocks = Array()
+    #// 
+    #// Resultant HTML from inside block comment delimiters
+    #// after removing inner blocks
+    #// 
+    #// @example "...Just <!-- wp:test /--> testing..." -> "Just testing..."
+    #// 
+    #// @since 3.8.0
+    #// @var string
+    #//
     innerHTML = Array()
+    #// 
+    #// List of string fragments and null markers where inner blocks were found
+    #// 
+    #// @example array(
+    #// 'innerHTML'    => 'BeforeInnerAfter',
+    #// 'innerBlocks'  => array( block, block ),
+    #// 'innerContent' => array( 'Before', null, 'Inner', null, 'After' ),
+    #// )
+    #// 
+    #// @since 4.2.0
+    #// @var array
+    #//
     innerContent = Array()
     #// 
     #// Constructor.
@@ -43,13 +82,14 @@ class WP_Block_Parser_Block():
     #// @param string $innerHTML    Resultant HTML from inside block comment delimiters after removing inner blocks.
     #// @param array  $innerContent List of string fragments and null markers where inner blocks were found.
     #//
-    def __init__(self, name=None, attrs=None, innerBlocks=None, innerHTML=None, innerContent=None):
+    def __init__(self, name_=None, attrs_=None, innerBlocks_=None, innerHTML_=None, innerContent_=None):
         
-        self.blockName = name
-        self.attrs = attrs
-        self.innerBlocks = innerBlocks
-        self.innerHTML = innerHTML
-        self.innerContent = innerContent
+        
+        self.blockName = name_
+        self.attrs = attrs_
+        self.innerBlocks = innerBlocks_
+        self.innerHTML = innerHTML_
+        self.innerContent = innerContent_
     # end def __init__
 # end class WP_Block_Parser_Block
 #// 
@@ -61,10 +101,41 @@ class WP_Block_Parser_Block():
 #// @since 3.8.0
 #//
 class WP_Block_Parser_Frame():
+    #// 
+    #// Full or partial block
+    #// 
+    #// @since 3.8.0
+    #// @var WP_Block_Parser_Block
+    #//
     block = Array()
+    #// 
+    #// Byte offset into document for start of parse token
+    #// 
+    #// @since 3.8.0
+    #// @var int
+    #//
     token_start = Array()
+    #// 
+    #// Byte length of entire parse token string
+    #// 
+    #// @since 3.8.0
+    #// @var int
+    #//
     token_length = Array()
+    #// 
+    #// Byte offset into document for after parse token ends
+    #// (used during reconstruction of stack into parse production)
+    #// 
+    #// @since 3.8.0
+    #// @var int
+    #//
     prev_offset = Array()
+    #// 
+    #// Byte offset into document where leading HTML before token starts
+    #// 
+    #// @since 3.8.0
+    #// @var int
+    #//
     leading_html_start = Array()
     #// 
     #// Constructor
@@ -79,13 +150,14 @@ class WP_Block_Parser_Frame():
     #// @param int                   $prev_offset        Byte offset into document for after parse token ends.
     #// @param int                   $leading_html_start Byte offset into document where leading HTML before token starts.
     #//
-    def __init__(self, block=None, token_start=None, token_length=None, prev_offset=None, leading_html_start=None):
+    def __init__(self, block_=None, token_start_=None, token_length_=None, prev_offset_=None, leading_html_start_=None):
         
-        self.block = block
-        self.token_start = token_start
-        self.token_length = token_length
-        self.prev_offset = prev_offset if (php_isset(lambda : prev_offset)) else token_start + token_length
-        self.leading_html_start = leading_html_start
+        
+        self.block = block_
+        self.token_start = token_start_
+        self.token_length = token_length_
+        self.prev_offset = prev_offset_ if (php_isset(lambda : prev_offset_)) else token_start_ + token_length_
+        self.leading_html_start = leading_html_start_
     # end def __init__
 # end class WP_Block_Parser_Frame
 #// 
@@ -97,10 +169,42 @@ class WP_Block_Parser_Frame():
 #// @since 4.0.0 returns arrays not objects, all attributes are arrays
 #//
 class WP_Block_Parser():
+    #// 
+    #// Input document being parsed
+    #// 
+    #// @example "Pre-text\n<!-- wp:paragraph -->This is inside a block!<!-- /wp:paragraph -->"
+    #// 
+    #// @since 3.8.0
+    #// @var string
+    #//
     document = Array()
+    #// 
+    #// Tracks parsing progress through document
+    #// 
+    #// @since 3.8.0
+    #// @var int
+    #//
     offset = Array()
+    #// 
+    #// List of parsed blocks
+    #// 
+    #// @since 3.8.0
+    #// @var WP_Block_Parser_Block[]
+    #//
     output = Array()
+    #// 
+    #// Stack of partially-parsed structures in memory during parse
+    #// 
+    #// @since 3.8.0
+    #// @var WP_Block_Parser_Frame[]
+    #//
     stack = Array()
+    #// 
+    #// Empty associative array, here due to PHP quirks
+    #// 
+    #// @since 4.4.0
+    #// @var array empty associative array
+    #//
     empty_attrs = Array()
     #// 
     #// Parses a document and returns a list of block structures
@@ -114,9 +218,10 @@ class WP_Block_Parser():
     #// @param string $document Input document being parsed.
     #// @return WP_Block_Parser_Block[]
     #//
-    def parse(self, document=None):
+    def parse(self, document_=None):
         
-        self.document = document
+        
+        self.document = document_
         self.offset = 0
         self.output = Array()
         self.stack = Array()
@@ -146,15 +251,16 @@ class WP_Block_Parser():
     #//
     def proceed(self):
         
-        next_token = self.next_token()
-        token_type, block_name, attrs, start_offset, token_length = next_token
-        stack_depth = php_count(self.stack)
+        
+        next_token_ = self.next_token()
+        token_type_, block_name_, attrs_, start_offset_, token_length_ = next_token_
+        stack_depth_ = php_count(self.stack)
         #// we may have some HTML soup before the next block.
-        leading_html_start = self.offset if start_offset > self.offset else None
-        for case in Switch(token_type):
+        leading_html_start_ = self.offset if start_offset_ > self.offset else None
+        for case in Switch(token_type_):
             if case("no-more-tokens"):
                 #// if not in a block then flush output.
-                if 0 == stack_depth:
+                if 0 == stack_depth_:
                     self.add_freeform()
                     return False
                 # end if
@@ -167,7 +273,7 @@ class WP_Block_Parser():
                 #// - assume an implicit closer (easiest when not nesting)
                 #// 
                 #// for the easy case we'll assume an implicit closer.
-                if 1 == stack_depth:
+                if 1 == stack_depth_:
                     self.add_block_from_stack()
                     return False
                 # end if
@@ -190,23 +296,23 @@ class WP_Block_Parser():
                 #// easy case is if we stumbled upon a void block
                 #// in the top-level of the document
                 #//
-                if 0 == stack_depth:
-                    if (php_isset(lambda : leading_html_start)):
-                        self.output[-1] = self.freeform(php_substr(self.document, leading_html_start, start_offset - leading_html_start))
+                if 0 == stack_depth_:
+                    if (php_isset(lambda : leading_html_start_)):
+                        self.output[-1] = self.freeform(php_substr(self.document, leading_html_start_, start_offset_ - leading_html_start_))
                     # end if
-                    self.output[-1] = php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(block_name, attrs, Array(), "", Array()))
-                    self.offset = start_offset + token_length
+                    self.output[-1] = php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(block_name_, attrs_, Array(), "", Array()))
+                    self.offset = start_offset_ + token_length_
                     return True
                 # end if
                 #// otherwise we found an inner block.
-                self.add_inner_block(php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(block_name, attrs, Array(), "", Array())), start_offset, token_length)
-                self.offset = start_offset + token_length
+                self.add_inner_block(php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(block_name_, attrs_, Array(), "", Array())), start_offset_, token_length_)
+                self.offset = start_offset_ + token_length_
                 return True
             # end if
             if case("block-opener"):
                 #// track all newly-opened blocks on the stack.
-                php_array_push(self.stack, php_new_class("WP_Block_Parser_Frame", lambda : WP_Block_Parser_Frame(php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(block_name, attrs, Array(), "", Array())), start_offset, token_length, start_offset + token_length, leading_html_start)))
-                self.offset = start_offset + token_length
+                php_array_push(self.stack, php_new_class("WP_Block_Parser_Frame", lambda : WP_Block_Parser_Frame(php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(block_name_, attrs_, Array(), "", Array())), start_offset_, token_length_, start_offset_ + token_length_, leading_html_start_)))
+                self.offset = start_offset_ + token_length_
                 return True
             # end if
             if case("block-closer"):
@@ -214,7 +320,7 @@ class WP_Block_Parser():
                 #// if we're missing an opener we're in trouble
                 #// This is an error
                 #//
-                if 0 == stack_depth:
+                if 0 == stack_depth_:
                     #// 
                     #// we have options
                     #// - assume an implicit opener
@@ -225,22 +331,22 @@ class WP_Block_Parser():
                     return False
                 # end if
                 #// if we're not nesting then this is easy - close the block.
-                if 1 == stack_depth:
-                    self.add_block_from_stack(start_offset)
-                    self.offset = start_offset + token_length
+                if 1 == stack_depth_:
+                    self.add_block_from_stack(start_offset_)
+                    self.offset = start_offset_ + token_length_
                     return True
                 # end if
                 #// 
                 #// otherwise we're nested and we have to close out the current
                 #// block and add it as a new innerBlock to the parent
                 #//
-                stack_top = php_array_pop(self.stack)
-                html = php_substr(self.document, stack_top.prev_offset, start_offset - stack_top.prev_offset)
-                stack_top.block.innerHTML += html
-                stack_top.block.innerContent[-1] = html
-                stack_top.prev_offset = start_offset + token_length
-                self.add_inner_block(stack_top.block, stack_top.token_start, stack_top.token_length, start_offset + token_length)
-                self.offset = start_offset + token_length
+                stack_top_ = php_array_pop(self.stack)
+                html_ = php_substr(self.document, stack_top_.prev_offset, start_offset_ - stack_top_.prev_offset)
+                stack_top_.block.innerHTML += html_
+                stack_top_.block.innerContent[-1] = html_
+                stack_top_.prev_offset = start_offset_ + token_length_
+                self.add_inner_block(stack_top_.block, stack_top_.token_start, stack_top_.token_length, start_offset_ + token_length_)
+                self.offset = start_offset_ + token_length_
                 return True
             # end if
             if case():
@@ -263,7 +369,8 @@ class WP_Block_Parser():
     #//
     def next_token(self):
         
-        matches = None
+        
+        matches_ = None
         #// 
         #// aye the magic
         #// we're using a single RegExp to tokenize the block comment delimiters
@@ -272,42 +379,42 @@ class WP_Block_Parser():
         #// a closer has no attributes). we can trap them both and process the
         #// match back in PHP to see which one it was.
         #//
-        has_match = php_preg_match("/<!--\\s+(?P<closer>\\/)?wp:(?P<namespace>[a-z][a-z0-9_-]*\\/)?(?P<name>[a-z][a-z0-9_-]*)\\s+(?P<attrs>{(?:(?:[^}]+|}+(?=})|(?!}\\s+\\/?-->).)*+)?}\\s+)?(?P<void>\\/)?-->/s", self.document, matches, PREG_OFFSET_CAPTURE, self.offset)
+        has_match_ = php_preg_match("/<!--\\s+(?P<closer>\\/)?wp:(?P<namespace>[a-z][a-z0-9_-]*\\/)?(?P<name>[a-z][a-z0-9_-]*)\\s+(?P<attrs>{(?:(?:[^}]+|}+(?=})|(?!}\\s+\\/?-->).)*+)?}\\s+)?(?P<void>\\/)?-->/s", self.document, matches_, PREG_OFFSET_CAPTURE, self.offset)
         #// if we get here we probably have catastrophic backtracking or out-of-memory in the PCRE.
-        if False == has_match:
+        if False == has_match_:
             return Array("no-more-tokens", None, None, None, None)
         # end if
         #// we have no more tokens.
-        if 0 == has_match:
+        if 0 == has_match_:
             return Array("no-more-tokens", None, None, None, None)
         # end if
-        match, started_at = matches[0]
-        length = php_strlen(match)
-        is_closer = (php_isset(lambda : matches["closer"])) and -1 != matches["closer"][1]
-        is_void = (php_isset(lambda : matches["void"])) and -1 != matches["void"][1]
-        namespace = matches["namespace"]
-        namespace = namespace[0] if (php_isset(lambda : namespace)) and -1 != namespace[1] else "core/"
-        name = namespace + matches["name"][0]
-        has_attrs = (php_isset(lambda : matches["attrs"])) and -1 != matches["attrs"][1]
+        match_, started_at_ = matches_[0]
+        length_ = php_strlen(match_)
+        is_closer_ = (php_isset(lambda : matches_["closer"])) and -1 != matches_["closer"][1]
+        is_void_ = (php_isset(lambda : matches_["void"])) and -1 != matches_["void"][1]
+        namespace_ = matches_["namespace"]
+        namespace_ = namespace_[0] if (php_isset(lambda : namespace_)) and -1 != namespace_[1] else "core/"
+        name_ = namespace_ + matches_["name"][0]
+        has_attrs_ = (php_isset(lambda : matches_["attrs"])) and -1 != matches_["attrs"][1]
         #// 
         #// Fun fact! It's not trivial in PHP to create "an empty associative array" since all arrays
         #// are associative arrays. If we use `array()` we get a JSON `[]`
         #//
-        attrs = php_json_decode(matches["attrs"][0], True) if has_attrs else self.empty_attrs
+        attrs_ = php_json_decode(matches_["attrs"][0], True) if has_attrs_ else self.empty_attrs
         #// 
         #// This state isn't allowed
         #// This is an error
         #//
-        if is_closer and is_void or has_attrs:
+        if is_closer_ and is_void_ or has_attrs_:
             pass
         # end if
-        if is_void:
-            return Array("void-block", name, attrs, started_at, length)
+        if is_void_:
+            return Array("void-block", name_, attrs_, started_at_, length_)
         # end if
-        if is_closer:
-            return Array("block-closer", name, None, started_at, length)
+        if is_closer_:
+            return Array("block-closer", name_, None, started_at_, length_)
         # end if
-        return Array("block-opener", name, attrs, started_at, length)
+        return Array("block-opener", name_, attrs_, started_at_, length_)
     # end def next_token
     #// 
     #// Returns a new block object for freeform HTML
@@ -318,9 +425,10 @@ class WP_Block_Parser():
     #// @param string $innerHTML HTML content of block.
     #// @return WP_Block_Parser_Block freeform block object.
     #//
-    def freeform(self, innerHTML=None):
+    def freeform(self, innerHTML_=None):
         
-        return php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(None, self.empty_attrs, Array(), innerHTML, Array(innerHTML)))
+        
+        return php_new_class("WP_Block_Parser_Block", lambda : WP_Block_Parser_Block(None, self.empty_attrs, Array(), innerHTML_, Array(innerHTML_)))
     # end def freeform
     #// 
     #// Pushes a length of text from the input document
@@ -330,13 +438,14 @@ class WP_Block_Parser():
     #// @since 3.8.0
     #// @param null $length how many bytes of document text to output.
     #//
-    def add_freeform(self, length=None):
+    def add_freeform(self, length_=None):
         
-        length = length if length else php_strlen(self.document) - self.offset
-        if 0 == length:
+        
+        length_ = length_ if length_ else php_strlen(self.document) - self.offset
+        if 0 == length_:
             return
         # end if
-        self.output[-1] = self.freeform(php_substr(self.document, self.offset, length))
+        self.output[-1] = self.freeform(php_substr(self.document, self.offset, length_))
     # end def add_freeform
     #// 
     #// Given a block structure from memory pushes
@@ -349,17 +458,18 @@ class WP_Block_Parser():
     #// @param int                   $token_length Byte length of entire block from start of opening token to end of closing token.
     #// @param int|null              $last_offset  Last byte offset into document if continuing form earlier output.
     #//
-    def add_inner_block(self, block=None, token_start=None, token_length=None, last_offset=None):
+    def add_inner_block(self, block_=None, token_start_=None, token_length_=None, last_offset_=None):
         
-        parent = self.stack[php_count(self.stack) - 1]
-        parent.block.innerBlocks[-1] = block
-        html = php_substr(self.document, parent.prev_offset, token_start - parent.prev_offset)
-        if (not php_empty(lambda : html)):
-            parent.block.innerHTML += html
-            parent.block.innerContent[-1] = html
+        
+        parent_ = self.stack[php_count(self.stack) - 1]
+        parent_.block.innerBlocks[-1] = block_
+        html_ = php_substr(self.document, parent_.prev_offset, token_start_ - parent_.prev_offset)
+        if (not php_empty(lambda : html_)):
+            parent_.block.innerHTML += html_
+            parent_.block.innerContent[-1] = html_
         # end if
-        parent.block.innerContent[-1] = None
-        parent.prev_offset = last_offset if last_offset else token_start + token_length
+        parent_.block.innerContent[-1] = None
+        parent_.prev_offset = last_offset_ if last_offset_ else token_start_ + token_length_
     # end def add_inner_block
     #// 
     #// Pushes the top block from the parsing stack to the output list.
@@ -368,18 +478,19 @@ class WP_Block_Parser():
     #// @since 3.8.0
     #// @param int|null $end_offset byte offset into document for where we should stop sending text output as HTML.
     #//
-    def add_block_from_stack(self, end_offset=None):
+    def add_block_from_stack(self, end_offset_=None):
         
-        stack_top = php_array_pop(self.stack)
-        prev_offset = stack_top.prev_offset
-        html = php_substr(self.document, prev_offset, end_offset - prev_offset) if (php_isset(lambda : end_offset)) else php_substr(self.document, prev_offset)
-        if (not php_empty(lambda : html)):
-            stack_top.block.innerHTML += html
-            stack_top.block.innerContent[-1] = html
+        
+        stack_top_ = php_array_pop(self.stack)
+        prev_offset_ = stack_top_.prev_offset
+        html_ = php_substr(self.document, prev_offset_, end_offset_ - prev_offset_) if (php_isset(lambda : end_offset_)) else php_substr(self.document, prev_offset_)
+        if (not php_empty(lambda : html_)):
+            stack_top_.block.innerHTML += html_
+            stack_top_.block.innerContent[-1] = html_
         # end if
-        if (php_isset(lambda : stack_top.leading_html_start)):
-            self.output[-1] = self.freeform(php_substr(self.document, stack_top.leading_html_start, stack_top.token_start - stack_top.leading_html_start))
+        if (php_isset(lambda : stack_top_.leading_html_start)):
+            self.output[-1] = self.freeform(php_substr(self.document, stack_top_.leading_html_start, stack_top_.token_start - stack_top_.leading_html_start))
         # end if
-        self.output[-1] = stack_top.block
+        self.output[-1] = stack_top_.block
     # end def add_block_from_stack
 # end class WP_Block_Parser

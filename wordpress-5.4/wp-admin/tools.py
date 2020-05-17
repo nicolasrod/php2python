@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -48,17 +43,17 @@ elif (php_isset(lambda : PHP_REQUEST["page"])):
 # end if
 #// WordPress Administration Bootstrap
 php_include_file(__DIR__ + "/admin.php", once=True)
-title = __("Tools")
+title_ = __("Tools")
 get_current_screen().add_help_tab(Array({"id": "converter", "title": __("Categories and Tags Converter"), "content": "<p>" + __("Categories have hierarchy, meaning that you can nest sub-categories. Tags do not have hierarchy and cannot be nested. Sometimes people start out using one on their posts, then later realize that the other would work better for their content.") + "</p>" + "<p>" + __("The Categories and Tags Converter link on this screen will take you to the Import screen, where that Converter is one of the plugins you can install. Once that plugin is installed, the Activate Plugin &amp; Run Importer link will take you to a screen where you can choose to convert tags into categories or vice versa.") + "</p>"}))
 get_current_screen().set_help_sidebar("<p><strong>" + __("For more information:") + "</strong></p>" + "<p>" + __("<a href=\"https://wordpress.org/support/article/tools-screen/\">Documentation on Tools</a>") + "</p>" + "<p>" + __("<a href=\"https://wordpress.org/support/\">Support</a>") + "</p>")
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("<div class=\"wrap\">\n<h1>")
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("</h1>\n")
 if current_user_can("import"):
-    cats = get_taxonomy("category")
-    tags = get_taxonomy("post_tag")
-    if current_user_can(cats.cap.manage_terms) or current_user_can(tags.cap.manage_terms):
+    cats_ = get_taxonomy("category")
+    tags_ = get_taxonomy("post_tag")
+    if current_user_can(cats_.cap.manage_terms) or current_user_can(tags_.cap.manage_terms):
         php_print("     <div class=\"card\">\n          <h2 class=\"title\">")
         _e("Categories and Tags Converter")
         php_print("</h2>\n          <p>\n           ")

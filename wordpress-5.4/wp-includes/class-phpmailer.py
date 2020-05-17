@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -38,82 +33,525 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @author Brent R. Matzelle (original founder)
 #//
 class PHPMailer():
+    #// 
+    #// The PHPMailer Version number.
+    #// @var string
+    #//
     Version = "5.2.27"
+    #// 
+    #// Email priority.
+    #// Options: null (default), 1 = High, 3 = Normal, 5 = low.
+    #// When null, the header is not set at all.
+    #// @var integer
+    #//
     Priority = None
+    #// 
+    #// The character set of the message.
+    #// @var string
+    #//
     CharSet = "iso-8859-1"
+    #// 
+    #// The MIME Content-type of the message.
+    #// @var string
+    #//
     ContentType = "text/plain"
+    #// 
+    #// The message encoding.
+    #// Options: "8bit", "7bit", "binary", "base64", and "quoted-printable".
+    #// @var string
+    #//
     Encoding = "8bit"
+    #// 
+    #// Holds the most recent mailer error message.
+    #// @var string
+    #//
     ErrorInfo = ""
+    #// 
+    #// The From email address for the message.
+    #// @var string
+    #//
     From = "root@localhost"
+    #// 
+    #// The From name of the message.
+    #// @var string
+    #//
     FromName = "Root User"
+    #// 
+    #// The Sender email (Return-Path) of the message.
+    #// If not empty, will be sent via -f to sendmail or as 'MAIL FROM' in smtp mode.
+    #// @var string
+    #//
     Sender = ""
+    #// 
+    #// The Return-Path of the message.
+    #// If empty, it will be set to either From or Sender.
+    #// @var string
+    #// @deprecated Email senders should never set a return-path header;
+    #// it's the receiver's job (RFC5321 section 4.4), so this no longer does anything.
+    #// @link https://tools.ietf.org/html/rfc5321#section-4.4 RFC5321 reference
+    #//
     ReturnPath = ""
+    #// 
+    #// The Subject of the message.
+    #// @var string
+    #//
     Subject = ""
+    #// 
+    #// An HTML or plain text message body.
+    #// If HTML then call isHTML(true).
+    #// @var string
+    #//
     Body = ""
+    #// 
+    #// The plain-text message body.
+    #// This body can be read by mail clients that do not have HTML email
+    #// capability such as mutt & Eudora.
+    #// Clients that can read HTML will view the normal Body.
+    #// @var string
+    #//
     AltBody = ""
+    #// 
+    #// An iCal message part body.
+    #// Only supported in simple alt or alt_inline message types
+    #// To generate iCal events, use the bundled extras/EasyPeasyICS.php class or iCalcreator
+    #// @link http://sprain.ch/blog/downloads/php-class-easypeasyics-create-ical-files-with-php
+    #// @link http://kigkonsult.se/iCalcreator
+    #// @var string
+    #//
     Ical = ""
+    #// 
+    #// The complete compiled MIME message body.
+    #// @access protected
+    #// @var string
+    #//
     MIMEBody = ""
+    #// 
+    #// The complete compiled MIME message headers.
+    #// @var string
+    #// @access protected
+    #//
     MIMEHeader = ""
+    #// 
+    #// Extra headers that createHeader() doesn't fold in.
+    #// @var string
+    #// @access protected
+    #//
     mailHeader = ""
+    #// 
+    #// Word-wrap the message body to this number of chars.
+    #// Set to 0 to not wrap. A useful value here is 78, for RFC2822 section 2.1.1 compliance.
+    #// @var integer
+    #//
     WordWrap = 0
+    #// 
+    #// Which method to use to send mail.
+    #// Options: "mail", "sendmail", or "smtp".
+    #// @var string
+    #//
     Mailer = "mail"
+    #// 
+    #// The path to the sendmail program.
+    #// @var string
+    #//
     Sendmail = "/usr/sbin/sendmail"
+    #// 
+    #// Whether mail() uses a fully sendmail-compatible MTA.
+    #// One which supports sendmail's "-oi -f" options.
+    #// @var boolean
+    #//
     UseSendmailOptions = True
+    #// 
+    #// Path to PHPMailer plugins.
+    #// Useful if the SMTP class is not in the PHP include path.
+    #// @var string
+    #// @deprecated Should not be needed now there is an autoloader.
+    #//
     PluginDir = ""
+    #// 
+    #// The email address that a reading confirmation should be sent to, also known as read receipt.
+    #// @var string
+    #//
     ConfirmReadingTo = ""
+    #// 
+    #// The hostname to use in the Message-ID header and as default HELO string.
+    #// If empty, PHPMailer attempts to find one with, in order,
+    #// $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
+    #// 'localhost.localdomain'.
+    #// @var string
+    #//
     Hostname = ""
+    #// 
+    #// An ID to be used in the Message-ID header.
+    #// If empty, a unique id will be generated.
+    #// You can set your own, but it must be in the format "<id@domain>",
+    #// as defined in RFC5322 section 3.6.4 or it will be ignored.
+    #// @see https://tools.ietf.org/html/rfc5322#section-3.6.4
+    #// @var string
+    #//
     MessageID = ""
+    #// 
+    #// The message Date to be used in the Date header.
+    #// If empty, the current date will be added.
+    #// @var string
+    #//
     MessageDate = ""
+    #// 
+    #// SMTP hosts.
+    #// Either a single hostname or multiple semicolon-delimited hostnames.
+    #// You can also specify a different port
+    #// for each host by using this format: [hostname:port]
+    #// (e.g. "smtp1.example.com:25;smtp2.example.com").
+    #// You can also specify encryption type, for example:
+    #// (e.g. "tls://smtp1.example.com:587;ssl://smtp2.example.com:465").
+    #// Hosts will be tried in order.
+    #// @var string
+    #//
     Host = "localhost"
+    #// 
+    #// The default SMTP server port.
+    #// @var integer
+    #// @TODO Why is this needed when the SMTP class takes care of it?
+    #//
     Port = 25
+    #// 
+    #// The SMTP HELO of the message.
+    #// Default is $Hostname. If $Hostname is empty, PHPMailer attempts to find
+    #// one with the same method described above for $Hostname.
+    #// @var string
+    #// @see PHPMailer::$Hostname
+    #//
     Helo = ""
+    #// 
+    #// What kind of encryption to use on the SMTP connection.
+    #// Options: '', 'ssl' or 'tls'
+    #// @var string
+    #//
     SMTPSecure = ""
+    #// 
+    #// Whether to enable TLS encryption automatically if a server supports it,
+    #// even if `SMTPSecure` is not set to 'tls'.
+    #// Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
+    #// @var boolean
+    #//
     SMTPAutoTLS = True
+    #// 
+    #// Whether to use SMTP authentication.
+    #// Uses the Username and Password properties.
+    #// @var boolean
+    #// @see PHPMailer::$Username
+    #// @see PHPMailer::$Password
+    #//
     SMTPAuth = False
+    #// 
+    #// Options array passed to stream_context_create when connecting via SMTP.
+    #// @var array
+    #//
     SMTPOptions = Array()
+    #// 
+    #// SMTP username.
+    #// @var string
+    #//
     Username = ""
+    #// 
+    #// SMTP password.
+    #// @var string
+    #//
     Password = ""
+    #// 
+    #// SMTP auth type.
+    #// Options are CRAM-MD5, LOGIN, PLAIN, attempted in that order if not specified
+    #// @var string
+    #//
     AuthType = ""
+    #// 
+    #// SMTP realm.
+    #// Used for NTLM auth
+    #// @var string
+    #//
     Realm = ""
+    #// 
+    #// SMTP workstation.
+    #// Used for NTLM auth
+    #// @var string
+    #//
     Workstation = ""
+    #// 
+    #// The SMTP server timeout in seconds.
+    #// Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+    #// @var integer
+    #//
     Timeout = 300
+    #// 
+    #// SMTP class debug output mode.
+    #// Debug output level.
+    #// Options:
+    #// `0` No output
+    #// `1` Commands
+    #// `2` Data and commands
+    #// `3` As 2 plus connection status
+    #// `4` Low-level data output
+    #// @var integer
+    #// @see SMTP::$do_debug
+    #//
     SMTPDebug = 0
+    #// 
+    #// How to handle debug output.
+    #// Options:
+    #// `echo` Output plain-text as-is, appropriate for CLI
+    #// `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
+    #// `error_log` Output to error log as configured in php.ini
+    #// 
+    #// Alternatively, you can provide a callable expecting two params: a message string and the debug level:
+    #// <code>
+    #// $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
+    #// </code>
+    #// @var string|callable
+    #// @see SMTP::$Debugoutput
+    #//
     Debugoutput = "echo"
+    #// 
+    #// Whether to keep SMTP connection open after each message.
+    #// If this is set to true then to close the connection
+    #// requires an explicit call to smtpClose().
+    #// @var boolean
+    #//
     SMTPKeepAlive = False
+    #// 
+    #// Whether to split multiple to addresses into multiple messages
+    #// or send them all in one message.
+    #// Only supported in `mail` and `sendmail` transports, not in SMTP.
+    #// @var boolean
+    #//
     SingleTo = False
+    #// 
+    #// Storage for addresses when SingleTo is enabled.
+    #// @var array
+    #// @TODO This should really not be public
+    #//
     SingleToArray = Array()
+    #// 
+    #// Whether to generate VERP addresses on send.
+    #// Only applicable when sending via SMTP.
+    #// @link https://en.wikipedia.org/wiki/Variable_envelope_return_path
+    #// @link http://www.postfix.org/VERP_README.html Postfix VERP info
+    #// @var boolean
+    #//
     do_verp = False
+    #// 
+    #// Whether to allow sending messages with an empty body.
+    #// @var boolean
+    #//
     AllowEmpty = False
+    #// 
+    #// The default line ending.
+    #// @note The default remains "\n". We force CRLF where we know
+    #// it must be used via self::CRLF.
+    #// @var string
+    #//
     LE = "\n"
+    #// 
+    #// DKIM selector.
+    #// @var string
+    #//
     DKIM_selector = ""
+    #// 
+    #// DKIM Identity.
+    #// Usually the email address used as the source of the email.
+    #// @var string
+    #//
     DKIM_identity = ""
+    #// 
+    #// DKIM passphrase.
+    #// Used if your key is encrypted.
+    #// @var string
+    #//
     DKIM_passphrase = ""
+    #// 
+    #// DKIM signing domain name.
+    #// @example 'example.com'
+    #// @var string
+    #//
     DKIM_domain = ""
+    #// 
+    #// DKIM private key file path.
+    #// @var string
+    #//
     DKIM_private = ""
+    #// 
+    #// DKIM private key string.
+    #// If set, takes precedence over `$DKIM_private`.
+    #// @var string
+    #//
     DKIM_private_string = ""
+    #// 
+    #// Callback Action function name.
+    #// 
+    #// The function that handles the result of the send email action.
+    #// It is called out by send() for each email sent.
+    #// 
+    #// Value can be any php callable: http://www.php.net/is_callable
+    #// 
+    #// Parameters:
+    #// boolean $result        result of the send action
+    #// array   $to            email addresses of the recipients
+    #// array   $cc            cc email addresses
+    #// array   $bcc           bcc email addresses
+    #// string  $subject       the subject
+    #// string  $body          the email body
+    #// string  $from          email address of sender
+    #// @var string
+    #//
     action_function = ""
+    #// 
+    #// What to put in the X-Mailer header.
+    #// Options: An empty string for PHPMailer default, whitespace for none, or a string to use
+    #// @var string
+    #//
     XMailer = ""
+    #// 
+    #// Which validator to use by default when validating email addresses.
+    #// May be a callable to inject your own validator, but there are several built-in validators.
+    #// @see PHPMailer::validateAddress()
+    #// @var string|callable
+    #// @static
+    #//
     validator = "auto"
+    #// 
+    #// An instance of the SMTP sender class.
+    #// @var SMTP
+    #// @access protected
+    #//
     smtp = None
+    #// 
+    #// The array of 'to' names and addresses.
+    #// @var array
+    #// @access protected
+    #//
     to = Array()
+    #// 
+    #// The array of 'cc' names and addresses.
+    #// @var array
+    #// @access protected
+    #//
     cc = Array()
+    #// 
+    #// The array of 'bcc' names and addresses.
+    #// @var array
+    #// @access protected
+    #//
     bcc = Array()
+    #// 
+    #// The array of reply-to names and addresses.
+    #// @var array
+    #// @access protected
+    #//
     ReplyTo = Array()
+    #// 
+    #// An array of all kinds of addresses.
+    #// Includes all of $to, $cc, $bcc
+    #// @var array
+    #// @access protected
+    #// @see PHPMailer::$to @see PHPMailer::$cc @see PHPMailer::$bcc
+    #//
     all_recipients = Array()
+    #// 
+    #// An array of names and addresses queued for validation.
+    #// In send(), valid and non duplicate entries are moved to $all_recipients
+    #// and one of $to, $cc, or $bcc.
+    #// This array is used only for addresses with IDN.
+    #// @var array
+    #// @access protected
+    #// @see PHPMailer::$to @see PHPMailer::$cc @see PHPMailer::$bcc
+    #// @see PHPMailer::$all_recipients
+    #//
     RecipientsQueue = Array()
+    #// 
+    #// An array of reply-to names and addresses queued for validation.
+    #// In send(), valid and non duplicate entries are moved to $ReplyTo.
+    #// This array is used only for addresses with IDN.
+    #// @var array
+    #// @access protected
+    #// @see PHPMailer::$ReplyTo
+    #//
     ReplyToQueue = Array()
+    #// 
+    #// The array of attachments.
+    #// @var array
+    #// @access protected
+    #//
     attachment = Array()
+    #// 
+    #// The array of custom headers.
+    #// @var array
+    #// @access protected
+    #//
     CustomHeader = Array()
+    #// 
+    #// The most recent Message-ID (including angular brackets).
+    #// @var string
+    #// @access protected
+    #//
     lastMessageID = ""
+    #// 
+    #// The message's MIME type.
+    #// @var string
+    #// @access protected
+    #//
     message_type = ""
+    #// 
+    #// The array of MIME boundary strings.
+    #// @var array
+    #// @access protected
+    #//
     boundary = Array()
+    #// 
+    #// The array of available languages.
+    #// @var array
+    #// @access protected
+    #//
     language = Array()
+    #// 
+    #// The number of errors encountered.
+    #// @var integer
+    #// @access protected
+    #//
     error_count = 0
+    #// 
+    #// The S/MIME certificate file path.
+    #// @var string
+    #// @access protected
+    #//
     sign_cert_file = ""
+    #// 
+    #// The S/MIME key file path.
+    #// @var string
+    #// @access protected
+    #//
     sign_key_file = ""
+    #// 
+    #// The optional S/MIME extra certificates ("CA Chain") file path.
+    #// @var string
+    #// @access protected
+    #//
     sign_extracerts_file = ""
+    #// 
+    #// The S/MIME password for the key.
+    #// Used only if the key is encrypted.
+    #// @var string
+    #// @access protected
+    #//
     sign_key_pass = ""
+    #// 
+    #// Whether to throw exceptions for errors.
+    #// @var boolean
+    #// @access protected
+    #//
     exceptions = False
+    #// 
+    #// Unique ID used for message ID and boundaries.
+    #// @var string
+    #// @access protected
+    #//
     uniqueid = ""
     STOP_MESSAGE = 0
     STOP_CONTINUE = 1
@@ -124,10 +562,11 @@ class PHPMailer():
     #// Constructor.
     #// @param boolean $exceptions Should we throw external exceptions?
     #//
-    def __init__(self, exceptions=None):
+    def __init__(self, exceptions_=None):
         
-        if exceptions != None:
-            self.exceptions = php_bool(exceptions)
+        
+        if exceptions_ != None:
+            self.exceptions = php_bool(exceptions_)
         # end if
         #// Pick an appropriate debug output format automatically
         self.Debugoutput = "echo" if php_strpos(PHP_SAPI, "cli") != False else "html"
@@ -136,6 +575,7 @@ class PHPMailer():
     #// Destructor.
     #//
     def __del__(self):
+        
         
         #// Close any open SMTP connection nicely
         self.smtpclose()
@@ -153,22 +593,23 @@ class PHPMailer():
     #// @access private
     #// @return boolean
     #//
-    def mailpassthru(self, to=None, subject=None, body=None, header=None, params=None):
+    def mailpassthru(self, to_=None, subject_=None, body_=None, header_=None, params_=None):
+        
         
         #// Check overloading of mail function to avoid double-encoding
         if php_ini_get("mbstring.func_overload") & 1:
-            subject = self.secureheader(subject)
+            subject_ = self.secureheader(subject_)
         else:
-            subject = self.encodeheader(self.secureheader(subject))
+            subject_ = self.encodeheader(self.secureheader(subject_))
         # end if
         #// Can't use additional_parameters in safe_mode, calling mail() with null params breaks
         #// @link http://php.net/manual/en/function.mail.php
-        if php_ini_get("safe_mode") or (not self.UseSendmailOptions) or is_null(params):
-            result = php_no_error(lambda: mail(to, subject, body, header))
+        if php_ini_get("safe_mode") or (not self.UseSendmailOptions) or is_null(params_):
+            result_ = php_no_error(lambda: mail(to_, subject_, body_, header_))
         else:
-            result = php_no_error(lambda: mail(to, subject, body, header, params))
+            result_ = php_no_error(lambda: mail(to_, subject_, body_, header_, params_))
         # end if
-        return result
+        return result_
     # end def mailpassthru
     #// 
     #// Output debugging info via user-defined method.
@@ -177,25 +618,26 @@ class PHPMailer():
     #// @see PHPMailer::$SMTPDebug
     #// @param string $str
     #//
-    def edebug(self, str=None):
+    def edebug(self, str_=None):
+        
         
         if self.SMTPDebug <= 0:
             return
         # end if
         #// Avoid clash with built-in function names
         if (not php_in_array(self.Debugoutput, Array("error_log", "html", "echo"))) and php_is_callable(self.Debugoutput):
-            php_call_user_func(self.Debugoutput, str, self.SMTPDebug)
+            php_call_user_func(self.Debugoutput, str_, self.SMTPDebug)
             return
         # end if
         for case in Switch(self.Debugoutput):
             if case("error_log"):
                 #// Don't output, just log
-                php_error_log(str)
+                php_error_log(str_)
                 break
             # end if
             if case("html"):
                 #// Cleans up output a bit for a better looking, HTML-safe output
-                php_print(htmlentities(php_preg_replace("/[\\r\\n]+/", "", str), ENT_QUOTES, "UTF-8") + "<br>\n")
+                php_print(htmlentities(php_preg_replace("/[\\r\\n]+/", "", str_), ENT_QUOTES, "UTF-8") + "<br>\n")
                 break
             # end if
             if case("echo"):
@@ -203,8 +645,8 @@ class PHPMailer():
             # end if
             if case():
                 #// Normalize line breaks
-                str = php_preg_replace("/\\r\\n?/ms", "\n", str)
-                php_print(gmdate("Y-m-d H:i:s") + " " + php_str_replace("\n", "\n                                         ", php_trim(str)) + "\n")
+                str_ = php_preg_replace("/\\r\\n?/ms", "\n", str_)
+                php_print(gmdate("Y-m-d H:i:s") + " " + php_str_replace("\n", "\n                                         ", php_trim(str_)) + "\n")
             # end if
         # end for
     # end def edebug
@@ -213,9 +655,12 @@ class PHPMailer():
     #// @param boolean $isHtml True for HTML mode.
     #// @return void
     #//
-    def ishtml(self, isHtml=True):
+    def ishtml(self, isHtml_=None):
+        if isHtml_ is None:
+            isHtml_ = True
+        # end if
         
-        if isHtml:
+        if isHtml_:
             self.ContentType = "text/html"
         else:
             self.ContentType = "text/plain"
@@ -227,6 +672,7 @@ class PHPMailer():
     #//
     def issmtp(self):
         
+        
         self.Mailer = "smtp"
     # end def issmtp
     #// 
@@ -234,6 +680,7 @@ class PHPMailer():
     #// @return void
     #//
     def ismail(self):
+        
         
         self.Mailer = "mail"
     # end def ismail
@@ -243,11 +690,12 @@ class PHPMailer():
     #//
     def issendmail(self):
         
-        ini_sendmail_path = php_ini_get("sendmail_path")
-        if (not php_stristr(ini_sendmail_path, "sendmail")):
+        
+        ini_sendmail_path_ = php_ini_get("sendmail_path")
+        if (not php_stristr(ini_sendmail_path_, "sendmail")):
             self.Sendmail = "/usr/sbin/sendmail"
         else:
-            self.Sendmail = ini_sendmail_path
+            self.Sendmail = ini_sendmail_path_
         # end if
         self.Mailer = "sendmail"
     # end def issendmail
@@ -257,11 +705,12 @@ class PHPMailer():
     #//
     def isqmail(self):
         
-        ini_sendmail_path = php_ini_get("sendmail_path")
-        if (not php_stristr(ini_sendmail_path, "qmail")):
+        
+        ini_sendmail_path_ = php_ini_get("sendmail_path")
+        if (not php_stristr(ini_sendmail_path_, "qmail")):
             self.Sendmail = "/var/qmail/bin/qmail-inject"
         else:
-            self.Sendmail = ini_sendmail_path
+            self.Sendmail = ini_sendmail_path_
         # end if
         self.Mailer = "qmail"
     # end def isqmail
@@ -271,9 +720,10 @@ class PHPMailer():
     #// @param string $name
     #// @return boolean true on success, false if address already used or invalid in some way
     #//
-    def addaddress(self, address=None, name=""):
+    def addaddress(self, address_=None, name_=""):
         
-        return self.addorenqueueanaddress("to", address, name)
+        
+        return self.addorenqueueanaddress("to", address_, name_)
     # end def addaddress
     #// 
     #// Add a "CC" address.
@@ -282,9 +732,10 @@ class PHPMailer():
     #// @param string $name
     #// @return boolean true on success, false if address already used or invalid in some way
     #//
-    def addcc(self, address=None, name=""):
+    def addcc(self, address_=None, name_=""):
         
-        return self.addorenqueueanaddress("cc", address, name)
+        
+        return self.addorenqueueanaddress("cc", address_, name_)
     # end def addcc
     #// 
     #// Add a "BCC" address.
@@ -293,9 +744,10 @@ class PHPMailer():
     #// @param string $name
     #// @return boolean true on success, false if address already used or invalid in some way
     #//
-    def addbcc(self, address=None, name=""):
+    def addbcc(self, address_=None, name_=""):
         
-        return self.addorenqueueanaddress("bcc", address, name)
+        
+        return self.addorenqueueanaddress("bcc", address_, name_)
     # end def addbcc
     #// 
     #// Add a "Reply-To" address.
@@ -303,9 +755,10 @@ class PHPMailer():
     #// @param string $name
     #// @return boolean true on success, false if address already used or invalid in some way
     #//
-    def addreplyto(self, address=None, name=""):
+    def addreplyto(self, address_=None, name_=""):
         
-        return self.addorenqueueanaddress("Reply-To", address, name)
+        
+        return self.addorenqueueanaddress("Reply-To", address_, name_)
     # end def addreplyto
     #// 
     #// Add an address to one of the recipient arrays or to the ReplyTo array. Because PHPMailer
@@ -319,41 +772,43 @@ class PHPMailer():
     #// @return boolean true on success, false if address already used or invalid in some way
     #// @access protected
     #//
-    def addorenqueueanaddress(self, kind=None, address=None, name=None):
+    def addorenqueueanaddress(self, kind_=None, address_=None, name_=None):
         
-        address = php_trim(address)
-        name = php_trim(php_preg_replace("/[\\r\\n]+/", "", name))
+        
+        address_ = php_trim(address_)
+        name_ = php_trim(php_preg_replace("/[\\r\\n]+/", "", name_))
         #// Strip breaks and trim
-        pos = php_strrpos(address, "@")
-        if pos == False:
+        pos_ = php_strrpos(address_, "@")
+        if pos_ == False:
             #// At-sign is misssing.
-            error_message = self.lang("invalid_address") + str(" (addAnAddress ") + str(kind) + str("): ") + str(address)
-            self.seterror(error_message)
-            self.edebug(error_message)
+            error_message_ = self.lang("invalid_address") + str(" (addAnAddress ") + str(kind_) + str("): ") + str(address_)
+            self.seterror(error_message_)
+            self.edebug(error_message_)
             if self.exceptions:
-                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message))
+                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message_))
             # end if
             return False
         # end if
-        params = Array(kind, address, name)
-        pos += 1
+        params_ = Array(kind_, address_, name_)
+        pos_ += 1
         #// Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
-        if self.has8bitchars(php_substr(address, pos)) and self.idnsupported():
-            if kind != "Reply-To":
-                if (not php_array_key_exists(address, self.RecipientsQueue)):
-                    self.RecipientsQueue[address] = params
+        pos_ += 1
+        if self.has8bitchars(php_substr(address_, pos_)) and self.idnsupported():
+            if kind_ != "Reply-To":
+                if (not php_array_key_exists(address_, self.RecipientsQueue)):
+                    self.RecipientsQueue[address_] = params_
                     return True
                 # end if
             else:
-                if (not php_array_key_exists(address, self.ReplyToQueue)):
-                    self.ReplyToQueue[address] = params
+                if (not php_array_key_exists(address_, self.ReplyToQueue)):
+                    self.ReplyToQueue[address_] = params_
                     return True
                 # end if
             # end if
             return False
         # end if
         #// Immediately add standard addresses without IDN.
-        return call_user_func_array(Array(self, "addAnAddress"), params)
+        return call_user_func_array(Array(self, "addAnAddress"), params_)
     # end def addorenqueueanaddress
     #// 
     #// Add an address to one of the recipient arrays or to the ReplyTo array.
@@ -365,35 +820,36 @@ class PHPMailer():
     #// @return boolean true on success, false if address already used or invalid in some way
     #// @access protected
     #//
-    def addanaddress(self, kind=None, address=None, name=""):
+    def addanaddress(self, kind_=None, address_=None, name_=""):
         
-        if (not php_in_array(kind, Array("to", "cc", "bcc", "Reply-To"))):
-            error_message = self.lang("Invalid recipient kind: ") + kind
-            self.seterror(error_message)
-            self.edebug(error_message)
+        
+        if (not php_in_array(kind_, Array("to", "cc", "bcc", "Reply-To"))):
+            error_message_ = self.lang("Invalid recipient kind: ") + kind_
+            self.seterror(error_message_)
+            self.edebug(error_message_)
             if self.exceptions:
-                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message))
+                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message_))
             # end if
             return False
         # end if
-        if (not self.validateaddress(address)):
-            error_message = self.lang("invalid_address") + str(" (addAnAddress ") + str(kind) + str("): ") + str(address)
-            self.seterror(error_message)
-            self.edebug(error_message)
+        if (not self.validateaddress(address_)):
+            error_message_ = self.lang("invalid_address") + str(" (addAnAddress ") + str(kind_) + str("): ") + str(address_)
+            self.seterror(error_message_)
+            self.edebug(error_message_)
             if self.exceptions:
-                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message))
+                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message_))
             # end if
             return False
         # end if
-        if kind != "Reply-To":
-            if (not php_array_key_exists(php_strtolower(address), self.all_recipients)):
-                php_array_push(self.kind, Array(address, name))
-                self.all_recipients[php_strtolower(address)] = True
+        if kind_ != "Reply-To":
+            if (not php_array_key_exists(php_strtolower(address_), self.all_recipients)):
+                php_array_push(self.kind_, Array(address_, name_))
+                self.all_recipients[php_strtolower(address_)] = True
                 return True
             # end if
         else:
-            if (not php_array_key_exists(php_strtolower(address), self.ReplyTo)):
-                self.ReplyTo[php_strtolower(address)] = Array(address, name)
+            if (not php_array_key_exists(php_strtolower(address_), self.ReplyTo)):
+                self.ReplyTo[php_strtolower(address_)] = Array(address_, name_)
                 return True
             # end if
         # end if
@@ -409,40 +865,43 @@ class PHPMailer():
     #// @return array
     #// @link http://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
     #//
-    def parseaddresses(self, addrstr=None, useimap=True):
+    def parseaddresses(self, addrstr_=None, useimap_=None):
+        if useimap_ is None:
+            useimap_ = True
+        # end if
         
-        addresses = Array()
-        if useimap and php_function_exists("imap_rfc822_parse_adrlist"):
+        addresses_ = Array()
+        if useimap_ and php_function_exists("imap_rfc822_parse_adrlist"):
             #// Use this built-in parser if it's available
-            list = imap_rfc822_parse_adrlist(addrstr, "")
-            for address in list:
-                if address.host != ".SYNTAX-ERROR.":
-                    if self.validateaddress(address.mailbox + "@" + address.host):
-                        addresses[-1] = Array({"name": address.personal if property_exists(address, "personal") else "", "address": address.mailbox + "@" + address.host})
+            list_ = imap_rfc822_parse_adrlist(addrstr_, "")
+            for address_ in list_:
+                if address_.host != ".SYNTAX-ERROR.":
+                    if self.validateaddress(address_.mailbox + "@" + address_.host):
+                        addresses_[-1] = Array({"name": address_.personal if property_exists(address_, "personal") else "", "address": address_.mailbox + "@" + address_.host})
                     # end if
                 # end if
             # end for
         else:
             #// Use this simpler parser
-            list = php_explode(",", addrstr)
-            for address in list:
-                address = php_trim(address)
+            list_ = php_explode(",", addrstr_)
+            for address_ in list_:
+                address_ = php_trim(address_)
                 #// Is there a separate name part?
-                if php_strpos(address, "<") == False:
+                if php_strpos(address_, "<") == False:
                     #// No separate name, just use the whole thing
-                    if self.validateaddress(address):
-                        addresses[-1] = Array({"name": "", "address": address})
+                    if self.validateaddress(address_):
+                        addresses_[-1] = Array({"name": "", "address": address_})
                     # end if
                 else:
-                    name, email = php_explode("<", address)
-                    email = php_trim(php_str_replace(">", "", email))
-                    if self.validateaddress(email):
-                        addresses[-1] = Array({"name": php_trim(php_str_replace(Array("\"", "'"), "", name)), "address": email})
+                    name_, email_ = php_explode("<", address_)
+                    email_ = php_trim(php_str_replace(">", "", email_))
+                    if self.validateaddress(email_):
+                        addresses_[-1] = Array({"name": php_trim(php_str_replace(Array("\"", "'"), "", name_)), "address": email_})
                     # end if
                 # end if
             # end for
         # end if
-        return addresses
+        return addresses_
     # end def parseaddresses
     #// 
     #// Set the From and FromName properties.
@@ -452,28 +911,32 @@ class PHPMailer():
     #// @throws phpmailerException
     #// @return boolean
     #//
-    def setfrom(self, address=None, name="", auto=True):
+    def setfrom(self, address_=None, name_="", auto_=None):
+        if auto_ is None:
+            auto_ = True
+        # end if
         
-        address = php_trim(address)
-        name = php_trim(php_preg_replace("/[\\r\\n]+/", "", name))
-        pos += 1
+        address_ = php_trim(address_)
+        name_ = php_trim(php_preg_replace("/[\\r\\n]+/", "", name_))
+        pos_ += 1
         #// Strip breaks and trim
         #// Don't validate now addresses with IDN. Will be done in send().
-        pos = php_strrpos(address, "@")
-        if pos == False or (not self.has8bitchars(php_substr(address, pos))) or (not self.idnsupported()) and (not self.validateaddress(address)):
-            error_message = self.lang("invalid_address") + str(" (setFrom) ") + str(address)
-            self.seterror(error_message)
-            self.edebug(error_message)
+        pos_ = php_strrpos(address_, "@")
+        pos_ += 1
+        if pos_ == False or (not self.has8bitchars(php_substr(address_, pos_))) or (not self.idnsupported()) and (not self.validateaddress(address_)):
+            error_message_ = self.lang("invalid_address") + str(" (setFrom) ") + str(address_)
+            self.seterror(error_message_)
+            self.edebug(error_message_)
             if self.exceptions:
-                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message))
+                raise php_new_class("phpmailerException", lambda : phpmailerException(error_message_))
             # end if
             return False
         # end if
-        self.From = address
-        self.FromName = name
-        if auto:
+        self.From = address_
+        self.FromName = name_
+        if auto_:
             if php_empty(lambda : self.Sender):
-                self.Sender = address
+                self.Sender = address_
             # end if
         # end if
         return True
@@ -486,6 +949,7 @@ class PHPMailer():
     #// @return string
     #//
     def getlastmessageid(self):
+        
         
         return self.lastMessageID
     # end def getlastmessageid
@@ -509,41 +973,42 @@ class PHPMailer():
     #// @access public
     #//
     @classmethod
-    def validateaddress(self, address=None, patternselect=None):
+    def validateaddress(self, address_=None, patternselect_=None):
         
-        if is_null(patternselect):
-            patternselect = self.validator
+        
+        if is_null(patternselect_):
+            patternselect_ = self.validator
         # end if
-        if php_is_callable(patternselect):
-            return php_call_user_func(patternselect, address)
+        if php_is_callable(patternselect_):
+            return php_call_user_func(patternselect_, address_)
         # end if
         #// Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
-        if php_strpos(address, "\n") != False or php_strpos(address, "\r") != False:
+        if php_strpos(address_, "\n") != False or php_strpos(address_, "\r") != False:
             return False
         # end if
-        if (not patternselect) or patternselect == "auto":
+        if (not patternselect_) or patternselect_ == "auto":
             #// Check this constant first so it works when extension_loaded() is disabled by safe mode
             #// Constant was added in PHP 5.2.4
             if php_defined("PCRE_VERSION"):
                 #// This pattern can get stuck in a recursive loop in PCRE <= 8.0.2
                 if php_version_compare(PCRE_VERSION, "8.0.3") >= 0:
-                    patternselect = "pcre8"
+                    patternselect_ = "pcre8"
                 else:
-                    patternselect = "pcre"
+                    patternselect_ = "pcre"
                 # end if
             elif php_function_exists("extension_loaded") and php_extension_loaded("pcre"):
                 #// Fall back to older PCRE
-                patternselect = "pcre"
+                patternselect_ = "pcre"
             else:
                 #// Filter_var appeared in PHP 5.2.0 and does not require the PCRE extension
                 if php_version_compare(PHP_VERSION, "5.2.0") >= 0:
-                    patternselect = "php"
+                    patternselect_ = "php"
                 else:
-                    patternselect = "noregex"
+                    patternselect_ = "noregex"
                 # end if
             # end if
         # end if
-        for case in Switch(patternselect):
+        for case in Switch(patternselect_):
             if case("pcre8"):
                 #// 
                 #// Uses the same RFC5322 regex on which FILTER_VALIDATE_EMAIL is based, but allows dotless domains.
@@ -551,29 +1016,29 @@ class PHPMailer():
                 #// @copyright 2009-2010 Michael Rushton
                 #// Feel free to use and redistribute this code. But please keep this copyright notice.
                 #//
-                return php_bool(php_preg_match("/^(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){255,})(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){65,}@)" + "((?>(?>(?>((?>(?>(?>\\x0D\\x0A)?[\\t ])+|(?>[\\t ]*\\x0D\\x0A)?[\\t ]+)?)(\\((?>(?2)" + "(?>[\\x01-\\x08\\x0B\\x0C\\x0E-'*-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]|(?3)))*(?2)\\)))+(?2))|(?2))?)" + "([!#-'*+\\/-9=?^-~-]+|\"(?>(?2)(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]))*" + "(?2)\")(?>(?1)\\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)" + "(?>(?1)\\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}" + "|(?!(?:.*[a-f0-9][:\\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:" + "|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?9)){3}))\\])(?1)$/isD", address))
+                return php_bool(php_preg_match("/^(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){255,})(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){65,}@)" + "((?>(?>(?>((?>(?>(?>\\x0D\\x0A)?[\\t ])+|(?>[\\t ]*\\x0D\\x0A)?[\\t ]+)?)(\\((?>(?2)" + "(?>[\\x01-\\x08\\x0B\\x0C\\x0E-'*-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]|(?3)))*(?2)\\)))+(?2))|(?2))?)" + "([!#-'*+\\/-9=?^-~-]+|\"(?>(?2)(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]))*" + "(?2)\")(?>(?1)\\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)" + "(?>(?1)\\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}" + "|(?!(?:.*[a-f0-9][:\\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:" + "|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?9)){3}))\\])(?1)$/isD", address_))
             # end if
             if case("pcre"):
                 #// An older regex that doesn't need a recent PCRE
-                return php_bool(php_preg_match("/^(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){255,})(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){65,}@)(?>" + "[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\")" + "(?>\\.(?>[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\"))*" + "@(?>(?![a-z0-9-]{64,})(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)(?>\\.(?![a-z0-9-]{64,})" + "(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)){0,126}|\\[(?:(?>IPv6:(?>(?>[a-f0-9]{1,4})(?>:" + "[a-f0-9]{1,4}){7}|(?!(?:.*[a-f0-9][:\\]]){8,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?" + "::(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?))|(?>(?>IPv6:(?>[a-f0-9]{1,4}(?>:" + "[a-f0-9]{1,4}){5}:|(?!(?:.*[a-f0-9]:){6,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4})?" + "::(?>(?:[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4}):)?))?(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}))\\])$/isD", address))
+                return php_bool(php_preg_match("/^(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){255,})(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){65,}@)(?>" + "[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\")" + "(?>\\.(?>[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\"))*" + "@(?>(?![a-z0-9-]{64,})(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)(?>\\.(?![a-z0-9-]{64,})" + "(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)){0,126}|\\[(?:(?>IPv6:(?>(?>[a-f0-9]{1,4})(?>:" + "[a-f0-9]{1,4}){7}|(?!(?:.*[a-f0-9][:\\]]){8,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?" + "::(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?))|(?>(?>IPv6:(?>[a-f0-9]{1,4}(?>:" + "[a-f0-9]{1,4}){5}:|(?!(?:.*[a-f0-9]:){6,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4})?" + "::(?>(?:[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4}):)?))?(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}))\\])$/isD", address_))
             # end if
             if case("html5"):
                 #// 
                 #// This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
                 #// @link http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
                 #//
-                return php_bool(php_preg_match("/^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}" + "[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD", address))
+                return php_bool(php_preg_match("/^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}" + "[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD", address_))
             # end if
             if case("noregex"):
                 #// No PCRE! Do something _very_ approximate!
                 #// Check the address is 3 chars or longer and contains an @ that's not the first or last char
-                return php_strlen(address) >= 3 and php_strpos(address, "@") >= 1 and php_strpos(address, "@") != php_strlen(address) - 1
+                return php_strlen(address_) >= 3 and php_strpos(address_, "@") >= 1 and php_strpos(address_, "@") != php_strlen(address_) - 1
             # end if
             if case("php"):
                 pass
             # end if
             if case():
-                return php_bool(filter_var(address, FILTER_VALIDATE_EMAIL))
+                return php_bool(filter_var(address_, FILTER_VALIDATE_EMAIL))
             # end if
         # end for
     # end def validateaddress
@@ -583,6 +1048,7 @@ class PHPMailer():
     #// @return bool "true" if required functions for IDN support are present
     #//
     def idnsupported(self):
+        
         
         #// @TODO: Write our own "idn_to_ascii" function for PHP <= 5.2.
         return php_function_exists("idn_to_ascii") and php_function_exists("mb_convert_encoding")
@@ -598,23 +1064,25 @@ class PHPMailer():
     #// @param string $address The email address to convert
     #// @return string The encoded address in ASCII form
     #//
-    def punyencodeaddress(self, address=None):
+    def punyencodeaddress(self, address_=None):
+        
         
         #// Verify we have required functions, CharSet, and at-sign.
-        pos = php_strrpos(address, "@")
-        if self.idnsupported() and (not php_empty(lambda : self.CharSet)) and pos != False:
-            pos += 1
-            domain = php_substr(address, pos)
+        pos_ = php_strrpos(address_, "@")
+        if self.idnsupported() and (not php_empty(lambda : self.CharSet)) and pos_ != False:
+            pos_ += 1
+            pos_ += 1
+            domain_ = php_substr(address_, pos_)
             #// Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
-            if self.has8bitchars(domain) and php_no_error(lambda: mb_check_encoding(domain, self.CharSet)):
-                domain = mb_convert_encoding(domain, "UTF-8", self.CharSet)
-                punycode = idn_to_ascii(domain, 0, INTL_IDNA_VARIANT_UTS46) if php_defined("INTL_IDNA_VARIANT_UTS46") else idn_to_ascii(domain)
-                if punycode != False:
-                    return php_substr(address, 0, pos) + punycode
+            if self.has8bitchars(domain_) and php_no_error(lambda: mb_check_encoding(domain_, self.CharSet)):
+                domain_ = mb_convert_encoding(domain_, "UTF-8", self.CharSet)
+                punycode_ = idn_to_ascii(domain_, 0, INTL_IDNA_VARIANT_UTS46) if php_defined("INTL_IDNA_VARIANT_UTS46") else idn_to_ascii(domain_)
+                if punycode_ != False:
+                    return php_substr(address_, 0, pos_) + punycode_
                 # end if
             # end if
         # end if
-        return address
+        return address_
     # end def punyencodeaddress
     #// 
     #// Create a message and send it.
@@ -624,16 +1092,17 @@ class PHPMailer():
     #//
     def send(self):
         
+        
         try: 
             if (not self.presend()):
                 return False
             # end if
             return self.postsend()
-        except phpmailerException as exc:
+        except phpmailerException as exc_:
             self.mailHeader = ""
-            self.seterror(exc.getmessage())
+            self.seterror(exc_.getmessage())
             if self.exceptions:
-                raise exc
+                raise exc_
             # end if
             return False
         # end try
@@ -645,31 +1114,32 @@ class PHPMailer():
     #//
     def presend(self):
         
+        
         try: 
             self.error_count = 0
             #// Reset errors
             self.mailHeader = ""
             #// Dequeue recipient and Reply-To addresses with IDN
-            for params in php_array_merge(self.RecipientsQueue, self.ReplyToQueue):
-                params[1] = self.punyencodeaddress(params[1])
-                call_user_func_array(Array(self, "addAnAddress"), params)
+            for params_ in php_array_merge(self.RecipientsQueue, self.ReplyToQueue):
+                params_[1] = self.punyencodeaddress(params_[1])
+                call_user_func_array(Array(self, "addAnAddress"), params_)
             # end for
             if php_count(self.to) + php_count(self.cc) + php_count(self.bcc) < 1:
                 raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("provide_address"), self.STOP_CRITICAL))
             # end if
             #// Validate From, Sender, and ConfirmReadingTo addresses
-            for address_kind in Array("From", "Sender", "ConfirmReadingTo"):
-                self.address_kind = php_trim(self.address_kind)
-                if php_empty(lambda : self.address_kind):
+            for address_kind_ in Array("From", "Sender", "ConfirmReadingTo"):
+                self.address_kind_ = php_trim(self.address_kind_)
+                if php_empty(lambda : self.address_kind_):
                     continue
                 # end if
-                self.address_kind = self.punyencodeaddress(self.address_kind)
-                if (not self.validateaddress(self.address_kind)):
-                    error_message = self.lang("invalid_address") + " (punyEncode) " + self.address_kind
-                    self.seterror(error_message)
-                    self.edebug(error_message)
+                self.address_kind_ = self.punyencodeaddress(self.address_kind_)
+                if (not self.validateaddress(self.address_kind_)):
+                    error_message_ = self.lang("invalid_address") + " (punyEncode) " + self.address_kind_
+                    self.seterror(error_message_)
+                    self.edebug(error_message_)
                     if self.exceptions:
-                        raise php_new_class("phpmailerException", lambda : phpmailerException(error_message))
+                        raise php_new_class("phpmailerException", lambda : phpmailerException(error_message_))
                     # end if
                     return False
                 # end if
@@ -687,9 +1157,9 @@ class PHPMailer():
             self.MIMEHeader = ""
             self.MIMEBody = self.createbody()
             #// createBody may have added some headers, so retain them
-            tempheaders = self.MIMEHeader
+            tempheaders_ = self.MIMEHeader
             self.MIMEHeader = self.createheader()
-            self.MIMEHeader += tempheaders
+            self.MIMEHeader += tempheaders_
             #// To capture the complete message when using mail(), create
             #// an extra header list which createHeader() doesn't fold in
             if self.Mailer == "mail":
@@ -702,14 +1172,14 @@ class PHPMailer():
             # end if
             #// Sign with DKIM if enabled
             if (not php_empty(lambda : self.DKIM_domain)) and (not php_empty(lambda : self.DKIM_selector)) and (not php_empty(lambda : self.DKIM_private_string)) or (not php_empty(lambda : self.DKIM_private)) and self.ispermittedpath(self.DKIM_private) and php_file_exists(self.DKIM_private):
-                header_dkim = self.dkim_add(self.MIMEHeader + self.mailHeader, self.encodeheader(self.secureheader(self.Subject)), self.MIMEBody)
-                self.MIMEHeader = php_rtrim(self.MIMEHeader, "\r\n ") + self.CRLF + php_str_replace("\r\n", "\n", header_dkim) + self.CRLF
+                header_dkim_ = self.dkim_add(self.MIMEHeader + self.mailHeader, self.encodeheader(self.secureheader(self.Subject)), self.MIMEBody)
+                self.MIMEHeader = php_rtrim(self.MIMEHeader, "\r\n ") + self.CRLF + php_str_replace("\r\n", "\n", header_dkim_) + self.CRLF
             # end if
             return True
-        except phpmailerException as exc:
-            self.seterror(exc.getmessage())
+        except phpmailerException as exc_:
+            self.seterror(exc_.getmessage())
             if self.exceptions:
-                raise exc
+                raise exc_
             # end if
             return False
         # end try
@@ -721,6 +1191,7 @@ class PHPMailer():
     #// @return boolean
     #//
     def postsend(self):
+        
         
         try: 
             #// Choose the mailer and send through it
@@ -738,18 +1209,18 @@ class PHPMailer():
                     return self.mailsend(self.MIMEHeader, self.MIMEBody)
                 # end if
                 if case():
-                    sendMethod = self.Mailer + "Send"
-                    if php_method_exists(self, sendMethod):
-                        return self.sendmethod(self.MIMEHeader, self.MIMEBody)
+                    sendMethod_ = self.Mailer + "Send"
+                    if php_method_exists(self, sendMethod_):
+                        return self.sendmethod_(self.MIMEHeader, self.MIMEBody)
                     # end if
                     return self.mailsend(self.MIMEHeader, self.MIMEBody)
                 # end if
             # end for
-        except phpmailerException as exc:
-            self.seterror(exc.getmessage())
-            self.edebug(exc.getmessage())
+        except phpmailerException as exc_:
+            self.seterror(exc_.getmessage())
+            self.edebug(exc_.getmessage())
             if self.exceptions:
-                raise exc
+                raise exc_
             # end if
         # end try
         return False
@@ -763,49 +1234,50 @@ class PHPMailer():
     #// @access protected
     #// @return boolean
     #//
-    def sendmailsend(self, header=None, body=None):
+    def sendmailsend(self, header_=None, body_=None):
+        
         
         #// CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
         if (not php_empty(lambda : self.Sender)) and self.isshellsafe(self.Sender):
             if self.Mailer == "qmail":
-                sendmailFmt = "%s -f%s"
+                sendmailFmt_ = "%s -f%s"
             else:
-                sendmailFmt = "%s -oi -f%s -t"
+                sendmailFmt_ = "%s -oi -f%s -t"
             # end if
         else:
             if self.Mailer == "qmail":
-                sendmailFmt = "%s"
+                sendmailFmt_ = "%s"
             else:
-                sendmailFmt = "%s -oi -t"
+                sendmailFmt_ = "%s -oi -t"
             # end if
         # end if
         #// TODO: If possible, this should be changed to escapeshellarg.  Needs thorough testing.
-        sendmail = php_sprintf(sendmailFmt, escapeshellcmd(self.Sendmail), self.Sender)
+        sendmail_ = php_sprintf(sendmailFmt_, escapeshellcmd(self.Sendmail), self.Sender)
         if self.SingleTo:
-            for toAddr in self.SingleToArray:
-                mail = popen(sendmail, "w")
-                if (not php_no_error(lambda: mail)):
+            for toAddr_ in self.SingleToArray:
+                mail_ = popen(sendmail_, "w")
+                if (not php_no_error(lambda: mail_)):
                     raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("execute") + self.Sendmail, self.STOP_CRITICAL))
                 # end if
-                fputs(mail, "To: " + toAddr + "\n")
-                fputs(mail, header)
-                fputs(mail, body)
-                result = pclose(mail)
-                self.docallback(result == 0, Array(toAddr), self.cc, self.bcc, self.Subject, body, self.From)
-                if result != 0:
+                fputs(mail_, "To: " + toAddr_ + "\n")
+                fputs(mail_, header_)
+                fputs(mail_, body_)
+                result_ = pclose(mail_)
+                self.docallback(result_ == 0, Array(toAddr_), self.cc, self.bcc, self.Subject, body_, self.From)
+                if result_ != 0:
                     raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("execute") + self.Sendmail, self.STOP_CRITICAL))
                 # end if
             # end for
         else:
-            mail = popen(sendmail, "w")
-            if (not php_no_error(lambda: mail)):
+            mail_ = popen(sendmail_, "w")
+            if (not php_no_error(lambda: mail_)):
                 raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("execute") + self.Sendmail, self.STOP_CRITICAL))
             # end if
-            fputs(mail, header)
-            fputs(mail, body)
-            result = pclose(mail)
-            self.docallback(result == 0, self.to, self.cc, self.bcc, self.Subject, body, self.From)
-            if result != 0:
+            fputs(mail_, header_)
+            fputs(mail_, body_)
+            result_ = pclose(mail_)
+            self.docallback(result_ == 0, self.to, self.cc, self.bcc, self.Subject, body_, self.From)
+            if result_ != 0:
                 raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("execute") + self.Sendmail, self.STOP_CRITICAL))
             # end if
         # end if
@@ -820,24 +1292,25 @@ class PHPMailer():
     #// @access protected
     #// @return boolean
     #//
-    def isshellsafe(self, string=None):
+    def isshellsafe(self, string_=None):
+        
         
         #// Future-proof
-        if escapeshellcmd(string) != string or (not php_in_array(escapeshellarg(string), Array(str("'") + str(string) + str("'"), str("\"") + str(string) + str("\"")))):
+        if escapeshellcmd(string_) != string_ or (not php_in_array(escapeshellarg(string_), Array(str("'") + str(string_) + str("'"), str("\"") + str(string_) + str("\"")))):
             return False
         # end if
-        length = php_strlen(string)
-        i = 0
-        while i < length:
+        length_ = php_strlen(string_)
+        i_ = 0
+        while i_ < length_:
             
-            c = string[i]
+            c_ = string_[i_]
             #// All other characters have a special meaning in at least one common shell, including = and +.
             #// Full stop (.) has a special meaning in cmd.exe, but its impact should be negligible here.
             #// Note that this does permit non-Latin alphanumeric characters based on the current locale.
-            if (not ctype_alnum(c)) and php_strpos("@_-.", c) == False:
+            if (not ctype_alnum(c_)) and php_strpos("@_-.", c_) == False:
                 return False
             # end if
-            i += 1
+            i_ += 1
         # end while
         return True
     # end def isshellsafe
@@ -848,9 +1321,10 @@ class PHPMailer():
     #// @param string $path A relative or absolute path to a file.
     #// @return bool
     #//
-    def ispermittedpath(self, path=None):
+    def ispermittedpath(self, path_=None):
         
-        return (not php_preg_match("#^[a-z]+://#i", path))
+        
+        return (not php_preg_match("#^[a-z]+://#i", path_))
     # end def ispermittedpath
     #// 
     #// Send mail using the PHP mail() function.
@@ -861,39 +1335,40 @@ class PHPMailer():
     #// @access protected
     #// @return boolean
     #//
-    def mailsend(self, header=None, body=None):
+    def mailsend(self, header_=None, body_=None):
         
-        toArr = Array()
-        for toaddr in self.to:
-            toArr[-1] = self.addrformat(toaddr)
+        
+        toArr_ = Array()
+        for toaddr_ in self.to:
+            toArr_[-1] = self.addrformat(toaddr_)
         # end for
-        to = php_implode(", ", toArr)
-        params = None
+        to_ = php_implode(", ", toArr_)
+        params_ = None
         #// This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
         if (not php_empty(lambda : self.Sender)) and self.validateaddress(self.Sender):
             #// CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
             if self.isshellsafe(self.Sender):
-                params = php_sprintf("-f%s", self.Sender)
+                params_ = php_sprintf("-f%s", self.Sender)
             # end if
         # end if
         if (not php_empty(lambda : self.Sender)) and (not php_ini_get("safe_mode")) and self.validateaddress(self.Sender):
-            old_from = php_ini_get("sendmail_from")
+            old_from_ = php_ini_get("sendmail_from")
             php_ini_set("sendmail_from", self.Sender)
         # end if
-        result = False
-        if self.SingleTo and php_count(toArr) > 1:
-            for toAddr in toArr:
-                result = self.mailpassthru(toAddr, self.Subject, body, header, params)
-                self.docallback(result, Array(toAddr), self.cc, self.bcc, self.Subject, body, self.From)
+        result_ = False
+        if self.SingleTo and php_count(toArr_) > 1:
+            for toAddr_ in toArr_:
+                result_ = self.mailpassthru(toAddr_, self.Subject, body_, header_, params_)
+                self.docallback(result_, Array(toAddr_), self.cc, self.bcc, self.Subject, body_, self.From)
             # end for
         else:
-            result = self.mailpassthru(to, self.Subject, body, header, params)
-            self.docallback(result, self.to, self.cc, self.bcc, self.Subject, body, self.From)
+            result_ = self.mailpassthru(to_, self.Subject, body_, header_, params_)
+            self.docallback(result_, self.to, self.cc, self.bcc, self.Subject, body_, self.From)
         # end if
-        if (php_isset(lambda : old_from)):
-            php_ini_set("sendmail_from", old_from)
+        if (php_isset(lambda : old_from_)):
+            php_ini_set("sendmail_from", old_from_)
         # end if
-        if (not result):
+        if (not result_):
             raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("instantiate"), self.STOP_CRITICAL))
         # end if
         return True
@@ -904,6 +1379,7 @@ class PHPMailer():
     #// @return SMTP
     #//
     def getsmtpinstance(self):
+        
         
         if (not php_is_object(self.smtp)):
             php_include_file("class-smtp.php", once=True)
@@ -923,36 +1399,37 @@ class PHPMailer():
     #// @access protected
     #// @return boolean
     #//
-    def smtpsend(self, header=None, body=None):
+    def smtpsend(self, header_=None, body_=None):
         
-        bad_rcpt = Array()
+        
+        bad_rcpt_ = Array()
         if (not self.smtpconnect(self.SMTPOptions)):
             raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("smtp_connect_failed"), self.STOP_CRITICAL))
         # end if
         if (not php_empty(lambda : self.Sender)) and self.validateaddress(self.Sender):
-            smtp_from = self.Sender
+            smtp_from_ = self.Sender
         else:
-            smtp_from = self.From
+            smtp_from_ = self.From
         # end if
-        if (not self.smtp.mail(smtp_from)):
-            self.seterror(self.lang("from_failed") + smtp_from + " : " + php_implode(",", self.smtp.geterror()))
+        if (not self.smtp.mail(smtp_from_)):
+            self.seterror(self.lang("from_failed") + smtp_from_ + " : " + php_implode(",", self.smtp.geterror()))
             raise php_new_class("phpmailerException", lambda : phpmailerException(self.ErrorInfo, self.STOP_CRITICAL))
         # end if
         #// Attempt to send to all recipients
-        for togroup in Array(self.to, self.cc, self.bcc):
-            for to in togroup:
-                if (not self.smtp.recipient(to[0])):
-                    error = self.smtp.geterror()
-                    bad_rcpt[-1] = Array({"to": to[0], "error": error["detail"]})
-                    isSent = False
+        for togroup_ in Array(self.to, self.cc, self.bcc):
+            for to_ in togroup_:
+                if (not self.smtp.recipient(to_[0])):
+                    error_ = self.smtp.geterror()
+                    bad_rcpt_[-1] = Array({"to": to_[0], "error": error_["detail"]})
+                    isSent_ = False
                 else:
-                    isSent = True
+                    isSent_ = True
                 # end if
-                self.docallback(isSent, Array(to[0]), Array(), Array(), self.Subject, body, self.From)
+                self.docallback(isSent_, Array(to_[0]), Array(), Array(), self.Subject, body_, self.From)
             # end for
         # end for
         #// Only send the DATA command if we have viable recipients
-        if php_count(self.all_recipients) > php_count(bad_rcpt) and (not self.smtp.data(header + body)):
+        if php_count(self.all_recipients) > php_count(bad_rcpt_) and (not self.smtp.data(header_ + body_)):
             raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("data_not_accepted"), self.STOP_CRITICAL))
         # end if
         if self.SMTPKeepAlive:
@@ -962,12 +1439,12 @@ class PHPMailer():
             self.smtp.close()
         # end if
         #// Create error message for any bad addresses
-        if php_count(bad_rcpt) > 0:
-            errstr = ""
-            for bad in bad_rcpt:
-                errstr += bad["to"] + ": " + bad["error"]
+        if php_count(bad_rcpt_) > 0:
+            errstr_ = ""
+            for bad_ in bad_rcpt_:
+                errstr_ += bad_["to"] + ": " + bad_["error"]
             # end for
-            raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("recipients_failed") + errstr, self.STOP_CONTINUE))
+            raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("recipients_failed") + errstr_, self.STOP_CONTINUE))
         # end if
         return True
     # end def smtpsend
@@ -980,14 +1457,15 @@ class PHPMailer():
     #// @throws phpmailerException
     #// @return boolean
     #//
-    def smtpconnect(self, options=None):
+    def smtpconnect(self, options_=None):
+        
         
         if is_null(self.smtp):
             self.smtp = self.getsmtpinstance()
         # end if
         #// If no options are provided, use whatever is set in the instance
-        if is_null(options):
-            options = self.SMTPOptions
+        if is_null(options_):
+            options_ = self.SMTPOptions
         # end if
         #// Already connected?
         if self.smtp.connected():
@@ -997,13 +1475,13 @@ class PHPMailer():
         self.smtp.setdebuglevel(self.SMTPDebug)
         self.smtp.setdebugoutput(self.Debugoutput)
         self.smtp.setverp(self.do_verp)
-        hosts = php_explode(";", self.Host)
-        lastexception = None
-        for hostentry in hosts:
-            hostinfo = Array()
-            if (not php_preg_match("/^((ssl|tls):\\/\\/)*([a-zA-Z0-9\\.-]*|\\[[a-fA-F0-9:]+\\]):?([0-9]*)$/", php_trim(hostentry), hostinfo)):
+        hosts_ = php_explode(";", self.Host)
+        lastexception_ = None
+        for hostentry_ in hosts_:
+            hostinfo_ = Array()
+            if (not php_preg_match("/^((ssl|tls):\\/\\/)*([a-zA-Z0-9\\.-]*|\\[[a-fA-F0-9:]+\\]):?([0-9]*)$/", php_trim(hostentry_), hostinfo_)):
                 #// Not a valid host entry
-                self.edebug("Ignoring invalid host: " + hostentry)
+                self.edebug("Ignoring invalid host: " + hostentry_)
                 continue
             # end if
             #// $hostinfo[2]: optional ssl or tls prefix
@@ -1011,55 +1489,55 @@ class PHPMailer():
             #// $hostinfo[4]: optional port number
             #// The host string prefix can temporarily override the current setting for SMTPSecure
             #// If it's not specified, the default value is used
-            prefix = ""
-            secure = self.SMTPSecure
-            tls = self.SMTPSecure == "tls"
-            if "ssl" == hostinfo[2] or "" == hostinfo[2] and "ssl" == self.SMTPSecure:
-                prefix = "ssl://"
-                tls = False
+            prefix_ = ""
+            secure_ = self.SMTPSecure
+            tls_ = self.SMTPSecure == "tls"
+            if "ssl" == hostinfo_[2] or "" == hostinfo_[2] and "ssl" == self.SMTPSecure:
+                prefix_ = "ssl://"
+                tls_ = False
                 #// Can't have SSL and TLS at the same time
-                secure = "ssl"
-            elif hostinfo[2] == "tls":
-                tls = True
+                secure_ = "ssl"
+            elif hostinfo_[2] == "tls":
+                tls_ = True
                 #// tls doesn't use a prefix
-                secure = "tls"
+                secure_ = "tls"
             # end if
             #// Do we need the OpenSSL extension?
-            sslext = php_defined("OPENSSL_ALGO_SHA1")
-            if "tls" == secure or "ssl" == secure:
+            sslext_ = php_defined("OPENSSL_ALGO_SHA1")
+            if "tls" == secure_ or "ssl" == secure_:
                 #// Check for an OpenSSL constant rather than using extension_loaded, which is sometimes disabled
-                if (not sslext):
+                if (not sslext_):
                     raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("extension_missing") + "openssl", self.STOP_CRITICAL))
                 # end if
             # end if
-            host = hostinfo[3]
-            port = self.Port
-            tport = php_int(hostinfo[4])
-            if tport > 0 and tport < 65536:
-                port = tport
+            host_ = hostinfo_[3]
+            port_ = self.Port
+            tport_ = php_int(hostinfo_[4])
+            if tport_ > 0 and tport_ < 65536:
+                port_ = tport_
             # end if
-            if self.smtp.connect(prefix + host, port, self.Timeout, options):
+            if self.smtp.connect(prefix_ + host_, port_, self.Timeout, options_):
                 try: 
                     if self.Helo:
-                        hello = self.Helo
+                        hello_ = self.Helo
                     else:
-                        hello = self.serverhostname()
+                        hello_ = self.serverhostname()
                     # end if
-                    self.smtp.hello(hello)
+                    self.smtp.hello(hello_)
                     #// Automatically enable TLS encryption if:
                     #// it's not disabled
                     #// we have openssl extension
                     #// we are not already using SSL
                     #// the server offers STARTTLS
-                    if self.SMTPAutoTLS and sslext and secure != "ssl" and self.smtp.getserverext("STARTTLS"):
-                        tls = True
+                    if self.SMTPAutoTLS and sslext_ and secure_ != "ssl" and self.smtp.getserverext("STARTTLS"):
+                        tls_ = True
                     # end if
-                    if tls:
+                    if tls_:
                         if (not self.smtp.starttls()):
                             raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("connect_host")))
                         # end if
                         #// We must resend EHLO after TLS negotiation
-                        self.smtp.hello(hello)
+                        self.smtp.hello(hello_)
                     # end if
                     if self.SMTPAuth:
                         if (not self.smtp.authenticate(self.Username, self.Password, self.AuthType, self.Realm, self.Workstation)):
@@ -1067,9 +1545,9 @@ class PHPMailer():
                         # end if
                     # end if
                     return True
-                except phpmailerException as exc:
-                    lastexception = exc
-                    self.edebug(exc.getmessage())
+                except phpmailerException as exc_:
+                    lastexception_ = exc_
+                    self.edebug(exc_.getmessage())
                     #// We must have connected, but then failed TLS or Auth, so close connection nicely
                     self.smtp.quit()
                 # end try
@@ -1078,8 +1556,8 @@ class PHPMailer():
         #// If we get here, all connection attempts have failed, so close connection hard
         self.smtp.close()
         #// As we've caught all exceptions, just report whatever the last one was
-        if self.exceptions and (not is_null(lastexception)):
-            raise lastexception
+        if self.exceptions and (not is_null(lastexception_)):
+            raise lastexception_
         # end if
         return False
     # end def smtpconnect
@@ -1088,6 +1566,7 @@ class PHPMailer():
     #// @return void
     #//
     def smtpclose(self):
+        
         
         if php_is_a(self.smtp, "SMTP"):
             if self.smtp.connected():
@@ -1105,38 +1584,39 @@ class PHPMailer():
     #// @return boolean
     #// @access public
     #//
-    def setlanguage(self, langcode="en", lang_path=""):
+    def setlanguage(self, langcode_="en", lang_path_=""):
+        
         
         #// Backwards compatibility for renamed language codes
-        renamed_langcodes = Array({"br": "pt_br", "cz": "cs", "dk": "da", "no": "nb", "se": "sv", "sr": "rs"})
-        if (php_isset(lambda : renamed_langcodes[langcode])):
-            langcode = renamed_langcodes[langcode]
+        renamed_langcodes_ = Array({"br": "pt_br", "cz": "cs", "dk": "da", "no": "nb", "se": "sv", "sr": "rs"})
+        if (php_isset(lambda : renamed_langcodes_[langcode_])):
+            langcode_ = renamed_langcodes_[langcode_]
         # end if
         #// Define full set of translatable strings in English
-        PHPMAILER_LANG = Array({"authenticate": "SMTP Error: Could not authenticate.", "connect_host": "SMTP Error: Could not connect to SMTP host.", "data_not_accepted": "SMTP Error: data not accepted.", "empty_message": "Message body empty", "encoding": "Unknown encoding: ", "execute": "Could not execute: ", "file_access": "Could not access file: ", "file_open": "File Error: Could not open file: ", "from_failed": "The following From address failed: ", "instantiate": "Could not instantiate mail function.", "invalid_address": "Invalid address: ", "mailer_not_supported": " mailer is not supported.", "provide_address": "You must provide at least one recipient email address.", "recipients_failed": "SMTP Error: The following recipients failed: ", "signing": "Signing Error: ", "smtp_connect_failed": "SMTP connect() failed.", "smtp_error": "SMTP server error: ", "variable_set": "Cannot set or reset variable: ", "extension_missing": "Extension missing: "})
-        if php_empty(lambda : lang_path):
+        PHPMAILER_LANG_ = Array({"authenticate": "SMTP Error: Could not authenticate.", "connect_host": "SMTP Error: Could not connect to SMTP host.", "data_not_accepted": "SMTP Error: data not accepted.", "empty_message": "Message body empty", "encoding": "Unknown encoding: ", "execute": "Could not execute: ", "file_access": "Could not access file: ", "file_open": "File Error: Could not open file: ", "from_failed": "The following From address failed: ", "instantiate": "Could not instantiate mail function.", "invalid_address": "Invalid address: ", "mailer_not_supported": " mailer is not supported.", "provide_address": "You must provide at least one recipient email address.", "recipients_failed": "SMTP Error: The following recipients failed: ", "signing": "Signing Error: ", "smtp_connect_failed": "SMTP connect() failed.", "smtp_error": "SMTP server error: ", "variable_set": "Cannot set or reset variable: ", "extension_missing": "Extension missing: "})
+        if php_empty(lambda : lang_path_):
             #// Calculate an absolute path so it can work if CWD is not here
-            lang_path = php_dirname(__FILE__) + DIRECTORY_SEPARATOR + "language" + DIRECTORY_SEPARATOR
+            lang_path_ = php_dirname(__FILE__) + DIRECTORY_SEPARATOR + "language" + DIRECTORY_SEPARATOR
         # end if
         #// Validate $langcode
-        if (not php_preg_match("/^[a-z]{2}(?:_[a-zA-Z]{2})?$/", langcode)):
-            langcode = "en"
+        if (not php_preg_match("/^[a-z]{2}(?:_[a-zA-Z]{2})?$/", langcode_)):
+            langcode_ = "en"
         # end if
-        foundlang = True
-        lang_file = lang_path + "phpmailer.lang-" + langcode + ".php"
+        foundlang_ = True
+        lang_file_ = lang_path_ + "phpmailer.lang-" + langcode_ + ".php"
         #// There is no English translation file
-        if langcode != "en":
+        if langcode_ != "en":
             #// Make sure language file path is readable
-            if (not self.ispermittedpath(lang_file)) or (not php_is_readable(lang_file)):
-                foundlang = False
+            if (not self.ispermittedpath(lang_file_)) or (not php_is_readable(lang_file_)):
+                foundlang_ = False
             else:
                 #// Overwrite language-specific strings.
                 #// This way we'll never have missing translation keys.
-                foundlang = php_include_file(lang_file, once=False)
+                foundlang_ = php_include_file(lang_file_, once=False)
             # end if
         # end if
-        self.language = PHPMAILER_LANG
-        return php_bool(foundlang)
+        self.language = PHPMAILER_LANG_
+        return php_bool(foundlang_)
         pass
     # end def setlanguage
     #// 
@@ -1144,6 +1624,7 @@ class PHPMailer():
     #// @return array
     #//
     def gettranslations(self):
+        
         
         return self.language
     # end def gettranslations
@@ -1157,13 +1638,14 @@ class PHPMailer():
     #// array(array('joe@example.com', 'Joe User'), array('zoe@example.com', 'Zoe User'))
     #// @return string
     #//
-    def addrappend(self, type=None, addr=None):
+    def addrappend(self, type_=None, addr_=None):
         
-        addresses = Array()
-        for address in addr:
-            addresses[-1] = self.addrformat(address)
+        
+        addresses_ = Array()
+        for address_ in addr_:
+            addresses_[-1] = self.addrformat(address_)
         # end for
-        return type + ": " + php_implode(", ", addresses) + self.LE
+        return type_ + ": " + php_implode(", ", addresses_) + self.LE
     # end def addrappend
     #// 
     #// Format an address for use in a message header.
@@ -1172,13 +1654,14 @@ class PHPMailer():
     #// like array('joe@example.com', 'Joe User')
     #// @return string
     #//
-    def addrformat(self, addr=None):
+    def addrformat(self, addr_=None):
         
-        if php_empty(lambda : addr[1]):
+        
+        if php_empty(lambda : addr_[1]):
             #// No name provided
-            return self.secureheader(addr[0])
+            return self.secureheader(addr_[0])
         else:
-            return self.encodeheader(self.secureheader(addr[1]), "phrase") + " <" + self.secureheader(addr[0]) + ">"
+            return self.encodeheader(self.secureheader(addr_[1]), "phrase") + " <" + self.secureheader(addr_[0]) + ">"
         # end if
     # end def addrformat
     #// 
@@ -1192,93 +1675,96 @@ class PHPMailer():
     #// @access public
     #// @return string
     #//
-    def wraptext(self, message=None, length=None, qp_mode=False):
+    def wraptext(self, message_=None, length_=None, qp_mode_=None):
+        if qp_mode_ is None:
+            qp_mode_ = False
+        # end if
         
-        if qp_mode:
-            soft_break = php_sprintf(" =%s", self.LE)
+        if qp_mode_:
+            soft_break_ = php_sprintf(" =%s", self.LE)
         else:
-            soft_break = self.LE
+            soft_break_ = self.LE
         # end if
         #// If utf-8 encoding is used, we will need to make sure we don't
         #// split multibyte characters when we wrap
-        is_utf8 = php_strtolower(self.CharSet) == "utf-8"
-        lelen = php_strlen(self.LE)
-        crlflen = php_strlen(self.CRLF)
-        message = self.fixeol(message)
+        is_utf8_ = php_strtolower(self.CharSet) == "utf-8"
+        lelen_ = php_strlen(self.LE)
+        crlflen_ = php_strlen(self.CRLF)
+        message_ = self.fixeol(message_)
         #// Remove a trailing line break
-        if php_substr(message, -lelen) == self.LE:
-            message = php_substr(message, 0, -lelen)
+        if php_substr(message_, -lelen_) == self.LE:
+            message_ = php_substr(message_, 0, -lelen_)
         # end if
         #// Split message into lines
-        lines = php_explode(self.LE, message)
+        lines_ = php_explode(self.LE, message_)
         #// Message will be rebuilt in here
-        message = ""
-        for line in lines:
-            words = php_explode(" ", line)
-            buf = ""
-            firstword = True
-            for word in words:
-                if qp_mode and php_strlen(word) > length:
-                    space_left = length - php_strlen(buf) - crlflen
-                    if (not firstword):
-                        if space_left > 20:
-                            len = space_left
-                            if is_utf8:
-                                len = self.utf8charboundary(word, len)
-                            elif php_substr(word, len - 1, 1) == "=":
-                                len -= 1
-                            elif php_substr(word, len - 2, 1) == "=":
-                                len -= 2
+        message_ = ""
+        for line_ in lines_:
+            words_ = php_explode(" ", line_)
+            buf_ = ""
+            firstword_ = True
+            for word_ in words_:
+                if qp_mode_ and php_strlen(word_) > length_:
+                    space_left_ = length_ - php_strlen(buf_) - crlflen_
+                    if (not firstword_):
+                        if space_left_ > 20:
+                            len_ = space_left_
+                            if is_utf8_:
+                                len_ = self.utf8charboundary(word_, len_)
+                            elif php_substr(word_, len_ - 1, 1) == "=":
+                                len_ -= 1
+                            elif php_substr(word_, len_ - 2, 1) == "=":
+                                len_ -= 2
                             # end if
-                            part = php_substr(word, 0, len)
-                            word = php_substr(word, len)
-                            buf += " " + part
-                            message += buf + php_sprintf("=%s", self.CRLF)
+                            part_ = php_substr(word_, 0, len_)
+                            word_ = php_substr(word_, len_)
+                            buf_ += " " + part_
+                            message_ += buf_ + php_sprintf("=%s", self.CRLF)
                         else:
-                            message += buf + soft_break
+                            message_ += buf_ + soft_break_
                         # end if
-                        buf = ""
+                        buf_ = ""
                     # end if
                     while True:
                         
-                        if not (php_strlen(word) > 0):
+                        if not (php_strlen(word_) > 0):
                             break
                         # end if
-                        if length <= 0:
+                        if length_ <= 0:
                             break
                         # end if
-                        len = length
-                        if is_utf8:
-                            len = self.utf8charboundary(word, len)
-                        elif php_substr(word, len - 1, 1) == "=":
-                            len -= 1
-                        elif php_substr(word, len - 2, 1) == "=":
-                            len -= 2
+                        len_ = length_
+                        if is_utf8_:
+                            len_ = self.utf8charboundary(word_, len_)
+                        elif php_substr(word_, len_ - 1, 1) == "=":
+                            len_ -= 1
+                        elif php_substr(word_, len_ - 2, 1) == "=":
+                            len_ -= 2
                         # end if
-                        part = php_substr(word, 0, len)
-                        word = php_substr(word, len)
-                        if php_strlen(word) > 0:
-                            message += part + php_sprintf("=%s", self.CRLF)
+                        part_ = php_substr(word_, 0, len_)
+                        word_ = php_substr(word_, len_)
+                        if php_strlen(word_) > 0:
+                            message_ += part_ + php_sprintf("=%s", self.CRLF)
                         else:
-                            buf = part
+                            buf_ = part_
                         # end if
                     # end while
                 else:
-                    buf_o = buf
-                    if (not firstword):
-                        buf += " "
+                    buf_o_ = buf_
+                    if (not firstword_):
+                        buf_ += " "
                     # end if
-                    buf += word
-                    if php_strlen(buf) > length and buf_o != "":
-                        message += buf_o + soft_break
-                        buf = word
+                    buf_ += word_
+                    if php_strlen(buf_) > length_ and buf_o_ != "":
+                        message_ += buf_o_ + soft_break_
+                        buf_ = word_
                     # end if
                 # end if
-                firstword = False
+                firstword_ = False
             # end for
-            message += buf + self.CRLF
+            message_ += buf_ + self.CRLF
         # end for
-        return message
+        return message_
     # end def wraptext
     #// 
     #// Find the last character boundary prior to $maxLength in a utf-8
@@ -1289,45 +1775,46 @@ class PHPMailer():
     #// @param integer $maxLength Find the last character boundary prior to this length
     #// @return integer
     #//
-    def utf8charboundary(self, encodedText=None, maxLength=None):
+    def utf8charboundary(self, encodedText_=None, maxLength_=None):
         
-        foundSplitPos = False
-        lookBack = 3
+        
+        foundSplitPos_ = False
+        lookBack_ = 3
         while True:
             
-            if not ((not foundSplitPos)):
+            if not ((not foundSplitPos_)):
                 break
             # end if
-            lastChunk = php_substr(encodedText, maxLength - lookBack, lookBack)
-            encodedCharPos = php_strpos(lastChunk, "=")
-            if False != encodedCharPos:
+            lastChunk_ = php_substr(encodedText_, maxLength_ - lookBack_, lookBack_)
+            encodedCharPos_ = php_strpos(lastChunk_, "=")
+            if False != encodedCharPos_:
                 #// Found start of encoded character byte within $lookBack block.
                 #// Check the encoded byte value (the 2 chars after the '=')
-                hex = php_substr(encodedText, maxLength - lookBack + encodedCharPos + 1, 2)
-                dec = hexdec(hex)
-                if dec < 128:
+                hex_ = php_substr(encodedText_, maxLength_ - lookBack_ + encodedCharPos_ + 1, 2)
+                dec_ = hexdec(hex_)
+                if dec_ < 128:
                     #// Single byte character.
                     #// If the encoded char was found at pos 0, it will fit
                     #// otherwise reduce maxLength to start of the encoded char
-                    if encodedCharPos > 0:
-                        maxLength = maxLength - lookBack - encodedCharPos
+                    if encodedCharPos_ > 0:
+                        maxLength_ = maxLength_ - lookBack_ - encodedCharPos_
                     # end if
-                    foundSplitPos = True
-                elif dec >= 192:
+                    foundSplitPos_ = True
+                elif dec_ >= 192:
                     #// First byte of a multi byte character
                     #// Reduce maxLength to split at start of character
-                    maxLength = maxLength - lookBack - encodedCharPos
-                    foundSplitPos = True
-                elif dec < 192:
+                    maxLength_ = maxLength_ - lookBack_ - encodedCharPos_
+                    foundSplitPos_ = True
+                elif dec_ < 192:
                     #// Middle byte of a multi byte character, look further back
-                    lookBack += 3
+                    lookBack_ += 3
                 # end if
             else:
                 #// No encoded character found
-                foundSplitPos = True
+                foundSplitPos_ = True
             # end if
         # end while
-        return maxLength
+        return maxLength_
     # end def utf8charboundary
     #// 
     #// Apply word wrapping to the message body.
@@ -1338,6 +1825,7 @@ class PHPMailer():
     #// @return void
     #//
     def setwordwrap(self):
+        
         
         if self.WordWrap < 1:
             return
@@ -1369,39 +1857,40 @@ class PHPMailer():
     #//
     def createheader(self):
         
-        result = ""
-        result += self.headerline("Date", self.rfcdate() if self.MessageDate == "" else self.MessageDate)
+        
+        result_ = ""
+        result_ += self.headerline("Date", self.rfcdate() if self.MessageDate == "" else self.MessageDate)
         #// To be created automatically by mail()
         if self.SingleTo:
             if self.Mailer != "mail":
-                for toaddr in self.to:
-                    self.SingleToArray[-1] = self.addrformat(toaddr)
+                for toaddr_ in self.to:
+                    self.SingleToArray[-1] = self.addrformat(toaddr_)
                 # end for
             # end if
         else:
             if php_count(self.to) > 0:
                 if self.Mailer != "mail":
-                    result += self.addrappend("To", self.to)
+                    result_ += self.addrappend("To", self.to)
                 # end if
             elif php_count(self.cc) == 0:
-                result += self.headerline("To", "undisclosed-recipients:;")
+                result_ += self.headerline("To", "undisclosed-recipients:;")
             # end if
         # end if
-        result += self.addrappend("From", Array(Array(php_trim(self.From), self.FromName)))
+        result_ += self.addrappend("From", Array(Array(php_trim(self.From), self.FromName)))
         #// sendmail and mail() extract Cc from the header before sending
         if php_count(self.cc) > 0:
-            result += self.addrappend("Cc", self.cc)
+            result_ += self.addrappend("Cc", self.cc)
         # end if
         #// sendmail and mail() extract Bcc from the header before sending
         if self.Mailer == "sendmail" or self.Mailer == "qmail" or self.Mailer == "mail" and php_count(self.bcc) > 0:
-            result += self.addrappend("Bcc", self.bcc)
+            result_ += self.addrappend("Bcc", self.bcc)
         # end if
         if php_count(self.ReplyTo) > 0:
-            result += self.addrappend("Reply-To", self.ReplyTo)
+            result_ += self.addrappend("Reply-To", self.ReplyTo)
         # end if
         #// mail() sets the subject itself
         if self.Mailer != "mail":
-            result += self.headerline("Subject", self.encodeheader(self.secureheader(self.Subject)))
+            result_ += self.headerline("Subject", self.encodeheader(self.secureheader(self.Subject)))
         # end if
         #// Only allow a custom message ID if it conforms to RFC 5322 section 3.6.4
         #// https://tools.ietf.org/html/rfc5322#section-3.6.4
@@ -1410,30 +1899,30 @@ class PHPMailer():
         else:
             self.lastMessageID = php_sprintf("<%s@%s>", self.uniqueid, self.serverhostname())
         # end if
-        result += self.headerline("Message-ID", self.lastMessageID)
+        result_ += self.headerline("Message-ID", self.lastMessageID)
         if (not is_null(self.Priority)):
-            result += self.headerline("X-Priority", self.Priority)
+            result_ += self.headerline("X-Priority", self.Priority)
         # end if
         if self.XMailer == "":
-            result += self.headerline("X-Mailer", "PHPMailer " + self.Version + " (https://github.com/PHPMailer/PHPMailer)")
+            result_ += self.headerline("X-Mailer", "PHPMailer " + self.Version + " (https://github.com/PHPMailer/PHPMailer)")
         else:
-            myXmailer = php_trim(self.XMailer)
-            if myXmailer:
-                result += self.headerline("X-Mailer", myXmailer)
+            myXmailer_ = php_trim(self.XMailer)
+            if myXmailer_:
+                result_ += self.headerline("X-Mailer", myXmailer_)
             # end if
         # end if
         if self.ConfirmReadingTo != "":
-            result += self.headerline("Disposition-Notification-To", "<" + self.ConfirmReadingTo + ">")
+            result_ += self.headerline("Disposition-Notification-To", "<" + self.ConfirmReadingTo + ">")
         # end if
         #// Add custom headers
-        for header in self.CustomHeader:
-            result += self.headerline(php_trim(header[0]), self.encodeheader(php_trim(header[1])))
+        for header_ in self.CustomHeader:
+            result_ += self.headerline(php_trim(header_[0]), self.encodeheader(php_trim(header_[1])))
         # end for
         if (not self.sign_key_file):
-            result += self.headerline("MIME-Version", "1.0")
-            result += self.getmailmime()
+            result_ += self.headerline("MIME-Version", "1.0")
+            result_ += self.getmailmime()
         # end if
-        return result
+        return result_
     # end def createheader
     #// 
     #// Get the message MIME type headers.
@@ -1442,12 +1931,13 @@ class PHPMailer():
     #//
     def getmailmime(self):
         
-        result = ""
-        ismultipart = True
+        
+        result_ = ""
+        ismultipart_ = True
         for case in Switch(self.message_type):
             if case("inline"):
-                result += self.headerline("Content-Type", "multipart/related;")
-                result += self.textline("   boundary=\"" + self.boundary[1] + "\"")
+                result_ += self.headerline("Content-Type", "multipart/related;")
+                result_ += self.textline("  boundary=\"" + self.boundary[1] + "\"")
                 break
             # end if
             if case("attach"):
@@ -1460,41 +1950,41 @@ class PHPMailer():
                 pass
             # end if
             if case("alt_inline_attach"):
-                result += self.headerline("Content-Type", "multipart/mixed;")
-                result += self.textline("   boundary=\"" + self.boundary[1] + "\"")
+                result_ += self.headerline("Content-Type", "multipart/mixed;")
+                result_ += self.textline("  boundary=\"" + self.boundary[1] + "\"")
                 break
             # end if
             if case("alt"):
                 pass
             # end if
             if case("alt_inline"):
-                result += self.headerline("Content-Type", "multipart/alternative;")
-                result += self.textline("   boundary=\"" + self.boundary[1] + "\"")
+                result_ += self.headerline("Content-Type", "multipart/alternative;")
+                result_ += self.textline("  boundary=\"" + self.boundary[1] + "\"")
                 break
             # end if
             if case():
                 #// Catches case 'plain': and case '':
-                result += self.textline("Content-Type: " + self.ContentType + "; charset=" + self.CharSet)
-                ismultipart = False
+                result_ += self.textline("Content-Type: " + self.ContentType + "; charset=" + self.CharSet)
+                ismultipart_ = False
                 break
             # end if
         # end for
         #// RFC1341 part 5 says 7bit is assumed if not specified
         if self.Encoding != "7bit":
             #// RFC 2045 section 6.4 says multipart MIME parts may only use 7bit, 8bit or binary CTE
-            if ismultipart:
+            if ismultipart_:
                 if self.Encoding == "8bit":
-                    result += self.headerline("Content-Transfer-Encoding", "8bit")
+                    result_ += self.headerline("Content-Transfer-Encoding", "8bit")
                 # end if
                 pass
             else:
-                result += self.headerline("Content-Transfer-Encoding", self.Encoding)
+                result_ += self.headerline("Content-Transfer-Encoding", self.Encoding)
             # end if
         # end if
         if self.Mailer != "mail":
-            result += self.LE
+            result_ += self.LE
         # end if
-        return result
+        return result_
     # end def getmailmime
     #// 
     #// Returns the whole MIME message.
@@ -1506,6 +1996,7 @@ class PHPMailer():
     #//
     def getsentmimemessage(self):
         
+        
         return php_rtrim(self.MIMEHeader + self.mailHeader, "\n\r") + self.CRLF + self.CRLF + self.MIMEBody
     # end def getsentmimemessage
     #// 
@@ -1513,6 +2004,7 @@ class PHPMailer():
     #// @return string
     #//
     def generateid(self):
+        
         
         return php_md5(uniqid(time()))
     # end def generateid
@@ -1525,196 +2017,197 @@ class PHPMailer():
     #//
     def createbody(self):
         
-        body = ""
+        
+        body_ = ""
         #// Create unique IDs and preset boundaries
         self.uniqueid = self.generateid()
         self.boundary[1] = "b1_" + self.uniqueid
         self.boundary[2] = "b2_" + self.uniqueid
         self.boundary[3] = "b3_" + self.uniqueid
         if self.sign_key_file:
-            body += self.getmailmime() + self.LE
+            body_ += self.getmailmime() + self.LE
         # end if
         self.setwordwrap()
-        bodyEncoding = self.Encoding
-        bodyCharSet = self.CharSet
+        bodyEncoding_ = self.Encoding
+        bodyCharSet_ = self.CharSet
         #// Can we do a 7-bit downgrade?
-        if bodyEncoding == "8bit" and (not self.has8bitchars(self.Body)):
-            bodyEncoding = "7bit"
+        if bodyEncoding_ == "8bit" and (not self.has8bitchars(self.Body)):
+            bodyEncoding_ = "7bit"
             #// All ISO 8859, Windows codepage and UTF-8 charsets are ascii compatible up to 7-bit
-            bodyCharSet = "us-ascii"
+            bodyCharSet_ = "us-ascii"
         # end if
         #// If lines are too long, and we're not already using an encoding that will shorten them,
         #// change to quoted-printable transfer encoding for the body part only
         if "base64" != self.Encoding and self.haslinelongerthanmax(self.Body):
-            bodyEncoding = "quoted-printable"
+            bodyEncoding_ = "quoted-printable"
         # end if
-        altBodyEncoding = self.Encoding
-        altBodyCharSet = self.CharSet
+        altBodyEncoding_ = self.Encoding
+        altBodyCharSet_ = self.CharSet
         #// Can we do a 7-bit downgrade?
-        if altBodyEncoding == "8bit" and (not self.has8bitchars(self.AltBody)):
-            altBodyEncoding = "7bit"
+        if altBodyEncoding_ == "8bit" and (not self.has8bitchars(self.AltBody)):
+            altBodyEncoding_ = "7bit"
             #// All ISO 8859, Windows codepage and UTF-8 charsets are ascii compatible up to 7-bit
-            altBodyCharSet = "us-ascii"
+            altBodyCharSet_ = "us-ascii"
         # end if
         #// If lines are too long, and we're not already using an encoding that will shorten them,
         #// change to quoted-printable transfer encoding for the alt body part only
-        if "base64" != altBodyEncoding and self.haslinelongerthanmax(self.AltBody):
-            altBodyEncoding = "quoted-printable"
+        if "base64" != altBodyEncoding_ and self.haslinelongerthanmax(self.AltBody):
+            altBodyEncoding_ = "quoted-printable"
         # end if
         #// Use this as a preamble in all multipart message types
-        mimepre = "This is a multi-part message in MIME format." + self.LE + self.LE
+        mimepre_ = "This is a multi-part message in MIME format." + self.LE + self.LE
         for case in Switch(self.message_type):
             if case("inline"):
-                body += mimepre
-                body += self.getboundary(self.boundary[1], bodyCharSet, "", bodyEncoding)
-                body += self.encodestring(self.Body, bodyEncoding)
-                body += self.LE + self.LE
-                body += self.attachall("inline", self.boundary[1])
+                body_ += mimepre_
+                body_ += self.getboundary(self.boundary[1], bodyCharSet_, "", bodyEncoding_)
+                body_ += self.encodestring(self.Body, bodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.attachall("inline", self.boundary[1])
                 break
             # end if
             if case("attach"):
-                body += mimepre
-                body += self.getboundary(self.boundary[1], bodyCharSet, "", bodyEncoding)
-                body += self.encodestring(self.Body, bodyEncoding)
-                body += self.LE + self.LE
-                body += self.attachall("attachment", self.boundary[1])
+                body_ += mimepre_
+                body_ += self.getboundary(self.boundary[1], bodyCharSet_, "", bodyEncoding_)
+                body_ += self.encodestring(self.Body, bodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.attachall("attachment", self.boundary[1])
                 break
             # end if
             if case("inline_attach"):
-                body += mimepre
-                body += self.textline("--" + self.boundary[1])
-                body += self.headerline("Content-Type", "multipart/related;")
-                body += self.textline(" boundary=\"" + self.boundary[2] + "\"")
-                body += self.LE
-                body += self.getboundary(self.boundary[2], bodyCharSet, "", bodyEncoding)
-                body += self.encodestring(self.Body, bodyEncoding)
-                body += self.LE + self.LE
-                body += self.attachall("inline", self.boundary[2])
-                body += self.LE
-                body += self.attachall("attachment", self.boundary[1])
+                body_ += mimepre_
+                body_ += self.textline("--" + self.boundary[1])
+                body_ += self.headerline("Content-Type", "multipart/related;")
+                body_ += self.textline("    boundary=\"" + self.boundary[2] + "\"")
+                body_ += self.LE
+                body_ += self.getboundary(self.boundary[2], bodyCharSet_, "", bodyEncoding_)
+                body_ += self.encodestring(self.Body, bodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.attachall("inline", self.boundary[2])
+                body_ += self.LE
+                body_ += self.attachall("attachment", self.boundary[1])
                 break
             # end if
             if case("alt"):
-                body += mimepre
-                body += self.getboundary(self.boundary[1], altBodyCharSet, "text/plain", altBodyEncoding)
-                body += self.encodestring(self.AltBody, altBodyEncoding)
-                body += self.LE + self.LE
-                body += self.getboundary(self.boundary[1], bodyCharSet, "text/html", bodyEncoding)
-                body += self.encodestring(self.Body, bodyEncoding)
-                body += self.LE + self.LE
+                body_ += mimepre_
+                body_ += self.getboundary(self.boundary[1], altBodyCharSet_, "text/plain", altBodyEncoding_)
+                body_ += self.encodestring(self.AltBody, altBodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.getboundary(self.boundary[1], bodyCharSet_, "text/html", bodyEncoding_)
+                body_ += self.encodestring(self.Body, bodyEncoding_)
+                body_ += self.LE + self.LE
                 if (not php_empty(lambda : self.Ical)):
-                    body += self.getboundary(self.boundary[1], "", "text/calendar; method=REQUEST", "")
-                    body += self.encodestring(self.Ical, self.Encoding)
-                    body += self.LE + self.LE
+                    body_ += self.getboundary(self.boundary[1], "", "text/calendar; method=REQUEST", "")
+                    body_ += self.encodestring(self.Ical, self.Encoding)
+                    body_ += self.LE + self.LE
                 # end if
-                body += self.endboundary(self.boundary[1])
+                body_ += self.endboundary(self.boundary[1])
                 break
             # end if
             if case("alt_inline"):
-                body += mimepre
-                body += self.getboundary(self.boundary[1], altBodyCharSet, "text/plain", altBodyEncoding)
-                body += self.encodestring(self.AltBody, altBodyEncoding)
-                body += self.LE + self.LE
-                body += self.textline("--" + self.boundary[1])
-                body += self.headerline("Content-Type", "multipart/related;")
-                body += self.textline(" boundary=\"" + self.boundary[2] + "\"")
-                body += self.LE
-                body += self.getboundary(self.boundary[2], bodyCharSet, "text/html", bodyEncoding)
-                body += self.encodestring(self.Body, bodyEncoding)
-                body += self.LE + self.LE
-                body += self.attachall("inline", self.boundary[2])
-                body += self.LE
-                body += self.endboundary(self.boundary[1])
+                body_ += mimepre_
+                body_ += self.getboundary(self.boundary[1], altBodyCharSet_, "text/plain", altBodyEncoding_)
+                body_ += self.encodestring(self.AltBody, altBodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.textline("--" + self.boundary[1])
+                body_ += self.headerline("Content-Type", "multipart/related;")
+                body_ += self.textline("    boundary=\"" + self.boundary[2] + "\"")
+                body_ += self.LE
+                body_ += self.getboundary(self.boundary[2], bodyCharSet_, "text/html", bodyEncoding_)
+                body_ += self.encodestring(self.Body, bodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.attachall("inline", self.boundary[2])
+                body_ += self.LE
+                body_ += self.endboundary(self.boundary[1])
                 break
             # end if
             if case("alt_attach"):
-                body += mimepre
-                body += self.textline("--" + self.boundary[1])
-                body += self.headerline("Content-Type", "multipart/alternative;")
-                body += self.textline(" boundary=\"" + self.boundary[2] + "\"")
-                body += self.LE
-                body += self.getboundary(self.boundary[2], altBodyCharSet, "text/plain", altBodyEncoding)
-                body += self.encodestring(self.AltBody, altBodyEncoding)
-                body += self.LE + self.LE
-                body += self.getboundary(self.boundary[2], bodyCharSet, "text/html", bodyEncoding)
-                body += self.encodestring(self.Body, bodyEncoding)
-                body += self.LE + self.LE
-                body += self.endboundary(self.boundary[2])
-                body += self.LE
-                body += self.attachall("attachment", self.boundary[1])
+                body_ += mimepre_
+                body_ += self.textline("--" + self.boundary[1])
+                body_ += self.headerline("Content-Type", "multipart/alternative;")
+                body_ += self.textline("    boundary=\"" + self.boundary[2] + "\"")
+                body_ += self.LE
+                body_ += self.getboundary(self.boundary[2], altBodyCharSet_, "text/plain", altBodyEncoding_)
+                body_ += self.encodestring(self.AltBody, altBodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.getboundary(self.boundary[2], bodyCharSet_, "text/html", bodyEncoding_)
+                body_ += self.encodestring(self.Body, bodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.endboundary(self.boundary[2])
+                body_ += self.LE
+                body_ += self.attachall("attachment", self.boundary[1])
                 break
             # end if
             if case("alt_inline_attach"):
-                body += mimepre
-                body += self.textline("--" + self.boundary[1])
-                body += self.headerline("Content-Type", "multipart/alternative;")
-                body += self.textline(" boundary=\"" + self.boundary[2] + "\"")
-                body += self.LE
-                body += self.getboundary(self.boundary[2], altBodyCharSet, "text/plain", altBodyEncoding)
-                body += self.encodestring(self.AltBody, altBodyEncoding)
-                body += self.LE + self.LE
-                body += self.textline("--" + self.boundary[2])
-                body += self.headerline("Content-Type", "multipart/related;")
-                body += self.textline(" boundary=\"" + self.boundary[3] + "\"")
-                body += self.LE
-                body += self.getboundary(self.boundary[3], bodyCharSet, "text/html", bodyEncoding)
-                body += self.encodestring(self.Body, bodyEncoding)
-                body += self.LE + self.LE
-                body += self.attachall("inline", self.boundary[3])
-                body += self.LE
-                body += self.endboundary(self.boundary[2])
-                body += self.LE
-                body += self.attachall("attachment", self.boundary[1])
+                body_ += mimepre_
+                body_ += self.textline("--" + self.boundary[1])
+                body_ += self.headerline("Content-Type", "multipart/alternative;")
+                body_ += self.textline("    boundary=\"" + self.boundary[2] + "\"")
+                body_ += self.LE
+                body_ += self.getboundary(self.boundary[2], altBodyCharSet_, "text/plain", altBodyEncoding_)
+                body_ += self.encodestring(self.AltBody, altBodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.textline("--" + self.boundary[2])
+                body_ += self.headerline("Content-Type", "multipart/related;")
+                body_ += self.textline("    boundary=\"" + self.boundary[3] + "\"")
+                body_ += self.LE
+                body_ += self.getboundary(self.boundary[3], bodyCharSet_, "text/html", bodyEncoding_)
+                body_ += self.encodestring(self.Body, bodyEncoding_)
+                body_ += self.LE + self.LE
+                body_ += self.attachall("inline", self.boundary[3])
+                body_ += self.LE
+                body_ += self.endboundary(self.boundary[2])
+                body_ += self.LE
+                body_ += self.attachall("attachment", self.boundary[1])
                 break
             # end if
             if case():
                 #// Catch case 'plain' and case '', applies to simple `text/plain` and `text/html` body content types
                 #// Reset the `Encoding` property in case we changed it for line length reasons
-                self.Encoding = bodyEncoding
-                body += self.encodestring(self.Body, self.Encoding)
+                self.Encoding = bodyEncoding_
+                body_ += self.encodestring(self.Body, self.Encoding)
                 break
             # end if
         # end for
         if self.iserror():
-            body = ""
+            body_ = ""
         elif self.sign_key_file:
             try: 
                 if (not php_defined("PKCS7_TEXT")):
                     raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("extension_missing") + "openssl"))
                 # end if
                 #// @TODO would be nice to use php://temp streams here, but need to wrap for PHP < 5.1
-                file = php_tempnam(php_sys_get_temp_dir(), "mail")
-                if False == file_put_contents(file, body):
+                file_ = php_tempnam(php_sys_get_temp_dir(), "mail")
+                if False == file_put_contents(file_, body_):
                     raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("signing") + " Could not write temp file"))
                 # end if
-                signed = php_tempnam(php_sys_get_temp_dir(), "signed")
+                signed_ = php_tempnam(php_sys_get_temp_dir(), "signed")
                 #// Workaround for PHP bug https://bugs.php.net/bug.php?id=69197
                 if php_empty(lambda : self.sign_extracerts_file):
-                    sign = php_no_error(lambda: openssl_pkcs7_sign(file, signed, "file://" + php_realpath(self.sign_cert_file), Array("file://" + php_realpath(self.sign_key_file), self.sign_key_pass), None))
+                    sign_ = php_no_error(lambda: openssl_pkcs7_sign(file_, signed_, "file://" + php_realpath(self.sign_cert_file), Array("file://" + php_realpath(self.sign_key_file), self.sign_key_pass), None))
                 else:
-                    sign = php_no_error(lambda: openssl_pkcs7_sign(file, signed, "file://" + php_realpath(self.sign_cert_file), Array("file://" + php_realpath(self.sign_key_file), self.sign_key_pass), None, PKCS7_DETACHED, self.sign_extracerts_file))
+                    sign_ = php_no_error(lambda: openssl_pkcs7_sign(file_, signed_, "file://" + php_realpath(self.sign_cert_file), Array("file://" + php_realpath(self.sign_key_file), self.sign_key_pass), None, PKCS7_DETACHED, self.sign_extracerts_file))
                 # end if
-                if sign:
-                    php_no_error(lambda: unlink(file))
-                    body = php_file_get_contents(signed)
-                    php_no_error(lambda: unlink(signed))
+                if sign_:
+                    php_no_error(lambda: unlink(file_))
+                    body_ = php_file_get_contents(signed_)
+                    php_no_error(lambda: unlink(signed_))
                     #// The message returned by openssl contains both headers and body, so need to split them up
-                    parts = php_explode("\n\n", body, 2)
-                    self.MIMEHeader += parts[0] + self.LE + self.LE
-                    body = parts[1]
+                    parts_ = php_explode("\n\n", body_, 2)
+                    self.MIMEHeader += parts_[0] + self.LE + self.LE
+                    body_ = parts_[1]
                 else:
-                    php_no_error(lambda: unlink(file))
-                    php_no_error(lambda: unlink(signed))
+                    php_no_error(lambda: unlink(file_))
+                    php_no_error(lambda: unlink(signed_))
                     raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("signing") + openssl_error_string()))
                 # end if
-            except phpmailerException as exc:
-                body = ""
+            except phpmailerException as exc_:
+                body_ = ""
                 if self.exceptions:
-                    raise exc
+                    raise exc_
                 # end if
             # end try
         # end if
-        return body
+        return body_
     # end def createbody
     #// 
     #// Return the start of a message boundary.
@@ -1725,27 +2218,28 @@ class PHPMailer():
     #// @param string $encoding
     #// @return string
     #//
-    def getboundary(self, boundary=None, charSet=None, contentType=None, encoding=None):
+    def getboundary(self, boundary_=None, charSet_=None, contentType_=None, encoding_=None):
         
-        result = ""
-        if charSet == "":
-            charSet = self.CharSet
+        
+        result_ = ""
+        if charSet_ == "":
+            charSet_ = self.CharSet
         # end if
-        if contentType == "":
-            contentType = self.ContentType
+        if contentType_ == "":
+            contentType_ = self.ContentType
         # end if
-        if encoding == "":
-            encoding = self.Encoding
+        if encoding_ == "":
+            encoding_ = self.Encoding
         # end if
-        result += self.textline("--" + boundary)
-        result += php_sprintf("Content-Type: %s; charset=%s", contentType, charSet)
-        result += self.LE
+        result_ += self.textline("--" + boundary_)
+        result_ += php_sprintf("Content-Type: %s; charset=%s", contentType_, charSet_)
+        result_ += self.LE
         #// RFC1341 part 5 says 7bit is assumed if not specified
-        if encoding != "7bit":
-            result += self.headerline("Content-Transfer-Encoding", encoding)
+        if encoding_ != "7bit":
+            result_ += self.headerline("Content-Transfer-Encoding", encoding_)
         # end if
-        result += self.LE
-        return result
+        result_ += self.LE
+        return result_
     # end def getboundary
     #// 
     #// Return the end of a message boundary.
@@ -1753,9 +2247,10 @@ class PHPMailer():
     #// @param string $boundary
     #// @return string
     #//
-    def endboundary(self, boundary=None):
+    def endboundary(self, boundary_=None):
         
-        return self.LE + "--" + boundary + "--" + self.LE
+        
+        return self.LE + "--" + boundary_ + "--" + self.LE
     # end def endboundary
     #// 
     #// Set the message type.
@@ -1765,17 +2260,18 @@ class PHPMailer():
     #//
     def setmessagetype(self):
         
-        type = Array()
+        
+        type_ = Array()
         if self.alternativeexists():
-            type[-1] = "alt"
+            type_[-1] = "alt"
         # end if
         if self.inlineimageexists():
-            type[-1] = "inline"
+            type_[-1] = "inline"
         # end if
         if self.attachmentexists():
-            type[-1] = "attach"
+            type_[-1] = "attach"
         # end if
-        self.message_type = php_implode("_", type)
+        self.message_type = php_implode("_", type_)
         if self.message_type == "":
             #// The 'plain' message_type refers to the message having a single body element, not that it is plain-text
             self.message_type = "plain"
@@ -1788,9 +2284,10 @@ class PHPMailer():
     #// @param string $value
     #// @return string
     #//
-    def headerline(self, name=None, value=None):
+    def headerline(self, name_=None, value_=None):
         
-        return name + ": " + value + self.LE
+        
+        return name_ + ": " + value_ + self.LE
     # end def headerline
     #// 
     #// Return a formatted mail line.
@@ -1798,9 +2295,10 @@ class PHPMailer():
     #// @param string $value
     #// @return string
     #//
-    def textline(self, value=None):
+    def textline(self, value_=None):
         
-        return value + self.LE
+        
+        return value_ + self.LE
     # end def textline
     #// 
     #// Add an attachment from a path on the filesystem.
@@ -1816,26 +2314,27 @@ class PHPMailer():
     #// @throws phpmailerException
     #// @return boolean
     #//
-    def addattachment(self, path=None, name="", encoding="base64", type="", disposition="attachment"):
+    def addattachment(self, path_=None, name_="", encoding_="base64", type_="", disposition_="attachment"):
+        
         
         try: 
-            if (not self.ispermittedpath(path)) or (not php_no_error(lambda: php_is_file(path))):
-                raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("file_access") + path, self.STOP_CONTINUE))
+            if (not self.ispermittedpath(path_)) or (not php_no_error(lambda: php_is_file(path_))):
+                raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("file_access") + path_, self.STOP_CONTINUE))
             # end if
             #// If a MIME type is not specified, try to work it out from the file name
-            if type == "":
-                type = self.filenametotype(path)
+            if type_ == "":
+                type_ = self.filenametotype(path_)
             # end if
-            filename = php_basename(path)
-            if name == "":
-                name = filename
+            filename_ = php_basename(path_)
+            if name_ == "":
+                name_ = filename_
             # end if
-            self.attachment[-1] = Array({0: path, 1: filename, 2: name, 3: encoding, 4: type, 5: False, 6: disposition, 7: 0})
-        except phpmailerException as exc:
-            self.seterror(exc.getmessage())
-            self.edebug(exc.getmessage())
+            self.attachment[-1] = Array({0: path_, 1: filename_, 2: name_, 3: encoding_, 4: type_, 5: False, 6: disposition_, 7: 0})
+        except phpmailerException as exc_:
+            self.seterror(exc_.getmessage())
+            self.edebug(exc_.getmessage())
             if self.exceptions:
-                raise exc
+                raise exc_
             # end if
             return False
         # end try
@@ -1847,6 +2346,7 @@ class PHPMailer():
     #//
     def getattachments(self):
         
+        
         return self.attachment
     # end def getattachments
     #// 
@@ -1857,89 +2357,90 @@ class PHPMailer():
     #// @param string $boundary
     #// @return string
     #//
-    def attachall(self, disposition_type=None, boundary=None):
+    def attachall(self, disposition_type_=None, boundary_=None):
+        
         
         #// Return text of body
-        mime = Array()
-        cidUniq = Array()
-        incl = Array()
+        mime_ = Array()
+        cidUniq_ = Array()
+        incl_ = Array()
         #// Add all attachments
-        for attachment in self.attachment:
+        for attachment_ in self.attachment:
             #// Check if it is a valid disposition_filter
-            if attachment[6] == disposition_type:
+            if attachment_[6] == disposition_type_:
                 #// Check for string attachment
-                string = ""
-                path = ""
-                bString = attachment[5]
-                if bString:
-                    string = attachment[0]
+                string_ = ""
+                path_ = ""
+                bString_ = attachment_[5]
+                if bString_:
+                    string_ = attachment_[0]
                 else:
-                    path = attachment[0]
+                    path_ = attachment_[0]
                 # end if
-                inclhash = php_md5(serialize(attachment))
-                if php_in_array(inclhash, incl):
+                inclhash_ = php_md5(serialize(attachment_))
+                if php_in_array(inclhash_, incl_):
                     continue
                 # end if
-                incl[-1] = inclhash
-                name = attachment[2]
-                encoding = attachment[3]
-                type = attachment[4]
-                disposition = attachment[6]
-                cid = attachment[7]
-                if disposition == "inline" and php_array_key_exists(cid, cidUniq):
+                incl_[-1] = inclhash_
+                name_ = attachment_[2]
+                encoding_ = attachment_[3]
+                type_ = attachment_[4]
+                disposition_ = attachment_[6]
+                cid_ = attachment_[7]
+                if disposition_ == "inline" and php_array_key_exists(cid_, cidUniq_):
                     continue
                 # end if
-                cidUniq[cid] = True
-                mime[-1] = php_sprintf("--%s%s", boundary, self.LE)
+                cidUniq_[cid_] = True
+                mime_[-1] = php_sprintf("--%s%s", boundary_, self.LE)
                 #// Only include a filename property if we have one
-                if (not php_empty(lambda : name)):
-                    mime[-1] = php_sprintf("Content-Type: %s; name=\"%s\"%s", type, self.encodeheader(self.secureheader(name)), self.LE)
+                if (not php_empty(lambda : name_)):
+                    mime_[-1] = php_sprintf("Content-Type: %s; name=\"%s\"%s", type_, self.encodeheader(self.secureheader(name_)), self.LE)
                 else:
-                    mime[-1] = php_sprintf("Content-Type: %s%s", type, self.LE)
+                    mime_[-1] = php_sprintf("Content-Type: %s%s", type_, self.LE)
                 # end if
                 #// RFC1341 part 5 says 7bit is assumed if not specified
-                if encoding != "7bit":
-                    mime[-1] = php_sprintf("Content-Transfer-Encoding: %s%s", encoding, self.LE)
+                if encoding_ != "7bit":
+                    mime_[-1] = php_sprintf("Content-Transfer-Encoding: %s%s", encoding_, self.LE)
                 # end if
-                if disposition == "inline":
-                    mime[-1] = php_sprintf("Content-ID: <%s>%s", cid, self.LE)
+                if disposition_ == "inline":
+                    mime_[-1] = php_sprintf("Content-ID: <%s>%s", cid_, self.LE)
                 # end if
                 #// If a filename contains any of these chars, it should be quoted,
                 #// but not otherwise: RFC2183 & RFC2045 5.1
                 #// Fixes a warning in IETF's msglint MIME checker
                 #// Allow for bypassing the Content-Disposition header totally
-                if (not php_empty(lambda : disposition)):
-                    encoded_name = self.encodeheader(self.secureheader(name))
-                    if php_preg_match("/[ \\(\\)<>@,;:\\\"\\/\\[\\]\\?=]/", encoded_name):
-                        mime[-1] = php_sprintf("Content-Disposition: %s; filename=\"%s\"%s", disposition, encoded_name, self.LE + self.LE)
+                if (not php_empty(lambda : disposition_)):
+                    encoded_name_ = self.encodeheader(self.secureheader(name_))
+                    if php_preg_match("/[ \\(\\)<>@,;:\\\"\\/\\[\\]\\?=]/", encoded_name_):
+                        mime_[-1] = php_sprintf("Content-Disposition: %s; filename=\"%s\"%s", disposition_, encoded_name_, self.LE + self.LE)
                     else:
-                        if (not php_empty(lambda : encoded_name)):
-                            mime[-1] = php_sprintf("Content-Disposition: %s; filename=%s%s", disposition, encoded_name, self.LE + self.LE)
+                        if (not php_empty(lambda : encoded_name_)):
+                            mime_[-1] = php_sprintf("Content-Disposition: %s; filename=%s%s", disposition_, encoded_name_, self.LE + self.LE)
                         else:
-                            mime[-1] = php_sprintf("Content-Disposition: %s%s", disposition, self.LE + self.LE)
+                            mime_[-1] = php_sprintf("Content-Disposition: %s%s", disposition_, self.LE + self.LE)
                         # end if
                     # end if
                 else:
-                    mime[-1] = self.LE
+                    mime_[-1] = self.LE
                 # end if
                 #// Encode as string attachment
-                if bString:
-                    mime[-1] = self.encodestring(string, encoding)
+                if bString_:
+                    mime_[-1] = self.encodestring(string_, encoding_)
                     if self.iserror():
                         return ""
                     # end if
-                    mime[-1] = self.LE + self.LE
+                    mime_[-1] = self.LE + self.LE
                 else:
-                    mime[-1] = self.encodefile(path, encoding)
+                    mime_[-1] = self.encodefile(path_, encoding_)
                     if self.iserror():
                         return ""
                     # end if
-                    mime[-1] = self.LE + self.LE
+                    mime_[-1] = self.LE + self.LE
                 # end if
             # end if
         # end for
-        mime[-1] = php_sprintf("--%s--%s", boundary, self.LE)
-        return php_implode("", mime)
+        mime_[-1] = php_sprintf("--%s--%s", boundary_, self.LE)
+        return php_implode("", mime_)
     # end def attachall
     #// 
     #// Encode a file attachment in requested format.
@@ -1950,15 +2451,16 @@ class PHPMailer():
     #// @access protected
     #// @return string
     #//
-    def encodefile(self, path=None, encoding="base64"):
+    def encodefile(self, path_=None, encoding_="base64"):
+        
         
         try: 
-            if (not self.ispermittedpath(path)) or (not php_file_exists(path)):
-                raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("file_open") + path, self.STOP_CONTINUE))
+            if (not self.ispermittedpath(path_)) or (not php_file_exists(path_)):
+                raise php_new_class("phpmailerException", lambda : phpmailerException(self.lang("file_open") + path_, self.STOP_CONTINUE))
             # end if
-            magic_quotes = PHP_VERSION_ID < 70400 and get_magic_quotes_runtime()
+            magic_quotes_ = PHP_VERSION_ID < 70400 and get_magic_quotes_runtime()
             #// WP: Patched for PHP 7.4.
-            if magic_quotes:
+            if magic_quotes_:
                 if php_version_compare(PHP_VERSION, "5.3.0", "<"):
                     set_magic_quotes_runtime(False)
                 else:
@@ -1968,18 +2470,18 @@ class PHPMailer():
                     php_ini_set("magic_quotes_runtime", False)
                 # end if
             # end if
-            file_buffer = php_file_get_contents(path)
-            file_buffer = self.encodestring(file_buffer, encoding)
-            if magic_quotes:
+            file_buffer_ = php_file_get_contents(path_)
+            file_buffer_ = self.encodestring(file_buffer_, encoding_)
+            if magic_quotes_:
                 if php_version_compare(PHP_VERSION, "5.3.0", "<"):
-                    set_magic_quotes_runtime(magic_quotes)
+                    set_magic_quotes_runtime(magic_quotes_)
                 else:
-                    php_ini_set("magic_quotes_runtime", magic_quotes)
+                    php_ini_set("magic_quotes_runtime", magic_quotes_)
                 # end if
             # end if
-            return file_buffer
-        except Exception as exc:
-            self.seterror(exc.getmessage())
+            return file_buffer_
+        except Exception as exc_:
+            self.seterror(exc_.getmessage())
             return ""
         # end try
     # end def encodefile
@@ -1991,39 +2493,40 @@ class PHPMailer():
     #// @access public
     #// @return string
     #//
-    def encodestring(self, str=None, encoding="base64"):
+    def encodestring(self, str_=None, encoding_="base64"):
         
-        encoded = ""
-        for case in Switch(php_strtolower(encoding)):
+        
+        encoded_ = ""
+        for case in Switch(php_strtolower(encoding_)):
             if case("base64"):
-                encoded = chunk_split(php_base64_encode(str), 76, self.LE)
+                encoded_ = chunk_split(php_base64_encode(str_), 76, self.LE)
                 break
             # end if
             if case("7bit"):
                 pass
             # end if
             if case("8bit"):
-                encoded = self.fixeol(str)
+                encoded_ = self.fixeol(str_)
                 #// Make sure it ends with a line break
-                if php_substr(encoded, -php_strlen(self.LE)) != self.LE:
-                    encoded += self.LE
+                if php_substr(encoded_, -php_strlen(self.LE)) != self.LE:
+                    encoded_ += self.LE
                 # end if
                 break
             # end if
             if case("binary"):
-                encoded = str
+                encoded_ = str_
                 break
             # end if
             if case("quoted-printable"):
-                encoded = self.encodeqp(str)
+                encoded_ = self.encodeqp(str_)
                 break
             # end if
             if case():
-                self.seterror(self.lang("encoding") + encoding)
+                self.seterror(self.lang("encoding") + encoding_)
                 break
             # end if
         # end for
-        return encoded
+        return encoded_
     # end def encodestring
     #// 
     #// Encode a header string optimally.
@@ -2033,61 +2536,62 @@ class PHPMailer():
     #// @param string $position
     #// @return string
     #//
-    def encodeheader(self, str=None, position="text"):
+    def encodeheader(self, str_=None, position_="text"):
         
-        matchcount = 0
-        for case in Switch(php_strtolower(position)):
+        
+        matchcount_ = 0
+        for case in Switch(php_strtolower(position_)):
             if case("phrase"):
-                if (not php_preg_match("/[\\200-\\377]/", str)):
+                if (not php_preg_match("/[\\200-\\377]/", str_)):
                     #// Can't use addslashes as we don't know the value of magic_quotes_sybase
-                    encoded = addcslashes(str, " ..\\\"")
-                    if str == encoded and (not php_preg_match("/[^A-Za-z0-9!#$%&'*+\\/=?^_`{|}~ -]/", str)):
-                        return encoded
+                    encoded_ = addcslashes(str_, " ..\\\"")
+                    if str_ == encoded_ and (not php_preg_match("/[^A-Za-z0-9!#$%&'*+\\/=?^_`{|}~ -]/", str_)):
+                        return encoded_
                     else:
-                        return str("\"") + str(encoded) + str("\"")
+                        return str("\"") + str(encoded_) + str("\"")
                     # end if
                 # end if
-                matchcount = preg_match_all("/[^\\040\\041\\043-\\133\\135-\\176]/", str, matches)
+                matchcount_ = preg_match_all("/[^\\040\\041\\043-\\133\\135-\\176]/", str_, matches_)
                 break
             # end if
             if case("comment"):
-                matchcount = preg_match_all("/[()\"]/", str, matches)
+                matchcount_ = preg_match_all("/[()\"]/", str_, matches_)
             # end if
             if case("text"):
                 pass
             # end if
             if case():
-                matchcount += preg_match_all("/[\\000-\\010\\013\\014\\016-\\037\\177-\\377]/", str, matches)
+                matchcount_ += preg_match_all("/[\\000-\\010\\013\\014\\016-\\037\\177-\\377]/", str_, matches_)
                 break
             # end if
         # end for
         #// There are no chars that need encoding
-        if matchcount == 0:
-            return str
+        if matchcount_ == 0:
+            return str_
         # end if
-        maxlen = 75 - 7 - php_strlen(self.CharSet)
+        maxlen_ = 75 - 7 - php_strlen(self.CharSet)
         #// Try to select the encoding which should produce the shortest output
-        if matchcount > php_strlen(str) / 3:
+        if matchcount_ > php_strlen(str_) / 3:
             #// More than a third of the content will need encoding, so B encoding will be most efficient
-            encoding = "B"
-            if php_function_exists("mb_strlen") and self.hasmultibytes(str):
+            encoding_ = "B"
+            if php_function_exists("mb_strlen") and self.hasmultibytes(str_):
                 #// Use a custom function which correctly encodes and wraps long
                 #// multibyte strings without breaking lines within a character
-                encoded = self.base64encodewrapmb(str, "\n")
+                encoded_ = self.base64encodewrapmb(str_, "\n")
             else:
-                encoded = php_base64_encode(str)
-                maxlen -= maxlen % 4
-                encoded = php_trim(chunk_split(encoded, maxlen, "\n"))
+                encoded_ = php_base64_encode(str_)
+                maxlen_ -= maxlen_ % 4
+                encoded_ = php_trim(chunk_split(encoded_, maxlen_, "\n"))
             # end if
         else:
-            encoding = "Q"
-            encoded = self.encodeq(str, position)
-            encoded = self.wraptext(encoded, maxlen, True)
-            encoded = php_str_replace("=" + self.CRLF, "\n", php_trim(encoded))
+            encoding_ = "Q"
+            encoded_ = self.encodeq(str_, position_)
+            encoded_ = self.wraptext(encoded_, maxlen_, True)
+            encoded_ = php_str_replace("=" + self.CRLF, "\n", php_trim(encoded_))
         # end if
-        encoded = php_preg_replace("/^(.*)$/m", " =?" + self.CharSet + str("?") + str(encoding) + str("?\\1?="), encoded)
-        encoded = php_trim(php_str_replace("\n", self.LE, encoded))
-        return encoded
+        encoded_ = php_preg_replace("/^(.*)$/m", " =?" + self.CharSet + str("?") + str(encoding_) + str("?\\1?="), encoded_)
+        encoded_ = php_trim(php_str_replace("\n", self.LE, encoded_))
+        return encoded_
     # end def encodeheader
     #// 
     #// Check if a string contains multi-byte characters.
@@ -2095,10 +2599,11 @@ class PHPMailer():
     #// @param string $str multi-byte text to wrap encode
     #// @return boolean
     #//
-    def hasmultibytes(self, str=None):
+    def hasmultibytes(self, str_=None):
+        
         
         if php_function_exists("mb_strlen"):
-            return php_strlen(str) > php_mb_strlen(str, self.CharSet)
+            return php_strlen(str_) > php_mb_strlen(str_, self.CharSet)
         else:
             #// Assume no multibytes (we can't handle without mbstring functions anyway)
             return False
@@ -2109,9 +2614,10 @@ class PHPMailer():
     #// @param string $text
     #// @return boolean
     #//
-    def has8bitchars(self, text=None):
+    def has8bitchars(self, text_=None):
         
-        return php_bool(php_preg_match("/[\\x80-\\xFF]/", text))
+        
+        return php_bool(php_preg_match("/[\\x80-\\xFF]/", text_))
     # end def has8bitchars
     #// 
     #// Encode and wrap long multibyte strings for mail headers
@@ -2123,41 +2629,42 @@ class PHPMailer():
     #// @param string $linebreak string to use as linefeed/end-of-line
     #// @return string
     #//
-    def base64encodewrapmb(self, str=None, linebreak=None):
+    def base64encodewrapmb(self, str_=None, linebreak_=None):
         
-        start = "=?" + self.CharSet + "?B?"
+        
+        start_ = "=?" + self.CharSet + "?B?"
         end_ = "?="
-        encoded = ""
-        if linebreak == None:
-            linebreak = self.LE
+        encoded_ = ""
+        if linebreak_ == None:
+            linebreak_ = self.LE
         # end if
-        mb_length = php_mb_strlen(str, self.CharSet)
+        mb_length_ = php_mb_strlen(str_, self.CharSet)
         #// Each line must have length <= 75, including $start and $end
-        length = 75 - php_strlen(start) - php_strlen(end_)
+        length_ = 75 - php_strlen(start_) - php_strlen(end_)
         #// Average multi-byte ratio
-        ratio = mb_length / php_strlen(str)
+        ratio_ = mb_length_ / php_strlen(str_)
         #// Base64 has a 4:3 ratio
-        avgLength = floor(length * ratio * 0.75)
-        i = 0
-        while i < mb_length:
+        avgLength_ = floor(length_ * ratio_ * 0.75)
+        i_ = 0
+        while i_ < mb_length_:
             
-            lookBack = 0
+            lookBack_ = 0
             while True:
-                offset = avgLength - lookBack
-                chunk = php_mb_substr(str, i, offset, self.CharSet)
-                chunk = php_base64_encode(chunk)
-                lookBack += 1
+                offset_ = avgLength_ - lookBack_
+                chunk_ = php_mb_substr(str_, i_, offset_, self.CharSet)
+                chunk_ = php_base64_encode(chunk_)
+                lookBack_ += 1
                 
-                if php_strlen(chunk) > length:
+                if php_strlen(chunk_) > length_:
                     break
                 # end if
             # end while
-            encoded += chunk + linebreak
-            i += offset
+            encoded_ += chunk_ + linebreak_
+            i_ += offset_
         # end while
         #// Chomp the last linefeed
-        encoded = php_substr(encoded, 0, -php_strlen(linebreak))
-        return encoded
+        encoded_ = php_substr(encoded_, 0, -php_strlen(linebreak_))
+        return encoded_
     # end def base64encodewrapmb
     #// 
     #// Encode a string in quoted-printable format.
@@ -2168,15 +2675,16 @@ class PHPMailer():
     #// @return string
     #// @link http://www.php.net/manual/en/function.quoted-printable-decode.php#89417 Adapted from this comment
     #//
-    def encodeqp(self, string=None, line_max=76):
+    def encodeqp(self, string_=None, line_max_=76):
+        
         
         #// Use native function if it's available (>= PHP5.3)
         if php_function_exists("quoted_printable_encode"):
-            return quoted_printable_encode(string)
+            return quoted_printable_encode(string_)
         # end if
         #// Fall back to a pure PHP implementation
-        string = php_str_replace(Array("%20", "%0D%0A.", "%0D%0A", "%"), Array(" ", "\r\n=2E", "\r\n", "="), rawurlencode(string))
-        return php_preg_replace("/[^\\r\\n]{" + line_max - 3 + "}[^=\\r\\n]{2}/", "$0=\r\n", string)
+        string_ = php_str_replace(Array("%20", "%0D%0A.", "%0D%0A", "%"), Array(" ", "\r\n=2E", "\r\n", "="), rawurlencode(string_))
+        return php_preg_replace("/[^\\r\\n]{" + line_max_ - 3 + "}[^=\\r\\n]{2}/", "$0=\r\n", string_)
     # end def encodeqp
     #// 
     #// Backward compatibility wrapper for an old QP encoding function that was removed.
@@ -2188,9 +2696,12 @@ class PHPMailer():
     #// @return string
     #// @deprecated Use encodeQP instead.
     #//
-    def encodeqpphp(self, string=None, line_max=76, space_conv=False):
+    def encodeqpphp(self, string_=None, line_max_=76, space_conv_=None):
+        if space_conv_ is None:
+            space_conv_ = False
+        # end if
         
-        return self.encodeqp(string, line_max)
+        return self.encodeqp(string_, line_max_)
     # end def encodeqpphp
     #// 
     #// Encode a string using Q encoding.
@@ -2200,20 +2711,21 @@ class PHPMailer():
     #// @access public
     #// @return string
     #//
-    def encodeq(self, str=None, position="text"):
+    def encodeq(self, str_=None, position_="text"):
+        
         
         #// There should not be any EOL in the string
-        pattern = ""
-        encoded = php_str_replace(Array("\r", "\n"), "", str)
-        for case in Switch(php_strtolower(position)):
+        pattern_ = ""
+        encoded_ = php_str_replace(Array("\r", "\n"), "", str_)
+        for case in Switch(php_strtolower(position_)):
             if case("phrase"):
                 #// RFC 2047 section 5.3
-                pattern = "^A-Za-z0-9!*+\\/ -"
+                pattern_ = "^A-Za-z0-9!*+\\/ -"
                 break
             # end if
             if case("comment"):
                 #// RFC 2047 section 5.2
-                pattern = "\\(\\)\""
+                pattern_ = "\\(\\)\""
             # end if
             if case("text"):
                 pass
@@ -2221,25 +2733,25 @@ class PHPMailer():
             if case():
                 #// RFC 2047 section 5.1
                 #// Replace every high ascii, control, =, ? and _ characters
-                pattern = "\\000-\\011\\013\\014\\016-\\037\\075\\077\\137\\177-\\377" + pattern
+                pattern_ = "\\000-\\011\\013\\014\\016-\\037\\075\\077\\137\\177-\\377" + pattern_
                 break
             # end if
         # end for
-        matches = Array()
-        if preg_match_all(str("/[") + str(pattern) + str("]/"), encoded, matches):
+        matches_ = Array()
+        if preg_match_all(str("/[") + str(pattern_) + str("]/"), encoded_, matches_):
             #// If the string contains an '=', make sure it's the first thing we replace
             #// so as to avoid double-encoding
-            eqkey = php_array_search("=", matches[0])
-            if False != eqkey:
-                matches[0][eqkey] = None
-                array_unshift(matches[0], "=")
+            eqkey_ = php_array_search("=", matches_[0])
+            if False != eqkey_:
+                matches_[0][eqkey_] = None
+                array_unshift(matches_[0], "=")
             # end if
-            for char in array_unique(matches[0]):
-                encoded = php_str_replace(char, "=" + php_sprintf("%02X", php_ord(char)), encoded)
+            for char_ in array_unique(matches_[0]):
+                encoded_ = php_str_replace(char_, "=" + php_sprintf("%02X", php_ord(char_)), encoded_)
             # end for
         # end if
         #// Replace every spaces to _ (more readable than =20)
-        return php_str_replace(" ", "_", encoded)
+        return php_str_replace(" ", "_", encoded_)
     # end def encodeq
     #// 
     #// Add a string or binary attachment (non-filesystem).
@@ -2252,14 +2764,15 @@ class PHPMailer():
     #// @param string $disposition Disposition to use
     #// @return void
     #//
-    def addstringattachment(self, string=None, filename=None, encoding="base64", type="", disposition="attachment"):
+    def addstringattachment(self, string_=None, filename_=None, encoding_="base64", type_="", disposition_="attachment"):
+        
         
         #// If a MIME type is not specified, try to work it out from the file name
-        if type == "":
-            type = self.filenametotype(filename)
+        if type_ == "":
+            type_ = self.filenametotype(filename_)
         # end if
         #// Append to $attachment array
-        self.attachment[-1] = Array({0: string, 1: filename, 2: php_basename(filename), 3: encoding, 4: type, 5: True, 6: disposition, 7: 0})
+        self.attachment[-1] = Array({0: string_, 1: filename_, 2: php_basename(filename_), 3: encoding_, 4: type_, 5: True, 6: disposition_, 7: 0})
     # end def addstringattachment
     #// 
     #// Add an embedded (inline) attachment from a file.
@@ -2278,22 +2791,23 @@ class PHPMailer():
     #// @param string $disposition Disposition to use
     #// @return boolean True on successfully adding an attachment
     #//
-    def addembeddedimage(self, path=None, cid=None, name="", encoding="base64", type="", disposition="inline"):
+    def addembeddedimage(self, path_=None, cid_=None, name_="", encoding_="base64", type_="", disposition_="inline"):
         
-        if (not self.ispermittedpath(path)) or (not php_no_error(lambda: php_is_file(path))):
-            self.seterror(self.lang("file_access") + path)
+        
+        if (not self.ispermittedpath(path_)) or (not php_no_error(lambda: php_is_file(path_))):
+            self.seterror(self.lang("file_access") + path_)
             return False
         # end if
         #// If a MIME type is not specified, try to work it out from the file name
-        if type == "":
-            type = self.filenametotype(path)
+        if type_ == "":
+            type_ = self.filenametotype(path_)
         # end if
-        filename = php_basename(path)
-        if name == "":
-            name = filename
+        filename_ = php_basename(path_)
+        if name_ == "":
+            name_ = filename_
         # end if
         #// Append to $attachment array
-        self.attachment[-1] = Array({0: path, 1: filename, 2: name, 3: encoding, 4: type, 5: False, 6: disposition, 7: cid})
+        self.attachment[-1] = Array({0: path_, 1: filename_, 2: name_, 3: encoding_, 4: type_, 5: False, 6: disposition_, 7: cid_})
         return True
     # end def addembeddedimage
     #// 
@@ -2310,14 +2824,15 @@ class PHPMailer():
     #// @param string $disposition Disposition to use
     #// @return boolean True on successfully adding an attachment
     #//
-    def addstringembeddedimage(self, string=None, cid=None, name="", encoding="base64", type="", disposition="inline"):
+    def addstringembeddedimage(self, string_=None, cid_=None, name_="", encoding_="base64", type_="", disposition_="inline"):
+        
         
         #// If a MIME type is not specified, try to work it out from the name
-        if type == "" and (not php_empty(lambda : name)):
-            type = self.filenametotype(name)
+        if type_ == "" and (not php_empty(lambda : name_)):
+            type_ = self.filenametotype(name_)
         # end if
         #// Append to $attachment array
-        self.attachment[-1] = Array({0: string, 1: name, 2: name, 3: encoding, 4: type, 5: True, 6: disposition, 7: cid})
+        self.attachment[-1] = Array({0: string_, 1: name_, 2: name_, 3: encoding_, 4: type_, 5: True, 6: disposition_, 7: cid_})
         return True
     # end def addstringembeddedimage
     #// 
@@ -2327,8 +2842,9 @@ class PHPMailer():
     #//
     def inlineimageexists(self):
         
-        for attachment in self.attachment:
-            if attachment[6] == "inline":
+        
+        for attachment_ in self.attachment:
+            if attachment_[6] == "inline":
                 return True
             # end if
         # end for
@@ -2340,8 +2856,9 @@ class PHPMailer():
     #//
     def attachmentexists(self):
         
-        for attachment in self.attachment:
-            if attachment[6] == "attachment":
+        
+        for attachment_ in self.attachment:
+            if attachment_[6] == "attachment":
                 return True
             # end if
         # end for
@@ -2353,6 +2870,7 @@ class PHPMailer():
     #//
     def alternativeexists(self):
         
+        
         return (not php_empty(lambda : self.AltBody))
     # end def alternativeexists
     #// 
@@ -2361,12 +2879,13 @@ class PHPMailer():
     #// @param string $kind 'to', 'cc', or 'bcc'
     #// @return void
     #//
-    def clearqueuedaddresses(self, kind=None):
+    def clearqueuedaddresses(self, kind_=None):
         
-        RecipientsQueue = self.RecipientsQueue
-        for address,params in RecipientsQueue:
-            if params[0] == kind:
-                self.RecipientsQueue[address] = None
+        
+        RecipientsQueue_ = self.RecipientsQueue
+        for address_,params_ in RecipientsQueue_:
+            if params_[0] == kind_:
+                self.RecipientsQueue[address_] = None
             # end if
         # end for
     # end def clearqueuedaddresses
@@ -2376,8 +2895,9 @@ class PHPMailer():
     #//
     def clearaddresses(self):
         
-        for to in self.to:
-            self.all_recipients[php_strtolower(to[0])] = None
+        
+        for to_ in self.to:
+            self.all_recipients[php_strtolower(to_[0])] = None
         # end for
         self.to = Array()
         self.clearqueuedaddresses("to")
@@ -2388,8 +2908,9 @@ class PHPMailer():
     #//
     def clearccs(self):
         
-        for cc in self.cc:
-            self.all_recipients[php_strtolower(cc[0])] = None
+        
+        for cc_ in self.cc:
+            self.all_recipients[php_strtolower(cc_[0])] = None
         # end for
         self.cc = Array()
         self.clearqueuedaddresses("cc")
@@ -2400,8 +2921,9 @@ class PHPMailer():
     #//
     def clearbccs(self):
         
-        for bcc in self.bcc:
-            self.all_recipients[php_strtolower(bcc[0])] = None
+        
+        for bcc_ in self.bcc:
+            self.all_recipients[php_strtolower(bcc_[0])] = None
         # end for
         self.bcc = Array()
         self.clearqueuedaddresses("bcc")
@@ -2412,6 +2934,7 @@ class PHPMailer():
     #//
     def clearreplytos(self):
         
+        
         self.ReplyTo = Array()
         self.ReplyToQueue = Array()
     # end def clearreplytos
@@ -2420,6 +2943,7 @@ class PHPMailer():
     #// @return void
     #//
     def clearallrecipients(self):
+        
         
         self.to = Array()
         self.cc = Array()
@@ -2433,6 +2957,7 @@ class PHPMailer():
     #//
     def clearattachments(self):
         
+        
         self.attachment = Array()
     # end def clearattachments
     #// 
@@ -2440,6 +2965,7 @@ class PHPMailer():
     #// @return void
     #//
     def clearcustomheaders(self):
+        
         
         self.CustomHeader = Array()
     # end def clearcustomheaders
@@ -2449,25 +2975,26 @@ class PHPMailer():
     #// @param string $msg
     #// @return void
     #//
-    def seterror(self, msg=None):
+    def seterror(self, msg_=None):
+        
         
         self.error_count += 1
         if self.Mailer == "smtp" and (not is_null(self.smtp)):
-            lasterror = self.smtp.geterror()
-            if (not php_empty(lambda : lasterror["error"])):
-                msg += self.lang("smtp_error") + lasterror["error"]
-                if (not php_empty(lambda : lasterror["detail"])):
-                    msg += " Detail: " + lasterror["detail"]
+            lasterror_ = self.smtp.geterror()
+            if (not php_empty(lambda : lasterror_["error"])):
+                msg_ += self.lang("smtp_error") + lasterror_["error"]
+                if (not php_empty(lambda : lasterror_["detail"])):
+                    msg_ += " Detail: " + lasterror_["detail"]
                 # end if
-                if (not php_empty(lambda : lasterror["smtp_code"])):
-                    msg += " SMTP code: " + lasterror["smtp_code"]
+                if (not php_empty(lambda : lasterror_["smtp_code"])):
+                    msg_ += " SMTP code: " + lasterror_["smtp_code"]
                 # end if
-                if (not php_empty(lambda : lasterror["smtp_code_ex"])):
-                    msg += " Additional SMTP info: " + lasterror["smtp_code_ex"]
+                if (not php_empty(lambda : lasterror_["smtp_code_ex"])):
+                    msg_ += " Additional SMTP info: " + lasterror_["smtp_code_ex"]
                 # end if
             # end if
         # end if
-        self.ErrorInfo = msg
+        self.ErrorInfo = msg_
     # end def seterror
     #// 
     #// Return an RFC 822 formatted date.
@@ -2477,6 +3004,7 @@ class PHPMailer():
     #//
     @classmethod
     def rfcdate(self):
+        
         
         #// Set the time zone to whatever the default is to avoid 500 errors
         #// Will default to UTC if it's not set properly in php.ini
@@ -2491,17 +3019,18 @@ class PHPMailer():
     #//
     def serverhostname(self):
         
-        result = "localhost.localdomain"
+        
+        result_ = "localhost.localdomain"
         if (not php_empty(lambda : self.Hostname)):
-            result = self.Hostname
+            result_ = self.Hostname
         elif (php_isset(lambda : PHP_SERVER)) and php_array_key_exists("SERVER_NAME", PHP_SERVER) and (not php_empty(lambda : PHP_SERVER["SERVER_NAME"])):
-            result = PHP_SERVER["SERVER_NAME"]
+            result_ = PHP_SERVER["SERVER_NAME"]
         elif php_function_exists("gethostname") and gethostname() != False:
-            result = gethostname()
+            result_ = gethostname()
         elif php_uname("n") != False:
-            result = php_uname("n")
+            result_ = php_uname("n")
         # end if
-        return result
+        return result_
     # end def serverhostname
     #// 
     #// Get an error message in the current language.
@@ -2509,23 +3038,24 @@ class PHPMailer():
     #// @param string $key
     #// @return string
     #//
-    def lang(self, key=None):
+    def lang(self, key_=None):
+        
         
         if php_count(self.language) < 1:
             self.setlanguage("en")
             pass
         # end if
-        if php_array_key_exists(key, self.language):
-            if key == "smtp_connect_failed":
+        if php_array_key_exists(key_, self.language):
+            if key_ == "smtp_connect_failed":
                 #// Include a link to troubleshooting docs on SMTP connection failure
                 #// this is by far the biggest cause of support questions
                 #// but it's usually not PHPMailer's fault.
-                return self.language[key] + " https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting"
+                return self.language[key_] + " https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting"
             # end if
-            return self.language[key]
+            return self.language[key_]
         else:
             #// Return the key as a fallback
-            return key
+            return key_
         # end if
     # end def lang
     #// 
@@ -2534,6 +3064,7 @@ class PHPMailer():
     #// @return boolean True if an error did occur.
     #//
     def iserror(self):
+        
         
         return self.error_count > 0
     # end def iserror
@@ -2544,15 +3075,16 @@ class PHPMailer():
     #// @param string $str String to fixEOL
     #// @return string
     #//
-    def fixeol(self, str=None):
+    def fixeol(self, str_=None):
+        
         
         #// Normalise to \n
-        nstr = php_str_replace(Array("\r\n", "\r"), "\n", str)
+        nstr_ = php_str_replace(Array("\r\n", "\r"), "\n", str_)
         #// Now convert LE as needed
         if self.LE != "\n":
-            nstr = php_str_replace("\n", self.LE, nstr)
+            nstr_ = php_str_replace("\n", self.LE, nstr_)
         # end if
-        return nstr
+        return nstr_
     # end def fixeol
     #// 
     #// Add a custom header.
@@ -2563,13 +3095,14 @@ class PHPMailer():
     #// @param string $value Header value
     #// @return void
     #//
-    def addcustomheader(self, name=None, value=None):
+    def addcustomheader(self, name_=None, value_=None):
         
-        if value == None:
+        
+        if value_ == None:
             #// Value passed in as name:value
-            self.CustomHeader[-1] = php_explode(":", name, 2)
+            self.CustomHeader[-1] = php_explode(":", name_, 2)
         else:
-            self.CustomHeader[-1] = Array(name, value)
+            self.CustomHeader[-1] = Array(name_, value_)
         # end if
     # end def addcustomheader
     #// 
@@ -2577,6 +3110,7 @@ class PHPMailer():
     #// @return array
     #//
     def getcustomheaders(self):
+        
         
         return self.CustomHeader
     # end def getcustomheaders
@@ -2596,51 +3130,54 @@ class PHPMailer():
     #// or your own custom converter @see PHPMailer::html2text()
     #// @return string $message The transformed message Body
     #//
-    def msghtml(self, message=None, basedir="", advanced=False):
+    def msghtml(self, message_=None, basedir_="", advanced_=None):
+        if advanced_ is None:
+            advanced_ = False
+        # end if
         
-        preg_match_all("/(src|background)=[\"'](.*)[\"']/Ui", message, images)
-        if php_array_key_exists(2, images):
-            if php_strlen(basedir) > 1 and php_substr(basedir, -1) != "/":
+        preg_match_all("/(src|background)=[\"'](.*)[\"']/Ui", message_, images_)
+        if php_array_key_exists(2, images_):
+            if php_strlen(basedir_) > 1 and php_substr(basedir_, -1) != "/":
                 #// Ensure $basedir has a trailing
-                basedir += "/"
+                basedir_ += "/"
             # end if
-            for imgindex,url in images[2]:
+            for imgindex_,url_ in images_[2]:
                 #// Convert data URIs into embedded images
-                if php_preg_match("#^data:(image[^;,]*)(;base64)?,#", url, match):
-                    data = php_substr(url, php_strpos(url, ","))
-                    if match[2]:
-                        data = php_base64_decode(data)
+                if php_preg_match("#^data:(image[^;,]*)(;base64)?,#", url_, match_):
+                    data_ = php_substr(url_, php_strpos(url_, ","))
+                    if match_[2]:
+                        data_ = php_base64_decode(data_)
                     else:
-                        data = rawurldecode(data)
+                        data_ = rawurldecode(data_)
                     # end if
-                    cid = php_md5(url) + "@phpmailer.0"
+                    cid_ = php_md5(url_) + "@phpmailer.0"
                     #// RFC2392 S 2
-                    if self.addstringembeddedimage(data, cid, "embed" + imgindex, "base64", match[1]):
-                        message = php_str_replace(images[0][imgindex], images[1][imgindex] + "=\"cid:" + cid + "\"", message)
+                    if self.addstringembeddedimage(data_, cid_, "embed" + imgindex_, "base64", match_[1]):
+                        message_ = php_str_replace(images_[0][imgindex_], images_[1][imgindex_] + "=\"cid:" + cid_ + "\"", message_)
                     # end if
                     continue
                 # end if
-                if (not php_empty(lambda : basedir)) and php_strpos(url, "..") == False and php_substr(url, 0, 4) != "cid:" and (not php_preg_match("#^[a-z][a-z0-9+.-]*:?//#i", url)):
-                    filename = php_basename(url)
-                    directory = php_dirname(url)
-                    if directory == ".":
-                        directory = ""
+                if (not php_empty(lambda : basedir_)) and php_strpos(url_, "..") == False and php_substr(url_, 0, 4) != "cid:" and (not php_preg_match("#^[a-z][a-z0-9+.-]*:?//#i", url_)):
+                    filename_ = php_basename(url_)
+                    directory_ = php_dirname(url_)
+                    if directory_ == ".":
+                        directory_ = ""
                     # end if
-                    cid = php_md5(url) + "@phpmailer.0"
+                    cid_ = php_md5(url_) + "@phpmailer.0"
                     #// RFC2392 S 2
-                    if php_strlen(directory) > 1 and php_substr(directory, -1) != "/":
-                        directory += "/"
+                    if php_strlen(directory_) > 1 and php_substr(directory_, -1) != "/":
+                        directory_ += "/"
                     # end if
-                    if self.addembeddedimage(basedir + directory + filename, cid, filename, "base64", self._mime_types(php_str(self.mb_pathinfo(filename, PATHINFO_EXTENSION)))):
-                        message = php_preg_replace("/" + images[1][imgindex] + "=[\"']" + preg_quote(url, "/") + "[\"']/Ui", images[1][imgindex] + "=\"cid:" + cid + "\"", message)
+                    if self.addembeddedimage(basedir_ + directory_ + filename_, cid_, filename_, "base64", self._mime_types(php_str(self.mb_pathinfo(filename_, PATHINFO_EXTENSION)))):
+                        message_ = php_preg_replace("/" + images_[1][imgindex_] + "=[\"']" + preg_quote(url_, "/") + "[\"']/Ui", images_[1][imgindex_] + "=\"cid:" + cid_ + "\"", message_)
                     # end if
                 # end if
             # end for
         # end if
         self.ishtml(True)
         #// Convert all message body line breaks to CRLF, makes quoted-printable encoding work much better
-        self.Body = self.normalizebreaks(message)
-        self.AltBody = self.normalizebreaks(self.html2text(message, advanced))
+        self.Body = self.normalizebreaks(message_)
+        self.AltBody = self.normalizebreaks(self.html2text(message_, advanced_))
         if (not self.alternativeexists()):
             self.AltBody = "To view this email message, open it in a program that understands HTML!" + self.CRLF + self.CRLF
         # end if
@@ -2666,12 +3203,15 @@ class PHPMailer():
     #// or provide your own callable for custom conversion.
     #// @return string
     #//
-    def html2text(self, html=None, advanced=False):
-        
-        if php_is_callable(advanced):
-            return php_call_user_func(advanced, html)
+    def html2text(self, html_=None, advanced_=None):
+        if advanced_ is None:
+            advanced_ = False
         # end if
-        return html_entity_decode(php_trim(strip_tags(php_preg_replace("/<(head|title|style|script)[^>]*>.*?<\\/\\1>/si", "", html))), ENT_QUOTES, self.CharSet)
+        
+        if php_is_callable(advanced_):
+            return php_call_user_func(advanced_, html_)
+        # end if
+        return html_entity_decode(php_trim(strip_tags(php_preg_replace("/<(head|title|style|script)[^>]*>.*?<\\/\\1>/si", "", html_))), ENT_QUOTES, self.CharSet)
     # end def html2text
     #// 
     #// Get the MIME type for a file extension.
@@ -2681,11 +3221,12 @@ class PHPMailer():
     #// @static
     #//
     @classmethod
-    def _mime_types(self, ext=""):
+    def _mime_types(self, ext_=""):
         
-        mimes = Array({"xl": "application/excel", "js": "application/javascript", "hqx": "application/mac-binhex40", "cpt": "application/mac-compactpro", "bin": "application/macbinary", "doc": "application/msword", "word": "application/msword", "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "xltx": "application/vnd.openxmlformats-officedocument.spreadsheetml.template", "potx": "application/vnd.openxmlformats-officedocument.presentationml.template", "ppsx": "application/vnd.openxmlformats-officedocument.presentationml.slideshow", "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation", "sldx": "application/vnd.openxmlformats-officedocument.presentationml.slide", "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "dotx": "application/vnd.openxmlformats-officedocument.wordprocessingml.template", "xlam": "application/vnd.ms-excel.addin.macroEnabled.12", "xlsb": "application/vnd.ms-excel.sheet.binary.macroEnabled.12", "class": "application/octet-stream", "dll": "application/octet-stream", "dms": "application/octet-stream", "exe": "application/octet-stream", "lha": "application/octet-stream", "lzh": "application/octet-stream", "psd": "application/octet-stream", "sea": "application/octet-stream", "so": "application/octet-stream", "oda": "application/oda", "pdf": "application/pdf", "ai": "application/postscript", "eps": "application/postscript", "ps": "application/postscript", "smi": "application/smil", "smil": "application/smil", "mif": "application/vnd.mif", "xls": "application/vnd.ms-excel", "ppt": "application/vnd.ms-powerpoint", "wbxml": "application/vnd.wap.wbxml", "wmlc": "application/vnd.wap.wmlc", "dcr": "application/x-director", "dir": "application/x-director", "dxr": "application/x-director", "dvi": "application/x-dvi", "gtar": "application/x-gtar", "php3": "application/x-httpd-php", "php4": "application/x-httpd-php", "php": "application/x-httpd-php", "phtml": "application/x-httpd-php", "phps": "application/x-httpd-php-source", "swf": "application/x-shockwave-flash", "sit": "application/x-stuffit", "tar": "application/x-tar", "tgz": "application/x-tar", "xht": "application/xhtml+xml", "xhtml": "application/xhtml+xml", "zip": "application/zip", "mid": "audio/midi", "midi": "audio/midi", "mp2": "audio/mpeg", "mp3": "audio/mpeg", "mpga": "audio/mpeg", "aif": "audio/x-aiff", "aifc": "audio/x-aiff", "aiff": "audio/x-aiff", "ram": "audio/x-pn-realaudio", "rm": "audio/x-pn-realaudio", "rpm": "audio/x-pn-realaudio-plugin", "ra": "audio/x-realaudio", "wav": "audio/x-wav", "bmp": "image/bmp", "gif": "image/gif", "jpeg": "image/jpeg", "jpe": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "tiff": "image/tiff", "tif": "image/tiff", "eml": "message/rfc822", "css": "text/css", "html": "text/html", "htm": "text/html", "shtml": "text/html", "log": "text/plain", "text": "text/plain", "txt": "text/plain", "rtx": "text/richtext", "rtf": "text/rtf", "vcf": "text/vcard", "vcard": "text/vcard", "xml": "text/xml", "xsl": "text/xml", "mpeg": "video/mpeg", "mpe": "video/mpeg", "mpg": "video/mpeg", "mov": "video/quicktime", "qt": "video/quicktime", "rv": "video/vnd.rn-realvideo", "avi": "video/x-msvideo", "movie": "video/x-sgi-movie"})
-        if php_array_key_exists(php_strtolower(ext), mimes):
-            return mimes[php_strtolower(ext)]
+        
+        mimes_ = Array({"xl": "application/excel", "js": "application/javascript", "hqx": "application/mac-binhex40", "cpt": "application/mac-compactpro", "bin": "application/macbinary", "doc": "application/msword", "word": "application/msword", "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "xltx": "application/vnd.openxmlformats-officedocument.spreadsheetml.template", "potx": "application/vnd.openxmlformats-officedocument.presentationml.template", "ppsx": "application/vnd.openxmlformats-officedocument.presentationml.slideshow", "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation", "sldx": "application/vnd.openxmlformats-officedocument.presentationml.slide", "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "dotx": "application/vnd.openxmlformats-officedocument.wordprocessingml.template", "xlam": "application/vnd.ms-excel.addin.macroEnabled.12", "xlsb": "application/vnd.ms-excel.sheet.binary.macroEnabled.12", "class": "application/octet-stream", "dll": "application/octet-stream", "dms": "application/octet-stream", "exe": "application/octet-stream", "lha": "application/octet-stream", "lzh": "application/octet-stream", "psd": "application/octet-stream", "sea": "application/octet-stream", "so": "application/octet-stream", "oda": "application/oda", "pdf": "application/pdf", "ai": "application/postscript", "eps": "application/postscript", "ps": "application/postscript", "smi": "application/smil", "smil": "application/smil", "mif": "application/vnd.mif", "xls": "application/vnd.ms-excel", "ppt": "application/vnd.ms-powerpoint", "wbxml": "application/vnd.wap.wbxml", "wmlc": "application/vnd.wap.wmlc", "dcr": "application/x-director", "dir": "application/x-director", "dxr": "application/x-director", "dvi": "application/x-dvi", "gtar": "application/x-gtar", "php3": "application/x-httpd-php", "php4": "application/x-httpd-php", "php": "application/x-httpd-php", "phtml": "application/x-httpd-php", "phps": "application/x-httpd-php-source", "swf": "application/x-shockwave-flash", "sit": "application/x-stuffit", "tar": "application/x-tar", "tgz": "application/x-tar", "xht": "application/xhtml+xml", "xhtml": "application/xhtml+xml", "zip": "application/zip", "mid": "audio/midi", "midi": "audio/midi", "mp2": "audio/mpeg", "mp3": "audio/mpeg", "mpga": "audio/mpeg", "aif": "audio/x-aiff", "aifc": "audio/x-aiff", "aiff": "audio/x-aiff", "ram": "audio/x-pn-realaudio", "rm": "audio/x-pn-realaudio", "rpm": "audio/x-pn-realaudio-plugin", "ra": "audio/x-realaudio", "wav": "audio/x-wav", "bmp": "image/bmp", "gif": "image/gif", "jpeg": "image/jpeg", "jpe": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "tiff": "image/tiff", "tif": "image/tiff", "eml": "message/rfc822", "css": "text/css", "html": "text/html", "htm": "text/html", "shtml": "text/html", "log": "text/plain", "text": "text/plain", "txt": "text/plain", "rtx": "text/richtext", "rtf": "text/rtf", "vcf": "text/vcard", "vcard": "text/vcard", "xml": "text/xml", "xsl": "text/xml", "mpeg": "video/mpeg", "mpe": "video/mpeg", "mpg": "video/mpeg", "mov": "video/quicktime", "qt": "video/quicktime", "rv": "video/vnd.rn-realvideo", "avi": "video/x-msvideo", "movie": "video/x-sgi-movie"})
+        if php_array_key_exists(php_strtolower(ext_), mimes_):
+            return mimes_[php_strtolower(ext_)]
         # end if
         return "application/octet-stream"
     # end def _mime_types
@@ -2697,15 +3238,16 @@ class PHPMailer():
     #// @static
     #//
     @classmethod
-    def filenametotype(self, filename=None):
+    def filenametotype(self, filename_=None):
+        
         
         #// In case the path is a URL, strip any query string before getting extension
-        qpos = php_strpos(filename, "?")
-        if False != qpos:
-            filename = php_substr(filename, 0, qpos)
+        qpos_ = php_strpos(filename_, "?")
+        if False != qpos_:
+            filename_ = php_substr(filename_, 0, qpos_)
         # end if
-        pathinfo = self.mb_pathinfo(filename)
-        return self._mime_types(pathinfo["extension"])
+        pathinfo_ = self.mb_pathinfo(filename_)
+        return self._mime_types(pathinfo_["extension"])
     # end def filenametotype
     #// 
     #// Multi-byte-safe pathinfo replacement.
@@ -2719,51 +3261,52 @@ class PHPMailer():
     #// @static
     #//
     @classmethod
-    def mb_pathinfo(self, path=None, options=None):
+    def mb_pathinfo(self, path_=None, options_=None):
         
-        ret = Array({"dirname": "", "basename": "", "extension": "", "filename": ""})
-        pathinfo = Array()
-        if php_preg_match("%^(.*?)[\\\\/]*(([^/\\\\]*?)(\\.([^\\.\\\\/]+?)|))[\\\\/\\.]*$%im", path, pathinfo):
-            if php_array_key_exists(1, pathinfo):
-                ret["dirname"] = pathinfo[1]
+        
+        ret_ = Array({"dirname": "", "basename": "", "extension": "", "filename": ""})
+        pathinfo_ = Array()
+        if php_preg_match("%^(.*?)[\\\\/]*(([^/\\\\]*?)(\\.([^\\.\\\\/]+?)|))[\\\\/\\.]*$%im", path_, pathinfo_):
+            if php_array_key_exists(1, pathinfo_):
+                ret_["dirname"] = pathinfo_[1]
             # end if
-            if php_array_key_exists(2, pathinfo):
-                ret["basename"] = pathinfo[2]
+            if php_array_key_exists(2, pathinfo_):
+                ret_["basename"] = pathinfo_[2]
             # end if
-            if php_array_key_exists(5, pathinfo):
-                ret["extension"] = pathinfo[5]
+            if php_array_key_exists(5, pathinfo_):
+                ret_["extension"] = pathinfo_[5]
             # end if
-            if php_array_key_exists(3, pathinfo):
-                ret["filename"] = pathinfo[3]
+            if php_array_key_exists(3, pathinfo_):
+                ret_["filename"] = pathinfo_[3]
             # end if
         # end if
-        for case in Switch(options):
+        for case in Switch(options_):
             if case(PATHINFO_DIRNAME):
                 pass
             # end if
             if case("dirname"):
-                return ret["dirname"]
+                return ret_["dirname"]
             # end if
             if case(PATHINFO_BASENAME):
                 pass
             # end if
             if case("basename"):
-                return ret["basename"]
+                return ret_["basename"]
             # end if
             if case(PATHINFO_EXTENSION):
                 pass
             # end if
             if case("extension"):
-                return ret["extension"]
+                return ret_["extension"]
             # end if
             if case(PATHINFO_FILENAME):
                 pass
             # end if
             if case("filename"):
-                return ret["filename"]
+                return ret_["filename"]
             # end if
             if case():
-                return ret
+                return ret_
             # end if
         # end for
     # end def mb_pathinfo
@@ -2781,13 +3324,14 @@ class PHPMailer():
     #// @return boolean
     #// @TODO Should this not be using the __set() magic function?
     #//
-    def set(self, name=None, value=""):
+    def set(self, name_=None, value_=""):
         
-        if property_exists(self, name):
-            self.name = value
+        
+        if property_exists(self, name_):
+            self.name_ = value_
             return True
         else:
-            self.seterror(self.lang("variable_set") + name)
+            self.seterror(self.lang("variable_set") + name_)
             return False
         # end if
     # end def set
@@ -2797,9 +3341,10 @@ class PHPMailer():
     #// @param string $str
     #// @return string
     #//
-    def secureheader(self, str=None):
+    def secureheader(self, str_=None):
         
-        return php_trim(php_str_replace(Array("\r", "\n"), "", str))
+        
+        return php_trim(php_str_replace(Array("\r", "\n"), "", str_))
     # end def secureheader
     #// 
     #// Normalize line breaks in a string.
@@ -2812,9 +3357,10 @@ class PHPMailer():
     #// @static
     #//
     @classmethod
-    def normalizebreaks(self, text=None, breaktype="\r\n"):
+    def normalizebreaks(self, text_=None, breaktype_="\r\n"):
         
-        return php_preg_replace("/(\\r\\n|\\r|\\n)/ms", breaktype, text)
+        
+        return php_preg_replace("/(\\r\\n|\\r|\\n)/ms", breaktype_, text_)
     # end def normalizebreaks
     #// 
     #// Set the public and private key files and password for S/MIME signing.
@@ -2824,12 +3370,13 @@ class PHPMailer():
     #// @param string $key_pass Password for private key
     #// @param string $extracerts_filename Optional path to chain certificate
     #//
-    def sign(self, cert_filename=None, key_filename=None, key_pass=None, extracerts_filename=""):
+    def sign(self, cert_filename_=None, key_filename_=None, key_pass_=None, extracerts_filename_=""):
         
-        self.sign_cert_file = cert_filename
-        self.sign_key_file = key_filename
-        self.sign_key_pass = key_pass
-        self.sign_extracerts_file = extracerts_filename
+        
+        self.sign_cert_file = cert_filename_
+        self.sign_key_file = key_filename_
+        self.sign_key_pass = key_pass_
+        self.sign_extracerts_file = extracerts_filename_
     # end def sign
     #// 
     #// Quoted-Printable-encode a DKIM header.
@@ -2837,21 +3384,22 @@ class PHPMailer():
     #// @param string $txt
     #// @return string
     #//
-    def dkim_qp(self, txt=None):
+    def dkim_qp(self, txt_=None):
         
-        line = ""
-        i = 0
-        while i < php_strlen(txt):
+        
+        line_ = ""
+        i_ = 0
+        while i_ < php_strlen(txt_):
             
-            ord = php_ord(txt[i])
-            if 33 <= ord and ord <= 58 or ord == 60 or 62 <= ord and ord <= 126:
-                line += txt[i]
+            ord_ = php_ord(txt_[i_])
+            if 33 <= ord_ and ord_ <= 58 or ord_ == 60 or 62 <= ord_ and ord_ <= 126:
+                line_ += txt_[i_]
             else:
-                line += "=" + php_sprintf("%02X", ord)
+                line_ += "=" + php_sprintf("%02X", ord_)
             # end if
-            i += 1
+            i_ += 1
         # end while
-        return line
+        return line_
     # end def dkim_qp
     #// 
     #// Generate a DKIM signature.
@@ -2860,7 +3408,8 @@ class PHPMailer():
     #// @throws phpmailerException
     #// @return string The DKIM signature value
     #//
-    def dkim_sign(self, signHeader=None):
+    def dkim_sign(self, signHeader_=None):
+        
         
         if (not php_defined("PKCS7_TEXT")):
             if self.exceptions:
@@ -2868,33 +3417,33 @@ class PHPMailer():
             # end if
             return ""
         # end if
-        privKeyStr = self.DKIM_private_string if (not php_empty(lambda : self.DKIM_private_string)) else php_file_get_contents(self.DKIM_private)
+        privKeyStr_ = self.DKIM_private_string if (not php_empty(lambda : self.DKIM_private_string)) else php_file_get_contents(self.DKIM_private)
         if "" != self.DKIM_passphrase:
-            privKey = openssl_pkey_get_private(privKeyStr, self.DKIM_passphrase)
+            privKey_ = openssl_pkey_get_private(privKeyStr_, self.DKIM_passphrase)
         else:
-            privKey = openssl_pkey_get_private(privKeyStr)
+            privKey_ = openssl_pkey_get_private(privKeyStr_)
         # end if
         #// Workaround for missing digest algorithms in old PHP & OpenSSL versions
         #// @link http://stackoverflow.com/a/11117338/333340
         if php_version_compare(PHP_VERSION, "5.3.0") >= 0 and php_in_array("sha256WithRSAEncryption", openssl_get_md_methods(True)):
-            if openssl_sign(signHeader, signature, privKey, "sha256WithRSAEncryption"):
-                openssl_pkey_free(privKey)
-                return php_base64_encode(signature)
+            if openssl_sign(signHeader_, signature_, privKey_, "sha256WithRSAEncryption"):
+                openssl_pkey_free(privKey_)
+                return php_base64_encode(signature_)
             # end if
         else:
-            pinfo = openssl_pkey_get_details(privKey)
-            hash = hash("sha256", signHeader)
+            pinfo_ = openssl_pkey_get_details(privKey_)
+            hash_ = hash("sha256", signHeader_)
             #// 'Magic' constant for SHA256 from RFC3447
             #// @link https://tools.ietf.org/html/rfc3447#page-43
-            t = "3031300d060960864801650304020105000420" + hash
-            pslen = pinfo["bits"] / 8 - php_strlen(t) / 2 + 3
-            eb = pack("H*", "0001" + php_str_repeat("FF", pslen) + "00" + t)
-            if openssl_private_encrypt(eb, signature, privKey, OPENSSL_NO_PADDING):
-                openssl_pkey_free(privKey)
-                return php_base64_encode(signature)
+            t_ = "3031300d060960864801650304020105000420" + hash_
+            pslen_ = pinfo_["bits"] / 8 - php_strlen(t_) / 2 + 3
+            eb_ = pack("H*", "0001" + php_str_repeat("FF", pslen_) + "00" + t_)
+            if openssl_private_encrypt(eb_, signature_, privKey_, OPENSSL_NO_PADDING):
+                openssl_pkey_free(privKey_)
+                return php_base64_encode(signature_)
             # end if
         # end if
-        openssl_pkey_free(privKey)
+        openssl_pkey_free(privKey_)
         return ""
     # end def dkim_sign
     #// 
@@ -2903,20 +3452,21 @@ class PHPMailer():
     #// @param string $signHeader Header
     #// @return string
     #//
-    def dkim_headerc(self, signHeader=None):
+    def dkim_headerc(self, signHeader_=None):
         
-        signHeader = php_preg_replace("/\\r\\n\\s+/", " ", signHeader)
-        lines = php_explode("\r\n", signHeader)
-        for key,line in lines:
-            heading, value = php_explode(":", line, 2)
-            heading = php_strtolower(heading)
-            value = php_preg_replace("/\\s{2,}/", " ", value)
+        
+        signHeader_ = php_preg_replace("/\\r\\n\\s+/", " ", signHeader_)
+        lines_ = php_explode("\r\n", signHeader_)
+        for key_,line_ in lines_:
+            heading_, value_ = php_explode(":", line_, 2)
+            heading_ = php_strtolower(heading_)
+            value_ = php_preg_replace("/\\s{2,}/", " ", value_)
             #// Compress useless spaces
-            lines[key] = heading + ":" + php_trim(value)
+            lines_[key_] = heading_ + ":" + php_trim(value_)
             pass
         # end for
-        signHeader = php_implode("\r\n", lines)
-        return signHeader
+        signHeader_ = php_implode("\r\n", lines_)
+        return signHeader_
     # end def dkim_headerc
     #// 
     #// Generate a DKIM canonicalization body.
@@ -2924,23 +3474,24 @@ class PHPMailer():
     #// @param string $body Message Body
     #// @return string
     #//
-    def dkim_bodyc(self, body=None):
+    def dkim_bodyc(self, body_=None):
         
-        if body == "":
+        
+        if body_ == "":
             return "\r\n"
         # end if
         #// stabilize line endings
-        body = php_str_replace("\r\n", "\n", body)
-        body = php_str_replace("\n", "\r\n", body)
+        body_ = php_str_replace("\r\n", "\n", body_)
+        body_ = php_str_replace("\n", "\r\n", body_)
         #// END stabilize line endings
         while True:
             
-            if not (php_substr(body, php_strlen(body) - 4, 4) == "\r\n\r\n"):
+            if not (php_substr(body_, php_strlen(body_) - 4, 4) == "\r\n\r\n"):
                 break
             # end if
-            body = php_substr(body, 0, php_strlen(body) - 2)
+            body_ = php_substr(body_, 0, php_strlen(body_) - 2)
         # end while
-        return body
+        return body_
     # end def dkim_bodyc
     #// 
     #// Create the DKIM header and body in a new message header.
@@ -2950,59 +3501,60 @@ class PHPMailer():
     #// @param string $body Body
     #// @return string
     #//
-    def dkim_add(self, headers_line=None, subject=None, body=None):
+    def dkim_add(self, headers_line_=None, subject_=None, body_=None):
         
-        DKIMsignatureType = "rsa-sha256"
+        
+        DKIMsignatureType_ = "rsa-sha256"
         #// Signature & hash algorithms
-        DKIMcanonicalization = "relaxed/simple"
+        DKIMcanonicalization_ = "relaxed/simple"
         #// Canonicalization of header/body
-        DKIMquery = "dns/txt"
+        DKIMquery_ = "dns/txt"
         #// Query method
-        DKIMtime = time()
+        DKIMtime_ = time()
         #// Signature Timestamp = seconds since 00:00:00 - Jan 1, 1970 (UTC time zone)
-        subject_header = str("Subject: ") + str(subject)
-        headers = php_explode(self.LE, headers_line)
-        from_header = ""
-        to_header = ""
-        date_header = ""
-        current = ""
-        for header in headers:
-            if php_strpos(header, "From:") == 0:
-                from_header = header
-                current = "from_header"
-            elif php_strpos(header, "To:") == 0:
-                to_header = header
-                current = "to_header"
-            elif php_strpos(header, "Date:") == 0:
-                date_header = header
-                current = "date_header"
+        subject_header_ = str("Subject: ") + str(subject_)
+        headers_ = php_explode(self.LE, headers_line_)
+        from_header_ = ""
+        to_header_ = ""
+        date_header_ = ""
+        current_ = ""
+        for header_ in headers_:
+            if php_strpos(header_, "From:") == 0:
+                from_header_ = header_
+                current_ = "from_header"
+            elif php_strpos(header_, "To:") == 0:
+                to_header_ = header_
+                current_ = "to_header"
+            elif php_strpos(header_, "Date:") == 0:
+                date_header_ = header_
+                current_ = "date_header"
             else:
-                if (not php_empty(lambda : current)) and php_strpos(header, " =?") == 0:
-                    current += header
+                if (not php_empty(lambda : current__)) and php_strpos(header_, " =?") == 0:
+                    current__ += header_
                 else:
-                    current = ""
+                    current_ = ""
                 # end if
             # end if
         # end for
-        from_ = php_str_replace("|", "=7C", self.dkim_qp(from_header))
-        to = php_str_replace("|", "=7C", self.dkim_qp(to_header))
-        date = php_str_replace("|", "=7C", self.dkim_qp(date_header))
-        subject = php_str_replace("|", "=7C", self.dkim_qp(subject_header))
+        from_ = php_str_replace("|", "=7C", self.dkim_qp(from_header_))
+        to_ = php_str_replace("|", "=7C", self.dkim_qp(to_header_))
+        date_ = php_str_replace("|", "=7C", self.dkim_qp(date_header_))
+        subject_ = php_str_replace("|", "=7C", self.dkim_qp(subject_header_))
         #// Copied header fields (dkim-quoted-printable)
-        body = self.dkim_bodyc(body)
-        DKIMlen = php_strlen(body)
+        body_ = self.dkim_bodyc(body_)
+        DKIMlen_ = php_strlen(body_)
         #// Length of body
-        DKIMb64 = php_base64_encode(pack("H*", hash("sha256", body)))
+        DKIMb64_ = php_base64_encode(pack("H*", hash("sha256", body_)))
         #// Base64 of packed binary SHA-256 hash of body
         if "" == self.DKIM_identity:
-            ident = ""
+            ident_ = ""
         else:
-            ident = " i=" + self.DKIM_identity + ";"
+            ident_ = " i=" + self.DKIM_identity + ";"
         # end if
-        dkimhdrs = "DKIM-Signature: v=1; a=" + DKIMsignatureType + "; q=" + DKIMquery + "; l=" + DKIMlen + "; s=" + self.DKIM_selector + ";\r\n" + "    t=" + DKIMtime + "; c=" + DKIMcanonicalization + ";\r\n" + "    h=From:To:Date:Subject;\r\n" + "    d=" + self.DKIM_domain + ";" + ident + "\r\n" + str("   z=") + str(from_) + str("\r\n") + str(" |") + str(to) + str("\r\n") + str(" |") + str(date) + str("\r\n") + str("   |") + str(subject) + str(";\r\n") + "   bh=" + DKIMb64 + ";\r\n" + "    b="
-        toSign = self.dkim_headerc(from_header + "\r\n" + to_header + "\r\n" + date_header + "\r\n" + subject_header + "\r\n" + dkimhdrs)
-        signed = self.dkim_sign(toSign)
-        return dkimhdrs + signed + "\r\n"
+        dkimhdrs_ = "DKIM-Signature: v=1; a=" + DKIMsignatureType_ + "; q=" + DKIMquery_ + "; l=" + DKIMlen_ + "; s=" + self.DKIM_selector + ";\r\n" + "    t=" + DKIMtime_ + "; c=" + DKIMcanonicalization_ + ";\r\n" + "  h=From:To:Date:Subject;\r\n" + "    d=" + self.DKIM_domain + ";" + ident_ + "\r\n" + str("  z=") + str(from_) + str("\r\n") + str(" |") + str(to_) + str("\r\n") + str("    |") + str(date_) + str("\r\n") + str("  |") + str(subject_) + str(";\r\n") + "  bh=" + DKIMb64_ + ";\r\n" + "   b="
+        toSign_ = self.dkim_headerc(from_header_ + "\r\n" + to_header_ + "\r\n" + date_header_ + "\r\n" + subject_header_ + "\r\n" + dkimhdrs_)
+        signed_ = self.dkim_sign(toSign_)
+        return dkimhdrs_ + signed_ + "\r\n"
     # end def dkim_add
     #// 
     #// Detect if a string contains a line longer than the maximum line length allowed.
@@ -3011,10 +3563,11 @@ class PHPMailer():
     #// @static
     #//
     @classmethod
-    def haslinelongerthanmax(self, str=None):
+    def haslinelongerthanmax(self, str_=None):
+        
         
         #// +2 to include CRLF line break for a 1000 total
-        return php_bool(php_preg_match("/^(.{" + self.MAX_LINE_LENGTH + 2 + ",})/m", str))
+        return php_bool(php_preg_match("/^(.{" + self.MAX_LINE_LENGTH + 2 + ",})/m", str_))
     # end def haslinelongerthanmax
     #// 
     #// Allows for public read access to 'to' property.
@@ -3023,6 +3576,7 @@ class PHPMailer():
     #// @return array
     #//
     def gettoaddresses(self):
+        
         
         return self.to
     # end def gettoaddresses
@@ -3034,6 +3588,7 @@ class PHPMailer():
     #//
     def getccaddresses(self):
         
+        
         return self.cc
     # end def getccaddresses
     #// 
@@ -3043,6 +3598,7 @@ class PHPMailer():
     #// @return array
     #//
     def getbccaddresses(self):
+        
         
         return self.bcc
     # end def getbccaddresses
@@ -3054,6 +3610,7 @@ class PHPMailer():
     #//
     def getreplytoaddresses(self):
         
+        
         return self.ReplyTo
     # end def getreplytoaddresses
     #// 
@@ -3063,6 +3620,7 @@ class PHPMailer():
     #// @return array
     #//
     def getallrecipientaddresses(self):
+        
         
         return self.all_recipients
     # end def getallrecipientaddresses
@@ -3076,11 +3634,12 @@ class PHPMailer():
     #// @param string $body
     #// @param string $from
     #//
-    def docallback(self, isSent=None, to=None, cc=None, bcc=None, subject=None, body=None, from_=None):
+    def docallback(self, isSent_=None, to_=None, cc_=None, bcc_=None, subject_=None, body_=None, from_=None):
+        
         
         if (not php_empty(lambda : self.action_function)) and php_is_callable(self.action_function):
-            params = Array(isSent, to, cc, bcc, subject, body, from_)
-            call_user_func_array(self.action_function, params)
+            params_ = Array(isSent_, to_, cc_, bcc_, subject_, body_, from_)
+            call_user_func_array(self.action_function, params_)
         # end if
     # end def docallback
 # end class PHPMailer
@@ -3095,7 +3654,8 @@ class phpmailerException(Exception):
     #//
     def errormessage(self):
         
-        errorMsg = "<strong>" + htmlspecialchars(self.getmessage()) + "</strong><br />\n"
-        return errorMsg
+        
+        errorMsg_ = "<strong>" + htmlspecialchars(self.getmessage()) + "</strong><br />\n"
+        return errorMsg_
     # end def errormessage
 # end class phpmailerException

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,9 +30,9 @@ php_include_file(ABSPATH + "wp-admin/includes/admin.php", once=True)
 nocache_headers()
 #// This action is documented in wp-admin/admin.php
 do_action("admin_init")
-action = "" if php_empty(lambda : PHP_REQUEST["action"]) else PHP_REQUEST["action"]
+action_ = "" if php_empty(lambda : PHP_REQUEST["action"]) else PHP_REQUEST["action"]
 if (not is_user_logged_in()):
-    if php_empty(lambda : action):
+    if php_empty(lambda : action_):
         #// 
         #// Fires on a non-authenticated admin post request where no action is supplied.
         #// 
@@ -53,10 +48,10 @@ if (not is_user_logged_in()):
         #// 
         #// @since 2.6.0
         #//
-        do_action(str("admin_post_nopriv_") + str(action))
+        do_action(str("admin_post_nopriv_") + str(action_))
     # end if
 else:
-    if php_empty(lambda : action):
+    if php_empty(lambda : action_):
         #// 
         #// Fires on an authenticated admin post request where no action is supplied.
         #// 
@@ -72,6 +67,6 @@ else:
         #// 
         #// @since 2.6.0
         #//
-        do_action(str("admin_post_") + str(action))
+        do_action(str("admin_post_") + str(action_))
     # end if
 # end if

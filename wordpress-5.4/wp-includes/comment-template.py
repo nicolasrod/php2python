@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,18 +28,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// Default current comment.
 #// @return string The comment author
 #//
-def get_comment_author(comment_ID=0, *args_):
+def get_comment_author(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    if php_empty(lambda : comment.comment_author):
-        user = get_userdata(comment.user_id) if comment.user_id else False
-        if user:
-            author = user.display_name
+    
+    comment_ = get_comment(comment_ID_)
+    if php_empty(lambda : comment_.comment_author):
+        user_ = get_userdata(comment_.user_id) if comment_.user_id else False
+        if user_:
+            author_ = user_.display_name
         else:
-            author = __("Anonymous")
+            author_ = __("Anonymous")
         # end if
     else:
-        author = comment.comment_author
+        author_ = comment_.comment_author
     # end if
     #// 
     #// Filters the returned comment author name.
@@ -56,7 +52,7 @@ def get_comment_author(comment_ID=0, *args_):
     #// @param int        $comment_ID The comment ID.
     #// @param WP_Comment $comment    The comment object.
     #//
-    return apply_filters("get_comment_author", author, comment.comment_ID, comment)
+    return apply_filters("get_comment_author", author_, comment_.comment_ID, comment_)
 # end def get_comment_author
 #// 
 #// Displays the author of the current comment.
@@ -67,10 +63,11 @@ def get_comment_author(comment_ID=0, *args_):
 #// @param int|WP_Comment $comment_ID Optional. WP_Comment or the ID of the comment for which to print the author.
 #// Default current comment.
 #//
-def comment_author(comment_ID=0, *args_):
+def comment_author(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    author = get_comment_author(comment)
+    
+    comment_ = get_comment(comment_ID_)
+    author_ = get_comment_author(comment_)
     #// 
     #// Filters the comment author's name for display.
     #// 
@@ -80,7 +77,7 @@ def comment_author(comment_ID=0, *args_):
     #// @param string $author     The comment author's username.
     #// @param int    $comment_ID The comment ID.
     #//
-    php_print(apply_filters("comment_author", author, comment.comment_ID))
+    php_print(apply_filters("comment_author", author_, comment_.comment_ID))
 # end def comment_author
 #// 
 #// Retrieves the email of the author of the current comment.
@@ -92,9 +89,10 @@ def comment_author(comment_ID=0, *args_):
 #// Default current comment.
 #// @return string The current comment author's email
 #//
-def get_comment_author_email(comment_ID=0, *args_):
+def get_comment_author_email(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
+    
+    comment_ = get_comment(comment_ID_)
     #// 
     #// Filters the comment author's returned email address.
     #// 
@@ -105,7 +103,7 @@ def get_comment_author_email(comment_ID=0, *args_):
     #// @param int        $comment_ID           The comment ID.
     #// @param WP_Comment $comment              The comment object.
     #//
-    return apply_filters("get_comment_author_email", comment.comment_author_email, comment.comment_ID, comment)
+    return apply_filters("get_comment_author_email", comment_.comment_author_email, comment_.comment_ID, comment_)
 # end def get_comment_author_email
 #// 
 #// Displays the email of the author of the current global $comment.
@@ -122,10 +120,11 @@ def get_comment_author_email(comment_ID=0, *args_):
 #// @param int|WP_Comment $comment_ID Optional. WP_Comment or the ID of the comment for which to print the author's email.
 #// Default current comment.
 #//
-def comment_author_email(comment_ID=0, *args_):
+def comment_author_email(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    author_email = get_comment_author_email(comment)
+    
+    comment_ = get_comment(comment_ID_)
+    author_email_ = get_comment_author_email(comment_)
     #// 
     #// Filters the comment author's email for display.
     #// 
@@ -135,7 +134,7 @@ def comment_author_email(comment_ID=0, *args_):
     #// @param string $author_email The comment author's email address.
     #// @param int    $comment_ID   The comment ID.
     #//
-    php_print(apply_filters("author_email", author_email, comment.comment_ID))
+    php_print(apply_filters("author_email", author_email_, comment_.comment_ID))
 # end def comment_author_email
 #// 
 #// Displays the HTML email link to the author of the current comment.
@@ -155,11 +154,12 @@ def comment_author_email(comment_ID=0, *args_):
 #// @param string         $after    Optional. Text or HTML to display after the email link. Default empty.
 #// @param int|WP_Comment $comment  Optional. Comment ID or WP_Comment object. Default is the current comment.
 #//
-def comment_author_email_link(linktext="", before="", after="", comment=None, *args_):
+def comment_author_email_link(linktext_="", before_="", after_="", comment_=None, *_args_):
     
-    link = get_comment_author_email_link(linktext, before, after, comment)
-    if link:
-        php_print(link)
+    
+    link_ = get_comment_author_email_link(linktext_, before_, after_, comment_)
+    if link_:
+        php_print(link_)
     # end if
 # end def comment_author_email_link
 #// 
@@ -182,9 +182,10 @@ def comment_author_email_link(linktext="", before="", after="", comment=None, *a
 #// @return string HTML markup for the comment author email link. By default, the email address is obfuscated
 #// via the {@see 'comment_email'} filter with antispambot().
 #//
-def get_comment_author_email_link(linktext="", before="", after="", comment=None, *args_):
+def get_comment_author_email_link(linktext_="", before_="", after_="", comment_=None, *_args_):
     
-    comment = get_comment(comment)
+    
+    comment_ = get_comment(comment_)
     #// 
     #// Filters the comment author's email for display.
     #// 
@@ -197,12 +198,12 @@ def get_comment_author_email_link(linktext="", before="", after="", comment=None
     #// @param string     $comment_author_email The comment author's email address.
     #// @param WP_Comment $comment              The comment object.
     #//
-    email = apply_filters("comment_email", comment.comment_author_email, comment)
-    if (not php_empty(lambda : email)) and "@" != email:
-        display = linktext if "" != linktext else email
-        return_ = before
-        return_ += php_sprintf("<a href=\"%1$s\">%2$s</a>", esc_url("mailto:" + email), esc_html(display))
-        return_ += after
+    email_ = apply_filters("comment_email", comment_.comment_author_email, comment_)
+    if (not php_empty(lambda : email_)) and "@" != email_:
+        display_ = linktext_ if "" != linktext_ else email_
+        return_ = before_
+        return_ += php_sprintf("<a href=\"%1$s\">%2$s</a>", esc_url("mailto:" + email_), esc_html(display_))
+        return_ += after_
         return return_
     else:
         return ""
@@ -221,15 +222,16 @@ def get_comment_author_email_link(linktext="", before="", after="", comment=None
 #// Default current comment.
 #// @return string The comment author name or HTML link for author's URL.
 #//
-def get_comment_author_link(comment_ID=0, *args_):
+def get_comment_author_link(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    url = get_comment_author_url(comment)
-    author = get_comment_author(comment)
-    if php_empty(lambda : url) or "http://" == url:
-        return_ = author
+    
+    comment_ = get_comment(comment_ID_)
+    url_ = get_comment_author_url(comment_)
+    author_ = get_comment_author(comment_)
+    if php_empty(lambda : url_) or "http://" == url_:
+        return_ = author_
     else:
-        return_ = str("<a href='") + str(url) + str("' rel='external nofollow ugc' class='url'>") + str(author) + str("</a>")
+        return_ = str("<a href='") + str(url_) + str("' rel='external nofollow ugc' class='url'>") + str(author_) + str("</a>")
     # end if
     #// 
     #// Filters the comment author's link for display.
@@ -242,7 +244,7 @@ def get_comment_author_link(comment_ID=0, *args_):
     #// @param string $author     The comment author's username.
     #// @param int    $comment_ID The comment ID.
     #//
-    return apply_filters("get_comment_author_link", return_, author, comment.comment_ID)
+    return apply_filters("get_comment_author_link", return_, author_, comment_.comment_ID)
 # end def get_comment_author_link
 #// 
 #// Displays the HTML link to the URL of the author of the current comment.
@@ -253,9 +255,10 @@ def get_comment_author_link(comment_ID=0, *args_):
 #// @param int|WP_Comment $comment_ID Optional. WP_Comment or the ID of the comment for which to print the author's link.
 #// Default current comment.
 #//
-def comment_author_link(comment_ID=0, *args_):
+def comment_author_link(comment_ID_=0, *_args_):
     
-    php_print(get_comment_author_link(comment_ID))
+    
+    php_print(get_comment_author_link(comment_ID_))
 # end def comment_author_link
 #// 
 #// Retrieve the IP address of the author of the current comment.
@@ -267,10 +270,11 @@ def comment_author_link(comment_ID=0, *args_):
 #// Default current comment.
 #// @return string Comment author's IP address.
 #//
-def get_comment_author_IP(comment_ID=0, *args_):
+def get_comment_author_IP(comment_ID_=0, *_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    comment = get_comment(comment_ID)
+    comment_ = get_comment(comment_ID_)
     #// 
     #// Filters the comment author's returned IP address.
     #// 
@@ -281,7 +285,7 @@ def get_comment_author_IP(comment_ID=0, *args_):
     #// @param int        $comment_ID        The comment ID.
     #// @param WP_Comment $comment           The comment object.
     #//
-    return apply_filters("get_comment_author_IP", comment.comment_author_IP, comment.comment_ID, comment)
+    return apply_filters("get_comment_author_IP", comment_.comment_author_IP, comment_.comment_ID, comment_)
     pass
 # end def get_comment_author_IP
 #// 
@@ -293,10 +297,11 @@ def get_comment_author_IP(comment_ID=0, *args_):
 #// @param int|WP_Comment $comment_ID Optional. WP_Comment or the ID of the comment for which to print the author's IP address.
 #// Default current comment.
 #//
-def comment_author_IP(comment_ID=0, *args_):
+def comment_author_IP(comment_ID_=0, *_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    php_print(esc_html(get_comment_author_IP(comment_ID)))
+    php_print(esc_html(get_comment_author_IP(comment_ID_)))
 # end def comment_author_IP
 #// 
 #// Retrieves the URL of the author of the current comment, not linked.
@@ -308,15 +313,16 @@ def comment_author_IP(comment_ID=0, *args_):
 #// Default current comment.
 #// @return string Comment author URL, if provided, an empty string otherwise.
 #//
-def get_comment_author_url(comment_ID=0, *args_):
+def get_comment_author_url(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    url = ""
-    id = 0
-    if (not php_empty(lambda : comment)):
-        author_url = "" if "http://" == comment.comment_author_url else comment.comment_author_url
-        url = esc_url(author_url, Array("http", "https"))
-        id = comment.comment_ID
+    
+    comment_ = get_comment(comment_ID_)
+    url_ = ""
+    id_ = 0
+    if (not php_empty(lambda : comment_)):
+        author_url_ = "" if "http://" == comment_.comment_author_url else comment_.comment_author_url
+        url_ = esc_url(author_url_, Array("http", "https"))
+        id_ = comment_.comment_ID
     # end if
     #// 
     #// Filters the comment author's URL.
@@ -328,7 +334,7 @@ def get_comment_author_url(comment_ID=0, *args_):
     #// @param int        $comment_ID The comment ID.
     #// @param WP_Comment $comment    The comment object.
     #//
-    return apply_filters("get_comment_author_url", url, id, comment)
+    return apply_filters("get_comment_author_url", url_, id_, comment_)
 # end def get_comment_author_url
 #// 
 #// Displays the URL of the author of the current comment, not linked.
@@ -339,10 +345,11 @@ def get_comment_author_url(comment_ID=0, *args_):
 #// @param int|WP_Comment $comment_ID Optional. WP_Comment or the ID of the comment for which to print the author's URL.
 #// Default current comment.
 #//
-def comment_author_url(comment_ID=0, *args_):
+def comment_author_url(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    author_url = get_comment_author_url(comment)
+    
+    comment_ = get_comment(comment_ID_)
+    author_url_ = get_comment_author_url(comment_)
     #// 
     #// Filters the comment author's URL for display.
     #// 
@@ -352,7 +359,7 @@ def comment_author_url(comment_ID=0, *args_):
     #// @param string $author_url The comment author's URL.
     #// @param int    $comment_ID The comment ID.
     #//
-    php_print(apply_filters("comment_url", author_url, comment.comment_ID))
+    php_print(apply_filters("comment_url", author_url_, comment_.comment_ID))
 # end def comment_author_url
 #// 
 #// Retrieves the HTML link of the URL of the author of the current comment.
@@ -377,16 +384,17 @@ def comment_author_url(comment_ID=0, *args_):
 #// Default is the current comment.
 #// @return string The HTML link between the $before and $after parameters.
 #//
-def get_comment_author_url_link(linktext="", before="", after="", comment=0, *args_):
+def get_comment_author_url_link(linktext_="", before_="", after_="", comment_=0, *_args_):
     
-    url = get_comment_author_url(comment)
-    display = linktext if "" != linktext else url
-    display = php_str_replace("http://www.", "", display)
-    display = php_str_replace("http://", "", display)
-    if "/" == php_substr(display, -1):
-        display = php_substr(display, 0, -1)
+    
+    url_ = get_comment_author_url(comment_)
+    display_ = linktext_ if "" != linktext_ else url_
+    display_ = php_str_replace("http://www.", "", display_)
+    display_ = php_str_replace("http://", "", display_)
+    if "/" == php_substr(display_, -1):
+        display_ = php_substr(display_, 0, -1)
     # end if
-    return_ = str(before) + str("<a href='") + str(url) + str("' rel='external'>") + str(display) + str("</a>") + str(after)
+    return_ = str(before_) + str("<a href='") + str(url_) + str("' rel='external'>") + str(display_) + str("</a>") + str(after_)
     #// 
     #// Filters the comment author's returned URL link.
     #// 
@@ -411,9 +419,10 @@ def get_comment_author_url_link(linktext="", before="", after="", comment=0, *ar
 #// @param int|WP_Comment $comment  Optional. Comment ID or WP_Comment object.
 #// Default is the current comment.
 #//
-def comment_author_url_link(linktext="", before="", after="", comment=0, *args_):
+def comment_author_url_link(linktext_="", before_="", after_="", comment_=0, *_args_):
     
-    php_print(get_comment_author_url_link(linktext, before, after, comment))
+    
+    php_print(get_comment_author_url_link(linktext_, before_, after_, comment_))
 # end def comment_author_url_link
 #// 
 #// Generates semantic classes for each comment element.
@@ -429,11 +438,14 @@ def comment_author_url_link(linktext="", before="", after="", comment=0, *args_)
 #// Default true.
 #// @return void|string Void if `$echo` argument is true, comment classes if `$echo` is false.
 #//
-def comment_class(class_="", comment=None, post_id=None, echo=True, *args_):
+def comment_class(class_="", comment_=None, post_id_=None, echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
     #// Separates classes with a single space, collates classes for comment DIV.
-    class_ = "class=\"" + join(" ", get_comment_class(class_, comment, post_id)) + "\""
-    if echo:
+    class_ = "class=\"" + join(" ", get_comment_class(class_, comment_, post_id_)) + "\""
+    if echo_:
         php_print(class_)
     else:
         return class_
@@ -454,64 +466,67 @@ def comment_class(class_="", comment=None, post_id=None, echo=True, *args_):
 #// @param int|WP_Post    $post_id    Post ID or WP_Post object. Default current post.
 #// @return string[] An array of classes.
 #//
-def get_comment_class(class_="", comment_id=None, post_id=None, *args_):
+def get_comment_class(class_="", comment_id_=None, post_id_=None, *_args_):
     
-    global comment_alt,comment_depth,comment_thread_alt
-    php_check_if_defined("comment_alt","comment_depth","comment_thread_alt")
-    classes = Array()
-    comment = get_comment(comment_id)
-    if (not comment):
-        return classes
+    
+    global comment_alt_
+    global comment_depth_
+    global comment_thread_alt_
+    php_check_if_defined("comment_alt_","comment_depth_","comment_thread_alt_")
+    classes_ = Array()
+    comment_ = get_comment(comment_id_)
+    if (not comment_):
+        return classes_
     # end if
     #// Get the comment type (comment, trackback).
-    classes[-1] = "comment" if php_empty(lambda : comment.comment_type) else comment.comment_type
+    classes_[-1] = "comment" if php_empty(lambda : comment_.comment_type) else comment_.comment_type
     #// Add classes for comment authors that are registered users.
-    user = get_userdata(comment.user_id) if comment.user_id else False
-    if user:
-        classes[-1] = "byuser"
-        classes[-1] = "comment-author-" + sanitize_html_class(user.user_nicename, comment.user_id)
+    user_ = get_userdata(comment_.user_id) if comment_.user_id else False
+    if user_:
+        classes_[-1] = "byuser"
+        classes_[-1] = "comment-author-" + sanitize_html_class(user_.user_nicename, comment_.user_id)
         #// For comment authors who are the author of the post.
-        post = get_post(post_id)
-        if post:
-            if comment.user_id == post.post_author:
-                classes[-1] = "bypostauthor"
+        post_ = get_post(post_id_)
+        if post_:
+            if comment_.user_id == post_.post_author:
+                classes_[-1] = "bypostauthor"
             # end if
         # end if
     # end if
-    if php_empty(lambda : comment_alt):
-        comment_alt = 0
+    if php_empty(lambda : comment_alt_):
+        comment_alt_ = 0
     # end if
-    if php_empty(lambda : comment_depth):
-        comment_depth = 1
+    if php_empty(lambda : comment_depth_):
+        comment_depth_ = 1
     # end if
-    if php_empty(lambda : comment_thread_alt):
-        comment_thread_alt = 0
+    if php_empty(lambda : comment_thread_alt_):
+        comment_thread_alt_ = 0
     # end if
-    if comment_alt % 2:
-        classes[-1] = "odd"
-        classes[-1] = "alt"
+    if comment_alt_ % 2:
+        classes_[-1] = "odd"
+        classes_[-1] = "alt"
     else:
-        classes[-1] = "even"
+        classes_[-1] = "even"
     # end if
-    comment_alt += 1
+    comment_alt_ += 1
     #// Alt for top-level comments.
-    if 1 == comment_depth:
-        if comment_thread_alt % 2:
-            classes[-1] = "thread-odd"
-            classes[-1] = "thread-alt"
+    if 1 == comment_depth_:
+        if comment_thread_alt_ % 2:
+            classes_[-1] = "thread-odd"
+            classes_[-1] = "thread-alt"
         else:
-            classes[-1] = "thread-even"
+            classes_[-1] = "thread-even"
         # end if
-        comment_thread_alt += 1
+        comment_thread_alt_ += 1
     # end if
-    classes[-1] = str("depth-") + str(comment_depth)
+    classes_[-1] = str("depth-") + str(comment_depth_)
     if (not php_empty(lambda : class_)):
         if (not php_is_array(class_)):
             class_ = php_preg_split("#\\s+#", class_)
         # end if
-        classes = php_array_merge(classes, class_)
+        classes_ = php_array_merge(classes_, class_)
     # end if
-    classes = php_array_map("esc_attr", classes)
+    classes_ = php_array_map("esc_attr", classes_)
     #// 
     #// Filters the returned CSS classes for the current comment.
     #// 
@@ -523,7 +538,7 @@ def get_comment_class(class_="", comment_id=None, post_id=None, *args_):
     #// @param WP_Comment  $comment    The comment object.
     #// @param int|WP_Post $post_id    The post ID or WP_Post object.
     #//
-    return apply_filters("comment_class", classes, class_, comment.comment_ID, comment, post_id)
+    return apply_filters("comment_class", classes_, class_, comment_.comment_ID, comment_, post_id_)
 # end def get_comment_class
 #// 
 #// Retrieves the comment date of the current comment.
@@ -536,13 +551,14 @@ def get_comment_class(class_="", comment_id=None, post_id=None, *args_):
 #// Default current comment.
 #// @return string The comment's date.
 #//
-def get_comment_date(format="", comment_ID=0, *args_):
+def get_comment_date(format_="", comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    if "" == format:
-        date = mysql2date(get_option("date_format"), comment.comment_date)
+    
+    comment_ = get_comment(comment_ID_)
+    if "" == format_:
+        date_ = mysql2date(get_option("date_format"), comment_.comment_date)
     else:
-        date = mysql2date(format, comment.comment_date)
+        date_ = mysql2date(format_, comment_.comment_date)
     # end if
     #// 
     #// Filters the returned comment date.
@@ -553,7 +569,7 @@ def get_comment_date(format="", comment_ID=0, *args_):
     #// @param string     $format  The format of the date.
     #// @param WP_Comment $comment The comment object.
     #//
-    return apply_filters("get_comment_date", date, format, comment)
+    return apply_filters("get_comment_date", date_, format_, comment_)
 # end def get_comment_date
 #// 
 #// Displays the comment date of the current comment.
@@ -565,9 +581,10 @@ def get_comment_date(format="", comment_ID=0, *args_):
 #// @param int|WP_Comment $comment_ID WP_Comment or ID of the comment for which to print the date.
 #// Default current comment.
 #//
-def comment_date(format="", comment_ID=0, *args_):
+def comment_date(format_="", comment_ID_=0, *_args_):
     
-    php_print(get_comment_date(format, comment_ID))
+    
+    php_print(get_comment_date(format_, comment_ID_))
 # end def comment_date
 #// 
 #// Retrieves the excerpt of the given comment.
@@ -581,12 +598,13 @@ def comment_date(format="", comment_ID=0, *args_):
 #// Default current comment.
 #// @return string The possibly truncated comment excerpt.
 #//
-def get_comment_excerpt(comment_ID=0, *args_):
+def get_comment_excerpt(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    comment_text = strip_tags(php_str_replace(Array("\n", "\r"), " ", comment.comment_content))
+    
+    comment_ = get_comment(comment_ID_)
+    comment_text_ = strip_tags(php_str_replace(Array("\n", "\r"), " ", comment_.comment_content))
     #// translators: Maximum number of words used in a comment excerpt.
-    comment_excerpt_length = php_intval(_x("20", "comment_excerpt_length"))
+    comment_excerpt_length_ = php_intval(_x("20", "comment_excerpt_length"))
     #// 
     #// Filters the maximum number of words used in the comment excerpt.
     #// 
@@ -594,8 +612,8 @@ def get_comment_excerpt(comment_ID=0, *args_):
     #// 
     #// @param int $comment_excerpt_length The amount of words you want to display in the comment excerpt.
     #//
-    comment_excerpt_length = apply_filters("comment_excerpt_length", comment_excerpt_length)
-    excerpt = wp_trim_words(comment_text, comment_excerpt_length, "&hellip;")
+    comment_excerpt_length_ = apply_filters("comment_excerpt_length", comment_excerpt_length_)
+    excerpt_ = wp_trim_words(comment_text_, comment_excerpt_length_, "&hellip;")
     #// 
     #// Filters the retrieved comment excerpt.
     #// 
@@ -606,7 +624,7 @@ def get_comment_excerpt(comment_ID=0, *args_):
     #// @param int        $comment_ID The comment ID.
     #// @param WP_Comment $comment    The comment object.
     #//
-    return apply_filters("get_comment_excerpt", excerpt, comment.comment_ID, comment)
+    return apply_filters("get_comment_excerpt", excerpt_, comment_.comment_ID, comment_)
 # end def get_comment_excerpt
 #// 
 #// Displays the excerpt of the current comment.
@@ -617,10 +635,11 @@ def get_comment_excerpt(comment_ID=0, *args_):
 #// @param int|WP_Comment $comment_ID  WP_Comment or ID of the comment for which to print the excerpt.
 #// Default current comment.
 #//
-def comment_excerpt(comment_ID=0, *args_):
+def comment_excerpt(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    comment_excerpt = get_comment_excerpt(comment)
+    
+    comment_ = get_comment(comment_ID_)
+    comment_excerpt_ = get_comment_excerpt(comment_)
     #// 
     #// Filters the comment excerpt for display.
     #// 
@@ -630,7 +649,7 @@ def comment_excerpt(comment_ID=0, *args_):
     #// @param string $comment_excerpt The comment excerpt text.
     #// @param int    $comment_ID      The comment ID.
     #//
-    php_print(apply_filters("comment_excerpt", comment_excerpt, comment.comment_ID))
+    php_print(apply_filters("comment_excerpt", comment_excerpt_, comment_.comment_ID))
 # end def comment_excerpt
 #// 
 #// Retrieves the comment id of the current comment.
@@ -639,10 +658,11 @@ def comment_excerpt(comment_ID=0, *args_):
 #// 
 #// @return int The comment ID.
 #//
-def get_comment_ID(*args_):
+def get_comment_ID(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    comment = get_comment()
+    comment_ = get_comment()
     #// 
     #// Filters the returned comment ID.
     #// 
@@ -652,7 +672,7 @@ def get_comment_ID(*args_):
     #// @param int        $comment_ID The current comment ID.
     #// @param WP_Comment $comment    The comment object.
     #//
-    return apply_filters("get_comment_ID", comment.comment_ID, comment)
+    return apply_filters("get_comment_ID", comment_.comment_ID, comment_)
     pass
 # end def get_comment_ID
 #// 
@@ -660,7 +680,8 @@ def get_comment_ID(*args_):
 #// 
 #// @since 0.71
 #//
-def comment_ID(*args_):
+def comment_ID(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
     php_print(get_comment_ID())
@@ -690,61 +711,65 @@ def comment_ID(*args_):
 #// }
 #// @return string The permalink to the given comment.
 #//
-def get_comment_link(comment=None, args=Array(), *args_):
-    
-    global wp_rewrite,in_comment_loop
-    php_check_if_defined("wp_rewrite","in_comment_loop")
-    comment = get_comment(comment)
-    #// Back-compat.
-    if (not php_is_array(args)):
-        args = Array({"page": args})
+def get_comment_link(comment_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
     # end if
-    defaults = Array({"type": "all", "page": "", "per_page": "", "max_depth": "", "cpage": None})
-    args = wp_parse_args(args, defaults)
-    link = get_permalink(comment.comment_post_ID)
+    
+    global wp_rewrite_
+    global in_comment_loop_
+    php_check_if_defined("wp_rewrite_","in_comment_loop_")
+    comment_ = get_comment(comment_)
+    #// Back-compat.
+    if (not php_is_array(args_)):
+        args_ = Array({"page": args_})
+    # end if
+    defaults_ = Array({"type": "all", "page": "", "per_page": "", "max_depth": "", "cpage": None})
+    args_ = wp_parse_args(args_, defaults_)
+    link_ = get_permalink(comment_.comment_post_ID)
     #// The 'cpage' param takes precedence.
-    if (not is_null(args["cpage"])):
-        cpage = args["cpage"]
+    if (not is_null(args_["cpage"])):
+        cpage_ = args_["cpage"]
         pass
     else:
-        if "" == args["per_page"] and get_option("page_comments"):
-            args["per_page"] = get_option("comments_per_page")
+        if "" == args_["per_page"] and get_option("page_comments"):
+            args_["per_page"] = get_option("comments_per_page")
         # end if
-        if php_empty(lambda : args["per_page"]):
-            args["per_page"] = 0
-            args["page"] = 0
+        if php_empty(lambda : args_["per_page"]):
+            args_["per_page"] = 0
+            args_["page"] = 0
         # end if
-        cpage = args["page"]
-        if "" == cpage:
-            if (not php_empty(lambda : in_comment_loop)):
-                cpage = get_query_var("cpage")
+        cpage_ = args_["page"]
+        if "" == cpage_:
+            if (not php_empty(lambda : in_comment_loop_)):
+                cpage_ = get_query_var("cpage")
             else:
                 #// Requires a database hit, so we only do it when we can't figure out from context.
-                cpage = get_page_of_comment(comment.comment_ID, args)
+                cpage_ = get_page_of_comment(comment_.comment_ID, args_)
             # end if
         # end if
         #// 
         #// If the default page displays the oldest comments, the permalinks for comments on the default page
         #// do not need a 'cpage' query var.
         #//
-        if "oldest" == get_option("default_comments_page") and 1 == cpage:
-            cpage = ""
+        if "oldest" == get_option("default_comments_page") and 1 == cpage_:
+            cpage_ = ""
         # end if
     # end if
-    if cpage and get_option("page_comments"):
-        if wp_rewrite.using_permalinks():
-            if cpage:
-                link = trailingslashit(link) + wp_rewrite.comments_pagination_base + "-" + cpage
+    if cpage_ and get_option("page_comments"):
+        if wp_rewrite_.using_permalinks():
+            if cpage_:
+                link_ = trailingslashit(link_) + wp_rewrite_.comments_pagination_base + "-" + cpage_
             # end if
-            link = user_trailingslashit(link, "comment")
-        elif cpage:
-            link = add_query_arg("cpage", cpage, link)
+            link_ = user_trailingslashit(link_, "comment")
+        elif cpage_:
+            link_ = add_query_arg("cpage", cpage_, link_)
         # end if
     # end if
-    if wp_rewrite.using_permalinks():
-        link = user_trailingslashit(link, "comment")
+    if wp_rewrite_.using_permalinks():
+        link_ = user_trailingslashit(link_, "comment")
     # end if
-    link = link + "#comment-" + comment.comment_ID
+    link_ = link_ + "#comment-" + comment_.comment_ID
     #// 
     #// Filters the returned single comment permalink.
     #// 
@@ -758,7 +783,7 @@ def get_comment_link(comment=None, args=Array(), *args_):
     #// @param array      $args    An array of arguments to override the defaults.
     #// @param int        $cpage   The calculated 'cpage' value.
     #//
-    return apply_filters("get_comment_link", link, comment, args, cpage)
+    return apply_filters("get_comment_link", link_, comment_, args_, cpage_)
 # end def get_comment_link
 #// 
 #// Retrieves the link to the current post comments.
@@ -768,10 +793,11 @@ def get_comment_link(comment=None, args=Array(), *args_):
 #// @param int|WP_Post $post_id Optional. Post ID or WP_Post object. Default is global $post.
 #// @return string The link to the comments.
 #//
-def get_comments_link(post_id=0, *args_):
+def get_comments_link(post_id_=0, *_args_):
     
-    hash = "#comments" if get_comments_number(post_id) else "#respond"
-    comments_link = get_permalink(post_id) + hash
+    
+    hash_ = "#comments" if get_comments_number(post_id_) else "#respond"
+    comments_link_ = get_permalink(post_id_) + hash_
     #// 
     #// Filters the returned post comments permalink.
     #// 
@@ -780,7 +806,7 @@ def get_comments_link(post_id=0, *args_):
     #// @param string      $comments_link Post comments permalink with '#comments' appended.
     #// @param int|WP_Post $post_id       Post ID or WP_Post object.
     #//
-    return apply_filters("get_comments_link", comments_link, post_id)
+    return apply_filters("get_comments_link", comments_link_, post_id_)
 # end def get_comments_link
 #// 
 #// Displays the link to the current post comments.
@@ -790,12 +816,13 @@ def get_comments_link(post_id=0, *args_):
 #// @param string $deprecated   Not Used.
 #// @param string $deprecated_2 Not Used.
 #//
-def comments_link(deprecated="", deprecated_2="", *args_):
+def comments_link(deprecated_="", deprecated_2_="", *_args_):
     
-    if (not php_empty(lambda : deprecated)):
+    
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "0.72")
     # end if
-    if (not php_empty(lambda : deprecated_2)):
+    if (not php_empty(lambda : deprecated_2_)):
         _deprecated_argument(__FUNCTION__, "1.3.0")
     # end if
     php_print(esc_url(get_comments_link()))
@@ -809,14 +836,15 @@ def comments_link(deprecated="", deprecated_2="", *args_):
 #// @return string|int If the post exists, a numeric string representing the number of comments
 #// the post has, otherwise 0.
 #//
-def get_comments_number(post_id=0, *args_):
+def get_comments_number(post_id_=0, *_args_):
     
-    post = get_post(post_id)
-    if (not post):
-        count = 0
+    
+    post_ = get_post(post_id_)
+    if (not post_):
+        count_ = 0
     else:
-        count = post.comment_count
-        post_id = post.ID
+        count_ = post_.comment_count
+        post_id_ = post_.ID
     # end if
     #// 
     #// Filters the returned comment count for a post.
@@ -826,7 +854,7 @@ def get_comments_number(post_id=0, *args_):
     #// @param string|int $count   A string representing the number of comments a post has, otherwise 0.
     #// @param int        $post_id Post ID.
     #//
-    return apply_filters("get_comments_number", count, post_id)
+    return apply_filters("get_comments_number", count_, post_id_)
 # end def get_comments_number
 #// 
 #// Displays the language string for the number of comments the current post has.
@@ -839,9 +867,18 @@ def get_comments_number(post_id=0, *args_):
 #// @param string      $more       Optional. Text for more than one comment. Default false.
 #// @param int|WP_Post $post_id    Optional. Post ID or WP_Post object. Default is the global `$post`.
 #//
-def comments_number(zero=False, one=False, more=False, post_id=0, *args_):
+def comments_number(zero_=None, one_=None, more_=None, post_id_=0, *_args_):
+    if zero_ is None:
+        zero_ = False
+    # end if
+    if one_ is None:
+        one_ = False
+    # end if
+    if more_ is None:
+        more_ = False
+    # end if
     
-    php_print(get_comments_number_text(zero, one, more, post_id))
+    php_print(get_comments_number_text(zero_, one_, more_, post_id_))
 # end def comments_number
 #// 
 #// Displays the language string for the number of comments the current post has.
@@ -855,13 +892,22 @@ def comments_number(zero=False, one=False, more=False, post_id=0, *args_):
 #// @param int|WP_Post $post_id Optional. Post ID or WP_Post object. Default is the global `$post`.
 #// @return string Language string for the number of comments a post has.
 #//
-def get_comments_number_text(zero=False, one=False, more=False, post_id=0, *args_):
+def get_comments_number_text(zero_=None, one_=None, more_=None, post_id_=0, *_args_):
+    if zero_ is None:
+        zero_ = False
+    # end if
+    if one_ is None:
+        one_ = False
+    # end if
+    if more_ is None:
+        more_ = False
+    # end if
     
-    number = get_comments_number(post_id)
-    if number > 1:
-        if False == more:
+    number_ = get_comments_number(post_id_)
+    if number_ > 1:
+        if False == more_:
             #// translators: %s: Number of comments.
-            output = php_sprintf(_n("%s Comment", "%s Comments", number), number_format_i18n(number))
+            output_ = php_sprintf(_n("%s Comment", "%s Comments", number_), number_format_i18n(number_))
         else:
             #// % Comments
             #// 
@@ -869,28 +915,28 @@ def get_comments_number_text(zero=False, one=False, more=False, post_id=0, *args
             #// translate this to 'on'. Do not translate into your own language.
             #//
             if "on" == _x("off", "Comment number declension: on or off"):
-                text = php_preg_replace("#<span class=\"screen-reader-text\">.+?</span>#", "", more)
-                text = php_preg_replace("/&.+?;/", "", text)
+                text_ = php_preg_replace("#<span class=\"screen-reader-text\">.+?</span>#", "", more_)
+                text_ = php_preg_replace("/&.+?;/", "", text_)
                 #// Kill entities.
-                text = php_trim(strip_tags(text), "% ")
+                text_ = php_trim(strip_tags(text_), "% ")
                 #// Replace '% Comments' with a proper plural form.
-                if text and (not php_preg_match("/[0-9]+/", text)) and False != php_strpos(more, "%"):
+                if text_ and (not php_preg_match("/[0-9]+/", text_)) and False != php_strpos(more_, "%"):
                     #// translators: %s: Number of comments.
-                    new_text = _n("%s Comment", "%s Comments", number)
-                    new_text = php_trim(php_sprintf(new_text, ""))
-                    more = php_str_replace(text, new_text, more)
-                    if False == php_strpos(more, "%"):
-                        more = "% " + more
+                    new_text_ = _n("%s Comment", "%s Comments", number_)
+                    new_text_ = php_trim(php_sprintf(new_text_, ""))
+                    more_ = php_str_replace(text_, new_text_, more_)
+                    if False == php_strpos(more_, "%"):
+                        more_ = "% " + more_
                     # end if
                 # end if
             # end if
-            output = php_str_replace("%", number_format_i18n(number), more)
+            output_ = php_str_replace("%", number_format_i18n(number_), more_)
         # end if
-    elif 0 == number:
-        output = __("No Comments") if False == zero else zero
+    elif 0 == number_:
+        output_ = __("No Comments") if False == zero_ else zero_
     else:
         #// Must be one.
-        output = __("1 Comment") if False == one else one
+        output_ = __("1 Comment") if False == one_ else one_
     # end if
     #// 
     #// Filters the comments count for display.
@@ -903,7 +949,7 @@ def get_comments_number_text(zero=False, one=False, more=False, post_id=0, *args
     #// is equal to 0, 1, or 1+.
     #// @param int    $number The number of post comments.
     #//
-    return apply_filters("comments_number", output, number)
+    return apply_filters("comments_number", output_, number_)
 # end def get_comments_number_text
 #// 
 #// Retrieves the text of the current comment.
@@ -919,16 +965,19 @@ def get_comments_number_text(zero=False, one=False, more=False, post_id=0, *args
 #// @param array           $args       Optional. An array of arguments. Default empty array.
 #// @return string The comment content.
 #//
-def get_comment_text(comment_ID=0, args=Array(), *args_):
+def get_comment_text(comment_ID_=0, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    comment = get_comment(comment_ID)
-    comment_content = comment.comment_content
-    if is_comment_feed() and comment.comment_parent:
-        parent = get_comment(comment.comment_parent)
-        if parent:
-            parent_link = esc_url(get_comment_link(parent))
-            name = get_comment_author(parent)
-            comment_content = php_sprintf(ent2ncr(__("In reply to %s.")), "<a href=\"" + parent_link + "\">" + name + "</a>") + "\n\n" + comment_content
+    comment_ = get_comment(comment_ID_)
+    comment_content_ = comment_.comment_content
+    if is_comment_feed() and comment_.comment_parent:
+        parent_ = get_comment(comment_.comment_parent)
+        if parent_:
+            parent_link_ = esc_url(get_comment_link(parent_))
+            name_ = get_comment_author(parent_)
+            comment_content_ = php_sprintf(ent2ncr(__("In reply to %s.")), "<a href=\"" + parent_link_ + "\">" + name_ + "</a>") + "\n\n" + comment_content_
         # end if
     # end if
     #// 
@@ -942,7 +991,7 @@ def get_comment_text(comment_ID=0, args=Array(), *args_):
     #// @param WP_Comment $comment         The comment object.
     #// @param array      $args            An array of arguments.
     #//
-    return apply_filters("get_comment_text", comment_content, comment, args)
+    return apply_filters("get_comment_text", comment_content_, comment_, args_)
 # end def get_comment_text
 #// 
 #// Displays the text of the current comment.
@@ -956,10 +1005,13 @@ def get_comment_text(comment_ID=0, args=Array(), *args_):
 #// Default current comment.
 #// @param array           $args       Optional. An array of arguments. Default empty array.
 #//
-def comment_text(comment_ID=0, args=Array(), *args_):
+def comment_text(comment_ID_=0, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    comment = get_comment(comment_ID)
-    comment_text = get_comment_text(comment, args)
+    comment_ = get_comment(comment_ID_)
+    comment_text_ = get_comment_text(comment_, args_)
     #// 
     #// Filters the text of a comment to be displayed.
     #// 
@@ -971,7 +1023,7 @@ def comment_text(comment_ID=0, args=Array(), *args_):
     #// @param WP_Comment|null $comment      The comment object.
     #// @param array           $args         An array of arguments.
     #//
-    php_print(apply_filters("comment_text", comment_text, comment, args))
+    php_print(apply_filters("comment_text", comment_text_, comment_, args_))
 # end def comment_text
 #// 
 #// Retrieves the comment time of the current comment.
@@ -984,14 +1036,20 @@ def comment_text(comment_ID=0, args=Array(), *args_):
 #// Default true.
 #// @return string The formatted time.
 #//
-def get_comment_time(format="", gmt=False, translate=True, *args_):
+def get_comment_time(format_="", gmt_=None, translate_=None, *_args_):
+    if gmt_ is None:
+        gmt_ = False
+    # end if
+    if translate_ is None:
+        translate_ = True
+    # end if
     
-    comment = get_comment()
-    comment_date = comment.comment_date_gmt if gmt else comment.comment_date
-    if "" == format:
-        date = mysql2date(get_option("time_format"), comment_date, translate)
+    comment_ = get_comment()
+    comment_date_ = comment_.comment_date_gmt if gmt_ else comment_.comment_date
+    if "" == format_:
+        date_ = mysql2date(get_option("time_format"), comment_date_, translate_)
     else:
-        date = mysql2date(format, comment_date, translate)
+        date_ = mysql2date(format_, comment_date_, translate_)
     # end if
     #// 
     #// Filters the returned comment time.
@@ -1004,7 +1062,7 @@ def get_comment_time(format="", gmt=False, translate=True, *args_):
     #// @param bool       $translate Whether the time is translated.
     #// @param WP_Comment $comment   The comment object.
     #//
-    return apply_filters("get_comment_time", date, format, gmt, translate, comment)
+    return apply_filters("get_comment_time", date_, format_, gmt_, translate_, comment_)
 # end def get_comment_time
 #// 
 #// Displays the comment time of the current comment.
@@ -1013,9 +1071,10 @@ def get_comment_time(format="", gmt=False, translate=True, *args_):
 #// 
 #// @param string $format Optional. The format of the time. Default user's settings.
 #//
-def comment_time(format="", *args_):
+def comment_time(format_="", *_args_):
     
-    php_print(get_comment_time(format))
+    
+    php_print(get_comment_time(format_))
 # end def comment_time
 #// 
 #// Retrieves the comment type of the current comment.
@@ -1027,11 +1086,12 @@ def comment_time(format="", *args_):
 #// Default current comment.
 #// @return string The comment type.
 #//
-def get_comment_type(comment_ID=0, *args_):
+def get_comment_type(comment_ID_=0, *_args_):
     
-    comment = get_comment(comment_ID)
-    if "" == comment.comment_type:
-        comment.comment_type = "comment"
+    
+    comment_ = get_comment(comment_ID_)
+    if "" == comment_.comment_type:
+        comment_.comment_type = "comment"
     # end if
     #// 
     #// Filters the returned comment type.
@@ -1043,7 +1103,7 @@ def get_comment_type(comment_ID=0, *args_):
     #// @param int        $comment_ID   The comment ID.
     #// @param WP_Comment $comment      The comment object.
     #//
-    return apply_filters("get_comment_type", comment.comment_type, comment.comment_ID, comment)
+    return apply_filters("get_comment_type", comment_.comment_type, comment_.comment_ID, comment_)
 # end def get_comment_type
 #// 
 #// Displays the comment type of the current comment.
@@ -1054,29 +1114,38 @@ def get_comment_type(comment_ID=0, *args_):
 #// @param string $trackbacktxt Optional. String to display for trackback type. Default false.
 #// @param string $pingbacktxt  Optional. String to display for pingback type. Default false.
 #//
-def comment_type(commenttxt=False, trackbacktxt=False, pingbacktxt=False, *args_):
+def comment_type(commenttxt_=None, trackbacktxt_=None, pingbacktxt_=None, *_args_):
+    if commenttxt_ is None:
+        commenttxt_ = False
+    # end if
+    if trackbacktxt_ is None:
+        trackbacktxt_ = False
+    # end if
+    if pingbacktxt_ is None:
+        pingbacktxt_ = False
+    # end if
     
-    if False == commenttxt:
-        commenttxt = _x("Comment", "noun")
+    if False == commenttxt_:
+        commenttxt_ = _x("Comment", "noun")
     # end if
-    if False == trackbacktxt:
-        trackbacktxt = __("Trackback")
+    if False == trackbacktxt_:
+        trackbacktxt_ = __("Trackback")
     # end if
-    if False == pingbacktxt:
-        pingbacktxt = __("Pingback")
+    if False == pingbacktxt_:
+        pingbacktxt_ = __("Pingback")
     # end if
-    type = get_comment_type()
-    for case in Switch(type):
+    type_ = get_comment_type()
+    for case in Switch(type_):
         if case("trackback"):
-            php_print(trackbacktxt)
+            php_print(trackbacktxt_)
             break
         # end if
         if case("pingback"):
-            php_print(pingbacktxt)
+            php_print(pingbacktxt_)
             break
         # end if
         if case():
-            php_print(commenttxt)
+            php_print(commenttxt_)
         # end if
     # end for
 # end def comment_type
@@ -1091,12 +1160,13 @@ def comment_type(commenttxt=False, trackbacktxt=False, pingbacktxt=False, *args_
 #// 
 #// @return string The trackback URL after being filtered.
 #//
-def get_trackback_url(*args_):
+def get_trackback_url(*_args_):
+    
     
     if "" != get_option("permalink_structure"):
-        tb_url = trailingslashit(get_permalink()) + user_trailingslashit("trackback", "single_trackback")
+        tb_url_ = trailingslashit(get_permalink()) + user_trailingslashit("trackback", "single_trackback")
     else:
-        tb_url = get_option("siteurl") + "/wp-trackback.php?p=" + get_the_ID()
+        tb_url_ = get_option("siteurl") + "/wp-trackback.php?p=" + get_the_ID()
     # end if
     #// 
     #// Filters the returned trackback URL.
@@ -1105,7 +1175,7 @@ def get_trackback_url(*args_):
     #// 
     #// @param string $tb_url The trackback URL.
     #//
-    return apply_filters("trackback_url", tb_url)
+    return apply_filters("trackback_url", tb_url_)
 # end def get_trackback_url
 #// 
 #// Displays the current post's trackback URL.
@@ -1116,12 +1186,15 @@ def get_trackback_url(*args_):
 #// @return void|string Should only be used to echo the trackback URL, use get_trackback_url()
 #// for the result instead.
 #//
-def trackback_url(deprecated_echo=True, *args_):
+def trackback_url(deprecated_echo_=None, *_args_):
+    if deprecated_echo_ is None:
+        deprecated_echo_ = True
+    # end if
     
-    if True != deprecated_echo:
+    if True != deprecated_echo_:
         _deprecated_argument(__FUNCTION__, "2.5.0", php_sprintf(__("Use %s instead if you do not want the value echoed."), "<code>get_trackback_url()</code>"))
     # end if
-    if deprecated_echo:
+    if deprecated_echo_:
         php_print(get_trackback_url())
     else:
         return get_trackback_url()
@@ -1136,9 +1209,10 @@ def trackback_url(deprecated_echo=True, *args_):
 #// 
 #// @param int $deprecated Not used (Was $timezone = 0).
 #//
-def trackback_rdf(deprecated="", *args_):
+def trackback_rdf(deprecated_="", *_args_):
     
-    if (not php_empty(lambda : deprecated)):
+    
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.5.0")
     # end if
     if (php_isset(lambda : PHP_SERVER["HTTP_USER_AGENT"])) and False != php_stripos(PHP_SERVER["HTTP_USER_AGENT"], "W3C_Validator"):
@@ -1169,11 +1243,12 @@ def trackback_rdf(deprecated="", *args_):
 #// @param int|WP_Post $post_id Post ID or WP_Post object. Default current post.
 #// @return bool True if the comments are open.
 #//
-def comments_open(post_id=None, *args_):
+def comments_open(post_id_=None, *_args_):
     
-    _post = get_post(post_id)
-    post_id = _post.ID if _post else 0
-    open_ = "open" == _post.comment_status
+    
+    _post_ = get_post(post_id_)
+    post_id_ = _post_.ID if _post_ else 0
+    open_ = "open" == _post_.comment_status
     #// 
     #// Filters whether the current post is open for comments.
     #// 
@@ -1182,7 +1257,7 @@ def comments_open(post_id=None, *args_):
     #// @param bool $open    Whether the current post is open for comments.
     #// @param int  $post_id The post ID.
     #//
-    return apply_filters("comments_open", open_, post_id)
+    return apply_filters("comments_open", open_, post_id_)
 # end def comments_open
 #// 
 #// Determines whether the current post is open for pings.
@@ -1196,11 +1271,12 @@ def comments_open(post_id=None, *args_):
 #// @param int|WP_Post $post_id Post ID or WP_Post object. Default current post.
 #// @return bool True if pings are accepted
 #//
-def pings_open(post_id=None, *args_):
+def pings_open(post_id_=None, *_args_):
     
-    _post = get_post(post_id)
-    post_id = _post.ID if _post else 0
-    open_ = "open" == _post.ping_status
+    
+    _post_ = get_post(post_id_)
+    post_id_ = _post_.ID if _post_ else 0
+    open_ = "open" == _post_.ping_status
     #// 
     #// Filters whether the current post is open for pings.
     #// 
@@ -1209,7 +1285,7 @@ def pings_open(post_id=None, *args_):
     #// @param bool $open    Whether the current post is open for pings.
     #// @param int  $post_id The post ID.
     #//
-    return apply_filters("pings_open", open_, post_id)
+    return apply_filters("pings_open", open_, post_id_)
 # end def pings_open
 #// 
 #// Displays form token for unfiltered comments.
@@ -1225,12 +1301,13 @@ def pings_open(post_id=None, *args_):
 #// 
 #// @since 2.1.3
 #//
-def wp_comment_form_unfiltered_html_nonce(*args_):
+def wp_comment_form_unfiltered_html_nonce(*_args_):
     
-    post = get_post()
-    post_id = post.ID if post else 0
+    
+    post_ = get_post()
+    post_id_ = post_.ID if post_ else 0
     if current_user_can("unfiltered_html"):
-        wp_nonce_field("unfiltered-html-comment_" + post_id, "_wp_unfiltered_html_comment_disabled", False)
+        wp_nonce_field("unfiltered-html-comment_" + post_id_, "_wp_unfiltered_html_comment_disabled", False)
         php_print("<script>(function(){if(window===window.parent){document.getElementById('_wp_unfiltered_html_comment_disabled').name='_wp_unfiltered_html_comment';}})();</script>\n")
     # end if
 # end def wp_comment_form_unfiltered_html_nonce
@@ -1269,73 +1346,85 @@ def wp_comment_form_unfiltered_html_nonce(*args_):
 #// @param bool   $separate_comments Optional. Whether to separate the comments by comment type.
 #// Default false.
 #//
-def comments_template(file="/comments.php", separate_comments=False, *args_):
+def comments_template(file_="/comments.php", separate_comments_=None, *_args_):
+    if separate_comments_ is None:
+        separate_comments_ = False
+    # end if
     
-    global wp_query,withcomments,post,wpdb,id,comment,user_login,user_ID,user_identity,overridden_cpage
-    php_check_if_defined("wp_query","withcomments","post","wpdb","id","comment","user_login","user_ID","user_identity","overridden_cpage")
-    if (not is_single() or is_page() or withcomments) or php_empty(lambda : post):
+    global wp_query_
+    global withcomments_
+    global post_
+    global wpdb_
+    global id_
+    global comment_
+    global user_login_
+    global user_ID_
+    global user_identity_
+    global overridden_cpage_
+    php_check_if_defined("wp_query_","withcomments_","post_","wpdb_","id_","comment_","user_login_","user_ID_","user_identity_","overridden_cpage_")
+    if (not is_single() or is_page() or withcomments_) or php_empty(lambda : post_):
         return
     # end if
-    if php_empty(lambda : file):
-        file = "/comments.php"
+    if php_empty(lambda : file_):
+        file_ = "/comments.php"
     # end if
-    req = get_option("require_name_email")
+    req_ = get_option("require_name_email")
     #// 
     #// Comment author information fetched from the comment cookies.
     #//
-    commenter = wp_get_current_commenter()
+    commenter_ = wp_get_current_commenter()
     #// 
     #// The name of the current comment author escaped for use in attributes.
     #// Escaped by sanitize_comment_cookies().
     #//
-    comment_author = commenter["comment_author"]
+    comment_author_ = commenter_["comment_author"]
     #// 
     #// The email address of the current comment author escaped for use in attributes.
     #// Escaped by sanitize_comment_cookies().
     #//
-    comment_author_email = commenter["comment_author_email"]
+    comment_author_email_ = commenter_["comment_author_email"]
     #// 
     #// The URL of the current comment author escaped for use in attributes.
     #//
-    comment_author_url = esc_url(commenter["comment_author_url"])
-    comment_args = Array({"orderby": "comment_date_gmt", "order": "ASC", "status": "approve", "post_id": post.ID, "no_found_rows": False, "update_comment_meta_cache": False})
+    comment_author_url_ = esc_url(commenter_["comment_author_url"])
+    comment_args_ = Array({"orderby": "comment_date_gmt", "order": "ASC", "status": "approve", "post_id": post_.ID, "no_found_rows": False, "update_comment_meta_cache": False})
     if get_option("thread_comments"):
-        comment_args["hierarchical"] = "threaded"
+        comment_args_["hierarchical"] = "threaded"
     else:
-        comment_args["hierarchical"] = False
+        comment_args_["hierarchical"] = False
     # end if
-    if user_ID:
-        comment_args["include_unapproved"] = Array(user_ID)
+    if user_ID_:
+        comment_args_["include_unapproved"] = Array(user_ID_)
     else:
-        unapproved_email = wp_get_unapproved_comment_author_email()
-        if unapproved_email:
-            comment_args["include_unapproved"] = Array(unapproved_email)
+        unapproved_email_ = wp_get_unapproved_comment_author_email()
+        if unapproved_email_:
+            comment_args_["include_unapproved"] = Array(unapproved_email_)
         # end if
     # end if
-    per_page = 0
+    per_page_ = 0
     if get_option("page_comments"):
-        per_page = php_int(get_query_var("comments_per_page"))
-        if 0 == per_page:
-            per_page = php_int(get_option("comments_per_page"))
+        per_page_ = php_int(get_query_var("comments_per_page"))
+        if 0 == per_page_:
+            per_page_ = php_int(get_option("comments_per_page"))
         # end if
-        comment_args["number"] = per_page
-        page = php_int(get_query_var("cpage"))
-        if page:
-            comment_args["offset"] = page - 1 * per_page
+        comment_args_["number"] = per_page_
+        page_ = php_int(get_query_var("cpage"))
+        if page_:
+            comment_args_["offset"] = page_ - 1 * per_page_
         elif "oldest" == get_option("default_comments_page"):
-            comment_args["offset"] = 0
+            comment_args_["offset"] = 0
         else:
             #// If fetching the first page of 'newest', we need a top-level comment count.
-            top_level_query = php_new_class("WP_Comment_Query", lambda : WP_Comment_Query())
-            top_level_args = Array({"count": True, "orderby": False, "post_id": post.ID, "status": "approve"})
-            if comment_args["hierarchical"]:
-                top_level_args["parent"] = 0
+            top_level_query_ = php_new_class("WP_Comment_Query", lambda : WP_Comment_Query())
+            top_level_args_ = Array({"count": True, "orderby": False, "post_id": post_.ID, "status": "approve"})
+            if comment_args_["hierarchical"]:
+                top_level_args_["parent"] = 0
             # end if
-            if (php_isset(lambda : comment_args["include_unapproved"])):
-                top_level_args["include_unapproved"] = comment_args["include_unapproved"]
+            if (php_isset(lambda : comment_args_["include_unapproved"])):
+                top_level_args_["include_unapproved"] = comment_args_["include_unapproved"]
             # end if
-            top_level_count = top_level_query.query(top_level_args)
-            comment_args["offset"] = ceil(top_level_count / per_page) - 1 * per_page
+            top_level_count_ = top_level_query_.query(top_level_args_)
+            comment_args_["offset"] = ceil(top_level_count_ / per_page_) - 1 * per_page_
         # end if
     # end if
     #// 
@@ -1361,21 +1450,21 @@ def comments_template(file="/comments.php", separate_comments=False, *args_):
     #// @type int          $number                    Number of comments to fetch.
     #// }
     #//
-    comment_args = apply_filters("comments_template_query_args", comment_args)
-    comment_query = php_new_class("WP_Comment_Query", lambda : WP_Comment_Query(comment_args))
-    _comments = comment_query.comments
+    comment_args_ = apply_filters("comments_template_query_args", comment_args_)
+    comment_query_ = php_new_class("WP_Comment_Query", lambda : WP_Comment_Query(comment_args_))
+    _comments_ = comment_query_.comments
     #// Trees must be flattened before they're passed to the walker.
-    if comment_args["hierarchical"]:
-        comments_flat = Array()
-        for _comment in _comments:
-            comments_flat[-1] = _comment
-            comment_children = _comment.get_children(Array({"format": "flat", "status": comment_args["status"], "orderby": comment_args["orderby"]}))
-            for comment_child in comment_children:
-                comments_flat[-1] = comment_child
+    if comment_args_["hierarchical"]:
+        comments_flat_ = Array()
+        for _comment_ in _comments_:
+            comments_flat_[-1] = _comment_
+            comment_children_ = _comment_.get_children(Array({"format": "flat", "status": comment_args_["status"], "orderby": comment_args_["orderby"]}))
+            for comment_child_ in comment_children_:
+                comments_flat_[-1] = comment_child_
             # end for
         # end for
     else:
-        comments_flat = _comments
+        comments_flat_ = _comments_
     # end if
     #// 
     #// Filters the comments array.
@@ -1385,25 +1474,25 @@ def comments_template(file="/comments.php", separate_comments=False, *args_):
     #// @param array $comments Array of comments supplied to the comments template.
     #// @param int   $post_ID  Post ID.
     #//
-    wp_query.comments = apply_filters("comments_array", comments_flat, post.ID)
-    comments = wp_query.comments
-    wp_query.comment_count = php_count(wp_query.comments)
-    wp_query.max_num_comment_pages = comment_query.max_num_pages
-    if separate_comments:
-        wp_query.comments_by_type = separate_comments(comments)
-        comments_by_type = wp_query.comments_by_type
+    wp_query_.comments = apply_filters("comments_array", comments_flat_, post_.ID)
+    comments_ = wp_query_.comments
+    wp_query_.comment_count = php_count(wp_query_.comments)
+    wp_query_.max_num_comment_pages = comment_query_.max_num_pages
+    if separate_comments_:
+        wp_query_.comments_by_type = separate_comments(comments_)
+        comments_by_type_ = wp_query_.comments_by_type
     else:
-        wp_query.comments_by_type = Array()
+        wp_query_.comments_by_type = Array()
     # end if
-    overridden_cpage = False
-    if "" == get_query_var("cpage") and wp_query.max_num_comment_pages > 1:
+    overridden_cpage_ = False
+    if "" == get_query_var("cpage") and wp_query_.max_num_comment_pages > 1:
         set_query_var("cpage", get_comment_pages_count() if "newest" == get_option("default_comments_page") else 1)
-        overridden_cpage = True
+        overridden_cpage_ = True
     # end if
     if (not php_defined("COMMENTS_TEMPLATE")):
         php_define("COMMENTS_TEMPLATE", True)
     # end if
-    theme_template = STYLESHEETPATH + file
+    theme_template_ = STYLESHEETPATH + file_
     #// 
     #// Filters the path to the theme template file used for the comments template.
     #// 
@@ -1411,11 +1500,11 @@ def comments_template(file="/comments.php", separate_comments=False, *args_):
     #// 
     #// @param string $theme_template The path to the theme template file.
     #//
-    include = apply_filters("comments_template", theme_template)
-    if php_file_exists(include):
-        php_include_file(include, once=False)
-    elif php_file_exists(TEMPLATEPATH + file):
-        php_include_file(TEMPLATEPATH + file, once=False)
+    include_ = apply_filters("comments_template", theme_template_)
+    if php_file_exists(include_):
+        php_include_file(include_, once=False)
+    elif php_file_exists(TEMPLATEPATH + file_):
+        php_include_file(TEMPLATEPATH + file_, once=False)
     else:
         #// Backward compat code will be removed in a future release.
         php_include_file(ABSPATH + WPINC + "/theme-compat/comments.php", once=False)
@@ -1432,30 +1521,42 @@ def comments_template(file="/comments.php", separate_comments=False, *args_):
 #// @param string       $css_class Optional. CSS class to use for comments. Default empty.
 #// @param false|string $none      Optional. String to display when comments have been turned off. Default false.
 #//
-def comments_popup_link(zero=False, one=False, more=False, css_class="", none=False, *args_):
+def comments_popup_link(zero_=None, one_=None, more_=None, css_class_="", none_=None, *_args_):
+    if zero_ is None:
+        zero_ = False
+    # end if
+    if one_ is None:
+        one_ = False
+    # end if
+    if more_ is None:
+        more_ = False
+    # end if
+    if none_ is None:
+        none_ = False
+    # end if
     
-    id = get_the_ID()
-    title = get_the_title()
-    number = get_comments_number(id)
-    if False == zero:
+    id_ = get_the_ID()
+    title_ = get_the_title()
+    number_ = get_comments_number(id_)
+    if False == zero_:
         #// translators: %s: Post title.
-        zero = php_sprintf(__("No Comments<span class=\"screen-reader-text\"> on %s</span>"), title)
+        zero_ = php_sprintf(__("No Comments<span class=\"screen-reader-text\"> on %s</span>"), title_)
     # end if
-    if False == one:
+    if False == one_:
         #// translators: %s: Post title.
-        one = php_sprintf(__("1 Comment<span class=\"screen-reader-text\"> on %s</span>"), title)
+        one_ = php_sprintf(__("1 Comment<span class=\"screen-reader-text\"> on %s</span>"), title_)
     # end if
-    if False == more:
+    if False == more_:
         #// translators: 1: Number of comments, 2: Post title.
-        more = _n("%1$s Comment<span class=\"screen-reader-text\"> on %2$s</span>", "%1$s Comments<span class=\"screen-reader-text\"> on %2$s</span>", number)
-        more = php_sprintf(more, number_format_i18n(number), title)
+        more_ = _n("%1$s Comment<span class=\"screen-reader-text\"> on %2$s</span>", "%1$s Comments<span class=\"screen-reader-text\"> on %2$s</span>", number_)
+        more_ = php_sprintf(more_, number_format_i18n(number_), title_)
     # end if
-    if False == none:
+    if False == none_:
         #// translators: %s: Post title.
-        none = php_sprintf(__("Comments Off<span class=\"screen-reader-text\"> on %s</span>"), title)
+        none_ = php_sprintf(__("Comments Off<span class=\"screen-reader-text\"> on %s</span>"), title_)
     # end if
-    if 0 == number and (not comments_open()) and (not pings_open()):
-        php_print("<span" + " class=\"" + esc_attr(css_class) + "\"" if (not php_empty(lambda : css_class)) else "" + ">" + none + "</span>")
+    if 0 == number_ and (not comments_open()) and (not pings_open()):
+        php_print("<span" + " class=\"" + esc_attr(css_class_) + "\"" if (not php_empty(lambda : css_class_)) else "" + ">" + none_ + "</span>")
         return
     # end if
     if post_password_required():
@@ -1463,8 +1564,8 @@ def comments_popup_link(zero=False, one=False, more=False, css_class="", none=Fa
         return
     # end if
     php_print("<a href=\"")
-    if 0 == number:
-        respond_link = get_permalink() + "#respond"
+    if 0 == number_:
+        respond_link_ = get_permalink() + "#respond"
         #// 
         #// Filters the respond link when a post has no comments.
         #// 
@@ -1473,15 +1574,15 @@ def comments_popup_link(zero=False, one=False, more=False, css_class="", none=Fa
         #// @param string $respond_link The default response link.
         #// @param integer $id The post ID.
         #//
-        php_print(apply_filters("respond_link", respond_link, id))
+        php_print(apply_filters("respond_link", respond_link_, id_))
     else:
         comments_link()
     # end if
     php_print("\"")
-    if (not php_empty(lambda : css_class)):
-        php_print(" class=\"" + css_class + "\" ")
+    if (not php_empty(lambda : css_class_)):
+        php_print(" class=\"" + css_class_ + "\" ")
     # end if
-    attributes = ""
+    attributes_ = ""
     #// 
     #// Filters the comments link attributes for display.
     #// 
@@ -1489,9 +1590,9 @@ def comments_popup_link(zero=False, one=False, more=False, css_class="", none=Fa
     #// 
     #// @param string $attributes The comments link attributes. Default empty.
     #//
-    php_print(apply_filters("comments_popup_link_attributes", attributes))
+    php_print(apply_filters("comments_popup_link_attributes", attributes_))
     php_print(">")
-    comments_number(zero, one, more)
+    comments_number(zero_, one_, more_)
     php_print("</a>")
 # end def comments_popup_link
 #// 
@@ -1522,22 +1623,25 @@ def comments_popup_link(zero=False, one=False, more=False, css_class="", none=Fa
 #// Default current post.
 #// @return string|false|null Link to show comment form, if successful. False, if comments are closed.
 #//
-def get_comment_reply_link(args=Array(), comment=None, post=None, *args_):
+def get_comment_reply_link(args_=None, comment_=None, post_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    defaults = Array({"add_below": "comment", "respond_id": "respond", "reply_text": __("Reply"), "reply_to_text": __("Reply to %s"), "login_text": __("Log in to Reply"), "max_depth": 0, "depth": 0, "before": "", "after": ""})
-    args = wp_parse_args(args, defaults)
-    if 0 == args["depth"] or args["max_depth"] <= args["depth"]:
+    defaults_ = Array({"add_below": "comment", "respond_id": "respond", "reply_text": __("Reply"), "reply_to_text": __("Reply to %s"), "login_text": __("Log in to Reply"), "max_depth": 0, "depth": 0, "before": "", "after": ""})
+    args_ = wp_parse_args(args_, defaults_)
+    if 0 == args_["depth"] or args_["max_depth"] <= args_["depth"]:
         return
     # end if
-    comment = get_comment(comment)
-    if php_empty(lambda : comment):
+    comment_ = get_comment(comment_)
+    if php_empty(lambda : comment_):
         return
     # end if
-    if php_empty(lambda : post):
-        post = comment.comment_post_ID
+    if php_empty(lambda : post_):
+        post_ = comment_.comment_post_ID
     # end if
-    post = get_post(post)
-    if (not comments_open(post.ID)):
+    post_ = get_post(post_)
+    if (not comments_open(post_.ID)):
         return False
     # end if
     #// 
@@ -1550,17 +1654,17 @@ def get_comment_reply_link(args=Array(), comment=None, post=None, *args_):
     #// @param WP_Comment $comment The object of the comment being replied to.
     #// @param WP_Post    $post    The WP_Post object.
     #//
-    args = apply_filters("comment_reply_link_args", args, comment, post)
+    args_ = apply_filters("comment_reply_link_args", args_, comment_, post_)
     if get_option("comment_registration") and (not is_user_logged_in()):
-        link = php_sprintf("<a rel=\"nofollow\" class=\"comment-reply-login\" href=\"%s\">%s</a>", esc_url(wp_login_url(get_permalink())), args["login_text"])
+        link_ = php_sprintf("<a rel=\"nofollow\" class=\"comment-reply-login\" href=\"%s\">%s</a>", esc_url(wp_login_url(get_permalink())), args_["login_text"])
     else:
-        data_attributes = Array({"commentid": comment.comment_ID, "postid": post.ID, "belowelement": args["add_below"] + "-" + comment.comment_ID, "respondelement": args["respond_id"]})
-        data_attribute_string = ""
-        for name,value in data_attributes:
-            data_attribute_string += str(" data-") + str(name) + str("=\"") + esc_attr(value) + "\""
+        data_attributes_ = Array({"commentid": comment_.comment_ID, "postid": post_.ID, "belowelement": args_["add_below"] + "-" + comment_.comment_ID, "respondelement": args_["respond_id"]})
+        data_attribute_string_ = ""
+        for name_,value_ in data_attributes_:
+            data_attribute_string_ += str(" data-") + str(name_) + str("=\"") + esc_attr(value_) + "\""
         # end for
-        data_attribute_string = php_trim(data_attribute_string)
-        link = php_sprintf("<a rel='nofollow' class='comment-reply-link' href='%s' %s aria-label='%s'>%s</a>", esc_url(add_query_arg(Array({"replytocom": comment.comment_ID, "unapproved": False, "moderation-hash": False}), get_permalink(post.ID))) + "#" + args["respond_id"], data_attribute_string, esc_attr(php_sprintf(args["reply_to_text"], comment.comment_author)), args["reply_text"])
+        data_attribute_string_ = php_trim(data_attribute_string_)
+        link_ = php_sprintf("<a rel='nofollow' class='comment-reply-link' href='%s' %s aria-label='%s'>%s</a>", esc_url(add_query_arg(Array({"replytocom": comment_.comment_ID, "unapproved": False, "moderation-hash": False}), get_permalink(post_.ID))) + "#" + args_["respond_id"], data_attribute_string_, esc_attr(php_sprintf(args_["reply_to_text"], comment_.comment_author)), args_["reply_text"])
     # end if
     #// 
     #// Filters the comment reply link.
@@ -1572,7 +1676,7 @@ def get_comment_reply_link(args=Array(), comment=None, post=None, *args_):
     #// @param WP_Comment $comment The object of the comment being replied.
     #// @param WP_Post    $post    The WP_Post object.
     #//
-    return apply_filters("comment_reply_link", args["before"] + link + args["after"], args, comment, post)
+    return apply_filters("comment_reply_link", args_["before"] + link_ + args_["after"], args_, comment_, post_)
 # end def get_comment_reply_link
 #// 
 #// Displays the HTML content for reply to comment link.
@@ -1586,9 +1690,12 @@ def get_comment_reply_link(args=Array(), comment=None, post=None, *args_):
 #// @param int|WP_Post    $post    Post ID or WP_Post object the comment is going to be displayed on.
 #// Default current post.
 #//
-def comment_reply_link(args=Array(), comment=None, post=None, *args_):
+def comment_reply_link(args_=None, comment_=None, post_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    php_print(get_comment_reply_link(args, comment, post))
+    php_print(get_comment_reply_link(args_, comment_, post_))
 # end def comment_reply_link
 #// 
 #// Retrieves HTML content for reply to post link.
@@ -1613,21 +1720,24 @@ def comment_reply_link(args=Array(), comment=None, post=None, *args_):
 #// Default current post.
 #// @return string|false|null Link to show comment form, if successful. False, if comments are closed.
 #//
-def get_post_reply_link(args=Array(), post=None, *args_):
+def get_post_reply_link(args_=None, post_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    defaults = Array({"add_below": "post", "respond_id": "respond", "reply_text": __("Leave a Comment"), "login_text": __("Log in to leave a Comment"), "before": "", "after": ""})
-    args = wp_parse_args(args, defaults)
-    post = get_post(post)
-    if (not comments_open(post.ID)):
+    defaults_ = Array({"add_below": "post", "respond_id": "respond", "reply_text": __("Leave a Comment"), "login_text": __("Log in to leave a Comment"), "before": "", "after": ""})
+    args_ = wp_parse_args(args_, defaults_)
+    post_ = get_post(post_)
+    if (not comments_open(post_.ID)):
         return False
     # end if
     if get_option("comment_registration") and (not is_user_logged_in()):
-        link = php_sprintf("<a rel=\"nofollow\" class=\"comment-reply-login\" href=\"%s\">%s</a>", wp_login_url(get_permalink()), args["login_text"])
+        link_ = php_sprintf("<a rel=\"nofollow\" class=\"comment-reply-login\" href=\"%s\">%s</a>", wp_login_url(get_permalink()), args_["login_text"])
     else:
-        onclick = php_sprintf("return addComment.moveForm( \"%1$s-%2$s\", \"0\", \"%3$s\", \"%2$s\" )", args["add_below"], post.ID, args["respond_id"])
-        link = php_sprintf("<a rel='nofollow' class='comment-reply-link' href='%s' onclick='%s'>%s</a>", get_permalink(post.ID) + "#" + args["respond_id"], onclick, args["reply_text"])
+        onclick_ = php_sprintf("return addComment.moveForm( \"%1$s-%2$s\", \"0\", \"%3$s\", \"%2$s\" )", args_["add_below"], post_.ID, args_["respond_id"])
+        link_ = php_sprintf("<a rel='nofollow' class='comment-reply-link' href='%s' onclick='%s'>%s</a>", get_permalink(post_.ID) + "#" + args_["respond_id"], onclick_, args_["reply_text"])
     # end if
-    formatted_link = args["before"] + link + args["after"]
+    formatted_link_ = args_["before"] + link_ + args_["after"]
     #// 
     #// Filters the formatted post comments link HTML.
     #// 
@@ -1636,7 +1746,7 @@ def get_post_reply_link(args=Array(), post=None, *args_):
     #// @param string      $formatted The HTML-formatted post comments link.
     #// @param int|WP_Post $post      The post ID or WP_Post object.
     #//
-    return apply_filters("post_comments_link", formatted_link, post)
+    return apply_filters("post_comments_link", formatted_link_, post_)
 # end def get_post_reply_link
 #// 
 #// Displays the HTML content for reply to post link.
@@ -1649,9 +1759,12 @@ def get_post_reply_link(args=Array(), post=None, *args_):
 #// @param int|WP_Post $post Post ID or WP_Post object the comment is going to be displayed on.
 #// Default current post.
 #//
-def post_reply_link(args=Array(), post=None, *args_):
+def post_reply_link(args_=None, post_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    php_print(get_post_reply_link(args, post))
+    php_print(get_post_reply_link(args_, post_))
 # end def post_reply_link
 #// 
 #// Retrieves HTML content for cancel comment reply link.
@@ -1661,14 +1774,15 @@ def post_reply_link(args=Array(), post=None, *args_):
 #// @param string $text Optional. Text to display for cancel reply link. Default empty.
 #// @return string
 #//
-def get_cancel_comment_reply_link(text="", *args_):
+def get_cancel_comment_reply_link(text_="", *_args_):
     
-    if php_empty(lambda : text):
-        text = __("Click here to cancel reply.")
+    
+    if php_empty(lambda : text_):
+        text_ = __("Click here to cancel reply.")
     # end if
-    style = "" if (php_isset(lambda : PHP_REQUEST["replytocom"])) else " style=\"display:none;\""
-    link = esc_html(remove_query_arg(Array("replytocom", "unapproved", "moderation-hash"))) + "#respond"
-    formatted_link = "<a rel=\"nofollow\" id=\"cancel-comment-reply-link\" href=\"" + link + "\"" + style + ">" + text + "</a>"
+    style_ = "" if (php_isset(lambda : PHP_REQUEST["replytocom"])) else " style=\"display:none;\""
+    link_ = esc_html(remove_query_arg(Array("replytocom", "unapproved", "moderation-hash"))) + "#respond"
+    formatted_link_ = "<a rel=\"nofollow\" id=\"cancel-comment-reply-link\" href=\"" + link_ + "\"" + style_ + ">" + text_ + "</a>"
     #// 
     #// Filters the cancel comment reply link HTML.
     #// 
@@ -1678,7 +1792,7 @@ def get_cancel_comment_reply_link(text="", *args_):
     #// @param string $link           Cancel comment reply link URL.
     #// @param string $text           Cancel comment reply link text.
     #//
-    return apply_filters("cancel_comment_reply_link", formatted_link, link, text)
+    return apply_filters("cancel_comment_reply_link", formatted_link_, link_, text_)
 # end def get_cancel_comment_reply_link
 #// 
 #// Displays HTML content for cancel comment reply link.
@@ -1687,9 +1801,10 @@ def get_cancel_comment_reply_link(text="", *args_):
 #// 
 #// @param string $text Optional. Text to display for cancel reply link. Default empty.
 #//
-def cancel_comment_reply_link(text="", *args_):
+def cancel_comment_reply_link(text_="", *_args_):
     
-    php_print(get_cancel_comment_reply_link(text))
+    
+    php_print(get_cancel_comment_reply_link(text_))
 # end def cancel_comment_reply_link
 #// 
 #// Retrieves hidden input HTML for replying to comments.
@@ -1699,14 +1814,15 @@ def cancel_comment_reply_link(text="", *args_):
 #// @param int $id Optional. Post ID. Default current post ID.
 #// @return string Hidden input HTML for replying to comments
 #//
-def get_comment_id_fields(id=0, *args_):
+def get_comment_id_fields(id_=0, *_args_):
     
-    if php_empty(lambda : id):
-        id = get_the_ID()
+    
+    if php_empty(lambda : id_):
+        id_ = get_the_ID()
     # end if
-    replytoid = php_int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
-    result = str("<input type='hidden' name='comment_post_ID' value='") + str(id) + str("' id='comment_post_ID' />\n")
-    result += str("<input type='hidden' name='comment_parent' id='comment_parent' value='") + str(replytoid) + str("' />\n")
+    replytoid_ = php_int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
+    result_ = str("<input type='hidden' name='comment_post_ID' value='") + str(id_) + str("' id='comment_post_ID' />\n")
+    result_ += str("<input type='hidden' name='comment_parent' id='comment_parent' value='") + str(replytoid_) + str("' />\n")
     #// 
     #// Filters the returned comment id fields.
     #// 
@@ -1716,7 +1832,7 @@ def get_comment_id_fields(id=0, *args_):
     #// @param int    $id        The post ID.
     #// @param int    $replytoid The id of the comment being replied to.
     #//
-    return apply_filters("comment_id_fields", result, id, replytoid)
+    return apply_filters("comment_id_fields", result_, id_, replytoid_)
 # end def get_comment_id_fields
 #// 
 #// Outputs hidden input HTML for replying to comments.
@@ -1725,9 +1841,10 @@ def get_comment_id_fields(id=0, *args_):
 #// 
 #// @param int $id Optional. Post ID. Default current post ID.
 #//
-def comment_id_fields(id=0, *args_):
+def comment_id_fields(id_=0, *_args_):
     
-    php_print(get_comment_id_fields(id))
+    
+    php_print(get_comment_id_fields(id_))
 # end def comment_id_fields
 #// 
 #// Displays text based on comment reply status.
@@ -1749,25 +1866,34 @@ def comment_id_fields(id=0, *args_):
 #// @param string $linktoparent Optional. Boolean to control making the author's name a link
 #// to their comment. Default true.
 #//
-def comment_form_title(noreplytext=False, replytext=False, linktoparent=True, *args_):
+def comment_form_title(noreplytext_=None, replytext_=None, linktoparent_=None, *_args_):
+    if noreplytext_ is None:
+        noreplytext_ = False
+    # end if
+    if replytext_ is None:
+        replytext_ = False
+    # end if
+    if linktoparent_ is None:
+        linktoparent_ = True
+    # end if
     
-    global comment
-    php_check_if_defined("comment")
-    if False == noreplytext:
-        noreplytext = __("Leave a Reply")
+    global comment_
+    php_check_if_defined("comment_")
+    if False == noreplytext_:
+        noreplytext_ = __("Leave a Reply")
     # end if
-    if False == replytext:
+    if False == replytext_:
         #// translators: %s: Author of the comment being replied to.
-        replytext = __("Leave a Reply to %s")
+        replytext_ = __("Leave a Reply to %s")
     # end if
-    replytoid = php_int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
-    if 0 == replytoid:
-        php_print(noreplytext)
+    replytoid_ = php_int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
+    if 0 == replytoid_:
+        php_print(noreplytext_)
     else:
         #// Sets the global so that template tags can be used in the comment form.
-        comment = get_comment(replytoid)
-        author = "<a href=\"#comment-" + get_comment_ID() + "\">" + get_comment_author(comment) + "</a>" if linktoparent else get_comment_author(comment)
-        printf(replytext, author)
+        comment_ = get_comment(replytoid_)
+        author_ = "<a href=\"#comment-" + get_comment_ID() + "\">" + get_comment_author(comment_) + "</a>" if linktoparent_ else get_comment_author(comment_)
+        printf(replytext_, author_)
     # end if
 # end def comment_form_title
 #// 
@@ -1810,16 +1936,24 @@ def comment_form_title(noreplytext=False, replytext=False, linktoparent=True, *a
 #// @return void|string Void if 'echo' argument is true, or no comments to list.
 #// Otherwise, HTML list of comments.
 #//
-def wp_list_comments(args=Array(), comments=None, *args_):
+def wp_list_comments(args_=None, comments_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_query,comment_alt,comment_depth,comment_thread_alt,overridden_cpage,in_comment_loop
-    php_check_if_defined("wp_query","comment_alt","comment_depth","comment_thread_alt","overridden_cpage","in_comment_loop")
-    in_comment_loop = True
-    comment_alt = 0
-    comment_thread_alt = 0
-    comment_depth = 1
-    defaults = Array({"walker": None, "max_depth": "", "style": "ul", "callback": None, "end-callback": None, "type": "all", "page": "", "per_page": "", "avatar_size": 32, "reverse_top_level": None, "reverse_children": "", "format": "html5" if current_theme_supports("html5", "comment-list") else "xhtml", "short_ping": False, "echo": True})
-    parsed_args = wp_parse_args(args, defaults)
+    global wp_query_
+    global comment_alt_
+    global comment_depth_
+    global comment_thread_alt_
+    global overridden_cpage_
+    global in_comment_loop_
+    php_check_if_defined("wp_query_","comment_alt_","comment_depth_","comment_thread_alt_","overridden_cpage_","in_comment_loop_")
+    in_comment_loop_ = True
+    comment_alt_ = 0
+    comment_thread_alt_ = 0
+    comment_depth_ = 1
+    defaults_ = Array({"walker": None, "max_depth": "", "style": "ul", "callback": None, "end-callback": None, "type": "all", "page": "", "per_page": "", "avatar_size": 32, "reverse_top_level": None, "reverse_children": "", "format": "html5" if current_theme_supports("html5", "comment-list") else "xhtml", "short_ping": False, "echo": True})
+    parsed_args_ = wp_parse_args(args_, defaults_)
     #// 
     #// Filters the arguments used in retrieving the comment list.
     #// 
@@ -1829,129 +1963,129 @@ def wp_list_comments(args=Array(), comments=None, *args_):
     #// 
     #// @param array $parsed_args An array of arguments for displaying comments.
     #//
-    parsed_args = apply_filters("wp_list_comments_args", parsed_args)
+    parsed_args_ = apply_filters("wp_list_comments_args", parsed_args_)
     #// Figure out what comments we'll be looping through ($_comments).
-    if None != comments:
-        comments = comments
-        if php_empty(lambda : comments):
+    if None != comments_:
+        comments_ = comments_
+        if php_empty(lambda : comments_):
             return
         # end if
-        if "all" != parsed_args["type"]:
-            comments_by_type = separate_comments(comments)
-            if php_empty(lambda : comments_by_type[parsed_args["type"]]):
+        if "all" != parsed_args_["type"]:
+            comments_by_type_ = separate_comments(comments_)
+            if php_empty(lambda : comments_by_type_[parsed_args_["type"]]):
                 return
             # end if
-            _comments = comments_by_type[parsed_args["type"]]
+            _comments_ = comments_by_type_[parsed_args_["type"]]
         else:
-            _comments = comments
+            _comments_ = comments_
         # end if
     else:
         #// 
         #// If 'page' or 'per_page' has been passed, and does not match what's in $wp_query,
         #// perform a separate comment query and allow Walker_Comment to paginate.
         #//
-        if parsed_args["page"] or parsed_args["per_page"]:
-            current_cpage = get_query_var("cpage")
-            if (not current_cpage):
-                current_cpage = 1 if "newest" == get_option("default_comments_page") else wp_query.max_num_comment_pages
+        if parsed_args_["page"] or parsed_args_["per_page"]:
+            current_cpage_ = get_query_var("cpage")
+            if (not current_cpage_):
+                current_cpage_ = 1 if "newest" == get_option("default_comments_page") else wp_query_.max_num_comment_pages
             # end if
-            current_per_page = get_query_var("comments_per_page")
-            if parsed_args["page"] != current_cpage or parsed_args["per_page"] != current_per_page:
-                comment_args = Array({"post_id": get_the_ID(), "orderby": "comment_date_gmt", "order": "ASC", "status": "approve"})
+            current_per_page_ = get_query_var("comments_per_page")
+            if parsed_args_["page"] != current_cpage_ or parsed_args_["per_page"] != current_per_page_:
+                comment_args_ = Array({"post_id": get_the_ID(), "orderby": "comment_date_gmt", "order": "ASC", "status": "approve"})
                 if is_user_logged_in():
-                    comment_args["include_unapproved"] = get_current_user_id()
+                    comment_args_["include_unapproved"] = get_current_user_id()
                 else:
-                    unapproved_email = wp_get_unapproved_comment_author_email()
-                    if unapproved_email:
-                        comment_args["include_unapproved"] = Array(unapproved_email)
+                    unapproved_email_ = wp_get_unapproved_comment_author_email()
+                    if unapproved_email_:
+                        comment_args_["include_unapproved"] = Array(unapproved_email_)
                     # end if
                 # end if
-                comments = get_comments(comment_args)
-                if "all" != parsed_args["type"]:
-                    comments_by_type = separate_comments(comments)
-                    if php_empty(lambda : comments_by_type[parsed_args["type"]]):
+                comments_ = get_comments(comment_args_)
+                if "all" != parsed_args_["type"]:
+                    comments_by_type_ = separate_comments(comments_)
+                    if php_empty(lambda : comments_by_type_[parsed_args_["type"]]):
                         return
                     # end if
-                    _comments = comments_by_type[parsed_args["type"]]
+                    _comments_ = comments_by_type_[parsed_args_["type"]]
                 else:
-                    _comments = comments
+                    _comments_ = comments_
                 # end if
             # end if
             pass
         else:
-            if php_empty(lambda : wp_query.comments):
+            if php_empty(lambda : wp_query_.comments):
                 return
             # end if
-            if "all" != parsed_args["type"]:
-                if php_empty(lambda : wp_query.comments_by_type):
-                    wp_query.comments_by_type = separate_comments(wp_query.comments)
+            if "all" != parsed_args_["type"]:
+                if php_empty(lambda : wp_query_.comments_by_type):
+                    wp_query_.comments_by_type = separate_comments(wp_query_.comments)
                 # end if
-                if php_empty(lambda : wp_query.comments_by_type[parsed_args["type"]]):
+                if php_empty(lambda : wp_query_.comments_by_type[parsed_args_["type"]]):
                     return
                 # end if
-                _comments = wp_query.comments_by_type[parsed_args["type"]]
+                _comments_ = wp_query_.comments_by_type[parsed_args_["type"]]
             else:
-                _comments = wp_query.comments
+                _comments_ = wp_query_.comments
             # end if
-            if wp_query.max_num_comment_pages:
-                default_comments_page = get_option("default_comments_page")
-                cpage = get_query_var("cpage")
-                if "newest" == default_comments_page:
-                    parsed_args["cpage"] = cpage
+            if wp_query_.max_num_comment_pages:
+                default_comments_page_ = get_option("default_comments_page")
+                cpage_ = get_query_var("cpage")
+                if "newest" == default_comments_page_:
+                    parsed_args_["cpage"] = cpage_
                     pass
-                elif 1 == cpage:
-                    parsed_args["cpage"] = ""
+                elif 1 == cpage_:
+                    parsed_args_["cpage"] = ""
                 else:
-                    parsed_args["cpage"] = cpage
+                    parsed_args_["cpage"] = cpage_
                 # end if
-                parsed_args["page"] = 0
-                parsed_args["per_page"] = 0
+                parsed_args_["page"] = 0
+                parsed_args_["per_page"] = 0
             # end if
         # end if
     # end if
-    if "" == parsed_args["per_page"] and get_option("page_comments"):
-        parsed_args["per_page"] = get_query_var("comments_per_page")
+    if "" == parsed_args_["per_page"] and get_option("page_comments"):
+        parsed_args_["per_page"] = get_query_var("comments_per_page")
     # end if
-    if php_empty(lambda : parsed_args["per_page"]):
-        parsed_args["per_page"] = 0
-        parsed_args["page"] = 0
+    if php_empty(lambda : parsed_args_["per_page"]):
+        parsed_args_["per_page"] = 0
+        parsed_args_["page"] = 0
     # end if
-    if "" == parsed_args["max_depth"]:
+    if "" == parsed_args_["max_depth"]:
         if get_option("thread_comments"):
-            parsed_args["max_depth"] = get_option("thread_comments_depth")
+            parsed_args_["max_depth"] = get_option("thread_comments_depth")
         else:
-            parsed_args["max_depth"] = -1
+            parsed_args_["max_depth"] = -1
         # end if
     # end if
-    if "" == parsed_args["page"]:
-        if php_empty(lambda : overridden_cpage):
-            parsed_args["page"] = get_query_var("cpage")
+    if "" == parsed_args_["page"]:
+        if php_empty(lambda : overridden_cpage_):
+            parsed_args_["page"] = get_query_var("cpage")
         else:
-            threaded = -1 != parsed_args["max_depth"]
-            parsed_args["page"] = get_comment_pages_count(_comments, parsed_args["per_page"], threaded) if "newest" == get_option("default_comments_page") else 1
-            set_query_var("cpage", parsed_args["page"])
+            threaded_ = -1 != parsed_args_["max_depth"]
+            parsed_args_["page"] = get_comment_pages_count(_comments_, parsed_args_["per_page"], threaded_) if "newest" == get_option("default_comments_page") else 1
+            set_query_var("cpage", parsed_args_["page"])
         # end if
     # end if
     #// Validation check.
-    parsed_args["page"] = php_intval(parsed_args["page"])
-    if 0 == parsed_args["page"] and 0 != parsed_args["per_page"]:
-        parsed_args["page"] = 1
+    parsed_args_["page"] = php_intval(parsed_args_["page"])
+    if 0 == parsed_args_["page"] and 0 != parsed_args_["per_page"]:
+        parsed_args_["page"] = 1
     # end if
-    if None == parsed_args["reverse_top_level"]:
-        parsed_args["reverse_top_level"] = "desc" == get_option("comment_order")
+    if None == parsed_args_["reverse_top_level"]:
+        parsed_args_["reverse_top_level"] = "desc" == get_option("comment_order")
     # end if
-    wp_queue_comments_for_comment_meta_lazyload(_comments)
-    if php_empty(lambda : parsed_args["walker"]):
-        walker = php_new_class("Walker_Comment", lambda : Walker_Comment())
+    wp_queue_comments_for_comment_meta_lazyload(_comments_)
+    if php_empty(lambda : parsed_args_["walker"]):
+        walker_ = php_new_class("Walker_Comment", lambda : Walker_Comment())
     else:
-        walker = parsed_args["walker"]
+        walker_ = parsed_args_["walker"]
     # end if
-    output = walker.paged_walk(_comments, parsed_args["max_depth"], parsed_args["page"], parsed_args["per_page"], parsed_args)
-    in_comment_loop = False
-    if parsed_args["echo"]:
-        php_print(output)
+    output_ = walker_.paged_walk(_comments_, parsed_args_["max_depth"], parsed_args_["page"], parsed_args_["per_page"], parsed_args_)
+    in_comment_loop_ = False
+    if parsed_args_["echo"]:
+        php_print(output_)
     else:
-        return output
+        return output_
     # end if
 # end def wp_list_comments
 #// 
@@ -2018,13 +2152,16 @@ def wp_list_comments(args=Array(), comments=None, *args_):
 #// }
 #// @param int|WP_Post $post_id Post ID or WP_Post object to generate the form for. Default current post.
 #//
-def comment_form(args=Array(), post_id=None, *args_):
+def comment_form(args_=None, post_id_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    if None == post_id:
-        post_id = get_the_ID()
+    if None == post_id_:
+        post_id_ = get_the_ID()
     # end if
     #// Exit the function when comments for the post are closed.
-    if (not comments_open(post_id)):
+    if (not comments_open(post_id_)):
         #// 
         #// Fires after the comment form if comments are closed.
         #// 
@@ -2033,26 +2170,26 @@ def comment_form(args=Array(), post_id=None, *args_):
         do_action("comment_form_comments_closed")
         return
     # end if
-    commenter = wp_get_current_commenter()
-    user = wp_get_current_user()
-    user_identity = user.display_name if user.exists() else ""
-    args = wp_parse_args(args)
-    if (not (php_isset(lambda : args["format"]))):
-        args["format"] = "html5" if current_theme_supports("html5", "comment-form") else "xhtml"
+    commenter_ = wp_get_current_commenter()
+    user_ = wp_get_current_user()
+    user_identity_ = user_.display_name if user_.exists() else ""
+    args_ = wp_parse_args(args_)
+    if (not (php_isset(lambda : args_["format"]))):
+        args_["format"] = "html5" if current_theme_supports("html5", "comment-form") else "xhtml"
     # end if
-    req = get_option("require_name_email")
-    html_req = " required='required'" if req else ""
-    html5 = "html5" == args["format"]
-    fields = Array({"author": php_sprintf("<p class=\"comment-form-author\">%s %s</p>", php_sprintf("<label for=\"author\">%s%s</label>", __("Name"), " <span class=\"required\">*</span>" if req else ""), php_sprintf("<input id=\"author\" name=\"author\" type=\"text\" value=\"%s\" size=\"30\" maxlength=\"245\"%s />", esc_attr(commenter["comment_author"]), html_req)), "email": php_sprintf("<p class=\"comment-form-email\">%s %s</p>", php_sprintf("<label for=\"email\">%s%s</label>", __("Email"), " <span class=\"required\">*</span>" if req else ""), php_sprintf("<input id=\"email\" name=\"email\" %s value=\"%s\" size=\"30\" maxlength=\"100\" aria-describedby=\"email-notes\"%s />", "type=\"email\"" if html5 else "type=\"text\"", esc_attr(commenter["comment_author_email"]), html_req)), "url": php_sprintf("<p class=\"comment-form-url\">%s %s</p>", php_sprintf("<label for=\"url\">%s</label>", __("Website")), php_sprintf("<input id=\"url\" name=\"url\" %s value=\"%s\" size=\"30\" maxlength=\"200\" />", "type=\"url\"" if html5 else "type=\"text\"", esc_attr(commenter["comment_author_url"])))})
+    req_ = get_option("require_name_email")
+    html_req_ = " required='required'" if req_ else ""
+    html5_ = "html5" == args_["format"]
+    fields_ = Array({"author": php_sprintf("<p class=\"comment-form-author\">%s %s</p>", php_sprintf("<label for=\"author\">%s%s</label>", __("Name"), " <span class=\"required\">*</span>" if req_ else ""), php_sprintf("<input id=\"author\" name=\"author\" type=\"text\" value=\"%s\" size=\"30\" maxlength=\"245\"%s />", esc_attr(commenter_["comment_author"]), html_req_)), "email": php_sprintf("<p class=\"comment-form-email\">%s %s</p>", php_sprintf("<label for=\"email\">%s%s</label>", __("Email"), " <span class=\"required\">*</span>" if req_ else ""), php_sprintf("<input id=\"email\" name=\"email\" %s value=\"%s\" size=\"30\" maxlength=\"100\" aria-describedby=\"email-notes\"%s />", "type=\"email\"" if html5_ else "type=\"text\"", esc_attr(commenter_["comment_author_email"]), html_req_)), "url": php_sprintf("<p class=\"comment-form-url\">%s %s</p>", php_sprintf("<label for=\"url\">%s</label>", __("Website")), php_sprintf("<input id=\"url\" name=\"url\" %s value=\"%s\" size=\"30\" maxlength=\"200\" />", "type=\"url\"" if html5_ else "type=\"text\"", esc_attr(commenter_["comment_author_url"])))})
     if has_action("set_comment_cookies", "wp_set_comment_cookies") and get_option("show_comments_cookies_opt_in"):
-        consent = "" if php_empty(lambda : commenter["comment_author_email"]) else " checked=\"checked\""
-        fields["cookies"] = php_sprintf("<p class=\"comment-form-cookies-consent\">%s %s</p>", php_sprintf("<input id=\"wp-comment-cookies-consent\" name=\"wp-comment-cookies-consent\" type=\"checkbox\" value=\"yes\"%s />", consent), php_sprintf("<label for=\"wp-comment-cookies-consent\">%s</label>", __("Save my name, email, and website in this browser for the next time I comment.")))
+        consent_ = "" if php_empty(lambda : commenter_["comment_author_email"]) else " checked=\"checked\""
+        fields_["cookies"] = php_sprintf("<p class=\"comment-form-cookies-consent\">%s %s</p>", php_sprintf("<input id=\"wp-comment-cookies-consent\" name=\"wp-comment-cookies-consent\" type=\"checkbox\" value=\"yes\"%s />", consent_), php_sprintf("<label for=\"wp-comment-cookies-consent\">%s</label>", __("Save my name, email, and website in this browser for the next time I comment.")))
         #// Ensure that the passed fields include cookies consent.
-        if (php_isset(lambda : args["fields"])) and (not (php_isset(lambda : args["fields"]["cookies"]))):
-            args["fields"]["cookies"] = fields["cookies"]
+        if (php_isset(lambda : args_["fields"])) and (not (php_isset(lambda : args_["fields"]["cookies"]))):
+            args_["fields"]["cookies"] = fields_["cookies"]
         # end if
     # end if
-    required_text = php_sprintf(" " + __("Required fields are marked %s"), "<span class=\"required\">*</span>")
+    required_text_ = php_sprintf(" " + __("Required fields are marked %s"), "<span class=\"required\">*</span>")
     #// 
     #// Filters the default comment form fields.
     #// 
@@ -2060,8 +2197,8 @@ def comment_form(args=Array(), post_id=None, *args_):
     #// 
     #// @param string[] $fields Array of the default comment fields.
     #//
-    fields = apply_filters("comment_form_default_fields", fields)
-    defaults = Array({"fields": fields, "comment_field": php_sprintf("<p class=\"comment-form-comment\">%s %s</p>", php_sprintf("<label for=\"comment\">%s</label>", _x("Comment", "noun")), "<textarea id=\"comment\" name=\"comment\" cols=\"45\" rows=\"8\" maxlength=\"65525\" required=\"required\"></textarea>"), "must_log_in": php_sprintf("<p class=\"must-log-in\">%s</p>", php_sprintf(__("You must be <a href=\"%s\">logged in</a> to post a comment."), wp_login_url(apply_filters("the_permalink", get_permalink(post_id), post_id)))), "logged_in_as": php_sprintf("<p class=\"logged-in-as\">%s</p>", php_sprintf(__("<a href=\"%1$s\" aria-label=\"%2$s\">Logged in as %3$s</a>. <a href=\"%4$s\">Log out?</a>"), get_edit_user_link(), esc_attr(php_sprintf(__("Logged in as %s. Edit your profile."), user_identity)), user_identity, wp_logout_url(apply_filters("the_permalink", get_permalink(post_id), post_id)))), "comment_notes_before": php_sprintf("<p class=\"comment-notes\">%s%s</p>", php_sprintf("<span id=\"email-notes\">%s</span>", __("Your email address will not be published.")), required_text if req else ""), "comment_notes_after": "", "action": site_url("/wp-comments-post.php"), "id_form": "commentform", "id_submit": "submit", "class_form": "comment-form", "class_submit": "submit", "name_submit": "submit", "title_reply": __("Leave a Reply"), "title_reply_to": __("Leave a Reply to %s"), "title_reply_before": "<h3 id=\"reply-title\" class=\"comment-reply-title\">", "title_reply_after": "</h3>", "cancel_reply_before": " <small>", "cancel_reply_after": "</small>", "cancel_reply_link": __("Cancel reply"), "label_submit": __("Post Comment"), "submit_button": "<input name=\"%1$s\" type=\"submit\" id=\"%2$s\" class=\"%3$s\" value=\"%4$s\" />", "submit_field": "<p class=\"form-submit\">%1$s %2$s</p>", "format": "xhtml"})
+    fields_ = apply_filters("comment_form_default_fields", fields_)
+    defaults_ = Array({"fields": fields_, "comment_field": php_sprintf("<p class=\"comment-form-comment\">%s %s</p>", php_sprintf("<label for=\"comment\">%s</label>", _x("Comment", "noun")), "<textarea id=\"comment\" name=\"comment\" cols=\"45\" rows=\"8\" maxlength=\"65525\" required=\"required\"></textarea>"), "must_log_in": php_sprintf("<p class=\"must-log-in\">%s</p>", php_sprintf(__("You must be <a href=\"%s\">logged in</a> to post a comment."), wp_login_url(apply_filters("the_permalink", get_permalink(post_id_), post_id_)))), "logged_in_as": php_sprintf("<p class=\"logged-in-as\">%s</p>", php_sprintf(__("<a href=\"%1$s\" aria-label=\"%2$s\">Logged in as %3$s</a>. <a href=\"%4$s\">Log out?</a>"), get_edit_user_link(), esc_attr(php_sprintf(__("Logged in as %s. Edit your profile."), user_identity_)), user_identity_, wp_logout_url(apply_filters("the_permalink", get_permalink(post_id_), post_id_)))), "comment_notes_before": php_sprintf("<p class=\"comment-notes\">%s%s</p>", php_sprintf("<span id=\"email-notes\">%s</span>", __("Your email address will not be published.")), required_text_ if req_ else ""), "comment_notes_after": "", "action": site_url("/wp-comments-post.php"), "id_form": "commentform", "id_submit": "submit", "class_form": "comment-form", "class_submit": "submit", "name_submit": "submit", "title_reply": __("Leave a Reply"), "title_reply_to": __("Leave a Reply to %s"), "title_reply_before": "<h3 id=\"reply-title\" class=\"comment-reply-title\">", "title_reply_after": "</h3>", "cancel_reply_before": " <small>", "cancel_reply_after": "</small>", "cancel_reply_link": __("Cancel reply"), "label_submit": __("Post Comment"), "submit_button": "<input name=\"%1$s\" type=\"submit\" id=\"%2$s\" class=\"%3$s\" value=\"%4$s\" />", "submit_field": "<p class=\"form-submit\">%1$s %2$s</p>", "format": "xhtml"})
     #// 
     #// Filters the comment form default arguments.
     #// 
@@ -2071,12 +2208,12 @@ def comment_form(args=Array(), post_id=None, *args_):
     #// 
     #// @param array $defaults The default comment form arguments.
     #//
-    args = wp_parse_args(args, apply_filters("comment_form_defaults", defaults))
+    args_ = wp_parse_args(args_, apply_filters("comment_form_defaults", defaults_))
     #// Ensure that the filtered args contain all required default values.
-    args = php_array_merge(defaults, args)
+    args_ = php_array_merge(defaults_, args_)
     #// Remove `aria-describedby` from the email field if there's no associated description.
-    if (php_isset(lambda : args["fields"]["email"])) and False == php_strpos(args["comment_notes_before"], "id=\"email-notes\""):
-        args["fields"]["email"] = php_str_replace(" aria-describedby=\"email-notes\"", "", args["fields"]["email"])
+    if (php_isset(lambda : args_["fields"]["email"])) and False == php_strpos(args_["comment_notes_before"], "id=\"email-notes\""):
+        args_["fields"]["email"] = php_str_replace(" aria-describedby=\"email-notes\"", "", args_["fields"]["email"])
     # end if
     #// 
     #// Fires before the comment form.
@@ -2085,14 +2222,14 @@ def comment_form(args=Array(), post_id=None, *args_):
     #//
     do_action("comment_form_before")
     php_print(" <div id=\"respond\" class=\"comment-respond\">\n        ")
-    php_print(args["title_reply_before"])
-    comment_form_title(args["title_reply"], args["title_reply_to"])
-    php_print(args["cancel_reply_before"])
-    cancel_comment_reply_link(args["cancel_reply_link"])
-    php_print(args["cancel_reply_after"])
-    php_print(args["title_reply_after"])
+    php_print(args_["title_reply_before"])
+    comment_form_title(args_["title_reply"], args_["title_reply_to"])
+    php_print(args_["cancel_reply_before"])
+    cancel_comment_reply_link(args_["cancel_reply_link"])
+    php_print(args_["cancel_reply_after"])
+    php_print(args_["title_reply_after"])
     if get_option("comment_registration") and (not is_user_logged_in()):
-        php_print(args["must_log_in"])
+        php_print(args_["must_log_in"])
         #// 
         #// Fires after the HTML-formatted 'must log in after' message in the comment form.
         #// 
@@ -2100,7 +2237,7 @@ def comment_form(args=Array(), post_id=None, *args_):
         #//
         do_action("comment_form_must_log_in_after")
     else:
-        printf("<form action=\"%s\" method=\"post\" id=\"%s\" class=\"%s\"%s>", esc_url(args["action"]), esc_attr(args["id_form"]), esc_attr(args["class_form"]), " novalidate" if html5 else "")
+        printf("<form action=\"%s\" method=\"post\" id=\"%s\" class=\"%s\"%s>", esc_url(args_["action"]), esc_attr(args_["id_form"]), esc_attr(args_["class_form"]), " novalidate" if html5_ else "")
         #// 
         #// Fires at the top of the comment form, inside the form tag.
         #// 
@@ -2119,7 +2256,7 @@ def comment_form(args=Array(), post_id=None, *args_):
             #// @param string $user_identity  If the commenter is a registered user,
             #// the display name, blank otherwise.
             #//
-            php_print(apply_filters("comment_form_logged_in", args["logged_in_as"], commenter, user_identity))
+            php_print(apply_filters("comment_form_logged_in", args_["logged_in_as"], commenter_, user_identity_))
             #// 
             #// Fires after the is_user_logged_in() check in the comment form.
             #// 
@@ -2130,12 +2267,12 @@ def comment_form(args=Array(), post_id=None, *args_):
             #// @param string $user_identity If the commenter is a registered user,
             #// the display name, blank otherwise.
             #//
-            do_action("comment_form_logged_in_after", commenter, user_identity)
+            do_action("comment_form_logged_in_after", commenter_, user_identity_)
         else:
-            php_print(args["comment_notes_before"])
+            php_print(args_["comment_notes_before"])
         # end if
         #// Prepare an array of all fields, including the textarea.
-        comment_fields = Array({"comment": args["comment_field"]}) + args["fields"]
+        comment_fields_ = Array({"comment": args_["comment_field"]}) + args_["fields"]
         #// 
         #// Filters the comment form fields, including the textarea.
         #// 
@@ -2143,14 +2280,14 @@ def comment_form(args=Array(), post_id=None, *args_):
         #// 
         #// @param array $comment_fields The comment fields.
         #//
-        comment_fields = apply_filters("comment_form_fields", comment_fields)
+        comment_fields_ = apply_filters("comment_form_fields", comment_fields_)
         #// Get an array of field names, excluding the textarea.
-        comment_field_keys = php_array_diff(php_array_keys(comment_fields), Array("comment"))
+        comment_field_keys_ = php_array_diff(php_array_keys(comment_fields_), Array("comment"))
         #// Get the first and the last field name, excluding the textarea.
-        first_field = reset(comment_field_keys)
-        last_field = php_end(comment_field_keys)
-        for name,field in comment_fields:
-            if "comment" == name:
+        first_field_ = reset(comment_field_keys_)
+        last_field_ = php_end(comment_field_keys_)
+        for name_,field_ in comment_fields_:
+            if "comment" == name_:
                 #// 
                 #// Filters the content of the comment textarea field for display.
                 #// 
@@ -2158,10 +2295,10 @@ def comment_form(args=Array(), post_id=None, *args_):
                 #// 
                 #// @param string $args_comment_field The content of the comment textarea field.
                 #//
-                php_print(apply_filters("comment_form_field_comment", field))
-                php_print(args["comment_notes_after"])
+                php_print(apply_filters("comment_form_field_comment", field_))
+                php_print(args_["comment_notes_after"])
             elif (not is_user_logged_in()):
-                if first_field == name:
+                if first_field_ == name_:
                     #// 
                     #// Fires before the comment fields in the comment form, excluding the textarea.
                     #// 
@@ -2179,8 +2316,8 @@ def comment_form(args=Array(), post_id=None, *args_):
                 #// 
                 #// @param string $field The HTML-formatted output of the comment form field.
                 #//
-                php_print(apply_filters(str("comment_form_field_") + str(name), field) + "\n")
-                if last_field == name:
+                php_print(apply_filters(str("comment_form_field_") + str(name_), field_) + "\n")
+                if last_field_ == name_:
                     #// 
                     #// Fires after the comment fields in the comment form, excluding the textarea.
                     #// 
@@ -2190,7 +2327,7 @@ def comment_form(args=Array(), post_id=None, *args_):
                 # end if
             # end if
         # end for
-        submit_button = php_sprintf(args["submit_button"], esc_attr(args["name_submit"]), esc_attr(args["id_submit"]), esc_attr(args["class_submit"]), esc_attr(args["label_submit"]))
+        submit_button_ = php_sprintf(args_["submit_button"], esc_attr(args_["name_submit"]), esc_attr(args_["id_submit"]), esc_attr(args_["class_submit"]), esc_attr(args_["label_submit"]))
         #// 
         #// Filters the submit button for the comment form to display.
         #// 
@@ -2199,8 +2336,8 @@ def comment_form(args=Array(), post_id=None, *args_):
         #// @param string $submit_button HTML markup for the submit button.
         #// @param array  $args          Arguments passed to comment_form().
         #//
-        submit_button = apply_filters("comment_form_submit_button", submit_button, args)
-        submit_field = php_sprintf(args["submit_field"], submit_button, get_comment_id_fields(post_id))
+        submit_button_ = apply_filters("comment_form_submit_button", submit_button_, args_)
+        submit_field_ = php_sprintf(args_["submit_field"], submit_button_, get_comment_id_fields(post_id_))
         #// 
         #// Filters the submit field for the comment form to display.
         #// 
@@ -2212,7 +2349,7 @@ def comment_form(args=Array(), post_id=None, *args_):
         #// @param string $submit_field HTML markup for the submit field.
         #// @param array  $args         Arguments passed to comment_form().
         #//
-        php_print(apply_filters("comment_form_submit_field", submit_field, args))
+        php_print(apply_filters("comment_form_submit_field", submit_field_, args_))
         #// 
         #// Fires at the bottom of the comment form, inside the closing form tag.
         #// 
@@ -2220,7 +2357,7 @@ def comment_form(args=Array(), post_id=None, *args_):
         #// 
         #// @param int $post_id The post ID.
         #//
-        do_action("comment_form", post_id)
+        do_action("comment_form", post_id_)
         php_print("</form>")
     # end if
     php_print(" </div><!-- #respond -->\n   ")

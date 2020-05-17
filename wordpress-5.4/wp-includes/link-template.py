@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,7 +21,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @param int|WP_Post $post Optional. Post ID or post object. Default is the global `$post`.
 #//
-def the_permalink(post=0, *args_):
+def the_permalink(post_=0, *_args_):
+    
     
     #// 
     #// Filters the display of the permalink for the current post.
@@ -37,7 +33,7 @@ def the_permalink(post=0, *args_):
     #// @param string      $permalink The permalink for the current post.
     #// @param int|WP_Post $post      Post ID, WP_Post object, or 0. Default 0.
     #//
-    php_print(esc_url(apply_filters("the_permalink", get_permalink(post), post)))
+    php_print(esc_url(apply_filters("the_permalink", get_permalink(post_), post_)))
 # end def the_permalink
 #// 
 #// Retrieves a trailing-slashed string if the site is set for adding trailing slashes.
@@ -56,14 +52,15 @@ def the_permalink(post=0, *args_):
 #// for use in the filter. Default empty string.
 #// @return string The URL with the trailing slash appended or stripped.
 #//
-def user_trailingslashit(string=None, type_of_url="", *args_):
+def user_trailingslashit(string_=None, type_of_url_="", *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if wp_rewrite.use_trailing_slashes:
-        string = trailingslashit(string)
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if wp_rewrite_.use_trailing_slashes:
+        string_ = trailingslashit(string_)
     else:
-        string = untrailingslashit(string)
+        string_ = untrailingslashit(string_)
     # end if
     #// 
     #// Filters the trailing-slashed string, depending on whether the site is set to use trailing slashes.
@@ -75,7 +72,7 @@ def user_trailingslashit(string=None, type_of_url="", *args_):
     #// 'single_feed', 'single_paged', 'commentpaged', 'paged', 'home', 'feed',
     #// 'category', 'page', 'year', 'month', 'day', 'post_type_archive'.
     #//
-    return apply_filters("user_trailingslashit", string, type_of_url)
+    return apply_filters("user_trailingslashit", string_, type_of_url_)
 # end def user_trailingslashit
 #// 
 #// Displays the permalink anchor for the current post.
@@ -87,20 +84,21 @@ def user_trailingslashit(string=None, type_of_url="", *args_):
 #// 
 #// @param string $mode Optional. Permalink mode. Accepts 'title' or 'id'. Default 'id'.
 #//
-def permalink_anchor(mode="id", *args_):
+def permalink_anchor(mode_="id", *_args_):
     
-    post = get_post()
-    for case in Switch(php_strtolower(mode)):
+    
+    post_ = get_post()
+    for case in Switch(php_strtolower(mode_)):
         if case("title"):
-            title = sanitize_title(post.post_title) + "-" + post.ID
-            php_print("<a id=\"" + title + "\"></a>")
+            title_ = sanitize_title(post_.post_title) + "-" + post_.ID
+            php_print("<a id=\"" + title_ + "\"></a>")
             break
         # end if
         if case("id"):
             pass
         # end if
         if case():
-            php_print("<a id=\"post-" + post.ID + "\"></a>")
+            php_print("<a id=\"post-" + post_.ID + "\"></a>")
             break
         # end if
     # end for
@@ -119,9 +117,12 @@ def permalink_anchor(mode="id", *args_):
 #// 
 #// @return string|false The permalink URL or false if post does not exist.
 #//
-def get_the_permalink(post=0, leavename=False, *args_):
+def get_the_permalink(post_=0, leavename_=None, *_args_):
+    if leavename_ is None:
+        leavename_ = False
+    # end if
     
-    return get_permalink(post, leavename)
+    return get_permalink(post_, leavename_)
 # end def get_the_permalink
 #// 
 #// Retrieves the full permalink for the current post or post ID.
@@ -132,26 +133,29 @@ def get_the_permalink(post=0, leavename=False, *args_):
 #// @param bool        $leavename Optional. Whether to keep post name or page name. Default false.
 #// @return string|false The permalink URL or false if post does not exist.
 #//
-def get_permalink(post=0, leavename=False, *args_):
-    
-    rewritecode = Array("%year%", "%monthnum%", "%day%", "%hour%", "%minute%", "%second%", "" if leavename else "%postname%", "%post_id%", "%category%", "%author%", "" if leavename else "%pagename%")
-    if php_is_object(post) and (php_isset(lambda : post.filter)) and "sample" == post.filter:
-        sample = True
-    else:
-        post = get_post(post)
-        sample = False
+def get_permalink(post_=0, leavename_=None, *_args_):
+    if leavename_ is None:
+        leavename_ = False
     # end if
-    if php_empty(lambda : post.ID):
+    
+    rewritecode_ = Array("%year%", "%monthnum%", "%day%", "%hour%", "%minute%", "%second%", "" if leavename_ else "%postname%", "%post_id%", "%category%", "%author%", "" if leavename_ else "%pagename%")
+    if php_is_object(post_) and (php_isset(lambda : post_.filter)) and "sample" == post_.filter:
+        sample_ = True
+    else:
+        post_ = get_post(post_)
+        sample_ = False
+    # end if
+    if php_empty(lambda : post_.ID):
         return False
     # end if
-    if "page" == post.post_type:
-        return get_page_link(post, leavename, sample)
-    elif "attachment" == post.post_type:
-        return get_attachment_link(post, leavename)
-    elif php_in_array(post.post_type, get_post_types(Array({"_builtin": False}))):
-        return get_post_permalink(post, leavename, sample)
+    if "page" == post_.post_type:
+        return get_page_link(post_, leavename_, sample_)
+    elif "attachment" == post_.post_type:
+        return get_attachment_link(post_, leavename_)
+    elif php_in_array(post_.post_type, get_post_types(Array({"_builtin": False}))):
+        return get_post_permalink(post_, leavename_, sample_)
     # end if
-    permalink = get_option("permalink_structure")
+    permalink_ = get_option("permalink_structure")
     #// 
     #// Filters the permalink structure for a post before token replacement occurs.
     #// 
@@ -163,13 +167,13 @@ def get_permalink(post=0, leavename=False, *args_):
     #// @param WP_Post $post      The post in question.
     #// @param bool    $leavename Whether to keep the post name.
     #//
-    permalink = apply_filters("pre_post_link", permalink, post, leavename)
-    if "" != permalink and (not php_in_array(post.post_status, Array("draft", "pending", "auto-draft", "future"))):
-        category = ""
-        if php_strpos(permalink, "%category%") != False:
-            cats = get_the_category(post.ID)
-            if cats:
-                cats = wp_list_sort(cats, Array({"term_id": "ASC"}))
+    permalink_ = apply_filters("pre_post_link", permalink_, post_, leavename_)
+    if "" != permalink_ and (not php_in_array(post_.post_status, Array("draft", "pending", "auto-draft", "future"))):
+        category_ = ""
+        if php_strpos(permalink_, "%category%") != False:
+            cats_ = get_the_category(post_.ID)
+            if cats_:
+                cats_ = wp_list_sort(cats_, Array({"term_id": "ASC"}))
                 #// 
                 #// Filters the category that gets used in the %category% permalink token.
                 #// 
@@ -179,36 +183,36 @@ def get_permalink(post=0, leavename=False, *args_):
                 #// @param array    $cats Array of all categories (WP_Term objects) associated with the post.
                 #// @param WP_Post  $post The post in question.
                 #//
-                category_object = apply_filters("post_link_category", cats[0], cats, post)
-                category_object = get_term(category_object, "category")
-                category = category_object.slug
-                if category_object.parent:
-                    category = get_category_parents(category_object.parent, False, "/", True) + category
+                category_object_ = apply_filters("post_link_category", cats_[0], cats_, post_)
+                category_object_ = get_term(category_object_, "category")
+                category_ = category_object_.slug
+                if category_object_.parent:
+                    category_ = get_category_parents(category_object_.parent, False, "/", True) + category_
                 # end if
             # end if
             #// Show default category in permalinks,
             #// without having to assign it explicitly.
-            if php_empty(lambda : category):
-                default_category = get_term(get_option("default_category"), "category")
-                if default_category and (not is_wp_error(default_category)):
-                    category = default_category.slug
+            if php_empty(lambda : category_):
+                default_category_ = get_term(get_option("default_category"), "category")
+                if default_category_ and (not is_wp_error(default_category_)):
+                    category_ = default_category_.slug
                 # end if
             # end if
         # end if
-        author = ""
-        if php_strpos(permalink, "%author%") != False:
-            authordata = get_userdata(post.post_author)
-            author = authordata.user_nicename
+        author_ = ""
+        if php_strpos(permalink_, "%author%") != False:
+            authordata_ = get_userdata(post_.post_author)
+            author_ = authordata_.user_nicename
         # end if
         #// This is not an API call because the permalink is based on the stored post_date value,
         #// which should be parsed as local time regardless of the default PHP timezone.
-        date = php_explode(" ", php_str_replace(Array("-", ":"), " ", post.post_date))
-        rewritereplace = Array(date[0], date[1], date[2], date[3], date[4], date[5], post.post_name, post.ID, category, author, post.post_name)
-        permalink = home_url(php_str_replace(rewritecode, rewritereplace, permalink))
-        permalink = user_trailingslashit(permalink, "single")
+        date_ = php_explode(" ", php_str_replace(Array("-", ":"), " ", post_.post_date))
+        rewritereplace_ = Array(date_[0], date_[1], date_[2], date_[3], date_[4], date_[5], post_.post_name, post_.ID, category_, author_, post_.post_name)
+        permalink_ = home_url(php_str_replace(rewritecode_, rewritereplace_, permalink_))
+        permalink_ = user_trailingslashit(permalink_, "single")
     else:
         #// If they're not using the fancy permalink option.
-        permalink = home_url("?p=" + post.ID)
+        permalink_ = home_url("?p=" + post_.ID)
     # end if
     #// 
     #// Filters the permalink for a post.
@@ -221,7 +225,7 @@ def get_permalink(post=0, leavename=False, *args_):
     #// @param WP_Post $post      The post in question.
     #// @param bool    $leavename Whether to keep the post name.
     #//
-    return apply_filters("post_link", permalink, post, leavename)
+    return apply_filters("post_link", permalink_, post_, leavename_)
 # end def get_permalink
 #// 
 #// Retrieves the permalink for a post of a custom post type.
@@ -235,33 +239,39 @@ def get_permalink(post=0, leavename=False, *args_):
 #// @param bool        $sample    Optional, defaults to false. Is it a sample permalink. Default false.
 #// @return string|WP_Error The post permalink.
 #//
-def get_post_permalink(id=0, leavename=False, sample=False, *args_):
+def get_post_permalink(id_=0, leavename_=None, sample_=None, *_args_):
+    if leavename_ is None:
+        leavename_ = False
+    # end if
+    if sample_ is None:
+        sample_ = False
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    post = get_post(id)
-    if is_wp_error(post):
-        return post
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    post_ = get_post(id_)
+    if is_wp_error(post_):
+        return post_
     # end if
-    post_link = wp_rewrite.get_extra_permastruct(post.post_type)
-    slug = post.post_name
-    draft_or_pending = get_post_status(post) and php_in_array(get_post_status(post), Array("draft", "pending", "auto-draft", "future"))
-    post_type = get_post_type_object(post.post_type)
-    if post_type.hierarchical:
-        slug = get_page_uri(post)
+    post_link_ = wp_rewrite_.get_extra_permastruct(post_.post_type)
+    slug_ = post_.post_name
+    draft_or_pending_ = get_post_status(post_) and php_in_array(get_post_status(post_), Array("draft", "pending", "auto-draft", "future"))
+    post_type_ = get_post_type_object(post_.post_type)
+    if post_type_.hierarchical:
+        slug_ = get_page_uri(post_)
     # end if
-    if (not php_empty(lambda : post_link)) and (not draft_or_pending) or sample:
-        if (not leavename):
-            post_link = php_str_replace(str("%") + str(post.post_type) + str("%"), slug, post_link)
+    if (not php_empty(lambda : post_link_)) and (not draft_or_pending_) or sample_:
+        if (not leavename_):
+            post_link_ = php_str_replace(str("%") + str(post_.post_type) + str("%"), slug_, post_link_)
         # end if
-        post_link = home_url(user_trailingslashit(post_link))
+        post_link_ = home_url(user_trailingslashit(post_link_))
     else:
-        if post_type.query_var and (php_isset(lambda : post.post_status)) and (not draft_or_pending):
-            post_link = add_query_arg(post_type.query_var, slug, "")
+        if post_type_.query_var and (php_isset(lambda : post_.post_status)) and (not draft_or_pending_):
+            post_link_ = add_query_arg(post_type_.query_var, slug_, "")
         else:
-            post_link = add_query_arg(Array({"post_type": post.post_type, "p": post.ID}), "")
+            post_link_ = add_query_arg(Array({"post_type": post_.post_type, "p": post_.ID}), "")
         # end if
-        post_link = home_url(post_link)
+        post_link_ = home_url(post_link_)
     # end if
     #// 
     #// Filters the permalink for a post of a custom post type.
@@ -273,7 +283,7 @@ def get_post_permalink(id=0, leavename=False, sample=False, *args_):
     #// @param bool    $leavename Whether to keep the post name.
     #// @param bool    $sample    Is it a sample permalink.
     #//
-    return apply_filters("post_type_link", post_link, post, leavename, sample)
+    return apply_filters("post_type_link", post_link_, post_, leavename_, sample_)
 # end def get_post_permalink
 #// 
 #// Retrieves the permalink for the current page or page ID.
@@ -288,13 +298,22 @@ def get_post_permalink(id=0, leavename=False, sample=False, *args_):
 #// Default false.
 #// @return string The page permalink.
 #//
-def get_page_link(post=False, leavename=False, sample=False, *args_):
+def get_page_link(post_=None, leavename_=None, sample_=None, *_args_):
+    if post_ is None:
+        post_ = False
+    # end if
+    if leavename_ is None:
+        leavename_ = False
+    # end if
+    if sample_ is None:
+        sample_ = False
+    # end if
     
-    post = get_post(post)
-    if "page" == get_option("show_on_front") and get_option("page_on_front") == post.ID:
-        link = home_url("/")
+    post_ = get_post(post_)
+    if "page" == get_option("show_on_front") and get_option("page_on_front") == post_.ID:
+        link_ = home_url("/")
     else:
-        link = _get_page_link(post, leavename, sample)
+        link_ = _get_page_link(post_, leavename_, sample_)
     # end if
     #// 
     #// Filters the permalink for a page.
@@ -305,7 +324,7 @@ def get_page_link(post=False, leavename=False, sample=False, *args_):
     #// @param int    $post_id The ID of the page.
     #// @param bool   $sample  Is it a sample permalink.
     #//
-    return apply_filters("page_link", link, post.ID, sample)
+    return apply_filters("page_link", link_, post_.ID, sample_)
 # end def get_page_link
 #// 
 #// Retrieves the page permalink.
@@ -323,21 +342,30 @@ def get_page_link(post=False, leavename=False, sample=False, *args_):
 #// Default false.
 #// @return string The page permalink.
 #//
-def _get_page_link(post=False, leavename=False, sample=False, *args_):
+def _get_page_link(post_=None, leavename_=None, sample_=None, *_args_):
+    if post_ is None:
+        post_ = False
+    # end if
+    if leavename_ is None:
+        leavename_ = False
+    # end if
+    if sample_ is None:
+        sample_ = False
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    post = get_post(post)
-    draft_or_pending = php_in_array(post.post_status, Array("draft", "pending", "auto-draft"))
-    link = wp_rewrite.get_page_permastruct()
-    if (not php_empty(lambda : link)) and (php_isset(lambda : post.post_status)) and (not draft_or_pending) or sample:
-        if (not leavename):
-            link = php_str_replace("%pagename%", get_page_uri(post), link)
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    post_ = get_post(post_)
+    draft_or_pending_ = php_in_array(post_.post_status, Array("draft", "pending", "auto-draft"))
+    link_ = wp_rewrite_.get_page_permastruct()
+    if (not php_empty(lambda : link_)) and (php_isset(lambda : post_.post_status)) and (not draft_or_pending_) or sample_:
+        if (not leavename_):
+            link_ = php_str_replace("%pagename%", get_page_uri(post_), link_)
         # end if
-        link = home_url(link)
-        link = user_trailingslashit(link, "page")
+        link_ = home_url(link_)
+        link_ = user_trailingslashit(link_, "page")
     else:
-        link = home_url("?page_id=" + post.ID)
+        link_ = home_url("?page_id=" + post_.ID)
     # end if
     #// 
     #// Filters the permalink for a non-page_on_front page.
@@ -347,7 +375,7 @@ def _get_page_link(post=False, leavename=False, sample=False, *args_):
     #// @param string $link    The page's permalink.
     #// @param int    $post_id The ID of the page.
     #//
-    return apply_filters("_get_page_link", link, post.ID)
+    return apply_filters("_get_page_link", link_, post_.ID)
 # end def _get_page_link
 #// 
 #// Retrieves the permalink for an attachment.
@@ -362,40 +390,43 @@ def _get_page_link(post=False, leavename=False, sample=False, *args_):
 #// @param bool       $leavename Optional. Whether to keep the page name. Default false.
 #// @return string The attachment permalink.
 #//
-def get_attachment_link(post=None, leavename=False, *args_):
+def get_attachment_link(post_=None, leavename_=None, *_args_):
+    if leavename_ is None:
+        leavename_ = False
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    link = False
-    post = get_post(post)
-    parent = get_post(post.post_parent) if post.post_parent > 0 and post.post_parent != post.ID else False
-    if parent and (not php_in_array(parent.post_type, get_post_types())):
-        parent = False
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    link_ = False
+    post_ = get_post(post_)
+    parent_ = get_post(post_.post_parent) if post_.post_parent > 0 and post_.post_parent != post_.ID else False
+    if parent_ and (not php_in_array(parent_.post_type, get_post_types())):
+        parent_ = False
     # end if
-    if wp_rewrite.using_permalinks() and parent:
-        if "page" == parent.post_type:
-            parentlink = _get_page_link(post.post_parent)
+    if wp_rewrite_.using_permalinks() and parent_:
+        if "page" == parent_.post_type:
+            parentlink_ = _get_page_link(post_.post_parent)
             pass
         else:
-            parentlink = get_permalink(post.post_parent)
+            parentlink_ = get_permalink(post_.post_parent)
         # end if
-        if php_is_numeric(post.post_name) or False != php_strpos(get_option("permalink_structure"), "%category%"):
-            name = "attachment/" + post.post_name
+        if php_is_numeric(post_.post_name) or False != php_strpos(get_option("permalink_structure"), "%category%"):
+            name_ = "attachment/" + post_.post_name
             pass
         else:
-            name = post.post_name
+            name_ = post_.post_name
         # end if
-        if php_strpos(parentlink, "?") == False:
-            link = user_trailingslashit(trailingslashit(parentlink) + "%postname%")
+        if php_strpos(parentlink_, "?") == False:
+            link_ = user_trailingslashit(trailingslashit(parentlink_) + "%postname%")
         # end if
-        if (not leavename):
-            link = php_str_replace("%postname%", name, link)
+        if (not leavename_):
+            link_ = php_str_replace("%postname%", name_, link_)
         # end if
-    elif wp_rewrite.using_permalinks() and (not leavename):
-        link = home_url(user_trailingslashit(post.post_name))
+    elif wp_rewrite_.using_permalinks() and (not leavename_):
+        link_ = home_url(user_trailingslashit(post_.post_name))
     # end if
-    if (not link):
-        link = home_url("/?attachment_id=" + post.ID)
+    if (not link_):
+        link_ = home_url("/?attachment_id=" + post_.ID)
     # end if
     #// 
     #// Filters the permalink for an attachment.
@@ -405,7 +436,7 @@ def get_attachment_link(post=None, leavename=False, *args_):
     #// @param string $link    The attachment's permalink.
     #// @param int    $post_id Attachment ID.
     #//
-    return apply_filters("attachment_link", link, post.ID)
+    return apply_filters("attachment_link", link_, post_.ID)
 # end def get_attachment_link
 #// 
 #// Retrieves the permalink for the year archives.
@@ -417,19 +448,20 @@ def get_attachment_link(post=None, leavename=False, *args_):
 #// @param int|false $year Integer of year. False for current year.
 #// @return string The permalink for the specified year archive.
 #//
-def get_year_link(year=None, *args_):
+def get_year_link(year_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if (not year):
-        year = current_time("Y")
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if (not year_):
+        year_ = current_time("Y")
     # end if
-    yearlink = wp_rewrite.get_year_permastruct()
-    if (not php_empty(lambda : yearlink)):
-        yearlink = php_str_replace("%year%", year, yearlink)
-        yearlink = home_url(user_trailingslashit(yearlink, "year"))
+    yearlink_ = wp_rewrite_.get_year_permastruct()
+    if (not php_empty(lambda : yearlink_)):
+        yearlink_ = php_str_replace("%year%", year_, yearlink_)
+        yearlink_ = home_url(user_trailingslashit(yearlink_, "year"))
     else:
-        yearlink = home_url("?m=" + year)
+        yearlink_ = home_url("?m=" + year_)
     # end if
     #// 
     #// Filters the year archive permalink.
@@ -439,7 +471,7 @@ def get_year_link(year=None, *args_):
     #// @param string $yearlink Permalink for the year archive.
     #// @param int    $year     Year for the archive.
     #//
-    return apply_filters("year_link", yearlink, year)
+    return apply_filters("year_link", yearlink_, year_)
 # end def get_year_link
 #// 
 #// Retrieves the permalink for the month archives with year.
@@ -452,23 +484,24 @@ def get_year_link(year=None, *args_):
 #// @param int|false $month Integer of month. False for current month.
 #// @return string The permalink for the specified month and year archive.
 #//
-def get_month_link(year=None, month=None, *args_):
+def get_month_link(year_=None, month_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if (not year):
-        year = current_time("Y")
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if (not year_):
+        year_ = current_time("Y")
     # end if
-    if (not month):
-        month = current_time("m")
+    if (not month_):
+        month_ = current_time("m")
     # end if
-    monthlink = wp_rewrite.get_month_permastruct()
-    if (not php_empty(lambda : monthlink)):
-        monthlink = php_str_replace("%year%", year, monthlink)
-        monthlink = php_str_replace("%monthnum%", zeroise(php_intval(month), 2), monthlink)
-        monthlink = home_url(user_trailingslashit(monthlink, "month"))
+    monthlink_ = wp_rewrite_.get_month_permastruct()
+    if (not php_empty(lambda : monthlink_)):
+        monthlink_ = php_str_replace("%year%", year_, monthlink_)
+        monthlink_ = php_str_replace("%monthnum%", zeroise(php_intval(month_), 2), monthlink_)
+        monthlink_ = home_url(user_trailingslashit(monthlink_, "month"))
     else:
-        monthlink = home_url("?m=" + year + zeroise(month, 2))
+        monthlink_ = home_url("?m=" + year_ + zeroise(month_, 2))
     # end if
     #// 
     #// Filters the month archive permalink.
@@ -479,7 +512,7 @@ def get_month_link(year=None, month=None, *args_):
     #// @param int    $year      Year for the archive.
     #// @param int    $month     The month for the archive.
     #//
-    return apply_filters("month_link", monthlink, year, month)
+    return apply_filters("month_link", monthlink_, year_, month_)
 # end def get_month_link
 #// 
 #// Retrieves the permalink for the day archives with year and month.
@@ -493,27 +526,28 @@ def get_month_link(year=None, month=None, *args_):
 #// @param int|false $day   Integer of day. False for current day.
 #// @return string The permalink for the specified day, month, and year archive.
 #//
-def get_day_link(year=None, month=None, day=None, *args_):
+def get_day_link(year_=None, month_=None, day_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if (not year):
-        year = current_time("Y")
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if (not year_):
+        year_ = current_time("Y")
     # end if
-    if (not month):
-        month = current_time("m")
+    if (not month_):
+        month_ = current_time("m")
     # end if
-    if (not day):
-        day = current_time("j")
+    if (not day_):
+        day_ = current_time("j")
     # end if
-    daylink = wp_rewrite.get_day_permastruct()
-    if (not php_empty(lambda : daylink)):
-        daylink = php_str_replace("%year%", year, daylink)
-        daylink = php_str_replace("%monthnum%", zeroise(php_intval(month), 2), daylink)
-        daylink = php_str_replace("%day%", zeroise(php_intval(day), 2), daylink)
-        daylink = home_url(user_trailingslashit(daylink, "day"))
+    daylink_ = wp_rewrite_.get_day_permastruct()
+    if (not php_empty(lambda : daylink_)):
+        daylink_ = php_str_replace("%year%", year_, daylink_)
+        daylink_ = php_str_replace("%monthnum%", zeroise(php_intval(month_), 2), daylink_)
+        daylink_ = php_str_replace("%day%", zeroise(php_intval(day_), 2), daylink_)
+        daylink_ = home_url(user_trailingslashit(daylink_, "day"))
     else:
-        daylink = home_url("?m=" + year + zeroise(month, 2) + zeroise(day, 2))
+        daylink_ = home_url("?m=" + year_ + zeroise(month_, 2) + zeroise(day_, 2))
     # end if
     #// 
     #// Filters the day archive permalink.
@@ -525,7 +559,7 @@ def get_day_link(year=None, month=None, day=None, *args_):
     #// @param int    $month   Month for the archive.
     #// @param int    $day     The day for the archive.
     #//
-    return apply_filters("day_link", daylink, year, month, day)
+    return apply_filters("day_link", daylink_, year_, month_, day_)
 # end def get_day_link
 #// 
 #// Displays the permalink for the feed type.
@@ -536,9 +570,10 @@ def get_day_link(year=None, month=None, day=None, *args_):
 #// @param string $feed   Optional. Feed type. Possible values include 'rss2', 'atom'.
 #// Default is the value of get_default_feed().
 #//
-def the_feed_link(anchor=None, feed="", *args_):
+def the_feed_link(anchor_=None, feed_="", *_args_):
     
-    link = "<a href=\"" + esc_url(get_feed_link(feed)) + "\">" + anchor + "</a>"
+    
+    link_ = "<a href=\"" + esc_url(get_feed_link(feed_)) + "\">" + anchor_ + "</a>"
     #// 
     #// Filters the feed link anchor tag.
     #// 
@@ -548,7 +583,7 @@ def the_feed_link(anchor=None, feed="", *args_):
     #// @param string $feed The feed type. Possible values include 'rss2', 'atom',
     #// or an empty string for the default feed type.
     #//
-    php_print(apply_filters("the_feed_link", link, feed))
+    php_print(apply_filters("the_feed_link", link_, feed_))
 # end def the_feed_link
 #// 
 #// Retrieves the permalink for the feed type.
@@ -561,30 +596,31 @@ def the_feed_link(anchor=None, feed="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string The feed permalink.
 #//
-def get_feed_link(feed="", *args_):
+def get_feed_link(feed_="", *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    permalink = wp_rewrite.get_feed_permastruct()
-    if "" != permalink:
-        if False != php_strpos(feed, "comments_"):
-            feed = php_str_replace("comments_", "", feed)
-            permalink = wp_rewrite.get_comment_feed_permastruct()
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    permalink_ = wp_rewrite_.get_feed_permastruct()
+    if "" != permalink_:
+        if False != php_strpos(feed_, "comments_"):
+            feed_ = php_str_replace("comments_", "", feed_)
+            permalink_ = wp_rewrite_.get_comment_feed_permastruct()
         # end if
-        if get_default_feed() == feed:
-            feed = ""
+        if get_default_feed() == feed_:
+            feed_ = ""
         # end if
-        permalink = php_str_replace("%feed%", feed, permalink)
-        permalink = php_preg_replace("#/+#", "/", str("/") + str(permalink))
-        output = home_url(user_trailingslashit(permalink, "feed"))
+        permalink_ = php_str_replace("%feed%", feed_, permalink_)
+        permalink_ = php_preg_replace("#/+#", "/", str("/") + str(permalink_))
+        output_ = home_url(user_trailingslashit(permalink_, "feed"))
     else:
-        if php_empty(lambda : feed):
-            feed = get_default_feed()
+        if php_empty(lambda : feed_):
+            feed_ = get_default_feed()
         # end if
-        if False != php_strpos(feed, "comments_"):
-            feed = php_str_replace("comments_", "comments-", feed)
+        if False != php_strpos(feed_, "comments_"):
+            feed_ = php_str_replace("comments_", "comments-", feed_)
         # end if
-        output = home_url(str("?feed=") + str(feed))
+        output_ = home_url(str("?feed=") + str(feed_))
     # end if
     #// 
     #// Filters the feed type permalink.
@@ -595,7 +631,7 @@ def get_feed_link(feed="", *args_):
     #// @param string $feed   The feed type. Possible values include 'rss2', 'atom',
     #// or an empty string for the default feed type.
     #//
-    return apply_filters("feed_link", output, feed)
+    return apply_filters("feed_link", output_, feed_)
 # end def get_feed_link
 #// 
 #// Retrieves the permalink for the post comments feed.
@@ -607,43 +643,44 @@ def get_feed_link(feed="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string The permalink for the comments feed for the given post.
 #//
-def get_post_comments_feed_link(post_id=0, feed="", *args_):
+def get_post_comments_feed_link(post_id_=0, feed_="", *_args_):
     
-    post_id = absint(post_id)
-    if (not post_id):
-        post_id = get_the_ID()
+    
+    post_id_ = absint(post_id_)
+    if (not post_id_):
+        post_id_ = get_the_ID()
     # end if
-    if php_empty(lambda : feed):
-        feed = get_default_feed()
+    if php_empty(lambda : feed_):
+        feed_ = get_default_feed()
     # end if
-    post = get_post(post_id)
-    unattached = "attachment" == post.post_type and 0 == php_int(post.post_parent)
+    post_ = get_post(post_id_)
+    unattached_ = "attachment" == post_.post_type and 0 == php_int(post_.post_parent)
     if "" != get_option("permalink_structure"):
-        if "page" == get_option("show_on_front") and get_option("page_on_front") == post_id:
-            url = _get_page_link(post_id)
+        if "page" == get_option("show_on_front") and get_option("page_on_front") == post_id_:
+            url_ = _get_page_link(post_id_)
         else:
-            url = get_permalink(post_id)
+            url_ = get_permalink(post_id_)
         # end if
-        if unattached:
-            url = home_url("/feed/")
-            if get_default_feed() != feed:
-                url += str(feed) + str("/")
+        if unattached_:
+            url_ = home_url("/feed/")
+            if get_default_feed() != feed_:
+                url_ += str(feed_) + str("/")
             # end if
-            url = add_query_arg("attachment_id", post_id, url)
+            url_ = add_query_arg("attachment_id", post_id_, url_)
         else:
-            url = trailingslashit(url) + "feed"
-            if get_default_feed() != feed:
-                url += str("/") + str(feed)
+            url_ = trailingslashit(url_) + "feed"
+            if get_default_feed() != feed_:
+                url_ += str("/") + str(feed_)
             # end if
-            url = user_trailingslashit(url, "single_feed")
+            url_ = user_trailingslashit(url_, "single_feed")
         # end if
     else:
-        if unattached:
-            url = add_query_arg(Array({"feed": feed, "attachment_id": post_id}), home_url("/"))
-        elif "page" == post.post_type:
-            url = add_query_arg(Array({"feed": feed, "page_id": post_id}), home_url("/"))
+        if unattached_:
+            url_ = add_query_arg(Array({"feed": feed_, "attachment_id": post_id_}), home_url("/"))
+        elif "page" == post_.post_type:
+            url_ = add_query_arg(Array({"feed": feed_, "page_id": post_id_}), home_url("/"))
         else:
-            url = add_query_arg(Array({"feed": feed, "p": post_id}), home_url("/"))
+            url_ = add_query_arg(Array({"feed": feed_, "p": post_id_}), home_url("/"))
         # end if
     # end if
     #// 
@@ -653,7 +690,7 @@ def get_post_comments_feed_link(post_id=0, feed="", *args_):
     #// 
     #// @param string $url Post comments feed permalink.
     #//
-    return apply_filters("post_comments_feed_link", url)
+    return apply_filters("post_comments_feed_link", url_)
 # end def get_post_comments_feed_link
 #// 
 #// Displays the comment feed link for a post.
@@ -669,13 +706,14 @@ def get_post_comments_feed_link(post_id=0, feed="", *args_):
 #// @param string $feed      Optional. Feed type. Possible values include 'rss2', 'atom'.
 #// Default is the value of get_default_feed().
 #//
-def post_comments_feed_link(link_text="", post_id="", feed="", *args_):
+def post_comments_feed_link(link_text_="", post_id_="", feed_="", *_args_):
     
-    url = get_post_comments_feed_link(post_id, feed)
-    if php_empty(lambda : link_text):
-        link_text = __("Comments Feed")
+    
+    url_ = get_post_comments_feed_link(post_id_, feed_)
+    if php_empty(lambda : link_text_):
+        link_text_ = __("Comments Feed")
     # end if
-    link = "<a href=\"" + esc_url(url) + "\">" + link_text + "</a>"
+    link_ = "<a href=\"" + esc_url(url_) + "\">" + link_text_ + "</a>"
     #// 
     #// Filters the post comment feed link anchor tag.
     #// 
@@ -686,7 +724,7 @@ def post_comments_feed_link(link_text="", post_id="", feed="", *args_):
     #// @param string $feed    The feed type. Possible values include 'rss2', 'atom',
     #// or an empty string for the default feed type.
     #//
-    php_print(apply_filters("post_comments_feed_link_html", link, post_id, feed))
+    php_print(apply_filters("post_comments_feed_link_html", link_, post_id_, feed_))
 # end def post_comments_feed_link
 #// 
 #// Retrieves the feed link for a given author.
@@ -701,23 +739,24 @@ def post_comments_feed_link(link_text="", post_id="", feed="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string Link to the feed for the author specified by $author_id.
 #//
-def get_author_feed_link(author_id=None, feed="", *args_):
+def get_author_feed_link(author_id_=None, feed_="", *_args_):
     
-    author_id = php_int(author_id)
-    permalink_structure = get_option("permalink_structure")
-    if php_empty(lambda : feed):
-        feed = get_default_feed()
+    
+    author_id_ = php_int(author_id_)
+    permalink_structure_ = get_option("permalink_structure")
+    if php_empty(lambda : feed_):
+        feed_ = get_default_feed()
     # end if
-    if "" == permalink_structure:
-        link = home_url(str("?feed=") + str(feed) + str("&amp;author=") + author_id)
+    if "" == permalink_structure_:
+        link_ = home_url(str("?feed=") + str(feed_) + str("&amp;author=") + author_id_)
     else:
-        link = get_author_posts_url(author_id)
-        if get_default_feed() == feed:
-            feed_link = "feed"
+        link_ = get_author_posts_url(author_id_)
+        if get_default_feed() == feed_:
+            feed_link_ = "feed"
         else:
-            feed_link = str("feed/") + str(feed)
+            feed_link_ = str("feed/") + str(feed_)
         # end if
-        link = trailingslashit(link) + user_trailingslashit(feed_link, "feed")
+        link_ = trailingslashit(link_) + user_trailingslashit(feed_link_, "feed")
     # end if
     #// 
     #// Filters the feed link for a given author.
@@ -727,8 +766,8 @@ def get_author_feed_link(author_id=None, feed="", *args_):
     #// @param string $link The author feed link.
     #// @param string $feed Feed type. Possible values include 'rss2', 'atom'.
     #//
-    link = apply_filters("author_feed_link", link, feed)
-    return link
+    link_ = apply_filters("author_feed_link", link_, feed_)
+    return link_
 # end def get_author_feed_link
 #// 
 #// Retrieves the feed link for a category.
@@ -743,9 +782,10 @@ def get_author_feed_link(author_id=None, feed="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string Link to the feed for the category specified by $cat_id.
 #//
-def get_category_feed_link(cat_id=None, feed="", *args_):
+def get_category_feed_link(cat_id_=None, feed_="", *_args_):
     
-    return get_term_feed_link(cat_id, "category", feed)
+    
+    return get_term_feed_link(cat_id_, "category", feed_)
 # end def get_category_feed_link
 #// 
 #// Retrieves the feed link for a term.
@@ -761,36 +801,37 @@ def get_category_feed_link(cat_id=None, feed="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string|false Link to the feed for the term specified by $term_id and $taxonomy.
 #//
-def get_term_feed_link(term_id=None, taxonomy="category", feed="", *args_):
+def get_term_feed_link(term_id_=None, taxonomy_="category", feed_="", *_args_):
     
-    term_id = php_int(term_id)
-    term = get_term(term_id, taxonomy)
-    if php_empty(lambda : term) or is_wp_error(term):
+    
+    term_id_ = php_int(term_id_)
+    term_ = get_term(term_id_, taxonomy_)
+    if php_empty(lambda : term_) or is_wp_error(term_):
         return False
     # end if
-    if php_empty(lambda : feed):
-        feed = get_default_feed()
+    if php_empty(lambda : feed_):
+        feed_ = get_default_feed()
     # end if
-    permalink_structure = get_option("permalink_structure")
-    if "" == permalink_structure:
-        if "category" == taxonomy:
-            link = home_url(str("?feed=") + str(feed) + str("&amp;cat=") + str(term_id))
-        elif "post_tag" == taxonomy:
-            link = home_url(str("?feed=") + str(feed) + str("&amp;tag=") + str(term.slug))
+    permalink_structure_ = get_option("permalink_structure")
+    if "" == permalink_structure_:
+        if "category" == taxonomy_:
+            link_ = home_url(str("?feed=") + str(feed_) + str("&amp;cat=") + str(term_id_))
+        elif "post_tag" == taxonomy_:
+            link_ = home_url(str("?feed=") + str(feed_) + str("&amp;tag=") + str(term_.slug))
         else:
-            t = get_taxonomy(taxonomy)
-            link = home_url(str("?feed=") + str(feed) + str("&amp;") + str(t.query_var) + str("=") + str(term.slug))
+            t_ = get_taxonomy(taxonomy_)
+            link_ = home_url(str("?feed=") + str(feed_) + str("&amp;") + str(t_.query_var) + str("=") + str(term_.slug))
         # end if
     else:
-        link = get_term_link(term_id, term.taxonomy)
-        if get_default_feed() == feed:
-            feed_link = "feed"
+        link_ = get_term_link(term_id_, term_.taxonomy)
+        if get_default_feed() == feed_:
+            feed_link_ = "feed"
         else:
-            feed_link = str("feed/") + str(feed)
+            feed_link_ = str("feed/") + str(feed_)
         # end if
-        link = trailingslashit(link) + user_trailingslashit(feed_link, "feed")
+        link_ = trailingslashit(link_) + user_trailingslashit(feed_link_, "feed")
     # end if
-    if "category" == taxonomy:
+    if "category" == taxonomy_:
         #// 
         #// Filters the category feed link.
         #// 
@@ -799,8 +840,8 @@ def get_term_feed_link(term_id=None, taxonomy="category", feed="", *args_):
         #// @param string $link The category feed link.
         #// @param string $feed Feed type. Possible values include 'rss2', 'atom'.
         #//
-        link = apply_filters("category_feed_link", link, feed)
-    elif "post_tag" == taxonomy:
+        link_ = apply_filters("category_feed_link", link_, feed_)
+    elif "post_tag" == taxonomy_:
         #// 
         #// Filters the post tag feed link.
         #// 
@@ -809,7 +850,7 @@ def get_term_feed_link(term_id=None, taxonomy="category", feed="", *args_):
         #// @param string $link The tag feed link.
         #// @param string $feed Feed type. Possible values include 'rss2', 'atom'.
         #//
-        link = apply_filters("tag_feed_link", link, feed)
+        link_ = apply_filters("tag_feed_link", link_, feed_)
     else:
         #// 
         #// Filters the feed link for a taxonomy other than 'category' or 'post_tag'.
@@ -820,9 +861,9 @@ def get_term_feed_link(term_id=None, taxonomy="category", feed="", *args_):
         #// @param string $feed     Feed type. Possible values include 'rss2', 'atom'.
         #// @param string $taxonomy The taxonomy name.
         #//
-        link = apply_filters("taxonomy_feed_link", link, feed, taxonomy)
+        link_ = apply_filters("taxonomy_feed_link", link_, feed_, taxonomy_)
     # end if
-    return link
+    return link_
 # end def get_term_feed_link
 #// 
 #// Retrieves the permalink for a tag feed.
@@ -834,9 +875,10 @@ def get_term_feed_link(term_id=None, taxonomy="category", feed="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string The feed permalink for the given tag.
 #//
-def get_tag_feed_link(tag_id=None, feed="", *args_):
+def get_tag_feed_link(tag_id_=None, feed_="", *_args_):
     
-    return get_term_feed_link(tag_id, "post_tag", feed)
+    
+    return get_term_feed_link(tag_id_, "post_tag", feed_)
 # end def get_tag_feed_link
 #// 
 #// Retrieves the edit link for a tag.
@@ -847,7 +889,8 @@ def get_tag_feed_link(tag_id=None, feed="", *args_):
 #// @param string $taxonomy Optional. Taxonomy slug. Default 'post_tag'.
 #// @return string The edit tag link URL for the given tag.
 #//
-def get_edit_tag_link(tag_id=None, taxonomy="post_tag", *args_):
+def get_edit_tag_link(tag_id_=None, taxonomy_="post_tag", *_args_):
+    
     
     #// 
     #// Filters the edit link for a tag (or term in another taxonomy).
@@ -856,7 +899,7 @@ def get_edit_tag_link(tag_id=None, taxonomy="post_tag", *args_):
     #// 
     #// @param string $link The term edit link.
     #//
-    return apply_filters("get_edit_tag_link", get_edit_term_link(tag_id, taxonomy))
+    return apply_filters("get_edit_tag_link", get_edit_term_link(tag_id_, taxonomy_))
 # end def get_edit_tag_link
 #// 
 #// Displays or retrieves the edit link for a tag with formatting.
@@ -869,9 +912,10 @@ def get_edit_tag_link(tag_id=None, taxonomy="post_tag", *args_):
 #// @param WP_Term $tag    Optional. Term object. If null, the queried object will be inspected.
 #// Default null.
 #//
-def edit_tag_link(link="", before="", after="", tag=None, *args_):
+def edit_tag_link(link_="", before_="", after_="", tag_=None, *_args_):
     
-    link = edit_term_link(link, "", "", tag, False)
+    
+    link_ = edit_term_link(link_, "", "", tag_, False)
     #// 
     #// Filters the anchor tag for the edit link for a tag (or term in another taxonomy).
     #// 
@@ -879,7 +923,7 @@ def edit_tag_link(link="", before="", after="", tag=None, *args_):
     #// 
     #// @param string $link The anchor tag for the edit link.
     #//
-    php_print(before + apply_filters("edit_tag_link", link) + after)
+    php_print(before_ + apply_filters("edit_tag_link", link_) + after_)
 # end def edit_tag_link
 #// 
 #// Retrieves the URL for editing a given term.
@@ -895,26 +939,27 @@ def edit_tag_link(link="", before="", after="", tag=None, *args_):
 #// with the taxonomy.
 #// @return string|null The edit term link URL for the given term, or null on failure.
 #//
-def get_edit_term_link(term_id=None, taxonomy="", object_type="", *args_):
+def get_edit_term_link(term_id_=None, taxonomy_="", object_type_="", *_args_):
     
-    term = get_term(term_id, taxonomy)
-    if (not term) or is_wp_error(term):
+    
+    term_ = get_term(term_id_, taxonomy_)
+    if (not term_) or is_wp_error(term_):
         return
     # end if
-    tax = get_taxonomy(term.taxonomy)
-    if (not tax) or (not current_user_can("edit_term", term.term_id)):
+    tax_ = get_taxonomy(term_.taxonomy)
+    if (not tax_) or (not current_user_can("edit_term", term_.term_id)):
         return
     # end if
-    args = Array({"taxonomy": taxonomy, "tag_ID": term.term_id})
-    if object_type:
-        args["post_type"] = object_type
-    elif (not php_empty(lambda : tax.object_type)):
-        args["post_type"] = reset(tax.object_type)
+    args_ = Array({"taxonomy": taxonomy_, "tag_ID": term_.term_id})
+    if object_type_:
+        args_["post_type"] = object_type_
+    elif (not php_empty(lambda : tax_.object_type)):
+        args_["post_type"] = reset(tax_.object_type)
     # end if
-    if tax.show_ui:
-        location = add_query_arg(args, admin_url("term.php"))
+    if tax_.show_ui:
+        location_ = add_query_arg(args_, admin_url("term.php"))
     else:
-        location = ""
+        location_ = ""
     # end if
     #// 
     #// Filters the edit link for a term.
@@ -926,7 +971,7 @@ def get_edit_term_link(term_id=None, taxonomy="", object_type="", *args_):
     #// @param string $taxonomy    Taxonomy name.
     #// @param string $object_type The object type (eg. the post type).
     #//
-    return apply_filters("get_edit_term_link", location, term_id, taxonomy, object_type)
+    return apply_filters("get_edit_term_link", location_, term_id_, taxonomy_, object_type_)
 # end def get_edit_term_link
 #// 
 #// Displays or retrieves the edit term link with formatting.
@@ -940,22 +985,25 @@ def get_edit_term_link(term_id=None, taxonomy="", object_type="", *args_):
 #// @param bool    $echo   Optional. Whether or not to echo the return. Default true.
 #// @return string|void HTML content.
 #//
-def edit_term_link(link="", before="", after="", term=None, echo=True, *args_):
+def edit_term_link(link_="", before_="", after_="", term_=None, echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    if is_null(term):
-        term = get_queried_object()
+    if is_null(term_):
+        term_ = get_queried_object()
     # end if
-    if (not term):
+    if (not term_):
         return
     # end if
-    tax = get_taxonomy(term.taxonomy)
-    if (not current_user_can("edit_term", term.term_id)):
+    tax_ = get_taxonomy(term_.taxonomy)
+    if (not current_user_can("edit_term", term_.term_id)):
         return
     # end if
-    if php_empty(lambda : link):
-        link = __("Edit This")
+    if php_empty(lambda : link_):
+        link_ = __("Edit This")
     # end if
-    link = "<a href=\"" + get_edit_term_link(term.term_id, term.taxonomy) + "\">" + link + "</a>"
+    link_ = "<a href=\"" + get_edit_term_link(term_.term_id, term_.taxonomy) + "\">" + link_ + "</a>"
     #// 
     #// Filters the anchor tag for the edit link of a term.
     #// 
@@ -964,11 +1012,11 @@ def edit_term_link(link="", before="", after="", term=None, echo=True, *args_):
     #// @param string $link    The anchor tag for the edit link.
     #// @param int    $term_id Term ID.
     #//
-    link = before + apply_filters("edit_term_link", link, term.term_id) + after
-    if echo:
-        php_print(link)
+    link_ = before_ + apply_filters("edit_term_link", link_, term_.term_id) + after_
+    if echo_:
+        php_print(link_)
     else:
-        return link
+        return link_
     # end if
 # end def edit_term_link
 #// 
@@ -981,24 +1029,25 @@ def edit_term_link(link="", before="", after="", term=None, echo=True, *args_):
 #// @param string $query Optional. The query string to use. If empty the current query is used. Default empty.
 #// @return string The search permalink.
 #//
-def get_search_link(query="", *args_):
+def get_search_link(query_="", *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if php_empty(lambda : query):
-        search = get_search_query(False)
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if php_empty(lambda : query_):
+        search_ = get_search_query(False)
     else:
-        search = stripslashes(query)
+        search_ = stripslashes(query_)
     # end if
-    permastruct = wp_rewrite.get_search_permastruct()
-    if php_empty(lambda : permastruct):
-        link = home_url("?s=" + urlencode(search))
+    permastruct_ = wp_rewrite_.get_search_permastruct()
+    if php_empty(lambda : permastruct_):
+        link_ = home_url("?s=" + urlencode(search_))
     else:
-        search = urlencode(search)
-        search = php_str_replace("%2F", "/", search)
+        search_ = urlencode(search_)
+        search_ = php_str_replace("%2F", "/", search_)
         #// %2F(/) is not valid within a URL, send it un-encoded.
-        link = php_str_replace("%search%", search, permastruct)
-        link = home_url(user_trailingslashit(link, "search"))
+        link_ = php_str_replace("%search%", search_, permastruct_)
+        link_ = home_url(user_trailingslashit(link_, "search"))
     # end if
     #// 
     #// Filters the search permalink.
@@ -1008,7 +1057,7 @@ def get_search_link(query="", *args_):
     #// @param string $link   Search permalink.
     #// @param string $search The URL-encoded search term.
     #//
-    return apply_filters("search_link", link, search)
+    return apply_filters("search_link", link_, search_)
 # end def get_search_link
 #// 
 #// Retrieves the permalink for the search results feed.
@@ -1022,20 +1071,21 @@ def get_search_link(query="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string The search results feed permalink.
 #//
-def get_search_feed_link(search_query="", feed="", *args_):
+def get_search_feed_link(search_query_="", feed_="", *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    link = get_search_link(search_query)
-    if php_empty(lambda : feed):
-        feed = get_default_feed()
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    link_ = get_search_link(search_query_)
+    if php_empty(lambda : feed_):
+        feed_ = get_default_feed()
     # end if
-    permastruct = wp_rewrite.get_search_permastruct()
-    if php_empty(lambda : permastruct):
-        link = add_query_arg("feed", feed, link)
+    permastruct_ = wp_rewrite_.get_search_permastruct()
+    if php_empty(lambda : permastruct_):
+        link_ = add_query_arg("feed", feed_, link_)
     else:
-        link = trailingslashit(link)
-        link += str("feed/") + str(feed) + str("/")
+        link_ = trailingslashit(link_)
+        link_ += str("feed/") + str(feed_) + str("/")
     # end if
     #// 
     #// Filters the search feed link.
@@ -1046,7 +1096,7 @@ def get_search_feed_link(search_query="", feed="", *args_):
     #// @param string $feed Feed type. Possible values include 'rss2', 'atom'.
     #// @param string $type The search type. One of 'posts' or 'comments'.
     #//
-    return apply_filters("search_feed_link", link, feed, "posts")
+    return apply_filters("search_feed_link", link_, feed_, "posts")
 # end def get_search_feed_link
 #// 
 #// Retrieves the permalink for the search results comments feed.
@@ -1060,22 +1110,23 @@ def get_search_feed_link(search_query="", feed="", *args_):
 #// Default is the value of get_default_feed().
 #// @return string The comments feed search results permalink.
 #//
-def get_search_comments_feed_link(search_query="", feed="", *args_):
+def get_search_comments_feed_link(search_query_="", feed_="", *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if php_empty(lambda : feed):
-        feed = get_default_feed()
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if php_empty(lambda : feed_):
+        feed_ = get_default_feed()
     # end if
-    link = get_search_feed_link(search_query, feed)
-    permastruct = wp_rewrite.get_search_permastruct()
-    if php_empty(lambda : permastruct):
-        link = add_query_arg("feed", "comments-" + feed, link)
+    link_ = get_search_feed_link(search_query_, feed_)
+    permastruct_ = wp_rewrite_.get_search_permastruct()
+    if php_empty(lambda : permastruct_):
+        link_ = add_query_arg("feed", "comments-" + feed_, link_)
     else:
-        link = add_query_arg("withcomments", 1, link)
+        link_ = add_query_arg("withcomments", 1, link_)
     # end if
     #// This filter is documented in wp-includes/link-template.php
-    return apply_filters("search_feed_link", link, feed, "comments")
+    return apply_filters("search_feed_link", link_, feed_, "comments")
 # end def get_search_comments_feed_link
 #// 
 #// Retrieves the permalink for a post type archive.
@@ -1088,38 +1139,39 @@ def get_search_comments_feed_link(search_query="", feed="", *args_):
 #// @param string $post_type Post type.
 #// @return string|false The post type archive permalink.
 #//
-def get_post_type_archive_link(post_type=None, *args_):
+def get_post_type_archive_link(post_type_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    post_type_obj = get_post_type_object(post_type)
-    if (not post_type_obj):
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    post_type_obj_ = get_post_type_object(post_type_)
+    if (not post_type_obj_):
         return False
     # end if
-    if "post" == post_type:
-        show_on_front = get_option("show_on_front")
-        page_for_posts = get_option("page_for_posts")
-        if "page" == show_on_front and page_for_posts:
-            link = get_permalink(page_for_posts)
+    if "post" == post_type_:
+        show_on_front_ = get_option("show_on_front")
+        page_for_posts_ = get_option("page_for_posts")
+        if "page" == show_on_front_ and page_for_posts_:
+            link_ = get_permalink(page_for_posts_)
         else:
-            link = get_home_url()
+            link_ = get_home_url()
         # end if
         #// This filter is documented in wp-includes/link-template.php
-        return apply_filters("post_type_archive_link", link, post_type)
+        return apply_filters("post_type_archive_link", link_, post_type_)
     # end if
-    if (not post_type_obj.has_archive):
+    if (not post_type_obj_.has_archive):
         return False
     # end if
-    if get_option("permalink_structure") and php_is_array(post_type_obj.rewrite):
-        struct = post_type_obj.rewrite["slug"] if True == post_type_obj.has_archive else post_type_obj.has_archive
-        if post_type_obj.rewrite["with_front"]:
-            struct = wp_rewrite.front + struct
+    if get_option("permalink_structure") and php_is_array(post_type_obj_.rewrite):
+        struct_ = post_type_obj_.rewrite["slug"] if True == post_type_obj_.has_archive else post_type_obj_.has_archive
+        if post_type_obj_.rewrite["with_front"]:
+            struct_ = wp_rewrite_.front + struct_
         else:
-            struct = wp_rewrite.root + struct
+            struct_ = wp_rewrite_.root + struct_
         # end if
-        link = home_url(user_trailingslashit(struct, "post_type_archive"))
+        link_ = home_url(user_trailingslashit(struct_, "post_type_archive"))
     else:
-        link = home_url("?post_type=" + post_type)
+        link_ = home_url("?post_type=" + post_type_)
     # end if
     #// 
     #// Filters the post type archive permalink.
@@ -1129,7 +1181,7 @@ def get_post_type_archive_link(post_type=None, *args_):
     #// @param string $link      The post type archive permalink.
     #// @param string $post_type Post type name.
     #//
-    return apply_filters("post_type_archive_link", link, post_type)
+    return apply_filters("post_type_archive_link", link_, post_type_)
 # end def get_post_type_archive_link
 #// 
 #// Retrieves the permalink for a post type archive feed.
@@ -1141,25 +1193,26 @@ def get_post_type_archive_link(post_type=None, *args_):
 #// Default is the value of get_default_feed().
 #// @return string|false The post type feed permalink.
 #//
-def get_post_type_archive_feed_link(post_type=None, feed="", *args_):
+def get_post_type_archive_feed_link(post_type_=None, feed_="", *_args_):
     
-    default_feed = get_default_feed()
-    if php_empty(lambda : feed):
-        feed = default_feed
+    
+    default_feed_ = get_default_feed()
+    if php_empty(lambda : feed_):
+        feed_ = default_feed_
     # end if
-    link = get_post_type_archive_link(post_type)
-    if (not link):
+    link_ = get_post_type_archive_link(post_type_)
+    if (not link_):
         return False
     # end if
-    post_type_obj = get_post_type_object(post_type)
-    if get_option("permalink_structure") and php_is_array(post_type_obj.rewrite) and post_type_obj.rewrite["feeds"]:
-        link = trailingslashit(link)
-        link += "feed/"
-        if feed != default_feed:
-            link += str(feed) + str("/")
+    post_type_obj_ = get_post_type_object(post_type_)
+    if get_option("permalink_structure") and php_is_array(post_type_obj_.rewrite) and post_type_obj_.rewrite["feeds"]:
+        link_ = trailingslashit(link_)
+        link_ += "feed/"
+        if feed_ != default_feed_:
+            link_ += str(feed_) + str("/")
         # end if
     else:
-        link = add_query_arg("feed", feed, link)
+        link_ = add_query_arg("feed", feed_, link_)
     # end if
     #// 
     #// Filters the post type archive feed link.
@@ -1169,7 +1222,7 @@ def get_post_type_archive_feed_link(post_type=None, feed="", *args_):
     #// @param string $link The post type archive feed link.
     #// @param string $feed Feed type. Possible values include 'rss2', 'atom'.
     #//
-    return apply_filters("post_type_archive_feed_link", link, feed)
+    return apply_filters("post_type_archive_feed_link", link_, feed_)
 # end def get_post_type_archive_feed_link
 #// 
 #// Retrieves the URL used for the post preview.
@@ -1185,19 +1238,22 @@ def get_post_type_archive_feed_link(post_type=None, feed="", *args_):
 #// post permalink. Default empty.
 #// @return string|null URL used for the post preview, or null if the post does not exist.
 #//
-def get_preview_post_link(post=None, query_args=Array(), preview_link="", *args_):
+def get_preview_post_link(post_=None, query_args_=None, preview_link_="", *_args_):
+    if query_args_ is None:
+        query_args_ = Array()
+    # end if
     
-    post = get_post(post)
-    if (not post):
+    post_ = get_post(post_)
+    if (not post_):
         return
     # end if
-    post_type_object = get_post_type_object(post.post_type)
-    if is_post_type_viewable(post_type_object):
-        if (not preview_link):
-            preview_link = set_url_scheme(get_permalink(post))
+    post_type_object_ = get_post_type_object(post_.post_type)
+    if is_post_type_viewable(post_type_object_):
+        if (not preview_link_):
+            preview_link_ = set_url_scheme(get_permalink(post_))
         # end if
-        query_args["preview"] = "true"
-        preview_link = add_query_arg(query_args, preview_link)
+        query_args_["preview"] = "true"
+        preview_link_ = add_query_arg(query_args_, preview_link_)
     # end if
     #// 
     #// Filters the URL used for a post preview.
@@ -1208,7 +1264,7 @@ def get_preview_post_link(post=None, query_args=Array(), preview_link="", *args_
     #// @param string  $preview_link URL used for the post preview.
     #// @param WP_Post $post         Post object.
     #//
-    return apply_filters("preview_post_link", preview_link, post)
+    return apply_filters("preview_post_link", preview_link_, post_)
 # end def get_preview_post_link
 #// 
 #// Retrieves the edit post link for post.
@@ -1223,30 +1279,31 @@ def get_preview_post_link(post=None, query_args=Array(), preview_link="", *args_
 #// @return string|null The edit post link for the given post. null if the post type is invalid or does
 #// not allow an editing UI.
 #//
-def get_edit_post_link(id=0, context="display", *args_):
+def get_edit_post_link(id_=0, context_="display", *_args_):
     
-    post = get_post(id)
-    if (not post):
+    
+    post_ = get_post(id_)
+    if (not post_):
         return
     # end if
-    if "revision" == post.post_type:
-        action = ""
-    elif "display" == context:
-        action = "&amp;action=edit"
+    if "revision" == post_.post_type:
+        action_ = ""
+    elif "display" == context_:
+        action_ = "&amp;action=edit"
     else:
-        action = "&action=edit"
+        action_ = "&action=edit"
     # end if
-    post_type_object = get_post_type_object(post.post_type)
-    if (not post_type_object):
+    post_type_object_ = get_post_type_object(post_.post_type)
+    if (not post_type_object_):
         return
     # end if
-    if (not current_user_can("edit_post", post.ID)):
+    if (not current_user_can("edit_post", post_.ID)):
         return
     # end if
-    if post_type_object._edit_link:
-        link = admin_url(php_sprintf(post_type_object._edit_link + action, post.ID))
+    if post_type_object_._edit_link:
+        link_ = admin_url(php_sprintf(post_type_object_._edit_link + action_, post_.ID))
     else:
-        link = ""
+        link_ = ""
     # end if
     #// 
     #// Filters the post edit link.
@@ -1258,7 +1315,7 @@ def get_edit_post_link(id=0, context="display", *args_):
     #// @param string $context The link context. If set to 'display' then ampersands
     #// are encoded.
     #//
-    return apply_filters("get_edit_post_link", link, post.ID, context)
+    return apply_filters("get_edit_post_link", link_, post_.ID, context_)
 # end def get_edit_post_link
 #// 
 #// Displays the edit post link for post.
@@ -1272,20 +1329,21 @@ def get_edit_post_link(id=0, context="display", *args_):
 #// @param int|WP_Post $id     Optional. Post ID or post object. Default is the global `$post`.
 #// @param string      $class  Optional. Add custom class to link. Default 'post-edit-link'.
 #//
-def edit_post_link(text=None, before="", after="", id=0, class_="post-edit-link", *args_):
+def edit_post_link(text_=None, before_="", after_="", id_=0, class_="post-edit-link", *_args_):
     
-    post = get_post(id)
-    if (not post):
+    
+    post_ = get_post(id_)
+    if (not post_):
         return
     # end if
-    url = get_edit_post_link(post.ID)
-    if (not url):
+    url_ = get_edit_post_link(post_.ID)
+    if (not url_):
         return
     # end if
-    if None == text:
-        text = __("Edit This")
+    if None == text_:
+        text_ = __("Edit This")
     # end if
-    link = "<a class=\"" + esc_attr(class_) + "\" href=\"" + esc_url(url) + "\">" + text + "</a>"
+    link_ = "<a class=\"" + esc_attr(class_) + "\" href=\"" + esc_url(url_) + "\">" + text_ + "</a>"
     #// 
     #// Filters the post edit link anchor tag.
     #// 
@@ -1295,7 +1353,7 @@ def edit_post_link(text=None, before="", after="", id=0, class_="post-edit-link"
     #// @param int    $post_id Post ID.
     #// @param string $text    Anchor text.
     #//
-    php_print(before + apply_filters("edit_post_link", link, post.ID, text) + after)
+    php_print(before_ + apply_filters("edit_post_link", link_, post_.ID, text_) + after_)
 # end def edit_post_link
 #// 
 #// Retrieves the delete posts link for post.
@@ -1309,24 +1367,27 @@ def edit_post_link(text=None, before="", after="", id=0, class_="post-edit-link"
 #// @param bool        $force_delete Optional. Whether to bypass Trash and force deletion. Default false.
 #// @return string|void The delete post link URL for the given post.
 #//
-def get_delete_post_link(id=0, deprecated="", force_delete=False, *args_):
+def get_delete_post_link(id_=0, deprecated_="", force_delete_=None, *_args_):
+    if force_delete_ is None:
+        force_delete_ = False
+    # end if
     
-    if (not php_empty(lambda : deprecated)):
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "3.0.0")
     # end if
-    post = get_post(id)
-    if (not post):
+    post_ = get_post(id_)
+    if (not post_):
         return
     # end if
-    post_type_object = get_post_type_object(post.post_type)
-    if (not post_type_object):
+    post_type_object_ = get_post_type_object(post_.post_type)
+    if (not post_type_object_):
         return
     # end if
-    if (not current_user_can("delete_post", post.ID)):
+    if (not current_user_can("delete_post", post_.ID)):
         return
     # end if
-    action = "delete" if force_delete or (not EMPTY_TRASH_DAYS) else "trash"
-    delete_link = add_query_arg("action", action, admin_url(php_sprintf(post_type_object._edit_link, post.ID)))
+    action_ = "delete" if force_delete_ or (not EMPTY_TRASH_DAYS) else "trash"
+    delete_link_ = add_query_arg("action", action_, admin_url(php_sprintf(post_type_object_._edit_link, post_.ID)))
     #// 
     #// Filters the post delete link.
     #// 
@@ -1336,7 +1397,7 @@ def get_delete_post_link(id=0, deprecated="", force_delete=False, *args_):
     #// @param int    $post_id      Post ID.
     #// @param bool   $force_delete Whether to bypass the Trash and force deletion. Default false.
     #//
-    return apply_filters("get_delete_post_link", wp_nonce_url(delete_link, str(action) + str("-post_") + str(post.ID)), post.ID, force_delete)
+    return apply_filters("get_delete_post_link", wp_nonce_url(delete_link_, str(action_) + str("-post_") + str(post_.ID)), post_.ID, force_delete_)
 # end def get_delete_post_link
 #// 
 #// Retrieves the edit comment link.
@@ -1346,13 +1407,14 @@ def get_delete_post_link(id=0, deprecated="", force_delete=False, *args_):
 #// @param int|WP_Comment $comment_id Optional. Comment ID or WP_Comment object.
 #// @return string|void The edit comment link URL for the given comment.
 #//
-def get_edit_comment_link(comment_id=0, *args_):
+def get_edit_comment_link(comment_id_=0, *_args_):
     
-    comment = get_comment(comment_id)
-    if (not current_user_can("edit_comment", comment.comment_ID)):
+    
+    comment_ = get_comment(comment_id_)
+    if (not current_user_can("edit_comment", comment_.comment_ID)):
         return
     # end if
-    location = admin_url("comment.php?action=editcomment&amp;c=") + comment.comment_ID
+    location_ = admin_url("comment.php?action=editcomment&amp;c=") + comment_.comment_ID
     #// 
     #// Filters the comment edit link.
     #// 
@@ -1360,7 +1422,7 @@ def get_edit_comment_link(comment_id=0, *args_):
     #// 
     #// @param string $location The edit link.
     #//
-    return apply_filters("get_edit_comment_link", location)
+    return apply_filters("get_edit_comment_link", location_)
 # end def get_edit_comment_link
 #// 
 #// Displays the edit comment link with formatting.
@@ -1371,16 +1433,17 @@ def get_edit_comment_link(comment_id=0, *args_):
 #// @param string $before Optional. Display before edit link. Default empty.
 #// @param string $after  Optional. Display after edit link. Default empty.
 #//
-def edit_comment_link(text=None, before="", after="", *args_):
+def edit_comment_link(text_=None, before_="", after_="", *_args_):
     
-    comment = get_comment()
-    if (not current_user_can("edit_comment", comment.comment_ID)):
+    
+    comment_ = get_comment()
+    if (not current_user_can("edit_comment", comment_.comment_ID)):
         return
     # end if
-    if None == text:
-        text = __("Edit This")
+    if None == text_:
+        text_ = __("Edit This")
     # end if
-    link = "<a class=\"comment-edit-link\" href=\"" + esc_url(get_edit_comment_link(comment)) + "\">" + text + "</a>"
+    link_ = "<a class=\"comment-edit-link\" href=\"" + esc_url(get_edit_comment_link(comment_)) + "\">" + text_ + "</a>"
     #// 
     #// Filters the comment edit link anchor tag.
     #// 
@@ -1390,7 +1453,7 @@ def edit_comment_link(text=None, before="", after="", *args_):
     #// @param int    $comment_id Comment ID.
     #// @param string $text       Anchor text.
     #//
-    php_print(before + apply_filters("edit_comment_link", link, comment.comment_ID, text) + after)
+    php_print(before_ + apply_filters("edit_comment_link", link_, comment_.comment_ID, text_) + after_)
 # end def edit_comment_link
 #// 
 #// Displays the edit bookmark link.
@@ -1400,13 +1463,14 @@ def edit_comment_link(text=None, before="", after="", *args_):
 #// @param int|stdClass $link Optional. Bookmark ID. Default is the id of the current bookmark.
 #// @return string|void The edit bookmark link URL.
 #//
-def get_edit_bookmark_link(link=0, *args_):
+def get_edit_bookmark_link(link_=0, *_args_):
     
-    link = get_bookmark(link)
+    
+    link_ = get_bookmark(link_)
     if (not current_user_can("manage_links")):
         return
     # end if
-    location = admin_url("link.php?action=edit&amp;link_id=") + link.link_id
+    location_ = admin_url("link.php?action=edit&amp;link_id=") + link_.link_id
     #// 
     #// Filters the bookmark edit link.
     #// 
@@ -1415,7 +1479,7 @@ def get_edit_bookmark_link(link=0, *args_):
     #// @param string $location The edit link.
     #// @param int    $link_id  Bookmark ID.
     #//
-    return apply_filters("get_edit_bookmark_link", location, link.link_id)
+    return apply_filters("get_edit_bookmark_link", location_, link_.link_id)
 # end def get_edit_bookmark_link
 #// 
 #// Displays the edit bookmark link anchor content.
@@ -1427,16 +1491,17 @@ def get_edit_bookmark_link(link=0, *args_):
 #// @param string $after    Optional. Display after edit link. Default empty.
 #// @param int    $bookmark Optional. Bookmark ID. Default is the current bookmark.
 #//
-def edit_bookmark_link(link="", before="", after="", bookmark=None, *args_):
+def edit_bookmark_link(link_="", before_="", after_="", bookmark_=None, *_args_):
     
-    bookmark = get_bookmark(bookmark)
+    
+    bookmark_ = get_bookmark(bookmark_)
     if (not current_user_can("manage_links")):
         return
     # end if
-    if php_empty(lambda : link):
-        link = __("Edit This")
+    if php_empty(lambda : link_):
+        link_ = __("Edit This")
     # end if
-    link = "<a href=\"" + esc_url(get_edit_bookmark_link(bookmark)) + "\">" + link + "</a>"
+    link_ = "<a href=\"" + esc_url(get_edit_bookmark_link(bookmark_)) + "\">" + link_ + "</a>"
     #// 
     #// Filters the bookmark edit link anchor tag.
     #// 
@@ -1445,7 +1510,7 @@ def edit_bookmark_link(link="", before="", after="", bookmark=None, *args_):
     #// @param string $link    Anchor tag for the edit link.
     #// @param int    $link_id Bookmark ID.
     #//
-    php_print(before + apply_filters("edit_bookmark_link", link, bookmark.link_id) + after)
+    php_print(before_ + apply_filters("edit_bookmark_link", link_, bookmark_.link_id) + after_)
 # end def edit_bookmark_link
 #// 
 #// Retrieves the edit user link.
@@ -1455,22 +1520,23 @@ def edit_bookmark_link(link="", before="", after="", bookmark=None, *args_):
 #// @param int $user_id Optional. User ID. Defaults to the current user.
 #// @return string URL to edit user page or empty string.
 #//
-def get_edit_user_link(user_id=None, *args_):
+def get_edit_user_link(user_id_=None, *_args_):
     
-    if (not user_id):
-        user_id = get_current_user_id()
+    
+    if (not user_id_):
+        user_id_ = get_current_user_id()
     # end if
-    if php_empty(lambda : user_id) or (not current_user_can("edit_user", user_id)):
+    if php_empty(lambda : user_id_) or (not current_user_can("edit_user", user_id_)):
         return ""
     # end if
-    user = get_userdata(user_id)
-    if (not user):
+    user_ = get_userdata(user_id_)
+    if (not user_):
         return ""
     # end if
-    if get_current_user_id() == user.ID:
-        link = get_edit_profile_url(user.ID)
+    if get_current_user_id() == user_.ID:
+        link_ = get_edit_profile_url(user_.ID)
     else:
-        link = add_query_arg("user_id", user.ID, self_admin_url("user-edit.php"))
+        link_ = add_query_arg("user_id", user_.ID, self_admin_url("user-edit.php"))
     # end if
     #// 
     #// Filters the user edit link.
@@ -1480,7 +1546,7 @@ def get_edit_user_link(user_id=None, *args_):
     #// @param string $link    The edit link.
     #// @param int    $user_id User ID.
     #//
-    return apply_filters("get_edit_user_link", link, user.ID)
+    return apply_filters("get_edit_user_link", link_, user_.ID)
 # end def get_edit_user_link
 #// 
 #// Navigation links.
@@ -1496,9 +1562,12 @@ def get_edit_user_link(user_id=None, *args_):
 #// @return null|string|WP_Post Post object if successful. Null if global $post is not set. Empty string if no
 #// corresponding post exists.
 #//
-def get_previous_post(in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def get_previous_post(in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    return get_adjacent_post(in_same_term, excluded_terms, True, taxonomy)
+    return get_adjacent_post(in_same_term_, excluded_terms_, True, taxonomy_)
 # end def get_previous_post
 #// 
 #// Retrieves the next post that is adjacent to the current post.
@@ -1511,9 +1580,12 @@ def get_previous_post(in_same_term=False, excluded_terms="", taxonomy="category"
 #// @return null|string|WP_Post Post object if successful. Null if global $post is not set. Empty string if no
 #// corresponding post exists.
 #//
-def get_next_post(in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def get_next_post(in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    return get_adjacent_post(in_same_term, excluded_terms, False, taxonomy)
+    return get_adjacent_post(in_same_term_, excluded_terms_, False, taxonomy_)
 # end def get_next_post
 #// 
 #// Retrieves the adjacent post.
@@ -1531,27 +1603,33 @@ def get_next_post(in_same_term=False, excluded_terms="", taxonomy="category", *a
 #// @return null|string|WP_Post Post object if successful. Null if global $post is not set. Empty string if no
 #// corresponding post exists.
 #//
-def get_adjacent_post(in_same_term=False, excluded_terms="", previous=True, taxonomy="category", *args_):
+def get_adjacent_post(in_same_term_=None, excluded_terms_="", previous_=None, taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
+    if previous_ is None:
+        previous_ = True
+    # end if
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post()
-    if (not post) or (not taxonomy_exists(taxonomy)):
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post()
+    if (not post_) or (not taxonomy_exists(taxonomy_)):
         return None
     # end if
-    current_post_date = post.post_date
-    join = ""
-    where = ""
-    adjacent = "previous" if previous else "next"
-    if (not php_empty(lambda : excluded_terms)) and (not php_is_array(excluded_terms)):
+    current_post_date_ = post_.post_date
+    join_ = ""
+    where_ = ""
+    adjacent_ = "previous" if previous_ else "next"
+    if (not php_empty(lambda : excluded_terms_)) and (not php_is_array(excluded_terms_)):
         #// Back-compat, $excluded_terms used to be $excluded_categories with IDs separated by " and ".
-        if False != php_strpos(excluded_terms, " and "):
+        if False != php_strpos(excluded_terms_, " and "):
             _deprecated_argument(__FUNCTION__, "3.3.0", php_sprintf(__("Use commas instead of %s to separate excluded terms."), "'and'"))
-            excluded_terms = php_explode(" and ", excluded_terms)
+            excluded_terms_ = php_explode(" and ", excluded_terms_)
         else:
-            excluded_terms = php_explode(",", excluded_terms)
+            excluded_terms_ = php_explode(",", excluded_terms_)
         # end if
-        excluded_terms = php_array_map("intval", excluded_terms)
+        excluded_terms_ = php_array_map("intval", excluded_terms_)
     # end if
     #// 
     #// Filters the IDs of terms excluded from adjacent post queries.
@@ -1563,56 +1641,56 @@ def get_adjacent_post(in_same_term=False, excluded_terms="", previous=True, taxo
     #// 
     #// @param array $excluded_terms Array of excluded term IDs.
     #//
-    excluded_terms = apply_filters(str("get_") + str(adjacent) + str("_post_excluded_terms"), excluded_terms)
-    if in_same_term or (not php_empty(lambda : excluded_terms)):
-        if in_same_term:
-            join += str(" INNER JOIN ") + str(wpdb.term_relationships) + str(" AS tr ON p.ID = tr.object_id INNER JOIN ") + str(wpdb.term_taxonomy) + str(" tt ON tr.term_taxonomy_id = tt.term_taxonomy_id")
-            where += wpdb.prepare("AND tt.taxonomy = %s", taxonomy)
-            if (not is_object_in_taxonomy(post.post_type, taxonomy)):
+    excluded_terms_ = apply_filters(str("get_") + str(adjacent_) + str("_post_excluded_terms"), excluded_terms_)
+    if in_same_term_ or (not php_empty(lambda : excluded_terms_)):
+        if in_same_term_:
+            join_ += str(" INNER JOIN ") + str(wpdb_.term_relationships) + str(" AS tr ON p.ID = tr.object_id INNER JOIN ") + str(wpdb_.term_taxonomy) + str(" tt ON tr.term_taxonomy_id = tt.term_taxonomy_id")
+            where_ += wpdb_.prepare("AND tt.taxonomy = %s", taxonomy_)
+            if (not is_object_in_taxonomy(post_.post_type, taxonomy_)):
                 return ""
             # end if
-            term_array = wp_get_object_terms(post.ID, taxonomy, Array({"fields": "ids"}))
+            term_array_ = wp_get_object_terms(post_.ID, taxonomy_, Array({"fields": "ids"}))
             #// Remove any exclusions from the term array to include.
-            term_array = php_array_diff(term_array, excluded_terms)
-            term_array = php_array_map("intval", term_array)
-            if (not term_array) or is_wp_error(term_array):
+            term_array_ = php_array_diff(term_array_, excluded_terms_)
+            term_array_ = php_array_map("intval", term_array_)
+            if (not term_array_) or is_wp_error(term_array_):
                 return ""
             # end if
-            where += " AND tt.term_id IN (" + php_implode(",", term_array) + ")"
+            where_ += " AND tt.term_id IN (" + php_implode(",", term_array_) + ")"
         # end if
-        if (not php_empty(lambda : excluded_terms)):
-            where += str(" AND p.ID NOT IN ( SELECT tr.object_id FROM ") + str(wpdb.term_relationships) + str(" tr LEFT JOIN ") + str(wpdb.term_taxonomy) + str(" tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN (") + php_implode(",", php_array_map("intval", excluded_terms)) + ") )"
+        if (not php_empty(lambda : excluded_terms_)):
+            where_ += str(" AND p.ID NOT IN ( SELECT tr.object_id FROM ") + str(wpdb_.term_relationships) + str(" tr LEFT JOIN ") + str(wpdb_.term_taxonomy) + str(" tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN (") + php_implode(",", php_array_map("intval", excluded_terms_)) + ") )"
         # end if
     # end if
     #// 'post_status' clause depends on the current user.
     if is_user_logged_in():
-        user_id = get_current_user_id()
-        post_type_object = get_post_type_object(post.post_type)
-        if php_empty(lambda : post_type_object):
-            post_type_cap = post.post_type
-            read_private_cap = "read_private_" + post_type_cap + "s"
+        user_id_ = get_current_user_id()
+        post_type_object_ = get_post_type_object(post_.post_type)
+        if php_empty(lambda : post_type_object_):
+            post_type_cap_ = post_.post_type
+            read_private_cap_ = "read_private_" + post_type_cap_ + "s"
         else:
-            read_private_cap = post_type_object.cap.read_private_posts
+            read_private_cap_ = post_type_object_.cap.read_private_posts
         # end if
         #// 
         #// Results should include private posts belonging to the current user, or private posts where the
         #// current user has the 'read_private_posts' cap.
         #//
-        private_states = get_post_stati(Array({"private": True}))
-        where += " AND ( p.post_status = 'publish'"
-        for state in private_states:
-            if current_user_can(read_private_cap):
-                where += wpdb.prepare(" OR p.post_status = %s", state)
+        private_states_ = get_post_stati(Array({"private": True}))
+        where_ += " AND ( p.post_status = 'publish'"
+        for state_ in private_states_:
+            if current_user_can(read_private_cap_):
+                where_ += wpdb_.prepare(" OR p.post_status = %s", state_)
             else:
-                where += wpdb.prepare(" OR (p.post_author = %d AND p.post_status = %s)", user_id, state)
+                where_ += wpdb_.prepare(" OR (p.post_author = %d AND p.post_status = %s)", user_id_, state_)
             # end if
         # end for
-        where += " )"
+        where_ += " )"
     else:
-        where += " AND p.post_status = 'publish'"
+        where_ += " AND p.post_status = 'publish'"
     # end if
-    op = "<" if previous else ">"
-    order = "DESC" if previous else "ASC"
+    op_ = "<" if previous_ else ">"
+    order_ = "DESC" if previous_ else "ASC"
     #// 
     #// Filters the JOIN clause in the SQL for an adjacent post query.
     #// 
@@ -1628,7 +1706,7 @@ def get_adjacent_post(in_same_term=False, excluded_terms="", previous=True, taxo
     #// @param string  $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
     #// @param WP_Post $post           WP_Post object.
     #//
-    join = apply_filters(str("get_") + str(adjacent) + str("_post_join"), join, in_same_term, excluded_terms, taxonomy, post)
+    join_ = apply_filters(str("get_") + str(adjacent_) + str("_post_join"), join_, in_same_term_, excluded_terms_, taxonomy_, post_)
     #// 
     #// Filters the WHERE clause in the SQL for an adjacent post query.
     #// 
@@ -1644,7 +1722,7 @@ def get_adjacent_post(in_same_term=False, excluded_terms="", previous=True, taxo
     #// @param string  $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
     #// @param WP_Post $post           WP_Post object.
     #//
-    where = apply_filters(str("get_") + str(adjacent) + str("_post_where"), wpdb.prepare(str("WHERE p.post_date ") + str(op) + str(" %s AND p.post_type = %s ") + str(where), current_post_date, post.post_type), in_same_term, excluded_terms, taxonomy, post)
+    where_ = apply_filters(str("get_") + str(adjacent_) + str("_post_where"), wpdb_.prepare(str("WHERE p.post_date ") + str(op_) + str(" %s AND p.post_type = %s ") + str(where_), current_post_date_, post_.post_type), in_same_term_, excluded_terms_, taxonomy_, post_)
     #// 
     #// Filters the ORDER BY clause in the SQL for an adjacent post query.
     #// 
@@ -1659,25 +1737,25 @@ def get_adjacent_post(in_same_term=False, excluded_terms="", previous=True, taxo
     #// @param WP_Post $post    WP_Post object.
     #// @param string  $order   Sort order. 'DESC' for previous post, 'ASC' for next.
     #//
-    sort = apply_filters(str("get_") + str(adjacent) + str("_post_sort"), str("ORDER BY p.post_date ") + str(order) + str(" LIMIT 1"), post, order)
-    query = str("SELECT p.ID FROM ") + str(wpdb.posts) + str(" AS p ") + str(join) + str(" ") + str(where) + str(" ") + str(sort)
-    query_key = "adjacent_post_" + php_md5(query)
-    result = wp_cache_get(query_key, "counts")
-    if False != result:
-        if result:
-            result = get_post(result)
+    sort_ = apply_filters(str("get_") + str(adjacent_) + str("_post_sort"), str("ORDER BY p.post_date ") + str(order_) + str(" LIMIT 1"), post_, order_)
+    query_ = str("SELECT p.ID FROM ") + str(wpdb_.posts) + str(" AS p ") + str(join_) + str(" ") + str(where_) + str(" ") + str(sort_)
+    query_key_ = "adjacent_post_" + php_md5(query_)
+    result_ = wp_cache_get(query_key_, "counts")
+    if False != result_:
+        if result_:
+            result_ = get_post(result_)
         # end if
-        return result
+        return result_
     # end if
-    result = wpdb.get_var(query)
-    if None == result:
-        result = ""
+    result_ = wpdb_.get_var(query_)
+    if None == result_:
+        result_ = ""
     # end if
-    wp_cache_set(query_key, result, "counts")
-    if result:
-        result = get_post(result)
+    wp_cache_set(query_key_, result_, "counts")
+    if result_:
+        result_ = get_post(result_)
     # end if
-    return result
+    return result_
 # end def get_adjacent_post
 #// 
 #// Retrieves the adjacent post relational link.
@@ -1693,28 +1771,34 @@ def get_adjacent_post(in_same_term=False, excluded_terms="", previous=True, taxo
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #// @return string|void The adjacent post relational link URL.
 #//
-def get_adjacent_post_rel_link(title="%title", in_same_term=False, excluded_terms="", previous=True, taxonomy="category", *args_):
-    
-    post = get_post()
-    if previous and is_attachment() and post:
-        post = get_post(post.post_parent)
-    else:
-        post = get_adjacent_post(in_same_term, excluded_terms, previous, taxonomy)
+def get_adjacent_post_rel_link(title_="%title", in_same_term_=None, excluded_terms_="", previous_=None, taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
     # end if
-    if php_empty(lambda : post):
+    if previous_ is None:
+        previous_ = True
+    # end if
+    
+    post_ = get_post()
+    if previous_ and is_attachment() and post_:
+        post_ = get_post(post_.post_parent)
+    else:
+        post_ = get_adjacent_post(in_same_term_, excluded_terms_, previous_, taxonomy_)
+    # end if
+    if php_empty(lambda : post_):
         return
     # end if
-    post_title = the_title_attribute(Array({"echo": False, "post": post}))
-    if php_empty(lambda : post_title):
-        post_title = __("Previous Post") if previous else __("Next Post")
+    post_title_ = the_title_attribute(Array({"echo": False, "post": post_}))
+    if php_empty(lambda : post_title_):
+        post_title_ = __("Previous Post") if previous_ else __("Next Post")
     # end if
-    date = mysql2date(get_option("date_format"), post.post_date)
-    title = php_str_replace("%title", post_title, title)
-    title = php_str_replace("%date", date, title)
-    link = "<link rel='prev' title='" if previous else "<link rel='next' title='"
-    link += esc_attr(title)
-    link += "' href='" + get_permalink(post) + "' />\n"
-    adjacent = "previous" if previous else "next"
+    date_ = mysql2date(get_option("date_format"), post_.post_date)
+    title_ = php_str_replace("%title", post_title_, title_)
+    title_ = php_str_replace("%date", date_, title_)
+    link_ = "<link rel='prev' title='" if previous_ else "<link rel='next' title='"
+    link_ += esc_attr(title_)
+    link_ += "' href='" + get_permalink(post_) + "' />\n"
+    adjacent_ = "previous" if previous_ else "next"
     #// 
     #// Filters the adjacent post relational link.
     #// 
@@ -1725,7 +1809,7 @@ def get_adjacent_post_rel_link(title="%title", in_same_term=False, excluded_term
     #// 
     #// @param string $link The relational link.
     #//
-    return apply_filters(str(adjacent) + str("_post_rel_link"), link)
+    return apply_filters(str(adjacent_) + str("_post_rel_link"), link_)
 # end def get_adjacent_post_rel_link
 #// 
 #// Displays the relational links for the posts adjacent to the current post.
@@ -1737,10 +1821,13 @@ def get_adjacent_post_rel_link(title="%title", in_same_term=False, excluded_term
 #// @param array|string $excluded_terms Optional. Array or comma-separated list of excluded term IDs. Default empty.
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #//
-def adjacent_posts_rel_link(title="%title", in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def adjacent_posts_rel_link(title_="%title", in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    php_print(get_adjacent_post_rel_link(title, in_same_term, excluded_terms, True, taxonomy))
-    php_print(get_adjacent_post_rel_link(title, in_same_term, excluded_terms, False, taxonomy))
+    php_print(get_adjacent_post_rel_link(title_, in_same_term_, excluded_terms_, True, taxonomy_))
+    php_print(get_adjacent_post_rel_link(title_, in_same_term_, excluded_terms_, False, taxonomy_))
 # end def adjacent_posts_rel_link
 #// 
 #// Displays relational links for the posts adjacent to the current post for single post pages.
@@ -1752,7 +1839,8 @@ def adjacent_posts_rel_link(title="%title", in_same_term=False, excluded_terms="
 #// 
 #// @see adjacent_posts_rel_link()
 #//
-def adjacent_posts_rel_link_wp_head(*args_):
+def adjacent_posts_rel_link_wp_head(*_args_):
+    
     
     if (not is_single()) or is_attachment():
         return
@@ -1771,9 +1859,12 @@ def adjacent_posts_rel_link_wp_head(*args_):
 #// @param array|string $excluded_terms Optional. Array or comma-separated list of excluded term IDs. Default empty.
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #//
-def next_post_rel_link(title="%title", in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def next_post_rel_link(title_="%title", in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    php_print(get_adjacent_post_rel_link(title, in_same_term, excluded_terms, False, taxonomy))
+    php_print(get_adjacent_post_rel_link(title_, in_same_term_, excluded_terms_, False, taxonomy_))
 # end def next_post_rel_link
 #// 
 #// Displays the relational link for the previous post adjacent to the current post.
@@ -1787,9 +1878,12 @@ def next_post_rel_link(title="%title", in_same_term=False, excluded_terms="", ta
 #// @param array|string $excluded_terms Optional. Array or comma-separated list of excluded term IDs. Default true.
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #//
-def prev_post_rel_link(title="%title", in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def prev_post_rel_link(title_="%title", in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    php_print(get_adjacent_post_rel_link(title, in_same_term, excluded_terms, True, taxonomy))
+    php_print(get_adjacent_post_rel_link(title_, in_same_term_, excluded_terms_, True, taxonomy_))
 # end def prev_post_rel_link
 #// 
 #// Retrieves the boundary post.
@@ -1807,37 +1901,43 @@ def prev_post_rel_link(title="%title", in_same_term=False, excluded_terms="", ta
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #// @return null|array Array containing the boundary post object if successful, null otherwise.
 #//
-def get_boundary_post(in_same_term=False, excluded_terms="", start=True, taxonomy="category", *args_):
+def get_boundary_post(in_same_term_=None, excluded_terms_="", start_=None, taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
+    if start_ is None:
+        start_ = True
+    # end if
     
-    post = get_post()
-    if (not post) or (not is_single()) or is_attachment() or (not taxonomy_exists(taxonomy)):
+    post_ = get_post()
+    if (not post_) or (not is_single()) or is_attachment() or (not taxonomy_exists(taxonomy_)):
         return None
     # end if
-    query_args = Array({"posts_per_page": 1, "order": "ASC" if start else "DESC", "update_post_term_cache": False, "update_post_meta_cache": False})
-    term_array = Array()
-    if (not php_is_array(excluded_terms)):
-        if (not php_empty(lambda : excluded_terms)):
-            excluded_terms = php_explode(",", excluded_terms)
+    query_args_ = Array({"posts_per_page": 1, "order": "ASC" if start_ else "DESC", "update_post_term_cache": False, "update_post_meta_cache": False})
+    term_array_ = Array()
+    if (not php_is_array(excluded_terms_)):
+        if (not php_empty(lambda : excluded_terms_)):
+            excluded_terms_ = php_explode(",", excluded_terms_)
         else:
-            excluded_terms = Array()
+            excluded_terms_ = Array()
         # end if
     # end if
-    if in_same_term or (not php_empty(lambda : excluded_terms)):
-        if in_same_term:
-            term_array = wp_get_object_terms(post.ID, taxonomy, Array({"fields": "ids"}))
+    if in_same_term_ or (not php_empty(lambda : excluded_terms_)):
+        if in_same_term_:
+            term_array_ = wp_get_object_terms(post_.ID, taxonomy_, Array({"fields": "ids"}))
         # end if
-        if (not php_empty(lambda : excluded_terms)):
-            excluded_terms = php_array_map("intval", excluded_terms)
-            excluded_terms = php_array_diff(excluded_terms, term_array)
-            inverse_terms = Array()
-            for excluded_term in excluded_terms:
-                inverse_terms[-1] = excluded_term * -1
+        if (not php_empty(lambda : excluded_terms_)):
+            excluded_terms_ = php_array_map("intval", excluded_terms_)
+            excluded_terms_ = php_array_diff(excluded_terms_, term_array_)
+            inverse_terms_ = Array()
+            for excluded_term_ in excluded_terms_:
+                inverse_terms_[-1] = excluded_term_ * -1
             # end for
-            excluded_terms = inverse_terms
+            excluded_terms_ = inverse_terms_
         # end if
-        query_args["tax_query"] = Array(Array({"taxonomy": taxonomy, "terms": php_array_merge(term_array, excluded_terms)}))
+        query_args_["tax_query"] = Array(Array({"taxonomy": taxonomy_, "terms": php_array_merge(term_array_, excluded_terms_)}))
     # end if
-    return get_posts(query_args)
+    return get_posts(query_args_)
 # end def get_boundary_post
 #// 
 #// Retrieves the previous post link that is adjacent to the current post.
@@ -1851,9 +1951,12 @@ def get_boundary_post(in_same_term=False, excluded_terms="", start=True, taxonom
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #// @return string The link URL of the previous post in relation to the current post.
 #//
-def get_previous_post_link(format="&laquo; %link", link="%title", in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def get_previous_post_link(format_="&laquo; %link", link_="%title", in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    return get_adjacent_post_link(format, link, in_same_term, excluded_terms, True, taxonomy)
+    return get_adjacent_post_link(format_, link_, in_same_term_, excluded_terms_, True, taxonomy_)
 # end def get_previous_post_link
 #// 
 #// Displays the previous post link that is adjacent to the current post.
@@ -1868,9 +1971,12 @@ def get_previous_post_link(format="&laquo; %link", link="%title", in_same_term=F
 #// @param array|string $excluded_terms Optional. Array or comma-separated list of excluded term IDs. Default empty.
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #//
-def previous_post_link(format="&laquo; %link", link="%title", in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def previous_post_link(format_="&laquo; %link", link_="%title", in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    php_print(get_previous_post_link(format, link, in_same_term, excluded_terms, taxonomy))
+    php_print(get_previous_post_link(format_, link_, in_same_term_, excluded_terms_, taxonomy_))
 # end def previous_post_link
 #// 
 #// Retrieves the next post link that is adjacent to the current post.
@@ -1884,9 +1990,12 @@ def previous_post_link(format="&laquo; %link", link="%title", in_same_term=False
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #// @return string The link URL of the next post in relation to the current post.
 #//
-def get_next_post_link(format="%link &raquo;", link="%title", in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def get_next_post_link(format_="%link &raquo;", link_="%title", in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    return get_adjacent_post_link(format, link, in_same_term, excluded_terms, False, taxonomy)
+    return get_adjacent_post_link(format_, link_, in_same_term_, excluded_terms_, False, taxonomy_)
 # end def get_next_post_link
 #// 
 #// Displays the next post link that is adjacent to the current post.
@@ -1900,9 +2009,12 @@ def get_next_post_link(format="%link &raquo;", link="%title", in_same_term=False
 #// @param array|string $excluded_terms Optional. Array or comma-separated list of excluded term IDs. Default empty.
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #//
-def next_post_link(format="%link &raquo;", link="%title", in_same_term=False, excluded_terms="", taxonomy="category", *args_):
+def next_post_link(format_="%link &raquo;", link_="%title", in_same_term_=None, excluded_terms_="", taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
     
-    php_print(get_next_post_link(format, link, in_same_term, excluded_terms, taxonomy))
+    php_print(get_next_post_link(format_, link_, in_same_term_, excluded_terms_, taxonomy_))
 # end def next_post_link
 #// 
 #// Retrieves the adjacent post link.
@@ -1919,31 +2031,37 @@ def next_post_link(format="%link &raquo;", link="%title", in_same_term=False, ex
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #// @return string The link URL of the previous or next post in relation to the current post.
 #//
-def get_adjacent_post_link(format=None, link=None, in_same_term=False, excluded_terms="", previous=True, taxonomy="category", *args_):
-    
-    if previous and is_attachment():
-        post = get_post(get_post().post_parent)
-    else:
-        post = get_adjacent_post(in_same_term, excluded_terms, previous, taxonomy)
+def get_adjacent_post_link(format_=None, link_=None, in_same_term_=None, excluded_terms_="", previous_=None, taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
     # end if
-    if (not post):
-        output = ""
+    if previous_ is None:
+        previous_ = True
+    # end if
+    
+    if previous_ and is_attachment():
+        post_ = get_post(get_post().post_parent)
     else:
-        title = post.post_title
-        if php_empty(lambda : post.post_title):
-            title = __("Previous Post") if previous else __("Next Post")
+        post_ = get_adjacent_post(in_same_term_, excluded_terms_, previous_, taxonomy_)
+    # end if
+    if (not post_):
+        output_ = ""
+    else:
+        title_ = post_.post_title
+        if php_empty(lambda : post_.post_title):
+            title_ = __("Previous Post") if previous_ else __("Next Post")
         # end if
         #// This filter is documented in wp-includes/post-template.php
-        title = apply_filters("the_title", title, post.ID)
-        date = mysql2date(get_option("date_format"), post.post_date)
-        rel = "prev" if previous else "next"
-        string = "<a href=\"" + get_permalink(post) + "\" rel=\"" + rel + "\">"
-        inlink = php_str_replace("%title", title, link)
-        inlink = php_str_replace("%date", date, inlink)
-        inlink = string + inlink + "</a>"
-        output = php_str_replace("%link", inlink, format)
+        title_ = apply_filters("the_title", title_, post_.ID)
+        date_ = mysql2date(get_option("date_format"), post_.post_date)
+        rel_ = "prev" if previous_ else "next"
+        string_ = "<a href=\"" + get_permalink(post_) + "\" rel=\"" + rel_ + "\">"
+        inlink_ = php_str_replace("%title", title_, link_)
+        inlink_ = php_str_replace("%date", date_, inlink_)
+        inlink_ = string_ + inlink_ + "</a>"
+        output_ = php_str_replace("%link", inlink_, format_)
     # end if
-    adjacent = "previous" if previous else "next"
+    adjacent_ = "previous" if previous_ else "next"
     #// 
     #// Filters the adjacent post link.
     #// 
@@ -1959,7 +2077,7 @@ def get_adjacent_post_link(format=None, link=None, in_same_term=False, excluded_
     #// @param WP_Post $post     The adjacent post.
     #// @param string  $adjacent Whether the post is previous or next.
     #//
-    return apply_filters(str(adjacent) + str("_post_link"), output, format, link, post, adjacent)
+    return apply_filters(str(adjacent_) + str("_post_link"), output_, format_, link_, post_, adjacent_)
 # end def get_adjacent_post_link
 #// 
 #// Displays the adjacent post link.
@@ -1975,9 +2093,15 @@ def get_adjacent_post_link(format=None, link=None, in_same_term=False, excluded_
 #// @param bool         $previous       Optional. Whether to display link to previous or next post. Default true.
 #// @param string       $taxonomy       Optional. Taxonomy, if $in_same_term is true. Default 'category'.
 #//
-def adjacent_post_link(format=None, link=None, in_same_term=False, excluded_terms="", previous=True, taxonomy="category", *args_):
+def adjacent_post_link(format_=None, link_=None, in_same_term_=None, excluded_terms_="", previous_=None, taxonomy_="category", *_args_):
+    if in_same_term_ is None:
+        in_same_term_ = False
+    # end if
+    if previous_ is None:
+        previous_ = True
+    # end if
     
-    php_print(get_adjacent_post_link(format, link, in_same_term, excluded_terms, previous, taxonomy))
+    php_print(get_adjacent_post_link(format_, link_, in_same_term_, excluded_terms_, previous_, taxonomy_))
 # end def adjacent_post_link
 #// 
 #// Retrieves the link for a page number.
@@ -1991,44 +2115,47 @@ def adjacent_post_link(format=None, link=None, in_same_term=False, excluded_term
 #// Otherwise, prepares the URL with esc_url_raw().
 #// @return string The link URL for the given page number.
 #//
-def get_pagenum_link(pagenum=1, escape=True, *args_):
+def get_pagenum_link(pagenum_=1, escape_=None, *_args_):
+    if escape_ is None:
+        escape_ = True
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    pagenum = php_int(pagenum)
-    request = remove_query_arg("paged")
-    home_root = php_parse_url(home_url())
-    home_root = home_root["path"] if (php_isset(lambda : home_root["path"])) else ""
-    home_root = preg_quote(home_root, "|")
-    request = php_preg_replace("|^" + home_root + "|i", "", request)
-    request = php_preg_replace("|^/+|", "", request)
-    if (not wp_rewrite.using_permalinks()) or is_admin():
-        base = trailingslashit(get_bloginfo("url"))
-        if pagenum > 1:
-            result = add_query_arg("paged", pagenum, base + request)
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    pagenum_ = php_int(pagenum_)
+    request_ = remove_query_arg("paged")
+    home_root_ = php_parse_url(home_url())
+    home_root_ = home_root_["path"] if (php_isset(lambda : home_root_["path"])) else ""
+    home_root_ = preg_quote(home_root_, "|")
+    request_ = php_preg_replace("|^" + home_root_ + "|i", "", request_)
+    request_ = php_preg_replace("|^/+|", "", request_)
+    if (not wp_rewrite_.using_permalinks()) or is_admin():
+        base_ = trailingslashit(get_bloginfo("url"))
+        if pagenum_ > 1:
+            result_ = add_query_arg("paged", pagenum_, base_ + request_)
         else:
-            result = base + request
+            result_ = base_ + request_
         # end if
     else:
-        qs_regex = "|\\?.*?$|"
-        php_preg_match(qs_regex, request, qs_match)
-        if (not php_empty(lambda : qs_match[0])):
-            query_string = qs_match[0]
-            request = php_preg_replace(qs_regex, "", request)
+        qs_regex_ = "|\\?.*?$|"
+        php_preg_match(qs_regex_, request_, qs_match_)
+        if (not php_empty(lambda : qs_match_[0])):
+            query_string_ = qs_match_[0]
+            request_ = php_preg_replace(qs_regex_, "", request_)
         else:
-            query_string = ""
+            query_string_ = ""
         # end if
-        request = php_preg_replace(str("|") + str(wp_rewrite.pagination_base) + str("/\\d+/?$|"), "", request)
-        request = php_preg_replace("|^" + preg_quote(wp_rewrite.index, "|") + "|i", "", request)
-        request = php_ltrim(request, "/")
-        base = trailingslashit(get_bloginfo("url"))
-        if wp_rewrite.using_index_permalinks() and pagenum > 1 or "" != request:
-            base += wp_rewrite.index + "/"
+        request_ = php_preg_replace(str("|") + str(wp_rewrite_.pagination_base) + str("/\\d+/?$|"), "", request_)
+        request_ = php_preg_replace("|^" + preg_quote(wp_rewrite_.index, "|") + "|i", "", request_)
+        request_ = php_ltrim(request_, "/")
+        base_ = trailingslashit(get_bloginfo("url"))
+        if wp_rewrite_.using_index_permalinks() and pagenum_ > 1 or "" != request_:
+            base_ += wp_rewrite_.index + "/"
         # end if
-        if pagenum > 1:
-            request = trailingslashit(request) if (not php_empty(lambda : request)) else request + user_trailingslashit(wp_rewrite.pagination_base + "/" + pagenum, "paged")
+        if pagenum_ > 1:
+            request_ = trailingslashit(request_) if (not php_empty(lambda : request_)) else request_ + user_trailingslashit(wp_rewrite_.pagination_base + "/" + pagenum_, "paged")
         # end if
-        result = base + request + query_string
+        result_ = base_ + request_ + query_string_
     # end if
     #// 
     #// Filters the page number link for the current request.
@@ -2039,11 +2166,11 @@ def get_pagenum_link(pagenum=1, escape=True, *args_):
     #// @param string $result  The page number link.
     #// @param int    $pagenum The page number.
     #//
-    result = apply_filters("get_pagenum_link", result, pagenum)
-    if escape:
-        return esc_url(result)
+    result_ = apply_filters("get_pagenum_link", result_, pagenum_)
+    if escape_:
+        return esc_url(result_)
     else:
-        return esc_url_raw(result)
+        return esc_url_raw(result_)
     # end if
 # end def get_pagenum_link
 #// 
@@ -2058,17 +2185,18 @@ def get_pagenum_link(pagenum=1, escape=True, *args_):
 #// @param int $max_page Optional. Max pages. Default 0.
 #// @return string|void The link URL for next posts page.
 #//
-def get_next_posts_page_link(max_page=0, *args_):
+def get_next_posts_page_link(max_page_=0, *_args_):
     
-    global paged
-    php_check_if_defined("paged")
+    
+    global paged_
+    php_check_if_defined("paged_")
     if (not is_single()):
-        if (not paged):
-            paged = 1
+        if (not paged_):
+            paged_ = 1
         # end if
-        nextpage = php_intval(paged) + 1
-        if (not max_page) or max_page >= nextpage:
-            return get_pagenum_link(nextpage)
+        nextpage_ = php_intval(paged_) + 1
+        if (not max_page_) or max_page_ >= nextpage_:
+            return get_pagenum_link(nextpage_)
         # end if
     # end if
 # end def get_next_posts_page_link
@@ -2081,13 +2209,16 @@ def get_next_posts_page_link(max_page=0, *args_):
 #// @param bool  $echo     Optional. Whether to echo the link. Default true.
 #// @return string|void The link URL for next posts page if `$echo = false`.
 #//
-def next_posts(max_page=0, echo=True, *args_):
+def next_posts(max_page_=0, echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    output = esc_url(get_next_posts_page_link(max_page))
-    if echo:
-        php_print(output)
+    output_ = esc_url(get_next_posts_page_link(max_page_))
+    if echo_:
+        php_print(output_)
     else:
-        return output
+        return output_
     # end if
 # end def next_posts
 #// 
@@ -2102,21 +2233,23 @@ def next_posts(max_page=0, echo=True, *args_):
 #// @param int    $max_page Optional. Max pages. Default 0.
 #// @return string|void HTML-formatted next posts page link.
 #//
-def get_next_posts_link(label=None, max_page=0, *args_):
+def get_next_posts_link(label_=None, max_page_=0, *_args_):
     
-    global paged,wp_query
-    php_check_if_defined("paged","wp_query")
-    if (not max_page):
-        max_page = wp_query.max_num_pages
+    
+    global paged_
+    global wp_query_
+    php_check_if_defined("paged_","wp_query_")
+    if (not max_page_):
+        max_page_ = wp_query_.max_num_pages
     # end if
-    if (not paged):
-        paged = 1
+    if (not paged_):
+        paged_ = 1
     # end if
-    nextpage = php_intval(paged) + 1
-    if None == label:
-        label = __("Next Page &raquo;")
+    nextpage_ = php_intval(paged_) + 1
+    if None == label_:
+        label_ = __("Next Page &raquo;")
     # end if
-    if (not is_single()) and nextpage <= max_page:
+    if (not is_single()) and nextpage_ <= max_page_:
         #// 
         #// Filters the anchor tag attributes for the next posts page link.
         #// 
@@ -2124,8 +2257,8 @@ def get_next_posts_link(label=None, max_page=0, *args_):
         #// 
         #// @param string $attributes Attributes for the anchor tag.
         #//
-        attr = apply_filters("next_posts_link_attributes", "")
-        return "<a href=\"" + next_posts(max_page, False) + str("\" ") + str(attr) + str(">") + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label) + "</a>"
+        attr_ = apply_filters("next_posts_link_attributes", "")
+        return "<a href=\"" + next_posts(max_page_, False) + str("\" ") + str(attr_) + str(">") + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label_) + "</a>"
     # end if
 # end def get_next_posts_link
 #// 
@@ -2136,9 +2269,10 @@ def get_next_posts_link(label=None, max_page=0, *args_):
 #// @param string $label    Content for link text.
 #// @param int    $max_page Optional. Max pages. Default 0.
 #//
-def next_posts_link(label=None, max_page=0, *args_):
+def next_posts_link(label_=None, max_page_=0, *_args_):
     
-    php_print(get_next_posts_link(label, max_page))
+    
+    php_print(get_next_posts_link(label_, max_page_))
 # end def next_posts_link
 #// 
 #// Retrieves the previous posts page link.
@@ -2153,16 +2287,17 @@ def next_posts_link(label=None, max_page=0, *args_):
 #// 
 #// @return string|void The link for the previous posts page.
 #//
-def get_previous_posts_page_link(*args_):
+def get_previous_posts_page_link(*_args_):
     
-    global paged
-    php_check_if_defined("paged")
+    
+    global paged_
+    php_check_if_defined("paged_")
     if (not is_single()):
-        nextpage = php_intval(paged) - 1
-        if nextpage < 1:
-            nextpage = 1
+        nextpage_ = php_intval(paged_) - 1
+        if nextpage_ < 1:
+            nextpage_ = 1
         # end if
-        return get_pagenum_link(nextpage)
+        return get_pagenum_link(nextpage_)
     # end if
 # end def get_previous_posts_page_link
 #// 
@@ -2173,13 +2308,16 @@ def get_previous_posts_page_link(*args_):
 #// @param bool $echo Optional. Whether to echo the link. Default true.
 #// @return string|void The previous posts page link if `$echo = false`.
 #//
-def previous_posts(echo=True, *args_):
+def previous_posts(echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    output = esc_url(get_previous_posts_page_link())
-    if echo:
-        php_print(output)
+    output_ = esc_url(get_previous_posts_page_link())
+    if echo_:
+        php_print(output_)
     else:
-        return output
+        return output_
     # end if
 # end def previous_posts
 #// 
@@ -2192,14 +2330,15 @@ def previous_posts(echo=True, *args_):
 #// @param string $label Optional. Previous page link text.
 #// @return string|void HTML-formatted previous page link.
 #//
-def get_previous_posts_link(label=None, *args_):
+def get_previous_posts_link(label_=None, *_args_):
     
-    global paged
-    php_check_if_defined("paged")
-    if None == label:
-        label = __("&laquo; Previous Page")
+    
+    global paged_
+    php_check_if_defined("paged_")
+    if None == label_:
+        label_ = __("&laquo; Previous Page")
     # end if
-    if (not is_single()) and paged > 1:
+    if (not is_single()) and paged_ > 1:
         #// 
         #// Filters the anchor tag attributes for the previous posts page link.
         #// 
@@ -2207,8 +2346,8 @@ def get_previous_posts_link(label=None, *args_):
         #// 
         #// @param string $attributes Attributes for the anchor tag.
         #//
-        attr = apply_filters("previous_posts_link_attributes", "")
-        return "<a href=\"" + previous_posts(False) + str("\" ") + str(attr) + str(">") + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label) + "</a>"
+        attr_ = apply_filters("previous_posts_link_attributes", "")
+        return "<a href=\"" + previous_posts(False) + str("\" ") + str(attr_) + str(">") + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label_) + "</a>"
     # end if
 # end def get_previous_posts_link
 #// 
@@ -2218,9 +2357,10 @@ def get_previous_posts_link(label=None, *args_):
 #// 
 #// @param string $label Optional. Previous page link text.
 #//
-def previous_posts_link(label=None, *args_):
+def previous_posts_link(label_=None, *_args_):
     
-    php_print(get_previous_posts_link(label))
+    
+    php_print(get_previous_posts_link(label_))
 # end def previous_posts_link
 #// 
 #// Retrieves the post pages link navigation for previous and next pages.
@@ -2240,24 +2380,27 @@ def previous_posts_link(label=None, *args_):
 #// }
 #// @return string The posts link navigation.
 #//
-def get_posts_nav_link(args=Array(), *args_):
+def get_posts_nav_link(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_query
-    php_check_if_defined("wp_query")
+    global wp_query_
+    php_check_if_defined("wp_query_")
     return_ = ""
     if (not is_singular()):
-        defaults = Array({"sep": " &#8212; ", "prelabel": __("&laquo; Previous Page"), "nxtlabel": __("Next Page &raquo;")})
-        args = wp_parse_args(args, defaults)
-        max_num_pages = wp_query.max_num_pages
-        paged = get_query_var("paged")
+        defaults_ = Array({"sep": " &#8212; ", "prelabel": __("&laquo; Previous Page"), "nxtlabel": __("Next Page &raquo;")})
+        args_ = wp_parse_args(args_, defaults_)
+        max_num_pages_ = wp_query_.max_num_pages
+        paged_ = get_query_var("paged")
         #// Only have sep if there's both prev and next results.
-        if paged < 2 or paged >= max_num_pages:
-            args["sep"] = ""
+        if paged_ < 2 or paged_ >= max_num_pages_:
+            args_["sep"] = ""
         # end if
-        if max_num_pages > 1:
-            return_ = get_previous_posts_link(args["prelabel"])
-            return_ += php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", args["sep"])
-            return_ += get_next_posts_link(args["nxtlabel"])
+        if max_num_pages_ > 1:
+            return_ = get_previous_posts_link(args_["prelabel"])
+            return_ += php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", args_["sep"])
+            return_ += get_next_posts_link(args_["nxtlabel"])
         # end if
     # end if
     return return_
@@ -2271,10 +2414,11 @@ def get_posts_nav_link(args=Array(), *args_):
 #// @param string $prelabel Optional. Label for previous pages. Default empty.
 #// @param string $nxtlabel Optional Label for next pages. Default empty.
 #//
-def posts_nav_link(sep="", prelabel="", nxtlabel="", *args_):
+def posts_nav_link(sep_="", prelabel_="", nxtlabel_="", *_args_):
     
-    args = php_array_filter(compact("sep", "prelabel", "nxtlabel"))
-    php_print(get_posts_nav_link(args))
+    
+    args_ = php_array_filter(php_compact("sep", "prelabel", "nxtlabel"))
+    php_print(get_posts_nav_link(args_))
 # end def posts_nav_link
 #// 
 #// Retrieves the navigation to next/previous post, when applicable.
@@ -2296,21 +2440,24 @@ def posts_nav_link(sep="", prelabel="", nxtlabel="", *args_):
 #// }
 #// @return string Markup for post links.
 #//
-def get_the_post_navigation(args=Array(), *args_):
+def get_the_post_navigation(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Make sure the nav element has an aria-label attribute: fallback to the screen reader text.
-    if (not php_empty(lambda : args["screen_reader_text"])) and php_empty(lambda : args["aria_label"]):
-        args["aria_label"] = args["screen_reader_text"]
+    if (not php_empty(lambda : args_["screen_reader_text"])) and php_empty(lambda : args_["aria_label"]):
+        args_["aria_label"] = args_["screen_reader_text"]
     # end if
-    args = wp_parse_args(args, Array({"prev_text": "%title", "next_text": "%title", "in_same_term": False, "excluded_terms": "", "taxonomy": "category", "screen_reader_text": __("Post navigation"), "aria_label": __("Posts")}))
-    navigation = ""
-    previous = get_previous_post_link("<div class=\"nav-previous\">%link</div>", args["prev_text"], args["in_same_term"], args["excluded_terms"], args["taxonomy"])
-    next = get_next_post_link("<div class=\"nav-next\">%link</div>", args["next_text"], args["in_same_term"], args["excluded_terms"], args["taxonomy"])
+    args_ = wp_parse_args(args_, Array({"prev_text": "%title", "next_text": "%title", "in_same_term": False, "excluded_terms": "", "taxonomy": "category", "screen_reader_text": __("Post navigation"), "aria_label": __("Posts")}))
+    navigation_ = ""
+    previous_ = get_previous_post_link("<div class=\"nav-previous\">%link</div>", args_["prev_text"], args_["in_same_term"], args_["excluded_terms"], args_["taxonomy"])
+    next_ = get_next_post_link("<div class=\"nav-next\">%link</div>", args_["next_text"], args_["in_same_term"], args_["excluded_terms"], args_["taxonomy"])
     #// Only add markup if there's somewhere to navigate to.
-    if previous or next:
-        navigation = _navigation_markup(previous + next, "post-navigation", args["screen_reader_text"], args["aria_label"])
+    if previous_ or next_:
+        navigation_ = _navigation_markup(previous_ + next_, "post-navigation", args_["screen_reader_text"], args_["aria_label"])
     # end if
-    return navigation
+    return navigation_
 # end def get_the_post_navigation
 #// 
 #// Displays the navigation to next/previous post, when applicable.
@@ -2320,9 +2467,12 @@ def get_the_post_navigation(args=Array(), *args_):
 #// @param array $args Optional. See get_the_post_navigation() for available arguments.
 #// Default empty array.
 #//
-def the_post_navigation(args=Array(), *args_):
+def the_post_navigation(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    php_print(get_the_post_navigation(args))
+    php_print(get_the_post_navigation(args_))
 # end def the_post_navigation
 #// 
 #// Returns the navigation to next/previous set of posts, when applicable.
@@ -2345,27 +2495,30 @@ def the_post_navigation(args=Array(), *args_):
 #// }
 #// @return string Markup for posts links.
 #//
-def get_the_posts_navigation(args=Array(), *args_):
+def get_the_posts_navigation(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    navigation = ""
+    navigation_ = ""
     #// Don't print empty markup if there's only one page.
     if PHP_GLOBALS["wp_query"].max_num_pages > 1:
         #// Make sure the nav element has an aria-label attribute: fallback to the screen reader text.
-        if (not php_empty(lambda : args["screen_reader_text"])) and php_empty(lambda : args["aria_label"]):
-            args["aria_label"] = args["screen_reader_text"]
+        if (not php_empty(lambda : args_["screen_reader_text"])) and php_empty(lambda : args_["aria_label"]):
+            args_["aria_label"] = args_["screen_reader_text"]
         # end if
-        args = wp_parse_args(args, Array({"prev_text": __("Older posts"), "next_text": __("Newer posts"), "screen_reader_text": __("Posts navigation"), "aria_label": __("Posts")}))
-        next_link = get_previous_posts_link(args["next_text"])
-        prev_link = get_next_posts_link(args["prev_text"])
-        if prev_link:
-            navigation += "<div class=\"nav-previous\">" + prev_link + "</div>"
+        args_ = wp_parse_args(args_, Array({"prev_text": __("Older posts"), "next_text": __("Newer posts"), "screen_reader_text": __("Posts navigation"), "aria_label": __("Posts")}))
+        next_link_ = get_previous_posts_link(args_["next_text"])
+        prev_link_ = get_next_posts_link(args_["prev_text"])
+        if prev_link_:
+            navigation_ += "<div class=\"nav-previous\">" + prev_link_ + "</div>"
         # end if
-        if next_link:
-            navigation += "<div class=\"nav-next\">" + next_link + "</div>"
+        if next_link_:
+            navigation_ += "<div class=\"nav-next\">" + next_link_ + "</div>"
         # end if
-        navigation = _navigation_markup(navigation, "posts-navigation", args["screen_reader_text"], args["aria_label"])
+        navigation_ = _navigation_markup(navigation_, "posts-navigation", args_["screen_reader_text"], args_["aria_label"])
     # end if
-    return navigation
+    return navigation_
 # end def get_the_posts_navigation
 #// 
 #// Displays the navigation to next/previous set of posts, when applicable.
@@ -2375,9 +2528,12 @@ def get_the_posts_navigation(args=Array(), *args_):
 #// @param array $args Optional. See get_the_posts_navigation() for available arguments.
 #// Default empty array.
 #//
-def the_posts_navigation(args=Array(), *args_):
+def the_posts_navigation(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    php_print(get_the_posts_navigation(args))
+    php_print(get_the_posts_navigation(args_))
 # end def the_posts_navigation
 #// 
 #// Retrieves a paginated navigation to next/previous set of posts, when applicable.
@@ -2394,27 +2550,30 @@ def the_posts_navigation(args=Array(), *args_):
 #// }
 #// @return string Markup for pagination links.
 #//
-def get_the_posts_pagination(args=Array(), *args_):
+def get_the_posts_pagination(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    navigation = ""
+    navigation_ = ""
     #// Don't print empty markup if there's only one page.
     if PHP_GLOBALS["wp_query"].max_num_pages > 1:
         #// Make sure the nav element has an aria-label attribute: fallback to the screen reader text.
-        if (not php_empty(lambda : args["screen_reader_text"])) and php_empty(lambda : args["aria_label"]):
-            args["aria_label"] = args["screen_reader_text"]
+        if (not php_empty(lambda : args_["screen_reader_text"])) and php_empty(lambda : args_["aria_label"]):
+            args_["aria_label"] = args_["screen_reader_text"]
         # end if
-        args = wp_parse_args(args, Array({"mid_size": 1, "prev_text": _x("Previous", "previous set of posts"), "next_text": _x("Next", "next set of posts"), "screen_reader_text": __("Posts navigation"), "aria_label": __("Posts")}))
+        args_ = wp_parse_args(args_, Array({"mid_size": 1, "prev_text": _x("Previous", "previous set of posts"), "next_text": _x("Next", "next set of posts"), "screen_reader_text": __("Posts navigation"), "aria_label": __("Posts")}))
         #// Make sure we get a string back. Plain is the next best thing.
-        if (php_isset(lambda : args["type"])) and "array" == args["type"]:
-            args["type"] = "plain"
+        if (php_isset(lambda : args_["type"])) and "array" == args_["type"]:
+            args_["type"] = "plain"
         # end if
         #// Set up paginated links.
-        links = paginate_links(args)
-        if links:
-            navigation = _navigation_markup(links, "pagination", args["screen_reader_text"], args["aria_label"])
+        links_ = paginate_links(args_)
+        if links_:
+            navigation_ = _navigation_markup(links_, "pagination", args_["screen_reader_text"], args_["aria_label"])
         # end if
     # end if
-    return navigation
+    return navigation_
 # end def get_the_posts_pagination
 #// 
 #// Displays a paginated navigation to next/previous set of posts, when applicable.
@@ -2424,9 +2583,12 @@ def get_the_posts_pagination(args=Array(), *args_):
 #// @param array $args Optional. See get_the_posts_pagination() for available arguments.
 #// Default empty array.
 #//
-def the_posts_pagination(args=Array(), *args_):
+def the_posts_pagination(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    php_print(get_the_posts_pagination(args))
+    php_print(get_the_posts_pagination(args_))
 # end def the_posts_pagination
 #// 
 #// Wraps passed links in navigational markup.
@@ -2441,15 +2603,16 @@ def the_posts_pagination(args=Array(), *args_):
 #// @param string $aria_label         Optional. ARIA label for the nav element. Default: same value as $screen_reader_text.
 #// @return string Navigation template tag.
 #//
-def _navigation_markup(links=None, class_="posts-navigation", screen_reader_text="", aria_label="", *args_):
+def _navigation_markup(links_=None, class_="posts-navigation", screen_reader_text_="", aria_label_="", *_args_):
     
-    if php_empty(lambda : screen_reader_text):
-        screen_reader_text = __("Posts navigation")
+    
+    if php_empty(lambda : screen_reader_text_):
+        screen_reader_text_ = __("Posts navigation")
     # end if
-    if php_empty(lambda : aria_label):
-        aria_label = screen_reader_text
+    if php_empty(lambda : aria_label_):
+        aria_label_ = screen_reader_text_
     # end if
-    template = """
+    template_ = """
     <nav class=\"navigation %1$s\" role=\"navigation\" aria-label=\"%4$s\">
     <h2 class=\"screen-reader-text\">%2$s</h2>
     <div class=\"nav-links\">%3$s</div>
@@ -2472,8 +2635,8 @@ def _navigation_markup(links=None, class_="posts-navigation", screen_reader_text
     #// @param string $class    The class passed by the calling function.
     #// @return string Navigation template.
     #//
-    template = apply_filters("navigation_markup_template", template, class_)
-    return php_sprintf(template, sanitize_html_class(class_), esc_html(screen_reader_text), links, esc_html(aria_label))
+    template_ = apply_filters("navigation_markup_template", template_, class_)
+    return php_sprintf(template_, sanitize_html_class(class_), esc_html(screen_reader_text_), links_, esc_html(aria_label_))
 # end def _navigation_markup
 #// 
 #// Retrieves the comments page number link.
@@ -2486,28 +2649,29 @@ def _navigation_markup(links=None, class_="posts-navigation", screen_reader_text
 #// @param int $max_page Optional. The maximum number of comment pages. Default 0.
 #// @return string The comments page number link URL.
 #//
-def get_comments_pagenum_link(pagenum=1, max_page=0, *args_):
+def get_comments_pagenum_link(pagenum_=1, max_page_=0, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    pagenum = php_int(pagenum)
-    result = get_permalink()
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    pagenum_ = php_int(pagenum_)
+    result_ = get_permalink()
     if "newest" == get_option("default_comments_page"):
-        if pagenum != max_page:
-            if wp_rewrite.using_permalinks():
-                result = user_trailingslashit(trailingslashit(result) + wp_rewrite.comments_pagination_base + "-" + pagenum, "commentpaged")
+        if pagenum_ != max_page_:
+            if wp_rewrite_.using_permalinks():
+                result_ = user_trailingslashit(trailingslashit(result_) + wp_rewrite_.comments_pagination_base + "-" + pagenum_, "commentpaged")
             else:
-                result = add_query_arg("cpage", pagenum, result)
+                result_ = add_query_arg("cpage", pagenum_, result_)
             # end if
         # end if
-    elif pagenum > 1:
-        if wp_rewrite.using_permalinks():
-            result = user_trailingslashit(trailingslashit(result) + wp_rewrite.comments_pagination_base + "-" + pagenum, "commentpaged")
+    elif pagenum_ > 1:
+        if wp_rewrite_.using_permalinks():
+            result_ = user_trailingslashit(trailingslashit(result_) + wp_rewrite_.comments_pagination_base + "-" + pagenum_, "commentpaged")
         else:
-            result = add_query_arg("cpage", pagenum, result)
+            result_ = add_query_arg("cpage", pagenum_, result_)
         # end if
     # end if
-    result += "#comments"
+    result_ += "#comments"
     #// 
     #// Filters the comments page number link for the current request.
     #// 
@@ -2515,7 +2679,7 @@ def get_comments_pagenum_link(pagenum=1, max_page=0, *args_):
     #// 
     #// @param string $result The comments page number link.
     #//
-    return apply_filters("get_comments_pagenum_link", result)
+    return apply_filters("get_comments_pagenum_link", result_)
 # end def get_comments_pagenum_link
 #// 
 #// Retrieves the link to the next comments page.
@@ -2528,29 +2692,30 @@ def get_comments_pagenum_link(pagenum=1, max_page=0, *args_):
 #// @param int    $max_page Optional. Max page. Default 0.
 #// @return string|void HTML-formatted link for the next page of comments.
 #//
-def get_next_comments_link(label="", max_page=0, *args_):
+def get_next_comments_link(label_="", max_page_=0, *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
     if (not is_singular()):
         return
     # end if
-    page = get_query_var("cpage")
-    if (not page):
-        page = 1
+    page_ = get_query_var("cpage")
+    if (not page_):
+        page_ = 1
     # end if
-    nextpage = php_intval(page) + 1
-    if php_empty(lambda : max_page):
-        max_page = wp_query.max_num_comment_pages
+    nextpage_ = php_intval(page_) + 1
+    if php_empty(lambda : max_page_):
+        max_page_ = wp_query_.max_num_comment_pages
     # end if
-    if php_empty(lambda : max_page):
-        max_page = get_comment_pages_count()
+    if php_empty(lambda : max_page_):
+        max_page_ = get_comment_pages_count()
     # end if
-    if nextpage > max_page:
+    if nextpage_ > max_page_:
         return
     # end if
-    if php_empty(lambda : label):
-        label = __("Newer Comments &raquo;")
+    if php_empty(lambda : label_):
+        label_ = __("Newer Comments &raquo;")
     # end if
     #// 
     #// Filters the anchor tag attributes for the next comments page link.
@@ -2559,7 +2724,7 @@ def get_next_comments_link(label="", max_page=0, *args_):
     #// 
     #// @param string $attributes Attributes for the anchor tag.
     #//
-    return "<a href=\"" + esc_url(get_comments_pagenum_link(nextpage, max_page)) + "\" " + apply_filters("next_comments_link_attributes", "") + ">" + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label) + "</a>"
+    return "<a href=\"" + esc_url(get_comments_pagenum_link(nextpage_, max_page_)) + "\" " + apply_filters("next_comments_link_attributes", "") + ">" + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label_) + "</a>"
 # end def get_next_comments_link
 #// 
 #// Displays the link to the next comments page.
@@ -2569,9 +2734,10 @@ def get_next_comments_link(label="", max_page=0, *args_):
 #// @param string $label    Optional. Label for link text. Default empty.
 #// @param int    $max_page Optional. Max page. Default 0.
 #//
-def next_comments_link(label="", max_page=0, *args_):
+def next_comments_link(label_="", max_page_=0, *_args_):
     
-    php_print(get_next_comments_link(label, max_page))
+    
+    php_print(get_next_comments_link(label_, max_page_))
 # end def next_comments_link
 #// 
 #// Retrieves the link to the previous comments page.
@@ -2581,18 +2747,19 @@ def next_comments_link(label="", max_page=0, *args_):
 #// @param string $label Optional. Label for comments link text. Default empty.
 #// @return string|void HTML-formatted link for the previous page of comments.
 #//
-def get_previous_comments_link(label="", *args_):
+def get_previous_comments_link(label_="", *_args_):
+    
     
     if (not is_singular()):
         return
     # end if
-    page = get_query_var("cpage")
-    if php_intval(page) <= 1:
+    page_ = get_query_var("cpage")
+    if php_intval(page_) <= 1:
         return
     # end if
-    prevpage = php_intval(page) - 1
-    if php_empty(lambda : label):
-        label = __("&laquo; Older Comments")
+    prevpage_ = php_intval(page_) - 1
+    if php_empty(lambda : label_):
+        label_ = __("&laquo; Older Comments")
     # end if
     #// 
     #// Filters the anchor tag attributes for the previous comments page link.
@@ -2601,7 +2768,7 @@ def get_previous_comments_link(label="", *args_):
     #// 
     #// @param string $attributes Attributes for the anchor tag.
     #//
-    return "<a href=\"" + esc_url(get_comments_pagenum_link(prevpage)) + "\" " + apply_filters("previous_comments_link_attributes", "") + ">" + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label) + "</a>"
+    return "<a href=\"" + esc_url(get_comments_pagenum_link(prevpage_)) + "\" " + apply_filters("previous_comments_link_attributes", "") + ">" + php_preg_replace("/&([^#])(?![a-z]{1,8};)/i", "&#038;$1", label_) + "</a>"
 # end def get_previous_comments_link
 #// 
 #// Displays the link to the previous comments page.
@@ -2610,9 +2777,10 @@ def get_previous_comments_link(label="", *args_):
 #// 
 #// @param string $label Optional. Label for comments link text. Default empty.
 #//
-def previous_comments_link(label="", *args_):
+def previous_comments_link(label_="", *_args_):
     
-    php_print(get_previous_comments_link(label))
+    
+    php_print(get_previous_comments_link(label_))
 # end def previous_comments_link
 #// 
 #// Displays or retrieves pagination links for the comments on the current post.
@@ -2628,28 +2796,31 @@ def previous_comments_link(label="", *args_):
 #// Otherwise, markup for comment page links or array of comment page links,
 #// depending on 'type' argument.
 #//
-def paginate_comments_links(args=Array(), *args_):
+def paginate_comments_links(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
     if (not is_singular()):
         return
     # end if
-    page = get_query_var("cpage")
-    if (not page):
-        page = 1
+    page_ = get_query_var("cpage")
+    if (not page_):
+        page_ = 1
     # end if
-    max_page = get_comment_pages_count()
-    defaults = Array({"base": add_query_arg("cpage", "%#%"), "format": "", "total": max_page, "current": page, "echo": True, "type": "plain", "add_fragment": "#comments"})
-    if wp_rewrite.using_permalinks():
-        defaults["base"] = user_trailingslashit(trailingslashit(get_permalink()) + wp_rewrite.comments_pagination_base + "-%#%", "commentpaged")
+    max_page_ = get_comment_pages_count()
+    defaults_ = Array({"base": add_query_arg("cpage", "%#%"), "format": "", "total": max_page_, "current": page_, "echo": True, "type": "plain", "add_fragment": "#comments"})
+    if wp_rewrite_.using_permalinks():
+        defaults_["base"] = user_trailingslashit(trailingslashit(get_permalink()) + wp_rewrite_.comments_pagination_base + "-%#%", "commentpaged")
     # end if
-    args = wp_parse_args(args, defaults)
-    page_links = paginate_links(args)
-    if args["echo"] and "array" != args["type"]:
-        php_print(page_links)
+    args_ = wp_parse_args(args_, defaults_)
+    page_links_ = paginate_links(args_)
+    if args_["echo"] and "array" != args_["type"]:
+        php_print(page_links_)
     else:
-        return page_links
+        return page_links_
     # end if
 # end def paginate_comments_links
 #// 
@@ -2670,27 +2841,30 @@ def paginate_comments_links(args=Array(), *args_):
 #// }
 #// @return string Markup for comments links.
 #//
-def get_the_comments_navigation(args=Array(), *args_):
+def get_the_comments_navigation(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    navigation = ""
+    navigation_ = ""
     #// Are there comments to navigate through?
     if get_comment_pages_count() > 1:
         #// Make sure the nav element has an aria-label attribute: fallback to the screen reader text.
-        if (not php_empty(lambda : args["screen_reader_text"])) and php_empty(lambda : args["aria_label"]):
-            args["aria_label"] = args["screen_reader_text"]
+        if (not php_empty(lambda : args_["screen_reader_text"])) and php_empty(lambda : args_["aria_label"]):
+            args_["aria_label"] = args_["screen_reader_text"]
         # end if
-        args = wp_parse_args(args, Array({"prev_text": __("Older comments"), "next_text": __("Newer comments"), "screen_reader_text": __("Comments navigation"), "aria_label": __("Comments")}))
-        prev_link = get_previous_comments_link(args["prev_text"])
-        next_link = get_next_comments_link(args["next_text"])
-        if prev_link:
-            navigation += "<div class=\"nav-previous\">" + prev_link + "</div>"
+        args_ = wp_parse_args(args_, Array({"prev_text": __("Older comments"), "next_text": __("Newer comments"), "screen_reader_text": __("Comments navigation"), "aria_label": __("Comments")}))
+        prev_link_ = get_previous_comments_link(args_["prev_text"])
+        next_link_ = get_next_comments_link(args_["next_text"])
+        if prev_link_:
+            navigation_ += "<div class=\"nav-previous\">" + prev_link_ + "</div>"
         # end if
-        if next_link:
-            navigation += "<div class=\"nav-next\">" + next_link + "</div>"
+        if next_link_:
+            navigation_ += "<div class=\"nav-next\">" + next_link_ + "</div>"
         # end if
-        navigation = _navigation_markup(navigation, "comment-navigation", args["screen_reader_text"], args["aria_label"])
+        navigation_ = _navigation_markup(navigation_, "comment-navigation", args_["screen_reader_text"], args_["aria_label"])
     # end if
-    return navigation
+    return navigation_
 # end def get_the_comments_navigation
 #// 
 #// Displays navigation to next/previous set of comments, when applicable.
@@ -2699,9 +2873,12 @@ def get_the_comments_navigation(args=Array(), *args_):
 #// 
 #// @param array $args See get_the_comments_navigation() for available arguments. Default empty array.
 #//
-def the_comments_navigation(args=Array(), *args_):
+def the_comments_navigation(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    php_print(get_the_comments_navigation(args))
+    php_print(get_the_comments_navigation(args_))
 # end def the_comments_navigation
 #// 
 #// Retrieves a paginated navigation to next/previous set of comments, when applicable.
@@ -2719,24 +2896,27 @@ def the_comments_navigation(args=Array(), *args_):
 #// }
 #// @return string Markup for pagination links.
 #//
-def get_the_comments_pagination(args=Array(), *args_):
+def get_the_comments_pagination(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    navigation = ""
+    navigation_ = ""
     #// Make sure the nav element has an aria-label attribute: fallback to the screen reader text.
-    if (not php_empty(lambda : args["screen_reader_text"])) and php_empty(lambda : args["aria_label"]):
-        args["aria_label"] = args["screen_reader_text"]
+    if (not php_empty(lambda : args_["screen_reader_text"])) and php_empty(lambda : args_["aria_label"]):
+        args_["aria_label"] = args_["screen_reader_text"]
     # end if
-    args = wp_parse_args(args, Array({"screen_reader_text": __("Comments navigation"), "aria_label": __("Comments")}))
-    args["echo"] = False
+    args_ = wp_parse_args(args_, Array({"screen_reader_text": __("Comments navigation"), "aria_label": __("Comments")}))
+    args_["echo"] = False
     #// Make sure we get a string back. Plain is the next best thing.
-    if (php_isset(lambda : args["type"])) and "array" == args["type"]:
-        args["type"] = "plain"
+    if (php_isset(lambda : args_["type"])) and "array" == args_["type"]:
+        args_["type"] = "plain"
     # end if
-    links = paginate_comments_links(args)
-    if links:
-        navigation = _navigation_markup(links, "comments-pagination", args["screen_reader_text"], args["aria_label"])
+    links_ = paginate_comments_links(args_)
+    if links_:
+        navigation_ = _navigation_markup(links_, "comments-pagination", args_["screen_reader_text"], args_["aria_label"])
     # end if
-    return navigation
+    return navigation_
 # end def get_the_comments_pagination
 #// 
 #// Displays a paginated navigation to next/previous set of comments, when applicable.
@@ -2745,9 +2925,12 @@ def get_the_comments_pagination(args=Array(), *args_):
 #// 
 #// @param array $args See get_the_comments_pagination() for available arguments. Default empty array.
 #//
-def the_comments_pagination(args=Array(), *args_):
+def the_comments_pagination(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    php_print(get_the_comments_pagination(args))
+    php_print(get_the_comments_pagination(args_))
 # end def the_comments_pagination
 #// 
 #// Retrieves the URL for the current site where the front end is accessible.
@@ -2763,9 +2946,10 @@ def the_comments_pagination(args=Array(), *args_):
 #// 'http', 'https', 'relative', 'rest', or null. Default null.
 #// @return string Home URL link with optional path appended.
 #//
-def home_url(path="", scheme=None, *args_):
+def home_url(path_="", scheme_=None, *_args_):
     
-    return get_home_url(None, path, scheme)
+    
+    return get_home_url(None, path_, scheme_)
 # end def home_url
 #// 
 #// Retrieves the URL for a given site where the front end is accessible.
@@ -2784,28 +2968,29 @@ def home_url(path="", scheme=None, *args_):
 #// 'http', 'https', 'relative', 'rest', or null. Default null.
 #// @return string Home URL link with optional path appended.
 #//
-def get_home_url(blog_id=None, path="", scheme=None, *args_):
+def get_home_url(blog_id_=None, path_="", scheme_=None, *_args_):
     
-    global pagenow
-    php_check_if_defined("pagenow")
-    orig_scheme = scheme
-    if php_empty(lambda : blog_id) or (not is_multisite()):
-        url = get_option("home")
+    
+    global pagenow_
+    php_check_if_defined("pagenow_")
+    orig_scheme_ = scheme_
+    if php_empty(lambda : blog_id_) or (not is_multisite()):
+        url_ = get_option("home")
     else:
-        switch_to_blog(blog_id)
-        url = get_option("home")
+        switch_to_blog(blog_id_)
+        url_ = get_option("home")
         restore_current_blog()
     # end if
-    if (not php_in_array(scheme, Array("http", "https", "relative"))):
-        if is_ssl() and (not is_admin()) and "wp-login.php" != pagenow:
-            scheme = "https"
+    if (not php_in_array(scheme_, Array("http", "https", "relative"))):
+        if is_ssl() and (not is_admin()) and "wp-login.php" != pagenow_:
+            scheme_ = "https"
         else:
-            scheme = php_parse_url(url, PHP_URL_SCHEME)
+            scheme_ = php_parse_url(url_, PHP_URL_SCHEME)
         # end if
     # end if
-    url = set_url_scheme(url, scheme)
-    if path and php_is_string(path):
-        url += "/" + php_ltrim(path, "/")
+    url_ = set_url_scheme(url_, scheme_)
+    if path_ and php_is_string(path_):
+        url_ += "/" + php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the home URL.
@@ -2818,7 +3003,7 @@ def get_home_url(blog_id=None, path="", scheme=None, *args_):
     #// 'relative', 'rest', or null.
     #// @param int|null    $blog_id     Site ID, or null for the current site.
     #//
-    return apply_filters("home_url", url, path, orig_scheme, blog_id)
+    return apply_filters("home_url", url_, path_, orig_scheme_, blog_id_)
 # end def get_home_url
 #// 
 #// Retrieves the URL for the current site where WordPress application files
@@ -2834,9 +3019,10 @@ def get_home_url(blog_id=None, path="", scheme=None, *args_):
 #// @param string $scheme Optional. Scheme to give the site URL context. See set_url_scheme().
 #// @return string Site URL link with optional path appended.
 #//
-def site_url(path="", scheme=None, *args_):
+def site_url(path_="", scheme_=None, *_args_):
     
-    return get_site_url(None, path, scheme)
+    
+    return get_site_url(None, path_, scheme_)
 # end def site_url
 #// 
 #// Retrieves the URL for a given site where WordPress application files
@@ -2855,18 +3041,19 @@ def site_url(path="", scheme=None, *args_):
 #// 'relative'. Default null.
 #// @return string Site URL link with optional path appended.
 #//
-def get_site_url(blog_id=None, path="", scheme=None, *args_):
+def get_site_url(blog_id_=None, path_="", scheme_=None, *_args_):
     
-    if php_empty(lambda : blog_id) or (not is_multisite()):
-        url = get_option("siteurl")
+    
+    if php_empty(lambda : blog_id_) or (not is_multisite()):
+        url_ = get_option("siteurl")
     else:
-        switch_to_blog(blog_id)
-        url = get_option("siteurl")
+        switch_to_blog(blog_id_)
+        url_ = get_option("siteurl")
         restore_current_blog()
     # end if
-    url = set_url_scheme(url, scheme)
-    if path and php_is_string(path):
-        url += "/" + php_ltrim(path, "/")
+    url_ = set_url_scheme(url_, scheme_)
+    if path_ and php_is_string(path_):
+        url_ += "/" + php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the site URL.
@@ -2879,7 +3066,7 @@ def get_site_url(blog_id=None, path="", scheme=None, *args_):
     #// 'login_post', 'admin', 'relative' or null.
     #// @param int|null    $blog_id Site ID, or null for the current site.
     #//
-    return apply_filters("site_url", url, path, scheme, blog_id)
+    return apply_filters("site_url", url_, path_, scheme_, blog_id_)
 # end def get_site_url
 #// 
 #// Retrieves the URL to the admin area for the current site.
@@ -2891,9 +3078,10 @@ def get_site_url(blog_id=None, path="", scheme=None, *args_):
 #// 'http' or 'https' can be passed to force those schemes.
 #// @return string Admin URL link with optional path appended.
 #//
-def admin_url(path="", scheme="admin", *args_):
+def admin_url(path_="", scheme_="admin", *_args_):
     
-    return get_admin_url(None, path, scheme)
+    
+    return get_admin_url(None, path_, scheme_)
 # end def admin_url
 #// 
 #// Retrieves the URL to the admin area for a given site.
@@ -2907,11 +3095,12 @@ def admin_url(path="", scheme="admin", *args_):
 #// force_ssl_admin() and is_ssl().
 #// @return string Admin URL link with optional path appended.
 #//
-def get_admin_url(blog_id=None, path="", scheme="admin", *args_):
+def get_admin_url(blog_id_=None, path_="", scheme_="admin", *_args_):
     
-    url = get_site_url(blog_id, "wp-admin/", scheme)
-    if path and php_is_string(path):
-        url += php_ltrim(path, "/")
+    
+    url_ = get_site_url(blog_id_, "wp-admin/", scheme_)
+    if path_ and php_is_string(path_):
+        url_ += php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the admin area URL.
@@ -2922,7 +3111,7 @@ def get_admin_url(blog_id=None, path="", scheme="admin", *args_):
     #// @param string   $path    Path relative to the admin area URL. Blank string if no path is specified.
     #// @param int|null $blog_id Site ID, or null for the current site.
     #//
-    return apply_filters("admin_url", url, path, blog_id)
+    return apply_filters("admin_url", url_, path_, blog_id_)
 # end def get_admin_url
 #// 
 #// Retrieves the URL to the includes directory.
@@ -2934,11 +3123,12 @@ def get_admin_url(blog_id=None, path="", scheme="admin", *args_):
 #// 'http', 'https', or 'relative'. Default null.
 #// @return string Includes URL link with optional path appended.
 #//
-def includes_url(path="", scheme=None, *args_):
+def includes_url(path_="", scheme_=None, *_args_):
     
-    url = site_url("/" + WPINC + "/", scheme)
-    if path and php_is_string(path):
-        url += php_ltrim(path, "/")
+    
+    url_ = site_url("/" + WPINC + "/", scheme_)
+    if path_ and php_is_string(path_):
+        url_ += php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the URL to the includes directory.
@@ -2949,7 +3139,7 @@ def includes_url(path="", scheme=None, *args_):
     #// @param string $path Path relative to the URL to the wp-includes directory. Blank string
     #// if no path is specified.
     #//
-    return apply_filters("includes_url", url, path)
+    return apply_filters("includes_url", url_, path_)
 # end def includes_url
 #// 
 #// Retrieves the URL to the content directory.
@@ -2959,11 +3149,12 @@ def includes_url(path="", scheme=None, *args_):
 #// @param string $path Optional. Path relative to the content URL. Default empty.
 #// @return string Content URL link with optional path appended.
 #//
-def content_url(path="", *args_):
+def content_url(path_="", *_args_):
     
-    url = set_url_scheme(WP_CONTENT_URL)
-    if path and php_is_string(path):
-        url += "/" + php_ltrim(path, "/")
+    
+    url_ = set_url_scheme(WP_CONTENT_URL)
+    if path_ and php_is_string(path_):
+        url_ += "/" + php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the URL to the content directory.
@@ -2974,7 +3165,7 @@ def content_url(path="", *args_):
     #// @param string $path Path relative to the URL to the content directory. Blank string
     #// if no path is specified.
     #//
-    return apply_filters("content_url", url, path)
+    return apply_filters("content_url", url_, path_)
 # end def content_url
 #// 
 #// Retrieves a URL within the plugins or mu-plugins directory.
@@ -2990,25 +3181,26 @@ def content_url(path="", *args_):
 #// Typically this is done by passing `__FILE__` as the argument.
 #// @return string Plugins URL link with optional paths appended.
 #//
-def plugins_url(path="", plugin="", *args_):
+def plugins_url(path_="", plugin_="", *_args_):
     
-    path = wp_normalize_path(path)
-    plugin = wp_normalize_path(plugin)
-    mu_plugin_dir = wp_normalize_path(WPMU_PLUGIN_DIR)
-    if (not php_empty(lambda : plugin)) and 0 == php_strpos(plugin, mu_plugin_dir):
-        url = WPMU_PLUGIN_URL
+    
+    path_ = wp_normalize_path(path_)
+    plugin_ = wp_normalize_path(plugin_)
+    mu_plugin_dir_ = wp_normalize_path(WPMU_PLUGIN_DIR)
+    if (not php_empty(lambda : plugin_)) and 0 == php_strpos(plugin_, mu_plugin_dir_):
+        url_ = WPMU_PLUGIN_URL
     else:
-        url = WP_PLUGIN_URL
+        url_ = WP_PLUGIN_URL
     # end if
-    url = set_url_scheme(url)
-    if (not php_empty(lambda : plugin)) and php_is_string(plugin):
-        folder = php_dirname(plugin_basename(plugin))
-        if "." != folder:
-            url += "/" + php_ltrim(folder, "/")
+    url_ = set_url_scheme(url_)
+    if (not php_empty(lambda : plugin_)) and php_is_string(plugin_):
+        folder_ = php_dirname(plugin_basename(plugin_))
+        if "." != folder_:
+            url_ += "/" + php_ltrim(folder_, "/")
         # end if
     # end if
-    if path and php_is_string(path):
-        url += "/" + php_ltrim(path, "/")
+    if path_ and php_is_string(path_):
+        url_ += "/" + php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the URL to the plugins directory.
@@ -3021,7 +3213,7 @@ def plugins_url(path="", plugin="", *args_):
     #// @param string $plugin The plugin file path to be relative to. Blank string if no plugin
     #// is specified.
     #//
-    return apply_filters("plugins_url", url, path, plugin)
+    return apply_filters("plugins_url", url_, path_, plugin_)
 # end def plugins_url
 #// 
 #// Retrieves the site URL for the current network.
@@ -3039,19 +3231,20 @@ def plugins_url(path="", plugin="", *args_):
 #// 'http', 'https', or 'relative'. Default null.
 #// @return string Site URL link with optional path appended.
 #//
-def network_site_url(path="", scheme=None, *args_):
+def network_site_url(path_="", scheme_=None, *_args_):
+    
     
     if (not is_multisite()):
-        return site_url(path, scheme)
+        return site_url(path_, scheme_)
     # end if
-    current_network = get_network()
-    if "relative" == scheme:
-        url = current_network.path
+    current_network_ = get_network()
+    if "relative" == scheme_:
+        url_ = current_network_.path
     else:
-        url = set_url_scheme("http://" + current_network.domain + current_network.path, scheme)
+        url_ = set_url_scheme("http://" + current_network_.domain + current_network_.path, scheme_)
     # end if
-    if path and php_is_string(path):
-        url += php_ltrim(path, "/")
+    if path_ and php_is_string(path_):
+        url_ += php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the network site URL.
@@ -3064,7 +3257,7 @@ def network_site_url(path="", scheme=None, *args_):
     #// @param string|null $scheme Scheme to give the URL context. Accepts 'http', 'https',
     #// 'relative' or null.
     #//
-    return apply_filters("network_site_url", url, path, scheme)
+    return apply_filters("network_site_url", url_, path_, scheme_)
 # end def network_site_url
 #// 
 #// Retrieves the home URL for the current network.
@@ -3080,23 +3273,24 @@ def network_site_url(path="", scheme=None, *args_):
 #// 'http', 'https', or 'relative'. Default null.
 #// @return string Home URL link with optional path appended.
 #//
-def network_home_url(path="", scheme=None, *args_):
+def network_home_url(path_="", scheme_=None, *_args_):
+    
     
     if (not is_multisite()):
-        return home_url(path, scheme)
+        return home_url(path_, scheme_)
     # end if
-    current_network = get_network()
-    orig_scheme = scheme
-    if (not php_in_array(scheme, Array("http", "https", "relative"))):
-        scheme = "https" if is_ssl() and (not is_admin()) else "http"
+    current_network_ = get_network()
+    orig_scheme_ = scheme_
+    if (not php_in_array(scheme_, Array("http", "https", "relative"))):
+        scheme_ = "https" if is_ssl() and (not is_admin()) else "http"
     # end if
-    if "relative" == scheme:
-        url = current_network.path
+    if "relative" == scheme_:
+        url_ = current_network_.path
     else:
-        url = set_url_scheme("http://" + current_network.domain + current_network.path, scheme)
+        url_ = set_url_scheme("http://" + current_network_.domain + current_network_.path, scheme_)
     # end if
-    if path and php_is_string(path):
-        url += php_ltrim(path, "/")
+    if path_ and php_is_string(path_):
+        url_ += php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the network home URL.
@@ -3109,7 +3303,7 @@ def network_home_url(path="", scheme=None, *args_):
     #// @param string|null $orig_scheme Scheme to give the URL context. Accepts 'http', 'https',
     #// 'relative' or null.
     #//
-    return apply_filters("network_home_url", url, path, orig_scheme)
+    return apply_filters("network_home_url", url_, path_, orig_scheme_)
 # end def network_home_url
 #// 
 #// Retrieves the URL to the admin area for the network.
@@ -3121,14 +3315,15 @@ def network_home_url(path="", scheme=None, *args_):
 #// and is_ssl(). 'http' or 'https' can be passed to force those schemes.
 #// @return string Admin URL link with optional path appended.
 #//
-def network_admin_url(path="", scheme="admin", *args_):
+def network_admin_url(path_="", scheme_="admin", *_args_):
+    
     
     if (not is_multisite()):
-        return admin_url(path, scheme)
+        return admin_url(path_, scheme_)
     # end if
-    url = network_site_url("wp-admin/network/", scheme)
-    if path and php_is_string(path):
-        url += php_ltrim(path, "/")
+    url_ = network_site_url("wp-admin/network/", scheme_)
+    if path_ and php_is_string(path_):
+        url_ += php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the network admin URL.
@@ -3139,7 +3334,7 @@ def network_admin_url(path="", scheme="admin", *args_):
     #// @param string $path Path relative to the network admin URL. Blank string if
     #// no path is specified.
     #//
-    return apply_filters("network_admin_url", url, path)
+    return apply_filters("network_admin_url", url_, path_)
 # end def network_admin_url
 #// 
 #// Retrieves the URL to the admin area for the current user.
@@ -3151,11 +3346,12 @@ def network_admin_url(path="", scheme="admin", *args_):
 #// and is_ssl(). 'http' or 'https' can be passed to force those schemes.
 #// @return string Admin URL link with optional path appended.
 #//
-def user_admin_url(path="", scheme="admin", *args_):
+def user_admin_url(path_="", scheme_="admin", *_args_):
     
-    url = network_site_url("wp-admin/user/", scheme)
-    if path and php_is_string(path):
-        url += php_ltrim(path, "/")
+    
+    url_ = network_site_url("wp-admin/user/", scheme_)
+    if path_ and php_is_string(path_):
+        url_ += php_ltrim(path_, "/")
     # end if
     #// 
     #// Filters the user admin URL for the current user.
@@ -3166,7 +3362,7 @@ def user_admin_url(path="", scheme="admin", *args_):
     #// @param string $path Path relative to the URL. Blank string if
     #// no path is specified.
     #//
-    return apply_filters("user_admin_url", url, path)
+    return apply_filters("user_admin_url", url_, path_)
 # end def user_admin_url
 #// 
 #// Retrieves the URL to the admin area for either the current site or the network depending on context.
@@ -3178,14 +3374,15 @@ def user_admin_url(path="", scheme="admin", *args_):
 #// and is_ssl(). 'http' or 'https' can be passed to force those schemes.
 #// @return string Admin URL link with optional path appended.
 #//
-def self_admin_url(path="", scheme="admin", *args_):
+def self_admin_url(path_="", scheme_="admin", *_args_):
+    
     
     if is_network_admin():
-        url = network_admin_url(path, scheme)
+        url_ = network_admin_url(path_, scheme_)
     elif is_user_admin():
-        url = user_admin_url(path, scheme)
+        url_ = user_admin_url(path_, scheme_)
     else:
-        url = admin_url(path, scheme)
+        url_ = admin_url(path_, scheme_)
     # end if
     #// 
     #// Filters the admin URL for the current site or network depending on context.
@@ -3196,7 +3393,7 @@ def self_admin_url(path="", scheme="admin", *args_):
     #// @param string $path   Path relative to the URL. Blank string if no path is specified.
     #// @param string $scheme The scheme to use.
     #//
-    return apply_filters("self_admin_url", url, path, scheme)
+    return apply_filters("self_admin_url", url_, path_, scheme_)
 # end def self_admin_url
 #// 
 #// Sets the scheme for a URL.
@@ -3209,27 +3406,28 @@ def self_admin_url(path="", scheme="admin", *args_):
 #// 'login_post', 'admin', 'relative', 'rest', 'rpc', or null. Default null.
 #// @return string $url URL with chosen scheme.
 #//
-def set_url_scheme(url=None, scheme=None, *args_):
+def set_url_scheme(url_=None, scheme_=None, *_args_):
     
-    orig_scheme = scheme
-    if (not scheme):
-        scheme = "https" if is_ssl() else "http"
-    elif "admin" == scheme or "login" == scheme or "login_post" == scheme or "rpc" == scheme:
-        scheme = "https" if is_ssl() or force_ssl_admin() else "http"
-    elif "http" != scheme and "https" != scheme and "relative" != scheme:
-        scheme = "https" if is_ssl() else "http"
+    
+    orig_scheme_ = scheme_
+    if (not scheme_):
+        scheme_ = "https" if is_ssl() else "http"
+    elif "admin" == scheme_ or "login" == scheme_ or "login_post" == scheme_ or "rpc" == scheme_:
+        scheme_ = "https" if is_ssl() or force_ssl_admin() else "http"
+    elif "http" != scheme_ and "https" != scheme_ and "relative" != scheme_:
+        scheme_ = "https" if is_ssl() else "http"
     # end if
-    url = php_trim(url)
-    if php_substr(url, 0, 2) == "//":
-        url = "http:" + url
+    url_ = php_trim(url_)
+    if php_substr(url_, 0, 2) == "//":
+        url_ = "http:" + url_
     # end if
-    if "relative" == scheme:
-        url = php_ltrim(php_preg_replace("#^\\w+://[^/]*#", "", url))
-        if "" != url and "/" == url[0]:
-            url = "/" + php_ltrim(url, "/   \n\r ")
+    if "relative" == scheme_:
+        url_ = php_ltrim(php_preg_replace("#^\\w+://[^/]*#", "", url_))
+        if "" != url_ and "/" == url_[0]:
+            url_ = "/" + php_ltrim(url_, "/     \n\r ")
         # end if
     else:
-        url = php_preg_replace("#^\\w+://#", scheme + "://", url)
+        url_ = php_preg_replace("#^\\w+://#", scheme_ + "://", url_)
     # end if
     #// 
     #// Filters the resulting URL after setting the scheme.
@@ -3241,7 +3439,7 @@ def set_url_scheme(url=None, scheme=None, *args_):
     #// @param string|null $orig_scheme Scheme requested for the URL. One of 'http', 'https', 'login',
     #// 'login_post', 'admin', 'relative', 'rest', 'rpc', or null.
     #//
-    return apply_filters("set_url_scheme", url, scheme, orig_scheme)
+    return apply_filters("set_url_scheme", url_, scheme_, orig_scheme_)
 # end def set_url_scheme
 #// 
 #// Retrieves the URL to the user's dashboard.
@@ -3259,24 +3457,25 @@ def set_url_scheme(url=None, scheme=None, *args_):
 #// and is_ssl(). 'http' or 'https' can be passed to force those schemes.
 #// @return string Dashboard URL link with optional path appended.
 #//
-def get_dashboard_url(user_id=0, path="", scheme="admin", *args_):
+def get_dashboard_url(user_id_=0, path_="", scheme_="admin", *_args_):
     
-    user_id = php_int(user_id) if user_id else get_current_user_id()
-    blogs = get_blogs_of_user(user_id)
-    if is_multisite() and (not user_can(user_id, "manage_network")) and php_empty(lambda : blogs):
-        url = user_admin_url(path, scheme)
+    
+    user_id_ = php_int(user_id_) if user_id_ else get_current_user_id()
+    blogs_ = get_blogs_of_user(user_id_)
+    if is_multisite() and (not user_can(user_id_, "manage_network")) and php_empty(lambda : blogs_):
+        url_ = user_admin_url(path_, scheme_)
     elif (not is_multisite()):
-        url = admin_url(path, scheme)
+        url_ = admin_url(path_, scheme_)
     else:
-        current_blog = get_current_blog_id()
-        if current_blog and user_can(user_id, "manage_network") or php_in_array(current_blog, php_array_keys(blogs)):
-            url = admin_url(path, scheme)
+        current_blog_ = get_current_blog_id()
+        if current_blog_ and user_can(user_id_, "manage_network") or php_in_array(current_blog_, php_array_keys(blogs_)):
+            url_ = admin_url(path_, scheme_)
         else:
-            active = get_active_blog_for_user(user_id)
-            if active:
-                url = get_admin_url(active.blog_id, path, scheme)
+            active_ = get_active_blog_for_user(user_id_)
+            if active_:
+                url_ = get_admin_url(active_.blog_id, path_, scheme_)
             else:
-                url = user_admin_url(path, scheme)
+                url_ = user_admin_url(path_, scheme_)
             # end if
         # end if
     # end if
@@ -3291,7 +3490,7 @@ def get_dashboard_url(user_id=0, path="", scheme="admin", *args_):
     #// @param string $scheme  Scheme to give the URL context. Accepts 'http', 'https', 'login',
     #// 'login_post', 'admin', 'relative' or null.
     #//
-    return apply_filters("user_dashboard_url", url, user_id, path, scheme)
+    return apply_filters("user_dashboard_url", url_, user_id_, path_, scheme_)
 # end def get_dashboard_url
 #// 
 #// Retrieves the URL to the user's profile editor.
@@ -3303,15 +3502,16 @@ def get_dashboard_url(user_id=0, path="", scheme="admin", *args_):
 #// and is_ssl(). 'http' or 'https' can be passed to force those schemes.
 #// @return string Dashboard URL link with optional path appended.
 #//
-def get_edit_profile_url(user_id=0, scheme="admin", *args_):
+def get_edit_profile_url(user_id_=0, scheme_="admin", *_args_):
     
-    user_id = php_int(user_id) if user_id else get_current_user_id()
+    
+    user_id_ = php_int(user_id_) if user_id_ else get_current_user_id()
     if is_user_admin():
-        url = user_admin_url("profile.php", scheme)
+        url_ = user_admin_url("profile.php", scheme_)
     elif is_network_admin():
-        url = network_admin_url("profile.php", scheme)
+        url_ = network_admin_url("profile.php", scheme_)
     else:
-        url = get_dashboard_url(user_id, "profile.php", scheme)
+        url_ = get_dashboard_url(user_id_, "profile.php", scheme_)
     # end if
     #// 
     #// Filters the URL for a user's profile editor.
@@ -3323,7 +3523,7 @@ def get_edit_profile_url(user_id=0, scheme="admin", *args_):
     #// @param string $scheme  Scheme to give the URL context. Accepts 'http', 'https', 'login',
     #// 'login_post', 'admin', 'relative' or null.
     #//
-    return apply_filters("edit_profile_url", url, user_id, scheme)
+    return apply_filters("edit_profile_url", url_, user_id_, scheme_)
 # end def get_edit_profile_url
 #// 
 #// Returns the canonical URL for a post.
@@ -3337,29 +3537,30 @@ def get_edit_profile_url(user_id=0, scheme="admin", *args_):
 #// @return string|false The canonical URL, or false if the post does not exist or has not
 #// been published yet.
 #//
-def wp_get_canonical_url(post=None, *args_):
+def wp_get_canonical_url(post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    if "publish" != post.post_status:
+    if "publish" != post_.post_status:
         return False
     # end if
-    canonical_url = get_permalink(post)
+    canonical_url_ = get_permalink(post_)
     #// If a canonical is being generated for the current page, make sure it has pagination if needed.
-    if get_queried_object_id() == post.ID:
-        page = get_query_var("page", 0)
-        if page >= 2:
+    if get_queried_object_id() == post_.ID:
+        page_ = get_query_var("page", 0)
+        if page_ >= 2:
             if "" == get_option("permalink_structure"):
-                canonical_url = add_query_arg("page", page, canonical_url)
+                canonical_url_ = add_query_arg("page", page_, canonical_url_)
             else:
-                canonical_url = trailingslashit(canonical_url) + user_trailingslashit(page, "single_paged")
+                canonical_url_ = trailingslashit(canonical_url_) + user_trailingslashit(page_, "single_paged")
             # end if
         # end if
-        cpage = get_query_var("cpage", 0)
-        if cpage:
-            canonical_url = get_comments_pagenum_link(cpage)
+        cpage_ = get_query_var("cpage", 0)
+        if cpage_:
+            canonical_url_ = get_comments_pagenum_link(cpage_)
         # end if
     # end if
     #// 
@@ -3370,7 +3571,7 @@ def wp_get_canonical_url(post=None, *args_):
     #// @param string  $canonical_url The post's canonical URL.
     #// @param WP_Post $post          Post object.
     #//
-    return apply_filters("get_canonical_url", canonical_url, post)
+    return apply_filters("get_canonical_url", canonical_url_, post_)
 # end def wp_get_canonical_url
 #// 
 #// Outputs rel=canonical for singular queries.
@@ -3378,18 +3579,19 @@ def wp_get_canonical_url(post=None, *args_):
 #// @since 2.9.0
 #// @since 4.6.0 Adjusted to use `wp_get_canonical_url()`.
 #//
-def rel_canonical(*args_):
+def rel_canonical(*_args_):
+    
     
     if (not is_singular()):
         return
     # end if
-    id = get_queried_object_id()
-    if 0 == id:
+    id_ = get_queried_object_id()
+    if 0 == id_:
         return
     # end if
-    url = wp_get_canonical_url(id)
-    if (not php_empty(lambda : url)):
-        php_print("<link rel=\"canonical\" href=\"" + esc_url(url) + "\" />" + "\n")
+    url_ = wp_get_canonical_url(id_)
+    if (not php_empty(lambda : url_)):
+        php_print("<link rel=\"canonical\" href=\"" + esc_url(url_) + "\" />" + "\n")
     # end if
 # end def rel_canonical
 #// 
@@ -3412,7 +3614,10 @@ def rel_canonical(*args_):
 #// @return string A shortlink or an empty string if no shortlink exists for the requested resource or if shortlinks
 #// are not enabled.
 #//
-def wp_get_shortlink(id=0, context="post", allow_slugs=True, *args_):
+def wp_get_shortlink(id_=0, context_="post", allow_slugs_=None, *_args_):
+    if allow_slugs_ is None:
+        allow_slugs_ = True
+    # end if
     
     #// 
     #// Filters whether to preempt generating a shortlink for the given post.
@@ -3427,28 +3632,28 @@ def wp_get_shortlink(id=0, context="post", allow_slugs=True, *args_):
     #// @param string      $context     The context for the link. One of 'post' or 'query',
     #// @param bool        $allow_slugs Whether to allow post slugs in the shortlink.
     #//
-    shortlink = apply_filters("pre_get_shortlink", False, id, context, allow_slugs)
-    if False != shortlink:
-        return shortlink
+    shortlink_ = apply_filters("pre_get_shortlink", False, id_, context_, allow_slugs_)
+    if False != shortlink_:
+        return shortlink_
     # end if
-    post_id = 0
-    if "query" == context and is_singular():
-        post_id = get_queried_object_id()
-        post = get_post(post_id)
-    elif "post" == context:
-        post = get_post(id)
-        if (not php_empty(lambda : post.ID)):
-            post_id = post.ID
+    post_id_ = 0
+    if "query" == context_ and is_singular():
+        post_id_ = get_queried_object_id()
+        post_ = get_post(post_id_)
+    elif "post" == context_:
+        post_ = get_post(id_)
+        if (not php_empty(lambda : post_.ID)):
+            post_id_ = post_.ID
         # end if
     # end if
-    shortlink = ""
+    shortlink_ = ""
     #// Return `?p=` link for all public post types.
-    if (not php_empty(lambda : post_id)):
-        post_type = get_post_type_object(post.post_type)
-        if "page" == post.post_type and get_option("page_on_front") == post.ID and "page" == get_option("show_on_front"):
-            shortlink = home_url("/")
-        elif post_type.public:
-            shortlink = home_url("?p=" + post_id)
+    if (not php_empty(lambda : post_id_)):
+        post_type_ = get_post_type_object(post_.post_type)
+        if "page" == post_.post_type and get_option("page_on_front") == post_.ID and "page" == get_option("show_on_front"):
+            shortlink_ = home_url("/")
+        elif post_type_.public:
+            shortlink_ = home_url("?p=" + post_id_)
         # end if
     # end if
     #// 
@@ -3461,7 +3666,7 @@ def wp_get_shortlink(id=0, context="post", allow_slugs=True, *args_):
     #// @param string $context     The context for the link. One of 'post' or 'query',
     #// @param bool   $allow_slugs Whether to allow post slugs in the shortlink. Not used by default.
     #//
-    return apply_filters("get_shortlink", shortlink, id, context, allow_slugs)
+    return apply_filters("get_shortlink", shortlink_, id_, context_, allow_slugs_)
 # end def wp_get_shortlink
 #// 
 #// Injects rel=shortlink into the head if a shortlink is defined for the current page.
@@ -3470,13 +3675,14 @@ def wp_get_shortlink(id=0, context="post", allow_slugs=True, *args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_shortlink_wp_head(*args_):
+def wp_shortlink_wp_head(*_args_):
     
-    shortlink = wp_get_shortlink(0, "query")
-    if php_empty(lambda : shortlink):
+    
+    shortlink_ = wp_get_shortlink(0, "query")
+    if php_empty(lambda : shortlink_):
         return
     # end if
-    php_print("<link rel='shortlink' href='" + esc_url(shortlink) + "' />\n")
+    php_print("<link rel='shortlink' href='" + esc_url(shortlink_) + "' />\n")
 # end def wp_shortlink_wp_head
 #// 
 #// Sends a Link: rel=shortlink header if a shortlink is defined for the current page.
@@ -3485,16 +3691,17 @@ def wp_shortlink_wp_head(*args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_shortlink_header(*args_):
+def wp_shortlink_header(*_args_):
+    
     
     if php_headers_sent():
         return
     # end if
-    shortlink = wp_get_shortlink(0, "query")
-    if php_empty(lambda : shortlink):
+    shortlink_ = wp_get_shortlink(0, "query")
+    if php_empty(lambda : shortlink_):
         return
     # end if
-    php_header("Link: <" + shortlink + ">; rel=shortlink", False)
+    php_header("Link: <" + shortlink_ + ">; rel=shortlink", False)
 # end def wp_shortlink_header
 #// 
 #// Displays the shortlink for a post.
@@ -3510,18 +3717,19 @@ def wp_shortlink_header(*args_):
 #// @param string $before Optional HTML to display before the link. Default empty.
 #// @param string $after  Optional HTML to display after the link. Default empty.
 #//
-def the_shortlink(text="", title="", before="", after="", *args_):
+def the_shortlink(text_="", title_="", before_="", after_="", *_args_):
     
-    post = get_post()
-    if php_empty(lambda : text):
-        text = __("This is the short link.")
+    
+    post_ = get_post()
+    if php_empty(lambda : text_):
+        text_ = __("This is the short link.")
     # end if
-    if php_empty(lambda : title):
-        title = the_title_attribute(Array({"echo": False}))
+    if php_empty(lambda : title_):
+        title_ = the_title_attribute(Array({"echo": False}))
     # end if
-    shortlink = wp_get_shortlink(post.ID)
-    if (not php_empty(lambda : shortlink)):
-        link = "<a rel=\"shortlink\" href=\"" + esc_url(shortlink) + "\" title=\"" + title + "\">" + text + "</a>"
+    shortlink_ = wp_get_shortlink(post_.ID)
+    if (not php_empty(lambda : shortlink_)):
+        link_ = "<a rel=\"shortlink\" href=\"" + esc_url(shortlink_) + "\" title=\"" + title_ + "\">" + text_ + "</a>"
         #// 
         #// Filters the short link anchor tag for a post.
         #// 
@@ -3532,8 +3740,8 @@ def the_shortlink(text="", title="", before="", after="", *args_):
         #// @param string $text      Shortlink's text.
         #// @param string $title     Shortlink's title attribute.
         #//
-        link = apply_filters("the_shortlink", link, shortlink, text, title)
-        php_print(before, link, after)
+        link_ = apply_filters("the_shortlink", link_, shortlink_, text_, title_)
+        php_print(before_, link_, after_)
     # end if
 # end def the_shortlink
 #// 
@@ -3563,10 +3771,11 @@ def the_shortlink(text="", title="", before="", after="", *args_):
 #// }
 #// @return string|false The URL of the avatar on success, false on failure.
 #//
-def get_avatar_url(id_or_email=None, args=None, *args_):
+def get_avatar_url(id_or_email_=None, args_=None, *_args_):
     
-    args = get_avatar_data(id_or_email, args)
-    return args["url"]
+    
+    args_ = get_avatar_data(id_or_email_, args_)
+    return args_["url"]
 # end def get_avatar_url
 #// 
 #// Check if this comment type allows avatars to be retrieved.
@@ -3576,7 +3785,8 @@ def get_avatar_url(id_or_email=None, args=None, *args_):
 #// @param string $comment_type Comment type to check.
 #// @return bool Whether the comment type is allowed for retrieving avatars.
 #//
-def is_avatar_comment_type(comment_type=None, *args_):
+def is_avatar_comment_type(comment_type_=None, *_args_):
+    
     
     #// 
     #// Filters the list of allowed comment types for retrieving avatars.
@@ -3585,8 +3795,8 @@ def is_avatar_comment_type(comment_type=None, *args_):
     #// 
     #// @param array $types An array of content types. Default only contains 'comment'.
     #//
-    allowed_comment_types = apply_filters("get_avatar_comment_types", Array("comment"))
-    return php_in_array(comment_type, allowed_comment_types, True)
+    allowed_comment_types_ = apply_filters("get_avatar_comment_types", Array("comment"))
+    return php_in_array(comment_type_, allowed_comment_types_, True)
 # end def is_avatar_comment_type
 #// 
 #// Retrieves default data about the avatar.
@@ -3624,37 +3834,38 @@ def is_avatar_comment_type(comment_type=None, *args_):
 #// @type string $url          The URL of the avatar we found.
 #// }
 #//
-def get_avatar_data(id_or_email=None, args=None, *args_):
+def get_avatar_data(id_or_email_=None, args_=None, *_args_):
     
-    args = wp_parse_args(args, Array({"size": 96, "height": None, "width": None, "default": get_option("avatar_default", "mystery"), "force_default": False, "rating": get_option("avatar_rating"), "scheme": None, "processed_args": None, "extra_attr": ""}))
-    if php_is_numeric(args["size"]):
-        args["size"] = absint(args["size"])
-        if (not args["size"]):
-            args["size"] = 96
+    
+    args_ = wp_parse_args(args_, Array({"size": 96, "height": None, "width": None, "default": get_option("avatar_default", "mystery"), "force_default": False, "rating": get_option("avatar_rating"), "scheme": None, "processed_args": None, "extra_attr": ""}))
+    if php_is_numeric(args_["size"]):
+        args_["size"] = absint(args_["size"])
+        if (not args_["size"]):
+            args_["size"] = 96
         # end if
     else:
-        args["size"] = 96
+        args_["size"] = 96
     # end if
-    if php_is_numeric(args["height"]):
-        args["height"] = absint(args["height"])
-        if (not args["height"]):
-            args["height"] = args["size"]
+    if php_is_numeric(args_["height"]):
+        args_["height"] = absint(args_["height"])
+        if (not args_["height"]):
+            args_["height"] = args_["size"]
         # end if
     else:
-        args["height"] = args["size"]
+        args_["height"] = args_["size"]
     # end if
-    if php_is_numeric(args["width"]):
-        args["width"] = absint(args["width"])
-        if (not args["width"]):
-            args["width"] = args["size"]
+    if php_is_numeric(args_["width"]):
+        args_["width"] = absint(args_["width"])
+        if (not args_["width"]):
+            args_["width"] = args_["size"]
         # end if
     else:
-        args["width"] = args["size"]
+        args_["width"] = args_["size"]
     # end if
-    if php_empty(lambda : args["default"]):
-        args["default"] = get_option("avatar_default", "mystery")
+    if php_empty(lambda : args_["default"]):
+        args_["default"] = get_option("avatar_default", "mystery")
     # end if
-    for case in Switch(args["default"]):
+    for case in Switch(args_["default"]):
         if case("mm"):
             pass
         # end if
@@ -3662,17 +3873,17 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
             pass
         # end if
         if case("mysteryman"):
-            args["default"] = "mm"
+            args_["default"] = "mm"
             break
         # end if
         if case("gravatar_default"):
-            args["default"] = False
+            args_["default"] = False
             break
         # end if
     # end for
-    args["force_default"] = php_bool(args["force_default"])
-    args["rating"] = php_strtolower(args["rating"])
-    args["found_avatar"] = False
+    args_["force_default"] = php_bool(args_["force_default"])
+    args_["rating"] = php_strtolower(args_["rating"])
+    args_["found_avatar"] = False
     #// 
     #// Filters whether to retrieve the avatar URL early.
     #// 
@@ -3686,68 +3897,68 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
     #// @param mixed $id_or_email The Gravatar to retrieve. Accepts a user ID, Gravatar MD5 hash,
     #// user email, WP_User object, WP_Post object, or WP_Comment object.
     #//
-    args = apply_filters("pre_get_avatar_data", args, id_or_email)
-    if (php_isset(lambda : args["url"])):
+    args_ = apply_filters("pre_get_avatar_data", args_, id_or_email_)
+    if (php_isset(lambda : args_["url"])):
         #// This filter is documented in wp-includes/link-template.php
-        return apply_filters("get_avatar_data", args, id_or_email)
+        return apply_filters("get_avatar_data", args_, id_or_email_)
     # end if
-    email_hash = ""
-    user = False
-    email = False
-    if php_is_object(id_or_email) and (php_isset(lambda : id_or_email.comment_ID)):
-        id_or_email = get_comment(id_or_email)
+    email_hash_ = ""
+    user_ = False
+    email_ = False
+    if php_is_object(id_or_email_) and (php_isset(lambda : id_or_email_.comment_ID)):
+        id_or_email_ = get_comment(id_or_email_)
     # end if
     #// Process the user identifier.
-    if php_is_numeric(id_or_email):
-        user = get_user_by("id", absint(id_or_email))
-    elif php_is_string(id_or_email):
-        if php_strpos(id_or_email, "@md5.gravatar.com"):
+    if php_is_numeric(id_or_email_):
+        user_ = get_user_by("id", absint(id_or_email_))
+    elif php_is_string(id_or_email_):
+        if php_strpos(id_or_email_, "@md5.gravatar.com"):
             #// MD5 hash.
-            email_hash = php_explode("@", id_or_email)
+            email_hash_ = php_explode("@", id_or_email_)
         else:
             #// Email address.
-            email = id_or_email
+            email_ = id_or_email_
         # end if
-    elif type(id_or_email).__name__ == "WP_User":
+    elif type(id_or_email_).__name__ == "WP_User":
         #// User object.
-        user = id_or_email
-    elif type(id_or_email).__name__ == "WP_Post":
+        user_ = id_or_email_
+    elif type(id_or_email_).__name__ == "WP_Post":
         #// Post object.
-        user = get_user_by("id", php_int(id_or_email.post_author))
-    elif type(id_or_email).__name__ == "WP_Comment":
-        if (not is_avatar_comment_type(get_comment_type(id_or_email))):
-            args["url"] = False
+        user_ = get_user_by("id", php_int(id_or_email_.post_author))
+    elif type(id_or_email_).__name__ == "WP_Comment":
+        if (not is_avatar_comment_type(get_comment_type(id_or_email_))):
+            args_["url"] = False
             #// This filter is documented in wp-includes/link-template.php
-            return apply_filters("get_avatar_data", args, id_or_email)
+            return apply_filters("get_avatar_data", args_, id_or_email_)
         # end if
-        if (not php_empty(lambda : id_or_email.user_id)):
-            user = get_user_by("id", php_int(id_or_email.user_id))
+        if (not php_empty(lambda : id_or_email_.user_id)):
+            user_ = get_user_by("id", php_int(id_or_email_.user_id))
         # end if
-        if (not user) or is_wp_error(user) and (not php_empty(lambda : id_or_email.comment_author_email)):
-            email = id_or_email.comment_author_email
-        # end if
-    # end if
-    if (not email_hash):
-        if user:
-            email = user.user_email
-        # end if
-        if email:
-            email_hash = php_md5(php_strtolower(php_trim(email)))
+        if (not user_) or is_wp_error(user_) and (not php_empty(lambda : id_or_email_.comment_author_email)):
+            email_ = id_or_email_.comment_author_email
         # end if
     # end if
-    if email_hash:
-        args["found_avatar"] = True
-        gravatar_server = hexdec(email_hash[0]) % 3
+    if (not email_hash_):
+        if user_:
+            email_ = user_.user_email
+        # end if
+        if email_:
+            email_hash_ = php_md5(php_strtolower(php_trim(email_)))
+        # end if
+    # end if
+    if email_hash_:
+        args_["found_avatar"] = True
+        gravatar_server_ = hexdec(email_hash_[0]) % 3
     else:
-        gravatar_server = rand(0, 2)
+        gravatar_server_ = rand(0, 2)
     # end if
-    url_args = Array({"s": args["size"], "d": args["default"], "f": "y" if args["force_default"] else False, "r": args["rating"]})
+    url_args_ = Array({"s": args_["size"], "d": args_["default"], "f": "y" if args_["force_default"] else False, "r": args_["rating"]})
     if is_ssl():
-        url = "https://secure.gravatar.com/avatar/" + email_hash
+        url_ = "https://secure.gravatar.com/avatar/" + email_hash_
     else:
-        url = php_sprintf("http://%d.gravatar.com/avatar/%s", gravatar_server, email_hash)
+        url_ = php_sprintf("http://%d.gravatar.com/avatar/%s", gravatar_server_, email_hash_)
     # end if
-    url = add_query_arg(rawurlencode_deep(php_array_filter(url_args)), set_url_scheme(url, args["scheme"]))
+    url_ = add_query_arg(rawurlencode_deep(php_array_filter(url_args_)), set_url_scheme(url_, args_["scheme"]))
     #// 
     #// Filters the avatar URL.
     #// 
@@ -3758,7 +3969,7 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
     #// user email, WP_User object, WP_Post object, or WP_Comment object.
     #// @param array  $args        Arguments passed to get_avatar_data(), after processing.
     #//
-    args["url"] = apply_filters("get_avatar_url", url, id_or_email, args)
+    args_["url"] = apply_filters("get_avatar_url", url_, id_or_email_, args_)
     #// 
     #// Filters the avatar data.
     #// 
@@ -3768,7 +3979,7 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
     #// @param mixed $id_or_email The Gravatar to retrieve. Accepts a user ID, Gravatar MD5 hash,
     #// user email, WP_User object, WP_Post object, or WP_Comment object.
     #//
-    return apply_filters("get_avatar_data", args, id_or_email)
+    return apply_filters("get_avatar_data", args_, id_or_email_)
 # end def get_avatar_data
 #// 
 #// Retrieves the URL of a file in the theme.
@@ -3781,15 +3992,16 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
 #// @param string $file Optional. File to search for in the stylesheet directory.
 #// @return string The URL of the file.
 #//
-def get_theme_file_uri(file="", *args_):
+def get_theme_file_uri(file_="", *_args_):
     
-    file = php_ltrim(file, "/")
-    if php_empty(lambda : file):
-        url = get_stylesheet_directory_uri()
-    elif php_file_exists(get_stylesheet_directory() + "/" + file):
-        url = get_stylesheet_directory_uri() + "/" + file
+    
+    file_ = php_ltrim(file_, "/")
+    if php_empty(lambda : file_):
+        url_ = get_stylesheet_directory_uri()
+    elif php_file_exists(get_stylesheet_directory() + "/" + file_):
+        url_ = get_stylesheet_directory_uri() + "/" + file_
     else:
-        url = get_template_directory_uri() + "/" + file
+        url_ = get_template_directory_uri() + "/" + file_
     # end if
     #// 
     #// Filters the URL to a file in the theme.
@@ -3799,7 +4011,7 @@ def get_theme_file_uri(file="", *args_):
     #// @param string $url  The file URL.
     #// @param string $file The requested file to search for.
     #//
-    return apply_filters("theme_file_uri", url, file)
+    return apply_filters("theme_file_uri", url_, file_)
 # end def get_theme_file_uri
 #// 
 #// Retrieves the URL of a file in the parent theme.
@@ -3809,13 +4021,14 @@ def get_theme_file_uri(file="", *args_):
 #// @param string $file Optional. File to return the URL for in the template directory.
 #// @return string The URL of the file.
 #//
-def get_parent_theme_file_uri(file="", *args_):
+def get_parent_theme_file_uri(file_="", *_args_):
     
-    file = php_ltrim(file, "/")
-    if php_empty(lambda : file):
-        url = get_template_directory_uri()
+    
+    file_ = php_ltrim(file_, "/")
+    if php_empty(lambda : file_):
+        url_ = get_template_directory_uri()
     else:
-        url = get_template_directory_uri() + "/" + file
+        url_ = get_template_directory_uri() + "/" + file_
     # end if
     #// 
     #// Filters the URL to a file in the parent theme.
@@ -3825,7 +4038,7 @@ def get_parent_theme_file_uri(file="", *args_):
     #// @param string $url  The file URL.
     #// @param string $file The requested file to search for.
     #//
-    return apply_filters("parent_theme_file_uri", url, file)
+    return apply_filters("parent_theme_file_uri", url_, file_)
 # end def get_parent_theme_file_uri
 #// 
 #// Retrieves the path of a file in the theme.
@@ -3838,15 +4051,16 @@ def get_parent_theme_file_uri(file="", *args_):
 #// @param string $file Optional. File to search for in the stylesheet directory.
 #// @return string The path of the file.
 #//
-def get_theme_file_path(file="", *args_):
+def get_theme_file_path(file_="", *_args_):
     
-    file = php_ltrim(file, "/")
-    if php_empty(lambda : file):
-        path = get_stylesheet_directory()
-    elif php_file_exists(get_stylesheet_directory() + "/" + file):
-        path = get_stylesheet_directory() + "/" + file
+    
+    file_ = php_ltrim(file_, "/")
+    if php_empty(lambda : file_):
+        path_ = get_stylesheet_directory()
+    elif php_file_exists(get_stylesheet_directory() + "/" + file_):
+        path_ = get_stylesheet_directory() + "/" + file_
     else:
-        path = get_template_directory() + "/" + file
+        path_ = get_template_directory() + "/" + file_
     # end if
     #// 
     #// Filters the path to a file in the theme.
@@ -3856,7 +4070,7 @@ def get_theme_file_path(file="", *args_):
     #// @param string $path The file path.
     #// @param string $file The requested file to search for.
     #//
-    return apply_filters("theme_file_path", path, file)
+    return apply_filters("theme_file_path", path_, file_)
 # end def get_theme_file_path
 #// 
 #// Retrieves the path of a file in the parent theme.
@@ -3866,13 +4080,14 @@ def get_theme_file_path(file="", *args_):
 #// @param string $file Optional. File to return the path for in the template directory.
 #// @return string The path of the file.
 #//
-def get_parent_theme_file_path(file="", *args_):
+def get_parent_theme_file_path(file_="", *_args_):
     
-    file = php_ltrim(file, "/")
-    if php_empty(lambda : file):
-        path = get_template_directory()
+    
+    file_ = php_ltrim(file_, "/")
+    if php_empty(lambda : file_):
+        path_ = get_template_directory()
     else:
-        path = get_template_directory() + "/" + file
+        path_ = get_template_directory() + "/" + file_
     # end if
     #// 
     #// Filters the path to a file in the parent theme.
@@ -3882,7 +4097,7 @@ def get_parent_theme_file_path(file="", *args_):
     #// @param string $path The file path.
     #// @param string $file The requested file to search for.
     #//
-    return apply_filters("parent_theme_file_path", path, file)
+    return apply_filters("parent_theme_file_path", path_, file_)
 # end def get_parent_theme_file_path
 #// 
 #// Retrieves the URL to the privacy policy page.
@@ -3891,12 +4106,13 @@ def get_parent_theme_file_path(file="", *args_):
 #// 
 #// @return string The URL to the privacy policy page. Empty string if it doesn't exist.
 #//
-def get_privacy_policy_url(*args_):
+def get_privacy_policy_url(*_args_):
     
-    url = ""
-    policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
-    if (not php_empty(lambda : policy_page_id)) and get_post_status(policy_page_id) == "publish":
-        url = php_str(get_permalink(policy_page_id))
+    
+    url_ = ""
+    policy_page_id_ = php_int(get_option("wp_page_for_privacy_policy"))
+    if (not php_empty(lambda : policy_page_id_)) and get_post_status(policy_page_id_) == "publish":
+        url_ = php_str(get_permalink(policy_page_id_))
     # end if
     #// 
     #// Filters the URL of the privacy policy page.
@@ -3907,7 +4123,7 @@ def get_privacy_policy_url(*args_):
     #// if it doesn't exist.
     #// @param int    $policy_page_id The ID of privacy policy page.
     #//
-    return apply_filters("privacy_policy_url", url, policy_page_id)
+    return apply_filters("privacy_policy_url", url_, policy_page_id_)
 # end def get_privacy_policy_url
 #// 
 #// Displays the privacy policy link with formatting, when applicable.
@@ -3917,9 +4133,10 @@ def get_privacy_policy_url(*args_):
 #// @param string $before Optional. Display before privacy policy link. Default empty.
 #// @param string $after  Optional. Display after privacy policy link. Default empty.
 #//
-def the_privacy_policy_link(before="", after="", *args_):
+def the_privacy_policy_link(before_="", after_="", *_args_):
     
-    php_print(get_the_privacy_policy_link(before, after))
+    
+    php_print(get_the_privacy_policy_link(before_, after_))
 # end def the_privacy_policy_link
 #// 
 #// Returns the privacy policy link with formatting, when applicable.
@@ -3932,14 +4149,15 @@ def the_privacy_policy_link(before="", after="", *args_):
 #// @return string Markup for the link and surrounding elements. Empty string if it
 #// doesn't exist.
 #//
-def get_the_privacy_policy_link(before="", after="", *args_):
+def get_the_privacy_policy_link(before_="", after_="", *_args_):
     
-    link = ""
-    privacy_policy_url = get_privacy_policy_url()
-    policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
-    page_title = get_the_title(policy_page_id) if policy_page_id else ""
-    if privacy_policy_url and page_title:
-        link = php_sprintf("<a class=\"privacy-policy-link\" href=\"%s\">%s</a>", esc_url(privacy_policy_url), esc_html(page_title))
+    
+    link_ = ""
+    privacy_policy_url_ = get_privacy_policy_url()
+    policy_page_id_ = php_int(get_option("wp_page_for_privacy_policy"))
+    page_title_ = get_the_title(policy_page_id_) if policy_page_id_ else ""
+    if privacy_policy_url_ and page_title_:
+        link_ = php_sprintf("<a class=\"privacy-policy-link\" href=\"%s\">%s</a>", esc_url(privacy_policy_url_), esc_html(page_title_))
     # end if
     #// 
     #// Filters the privacy policy link.
@@ -3951,9 +4169,9 @@ def get_the_privacy_policy_link(before="", after="", *args_):
     #// @param string $privacy_policy_url The URL of the privacy policy. Empty string
     #// if it doesn't exist.
     #//
-    link = apply_filters("the_privacy_policy_link", link, privacy_policy_url)
-    if link:
-        return before + link + after
+    link_ = apply_filters("the_privacy_policy_link", link_, privacy_policy_url_)
+    if link_:
+        return before_ + link_ + after_
     # end if
     return ""
 # end def get_the_privacy_policy_link

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,6 +21,10 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Filesystem_Base
 #//
 class WP_Filesystem_FTPext(WP_Filesystem_Base):
+    #// 
+    #// @since 2.5.0
+    #// @var resource
+    #//
     link = Array()
     #// 
     #// Constructor.
@@ -34,7 +33,8 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// 
     #// @param array $opt
     #//
-    def __init__(self, opt=""):
+    def __init__(self, opt_=""):
+        
         
         self.method = "ftpext"
         self.errors = php_new_class("WP_Error", lambda : WP_Error())
@@ -47,29 +47,29 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
         if (not php_defined("FS_TIMEOUT")):
             php_define("FS_TIMEOUT", 240)
         # end if
-        if php_empty(lambda : opt["port"]):
+        if php_empty(lambda : opt_["port"]):
             self.options["port"] = 21
         else:
-            self.options["port"] = opt["port"]
+            self.options["port"] = opt_["port"]
         # end if
-        if php_empty(lambda : opt["hostname"]):
+        if php_empty(lambda : opt_["hostname"]):
             self.errors.add("empty_hostname", __("FTP hostname is required"))
         else:
-            self.options["hostname"] = opt["hostname"]
+            self.options["hostname"] = opt_["hostname"]
         # end if
         #// Check if the options provided are OK.
-        if php_empty(lambda : opt["username"]):
+        if php_empty(lambda : opt_["username"]):
             self.errors.add("empty_username", __("FTP username is required"))
         else:
-            self.options["username"] = opt["username"]
+            self.options["username"] = opt_["username"]
         # end if
-        if php_empty(lambda : opt["password"]):
+        if php_empty(lambda : opt_["password"]):
             self.errors.add("empty_password", __("FTP password is required"))
         else:
-            self.options["password"] = opt["password"]
+            self.options["password"] = opt_["password"]
         # end if
         self.options["ssl"] = False
-        if (php_isset(lambda : opt["connection_type"])) and "ftps" == opt["connection_type"]:
+        if (php_isset(lambda : opt_["connection_type"])) and "ftps" == opt_["connection_type"]:
             self.options["ssl"] = True
         # end if
     # end def __init__
@@ -81,6 +81,7 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @return bool True on success, false on failure.
     #//
     def connect(self):
+        
         
         if (php_isset(lambda : self.options["ssl"])) and self.options["ssl"] and php_function_exists("ftp_ssl_connect"):
             self.link = php_no_error(lambda: ftp_ssl_connect(self.options["hostname"], self.options["port"], FS_CONNECT_TIMEOUT))
@@ -111,32 +112,33 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @return string|false Read data on success, false if no temporary file could be opened,
     #// or if the file couldn't be retrieved.
     #//
-    def get_contents(self, file=None):
+    def get_contents(self, file_=None):
         
-        tempfile = wp_tempnam(file)
-        temp = fopen(tempfile, "w+")
-        if (not temp):
-            unlink(tempfile)
+        
+        tempfile_ = wp_tempnam(file_)
+        temp_ = fopen(tempfile_, "w+")
+        if (not temp_):
+            unlink(tempfile_)
             return False
         # end if
-        if (not ftp_fget(self.link, temp, file, FTP_BINARY)):
-            php_fclose(temp)
-            unlink(tempfile)
+        if (not ftp_fget(self.link, temp_, file_, FTP_BINARY)):
+            php_fclose(temp_)
+            unlink(tempfile_)
             return False
         # end if
-        fseek(temp, 0)
+        fseek(temp_, 0)
         #// Skip back to the start of the file being written to.
-        contents = ""
+        contents_ = ""
         while True:
             
-            if not ((not php_feof(temp))):
+            if not ((not php_feof(temp_))):
                 break
             # end if
-            contents += fread(temp, 8 * KB_IN_BYTES)
+            contents_ += fread(temp_, 8 * KB_IN_BYTES)
         # end while
-        php_fclose(temp)
-        unlink(tempfile)
-        return contents
+        php_fclose(temp_)
+        unlink(tempfile_)
+        return contents_
     # end def get_contents
     #// 
     #// Reads entire file into an array.
@@ -146,9 +148,10 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return array|false File contents in an array on success, false on failure.
     #//
-    def get_contents_array(self, file=None):
+    def get_contents_array(self, file_=None):
         
-        return php_explode("\n", self.get_contents(file))
+        
+        return php_explode("\n", self.get_contents(file_))
     # end def get_contents_array
     #// 
     #// Writes a string to a file.
@@ -161,30 +164,33 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def put_contents(self, file=None, contents=None, mode=False):
+    def put_contents(self, file_=None, contents_=None, mode_=None):
+        if mode_ is None:
+            mode_ = False
+        # end if
         
-        tempfile = wp_tempnam(file)
-        temp = fopen(tempfile, "wb+")
-        if (not temp):
-            unlink(tempfile)
+        tempfile_ = wp_tempnam(file_)
+        temp_ = fopen(tempfile_, "wb+")
+        if (not temp_):
+            unlink(tempfile_)
             return False
         # end if
         mbstring_binary_safe_encoding()
-        data_length = php_strlen(contents)
-        bytes_written = fwrite(temp, contents)
+        data_length_ = php_strlen(contents_)
+        bytes_written_ = fwrite(temp_, contents_)
         reset_mbstring_encoding()
-        if data_length != bytes_written:
-            php_fclose(temp)
-            unlink(tempfile)
+        if data_length_ != bytes_written_:
+            php_fclose(temp_)
+            unlink(tempfile_)
             return False
         # end if
-        fseek(temp, 0)
+        fseek(temp_, 0)
         #// Skip back to the start of the file being written to.
-        ret = ftp_fput(self.link, file, temp, FTP_BINARY)
-        php_fclose(temp)
-        unlink(tempfile)
-        self.chmod(file, mode)
-        return ret
+        ret_ = ftp_fput(self.link, file_, temp_, FTP_BINARY)
+        php_fclose(temp_)
+        unlink(tempfile_)
+        self.chmod(file_, mode_)
+        return ret_
     # end def put_contents
     #// 
     #// Gets the current working directory.
@@ -195,11 +201,12 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #//
     def cwd(self):
         
-        cwd = ftp_pwd(self.link)
-        if cwd:
-            cwd = trailingslashit(cwd)
+        
+        cwd_ = ftp_pwd(self.link)
+        if cwd_:
+            cwd_ = trailingslashit(cwd_)
         # end if
-        return cwd
+        return cwd_
     # end def cwd
     #// 
     #// Changes current directory.
@@ -209,9 +216,10 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $dir The new current directory.
     #// @return bool True on success, false on failure.
     #//
-    def chdir(self, dir=None):
+    def chdir(self, dir_=None):
         
-        return php_no_error(lambda: ftp_chdir(self.link, dir))
+        
+        return php_no_error(lambda: ftp_chdir(self.link, dir_))
     # end def chdir
     #// 
     #// Changes filesystem permissions.
@@ -225,29 +233,35 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def chmod(self, file=None, mode=False, recursive=False):
+    def chmod(self, file_=None, mode_=None, recursive_=None):
+        if mode_ is None:
+            mode_ = False
+        # end if
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if (not mode):
-            if self.is_file(file):
-                mode = FS_CHMOD_FILE
-            elif self.is_dir(file):
-                mode = FS_CHMOD_DIR
+        if (not mode_):
+            if self.is_file(file_):
+                mode_ = FS_CHMOD_FILE
+            elif self.is_dir(file_):
+                mode_ = FS_CHMOD_DIR
             else:
                 return False
             # end if
         # end if
         #// chmod any sub-objects if recursive.
-        if recursive and self.is_dir(file):
-            filelist = self.dirlist(file)
-            for filename,filemeta in filelist:
-                self.chmod(file + "/" + filename, mode, recursive)
+        if recursive_ and self.is_dir(file_):
+            filelist_ = self.dirlist(file_)
+            for filename_,filemeta_ in filelist_:
+                self.chmod(file_ + "/" + filename_, mode_, recursive_)
             # end for
         # end if
         #// chmod the file or directory.
         if (not php_function_exists("ftp_chmod")):
-            return php_bool(ftp_site(self.link, php_sprintf("CHMOD %o %s", mode, file)))
+            return php_bool(ftp_site(self.link, php_sprintf("CHMOD %o %s", mode_, file_)))
         # end if
-        return php_bool(ftp_chmod(self.link, mode, file))
+        return php_bool(ftp_chmod(self.link, mode_, file_))
     # end def chmod
     #// 
     #// Gets the file owner.
@@ -257,10 +271,11 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string|false Username of the owner on success, false on failure.
     #//
-    def owner(self, file=None):
+    def owner(self, file_=None):
         
-        dir = self.dirlist(file)
-        return dir[file]["owner"]
+        
+        dir_ = self.dirlist(file_)
+        return dir_[file_]["owner"]
     # end def owner
     #// 
     #// Gets the permissions of the specified file or filepath in their octal format.
@@ -270,10 +285,11 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string Mode of the file (the last 3 digits).
     #//
-    def getchmod(self, file=None):
+    def getchmod(self, file_=None):
         
-        dir = self.dirlist(file)
-        return dir[file]["permsn"]
+        
+        dir_ = self.dirlist(file_)
+        return dir_[file_]["permsn"]
     # end def getchmod
     #// 
     #// Gets the file's group.
@@ -283,10 +299,11 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string|false The group on success, false on failure.
     #//
-    def group(self, file=None):
+    def group(self, file_=None):
         
-        dir = self.dirlist(file)
-        return dir[file]["group"]
+        
+        dir_ = self.dirlist(file_)
+        return dir_[file_]["group"]
     # end def group
     #// 
     #// Copies a file.
@@ -301,16 +318,22 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// 0755 for dirs. Default false.
     #// @return bool True on success, false on failure.
     #//
-    def copy(self, source=None, destination=None, overwrite=False, mode=False):
+    def copy(self, source_=None, destination_=None, overwrite_=None, mode_=None):
+        if overwrite_ is None:
+            overwrite_ = False
+        # end if
+        if mode_ is None:
+            mode_ = False
+        # end if
         
-        if (not overwrite) and self.exists(destination):
+        if (not overwrite_) and self.exists(destination_):
             return False
         # end if
-        content = self.get_contents(source)
-        if False == content:
+        content_ = self.get_contents(source_)
+        if False == content_:
             return False
         # end if
-        return self.put_contents(destination, content, mode)
+        return self.put_contents(destination_, content_, mode_)
     # end def copy
     #// 
     #// Moves a file.
@@ -323,9 +346,12 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def move(self, source=None, destination=None, overwrite=False):
+    def move(self, source_=None, destination_=None, overwrite_=None):
+        if overwrite_ is None:
+            overwrite_ = False
+        # end if
         
-        return ftp_rename(self.link, source, destination)
+        return ftp_rename(self.link, source_, destination_)
     # end def move
     #// 
     #// Deletes a file or directory.
@@ -339,24 +365,30 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def delete(self, file=None, recursive=False, type=False):
+    def delete(self, file_=None, recursive_=None, type_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
+        if type_ is None:
+            type_ = False
+        # end if
         
-        if php_empty(lambda : file):
+        if php_empty(lambda : file_):
             return False
         # end if
-        if "f" == type or self.is_file(file):
-            return ftp_delete(self.link, file)
+        if "f" == type_ or self.is_file(file_):
+            return ftp_delete(self.link, file_)
         # end if
-        if (not recursive):
-            return ftp_rmdir(self.link, file)
+        if (not recursive_):
+            return ftp_rmdir(self.link, file_)
         # end if
-        filelist = self.dirlist(trailingslashit(file))
-        if (not php_empty(lambda : filelist)):
-            for delete_file in filelist:
-                self.delete(trailingslashit(file) + delete_file["name"], recursive, delete_file["type"])
+        filelist_ = self.dirlist(trailingslashit(file_))
+        if (not php_empty(lambda : filelist_)):
+            for delete_file_ in filelist_:
+                self.delete(trailingslashit(file_) + delete_file_["name"], recursive_, delete_file_["type"])
             # end for
         # end if
-        return ftp_rmdir(self.link, file)
+        return ftp_rmdir(self.link, file_)
     # end def delete
     #// 
     #// Checks if a file or directory exists.
@@ -366,14 +398,15 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to file or directory.
     #// @return bool Whether $file exists or not.
     #//
-    def exists(self, file=None):
+    def exists(self, file_=None):
         
-        list = ftp_nlist(self.link, file)
-        if php_empty(lambda : list) and self.is_dir(file):
+        
+        list_ = ftp_nlist(self.link, file_)
+        if php_empty(lambda : list_) and self.is_dir(file_):
             return True
             pass
         # end if
-        return (not php_empty(lambda : list))
+        return (not php_empty(lambda : list_))
         pass
     # end def exists
     #// 
@@ -384,9 +417,10 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file File path.
     #// @return bool Whether $file is a file.
     #//
-    def is_file(self, file=None):
+    def is_file(self, file_=None):
         
-        return self.exists(file) and (not self.is_dir(file))
+        
+        return self.exists(file_) and (not self.is_dir(file_))
     # end def is_file
     #// 
     #// Checks if resource is a directory.
@@ -396,12 +430,13 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $path Directory path.
     #// @return bool Whether $path is a directory.
     #//
-    def is_dir(self, path=None):
+    def is_dir(self, path_=None):
         
-        cwd = self.cwd()
-        result = php_no_error(lambda: ftp_chdir(self.link, trailingslashit(path)))
-        if result and path == self.cwd() or self.cwd() != cwd:
-            php_no_error(lambda: ftp_chdir(self.link, cwd))
+        
+        cwd_ = self.cwd()
+        result_ = php_no_error(lambda: ftp_chdir(self.link, trailingslashit(path_)))
+        if result_ and path_ == self.cwd() or self.cwd() != cwd_:
+            php_no_error(lambda: ftp_chdir(self.link, cwd_))
             return True
         # end if
         return False
@@ -414,7 +449,8 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return bool Whether $file is readable.
     #//
-    def is_readable(self, file=None):
+    def is_readable(self, file_=None):
+        
         
         return True
     # end def is_readable
@@ -426,7 +462,8 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to file or directory.
     #// @return bool Whether $file is writable.
     #//
-    def is_writable(self, file=None):
+    def is_writable(self, file_=None):
+        
         
         return True
     # end def is_writable
@@ -438,7 +475,8 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Unix timestamp representing last access time, false on failure.
     #//
-    def atime(self, file=None):
+    def atime(self, file_=None):
+        
         
         return False
     # end def atime
@@ -450,9 +488,10 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Unix timestamp representing modification time, false on failure.
     #//
-    def mtime(self, file=None):
+    def mtime(self, file_=None):
         
-        return ftp_mdtm(self.link, file)
+        
+        return ftp_mdtm(self.link, file_)
     # end def mtime
     #// 
     #// Gets the file size (in bytes).
@@ -462,9 +501,10 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Size of the file in bytes on success, false on failure.
     #//
-    def size(self, file=None):
+    def size(self, file_=None):
         
-        return ftp_size(self.link, file)
+        
+        return ftp_size(self.link, file_)
     # end def size
     #// 
     #// Sets the access and modification times of a file.
@@ -480,7 +520,8 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// Default 0.
     #// @return bool True on success, false on failure.
     #//
-    def touch(self, file=None, time=0, atime=0):
+    def touch(self, file_=None, time_=0, atime_=0):
+        
         
         return False
     # end def touch
@@ -498,16 +539,25 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def mkdir(self, path=None, chmod=False, chown=False, chgrp=False):
+    def mkdir(self, path_=None, chmod_=None, chown_=None, chgrp_=None):
+        if chmod_ is None:
+            chmod_ = False
+        # end if
+        if chown_ is None:
+            chown_ = False
+        # end if
+        if chgrp_ is None:
+            chgrp_ = False
+        # end if
         
-        path = untrailingslashit(path)
-        if php_empty(lambda : path):
+        path_ = untrailingslashit(path_)
+        if php_empty(lambda : path_):
             return False
         # end if
-        if (not ftp_mkdir(self.link, path)):
+        if (not ftp_mkdir(self.link, path_)):
             return False
         # end if
-        self.chmod(path, chmod)
+        self.chmod(path_, chmod_)
         return True
     # end def mkdir
     #// 
@@ -520,95 +570,99 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def rmdir(self, path=None, recursive=False):
+    def rmdir(self, path_=None, recursive_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        return self.delete(path, recursive)
+        return self.delete(path_, recursive_)
     # end def rmdir
     #// 
     #// @staticvar bool $is_windows
     #// @param string $line
     #// @return array
     #//
-    def parselisting(self, line=None):
+    def parselisting(self, line_=None):
         
-        parselisting.is_windows = None
-        if is_null(parselisting.is_windows):
-            parselisting.is_windows = php_stripos(ftp_systype(self.link), "win") != False
+        
+        is_windows_ = None
+        if is_null(is_windows_):
+            is_windows_ = php_stripos(ftp_systype(self.link), "win") != False
         # end if
-        if parselisting.is_windows and php_preg_match("/([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)/", line, lucifer):
-            b = Array()
-            if lucifer[3] < 70:
-                lucifer[3] += 2000
+        if is_windows_ and php_preg_match("/([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)/", line_, lucifer_):
+            b_ = Array()
+            if lucifer_[3] < 70:
+                lucifer_[3] += 2000
             else:
-                lucifer[3] += 1900
+                lucifer_[3] += 1900
                 pass
             # end if
-            b["isdir"] = "<DIR>" == lucifer[7]
-            if b["isdir"]:
-                b["type"] = "d"
+            b_["isdir"] = "<DIR>" == lucifer_[7]
+            if b_["isdir"]:
+                b_["type"] = "d"
             else:
-                b["type"] = "f"
+                b_["type"] = "f"
             # end if
-            b["size"] = lucifer[7]
-            b["month"] = lucifer[1]
-            b["day"] = lucifer[2]
-            b["year"] = lucifer[3]
-            b["hour"] = lucifer[4]
-            b["minute"] = lucifer[5]
-            b["time"] = mktime(lucifer[4] + 12 if strcasecmp(lucifer[6], "PM") == 0 else 0, lucifer[5], 0, lucifer[1], lucifer[2], lucifer[3])
-            b["am/pm"] = lucifer[6]
-            b["name"] = lucifer[8]
-        elif (not parselisting.is_windows):
-            lucifer = php_preg_split("/[ ]/", line, 9, PREG_SPLIT_NO_EMPTY)
-            if lucifer:
+            b_["size"] = lucifer_[7]
+            b_["month"] = lucifer_[1]
+            b_["day"] = lucifer_[2]
+            b_["year"] = lucifer_[3]
+            b_["hour"] = lucifer_[4]
+            b_["minute"] = lucifer_[5]
+            b_["time"] = mktime(lucifer_[4] + 12 if strcasecmp(lucifer_[6], "PM") == 0 else 0, lucifer_[5], 0, lucifer_[1], lucifer_[2], lucifer_[3])
+            b_["am/pm"] = lucifer_[6]
+            b_["name"] = lucifer_[8]
+        elif (not is_windows_):
+            lucifer_ = php_preg_split("/[ ]/", line_, 9, PREG_SPLIT_NO_EMPTY)
+            if lucifer_:
                 #// echo $line."\n";
-                lcount = php_count(lucifer)
-                if lcount < 8:
+                lcount_ = php_count(lucifer_)
+                if lcount_ < 8:
                     return ""
                 # end if
-                b = Array()
-                b["isdir"] = "d" == lucifer[0][0]
-                b["islink"] = "l" == lucifer[0][0]
-                if b["isdir"]:
-                    b["type"] = "d"
-                elif b["islink"]:
-                    b["type"] = "l"
+                b_ = Array()
+                b_["isdir"] = "d" == lucifer_[0][0]
+                b_["islink"] = "l" == lucifer_[0][0]
+                if b_["isdir"]:
+                    b_["type"] = "d"
+                elif b_["islink"]:
+                    b_["type"] = "l"
                 else:
-                    b["type"] = "f"
+                    b_["type"] = "f"
                 # end if
-                b["perms"] = lucifer[0]
-                b["permsn"] = self.getnumchmodfromh(b["perms"])
-                b["number"] = lucifer[1]
-                b["owner"] = lucifer[2]
-                b["group"] = lucifer[3]
-                b["size"] = lucifer[4]
-                if 8 == lcount:
-                    sscanf(lucifer[5], "%d-%d-%d", b["year"], b["month"], b["day"])
-                    sscanf(lucifer[6], "%d:%d", b["hour"], b["minute"])
-                    b["time"] = mktime(b["hour"], b["minute"], 0, b["month"], b["day"], b["year"])
-                    b["name"] = lucifer[7]
+                b_["perms"] = lucifer_[0]
+                b_["permsn"] = self.getnumchmodfromh(b_["perms"])
+                b_["number"] = lucifer_[1]
+                b_["owner"] = lucifer_[2]
+                b_["group"] = lucifer_[3]
+                b_["size"] = lucifer_[4]
+                if 8 == lcount_:
+                    sscanf(lucifer_[5], "%d-%d-%d", b_["year"], b_["month"], b_["day"])
+                    sscanf(lucifer_[6], "%d:%d", b_["hour"], b_["minute"])
+                    b_["time"] = mktime(b_["hour"], b_["minute"], 0, b_["month"], b_["day"], b_["year"])
+                    b_["name"] = lucifer_[7]
                 else:
-                    b["month"] = lucifer[5]
-                    b["day"] = lucifer[6]
-                    if php_preg_match("/([0-9]{2}):([0-9]{2})/", lucifer[7], l2):
-                        b["year"] = gmdate("Y")
-                        b["hour"] = l2[1]
-                        b["minute"] = l2[2]
+                    b_["month"] = lucifer_[5]
+                    b_["day"] = lucifer_[6]
+                    if php_preg_match("/([0-9]{2}):([0-9]{2})/", lucifer_[7], l2_):
+                        b_["year"] = gmdate("Y")
+                        b_["hour"] = l2_[1]
+                        b_["minute"] = l2_[2]
                     else:
-                        b["year"] = lucifer[7]
-                        b["hour"] = 0
-                        b["minute"] = 0
+                        b_["year"] = lucifer_[7]
+                        b_["hour"] = 0
+                        b_["minute"] = 0
                     # end if
-                    b["time"] = strtotime(php_sprintf("%d %s %d %02d:%02d", b["day"], b["month"], b["year"], b["hour"], b["minute"]))
-                    b["name"] = lucifer[8]
+                    b_["time"] = strtotime(php_sprintf("%d %s %d %02d:%02d", b_["day"], b_["month"], b_["year"], b_["hour"], b_["minute"]))
+                    b_["name"] = lucifer_[8]
                 # end if
             # end if
         # end if
         #// Replace symlinks formatted as "source -> target" with just the source name.
-        if (php_isset(lambda : b["islink"])) and b["islink"]:
-            b["name"] = php_preg_replace("/(\\s*->\\s*.*)$/", "", b["name"])
+        if (php_isset(lambda : b_["islink"])) and b_["islink"]:
+            b_["name"] = php_preg_replace("/(\\s*->\\s*.*)$/", "", b_["name"])
         # end if
-        return b
+        return b_
     # end def parselisting
     #// 
     #// Gets details for files in a directory or a specific file.
@@ -635,54 +689,60 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @type mixed  $files       If a directory and $recursive is true, contains another array of files.
     #// }
     #//
-    def dirlist(self, path=".", include_hidden=True, recursive=False):
-        
-        if self.is_file(path):
-            limit_file = php_basename(path)
-            path = php_dirname(path) + "/"
-        else:
-            limit_file = False
+    def dirlist(self, path_=".", include_hidden_=None, recursive_=None):
+        if include_hidden_ is None:
+            include_hidden_ = True
         # end if
-        pwd = ftp_pwd(self.link)
-        if (not php_no_error(lambda: ftp_chdir(self.link, path))):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
+        
+        if self.is_file(path_):
+            limit_file_ = php_basename(path_)
+            path_ = php_dirname(path_) + "/"
+        else:
+            limit_file_ = False
+        # end if
+        pwd_ = ftp_pwd(self.link)
+        if (not php_no_error(lambda: ftp_chdir(self.link, path_))):
             #// Can't change to folder = folder doesn't exist.
             return False
         # end if
-        list = ftp_rawlist(self.link, "-a", False)
-        php_no_error(lambda: ftp_chdir(self.link, pwd))
-        if php_empty(lambda : list):
+        list_ = ftp_rawlist(self.link, "-a", False)
+        php_no_error(lambda: ftp_chdir(self.link, pwd_))
+        if php_empty(lambda : list_):
             #// Empty array = non-existent folder (real folder will show . at least).
             return False
         # end if
-        dirlist = Array()
-        for k,v in list:
-            entry = self.parselisting(v)
-            if php_empty(lambda : entry):
+        dirlist_ = Array()
+        for k_,v_ in list_:
+            entry_ = self.parselisting(v_)
+            if php_empty(lambda : entry_):
                 continue
             # end if
-            if "." == entry["name"] or ".." == entry["name"]:
+            if "." == entry_["name"] or ".." == entry_["name"]:
                 continue
             # end if
-            if (not include_hidden) and "." == entry["name"][0]:
+            if (not include_hidden_) and "." == entry_["name"][0]:
                 continue
             # end if
-            if limit_file and entry["name"] != limit_file:
+            if limit_file_ and entry_["name"] != limit_file_:
                 continue
             # end if
-            dirlist[entry["name"]] = entry
+            dirlist_[entry_["name"]] = entry_
         # end for
-        ret = Array()
-        for struc in dirlist:
-            if "d" == struc["type"]:
-                if recursive:
-                    struc["files"] = self.dirlist(path + "/" + struc["name"], include_hidden, recursive)
+        ret_ = Array()
+        for struc_ in dirlist_:
+            if "d" == struc_["type"]:
+                if recursive_:
+                    struc_["files"] = self.dirlist(path_ + "/" + struc_["name"], include_hidden_, recursive_)
                 else:
-                    struc["files"] = Array()
+                    struc_["files"] = Array()
                 # end if
             # end if
-            ret[struc["name"]] = struc
+            ret_[struc_["name"]] = struc_
         # end for
-        return ret
+        return ret_
     # end def dirlist
     #// 
     #// Destructor.
@@ -690,6 +750,7 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #// @since 2.5.0
     #//
     def __del__(self):
+        
         
         if self.link:
             ftp_close(self.link)

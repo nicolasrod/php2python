@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -39,19 +34,20 @@ if (not php_class_exists("TwentyTwenty_Script_Loader")):
         #// @param string $handle The script handle.
         #// @return string Script HTML string.
         #//
-        def filter_script_loader_tag(self, tag=None, handle=None):
+        def filter_script_loader_tag(self, tag_=None, handle_=None):
             
-            for attr in Array("async", "defer"):
-                if (not wp_scripts().get_data(handle, attr)):
+            
+            for attr_ in Array("async", "defer"):
+                if (not wp_scripts().get_data(handle_, attr_)):
                     continue
                 # end if
                 #// Prevent adding attribute when already added in #12009.
-                if (not php_preg_match(str(":\\s") + str(attr) + str("(=|>|\\s):"), tag)):
-                    tag = php_preg_replace(":(?=></script>):", str(" ") + str(attr), tag, 1)
+                if (not php_preg_match(str(":\\s") + str(attr_) + str("(=|>|\\s):"), tag_)):
+                    tag_ = php_preg_replace(":(?=></script>):", str(" ") + str(attr_), tag_, 1)
                 # end if
                 break
             # end for
-            return tag
+            return tag_
         # end def filter_script_loader_tag
     # end class TwentyTwenty_Script_Loader
 # end if

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -412,8 +407,22 @@ php_define("EBML_ID_CLUSTERREFERENCEVIRTUAL", 125)
 #// @todo After rewrite implement stream size calculation, that will provide additional useful info and enable AAC/FLAC audio bitrate detection
 #//
 class getid3_matroska(getid3_handler):
+    #// 
+    #// If true, do not return information about CLUSTER chunks, since there's a lot of them
+    #// and they're not usually useful [default: TRUE].
+    #// 
+    #// @var bool
+    #//
     hide_clusters = True
+    #// 
+    #// True to parse the whole file, not only header [default: FALSE].
+    #// 
+    #// @var bool
+    #//
     parse_whole_file = False
+    #// 
+    #// Private parser settings/placeholders.
+    #//
     EBMLbuffer = ""
     EBMLbuffer_offset = 0
     EBMLbuffer_length = 0
@@ -424,93 +433,94 @@ class getid3_matroska(getid3_handler):
     #//
     def analyze(self):
         
-        info = self.getid3.info
+        
+        info_ = self.getid3.info
         #// parse container
         try: 
-            self.parseebml(info)
-        except Exception as e:
-            self.error("EBML parser: " + e.getmessage())
+            self.parseebml(info_)
+        except Exception as e_:
+            self.error("EBML parser: " + e_.getmessage())
         # end try
         #// calculate playtime
-        if (php_isset(lambda : info["matroska"]["info"])) and php_is_array(info["matroska"]["info"]):
-            for key,infoarray in info["matroska"]["info"]:
-                if (php_isset(lambda : infoarray["Duration"])):
+        if (php_isset(lambda : info_["matroska"]["info"])) and php_is_array(info_["matroska"]["info"]):
+            for key_,infoarray_ in info_["matroska"]["info"]:
+                if (php_isset(lambda : infoarray_["Duration"])):
                     #// TimecodeScale is how many nanoseconds each Duration unit is
-                    info["playtime_seconds"] = infoarray["Duration"] * infoarray["TimecodeScale"] if (php_isset(lambda : infoarray["TimecodeScale"])) else 1000000 / 1000000000
+                    info_["playtime_seconds"] = infoarray_["Duration"] * infoarray_["TimecodeScale"] if (php_isset(lambda : infoarray_["TimecodeScale"])) else 1000000 / 1000000000
                     break
                 # end if
             # end for
         # end if
         #// extract tags
-        if (php_isset(lambda : info["matroska"]["tags"])) and php_is_array(info["matroska"]["tags"]):
-            for key,infoarray in info["matroska"]["tags"]:
-                self.extractcommentssimpletag(infoarray)
+        if (php_isset(lambda : info_["matroska"]["tags"])) and php_is_array(info_["matroska"]["tags"]):
+            for key_,infoarray_ in info_["matroska"]["tags"]:
+                self.extractcommentssimpletag(infoarray_)
             # end for
         # end if
         #// process tracks
-        if (php_isset(lambda : info["matroska"]["tracks"]["tracks"])) and php_is_array(info["matroska"]["tracks"]["tracks"]):
-            for key,trackarray in info["matroska"]["tracks"]["tracks"]:
-                track_info = Array()
-                track_info["dataformat"] = self.codecidtocommonname(trackarray["CodecID"])
-                track_info["default"] = trackarray["FlagDefault"] if (php_isset(lambda : trackarray["FlagDefault"])) else True
-                if (php_isset(lambda : trackarray["Name"])):
-                    track_info["name"] = trackarray["Name"]
+        if (php_isset(lambda : info_["matroska"]["tracks"]["tracks"])) and php_is_array(info_["matroska"]["tracks"]["tracks"]):
+            for key_,trackarray_ in info_["matroska"]["tracks"]["tracks"]:
+                track_info_ = Array()
+                track_info_["dataformat"] = self.codecidtocommonname(trackarray_["CodecID"])
+                track_info_["default"] = trackarray_["FlagDefault"] if (php_isset(lambda : trackarray_["FlagDefault"])) else True
+                if (php_isset(lambda : trackarray_["Name"])):
+                    track_info_["name"] = trackarray_["Name"]
                 # end if
-                for case in Switch(trackarray["TrackType"]):
+                for case in Switch(trackarray_["TrackType"]):
                     if case(1):
                         #// Video
-                        track_info["resolution_x"] = trackarray["PixelWidth"]
-                        track_info["resolution_y"] = trackarray["PixelHeight"]
-                        track_info["display_unit"] = self.displayunit(trackarray["DisplayUnit"] if (php_isset(lambda : trackarray["DisplayUnit"])) else 0)
-                        track_info["display_x"] = trackarray["DisplayWidth"] if (php_isset(lambda : trackarray["DisplayWidth"])) else trackarray["PixelWidth"]
-                        track_info["display_y"] = trackarray["DisplayHeight"] if (php_isset(lambda : trackarray["DisplayHeight"])) else trackarray["PixelHeight"]
-                        if (php_isset(lambda : trackarray["PixelCropBottom"])):
-                            track_info["crop_bottom"] = trackarray["PixelCropBottom"]
+                        track_info_["resolution_x"] = trackarray_["PixelWidth"]
+                        track_info_["resolution_y"] = trackarray_["PixelHeight"]
+                        track_info_["display_unit"] = self.displayunit(trackarray_["DisplayUnit"] if (php_isset(lambda : trackarray_["DisplayUnit"])) else 0)
+                        track_info_["display_x"] = trackarray_["DisplayWidth"] if (php_isset(lambda : trackarray_["DisplayWidth"])) else trackarray_["PixelWidth"]
+                        track_info_["display_y"] = trackarray_["DisplayHeight"] if (php_isset(lambda : trackarray_["DisplayHeight"])) else trackarray_["PixelHeight"]
+                        if (php_isset(lambda : trackarray_["PixelCropBottom"])):
+                            track_info_["crop_bottom"] = trackarray_["PixelCropBottom"]
                         # end if
-                        if (php_isset(lambda : trackarray["PixelCropTop"])):
-                            track_info["crop_top"] = trackarray["PixelCropTop"]
+                        if (php_isset(lambda : trackarray_["PixelCropTop"])):
+                            track_info_["crop_top"] = trackarray_["PixelCropTop"]
                         # end if
-                        if (php_isset(lambda : trackarray["PixelCropLeft"])):
-                            track_info["crop_left"] = trackarray["PixelCropLeft"]
+                        if (php_isset(lambda : trackarray_["PixelCropLeft"])):
+                            track_info_["crop_left"] = trackarray_["PixelCropLeft"]
                         # end if
-                        if (php_isset(lambda : trackarray["PixelCropRight"])):
-                            track_info["crop_right"] = trackarray["PixelCropRight"]
+                        if (php_isset(lambda : trackarray_["PixelCropRight"])):
+                            track_info_["crop_right"] = trackarray_["PixelCropRight"]
                         # end if
-                        if (php_isset(lambda : trackarray["DefaultDuration"])):
-                            track_info["frame_rate"] = round(1000000000 / trackarray["DefaultDuration"], 3)
+                        if (php_isset(lambda : trackarray_["DefaultDuration"])):
+                            track_info_["frame_rate"] = round(1000000000 / trackarray_["DefaultDuration"], 3)
                         # end if
-                        if (php_isset(lambda : trackarray["CodecName"])):
-                            track_info["codec"] = trackarray["CodecName"]
+                        if (php_isset(lambda : trackarray_["CodecName"])):
+                            track_info_["codec"] = trackarray_["CodecName"]
                         # end if
-                        for case in Switch(trackarray["CodecID"]):
+                        for case in Switch(trackarray_["CodecID"]):
                             if case("V_MS/VFW/FOURCC"):
                                 getid3_lib.includedependency(GETID3_INCLUDEPATH + "module.audio-video.riff.php", __FILE__, True)
-                                parsed = getid3_riff.parsebitmapinfoheader(trackarray["CodecPrivate"])
-                                track_info["codec"] = getid3_riff.fourcclookup(parsed["fourcc"])
-                                info["matroska"]["track_codec_parsed"][trackarray["TrackNumber"]] = parsed
+                                parsed_ = getid3_riff.parsebitmapinfoheader(trackarray_["CodecPrivate"])
+                                track_info_["codec"] = getid3_riff.fourcclookup(parsed_["fourcc"])
+                                info_["matroska"]["track_codec_parsed"][trackarray_["TrackNumber"]] = parsed_
                                 break
                             # end if
                         # end for
-                        info["video"]["streams"][-1] = track_info
+                        info_["video"]["streams"][-1] = track_info_
                         break
                     # end if
                     if case(2):
                         #// Audio
-                        track_info["sample_rate"] = trackarray["SamplingFrequency"] if (php_isset(lambda : trackarray["SamplingFrequency"])) else 8000
-                        track_info["channels"] = trackarray["Channels"] if (php_isset(lambda : trackarray["Channels"])) else 1
-                        track_info["language"] = trackarray["Language"] if (php_isset(lambda : trackarray["Language"])) else "eng"
-                        if (php_isset(lambda : trackarray["BitDepth"])):
-                            track_info["bits_per_sample"] = trackarray["BitDepth"]
+                        track_info_["sample_rate"] = trackarray_["SamplingFrequency"] if (php_isset(lambda : trackarray_["SamplingFrequency"])) else 8000
+                        track_info_["channels"] = trackarray_["Channels"] if (php_isset(lambda : trackarray_["Channels"])) else 1
+                        track_info_["language"] = trackarray_["Language"] if (php_isset(lambda : trackarray_["Language"])) else "eng"
+                        if (php_isset(lambda : trackarray_["BitDepth"])):
+                            track_info_["bits_per_sample"] = trackarray_["BitDepth"]
                         # end if
-                        if (php_isset(lambda : trackarray["CodecName"])):
-                            track_info["codec"] = trackarray["CodecName"]
+                        if (php_isset(lambda : trackarray_["CodecName"])):
+                            track_info_["codec"] = trackarray_["CodecName"]
                         # end if
-                        for case in Switch(trackarray["CodecID"]):
+                        for case in Switch(trackarray_["CodecID"]):
                             if case("A_PCM/INT/LIT"):
                                 pass
                             # end if
                             if case("A_PCM/INT/BIG"):
-                                track_info["bitrate"] = track_info["sample_rate"] * track_info["channels"] * trackarray["BitDepth"]
+                                track_info_["bitrate"] = track_info_["sample_rate"] * track_info_["channels"] * trackarray_["BitDepth"]
                                 break
                             # end if
                             if case("A_AC3"):
@@ -529,53 +539,53 @@ class getid3_matroska(getid3_handler):
                                 pass
                             # end if
                             if case("A_FLAC"):
-                                module_dataformat = "mp3" if track_info["dataformat"] == "mp2" else "ac3" if track_info["dataformat"] == "eac3" else track_info["dataformat"]
-                                getid3_lib.includedependency(GETID3_INCLUDEPATH + "module.audio." + module_dataformat + ".php", __FILE__, True)
-                                if (not (php_isset(lambda : info["matroska"]["track_data_offsets"][trackarray["TrackNumber"]]))):
-                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because $info[matroska][track_data_offsets][" + trackarray["TrackNumber"] + "] not set")
+                                module_dataformat_ = "mp3" if track_info_["dataformat"] == "mp2" else "ac3" if track_info_["dataformat"] == "eac3" else track_info_["dataformat"]
+                                getid3_lib.includedependency(GETID3_INCLUDEPATH + "module.audio." + module_dataformat_ + ".php", __FILE__, True)
+                                if (not (php_isset(lambda : info_["matroska"]["track_data_offsets"][trackarray_["TrackNumber"]]))):
+                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because $info[matroska][track_data_offsets][" + trackarray_["TrackNumber"] + "] not set")
                                     break
                                 # end if
                                 #// create temp instance
-                                getid3_temp = php_new_class("getID3", lambda : getID3())
-                                if track_info["dataformat"] != "flac":
-                                    getid3_temp.openfile(self.getid3.filename)
+                                getid3_temp_ = php_new_class("getID3", lambda : getID3())
+                                if track_info_["dataformat"] != "flac":
+                                    getid3_temp_.openfile(self.getid3.filename)
                                 # end if
-                                getid3_temp.info["avdataoffset"] = info["matroska"]["track_data_offsets"][trackarray["TrackNumber"]]["offset"]
-                                if track_info["dataformat"][0] == "m" or track_info["dataformat"] == "flac":
-                                    getid3_temp.info["avdataend"] = info["matroska"]["track_data_offsets"][trackarray["TrackNumber"]]["offset"] + info["matroska"]["track_data_offsets"][trackarray["TrackNumber"]]["length"]
+                                getid3_temp_.info["avdataoffset"] = info_["matroska"]["track_data_offsets"][trackarray_["TrackNumber"]]["offset"]
+                                if track_info_["dataformat"][0] == "m" or track_info_["dataformat"] == "flac":
+                                    getid3_temp_.info["avdataend"] = info_["matroska"]["track_data_offsets"][trackarray_["TrackNumber"]]["offset"] + info_["matroska"]["track_data_offsets"][trackarray_["TrackNumber"]]["length"]
                                 # end if
                                 #// analyze
-                                class_ = "getid3_" + module_dataformat
-                                header_data_key = "mpeg" if track_info["dataformat"][0] == "m" else track_info["dataformat"]
-                                getid3_audio = php_new_class(class_, lambda : {**locals(), **globals()}[class_](getid3_temp, __CLASS__))
-                                if track_info["dataformat"] == "flac":
-                                    getid3_audio.analyzestring(trackarray["CodecPrivate"])
+                                class_ = "getid3_" + module_dataformat_
+                                header_data_key_ = "mpeg" if track_info_["dataformat"][0] == "m" else track_info_["dataformat"]
+                                getid3_audio_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_](getid3_temp_, __CLASS__))
+                                if track_info_["dataformat"] == "flac":
+                                    getid3_audio_.analyzestring(trackarray_["CodecPrivate"])
                                 else:
-                                    getid3_audio.analyze()
+                                    getid3_audio_.analyze()
                                 # end if
-                                if (not php_empty(lambda : getid3_temp.info[header_data_key])):
-                                    info["matroska"]["track_codec_parsed"][trackarray["TrackNumber"]] = getid3_temp.info[header_data_key]
-                                    if (php_isset(lambda : getid3_temp.info["audio"])) and php_is_array(getid3_temp.info["audio"]):
-                                        for sub_key,value in getid3_temp.info["audio"]:
-                                            track_info[sub_key] = value
+                                if (not php_empty(lambda : getid3_temp_.info[header_data_key_])):
+                                    info_["matroska"]["track_codec_parsed"][trackarray_["TrackNumber"]] = getid3_temp_.info[header_data_key_]
+                                    if (php_isset(lambda : getid3_temp_.info["audio"])) and php_is_array(getid3_temp_.info["audio"]):
+                                        for sub_key_,value_ in getid3_temp_.info["audio"]:
+                                            track_info_[sub_key_] = value_
                                         # end for
                                     # end if
                                 else:
-                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because " + class_ + "::Analyze() failed at offset " + getid3_temp.info["avdataoffset"])
+                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because " + class_ + "::Analyze() failed at offset " + getid3_temp_.info["avdataoffset"])
                                 # end if
                                 #// copy errors and warnings
-                                if (not php_empty(lambda : getid3_temp.info["error"])):
-                                    for newerror in getid3_temp.info["error"]:
-                                        self.warning(class_ + "() says: [" + newerror + "]")
+                                if (not php_empty(lambda : getid3_temp_.info["error"])):
+                                    for newerror_ in getid3_temp_.info["error"]:
+                                        self.warning(class_ + "() says: [" + newerror_ + "]")
                                     # end for
                                 # end if
-                                if (not php_empty(lambda : getid3_temp.info["warning"])):
-                                    for newerror in getid3_temp.info["warning"]:
-                                        self.warning(class_ + "() says: [" + newerror + "]")
+                                if (not php_empty(lambda : getid3_temp_.info["warning"])):
+                                    for newerror_ in getid3_temp_.info["warning"]:
+                                        self.warning(class_ + "() says: [" + newerror_ + "]")
                                     # end for
                                 # end if
-                                getid3_temp = None
-                                getid3_audio = None
+                                getid3_temp_ = None
+                                getid3_audio_ = None
                                 break
                             # end if
                             if case("A_AAC"):
@@ -591,123 +601,124 @@ class getid3_matroska(getid3_handler):
                                 pass
                             # end if
                             if case("A_AAC/MPEG4/LC/SBR"):
-                                self.warning(trackarray["CodecID"] + " audio data contains no header, audio/video bitrates can't be calculated")
+                                self.warning(trackarray_["CodecID"] + " audio data contains no header, audio/video bitrates can't be calculated")
                                 break
                             # end if
                             if case("A_VORBIS"):
-                                if (not (php_isset(lambda : trackarray["CodecPrivate"]))):
+                                if (not (php_isset(lambda : trackarray_["CodecPrivate"]))):
                                     self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because CodecPrivate data not set")
                                     break
                                 # end if
-                                vorbis_offset = php_strpos(trackarray["CodecPrivate"], "vorbis", 1)
-                                if vorbis_offset == False:
+                                vorbis_offset_ = php_strpos(trackarray_["CodecPrivate"], "vorbis", 1)
+                                if vorbis_offset_ == False:
                                     self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because CodecPrivate data does not contain \"vorbis\" keyword")
                                     break
                                 # end if
-                                vorbis_offset -= 1
+                                vorbis_offset_ -= 1
                                 getid3_lib.includedependency(GETID3_INCLUDEPATH + "module.audio.ogg.php", __FILE__, True)
                                 #// create temp instance
-                                getid3_temp = php_new_class("getID3", lambda : getID3())
+                                getid3_temp_ = php_new_class("getID3", lambda : getID3())
                                 #// analyze
-                                getid3_ogg = php_new_class("getid3_ogg", lambda : getid3_ogg(getid3_temp))
-                                oggpageinfo["page_seqno"] = 0
-                                getid3_ogg.parsevorbispageheader(trackarray["CodecPrivate"], vorbis_offset, oggpageinfo)
-                                if (not php_empty(lambda : getid3_temp.info["ogg"])):
-                                    info["matroska"]["track_codec_parsed"][trackarray["TrackNumber"]] = getid3_temp.info["ogg"]
-                                    if (php_isset(lambda : getid3_temp.info["audio"])) and php_is_array(getid3_temp.info["audio"]):
-                                        for sub_key,value in getid3_temp.info["audio"]:
-                                            track_info[sub_key] = value
+                                getid3_ogg_ = php_new_class("getid3_ogg", lambda : getid3_ogg(getid3_temp_))
+                                oggpageinfo_["page_seqno"] = 0
+                                getid3_ogg_.parsevorbispageheader(trackarray_["CodecPrivate"], vorbis_offset_, oggpageinfo_)
+                                if (not php_empty(lambda : getid3_temp_.info["ogg"])):
+                                    info_["matroska"]["track_codec_parsed"][trackarray_["TrackNumber"]] = getid3_temp_.info["ogg"]
+                                    if (php_isset(lambda : getid3_temp_.info["audio"])) and php_is_array(getid3_temp_.info["audio"]):
+                                        for sub_key_,value_ in getid3_temp_.info["audio"]:
+                                            track_info_[sub_key_] = value_
                                         # end for
                                     # end if
                                 # end if
                                 #// copy errors and warnings
-                                if (not php_empty(lambda : getid3_temp.info["error"])):
-                                    for newerror in getid3_temp.info["error"]:
-                                        self.warning("getid3_ogg() says: [" + newerror + "]")
+                                if (not php_empty(lambda : getid3_temp_.info["error"])):
+                                    for newerror_ in getid3_temp_.info["error"]:
+                                        self.warning("getid3_ogg() says: [" + newerror_ + "]")
                                     # end for
                                 # end if
-                                if (not php_empty(lambda : getid3_temp.info["warning"])):
-                                    for newerror in getid3_temp.info["warning"]:
-                                        self.warning("getid3_ogg() says: [" + newerror + "]")
+                                if (not php_empty(lambda : getid3_temp_.info["warning"])):
+                                    for newerror_ in getid3_temp_.info["warning"]:
+                                        self.warning("getid3_ogg() says: [" + newerror_ + "]")
                                     # end for
                                 # end if
-                                if (not php_empty(lambda : getid3_temp.info["ogg"]["bitrate_nominal"])):
-                                    track_info["bitrate"] = getid3_temp.info["ogg"]["bitrate_nominal"]
+                                if (not php_empty(lambda : getid3_temp_.info["ogg"]["bitrate_nominal"])):
+                                    track_info_["bitrate"] = getid3_temp_.info["ogg"]["bitrate_nominal"]
                                 # end if
-                                getid3_temp = None
-                                getid3_ogg = None
-                                oggpageinfo = None
-                                vorbis_offset = None
+                                getid3_temp_ = None
+                                getid3_ogg_ = None
+                                oggpageinfo_ = None
+                                vorbis_offset_ = None
                                 break
                             # end if
                             if case("A_MS/ACM"):
                                 getid3_lib.includedependency(GETID3_INCLUDEPATH + "module.audio-video.riff.php", __FILE__, True)
-                                parsed = getid3_riff.parsewaveformatex(trackarray["CodecPrivate"])
-                                for sub_key,value in parsed:
-                                    if sub_key != "raw":
-                                        track_info[sub_key] = value
+                                parsed_ = getid3_riff.parsewaveformatex(trackarray_["CodecPrivate"])
+                                for sub_key_,value_ in parsed_:
+                                    if sub_key_ != "raw":
+                                        track_info_[sub_key_] = value_
                                     # end if
                                 # end for
-                                info["matroska"]["track_codec_parsed"][trackarray["TrackNumber"]] = parsed
+                                info_["matroska"]["track_codec_parsed"][trackarray_["TrackNumber"]] = parsed_
                                 break
                             # end if
                             if case():
-                                self.warning("Unhandled audio type \"" + trackarray["CodecID"] if (php_isset(lambda : trackarray["CodecID"])) else "" + "\"")
+                                self.warning("Unhandled audio type \"" + trackarray_["CodecID"] if (php_isset(lambda : trackarray_["CodecID"])) else "" + "\"")
                                 break
                             # end if
                         # end for
-                        info["audio"]["streams"][-1] = track_info
+                        info_["audio"]["streams"][-1] = track_info_
                         break
                     # end if
                 # end for
             # end for
-            if (not php_empty(lambda : info["video"]["streams"])):
-                info["video"] = self.getdefaultstreaminfo(info["video"]["streams"])
+            if (not php_empty(lambda : info_["video"]["streams"])):
+                info_["video"] = self.getdefaultstreaminfo(info_["video"]["streams"])
             # end if
-            if (not php_empty(lambda : info["audio"]["streams"])):
-                info["audio"] = self.getdefaultstreaminfo(info["audio"]["streams"])
+            if (not php_empty(lambda : info_["audio"]["streams"])):
+                info_["audio"] = self.getdefaultstreaminfo(info_["audio"]["streams"])
             # end if
         # end if
         #// process attachments
-        if (php_isset(lambda : info["matroska"]["attachments"])) and self.getid3.option_save_attachments != getID3.ATTACHMENTS_NONE:
-            for i,entry in info["matroska"]["attachments"]:
-                if php_strpos(entry["FileMimeType"], "image/") == 0 and (not php_empty(lambda : entry["FileData"])):
-                    info["matroska"]["comments"]["picture"][-1] = Array({"data": entry["FileData"], "image_mime": entry["FileMimeType"], "filename": entry["FileName"]})
+        if (php_isset(lambda : info_["matroska"]["attachments"])) and self.getid3.option_save_attachments != getID3.ATTACHMENTS_NONE:
+            for i_,entry_ in info_["matroska"]["attachments"]:
+                if php_strpos(entry_["FileMimeType"], "image/") == 0 and (not php_empty(lambda : entry_["FileData"])):
+                    info_["matroska"]["comments"]["picture"][-1] = Array({"data": entry_["FileData"], "image_mime": entry_["FileMimeType"], "filename": entry_["FileName"]})
                 # end if
             # end for
         # end if
         #// determine mime type
-        if (not php_empty(lambda : info["video"]["streams"])):
-            info["mime_type"] = "video/webm" if info["matroska"]["doctype"] == "webm" else "video/x-matroska"
-        elif (not php_empty(lambda : info["audio"]["streams"])):
-            info["mime_type"] = "audio/webm" if info["matroska"]["doctype"] == "webm" else "audio/x-matroska"
-        elif (php_isset(lambda : info["mime_type"])):
-            info["mime_type"] = None
+        if (not php_empty(lambda : info_["video"]["streams"])):
+            info_["mime_type"] = "video/webm" if info_["matroska"]["doctype"] == "webm" else "video/x-matroska"
+        elif (not php_empty(lambda : info_["audio"]["streams"])):
+            info_["mime_type"] = "audio/webm" if info_["matroska"]["doctype"] == "webm" else "audio/x-matroska"
+        elif (php_isset(lambda : info_["mime_type"])):
+            info_["mime_type"] = None
         # end if
         return True
     # end def analyze
     #// 
     #// @param array $info
     #//
-    def parseebml(self, info=None):
+    def parseebml(self, info_=None):
+        
         
         #// http://www.matroska.org/technical/specs/index.html#EBMLBasics
-        self.current_offset = info["avdataoffset"]
+        self.current_offset = info_["avdataoffset"]
         while True:
             
-            if not (self.getebmlelement(top_element, info["avdataend"])):
+            if not (self.getebmlelement(top_element_, info_["avdataend"])):
                 break
             # end if
-            for case in Switch(top_element["id"]):
+            for case in Switch(top_element_["id"]):
                 if case(EBML_ID_EBML):
-                    info["matroska"]["header"]["offset"] = top_element["offset"]
-                    info["matroska"]["header"]["length"] = top_element["length"]
+                    info_["matroska"]["header"]["offset"] = top_element_["offset"]
+                    info_["matroska"]["header"]["length"] = top_element_["length"]
                     while True:
                         
-                        if not (self.getebmlelement(element_data, top_element["end"], True)):
+                        if not (self.getebmlelement(element_data_, top_element_["end"], True)):
                             break
                         # end if
-                        for case in Switch(element_data["id"]):
+                        for case in Switch(element_data_["id"]):
                             if case(EBML_ID_EBMLVERSION):
                                 pass
                             # end if
@@ -724,82 +735,82 @@ class getid3_matroska(getid3_handler):
                                 pass
                             # end if
                             if case(EBML_ID_DOCTYPEREADVERSION):
-                                element_data["data"] = getid3_lib.bigendian2int(element_data["data"])
+                                element_data_["data"] = getid3_lib.bigendian2int(element_data_["data"])
                                 break
                             # end if
                             if case(EBML_ID_DOCTYPE):
-                                element_data["data"] = getid3_lib.trimnullbyte(element_data["data"])
-                                info["matroska"]["doctype"] = element_data["data"]
-                                info["fileformat"] = element_data["data"]
+                                element_data_["data"] = getid3_lib.trimnullbyte(element_data_["data"])
+                                info_["matroska"]["doctype"] = element_data_["data"]
+                                info_["fileformat"] = element_data_["data"]
                                 break
                             # end if
                             if case():
-                                self.unhandledelement("header", 0, element_data)
+                                self.unhandledelement("header", 0, element_data_)
                                 break
                             # end if
                         # end for
-                        element_data["offset"] = None
-                        element_data["end"] = None
-                        info["matroska"]["header"]["elements"][-1] = element_data
+                        element_data_["offset"] = None
+                        element_data_["end"] = None
+                        info_["matroska"]["header"]["elements"][-1] = element_data_
                     # end while
                     break
                 # end if
                 if case(EBML_ID_SEGMENT):
-                    info["matroska"]["segment"][0]["offset"] = top_element["offset"]
-                    info["matroska"]["segment"][0]["length"] = top_element["length"]
+                    info_["matroska"]["segment"][0]["offset"] = top_element_["offset"]
+                    info_["matroska"]["segment"][0]["length"] = top_element_["length"]
                     while True:
                         
-                        if not (self.getebmlelement(element_data, top_element["end"])):
+                        if not (self.getebmlelement(element_data_, top_element_["end"])):
                             break
                         # end if
-                        if element_data["id"] != EBML_ID_CLUSTER or (not self.hide_clusters):
+                        if element_data_["id"] != EBML_ID_CLUSTER or (not self.hide_clusters):
                             #// collect clusters only if required
-                            info["matroska"]["segments"][-1] = element_data
+                            info_["matroska"]["segments"][-1] = element_data_
                         # end if
-                        for case in Switch(element_data["id"]):
+                        for case in Switch(element_data_["id"]):
                             if case(EBML_ID_SEEKHEAD):
                                 #// Contains the position of other level 1 elements.
                                 while True:
                                     
-                                    if not (self.getebmlelement(seek_entry, element_data["end"])):
+                                    if not (self.getebmlelement(seek_entry_, element_data_["end"])):
                                         break
                                     # end if
-                                    for case in Switch(seek_entry["id"]):
+                                    for case in Switch(seek_entry_["id"]):
                                         if case(EBML_ID_SEEK):
                                             #// Contains a single seek entry to an EBML element
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_seek_entry, seek_entry["end"], True)):
+                                                if not (self.getebmlelement(sub_seek_entry_, seek_entry_["end"], True)):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_seek_entry["id"]):
+                                                for case in Switch(sub_seek_entry_["id"]):
                                                     if case(EBML_ID_SEEKID):
-                                                        seek_entry["target_id"] = self.ebml2int(sub_seek_entry["data"])
-                                                        seek_entry["target_name"] = self.ebmlidname(seek_entry["target_id"])
+                                                        seek_entry_["target_id"] = self.ebml2int(sub_seek_entry_["data"])
+                                                        seek_entry_["target_name"] = self.ebmlidname(seek_entry_["target_id"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_SEEKPOSITION):
-                                                        seek_entry["target_offset"] = element_data["offset"] + getid3_lib.bigendian2int(sub_seek_entry["data"])
+                                                        seek_entry_["target_offset"] = element_data_["offset"] + getid3_lib.bigendian2int(sub_seek_entry_["data"])
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("seekhead.seek", 0, sub_seek_entry)
+                                                        self.unhandledelement("seekhead.seek", 0, sub_seek_entry_)
                                                     # end if
                                                 # end for
                                                 break
                                             # end while
-                                            if (not (php_isset(lambda : seek_entry["target_id"]))):
-                                                self.warning("seek_entry[target_id] unexpectedly not set at " + seek_entry["offset"])
+                                            if (not (php_isset(lambda : seek_entry_["target_id"]))):
+                                                self.warning("seek_entry[target_id] unexpectedly not set at " + seek_entry_["offset"])
                                                 break
                                             # end if
-                                            if seek_entry["target_id"] != EBML_ID_CLUSTER or (not self.hide_clusters):
+                                            if seek_entry_["target_id"] != EBML_ID_CLUSTER or (not self.hide_clusters):
                                                 #// collect clusters only if required
-                                                info["matroska"]["seek"][-1] = seek_entry
+                                                info_["matroska"]["seek"][-1] = seek_entry_
                                             # end if
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("seekhead", 0, seek_entry)
+                                            self.unhandledelement("seekhead", 0, seek_entry_)
                                             break
                                         # end if
                                     # end for
@@ -808,21 +819,21 @@ class getid3_matroska(getid3_handler):
                             # end if
                             if case(EBML_ID_TRACKS):
                                 #// A top-level block of information with many tracks described.
-                                info["matroska"]["tracks"] = element_data
+                                info_["matroska"]["tracks"] = element_data_
                                 while True:
                                     
-                                    if not (self.getebmlelement(track_entry, element_data["end"])):
+                                    if not (self.getebmlelement(track_entry_, element_data_["end"])):
                                         break
                                     # end if
-                                    for case in Switch(track_entry["id"]):
+                                    for case in Switch(track_entry_["id"]):
                                         if case(EBML_ID_TRACKENTRY):
                                             #// subelements: Describes a track with all elements.
                                             while True:
                                                 
-                                                if not (self.getebmlelement(subelement, track_entry["end"], Array(EBML_ID_VIDEO, EBML_ID_AUDIO, EBML_ID_CONTENTENCODINGS, EBML_ID_CODECPRIVATE))):
+                                                if not (self.getebmlelement(subelement_, track_entry_["end"], Array(EBML_ID_VIDEO, EBML_ID_AUDIO, EBML_ID_CONTENTENCODINGS, EBML_ID_CODECPRIVATE))):
                                                     break
                                                 # end if
-                                                for case in Switch(subelement["id"]):
+                                                for case in Switch(subelement_["id"]):
                                                     if case(EBML_ID_TRACKNUMBER):
                                                         pass
                                                     # end if
@@ -843,11 +854,11 @@ class getid3_matroska(getid3_handler):
                                                     # end if
                                                     if case(EBML_ID_DEFAULTDURATION):
                                                         #// nanoseconds per frame
-                                                        track_entry[subelement["id_name"]] = getid3_lib.bigendian2int(subelement["data"])
+                                                        track_entry_[subelement_["id_name"]] = getid3_lib.bigendian2int(subelement_["data"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_TRACKTIMECODESCALE):
-                                                        track_entry[subelement["id_name"]] = getid3_lib.bigendian2float(subelement["data"])
+                                                        track_entry_[subelement_["id_name"]] = getid3_lib.bigendian2float(subelement_["data"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CODECID):
@@ -860,11 +871,11 @@ class getid3_matroska(getid3_handler):
                                                         pass
                                                     # end if
                                                     if case(EBML_ID_CODECNAME):
-                                                        track_entry[subelement["id_name"]] = getid3_lib.trimnullbyte(subelement["data"])
+                                                        track_entry_[subelement_["id_name"]] = getid3_lib.trimnullbyte(subelement_["data"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CODECPRIVATE):
-                                                        track_entry[subelement["id_name"]] = self.readebmlelementdata(subelement["length"], True)
+                                                        track_entry_[subelement_["id_name"]] = self.readebmlelementdata(subelement_["length"], True)
                                                         break
                                                     # end if
                                                     if case(EBML_ID_FLAGENABLED):
@@ -880,16 +891,16 @@ class getid3_matroska(getid3_handler):
                                                         pass
                                                     # end if
                                                     if case(EBML_ID_CODECDECODEALL):
-                                                        track_entry[subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(subelement["data"]))
+                                                        track_entry_[subelement_["id_name"]] = php_bool(getid3_lib.bigendian2int(subelement_["data"]))
                                                         break
                                                     # end if
                                                     if case(EBML_ID_VIDEO):
                                                         while True:
                                                             
-                                                            if not (self.getebmlelement(sub_subelement, subelement["end"], True)):
+                                                            if not (self.getebmlelement(sub_subelement_, subelement_["end"], True)):
                                                                 break
                                                             # end if
-                                                            for case in Switch(sub_subelement["id"]):
+                                                            for case in Switch(sub_subelement_["id"]):
                                                                 if case(EBML_ID_PIXELWIDTH):
                                                                     pass
                                                                 # end if
@@ -924,23 +935,23 @@ class getid3_matroska(getid3_handler):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_OLDSTEREOMODE):
-                                                                    track_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                                    track_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_FLAGINTERLACED):
-                                                                    track_entry[sub_subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_subelement["data"]))
+                                                                    track_entry_[sub_subelement_["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_subelement_["data"]))
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_GAMMAVALUE):
-                                                                    track_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2float(sub_subelement["data"])
+                                                                    track_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2float(sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_COLOURSPACE):
-                                                                    track_entry[sub_subelement["id_name"]] = getid3_lib.trimnullbyte(sub_subelement["data"])
+                                                                    track_entry_[sub_subelement_["id_name"]] = getid3_lib.trimnullbyte(sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("track.video", 0, sub_subelement)
+                                                                    self.unhandledelement("track.video", 0, sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -950,30 +961,30 @@ class getid3_matroska(getid3_handler):
                                                     if case(EBML_ID_AUDIO):
                                                         while True:
                                                             
-                                                            if not (self.getebmlelement(sub_subelement, subelement["end"], True)):
+                                                            if not (self.getebmlelement(sub_subelement_, subelement_["end"], True)):
                                                                 break
                                                             # end if
-                                                            for case in Switch(sub_subelement["id"]):
+                                                            for case in Switch(sub_subelement_["id"]):
                                                                 if case(EBML_ID_CHANNELS):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_BITDEPTH):
-                                                                    track_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                                    track_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_SAMPLINGFREQUENCY):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_OUTPUTSAMPLINGFREQUENCY):
-                                                                    track_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2float(sub_subelement["data"])
+                                                                    track_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2float(sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_CHANNELPOSITIONS):
-                                                                    track_entry[sub_subelement["id_name"]] = getid3_lib.trimnullbyte(sub_subelement["data"])
+                                                                    track_entry_[sub_subelement_["id_name"]] = getid3_lib.trimnullbyte(sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("track.audio", 0, sub_subelement)
+                                                                    self.unhandledelement("track.audio", 0, sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -983,17 +994,17 @@ class getid3_matroska(getid3_handler):
                                                     if case(EBML_ID_CONTENTENCODINGS):
                                                         while True:
                                                             
-                                                            if not (self.getebmlelement(sub_subelement, subelement["end"])):
+                                                            if not (self.getebmlelement(sub_subelement_, subelement_["end"])):
                                                                 break
                                                             # end if
-                                                            for case in Switch(sub_subelement["id"]):
+                                                            for case in Switch(sub_subelement_["id"]):
                                                                 if case(EBML_ID_CONTENTENCODING):
                                                                     while True:
                                                                         
-                                                                        if not (self.getebmlelement(sub_sub_subelement, sub_subelement["end"], Array(EBML_ID_CONTENTCOMPRESSION, EBML_ID_CONTENTENCRYPTION))):
+                                                                        if not (self.getebmlelement(sub_sub_subelement_, sub_subelement_["end"], Array(EBML_ID_CONTENTCOMPRESSION, EBML_ID_CONTENTENCRYPTION))):
                                                                             break
                                                                         # end if
-                                                                        for case in Switch(sub_sub_subelement["id"]):
+                                                                        for case in Switch(sub_sub_subelement_["id"]):
                                                                             if case(EBML_ID_CONTENTENCODINGORDER):
                                                                                 pass
                                                                             # end if
@@ -1001,26 +1012,26 @@ class getid3_matroska(getid3_handler):
                                                                                 pass
                                                                             # end if
                                                                             if case(EBML_ID_CONTENTENCODINGTYPE):
-                                                                                track_entry[sub_subelement["id_name"]][sub_sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement["data"])
+                                                                                track_entry_[sub_subelement_["id_name"]][sub_sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement_["data"])
                                                                                 break
                                                                             # end if
                                                                             if case(EBML_ID_CONTENTCOMPRESSION):
                                                                                 while True:
                                                                                     
-                                                                                    if not (self.getebmlelement(sub_sub_sub_subelement, sub_sub_subelement["end"], True)):
+                                                                                    if not (self.getebmlelement(sub_sub_sub_subelement_, sub_sub_subelement_["end"], True)):
                                                                                         break
                                                                                     # end if
-                                                                                    for case in Switch(sub_sub_sub_subelement["id"]):
+                                                                                    for case in Switch(sub_sub_sub_subelement_["id"]):
                                                                                         if case(EBML_ID_CONTENTCOMPALGO):
-                                                                                            track_entry[sub_subelement["id_name"]][sub_sub_subelement["id_name"]][sub_sub_sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_sub_sub_subelement["data"])
+                                                                                            track_entry_[sub_subelement_["id_name"]][sub_sub_subelement_["id_name"]][sub_sub_sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_sub_sub_subelement_["data"])
                                                                                             break
                                                                                         # end if
                                                                                         if case(EBML_ID_CONTENTCOMPSETTINGS):
-                                                                                            track_entry[sub_subelement["id_name"]][sub_sub_subelement["id_name"]][sub_sub_sub_subelement["id_name"]] = sub_sub_sub_subelement["data"]
+                                                                                            track_entry_[sub_subelement_["id_name"]][sub_sub_subelement_["id_name"]][sub_sub_sub_subelement_["id_name"]] = sub_sub_sub_subelement_["data"]
                                                                                             break
                                                                                         # end if
                                                                                         if case():
-                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", 0, sub_sub_sub_subelement)
+                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", 0, sub_sub_sub_subelement_)
                                                                                             break
                                                                                         # end if
                                                                                     # end for
@@ -1030,10 +1041,10 @@ class getid3_matroska(getid3_handler):
                                                                             if case(EBML_ID_CONTENTENCRYPTION):
                                                                                 while True:
                                                                                     
-                                                                                    if not (self.getebmlelement(sub_sub_sub_subelement, sub_sub_subelement["end"], True)):
+                                                                                    if not (self.getebmlelement(sub_sub_sub_subelement_, sub_sub_subelement_["end"], True)):
                                                                                         break
                                                                                     # end if
-                                                                                    for case in Switch(sub_sub_sub_subelement["id"]):
+                                                                                    for case in Switch(sub_sub_sub_subelement_["id"]):
                                                                                         if case(EBML_ID_CONTENTENCALGO):
                                                                                             pass
                                                                                         # end if
@@ -1041,7 +1052,7 @@ class getid3_matroska(getid3_handler):
                                                                                             pass
                                                                                         # end if
                                                                                         if case(EBML_ID_CONTENTSIGHASHALGO):
-                                                                                            track_entry[sub_subelement["id_name"]][sub_sub_subelement["id_name"]][sub_sub_sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_sub_sub_subelement["data"])
+                                                                                            track_entry_[sub_subelement_["id_name"]][sub_sub_subelement_["id_name"]][sub_sub_sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_sub_sub_subelement_["data"])
                                                                                             break
                                                                                         # end if
                                                                                         if case(EBML_ID_CONTENTENCKEYID):
@@ -1051,11 +1062,11 @@ class getid3_matroska(getid3_handler):
                                                                                             pass
                                                                                         # end if
                                                                                         if case(EBML_ID_CONTENTSIGKEYID):
-                                                                                            track_entry[sub_subelement["id_name"]][sub_sub_subelement["id_name"]][sub_sub_sub_subelement["id_name"]] = sub_sub_sub_subelement["data"]
+                                                                                            track_entry_[sub_subelement_["id_name"]][sub_sub_subelement_["id_name"]][sub_sub_sub_subelement_["id_name"]] = sub_sub_sub_subelement_["data"]
                                                                                             break
                                                                                         # end if
                                                                                         if case():
-                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", 0, sub_sub_sub_subelement)
+                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", 0, sub_sub_sub_subelement_)
                                                                                             break
                                                                                         # end if
                                                                                     # end for
@@ -1063,7 +1074,7 @@ class getid3_matroska(getid3_handler):
                                                                                 break
                                                                             # end if
                                                                             if case():
-                                                                                self.unhandledelement("track.contentencodings.contentencoding", 0, sub_sub_subelement)
+                                                                                self.unhandledelement("track.contentencodings.contentencoding", 0, sub_sub_subelement_)
                                                                                 break
                                                                             # end if
                                                                         # end for
@@ -1071,7 +1082,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("track.contentencodings", 0, sub_subelement)
+                                                                    self.unhandledelement("track.contentencodings", 0, sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -1079,16 +1090,16 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("track", 0, subelement)
+                                                        self.unhandledelement("track", 0, subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            info["matroska"]["tracks"]["tracks"][-1] = track_entry
+                                            info_["matroska"]["tracks"]["tracks"][-1] = track_entry_
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("tracks", 0, track_entry)
+                                            self.unhandledelement("tracks", 0, track_entry_)
                                             break
                                         # end if
                                     # end for
@@ -1097,24 +1108,24 @@ class getid3_matroska(getid3_handler):
                             # end if
                             if case(EBML_ID_INFO):
                                 #// Contains miscellaneous general information and statistics on the file.
-                                info_entry = Array()
+                                info_entry_ = Array()
                                 while True:
                                     
-                                    if not (self.getebmlelement(subelement, element_data["end"], True)):
+                                    if not (self.getebmlelement(subelement_, element_data_["end"], True)):
                                         break
                                     # end if
-                                    for case in Switch(subelement["id"]):
+                                    for case in Switch(subelement_["id"]):
                                         if case(EBML_ID_TIMECODESCALE):
-                                            info_entry[subelement["id_name"]] = getid3_lib.bigendian2int(subelement["data"])
+                                            info_entry_[subelement_["id_name"]] = getid3_lib.bigendian2int(subelement_["data"])
                                             break
                                         # end if
                                         if case(EBML_ID_DURATION):
-                                            info_entry[subelement["id_name"]] = getid3_lib.bigendian2float(subelement["data"])
+                                            info_entry_[subelement_["id_name"]] = getid3_lib.bigendian2float(subelement_["data"])
                                             break
                                         # end if
                                         if case(EBML_ID_DATEUTC):
-                                            info_entry[subelement["id_name"]] = getid3_lib.bigendian2int(subelement["data"])
-                                            info_entry[subelement["id_name"] + "_unix"] = self.ebmldate2unix(info_entry[subelement["id_name"]])
+                                            info_entry_[subelement_["id_name"]] = getid3_lib.bigendian2int(subelement_["data"])
+                                            info_entry_[subelement_["id_name"] + "_unix"] = self.ebmldate2unix(info_entry_[subelement_["id_name"]])
                                             break
                                         # end if
                                         if case(EBML_ID_SEGMENTUID):
@@ -1124,11 +1135,11 @@ class getid3_matroska(getid3_handler):
                                             pass
                                         # end if
                                         if case(EBML_ID_NEXTUID):
-                                            info_entry[subelement["id_name"]] = getid3_lib.trimnullbyte(subelement["data"])
+                                            info_entry_[subelement_["id_name"]] = getid3_lib.trimnullbyte(subelement_["data"])
                                             break
                                         # end if
                                         if case(EBML_ID_SEGMENTFAMILY):
-                                            info_entry[subelement["id_name"]][-1] = getid3_lib.trimnullbyte(subelement["data"])
+                                            info_entry_[subelement_["id_name"]][-1] = getid3_lib.trimnullbyte(subelement_["data"])
                                             break
                                         # end if
                                         if case(EBML_ID_SEGMENTFILENAME):
@@ -1147,78 +1158,78 @@ class getid3_matroska(getid3_handler):
                                             pass
                                         # end if
                                         if case(EBML_ID_WRITINGAPP):
-                                            info_entry[subelement["id_name"]] = getid3_lib.trimnullbyte(subelement["data"])
-                                            info["matroska"]["comments"][php_strtolower(subelement["id_name"])][-1] = info_entry[subelement["id_name"]]
+                                            info_entry_[subelement_["id_name"]] = getid3_lib.trimnullbyte(subelement_["data"])
+                                            info_["matroska"]["comments"][php_strtolower(subelement_["id_name"])][-1] = info_entry_[subelement_["id_name"]]
                                             break
                                         # end if
                                         if case(EBML_ID_CHAPTERTRANSLATE):
-                                            chaptertranslate_entry = Array()
+                                            chaptertranslate_entry_ = Array()
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_subelement, subelement["end"], True)):
+                                                if not (self.getebmlelement(sub_subelement_, subelement_["end"], True)):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_subelement["id"]):
+                                                for case in Switch(sub_subelement_["id"]):
                                                     if case(EBML_ID_CHAPTERTRANSLATEEDITIONUID):
-                                                        chaptertranslate_entry[sub_subelement["id_name"]][-1] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                        chaptertranslate_entry_[sub_subelement_["id_name"]][-1] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CHAPTERTRANSLATECODEC):
-                                                        chaptertranslate_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                        chaptertranslate_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CHAPTERTRANSLATEID):
-                                                        chaptertranslate_entry[sub_subelement["id_name"]] = getid3_lib.trimnullbyte(sub_subelement["data"])
+                                                        chaptertranslate_entry_[sub_subelement_["id_name"]] = getid3_lib.trimnullbyte(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("info.chaptertranslate", 0, sub_subelement)
+                                                        self.unhandledelement("info.chaptertranslate", 0, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            info_entry[subelement["id_name"]] = chaptertranslate_entry
+                                            info_entry_[subelement_["id_name"]] = chaptertranslate_entry_
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("info", 0, subelement)
+                                            self.unhandledelement("info", 0, subelement_)
                                             break
                                         # end if
                                     # end for
                                 # end while
-                                info["matroska"]["info"][-1] = info_entry
+                                info_["matroska"]["info"][-1] = info_entry_
                                 break
                             # end if
                             if case(EBML_ID_CUES):
                                 #// A top-level element to speed seeking access. All entries are local to the segment. Should be mandatory for non "live" streams.
                                 if self.hide_clusters:
                                     #// do not parse cues if hide clusters is "ON" till they point to clusters anyway
-                                    self.current_offset = element_data["end"]
+                                    self.current_offset = element_data_["end"]
                                     break
                                 # end if
-                                cues_entry = Array()
+                                cues_entry_ = Array()
                                 while True:
                                     
-                                    if not (self.getebmlelement(subelement, element_data["end"])):
+                                    if not (self.getebmlelement(subelement_, element_data_["end"])):
                                         break
                                     # end if
-                                    for case in Switch(subelement["id"]):
+                                    for case in Switch(subelement_["id"]):
                                         if case(EBML_ID_CUEPOINT):
-                                            cuepoint_entry = Array()
+                                            cuepoint_entry_ = Array()
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_subelement, subelement["end"], Array(EBML_ID_CUETRACKPOSITIONS))):
+                                                if not (self.getebmlelement(sub_subelement_, subelement_["end"], Array(EBML_ID_CUETRACKPOSITIONS))):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_subelement["id"]):
+                                                for case in Switch(sub_subelement_["id"]):
                                                     if case(EBML_ID_CUETRACKPOSITIONS):
-                                                        cuetrackpositions_entry = Array()
+                                                        cuetrackpositions_entry_ = Array()
                                                         while True:
                                                             
-                                                            if not (self.getebmlelement(sub_sub_subelement, sub_subelement["end"], True)):
+                                                            if not (self.getebmlelement(sub_sub_subelement_, sub_subelement_["end"], True)):
                                                                 break
                                                             # end if
-                                                            for case in Switch(sub_sub_subelement["id"]):
+                                                            for case in Switch(sub_sub_subelement_["id"]):
                                                                 if case(EBML_ID_CUETRACK):
                                                                     pass
                                                                 # end if
@@ -1229,72 +1240,72 @@ class getid3_matroska(getid3_handler):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_CUECODECSTATE):
-                                                                    cuetrackpositions_entry[sub_sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement["data"])
+                                                                    cuetrackpositions_entry_[sub_sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("cues.cuepoint.cuetrackpositions", 0, sub_sub_subelement)
+                                                                    self.unhandledelement("cues.cuepoint.cuetrackpositions", 0, sub_sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
                                                         # end while
-                                                        cuepoint_entry[sub_subelement["id_name"]][-1] = cuetrackpositions_entry
+                                                        cuepoint_entry_[sub_subelement_["id_name"]][-1] = cuetrackpositions_entry_
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CUETIME):
-                                                        cuepoint_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                        cuepoint_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("cues.cuepoint", 0, sub_subelement)
+                                                        self.unhandledelement("cues.cuepoint", 0, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            cues_entry[-1] = cuepoint_entry
+                                            cues_entry_[-1] = cuepoint_entry_
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("cues", 0, subelement)
+                                            self.unhandledelement("cues", 0, subelement_)
                                             break
                                         # end if
                                     # end for
                                 # end while
-                                info["matroska"]["cues"] = cues_entry
+                                info_["matroska"]["cues"] = cues_entry_
                                 break
                             # end if
                             if case(EBML_ID_TAGS):
                                 #// Element containing elements specific to Tracks/Chapters.
-                                tags_entry = Array()
+                                tags_entry_ = Array()
                                 while True:
                                     
-                                    if not (self.getebmlelement(subelement, element_data["end"], False)):
+                                    if not (self.getebmlelement(subelement_, element_data_["end"], False)):
                                         break
                                     # end if
-                                    for case in Switch(subelement["id"]):
+                                    for case in Switch(subelement_["id"]):
                                         if case(EBML_ID_TAG):
-                                            tag_entry = Array()
+                                            tag_entry_ = Array()
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_subelement, subelement["end"], False)):
+                                                if not (self.getebmlelement(sub_subelement_, subelement_["end"], False)):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_subelement["id"]):
+                                                for case in Switch(sub_subelement_["id"]):
                                                     if case(EBML_ID_TARGETS):
-                                                        targets_entry = Array()
+                                                        targets_entry_ = Array()
                                                         while True:
                                                             
-                                                            if not (self.getebmlelement(sub_sub_subelement, sub_subelement["end"], True)):
+                                                            if not (self.getebmlelement(sub_sub_subelement_, sub_subelement_["end"], True)):
                                                                 break
                                                             # end if
-                                                            for case in Switch(sub_sub_subelement["id"]):
+                                                            for case in Switch(sub_sub_subelement_["id"]):
                                                                 if case(EBML_ID_TARGETTYPEVALUE):
-                                                                    targets_entry[sub_sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement["data"])
-                                                                    targets_entry[php_strtolower(sub_sub_subelement["id_name"]) + "_long"] = self.targettypevalue(targets_entry[sub_sub_subelement["id_name"]])
+                                                                    targets_entry_[sub_sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement_["data"])
+                                                                    targets_entry_[php_strtolower(sub_sub_subelement_["id_name"]) + "_long"] = self.targettypevalue(targets_entry_[sub_sub_subelement_["id_name"]])
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_TARGETTYPE):
-                                                                    targets_entry[sub_sub_subelement["id_name"]] = sub_sub_subelement["data"]
+                                                                    targets_entry_[sub_sub_subelement_["id_name"]] = sub_sub_subelement_["data"]
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_TAGTRACKUID):
@@ -1307,56 +1318,56 @@ class getid3_matroska(getid3_handler):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_TAGATTACHMENTUID):
-                                                                    targets_entry[sub_sub_subelement["id_name"]][-1] = getid3_lib.bigendian2int(sub_sub_subelement["data"])
+                                                                    targets_entry_[sub_sub_subelement_["id_name"]][-1] = getid3_lib.bigendian2int(sub_sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("tags.tag.targets", 0, sub_sub_subelement)
+                                                                    self.unhandledelement("tags.tag.targets", 0, sub_sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
                                                         # end while
-                                                        tag_entry[sub_subelement["id_name"]] = targets_entry
+                                                        tag_entry_[sub_subelement_["id_name"]] = targets_entry_
                                                         break
                                                     # end if
                                                     if case(EBML_ID_SIMPLETAG):
-                                                        tag_entry[sub_subelement["id_name"]][-1] = self.handleemblsimpletag(sub_subelement["end"])
+                                                        tag_entry_[sub_subelement_["id_name"]][-1] = self.handleemblsimpletag(sub_subelement_["end"])
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("tags.tag", 0, sub_subelement)
+                                                        self.unhandledelement("tags.tag", 0, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            tags_entry[-1] = tag_entry
+                                            tags_entry_[-1] = tag_entry_
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("tags", 0, subelement)
+                                            self.unhandledelement("tags", 0, subelement_)
                                             break
                                         # end if
                                     # end for
                                 # end while
-                                info["matroska"]["tags"] = tags_entry
+                                info_["matroska"]["tags"] = tags_entry_
                                 break
                             # end if
                             if case(EBML_ID_ATTACHMENTS):
                                 #// Contain attached files.
                                 while True:
                                     
-                                    if not (self.getebmlelement(subelement, element_data["end"])):
+                                    if not (self.getebmlelement(subelement_, element_data_["end"])):
                                         break
                                     # end if
-                                    for case in Switch(subelement["id"]):
+                                    for case in Switch(subelement_["id"]):
                                         if case(EBML_ID_ATTACHEDFILE):
-                                            attachedfile_entry = Array()
+                                            attachedfile_entry_ = Array()
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_subelement, subelement["end"], Array(EBML_ID_FILEDATA))):
+                                                if not (self.getebmlelement(sub_subelement_, subelement_["end"], Array(EBML_ID_FILEDATA))):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_subelement["id"]):
+                                                for case in Switch(sub_subelement_["id"]):
                                                     if case(EBML_ID_FILEDESCRIPTION):
                                                         pass
                                                     # end if
@@ -1364,31 +1375,31 @@ class getid3_matroska(getid3_handler):
                                                         pass
                                                     # end if
                                                     if case(EBML_ID_FILEMIMETYPE):
-                                                        attachedfile_entry[sub_subelement["id_name"]] = sub_subelement["data"]
+                                                        attachedfile_entry_[sub_subelement_["id_name"]] = sub_subelement_["data"]
                                                         break
                                                     # end if
                                                     if case(EBML_ID_FILEDATA):
-                                                        attachedfile_entry["data_offset"] = self.current_offset
-                                                        attachedfile_entry["data_length"] = sub_subelement["length"]
-                                                        attachedfile_entry[sub_subelement["id_name"]] = self.saveattachment(attachedfile_entry["FileName"], attachedfile_entry["data_offset"], attachedfile_entry["data_length"])
-                                                        self.current_offset = sub_subelement["end"]
+                                                        attachedfile_entry_["data_offset"] = self.current_offset
+                                                        attachedfile_entry_["data_length"] = sub_subelement_["length"]
+                                                        attachedfile_entry_[sub_subelement_["id_name"]] = self.saveattachment(attachedfile_entry_["FileName"], attachedfile_entry_["data_offset"], attachedfile_entry_["data_length"])
+                                                        self.current_offset = sub_subelement_["end"]
                                                         break
                                                     # end if
                                                     if case(EBML_ID_FILEUID):
-                                                        attachedfile_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                        attachedfile_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("attachments.attachedfile", 0, sub_subelement)
+                                                        self.unhandledelement("attachments.attachedfile", 0, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            info["matroska"]["attachments"][-1] = attachedfile_entry
+                                            info_["matroska"]["attachments"][-1] = attachedfile_entry_
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("attachments", 0, subelement)
+                                            self.unhandledelement("attachments", 0, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1398,20 +1409,20 @@ class getid3_matroska(getid3_handler):
                             if case(EBML_ID_CHAPTERS):
                                 while True:
                                     
-                                    if not (self.getebmlelement(subelement, element_data["end"])):
+                                    if not (self.getebmlelement(subelement_, element_data_["end"])):
                                         break
                                     # end if
-                                    for case in Switch(subelement["id"]):
+                                    for case in Switch(subelement_["id"]):
                                         if case(EBML_ID_EDITIONENTRY):
-                                            editionentry_entry = Array()
+                                            editionentry_entry_ = Array()
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_subelement, subelement["end"], Array(EBML_ID_CHAPTERATOM))):
+                                                if not (self.getebmlelement(sub_subelement_, subelement_["end"], Array(EBML_ID_CHAPTERATOM))):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_subelement["id"]):
+                                                for case in Switch(sub_subelement_["id"]):
                                                     if case(EBML_ID_EDITIONUID):
-                                                        editionentry_entry[sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                        editionentry_entry_[sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_EDITIONFLAGHIDDEN):
@@ -1421,29 +1432,29 @@ class getid3_matroska(getid3_handler):
                                                         pass
                                                     # end if
                                                     if case(EBML_ID_EDITIONFLAGORDERED):
-                                                        editionentry_entry[sub_subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_subelement["data"]))
+                                                        editionentry_entry_[sub_subelement_["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_subelement_["data"]))
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CHAPTERATOM):
-                                                        chapteratom_entry = Array()
+                                                        chapteratom_entry_ = Array()
                                                         while True:
                                                             
-                                                            if not (self.getebmlelement(sub_sub_subelement, sub_subelement["end"], Array(EBML_ID_CHAPTERTRACK, EBML_ID_CHAPTERDISPLAY))):
+                                                            if not (self.getebmlelement(sub_sub_subelement_, sub_subelement_["end"], Array(EBML_ID_CHAPTERTRACK, EBML_ID_CHAPTERDISPLAY))):
                                                                 break
                                                             # end if
-                                                            for case in Switch(sub_sub_subelement["id"]):
+                                                            for case in Switch(sub_sub_subelement_["id"]):
                                                                 if case(EBML_ID_CHAPTERSEGMENTUID):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERSEGMENTEDITIONUID):
-                                                                    chapteratom_entry[sub_sub_subelement["id_name"]] = sub_sub_subelement["data"]
+                                                                    chapteratom_entry_[sub_sub_subelement_["id_name"]] = sub_sub_subelement_["data"]
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERFLAGENABLED):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERFLAGHIDDEN):
-                                                                    chapteratom_entry[sub_sub_subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_sub_subelement["data"]))
+                                                                    chapteratom_entry_[sub_sub_subelement_["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_sub_subelement_["data"]))
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERUID):
@@ -1453,38 +1464,38 @@ class getid3_matroska(getid3_handler):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERTIMEEND):
-                                                                    chapteratom_entry[sub_sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement["data"])
+                                                                    chapteratom_entry_[sub_sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_sub_subelement_["data"])
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERTRACK):
-                                                                    chaptertrack_entry = Array()
+                                                                    chaptertrack_entry_ = Array()
                                                                     while True:
                                                                         
-                                                                        if not (self.getebmlelement(sub_sub_sub_subelement, sub_sub_subelement["end"], True)):
+                                                                        if not (self.getebmlelement(sub_sub_sub_subelement_, sub_sub_subelement_["end"], True)):
                                                                             break
                                                                         # end if
-                                                                        for case in Switch(sub_sub_sub_subelement["id"]):
+                                                                        for case in Switch(sub_sub_sub_subelement_["id"]):
                                                                             if case(EBML_ID_CHAPTERTRACKNUMBER):
-                                                                                chaptertrack_entry[sub_sub_sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_sub_sub_subelement["data"])
+                                                                                chaptertrack_entry_[sub_sub_sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_sub_sub_subelement_["data"])
                                                                                 break
                                                                             # end if
                                                                             if case():
-                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chaptertrack", 0, sub_sub_sub_subelement)
+                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chaptertrack", 0, sub_sub_sub_subelement_)
                                                                                 break
                                                                             # end if
                                                                         # end for
                                                                     # end while
-                                                                    chapteratom_entry[sub_sub_subelement["id_name"]][-1] = chaptertrack_entry
+                                                                    chapteratom_entry_[sub_sub_subelement_["id_name"]][-1] = chaptertrack_entry_
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERDISPLAY):
-                                                                    chapterdisplay_entry = Array()
+                                                                    chapterdisplay_entry_ = Array()
                                                                     while True:
                                                                         
-                                                                        if not (self.getebmlelement(sub_sub_sub_subelement, sub_sub_subelement["end"], True)):
+                                                                        if not (self.getebmlelement(sub_sub_sub_subelement_, sub_sub_subelement_["end"], True)):
                                                                             break
                                                                         # end if
-                                                                        for case in Switch(sub_sub_sub_subelement["id"]):
+                                                                        for case in Switch(sub_sub_sub_subelement_["id"]):
                                                                             if case(EBML_ID_CHAPSTRING):
                                                                                 pass
                                                                             # end if
@@ -1492,38 +1503,38 @@ class getid3_matroska(getid3_handler):
                                                                                 pass
                                                                             # end if
                                                                             if case(EBML_ID_CHAPCOUNTRY):
-                                                                                chapterdisplay_entry[sub_sub_sub_subelement["id_name"]] = sub_sub_sub_subelement["data"]
+                                                                                chapterdisplay_entry_[sub_sub_sub_subelement_["id_name"]] = sub_sub_sub_subelement_["data"]
                                                                                 break
                                                                             # end if
                                                                             if case():
-                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chapterdisplay", 0, sub_sub_sub_subelement)
+                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chapterdisplay", 0, sub_sub_sub_subelement_)
                                                                                 break
                                                                             # end if
                                                                         # end for
                                                                     # end while
-                                                                    chapteratom_entry[sub_sub_subelement["id_name"]][-1] = chapterdisplay_entry
+                                                                    chapteratom_entry_[sub_sub_subelement_["id_name"]][-1] = chapterdisplay_entry_
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("chapters.editionentry.chapteratom", 0, sub_sub_subelement)
+                                                                    self.unhandledelement("chapters.editionentry.chapteratom", 0, sub_sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
                                                         # end while
-                                                        editionentry_entry[sub_subelement["id_name"]][-1] = chapteratom_entry
+                                                        editionentry_entry_[sub_subelement_["id_name"]][-1] = chapteratom_entry_
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("chapters.editionentry", 0, sub_subelement)
+                                                        self.unhandledelement("chapters.editionentry", 0, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            info["matroska"]["chapters"][-1] = editionentry_entry
+                                            info_["matroska"]["chapters"][-1] = editionentry_entry_
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("chapters", 0, subelement)
+                                            self.unhandledelement("chapters", 0, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1532,13 +1543,13 @@ class getid3_matroska(getid3_handler):
                             # end if
                             if case(EBML_ID_CLUSTER):
                                 #// The lower level element containing the (monolithic) Block structure.
-                                cluster_entry = Array()
+                                cluster_entry_ = Array()
                                 while True:
                                     
-                                    if not (self.getebmlelement(subelement, element_data["end"], Array(EBML_ID_CLUSTERSILENTTRACKS, EBML_ID_CLUSTERBLOCKGROUP, EBML_ID_CLUSTERSIMPLEBLOCK))):
+                                    if not (self.getebmlelement(subelement_, element_data_["end"], Array(EBML_ID_CLUSTERSILENTTRACKS, EBML_ID_CLUSTERBLOCKGROUP, EBML_ID_CLUSTERSIMPLEBLOCK))):
                                         break
                                     # end if
-                                    for case in Switch(subelement["id"]):
+                                    for case in Switch(subelement_["id"]):
                                         if case(EBML_ID_CLUSTERTIMECODE):
                                             pass
                                         # end if
@@ -1546,40 +1557,40 @@ class getid3_matroska(getid3_handler):
                                             pass
                                         # end if
                                         if case(EBML_ID_CLUSTERPREVSIZE):
-                                            cluster_entry[subelement["id_name"]] = getid3_lib.bigendian2int(subelement["data"])
+                                            cluster_entry_[subelement_["id_name"]] = getid3_lib.bigendian2int(subelement_["data"])
                                             break
                                         # end if
                                         if case(EBML_ID_CLUSTERSILENTTRACKS):
-                                            cluster_silent_tracks = Array()
+                                            cluster_silent_tracks_ = Array()
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_subelement, subelement["end"], True)):
+                                                if not (self.getebmlelement(sub_subelement_, subelement_["end"], True)):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_subelement["id"]):
+                                                for case in Switch(sub_subelement_["id"]):
                                                     if case(EBML_ID_CLUSTERSILENTTRACKNUMBER):
-                                                        cluster_silent_tracks[-1] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                        cluster_silent_tracks_[-1] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("cluster.silenttracks", 0, sub_subelement)
+                                                        self.unhandledelement("cluster.silenttracks", 0, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            cluster_entry[subelement["id_name"]][-1] = cluster_silent_tracks
+                                            cluster_entry_[subelement_["id_name"]][-1] = cluster_silent_tracks_
                                             break
                                         # end if
                                         if case(EBML_ID_CLUSTERBLOCKGROUP):
-                                            cluster_block_group = Array({"offset": self.current_offset})
+                                            cluster_block_group_ = Array({"offset": self.current_offset})
                                             while True:
                                                 
-                                                if not (self.getebmlelement(sub_subelement, subelement["end"], Array(EBML_ID_CLUSTERBLOCK))):
+                                                if not (self.getebmlelement(sub_subelement_, subelement_["end"], Array(EBML_ID_CLUSTERBLOCK))):
                                                     break
                                                 # end if
-                                                for case in Switch(sub_subelement["id"]):
+                                                for case in Switch(sub_subelement_["id"]):
                                                     if case(EBML_ID_CLUSTERBLOCK):
-                                                        cluster_block_group[sub_subelement["id_name"]] = self.handleemblclusterblock(sub_subelement, EBML_ID_CLUSTERBLOCK, info)
+                                                        cluster_block_group_[sub_subelement_["id_name"]] = self.handleemblclusterblock(sub_subelement_, EBML_ID_CLUSTERBLOCK, info_)
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CLUSTERREFERENCEPRIORITY):
@@ -1587,46 +1598,46 @@ class getid3_matroska(getid3_handler):
                                                     # end if
                                                     if case(EBML_ID_CLUSTERBLOCKDURATION):
                                                         #// unsigned-int
-                                                        cluster_block_group[sub_subelement["id_name"]] = getid3_lib.bigendian2int(sub_subelement["data"])
+                                                        cluster_block_group_[sub_subelement_["id_name"]] = getid3_lib.bigendian2int(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CLUSTERREFERENCEBLOCK):
                                                         #// signed-int
-                                                        cluster_block_group[sub_subelement["id_name"]][-1] = getid3_lib.bigendian2int(sub_subelement["data"], False, True)
+                                                        cluster_block_group_[sub_subelement_["id_name"]][-1] = getid3_lib.bigendian2int(sub_subelement_["data"], False, True)
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CLUSTERCODECSTATE):
-                                                        cluster_block_group[sub_subelement["id_name"]] = getid3_lib.trimnullbyte(sub_subelement["data"])
+                                                        cluster_block_group_[sub_subelement_["id_name"]] = getid3_lib.trimnullbyte(sub_subelement_["data"])
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("clusters.blockgroup", 0, sub_subelement)
+                                                        self.unhandledelement("clusters.blockgroup", 0, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
                                             # end while
-                                            cluster_entry[subelement["id_name"]][-1] = cluster_block_group
+                                            cluster_entry_[subelement_["id_name"]][-1] = cluster_block_group_
                                             break
                                         # end if
                                         if case(EBML_ID_CLUSTERSIMPLEBLOCK):
-                                            cluster_entry[subelement["id_name"]][-1] = self.handleemblclusterblock(subelement, EBML_ID_CLUSTERSIMPLEBLOCK, info)
+                                            cluster_entry_[subelement_["id_name"]][-1] = self.handleemblclusterblock(subelement_, EBML_ID_CLUSTERSIMPLEBLOCK, info_)
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("cluster", 0, subelement)
+                                            self.unhandledelement("cluster", 0, subelement_)
                                             break
                                         # end if
                                     # end for
-                                    self.current_offset = subelement["end"]
+                                    self.current_offset = subelement_["end"]
                                 # end while
                                 if (not self.hide_clusters):
-                                    info["matroska"]["cluster"][-1] = cluster_entry
+                                    info_["matroska"]["cluster"][-1] = cluster_entry_
                                 # end if
                                 #// check to see if all the data we need exists already, if so, break out of the loop
                                 if (not self.parse_whole_file):
-                                    if (php_isset(lambda : info["matroska"]["info"])) and php_is_array(info["matroska"]["info"]):
-                                        if (php_isset(lambda : info["matroska"]["tracks"]["tracks"])) and php_is_array(info["matroska"]["tracks"]["tracks"]):
-                                            if php_count(info["matroska"]["track_data_offsets"]) == php_count(info["matroska"]["tracks"]["tracks"]):
+                                    if (php_isset(lambda : info_["matroska"]["info"])) and php_is_array(info_["matroska"]["info"]):
+                                        if (php_isset(lambda : info_["matroska"]["tracks"]["tracks"])) and php_is_array(info_["matroska"]["tracks"]["tracks"]):
+                                            if php_count(info_["matroska"]["track_data_offsets"]) == php_count(info_["matroska"]["tracks"]["tracks"]):
                                                 return
                                             # end if
                                         # end if
@@ -1635,7 +1646,7 @@ class getid3_matroska(getid3_handler):
                                 break
                             # end if
                             if case():
-                                self.unhandledelement("segment", 0, element_data)
+                                self.unhandledelement("segment", 0, element_data_)
                                 break
                             # end if
                         # end for
@@ -1643,7 +1654,7 @@ class getid3_matroska(getid3_handler):
                     break
                 # end if
                 if case():
-                    self.unhandledelement("root", 0, top_element)
+                    self.unhandledelement("root", 0, top_element_)
                     break
                 # end if
             # end for
@@ -1654,17 +1665,18 @@ class getid3_matroska(getid3_handler):
     #// 
     #// @return bool
     #//
-    def ensurebufferhasenoughdata(self, min_data=1024):
+    def ensurebufferhasenoughdata(self, min_data_=1024):
         
-        if self.current_offset - self.EBMLbuffer_offset >= self.EBMLbuffer_length - min_data:
-            read_bytes = php_max(min_data, self.getid3.fread_buffer_size())
+        
+        if self.current_offset - self.EBMLbuffer_offset >= self.EBMLbuffer_length - min_data_:
+            read_bytes_ = php_max(min_data_, self.getid3.fread_buffer_size())
             try: 
                 self.fseek(self.current_offset)
                 self.EBMLbuffer_offset = self.current_offset
-                self.EBMLbuffer = self.fread(read_bytes)
+                self.EBMLbuffer = self.fread(read_bytes_)
                 self.EBMLbuffer_length = php_strlen(self.EBMLbuffer)
-            except getid3_exception as e:
-                self.warning("EBML parser: " + e.getmessage())
+            except getid3_exception as e_:
+                self.warning("EBML parser: " + e_.getmessage())
                 return False
             # end try
             if self.EBMLbuffer_length == 0 and self.feof():
@@ -1678,32 +1690,33 @@ class getid3_matroska(getid3_handler):
     #//
     def readebmlint(self):
         
-        actual_offset = self.current_offset - self.EBMLbuffer_offset
+        
+        actual_offset_ = self.current_offset - self.EBMLbuffer_offset
         #// get length of integer
-        first_byte_int = php_ord(self.EBMLbuffer[actual_offset])
-        if 128 & first_byte_int:
-            length = 1
-        elif 64 & first_byte_int:
-            length = 2
-        elif 32 & first_byte_int:
-            length = 3
-        elif 16 & first_byte_int:
-            length = 4
-        elif 8 & first_byte_int:
-            length = 5
-        elif 4 & first_byte_int:
-            length = 6
-        elif 2 & first_byte_int:
-            length = 7
-        elif 1 & first_byte_int:
-            length = 8
+        first_byte_int_ = php_ord(self.EBMLbuffer[actual_offset_])
+        if 128 & first_byte_int_:
+            length_ = 1
+        elif 64 & first_byte_int_:
+            length_ = 2
+        elif 32 & first_byte_int_:
+            length_ = 3
+        elif 16 & first_byte_int_:
+            length_ = 4
+        elif 8 & first_byte_int_:
+            length_ = 5
+        elif 4 & first_byte_int_:
+            length_ = 6
+        elif 2 & first_byte_int_:
+            length_ = 7
+        elif 1 & first_byte_int_:
+            length_ = 8
         else:
             raise php_new_class("Exception", lambda : Exception("invalid EBML integer (leading 0x00) at " + self.current_offset))
         # end if
         #// read
-        int_value = self.ebml2int(php_substr(self.EBMLbuffer, actual_offset, length))
-        self.current_offset += length
-        return int_value
+        int_value_ = self.ebml2int(php_substr(self.EBMLbuffer, actual_offset_, length_))
+        self.current_offset += length_
+        return int_value_
     # end def readebmlint
     #// 
     #// @param int  $length
@@ -1711,14 +1724,17 @@ class getid3_matroska(getid3_handler):
     #// 
     #// @return string|false
     #//
-    def readebmlelementdata(self, length=None, check_buffer=False):
+    def readebmlelementdata(self, length_=None, check_buffer_=None):
+        if check_buffer_ is None:
+            check_buffer_ = False
+        # end if
         
-        if check_buffer and (not self.ensurebufferhasenoughdata(length)):
+        if check_buffer_ and (not self.ensurebufferhasenoughdata(length_)):
             return False
         # end if
-        data = php_substr(self.EBMLbuffer, self.current_offset - self.EBMLbuffer_offset, length)
-        self.current_offset += length
-        return data
+        data_ = php_substr(self.EBMLbuffer, self.current_offset - self.EBMLbuffer_offset, length_)
+        self.current_offset += length_
+        return data_
     # end def readebmlelementdata
     #// 
     #// @param array      $element
@@ -1727,9 +1743,12 @@ class getid3_matroska(getid3_handler):
     #// 
     #// @return bool
     #//
-    def getebmlelement(self, element=None, parent_end=None, get_data=False):
+    def getebmlelement(self, element_=None, parent_end_=None, get_data_=None):
+        if get_data_ is None:
+            get_data_ = False
+        # end if
         
-        if self.current_offset >= parent_end:
+        if self.current_offset >= parent_end_:
             return False
         # end if
         if (not self.ensurebufferhasenoughdata()):
@@ -1737,21 +1756,21 @@ class getid3_matroska(getid3_handler):
             #// do not exit parser right now, allow to finish current loop to gather maximum information
             return False
         # end if
-        element = Array()
+        element_ = Array()
         #// set offset
-        element["offset"] = self.current_offset
+        element_["offset"] = self.current_offset
         #// get ID
-        element["id"] = self.readebmlint()
+        element_["id"] = self.readebmlint()
         #// get name
-        element["id_name"] = self.ebmlidname(element["id"])
+        element_["id_name"] = self.ebmlidname(element_["id"])
         #// get length
-        element["length"] = self.readebmlint()
+        element_["length"] = self.readebmlint()
         #// get end offset
-        element["end"] = self.current_offset + element["length"]
+        element_["end"] = self.current_offset + element_["length"]
         #// get raw data
-        dont_parse = php_in_array(element["id"], self.unuseful_elements) or element["id_name"] == dechex(element["id"])
-        if get_data == True or php_is_array(get_data) and (not php_in_array(element["id"], get_data)) and (not dont_parse):
-            element["data"] = self.readebmlelementdata(element["length"], element)
+        dont_parse_ = php_in_array(element_["id"], self.unuseful_elements) or element_["id_name"] == dechex(element_["id"])
+        if get_data_ == True or php_is_array(get_data_) and (not php_in_array(element_["id"], get_data_)) and (not dont_parse_):
+            element_["data"] = self.readebmlelementdata(element_["length"], element_)
         # end if
         return True
     # end def getebmlelement
@@ -1760,15 +1779,16 @@ class getid3_matroska(getid3_handler):
     #// @param int    $line
     #// @param array  $element
     #//
-    def unhandledelement(self, type=None, line=None, element=None):
+    def unhandledelement(self, type_=None, line_=None, element_=None):
+        
         
         #// warn only about unknown and missed elements, not about unuseful
-        if (not php_in_array(element["id"], self.unuseful_elements)):
-            self.warning("Unhandled " + type + " element [" + php_basename(__FILE__) + ":" + line + "] (" + element["id"] + "::" + element["id_name"] + " [" + element["length"] + " bytes]) at " + element["offset"])
+        if (not php_in_array(element_["id"], self.unuseful_elements)):
+            self.warning("Unhandled " + type_ + " element [" + php_basename(__FILE__) + ":" + line_ + "] (" + element_["id"] + "::" + element_["id_name"] + " [" + element_["length"] + " bytes]) at " + element_["offset"])
         # end if
         #// increase offset for unparsed elements
-        if (not (php_isset(lambda : element["data"]))):
-            self.current_offset = element["end"]
+        if (not (php_isset(lambda : element_["data"]))):
+            self.current_offset = element_["end"]
         # end if
     # end def unhandledelement
     #// 
@@ -1776,15 +1796,16 @@ class getid3_matroska(getid3_handler):
     #// 
     #// @return bool
     #//
-    def extractcommentssimpletag(self, SimpleTagArray=None):
+    def extractcommentssimpletag(self, SimpleTagArray_=None):
         
-        if (not php_empty(lambda : SimpleTagArray["SimpleTag"])):
-            for SimpleTagKey,SimpleTagData in SimpleTagArray["SimpleTag"]:
-                if (not php_empty(lambda : SimpleTagData["TagName"])) and (not php_empty(lambda : SimpleTagData["TagString"])):
-                    self.getid3.info["matroska"]["comments"][php_strtolower(SimpleTagData["TagName"])][-1] = SimpleTagData["TagString"]
+        
+        if (not php_empty(lambda : SimpleTagArray_["SimpleTag"])):
+            for SimpleTagKey_,SimpleTagData_ in SimpleTagArray_["SimpleTag"]:
+                if (not php_empty(lambda : SimpleTagData_["TagName"])) and (not php_empty(lambda : SimpleTagData_["TagString"])):
+                    self.getid3.info["matroska"]["comments"][php_strtolower(SimpleTagData_["TagName"])][-1] = SimpleTagData_["TagString"]
                 # end if
-                if (not php_empty(lambda : SimpleTagData["SimpleTag"])):
-                    self.extractcommentssimpletag(SimpleTagData)
+                if (not php_empty(lambda : SimpleTagData_["SimpleTag"])):
+                    self.extractcommentssimpletag(SimpleTagData_)
                 # end if
             # end for
         # end if
@@ -1795,15 +1816,16 @@ class getid3_matroska(getid3_handler):
     #// 
     #// @return array
     #//
-    def handleemblsimpletag(self, parent_end=None):
+    def handleemblsimpletag(self, parent_end_=None):
         
-        simpletag_entry = Array()
+        
+        simpletag_entry_ = Array()
         while True:
             
-            if not (self.getebmlelement(element, parent_end, Array(EBML_ID_SIMPLETAG))):
+            if not (self.getebmlelement(element_, parent_end_, Array(EBML_ID_SIMPLETAG))):
                 break
             # end if
-            for case in Switch(element["id"]):
+            for case in Switch(element_["id"]):
                 if case(EBML_ID_TAGNAME):
                     pass
                 # end if
@@ -1814,24 +1836,24 @@ class getid3_matroska(getid3_handler):
                     pass
                 # end if
                 if case(EBML_ID_TAGBINARY):
-                    simpletag_entry[element["id_name"]] = element["data"]
+                    simpletag_entry_[element_["id_name"]] = element_["data"]
                     break
                 # end if
                 if case(EBML_ID_SIMPLETAG):
-                    simpletag_entry[element["id_name"]][-1] = self.handleemblsimpletag(element["end"])
+                    simpletag_entry_[element_["id_name"]][-1] = self.handleemblsimpletag(element_["end"])
                     break
                 # end if
                 if case(EBML_ID_TAGDEFAULT):
-                    simpletag_entry[element["id_name"]] = php_bool(getid3_lib.bigendian2int(element["data"]))
+                    simpletag_entry_[element_["id_name"]] = php_bool(getid3_lib.bigendian2int(element_["data"]))
                     break
                 # end if
                 if case():
-                    self.unhandledelement("tag.simpletag", 0, element)
+                    self.unhandledelement("tag.simpletag", 0, element_)
                     break
                 # end if
             # end for
         # end while
-        return simpletag_entry
+        return simpletag_entry_
     # end def handleemblsimpletag
     #// 
     #// @param array $element
@@ -1840,79 +1862,81 @@ class getid3_matroska(getid3_handler):
     #// 
     #// @return array
     #//
-    def handleemblclusterblock(self, element=None, block_type=None, info=None):
+    def handleemblclusterblock(self, element_=None, block_type_=None, info_=None):
+        
         
         #// http://www.matroska.org/technical/specs/index.html#block_structure
         #// http://www.matroska.org/technical/specs/index.html#simpleblock_structure
-        block_data = Array()
-        block_data["tracknumber"] = self.readebmlint()
-        block_data["timecode"] = getid3_lib.bigendian2int(self.readebmlelementdata(2), False, True)
-        block_data["flags_raw"] = getid3_lib.bigendian2int(self.readebmlelementdata(1))
-        if block_type == EBML_ID_CLUSTERSIMPLEBLOCK:
-            block_data["flags"]["keyframe"] = block_data["flags_raw"] & 128 >> 7
+        block_data_ = Array()
+        block_data_["tracknumber"] = self.readebmlint()
+        block_data_["timecode"] = getid3_lib.bigendian2int(self.readebmlelementdata(2), False, True)
+        block_data_["flags_raw"] = getid3_lib.bigendian2int(self.readebmlelementdata(1))
+        if block_type_ == EBML_ID_CLUSTERSIMPLEBLOCK:
+            block_data_["flags"]["keyframe"] = block_data_["flags_raw"] & 128 >> 7
             pass
         else:
             pass
         # end if
-        block_data["flags"]["invisible"] = php_bool(block_data["flags_raw"] & 8 >> 3)
-        block_data["flags"]["lacing"] = block_data["flags_raw"] & 6 >> 1
+        block_data_["flags"]["invisible"] = php_bool(block_data_["flags_raw"] & 8 >> 3)
+        block_data_["flags"]["lacing"] = block_data_["flags_raw"] & 6 >> 1
         #// 00=no lacing; 01=Xiph lacing; 11=EBML lacing; 10=fixed-size lacing
-        if block_type == EBML_ID_CLUSTERSIMPLEBLOCK:
-            block_data["flags"]["discardable"] = block_data["flags_raw"] & 1
+        if block_type_ == EBML_ID_CLUSTERSIMPLEBLOCK:
+            block_data_["flags"]["discardable"] = block_data_["flags_raw"] & 1
         else:
             pass
         # end if
-        block_data["flags"]["lacing_type"] = self.blocklacingtype(block_data["flags"]["lacing"])
+        block_data_["flags"]["lacing_type"] = self.blocklacingtype(block_data_["flags"]["lacing"])
         #// Lace (when lacing bit is set)
-        if block_data["flags"]["lacing"] > 0:
-            block_data["lace_frames"] = getid3_lib.bigendian2int(self.readebmlelementdata(1)) + 1
+        if block_data_["flags"]["lacing"] > 0:
+            block_data_["lace_frames"] = getid3_lib.bigendian2int(self.readebmlelementdata(1)) + 1
             #// Number of frames in the lace-1 (uint8)
-            if block_data["flags"]["lacing"] != 2:
-                i = 1
-                while i < block_data["lace_frames"]:
+            if block_data_["flags"]["lacing"] != 2:
+                i_ = 1
+                while i_ < block_data_["lace_frames"]:
                     
                     #// Lace-coded size of each frame of the lace, except for the last one (multiple uint8). *This is not used with Fixed-size lacing as it is calculated automatically from (total size of lace) / (number of frames in lace).
-                    if block_data["flags"]["lacing"] == 3:
+                    if block_data_["flags"]["lacing"] == 3:
                         #// EBML lacing
-                        block_data["lace_frames_size"][i] = self.readebmlint()
+                        block_data_["lace_frames_size"][i_] = self.readebmlint()
                         pass
                     else:
                         #// Xiph lacing
-                        block_data["lace_frames_size"][i] = 0
+                        block_data_["lace_frames_size"][i_] = 0
                         while True:
-                            size = getid3_lib.bigendian2int(self.readebmlelementdata(1))
-                            block_data["lace_frames_size"][i] += size
+                            size_ = getid3_lib.bigendian2int(self.readebmlelementdata(1))
+                            block_data_["lace_frames_size"][i_] += size_
                             
-                            if size == 255:
+                            if size_ == 255:
                                 break
                             # end if
                         # end while
                     # end if
-                    i += 1
+                    i_ += 1
                 # end while
-                if block_data["flags"]["lacing"] == 1:
+                if block_data_["flags"]["lacing"] == 1:
                     #// calc size of the last frame only for Xiph lacing, till EBML sizes are now anyway determined incorrectly
-                    block_data["lace_frames_size"][-1] = element["end"] - self.current_offset - array_sum(block_data["lace_frames_size"])
+                    block_data_["lace_frames_size"][-1] = element_["end"] - self.current_offset - array_sum(block_data_["lace_frames_size"])
                 # end if
             # end if
         # end if
-        if (not (php_isset(lambda : info["matroska"]["track_data_offsets"][block_data["tracknumber"]]))):
-            info["matroska"]["track_data_offsets"][block_data["tracknumber"]]["offset"] = self.current_offset
-            info["matroska"]["track_data_offsets"][block_data["tracknumber"]]["length"] = element["end"] - self.current_offset
+        if (not (php_isset(lambda : info_["matroska"]["track_data_offsets"][block_data_["tracknumber"]]))):
+            info_["matroska"]["track_data_offsets"][block_data_["tracknumber"]]["offset"] = self.current_offset
+            info_["matroska"]["track_data_offsets"][block_data_["tracknumber"]]["length"] = element_["end"] - self.current_offset
             pass
         # end if
         #// $info['matroska']['track_data_offsets'][$block_data['tracknumber']]['total_length'] += $info['matroska']['track_data_offsets'][$block_data['tracknumber']]['length'];
         #// $info['matroska']['track_data_offsets'][$block_data['tracknumber']]['duration']      = $block_data['timecode'] * ((isset($info['matroska']['info'][0]['TimecodeScale']) ? $info['matroska']['info'][0]['TimecodeScale'] : 1000000) / 1000000000);
         #// set offset manually
-        self.current_offset = element["end"]
-        return block_data
+        self.current_offset = element_["end"]
+        return block_data_
     # end def handleemblclusterblock
     #// 
     #// @param string $EBMLstring
     #// 
     #// @return int|float|false
     #//
-    def ebml2int(self, EBMLstring=None):
+    def ebml2int(self, EBMLstring_=None):
+        
         
         #// http://matroska.org/specs
         #// Element ID coded with an UTF-8 like system:
@@ -1930,36 +1954,37 @@ class getid3_matroska(getid3_handler):
         #// 0000 01xx  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx                       - value 0 to 2^42-2
         #// 0000 001x  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx            - value 0 to 2^49-2
         #// 0000 0001  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx  xxxx xxxx - value 0 to 2^56-2
-        first_byte_int = php_ord(EBMLstring[0])
-        if 128 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 127)
-        elif 64 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 63)
-        elif 32 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 31)
-        elif 16 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 15)
-        elif 8 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 7)
-        elif 4 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 3)
-        elif 2 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 1)
-        elif 1 & first_byte_int:
-            EBMLstring[0] = chr(first_byte_int & 0)
+        first_byte_int_ = php_ord(EBMLstring_[0])
+        if 128 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 127)
+        elif 64 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 63)
+        elif 32 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 31)
+        elif 16 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 15)
+        elif 8 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 7)
+        elif 4 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 3)
+        elif 2 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 1)
+        elif 1 & first_byte_int_:
+            EBMLstring_[0] = chr(first_byte_int_ & 0)
         # end if
-        return getid3_lib.bigendian2int(EBMLstring)
+        return getid3_lib.bigendian2int(EBMLstring_)
     # end def ebml2int
     #// 
     #// @param int $EBMLdatestamp
     #// 
     #// @return float
     #//
-    def ebmldate2unix(self, EBMLdatestamp=None):
+    def ebmldate2unix(self, EBMLdatestamp_=None):
+        
         
         #// Date - signed 8 octets integer in nanoseconds with 0 indicating the precise beginning of the millennium (at 2001-01-01T00:00:00,000000000 UTC)
         #// 978307200 == mktime(0, 0, 0, 1, 1, 2001) == January 1, 2001 12:00:00am UTC
-        return round(EBMLdatestamp / 1000000000 + 978307200)
+        return round(EBMLdatestamp_ / 1000000000 + 978307200)
     # end def ebmldate2unix
     #// 
     #// @param int $target_type
@@ -1967,26 +1992,27 @@ class getid3_matroska(getid3_handler):
     #// @return string|int
     #//
     @classmethod
-    def targettypevalue(self, target_type=None):
+    def targettypevalue(self, target_type_=None):
         
-        targettypevalue.TargetTypeValue = Array()
-        if php_empty(lambda : targettypevalue.TargetTypeValue):
-            targettypevalue.TargetTypeValue[10] = "A: ~ V:shot"
+        
+        TargetTypeValue_ = Array()
+        if php_empty(lambda : TargetTypeValue_):
+            TargetTypeValue_[10] = "A: ~ V:shot"
             #// the lowest hierarchy found in music or movies
-            targettypevalue.TargetTypeValue[20] = "A:subtrack/part/movement ~ V:scene"
+            TargetTypeValue_[20] = "A:subtrack/part/movement ~ V:scene"
             #// corresponds to parts of a track for audio (like a movement)
-            targettypevalue.TargetTypeValue[30] = "A:track/song ~ V:chapter"
+            TargetTypeValue_[30] = "A:track/song ~ V:chapter"
             #// the common parts of an album or a movie
-            targettypevalue.TargetTypeValue[40] = "A:part/session ~ V:part/session"
+            TargetTypeValue_[40] = "A:part/session ~ V:part/session"
             #// when an album or episode has different logical parts
-            targettypevalue.TargetTypeValue[50] = "A:album/opera/concert ~ V:movie/episode/concert"
+            TargetTypeValue_[50] = "A:album/opera/concert ~ V:movie/episode/concert"
             #// the most common grouping level of music and video (equals to an episode for TV series)
-            targettypevalue.TargetTypeValue[60] = "A:edition/issue/volume/opus ~ V:season/sequel/volume"
+            TargetTypeValue_[60] = "A:edition/issue/volume/opus ~ V:season/sequel/volume"
             #// a list of lower levels grouped together
-            targettypevalue.TargetTypeValue[70] = "A:collection ~ V:collection"
+            TargetTypeValue_[70] = "A:collection ~ V:collection"
             pass
         # end if
-        return targettypevalue.TargetTypeValue[target_type] if (php_isset(lambda : targettypevalue.TargetTypeValue[target_type])) else target_type
+        return TargetTypeValue_[target_type_] if (php_isset(lambda : TargetTypeValue_[target_type_])) else target_type_
     # end def targettypevalue
     #// 
     #// @param int $lacingtype
@@ -1994,16 +2020,17 @@ class getid3_matroska(getid3_handler):
     #// @return string|int
     #//
     @classmethod
-    def blocklacingtype(self, lacingtype=None):
+    def blocklacingtype(self, lacingtype_=None):
         
-        blocklacingtype.BlockLacingType = Array()
-        if php_empty(lambda : blocklacingtype.BlockLacingType):
-            blocklacingtype.BlockLacingType[0] = "no lacing"
-            blocklacingtype.BlockLacingType[1] = "Xiph lacing"
-            blocklacingtype.BlockLacingType[2] = "fixed-size lacing"
-            blocklacingtype.BlockLacingType[3] = "EBML lacing"
+        
+        BlockLacingType_ = Array()
+        if php_empty(lambda : BlockLacingType_):
+            BlockLacingType_[0] = "no lacing"
+            BlockLacingType_[1] = "Xiph lacing"
+            BlockLacingType_[2] = "fixed-size lacing"
+            BlockLacingType_[3] = "EBML lacing"
         # end if
-        return blocklacingtype.BlockLacingType[lacingtype] if (php_isset(lambda : blocklacingtype.BlockLacingType[lacingtype])) else lacingtype
+        return BlockLacingType_[lacingtype_] if (php_isset(lambda : BlockLacingType_[lacingtype_])) else lacingtype_
     # end def blocklacingtype
     #// 
     #// @param string $codecid
@@ -2011,249 +2038,251 @@ class getid3_matroska(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def codecidtocommonname(self, codecid=None):
+    def codecidtocommonname(self, codecid_=None):
         
-        codecidtocommonname.CodecIDlist = Array()
-        if php_empty(lambda : codecidtocommonname.CodecIDlist):
-            codecidtocommonname.CodecIDlist["A_AAC"] = "aac"
-            codecidtocommonname.CodecIDlist["A_AAC/MPEG2/LC"] = "aac"
-            codecidtocommonname.CodecIDlist["A_AC3"] = "ac3"
-            codecidtocommonname.CodecIDlist["A_EAC3"] = "eac3"
-            codecidtocommonname.CodecIDlist["A_DTS"] = "dts"
-            codecidtocommonname.CodecIDlist["A_FLAC"] = "flac"
-            codecidtocommonname.CodecIDlist["A_MPEG/L1"] = "mp1"
-            codecidtocommonname.CodecIDlist["A_MPEG/L2"] = "mp2"
-            codecidtocommonname.CodecIDlist["A_MPEG/L3"] = "mp3"
-            codecidtocommonname.CodecIDlist["A_PCM/INT/LIT"] = "pcm"
+        
+        CodecIDlist_ = Array()
+        if php_empty(lambda : CodecIDlist_):
+            CodecIDlist_["A_AAC"] = "aac"
+            CodecIDlist_["A_AAC/MPEG2/LC"] = "aac"
+            CodecIDlist_["A_AC3"] = "ac3"
+            CodecIDlist_["A_EAC3"] = "eac3"
+            CodecIDlist_["A_DTS"] = "dts"
+            CodecIDlist_["A_FLAC"] = "flac"
+            CodecIDlist_["A_MPEG/L1"] = "mp1"
+            CodecIDlist_["A_MPEG/L2"] = "mp2"
+            CodecIDlist_["A_MPEG/L3"] = "mp3"
+            CodecIDlist_["A_PCM/INT/LIT"] = "pcm"
             #// PCM Integer Little Endian
-            codecidtocommonname.CodecIDlist["A_PCM/INT/BIG"] = "pcm"
+            CodecIDlist_["A_PCM/INT/BIG"] = "pcm"
             #// PCM Integer Big Endian
-            codecidtocommonname.CodecIDlist["A_QUICKTIME/QDMC"] = "quicktime"
+            CodecIDlist_["A_QUICKTIME/QDMC"] = "quicktime"
             #// Quicktime: QDesign Music
-            codecidtocommonname.CodecIDlist["A_QUICKTIME/QDM2"] = "quicktime"
+            CodecIDlist_["A_QUICKTIME/QDM2"] = "quicktime"
             #// Quicktime: QDesign Music v2
-            codecidtocommonname.CodecIDlist["A_VORBIS"] = "vorbis"
-            codecidtocommonname.CodecIDlist["V_MPEG1"] = "mpeg"
-            codecidtocommonname.CodecIDlist["V_THEORA"] = "theora"
-            codecidtocommonname.CodecIDlist["V_REAL/RV40"] = "real"
-            codecidtocommonname.CodecIDlist["V_REAL/RV10"] = "real"
-            codecidtocommonname.CodecIDlist["V_REAL/RV20"] = "real"
-            codecidtocommonname.CodecIDlist["V_REAL/RV30"] = "real"
-            codecidtocommonname.CodecIDlist["V_QUICKTIME"] = "quicktime"
+            CodecIDlist_["A_VORBIS"] = "vorbis"
+            CodecIDlist_["V_MPEG1"] = "mpeg"
+            CodecIDlist_["V_THEORA"] = "theora"
+            CodecIDlist_["V_REAL/RV40"] = "real"
+            CodecIDlist_["V_REAL/RV10"] = "real"
+            CodecIDlist_["V_REAL/RV20"] = "real"
+            CodecIDlist_["V_REAL/RV30"] = "real"
+            CodecIDlist_["V_QUICKTIME"] = "quicktime"
             #// Quicktime
-            codecidtocommonname.CodecIDlist["V_MPEG4/ISO/AP"] = "mpeg4"
-            codecidtocommonname.CodecIDlist["V_MPEG4/ISO/ASP"] = "mpeg4"
-            codecidtocommonname.CodecIDlist["V_MPEG4/ISO/AVC"] = "h264"
-            codecidtocommonname.CodecIDlist["V_MPEG4/ISO/SP"] = "mpeg4"
-            codecidtocommonname.CodecIDlist["V_VP8"] = "vp8"
-            codecidtocommonname.CodecIDlist["V_MS/VFW/FOURCC"] = "vcm"
+            CodecIDlist_["V_MPEG4/ISO/AP"] = "mpeg4"
+            CodecIDlist_["V_MPEG4/ISO/ASP"] = "mpeg4"
+            CodecIDlist_["V_MPEG4/ISO/AVC"] = "h264"
+            CodecIDlist_["V_MPEG4/ISO/SP"] = "mpeg4"
+            CodecIDlist_["V_VP8"] = "vp8"
+            CodecIDlist_["V_MS/VFW/FOURCC"] = "vcm"
             #// Microsoft (TM) Video Codec Manager (VCM)
-            codecidtocommonname.CodecIDlist["A_MS/ACM"] = "acm"
+            CodecIDlist_["A_MS/ACM"] = "acm"
             pass
         # end if
-        return codecidtocommonname.CodecIDlist[codecid] if (php_isset(lambda : codecidtocommonname.CodecIDlist[codecid])) else codecid
+        return CodecIDlist_[codecid_] if (php_isset(lambda : CodecIDlist_[codecid_])) else codecid_
     # end def codecidtocommonname
     #// 
     #// @param int $value
     #// 
     #// @return string
     #//
-    def ebmlidname(self, value=None):
+    def ebmlidname(self, value_=None):
         
-        ebmlidname.EBMLidList = Array()
-        if php_empty(lambda : ebmlidname.EBMLidList):
-            ebmlidname.EBMLidList[EBML_ID_ASPECTRATIOTYPE] = "AspectRatioType"
-            ebmlidname.EBMLidList[EBML_ID_ATTACHEDFILE] = "AttachedFile"
-            ebmlidname.EBMLidList[EBML_ID_ATTACHMENTLINK] = "AttachmentLink"
-            ebmlidname.EBMLidList[EBML_ID_ATTACHMENTS] = "Attachments"
-            ebmlidname.EBMLidList[EBML_ID_AUDIO] = "Audio"
-            ebmlidname.EBMLidList[EBML_ID_BITDEPTH] = "BitDepth"
-            ebmlidname.EBMLidList[EBML_ID_CHANNELPOSITIONS] = "ChannelPositions"
-            ebmlidname.EBMLidList[EBML_ID_CHANNELS] = "Channels"
-            ebmlidname.EBMLidList[EBML_ID_CHAPCOUNTRY] = "ChapCountry"
-            ebmlidname.EBMLidList[EBML_ID_CHAPLANGUAGE] = "ChapLanguage"
-            ebmlidname.EBMLidList[EBML_ID_CHAPPROCESS] = "ChapProcess"
-            ebmlidname.EBMLidList[EBML_ID_CHAPPROCESSCODECID] = "ChapProcessCodecID"
-            ebmlidname.EBMLidList[EBML_ID_CHAPPROCESSCOMMAND] = "ChapProcessCommand"
-            ebmlidname.EBMLidList[EBML_ID_CHAPPROCESSDATA] = "ChapProcessData"
-            ebmlidname.EBMLidList[EBML_ID_CHAPPROCESSPRIVATE] = "ChapProcessPrivate"
-            ebmlidname.EBMLidList[EBML_ID_CHAPPROCESSTIME] = "ChapProcessTime"
-            ebmlidname.EBMLidList[EBML_ID_CHAPSTRING] = "ChapString"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERATOM] = "ChapterAtom"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERDISPLAY] = "ChapterDisplay"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERFLAGENABLED] = "ChapterFlagEnabled"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERFLAGHIDDEN] = "ChapterFlagHidden"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERPHYSICALEQUIV] = "ChapterPhysicalEquiv"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERS] = "Chapters"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERSEGMENTEDITIONUID] = "ChapterSegmentEditionUID"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERSEGMENTUID] = "ChapterSegmentUID"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTIMEEND] = "ChapterTimeEnd"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTIMESTART] = "ChapterTimeStart"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTRACK] = "ChapterTrack"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTRACKNUMBER] = "ChapterTrackNumber"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTRANSLATE] = "ChapterTranslate"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTRANSLATECODEC] = "ChapterTranslateCodec"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTRANSLATEEDITIONUID] = "ChapterTranslateEditionUID"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERTRANSLATEID] = "ChapterTranslateID"
-            ebmlidname.EBMLidList[EBML_ID_CHAPTERUID] = "ChapterUID"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTER] = "Cluster"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCK] = "ClusterBlock"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKADDID] = "ClusterBlockAddID"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKADDITIONAL] = "ClusterBlockAdditional"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKADDITIONID] = "ClusterBlockAdditionID"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKADDITIONS] = "ClusterBlockAdditions"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKDURATION] = "ClusterBlockDuration"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKGROUP] = "ClusterBlockGroup"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKMORE] = "ClusterBlockMore"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERBLOCKVIRTUAL] = "ClusterBlockVirtual"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERCODECSTATE] = "ClusterCodecState"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERDELAY] = "ClusterDelay"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERDURATION] = "ClusterDuration"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERENCRYPTEDBLOCK] = "ClusterEncryptedBlock"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERFRAMENUMBER] = "ClusterFrameNumber"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERLACENUMBER] = "ClusterLaceNumber"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERPOSITION] = "ClusterPosition"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERPREVSIZE] = "ClusterPrevSize"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERREFERENCEBLOCK] = "ClusterReferenceBlock"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERREFERENCEPRIORITY] = "ClusterReferencePriority"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERREFERENCEVIRTUAL] = "ClusterReferenceVirtual"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERSILENTTRACKNUMBER] = "ClusterSilentTrackNumber"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERSILENTTRACKS] = "ClusterSilentTracks"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERSIMPLEBLOCK] = "ClusterSimpleBlock"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERTIMECODE] = "ClusterTimecode"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERTIMESLICE] = "ClusterTimeSlice"
-            ebmlidname.EBMLidList[EBML_ID_CODECDECODEALL] = "CodecDecodeAll"
-            ebmlidname.EBMLidList[EBML_ID_CODECDOWNLOADURL] = "CodecDownloadURL"
-            ebmlidname.EBMLidList[EBML_ID_CODECID] = "CodecID"
-            ebmlidname.EBMLidList[EBML_ID_CODECINFOURL] = "CodecInfoURL"
-            ebmlidname.EBMLidList[EBML_ID_CODECNAME] = "CodecName"
-            ebmlidname.EBMLidList[EBML_ID_CODECPRIVATE] = "CodecPrivate"
-            ebmlidname.EBMLidList[EBML_ID_CODECSETTINGS] = "CodecSettings"
-            ebmlidname.EBMLidList[EBML_ID_COLOURSPACE] = "ColourSpace"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTCOMPALGO] = "ContentCompAlgo"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTCOMPRESSION] = "ContentCompression"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTCOMPSETTINGS] = "ContentCompSettings"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCALGO] = "ContentEncAlgo"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCKEYID] = "ContentEncKeyID"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCODING] = "ContentEncoding"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCODINGORDER] = "ContentEncodingOrder"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCODINGS] = "ContentEncodings"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCODINGSCOPE] = "ContentEncodingScope"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCODINGTYPE] = "ContentEncodingType"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTENCRYPTION] = "ContentEncryption"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTSIGALGO] = "ContentSigAlgo"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTSIGHASHALGO] = "ContentSigHashAlgo"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTSIGKEYID] = "ContentSigKeyID"
-            ebmlidname.EBMLidList[EBML_ID_CONTENTSIGNATURE] = "ContentSignature"
-            ebmlidname.EBMLidList[EBML_ID_CRC32] = "CRC32"
-            ebmlidname.EBMLidList[EBML_ID_CUEBLOCKNUMBER] = "CueBlockNumber"
-            ebmlidname.EBMLidList[EBML_ID_CUECLUSTERPOSITION] = "CueClusterPosition"
-            ebmlidname.EBMLidList[EBML_ID_CUECODECSTATE] = "CueCodecState"
-            ebmlidname.EBMLidList[EBML_ID_CUEPOINT] = "CuePoint"
-            ebmlidname.EBMLidList[EBML_ID_CUEREFCLUSTER] = "CueRefCluster"
-            ebmlidname.EBMLidList[EBML_ID_CUEREFCODECSTATE] = "CueRefCodecState"
-            ebmlidname.EBMLidList[EBML_ID_CUEREFERENCE] = "CueReference"
-            ebmlidname.EBMLidList[EBML_ID_CUEREFNUMBER] = "CueRefNumber"
-            ebmlidname.EBMLidList[EBML_ID_CUEREFTIME] = "CueRefTime"
-            ebmlidname.EBMLidList[EBML_ID_CUES] = "Cues"
-            ebmlidname.EBMLidList[EBML_ID_CUETIME] = "CueTime"
-            ebmlidname.EBMLidList[EBML_ID_CUETRACK] = "CueTrack"
-            ebmlidname.EBMLidList[EBML_ID_CUETRACKPOSITIONS] = "CueTrackPositions"
-            ebmlidname.EBMLidList[EBML_ID_DATEUTC] = "DateUTC"
-            ebmlidname.EBMLidList[EBML_ID_DEFAULTDURATION] = "DefaultDuration"
-            ebmlidname.EBMLidList[EBML_ID_DISPLAYHEIGHT] = "DisplayHeight"
-            ebmlidname.EBMLidList[EBML_ID_DISPLAYUNIT] = "DisplayUnit"
-            ebmlidname.EBMLidList[EBML_ID_DISPLAYWIDTH] = "DisplayWidth"
-            ebmlidname.EBMLidList[EBML_ID_DOCTYPE] = "DocType"
-            ebmlidname.EBMLidList[EBML_ID_DOCTYPEREADVERSION] = "DocTypeReadVersion"
-            ebmlidname.EBMLidList[EBML_ID_DOCTYPEVERSION] = "DocTypeVersion"
-            ebmlidname.EBMLidList[EBML_ID_DURATION] = "Duration"
-            ebmlidname.EBMLidList[EBML_ID_EBML] = "EBML"
-            ebmlidname.EBMLidList[EBML_ID_EBMLMAXIDLENGTH] = "EBMLMaxIDLength"
-            ebmlidname.EBMLidList[EBML_ID_EBMLMAXSIZELENGTH] = "EBMLMaxSizeLength"
-            ebmlidname.EBMLidList[EBML_ID_EBMLREADVERSION] = "EBMLReadVersion"
-            ebmlidname.EBMLidList[EBML_ID_EBMLVERSION] = "EBMLVersion"
-            ebmlidname.EBMLidList[EBML_ID_EDITIONENTRY] = "EditionEntry"
-            ebmlidname.EBMLidList[EBML_ID_EDITIONFLAGDEFAULT] = "EditionFlagDefault"
-            ebmlidname.EBMLidList[EBML_ID_EDITIONFLAGHIDDEN] = "EditionFlagHidden"
-            ebmlidname.EBMLidList[EBML_ID_EDITIONFLAGORDERED] = "EditionFlagOrdered"
-            ebmlidname.EBMLidList[EBML_ID_EDITIONUID] = "EditionUID"
-            ebmlidname.EBMLidList[EBML_ID_FILEDATA] = "FileData"
-            ebmlidname.EBMLidList[EBML_ID_FILEDESCRIPTION] = "FileDescription"
-            ebmlidname.EBMLidList[EBML_ID_FILEMIMETYPE] = "FileMimeType"
-            ebmlidname.EBMLidList[EBML_ID_FILENAME] = "FileName"
-            ebmlidname.EBMLidList[EBML_ID_FILEREFERRAL] = "FileReferral"
-            ebmlidname.EBMLidList[EBML_ID_FILEUID] = "FileUID"
-            ebmlidname.EBMLidList[EBML_ID_FLAGDEFAULT] = "FlagDefault"
-            ebmlidname.EBMLidList[EBML_ID_FLAGENABLED] = "FlagEnabled"
-            ebmlidname.EBMLidList[EBML_ID_FLAGFORCED] = "FlagForced"
-            ebmlidname.EBMLidList[EBML_ID_FLAGINTERLACED] = "FlagInterlaced"
-            ebmlidname.EBMLidList[EBML_ID_FLAGLACING] = "FlagLacing"
-            ebmlidname.EBMLidList[EBML_ID_GAMMAVALUE] = "GammaValue"
-            ebmlidname.EBMLidList[EBML_ID_INFO] = "Info"
-            ebmlidname.EBMLidList[EBML_ID_LANGUAGE] = "Language"
-            ebmlidname.EBMLidList[EBML_ID_MAXBLOCKADDITIONID] = "MaxBlockAdditionID"
-            ebmlidname.EBMLidList[EBML_ID_MAXCACHE] = "MaxCache"
-            ebmlidname.EBMLidList[EBML_ID_MINCACHE] = "MinCache"
-            ebmlidname.EBMLidList[EBML_ID_MUXINGAPP] = "MuxingApp"
-            ebmlidname.EBMLidList[EBML_ID_NAME] = "Name"
-            ebmlidname.EBMLidList[EBML_ID_NEXTFILENAME] = "NextFilename"
-            ebmlidname.EBMLidList[EBML_ID_NEXTUID] = "NextUID"
-            ebmlidname.EBMLidList[EBML_ID_OUTPUTSAMPLINGFREQUENCY] = "OutputSamplingFrequency"
-            ebmlidname.EBMLidList[EBML_ID_PIXELCROPBOTTOM] = "PixelCropBottom"
-            ebmlidname.EBMLidList[EBML_ID_PIXELCROPLEFT] = "PixelCropLeft"
-            ebmlidname.EBMLidList[EBML_ID_PIXELCROPRIGHT] = "PixelCropRight"
-            ebmlidname.EBMLidList[EBML_ID_PIXELCROPTOP] = "PixelCropTop"
-            ebmlidname.EBMLidList[EBML_ID_PIXELHEIGHT] = "PixelHeight"
-            ebmlidname.EBMLidList[EBML_ID_PIXELWIDTH] = "PixelWidth"
-            ebmlidname.EBMLidList[EBML_ID_PREVFILENAME] = "PrevFilename"
-            ebmlidname.EBMLidList[EBML_ID_PREVUID] = "PrevUID"
-            ebmlidname.EBMLidList[EBML_ID_SAMPLINGFREQUENCY] = "SamplingFrequency"
-            ebmlidname.EBMLidList[EBML_ID_SEEK] = "Seek"
-            ebmlidname.EBMLidList[EBML_ID_SEEKHEAD] = "SeekHead"
-            ebmlidname.EBMLidList[EBML_ID_SEEKID] = "SeekID"
-            ebmlidname.EBMLidList[EBML_ID_SEEKPOSITION] = "SeekPosition"
-            ebmlidname.EBMLidList[EBML_ID_SEGMENT] = "Segment"
-            ebmlidname.EBMLidList[EBML_ID_SEGMENTFAMILY] = "SegmentFamily"
-            ebmlidname.EBMLidList[EBML_ID_SEGMENTFILENAME] = "SegmentFilename"
-            ebmlidname.EBMLidList[EBML_ID_SEGMENTUID] = "SegmentUID"
-            ebmlidname.EBMLidList[EBML_ID_SIMPLETAG] = "SimpleTag"
-            ebmlidname.EBMLidList[EBML_ID_CLUSTERSLICES] = "ClusterSlices"
-            ebmlidname.EBMLidList[EBML_ID_STEREOMODE] = "StereoMode"
-            ebmlidname.EBMLidList[EBML_ID_OLDSTEREOMODE] = "OldStereoMode"
-            ebmlidname.EBMLidList[EBML_ID_TAG] = "Tag"
-            ebmlidname.EBMLidList[EBML_ID_TAGATTACHMENTUID] = "TagAttachmentUID"
-            ebmlidname.EBMLidList[EBML_ID_TAGBINARY] = "TagBinary"
-            ebmlidname.EBMLidList[EBML_ID_TAGCHAPTERUID] = "TagChapterUID"
-            ebmlidname.EBMLidList[EBML_ID_TAGDEFAULT] = "TagDefault"
-            ebmlidname.EBMLidList[EBML_ID_TAGEDITIONUID] = "TagEditionUID"
-            ebmlidname.EBMLidList[EBML_ID_TAGLANGUAGE] = "TagLanguage"
-            ebmlidname.EBMLidList[EBML_ID_TAGNAME] = "TagName"
-            ebmlidname.EBMLidList[EBML_ID_TAGTRACKUID] = "TagTrackUID"
-            ebmlidname.EBMLidList[EBML_ID_TAGS] = "Tags"
-            ebmlidname.EBMLidList[EBML_ID_TAGSTRING] = "TagString"
-            ebmlidname.EBMLidList[EBML_ID_TARGETS] = "Targets"
-            ebmlidname.EBMLidList[EBML_ID_TARGETTYPE] = "TargetType"
-            ebmlidname.EBMLidList[EBML_ID_TARGETTYPEVALUE] = "TargetTypeValue"
-            ebmlidname.EBMLidList[EBML_ID_TIMECODESCALE] = "TimecodeScale"
-            ebmlidname.EBMLidList[EBML_ID_TITLE] = "Title"
-            ebmlidname.EBMLidList[EBML_ID_TRACKENTRY] = "TrackEntry"
-            ebmlidname.EBMLidList[EBML_ID_TRACKNUMBER] = "TrackNumber"
-            ebmlidname.EBMLidList[EBML_ID_TRACKOFFSET] = "TrackOffset"
-            ebmlidname.EBMLidList[EBML_ID_TRACKOVERLAY] = "TrackOverlay"
-            ebmlidname.EBMLidList[EBML_ID_TRACKS] = "Tracks"
-            ebmlidname.EBMLidList[EBML_ID_TRACKTIMECODESCALE] = "TrackTimecodeScale"
-            ebmlidname.EBMLidList[EBML_ID_TRACKTRANSLATE] = "TrackTranslate"
-            ebmlidname.EBMLidList[EBML_ID_TRACKTRANSLATECODEC] = "TrackTranslateCodec"
-            ebmlidname.EBMLidList[EBML_ID_TRACKTRANSLATEEDITIONUID] = "TrackTranslateEditionUID"
-            ebmlidname.EBMLidList[EBML_ID_TRACKTRANSLATETRACKID] = "TrackTranslateTrackID"
-            ebmlidname.EBMLidList[EBML_ID_TRACKTYPE] = "TrackType"
-            ebmlidname.EBMLidList[EBML_ID_TRACKUID] = "TrackUID"
-            ebmlidname.EBMLidList[EBML_ID_VIDEO] = "Video"
-            ebmlidname.EBMLidList[EBML_ID_VOID] = "Void"
-            ebmlidname.EBMLidList[EBML_ID_WRITINGAPP] = "WritingApp"
+        
+        EBMLidList_ = Array()
+        if php_empty(lambda : EBMLidList_):
+            EBMLidList_[EBML_ID_ASPECTRATIOTYPE] = "AspectRatioType"
+            EBMLidList_[EBML_ID_ATTACHEDFILE] = "AttachedFile"
+            EBMLidList_[EBML_ID_ATTACHMENTLINK] = "AttachmentLink"
+            EBMLidList_[EBML_ID_ATTACHMENTS] = "Attachments"
+            EBMLidList_[EBML_ID_AUDIO] = "Audio"
+            EBMLidList_[EBML_ID_BITDEPTH] = "BitDepth"
+            EBMLidList_[EBML_ID_CHANNELPOSITIONS] = "ChannelPositions"
+            EBMLidList_[EBML_ID_CHANNELS] = "Channels"
+            EBMLidList_[EBML_ID_CHAPCOUNTRY] = "ChapCountry"
+            EBMLidList_[EBML_ID_CHAPLANGUAGE] = "ChapLanguage"
+            EBMLidList_[EBML_ID_CHAPPROCESS] = "ChapProcess"
+            EBMLidList_[EBML_ID_CHAPPROCESSCODECID] = "ChapProcessCodecID"
+            EBMLidList_[EBML_ID_CHAPPROCESSCOMMAND] = "ChapProcessCommand"
+            EBMLidList_[EBML_ID_CHAPPROCESSDATA] = "ChapProcessData"
+            EBMLidList_[EBML_ID_CHAPPROCESSPRIVATE] = "ChapProcessPrivate"
+            EBMLidList_[EBML_ID_CHAPPROCESSTIME] = "ChapProcessTime"
+            EBMLidList_[EBML_ID_CHAPSTRING] = "ChapString"
+            EBMLidList_[EBML_ID_CHAPTERATOM] = "ChapterAtom"
+            EBMLidList_[EBML_ID_CHAPTERDISPLAY] = "ChapterDisplay"
+            EBMLidList_[EBML_ID_CHAPTERFLAGENABLED] = "ChapterFlagEnabled"
+            EBMLidList_[EBML_ID_CHAPTERFLAGHIDDEN] = "ChapterFlagHidden"
+            EBMLidList_[EBML_ID_CHAPTERPHYSICALEQUIV] = "ChapterPhysicalEquiv"
+            EBMLidList_[EBML_ID_CHAPTERS] = "Chapters"
+            EBMLidList_[EBML_ID_CHAPTERSEGMENTEDITIONUID] = "ChapterSegmentEditionUID"
+            EBMLidList_[EBML_ID_CHAPTERSEGMENTUID] = "ChapterSegmentUID"
+            EBMLidList_[EBML_ID_CHAPTERTIMEEND] = "ChapterTimeEnd"
+            EBMLidList_[EBML_ID_CHAPTERTIMESTART] = "ChapterTimeStart"
+            EBMLidList_[EBML_ID_CHAPTERTRACK] = "ChapterTrack"
+            EBMLidList_[EBML_ID_CHAPTERTRACKNUMBER] = "ChapterTrackNumber"
+            EBMLidList_[EBML_ID_CHAPTERTRANSLATE] = "ChapterTranslate"
+            EBMLidList_[EBML_ID_CHAPTERTRANSLATECODEC] = "ChapterTranslateCodec"
+            EBMLidList_[EBML_ID_CHAPTERTRANSLATEEDITIONUID] = "ChapterTranslateEditionUID"
+            EBMLidList_[EBML_ID_CHAPTERTRANSLATEID] = "ChapterTranslateID"
+            EBMLidList_[EBML_ID_CHAPTERUID] = "ChapterUID"
+            EBMLidList_[EBML_ID_CLUSTER] = "Cluster"
+            EBMLidList_[EBML_ID_CLUSTERBLOCK] = "ClusterBlock"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKADDID] = "ClusterBlockAddID"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKADDITIONAL] = "ClusterBlockAdditional"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKADDITIONID] = "ClusterBlockAdditionID"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKADDITIONS] = "ClusterBlockAdditions"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKDURATION] = "ClusterBlockDuration"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKGROUP] = "ClusterBlockGroup"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKMORE] = "ClusterBlockMore"
+            EBMLidList_[EBML_ID_CLUSTERBLOCKVIRTUAL] = "ClusterBlockVirtual"
+            EBMLidList_[EBML_ID_CLUSTERCODECSTATE] = "ClusterCodecState"
+            EBMLidList_[EBML_ID_CLUSTERDELAY] = "ClusterDelay"
+            EBMLidList_[EBML_ID_CLUSTERDURATION] = "ClusterDuration"
+            EBMLidList_[EBML_ID_CLUSTERENCRYPTEDBLOCK] = "ClusterEncryptedBlock"
+            EBMLidList_[EBML_ID_CLUSTERFRAMENUMBER] = "ClusterFrameNumber"
+            EBMLidList_[EBML_ID_CLUSTERLACENUMBER] = "ClusterLaceNumber"
+            EBMLidList_[EBML_ID_CLUSTERPOSITION] = "ClusterPosition"
+            EBMLidList_[EBML_ID_CLUSTERPREVSIZE] = "ClusterPrevSize"
+            EBMLidList_[EBML_ID_CLUSTERREFERENCEBLOCK] = "ClusterReferenceBlock"
+            EBMLidList_[EBML_ID_CLUSTERREFERENCEPRIORITY] = "ClusterReferencePriority"
+            EBMLidList_[EBML_ID_CLUSTERREFERENCEVIRTUAL] = "ClusterReferenceVirtual"
+            EBMLidList_[EBML_ID_CLUSTERSILENTTRACKNUMBER] = "ClusterSilentTrackNumber"
+            EBMLidList_[EBML_ID_CLUSTERSILENTTRACKS] = "ClusterSilentTracks"
+            EBMLidList_[EBML_ID_CLUSTERSIMPLEBLOCK] = "ClusterSimpleBlock"
+            EBMLidList_[EBML_ID_CLUSTERTIMECODE] = "ClusterTimecode"
+            EBMLidList_[EBML_ID_CLUSTERTIMESLICE] = "ClusterTimeSlice"
+            EBMLidList_[EBML_ID_CODECDECODEALL] = "CodecDecodeAll"
+            EBMLidList_[EBML_ID_CODECDOWNLOADURL] = "CodecDownloadURL"
+            EBMLidList_[EBML_ID_CODECID] = "CodecID"
+            EBMLidList_[EBML_ID_CODECINFOURL] = "CodecInfoURL"
+            EBMLidList_[EBML_ID_CODECNAME] = "CodecName"
+            EBMLidList_[EBML_ID_CODECPRIVATE] = "CodecPrivate"
+            EBMLidList_[EBML_ID_CODECSETTINGS] = "CodecSettings"
+            EBMLidList_[EBML_ID_COLOURSPACE] = "ColourSpace"
+            EBMLidList_[EBML_ID_CONTENTCOMPALGO] = "ContentCompAlgo"
+            EBMLidList_[EBML_ID_CONTENTCOMPRESSION] = "ContentCompression"
+            EBMLidList_[EBML_ID_CONTENTCOMPSETTINGS] = "ContentCompSettings"
+            EBMLidList_[EBML_ID_CONTENTENCALGO] = "ContentEncAlgo"
+            EBMLidList_[EBML_ID_CONTENTENCKEYID] = "ContentEncKeyID"
+            EBMLidList_[EBML_ID_CONTENTENCODING] = "ContentEncoding"
+            EBMLidList_[EBML_ID_CONTENTENCODINGORDER] = "ContentEncodingOrder"
+            EBMLidList_[EBML_ID_CONTENTENCODINGS] = "ContentEncodings"
+            EBMLidList_[EBML_ID_CONTENTENCODINGSCOPE] = "ContentEncodingScope"
+            EBMLidList_[EBML_ID_CONTENTENCODINGTYPE] = "ContentEncodingType"
+            EBMLidList_[EBML_ID_CONTENTENCRYPTION] = "ContentEncryption"
+            EBMLidList_[EBML_ID_CONTENTSIGALGO] = "ContentSigAlgo"
+            EBMLidList_[EBML_ID_CONTENTSIGHASHALGO] = "ContentSigHashAlgo"
+            EBMLidList_[EBML_ID_CONTENTSIGKEYID] = "ContentSigKeyID"
+            EBMLidList_[EBML_ID_CONTENTSIGNATURE] = "ContentSignature"
+            EBMLidList_[EBML_ID_CRC32] = "CRC32"
+            EBMLidList_[EBML_ID_CUEBLOCKNUMBER] = "CueBlockNumber"
+            EBMLidList_[EBML_ID_CUECLUSTERPOSITION] = "CueClusterPosition"
+            EBMLidList_[EBML_ID_CUECODECSTATE] = "CueCodecState"
+            EBMLidList_[EBML_ID_CUEPOINT] = "CuePoint"
+            EBMLidList_[EBML_ID_CUEREFCLUSTER] = "CueRefCluster"
+            EBMLidList_[EBML_ID_CUEREFCODECSTATE] = "CueRefCodecState"
+            EBMLidList_[EBML_ID_CUEREFERENCE] = "CueReference"
+            EBMLidList_[EBML_ID_CUEREFNUMBER] = "CueRefNumber"
+            EBMLidList_[EBML_ID_CUEREFTIME] = "CueRefTime"
+            EBMLidList_[EBML_ID_CUES] = "Cues"
+            EBMLidList_[EBML_ID_CUETIME] = "CueTime"
+            EBMLidList_[EBML_ID_CUETRACK] = "CueTrack"
+            EBMLidList_[EBML_ID_CUETRACKPOSITIONS] = "CueTrackPositions"
+            EBMLidList_[EBML_ID_DATEUTC] = "DateUTC"
+            EBMLidList_[EBML_ID_DEFAULTDURATION] = "DefaultDuration"
+            EBMLidList_[EBML_ID_DISPLAYHEIGHT] = "DisplayHeight"
+            EBMLidList_[EBML_ID_DISPLAYUNIT] = "DisplayUnit"
+            EBMLidList_[EBML_ID_DISPLAYWIDTH] = "DisplayWidth"
+            EBMLidList_[EBML_ID_DOCTYPE] = "DocType"
+            EBMLidList_[EBML_ID_DOCTYPEREADVERSION] = "DocTypeReadVersion"
+            EBMLidList_[EBML_ID_DOCTYPEVERSION] = "DocTypeVersion"
+            EBMLidList_[EBML_ID_DURATION] = "Duration"
+            EBMLidList_[EBML_ID_EBML] = "EBML"
+            EBMLidList_[EBML_ID_EBMLMAXIDLENGTH] = "EBMLMaxIDLength"
+            EBMLidList_[EBML_ID_EBMLMAXSIZELENGTH] = "EBMLMaxSizeLength"
+            EBMLidList_[EBML_ID_EBMLREADVERSION] = "EBMLReadVersion"
+            EBMLidList_[EBML_ID_EBMLVERSION] = "EBMLVersion"
+            EBMLidList_[EBML_ID_EDITIONENTRY] = "EditionEntry"
+            EBMLidList_[EBML_ID_EDITIONFLAGDEFAULT] = "EditionFlagDefault"
+            EBMLidList_[EBML_ID_EDITIONFLAGHIDDEN] = "EditionFlagHidden"
+            EBMLidList_[EBML_ID_EDITIONFLAGORDERED] = "EditionFlagOrdered"
+            EBMLidList_[EBML_ID_EDITIONUID] = "EditionUID"
+            EBMLidList_[EBML_ID_FILEDATA] = "FileData"
+            EBMLidList_[EBML_ID_FILEDESCRIPTION] = "FileDescription"
+            EBMLidList_[EBML_ID_FILEMIMETYPE] = "FileMimeType"
+            EBMLidList_[EBML_ID_FILENAME] = "FileName"
+            EBMLidList_[EBML_ID_FILEREFERRAL] = "FileReferral"
+            EBMLidList_[EBML_ID_FILEUID] = "FileUID"
+            EBMLidList_[EBML_ID_FLAGDEFAULT] = "FlagDefault"
+            EBMLidList_[EBML_ID_FLAGENABLED] = "FlagEnabled"
+            EBMLidList_[EBML_ID_FLAGFORCED] = "FlagForced"
+            EBMLidList_[EBML_ID_FLAGINTERLACED] = "FlagInterlaced"
+            EBMLidList_[EBML_ID_FLAGLACING] = "FlagLacing"
+            EBMLidList_[EBML_ID_GAMMAVALUE] = "GammaValue"
+            EBMLidList_[EBML_ID_INFO] = "Info"
+            EBMLidList_[EBML_ID_LANGUAGE] = "Language"
+            EBMLidList_[EBML_ID_MAXBLOCKADDITIONID] = "MaxBlockAdditionID"
+            EBMLidList_[EBML_ID_MAXCACHE] = "MaxCache"
+            EBMLidList_[EBML_ID_MINCACHE] = "MinCache"
+            EBMLidList_[EBML_ID_MUXINGAPP] = "MuxingApp"
+            EBMLidList_[EBML_ID_NAME] = "Name"
+            EBMLidList_[EBML_ID_NEXTFILENAME] = "NextFilename"
+            EBMLidList_[EBML_ID_NEXTUID] = "NextUID"
+            EBMLidList_[EBML_ID_OUTPUTSAMPLINGFREQUENCY] = "OutputSamplingFrequency"
+            EBMLidList_[EBML_ID_PIXELCROPBOTTOM] = "PixelCropBottom"
+            EBMLidList_[EBML_ID_PIXELCROPLEFT] = "PixelCropLeft"
+            EBMLidList_[EBML_ID_PIXELCROPRIGHT] = "PixelCropRight"
+            EBMLidList_[EBML_ID_PIXELCROPTOP] = "PixelCropTop"
+            EBMLidList_[EBML_ID_PIXELHEIGHT] = "PixelHeight"
+            EBMLidList_[EBML_ID_PIXELWIDTH] = "PixelWidth"
+            EBMLidList_[EBML_ID_PREVFILENAME] = "PrevFilename"
+            EBMLidList_[EBML_ID_PREVUID] = "PrevUID"
+            EBMLidList_[EBML_ID_SAMPLINGFREQUENCY] = "SamplingFrequency"
+            EBMLidList_[EBML_ID_SEEK] = "Seek"
+            EBMLidList_[EBML_ID_SEEKHEAD] = "SeekHead"
+            EBMLidList_[EBML_ID_SEEKID] = "SeekID"
+            EBMLidList_[EBML_ID_SEEKPOSITION] = "SeekPosition"
+            EBMLidList_[EBML_ID_SEGMENT] = "Segment"
+            EBMLidList_[EBML_ID_SEGMENTFAMILY] = "SegmentFamily"
+            EBMLidList_[EBML_ID_SEGMENTFILENAME] = "SegmentFilename"
+            EBMLidList_[EBML_ID_SEGMENTUID] = "SegmentUID"
+            EBMLidList_[EBML_ID_SIMPLETAG] = "SimpleTag"
+            EBMLidList_[EBML_ID_CLUSTERSLICES] = "ClusterSlices"
+            EBMLidList_[EBML_ID_STEREOMODE] = "StereoMode"
+            EBMLidList_[EBML_ID_OLDSTEREOMODE] = "OldStereoMode"
+            EBMLidList_[EBML_ID_TAG] = "Tag"
+            EBMLidList_[EBML_ID_TAGATTACHMENTUID] = "TagAttachmentUID"
+            EBMLidList_[EBML_ID_TAGBINARY] = "TagBinary"
+            EBMLidList_[EBML_ID_TAGCHAPTERUID] = "TagChapterUID"
+            EBMLidList_[EBML_ID_TAGDEFAULT] = "TagDefault"
+            EBMLidList_[EBML_ID_TAGEDITIONUID] = "TagEditionUID"
+            EBMLidList_[EBML_ID_TAGLANGUAGE] = "TagLanguage"
+            EBMLidList_[EBML_ID_TAGNAME] = "TagName"
+            EBMLidList_[EBML_ID_TAGTRACKUID] = "TagTrackUID"
+            EBMLidList_[EBML_ID_TAGS] = "Tags"
+            EBMLidList_[EBML_ID_TAGSTRING] = "TagString"
+            EBMLidList_[EBML_ID_TARGETS] = "Targets"
+            EBMLidList_[EBML_ID_TARGETTYPE] = "TargetType"
+            EBMLidList_[EBML_ID_TARGETTYPEVALUE] = "TargetTypeValue"
+            EBMLidList_[EBML_ID_TIMECODESCALE] = "TimecodeScale"
+            EBMLidList_[EBML_ID_TITLE] = "Title"
+            EBMLidList_[EBML_ID_TRACKENTRY] = "TrackEntry"
+            EBMLidList_[EBML_ID_TRACKNUMBER] = "TrackNumber"
+            EBMLidList_[EBML_ID_TRACKOFFSET] = "TrackOffset"
+            EBMLidList_[EBML_ID_TRACKOVERLAY] = "TrackOverlay"
+            EBMLidList_[EBML_ID_TRACKS] = "Tracks"
+            EBMLidList_[EBML_ID_TRACKTIMECODESCALE] = "TrackTimecodeScale"
+            EBMLidList_[EBML_ID_TRACKTRANSLATE] = "TrackTranslate"
+            EBMLidList_[EBML_ID_TRACKTRANSLATECODEC] = "TrackTranslateCodec"
+            EBMLidList_[EBML_ID_TRACKTRANSLATEEDITIONUID] = "TrackTranslateEditionUID"
+            EBMLidList_[EBML_ID_TRACKTRANSLATETRACKID] = "TrackTranslateTrackID"
+            EBMLidList_[EBML_ID_TRACKTYPE] = "TrackType"
+            EBMLidList_[EBML_ID_TRACKUID] = "TrackUID"
+            EBMLidList_[EBML_ID_VIDEO] = "Video"
+            EBMLidList_[EBML_ID_VOID] = "Void"
+            EBMLidList_[EBML_ID_WRITINGAPP] = "WritingApp"
         # end if
-        return ebmlidname.EBMLidList[value] if (php_isset(lambda : ebmlidname.EBMLidList[value])) else dechex(value)
+        return EBMLidList_[value_] if (php_isset(lambda : EBMLidList_[value_])) else dechex(value_)
     # end def ebmlidname
     #// 
     #// @param int $value
@@ -2261,32 +2290,34 @@ class getid3_matroska(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def displayunit(self, value=None):
+    def displayunit(self, value_=None):
         
-        displayunit.units = Array({0: "pixels", 1: "centimeters", 2: "inches", 3: "Display Aspect Ratio"})
-        return displayunit.units[value] if (php_isset(lambda : displayunit.units[value])) else "unknown"
+        
+        units_ = Array({0: "pixels", 1: "centimeters", 2: "inches", 3: "Display Aspect Ratio"})
+        return units_[value_] if (php_isset(lambda : units_[value_])) else "unknown"
     # end def displayunit
     #// 
     #// @param array $streams
     #// 
     #// @return array
     #//
-    def getdefaultstreaminfo(self, streams=None):
+    def getdefaultstreaminfo(self, streams_=None):
         
-        stream = Array()
-        for stream in array_reverse(streams):
-            if stream["default"]:
+        
+        stream_ = Array()
+        for stream_ in array_reverse(streams_):
+            if stream_["default"]:
                 break
             # end if
         # end for
-        unset = Array("default", "name")
-        for u in unset:
-            if (php_isset(lambda : stream[u])):
-                stream[u] = None
+        unset_ = Array("default", "name")
+        for u_ in unset_:
+            if (php_isset(lambda : stream_[u_])):
+                stream_[u_] = None
             # end if
         # end for
-        info = stream
-        info["streams"] = streams
-        return info
+        info_ = stream_
+        info_["streams"] = streams_
+        return info_
     # end def getdefaultstreaminfo
 # end class getid3_matroska

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,7 +60,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage API
 #//
 class SimplePie_Rating():
+    #// 
+    #// Rating scheme
+    #// 
+    #// @var string
+    #// @see get_scheme()
+    #//
     scheme = Array()
+    #// 
+    #// Rating value
+    #// 
+    #// @var string
+    #// @see get_value()
+    #//
     value = Array()
     #// 
     #// Constructor, used to input the data
@@ -73,10 +80,11 @@ class SimplePie_Rating():
     #// For documentation on all the parameters, see the corresponding
     #// properties and their accessors
     #//
-    def __init__(self, scheme=None, value=None):
+    def __init__(self, scheme_=None, value_=None):
         
-        self.scheme = scheme
-        self.value = value
+        
+        self.scheme = scheme_
+        self.value = value_
     # end def __init__
     #// 
     #// String-ified version
@@ -84,6 +92,7 @@ class SimplePie_Rating():
     #// @return string
     #//
     def __tostring(self):
+        
         
         #// There is no $this->data here
         return php_md5(serialize(self))
@@ -94,6 +103,7 @@ class SimplePie_Rating():
     #// @return string|null
     #//
     def get_scheme(self):
+        
         
         if self.scheme != None:
             return self.scheme
@@ -107,6 +117,7 @@ class SimplePie_Rating():
     #// @return string|null
     #//
     def get_value(self):
+        
         
         if self.value != None:
             return self.value

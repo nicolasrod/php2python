@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,14 +18,14 @@ php_include_file(__DIR__ + "/admin.php", once=True)
 if (not current_user_can("manage_options")):
     wp_die(__("Sorry, you are not allowed to manage options for this site."))
 # end if
-title = __("Discussion Settings")
-parent_file = "options-general.php"
+title_ = __("Discussion Settings")
+parent_file_ = "options-general.php"
 add_action("admin_print_footer_scripts", "options_discussion_add_js")
 get_current_screen().add_help_tab(Array({"id": "overview", "title": __("Overview"), "content": "<p>" + __("This screen provides many options for controlling the management and display of comments and links to your posts/pages. So many, in fact, they won&#8217;t all fit here! :) Use the documentation links to get information on what each discussion setting does.") + "</p>" + "<p>" + __("You must click the Save Changes button at the bottom of the screen for new settings to take effect.") + "</p>"}))
 get_current_screen().set_help_sidebar("<p><strong>" + __("For more information:") + "</strong></p>" + "<p>" + __("<a href=\"https://wordpress.org/support/article/settings-discussion-screen/\">Documentation on Discussion Settings</a>") + "</p>" + "<p>" + __("<a href=\"https://wordpress.org/support/\">Support</a>") + "</p>")
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("\n<div class=\"wrap\">\n<h1>")
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("""</h1>
 <form method=\"post\" action=\"options.php\">
 """)
@@ -111,52 +106,52 @@ php_print(" />\n")
 #// 
 #// @param int $max_depth The maximum depth of threaded comments. Default 10.
 #//
-maxdeep = php_int(apply_filters("thread_comments_depth_max", 10))
-thread_comments_depth = "</label> <label for=\"thread_comments_depth\"><select name=\"thread_comments_depth\" id=\"thread_comments_depth\">"
-i = 2
-while i <= maxdeep:
+maxdeep_ = php_int(apply_filters("thread_comments_depth_max", 10))
+thread_comments_depth_ = "</label> <label for=\"thread_comments_depth\"><select name=\"thread_comments_depth\" id=\"thread_comments_depth\">"
+i_ = 2
+while i_ <= maxdeep_:
     
-    thread_comments_depth += "<option value='" + esc_attr(i) + "'"
-    if get_option("thread_comments_depth") == i:
-        thread_comments_depth += " selected='selected'"
+    thread_comments_depth_ += "<option value='" + esc_attr(i_) + "'"
+    if get_option("thread_comments_depth") == i_:
+        thread_comments_depth_ += " selected='selected'"
     # end if
-    thread_comments_depth += str(">") + str(i) + str("</option>")
-    i += 1
+    thread_comments_depth_ += str(">") + str(i_) + str("</option>")
+    i_ += 1
 # end while
-thread_comments_depth += "</select>"
+thread_comments_depth_ += "</select>"
 #// translators: %s: Number of levels.
-printf(__("Enable threaded (nested) comments %s levels deep"), thread_comments_depth)
+printf(__("Enable threaded (nested) comments %s levels deep"), thread_comments_depth_)
 php_print("""</label>
 <br />
 <label for=\"page_comments\">
 <input name=\"page_comments\" type=\"checkbox\" id=\"page_comments\" value=\"1\" """)
 checked("1", get_option("page_comments"))
 php_print(" />\n")
-default_comments_page = "</label> <label for=\"default_comments_page\"><select name=\"default_comments_page\" id=\"default_comments_page\"><option value=\"newest\""
+default_comments_page_ = "</label> <label for=\"default_comments_page\"><select name=\"default_comments_page\" id=\"default_comments_page\"><option value=\"newest\""
 if "newest" == get_option("default_comments_page"):
-    default_comments_page += " selected=\"selected\""
+    default_comments_page_ += " selected=\"selected\""
 # end if
-default_comments_page += ">" + __("last") + "</option><option value=\"oldest\""
+default_comments_page_ += ">" + __("last") + "</option><option value=\"oldest\""
 if "oldest" == get_option("default_comments_page"):
-    default_comments_page += " selected=\"selected\""
+    default_comments_page_ += " selected=\"selected\""
 # end if
-default_comments_page += ">" + __("first") + "</option></select>"
-printf(__("Break comments into pages with %1$s top level comments per page and the %2$s page displayed by default"), "</label> <label for=\"comments_per_page\"><input name=\"comments_per_page\" type=\"number\" step=\"1\" min=\"0\" id=\"comments_per_page\" value=\"" + esc_attr(get_option("comments_per_page")) + "\" class=\"small-text\" />", default_comments_page)
+default_comments_page_ += ">" + __("first") + "</option></select>"
+printf(__("Break comments into pages with %1$s top level comments per page and the %2$s page displayed by default"), "</label> <label for=\"comments_per_page\"><input name=\"comments_per_page\" type=\"number\" step=\"1\" min=\"0\" id=\"comments_per_page\" value=\"" + esc_attr(get_option("comments_per_page")) + "\" class=\"small-text\" />", default_comments_page_)
 php_print("""</label>
 <br />
 <label for=\"comment_order\">
 """)
-comment_order = "<select name=\"comment_order\" id=\"comment_order\"><option value=\"asc\""
+comment_order_ = "<select name=\"comment_order\" id=\"comment_order\"><option value=\"asc\""
 if "asc" == get_option("comment_order"):
-    comment_order += " selected=\"selected\""
+    comment_order_ += " selected=\"selected\""
 # end if
-comment_order += ">" + __("older") + "</option><option value=\"desc\""
+comment_order_ += ">" + __("older") + "</option><option value=\"desc\""
 if "desc" == get_option("comment_order"):
-    comment_order += " selected=\"selected\""
+    comment_order_ += " selected=\"selected\""
 # end if
-comment_order += ">" + __("newer") + "</option></select>"
+comment_order_ += ">" + __("newer") + "</option></select>"
 #// translators: %s: Form field control for 'older' or 'newer' comments.
-printf(__("Comments should be displayed with the %s comments at the top of each page"), comment_order)
+printf(__("Comments should be displayed with the %s comments at the top of each page"), comment_order_)
 php_print("""</label>
 </fieldset></td>
 </tr>
@@ -231,10 +226,10 @@ php_print("</h2>\n\n<p>")
 _e("An avatar is an image that follows you from weblog to weblog appearing beside your name when you comment on avatar enabled sites. Here you can enable the display of avatars for people who comment on your site.")
 php_print("</p>\n\n")
 #// The above would be a good place to link to the documentation on the Gravatar functions, for putting it in themes. Anything like that?
-show_avatars = get_option("show_avatars")
-show_avatars_class = ""
-if (not show_avatars):
-    show_avatars_class = " hide-if-js"
+show_avatars_ = get_option("show_avatars")
+show_avatars_class_ = ""
+if (not show_avatars_):
+    show_avatars_class_ = " hide-if-js"
 # end if
 php_print("""
 <table class=\"form-table\" role=\"presentation\">
@@ -245,29 +240,29 @@ php_print("""</th>
 <td>
 <label for=\"show_avatars\">
 <input type=\"checkbox\" id=\"show_avatars\" name=\"show_avatars\" value=\"1\" """)
-checked(show_avatars, 1)
+checked(show_avatars_, 1)
 php_print(" />\n        ")
 _e("Show Avatars")
 php_print("""   </label>
 </td>
 </tr>
 <tr class=\"avatar-settings""")
-php_print(show_avatars_class)
+php_print(show_avatars_class_)
 php_print("\">\n<th scope=\"row\">")
 _e("Maximum Rating")
 php_print("</th>\n<td><fieldset><legend class=\"screen-reader-text\"><span>")
 _e("Maximum Rating")
 php_print("</span></legend>\n\n")
-ratings = Array({"G": __("G &#8212; Suitable for all audiences"), "PG": __("PG &#8212; Possibly offensive, usually for audiences 13 and above"), "R": __("R &#8212; Intended for adult audiences above 17"), "X": __("X &#8212; Even more mature than above")})
-for key,rating in ratings:
-    selected = "checked=\"checked\"" if get_option("avatar_rating") == key else ""
-    php_print("\n   <label><input type='radio' name='avatar_rating' value='" + esc_attr(key) + str("' ") + str(selected) + str("/> ") + str(rating) + str("</label><br />"))
+ratings_ = Array({"G": __("G &#8212; Suitable for all audiences"), "PG": __("PG &#8212; Possibly offensive, usually for audiences 13 and above"), "R": __("R &#8212; Intended for adult audiences above 17"), "X": __("X &#8212; Even more mature than above")})
+for key_,rating_ in ratings_:
+    selected_ = "checked=\"checked\"" if get_option("avatar_rating") == key_ else ""
+    php_print("\n   <label><input type='radio' name='avatar_rating' value='" + esc_attr(key_) + str("' ") + str(selected_) + str("/> ") + str(rating_) + str("</label><br />"))
 # end for
 php_print("""
 </fieldset></td>
 </tr>
 <tr class=\"avatar-settings""")
-php_print(show_avatars_class)
+php_print(show_avatars_class_)
 php_print("\">\n<th scope=\"row\">")
 _e("Default Avatar")
 php_print("</th>\n<td class=\"defaultavatarpicker\"><fieldset><legend class=\"screen-reader-text\"><span>")
@@ -279,7 +274,7 @@ _e("For users without a custom avatar of their own, you can either display a gen
 php_print("""<br />
 </p>
 """)
-avatar_defaults = Array({"mystery": __("Mystery Person"), "blank": __("Blank"), "gravatar_default": __("Gravatar Logo"), "identicon": __("Identicon (Generated)"), "wavatar": __("Wavatar (Generated)"), "monsterid": __("MonsterID (Generated)"), "retro": __("Retro (Generated)")})
+avatar_defaults_ = Array({"mystery": __("Mystery Person"), "blank": __("Blank"), "gravatar_default": __("Gravatar Logo"), "identicon": __("Identicon (Generated)"), "wavatar": __("Wavatar (Generated)"), "monsterid": __("MonsterID (Generated)"), "retro": __("Retro (Generated)")})
 #// 
 #// Filters the default avatars.
 #// 
@@ -290,17 +285,17 @@ avatar_defaults = Array({"mystery": __("Mystery Person"), "blank": __("Blank"), 
 #// 
 #// @param string[] $avatar_defaults Associative array of default avatars.
 #//
-avatar_defaults = apply_filters("avatar_defaults", avatar_defaults)
-default = get_option("avatar_default", "mystery")
-avatar_list = ""
+avatar_defaults_ = apply_filters("avatar_defaults", avatar_defaults_)
+default_ = get_option("avatar_default", "mystery")
+avatar_list_ = ""
 #// Force avatars on to display these choices.
 add_filter("pre_option_show_avatars", "__return_true", 100)
-for default_key,default_name in avatar_defaults:
-    selected = "checked=\"checked\" " if default == default_key else ""
-    avatar_list += str("\n  <label><input type='radio' name='avatar_default' id='avatar_") + str(default_key) + str("' value='") + esc_attr(default_key) + str("' ") + str(selected) + str("/> ")
-    avatar_list += get_avatar(user_email, 32, default_key, "", Array({"force_default": True}))
-    avatar_list += " " + default_name + "</label>"
-    avatar_list += "<br />"
+for default_key_,default_name_ in avatar_defaults_:
+    selected_ = "checked=\"checked\" " if default_ == default_key_ else ""
+    avatar_list_ += str("\n <label><input type='radio' name='avatar_default' id='avatar_") + str(default_key_) + str("' value='") + esc_attr(default_key_) + str("' ") + str(selected_) + str("/> ")
+    avatar_list_ += get_avatar(user_email_, 32, default_key_, "", Array({"force_default": True}))
+    avatar_list_ += " " + default_name_ + "</label>"
+    avatar_list_ += "<br />"
 # end for
 remove_filter("pre_option_show_avatars", "__return_true", 100)
 #// 
@@ -310,7 +305,7 @@ remove_filter("pre_option_show_avatars", "__return_true", 100)
 #// 
 #// @param string $avatar_list HTML markup of the avatar list.
 #//
-php_print(apply_filters("default_avatar_select", avatar_list))
+php_print(apply_filters("default_avatar_select", avatar_list_))
 php_print("""
 </fieldset></td>
 </tr>

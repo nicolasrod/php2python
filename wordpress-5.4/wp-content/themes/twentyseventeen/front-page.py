@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -53,16 +48,16 @@ if 0 != twentyseventeen_panel_count() or is_customize_preview():
     #// 
     #// @param int $num_sections Number of front page sections.
     #//
-    num_sections = apply_filters("twentyseventeen_front_page_sections", 4)
-    global twentyseventeencounter
-    php_check_if_defined("twentyseventeencounter")
+    num_sections_ = apply_filters("twentyseventeen_front_page_sections", 4)
+    global twentyseventeencounter_
+    php_check_if_defined("twentyseventeencounter_")
     #// Create a setting and control for each of the sections available in the theme.
-    i = 1
-    while i < 1 + num_sections:
+    i_ = 1
+    while i_ < 1 + num_sections_:
         
-        twentyseventeencounter = i
-        twentyseventeen_front_page_section(None, i)
-        i += 1
+        twentyseventeencounter_ = i_
+        twentyseventeen_front_page_section(None, i_)
+        i_ += 1
     # end while
 # end if
 pass

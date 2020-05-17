@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,6 +22,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_REST_Meta_Fields
 #//
 class WP_REST_Post_Meta_Fields(WP_REST_Meta_Fields):
+    #// 
+    #// Post type to register fields for.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     post_type = Array()
     #// 
     #// Constructor.
@@ -35,9 +36,10 @@ class WP_REST_Post_Meta_Fields(WP_REST_Meta_Fields):
     #// 
     #// @param string $post_type Post type to register fields for.
     #//
-    def __init__(self, post_type=None):
+    def __init__(self, post_type_=None):
         
-        self.post_type = post_type
+        
+        self.post_type = post_type_
     # end def __init__
     #// 
     #// Retrieves the object meta type.
@@ -47,6 +49,7 @@ class WP_REST_Post_Meta_Fields(WP_REST_Meta_Fields):
     #// @return string The meta type.
     #//
     def get_meta_type(self):
+        
         
         return "post"
     # end def get_meta_type
@@ -58,6 +61,7 @@ class WP_REST_Post_Meta_Fields(WP_REST_Meta_Fields):
     #// @return string Subtype for the meta type, or empty string if no specific subtype.
     #//
     def get_meta_subtype(self):
+        
         
         return self.post_type
     # end def get_meta_subtype
@@ -71,6 +75,7 @@ class WP_REST_Post_Meta_Fields(WP_REST_Meta_Fields):
     #// @return string The REST field type.
     #//
     def get_rest_field_type(self):
+        
         
         return self.post_type
     # end def get_rest_field_type

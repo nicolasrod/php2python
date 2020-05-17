@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,8 +21,8 @@ if (not php_defined("ABSPATH")):
 #// 
 #// @global string $hook_suffix
 #//
-global hook_suffix
-php_check_if_defined("hook_suffix")
+global hook_suffix_
+php_check_if_defined("hook_suffix_")
 php_print("""
 <div class=\"clear\"></div></div><!-- wpbody-content -->
 <div class=\"clear\"></div></div><!-- wpbody -->
@@ -41,7 +36,7 @@ php_print("""
 #//
 do_action("in_admin_footer")
 php_print(" <p id=\"footer-left\" class=\"alignleft\">\n        ")
-text = php_sprintf(__("Thank you for creating with <a href=\"%s\">WordPress</a>."), __("https://wordpress.org/"))
+text_ = php_sprintf(__("Thank you for creating with <a href=\"%s\">WordPress</a>."), __("https://wordpress.org/"))
 #// 
 #// Filters the "Thank you" text displayed in the admin footer.
 #// 
@@ -49,7 +44,7 @@ text = php_sprintf(__("Thank you for creating with <a href=\"%s\">WordPress</a>.
 #// 
 #// @param string $text The content that will be printed.
 #//
-php_print(apply_filters("admin_footer_text", "<span id=\"footer-thankyou\">" + text + "</span>"))
+php_print(apply_filters("admin_footer_text", "<span id=\"footer-thankyou\">" + text_ + "</span>"))
 php_print(" </p>\n  <p id=\"footer-upgrade\" class=\"alignright\">\n        ")
 #// 
 #// Filters the version/update text displayed in the admin footer.
@@ -84,7 +79,7 @@ do_action("admin_footer", "")
 #// 
 #// @since 4.6.0
 #//
-do_action(str("admin_print_footer_scripts-") + str(hook_suffix))
+do_action(str("admin_print_footer_scripts-") + str(hook_suffix_))
 #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 #// 
 #// Prints any scripts and data queued for the footer.
@@ -100,7 +95,7 @@ do_action("admin_print_footer_scripts")
 #// 
 #// @since 2.8.0
 #//
-do_action(str("admin_footer-") + str(hook_suffix))
+do_action(str("admin_footer-") + str(hook_suffix_))
 #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 #// get_site_option() won't exist when auto upgrading from <= 2.7.
 if php_function_exists("get_site_option"):

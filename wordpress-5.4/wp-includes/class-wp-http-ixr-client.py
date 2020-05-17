@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,6 +15,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 class WP_HTTP_IXR_Client(IXR_Client):
     scheme = Array()
+    #// 
+    #// @var IXR_Error
+    #//
     error = Array()
     #// 
     #// @param string $server
@@ -27,46 +25,53 @@ class WP_HTTP_IXR_Client(IXR_Client):
     #// @param int|bool $port
     #// @param int $timeout
     #//
-    def __init__(self, server=None, path=False, port=False, timeout=15):
+    def __init__(self, server_=None, path_=None, port_=None, timeout_=15):
+        if path_ is None:
+            path_ = False
+        # end if
+        if port_ is None:
+            port_ = False
+        # end if
         
-        if (not path):
+        if (not path_):
             #// Assume we have been given a URL instead.
-            bits = php_parse_url(server)
-            self.scheme = bits["scheme"]
-            self.server = bits["host"]
-            self.port = bits["port"] if (php_isset(lambda : bits["port"])) else port
-            self.path = bits["path"] if (not php_empty(lambda : bits["path"])) else "/"
+            bits_ = php_parse_url(server_)
+            self.scheme = bits_["scheme"]
+            self.server = bits_["host"]
+            self.port = bits_["port"] if (php_isset(lambda : bits_["port"])) else port_
+            self.path = bits_["path"] if (not php_empty(lambda : bits_["path"])) else "/"
             #// Make absolutely sure we have a path.
             if (not self.path):
                 self.path = "/"
             # end if
-            if (not php_empty(lambda : bits["query"])):
-                self.path += "?" + bits["query"]
+            if (not php_empty(lambda : bits_["query"])):
+                self.path += "?" + bits_["query"]
             # end if
         else:
             self.scheme = "http"
-            self.server = server
-            self.path = path
-            self.port = port
+            self.server = server_
+            self.path = path_
+            self.port = port_
         # end if
         self.useragent = "The Incutio XML-RPC PHP Library"
-        self.timeout = timeout
+        self.timeout = timeout_
     # end def __init__
     #// 
     #// @return bool
     #//
     def query(self):
         
-        args = php_func_get_args()
-        method = php_array_shift(args)
-        request = php_new_class("IXR_Request", lambda : IXR_Request(method, args))
-        xml = request.getxml()
-        port = str(":") + str(self.port) if self.port else ""
-        url = self.scheme + "://" + self.server + port + self.path
-        args = Array({"headers": Array({"Content-Type": "text/xml"})}, {"user-agent": self.useragent, "body": xml})
+        
+        args_ = php_func_get_args()
+        method_ = php_array_shift(args_)
+        request_ = php_new_class("IXR_Request", lambda : IXR_Request(method_, args_))
+        xml_ = request_.getxml()
+        port_ = str(":") + str(self.port) if self.port else ""
+        url_ = self.scheme + "://" + self.server + port_ + self.path
+        args_ = Array({"headers": Array({"Content-Type": "text/xml"})}, {"user-agent": self.useragent, "body": xml_})
         #// Merge Custom headers ala #8145.
-        for header,value in self.headers:
-            args["headers"][header] = value
+        for header_,value_ in self.headers:
+            args_["headers"][header_] = value_
         # end for
         #// 
         #// Filters the headers collection to be sent to the XML-RPC server.
@@ -75,34 +80,34 @@ class WP_HTTP_IXR_Client(IXR_Client):
         #// 
         #// @param string[] $headers Associative array of headers to be sent.
         #//
-        args["headers"] = apply_filters("wp_http_ixr_client_headers", args["headers"])
+        args_["headers"] = apply_filters("wp_http_ixr_client_headers", args_["headers"])
         if False != self.timeout:
-            args["timeout"] = self.timeout
+            args_["timeout"] = self.timeout
         # end if
         #// Now send the request.
         if self.debug:
-            php_print("<pre class=\"ixr_request\">" + htmlspecialchars(xml) + """
+            php_print("<pre class=\"ixr_request\">" + htmlspecialchars(xml_) + """
             </pre>
             """)
         # end if
-        response = wp_remote_post(url, args)
-        if is_wp_error(response):
-            errno = response.get_error_code()
-            errorstr = response.get_error_message()
-            self.error = php_new_class("IXR_Error", lambda : IXR_Error(-32300, str("transport error: ") + str(errno) + str(" ") + str(errorstr)))
+        response_ = wp_remote_post(url_, args_)
+        if is_wp_error(response_):
+            errno_ = response_.get_error_code()
+            errorstr_ = response_.get_error_message()
+            self.error = php_new_class("IXR_Error", lambda : IXR_Error(-32300, str("transport error: ") + str(errno_) + str(" ") + str(errorstr_)))
             return False
         # end if
-        if 200 != wp_remote_retrieve_response_code(response):
-            self.error = php_new_class("IXR_Error", lambda : IXR_Error(-32301, "transport error - HTTP status code was not 200 (" + wp_remote_retrieve_response_code(response) + ")"))
+        if 200 != wp_remote_retrieve_response_code(response_):
+            self.error = php_new_class("IXR_Error", lambda : IXR_Error(-32301, "transport error - HTTP status code was not 200 (" + wp_remote_retrieve_response_code(response_) + ")"))
             return False
         # end if
         if self.debug:
-            php_print("<pre class=\"ixr_response\">" + htmlspecialchars(wp_remote_retrieve_body(response)) + """
+            php_print("<pre class=\"ixr_response\">" + htmlspecialchars(wp_remote_retrieve_body(response_)) + """
             </pre>
             """)
         # end if
         #// Now parse what we've got back.
-        self.message = php_new_class("IXR_Message", lambda : IXR_Message(wp_remote_retrieve_body(response)))
+        self.message = php_new_class("IXR_Message", lambda : IXR_Message(wp_remote_retrieve_body(response_)))
         if (not self.message.parse()):
             #// XML error.
             self.error = php_new_class("IXR_Error", lambda : IXR_Error(-32700, "parse error. not well formed"))

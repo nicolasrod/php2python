@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,26 +18,28 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return WP_Paused_Extensions_Storage
 #//
-def wp_paused_plugins(*args_):
+def wp_paused_plugins(*_args_):
     
-    wp_paused_plugins.storage = None
-    if None == wp_paused_plugins.storage:
-        wp_paused_plugins.storage = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("plugin"))
+    
+    storage_ = None
+    if None == storage_:
+        storage_ = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("plugin"))
     # end if
-    return wp_paused_plugins.storage
+    return storage_
 # end def wp_paused_plugins
 #// 
 #// Get the instance for storing paused extensions.
 #// 
 #// @return WP_Paused_Extensions_Storage
 #//
-def wp_paused_themes(*args_):
+def wp_paused_themes(*_args_):
     
-    wp_paused_themes.storage = None
-    if None == wp_paused_themes.storage:
-        wp_paused_themes.storage = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("theme"))
+    
+    storage_ = None
+    if None == storage_:
+        storage_ = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("theme"))
     # end if
-    return wp_paused_themes.storage
+    return storage_
 # end def wp_paused_themes
 #// 
 #// Get a human readable description of an extension's error.
@@ -53,22 +50,23 @@ def wp_paused_themes(*args_):
 #// 
 #// @return string Formatted error description.
 #//
-def wp_get_extension_error_description(error=None, *args_):
+def wp_get_extension_error_description(error_=None, *_args_):
     
-    constants = get_defined_constants(True)
-    constants = constants["Core"] if (php_isset(lambda : constants["Core"])) else constants["internal"]
-    core_errors = Array()
-    for constant,value in constants:
-        if 0 == php_strpos(constant, "E_"):
-            core_errors[value] = constant
+    
+    constants_ = get_defined_constants(True)
+    constants_ = constants_["Core"] if (php_isset(lambda : constants_["Core"])) else constants_["internal"]
+    core_errors_ = Array()
+    for constant_,value_ in constants_:
+        if 0 == php_strpos(constant_, "E_"):
+            core_errors_[value_] = constant_
         # end if
     # end for
-    if (php_isset(lambda : core_errors[error["type"]])):
-        error["type"] = core_errors[error["type"]]
+    if (php_isset(lambda : core_errors_[error_["type"]])):
+        error_["type"] = core_errors_[error_["type"]]
     # end if
     #// translators: 1: Error type, 2: Error line number, 3: Error file name, 4: Error message.
-    error_message = __("An error of type %1$s was caused in line %2$s of the file %3$s. Error message: %4$s")
-    return php_sprintf(error_message, str("<code>") + str(error["type"]) + str("</code>"), str("<code>") + str(error["line"]) + str("</code>"), str("<code>") + str(error["file"]) + str("</code>"), str("<code>") + str(error["message"]) + str("</code>"))
+    error_message_ = __("An error of type %1$s was caused in line %2$s of the file %3$s. Error message: %4$s")
+    return php_sprintf(error_message_, str("<code>") + str(error_["type"]) + str("</code>"), str("<code>") + str(error_["line"]) + str("</code>"), str("<code>") + str(error_["file"]) + str("</code>"), str("<code>") + str(error_["message"]) + str("</code>"))
 # end def wp_get_extension_error_description
 #// 
 #// Registers the shutdown handler for fatal errors.
@@ -77,19 +75,20 @@ def wp_get_extension_error_description(error=None, *args_):
 #// 
 #// @since 5.2.0
 #//
-def wp_register_fatal_error_handler(*args_):
+def wp_register_fatal_error_handler(*_args_):
+    
     
     if (not wp_is_fatal_error_handler_enabled()):
         return
     # end if
-    handler = None
+    handler_ = None
     if php_defined("WP_CONTENT_DIR") and php_is_readable(WP_CONTENT_DIR + "/fatal-error-handler.php"):
-        handler = php_include_file(WP_CONTENT_DIR + "/fatal-error-handler.php", once=False)
+        handler_ = php_include_file(WP_CONTENT_DIR + "/fatal-error-handler.php", once=False)
     # end if
-    if (not php_is_object(handler)) or (not php_is_callable(Array(handler, "handle"))):
-        handler = php_new_class("WP_Fatal_Error_Handler", lambda : WP_Fatal_Error_Handler())
+    if (not php_is_object(handler_)) or (not php_is_callable(Array(handler_, "handle"))):
+        handler_ = php_new_class("WP_Fatal_Error_Handler", lambda : WP_Fatal_Error_Handler())
     # end if
-    php_register_shutdown_function(Array(handler, "handle"))
+    php_register_shutdown_function(Array(handler_, "handle"))
 # end def wp_register_fatal_error_handler
 #// 
 #// Checks whether the fatal error handler is enabled.
@@ -101,9 +100,10 @@ def wp_register_fatal_error_handler(*args_):
 #// 
 #// @return bool True if the fatal error handler is enabled, false otherwise.
 #//
-def wp_is_fatal_error_handler_enabled(*args_):
+def wp_is_fatal_error_handler_enabled(*_args_):
     
-    enabled = (not php_defined("WP_DISABLE_FATAL_ERROR_HANDLER")) or (not WP_DISABLE_FATAL_ERROR_HANDLER)
+    
+    enabled_ = (not php_defined("WP_DISABLE_FATAL_ERROR_HANDLER")) or (not WP_DISABLE_FATAL_ERROR_HANDLER)
     #// 
     #// Filters whether the fatal error handler is enabled.
     #// 
@@ -111,7 +111,7 @@ def wp_is_fatal_error_handler_enabled(*args_):
     #// 
     #// @param bool $enabled True if the fatal error handler is enabled, false otherwise.
     #//
-    return apply_filters("wp_fatal_error_handler_enabled", enabled)
+    return apply_filters("wp_fatal_error_handler_enabled", enabled_)
 # end def wp_is_fatal_error_handler_enabled
 #// 
 #// Access the WordPress Recovery Mode instance.
@@ -120,11 +120,12 @@ def wp_is_fatal_error_handler_enabled(*args_):
 #// 
 #// @return WP_Recovery_Mode
 #//
-def wp_recovery_mode(*args_):
+def wp_recovery_mode(*_args_):
     
-    wp_recovery_mode.wp_recovery_mode = None
-    if (not wp_recovery_mode.wp_recovery_mode):
-        wp_recovery_mode.wp_recovery_mode = php_new_class("WP_Recovery_Mode", lambda : WP_Recovery_Mode())
+    
+    wp_recovery_mode_ = None
+    if (not wp_recovery_mode_):
+        wp_recovery_mode_ = php_new_class("WP_Recovery_Mode", lambda : WP_Recovery_Mode())
     # end if
-    return wp_recovery_mode.wp_recovery_mode
+    return wp_recovery_mode_
 # end def wp_recovery_mode

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,6 +31,7 @@ class WP_REST_User_Meta_Fields(WP_REST_Meta_Fields):
     #//
     def get_meta_type(self):
         
+        
         return "user"
     # end def get_meta_type
     #// 
@@ -47,6 +43,7 @@ class WP_REST_User_Meta_Fields(WP_REST_Meta_Fields):
     #//
     def get_meta_subtype(self):
         
+        
         return "user"
     # end def get_meta_subtype
     #// 
@@ -57,6 +54,7 @@ class WP_REST_User_Meta_Fields(WP_REST_Meta_Fields):
     #// @return string The user REST field type.
     #//
     def get_rest_field_type(self):
+        
         
         return "user"
     # end def get_rest_field_type

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,19 +21,19 @@ php_include_file(ABSPATH + "wp-admin/includes/translation-install.php", once=Tru
 if (not current_user_can("manage_network_options")):
     wp_die(__("Sorry, you are not allowed to access this page."), 403)
 # end if
-title = __("Network Settings")
-parent_file = "settings.php"
+title_ = __("Network Settings")
+parent_file_ = "settings.php"
 #// Handle network admin email change requests.
 if (not php_empty(lambda : PHP_REQUEST["network_admin_hash"])):
-    new_admin_details = get_site_option("network_admin_hash")
-    redirect = "settings.php?updated=false"
-    if php_is_array(new_admin_details) and hash_equals(new_admin_details["hash"], PHP_REQUEST["network_admin_hash"]) and (not php_empty(lambda : new_admin_details["newemail"])):
-        update_site_option("admin_email", new_admin_details["newemail"])
+    new_admin_details_ = get_site_option("network_admin_hash")
+    redirect_ = "settings.php?updated=false"
+    if php_is_array(new_admin_details_) and hash_equals(new_admin_details_["hash"], PHP_REQUEST["network_admin_hash"]) and (not php_empty(lambda : new_admin_details_["newemail"])):
+        update_site_option("admin_email", new_admin_details_["newemail"])
         delete_site_option("network_admin_hash")
         delete_site_option("new_admin_email")
-        redirect = "settings.php?updated=true"
+        redirect_ = "settings.php?updated=true"
     # end if
-    wp_redirect(network_admin_url(redirect))
+    wp_redirect(network_admin_url(redirect_))
     php_exit(0)
 elif (not php_empty(lambda : PHP_REQUEST["dismiss"])) and "new_network_admin_email" == PHP_REQUEST["dismiss"]:
     check_admin_referer("dismiss_new_network_admin_email")
@@ -54,26 +49,26 @@ if PHP_POST:
     #// This action is documented in wp-admin/network/edit.php
     do_action("wpmuadminedit")
     check_admin_referer("siteoptions")
-    checked_options = Array({"menu_items": Array(), "registrationnotification": "no", "upload_space_check_disabled": 1, "add_new_users": 0})
-    for option_name,option_unchecked_value in checked_options:
-        if (not (php_isset(lambda : PHP_POST[option_name]))):
-            PHP_POST[option_name] = option_unchecked_value
+    checked_options_ = Array({"menu_items": Array(), "registrationnotification": "no", "upload_space_check_disabled": 1, "add_new_users": 0})
+    for option_name_,option_unchecked_value_ in checked_options_:
+        if (not (php_isset(lambda : PHP_POST[option_name_]))):
+            PHP_POST[option_name_] = option_unchecked_value_
         # end if
     # end for
-    options = Array("registrationnotification", "registration", "add_new_users", "menu_items", "upload_space_check_disabled", "blog_upload_space", "upload_filetypes", "site_name", "first_post", "first_page", "first_comment", "first_comment_url", "first_comment_author", "welcome_email", "welcome_user_email", "fileupload_maxk", "global_terms_enabled", "illegal_names", "limited_email_domains", "banned_email_domains", "WPLANG", "new_admin_email", "first_comment_email")
+    options_ = Array("registrationnotification", "registration", "add_new_users", "menu_items", "upload_space_check_disabled", "blog_upload_space", "upload_filetypes", "site_name", "first_post", "first_page", "first_comment", "first_comment_url", "first_comment_author", "welcome_email", "welcome_user_email", "fileupload_maxk", "global_terms_enabled", "illegal_names", "limited_email_domains", "banned_email_domains", "WPLANG", "new_admin_email", "first_comment_email")
     #// Handle translation installation.
     if (not php_empty(lambda : PHP_POST["WPLANG"])) and current_user_can("install_languages") and wp_can_install_language_pack():
-        language = wp_download_language_pack(PHP_POST["WPLANG"])
-        if language:
-            PHP_POST["WPLANG"] = language
+        language_ = wp_download_language_pack(PHP_POST["WPLANG"])
+        if language_:
+            PHP_POST["WPLANG"] = language_
         # end if
     # end if
-    for option_name in options:
-        if (not (php_isset(lambda : PHP_POST[option_name]))):
+    for option_name_ in options_:
+        if (not (php_isset(lambda : PHP_POST[option_name_]))):
             continue
         # end if
-        value = wp_unslash(PHP_POST[option_name])
-        update_site_option(option_name, value)
+        value_ = wp_unslash(PHP_POST[option_name_])
+        update_site_option(option_name_, value_)
     # end for
     #// 
     #// Fires after the network options are updated.
@@ -91,7 +86,7 @@ if (php_isset(lambda : PHP_REQUEST["updated"])):
     php_print("</p></div>\n ")
 # end if
 php_print("\n<div class=\"wrap\">\n <h1>")
-php_print(esc_html(title))
+php_print(esc_html(title_))
 php_print("</h1>\n  <form method=\"post\" action=\"settings.php\" novalidate=\"novalidate\">\n      ")
 wp_nonce_field("siteoptions")
 php_print("     <h2>")
@@ -114,10 +109,10 @@ php_print(esc_attr(get_site_option("admin_email")))
 php_print("\" />\n                  <p class=\"description\" id=\"admin-email-desc\">\n                     ")
 _e("This address is used for admin purposes. If you change this, we will send you an email at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong>")
 php_print("                 </p>\n                  ")
-new_admin_email = get_site_option("new_admin_email")
-if new_admin_email and get_site_option("admin_email") != new_admin_email:
+new_admin_email_ = get_site_option("new_admin_email")
+if new_admin_email_ and get_site_option("admin_email") != new_admin_email_:
     php_print("                     <div class=\"updated inline\">\n                        <p>\n                       ")
-    printf(__("There is a pending change of the network admin email to %s."), "<code>" + esc_html(new_admin_email) + "</code>")
+    printf(__("There is a pending change of the network admin email to %s."), "<code>" + esc_html(new_admin_email_) + "</code>")
     printf(" <a href=\"%1$s\">%2$s</a>", esc_url(wp_nonce_url(network_admin_url("settings.php?dismiss=new_network_admin_email"), "dismiss_new_network_admin_email")), __("Cancel"))
     php_print("                     </p>\n                      </div>\n                    ")
 # end if
@@ -135,23 +130,23 @@ php_print("</th>\n              ")
 if (not get_site_option("registration")):
     update_site_option("registration", "none")
 # end if
-reg = get_site_option("registration")
+reg_ = get_site_option("registration")
 php_print("             <td>\n                  <fieldset>\n                    <legend class=\"screen-reader-text\">")
 _e("New registrations settings")
 php_print("</legend>\n                  <label><input name=\"registration\" type=\"radio\" id=\"registration1\" value=\"none\"")
-checked(reg, "none")
+checked(reg_, "none")
 php_print(" /> ")
 _e("Registration is disabled")
 php_print("</label><br />\n                 <label><input name=\"registration\" type=\"radio\" id=\"registration2\" value=\"user\"")
-checked(reg, "user")
+checked(reg_, "user")
 php_print(" /> ")
 _e("User accounts may be registered")
 php_print("</label><br />\n                 <label><input name=\"registration\" type=\"radio\" id=\"registration3\" value=\"blog\"")
-checked(reg, "blog")
+checked(reg_, "blog")
 php_print(" /> ")
 _e("Logged in users may register new sites")
 php_print("</label><br />\n                 <label><input name=\"registration\" type=\"radio\" id=\"registration4\" value=\"all\"")
-checked(reg, "all")
+checked(reg_, "all")
 php_print(" /> ")
 _e("Both sites and user accounts can be registered")
 php_print("</label>\n                   ")
@@ -201,10 +196,10 @@ php_print("""                   </p>
 <th scope=\"row\"><label for=\"limited_email_domains\">""")
 _e("Limited Email Registrations")
 php_print("</label></th>\n              <td>\n                  ")
-limited_email_domains = get_site_option("limited_email_domains")
-limited_email_domains = php_str_replace(" ", "\n", limited_email_domains)
+limited_email_domains_ = get_site_option("limited_email_domains")
+limited_email_domains_ = php_str_replace(" ", "\n", limited_email_domains_)
 php_print("                 <textarea name=\"limited_email_domains\" id=\"limited_email_domains\" aria-describedby=\"limited-email-domains-desc\" cols=\"45\" rows=\"5\">\n")
-php_print(esc_textarea("" if "" == limited_email_domains else php_implode("\n", limited_email_domains)))
+php_print(esc_textarea("" if "" == limited_email_domains_ else php_implode("\n", limited_email_domains_)))
 php_print("</textarea>\n                    <p class=\"description\" id=\"limited-email-domains-desc\">\n                       ")
 _e("If you want to limit site registrations to certain domains. One domain per line.")
 php_print("""                   </p>
@@ -362,9 +357,9 @@ php_print("""                   </p>
 </tr>
 </table>
 """)
-languages = get_available_languages()
-translations = wp_get_available_translations()
-if (not php_empty(lambda : languages)) or (not php_empty(lambda : translations)):
+languages_ = get_available_languages()
+translations_ = wp_get_available_translations()
+if (not php_empty(lambda : languages_)) or (not php_empty(lambda : translations_)):
     php_print("         <h2>")
     _e("Language Settings")
     php_print("""</h2>
@@ -373,11 +368,11 @@ if (not php_empty(lambda : languages)) or (not php_empty(lambda : translations))
     <th><label for=\"WPLANG\">""")
     _e("Default Language")
     php_print("</label></th>\n                  <td>\n                      ")
-    lang = get_site_option("WPLANG")
-    if (not php_in_array(lang, languages)):
-        lang = ""
+    lang_ = get_site_option("WPLANG")
+    if (not php_in_array(lang_, languages_)):
+        lang_ = ""
     # end if
-    wp_dropdown_languages(Array({"name": "WPLANG", "id": "WPLANG", "selected": lang, "languages": languages, "translations": translations, "show_available_translations": current_user_can("install_languages") and wp_can_install_language_pack()}))
+    wp_dropdown_languages(Array({"name": "WPLANG", "id": "WPLANG", "selected": lang_, "languages": languages_, "translations": translations_, "show_available_translations": current_user_can("install_languages") and wp_can_install_language_pack()}))
     php_print("""                   </td>
     </tr>
     </table>
@@ -391,7 +386,7 @@ php_print("""</h2>
 <th scope=\"row\">""")
 _e("Enable administration menus")
 php_print("</th>\n              <td>\n          ")
-menu_perms = get_site_option("menu_items")
+menu_perms_ = get_site_option("menu_items")
 #// 
 #// Filters available network-wide administration menu options.
 #// 
@@ -407,10 +402,10 @@ menu_perms = get_site_option("menu_items")
 #// 
 #// @param string[] $admin_menus Associative array of the menu items available.
 #//
-menu_items = apply_filters("mu_menu_items", Array({"plugins": __("Plugins")}))
+menu_items_ = apply_filters("mu_menu_items", Array({"plugins": __("Plugins")}))
 php_print("<fieldset><legend class=\"screen-reader-text\">" + __("Enable menus") + "</legend>")
-for key,val in menu_items:
-    php_print("<label><input type='checkbox' name='menu_items[" + key + "]' value='1'" + checked(menu_perms[key], "1", False) if (php_isset(lambda : menu_perms[key])) else "" + " /> " + esc_html(val) + "</label><br/>")
+for key_,val_ in menu_items_:
+    php_print("<label><input type='checkbox' name='menu_items[" + key_ + "]' value='1'" + checked(menu_perms_[key_], "1", False) if (php_isset(lambda : menu_perms_[key_])) else "" + " /> " + esc_html(val_) + "</label><br/>")
 # end for
 php_print("</fieldset>")
 php_print("""               </td>

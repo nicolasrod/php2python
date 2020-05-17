@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -63,22 +58,22 @@ elif is_trackback():
     sys.exit(-1)
 # end if
 if wp_using_themes():
-    tag_templates = Array({"is_embed": "get_embed_template", "is_404": "get_404_template", "is_search": "get_search_template", "is_front_page": "get_front_page_template", "is_home": "get_home_template", "is_privacy_policy": "get_privacy_policy_template", "is_post_type_archive": "get_post_type_archive_template", "is_tax": "get_taxonomy_template", "is_attachment": "get_attachment_template", "is_single": "get_single_template", "is_page": "get_page_template", "is_singular": "get_singular_template", "is_category": "get_category_template", "is_tag": "get_tag_template", "is_author": "get_author_template", "is_date": "get_date_template", "is_archive": "get_archive_template"})
-    template = False
+    tag_templates_ = Array({"is_embed": "get_embed_template", "is_404": "get_404_template", "is_search": "get_search_template", "is_front_page": "get_front_page_template", "is_home": "get_home_template", "is_privacy_policy": "get_privacy_policy_template", "is_post_type_archive": "get_post_type_archive_template", "is_tax": "get_taxonomy_template", "is_attachment": "get_attachment_template", "is_single": "get_single_template", "is_page": "get_page_template", "is_singular": "get_singular_template", "is_category": "get_category_template", "is_tag": "get_tag_template", "is_author": "get_author_template", "is_date": "get_date_template", "is_archive": "get_archive_template"})
+    template_ = False
     #// Loop through each of the template conditionals, and find the appropriate template file.
-    for tag,template_getter in tag_templates:
-        if php_call_user_func(tag):
-            template = php_call_user_func(template_getter)
+    for tag_,template_getter_ in tag_templates_:
+        if php_call_user_func(tag_):
+            template_ = php_call_user_func(template_getter_)
         # end if
-        if template:
-            if "is_attachment" == tag:
+        if template_:
+            if "is_attachment" == tag_:
                 remove_filter("the_content", "prepend_attachment")
             # end if
             break
         # end if
     # end for
-    if (not template):
-        template = get_index_template()
+    if (not template_):
+        template_ = get_index_template()
     # end if
     #// 
     #// Filters the path of the current template before including it.
@@ -87,13 +82,13 @@ if wp_using_themes():
     #// 
     #// @param string $template The path of the template to include.
     #//
-    template = apply_filters("template_include", template)
-    if template:
-        php_include_file(template, once=False)
+    template_ = apply_filters("template_include", template_)
+    if template_:
+        php_include_file(template_, once=False)
     elif current_user_can("switch_themes"):
-        theme = wp_get_theme()
-        if theme.errors():
-            wp_die(theme.errors())
+        theme_ = wp_get_theme()
+        if theme_.errors():
+            wp_die(theme_.errors())
         # end if
     # end if
     sys.exit(-1)

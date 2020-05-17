@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -48,14 +43,67 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @property string $syntax_highlighting
 #//
 class WP_User():
+    #// 
+    #// User data container.
+    #// 
+    #// @since 2.0.0
+    #// @var object
+    #//
     data = Array()
+    #// 
+    #// The user's ID.
+    #// 
+    #// @since 2.1.0
+    #// @var int
+    #//
     ID = 0
+    #// 
+    #// The individual capabilities the user has been given.
+    #// 
+    #// @since 2.0.0
+    #// @var array
+    #//
     caps = Array()
+    #// 
+    #// User metadata option name.
+    #// 
+    #// @since 2.0.0
+    #// @var string
+    #//
     cap_key = Array()
+    #// 
+    #// The roles the user is part of.
+    #// 
+    #// @since 2.0.0
+    #// @var array
+    #//
     roles = Array()
+    #// 
+    #// All capabilities the user has, including individual and role based.
+    #// 
+    #// @since 2.0.0
+    #// @var bool[] Array of key/value pairs where keys represent a capability name and boolean values
+    #// represent whether the user has that capability.
+    #//
     allcaps = Array()
+    #// 
+    #// The filter context applied to user data fields.
+    #// 
+    #// @since 2.9.0
+    #// @var string
+    #//
     filter = None
+    #// 
+    #// The site ID the capabilities of this user are initialized for.
+    #// 
+    #// @since 4.9.0
+    #// @var int
+    #//
     site_id = 0
+    #// 
+    #// @since 3.3.0
+    #// @var array
+    #//
     back_compat_keys = Array()
     #// 
     #// Constructor.
@@ -68,30 +116,31 @@ class WP_User():
     #// @param string $name Optional. User's username
     #// @param int $site_id Optional Site ID, defaults to current site.
     #//
-    def __init__(self, id=0, name="", site_id=""):
+    def __init__(self, id_=0, name_="", site_id_=""):
+        
         
         if (not (php_isset(lambda : self.back_compat_keys))):
-            prefix = PHP_GLOBALS["wpdb"].prefix
-            self.back_compat_keys = Array({"user_firstname": "first_name", "user_lastname": "last_name", "user_description": "description", "user_level": prefix + "user_level", prefix + "usersettings": prefix + "user-settings", prefix + "usersettingstime": prefix + "user-settings-time"})
+            prefix_ = PHP_GLOBALS["wpdb"].prefix
+            self.back_compat_keys = Array({"user_firstname": "first_name", "user_lastname": "last_name", "user_description": "description", "user_level": prefix_ + "user_level", prefix_ + "usersettings": prefix_ + "user-settings", prefix_ + "usersettingstime": prefix_ + "user-settings-time"})
         # end if
-        if type(id).__name__ == "WP_User":
-            self.init(id.data, site_id)
+        if type(id_).__name__ == "WP_User":
+            self.init(id_.data, site_id_)
             return
-        elif php_is_object(id):
-            self.init(id, site_id)
+        elif php_is_object(id_):
+            self.init(id_, site_id_)
             return
         # end if
-        if (not php_empty(lambda : id)) and (not php_is_numeric(id)):
-            name = id
-            id = 0
+        if (not php_empty(lambda : id_)) and (not php_is_numeric(id_)):
+            name_ = id_
+            id_ = 0
         # end if
-        if id:
-            data = self.get_data_by("id", id)
+        if id_:
+            data_ = self.get_data_by("id", id_)
         else:
-            data = self.get_data_by("login", name)
+            data_ = self.get_data_by("login", name_)
         # end if
-        if data:
-            self.init(data, site_id)
+        if data_:
+            self.init(data_, site_id_)
         else:
             self.data = php_new_class("stdClass", lambda : stdClass())
         # end if
@@ -104,11 +153,12 @@ class WP_User():
     #// @param object $data    User DB row object.
     #// @param int    $site_id Optional. The site ID to initialize for.
     #//
-    def init(self, data=None, site_id=""):
+    def init(self, data_=None, site_id_=""):
         
-        self.data = data
-        self.ID = php_int(data.ID)
-        self.for_site(site_id)
+        
+        self.data = data_
+        self.ID = php_int(data_.ID)
+        self.for_site(site_id_)
     # end def init
     #// 
     #// Return only the main user fields
@@ -123,68 +173,69 @@ class WP_User():
     #// @return object|false Raw user object
     #//
     @classmethod
-    def get_data_by(self, field=None, value=None):
+    def get_data_by(self, field_=None, value_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
         #// 'ID' is an alias of 'id'.
-        if "ID" == field:
-            field = "id"
+        if "ID" == field_:
+            field_ = "id"
         # end if
-        if "id" == field:
+        if "id" == field_:
             #// Make sure the value is numeric to avoid casting objects, for example,
             #// to int 1.
-            if (not php_is_numeric(value)):
+            if (not php_is_numeric(value_)):
                 return False
             # end if
-            value = php_intval(value)
-            if value < 1:
+            value_ = php_intval(value_)
+            if value_ < 1:
                 return False
             # end if
         else:
-            value = php_trim(value)
+            value_ = php_trim(value_)
         # end if
-        if (not value):
+        if (not value_):
             return False
         # end if
-        for case in Switch(field):
+        for case in Switch(field_):
             if case("id"):
-                user_id = value
-                db_field = "ID"
+                user_id_ = value_
+                db_field_ = "ID"
                 break
             # end if
             if case("slug"):
-                user_id = wp_cache_get(value, "userslugs")
-                db_field = "user_nicename"
+                user_id_ = wp_cache_get(value_, "userslugs")
+                db_field_ = "user_nicename"
                 break
             # end if
             if case("email"):
-                user_id = wp_cache_get(value, "useremail")
-                db_field = "user_email"
+                user_id_ = wp_cache_get(value_, "useremail")
+                db_field_ = "user_email"
                 break
             # end if
             if case("login"):
-                value = sanitize_user(value)
-                user_id = wp_cache_get(value, "userlogins")
-                db_field = "user_login"
+                value_ = sanitize_user(value_)
+                user_id_ = wp_cache_get(value_, "userlogins")
+                db_field_ = "user_login"
                 break
             # end if
             if case():
                 return False
             # end if
         # end for
-        if False != user_id:
-            user = wp_cache_get(user_id, "users")
-            if user:
-                return user
+        if False != user_id_:
+            user_ = wp_cache_get(user_id_, "users")
+            if user_:
+                return user_
             # end if
         # end if
-        user = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.users) + str(" WHERE ") + str(db_field) + str(" = %s LIMIT 1"), value))
-        if (not user):
+        user_ = wpdb_.get_row(wpdb_.prepare(str("SELECT * FROM ") + str(wpdb_.users) + str(" WHERE ") + str(db_field_) + str(" = %s LIMIT 1"), value_))
+        if (not user_):
             return False
         # end if
-        update_user_caches(user)
-        return user
+        update_user_caches(user_)
+        return user_
     # end def get_data_by
     #// 
     #// Magic method for checking the existence of a certain custom field.
@@ -194,19 +245,20 @@ class WP_User():
     #// @param string $key User meta key to check if set.
     #// @return bool Whether the given user meta key is set.
     #//
-    def __isset(self, key=None):
+    def __isset(self, key_=None):
         
-        if "id" == key:
+        
+        if "id" == key_:
             _deprecated_argument("WP_User->id", "2.1.0", php_sprintf(__("Use %s instead."), "<code>WP_User->ID</code>"))
-            key = "ID"
+            key_ = "ID"
         # end if
-        if (php_isset(lambda : self.data.key)):
+        if (php_isset(lambda : self.data.key_)):
             return True
         # end if
-        if (php_isset(lambda : self.back_compat_keys[key])):
-            key = self.back_compat_keys[key]
+        if (php_isset(lambda : self.back_compat_keys[key_])):
+            key_ = self.back_compat_keys[key_]
         # end if
-        return metadata_exists("user", self.ID, key)
+        return metadata_exists("user", self.ID, key_)
     # end def __isset
     #// 
     #// Magic method for accessing custom fields.
@@ -216,24 +268,25 @@ class WP_User():
     #// @param string $key User meta key to retrieve.
     #// @return mixed Value of the given user meta key (if set). If `$key` is 'id', the user ID.
     #//
-    def __get(self, key=None):
+    def __get(self, key_=None):
         
-        if "id" == key:
+        
+        if "id" == key_:
             _deprecated_argument("WP_User->id", "2.1.0", php_sprintf(__("Use %s instead."), "<code>WP_User->ID</code>"))
             return self.ID
         # end if
-        if (php_isset(lambda : self.data.key)):
-            value = self.data.key
+        if (php_isset(lambda : self.data.key_)):
+            value_ = self.data.key_
         else:
-            if (php_isset(lambda : self.back_compat_keys[key])):
-                key = self.back_compat_keys[key]
+            if (php_isset(lambda : self.back_compat_keys[key_])):
+                key_ = self.back_compat_keys[key_]
             # end if
-            value = get_user_meta(self.ID, key, True)
+            value_ = get_user_meta(self.ID, key_, True)
         # end if
         if self.filter:
-            value = sanitize_user_field(key, value, self.ID, self.filter)
+            value_ = sanitize_user_field(key_, value_, self.ID, self.filter)
         # end if
-        return value
+        return value_
     # end def __get
     #// 
     #// Magic method for setting custom user fields.
@@ -246,14 +299,15 @@ class WP_User():
     #// @param string $key   User meta key.
     #// @param mixed  $value User meta value.
     #//
-    def __set(self, key=None, value=None):
+    def __set(self, key_=None, value_=None):
         
-        if "id" == key:
+        
+        if "id" == key_:
             _deprecated_argument("WP_User->id", "2.1.0", php_sprintf(__("Use %s instead."), "<code>WP_User->ID</code>"))
-            self.ID = value
+            self.ID = value_
             return
         # end if
-        self.data.key = value
+        self.data.key_ = value_
     # end def __set
     #// 
     #// Magic method for unsetting a certain custom field.
@@ -262,16 +316,17 @@ class WP_User():
     #// 
     #// @param string $key User meta key to unset.
     #//
-    def __unset(self, key=None):
+    def __unset(self, key_=None):
         
-        if "id" == key:
+        
+        if "id" == key_:
             _deprecated_argument("WP_User->id", "2.1.0", php_sprintf(__("Use %s instead."), "<code>WP_User->ID</code>"))
         # end if
-        if (php_isset(lambda : self.data.key)):
-            self.data.key = None
+        if (php_isset(lambda : self.data.key_)):
+            self.data.key_ = None
         # end if
-        if (php_isset(lambda : self.back_compat_keys[key])):
-            self.back_compat_keys[key] = None
+        if (php_isset(lambda : self.back_compat_keys[key_])):
+            self.back_compat_keys[key_] = None
         # end if
     # end def __unset
     #// 
@@ -282,6 +337,7 @@ class WP_User():
     #// @return bool True if user exists in the database, false if not.
     #//
     def exists(self):
+        
         
         return (not php_empty(lambda : self.ID))
     # end def exists
@@ -295,9 +351,10 @@ class WP_User():
     #// @param string $key Property
     #// @return mixed
     #//
-    def get(self, key=None):
+    def get(self, key_=None):
         
-        return self.__get(key)
+        
+        return self.__get(key_)
     # end def get
     #// 
     #// Determine whether a property or meta key is set
@@ -309,9 +366,10 @@ class WP_User():
     #// @param string $key Property
     #// @return bool
     #//
-    def has_prop(self, key=None):
+    def has_prop(self, key_=None):
         
-        return self.__isset(key)
+        
+        return self.__isset(key_)
     # end def has_prop
     #// 
     #// Return an array representation.
@@ -321,6 +379,7 @@ class WP_User():
     #// @return array Array representation.
     #//
     def to_array(self):
+        
         
         return get_object_vars(self.data)
     # end def to_array
@@ -333,10 +392,11 @@ class WP_User():
     #// @param array    $arguments Arguments to pass when calling.
     #// @return mixed|false Return value of the callback, false otherwise.
     #//
-    def __call(self, name=None, arguments=None):
+    def __call(self, name_=None, arguments_=None):
         
-        if "_init_caps" == name:
-            return self._init_caps(arguments)
+        
+        if "_init_caps" == name_:
+            return self._init_caps(arguments_)
         # end if
         return False
     # end def __call
@@ -355,15 +415,16 @@ class WP_User():
     #// 
     #// @param string $cap_key Optional capability key
     #//
-    def _init_caps(self, cap_key=""):
+    def _init_caps(self, cap_key_=""):
         
-        global wpdb
-        php_check_if_defined("wpdb")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
         _deprecated_function(__METHOD__, "4.9.0", "WP_User::for_site()")
-        if php_empty(lambda : cap_key):
-            self.cap_key = wpdb.get_blog_prefix(self.site_id) + "capabilities"
+        if php_empty(lambda : cap_key_):
+            self.cap_key = wpdb_.get_blog_prefix(self.site_id) + "capabilities"
         else:
-            self.cap_key = cap_key
+            self.cap_key = cap_key_
         # end if
         self.caps = self.get_caps_data()
         self.get_role_caps()
@@ -381,24 +442,25 @@ class WP_User():
     #//
     def get_role_caps(self):
         
-        switch_site = False
+        
+        switch_site_ = False
         if is_multisite() and get_current_blog_id() != self.site_id:
-            switch_site = True
+            switch_site_ = True
             switch_to_blog(self.site_id)
         # end if
-        wp_roles = wp_roles()
+        wp_roles_ = wp_roles()
         #// Filter out caps that are not role names and assign to $this->roles.
         if php_is_array(self.caps):
-            self.roles = php_array_filter(php_array_keys(self.caps), Array(wp_roles, "is_role"))
+            self.roles = php_array_filter(php_array_keys(self.caps), Array(wp_roles_, "is_role"))
         # end if
         #// Build $allcaps from role caps, overlay user's $caps.
         self.allcaps = Array()
-        for role in self.roles:
-            the_role = wp_roles.get_role(role)
-            self.allcaps = php_array_merge(self.allcaps, the_role.capabilities)
+        for role_ in self.roles:
+            the_role_ = wp_roles_.get_role(role_)
+            self.allcaps = php_array_merge(self.allcaps, the_role_.capabilities)
         # end for
         self.allcaps = php_array_merge(self.allcaps, self.caps)
-        if switch_site:
+        if switch_site_:
             restore_current_blog()
         # end if
         return self.allcaps
@@ -412,12 +474,13 @@ class WP_User():
     #// 
     #// @param string $role Role name.
     #//
-    def add_role(self, role=None):
+    def add_role(self, role_=None):
         
-        if php_empty(lambda : role):
+        
+        if php_empty(lambda : role_):
             return
         # end if
-        self.caps[role] = True
+        self.caps[role_] = True
         update_user_meta(self.ID, self.cap_key, self.caps)
         self.get_role_caps()
         self.update_user_level_from_caps()
@@ -429,7 +492,7 @@ class WP_User():
         #// @param int    $user_id The user ID.
         #// @param string $role    The new role.
         #//
-        do_action("add_user_role", self.ID, role)
+        do_action("add_user_role", self.ID, role_)
     # end def add_role
     #// 
     #// Remove role from user.
@@ -438,12 +501,13 @@ class WP_User():
     #// 
     #// @param string $role Role name.
     #//
-    def remove_role(self, role=None):
+    def remove_role(self, role_=None):
         
-        if (not php_in_array(role, self.roles)):
+        
+        if (not php_in_array(role_, self.roles)):
             return
         # end if
-        self.caps[role] = None
+        self.caps[role_] = None
         update_user_meta(self.ID, self.cap_key, self.caps)
         self.get_role_caps()
         self.update_user_level_from_caps()
@@ -455,7 +519,7 @@ class WP_User():
         #// @param int    $user_id The user ID.
         #// @param string $role    The removed role.
         #//
-        do_action("remove_user_role", self.ID, role)
+        do_action("remove_user_role", self.ID, role_)
     # end def remove_role
     #// 
     #// Set the role of the user.
@@ -468,18 +532,19 @@ class WP_User():
     #// 
     #// @param string $role Role name.
     #//
-    def set_role(self, role=None):
+    def set_role(self, role_=None):
         
-        if 1 == php_count(self.roles) and current(self.roles) == role:
+        
+        if 1 == php_count(self.roles) and current(self.roles) == role_:
             return
         # end if
-        for oldrole in self.roles:
-            self.caps[oldrole] = None
+        for oldrole_ in self.roles:
+            self.caps[oldrole_] = None
         # end for
-        old_roles = self.roles
-        if (not php_empty(lambda : role)):
-            self.caps[role] = True
-            self.roles = Array({role: True})
+        old_roles_ = self.roles
+        if (not php_empty(lambda : role_)):
+            self.caps[role_] = True
+            self.roles = Array({role_: True})
         else:
             self.roles = False
         # end if
@@ -496,7 +561,7 @@ class WP_User():
         #// @param string   $role      The new role.
         #// @param string[] $old_roles An array of the user's previous roles.
         #//
-        do_action("set_user_role", self.ID, role, old_roles)
+        do_action("set_user_role", self.ID, role_, old_roles_)
     # end def set_role
     #// 
     #// Choose the maximum level the user has.
@@ -516,13 +581,14 @@ class WP_User():
     #// @param string $item Level capability name.
     #// @return int Max Level.
     #//
-    def level_reduction(self, max=None, item=None):
+    def level_reduction(self, max_=None, item_=None):
         
-        if php_preg_match("/^level_(10|[0-9])$/i", item, matches):
-            level = php_intval(matches[1])
-            return php_max(max, level)
+        
+        if php_preg_match("/^level_(10|[0-9])$/i", item_, matches_):
+            level_ = php_intval(matches_[1])
+            return php_max(max_, level_)
         else:
-            return max
+            return max_
         # end if
     # end def level_reduction
     #// 
@@ -538,10 +604,11 @@ class WP_User():
     #//
     def update_user_level_from_caps(self):
         
-        global wpdb
-        php_check_if_defined("wpdb")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
         self.user_level = array_reduce(php_array_keys(self.allcaps), Array(self, "level_reduction"), 0)
-        update_user_meta(self.ID, wpdb.get_blog_prefix() + "user_level", self.user_level)
+        update_user_meta(self.ID, wpdb_.get_blog_prefix() + "user_level", self.user_level)
     # end def update_user_level_from_caps
     #// 
     #// Add capability and grant or deny access to capability.
@@ -551,9 +618,12 @@ class WP_User():
     #// @param string $cap Capability name.
     #// @param bool $grant Whether to grant capability to user.
     #//
-    def add_cap(self, cap=None, grant=True):
+    def add_cap(self, cap_=None, grant_=None):
+        if grant_ is None:
+            grant_ = True
+        # end if
         
-        self.caps[cap] = grant
+        self.caps[cap_] = grant_
         update_user_meta(self.ID, self.cap_key, self.caps)
         self.get_role_caps()
         self.update_user_level_from_caps()
@@ -565,12 +635,13 @@ class WP_User():
     #// 
     #// @param string $cap Capability name.
     #//
-    def remove_cap(self, cap=None):
+    def remove_cap(self, cap_=None):
         
-        if (not (php_isset(lambda : self.caps[cap]))):
+        
+        if (not (php_isset(lambda : self.caps[cap_]))):
             return
         # end if
-        self.caps[cap] = None
+        self.caps[cap_] = None
         update_user_meta(self.ID, self.cap_key, self.caps)
         self.get_role_caps()
         self.update_user_level_from_caps()
@@ -584,11 +655,12 @@ class WP_User():
     #//
     def remove_all_caps(self):
         
-        global wpdb
-        php_check_if_defined("wpdb")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
         self.caps = Array()
         delete_user_meta(self.ID, self.cap_key)
-        delete_user_meta(self.ID, wpdb.get_blog_prefix() + "user_level")
+        delete_user_meta(self.ID, wpdb_.get_blog_prefix() + "user_level")
         self.get_role_caps()
     # end def remove_all_caps
     #// 
@@ -618,22 +690,23 @@ class WP_User():
     #// @return bool Whether the user has the given capability, or, if an object ID is passed, whether the user has
     #// the given capability for that object.
     #//
-    def has_cap(self, cap=None, *args):
+    def has_cap(self, cap_=None, *args_):
         
-        if php_is_numeric(cap):
+        
+        if php_is_numeric(cap_):
             _deprecated_argument(__FUNCTION__, "2.0.0", __("Usage of user levels is deprecated. Use capabilities instead."))
-            cap = self.translate_level_to_cap(cap)
+            cap_ = self.translate_level_to_cap(cap_)
         # end if
-        caps = map_meta_cap(cap, self.ID, args)
+        caps_ = map_meta_cap(cap_, self.ID, args_)
         #// Multisite super admin has all caps by definition, Unless specifically denied.
         if is_multisite() and is_super_admin(self.ID):
-            if php_in_array("do_not_allow", caps):
+            if php_in_array("do_not_allow", caps_):
                 return False
             # end if
             return True
         # end if
         #// Maintain BC for the argument passed to the "user_has_cap" filter.
-        args = php_array_merge(Array(cap, self.ID), args)
+        args_ = php_array_merge(Array(cap_, self.ID), args_)
         #// 
         #// Dynamically filter a user's capabilities.
         #// 
@@ -652,13 +725,13 @@ class WP_User():
         #// }
         #// @param WP_User  $user    The user object.
         #//
-        capabilities = apply_filters("user_has_cap", self.allcaps, caps, args, self)
+        capabilities_ = apply_filters("user_has_cap", self.allcaps, caps_, args_, self)
         #// Everyone is allowed to exist.
-        capabilities["exist"] = True
-        capabilities["do_not_allow"] = None
+        capabilities_["exist"] = True
+        capabilities_["do_not_allow"] = None
         #// Must have ALL requested caps.
-        for cap in caps:
-            if php_empty(lambda : capabilities[cap]):
+        for cap_ in caps_:
+            if php_empty(lambda : capabilities_[cap_]):
                 return False
             # end if
         # end for
@@ -674,9 +747,10 @@ class WP_User():
     #// @param int $level Level number, 1 to 10.
     #// @return string
     #//
-    def translate_level_to_cap(self, level=None):
+    def translate_level_to_cap(self, level_=None):
         
-        return "level_" + level
+        
+        return "level_" + level_
     # end def translate_level_to_cap
     #// 
     #// Set the site to operate on. Defaults to the current site.
@@ -686,10 +760,11 @@ class WP_User():
     #// 
     #// @param int $blog_id Optional. Site ID, defaults to current site.
     #//
-    def for_blog(self, blog_id=""):
+    def for_blog(self, blog_id_=""):
+        
         
         _deprecated_function(__METHOD__, "4.9.0", "WP_User::for_site()")
-        self.for_site(blog_id)
+        self.for_site(blog_id_)
     # end def for_blog
     #// 
     #// Sets the site to operate on. Defaults to the current site.
@@ -700,16 +775,17 @@ class WP_User():
     #// 
     #// @param int $site_id Site ID to initialize user capabilities for. Default is the current site.
     #//
-    def for_site(self, site_id=""):
+    def for_site(self, site_id_=""):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        if (not php_empty(lambda : site_id)):
-            self.site_id = absint(site_id)
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        if (not php_empty(lambda : site_id_)):
+            self.site_id = absint(site_id_)
         else:
             self.site_id = get_current_blog_id()
         # end if
-        self.cap_key = wpdb.get_blog_prefix(self.site_id) + "capabilities"
+        self.cap_key = wpdb_.get_blog_prefix(self.site_id) + "capabilities"
         self.caps = self.get_caps_data()
         self.get_role_caps()
     # end def for_site
@@ -721,6 +797,7 @@ class WP_User():
     #// @return int Site ID.
     #//
     def get_site_id(self):
+        
         
         return self.site_id
     # end def get_site_id
@@ -734,10 +811,11 @@ class WP_User():
     #//
     def get_caps_data(self):
         
-        caps = get_user_meta(self.ID, self.cap_key, True)
-        if (not php_is_array(caps)):
+        
+        caps_ = get_user_meta(self.ID, self.cap_key, True)
+        if (not php_is_array(caps_)):
             return Array()
         # end if
-        return caps
+        return caps_
     # end def get_caps_data
 # end class WP_User

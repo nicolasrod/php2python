@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,11 +29,57 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @property int $site_id
 #//
 class WP_Network():
+    #// 
+    #// Network ID.
+    #// 
+    #// @since 4.4.0
+    #// @since 4.6.0 Converted from public to private to explicitly enable more intuitive
+    #// access via magic methods. As part of the access change, the type was
+    #// also changed from `string` to `int`.
+    #// @var int
+    #//
     id = Array()
+    #// 
+    #// Domain of the network.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     domain = ""
+    #// 
+    #// Path of the network.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     path = ""
+    #// 
+    #// The ID of the network's main site.
+    #// 
+    #// Named "blog" vs. "site" for legacy reasons. A main site is mapped to
+    #// the network when the network is created.
+    #// 
+    #// A numeric string, for compatibility reasons.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     blog_id = "0"
+    #// 
+    #// Domain used to set cookies for this network.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     cookie_domain = ""
+    #// 
+    #// Name of this network.
+    #// 
+    #// Named "site" vs. "network" for legacy reasons.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     site_name = ""
     #// 
     #// Retrieve a network from the database by its ID.
@@ -51,26 +92,27 @@ class WP_Network():
     #// @return WP_Network|bool The network's object if found. False if not.
     #//
     @classmethod
-    def get_instance(self, network_id=None):
+    def get_instance(self, network_id_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        network_id = php_int(network_id)
-        if (not network_id):
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        network_id_ = php_int(network_id_)
+        if (not network_id_):
             return False
         # end if
-        _network = wp_cache_get(network_id, "networks")
-        if False == _network:
-            _network = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.site) + str(" WHERE id = %d LIMIT 1"), network_id))
-            if php_empty(lambda : _network) or is_wp_error(_network):
-                _network = -1
+        _network_ = wp_cache_get(network_id_, "networks")
+        if False == _network_:
+            _network_ = wpdb_.get_row(wpdb_.prepare(str("SELECT * FROM ") + str(wpdb_.site) + str(" WHERE id = %d LIMIT 1"), network_id_))
+            if php_empty(lambda : _network_) or is_wp_error(_network_):
+                _network_ = -1
             # end if
-            wp_cache_add(network_id, _network, "networks")
+            wp_cache_add(network_id_, _network_, "networks")
         # end if
-        if php_is_numeric(_network):
+        if php_is_numeric(_network_):
             return False
         # end if
-        return php_new_class("WP_Network", lambda : WP_Network(_network))
+        return php_new_class("WP_Network", lambda : WP_Network(_network_))
     # end def get_instance
     #// 
     #// Create a new WP_Network object.
@@ -82,10 +124,11 @@ class WP_Network():
     #// 
     #// @param WP_Network|object $network A network object.
     #//
-    def __init__(self, network=None):
+    def __init__(self, network_=None):
         
-        for key,value in get_object_vars(network):
-            self.key = value
+        
+        for key_,value_ in get_object_vars(network_):
+            self.key_ = value_
         # end for
         self._set_site_name()
         self._set_cookie_domain()
@@ -100,9 +143,10 @@ class WP_Network():
     #// @param string $key Property to get.
     #// @return mixed Value of the property. Null if not available.
     #//
-    def __get(self, key=None):
+    def __get(self, key_=None):
         
-        for case in Switch(key):
+        
+        for case in Switch(key_):
             if case("id"):
                 return php_int(self.id)
             # end if
@@ -125,9 +169,10 @@ class WP_Network():
     #// @param string $key Property to check if set.
     #// @return bool Whether the property is set.
     #//
-    def __isset(self, key=None):
+    def __isset(self, key_=None):
         
-        for case in Switch(key):
+        
+        for case in Switch(key_):
             if case("id"):
                 pass
             # end if
@@ -150,22 +195,23 @@ class WP_Network():
     #// @param string $key   Property to set.
     #// @param mixed  $value Value to assign to the property.
     #//
-    def __set(self, key=None, value=None):
+    def __set(self, key_=None, value_=None):
         
-        for case in Switch(key):
+        
+        for case in Switch(key_):
             if case("id"):
-                self.id = php_int(value)
+                self.id = php_int(value_)
                 break
             # end if
             if case("blog_id"):
                 pass
             # end if
             if case("site_id"):
-                self.blog_id = php_str(value)
+                self.blog_id = php_str(value_)
                 break
             # end if
             if case():
-                self.key = value
+                self.key_ = value_
             # end if
         # end for
     # end def __set
@@ -181,6 +227,7 @@ class WP_Network():
     #//
     def get_main_site_id(self):
         
+        
         #// 
         #// Filters the main site ID.
         #// 
@@ -191,9 +238,9 @@ class WP_Network():
         #// @param int|null   $main_site_id If a positive integer is returned, it is interpreted as the main site ID.
         #// @param WP_Network $network      The network object for which the main site was detected.
         #//
-        main_site_id = php_int(apply_filters("pre_get_main_site_id", None, self))
-        if 0 < main_site_id:
-            return main_site_id
+        main_site_id_ = php_int(apply_filters("pre_get_main_site_id", None, self))
+        if 0 < main_site_id_:
+            return main_site_id_
         # end if
         if 0 < php_int(self.blog_id):
             return php_int(self.blog_id)
@@ -209,19 +256,19 @@ class WP_Network():
                 return php_int(self.blog_id)
             # end if
         # end if
-        site = get_site()
-        if site.domain == self.domain and site.path == self.path:
-            main_site_id = php_int(site.id)
+        site_ = get_site()
+        if site_.domain == self.domain and site_.path == self.path:
+            main_site_id_ = php_int(site_.id)
         else:
-            cache_key = "network:" + self.id + ":main_site"
-            main_site_id = wp_cache_get(cache_key, "site-options")
-            if False == main_site_id:
-                _sites = get_sites(Array({"fields": "ids", "number": 1, "domain": self.domain, "path": self.path, "network_id": self.id}))
-                main_site_id = php_array_shift(_sites) if (not php_empty(lambda : _sites)) else 0
-                wp_cache_add(cache_key, main_site_id, "site-options")
+            cache_key_ = "network:" + self.id + ":main_site"
+            main_site_id_ = wp_cache_get(cache_key_, "site-options")
+            if False == main_site_id_:
+                _sites_ = get_sites(Array({"fields": "ids", "number": 1, "domain": self.domain, "path": self.path, "network_id": self.id}))
+                main_site_id_ = php_array_shift(_sites_) if (not php_empty(lambda : _sites_)) else 0
+                wp_cache_add(cache_key_, main_site_id_, "site-options")
             # end if
         # end if
-        self.blog_id = php_str(main_site_id)
+        self.blog_id = php_str(main_site_id_)
         return php_int(self.blog_id)
     # end def get_main_site_id
     #// 
@@ -231,11 +278,12 @@ class WP_Network():
     #//
     def _set_site_name(self):
         
+        
         if (not php_empty(lambda : self.site_name)):
             return
         # end if
-        default = ucfirst(self.domain)
-        self.site_name = get_network_option(self.id, "site_name", default)
+        default_ = ucfirst(self.domain)
+        self.site_name = get_network_option(self.id, "site_name", default_)
     # end def _set_site_name
     #// 
     #// Set the cookie domain based on the network domain if one has
@@ -246,6 +294,7 @@ class WP_Network():
     #// @since 4.4.0
     #//
     def _set_cookie_domain(self):
+        
         
         if (not php_empty(lambda : self.cookie_domain)):
             return
@@ -273,21 +322,22 @@ class WP_Network():
     #// @return WP_Network|bool Network object if successful. False when no network is found.
     #//
     @classmethod
-    def get_by_path(self, domain="", path="", segments=None):
+    def get_by_path(self, domain_="", path_="", segments_=None):
         
-        domains = Array(domain)
-        pieces = php_explode(".", domain)
+        
+        domains_ = Array(domain_)
+        pieces_ = php_explode(".", domain_)
         #// 
         #// It's possible one domain to search is 'com', but it might as well
         #// be 'localhost' or some other locally mapped domain.
         #//
         while True:
             
-            if not (php_array_shift(pieces)):
+            if not (php_array_shift(pieces_)):
                 break
             # end if
-            if (not php_empty(lambda : pieces)):
-                domains[-1] = php_implode(".", pieces)
+            if (not php_empty(lambda : pieces_)):
+                domains_[-1] = php_implode(".", pieces_)
             # end if
         # end while
         #// 
@@ -299,17 +349,17 @@ class WP_Network():
         #// This is a very basic optimization; anything further could have
         #// drawbacks depending on the setup, so this is best done per-installation.
         #//
-        using_paths = True
+        using_paths_ = True
         if wp_using_ext_object_cache():
-            using_paths = wp_cache_get("networks_have_paths", "site-options")
-            if False == using_paths:
-                using_paths = get_networks(Array({"number": 1, "count": True, "path__not_in": "/"}))
-                wp_cache_add("networks_have_paths", using_paths, "site-options")
+            using_paths_ = wp_cache_get("networks_have_paths", "site-options")
+            if False == using_paths_:
+                using_paths_ = get_networks(Array({"number": 1, "count": True, "path__not_in": "/"}))
+                wp_cache_add("networks_have_paths", using_paths_, "site-options")
             # end if
         # end if
-        paths = Array()
-        if using_paths:
-            path_segments = php_array_filter(php_explode("/", php_trim(path, "/")))
+        paths_ = Array()
+        if using_paths_:
+            path_segments_ = php_array_filter(php_explode("/", php_trim(path_, "/")))
             #// 
             #// Filters the number of path segments to consider when searching for a site.
             #// 
@@ -321,19 +371,19 @@ class WP_Network():
             #// @param string   $domain   The requested domain.
             #// @param string   $path     The requested path, in full.
             #//
-            segments = apply_filters("network_by_path_segments_count", segments, domain, path)
-            if None != segments and php_count(path_segments) > segments:
-                path_segments = php_array_slice(path_segments, 0, segments)
+            segments_ = apply_filters("network_by_path_segments_count", segments_, domain_, path_)
+            if None != segments_ and php_count(path_segments_) > segments_:
+                path_segments_ = php_array_slice(path_segments_, 0, segments_)
             # end if
             while True:
                 
-                if not (php_count(path_segments)):
+                if not (php_count(path_segments_)):
                     break
                 # end if
-                paths[-1] = "/" + php_implode("/", path_segments) + "/"
-                php_array_pop(path_segments)
+                paths_[-1] = "/" + php_implode("/", path_segments_) + "/"
+                php_array_pop(path_segments_)
             # end while
-            paths[-1] = "/"
+            paths_[-1] = "/"
         # end if
         #// 
         #// Determine a network by its domain and path.
@@ -355,38 +405,38 @@ class WP_Network():
         #// Default null, meaning the entire path was to be consulted.
         #// @param string[]             $paths    Array of paths to search for, based on `$path` and `$segments`.
         #//
-        pre = apply_filters("pre_get_network_by_path", None, domain, path, segments, paths)
-        if None != pre:
-            return pre
+        pre_ = apply_filters("pre_get_network_by_path", None, domain_, path_, segments_, paths_)
+        if None != pre_:
+            return pre_
         # end if
-        if (not using_paths):
-            networks = get_networks(Array({"number": 1, "orderby": Array({"domain_length": "DESC"})}, {"domain__in": domains}))
-            if (not php_empty(lambda : networks)):
-                return php_array_shift(networks)
+        if (not using_paths_):
+            networks_ = get_networks(Array({"number": 1, "orderby": Array({"domain_length": "DESC"})}, {"domain__in": domains_}))
+            if (not php_empty(lambda : networks_)):
+                return php_array_shift(networks_)
             # end if
             return False
         # end if
-        networks = get_networks(Array({"orderby": Array({"domain_length": "DESC", "path_length": "DESC"})}, {"domain__in": domains, "path__in": paths}))
+        networks_ = get_networks(Array({"orderby": Array({"domain_length": "DESC", "path_length": "DESC"})}, {"domain__in": domains_, "path__in": paths_}))
         #// 
         #// Domains are sorted by length of domain, then by length of path.
         #// The domain must match for the path to be considered. Otherwise,
         #// a network with the path of / will suffice.
         #//
-        found = False
-        for network in networks:
-            if network.domain == domain or str("www.") + str(network.domain) == domain:
-                if php_in_array(network.path, paths, True):
-                    found = True
+        found_ = False
+        for network_ in networks_:
+            if network_.domain == domain_ or str("www.") + str(network_.domain) == domain_:
+                if php_in_array(network_.path, paths_, True):
+                    found_ = True
                     break
                 # end if
             # end if
-            if "/" == network.path:
-                found = True
+            if "/" == network_.path:
+                found_ = True
                 break
             # end if
         # end for
-        if True == found:
-            return network
+        if True == found_:
+            return network_
         # end if
         return False
     # end def get_by_path

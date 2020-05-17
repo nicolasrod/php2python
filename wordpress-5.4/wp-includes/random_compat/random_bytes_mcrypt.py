@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -51,22 +46,23 @@ if (not php_is_callable("random_bytes")):
     #// 
     #// @return string
     #//
-    def random_bytes(bytes=None, *args_):
+    def random_bytes(bytes_=None, *_args_):
+        
         
         try: 
-            bytes = RandomCompat_intval(bytes)
-        except TypeError as ex:
+            bytes_ = RandomCompat_intval(bytes_)
+        except TypeError as ex_:
             raise php_new_class("TypeError", lambda : TypeError("random_bytes(): $bytes must be an integer"))
         # end try
-        if bytes < 1:
+        if bytes_ < 1:
             raise php_new_class("Error", lambda : Error("Length must be greater than 0"))
         # end if
-        buf = php_no_error(lambda: mcrypt_create_iv(bytes, MCRYPT_DEV_URANDOM))
-        if buf != False and RandomCompat_strlen(buf) == bytes:
+        buf_ = php_no_error(lambda: mcrypt_create_iv(bytes_, MCRYPT_DEV_URANDOM))
+        if buf_ != False and RandomCompat_strlen(buf_) == bytes_:
             #// 
             #// Return our random entropy buffer here:
             #//
-            return buf
+            return buf_
         # end if
         raise php_new_class("Exception", lambda : Exception("Could not gather sufficient random data"))
     # end def random_bytes

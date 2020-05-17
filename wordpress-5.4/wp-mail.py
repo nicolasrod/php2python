@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,8 +20,8 @@ php_include_file(__DIR__ + "/wp-load.php", once=False)
 if (not apply_filters("enable_post_by_email_configuration", True)):
     wp_die(__("This action has been disabled by the administrator."), 403)
 # end if
-mailserver_url = get_option("mailserver_url")
-if "mail.example.com" == mailserver_url or php_empty(lambda : mailserver_url):
+mailserver_url_ = get_option("mailserver_url")
+if "mail.example.com" == mailserver_url_ or php_empty(lambda : mailserver_url_):
     wp_die(__("This action has been disabled by the administrator."), 403)
 # end if
 #// 
@@ -42,130 +37,130 @@ php_include_file(ABSPATH + WPINC + "/class-pop3.php", once=True)
 if (not php_defined("WP_MAIL_INTERVAL")):
     php_define("WP_MAIL_INTERVAL", 5 * MINUTE_IN_SECONDS)
 # end if
-last_checked = get_transient("mailserver_last_checked")
-if last_checked:
+last_checked_ = get_transient("mailserver_last_checked")
+if last_checked_:
     wp_die(__("Slow down cowboy, no need to check for new mails so often!"))
 # end if
 set_transient("mailserver_last_checked", True, WP_MAIL_INTERVAL)
-time_difference = get_option("gmt_offset") * HOUR_IN_SECONDS
-phone_delim = "::"
-pop3 = php_new_class("POP3", lambda : POP3())
-if (not pop3.connect(get_option("mailserver_url"), get_option("mailserver_port"))) or (not pop3.user(get_option("mailserver_login"))):
-    wp_die(esc_html(pop3.ERROR))
+time_difference_ = get_option("gmt_offset") * HOUR_IN_SECONDS
+phone_delim_ = "::"
+pop3_ = php_new_class("POP3", lambda : POP3())
+if (not pop3_.connect(get_option("mailserver_url"), get_option("mailserver_port"))) or (not pop3_.user(get_option("mailserver_login"))):
+    wp_die(esc_html(pop3_.ERROR))
 # end if
-count = pop3.pass_(get_option("mailserver_pass"))
-if False == count:
-    wp_die(esc_html(pop3.ERROR))
+count_ = pop3_.pass_(get_option("mailserver_pass"))
+if False == count_:
+    wp_die(esc_html(pop3_.ERROR))
 # end if
-if 0 == count:
-    pop3.quit()
+if 0 == count_:
+    pop3_.quit()
     wp_die(__("There doesn&#8217;t seem to be any new mail."))
 # end if
-i = 1
-while i <= count:
+i_ = 1
+while i_ <= count_:
     
-    message = pop3.get(i)
-    bodysignal = False
-    boundary = ""
-    charset = ""
-    content = ""
-    content_type = ""
-    content_transfer_encoding = ""
-    post_author = 1
-    author_found = False
-    for line in message:
+    message_ = pop3_.get(i_)
+    bodysignal_ = False
+    boundary_ = ""
+    charset_ = ""
+    content_ = ""
+    content_type_ = ""
+    content_transfer_encoding_ = ""
+    post_author_ = 1
+    author_found_ = False
+    for line_ in message_:
         #// Body signal.
-        if php_strlen(line) < 3:
-            bodysignal = True
+        if php_strlen(line_) < 3:
+            bodysignal_ = True
         # end if
-        if bodysignal:
-            content += line
+        if bodysignal_:
+            content_ += line_
         else:
-            if php_preg_match("/Content-Type: /i", line):
-                content_type = php_trim(line)
-                content_type = php_substr(content_type, 14, php_strlen(content_type) - 14)
-                content_type = php_explode(";", content_type)
-                if (not php_empty(lambda : content_type[1])):
-                    charset = php_explode("=", content_type[1])
-                    charset = php_trim(charset[1]) if (not php_empty(lambda : charset[1])) else ""
+            if php_preg_match("/Content-Type: /i", line_):
+                content_type_ = php_trim(line_)
+                content_type_ = php_substr(content_type_, 14, php_strlen(content_type_) - 14)
+                content_type_ = php_explode(";", content_type_)
+                if (not php_empty(lambda : content_type_[1])):
+                    charset_ = php_explode("=", content_type_[1])
+                    charset_ = php_trim(charset_[1]) if (not php_empty(lambda : charset_[1])) else ""
                 # end if
-                content_type = content_type[0]
+                content_type_ = content_type_[0]
             # end if
-            if php_preg_match("/Content-Transfer-Encoding: /i", line):
-                content_transfer_encoding = php_trim(line)
-                content_transfer_encoding = php_substr(content_transfer_encoding, 27, php_strlen(content_transfer_encoding) - 27)
-                content_transfer_encoding = php_explode(";", content_transfer_encoding)
-                content_transfer_encoding = content_transfer_encoding[0]
+            if php_preg_match("/Content-Transfer-Encoding: /i", line_):
+                content_transfer_encoding_ = php_trim(line_)
+                content_transfer_encoding_ = php_substr(content_transfer_encoding_, 27, php_strlen(content_transfer_encoding_) - 27)
+                content_transfer_encoding_ = php_explode(";", content_transfer_encoding_)
+                content_transfer_encoding_ = content_transfer_encoding_[0]
             # end if
-            if "multipart/alternative" == content_type and False != php_strpos(line, "boundary=\"") and "" == boundary:
-                boundary = php_trim(line)
-                boundary = php_explode("\"", boundary)
-                boundary = boundary[1]
+            if "multipart/alternative" == content_type_ and False != php_strpos(line_, "boundary=\"") and "" == boundary_:
+                boundary_ = php_trim(line_)
+                boundary_ = php_explode("\"", boundary_)
+                boundary_ = boundary_[1]
             # end if
-            if php_preg_match("/Subject: /i", line):
-                subject = php_trim(line)
-                subject = php_substr(subject, 9, php_strlen(subject) - 9)
+            if php_preg_match("/Subject: /i", line_):
+                subject_ = php_trim(line_)
+                subject_ = php_substr(subject_, 9, php_strlen(subject_) - 9)
                 #// Captures any text in the subject before $phone_delim as the subject.
                 if php_function_exists("iconv_mime_decode"):
-                    subject = iconv_mime_decode(subject, 2, get_option("blog_charset"))
+                    subject_ = iconv_mime_decode(subject_, 2, get_option("blog_charset"))
                 else:
-                    subject = wp_iso_descrambler(subject)
+                    subject_ = wp_iso_descrambler(subject_)
                 # end if
-                subject = php_explode(phone_delim, subject)
-                subject = subject[0]
+                subject_ = php_explode(phone_delim_, subject_)
+                subject_ = subject_[0]
             # end if
             #// 
             #// Set the author using the email address (From or Reply-To, the last used)
             #// otherwise use the site admin.
             #//
-            if (not author_found) and php_preg_match("/^(From|Reply-To): /", line):
-                if php_preg_match("|[a-z0-9_.-]+@[a-z0-9_.-]+(?!.*<)|i", line, matches):
-                    author = matches[0]
+            if (not author_found_) and php_preg_match("/^(From|Reply-To): /", line_):
+                if php_preg_match("|[a-z0-9_.-]+@[a-z0-9_.-]+(?!.*<)|i", line_, matches_):
+                    author_ = matches_[0]
                 else:
-                    author = php_trim(line)
+                    author_ = php_trim(line_)
                 # end if
-                author = sanitize_email(author)
-                if is_email(author):
+                author_ = sanitize_email(author_)
+                if is_email(author_):
                     #// translators: %s: Post author email address.
-                    php_print("<p>" + php_sprintf(__("Author is %s"), author) + "</p>")
-                    userdata = get_user_by("email", author)
-                    if (not php_empty(lambda : userdata)):
-                        post_author = userdata.ID
-                        author_found = True
+                    php_print("<p>" + php_sprintf(__("Author is %s"), author_) + "</p>")
+                    userdata_ = get_user_by("email", author_)
+                    if (not php_empty(lambda : userdata_)):
+                        post_author_ = userdata_.ID
+                        author_found_ = True
                     # end if
                 # end if
             # end if
-            if php_preg_match("/Date: /i", line):
+            if php_preg_match("/Date: /i", line_):
                 #// Of the form '20 Mar 2002 20:32:37 +0100'.
-                ddate = php_str_replace("Date: ", "", php_trim(line))
+                ddate_ = php_str_replace("Date: ", "", php_trim(line_))
                 #// Remove parenthesised timezone string if it exists, as this confuses strtotime().
-                ddate = php_preg_replace("!\\s*\\(.+\\)\\s*$!", "", ddate)
-                ddate_timestamp = strtotime(ddate)
-                post_date = gmdate("Y-m-d H:i:s", ddate_timestamp + time_difference)
-                post_date_gmt = gmdate("Y-m-d H:i:s", ddate_timestamp)
+                ddate_ = php_preg_replace("!\\s*\\(.+\\)\\s*$!", "", ddate_)
+                ddate_timestamp_ = strtotime(ddate_)
+                post_date_ = gmdate("Y-m-d H:i:s", ddate_timestamp_ + time_difference_)
+                post_date_gmt_ = gmdate("Y-m-d H:i:s", ddate_timestamp_)
             # end if
         # end if
     # end for
     #// Set $post_status based on $author_found and on author's publish_posts capability.
-    if author_found:
-        user = php_new_class("WP_User", lambda : WP_User(post_author))
-        post_status = "publish" if user.has_cap("publish_posts") else "pending"
+    if author_found_:
+        user_ = php_new_class("WP_User", lambda : WP_User(post_author_))
+        post_status_ = "publish" if user_.has_cap("publish_posts") else "pending"
     else:
         #// Author not found in DB, set status to pending. Author already set to admin.
-        post_status = "pending"
+        post_status_ = "pending"
     # end if
-    subject = php_trim(subject)
-    if "multipart/alternative" == content_type:
-        content = php_explode("--" + boundary, content)
-        content = content[2]
+    subject_ = php_trim(subject_)
+    if "multipart/alternative" == content_type_:
+        content_ = php_explode("--" + boundary_, content_)
+        content_ = content_[2]
         #// Match case-insensitive content-transfer-encoding.
-        if php_preg_match("/Content-Transfer-Encoding: quoted-printable/i", content, delim):
-            content = php_explode(delim[0], content)
-            content = content[1]
+        if php_preg_match("/Content-Transfer-Encoding: quoted-printable/i", content_, delim_):
+            content_ = php_explode(delim_[0], content_)
+            content_ = content_[1]
         # end if
-        content = strip_tags(content, "<img><p><br><i><b><u><em><strong><strike><font><span><div>")
+        content_ = strip_tags(content_, "<img><p><br><i><b><u><em><strong><strike><font><span><div>")
     # end if
-    content = php_trim(content)
+    content_ = php_trim(content_)
     #// 
     #// Filters the original content of the email.
     #// 
@@ -176,17 +171,17 @@ while i <= count:
     #// 
     #// @param string $content The original email content.
     #//
-    content = apply_filters("wp_mail_original_content", content)
-    if False != php_stripos(content_transfer_encoding, "quoted-printable"):
-        content = quoted_printable_decode(content)
+    content_ = apply_filters("wp_mail_original_content", content_)
+    if False != php_stripos(content_transfer_encoding_, "quoted-printable"):
+        content_ = quoted_printable_decode(content_)
     # end if
-    if php_function_exists("iconv") and (not php_empty(lambda : charset)):
-        content = iconv(charset, get_option("blog_charset"), content)
+    if php_function_exists("iconv") and (not php_empty(lambda : charset_)):
+        content_ = iconv(charset_, get_option("blog_charset"), content_)
     # end if
     #// Captures any text in the body after $phone_delim as the body.
-    content = php_explode(phone_delim, content)
-    content = content[0] if php_empty(lambda : content[1]) else content[1]
-    content = php_trim(content)
+    content_ = php_explode(phone_delim_, content_)
+    content_ = content_[0] if php_empty(lambda : content_[1]) else content_[1]
+    content_ = php_trim(content_)
     #// 
     #// Filters the content of the post submitted by email before saving.
     #// 
@@ -194,20 +189,20 @@ while i <= count:
     #// 
     #// @param string $content The email content.
     #//
-    post_content = apply_filters("phone_content", content)
-    post_title = xmlrpc_getposttitle(content)
-    if "" == post_title:
-        post_title = subject
+    post_content_ = apply_filters("phone_content", content_)
+    post_title_ = xmlrpc_getposttitle(content_)
+    if "" == post_title_:
+        post_title_ = subject_
     # end if
-    post_category = Array(get_option("default_email_category"))
-    post_data = compact("post_content", "post_title", "post_date", "post_date_gmt", "post_author", "post_category", "post_status")
-    post_data = wp_slash(post_data)
-    post_ID = wp_insert_post(post_data)
-    if is_wp_error(post_ID):
-        php_print("\n" + post_ID.get_error_message())
+    post_category_ = Array(get_option("default_email_category"))
+    post_data_ = php_compact("post_content", "post_title", "post_date", "post_date_gmt", "post_author", "post_category", "post_status")
+    post_data_ = wp_slash(post_data_)
+    post_ID_ = wp_insert_post(post_data_)
+    if is_wp_error(post_ID_):
+        php_print("\n" + post_ID_.get_error_message())
     # end if
     #// We couldn't post, for whatever reason. Better move forward to the next email.
-    if php_empty(lambda : post_ID):
+    if php_empty(lambda : post_ID_):
         continue
     # end if
     #// 
@@ -217,16 +212,16 @@ while i <= count:
     #// 
     #// @param int $post_ID The post ID.
     #//
-    do_action("publish_phone", post_ID)
-    php_print("\n<p><strong>" + __("Author:") + "</strong> " + esc_html(post_author) + "</p>")
-    php_print("\n<p><strong>" + __("Posted title:") + "</strong> " + esc_html(post_title) + "</p>")
-    if (not pop3.delete(i)):
-        php_print("<p>" + php_sprintf(__("Oops: %s"), esc_html(pop3.ERROR)) + "</p>")
-        pop3.reset()
+    do_action("publish_phone", post_ID_)
+    php_print("\n<p><strong>" + __("Author:") + "</strong> " + esc_html(post_author_) + "</p>")
+    php_print("\n<p><strong>" + __("Posted title:") + "</strong> " + esc_html(post_title_) + "</p>")
+    if (not pop3_.delete(i_)):
+        php_print("<p>" + php_sprintf(__("Oops: %s"), esc_html(pop3_.ERROR)) + "</p>")
+        pop3_.reset()
         php_exit(0)
     else:
-        php_print("<p>" + php_sprintf(__("Mission complete. Message %s deleted."), "<strong>" + i + "</strong>") + "</p>")
+        php_print("<p>" + php_sprintf(__("Mission complete. Message %s deleted."), "<strong>" + i_ + "</strong>") + "</p>")
     # end if
-    i += 1
+    i_ += 1
 # end while
-pop3.quit()
+pop3_.quit()

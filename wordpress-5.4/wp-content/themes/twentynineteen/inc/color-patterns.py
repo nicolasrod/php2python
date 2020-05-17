@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -22,11 +17,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// Generate the CSS for the current primary color.
 #//
-def twentynineteen_custom_colors_css(*args_):
+def twentynineteen_custom_colors_css(*_args_):
     
-    primary_color = 199
+    
+    primary_color_ = 199
     if "default" != get_theme_mod("primary_color", "default"):
-        primary_color = absint(get_theme_mod("primary_color_hue", 199))
+        primary_color_ = absint(get_theme_mod("primary_color_hue", 199))
     # end if
     #// 
     #// Filter Twenty Nineteen default saturation level.
@@ -35,8 +31,8 @@ def twentynineteen_custom_colors_css(*args_):
     #// 
     #// @param int $saturation Color saturation level.
     #//
-    saturation = apply_filters("twentynineteen_custom_colors_saturation", 100)
-    saturation = absint(saturation) + "%"
+    saturation_ = apply_filters("twentynineteen_custom_colors_saturation", 100)
+    saturation_ = absint(saturation_) + "%"
     #// 
     #// Filter Twenty Nineteen default selection saturation level.
     #// 
@@ -44,8 +40,8 @@ def twentynineteen_custom_colors_css(*args_):
     #// 
     #// @param int $saturation_selection Selection color saturation level.
     #//
-    saturation_selection = absint(apply_filters("twentynineteen_custom_colors_saturation_selection", 50))
-    saturation_selection = saturation_selection + "%"
+    saturation_selection_ = absint(apply_filters("twentynineteen_custom_colors_saturation_selection", 50))
+    saturation_selection_ = saturation_selection_ + "%"
     #// 
     #// Filter Twenty Nineteen default lightness level.
     #// 
@@ -53,8 +49,8 @@ def twentynineteen_custom_colors_css(*args_):
     #// 
     #// @param int $lightness Color lightness level.
     #//
-    lightness = apply_filters("twentynineteen_custom_colors_lightness", 33)
-    lightness = absint(lightness) + "%"
+    lightness_ = apply_filters("twentynineteen_custom_colors_lightness", 33)
+    lightness_ = absint(lightness_) + "%"
     #// 
     #// Filter Twenty Nineteen default hover lightness level.
     #// 
@@ -62,8 +58,8 @@ def twentynineteen_custom_colors_css(*args_):
     #// 
     #// @param int $lightness_hover Hover color lightness level.
     #//
-    lightness_hover = apply_filters("twentynineteen_custom_colors_lightness_hover", 23)
-    lightness_hover = absint(lightness_hover) + "%"
+    lightness_hover_ = apply_filters("twentynineteen_custom_colors_lightness_hover", 23)
+    lightness_hover_ = absint(lightness_hover_) + "%"
     #// 
     #// Filter Twenty Nineteen default selection lightness level.
     #// 
@@ -71,9 +67,9 @@ def twentynineteen_custom_colors_css(*args_):
     #// 
     #// @param int $lightness_selection Selection color lightness level.
     #//
-    lightness_selection = apply_filters("twentynineteen_custom_colors_lightness_selection", 90)
-    lightness_selection = absint(lightness_selection) + "%"
-    theme_css = """
+    lightness_selection_ = apply_filters("twentynineteen_custom_colors_lightness_selection", 90)
+    lightness_selection_ = absint(lightness_selection_) + "%"
+    theme_css_ = """
     /*
     * Set background for:
     * - featured image :before
@@ -100,7 +96,7 @@ def twentynineteen_custom_colors_css(*args_):
     .entry .entry-content > *[class^=\"wp-block-\"].is-style-solid-color,
     .entry .entry-content > *[class^=\"wp-block-\"].is-style-solid-color.has-primary-background-color,
     .entry .entry-content .wp-block-file .wp-block-file__button {
-    background-color: hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    background-color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     /*
     * Set Color for:
@@ -133,7 +129,7 @@ def twentynineteen_custom_colors_css(*args_):
     .entry .entry-content > *[class^=\"wp-block-\"] .has-primary-color,
     .entry .entry-content > *[class^=\"wp-block-\"].is-style-solid-color blockquote.has-primary-color,
     .entry .entry-content > *[class^=\"wp-block-\"].is-style-solid-color blockquote.has-primary-color p {
-    color: hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     /*
     * Set border color for:
@@ -160,10 +156,10 @@ def twentynineteen_custom_colors_css(*args_):
     input[type=\"datetime-local\"]:focus,
     input[type=\"color\"]:focus,
     textarea:focus {
-    border-color: hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    border-color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     .gallery-item > div > a:focus {
-    box-shadow: 0 0 0 2px hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    box-shadow: 0 0 0 2px hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     /* Hover colors */
     a:hover, a:active,
@@ -182,7 +178,7 @@ def twentynineteen_custom_colors_css(*args_):
     .comment-navigation .nav-next a:hover,
     #cancel-comment-reply-link:hover,
     .widget a:hover {
-    color: hsl( """ + primary_color + ", " + saturation + ", " + lightness_hover + """ ); /* base: #005177; */
+    color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_hover_ + """ ); /* base: #005177; */
     }
     .main-navigation .sub-menu > li > a:hover,
     .main-navigation .sub-menu > li > a:focus,
@@ -196,15 +192,15 @@ def twentynineteen_custom_colors_css(*args_):
     .entry .entry-content > *[class^=\"wp-block-\"].has-secondary-background-color,
     .entry .entry-content > *[class^=\"wp-block-\"] .has-secondary-background-color,
     .entry .entry-content > *[class^=\"wp-block-\"].is-style-solid-color.has-secondary-background-color {
-    background-color: hsl( """ + primary_color + ", " + saturation + ", " + lightness_hover + """ ); /* base: #005177; */
+    background-color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_hover_ + """ ); /* base: #005177; */
     }
     /* Text selection colors */
     ::selection {
-    background-color: hsl( """ + primary_color + ", " + saturation_selection + ", " + lightness_selection + """ ); /* base: #005177; */
+    background-color: hsl( """ + primary_color_ + ", " + saturation_selection_ + ", " + lightness_selection_ + """ ); /* base: #005177; */
     }
     ::-moz-selection {
-    background-color: hsl( """ + primary_color + ", " + saturation_selection + ", " + lightness_selection + " ); /* base: #005177; */\n     }"
-    editor_css = """
+    background-color: hsl( """ + primary_color_ + ", " + saturation_selection_ + ", " + lightness_selection_ + " ); /* base: #005177; */\n      }"
+    editor_css_ = """
     /*
     * Set colors for:
     * - links
@@ -218,27 +214,27 @@ def twentynineteen_custom_colors_css(*args_):
     .editor-block-list__layout .editor-block-list__block .wp-block-button.is-style-outline:focus .wp-block-button__link:not(.has-text-color),
     .editor-block-list__layout .editor-block-list__block .wp-block-button.is-style-outline:active .wp-block-button__link:not(.has-text-color),
     .editor-block-list__layout .editor-block-list__block .wp-block-file .wp-block-file__textlink {
-    color: hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     .editor-block-list__layout .editor-block-list__block .wp-block-quote:not(.is-large):not(.is-style-large),
     .editor-styles-wrapper .editor-block-list__layout .wp-block-freeform blockquote {
-    border-color: hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    border-color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     .editor-block-list__layout .editor-block-list__block .wp-block-pullquote.is-style-solid-color:not(.has-background-color) {
-    background-color: hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    background-color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     .editor-block-list__layout .editor-block-list__block .wp-block-file .wp-block-file__button,
     .editor-block-list__layout .editor-block-list__block .wp-block-button:not(.is-style-outline) .wp-block-button__link,
     .editor-block-list__layout .editor-block-list__block .wp-block-button:not(.is-style-outline) .wp-block-button__link:active,
     .editor-block-list__layout .editor-block-list__block .wp-block-button:not(.is-style-outline) .wp-block-button__link:focus,
     .editor-block-list__layout .editor-block-list__block .wp-block-button:not(.is-style-outline) .wp-block-button__link:hover {
-    background-color: hsl( """ + primary_color + ", " + saturation + ", " + lightness + """ ); /* base: #0073a8; */
+    background-color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_ + """ ); /* base: #0073a8; */
     }
     /* Hover colors */
     .editor-block-list__layout .editor-block-list__block a:hover,
     .editor-block-list__layout .editor-block-list__block a:active,
     .editor-block-list__layout .editor-block-list__block .wp-block-file .wp-block-file__textlink:hover {
-    color: hsl( """ + primary_color + ", " + saturation + ", " + lightness_hover + """ ); /* base: #005177; */
+    color: hsl( """ + primary_color_ + ", " + saturation_ + ", " + lightness_hover_ + """ ); /* base: #005177; */
     }
     /* Do not overwrite solid color pullquote or cover links */
     .editor-block-list__layout .editor-block-list__block .wp-block-pullquote.is-style-solid-color a,
@@ -247,7 +243,7 @@ def twentynineteen_custom_colors_css(*args_):
     }
     """
     if php_function_exists("register_block_type") and is_admin():
-        theme_css = editor_css
+        theme_css_ = editor_css_
     # end if
     #// 
     #// Filters Twenty Nineteen custom colors CSS.
@@ -258,5 +254,5 @@ def twentynineteen_custom_colors_css(*args_):
     #// @param int    $primary_color The user's selected color hue.
     #// @param string $saturation    Filtered theme color saturation level.
     #//
-    return apply_filters("twentynineteen_custom_colors_css", theme_css, primary_color, saturation)
+    return apply_filters("twentynineteen_custom_colors_css", theme_css_, primary_color_, saturation_)
 # end def twentynineteen_custom_colors_css

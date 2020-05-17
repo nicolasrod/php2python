@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,7 +21,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @uses twentyseventeen_header_style()
 #//
-def twentyseventeen_custom_header_setup(*args_):
+def twentyseventeen_custom_header_setup(*_args_):
+    
     
     #// 
     #// Filter Twenty Seventeen custom-header support arguments.
@@ -55,18 +51,19 @@ if (not php_function_exists("twentyseventeen_header_style")):
     #// 
     #// @see twentyseventeen_custom_header_setup().
     #//
-    def twentyseventeen_header_style(*args_):
+    def twentyseventeen_header_style(*_args_):
         
-        header_text_color = get_header_textcolor()
+        
+        header_text_color_ = get_header_textcolor()
         #// If no custom options for text are set, let's bail.
         #// get_header_textcolor() options: add_theme_support( 'custom-header' ) is default, hide text (returns 'blank') or any hex value.
-        if get_theme_support("custom-header", "default-text-color") == header_text_color:
+        if get_theme_support("custom-header", "default-text-color") == header_text_color_:
             return
         # end if
         pass
         php_print("     <style id=\"twentyseventeen-custom-header-styles\" type=\"text/css\">\n     ")
         #// Has the text been hidden?
-        if "blank" == header_text_color:
+        if "blank" == header_text_color_:
             php_print("""       .site-title,
             .site-description {
             position: absolute;
@@ -94,7 +91,7 @@ if (not php_function_exists("twentyseventeen_header_style")):
             body.has-header-image.colors-custom .site-description,
             body.has-header-video.colors-custom .site-description {
             color: #""")
-            php_print(esc_attr(header_text_color))
+            php_print(esc_attr(header_text_color_))
             php_print(";\n      }\n ")
         # end if
         php_print(" </style>\n      ")
@@ -107,10 +104,11 @@ if (not php_function_exists("twentyseventeen_header_style")):
 #// @param array $settings Video settings.
 #// @return array The filtered video settings.
 #//
-def twentyseventeen_video_controls(settings=None, *args_):
+def twentyseventeen_video_controls(settings_=None, *_args_):
     
-    settings["l10n"]["play"] = "<span class=\"screen-reader-text\">" + __("Play background video", "twentyseventeen") + "</span>" + twentyseventeen_get_svg(Array({"icon": "play"}))
-    settings["l10n"]["pause"] = "<span class=\"screen-reader-text\">" + __("Pause background video", "twentyseventeen") + "</span>" + twentyseventeen_get_svg(Array({"icon": "pause"}))
-    return settings
+    
+    settings_["l10n"]["play"] = "<span class=\"screen-reader-text\">" + __("Play background video", "twentyseventeen") + "</span>" + twentyseventeen_get_svg(Array({"icon": "play"}))
+    settings_["l10n"]["pause"] = "<span class=\"screen-reader-text\">" + __("Pause background video", "twentyseventeen") + "</span>" + twentyseventeen_get_svg(Array({"icon": "pause"}))
+    return settings_
 # end def twentyseventeen_video_controls
 add_filter("header_video_settings", "twentyseventeen_video_controls")

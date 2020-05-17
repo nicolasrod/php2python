@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,6 +22,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Customize_Nav_Menu_Locations_Control(WP_Customize_Control):
+    #// 
+    #// Control type.
+    #// 
+    #// @since 4.9.0
+    #// @var string
+    #//
     type = "nav_menu_locations"
     #// 
     #// Don't render the control's content - it uses a JS template instead.
@@ -34,6 +35,7 @@ class WP_Customize_Nav_Menu_Locations_Control(WP_Customize_Control):
     #// @since 4.9.0
     #//
     def render_content(self):
+        
         
         pass
     # end def render_content
@@ -43,6 +45,7 @@ class WP_Customize_Nav_Menu_Locations_Control(WP_Customize_Control):
     #// @since 4.9.0
     #//
     def content_template(self):
+        
         
         if current_theme_supports("menus"):
             php_print("""           <# var elementId; #>
@@ -64,16 +67,16 @@ class WP_Customize_Nav_Menu_Locations_Control(WP_Customize_Control):
             <# } #>
             </li>
             """)
-            for location,description in get_registered_nav_menus():
+            for location_,description_ in get_registered_nav_menus():
                 php_print("""                   <# elementId = _.uniqueId( 'customize-nav-menu-control-location-' ); #>
                 <li class=\"customize-control customize-control-checkbox assigned-menu-location\">
                 <span class=\"customize-inside-control-row\">
                 <input id=\"{{ elementId }}\" type=\"checkbox\" data-menu-id=\"{{ data.menu_id }}\" data-location-id=\"""")
-                php_print(esc_attr(location))
+                php_print(esc_attr(location_))
                 php_print("\" class=\"menu-location\" />\n                          <label for=\"{{ elementId }}\">\n                               ")
-                php_print(description)
+                php_print(description_)
                 php_print("                             <span class=\"theme-location-set\">\n                                   ")
-                printf(_x("(Current: %s)", "menu location"), "<span class=\"current-menu-location-name-" + esc_attr(location) + "\"></span>")
+                printf(_x("(Current: %s)", "menu location"), "<span class=\"current-menu-location-name-" + esc_attr(location_) + "\"></span>")
                 php_print("""                               </span>
                 </label>
                 </span>

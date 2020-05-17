@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,6 +30,7 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
     #//
     def __init__(self):
         
+        
         super().__init__("media_gallery", __("Gallery"), Array({"description": __("Displays an image gallery."), "mime_type": "image"}))
         self.l10n = php_array_merge(self.l10n, Array({"no_media_selected": __("No images selected"), "add_media": _x("Add Images", "label for button in the gallery widget; should not be longer than ~13 characters long"), "replace_media": "", "edit_media": _x("Edit Gallery", "label for button in the gallery widget; should not be longer than ~13 characters long")}))
     # end def __init__
@@ -51,10 +47,11 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
     #//
     def get_instance_schema(self):
         
-        schema = Array({"title": Array({"type": "string", "default": "", "sanitize_callback": "sanitize_text_field", "description": __("Title for the widget"), "should_preview_update": False})}, {"ids": Array({"type": "array", "items": Array({"type": "integer"})}, {"default": Array(), "sanitize_callback": "wp_parse_id_list"})}, {"columns": Array({"type": "integer", "default": 3, "minimum": 1, "maximum": 9})}, {"size": Array({"type": "string", "enum": php_array_merge(get_intermediate_image_sizes(), Array("full", "custom")), "default": "thumbnail"})}, {"link_type": Array({"type": "string", "enum": Array("post", "file", "none"), "default": "post", "media_prop": "link", "should_preview_update": False})}, {"orderby_random": Array({"type": "boolean", "default": False, "media_prop": "_orderbyRandom", "should_preview_update": False})})
+        
+        schema_ = Array({"title": Array({"type": "string", "default": "", "sanitize_callback": "sanitize_text_field", "description": __("Title for the widget"), "should_preview_update": False})}, {"ids": Array({"type": "array", "items": Array({"type": "integer"})}, {"default": Array(), "sanitize_callback": "wp_parse_id_list"})}, {"columns": Array({"type": "integer", "default": 3, "minimum": 1, "maximum": 9})}, {"size": Array({"type": "string", "enum": php_array_merge(get_intermediate_image_sizes(), Array("full", "custom")), "default": "thumbnail"})}, {"link_type": Array({"type": "string", "enum": Array("post", "file", "none"), "default": "post", "media_prop": "link", "should_preview_update": False})}, {"orderby_random": Array({"type": "boolean", "default": False, "media_prop": "_orderbyRandom", "should_preview_update": False})})
         #// This filter is documented in wp-includes/widgets/class-wp-widget-media.php
-        schema = apply_filters(str("widget_") + str(self.id_base) + str("_instance_schema"), schema, self)
-        return schema
+        schema_ = apply_filters(str("widget_") + str(self.id_base) + str("_instance_schema"), schema_, self)
+        return schema_
     # end def get_instance_schema
     #// 
     #// Render the media on the frontend.
@@ -63,16 +60,17 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
     #// 
     #// @param array $instance Widget instance props.
     #//
-    def render_media(self, instance=None):
+    def render_media(self, instance_=None):
         
-        instance = php_array_merge(wp_list_pluck(self.get_instance_schema(), "default"), instance)
-        shortcode_atts = php_array_merge(instance, Array({"link": instance["link_type"]}))
+        
+        instance_ = php_array_merge(wp_list_pluck(self.get_instance_schema(), "default"), instance_)
+        shortcode_atts_ = php_array_merge(instance_, Array({"link": instance_["link_type"]}))
         #// @codeCoverageIgnoreStart
-        if instance["orderby_random"]:
-            shortcode_atts["orderby"] = "rand"
+        if instance_["orderby_random"]:
+            shortcode_atts_["orderby"] = "rand"
         # end if
         #// @codeCoverageIgnoreEnd
-        php_print(gallery_shortcode(shortcode_atts))
+        php_print(gallery_shortcode(shortcode_atts_))
     # end def render_media
     #// 
     #// Loads the required media files for the media manager and scripts for media widgets.
@@ -81,15 +79,16 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
     #//
     def enqueue_admin_scripts(self):
         
+        
         super().enqueue_admin_scripts()
-        handle = "media-gallery-widget"
-        wp_enqueue_script(handle)
-        exported_schema = Array()
-        for field,field_schema in self.get_instance_schema():
-            exported_schema[field] = wp_array_slice_assoc(field_schema, Array("type", "default", "enum", "minimum", "format", "media_prop", "should_preview_update", "items"))
+        handle_ = "media-gallery-widget"
+        wp_enqueue_script(handle_)
+        exported_schema_ = Array()
+        for field_,field_schema_ in self.get_instance_schema():
+            exported_schema_[field_] = wp_array_slice_assoc(field_schema_, Array("type", "default", "enum", "minimum", "format", "media_prop", "should_preview_update", "items"))
         # end for
-        wp_add_inline_script(handle, php_sprintf("wp.mediaWidgets.modelConstructors[ %s ].prototype.schema = %s;", wp_json_encode(self.id_base), wp_json_encode(exported_schema)))
-        wp_add_inline_script(handle, php_sprintf("""
+        wp_add_inline_script(handle_, php_sprintf("wp.mediaWidgets.modelConstructors[ %s ].prototype.schema = %s;", wp_json_encode(self.id_base), wp_json_encode(exported_schema_)))
+        wp_add_inline_script(handle_, php_sprintf("""
         wp.mediaWidgets.controlConstructors[ %1$s ].prototype.mime_type = %2$s;
         _.extend( wp.mediaWidgets.controlConstructors[ %1$s ].prototype.l10n, %3$s );
         """, wp_json_encode(self.id_base), wp_json_encode(self.widget_options["mime_type"]), wp_json_encode(self.l10n)))
@@ -100,6 +99,7 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
     #// @since 4.9.0
     #//
     def render_control_template_scripts(self):
+        
         
         super().render_control_template_scripts()
         php_print("""       <script type=\"text/html\" id=\"tmpl-wp-media-widget-gallery-preview\">
@@ -161,12 +161,13 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
     #// @param array $instance Widget instance props.
     #// @return bool Whether widget has content.
     #//
-    def has_content(self, instance=None):
+    def has_content(self, instance_=None):
         
-        if (not php_empty(lambda : instance["ids"])):
-            attachments = wp_parse_id_list(instance["ids"])
-            for attachment in attachments:
-                if "attachment" != get_post_type(attachment):
+        
+        if (not php_empty(lambda : instance_["ids"])):
+            attachments_ = wp_parse_id_list(instance_["ids"])
+            for attachment_ in attachments_:
+                if "attachment" != get_post_type(attachment_):
                     return False
                 # end if
             # end for

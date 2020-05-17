@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -55,26 +50,27 @@ if (not php_is_callable("random_bytes")):
     #// 
     #// @return string
     #//
-    def random_bytes(bytes=None, *args_):
+    def random_bytes(bytes_=None, *_args_):
         
-        random_bytes.fp = None
+        
+        fp_ = None
         #// 
         #// This block should only be run once
         #//
-        if php_empty(lambda : random_bytes.fp):
+        if php_empty(lambda : fp_):
             #// 
             #// We use /dev/urandom if it is a char device.
             #// We never fall back to /dev/random
             #//
-            random_bytes.fp = fopen("/dev/urandom", "rb")
-            if (not php_empty(lambda : random_bytes.fp)):
-                st = fstat(random_bytes.fp)
-                if st["mode"] & 61440 != 8192:
-                    php_fclose(random_bytes.fp)
-                    random_bytes.fp = False
+            fp_ = fopen("/dev/urandom", "rb")
+            if (not php_empty(lambda : fp_)):
+                st_ = fstat(fp_)
+                if st_["mode"] & 61440 != 8192:
+                    php_fclose(fp_)
+                    fp_ = False
                 # end if
             # end if
-            if (not php_empty(lambda : random_bytes.fp)):
+            if (not php_empty(lambda : fp_)):
                 #// 
                 #// stream_set_read_buffer() does not exist in HHVM
                 #// 
@@ -84,19 +80,19 @@ if (not php_is_callable("random_bytes")):
                 #// stream_set_read_buffer returns 0 on success
                 #//
                 if php_is_callable("stream_set_read_buffer"):
-                    stream_set_read_buffer(random_bytes.fp, RANDOM_COMPAT_READ_BUFFER)
+                    stream_set_read_buffer(fp_, RANDOM_COMPAT_READ_BUFFER)
                 # end if
                 if php_is_callable("stream_set_chunk_size"):
-                    stream_set_chunk_size(random_bytes.fp, RANDOM_COMPAT_READ_BUFFER)
+                    stream_set_chunk_size(fp_, RANDOM_COMPAT_READ_BUFFER)
                 # end if
             # end if
         # end if
         try: 
-            bytes = RandomCompat_intval(bytes)
-        except TypeError as ex:
+            bytes_ = RandomCompat_intval(bytes_)
+        except TypeError as ex_:
             raise php_new_class("TypeError", lambda : TypeError("random_bytes(): $bytes must be an integer"))
         # end try
-        if bytes < 1:
+        if bytes_ < 1:
             raise php_new_class("Error", lambda : Error("Length must be greater than 0"))
         # end if
         #// 
@@ -106,15 +102,15 @@ if (not php_is_callable("random_bytes")):
         #// if (empty($fp)) line is logic that should only be run once per
         #// page load.
         #//
-        if (not php_empty(lambda : random_bytes.fp)):
+        if (not php_empty(lambda : fp_)):
             #// 
             #// @var int
             #//
-            remaining = bytes
+            remaining_ = bytes_
             #// 
             #// @var string|bool
             #//
-            buf = ""
+            buf_ = ""
             #// 
             #// We use fread() in a loop to protect against partial reads
             #//
@@ -122,41 +118,41 @@ if (not php_is_callable("random_bytes")):
                 #// 
                 #// @var string|bool
                 #//
-                read = fread(random_bytes.fp, remaining)
-                if (not php_is_string(read)):
-                    if read == False:
+                read_ = fread(fp_, remaining_)
+                if (not php_is_string(read_)):
+                    if read_ == False:
                         #// 
                         #// We cannot safely read from the file. Exit the
                         #// do-while loop and trigger the exception condition
                         #// 
                         #// @var string|bool
                         #//
-                        buf = False
+                        buf_ = False
                         break
                     # end if
                 # end if
                 #// 
                 #// Decrease the number of bytes returned from remaining
                 #//
-                remaining -= RandomCompat_strlen(read)
+                remaining_ -= RandomCompat_strlen(read_)
                 #// 
                 #// @var string|bool
                 #//
-                buf = buf + read
+                buf_ = buf_ + read_
                 
-                if remaining > 0:
+                if remaining_ > 0:
                     break
                 # end if
             # end while
             #// 
             #// Is our result valid?
             #//
-            if php_is_string(buf):
-                if RandomCompat_strlen(buf) == bytes:
+            if php_is_string(buf_):
+                if RandomCompat_strlen(buf_) == bytes_:
                     #// 
                     #// Return our random entropy buffer here:
                     #//
-                    return buf
+                    return buf_
                 # end if
             # end if
         # end if

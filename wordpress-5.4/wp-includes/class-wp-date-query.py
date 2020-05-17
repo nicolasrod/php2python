@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -28,10 +23,42 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 3.7.0
 #//
 class WP_Date_Query():
+    #// 
+    #// Array of date queries.
+    #// 
+    #// See WP_Date_Query::__construct() for information on date query arguments.
+    #// 
+    #// @since 3.7.0
+    #// @var array
+    #//
     queries = Array()
+    #// 
+    #// The default relation between top-level queries. Can be either 'AND' or 'OR'.
+    #// 
+    #// @since 3.7.0
+    #// @var string
+    #//
     relation = "AND"
+    #// 
+    #// The column to query against. Can be changed via the query arguments.
+    #// 
+    #// @since 3.7.0
+    #// @var string
+    #//
     column = "post_date"
+    #// 
+    #// The value comparison operator. Can be changed via the query arguments.
+    #// 
+    #// @since 3.7.0
+    #// @var array
+    #//
     compare = "="
+    #// 
+    #// Supported time-related parameter keys.
+    #// 
+    #// @since 4.1.0
+    #// @var array
+    #//
     time_keys = Array("after", "before", "year", "month", "monthnum", "week", "w", "dayofyear", "day", "dayofweek", "dayofweek_iso", "hour", "minute", "second")
     #// 
     #// Constructor.
@@ -120,28 +147,29 @@ class WP_Date_Query():
     #// Accepts 'post_date', 'post_date_gmt', 'post_modified', 'post_modified_gmt',
     #// 'comment_date', 'comment_date_gmt'.
     #//
-    def __init__(self, date_query=None, default_column="post_date"):
+    def __init__(self, date_query_=None, default_column_="post_date"):
         
-        if php_empty(lambda : date_query) or (not php_is_array(date_query)):
+        
+        if php_empty(lambda : date_query_) or (not php_is_array(date_query_)):
             return
         # end if
-        if (php_isset(lambda : date_query["relation"])) and "OR" == php_strtoupper(date_query["relation"]):
+        if (php_isset(lambda : date_query_["relation"])) and "OR" == php_strtoupper(date_query_["relation"]):
             self.relation = "OR"
         else:
             self.relation = "AND"
         # end if
         #// Support for passing time-based keys in the top level of the $date_query array.
-        if (not (php_isset(lambda : date_query[0]))):
-            date_query = Array(date_query)
+        if (not (php_isset(lambda : date_query_[0]))):
+            date_query_ = Array(date_query_)
         # end if
-        if (not php_empty(lambda : date_query["column"])):
-            date_query["column"] = esc_sql(date_query["column"])
+        if (not php_empty(lambda : date_query_["column"])):
+            date_query_["column"] = esc_sql(date_query_["column"])
         else:
-            date_query["column"] = esc_sql(default_column)
+            date_query_["column"] = esc_sql(default_column_)
         # end if
         self.column = self.validate_column(self.column)
-        self.compare = self.get_compare(date_query)
-        self.queries = self.sanitize_query(date_query)
+        self.compare = self.get_compare(date_query_)
+        self.queries = self.sanitize_query(date_query_)
     # end def __init__
     #// 
     #// Recursive-friendly query sanitizer.
@@ -157,41 +185,42 @@ class WP_Date_Query():
     #// 
     #// @return array Sanitized queries.
     #//
-    def sanitize_query(self, queries=None, parent_query=None):
+    def sanitize_query(self, queries_=None, parent_query_=None):
         
-        cleaned_query = Array()
-        defaults = Array({"column": "post_date", "compare": "=", "relation": "AND"})
+        
+        cleaned_query_ = Array()
+        defaults_ = Array({"column": "post_date", "compare": "=", "relation": "AND"})
         #// Numeric keys should always have array values.
-        for qkey,qvalue in queries:
-            if php_is_numeric(qkey) and (not php_is_array(qvalue)):
-                queries[qkey] = None
+        for qkey_,qvalue_ in queries_:
+            if php_is_numeric(qkey_) and (not php_is_array(qvalue_)):
+                queries_[qkey_] = None
             # end if
         # end for
         #// Each query should have a value for each default key. Inherit from the parent when possible.
-        for dkey,dvalue in defaults:
-            if (php_isset(lambda : queries[dkey])):
+        for dkey_,dvalue_ in defaults_:
+            if (php_isset(lambda : queries_[dkey_])):
                 continue
             # end if
-            if (php_isset(lambda : parent_query[dkey])):
-                queries[dkey] = parent_query[dkey]
+            if (php_isset(lambda : parent_query_[dkey_])):
+                queries_[dkey_] = parent_query_[dkey_]
             else:
-                queries[dkey] = dvalue
+                queries_[dkey_] = dvalue_
             # end if
         # end for
         #// Validate the dates passed in the query.
-        if self.is_first_order_clause(queries):
-            self.validate_date_values(queries)
+        if self.is_first_order_clause(queries_):
+            self.validate_date_values(queries_)
         # end if
-        for key,q in queries:
-            if (not php_is_array(q)) or php_in_array(key, self.time_keys, True):
+        for key_,q_ in queries_:
+            if (not php_is_array(q_)) or php_in_array(key_, self.time_keys, True):
                 #// This is a first-order query. Trust the values and sanitize when building SQL.
-                cleaned_query[key] = q
+                cleaned_query_[key_] = q_
             else:
                 #// Any array without a time key is another query, so we recurse.
-                cleaned_query[-1] = self.sanitize_query(q, queries)
+                cleaned_query_[-1] = self.sanitize_query(q_, queries_)
             # end if
         # end for
-        return cleaned_query
+        return cleaned_query_
     # end def sanitize_query
     #// 
     #// Determine whether this is a first-order clause.
@@ -204,10 +233,11 @@ class WP_Date_Query():
     #// @param  array $query Query clause.
     #// @return bool True if this is a first-order clause.
     #//
-    def is_first_order_clause(self, query=None):
+    def is_first_order_clause(self, query_=None):
         
-        time_keys = php_array_intersect(self.time_keys, php_array_keys(query))
-        return (not php_empty(lambda : time_keys))
+        
+        time_keys_ = php_array_intersect(self.time_keys, php_array_keys(query_))
+        return (not php_empty(lambda : time_keys_))
     # end def is_first_order_clause
     #// 
     #// Determines and validates what comparison operator to use.
@@ -217,10 +247,11 @@ class WP_Date_Query():
     #// @param array $query A date query or a date subquery.
     #// @return string The comparison operator.
     #//
-    def get_compare(self, query=None):
+    def get_compare(self, query_=None):
         
-        if (not php_empty(lambda : query["compare"])) and php_in_array(query["compare"], Array("=", "!=", ">", ">=", "<", "<=", "IN", "NOT IN", "BETWEEN", "NOT BETWEEN")):
-            return php_strtoupper(query["compare"])
+        
+        if (not php_empty(lambda : query_["compare"])) and php_in_array(query_["compare"], Array("=", "!=", ">", ">=", "<", "<=", "IN", "NOT IN", "BETWEEN", "NOT BETWEEN")):
+            return php_strtoupper(query_["compare"])
         # end if
         return self.compare
     # end def get_compare
@@ -236,111 +267,114 @@ class WP_Date_Query():
     #// @param  array $date_query The date_query array.
     #// @return bool  True if all values in the query are valid, false if one or more fail.
     #//
-    def validate_date_values(self, date_query=Array()):
+    def validate_date_values(self, date_query_=None):
+        if date_query_ is None:
+            date_query_ = Array()
+        # end if
         
-        if php_empty(lambda : date_query):
+        if php_empty(lambda : date_query_):
             return False
         # end if
-        valid = True
+        valid_ = True
         #// 
         #// Validate 'before' and 'after' up front, then let the
         #// validation routine continue to be sure that all invalid
         #// values generate errors too.
         #//
-        if php_array_key_exists("before", date_query) and php_is_array(date_query["before"]):
-            valid = self.validate_date_values(date_query["before"])
+        if php_array_key_exists("before", date_query_) and php_is_array(date_query_["before"]):
+            valid_ = self.validate_date_values(date_query_["before"])
         # end if
-        if php_array_key_exists("after", date_query) and php_is_array(date_query["after"]):
-            valid = self.validate_date_values(date_query["after"])
+        if php_array_key_exists("after", date_query_) and php_is_array(date_query_["after"]):
+            valid_ = self.validate_date_values(date_query_["after"])
         # end if
         #// Array containing all min-max checks.
-        min_max_checks = Array()
+        min_max_checks_ = Array()
         #// Days per year.
-        if php_array_key_exists("year", date_query):
+        if php_array_key_exists("year", date_query_):
             #// 
             #// If a year exists in the date query, we can use it to get the days.
             #// If multiple years are provided (as in a BETWEEN), use the first one.
             #//
-            if php_is_array(date_query["year"]):
-                _year = reset(date_query["year"])
+            if php_is_array(date_query_["year"]):
+                _year_ = reset(date_query_["year"])
             else:
-                _year = date_query["year"]
+                _year_ = date_query_["year"]
             # end if
-            max_days_of_year = gmdate("z", mktime(0, 0, 0, 12, 31, _year)) + 1
+            max_days_of_year_ = gmdate("z", mktime(0, 0, 0, 12, 31, _year_)) + 1
         else:
             #// Otherwise we use the max of 366 (leap-year).
-            max_days_of_year = 366
+            max_days_of_year_ = 366
         # end if
-        min_max_checks["dayofyear"] = Array({"min": 1, "max": max_days_of_year})
+        min_max_checks_["dayofyear"] = Array({"min": 1, "max": max_days_of_year_})
         #// Days per week.
-        min_max_checks["dayofweek"] = Array({"min": 1, "max": 7})
+        min_max_checks_["dayofweek"] = Array({"min": 1, "max": 7})
         #// Days per week.
-        min_max_checks["dayofweek_iso"] = Array({"min": 1, "max": 7})
+        min_max_checks_["dayofweek_iso"] = Array({"min": 1, "max": 7})
         #// Months per year.
-        min_max_checks["month"] = Array({"min": 1, "max": 12})
+        min_max_checks_["month"] = Array({"min": 1, "max": 12})
         #// Weeks per year.
-        if (php_isset(lambda : _year)):
+        if (php_isset(lambda : _year_)):
             #// 
             #// If we have a specific year, use it to calculate number of weeks.
             #// Note: the number of weeks in a year is the date in which Dec 28 appears.
             #//
-            week_count = gmdate("W", mktime(0, 0, 0, 12, 28, _year))
+            week_count_ = gmdate("W", mktime(0, 0, 0, 12, 28, _year_))
         else:
             #// Otherwise set the week-count to a maximum of 53.
-            week_count = 53
+            week_count_ = 53
         # end if
-        min_max_checks["week"] = Array({"min": 1, "max": week_count})
+        min_max_checks_["week"] = Array({"min": 1, "max": week_count_})
         #// Days per month.
-        min_max_checks["day"] = Array({"min": 1, "max": 31})
+        min_max_checks_["day"] = Array({"min": 1, "max": 31})
         #// Hours per day.
-        min_max_checks["hour"] = Array({"min": 0, "max": 23})
+        min_max_checks_["hour"] = Array({"min": 0, "max": 23})
         #// Minutes per hour.
-        min_max_checks["minute"] = Array({"min": 0, "max": 59})
+        min_max_checks_["minute"] = Array({"min": 0, "max": 59})
         #// Seconds per minute.
-        min_max_checks["second"] = Array({"min": 0, "max": 59})
+        min_max_checks_["second"] = Array({"min": 0, "max": 59})
         #// Concatenate and throw a notice for each invalid value.
-        for key,check in min_max_checks:
-            if (not php_array_key_exists(key, date_query)):
+        for key_,check_ in min_max_checks_:
+            if (not php_array_key_exists(key_, date_query_)):
                 continue
             # end if
             #// Throw a notice for each failing value.
-            for _value in date_query[key]:
-                is_between = _value >= check["min"] and _value <= check["max"]
-                if (not php_is_numeric(_value)) or (not is_between):
-                    error = php_sprintf(__("Invalid value %1$s for %2$s. Expected value should be between %3$s and %4$s."), "<code>" + esc_html(_value) + "</code>", "<code>" + esc_html(key) + "</code>", "<code>" + esc_html(check["min"]) + "</code>", "<code>" + esc_html(check["max"]) + "</code>")
-                    _doing_it_wrong(__CLASS__, error, "4.1.0")
-                    valid = False
+            for _value_ in date_query_[key_]:
+                is_between_ = _value_ >= check_["min"] and _value_ <= check_["max"]
+                if (not php_is_numeric(_value_)) or (not is_between_):
+                    error_ = php_sprintf(__("Invalid value %1$s for %2$s. Expected value should be between %3$s and %4$s."), "<code>" + esc_html(_value_) + "</code>", "<code>" + esc_html(key_) + "</code>", "<code>" + esc_html(check_["min"]) + "</code>", "<code>" + esc_html(check_["max"]) + "</code>")
+                    _doing_it_wrong(__CLASS__, error_, "4.1.0")
+                    valid_ = False
                 # end if
             # end for
         # end for
         #// If we already have invalid date messages, don't bother running through checkdate().
-        if (not valid):
-            return valid
+        if (not valid_):
+            return valid_
         # end if
-        day_month_year_error_msg = ""
-        day_exists = php_array_key_exists("day", date_query) and php_is_numeric(date_query["day"])
-        month_exists = php_array_key_exists("month", date_query) and php_is_numeric(date_query["month"])
-        year_exists = php_array_key_exists("year", date_query) and php_is_numeric(date_query["year"])
-        if day_exists and month_exists and year_exists:
+        day_month_year_error_msg_ = ""
+        day_exists_ = php_array_key_exists("day", date_query_) and php_is_numeric(date_query_["day"])
+        month_exists_ = php_array_key_exists("month", date_query_) and php_is_numeric(date_query_["month"])
+        year_exists_ = php_array_key_exists("year", date_query_) and php_is_numeric(date_query_["year"])
+        if day_exists_ and month_exists_ and year_exists_:
             #// 1. Checking day, month, year combination.
-            if (not wp_checkdate(date_query["month"], date_query["day"], date_query["year"], php_sprintf("%s-%s-%s", date_query["year"], date_query["month"], date_query["day"]))):
-                day_month_year_error_msg = php_sprintf(__("The following values do not describe a valid date: year %1$s, month %2$s, day %3$s."), "<code>" + esc_html(date_query["year"]) + "</code>", "<code>" + esc_html(date_query["month"]) + "</code>", "<code>" + esc_html(date_query["day"]) + "</code>")
-                valid = False
+            if (not wp_checkdate(date_query_["month"], date_query_["day"], date_query_["year"], php_sprintf("%s-%s-%s", date_query_["year"], date_query_["month"], date_query_["day"]))):
+                day_month_year_error_msg_ = php_sprintf(__("The following values do not describe a valid date: year %1$s, month %2$s, day %3$s."), "<code>" + esc_html(date_query_["year"]) + "</code>", "<code>" + esc_html(date_query_["month"]) + "</code>", "<code>" + esc_html(date_query_["day"]) + "</code>")
+                valid_ = False
             # end if
-        elif day_exists and month_exists:
+        elif day_exists_ and month_exists_:
             #// 
             #// 2. checking day, month combination
             #// We use 2012 because, as a leap year, it's the most permissive.
             #//
-            if (not wp_checkdate(date_query["month"], date_query["day"], 2012, php_sprintf("2012-%s-%s", date_query["month"], date_query["day"]))):
-                day_month_year_error_msg = php_sprintf(__("The following values do not describe a valid date: month %1$s, day %2$s."), "<code>" + esc_html(date_query["month"]) + "</code>", "<code>" + esc_html(date_query["day"]) + "</code>")
-                valid = False
+            if (not wp_checkdate(date_query_["month"], date_query_["day"], 2012, php_sprintf("2012-%s-%s", date_query_["month"], date_query_["day"]))):
+                day_month_year_error_msg_ = php_sprintf(__("The following values do not describe a valid date: month %1$s, day %2$s."), "<code>" + esc_html(date_query_["month"]) + "</code>", "<code>" + esc_html(date_query_["day"]) + "</code>")
+                valid_ = False
             # end if
         # end if
-        if (not php_empty(lambda : day_month_year_error_msg)):
-            _doing_it_wrong(__CLASS__, day_month_year_error_msg, "4.1.0")
+        if (not php_empty(lambda : day_month_year_error_msg_)):
+            _doing_it_wrong(__CLASS__, day_month_year_error_msg_, "4.1.0")
         # end if
-        return valid
+        return valid_
     # end def validate_date_values
     #// 
     #// Validates a column name parameter.
@@ -355,13 +389,14 @@ class WP_Date_Query():
     #// @param string $column The user-supplied column name.
     #// @return string A validated column name value.
     #//
-    def validate_column(self, column=None):
+    def validate_column(self, column_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        valid_columns = Array("post_date", "post_date_gmt", "post_modified", "post_modified_gmt", "comment_date", "comment_date_gmt", "user_registered", "registered", "last_updated")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        valid_columns_ = Array("post_date", "post_date_gmt", "post_modified", "post_modified_gmt", "comment_date", "comment_date_gmt", "user_registered", "registered", "last_updated")
         #// Attempt to detect a table prefix.
-        if False == php_strpos(column, "."):
+        if False == php_strpos(column_, "."):
             #// 
             #// Filters the list of valid date query columns.
             #// 
@@ -373,20 +408,20 @@ class WP_Date_Query():
             #// 'post_modified_gmt', 'comment_date', 'comment_date_gmt',
             #// 'user_registered'
             #//
-            if (not php_in_array(column, apply_filters("date_query_valid_columns", valid_columns))):
-                column = "post_date"
+            if (not php_in_array(column_, apply_filters("date_query_valid_columns", valid_columns_))):
+                column_ = "post_date"
             # end if
-            known_columns = Array({wpdb.posts: Array("post_date", "post_date_gmt", "post_modified", "post_modified_gmt"), wpdb.comments: Array("comment_date", "comment_date_gmt"), wpdb.users: Array("user_registered"), wpdb.blogs: Array("registered", "last_updated")})
+            known_columns_ = Array({wpdb_.posts: Array("post_date", "post_date_gmt", "post_modified", "post_modified_gmt"), wpdb_.comments: Array("comment_date", "comment_date_gmt"), wpdb_.users: Array("user_registered"), wpdb_.blogs: Array("registered", "last_updated")})
             #// If it's a known column name, add the appropriate table prefix.
-            for table_name,table_columns in known_columns:
-                if php_in_array(column, table_columns):
-                    column = table_name + "." + column
+            for table_name_,table_columns_ in known_columns_:
+                if php_in_array(column_, table_columns_):
+                    column_ = table_name_ + "." + column_
                     break
                 # end if
             # end for
         # end if
         #// Remove unsafe characters.
-        return php_preg_replace("/[^a-zA-Z0-9_$\\.]/", "", column)
+        return php_preg_replace("/[^a-zA-Z0-9_$\\.]/", "", column_)
     # end def validate_column
     #// 
     #// Generate WHERE clause to be appended to a main query.
@@ -397,8 +432,9 @@ class WP_Date_Query():
     #//
     def get_sql(self):
         
-        sql = self.get_sql_clauses()
-        where = sql["where"]
+        
+        sql_ = self.get_sql_clauses()
+        where_ = sql_["where"]
         #// 
         #// Filters the date query WHERE clause.
         #// 
@@ -407,7 +443,7 @@ class WP_Date_Query():
         #// @param string        $where WHERE clause of the date query.
         #// @param WP_Date_Query $this  The WP_Date_Query instance.
         #//
-        return apply_filters("get_date_sql", where, self)
+        return apply_filters("get_date_sql", where_, self)
     # end def get_sql
     #// 
     #// Generate SQL clauses to be appended to a main query.
@@ -426,11 +462,12 @@ class WP_Date_Query():
     #//
     def get_sql_clauses(self):
         
-        sql = self.get_sql_for_query(self.queries)
-        if (not php_empty(lambda : sql["where"])):
-            sql["where"] = " AND " + sql["where"]
+        
+        sql_ = self.get_sql_for_query(self.queries)
+        if (not php_empty(lambda : sql_["where"])):
+            sql_["where"] = " AND " + sql_["where"]
         # end if
-        return sql
+        return sql_
     # end def get_sql_clauses
     #// 
     #// Generate SQL clauses for a single query array.
@@ -450,56 +487,57 @@ class WP_Date_Query():
     #// @type string $where SQL fragment to append to the main WHERE clause.
     #// }
     #//
-    def get_sql_for_query(self, query=None, depth=0):
+    def get_sql_for_query(self, query_=None, depth_=0):
         
-        sql_chunks = Array({"join": Array(), "where": Array()})
-        sql = Array({"join": "", "where": ""})
-        indent = ""
-        i = 0
-        while i < depth:
+        
+        sql_chunks_ = Array({"join": Array(), "where": Array()})
+        sql_ = Array({"join": "", "where": ""})
+        indent_ = ""
+        i_ = 0
+        while i_ < depth_:
             
-            indent += "  "
-            i += 1
+            indent_ += "  "
+            i_ += 1
         # end while
-        for key,clause in query:
-            if "relation" == key:
-                relation = query["relation"]
-            elif php_is_array(clause):
+        for key_,clause_ in query_:
+            if "relation" == key_:
+                relation_ = query_["relation"]
+            elif php_is_array(clause_):
                 #// This is a first-order clause.
-                if self.is_first_order_clause(clause):
-                    clause_sql = self.get_sql_for_clause(clause, query)
-                    where_count = php_count(clause_sql["where"])
-                    if (not where_count):
-                        sql_chunks["where"][-1] = ""
-                    elif 1 == where_count:
-                        sql_chunks["where"][-1] = clause_sql["where"][0]
+                if self.is_first_order_clause(clause_):
+                    clause_sql_ = self.get_sql_for_clause(clause_, query_)
+                    where_count_ = php_count(clause_sql_["where"])
+                    if (not where_count_):
+                        sql_chunks_["where"][-1] = ""
+                    elif 1 == where_count_:
+                        sql_chunks_["where"][-1] = clause_sql_["where"][0]
                     else:
-                        sql_chunks["where"][-1] = "( " + php_implode(" AND ", clause_sql["where"]) + " )"
+                        sql_chunks_["where"][-1] = "( " + php_implode(" AND ", clause_sql_["where"]) + " )"
                     # end if
-                    sql_chunks["join"] = php_array_merge(sql_chunks["join"], clause_sql["join"])
+                    sql_chunks_["join"] = php_array_merge(sql_chunks_["join"], clause_sql_["join"])
                     pass
                 else:
-                    clause_sql = self.get_sql_for_query(clause, depth + 1)
-                    sql_chunks["where"][-1] = clause_sql["where"]
-                    sql_chunks["join"][-1] = clause_sql["join"]
+                    clause_sql_ = self.get_sql_for_query(clause_, depth_ + 1)
+                    sql_chunks_["where"][-1] = clause_sql_["where"]
+                    sql_chunks_["join"][-1] = clause_sql_["join"]
                 # end if
             # end if
         # end for
         #// Filter to remove empties.
-        sql_chunks["join"] = php_array_filter(sql_chunks["join"])
-        sql_chunks["where"] = php_array_filter(sql_chunks["where"])
-        if php_empty(lambda : relation):
-            relation = "AND"
+        sql_chunks_["join"] = php_array_filter(sql_chunks_["join"])
+        sql_chunks_["where"] = php_array_filter(sql_chunks_["where"])
+        if php_empty(lambda : relation_):
+            relation_ = "AND"
         # end if
         #// Filter duplicate JOIN clauses and combine into a single string.
-        if (not php_empty(lambda : sql_chunks["join"])):
-            sql["join"] = php_implode(" ", array_unique(sql_chunks["join"]))
+        if (not php_empty(lambda : sql_chunks_["join"])):
+            sql_["join"] = php_implode(" ", array_unique(sql_chunks_["join"]))
         # end if
         #// Generate a single WHERE clause with proper brackets and indentation.
-        if (not php_empty(lambda : sql_chunks["where"])):
-            sql["where"] = "( " + "\n  " + indent + php_implode(" " + "\n  " + indent + relation + " " + "\n  " + indent, sql_chunks["where"]) + "\n" + indent + ")"
+        if (not php_empty(lambda : sql_chunks_["where"])):
+            sql_["where"] = "( " + "\n  " + indent_ + php_implode(" " + "\n  " + indent_ + relation_ + " " + "\n  " + indent_, sql_chunks_["where"]) + "\n" + indent_ + ")"
         # end if
-        return sql
+        return sql_
     # end def get_sql_for_query
     #// 
     #// Turns a single date clause into pieces for a WHERE clause.
@@ -517,9 +555,10 @@ class WP_Date_Query():
     #// @type string $where SQL fragment to append to the main WHERE clause.
     #// }
     #//
-    def get_sql_for_subquery(self, query=None):
+    def get_sql_for_subquery(self, query_=None):
         
-        return self.get_sql_for_clause(query, "")
+        
+        return self.get_sql_for_clause(query_, "")
     # end def get_sql_for_subquery
     #// 
     #// Turns a first-order date query into SQL for a WHERE clause.
@@ -535,49 +574,50 @@ class WP_Date_Query():
     #// @type string $where SQL fragment to append to the main WHERE clause.
     #// }
     #//
-    def get_sql_for_clause(self, query=None, parent_query=None):
+    def get_sql_for_clause(self, query_=None, parent_query_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
         #// The sub-parts of a $where part.
-        where_parts = Array()
-        column = esc_sql(query["column"]) if (not php_empty(lambda : query["column"])) else self.column
-        column = self.validate_column(column)
-        compare = self.get_compare(query)
-        inclusive = (not php_empty(lambda : query["inclusive"]))
+        where_parts_ = Array()
+        column_ = esc_sql(query_["column"]) if (not php_empty(lambda : query_["column"])) else self.column
+        column_ = self.validate_column(column_)
+        compare_ = self.get_compare(query_)
+        inclusive_ = (not php_empty(lambda : query_["inclusive"]))
         #// Assign greater- and less-than values.
-        lt = "<"
-        gt = ">"
-        if inclusive:
-            lt += "="
-            gt += "="
+        lt_ = "<"
+        gt_ = ">"
+        if inclusive_:
+            lt_ += "="
+            gt_ += "="
         # end if
         #// Range queries.
-        if (not php_empty(lambda : query["after"])):
-            where_parts[-1] = wpdb.prepare(str(column) + str(" ") + str(gt) + str(" %s"), self.build_mysql_datetime(query["after"], (not inclusive)))
+        if (not php_empty(lambda : query_["after"])):
+            where_parts_[-1] = wpdb_.prepare(str(column_) + str(" ") + str(gt_) + str(" %s"), self.build_mysql_datetime(query_["after"], (not inclusive_)))
         # end if
-        if (not php_empty(lambda : query["before"])):
-            where_parts[-1] = wpdb.prepare(str(column) + str(" ") + str(lt) + str(" %s"), self.build_mysql_datetime(query["before"], inclusive))
+        if (not php_empty(lambda : query_["before"])):
+            where_parts_[-1] = wpdb_.prepare(str(column_) + str(" ") + str(lt_) + str(" %s"), self.build_mysql_datetime(query_["before"], inclusive_))
         # end if
         #// Specific value queries.
-        date_units = Array({"YEAR": Array("year"), "MONTH": Array("month", "monthnum"), "_wp_mysql_week": Array("week", "w"), "DAYOFYEAR": Array("dayofyear"), "DAYOFMONTH": Array("day"), "DAYOFWEEK": Array("dayofweek"), "WEEKDAY": Array("dayofweek_iso")})
+        date_units_ = Array({"YEAR": Array("year"), "MONTH": Array("month", "monthnum"), "_wp_mysql_week": Array("week", "w"), "DAYOFYEAR": Array("dayofyear"), "DAYOFMONTH": Array("day"), "DAYOFWEEK": Array("dayofweek"), "WEEKDAY": Array("dayofweek_iso")})
         #// Check of the possible date units and add them to the query.
-        for sql_part,query_parts in date_units:
-            for query_part in query_parts:
-                if (php_isset(lambda : query[query_part])):
-                    value = self.build_value(compare, query[query_part])
-                    if value:
-                        for case in Switch(sql_part):
+        for sql_part_,query_parts_ in date_units_:
+            for query_part_ in query_parts_:
+                if (php_isset(lambda : query_[query_part_])):
+                    value_ = self.build_value(compare_, query_[query_part_])
+                    if value_:
+                        for case in Switch(sql_part_):
                             if case("_wp_mysql_week"):
-                                where_parts[-1] = _wp_mysql_week(column) + str(" ") + str(compare) + str(" ") + str(value)
+                                where_parts_[-1] = _wp_mysql_week(column_) + str(" ") + str(compare_) + str(" ") + str(value_)
                                 break
                             # end if
                             if case("WEEKDAY"):
-                                where_parts[-1] = str(sql_part) + str("( ") + str(column) + str(" ) + 1 ") + str(compare) + str(" ") + str(value)
+                                where_parts_[-1] = str(sql_part_) + str("( ") + str(column_) + str(" ) + 1 ") + str(compare_) + str(" ") + str(value_)
                                 break
                             # end if
                             if case():
-                                where_parts[-1] = str(sql_part) + str("( ") + str(column) + str(" ) ") + str(compare) + str(" ") + str(value)
+                                where_parts_[-1] = str(sql_part_) + str("( ") + str(column_) + str(" ) ") + str(compare_) + str(" ") + str(value_)
                             # end if
                         # end for
                         break
@@ -585,23 +625,23 @@ class WP_Date_Query():
                 # end if
             # end for
         # end for
-        if (php_isset(lambda : query["hour"])) or (php_isset(lambda : query["minute"])) or (php_isset(lambda : query["second"])):
+        if (php_isset(lambda : query_["hour"])) or (php_isset(lambda : query_["minute"])) or (php_isset(lambda : query_["second"])):
             #// Avoid notices.
-            for unit in Array("hour", "minute", "second"):
-                if (not (php_isset(lambda : query[unit]))):
-                    query[unit] = None
+            for unit_ in Array("hour", "minute", "second"):
+                if (not (php_isset(lambda : query_[unit_]))):
+                    query_[unit_] = None
                 # end if
             # end for
-            time_query = self.build_time_query(column, compare, query["hour"], query["minute"], query["second"])
-            if time_query:
-                where_parts[-1] = time_query
+            time_query_ = self.build_time_query(column_, compare_, query_["hour"], query_["minute"], query_["second"])
+            if time_query_:
+                where_parts_[-1] = time_query_
             # end if
         # end if
         #// 
         #// Return an array of 'join' and 'where' for compatibility
         #// with other query classes.
         #//
-        return Array({"where": where_parts, "join": Array()})
+        return Array({"where": where_parts_, "join": Array()})
     # end def get_sql_for_clause
     #// 
     #// Builds and validates a value string based on the comparison operator.
@@ -612,47 +652,48 @@ class WP_Date_Query():
     #// @param string|array $value The value
     #// @return string|false|int The value to be used in SQL or false on error.
     #//
-    def build_value(self, compare=None, value=None):
+    def build_value(self, compare_=None, value_=None):
         
-        if (not (php_isset(lambda : value))):
+        
+        if (not (php_isset(lambda : value_))):
             return False
         # end if
-        for case in Switch(compare):
+        for case in Switch(compare_):
             if case("IN"):
                 pass
             # end if
             if case("NOT IN"):
-                value = value
+                value_ = value_
                 #// Remove non-numeric values.
-                value = php_array_filter(value, "is_numeric")
-                if php_empty(lambda : value):
+                value_ = php_array_filter(value_, "is_numeric")
+                if php_empty(lambda : value_):
                     return False
                 # end if
-                return "(" + php_implode(",", php_array_map("intval", value)) + ")"
+                return "(" + php_implode(",", php_array_map("intval", value_)) + ")"
             # end if
             if case("BETWEEN"):
                 pass
             # end if
             if case("NOT BETWEEN"):
-                if (not php_is_array(value)) or 2 != php_count(value):
-                    value = Array(value, value)
+                if (not php_is_array(value_)) or 2 != php_count(value_):
+                    value_ = Array(value_, value_)
                 else:
-                    value = php_array_values(value)
+                    value_ = php_array_values(value_)
                 # end if
                 #// If either value is non-numeric, bail.
-                for v in value:
-                    if (not php_is_numeric(v)):
+                for v_ in value_:
+                    if (not php_is_numeric(v_)):
                         return False
                     # end if
                 # end for
-                value = php_array_map("intval", value)
-                return value[0] + " AND " + value[1]
+                value_ = php_array_map("intval", value_)
+                return value_[0] + " AND " + value_[1]
             # end if
             if case():
-                if (not php_is_numeric(value)):
+                if (not php_is_numeric(value_)):
                     return False
                 # end if
-                return php_int(value)
+                return php_int(value_)
             # end if
         # end for
     # end def build_value
@@ -672,57 +713,60 @@ class WP_Date_Query():
     #// Default: false.
     #// @return string|false A MySQL format date/time or false on failure
     #//
-    def build_mysql_datetime(self, datetime=None, default_to_max=False):
+    def build_mysql_datetime(self, datetime_=None, default_to_max_=None):
+        if default_to_max_ is None:
+            default_to_max_ = False
+        # end if
         
-        if (not php_is_array(datetime)):
+        if (not php_is_array(datetime_)):
             #// 
             #// Try to parse some common date formats, so we can detect
             #// the level of precision and support the 'inclusive' parameter.
             #//
-            if php_preg_match("/^(\\d{4})$/", datetime, matches):
+            if php_preg_match("/^(\\d{4})$/", datetime_, matches_):
                 #// Y
-                datetime = Array({"year": php_intval(matches[1])})
-            elif php_preg_match("/^(\\d{4})\\-(\\d{2})$/", datetime, matches):
+                datetime_ = Array({"year": php_intval(matches_[1])})
+            elif php_preg_match("/^(\\d{4})\\-(\\d{2})$/", datetime_, matches_):
                 #// Y-m
-                datetime = Array({"year": php_intval(matches[1]), "month": php_intval(matches[2])})
-            elif php_preg_match("/^(\\d{4})\\-(\\d{2})\\-(\\d{2})$/", datetime, matches):
+                datetime_ = Array({"year": php_intval(matches_[1]), "month": php_intval(matches_[2])})
+            elif php_preg_match("/^(\\d{4})\\-(\\d{2})\\-(\\d{2})$/", datetime_, matches_):
                 #// Y-m-d
-                datetime = Array({"year": php_intval(matches[1]), "month": php_intval(matches[2]), "day": php_intval(matches[3])})
-            elif php_preg_match("/^(\\d{4})\\-(\\d{2})\\-(\\d{2}) (\\d{2}):(\\d{2})$/", datetime, matches):
+                datetime_ = Array({"year": php_intval(matches_[1]), "month": php_intval(matches_[2]), "day": php_intval(matches_[3])})
+            elif php_preg_match("/^(\\d{4})\\-(\\d{2})\\-(\\d{2}) (\\d{2}):(\\d{2})$/", datetime_, matches_):
                 #// Y-m-d H:i
-                datetime = Array({"year": php_intval(matches[1]), "month": php_intval(matches[2]), "day": php_intval(matches[3]), "hour": php_intval(matches[4]), "minute": php_intval(matches[5])})
+                datetime_ = Array({"year": php_intval(matches_[1]), "month": php_intval(matches_[2]), "day": php_intval(matches_[3]), "hour": php_intval(matches_[4]), "minute": php_intval(matches_[5])})
             # end if
             #// If no match is found, we don't support default_to_max.
-            if (not php_is_array(datetime)):
-                wp_timezone = wp_timezone()
+            if (not php_is_array(datetime_)):
+                wp_timezone_ = wp_timezone()
                 #// Assume local timezone if not provided.
-                dt = date_create(datetime, wp_timezone)
-                if False == dt:
+                dt_ = date_create(datetime_, wp_timezone_)
+                if False == dt_:
                     return gmdate("Y-m-d H:i:s", False)
                 # end if
-                return dt.settimezone(wp_timezone).format("Y-m-d H:i:s")
+                return dt_.settimezone(wp_timezone_).format("Y-m-d H:i:s")
             # end if
         # end if
-        datetime = php_array_map("absint", datetime)
-        if (not (php_isset(lambda : datetime["year"]))):
-            datetime["year"] = current_time("Y")
+        datetime_ = php_array_map("absint", datetime_)
+        if (not (php_isset(lambda : datetime_["year"]))):
+            datetime_["year"] = current_time("Y")
         # end if
-        if (not (php_isset(lambda : datetime["month"]))):
-            datetime["month"] = 12 if default_to_max else 1
+        if (not (php_isset(lambda : datetime_["month"]))):
+            datetime_["month"] = 12 if default_to_max_ else 1
         # end if
-        if (not (php_isset(lambda : datetime["day"]))):
-            datetime["day"] = php_int(gmdate("t", mktime(0, 0, 0, datetime["month"], 1, datetime["year"]))) if default_to_max else 1
+        if (not (php_isset(lambda : datetime_["day"]))):
+            datetime_["day"] = php_int(gmdate("t", mktime(0, 0, 0, datetime_["month"], 1, datetime_["year"]))) if default_to_max_ else 1
         # end if
-        if (not (php_isset(lambda : datetime["hour"]))):
-            datetime["hour"] = 23 if default_to_max else 0
+        if (not (php_isset(lambda : datetime_["hour"]))):
+            datetime_["hour"] = 23 if default_to_max_ else 0
         # end if
-        if (not (php_isset(lambda : datetime["minute"]))):
-            datetime["minute"] = 59 if default_to_max else 0
+        if (not (php_isset(lambda : datetime_["minute"]))):
+            datetime_["minute"] = 59 if default_to_max_ else 0
         # end if
-        if (not (php_isset(lambda : datetime["second"]))):
-            datetime["second"] = 59 if default_to_max else 0
+        if (not (php_isset(lambda : datetime_["second"]))):
+            datetime_["second"] = 59 if default_to_max_ else 0
         # end if
-        return php_sprintf("%04d-%02d-%02d %02d:%02d:%02d", datetime["year"], datetime["month"], datetime["day"], datetime["hour"], datetime["minute"], datetime["second"])
+        return php_sprintf("%04d-%02d-%02d %02d:%02d:%02d", datetime_["year"], datetime_["month"], datetime_["day"], datetime_["hour"], datetime_["minute"], datetime_["second"])
     # end def build_mysql_datetime
     #// 
     #// Builds a query string for comparing time values (hour, minute, second).
@@ -740,69 +784,70 @@ class WP_Date_Query():
     #// @param int|null $second Optional. A second value (0-59).
     #// @return string|false A query part or false on failure.
     #//
-    def build_time_query(self, column=None, compare=None, hour=None, minute=None, second=None):
+    def build_time_query(self, column_=None, compare_=None, hour_=None, minute_=None, second_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
         #// Have to have at least one.
-        if (not (php_isset(lambda : hour))) and (not (php_isset(lambda : minute))) and (not (php_isset(lambda : second))):
+        if (not (php_isset(lambda : hour_))) and (not (php_isset(lambda : minute_))) and (not (php_isset(lambda : second_))):
             return False
         # end if
         #// Complex combined queries aren't supported for multi-value queries.
-        if php_in_array(compare, Array("IN", "NOT IN", "BETWEEN", "NOT BETWEEN")):
+        if php_in_array(compare_, Array("IN", "NOT IN", "BETWEEN", "NOT BETWEEN")):
             return_ = Array()
-            value = self.build_value(compare, hour)
-            if False != value:
-                return_[-1] = str("HOUR( ") + str(column) + str(" ) ") + str(compare) + str(" ") + str(value)
+            value_ = self.build_value(compare_, hour_)
+            if False != value_:
+                return_[-1] = str("HOUR( ") + str(column_) + str(" ) ") + str(compare_) + str(" ") + str(value_)
             # end if
-            value = self.build_value(compare, minute)
-            if False != value:
-                return_[-1] = str("MINUTE( ") + str(column) + str(" ) ") + str(compare) + str(" ") + str(value)
+            value_ = self.build_value(compare_, minute_)
+            if False != value_:
+                return_[-1] = str("MINUTE( ") + str(column_) + str(" ) ") + str(compare_) + str(" ") + str(value_)
             # end if
-            value = self.build_value(compare, second)
-            if False != value:
-                return_[-1] = str("SECOND( ") + str(column) + str(" ) ") + str(compare) + str(" ") + str(value)
+            value_ = self.build_value(compare_, second_)
+            if False != value_:
+                return_[-1] = str("SECOND( ") + str(column_) + str(" ) ") + str(compare_) + str(" ") + str(value_)
             # end if
             return php_implode(" AND ", return_)
         # end if
         #// Cases where just one unit is set.
-        if (php_isset(lambda : hour)) and (not (php_isset(lambda : minute))) and (not (php_isset(lambda : second))):
-            value = self.build_value(compare, hour)
-            if False != value:
-                return str("HOUR( ") + str(column) + str(" ) ") + str(compare) + str(" ") + str(value)
+        if (php_isset(lambda : hour_)) and (not (php_isset(lambda : minute_))) and (not (php_isset(lambda : second_))):
+            value_ = self.build_value(compare_, hour_)
+            if False != value_:
+                return str("HOUR( ") + str(column_) + str(" ) ") + str(compare_) + str(" ") + str(value_)
             # end if
-        elif (not (php_isset(lambda : hour))) and (php_isset(lambda : minute)) and (not (php_isset(lambda : second))):
-            value = self.build_value(compare, minute)
-            if False != value:
-                return str("MINUTE( ") + str(column) + str(" ) ") + str(compare) + str(" ") + str(value)
+        elif (not (php_isset(lambda : hour_))) and (php_isset(lambda : minute_)) and (not (php_isset(lambda : second_))):
+            value_ = self.build_value(compare_, minute_)
+            if False != value_:
+                return str("MINUTE( ") + str(column_) + str(" ) ") + str(compare_) + str(" ") + str(value_)
             # end if
-        elif (not (php_isset(lambda : hour))) and (not (php_isset(lambda : minute))) and (php_isset(lambda : second)):
-            value = self.build_value(compare, second)
-            if False != value:
-                return str("SECOND( ") + str(column) + str(" ) ") + str(compare) + str(" ") + str(value)
+        elif (not (php_isset(lambda : hour_))) and (not (php_isset(lambda : minute_))) and (php_isset(lambda : second_)):
+            value_ = self.build_value(compare_, second_)
+            if False != value_:
+                return str("SECOND( ") + str(column_) + str(" ) ") + str(compare_) + str(" ") + str(value_)
             # end if
         # end if
         #// Single units were already handled. Since hour & second isn't allowed, minute must to be set.
-        if (not (php_isset(lambda : minute))):
+        if (not (php_isset(lambda : minute_))):
             return False
         # end if
-        format = ""
-        time = ""
+        format_ = ""
+        time_ = ""
         #// Hour.
-        if None != hour:
-            format += "%H."
-            time += php_sprintf("%02d", hour) + "."
+        if None != hour_:
+            format_ += "%H."
+            time_ += php_sprintf("%02d", hour_) + "."
         else:
-            format += "0."
-            time += "0."
+            format_ += "0."
+            time_ += "0."
         # end if
         #// Minute.
-        format += "%i"
-        time += php_sprintf("%02d", minute)
-        if (php_isset(lambda : second)):
-            format += "%s"
-            time += php_sprintf("%02d", second)
+        format_ += "%i"
+        time_ += php_sprintf("%02d", minute_)
+        if (php_isset(lambda : second_)):
+            format_ += "%s"
+            time_ += php_sprintf("%02d", second_)
         # end if
-        return wpdb.prepare(str("DATE_FORMAT( ") + str(column) + str(", %s ) ") + str(compare) + str(" %f"), format, time)
+        return wpdb_.prepare(str("DATE_FORMAT( ") + str(column_) + str(", %s ) ") + str(compare_) + str(" %f"), format_, time_)
     # end def build_time_query
 # end class WP_Date_Query

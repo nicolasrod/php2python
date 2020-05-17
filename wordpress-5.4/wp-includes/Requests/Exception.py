@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,7 +18,17 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package Requests
 #//
 class Requests_Exception(Exception):
+    #// 
+    #// Type of exception
+    #// 
+    #// @var string
+    #//
     type = Array()
+    #// 
+    #// Data associated with the exception
+    #// 
+    #// @var mixed
+    #//
     data = Array()
     #// 
     #// Create a new exception
@@ -33,11 +38,12 @@ class Requests_Exception(Exception):
     #// @param mixed $data Associated data
     #// @param integer $code Exception numerical code, if applicable
     #//
-    def __init__(self, message=None, type=None, data=None, code=0):
+    def __init__(self, message_=None, type_=None, data_=None, code_=0):
         
-        super().__init__(message, code)
-        self.type = type
-        self.data = data
+        
+        super().__init__(message_, code_)
+        self.type = type_
+        self.data = data_
     # end def __init__
     #// 
     #// Like {@see getCode()}, but a string code.
@@ -46,6 +52,7 @@ class Requests_Exception(Exception):
     #// @return string
     #//
     def gettype(self):
+        
         
         return self.type
     # end def gettype
@@ -56,6 +63,7 @@ class Requests_Exception(Exception):
     #// @return mixed
     #//
     def getdata(self):
+        
         
         return self.data
     # end def getdata

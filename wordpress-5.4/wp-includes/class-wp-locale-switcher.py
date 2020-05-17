@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,8 +20,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 4.7.0
 #//
 class WP_Locale_Switcher():
+    #// 
+    #// Locale stack.
+    #// 
+    #// @since 4.7.0
+    #// @var string[]
+    #//
     locales = Array()
+    #// 
+    #// Original locale.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     original_locale = Array()
+    #// 
+    #// Holds all available languages.
+    #// 
+    #// @since 4.7.0
+    #// @var array An array of language codes (file names without the .mo extension).
+    #//
     available_languages = Array()
     #// 
     #// Constructor.
@@ -36,6 +49,7 @@ class WP_Locale_Switcher():
     #// @since 4.7.0
     #//
     def __init__(self):
+        
         
         self.original_locale = determine_locale()
         self.available_languages = php_array_merge(Array("en_US"), get_available_languages())
@@ -49,6 +63,7 @@ class WP_Locale_Switcher():
     #//
     def init(self):
         
+        
         add_filter("locale", Array(self, "filter_locale"))
     # end def init
     #// 
@@ -59,17 +74,18 @@ class WP_Locale_Switcher():
     #// @param string $locale The locale to switch to.
     #// @return bool True on success, false on failure.
     #//
-    def switch_to_locale(self, locale=None):
+    def switch_to_locale(self, locale_=None):
         
-        current_locale = determine_locale()
-        if current_locale == locale:
+        
+        current_locale_ = determine_locale()
+        if current_locale_ == locale_:
             return False
         # end if
-        if (not php_in_array(locale, self.available_languages, True)):
+        if (not php_in_array(locale_, self.available_languages, True)):
             return False
         # end if
-        self.locales[-1] = locale
-        self.change_locale(locale)
+        self.locales[-1] = locale_
+        self.change_locale(locale_)
         #// 
         #// Fires when the locale is switched.
         #// 
@@ -77,7 +93,7 @@ class WP_Locale_Switcher():
         #// 
         #// @param string $locale The new locale.
         #//
-        do_action("switch_locale", locale)
+        do_action("switch_locale", locale_)
         return True
     # end def switch_to_locale
     #// 
@@ -89,17 +105,18 @@ class WP_Locale_Switcher():
     #//
     def restore_previous_locale(self):
         
-        previous_locale = php_array_pop(self.locales)
-        if None == previous_locale:
+        
+        previous_locale_ = php_array_pop(self.locales)
+        if None == previous_locale_:
             #// The stack is empty, bail.
             return False
         # end if
-        locale = php_end(self.locales)
-        if (not locale):
+        locale_ = php_end(self.locales)
+        if (not locale_):
             #// There's nothing left in the stack: go back to the original locale.
-            locale = self.original_locale
+            locale_ = self.original_locale
         # end if
-        self.change_locale(locale)
+        self.change_locale(locale_)
         #// 
         #// Fires when the locale is restored to the previous one.
         #// 
@@ -108,8 +125,8 @@ class WP_Locale_Switcher():
         #// @param string $locale          The new locale.
         #// @param string $previous_locale The previous locale.
         #//
-        do_action("restore_previous_locale", locale, previous_locale)
-        return locale
+        do_action("restore_previous_locale", locale_, previous_locale_)
+        return locale_
     # end def restore_previous_locale
     #// 
     #// Restores the translations according to the original locale.
@@ -119,6 +136,7 @@ class WP_Locale_Switcher():
     #// @return string|false Locale on success, false on failure.
     #//
     def restore_current_locale(self):
+        
         
         if php_empty(lambda : self.locales):
             return False
@@ -135,6 +153,7 @@ class WP_Locale_Switcher():
     #//
     def is_switched(self):
         
+        
         return (not php_empty(lambda : self.locales))
     # end def is_switched
     #// 
@@ -145,13 +164,14 @@ class WP_Locale_Switcher():
     #// @param string $locale The locale of the WordPress installation.
     #// @return string The locale currently being switched to.
     #//
-    def filter_locale(self, locale=None):
+    def filter_locale(self, locale_=None):
         
-        switched_locale = php_end(self.locales)
-        if switched_locale:
-            return switched_locale
+        
+        switched_locale_ = php_end(self.locales)
+        if switched_locale_:
+            return switched_locale_
         # end if
-        return locale
+        return locale_
     # end def filter_locale
     #// 
     #// Load translations for a given locale.
@@ -164,18 +184,19 @@ class WP_Locale_Switcher():
     #// 
     #// @param string $locale The locale to load translations for.
     #//
-    def load_translations(self, locale=None):
+    def load_translations(self, locale_=None):
         
-        global l10n
-        php_check_if_defined("l10n")
-        domains = php_array_keys(l10n) if l10n else Array()
-        load_default_textdomain(locale)
-        for domain in domains:
-            if "default" == domain:
+        
+        global l10n_
+        php_check_if_defined("l10n_")
+        domains_ = php_array_keys(l10n_) if l10n_ else Array()
+        load_default_textdomain(locale_)
+        for domain_ in domains_:
+            if "default" == domain_:
                 continue
             # end if
-            unload_textdomain(domain)
-            get_translations_for_domain(domain)
+            unload_textdomain(domain_)
+            get_translations_for_domain(domain_)
         # end for
     # end def load_translations
     #// 
@@ -190,11 +211,12 @@ class WP_Locale_Switcher():
     #// 
     #// @param string $locale The locale to change to.
     #//
-    def change_locale(self, locale=None):
+    def change_locale(self, locale_=None):
+        
         global PHP_GLOBALS
         #// Reset translation availability information.
         _get_path_to_translation(None, True)
-        self.load_translations(locale)
+        self.load_translations(locale_)
         PHP_GLOBALS["wp_locale"] = php_new_class("WP_Locale", lambda : WP_Locale())
         #// 
         #// Fires when the locale is switched to or restored.
@@ -203,6 +225,6 @@ class WP_Locale_Switcher():
         #// 
         #// @param string $locale The new locale.
         #//
-        do_action("change_locale", locale)
+        do_action("change_locale", locale_)
     # end def change_locale
 # end class WP_Locale_Switcher

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,10 +22,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @global int    $blog_id    The current site ID.
 #// @global string $wp_version The WordPress version string.
 #//
-def wp_initial_constants(*args_):
+def wp_initial_constants(*_args_):
     
-    global blog_id
-    php_check_if_defined("blog_id")
+    
+    global blog_id_
+    php_check_if_defined("blog_id_")
     #// #@+
     #// Constants for expressing human-readable data sizes in their respective number of bytes.
     #// 
@@ -45,12 +41,12 @@ def wp_initial_constants(*args_):
     if (not php_defined("WP_START_TIMESTAMP")):
         php_define("WP_START_TIMESTAMP", php_microtime(True))
     # end if
-    current_limit = php_ini_get("memory_limit")
-    current_limit_int = wp_convert_hr_to_bytes(current_limit)
+    current_limit_ = php_ini_get("memory_limit")
+    current_limit_int_ = wp_convert_hr_to_bytes(current_limit_)
     #// Define memory limits.
     if (not php_defined("WP_MEMORY_LIMIT")):
         if False == wp_is_ini_value_changeable("memory_limit"):
-            php_define("WP_MEMORY_LIMIT", current_limit)
+            php_define("WP_MEMORY_LIMIT", current_limit_)
         elif is_multisite():
             php_define("WP_MEMORY_LIMIT", "64M")
         else:
@@ -59,20 +55,20 @@ def wp_initial_constants(*args_):
     # end if
     if (not php_defined("WP_MAX_MEMORY_LIMIT")):
         if False == wp_is_ini_value_changeable("memory_limit"):
-            php_define("WP_MAX_MEMORY_LIMIT", current_limit)
-        elif -1 == current_limit_int or current_limit_int > 268435456:
-            php_define("WP_MAX_MEMORY_LIMIT", current_limit)
+            php_define("WP_MAX_MEMORY_LIMIT", current_limit_)
+        elif -1 == current_limit_int_ or current_limit_int_ > 268435456:
+            php_define("WP_MAX_MEMORY_LIMIT", current_limit_)
         else:
             php_define("WP_MAX_MEMORY_LIMIT", "256M")
         # end if
     # end if
     #// Set memory limits.
-    wp_limit_int = wp_convert_hr_to_bytes(WP_MEMORY_LIMIT)
-    if -1 != current_limit_int and -1 == wp_limit_int or wp_limit_int > current_limit_int:
+    wp_limit_int_ = wp_convert_hr_to_bytes(WP_MEMORY_LIMIT)
+    if -1 != current_limit_int_ and -1 == wp_limit_int_ or wp_limit_int_ > current_limit_int_:
         php_ini_set("memory_limit", WP_MEMORY_LIMIT)
     # end if
-    if (not (php_isset(lambda : blog_id))):
-        blog_id = 1
+    if (not (php_isset(lambda : blog_id_))):
+        blog_id_ = 1
     # end if
     if (not php_defined("WP_CONTENT_DIR")):
         php_define("WP_CONTENT_DIR", ABSPATH + "wp-content")
@@ -98,11 +94,11 @@ def wp_initial_constants(*args_):
     #// non-concatenated scripts and stylesheets.
     if (not php_defined("SCRIPT_DEBUG")):
         if (not php_empty(lambda : PHP_GLOBALS["wp_version"])):
-            develop_src = False != php_strpos(PHP_GLOBALS["wp_version"], "-src")
+            develop_src_ = False != php_strpos(PHP_GLOBALS["wp_version"], "-src")
         else:
-            develop_src = False
+            develop_src_ = False
         # end if
-        php_define("SCRIPT_DEBUG", develop_src)
+        php_define("SCRIPT_DEBUG", develop_src_)
     # end if
     #// 
     #// Private
@@ -143,7 +139,8 @@ def wp_initial_constants(*args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_plugin_directory_constants(*args_):
+def wp_plugin_directory_constants(*_args_):
+    
     
     if (not php_defined("WP_CONTENT_URL")):
         php_define("WP_CONTENT_URL", get_option("siteurl") + "/wp-content")
@@ -213,7 +210,8 @@ def wp_plugin_directory_constants(*args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_cookie_constants(*args_):
+def wp_cookie_constants(*_args_):
+    
     
     #// 
     #// Used to guarantee unique hash cookies.
@@ -221,9 +219,9 @@ def wp_cookie_constants(*args_):
     #// @since 1.5.0
     #//
     if (not php_defined("COOKIEHASH")):
-        siteurl = get_site_option("siteurl")
-        if siteurl:
-            php_define("COOKIEHASH", php_md5(siteurl))
+        siteurl_ = get_site_option("siteurl")
+        if siteurl_:
+            php_define("COOKIEHASH", php_md5(siteurl_))
         else:
             php_define("COOKIEHASH", "")
         # end if
@@ -306,7 +304,8 @@ def wp_cookie_constants(*args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_ssl_constants(*args_):
+def wp_ssl_constants(*_args_):
+    
     
     #// 
     #// @since 2.6.0
@@ -332,7 +331,8 @@ def wp_ssl_constants(*args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_functionality_constants(*args_):
+def wp_functionality_constants(*_args_):
+    
     
     #// 
     #// @since 2.5.0
@@ -361,7 +361,8 @@ def wp_functionality_constants(*args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_templating_constants(*args_):
+def wp_templating_constants(*_args_):
+    
     
     #// 
     #// Filesystem path to the current active template directory.

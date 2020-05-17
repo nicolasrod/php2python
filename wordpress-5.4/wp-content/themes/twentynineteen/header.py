@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -39,13 +34,13 @@ if is_singular() and twentynineteen_can_show_post_thumbnail():
     php_print("             <div class=\"site-featured-image\">\n                   ")
     twentynineteen_post_thumbnail()
     the_post()
-    discussion = twentynineteen_get_discussion_data() if (not is_page()) and twentynineteen_can_show_post_thumbnail() else None
-    classes = "entry-header"
-    if (not php_empty(lambda : discussion)) and absint(discussion.responses) > 0:
-        classes = "entry-header has-discussion"
+    discussion_ = twentynineteen_get_discussion_data() if (not is_page()) and twentynineteen_can_show_post_thumbnail() else None
+    classes_ = "entry-header"
+    if (not php_empty(lambda : discussion_)) and absint(discussion_.responses) > 0:
+        classes_ = "entry-header has-discussion"
     # end if
     php_print("                 <div class=\"")
-    php_print(classes)
+    php_print(classes_)
     php_print("\">\n                        ")
     get_template_part("template-parts/header/entry", "header")
     php_print("                 </div><!-- .entry-header -->\n                  ")

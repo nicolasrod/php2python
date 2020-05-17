@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,8 +29,9 @@ class WP_Widget_Recent_Comments(WP_Widget):
     #//
     def __init__(self):
         
-        widget_ops = Array({"classname": "widget_recent_comments", "description": __("Your site&#8217;s most recent comments."), "customize_selective_refresh": True})
-        super().__init__("recent-comments", __("Recent Comments"), widget_ops)
+        
+        widget_ops_ = Array({"classname": "widget_recent_comments", "description": __("Your site&#8217;s most recent comments."), "customize_selective_refresh": True})
+        super().__init__("recent-comments", __("Recent Comments"), widget_ops_)
         self.alt_option_name = "widget_recent_comments"
         if is_active_widget(False, False, self.id_base) or is_customize_preview():
             add_action("wp_head", Array(self, "recent_comments_style"))
@@ -48,6 +44,7 @@ class WP_Widget_Recent_Comments(WP_Widget):
     #//
     def recent_comments_style(self):
         
+        
         #// 
         #// Filters the Recent Comments default widget styles.
         #// 
@@ -59,8 +56,8 @@ class WP_Widget_Recent_Comments(WP_Widget):
         if (not current_theme_supports("widgets")) or (not apply_filters("show_recent_comments_widget_style", True, self.id_base)):
             return
         # end if
-        type_attr = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
-        printf("<style%s>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>", type_attr)
+        type_attr_ = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
+        printf("<style%s>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>", type_attr_)
     # end def recent_comments_style
     #// 
     #// Outputs the content for the current Recent Comments widget instance.
@@ -75,41 +72,42 @@ class WP_Widget_Recent_Comments(WP_Widget):
     #// 'before_widget', and 'after_widget'.
     #// @param array $instance Settings for the current Recent Comments widget instance.
     #//
-    def widget(self, args=None, instance=None):
+    def widget(self, args_=None, instance_=None):
         
-        widget.first_instance = True
-        if (not (php_isset(lambda : args["widget_id"]))):
-            args["widget_id"] = self.id
+        
+        first_instance_ = True
+        if (not (php_isset(lambda : args_["widget_id"]))):
+            args_["widget_id"] = self.id
         # end if
-        output = ""
-        title = instance["title"] if (not php_empty(lambda : instance["title"])) else __("Recent Comments")
+        output_ = ""
+        title_ = instance_["title"] if (not php_empty(lambda : instance_["title"])) else __("Recent Comments")
         #// This filter is documented in wp-includes/widgets/class-wp-widget-pages.php
-        title = apply_filters("widget_title", title, instance, self.id_base)
-        number = absint(instance["number"]) if (not php_empty(lambda : instance["number"])) else 5
-        if (not number):
-            number = 5
+        title_ = apply_filters("widget_title", title_, instance_, self.id_base)
+        number_ = absint(instance_["number"]) if (not php_empty(lambda : instance_["number"])) else 5
+        if (not number_):
+            number_ = 5
         # end if
-        comments = get_comments(apply_filters("widget_comments_args", Array({"number": number, "status": "approve", "post_status": "publish"}), instance))
-        output += args["before_widget"]
-        if title:
-            output += args["before_title"] + title + args["after_title"]
+        comments_ = get_comments(apply_filters("widget_comments_args", Array({"number": number_, "status": "approve", "post_status": "publish"}), instance_))
+        output_ += args_["before_widget"]
+        if title_:
+            output_ += args_["before_title"] + title_ + args_["after_title"]
         # end if
-        recent_comments_id = "recentcomments" if widget.first_instance else str("recentcomments-") + str(self.number)
-        widget.first_instance = False
-        output += "<ul id=\"" + esc_attr(recent_comments_id) + "\">"
-        if php_is_array(comments) and comments:
+        recent_comments_id_ = "recentcomments" if first_instance_ else str("recentcomments-") + str(self.number)
+        first_instance_ = False
+        output_ += "<ul id=\"" + esc_attr(recent_comments_id_) + "\">"
+        if php_is_array(comments_) and comments_:
             #// Prime cache for associated posts. (Prime post term cache if we need it for permalinks.)
-            post_ids = array_unique(wp_list_pluck(comments, "comment_post_ID"))
-            _prime_post_caches(post_ids, php_strpos(get_option("permalink_structure"), "%category%"), False)
-            for comment in comments:
-                output += "<li class=\"recentcomments\">"
-                output += php_sprintf(_x("%1$s on %2$s", "widgets"), "<span class=\"comment-author-link\">" + get_comment_author_link(comment) + "</span>", "<a href=\"" + esc_url(get_comment_link(comment)) + "\">" + get_the_title(comment.comment_post_ID) + "</a>")
-                output += "</li>"
+            post_ids_ = array_unique(wp_list_pluck(comments_, "comment_post_ID"))
+            _prime_post_caches(post_ids_, php_strpos(get_option("permalink_structure"), "%category%"), False)
+            for comment_ in comments_:
+                output_ += "<li class=\"recentcomments\">"
+                output_ += php_sprintf(_x("%1$s on %2$s", "widgets"), "<span class=\"comment-author-link\">" + get_comment_author_link(comment_) + "</span>", "<a href=\"" + esc_url(get_comment_link(comment_)) + "\">" + get_the_title(comment_.comment_post_ID) + "</a>")
+                output_ += "</li>"
             # end for
         # end if
-        output += "</ul>"
-        output += args["after_widget"]
-        php_print(output)
+        output_ += "</ul>"
+        output_ += args_["after_widget"]
+        php_print(output_)
     # end def widget
     #// 
     #// Handles updating settings for the current Recent Comments widget instance.
@@ -121,12 +119,13 @@ class WP_Widget_Recent_Comments(WP_Widget):
     #// @param array $old_instance Old settings for this instance.
     #// @return array Updated settings to save.
     #//
-    def update(self, new_instance=None, old_instance=None):
+    def update(self, new_instance_=None, old_instance_=None):
         
-        instance = old_instance
-        instance["title"] = sanitize_text_field(new_instance["title"])
-        instance["number"] = absint(new_instance["number"])
-        return instance
+        
+        instance_ = old_instance_
+        instance_["title"] = sanitize_text_field(new_instance_["title"])
+        instance_["number"] = absint(new_instance_["number"])
+        return instance_
     # end def update
     #// 
     #// Outputs the settings form for the Recent Comments widget.
@@ -135,10 +134,11 @@ class WP_Widget_Recent_Comments(WP_Widget):
     #// 
     #// @param array $instance Current settings.
     #//
-    def form(self, instance=None):
+    def form(self, instance_=None):
         
-        title = instance["title"] if (php_isset(lambda : instance["title"])) else ""
-        number = absint(instance["number"]) if (php_isset(lambda : instance["number"])) else 5
+        
+        title_ = instance_["title"] if (php_isset(lambda : instance_["title"])) else ""
+        number_ = absint(instance_["number"]) if (php_isset(lambda : instance_["number"])) else 5
         php_print("     <p><label for=\"")
         php_print(self.get_field_id("title"))
         php_print("\">")
@@ -148,7 +148,7 @@ class WP_Widget_Recent_Comments(WP_Widget):
         php_print("\" name=\"")
         php_print(self.get_field_name("title"))
         php_print("\" type=\"text\" value=\"")
-        php_print(esc_attr(title))
+        php_print(esc_attr(title_))
         php_print("\" /></p>\n\n        <p><label for=\"")
         php_print(self.get_field_id("number"))
         php_print("\">")
@@ -158,7 +158,7 @@ class WP_Widget_Recent_Comments(WP_Widget):
         php_print("\" name=\"")
         php_print(self.get_field_name("number"))
         php_print("\" type=\"number\" step=\"1\" min=\"1\" value=\"")
-        php_print(number)
+        php_print(number_)
         php_print("\" size=\"3\" /></p>\n       ")
     # end def form
     #// 
@@ -169,6 +169,7 @@ class WP_Widget_Recent_Comments(WP_Widget):
     #// @deprecated 4.4.0 Fragment caching was removed in favor of split queries.
     #//
     def flush_widget_cache(self):
+        
         
         _deprecated_function(__METHOD__, "4.4.0")
     # end def flush_widget_cache

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -39,13 +34,14 @@ class Requests_IDNAEncoder():
     #// @return string Punycode-encoded hostname
     #//
     @classmethod
-    def encode(self, string=None):
+    def encode(self, string_=None):
         
-        parts = php_explode(".", string)
-        for part in parts:
-            part = self.to_ascii(part)
+        
+        parts_ = php_explode(".", string_)
+        for part_ in parts_:
+            part_ = self.to_ascii(part_)
         # end for
-        return php_implode(".", parts)
+        return php_implode(".", parts_)
     # end def encode
     #// 
     #// Convert a UTF-8 string to an ASCII string using Punycode
@@ -59,40 +55,41 @@ class Requests_IDNAEncoder():
     #// @return string ASCII string
     #//
     @classmethod
-    def to_ascii(self, string=None):
+    def to_ascii(self, string_=None):
+        
         
         #// Step 1: Check if the string is already ASCII
-        if self.is_ascii(string):
+        if self.is_ascii(string_):
             #// Skip to step 7
-            if php_strlen(string) < 64:
-                return string
+            if php_strlen(string_) < 64:
+                return string_
             # end if
-            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Provided string is too long", "idna.provided_too_long", string))
+            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Provided string is too long", "idna.provided_too_long", string_))
         # end if
         #// Step 2: nameprep
-        string = self.nameprep(string)
+        string_ = self.nameprep(string_)
         #// Step 3: UseSTD3ASCIIRules is false, continue
         #// Step 4: Check if it's ASCII now
-        if self.is_ascii(string):
+        if self.is_ascii(string_):
             #// Skip to step 7
-            if php_strlen(string) < 64:
-                return string
+            if php_strlen(string_) < 64:
+                return string_
             # end if
-            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Prepared string is too long", "idna.prepared_too_long", string))
+            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Prepared string is too long", "idna.prepared_too_long", string_))
         # end if
         #// Step 5: Check ACE prefix
-        if php_strpos(string, self.ACE_PREFIX) == 0:
-            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Provided string begins with ACE prefix", "idna.provided_is_prefixed", string))
+        if php_strpos(string_, self.ACE_PREFIX) == 0:
+            raise php_new_class("Requests_Exception", lambda : Requests_Exception("Provided string begins with ACE prefix", "idna.provided_is_prefixed", string_))
         # end if
         #// Step 6: Encode with Punycode
-        string = self.punycode_encode(string)
+        string_ = self.punycode_encode(string_)
         #// Step 7: Prepend ACE prefix
-        string = self.ACE_PREFIX + string
+        string_ = self.ACE_PREFIX + string_
         #// Step 8: Check size
-        if php_strlen(string) < 64:
-            return string
+        if php_strlen(string_) < 64:
+            return string_
         # end if
-        raise php_new_class("Requests_Exception", lambda : Requests_Exception("Encoded string is too long", "idna.encoded_too_long", string))
+        raise php_new_class("Requests_Exception", lambda : Requests_Exception("Encoded string is too long", "idna.encoded_too_long", string_))
     # end def to_ascii
     #// 
     #// Check whether a given string contains only ASCII characters
@@ -102,9 +99,10 @@ class Requests_IDNAEncoder():
     #// @param string $string
     #// @return bool Is the string ASCII-only?
     #//
-    def is_ascii(self, string=None):
+    def is_ascii(self, string_=None):
         
-        return php_preg_match("/(?:[^\\x00-\\x7F])/", string) != 1
+        
+        return php_preg_match("/(?:[^\\x00-\\x7F])/", string_) != 1
     # end def is_ascii
     #// 
     #// Prepare a string for use as an IDNA name
@@ -113,9 +111,10 @@ class Requests_IDNAEncoder():
     #// @param string $string
     #// @return string Prepared string
     #//
-    def nameprep(self, string=None):
+    def nameprep(self, string_=None):
         
-        return string
+        
+        return string_
     # end def nameprep
     #// 
     #// Convert a UTF-8 string to a UCS-4 codepoint array
@@ -126,63 +125,64 @@ class Requests_IDNAEncoder():
     #// @param string $input
     #// @return array Unicode code points
     #//
-    def utf8_to_codepoints(self, input=None):
+    def utf8_to_codepoints(self, input_=None):
         
-        codepoints = Array()
+        
+        codepoints_ = Array()
         #// Get number of bytes
-        strlen = php_strlen(input)
-        position = 0
-        while position < strlen:
+        strlen_ = php_strlen(input_)
+        position_ = 0
+        while position_ < strlen_:
             
-            value = php_ord(input[position])
+            value_ = php_ord(input_[position_])
             #// One byte sequence:
-            if (1 << (value).bit_length()) - 1 - value & 128 == 128:
-                character = value
-                length = 1
-                remaining = 0
+            if (1 << (value_).bit_length()) - 1 - value_ & 128 == 128:
+                character_ = value_
+                length_ = 1
+                remaining_ = 0
                 #// Two byte sequence:
-            elif value & 224 == 192:
-                character = value & 31 << 6
-                length = 2
-                remaining = 1
+            elif value_ & 224 == 192:
+                character_ = value_ & 31 << 6
+                length_ = 2
+                remaining_ = 1
                 #// Three byte sequence:
-            elif value & 240 == 224:
-                character = value & 15 << 12
-                length = 3
-                remaining = 2
+            elif value_ & 240 == 224:
+                character_ = value_ & 15 << 12
+                length_ = 3
+                remaining_ = 2
                 #// Four byte sequence:
-            elif value & 248 == 240:
-                character = value & 7 << 18
-                length = 4
-                remaining = 3
+            elif value_ & 248 == 240:
+                character_ = value_ & 7 << 18
+                length_ = 4
+                remaining_ = 3
             else:
-                raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", value))
+                raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", value_))
             # end if
-            if remaining > 0:
-                if position + length > strlen:
-                    raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", character))
+            if remaining_ > 0:
+                if position_ + length_ > strlen_:
+                    raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", character_))
                 # end if
-                position += 1
-                while remaining > 0:
+                position_ += 1
+                while remaining_ > 0:
                     
-                    value = php_ord(input[position])
+                    value_ = php_ord(input_[position_])
                     #// If it is invalid, count the sequence as invalid and reprocess the current byte:
-                    if value & 192 != 128:
-                        raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", character))
+                    if value_ & 192 != 128:
+                        raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", character_))
                     # end if
-                    remaining -= 1
-                    character |= value & 63 << remaining * 6
-                    position += 1
+                    remaining_ -= 1
+                    character_ |= value_ & 63 << remaining_ * 6
+                    position_ += 1
                 # end while
-                position -= 1
+                position_ -= 1
             # end if
-            if length > 1 and character <= 127 or length > 2 and character <= 2047 or length > 3 and character <= 65535 or character & 65534 == 65534 or character >= 64976 and character <= 65007 or character > 55295 and character < 63744 or character < 32 or character > 126 and character < 160 or character > 983037:
-                raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", character))
+            if length_ > 1 and character_ <= 127 or length_ > 2 and character_ <= 2047 or length_ > 3 and character_ <= 65535 or character_ & 65534 == 65534 or character_ >= 64976 and character_ <= 65007 or character_ > 55295 and character_ < 63744 or character_ < 32 or character_ > 126 and character_ < 160 or character_ > 983037:
+                raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid Unicode codepoint", "idna.invalidcodepoint", character_))
             # end if
-            codepoints[-1] = character
-            position += 1
+            codepoints_[-1] = character_
+            position_ += 1
         # end while
-        return codepoints
+        return codepoints_
     # end def utf8_to_codepoints
     #// 
     #// RFC3492-compliant encoder
@@ -194,113 +194,114 @@ class Requests_IDNAEncoder():
     #// @return string Punycode-encoded string
     #//
     @classmethod
-    def punycode_encode(self, input=None):
+    def punycode_encode(self, input_=None):
         
-        output = ""
+        
+        output_ = ""
         #// #       let n = initial_n
-        n = self.BOOTSTRAP_INITIAL_N
+        n_ = self.BOOTSTRAP_INITIAL_N
         #// #       let delta = 0
-        delta = 0
+        delta_ = 0
         #// #       let bias = initial_bias
-        bias = self.BOOTSTRAP_INITIAL_BIAS
+        bias_ = self.BOOTSTRAP_INITIAL_BIAS
         #// #       let h = b = the number of basic code points in the input
-        h = b = 0
+        h_ = b_ = 0
         #// see loop
         #// #       copy them to the output in order
-        codepoints = self.utf8_to_codepoints(input)
-        extended = Array()
-        for char in codepoints:
-            if char < 128:
+        codepoints_ = self.utf8_to_codepoints(input_)
+        extended_ = Array()
+        for char_ in codepoints_:
+            if char_ < 128:
                 #// Character is valid ASCII
                 #// TODO: this should also check if it's valid for a URL
-                output += chr(char)
-                h += 1
+                output_ += chr(char_)
+                h_ += 1
                 #// Check if the character is non-ASCII, but below initial n
                 #// This never occurs for Punycode, so ignore in coverage
                 #// @codeCoverageIgnoreStart
-            elif char < n:
-                raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid character", "idna.character_outside_domain", char))
+            elif char_ < n_:
+                raise php_new_class("Requests_Exception", lambda : Requests_Exception("Invalid character", "idna.character_outside_domain", char_))
             else:
-                extended[char] = True
+                extended_[char_] = True
             # end if
         # end for
-        extended = php_array_keys(extended)
-        sort(extended)
-        b = h
+        extended_ = php_array_keys(extended_)
+        sort(extended_)
+        b_ = h_
         #// #       [copy them] followed by a delimiter if b > 0
-        if php_strlen(output) > 0:
-            output += "-"
+        if php_strlen(output_) > 0:
+            output_ += "-"
         # end if
         #// #       {if the input contains a non-basic code point < n then fail}
         #// #       while h < length(input) do begin
         while True:
             
-            if not (h < php_count(codepoints)):
+            if not (h_ < php_count(codepoints_)):
                 break
             # end if
             #// #           let m = the minimum code point >= n in the input
-            m = php_array_shift(extended)
+            m_ = php_array_shift(extended_)
             #// printf('next code point to insert is %s' . PHP_EOL, dechex($m));
             #// #           let delta = delta + (m - n) * (h + 1), fail on overflow
-            delta += m - n * h + 1
+            delta_ += m_ - n_ * h_ + 1
             #// #           let n = m
-            n = m
+            n_ = m_
             #// #           for each code point c in the input (in order) do begin
-            num = 0
-            while num < php_count(codepoints):
+            num_ = 0
+            while num_ < php_count(codepoints_):
                 
-                c = codepoints[num]
+                c_ = codepoints_[num_]
                 #// #               if c < n then increment delta, fail on overflow
-                if c < n:
-                    delta += 1
+                if c_ < n_:
+                    delta_ += 1
                     #// #               if c == n then begin
-                elif c == n:
+                elif c_ == n_:
                     #// #                   let q = delta
-                    q = delta
+                    q_ = delta_
                     #// #                   for k = base to infinity in steps of base do begin
-                    k = self.BOOTSTRAP_BASE
+                    k_ = self.BOOTSTRAP_BASE
                     while True:
                         
                         #// #                       let t = tmin if k <= bias {+ tmin}, or
                         #// #                               tmax if k >= bias + tmax, or k - bias otherwise
-                        if k <= bias + self.BOOTSTRAP_TMIN:
-                            t = self.BOOTSTRAP_TMIN
-                        elif k >= bias + self.BOOTSTRAP_TMAX:
-                            t = self.BOOTSTRAP_TMAX
+                        if k_ <= bias_ + self.BOOTSTRAP_TMIN:
+                            t_ = self.BOOTSTRAP_TMIN
+                        elif k_ >= bias_ + self.BOOTSTRAP_TMAX:
+                            t_ = self.BOOTSTRAP_TMAX
                         else:
-                            t = k - bias
+                            t_ = k_ - bias_
                         # end if
                         #// #                       if q < t then break
-                        if q < t:
+                        if q_ < t_:
                             break
                         # end if
                         #// #                       output the code point for digit t + ((q - t) mod (base - t))
-                        digit = t + q - t % self.BOOTSTRAP_BASE - t
-                        output += self.digit_to_char(digit)
+                        digit_ = t_ + q_ - t_ % self.BOOTSTRAP_BASE - t_
+                        output_ += self.digit_to_char(digit_)
                         #// #                       let q = (q - t) div (base - t)
-                        q = floor(q - t / self.BOOTSTRAP_BASE - t)
+                        q_ = floor(q_ - t_ / self.BOOTSTRAP_BASE - t_)
                         pass
-                        k += self.BOOTSTRAP_BASE
+                        k_ += self.BOOTSTRAP_BASE
                     # end while
                     #// #                   output the code point for digit q
-                    output += self.digit_to_char(q)
+                    output_ += self.digit_to_char(q_)
                     #// #                   let bias = adapt(delta, h + 1, test h equals b?)
-                    bias = self.adapt(delta, h + 1, h == b)
+                    bias_ = self.adapt(delta_, h_ + 1, h_ == b_)
                     #// #                   let delta = 0
-                    delta = 0
+                    delta_ = 0
                     #// #                   increment h
-                    h += 1
+                    h_ += 1
                     pass
                 # end if
                 pass
-                num += 1
+                num_ += 1
             # end while
             #// #           increment delta and n
-            delta += 1
-            n += 1
+            delta_ += 1
+            n_ += 1
             pass
         # end while
-        return output
+        return output_
     # end def punycode_encode
     #// 
     #// Convert a digit to its respective character
@@ -311,16 +312,17 @@ class Requests_IDNAEncoder():
     #// @param int $digit Digit in the range 0-35
     #// @return string Single character corresponding to digit
     #//
-    def digit_to_char(self, digit=None):
+    def digit_to_char(self, digit_=None):
+        
         
         #// @codeCoverageIgnoreStart
         #// As far as I know, this never happens, but still good to be sure.
-        if digit < 0 or digit > 35:
-            raise php_new_class("Requests_Exception", lambda : Requests_Exception(php_sprintf("Invalid digit %d", digit), "idna.invalid_digit", digit))
+        if digit_ < 0 or digit_ > 35:
+            raise php_new_class("Requests_Exception", lambda : Requests_Exception(php_sprintf("Invalid digit %d", digit_), "idna.invalid_digit", digit_))
         # end if
         #// @codeCoverageIgnoreEnd
-        digits = "abcdefghijklmnopqrstuvwxyz0123456789"
-        return php_substr(digits, digit, 1)
+        digits_ = "abcdefghijklmnopqrstuvwxyz0123456789"
+        return php_substr(digits_, digit_, 1)
     # end def digit_to_char
     #// 
     #// Adapt the bias
@@ -331,33 +333,34 @@ class Requests_IDNAEncoder():
     #// @param bool $firsttime
     #// @return int New bias
     #//
-    def adapt(self, delta=None, numpoints=None, firsttime=None):
+    def adapt(self, delta_=None, numpoints_=None, firsttime_=None):
+        
         
         #// #   function adapt(delta,numpoints,firsttime):
         #// #       if firsttime then let delta = delta div damp
-        if firsttime:
-            delta = floor(delta / self.BOOTSTRAP_DAMP)
+        if firsttime_:
+            delta_ = floor(delta_ / self.BOOTSTRAP_DAMP)
         else:
-            delta = floor(delta / 2)
+            delta_ = floor(delta_ / 2)
         # end if
         #// #       let delta = delta + (delta div numpoints)
-        delta += floor(delta / numpoints)
+        delta_ += floor(delta_ / numpoints_)
         #// #       let k = 0
-        k = 0
+        k_ = 0
         #// #       while delta > ((base - tmin) * tmax) div 2 do begin
-        max = floor(self.BOOTSTRAP_BASE - self.BOOTSTRAP_TMIN * self.BOOTSTRAP_TMAX / 2)
+        max_ = floor(self.BOOTSTRAP_BASE - self.BOOTSTRAP_TMIN * self.BOOTSTRAP_TMAX / 2)
         while True:
             
-            if not (delta > max):
+            if not (delta_ > max_):
                 break
             # end if
             #// #           let delta = delta div (base - tmin)
-            delta = floor(delta / self.BOOTSTRAP_BASE - self.BOOTSTRAP_TMIN)
+            delta_ = floor(delta_ / self.BOOTSTRAP_BASE - self.BOOTSTRAP_TMIN)
             #// #           let k = k + base
-            k += self.BOOTSTRAP_BASE
+            k_ += self.BOOTSTRAP_BASE
             pass
         # end while
         #// #       return k + (((base - tmin + 1) * delta) div (delta + skew))
-        return k + floor(self.BOOTSTRAP_BASE - self.BOOTSTRAP_TMIN + 1 * delta / delta + self.BOOTSTRAP_SKEW)
+        return k_ + floor(self.BOOTSTRAP_BASE - self.BOOTSTRAP_TMIN + 1 * delta_ / delta_ + self.BOOTSTRAP_SKEW)
     # end def adapt
 # end class Requests_IDNAEncoder

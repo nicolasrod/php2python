@@ -1,9 +1,9 @@
 Traceback (most recent call last):
-  File "/Users/nico/repos/php2python/ast2py.py", line 44, in is_valid_code
+  File "/Users/nico/repos/php2python/ast2py.py", line 49, in is_valid_code
     ast.parse(src.replace('\x00', ''))
   File "/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/lib/python3.7/ast.py", line 35, in parse
     return compile(source, filename, mode, PyCF_ONLY_AST)
-  File "<unknown>", line 351
-    if not (position += strspn(string, extra_chars, position) < strlen):
-                      ^
+  File "<unknown>", line 399
+    if not (position_ += strspn(string_, extra_chars_, position_) < strlen_):
+                       ^
 SyntaxError: invalid syntax

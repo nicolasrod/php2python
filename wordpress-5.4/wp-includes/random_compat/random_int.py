@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -49,7 +44,8 @@ if (not php_is_callable("random_int")):
     #// 
     #// @return int
     #//
-    def random_int(min=None, max=None, *args_):
+    def random_int(min_=None, max_=None, *_args_):
+        
         
         #// 
         #// Type and input logic checks
@@ -61,13 +57,13 @@ if (not php_is_callable("random_int")):
         #// through.
         #//
         try: 
-            min = RandomCompat_intval(min)
-        except TypeError as ex:
+            min_ = RandomCompat_intval(min_)
+        except TypeError as ex_:
             raise php_new_class("TypeError", lambda : TypeError("random_int(): $min must be an integer"))
         # end try
         try: 
-            max = RandomCompat_intval(max)
-        except TypeError as ex:
+            max_ = RandomCompat_intval(max_)
+        except TypeError as ex_:
             raise php_new_class("TypeError", lambda : TypeError("random_int(): $max must be an integer"))
         # end try
         #// 
@@ -75,11 +71,11 @@ if (not php_is_callable("random_int")):
         #// let's validate the logic then we can move forward with generating random
         #// integers along a given range.
         #//
-        if min > max:
+        if min_ > max_:
             raise php_new_class("Error", lambda : Error("Minimum value must be less than or equal to the maximum value"))
         # end if
-        if max == min:
-            return php_int(min)
+        if max_ == min_:
+            return php_int(min_)
         # end if
         #// 
         #// Initialize variables to 0
@@ -89,17 +85,17 @@ if (not php_is_callable("random_int")):
         #// $mask => an integer bitmask (for use with the &) operator
         #// so we can minimize the number of discards
         #//
-        attempts = bits
+        attempts_ = bits_
         #// 
         #// At this point, $range is a positive number greater than 0. It might
         #// overflow, however, if $max - $min > PHP_INT_MAX. PHP will cast it to
         #// a float and we will lose some precision.
         #//
-        range = max - min
+        range_ = max_ - min_
         #// 
         #// Test for integer overflow:
         #//
-        if (not php_is_int(range)):
+        if (not php_is_int(range_)):
             #// 
             #// Still safely calculate wider ranges.
             #// Provided by @CodesInChaos, @oittaa
@@ -111,8 +107,8 @@ if (not php_is_callable("random_int")):
             #// @ref https://eval.in/400356 (32-bit)
             #// @ref http://3v4l.org/XX9r5  (64-bit)
             #//
-            bytes = PHP_INT_SIZE
-            mask = (1 << (0).bit_length()) - 1 - 0
+            bytes_ = PHP_INT_SIZE
+            mask_ = (1 << (0).bit_length()) - 1 - 0
         else:
             #// 
             #// $bits is effectively ceil(log($range, 2)) without dealing with
@@ -120,19 +116,19 @@ if (not php_is_callable("random_int")):
             #//
             while True:
                 
-                if not (range > 0):
+                if not (range_ > 0):
                     break
                 # end if
-                if bits % 8 == 0:
-                    bytes += 1
+                if bits_ % 8 == 0:
+                    bytes_ += 1
                 # end if
-                bits += 1
-                range >>= 1
-                mask = mask << 1 | 1
+                bits_ += 1
+                range_ >>= 1
+                mask_ = mask_ << 1 | 1
             # end while
-            valueShift = min
+            valueShift_ = min_
         # end if
-        val = 0
+        val_ = 0
         #// 
         #// Now that we have our parameters set up, let's begin generating
         #// random integers until one falls between $min and $max
@@ -142,13 +138,13 @@ if (not php_is_callable("random_int")):
             #// The rejection probability is at most 0.5, so this corresponds
             #// to a failure probability of 2^-128 for a working RNG
             #//
-            if attempts > 128:
+            if attempts_ > 128:
                 raise php_new_class("Exception", lambda : Exception("random_int: RNG is broken - too many rejections"))
             # end if
             #// 
             #// Let's grab the necessary number of random bytes
             #//
-            randomByteString = random_bytes(bytes)
+            randomByteString_ = random_bytes(bytes_)
             #// 
             #// Let's turn $randomByteString into an integer
             #// 
@@ -159,25 +155,25 @@ if (not php_is_callable("random_int")):
             #// 159 + 27904 + 3276800 + 201326592 =>
             #// 204631455
             #//
-            val &= 0
-            i = 0
-            while i < bytes:
+            val_ &= 0
+            i_ = 0
+            while i_ < bytes_:
                 
-                val |= php_ord(randomByteString[i]) << i * 8
-                i += 1
+                val_ |= php_ord(randomByteString_[i_]) << i_ * 8
+                i_ += 1
             # end while
             #// 
             #// Apply mask
             #//
-            val &= mask
-            val += valueShift
-            attempts += 1
+            val_ &= mask_
+            val_ += valueShift_
+            attempts_ += 1
             pass
             
-            if (not php_is_int(val)) or val > max or val < min:
+            if (not php_is_int(val_)) or val_ > max_ or val_ < min_:
                 break
             # end if
         # end while
-        return php_int(val)
+        return php_int(val_)
     # end def random_int
 # end if

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -37,27 +32,28 @@ class WP_Customize_Header_Image_Setting(WP_Customize_Setting):
     #// 
     #// @param $value
     #//
-    def update(self, value=None):
+    def update(self, value_=None):
         
-        global custom_image_header
-        php_check_if_defined("custom_image_header")
+        
+        global custom_image_header_
+        php_check_if_defined("custom_image_header_")
         #// If _custom_header_background_just_in_time() fails to initialize $custom_image_header when not is_admin().
-        if php_empty(lambda : custom_image_header):
+        if php_empty(lambda : custom_image_header_):
             php_include_file(ABSPATH + "wp-admin/includes/class-custom-image-header.php", once=True)
-            args = get_theme_support("custom-header")
-            admin_head_callback = args[0]["admin-head-callback"] if (php_isset(lambda : args[0]["admin-head-callback"])) else None
-            admin_preview_callback = args[0]["admin-preview-callback"] if (php_isset(lambda : args[0]["admin-preview-callback"])) else None
-            custom_image_header = php_new_class("Custom_Image_Header", lambda : Custom_Image_Header(admin_head_callback, admin_preview_callback))
+            args_ = get_theme_support("custom-header")
+            admin_head_callback_ = args_[0]["admin-head-callback"] if (php_isset(lambda : args_[0]["admin-head-callback"])) else None
+            admin_preview_callback_ = args_[0]["admin-preview-callback"] if (php_isset(lambda : args_[0]["admin-preview-callback"])) else None
+            custom_image_header_ = php_new_class("Custom_Image_Header", lambda : Custom_Image_Header(admin_head_callback_, admin_preview_callback_))
         # end if
         #// If the value doesn't exist (removed or random),
         #// use the header_image value.
-        if (not value):
-            value = self.manager.get_setting("header_image").post_value()
+        if (not value_):
+            value_ = self.manager.get_setting("header_image").post_value()
         # end if
-        if php_is_array(value) and (php_isset(lambda : value["choice"])):
-            custom_image_header.set_header_image(value["choice"])
+        if php_is_array(value_) and (php_isset(lambda : value_["choice"])):
+            custom_image_header_.set_header_image(value_["choice"])
         else:
-            custom_image_header.set_header_image(value)
+            custom_image_header_.set_header_image(value_)
         # end if
     # end def update
 # end class WP_Customize_Header_Image_Setting

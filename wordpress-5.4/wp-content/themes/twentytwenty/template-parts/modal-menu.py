@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -24,22 +19,22 @@ _e("Close Menu", "twentytwenty")
 php_print("</span>\n                    ")
 twentytwenty_the_theme_svg("cross")
 php_print("             </button><!-- .nav-toggle -->\n\n               ")
-mobile_menu_location = ""
+mobile_menu_location_ = ""
 #// If the mobile menu location is not set, use the primary and expanded locations as fallbacks, in that order.
 if has_nav_menu("mobile"):
-    mobile_menu_location = "mobile"
+    mobile_menu_location_ = "mobile"
 elif has_nav_menu("primary"):
-    mobile_menu_location = "primary"
+    mobile_menu_location_ = "primary"
 elif has_nav_menu("expanded"):
-    mobile_menu_location = "expanded"
+    mobile_menu_location_ = "expanded"
 # end if
 if has_nav_menu("expanded"):
-    expanded_nav_classes = ""
-    if "expanded" == mobile_menu_location:
-        expanded_nav_classes += " mobile-menu"
+    expanded_nav_classes_ = ""
+    if "expanded" == mobile_menu_location_:
+        expanded_nav_classes_ += " mobile-menu"
     # end if
     php_print("\n                   <nav class=\"expanded-menu")
-    php_print(esc_attr(expanded_nav_classes))
+    php_print(esc_attr(expanded_nav_classes_))
     php_print("\" aria-label=\"")
     esc_attr_e("Expanded", "twentytwenty")
     php_print("""\" role=\"navigation\">
@@ -52,14 +47,14 @@ if has_nav_menu("expanded"):
     </nav>
     """)
 # end if
-if "expanded" != mobile_menu_location:
+if "expanded" != mobile_menu_location_:
     php_print("\n                   <nav class=\"mobile-menu\" aria-label=\"")
     esc_attr_e("Mobile", "twentytwenty")
     php_print("""\" role=\"navigation\">
     <ul class=\"modal-menu reset-list-style\">
     """)
-    if mobile_menu_location:
-        wp_nav_menu(Array({"container": "", "items_wrap": "%3$s", "show_toggles": True, "theme_location": mobile_menu_location}))
+    if mobile_menu_location_:
+        wp_nav_menu(Array({"container": "", "items_wrap": "%3$s", "show_toggles": True, "theme_location": mobile_menu_location_}))
     else:
         wp_list_pages(Array({"match_menu_classes": True, "show_toggles": True, "title_li": False, "walker": php_new_class("TwentyTwenty_Walker_Page", lambda : TwentyTwenty_Walker_Page())}))
     # end if

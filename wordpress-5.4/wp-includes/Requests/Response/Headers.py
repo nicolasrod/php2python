@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,13 +30,14 @@ class Requests_Response_Headers(Requests_Utility_CaseInsensitiveDictionary):
     #// @param string $key
     #// @return string Header value
     #//
-    def offsetget(self, key=None):
+    def offsetget(self, key_=None):
         
-        key = php_strtolower(key)
-        if (not (php_isset(lambda : self.data[key]))):
+        
+        key_ = php_strtolower(key_)
+        if (not (php_isset(lambda : self.data[key_]))):
             return None
         # end if
-        return self.flatten(self.data[key])
+        return self.flatten(self.data[key_])
     # end def offsetget
     #// 
     #// Set the given item
@@ -51,16 +47,17 @@ class Requests_Response_Headers(Requests_Utility_CaseInsensitiveDictionary):
     #// @param string $key Item name
     #// @param string $value Item value
     #//
-    def offsetset(self, key=None, value=None):
+    def offsetset(self, key_=None, value_=None):
         
-        if key == None:
+        
+        if key_ == None:
             raise php_new_class("Requests_Exception", lambda : Requests_Exception("Object is a dictionary, not a list", "invalidset"))
         # end if
-        key = php_strtolower(key)
-        if (not (php_isset(lambda : self.data[key]))):
-            self.data[key] = Array()
+        key_ = php_strtolower(key_)
+        if (not (php_isset(lambda : self.data[key_]))):
+            self.data[key_] = Array()
         # end if
-        self.data[key][-1] = value
+        self.data[key_][-1] = value_
     # end def offsetset
     #// 
     #// Get all values for a given header
@@ -68,13 +65,14 @@ class Requests_Response_Headers(Requests_Utility_CaseInsensitiveDictionary):
     #// @param string $key
     #// @return array Header values
     #//
-    def getvalues(self, key=None):
+    def getvalues(self, key_=None):
         
-        key = php_strtolower(key)
-        if (not (php_isset(lambda : self.data[key]))):
+        
+        key_ = php_strtolower(key_)
+        if (not (php_isset(lambda : self.data[key_]))):
             return None
         # end if
-        return self.data[key]
+        return self.data[key_]
     # end def getvalues
     #// 
     #// Flattens a value into a string
@@ -85,12 +83,13 @@ class Requests_Response_Headers(Requests_Utility_CaseInsensitiveDictionary):
     #// @param string|array $value Value to flatten
     #// @return string Flattened value
     #//
-    def flatten(self, value=None):
+    def flatten(self, value_=None):
         
-        if php_is_array(value):
-            value = php_implode(",", value)
+        
+        if php_is_array(value_):
+            value_ = php_implode(",", value_)
         # end if
-        return value
+        return value_
     # end def flatten
     #// 
     #// Get an iterator for the data
@@ -99,6 +98,7 @@ class Requests_Response_Headers(Requests_Utility_CaseInsensitiveDictionary):
     #// @return ArrayIterator
     #//
     def getiterator(self):
+        
         
         return php_new_class("Requests_Utility_FilteredIterator", lambda : Requests_Utility_FilteredIterator(self.data, Array(self, "flatten")))
     # end def getiterator

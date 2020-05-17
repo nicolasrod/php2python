@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,21 +21,22 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param int|object|null $post Post ID or post object. Optional, default is the current post from the loop.
 #// @return string|false The format if successful. False otherwise.
 #//
-def get_post_format(post=None, *args_):
+def get_post_format(post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    if (not post_type_supports(post.post_type, "post-formats")):
+    if (not post_type_supports(post_.post_type, "post-formats")):
         return False
     # end if
-    _format = get_the_terms(post.ID, "post_format")
-    if php_empty(lambda : _format):
+    _format_ = get_the_terms(post_.ID, "post_format")
+    if php_empty(lambda : _format_):
         return False
     # end if
-    format = reset(_format)
-    return php_str_replace("post-format-", "", format.slug)
+    format_ = reset(_format_)
+    return php_str_replace("post-format-", "", format_.slug)
 # end def get_post_format
 #// 
 #// Check if a post has any of the given formats, or any format.
@@ -51,15 +47,18 @@ def get_post_format(post=None, *args_):
 #// @param WP_Post|int|null $post   Optional. The post to check. If not supplied, defaults to the current post if used in the loop.
 #// @return bool True if the post has any of the given formats (or any format, if no format specified), false otherwise.
 #//
-def has_post_format(format=Array(), post=None, *args_):
+def has_post_format(format_=None, post_=None, *_args_):
+    if format_ is None:
+        format_ = Array()
+    # end if
     
-    prefixed = Array()
-    if format:
-        for single in format:
-            prefixed[-1] = "post-format-" + sanitize_key(single)
+    prefixed_ = Array()
+    if format_:
+        for single_ in format_:
+            prefixed_[-1] = "post-format-" + sanitize_key(single_)
         # end for
     # end if
-    return has_term(prefixed, "post_format", post)
+    return has_term(prefixed_, "post_format", post_)
 # end def has_post_format
 #// 
 #// Assign a format to a post
@@ -70,21 +69,22 @@ def has_post_format(format=Array(), post=None, *args_):
 #// @param string     $format A format to assign. Use an empty string or array to remove all formats from the post.
 #// @return array|WP_Error|false WP_Error on error. Array of affected term IDs on success.
 #//
-def set_post_format(post=None, format=None, *args_):
+def set_post_format(post_=None, format_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_post", __("Invalid post.")))
     # end if
-    if (not php_empty(lambda : format)):
-        format = sanitize_key(format)
-        if "standard" == format or (not php_in_array(format, get_post_format_slugs())):
-            format = ""
+    if (not php_empty(lambda : format_)):
+        format_ = sanitize_key(format_)
+        if "standard" == format_ or (not php_in_array(format_, get_post_format_slugs())):
+            format_ = ""
         else:
-            format = "post-format-" + format
+            format_ = "post-format-" + format_
         # end if
     # end if
-    return wp_set_post_terms(post.ID, format, "post_format")
+    return wp_set_post_terms(post_.ID, format_, "post_format")
 # end def set_post_format
 #// 
 #// Returns an array of post format slugs to their translated and pretty display versions
@@ -93,10 +93,11 @@ def set_post_format(post=None, format=None, *args_):
 #// 
 #// @return string[] Array of post format labels keyed by format slug.
 #//
-def get_post_format_strings(*args_):
+def get_post_format_strings(*_args_):
     
-    strings = Array({"standard": _x("Standard", "Post format"), "aside": _x("Aside", "Post format"), "chat": _x("Chat", "Post format"), "gallery": _x("Gallery", "Post format"), "link": _x("Link", "Post format"), "image": _x("Image", "Post format"), "quote": _x("Quote", "Post format"), "status": _x("Status", "Post format"), "video": _x("Video", "Post format"), "audio": _x("Audio", "Post format")})
-    return strings
+    
+    strings_ = Array({"standard": _x("Standard", "Post format"), "aside": _x("Aside", "Post format"), "chat": _x("Chat", "Post format"), "gallery": _x("Gallery", "Post format"), "link": _x("Link", "Post format"), "image": _x("Image", "Post format"), "quote": _x("Quote", "Post format"), "status": _x("Status", "Post format"), "video": _x("Video", "Post format"), "audio": _x("Audio", "Post format")})
+    return strings_
 # end def get_post_format_strings
 #// 
 #// Retrieves the array of post format slugs.
@@ -105,10 +106,11 @@ def get_post_format_strings(*args_):
 #// 
 #// @return string[] The array of post format slugs as both keys and values.
 #//
-def get_post_format_slugs(*args_):
+def get_post_format_slugs(*_args_):
     
-    slugs = php_array_keys(get_post_format_strings())
-    return php_array_combine(slugs, slugs)
+    
+    slugs_ = php_array_keys(get_post_format_strings())
+    return php_array_combine(slugs_, slugs_)
 # end def get_post_format_slugs
 #// 
 #// Returns a pretty, translated version of a post format slug
@@ -118,13 +120,14 @@ def get_post_format_slugs(*args_):
 #// @param string $slug A post format slug.
 #// @return string The translated post format name.
 #//
-def get_post_format_string(slug=None, *args_):
+def get_post_format_string(slug_=None, *_args_):
     
-    strings = get_post_format_strings()
-    if (not slug):
-        return strings["standard"]
+    
+    strings_ = get_post_format_strings()
+    if (not slug_):
+        return strings_["standard"]
     else:
-        return strings[slug] if (php_isset(lambda : strings[slug])) else ""
+        return strings_[slug_] if (php_isset(lambda : strings_[slug_])) else ""
     # end if
 # end def get_post_format_string
 #// 
@@ -135,13 +138,14 @@ def get_post_format_string(slug=None, *args_):
 #// @param string $format The post format slug.
 #// @return string|WP_Error|false The post format term link.
 #//
-def get_post_format_link(format=None, *args_):
+def get_post_format_link(format_=None, *_args_):
     
-    term = get_term_by("slug", "post-format-" + format, "post_format")
-    if (not term) or is_wp_error(term):
+    
+    term_ = get_term_by("slug", "post-format-" + format_, "post_format")
+    if (not term_) or is_wp_error(term_):
         return False
     # end if
-    return get_term_link(term)
+    return get_term_link(term_)
 # end def get_post_format_link
 #// 
 #// Filters the request to allow for the format prefix.
@@ -152,20 +156,21 @@ def get_post_format_link(format=None, *args_):
 #// @param array $qvs
 #// @return array
 #//
-def _post_format_request(qvs=None, *args_):
+def _post_format_request(qvs_=None, *_args_):
     
-    if (not (php_isset(lambda : qvs["post_format"]))):
-        return qvs
+    
+    if (not (php_isset(lambda : qvs_["post_format"]))):
+        return qvs_
     # end if
-    slugs = get_post_format_slugs()
-    if (php_isset(lambda : slugs[qvs["post_format"]])):
-        qvs["post_format"] = "post-format-" + slugs[qvs["post_format"]]
+    slugs_ = get_post_format_slugs()
+    if (php_isset(lambda : slugs_[qvs_["post_format"]])):
+        qvs_["post_format"] = "post-format-" + slugs_[qvs_["post_format"]]
     # end if
-    tax = get_taxonomy("post_format")
+    tax_ = get_taxonomy("post_format")
     if (not is_admin()):
-        qvs["post_type"] = tax.object_type
+        qvs_["post_type"] = tax_.object_type
     # end if
-    return qvs
+    return qvs_
 # end def _post_format_request
 #// 
 #// Filters the post format term link to remove the format prefix.
@@ -180,18 +185,19 @@ def _post_format_request(qvs=None, *args_):
 #// @param string $taxonomy
 #// @return string
 #//
-def _post_format_link(link=None, term=None, taxonomy=None, *args_):
+def _post_format_link(link_=None, term_=None, taxonomy_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if "post_format" != taxonomy:
-        return link
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if "post_format" != taxonomy_:
+        return link_
     # end if
-    if wp_rewrite.get_extra_permastruct(taxonomy):
-        return php_str_replace(str("/") + str(term.slug), "/" + php_str_replace("post-format-", "", term.slug), link)
+    if wp_rewrite_.get_extra_permastruct(taxonomy_):
+        return php_str_replace(str("/") + str(term_.slug), "/" + php_str_replace("post-format-", "", term_.slug), link_)
     else:
-        link = remove_query_arg("post_format", link)
-        return add_query_arg("post_format", php_str_replace("post-format-", "", term.slug), link)
+        link_ = remove_query_arg("post_format", link_)
+        return add_query_arg("post_format", php_str_replace("post-format-", "", term_.slug), link_)
     # end if
 # end def _post_format_link
 #// 
@@ -203,12 +209,13 @@ def _post_format_link(link=None, term=None, taxonomy=None, *args_):
 #// @param object $term
 #// @return object
 #//
-def _post_format_get_term(term=None, *args_):
+def _post_format_get_term(term_=None, *_args_):
     
-    if (php_isset(lambda : term.slug)):
-        term.name = get_post_format_string(php_str_replace("post-format-", "", term.slug))
+    
+    if (php_isset(lambda : term_.slug)):
+        term_.name = get_post_format_string(php_str_replace("post-format-", "", term_.slug))
     # end if
-    return term
+    return term_
 # end def _post_format_get_term
 #// 
 #// Remove the post format prefix from the name property of the term objects created by get_terms().
@@ -221,22 +228,23 @@ def _post_format_get_term(term=None, *args_):
 #// @param array        $args
 #// @return array
 #//
-def _post_format_get_terms(terms=None, taxonomies=None, args=None, *args_):
+def _post_format_get_terms(terms_=None, taxonomies_=None, args_=None, *_args_):
     
-    if php_in_array("post_format", taxonomies):
-        if (php_isset(lambda : args["fields"])) and "names" == args["fields"]:
-            for order,name in terms:
-                terms[order] = get_post_format_string(php_str_replace("post-format-", "", name))
+    
+    if php_in_array("post_format", taxonomies_):
+        if (php_isset(lambda : args_["fields"])) and "names" == args_["fields"]:
+            for order_,name_ in terms_:
+                terms_[order_] = get_post_format_string(php_str_replace("post-format-", "", name_))
             # end for
         else:
-            for order,term in terms:
-                if (php_isset(lambda : term.taxonomy)) and "post_format" == term.taxonomy:
-                    terms[order].name = get_post_format_string(php_str_replace("post-format-", "", term.slug))
+            for order_,term_ in terms_:
+                if (php_isset(lambda : term_.taxonomy)) and "post_format" == term_.taxonomy:
+                    terms_[order_].name = get_post_format_string(php_str_replace("post-format-", "", term_.slug))
                 # end if
             # end for
         # end if
     # end if
-    return terms
+    return terms_
 # end def _post_format_get_terms
 #// 
 #// Remove the post format prefix from the name property of the term objects created by wp_get_object_terms().
@@ -247,12 +255,13 @@ def _post_format_get_terms(terms=None, taxonomies=None, args=None, *args_):
 #// @param array $terms
 #// @return array
 #//
-def _post_format_wp_get_object_terms(terms=None, *args_):
+def _post_format_wp_get_object_terms(terms_=None, *_args_):
     
-    for order,term in terms:
-        if (php_isset(lambda : term.taxonomy)) and "post_format" == term.taxonomy:
-            terms[order].name = get_post_format_string(php_str_replace("post-format-", "", term.slug))
+    
+    for order_,term_ in terms_:
+        if (php_isset(lambda : term_.taxonomy)) and "post_format" == term_.taxonomy:
+            terms_[order_].name = get_post_format_string(php_str_replace("post-format-", "", term_.slug))
         # end if
     # end for
-    return terms
+    return terms_
 # end def _post_format_wp_get_object_terms

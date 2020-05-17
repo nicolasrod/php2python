@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,7 +20,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @since 0.71
 #//
-def the_ID(*args_):
+def the_ID(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
     php_print(get_the_ID())
@@ -37,11 +33,12 @@ def the_ID(*args_):
 #// 
 #// @return int|false The ID of the current item in the WordPress Loop. False if $post is not set.
 #//
-def get_the_ID(*args_):
+def get_the_ID(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    post = get_post()
-    return post.ID if (not php_empty(lambda : post)) else False
+    post_ = get_post()
+    return post_.ID if (not php_empty(lambda : post_)) else False
 # end def get_the_ID
 #// 
 #// Display or retrieve the current post title with optional markup.
@@ -53,17 +50,20 @@ def get_the_ID(*args_):
 #// @param bool   $echo   Optional. Whether to echo or return the title. Default true for echo.
 #// @return void|string Void if `$echo` argument is true, current post title if `$echo` is false.
 #//
-def the_title(before="", after="", echo=True, *args_):
+def the_title(before_="", after_="", echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    title = get_the_title()
-    if php_strlen(title) == 0:
+    title_ = get_the_title()
+    if php_strlen(title_) == 0:
         return
     # end if
-    title = before + title + after
-    if echo:
-        php_print(title)
+    title_ = before_ + title_ + after_
+    if echo_:
+        php_print(title_)
     else:
-        return title
+        return title_
     # end if
 # end def the_title
 #// 
@@ -88,20 +88,21 @@ def the_title(before="", after="", echo=True, *args_):
 #// }
 #// @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
 #//
-def the_title_attribute(args="", *args_):
+def the_title_attribute(args_="", *_args_):
     
-    defaults = Array({"before": "", "after": "", "echo": True, "post": get_post()})
-    parsed_args = wp_parse_args(args, defaults)
-    title = get_the_title(parsed_args["post"])
-    if php_strlen(title) == 0:
+    
+    defaults_ = Array({"before": "", "after": "", "echo": True, "post": get_post()})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    title_ = get_the_title(parsed_args_["post"])
+    if php_strlen(title_) == 0:
         return
     # end if
-    title = parsed_args["before"] + title + parsed_args["after"]
-    title = esc_attr(strip_tags(title))
-    if parsed_args["echo"]:
-        php_print(title)
+    title_ = parsed_args_["before"] + title_ + parsed_args_["after"]
+    title_ = esc_attr(strip_tags(title_))
+    if parsed_args_["echo"]:
+        php_print(title_)
     else:
-        return title
+        return title_
     # end if
 # end def the_title_attribute
 #// 
@@ -116,15 +117,16 @@ def the_title_attribute(args="", *args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
 #// @return string
 #//
-def get_the_title(post=0, *args_):
+def get_the_title(post_=0, *_args_):
     
-    post = get_post(post)
-    title = post.post_title if (php_isset(lambda : post.post_title)) else ""
-    id = post.ID if (php_isset(lambda : post.ID)) else 0
+    
+    post_ = get_post(post_)
+    title_ = post_.post_title if (php_isset(lambda : post_.post_title)) else ""
+    id_ = post_.ID if (php_isset(lambda : post_.ID)) else 0
     if (not is_admin()):
-        if (not php_empty(lambda : post.post_password)):
+        if (not php_empty(lambda : post_.post_password)):
             #// translators: %s: Protected post title.
-            prepend = __("Protected: %s")
+            prepend_ = __("Protected: %s")
             #// 
             #// Filters the text prepended to the post title for protected posts.
             #// 
@@ -136,11 +138,11 @@ def get_the_title(post=0, *args_):
             #// Default 'Protected: %s'.
             #// @param WP_Post $post    Current post object.
             #//
-            protected_title_format = apply_filters("protected_title_format", prepend, post)
-            title = php_sprintf(protected_title_format, title)
-        elif (php_isset(lambda : post.post_status)) and "private" == post.post_status:
+            protected_title_format_ = apply_filters("protected_title_format", prepend_, post_)
+            title_ = php_sprintf(protected_title_format_, title_)
+        elif (php_isset(lambda : post_.post_status)) and "private" == post_.post_status:
             #// translators: %s: Private post title.
-            prepend = __("Private: %s")
+            prepend_ = __("Private: %s")
             #// 
             #// Filters the text prepended to the post title of private posts.
             #// 
@@ -152,8 +154,8 @@ def get_the_title(post=0, *args_):
             #// Default 'Private: %s'.
             #// @param WP_Post $post    Current post object.
             #//
-            private_title_format = apply_filters("private_title_format", prepend, post)
-            title = php_sprintf(private_title_format, title)
+            private_title_format_ = apply_filters("private_title_format", prepend_, post_)
+            title_ = php_sprintf(private_title_format_, title_)
         # end if
     # end if
     #// 
@@ -164,7 +166,7 @@ def get_the_title(post=0, *args_):
     #// @param string $title The post title.
     #// @param int    $id    The post ID.
     #//
-    return apply_filters("the_title", title, id)
+    return apply_filters("the_title", title_, id_)
 # end def get_the_title
 #// 
 #// Display the Post Global Unique Identifier (guid).
@@ -179,11 +181,12 @@ def get_the_title(post=0, *args_):
 #// 
 #// @param int|WP_Post $post Optional. Post ID or post object. Default is global $post.
 #//
-def the_guid(post=0, *args_):
+def the_guid(post_=0, *_args_):
     
-    post = get_post(post)
-    guid = get_the_guid(post) if (php_isset(lambda : post.guid)) else ""
-    id = post.ID if (php_isset(lambda : post.ID)) else 0
+    
+    post_ = get_post(post_)
+    guid_ = get_the_guid(post_) if (php_isset(lambda : post_.guid)) else ""
+    id_ = post_.ID if (php_isset(lambda : post_.ID)) else 0
     #// 
     #// Filters the escaped Global Unique Identifier (guid) of the post.
     #// 
@@ -194,7 +197,7 @@ def the_guid(post=0, *args_):
     #// @param string $guid Escaped Global Unique Identifier (guid) of the post.
     #// @param int    $id   The post ID.
     #//
-    php_print(apply_filters("the_guid", guid, id))
+    php_print(apply_filters("the_guid", guid_, id_))
 # end def the_guid
 #// 
 #// Retrieve the Post Global Unique Identifier (guid).
@@ -208,11 +211,12 @@ def the_guid(post=0, *args_):
 #// @param int|WP_Post $post Optional. Post ID or post object. Default is global $post.
 #// @return string
 #//
-def get_the_guid(post=0, *args_):
+def get_the_guid(post_=0, *_args_):
     
-    post = get_post(post)
-    guid = post.guid if (php_isset(lambda : post.guid)) else ""
-    id = post.ID if (php_isset(lambda : post.ID)) else 0
+    
+    post_ = get_post(post_)
+    guid_ = post_.guid if (php_isset(lambda : post_.guid)) else ""
+    id_ = post_.ID if (php_isset(lambda : post_.ID)) else 0
     #// 
     #// Filters the Global Unique Identifier (guid) of the post.
     #// 
@@ -221,7 +225,7 @@ def get_the_guid(post=0, *args_):
     #// @param string $guid Global Unique Identifier (guid) of the post.
     #// @param int    $id   The post ID.
     #//
-    return apply_filters("get_the_guid", guid, id)
+    return apply_filters("get_the_guid", guid_, id_)
 # end def get_the_guid
 #// 
 #// Display the post content.
@@ -231,9 +235,12 @@ def get_the_guid(post=0, *args_):
 #// @param string $more_link_text Optional. Content for when there is more text.
 #// @param bool   $strip_teaser   Optional. Strip teaser content before the more text. Default is false.
 #//
-def the_content(more_link_text=None, strip_teaser=False, *args_):
+def the_content(more_link_text_=None, strip_teaser_=None, *_args_):
+    if strip_teaser_ is None:
+        strip_teaser_ = False
+    # end if
     
-    content = get_the_content(more_link_text, strip_teaser)
+    content_ = get_the_content(more_link_text_, strip_teaser_)
     #// 
     #// Filters the post content.
     #// 
@@ -241,9 +248,9 @@ def the_content(more_link_text=None, strip_teaser=False, *args_):
     #// 
     #// @param string $content Content of the current post.
     #//
-    content = apply_filters("the_content", content)
-    content = php_str_replace("]]>", "]]&gt;", content)
-    php_print(content)
+    content_ = apply_filters("the_content", content_)
+    content_ = php_str_replace("]]>", "]]&gt;", content_)
+    php_print(content_)
 # end def the_content
 #// 
 #// Retrieve the post content.
@@ -263,61 +270,68 @@ def the_content(more_link_text=None, strip_teaser=False, *args_):
 #// @param WP_Post|object|int $post           Optional. WP_Post instance or Post ID/object. Default is null.
 #// @return string
 #//
-def get_the_content(more_link_text=None, strip_teaser=False, post=None, *args_):
+def get_the_content(more_link_text_=None, strip_teaser_=None, post_=None, *_args_):
+    if strip_teaser_ is None:
+        strip_teaser_ = False
+    # end if
     
-    global page,more,preview,pages,multipage
-    php_check_if_defined("page","more","preview","pages","multipage")
-    _post = get_post(post)
-    if (not type(_post).__name__ == "WP_Post"):
+    global page_
+    global more_
+    global preview_
+    global pages_
+    global multipage_
+    php_check_if_defined("page_","more_","preview_","pages_","multipage_")
+    _post_ = get_post(post_)
+    if (not type(_post_).__name__ == "WP_Post"):
         return ""
     # end if
-    if None == post:
-        elements = compact("page", "more", "preview", "pages", "multipage")
+    if None == post_:
+        elements_ = php_compact("page", "more", "preview", "pages", "multipage")
     else:
-        elements = generate_postdata(_post)
+        elements_ = generate_postdata(_post_)
     # end if
-    if None == more_link_text:
-        more_link_text = php_sprintf("<span aria-label=\"%1$s\">%2$s</span>", php_sprintf(__("Continue reading %s"), the_title_attribute(Array({"echo": False, "post": _post}))), __("(more&hellip;)"))
+    if None == more_link_text_:
+        more_link_text_ = php_sprintf("<span aria-label=\"%1$s\">%2$s</span>", php_sprintf(__("Continue reading %s"), the_title_attribute(Array({"echo": False, "post": _post_}))), __("(more&hellip;)"))
     # end if
-    output = ""
-    has_teaser = False
+    output_ = ""
+    has_teaser_ = False
     #// If post password required and it doesn't match the cookie.
-    if post_password_required(_post):
-        return get_the_password_form(_post)
+    if post_password_required(_post_):
+        return get_the_password_form(_post_)
     # end if
     #// If the requested page doesn't exist.
-    if elements["page"] > php_count(elements["pages"]):
+    if elements_["page"] > php_count(elements_["pages"]):
         #// Give them the highest numbered page that DOES exist.
-        elements["page"] = php_count(elements["pages"])
+        elements_["page"] = php_count(elements_["pages"])
     # end if
-    page_no = elements["page"]
-    content = elements["pages"][page_no - 1]
-    if php_preg_match("/<!--more(.*?)?-->/", content, matches):
-        if has_block("more", content):
+    page_no_ = elements_["page"]
+    content_ = elements_["pages"][page_no_ - 1]
+    if php_preg_match("/<!--more(.*?)?-->/", content_, matches_):
+        if has_block("more", content_):
             #// Remove the core/more block delimiters. They will be left over after $content is split up.
-            content = php_preg_replace("/<!-- \\/?wp:more(.*?) -->/", "", content)
+            content_ = php_preg_replace("/<!-- \\/?wp:more(.*?) -->/", "", content_)
         # end if
-        content = php_explode(matches[0], content, 2)
-        if (not php_empty(lambda : matches[1])) and (not php_empty(lambda : more_link_text)):
-            more_link_text = strip_tags(wp_kses_no_null(php_trim(matches[1])))
+        content_ = php_explode(matches_[0], content_, 2)
+        if (not php_empty(lambda : matches_[1])) and (not php_empty(lambda : more_link_text_)):
+            more_link_text_ = strip_tags(wp_kses_no_null(php_trim(matches_[1])))
         # end if
-        has_teaser = True
+        has_teaser_ = True
     else:
-        content = Array(content)
+        content_ = Array(content_)
     # end if
-    if False != php_strpos(_post.post_content, "<!--noteaser-->") and (not elements["multipage"]) or 1 == elements["page"]:
-        strip_teaser = True
+    if False != php_strpos(_post_.post_content, "<!--noteaser-->") and (not elements_["multipage"]) or 1 == elements_["page"]:
+        strip_teaser_ = True
     # end if
-    teaser = content[0]
-    if elements["more"] and strip_teaser and has_teaser:
-        teaser = ""
+    teaser_ = content_[0]
+    if elements_["more"] and strip_teaser_ and has_teaser_:
+        teaser_ = ""
     # end if
-    output += teaser
-    if php_count(content) > 1:
-        if elements["more"]:
-            output += "<span id=\"more-" + _post.ID + "\"></span>" + content[1]
+    output_ += teaser_
+    if php_count(content_) > 1:
+        if elements_["more"]:
+            output_ += "<span id=\"more-" + _post_.ID + "\"></span>" + content_[1]
         else:
-            if (not php_empty(lambda : more_link_text)):
+            if (not php_empty(lambda : more_link_text_)):
                 #// 
                 #// Filters the Read More link text.
                 #// 
@@ -326,19 +340,20 @@ def get_the_content(more_link_text=None, strip_teaser=False, post=None, *args_):
                 #// @param string $more_link_element Read More link element.
                 #// @param string $more_link_text    Read More text.
                 #//
-                output += apply_filters("the_content_more_link", " <a href=\"" + get_permalink(_post) + str("#more-") + str(_post.ID) + str("\" class=\"more-link\">") + str(more_link_text) + str("</a>"), more_link_text)
+                output_ += apply_filters("the_content_more_link", " <a href=\"" + get_permalink(_post_) + str("#more-") + str(_post_.ID) + str("\" class=\"more-link\">") + str(more_link_text_) + str("</a>"), more_link_text_)
             # end if
-            output = force_balance_tags(output)
+            output_ = force_balance_tags(output_)
         # end if
     # end if
-    return output
+    return output_
 # end def get_the_content
 #// 
 #// Display the post excerpt.
 #// 
 #// @since 0.71
 #//
-def the_excerpt(*args_):
+def the_excerpt(*_args_):
+    
     
     #// 
     #// Filters the displayed post excerpt.
@@ -360,16 +375,17 @@ def the_excerpt(*args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
 #// @return string Post excerpt.
 #//
-def get_the_excerpt(post=None, *args_):
+def get_the_excerpt(post_=None, *_args_):
     
-    if php_is_bool(post):
+    
+    if php_is_bool(post_):
         _deprecated_argument(__FUNCTION__, "2.3.0")
     # end if
-    post = get_post(post)
-    if php_empty(lambda : post):
+    post_ = get_post(post_)
+    if php_empty(lambda : post_):
         return ""
     # end if
-    if post_password_required(post):
+    if post_password_required(post_):
         return __("There is no excerpt because this is a protected post.")
     # end if
     #// 
@@ -381,7 +397,7 @@ def get_the_excerpt(post=None, *args_):
     #// @param string  $post_excerpt The post excerpt.
     #// @param WP_Post $post         Post object.
     #//
-    return apply_filters("get_the_excerpt", post.post_excerpt, post)
+    return apply_filters("get_the_excerpt", post_.post_excerpt, post_)
 # end def get_the_excerpt
 #// 
 #// Determines whether the post has a custom excerpt.
@@ -395,10 +411,11 @@ def get_the_excerpt(post=None, *args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
 #// @return bool True if the post has a custom excerpt, false otherwise.
 #//
-def has_excerpt(post=0, *args_):
+def has_excerpt(post_=0, *_args_):
     
-    post = get_post(post)
-    return (not php_empty(lambda : post.post_excerpt))
+    
+    post_ = get_post(post_)
+    return (not php_empty(lambda : post_.post_excerpt))
 # end def has_excerpt
 #// 
 #// Displays the classes for the post container element.
@@ -408,10 +425,11 @@ def has_excerpt(post=0, *args_):
 #// @param string|array $class   One or more classes to add to the class list.
 #// @param int|WP_Post  $post_id Optional. Post ID or post object. Defaults to the global `$post`.
 #//
-def post_class(class_="", post_id=None, *args_):
+def post_class(class_="", post_id_=None, *_args_):
+    
     
     #// Separates classes with a single space, collates classes for post DIV.
-    php_print("class=\"" + join(" ", get_post_class(class_, post_id)) + "\"")
+    php_print("class=\"" + join(" ", get_post_class(class_, post_id_)) + "\"")
 # end def post_class
 #// 
 #// Retrieves an array of the class names for the post container element.
@@ -434,80 +452,81 @@ def post_class(class_="", post_id=None, *args_):
 #// @param int|WP_Post     $post_id Optional. Post ID or post object.
 #// @return string[] Array of class names.
 #//
-def get_post_class(class_="", post_id=None, *args_):
+def get_post_class(class_="", post_id_=None, *_args_):
     
-    post = get_post(post_id)
-    classes = Array()
+    
+    post_ = get_post(post_id_)
+    classes_ = Array()
     if class_:
         if (not php_is_array(class_)):
             class_ = php_preg_split("#\\s+#", class_)
         # end if
-        classes = php_array_map("esc_attr", class_)
+        classes_ = php_array_map("esc_attr", class_)
     else:
         #// Ensure that we always coerce class to being an array.
         class_ = Array()
     # end if
-    if (not post):
-        return classes
+    if (not post_):
+        return classes_
     # end if
-    classes[-1] = "post-" + post.ID
+    classes_[-1] = "post-" + post_.ID
     if (not is_admin()):
-        classes[-1] = post.post_type
+        classes_[-1] = post_.post_type
     # end if
-    classes[-1] = "type-" + post.post_type
-    classes[-1] = "status-" + post.post_status
+    classes_[-1] = "type-" + post_.post_type
+    classes_[-1] = "status-" + post_.post_status
     #// Post Format.
-    if post_type_supports(post.post_type, "post-formats"):
-        post_format = get_post_format(post.ID)
-        if post_format and (not is_wp_error(post_format)):
-            classes[-1] = "format-" + sanitize_html_class(post_format)
+    if post_type_supports(post_.post_type, "post-formats"):
+        post_format_ = get_post_format(post_.ID)
+        if post_format_ and (not is_wp_error(post_format_)):
+            classes_[-1] = "format-" + sanitize_html_class(post_format_)
         else:
-            classes[-1] = "format-standard"
+            classes_[-1] = "format-standard"
         # end if
     # end if
-    post_password_required = post_password_required(post.ID)
+    post_password_required_ = post_password_required(post_.ID)
     #// Post requires password.
-    if post_password_required:
-        classes[-1] = "post-password-required"
-    elif (not php_empty(lambda : post.post_password)):
-        classes[-1] = "post-password-protected"
+    if post_password_required_:
+        classes_[-1] = "post-password-required"
+    elif (not php_empty(lambda : post_.post_password)):
+        classes_[-1] = "post-password-protected"
     # end if
     #// Post thumbnails.
-    if current_theme_supports("post-thumbnails") and has_post_thumbnail(post.ID) and (not is_attachment(post)) and (not post_password_required):
-        classes[-1] = "has-post-thumbnail"
+    if current_theme_supports("post-thumbnails") and has_post_thumbnail(post_.ID) and (not is_attachment(post_)) and (not post_password_required_):
+        classes_[-1] = "has-post-thumbnail"
     # end if
     #// Sticky for Sticky Posts.
-    if is_sticky(post.ID):
+    if is_sticky(post_.ID):
         if is_home() and (not is_paged()):
-            classes[-1] = "sticky"
+            classes_[-1] = "sticky"
         elif is_admin():
-            classes[-1] = "status-sticky"
+            classes_[-1] = "status-sticky"
         # end if
     # end if
     #// hentry for hAtom compliance.
-    classes[-1] = "hentry"
+    classes_[-1] = "hentry"
     #// All public taxonomies.
-    taxonomies = get_taxonomies(Array({"public": True}))
-    for taxonomy in taxonomies:
-        if is_object_in_taxonomy(post.post_type, taxonomy):
-            for term in get_the_terms(post.ID, taxonomy):
-                if php_empty(lambda : term.slug):
+    taxonomies_ = get_taxonomies(Array({"public": True}))
+    for taxonomy_ in taxonomies_:
+        if is_object_in_taxonomy(post_.post_type, taxonomy_):
+            for term_ in get_the_terms(post_.ID, taxonomy_):
+                if php_empty(lambda : term_.slug):
                     continue
                 # end if
-                term_class = sanitize_html_class(term.slug, term.term_id)
-                if php_is_numeric(term_class) or (not php_trim(term_class, "-")):
-                    term_class = term.term_id
+                term_class_ = sanitize_html_class(term_.slug, term_.term_id)
+                if php_is_numeric(term_class_) or (not php_trim(term_class_, "-")):
+                    term_class_ = term_.term_id
                 # end if
                 #// 'post_tag' uses the 'tag' prefix for backward compatibility.
-                if "post_tag" == taxonomy:
-                    classes[-1] = "tag-" + term_class
+                if "post_tag" == taxonomy_:
+                    classes_[-1] = "tag-" + term_class_
                 else:
-                    classes[-1] = sanitize_html_class(taxonomy + "-" + term_class, taxonomy + "-" + term.term_id)
+                    classes_[-1] = sanitize_html_class(taxonomy_ + "-" + term_class_, taxonomy_ + "-" + term_.term_id)
                 # end if
             # end for
         # end if
     # end for
-    classes = php_array_map("esc_attr", classes)
+    classes_ = php_array_map("esc_attr", classes_)
     #// 
     #// Filters the list of CSS class names for the current post.
     #// 
@@ -517,8 +536,8 @@ def get_post_class(class_="", post_id=None, *args_):
     #// @param string[] $class   An array of additional class names added to the post.
     #// @param int      $post_id The post ID.
     #//
-    classes = apply_filters("post_class", classes, class_, post.ID)
-    return array_unique(classes)
+    classes_ = apply_filters("post_class", classes_, class_, post_.ID)
+    return array_unique(classes_)
 # end def get_post_class
 #// 
 #// Displays the class names for the body element.
@@ -527,7 +546,8 @@ def get_post_class(class_="", post_id=None, *args_):
 #// 
 #// @param string|string[] $class Space-separated string or array of class names to add to the class list.
 #//
-def body_class(class_="", *args_):
+def body_class(class_="", *_args_):
+    
     
     #// Separates class names with a single space, collates class names for body element.
     php_print("class=\"" + join(" ", get_body_class(class_)) + "\"")
@@ -542,191 +562,192 @@ def body_class(class_="", *args_):
 #// @param string|string[] $class Space-separated string or array of class names to add to the class list.
 #// @return string[] Array of class names.
 #//
-def get_body_class(class_="", *args_):
+def get_body_class(class_="", *_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    classes = Array()
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    classes_ = Array()
     if is_rtl():
-        classes[-1] = "rtl"
+        classes_[-1] = "rtl"
     # end if
     if is_front_page():
-        classes[-1] = "home"
+        classes_[-1] = "home"
     # end if
     if is_home():
-        classes[-1] = "blog"
+        classes_[-1] = "blog"
     # end if
     if is_privacy_policy():
-        classes[-1] = "privacy-policy"
+        classes_[-1] = "privacy-policy"
     # end if
     if is_archive():
-        classes[-1] = "archive"
+        classes_[-1] = "archive"
     # end if
     if is_date():
-        classes[-1] = "date"
+        classes_[-1] = "date"
     # end if
     if is_search():
-        classes[-1] = "search"
-        classes[-1] = "search-results" if wp_query.posts else "search-no-results"
+        classes_[-1] = "search"
+        classes_[-1] = "search-results" if wp_query_.posts else "search-no-results"
     # end if
     if is_paged():
-        classes[-1] = "paged"
+        classes_[-1] = "paged"
     # end if
     if is_attachment():
-        classes[-1] = "attachment"
+        classes_[-1] = "attachment"
     # end if
     if is_404():
-        classes[-1] = "error404"
+        classes_[-1] = "error404"
     # end if
     if is_singular():
-        post_id = wp_query.get_queried_object_id()
-        post = wp_query.get_queried_object()
-        post_type = post.post_type
+        post_id_ = wp_query_.get_queried_object_id()
+        post_ = wp_query_.get_queried_object()
+        post_type_ = post_.post_type
         if is_page_template():
-            classes[-1] = str(post_type) + str("-template")
-            template_slug = get_page_template_slug(post_id)
-            template_parts = php_explode("/", template_slug)
-            for part in template_parts:
-                classes[-1] = str(post_type) + str("-template-") + sanitize_html_class(php_str_replace(Array(".", "/"), "-", php_basename(part, ".php")))
+            classes_[-1] = str(post_type_) + str("-template")
+            template_slug_ = get_page_template_slug(post_id_)
+            template_parts_ = php_explode("/", template_slug_)
+            for part_ in template_parts_:
+                classes_[-1] = str(post_type_) + str("-template-") + sanitize_html_class(php_str_replace(Array(".", "/"), "-", php_basename(part_, ".php")))
             # end for
-            classes[-1] = str(post_type) + str("-template-") + sanitize_html_class(php_str_replace(".", "-", template_slug))
+            classes_[-1] = str(post_type_) + str("-template-") + sanitize_html_class(php_str_replace(".", "-", template_slug_))
         else:
-            classes[-1] = str(post_type) + str("-template-default")
+            classes_[-1] = str(post_type_) + str("-template-default")
         # end if
         if is_single():
-            classes[-1] = "single"
-            if (php_isset(lambda : post.post_type)):
-                classes[-1] = "single-" + sanitize_html_class(post.post_type, post_id)
-                classes[-1] = "postid-" + post_id
+            classes_[-1] = "single"
+            if (php_isset(lambda : post_.post_type)):
+                classes_[-1] = "single-" + sanitize_html_class(post_.post_type, post_id_)
+                classes_[-1] = "postid-" + post_id_
                 #// Post Format.
-                if post_type_supports(post.post_type, "post-formats"):
-                    post_format = get_post_format(post.ID)
-                    if post_format and (not is_wp_error(post_format)):
-                        classes[-1] = "single-format-" + sanitize_html_class(post_format)
+                if post_type_supports(post_.post_type, "post-formats"):
+                    post_format_ = get_post_format(post_.ID)
+                    if post_format_ and (not is_wp_error(post_format_)):
+                        classes_[-1] = "single-format-" + sanitize_html_class(post_format_)
                     else:
-                        classes[-1] = "single-format-standard"
+                        classes_[-1] = "single-format-standard"
                     # end if
                 # end if
             # end if
         # end if
         if is_attachment():
-            mime_type = get_post_mime_type(post_id)
-            mime_prefix = Array("application/", "image/", "text/", "audio/", "video/", "music/")
-            classes[-1] = "attachmentid-" + post_id
-            classes[-1] = "attachment-" + php_str_replace(mime_prefix, "", mime_type)
+            mime_type_ = get_post_mime_type(post_id_)
+            mime_prefix_ = Array("application/", "image/", "text/", "audio/", "video/", "music/")
+            classes_[-1] = "attachmentid-" + post_id_
+            classes_[-1] = "attachment-" + php_str_replace(mime_prefix_, "", mime_type_)
         elif is_page():
-            classes[-1] = "page"
-            page_id = wp_query.get_queried_object_id()
-            post = get_post(page_id)
-            classes[-1] = "page-id-" + page_id
-            if get_pages(Array({"parent": page_id, "number": 1})):
-                classes[-1] = "page-parent"
+            classes_[-1] = "page"
+            page_id_ = wp_query_.get_queried_object_id()
+            post_ = get_post(page_id_)
+            classes_[-1] = "page-id-" + page_id_
+            if get_pages(Array({"parent": page_id_, "number": 1})):
+                classes_[-1] = "page-parent"
             # end if
-            if post.post_parent:
-                classes[-1] = "page-child"
-                classes[-1] = "parent-pageid-" + post.post_parent
+            if post_.post_parent:
+                classes_[-1] = "page-child"
+                classes_[-1] = "parent-pageid-" + post_.post_parent
             # end if
         # end if
     elif is_archive():
         if is_post_type_archive():
-            classes[-1] = "post-type-archive"
-            post_type = get_query_var("post_type")
-            if php_is_array(post_type):
-                post_type = reset(post_type)
+            classes_[-1] = "post-type-archive"
+            post_type_ = get_query_var("post_type")
+            if php_is_array(post_type_):
+                post_type_ = reset(post_type_)
             # end if
-            classes[-1] = "post-type-archive-" + sanitize_html_class(post_type)
+            classes_[-1] = "post-type-archive-" + sanitize_html_class(post_type_)
         elif is_author():
-            author = wp_query.get_queried_object()
-            classes[-1] = "author"
-            if (php_isset(lambda : author.user_nicename)):
-                classes[-1] = "author-" + sanitize_html_class(author.user_nicename, author.ID)
-                classes[-1] = "author-" + author.ID
+            author_ = wp_query_.get_queried_object()
+            classes_[-1] = "author"
+            if (php_isset(lambda : author_.user_nicename)):
+                classes_[-1] = "author-" + sanitize_html_class(author_.user_nicename, author_.ID)
+                classes_[-1] = "author-" + author_.ID
             # end if
         elif is_category():
-            cat = wp_query.get_queried_object()
-            classes[-1] = "category"
-            if (php_isset(lambda : cat.term_id)):
-                cat_class = sanitize_html_class(cat.slug, cat.term_id)
-                if php_is_numeric(cat_class) or (not php_trim(cat_class, "-")):
-                    cat_class = cat.term_id
+            cat_ = wp_query_.get_queried_object()
+            classes_[-1] = "category"
+            if (php_isset(lambda : cat_.term_id)):
+                cat_class_ = sanitize_html_class(cat_.slug, cat_.term_id)
+                if php_is_numeric(cat_class_) or (not php_trim(cat_class_, "-")):
+                    cat_class_ = cat_.term_id
                 # end if
-                classes[-1] = "category-" + cat_class
-                classes[-1] = "category-" + cat.term_id
+                classes_[-1] = "category-" + cat_class_
+                classes_[-1] = "category-" + cat_.term_id
             # end if
         elif is_tag():
-            tag = wp_query.get_queried_object()
-            classes[-1] = "tag"
-            if (php_isset(lambda : tag.term_id)):
-                tag_class = sanitize_html_class(tag.slug, tag.term_id)
-                if php_is_numeric(tag_class) or (not php_trim(tag_class, "-")):
-                    tag_class = tag.term_id
+            tag_ = wp_query_.get_queried_object()
+            classes_[-1] = "tag"
+            if (php_isset(lambda : tag_.term_id)):
+                tag_class_ = sanitize_html_class(tag_.slug, tag_.term_id)
+                if php_is_numeric(tag_class_) or (not php_trim(tag_class_, "-")):
+                    tag_class_ = tag_.term_id
                 # end if
-                classes[-1] = "tag-" + tag_class
-                classes[-1] = "tag-" + tag.term_id
+                classes_[-1] = "tag-" + tag_class_
+                classes_[-1] = "tag-" + tag_.term_id
             # end if
         elif is_tax():
-            term = wp_query.get_queried_object()
-            if (php_isset(lambda : term.term_id)):
-                term_class = sanitize_html_class(term.slug, term.term_id)
-                if php_is_numeric(term_class) or (not php_trim(term_class, "-")):
-                    term_class = term.term_id
+            term_ = wp_query_.get_queried_object()
+            if (php_isset(lambda : term_.term_id)):
+                term_class_ = sanitize_html_class(term_.slug, term_.term_id)
+                if php_is_numeric(term_class_) or (not php_trim(term_class_, "-")):
+                    term_class_ = term_.term_id
                 # end if
-                classes[-1] = "tax-" + sanitize_html_class(term.taxonomy)
-                classes[-1] = "term-" + term_class
-                classes[-1] = "term-" + term.term_id
+                classes_[-1] = "tax-" + sanitize_html_class(term_.taxonomy)
+                classes_[-1] = "term-" + term_class_
+                classes_[-1] = "term-" + term_.term_id
             # end if
         # end if
     # end if
     if is_user_logged_in():
-        classes[-1] = "logged-in"
+        classes_[-1] = "logged-in"
     # end if
     if is_admin_bar_showing():
-        classes[-1] = "admin-bar"
-        classes[-1] = "no-customize-support"
+        classes_[-1] = "admin-bar"
+        classes_[-1] = "no-customize-support"
     # end if
     if current_theme_supports("custom-background") and get_background_color() != get_theme_support("custom-background", "default-color") or get_background_image():
-        classes[-1] = "custom-background"
+        classes_[-1] = "custom-background"
     # end if
     if has_custom_logo():
-        classes[-1] = "wp-custom-logo"
+        classes_[-1] = "wp-custom-logo"
     # end if
     if current_theme_supports("responsive-embeds"):
-        classes[-1] = "wp-embed-responsive"
+        classes_[-1] = "wp-embed-responsive"
     # end if
-    page = wp_query.get("page")
-    if (not page) or page < 2:
-        page = wp_query.get("paged")
+    page_ = wp_query_.get("page")
+    if (not page_) or page_ < 2:
+        page_ = wp_query_.get("paged")
     # end if
-    if page and page > 1 and (not is_404()):
-        classes[-1] = "paged-" + page
+    if page_ and page_ > 1 and (not is_404()):
+        classes_[-1] = "paged-" + page_
         if is_single():
-            classes[-1] = "single-paged-" + page
+            classes_[-1] = "single-paged-" + page_
         elif is_page():
-            classes[-1] = "page-paged-" + page
+            classes_[-1] = "page-paged-" + page_
         elif is_category():
-            classes[-1] = "category-paged-" + page
+            classes_[-1] = "category-paged-" + page_
         elif is_tag():
-            classes[-1] = "tag-paged-" + page
+            classes_[-1] = "tag-paged-" + page_
         elif is_date():
-            classes[-1] = "date-paged-" + page
+            classes_[-1] = "date-paged-" + page_
         elif is_author():
-            classes[-1] = "author-paged-" + page
+            classes_[-1] = "author-paged-" + page_
         elif is_search():
-            classes[-1] = "search-paged-" + page
+            classes_[-1] = "search-paged-" + page_
         elif is_post_type_archive():
-            classes[-1] = "post-type-paged-" + page
+            classes_[-1] = "post-type-paged-" + page_
         # end if
     # end if
     if (not php_empty(lambda : class_)):
         if (not php_is_array(class_)):
             class_ = php_preg_split("#\\s+#", class_)
         # end if
-        classes = php_array_merge(classes, class_)
+        classes_ = php_array_merge(classes_, class_)
     else:
         #// Ensure that we always coerce class to being an array.
         class_ = Array()
     # end if
-    classes = php_array_map("esc_attr", classes)
+    classes_ = php_array_map("esc_attr", classes_)
     #// 
     #// Filters the list of CSS body class names for the current post or page.
     #// 
@@ -735,8 +756,8 @@ def get_body_class(class_="", *args_):
     #// @param string[] $classes An array of body class names.
     #// @param string[] $class   An array of additional class names added to the body.
     #//
-    classes = apply_filters("body_class", classes, class_)
-    return array_unique(classes)
+    classes_ = apply_filters("body_class", classes_, class_)
+    return array_unique(classes_)
 # end def get_body_class
 #// 
 #// Whether post requires password and correct password has been provided.
@@ -746,24 +767,25 @@ def get_body_class(class_="", *args_):
 #// @param int|WP_Post|null $post An optional post. Global $post used if not provided.
 #// @return bool false if a password is not required or the correct password cookie is present, true otherwise.
 #//
-def post_password_required(post=None, *args_):
+def post_password_required(post_=None, *_args_):
     
-    post = get_post(post)
-    if php_empty(lambda : post.post_password):
+    
+    post_ = get_post(post_)
+    if php_empty(lambda : post_.post_password):
         #// This filter is documented in wp-includes/post-template.php
-        return apply_filters("post_password_required", False, post)
+        return apply_filters("post_password_required", False, post_)
     # end if
     if (not (php_isset(lambda : PHP_COOKIE["wp-postpass_" + COOKIEHASH]))):
         #// This filter is documented in wp-includes/post-template.php
-        return apply_filters("post_password_required", True, post)
+        return apply_filters("post_password_required", True, post_)
     # end if
     php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
-    hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
-    hash = wp_unslash(PHP_COOKIE["wp-postpass_" + COOKIEHASH])
-    if 0 != php_strpos(hash, "$P$B"):
-        required = True
+    hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+    hash_ = wp_unslash(PHP_COOKIE["wp-postpass_" + COOKIEHASH])
+    if 0 != php_strpos(hash_, "$P$B"):
+        required_ = True
     else:
-        required = (not hasher.checkpassword(post.post_password, hash))
+        required_ = (not hasher_.checkpassword(post_.post_password, hash_))
     # end if
     #// 
     #// Filters whether a post requires the user to supply a password.
@@ -774,7 +796,7 @@ def post_password_required(post=None, *args_):
     #// provided or is incorrect, false if password has been supplied or is not required.
     #// @param WP_Post $post     Post data.
     #//
-    return apply_filters("post_password_required", required, post)
+    return apply_filters("post_password_required", required_, post_)
 # end def post_password_required
 #// 
 #// Page Template Functions for usage in Themes.
@@ -816,12 +838,16 @@ def post_password_required(post=None, *args_):
 #// }
 #// @return string Formatted output in HTML.
 #//
-def wp_link_pages(args="", *args_):
+def wp_link_pages(args_="", *_args_):
     
-    global page,numpages,multipage,more
-    php_check_if_defined("page","numpages","multipage","more")
-    defaults = Array({"before": "<p class=\"post-nav-links\">" + __("Pages:"), "after": "</p>", "link_before": "", "link_after": "", "aria_current": "page", "next_or_number": "number", "separator": " ", "nextpagelink": __("Next page"), "previouspagelink": __("Previous page"), "pagelink": "%", "echo": 1})
-    parsed_args = wp_parse_args(args, defaults)
+    
+    global page_
+    global numpages_
+    global multipage_
+    global more_
+    php_check_if_defined("page_","numpages_","multipage_","more_")
+    defaults_ = Array({"before": "<p class=\"post-nav-links\">" + __("Pages:"), "after": "</p>", "link_before": "", "link_after": "", "aria_current": "page", "next_or_number": "number", "separator": " ", "nextpagelink": __("Next page"), "previouspagelink": __("Previous page"), "pagelink": "%", "echo": 1})
+    parsed_args_ = wp_parse_args(args_, defaults_)
     #// 
     #// Filters the arguments used in retrieving page links for paginated posts.
     #// 
@@ -829,19 +855,19 @@ def wp_link_pages(args="", *args_):
     #// 
     #// @param array $parsed_args An array of arguments for page links for paginated posts.
     #//
-    parsed_args = apply_filters("wp_link_pages_args", parsed_args)
-    output = ""
-    if multipage:
-        if "number" == parsed_args["next_or_number"]:
-            output += parsed_args["before"]
-            i = 1
-            while i <= numpages:
+    parsed_args_ = apply_filters("wp_link_pages_args", parsed_args_)
+    output_ = ""
+    if multipage_:
+        if "number" == parsed_args_["next_or_number"]:
+            output_ += parsed_args_["before"]
+            i_ = 1
+            while i_ <= numpages_:
                 
-                link = parsed_args["link_before"] + php_str_replace("%", i, parsed_args["pagelink"]) + parsed_args["link_after"]
-                if i != page or (not more) and 1 == page:
-                    link = _wp_link_page(i) + link + "</a>"
-                elif i == page:
-                    link = "<span class=\"post-page-numbers current\" aria-current=\"" + esc_attr(parsed_args["aria_current"]) + "\">" + link + "</span>"
+                link_ = parsed_args_["link_before"] + php_str_replace("%", i_, parsed_args_["pagelink"]) + parsed_args_["link_after"]
+                if i_ != page_ or (not more_) and 1 == page_:
+                    link_ = _wp_link_page(i_) + link_ + "</a>"
+                elif i_ == page_:
+                    link_ = "<span class=\"post-page-numbers current\" aria-current=\"" + esc_attr(parsed_args_["aria_current"]) + "\">" + link_ + "</span>"
                 # end if
                 #// 
                 #// Filters the HTML output of individual page number links.
@@ -851,31 +877,31 @@ def wp_link_pages(args="", *args_):
                 #// @param string $link The page number HTML output.
                 #// @param int    $i    Page number for paginated posts' page links.
                 #//
-                link = apply_filters("wp_link_pages_link", link, i)
+                link_ = apply_filters("wp_link_pages_link", link_, i_)
                 #// Use the custom links separator beginning with the second link.
-                output += " " if 1 == i else parsed_args["separator"]
-                output += link
-                i += 1
+                output_ += " " if 1 == i_ else parsed_args_["separator"]
+                output_ += link_
+                i_ += 1
             # end while
-            output += parsed_args["after"]
-        elif more:
-            output += parsed_args["before"]
-            prev = page - 1
-            if prev > 0:
-                link = _wp_link_page(prev) + parsed_args["link_before"] + parsed_args["previouspagelink"] + parsed_args["link_after"] + "</a>"
+            output_ += parsed_args_["after"]
+        elif more_:
+            output_ += parsed_args_["before"]
+            prev_ = page_ - 1
+            if prev_ > 0:
+                link_ = _wp_link_page(prev_) + parsed_args_["link_before"] + parsed_args_["previouspagelink"] + parsed_args_["link_after"] + "</a>"
                 #// This filter is documented in wp-includes/post-template.php
-                output += apply_filters("wp_link_pages_link", link, prev)
+                output_ += apply_filters("wp_link_pages_link", link_, prev_)
             # end if
-            next = page + 1
-            if next <= numpages:
-                if prev:
-                    output += parsed_args["separator"]
+            next_ = page_ + 1
+            if next_ <= numpages_:
+                if prev_:
+                    output_ += parsed_args_["separator"]
                 # end if
-                link = _wp_link_page(next) + parsed_args["link_before"] + parsed_args["nextpagelink"] + parsed_args["link_after"] + "</a>"
+                link_ = _wp_link_page(next_) + parsed_args_["link_before"] + parsed_args_["nextpagelink"] + parsed_args_["link_after"] + "</a>"
                 #// This filter is documented in wp-includes/post-template.php
-                output += apply_filters("wp_link_pages_link", link, next)
+                output_ += apply_filters("wp_link_pages_link", link_, next_)
             # end if
-            output += parsed_args["after"]
+            output_ += parsed_args_["after"]
         # end if
     # end if
     #// 
@@ -886,11 +912,11 @@ def wp_link_pages(args="", *args_):
     #// @param string $output HTML output of paginated posts' page links.
     #// @param array  $args   An array of arguments.
     #//
-    html = apply_filters("wp_link_pages", output, args)
-    if parsed_args["echo"]:
-        php_print(html)
+    html_ = apply_filters("wp_link_pages", output_, args_)
+    if parsed_args_["echo"]:
+        php_print(html_)
     # end if
-    return html
+    return html_
 # end def wp_link_pages
 #// 
 #// Helper function for wp_link_pages().
@@ -903,31 +929,32 @@ def wp_link_pages(args="", *args_):
 #// @param int $i Page number.
 #// @return string Link.
 #//
-def _wp_link_page(i=None, *args_):
+def _wp_link_page(i_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    post = get_post()
-    query_args = Array()
-    if 1 == i:
-        url = get_permalink()
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    post_ = get_post()
+    query_args_ = Array()
+    if 1 == i_:
+        url_ = get_permalink()
     else:
-        if "" == get_option("permalink_structure") or php_in_array(post.post_status, Array("draft", "pending")):
-            url = add_query_arg("page", i, get_permalink())
-        elif "page" == get_option("show_on_front") and get_option("page_on_front") == post.ID:
-            url = trailingslashit(get_permalink()) + user_trailingslashit(str(wp_rewrite.pagination_base) + str("/") + i, "single_paged")
+        if "" == get_option("permalink_structure") or php_in_array(post_.post_status, Array("draft", "pending")):
+            url_ = add_query_arg("page", i_, get_permalink())
+        elif "page" == get_option("show_on_front") and get_option("page_on_front") == post_.ID:
+            url_ = trailingslashit(get_permalink()) + user_trailingslashit(str(wp_rewrite_.pagination_base) + str("/") + i_, "single_paged")
         else:
-            url = trailingslashit(get_permalink()) + user_trailingslashit(i, "single_paged")
+            url_ = trailingslashit(get_permalink()) + user_trailingslashit(i_, "single_paged")
         # end if
     # end if
     if is_preview():
-        if "draft" != post.post_status and (php_isset(lambda : PHP_REQUEST["preview_id"]) and php_isset(lambda : PHP_REQUEST["preview_nonce"])):
-            query_args["preview_id"] = wp_unslash(PHP_REQUEST["preview_id"])
-            query_args["preview_nonce"] = wp_unslash(PHP_REQUEST["preview_nonce"])
+        if "draft" != post_.post_status and (php_isset(lambda : PHP_REQUEST["preview_id"]) and php_isset(lambda : PHP_REQUEST["preview_nonce"])):
+            query_args_["preview_id"] = wp_unslash(PHP_REQUEST["preview_id"])
+            query_args_["preview_nonce"] = wp_unslash(PHP_REQUEST["preview_nonce"])
         # end if
-        url = get_preview_post_link(post, query_args, url)
+        url_ = get_preview_post_link(post_, query_args_, url_)
     # end if
-    return "<a href=\"" + esc_url(url) + "\" class=\"post-page-numbers\">"
+    return "<a href=\"" + esc_url(url_) + "\" class=\"post-page-numbers\">"
 # end def _wp_link_page
 #// 
 #// Post-meta: Custom per-post fields.
@@ -941,15 +968,16 @@ def _wp_link_page(i=None, *args_):
 #// @return array|string|false Array of values, or single value if only one element exists.
 #// False if the key does not exist.
 #//
-def post_custom(key="", *args_):
+def post_custom(key_="", *_args_):
     
-    custom = get_post_custom()
-    if (not (php_isset(lambda : custom[key]))):
+    
+    custom_ = get_post_custom()
+    if (not (php_isset(lambda : custom_[key_]))):
         return False
-    elif 1 == php_count(custom[key]):
-        return custom[key][0]
+    elif 1 == php_count(custom_[key_]):
+        return custom_[key_][0]
     else:
-        return custom[key]
+        return custom_[key_]
     # end if
 # end def post_custom
 #// 
@@ -959,19 +987,20 @@ def post_custom(key="", *args_):
 #// 
 #// @internal This will probably change at some point...
 #//
-def the_meta(*args_):
+def the_meta(*_args_):
     
-    keys = get_post_custom_keys()
-    if keys:
-        li_html = ""
-        for key in keys:
-            keyt = php_trim(key)
-            if is_protected_meta(keyt, "post"):
+    
+    keys_ = get_post_custom_keys()
+    if keys_:
+        li_html_ = ""
+        for key_ in keys_:
+            keyt_ = php_trim(key_)
+            if is_protected_meta(keyt_, "post"):
                 continue
             # end if
-            values = php_array_map("trim", get_post_custom_values(key))
-            value = php_implode(", ", values)
-            html = php_sprintf("<li><span class='post-meta-key'>%s</span> %s</li>\n", php_sprintf(_x("%s:", "Post custom field name"), key), value)
+            values_ = php_array_map("trim", get_post_custom_values(key_))
+            value_ = php_implode(", ", values_)
+            html_ = php_sprintf("<li><span class='post-meta-key'>%s</span> %s</li>\n", php_sprintf(_x("%s:", "Post custom field name"), key_), value_)
             #// 
             #// Filters the HTML output of the li element in the post custom fields list.
             #// 
@@ -981,10 +1010,10 @@ def the_meta(*args_):
             #// @param string $key   Meta key.
             #// @param string $value Meta value.
             #//
-            li_html += apply_filters("the_meta_key", html, key, value)
+            li_html_ += apply_filters("the_meta_key", html_, key_, value_)
         # end for
-        if li_html:
-            php_print(str("<ul class='post-meta'>\n") + str(li_html) + str("</ul>\n"))
+        if li_html_:
+            php_print(str("<ul class='post-meta'>\n") + str(li_html_) + str("</ul>\n"))
         # end if
     # end if
 # end def the_meta
@@ -1021,30 +1050,31 @@ def the_meta(*args_):
 #// }
 #// @return string HTML dropdown list of pages.
 #//
-def wp_dropdown_pages(args="", *args_):
+def wp_dropdown_pages(args_="", *_args_):
     
-    defaults = Array({"depth": 0, "child_of": 0, "selected": 0, "echo": 1, "name": "page_id", "id": "", "class": "", "show_option_none": "", "show_option_no_change": "", "option_none_value": "", "value_field": "ID"})
-    parsed_args = wp_parse_args(args, defaults)
-    pages = get_pages(parsed_args)
-    output = ""
+    
+    defaults_ = Array({"depth": 0, "child_of": 0, "selected": 0, "echo": 1, "name": "page_id", "id": "", "class": "", "show_option_none": "", "show_option_no_change": "", "option_none_value": "", "value_field": "ID"})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    pages_ = get_pages(parsed_args_)
+    output_ = ""
     #// Back-compat with old system where both id and name were based on $name argument.
-    if php_empty(lambda : parsed_args["id"]):
-        parsed_args["id"] = parsed_args["name"]
+    if php_empty(lambda : parsed_args_["id"]):
+        parsed_args_["id"] = parsed_args_["name"]
     # end if
-    if (not php_empty(lambda : pages)):
+    if (not php_empty(lambda : pages_)):
         class_ = ""
-        if (not php_empty(lambda : parsed_args["class"])):
-            class_ = " class='" + esc_attr(parsed_args["class"]) + "'"
+        if (not php_empty(lambda : parsed_args_["class"])):
+            class_ = " class='" + esc_attr(parsed_args_["class"]) + "'"
         # end if
-        output = "<select name='" + esc_attr(parsed_args["name"]) + "'" + class_ + " id='" + esc_attr(parsed_args["id"]) + "'>\n"
-        if parsed_args["show_option_no_change"]:
-            output += " <option value=\"-1\">" + parsed_args["show_option_no_change"] + "</option>\n"
+        output_ = "<select name='" + esc_attr(parsed_args_["name"]) + "'" + class_ + " id='" + esc_attr(parsed_args_["id"]) + "'>\n"
+        if parsed_args_["show_option_no_change"]:
+            output_ += "    <option value=\"-1\">" + parsed_args_["show_option_no_change"] + "</option>\n"
         # end if
-        if parsed_args["show_option_none"]:
-            output += " <option value=\"" + esc_attr(parsed_args["option_none_value"]) + "\">" + parsed_args["show_option_none"] + "</option>\n"
+        if parsed_args_["show_option_none"]:
+            output_ += "    <option value=\"" + esc_attr(parsed_args_["option_none_value"]) + "\">" + parsed_args_["show_option_none"] + "</option>\n"
         # end if
-        output += walk_page_dropdown_tree(pages, parsed_args["depth"], parsed_args)
-        output += "</select>\n"
+        output_ += walk_page_dropdown_tree(pages_, parsed_args_["depth"], parsed_args_)
+        output_ += "</select>\n"
     # end if
     #// 
     #// Filters the HTML output of a list of pages as a drop down.
@@ -1056,11 +1086,11 @@ def wp_dropdown_pages(args="", *args_):
     #// @param array     $parsed_args The parsed arguments array.
     #// @param WP_Post[] $pages       Array of the page objects.
     #//
-    html = apply_filters("wp_dropdown_pages", output, parsed_args, pages)
-    if parsed_args["echo"]:
-        php_print(html)
+    html_ = apply_filters("wp_dropdown_pages", output_, parsed_args_, pages_)
+    if parsed_args_["echo"]:
+        php_print(html_)
     # end if
-    return html
+    return html_
 # end def wp_dropdown_pages
 #// 
 #// Retrieve or display a list of pages (or hierarchical post type items) in list (li) format.
@@ -1102,20 +1132,21 @@ def wp_dropdown_pages(args="", *args_):
 #// }
 #// @return void|string Void if 'echo' argument is true, HTML list of pages if 'echo' is false.
 #//
-def wp_list_pages(args="", *args_):
+def wp_list_pages(args_="", *_args_):
     
-    defaults = Array({"depth": 0, "show_date": "", "date_format": get_option("date_format"), "child_of": 0, "exclude": "", "title_li": __("Pages"), "echo": 1, "authors": "", "sort_column": "menu_order, post_title", "link_before": "", "link_after": "", "item_spacing": "preserve", "walker": ""})
-    parsed_args = wp_parse_args(args, defaults)
-    if (not php_in_array(parsed_args["item_spacing"], Array("preserve", "discard"), True)):
+    
+    defaults_ = Array({"depth": 0, "show_date": "", "date_format": get_option("date_format"), "child_of": 0, "exclude": "", "title_li": __("Pages"), "echo": 1, "authors": "", "sort_column": "menu_order, post_title", "link_before": "", "link_after": "", "item_spacing": "preserve", "walker": ""})
+    parsed_args_ = wp_parse_args(args_, defaults_)
+    if (not php_in_array(parsed_args_["item_spacing"], Array("preserve", "discard"), True)):
         #// Invalid value, fall back to default.
-        parsed_args["item_spacing"] = defaults["item_spacing"]
+        parsed_args_["item_spacing"] = defaults_["item_spacing"]
     # end if
-    output = ""
-    current_page = 0
+    output_ = ""
+    current_page_ = 0
     #// Sanitize, mostly to keep spaces out.
-    parsed_args["exclude"] = php_preg_replace("/[^0-9,]/", "", parsed_args["exclude"])
+    parsed_args_["exclude"] = php_preg_replace("/[^0-9,]/", "", parsed_args_["exclude"])
     #// Allow plugins to filter an array of excluded pages (but don't put a nullstring into the array).
-    exclude_array = php_explode(",", parsed_args["exclude"]) if parsed_args["exclude"] else Array()
+    exclude_array_ = php_explode(",", parsed_args_["exclude"]) if parsed_args_["exclude"] else Array()
     #// 
     #// Filters the array of pages to exclude from the pages list.
     #// 
@@ -1123,27 +1154,27 @@ def wp_list_pages(args="", *args_):
     #// 
     #// @param string[] $exclude_array An array of page IDs to exclude.
     #//
-    parsed_args["exclude"] = php_implode(",", apply_filters("wp_list_pages_excludes", exclude_array))
-    parsed_args["hierarchical"] = 0
+    parsed_args_["exclude"] = php_implode(",", apply_filters("wp_list_pages_excludes", exclude_array_))
+    parsed_args_["hierarchical"] = 0
     #// Query pages.
-    pages = get_pages(parsed_args)
-    if (not php_empty(lambda : pages)):
-        if parsed_args["title_li"]:
-            output += "<li class=\"pagenav\">" + parsed_args["title_li"] + "<ul>"
+    pages_ = get_pages(parsed_args_)
+    if (not php_empty(lambda : pages_)):
+        if parsed_args_["title_li"]:
+            output_ += "<li class=\"pagenav\">" + parsed_args_["title_li"] + "<ul>"
         # end if
-        global wp_query
-        php_check_if_defined("wp_query")
-        if is_page() or is_attachment() or wp_query.is_posts_page:
-            current_page = get_queried_object_id()
+        global wp_query_
+        php_check_if_defined("wp_query_")
+        if is_page() or is_attachment() or wp_query_.is_posts_page:
+            current_page_ = get_queried_object_id()
         elif is_singular():
-            queried_object = get_queried_object()
-            if is_post_type_hierarchical(queried_object.post_type):
-                current_page = queried_object.ID
+            queried_object_ = get_queried_object()
+            if is_post_type_hierarchical(queried_object_.post_type):
+                current_page_ = queried_object_.ID
             # end if
         # end if
-        output += walk_page_tree(pages, parsed_args["depth"], current_page, parsed_args)
-        if parsed_args["title_li"]:
-            output += "</ul></li>"
+        output_ += walk_page_tree(pages_, parsed_args_["depth"], current_page_, parsed_args_)
+        if parsed_args_["title_li"]:
+            output_ += "</ul></li>"
         # end if
     # end if
     #// 
@@ -1158,11 +1189,11 @@ def wp_list_pages(args="", *args_):
     #// @param array     $parsed_args An array of page-listing arguments.
     #// @param WP_Post[] $pages       Array of the page objects.
     #//
-    html = apply_filters("wp_list_pages", output, parsed_args, pages)
-    if parsed_args["echo"]:
-        php_print(html)
+    html_ = apply_filters("wp_list_pages", output_, parsed_args_, pages_)
+    if parsed_args_["echo"]:
+        php_print(html_)
     else:
-        return html
+        return html_
     # end if
 # end def wp_list_pages
 #// 
@@ -1197,20 +1228,23 @@ def wp_list_pages(args="", *args_):
 #// }
 #// @return void|string Void if 'echo' argument is true, HTML menu if 'echo' is false.
 #//
-def wp_page_menu(args=Array(), *args_):
-    
-    defaults = Array({"sort_column": "menu_order, post_title", "menu_id": "", "menu_class": "menu", "container": "div", "echo": True, "link_before": "", "link_after": "", "before": "<ul>", "after": "</ul>", "item_spacing": "discard", "walker": ""})
-    args = wp_parse_args(args, defaults)
-    if (not php_in_array(args["item_spacing"], Array("preserve", "discard"))):
-        #// Invalid value, fall back to default.
-        args["item_spacing"] = defaults["item_spacing"]
+def wp_page_menu(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
     # end if
-    if "preserve" == args["item_spacing"]:
-        t = "   "
-        n = "\n"
+    
+    defaults_ = Array({"sort_column": "menu_order, post_title", "menu_id": "", "menu_class": "menu", "container": "div", "echo": True, "link_before": "", "link_after": "", "before": "<ul>", "after": "</ul>", "item_spacing": "discard", "walker": ""})
+    args_ = wp_parse_args(args_, defaults_)
+    if (not php_in_array(args_["item_spacing"], Array("preserve", "discard"))):
+        #// Invalid value, fall back to default.
+        args_["item_spacing"] = defaults_["item_spacing"]
+    # end if
+    if "preserve" == args_["item_spacing"]:
+        t_ = "  "
+        n_ = "\n"
     else:
-        t = ""
-        n = ""
+        t_ = ""
+        n_ = ""
     # end if
     #// 
     #// Filters the arguments used to generate a page-based menu.
@@ -1221,55 +1255,55 @@ def wp_page_menu(args=Array(), *args_):
     #// 
     #// @param array $args An array of page menu arguments.
     #//
-    args = apply_filters("wp_page_menu_args", args)
-    menu = ""
-    list_args = args
+    args_ = apply_filters("wp_page_menu_args", args_)
+    menu_ = ""
+    list_args_ = args_
     #// Show Home in the menu.
-    if (not php_empty(lambda : args["show_home"])):
-        if True == args["show_home"] or "1" == args["show_home"] or 1 == args["show_home"]:
-            text = __("Home")
+    if (not php_empty(lambda : args_["show_home"])):
+        if True == args_["show_home"] or "1" == args_["show_home"] or 1 == args_["show_home"]:
+            text_ = __("Home")
         else:
-            text = args["show_home"]
+            text_ = args_["show_home"]
         # end if
         class_ = ""
         if is_front_page() and (not is_paged()):
             class_ = "class=\"current_page_item\""
         # end if
-        menu += "<li " + class_ + "><a href=\"" + home_url("/") + "\">" + args["link_before"] + text + args["link_after"] + "</a></li>"
+        menu_ += "<li " + class_ + "><a href=\"" + home_url("/") + "\">" + args_["link_before"] + text_ + args_["link_after"] + "</a></li>"
         #// If the front page is a page, add it to the exclude list.
         if get_option("show_on_front") == "page":
-            if (not php_empty(lambda : list_args["exclude"])):
-                list_args["exclude"] += ","
+            if (not php_empty(lambda : list_args_["exclude"])):
+                list_args_["exclude"] += ","
             else:
-                list_args["exclude"] = ""
+                list_args_["exclude"] = ""
             # end if
-            list_args["exclude"] += get_option("page_on_front")
+            list_args_["exclude"] += get_option("page_on_front")
         # end if
     # end if
-    list_args["echo"] = False
-    list_args["title_li"] = ""
-    menu += wp_list_pages(list_args)
-    container = sanitize_text_field(args["container"])
+    list_args_["echo"] = False
+    list_args_["title_li"] = ""
+    menu_ += wp_list_pages(list_args_)
+    container_ = sanitize_text_field(args_["container"])
     #// Fallback in case `wp_nav_menu()` was called without a container.
-    if php_empty(lambda : container):
-        container = "div"
+    if php_empty(lambda : container_):
+        container_ = "div"
     # end if
-    if menu:
+    if menu_:
         #// wp_nav_menu() doesn't set before and after.
-        if (php_isset(lambda : args["fallback_cb"])) and "wp_page_menu" == args["fallback_cb"] and "ul" != container:
-            args["before"] = str("<ul>") + str(n)
-            args["after"] = "</ul>"
+        if (php_isset(lambda : args_["fallback_cb"])) and "wp_page_menu" == args_["fallback_cb"] and "ul" != container_:
+            args_["before"] = str("<ul>") + str(n_)
+            args_["after"] = "</ul>"
         # end if
-        menu = args["before"] + menu + args["after"]
+        menu_ = args_["before"] + menu_ + args_["after"]
     # end if
-    attrs = ""
-    if (not php_empty(lambda : args["menu_id"])):
-        attrs += " id=\"" + esc_attr(args["menu_id"]) + "\""
+    attrs_ = ""
+    if (not php_empty(lambda : args_["menu_id"])):
+        attrs_ += " id=\"" + esc_attr(args_["menu_id"]) + "\""
     # end if
-    if (not php_empty(lambda : args["menu_class"])):
-        attrs += " class=\"" + esc_attr(args["menu_class"]) + "\""
+    if (not php_empty(lambda : args_["menu_class"])):
+        attrs_ += " class=\"" + esc_attr(args_["menu_class"]) + "\""
     # end if
-    menu = str("<") + str(container) + str(attrs) + str(">") + menu + str("</") + str(container) + str(">") + str(n)
+    menu_ = str("<") + str(container_) + str(attrs_) + str(">") + menu_ + str("</") + str(container_) + str(">") + str(n_)
     #// 
     #// Filters the HTML output of a page-based menu.
     #// 
@@ -1280,11 +1314,11 @@ def wp_page_menu(args=Array(), *args_):
     #// @param string $menu The HTML output.
     #// @param array  $args An array of arguments.
     #//
-    menu = apply_filters("wp_page_menu", menu, args)
-    if args["echo"]:
-        php_print(menu)
+    menu_ = apply_filters("wp_page_menu", menu_, args_)
+    if args_["echo"]:
+        php_print(menu_)
     else:
-        return menu
+        return menu_
     # end if
 # end def wp_page_menu
 #// 
@@ -1302,19 +1336,20 @@ def wp_page_menu(args=Array(), *args_):
 #// @param array $r
 #// @return string
 #//
-def walk_page_tree(pages=None, depth=None, current_page=None, r=None, *args_):
+def walk_page_tree(pages_=None, depth_=None, current_page_=None, r_=None, *_args_):
     
-    if php_empty(lambda : r["walker"]):
-        walker = php_new_class("Walker_Page", lambda : Walker_Page())
+    
+    if php_empty(lambda : r_["walker"]):
+        walker_ = php_new_class("Walker_Page", lambda : Walker_Page())
     else:
-        walker = r["walker"]
+        walker_ = r_["walker"]
     # end if
-    for page in pages:
-        if page.post_parent:
-            r["pages_with_children"][page.post_parent] = True
+    for page_ in pages_:
+        if page_.post_parent:
+            r_["pages_with_children"][page_.post_parent] = True
         # end if
     # end for
-    return walker.walk(pages, depth, r, current_page)
+    return walker_.walk(pages_, depth_, r_, current_page_)
 # end def walk_page_tree
 #// 
 #// Retrieve HTML dropdown (select) content for page list.
@@ -1328,15 +1363,16 @@ def walk_page_tree(pages=None, depth=None, current_page=None, r=None, *args_):
 #// 
 #// @return string
 #//
-def walk_page_dropdown_tree(*args):
+def walk_page_dropdown_tree(*args_):
     
-    if php_empty(lambda : args[2]["walker"]):
+    
+    if php_empty(lambda : args_[2]["walker"]):
         #// The user's options are the third parameter.
-        walker = php_new_class("Walker_PageDropdown", lambda : Walker_PageDropdown())
+        walker_ = php_new_class("Walker_PageDropdown", lambda : Walker_PageDropdown())
     else:
-        walker = args[2]["walker"]
+        walker_ = args_[2]["walker"]
     # end if
-    return walker.walk(args)
+    return walker_.walk(args_)
 # end def walk_page_dropdown_tree
 #// 
 #// Attachments.
@@ -1351,15 +1387,24 @@ def walk_page_dropdown_tree(*args):
 #// @param bool        $deprecated   Deprecated. Not used.
 #// @param bool        $permalink    Optional, default is false. Whether to include permalink.
 #//
-def the_attachment_link(id=0, fullsize=False, deprecated=False, permalink=False, *args_):
+def the_attachment_link(id_=0, fullsize_=None, deprecated_=None, permalink_=None, *_args_):
+    if fullsize_ is None:
+        fullsize_ = False
+    # end if
+    if deprecated_ is None:
+        deprecated_ = False
+    # end if
+    if permalink_ is None:
+        permalink_ = False
+    # end if
     
-    if (not php_empty(lambda : deprecated)):
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.5.0")
     # end if
-    if fullsize:
-        php_print(wp_get_attachment_link(id, "full", permalink))
+    if fullsize_:
+        php_print(wp_get_attachment_link(id_, "full", permalink_))
     else:
-        php_print(wp_get_attachment_link(id, "thumbnail", permalink))
+        php_print(wp_get_attachment_link(id_, "thumbnail", permalink_))
     # end if
 # end def the_attachment_link
 #// 
@@ -1379,28 +1424,37 @@ def the_attachment_link(id=0, fullsize=False, deprecated=False, permalink=False,
 #// @param array|string $attr      Optional. Array or string of attributes. Default empty.
 #// @return string HTML content.
 #//
-def wp_get_attachment_link(id=0, size="thumbnail", permalink=False, icon=False, text=False, attr="", *args_):
+def wp_get_attachment_link(id_=0, size_="thumbnail", permalink_=None, icon_=None, text_=None, attr_="", *_args_):
+    if permalink_ is None:
+        permalink_ = False
+    # end if
+    if icon_ is None:
+        icon_ = False
+    # end if
+    if text_ is None:
+        text_ = False
+    # end if
     
-    _post = get_post(id)
-    if php_empty(lambda : _post) or "attachment" != _post.post_type or (not wp_get_attachment_url(_post.ID)):
+    _post_ = get_post(id_)
+    if php_empty(lambda : _post_) or "attachment" != _post_.post_type or (not wp_get_attachment_url(_post_.ID)):
         return __("Missing Attachment")
     # end if
-    url = wp_get_attachment_url(_post.ID)
-    if permalink:
-        url = get_attachment_link(_post.ID)
+    url_ = wp_get_attachment_url(_post_.ID)
+    if permalink_:
+        url_ = get_attachment_link(_post_.ID)
     # end if
-    if text:
-        link_text = text
-    elif size and "none" != size:
-        link_text = wp_get_attachment_image(_post.ID, size, icon, attr)
+    if text_:
+        link_text_ = text_
+    elif size_ and "none" != size_:
+        link_text_ = wp_get_attachment_image(_post_.ID, size_, icon_, attr_)
     else:
-        link_text = ""
+        link_text_ = ""
     # end if
-    if "" == php_trim(link_text):
-        link_text = _post.post_title
+    if "" == php_trim(link_text_):
+        link_text_ = _post_.post_title
     # end if
-    if "" == php_trim(link_text):
-        link_text = esc_html(pathinfo(get_attached_file(_post.ID), PATHINFO_FILENAME))
+    if "" == php_trim(link_text_):
+        link_text_ = esc_html(pathinfo(get_attached_file(_post_.ID), PATHINFO_FILENAME))
     # end if
     #// 
     #// Filters a retrieved attachment page link.
@@ -1417,7 +1471,7 @@ def wp_get_attachment_link(id=0, size="thumbnail", permalink=False, icon=False, 
     #// @param string|bool  $text      If string, will be link text. Default false.
     #// @param array|string $attr      Array or string of attributes. Default empty.
     #//
-    return apply_filters("wp_get_attachment_link", "<a href='" + esc_url(url) + str("'>") + str(link_text) + str("</a>"), id, size, permalink, icon, text, attr)
+    return apply_filters("wp_get_attachment_link", "<a href='" + esc_url(url_) + str("'>") + str(link_text_) + str("</a>"), id_, size_, permalink_, icon_, text_, attr_)
 # end def wp_get_attachment_link
 #// 
 #// Wrap attachment in paragraph tag before content.
@@ -1427,30 +1481,31 @@ def wp_get_attachment_link(id=0, size="thumbnail", permalink=False, icon=False, 
 #// @param string $content
 #// @return string
 #//
-def prepend_attachment(content=None, *args_):
+def prepend_attachment(content_=None, *_args_):
     
-    post = get_post()
-    if php_empty(lambda : post.post_type) or "attachment" != post.post_type:
-        return content
+    
+    post_ = get_post()
+    if php_empty(lambda : post_.post_type) or "attachment" != post_.post_type:
+        return content_
     # end if
-    if wp_attachment_is("video", post):
-        meta = wp_get_attachment_metadata(get_the_ID())
-        atts = Array({"src": wp_get_attachment_url()})
-        if (not php_empty(lambda : meta["width"])) and (not php_empty(lambda : meta["height"])):
-            atts["width"] = php_int(meta["width"])
-            atts["height"] = php_int(meta["height"])
+    if wp_attachment_is("video", post_):
+        meta_ = wp_get_attachment_metadata(get_the_ID())
+        atts_ = Array({"src": wp_get_attachment_url()})
+        if (not php_empty(lambda : meta_["width"])) and (not php_empty(lambda : meta_["height"])):
+            atts_["width"] = php_int(meta_["width"])
+            atts_["height"] = php_int(meta_["height"])
         # end if
         if has_post_thumbnail():
-            atts["poster"] = wp_get_attachment_url(get_post_thumbnail_id())
+            atts_["poster"] = wp_get_attachment_url(get_post_thumbnail_id())
         # end if
-        p = wp_video_shortcode(atts)
-    elif wp_attachment_is("audio", post):
-        p = wp_audio_shortcode(Array({"src": wp_get_attachment_url()}))
+        p_ = wp_video_shortcode(atts_)
+    elif wp_attachment_is("audio", post_):
+        p_ = wp_audio_shortcode(Array({"src": wp_get_attachment_url()}))
     else:
-        p = "<p class=\"attachment\">"
+        p_ = "<p class=\"attachment\">"
         #// Show the medium sized image representation of the attachment if available, and link to the raw file.
-        p += wp_get_attachment_link(0, "medium", False)
-        p += "</p>"
+        p_ += wp_get_attachment_link(0, "medium", False)
+        p_ += "</p>"
     # end if
     #// 
     #// Filters the attachment markup to be prepended to the post content.
@@ -1461,8 +1516,8 @@ def prepend_attachment(content=None, *args_):
     #// 
     #// @param string $p The attachment HTML output.
     #//
-    p = apply_filters("prepend_attachment", p)
-    return str(p) + str("\n") + str(content)
+    p_ = apply_filters("prepend_attachment", p_)
+    return str(p_) + str("\n") + str(content_)
 # end def prepend_attachment
 #// 
 #// Misc.
@@ -1475,11 +1530,12 @@ def prepend_attachment(content=None, *args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
 #// @return string HTML content for password form for password protected post.
 #//
-def get_the_password_form(post=0, *args_):
+def get_the_password_form(post_=0, *_args_):
     
-    post = get_post(post)
-    label = "pwbox-" + rand() if php_empty(lambda : post.ID) else post.ID
-    output = "<form action=\"" + esc_url(site_url("wp-login.php?action=postpass", "login_post")) + "\" class=\"post-password-form\" method=\"post\">\n  <p>" + __("This content is password protected. To view it please enter your password below:") + "</p>\n <p><label for=\"" + label + "\">" + __("Password:") + " <input name=\"post_password\" id=\"" + label + "\" type=\"password\" size=\"20\" /></label> <input type=\"submit\" name=\"Submit\" value=\"" + esc_attr_x("Enter", "post password form") + "\" /></p></form>\n  "
+    
+    post_ = get_post(post_)
+    label_ = "pwbox-" + rand() if php_empty(lambda : post_.ID) else post_.ID
+    output_ = "<form action=\"" + esc_url(site_url("wp-login.php?action=postpass", "login_post")) + "\" class=\"post-password-form\" method=\"post\">\n <p>" + __("This content is password protected. To view it please enter your password below:") + "</p>\n <p><label for=\"" + label_ + "\">" + __("Password:") + " <input name=\"post_password\" id=\"" + label_ + "\" type=\"password\" size=\"20\" /></label> <input type=\"submit\" name=\"Submit\" value=\"" + esc_attr_x("Enter", "post password form") + "\" /></p></form>\n    "
     #// 
     #// Filters the HTML output for the protected post password form.
     #// 
@@ -1491,7 +1547,7 @@ def get_the_password_form(post=0, *args_):
     #// 
     #// @param string $output The password form HTML output.
     #//
-    return apply_filters("the_password_form", output)
+    return apply_filters("the_password_form", output_)
 # end def get_the_password_form
 #// 
 #// Determines whether currently in a page template.
@@ -1511,24 +1567,25 @@ def get_the_password_form(post=0, *args_):
 #// @param string|array $template The specific template filename or array of templates to match.
 #// @return bool True on success, false on failure.
 #//
-def is_page_template(template="", *args_):
+def is_page_template(template_="", *_args_):
+    
     
     if (not is_singular()):
         return False
     # end if
-    page_template = get_page_template_slug(get_queried_object_id())
-    if php_empty(lambda : template):
-        return php_bool(page_template)
+    page_template_ = get_page_template_slug(get_queried_object_id())
+    if php_empty(lambda : template_):
+        return php_bool(page_template_)
     # end if
-    if template == page_template:
+    if template_ == page_template_:
         return True
     # end if
-    if php_is_array(template):
-        if php_in_array("default", template, True) and (not page_template) or php_in_array(page_template, template, True):
+    if php_is_array(template_):
+        if php_in_array("default", template_, True) and (not page_template_) or php_in_array(page_template_, template_, True):
             return True
         # end if
     # end if
-    return "default" == template and (not page_template)
+    return "default" == template_ and (not page_template_)
 # end def is_page_template
 #// 
 #// Get the specific template filename for a given post.
@@ -1540,17 +1597,18 @@ def is_page_template(template="", *args_):
 #// @return string|false Page template filename. Returns an empty string when the default page template
 #// is in use. Returns false if the post does not exist.
 #//
-def get_page_template_slug(post=None, *args_):
+def get_page_template_slug(post_=None, *_args_):
     
-    post = get_post(post)
-    if (not post):
+    
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    template = get_post_meta(post.ID, "_wp_page_template", True)
-    if (not template) or "default" == template:
+    template_ = get_post_meta(post_.ID, "_wp_page_template", True)
+    if (not template_) or "default" == template_:
         return ""
     # end if
-    return template
+    return template_
 # end def get_page_template_slug
 #// 
 #// Retrieve formatted date timestamp of a revision (linked to that revisions's page).
@@ -1561,32 +1619,35 @@ def get_page_template_slug(post=None, *args_):
 #// @param bool       $link     Optional, default is true. Link to revisions's page?
 #// @return string|false i18n formatted datetimestamp or localized 'Current Revision'.
 #//
-def wp_post_revision_title(revision=None, link=True, *args_):
-    
-    revision = get_post(revision)
-    if (not revision):
-        return revision
+def wp_post_revision_title(revision_=None, link_=None, *_args_):
+    if link_ is None:
+        link_ = True
     # end if
-    if (not php_in_array(revision.post_type, Array("post", "page", "revision"))):
+    
+    revision_ = get_post(revision_)
+    if (not revision_):
+        return revision_
+    # end if
+    if (not php_in_array(revision_.post_type, Array("post", "page", "revision"))):
         return False
     # end if
     #// translators: Revision date format, see https://www.php.net/date
-    datef = _x("F j, Y @ H:i:s", "revision date format")
+    datef_ = _x("F j, Y @ H:i:s", "revision date format")
     #// translators: %s: Revision date.
-    autosavef = __("%s [Autosave]")
+    autosavef_ = __("%s [Autosave]")
     #// translators: %s: Revision date.
-    currentf = __("%s [Current Revision]")
-    date = date_i18n(datef, strtotime(revision.post_modified))
-    edit_link = get_edit_post_link(revision.ID)
-    if link and current_user_can("edit_post", revision.ID) and edit_link:
-        date = str("<a href='") + str(edit_link) + str("'>") + str(date) + str("</a>")
+    currentf_ = __("%s [Current Revision]")
+    date_ = date_i18n(datef_, strtotime(revision_.post_modified))
+    edit_link_ = get_edit_post_link(revision_.ID)
+    if link_ and current_user_can("edit_post", revision_.ID) and edit_link_:
+        date_ = str("<a href='") + str(edit_link_) + str("'>") + str(date_) + str("</a>")
     # end if
-    if (not wp_is_post_revision(revision)):
-        date = php_sprintf(currentf, date)
-    elif wp_is_post_autosave(revision):
-        date = php_sprintf(autosavef, date)
+    if (not wp_is_post_revision(revision_)):
+        date_ = php_sprintf(currentf_, date_)
+    elif wp_is_post_autosave(revision_):
+        date_ = php_sprintf(autosavef_, date_)
     # end if
-    return date
+    return date_
 # end def wp_post_revision_title
 #// 
 #// Retrieve formatted date timestamp of a revision (linked to that revisions's page).
@@ -1597,33 +1658,36 @@ def wp_post_revision_title(revision=None, link=True, *args_):
 #// @param bool       $link     Optional, default is true. Link to revisions's page?
 #// @return string|false gravatar, user, i18n formatted datetimestamp or localized 'Current Revision'.
 #//
-def wp_post_revision_title_expanded(revision=None, link=True, *args_):
-    
-    revision = get_post(revision)
-    if (not revision):
-        return revision
+def wp_post_revision_title_expanded(revision_=None, link_=None, *_args_):
+    if link_ is None:
+        link_ = True
     # end if
-    if (not php_in_array(revision.post_type, Array("post", "page", "revision"))):
+    
+    revision_ = get_post(revision_)
+    if (not revision_):
+        return revision_
+    # end if
+    if (not php_in_array(revision_.post_type, Array("post", "page", "revision"))):
         return False
     # end if
-    author = get_the_author_meta("display_name", revision.post_author)
+    author_ = get_the_author_meta("display_name", revision_.post_author)
     #// translators: Revision date format, see https://www.php.net/date
-    datef = _x("F j, Y @ H:i:s", "revision date format")
-    gravatar = get_avatar(revision.post_author, 24)
-    date = date_i18n(datef, strtotime(revision.post_modified))
-    edit_link = get_edit_post_link(revision.ID)
-    if link and current_user_can("edit_post", revision.ID) and edit_link:
-        date = str("<a href='") + str(edit_link) + str("'>") + str(date) + str("</a>")
+    datef_ = _x("F j, Y @ H:i:s", "revision date format")
+    gravatar_ = get_avatar(revision_.post_author, 24)
+    date_ = date_i18n(datef_, strtotime(revision_.post_modified))
+    edit_link_ = get_edit_post_link(revision_.ID)
+    if link_ and current_user_can("edit_post", revision_.ID) and edit_link_:
+        date_ = str("<a href='") + str(edit_link_) + str("'>") + str(date_) + str("</a>")
     # end if
-    revision_date_author = php_sprintf(__("%1$s %2$s, %3$s ago (%4$s)"), gravatar, author, human_time_diff(strtotime(revision.post_modified_gmt)), date)
+    revision_date_author_ = php_sprintf(__("%1$s %2$s, %3$s ago (%4$s)"), gravatar_, author_, human_time_diff(strtotime(revision_.post_modified_gmt)), date_)
     #// translators: %s: Revision date with author avatar.
-    autosavef = __("%s [Autosave]")
+    autosavef_ = __("%s [Autosave]")
     #// translators: %s: Revision date with author avatar.
-    currentf = __("%s [Current Revision]")
-    if (not wp_is_post_revision(revision)):
-        revision_date_author = php_sprintf(currentf, revision_date_author)
-    elif wp_is_post_autosave(revision):
-        revision_date_author = php_sprintf(autosavef, revision_date_author)
+    currentf_ = __("%s [Current Revision]")
+    if (not wp_is_post_revision(revision_)):
+        revision_date_author_ = php_sprintf(currentf_, revision_date_author_)
+    elif wp_is_post_autosave(revision_):
+        revision_date_author_ = php_sprintf(autosavef_, revision_date_author_)
     # end if
     #// 
     #// Filters the formatted author and date for a revision.
@@ -1635,7 +1699,7 @@ def wp_post_revision_title_expanded(revision=None, link=True, *args_):
     #// @param bool    $link                 Whether to link to the revisions page, as passed into
     #// wp_post_revision_title_expanded().
     #//
-    return apply_filters("wp_post_revision_title_expanded", revision_date_author, revision, link)
+    return apply_filters("wp_post_revision_title_expanded", revision_date_author_, revision_, link_)
 # end def wp_post_revision_title_expanded
 #// 
 #// Display a list of a post's revisions.
@@ -1648,34 +1712,35 @@ def wp_post_revision_title_expanded(revision=None, link=True, *args_):
 #// @param int|WP_Post $post_id Optional. Post ID or WP_Post object. Default is global $post.
 #// @param string      $type    'all' (default), 'revision' or 'autosave'
 #//
-def wp_list_post_revisions(post_id=0, type="all", *args_):
+def wp_list_post_revisions(post_id_=0, type_="all", *_args_):
     
-    post = get_post(post_id)
-    if (not post):
+    
+    post_ = get_post(post_id_)
+    if (not post_):
         return
     # end if
     #// $args array with (parent, format, right, left, type) deprecated since 3.6.
-    if php_is_array(type):
-        type = type["type"] if (not php_empty(lambda : type["type"])) else type
+    if php_is_array(type_):
+        type_ = type_["type"] if (not php_empty(lambda : type_["type"])) else type_
         _deprecated_argument(__FUNCTION__, "3.6.0")
     # end if
-    revisions = wp_get_post_revisions(post.ID)
-    if (not revisions):
+    revisions_ = wp_get_post_revisions(post_.ID)
+    if (not revisions_):
         return
     # end if
-    rows = ""
-    for revision in revisions:
-        if (not current_user_can("read_post", revision.ID)):
+    rows_ = ""
+    for revision_ in revisions_:
+        if (not current_user_can("read_post", revision_.ID)):
             continue
         # end if
-        is_autosave = wp_is_post_autosave(revision)
-        if "revision" == type and is_autosave or "autosave" == type and (not is_autosave):
+        is_autosave_ = wp_is_post_autosave(revision_)
+        if "revision" == type_ and is_autosave_ or "autosave" == type_ and (not is_autosave_):
             continue
         # end if
-        rows += "   <li>" + wp_post_revision_title_expanded(revision) + "</li>\n"
+        rows_ += "  <li>" + wp_post_revision_title_expanded(revision_) + "</li>\n"
     # end for
     php_print("<div class='hide-if-js'><p>" + __("JavaScript must be enabled to use this feature.") + "</p></div>\n")
     php_print("<ul class='post-revisions hide-if-no-js'>\n")
-    php_print(rows)
+    php_print(rows_)
     php_print("</ul>")
 # end def wp_list_post_revisions

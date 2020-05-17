@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,24 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see Walker
 #//
 class Walker_Page(Walker):
+    #// 
+    #// What the class handles.
+    #// 
+    #// @since 2.1.0
+    #// @var string
+    #// 
+    #// @see Walker::$tree_type
+    #//
     tree_type = "page"
+    #// 
+    #// Database fields to use.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #// 
+    #// @see Walker::$db_fields
+    #// @todo Decouple this.
+    #//
     db_fields = Array({"parent": "post_parent", "id": "ID"})
     #// 
     #// Outputs the beginning of the current level in the tree before elements are output.
@@ -41,17 +53,20 @@ class Walker_Page(Walker):
     #// @param array  $args   Optional. Arguments for outputting the next level.
     #// Default empty array.
     #//
-    def start_lvl(self, output=None, depth=0, args=Array()):
-        
-        if (php_isset(lambda : args["item_spacing"])) and "preserve" == args["item_spacing"]:
-            t = "   "
-            n = "\n"
-        else:
-            t = ""
-            n = ""
+    def start_lvl(self, output_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        indent = php_str_repeat(t, depth)
-        output += str(n) + str(indent) + str("<ul class='children'>") + str(n)
+        
+        if (php_isset(lambda : args_["item_spacing"])) and "preserve" == args_["item_spacing"]:
+            t_ = "  "
+            n_ = "\n"
+        else:
+            t_ = ""
+            n_ = ""
+        # end if
+        indent_ = php_str_repeat(t_, depth_)
+        output_ += str(n_) + str(indent_) + str("<ul class='children'>") + str(n_)
     # end def start_lvl
     #// 
     #// Outputs the end of the current level in the tree after elements are output.
@@ -65,17 +80,20 @@ class Walker_Page(Walker):
     #// @param array  $args   Optional. Arguments for outputting the end of the current level.
     #// Default empty array.
     #//
-    def end_lvl(self, output=None, depth=0, args=Array()):
-        
-        if (php_isset(lambda : args["item_spacing"])) and "preserve" == args["item_spacing"]:
-            t = "   "
-            n = "\n"
-        else:
-            t = ""
-            n = ""
+    def end_lvl(self, output_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        indent = php_str_repeat(t, depth)
-        output += str(indent) + str("</ul>") + str(n)
+        
+        if (php_isset(lambda : args_["item_spacing"])) and "preserve" == args_["item_spacing"]:
+            t_ = "  "
+            n_ = "\n"
+        else:
+            t_ = ""
+            n_ = ""
+        # end if
+        indent_ = php_str_repeat(t_, depth_)
+        output_ += str(indent_) + str("</ul>") + str(n_)
     # end def end_lvl
     #// 
     #// Outputs the beginning of the current element in the tree.
@@ -89,36 +107,39 @@ class Walker_Page(Walker):
     #// @param array   $args         Optional. Array of arguments. Default empty array.
     #// @param int     $current_page Optional. Page ID. Default 0.
     #//
-    def start_el(self, output=None, page=None, depth=0, args=Array(), current_page=0):
+    def start_el(self, output_=None, page_=None, depth_=0, args_=None, current_page_=0):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if (php_isset(lambda : args["item_spacing"])) and "preserve" == args["item_spacing"]:
-            t = "   "
-            n = "\n"
+        if (php_isset(lambda : args_["item_spacing"])) and "preserve" == args_["item_spacing"]:
+            t_ = "  "
+            n_ = "\n"
         else:
-            t = ""
-            n = ""
+            t_ = ""
+            n_ = ""
         # end if
-        if depth:
-            indent = php_str_repeat(t, depth)
+        if depth_:
+            indent_ = php_str_repeat(t_, depth_)
         else:
-            indent = ""
+            indent_ = ""
         # end if
-        css_class = Array("page_item", "page-item-" + page.ID)
-        if (php_isset(lambda : args["pages_with_children"][page.ID])):
-            css_class[-1] = "page_item_has_children"
+        css_class_ = Array("page_item", "page-item-" + page_.ID)
+        if (php_isset(lambda : args_["pages_with_children"][page_.ID])):
+            css_class_[-1] = "page_item_has_children"
         # end if
-        if (not php_empty(lambda : current_page)):
-            _current_page = get_post(current_page)
-            if _current_page and php_in_array(page.ID, _current_page.ancestors):
-                css_class[-1] = "current_page_ancestor"
+        if (not php_empty(lambda : current_page_)):
+            _current_page_ = get_post(current_page_)
+            if _current_page_ and php_in_array(page_.ID, _current_page_.ancestors):
+                css_class_[-1] = "current_page_ancestor"
             # end if
-            if page.ID == current_page:
-                css_class[-1] = "current_page_item"
-            elif _current_page and page.ID == _current_page.post_parent:
-                css_class[-1] = "current_page_parent"
+            if page_.ID == current_page_:
+                css_class_[-1] = "current_page_item"
+            elif _current_page_ and page_.ID == _current_page_.post_parent:
+                css_class_[-1] = "current_page_parent"
             # end if
-        elif get_option("page_for_posts") == page.ID:
-            css_class[-1] = "current_page_parent"
+        elif get_option("page_for_posts") == page_.ID:
+            css_class_[-1] = "current_page_parent"
         # end if
         #// 
         #// Filters the list of CSS classes to include with each page item in the list.
@@ -133,17 +154,17 @@ class Walker_Page(Walker):
         #// @param array    $args         An array of arguments.
         #// @param int      $current_page ID of the current page.
         #//
-        css_classes = php_implode(" ", apply_filters("page_css_class", css_class, page, depth, args, current_page))
-        css_classes = " class=\"" + esc_attr(css_classes) + "\"" if css_classes else ""
-        if "" == page.post_title:
+        css_classes_ = php_implode(" ", apply_filters("page_css_class", css_class_, page_, depth_, args_, current_page_))
+        css_classes_ = " class=\"" + esc_attr(css_classes_) + "\"" if css_classes_ else ""
+        if "" == page_.post_title:
             #// translators: %d: ID of a post.
-            page.post_title = php_sprintf(__("#%d (no title)"), page.ID)
+            page_.post_title = php_sprintf(__("#%d (no title)"), page_.ID)
         # end if
-        args["link_before"] = "" if php_empty(lambda : args["link_before"]) else args["link_before"]
-        args["link_after"] = "" if php_empty(lambda : args["link_after"]) else args["link_after"]
-        atts = Array()
-        atts["href"] = get_permalink(page.ID)
-        atts["aria-current"] = "page" if page.ID == current_page else ""
+        args_["link_before"] = "" if php_empty(lambda : args_["link_before"]) else args_["link_before"]
+        args_["link_after"] = "" if php_empty(lambda : args_["link_after"]) else args_["link_after"]
+        atts_ = Array()
+        atts_["href"] = get_permalink(page_.ID)
+        atts_["aria-current"] = "page" if page_.ID == current_page_ else ""
         #// 
         #// Filters the HTML attributes applied to a page menu item's anchor element.
         #// 
@@ -160,23 +181,23 @@ class Walker_Page(Walker):
         #// @param array   $args         An array of arguments.
         #// @param int     $current_page ID of the current page.
         #//
-        atts = apply_filters("page_menu_link_attributes", atts, page, depth, args, current_page)
-        attributes = ""
-        for attr,value in atts:
-            if is_scalar(value) and "" != value and False != value:
-                value = esc_url(value) if "href" == attr else esc_attr(value)
-                attributes += " " + attr + "=\"" + value + "\""
+        atts_ = apply_filters("page_menu_link_attributes", atts_, page_, depth_, args_, current_page_)
+        attributes_ = ""
+        for attr_,value_ in atts_:
+            if is_scalar(value_) and "" != value_ and False != value_:
+                value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
+                attributes_ += " " + attr_ + "=\"" + value_ + "\""
             # end if
         # end for
-        output += indent + php_sprintf("<li%s><a%s>%s%s%s</a>", css_classes, attributes, args["link_before"], apply_filters("the_title", page.post_title, page.ID), args["link_after"])
-        if (not php_empty(lambda : args["show_date"])):
-            if "modified" == args["show_date"]:
-                time = page.post_modified
+        output_ += indent_ + php_sprintf("<li%s><a%s>%s%s%s</a>", css_classes_, attributes_, args_["link_before"], apply_filters("the_title", page_.post_title, page_.ID), args_["link_after"])
+        if (not php_empty(lambda : args_["show_date"])):
+            if "modified" == args_["show_date"]:
+                time_ = page_.post_modified
             else:
-                time = page.post_date
+                time_ = page_.post_date
             # end if
-            date_format = "" if php_empty(lambda : args["date_format"]) else args["date_format"]
-            output += " " + mysql2date(date_format, time)
+            date_format_ = "" if php_empty(lambda : args_["date_format"]) else args_["date_format"]
+            output_ += " " + mysql2date(date_format_, time_)
         # end if
     # end def start_el
     #// 
@@ -191,15 +212,18 @@ class Walker_Page(Walker):
     #// @param int     $depth  Optional. Depth of page. Default 0 (unused).
     #// @param array   $args   Optional. Array of arguments. Default empty array.
     #//
-    def end_el(self, output=None, page=None, depth=0, args=Array()):
-        
-        if (php_isset(lambda : args["item_spacing"])) and "preserve" == args["item_spacing"]:
-            t = "   "
-            n = "\n"
-        else:
-            t = ""
-            n = ""
+    def end_el(self, output_=None, page_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        output += str("</li>") + str(n)
+        
+        if (php_isset(lambda : args_["item_spacing"])) and "preserve" == args_["item_spacing"]:
+            t_ = "  "
+            n_ = "\n"
+        else:
+            t_ = ""
+            n_ = ""
+        # end if
+        output_ += str("</li>") + str(n_)
     # end def end_el
 # end class Walker_Page

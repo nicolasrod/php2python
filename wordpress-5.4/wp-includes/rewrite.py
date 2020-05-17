@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -130,11 +125,12 @@ php_define("EP_ALL", EP_PERMALINK | EP_ATTACHMENT | EP_ROOT | EP_COMMENTS | EP_S
 #// @param string       $after Optional. Priority of the new rule. Accepts 'top'
 #// or 'bottom'. Default 'bottom'.
 #//
-def add_rewrite_rule(regex=None, query=None, after="bottom", *args_):
+def add_rewrite_rule(regex_=None, query_=None, after_="bottom", *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    wp_rewrite.add_rule(regex, query, after)
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    wp_rewrite_.add_rule(regex_, query_, after_)
 # end def add_rewrite_rule
 #// 
 #// Add a new rewrite tag (like %postname%).
@@ -152,20 +148,22 @@ def add_rewrite_rule(regex=None, query=None, after="bottom", *args_):
 #// @param string $regex Regular expression to substitute the tag for in rewrite rules.
 #// @param string $query Optional. String to append to the rewritten query. Must end in '='. Default empty.
 #//
-def add_rewrite_tag(tag=None, regex=None, query="", *args_):
+def add_rewrite_tag(tag_=None, regex_=None, query_="", *_args_):
+    
     
     #// Validate the tag's name.
-    if php_strlen(tag) < 3 or "%" != tag[0] or "%" != tag[php_strlen(tag) - 1]:
+    if php_strlen(tag_) < 3 or "%" != tag_[0] or "%" != tag_[php_strlen(tag_) - 1]:
         return
     # end if
-    global wp_rewrite,wp
-    php_check_if_defined("wp_rewrite","wp")
-    if php_empty(lambda : query):
-        qv = php_trim(tag, "%")
-        wp.add_query_var(qv)
-        query = qv + "="
+    global wp_rewrite_
+    global wp_
+    php_check_if_defined("wp_rewrite_","wp_")
+    if php_empty(lambda : query_):
+        qv_ = php_trim(tag_, "%")
+        wp_.add_query_var(qv_)
+        query_ = qv_ + "="
     # end if
-    wp_rewrite.add_rewrite_tag(tag, regex, query)
+    wp_rewrite_.add_rewrite_tag(tag_, regex_, query_)
 # end def add_rewrite_tag
 #// 
 #// Removes an existing rewrite tag (like %postname%).
@@ -176,11 +174,12 @@ def add_rewrite_tag(tag=None, regex=None, query="", *args_):
 #// 
 #// @param string $tag Name of the rewrite tag.
 #//
-def remove_rewrite_tag(tag=None, *args_):
+def remove_rewrite_tag(tag_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    wp_rewrite.remove_rewrite_tag(tag)
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    wp_rewrite_.remove_rewrite_tag(tag_)
 # end def remove_rewrite_tag
 #// 
 #// Add permalink structure.
@@ -195,18 +194,21 @@ def remove_rewrite_tag(tag=None, *args_):
 #// @param array  $args   Optional. Arguments for building the rules from the permalink structure,
 #// see WP_Rewrite::add_permastruct() for full details. Default empty array.
 #//
-def add_permastruct(name=None, struct=None, args=Array(), *args_):
+def add_permastruct(name_=None, struct_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
     #// Back-compat for the old parameters: $with_front and $ep_mask.
-    if (not php_is_array(args)):
-        args = Array({"with_front": args})
+    if (not php_is_array(args_)):
+        args_ = Array({"with_front": args_})
     # end if
     if php_func_num_args() == 4:
-        args["ep_mask"] = php_func_get_arg(3)
+        args_["ep_mask"] = php_func_get_arg(3)
     # end if
-    wp_rewrite.add_permastruct(name, struct, args)
+    wp_rewrite_.add_permastruct(name_, struct_, args_)
 # end def add_permastruct
 #// 
 #// Removes a permalink structure.
@@ -221,11 +223,12 @@ def add_permastruct(name=None, struct=None, args=Array(), *args_):
 #// 
 #// @param string $name Name for permalink structure.
 #//
-def remove_permastruct(name=None, *args_):
+def remove_permastruct(name_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    wp_rewrite.remove_permastruct(name)
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    wp_rewrite_.remove_permastruct(name_)
 # end def remove_permastruct
 #// 
 #// Add a new feed type like /atom1/.
@@ -238,18 +241,19 @@ def remove_permastruct(name=None, *args_):
 #// @param callable $function Callback to run on feed display.
 #// @return string Feed action name.
 #//
-def add_feed(feedname=None, function=None, *args_):
+def add_feed(feedname_=None, function_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if (not php_in_array(feedname, wp_rewrite.feeds)):
-        wp_rewrite.feeds[-1] = feedname
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if (not php_in_array(feedname_, wp_rewrite_.feeds)):
+        wp_rewrite_.feeds[-1] = feedname_
     # end if
-    hook = "do_feed_" + feedname
+    hook_ = "do_feed_" + feedname_
     #// Remove default function hook.
-    remove_action(hook, hook)
-    add_action(hook, function, 10, 2)
-    return hook
+    remove_action(hook_, hook_)
+    add_action(hook_, function_, 10, 2)
+    return hook_
 # end def add_feed
 #// 
 #// Remove rewrite rules and then recreate rewrite rules.
@@ -261,12 +265,15 @@ def add_feed(feedname=None, function=None, *args_):
 #// @param bool $hard Whether to update .htaccess (hard flush) or just update
 #// rewrite_rules transient (soft flush). Default is true (hard).
 #//
-def flush_rewrite_rules(hard=True, *args_):
+def flush_rewrite_rules(hard_=None, *_args_):
+    if hard_ is None:
+        hard_ = True
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    if php_is_callable(Array(wp_rewrite, "flush_rules")):
-        wp_rewrite.flush_rules(hard)
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    if php_is_callable(Array(wp_rewrite_, "flush_rules")):
+        wp_rewrite_.flush_rules(hard_)
     # end if
 # end def flush_rewrite_rules
 #// 
@@ -301,11 +308,14 @@ def flush_rewrite_rules(hard=True, *args_):
 #// @param string|bool $query_var Name of the corresponding query variable. Pass `false` to skip registering a query_var
 #// for this endpoint. Defaults to the value of `$name`.
 #//
-def add_rewrite_endpoint(name=None, places=None, query_var=True, *args_):
+def add_rewrite_endpoint(name_=None, places_=None, query_var_=None, *_args_):
+    if query_var_ is None:
+        query_var_ = True
+    # end if
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    wp_rewrite.add_endpoint(name, places, query_var)
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    wp_rewrite_.add_endpoint(name_, places_, query_var_)
 # end def add_rewrite_endpoint
 #// 
 #// Filters the URL base for taxonomies.
@@ -318,13 +328,14 @@ def add_rewrite_endpoint(name=None, places=None, query_var=True, *args_):
 #// @param string $base The taxonomy base that we're going to filter
 #// @return string
 #//
-def _wp_filter_taxonomy_base(base=None, *args_):
+def _wp_filter_taxonomy_base(base_=None, *_args_):
     
-    if (not php_empty(lambda : base)):
-        base = php_preg_replace("|^/index\\.php/|", "", base)
-        base = php_trim(base, "/")
+    
+    if (not php_empty(lambda : base_)):
+        base_ = php_preg_replace("|^/index\\.php/|", "", base_)
+        base_ = php_trim(base_, "/")
     # end if
-    return base
+    return base_
 # end def _wp_filter_taxonomy_base
 #// 
 #// Resolve numeric slugs that collide with date permalinks.
@@ -347,16 +358,19 @@ def _wp_filter_taxonomy_base(base=None, *args_):
 #// WP::parse_request(). Default empty array.
 #// @return array Returns the original array of query vars, with date/post conflicts resolved.
 #//
-def wp_resolve_numeric_slug_conflicts(query_vars=Array(), *args_):
+def wp_resolve_numeric_slug_conflicts(query_vars_=None, *_args_):
+    if query_vars_ is None:
+        query_vars_ = Array()
+    # end if
     
-    if (not (php_isset(lambda : query_vars["year"]))) and (not (php_isset(lambda : query_vars["monthnum"]))) and (not (php_isset(lambda : query_vars["day"]))):
-        return query_vars
+    if (not (php_isset(lambda : query_vars_["year"]))) and (not (php_isset(lambda : query_vars_["monthnum"]))) and (not (php_isset(lambda : query_vars_["day"]))):
+        return query_vars_
     # end if
     #// Identify the 'postname' position in the permastruct array.
-    permastructs = php_array_values(php_array_filter(php_explode("/", get_option("permalink_structure"))))
-    postname_index = php_array_search("%postname%", permastructs)
-    if False == postname_index:
-        return query_vars
+    permastructs_ = php_array_values(php_array_filter(php_explode("/", get_option("permalink_structure"))))
+    postname_index_ = php_array_search("%postname%", permastructs_)
+    if False == postname_index_:
+        return query_vars_
     # end if
     #// 
     #// A numeric slug could be confused with a year, month, or day, depending on position. To account for
@@ -364,66 +378,66 @@ def wp_resolve_numeric_slug_conflicts(query_vars=Array(), *args_):
     #// `is_*` checks are generous: check for year-slug clashes when `is_year` *or* `is_month`, and check
     #// for month-slug clashes when `is_month` *or* `is_day`.
     #//
-    compare = ""
-    if 0 == postname_index and (php_isset(lambda : query_vars["year"])) or (php_isset(lambda : query_vars["monthnum"])):
-        compare = "year"
-    elif postname_index and "%year%" == permastructs[postname_index - 1] and (php_isset(lambda : query_vars["monthnum"])) or (php_isset(lambda : query_vars["day"])):
-        compare = "monthnum"
-    elif postname_index and "%monthnum%" == permastructs[postname_index - 1] and (php_isset(lambda : query_vars["day"])):
-        compare = "day"
+    compare_ = ""
+    if 0 == postname_index_ and (php_isset(lambda : query_vars_["year"])) or (php_isset(lambda : query_vars_["monthnum"])):
+        compare_ = "year"
+    elif postname_index_ and "%year%" == permastructs_[postname_index_ - 1] and (php_isset(lambda : query_vars_["monthnum"])) or (php_isset(lambda : query_vars_["day"])):
+        compare_ = "monthnum"
+    elif postname_index_ and "%monthnum%" == permastructs_[postname_index_ - 1] and (php_isset(lambda : query_vars_["day"])):
+        compare_ = "day"
     # end if
-    if (not compare):
-        return query_vars
+    if (not compare_):
+        return query_vars_
     # end if
     #// This is the potentially clashing slug.
-    value = query_vars[compare]
-    post = get_page_by_path(value, OBJECT, "post")
-    if (not type(post).__name__ == "WP_Post"):
-        return query_vars
+    value_ = query_vars_[compare_]
+    post_ = get_page_by_path(value_, OBJECT, "post")
+    if (not type(post_).__name__ == "WP_Post"):
+        return query_vars_
     # end if
     #// If the date of the post doesn't match the date specified in the URL, resolve to the date archive.
-    if php_preg_match("/^([0-9]{4})\\-([0-9]{2})/", post.post_date, matches) and (php_isset(lambda : query_vars["year"])) and "monthnum" == compare or "day" == compare:
+    if php_preg_match("/^([0-9]{4})\\-([0-9]{2})/", post_.post_date, matches_) and (php_isset(lambda : query_vars_["year"])) and "monthnum" == compare_ or "day" == compare_:
         #// $matches[1] is the year the post was published.
-        if php_intval(query_vars["year"]) != php_intval(matches[1]):
-            return query_vars
+        if php_intval(query_vars_["year"]) != php_intval(matches_[1]):
+            return query_vars_
         # end if
         #// $matches[2] is the month the post was published.
-        if "day" == compare and (php_isset(lambda : query_vars["monthnum"])) and php_intval(query_vars["monthnum"]) != php_intval(matches[2]):
-            return query_vars
+        if "day" == compare_ and (php_isset(lambda : query_vars_["monthnum"])) and php_intval(query_vars_["monthnum"]) != php_intval(matches_[2]):
+            return query_vars_
         # end if
     # end if
     #// 
     #// If the located post contains nextpage pagination, then the URL chunk following postname may be
     #// intended as the page number. Verify that it's a valid page before resolving to it.
     #//
-    maybe_page = ""
-    if "year" == compare and (php_isset(lambda : query_vars["monthnum"])):
-        maybe_page = query_vars["monthnum"]
-    elif "monthnum" == compare and (php_isset(lambda : query_vars["day"])):
-        maybe_page = query_vars["day"]
+    maybe_page_ = ""
+    if "year" == compare_ and (php_isset(lambda : query_vars_["monthnum"])):
+        maybe_page_ = query_vars_["monthnum"]
+    elif "monthnum" == compare_ and (php_isset(lambda : query_vars_["day"])):
+        maybe_page_ = query_vars_["day"]
     # end if
     #// Bug found in #11694 - 'page' was returning '/4'.
-    maybe_page = php_int(php_trim(maybe_page, "/"))
-    post_page_count = php_substr_count(post.post_content, "<!--nextpage-->") + 1
+    maybe_page_ = php_int(php_trim(maybe_page_, "/"))
+    post_page_count_ = php_substr_count(post_.post_content, "<!--nextpage-->") + 1
     #// If the post doesn't have multiple pages, but a 'page' candidate is found, resolve to the date archive.
-    if 1 == post_page_count and maybe_page:
-        return query_vars
+    if 1 == post_page_count_ and maybe_page_:
+        return query_vars_
     # end if
     #// If the post has multiple pages and the 'page' number isn't valid, resolve to the date archive.
-    if post_page_count > 1 and maybe_page > post_page_count:
-        return query_vars
+    if post_page_count_ > 1 and maybe_page_ > post_page_count_:
+        return query_vars_
     # end if
     #// If we've gotten to this point, we have a slug/date clash. First, adjust for nextpage.
-    if "" != maybe_page:
-        query_vars["page"] = php_intval(maybe_page)
+    if "" != maybe_page_:
+        query_vars_["page"] = php_intval(maybe_page_)
     # end if
-    query_vars["year"] = None
-    query_vars["monthnum"] = None
-    query_vars["day"] = None
+    query_vars_["year"] = None
+    query_vars_["monthnum"] = None
+    query_vars_["day"] = None
     #// Then, set the identified post.
-    query_vars["name"] = post.post_name
+    query_vars_["name"] = post_.post_name
     #// Finally, return the modified query vars.
-    return query_vars
+    return query_vars_
 # end def wp_resolve_numeric_slug_conflicts
 #// 
 #// Examine a URL and try to determine the post ID it represents.
@@ -438,10 +452,11 @@ def wp_resolve_numeric_slug_conflicts(query_vars=Array(), *args_):
 #// @param string $url Permalink to check.
 #// @return int Post ID, or 0 on failure.
 #//
-def url_to_postid(url=None, *args_):
+def url_to_postid(url_=None, *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
     #// 
     #// Filters the URL to derive the post ID from.
     #// 
@@ -449,116 +464,116 @@ def url_to_postid(url=None, *args_):
     #// 
     #// @param string $url The URL to derive the post ID from.
     #//
-    url = apply_filters("url_to_postid", url)
-    url_host = php_str_replace("www.", "", php_parse_url(url, PHP_URL_HOST))
-    home_url_host = php_str_replace("www.", "", php_parse_url(home_url(), PHP_URL_HOST))
+    url_ = apply_filters("url_to_postid", url_)
+    url_host_ = php_str_replace("www.", "", php_parse_url(url_, PHP_URL_HOST))
+    home_url_host_ = php_str_replace("www.", "", php_parse_url(home_url(), PHP_URL_HOST))
     #// Bail early if the URL does not belong to this site.
-    if url_host and url_host != home_url_host:
+    if url_host_ and url_host_ != home_url_host_:
         return 0
     # end if
     #// First, check to see if there is a 'p=N' or 'page_id=N' to match against.
-    if php_preg_match("#[?&](p|page_id|attachment_id)=(\\d+)#", url, values):
-        id = absint(values[2])
-        if id:
-            return id
+    if php_preg_match("#[?&](p|page_id|attachment_id)=(\\d+)#", url_, values_):
+        id_ = absint(values_[2])
+        if id_:
+            return id_
         # end if
     # end if
     #// Get rid of the #anchor.
-    url_split = php_explode("#", url)
-    url = url_split[0]
+    url_split_ = php_explode("#", url_)
+    url_ = url_split_[0]
     #// Get rid of URL ?query=string.
-    url_split = php_explode("?", url)
-    url = url_split[0]
+    url_split_ = php_explode("?", url_)
+    url_ = url_split_[0]
     #// Set the correct URL scheme.
-    scheme = php_parse_url(home_url(), PHP_URL_SCHEME)
-    url = set_url_scheme(url, scheme)
+    scheme_ = php_parse_url(home_url(), PHP_URL_SCHEME)
+    url_ = set_url_scheme(url_, scheme_)
     #// Add 'www.' if it is absent and should be there.
-    if False != php_strpos(home_url(), "://www.") and False == php_strpos(url, "://www."):
-        url = php_str_replace("://", "://www.", url)
+    if False != php_strpos(home_url(), "://www.") and False == php_strpos(url_, "://www."):
+        url_ = php_str_replace("://", "://www.", url_)
     # end if
     #// Strip 'www.' if it is present and shouldn't be.
     if False == php_strpos(home_url(), "://www."):
-        url = php_str_replace("://www.", "://", url)
+        url_ = php_str_replace("://www.", "://", url_)
     # end if
-    if php_trim(url, "/") == home_url() and "page" == get_option("show_on_front"):
-        page_on_front = get_option("page_on_front")
-        if page_on_front and type(get_post(page_on_front)).__name__ == "WP_Post":
-            return php_int(page_on_front)
+    if php_trim(url_, "/") == home_url() and "page" == get_option("show_on_front"):
+        page_on_front_ = get_option("page_on_front")
+        if page_on_front_ and type(get_post(page_on_front_)).__name__ == "WP_Post":
+            return php_int(page_on_front_)
         # end if
     # end if
     #// Check to see if we are using rewrite rules.
-    rewrite = wp_rewrite.wp_rewrite_rules()
+    rewrite_ = wp_rewrite_.wp_rewrite_rules()
     #// Not using rewrite rules, and 'p=N' and 'page_id=N' methods failed, so we're out of options.
-    if php_empty(lambda : rewrite):
+    if php_empty(lambda : rewrite_):
         return 0
     # end if
     #// Strip 'index.php/' if we're not using path info permalinks.
-    if (not wp_rewrite.using_index_permalinks()):
-        url = php_str_replace(wp_rewrite.index + "/", "", url)
+    if (not wp_rewrite_.using_index_permalinks()):
+        url_ = php_str_replace(wp_rewrite_.index + "/", "", url_)
     # end if
-    if False != php_strpos(trailingslashit(url), home_url("/")):
+    if False != php_strpos(trailingslashit(url_), home_url("/")):
         #// Chop off http://domain.com/[path].
-        url = php_str_replace(home_url(), "", url)
+        url_ = php_str_replace(home_url(), "", url_)
     else:
         #// Chop off /path/to/blog.
-        home_path = php_parse_url(home_url("/"))
-        home_path = home_path["path"] if (php_isset(lambda : home_path["path"])) else ""
-        url = php_preg_replace(php_sprintf("#^%s#", preg_quote(home_path)), "", trailingslashit(url))
+        home_path_ = php_parse_url(home_url("/"))
+        home_path_ = home_path_["path"] if (php_isset(lambda : home_path_["path"])) else ""
+        url_ = php_preg_replace(php_sprintf("#^%s#", preg_quote(home_path_)), "", trailingslashit(url_))
     # end if
     #// Trim leading and lagging slashes.
-    url = php_trim(url, "/")
-    request = url
-    post_type_query_vars = Array()
-    for post_type,t in get_post_types(Array(), "objects"):
-        if (not php_empty(lambda : t.query_var)):
-            post_type_query_vars[t.query_var] = post_type
+    url_ = php_trim(url_, "/")
+    request_ = url_
+    post_type_query_vars_ = Array()
+    for post_type_,t_ in get_post_types(Array(), "objects"):
+        if (not php_empty(lambda : t_.query_var)):
+            post_type_query_vars_[t_.query_var] = post_type_
         # end if
     # end for
     #// Look for matches.
-    request_match = request
-    for match,query in rewrite:
+    request_match_ = request_
+    for match_,query_ in rewrite_:
         #// If the requesting file is the anchor of the match,
         #// prepend it to the path info.
-        if (not php_empty(lambda : url)) and url != request and php_strpos(match, url) == 0:
-            request_match = url + "/" + request
+        if (not php_empty(lambda : url_)) and url_ != request_ and php_strpos(match_, url_) == 0:
+            request_match_ = url_ + "/" + request_
         # end if
-        if php_preg_match(str("#^") + str(match) + str("#"), request_match, matches):
-            if wp_rewrite.use_verbose_page_rules and php_preg_match("/pagename=\\$matches\\[([0-9]+)\\]/", query, varmatch):
+        if php_preg_match(str("#^") + str(match_) + str("#"), request_match_, matches_):
+            if wp_rewrite_.use_verbose_page_rules and php_preg_match("/pagename=\\$matches\\[([0-9]+)\\]/", query_, varmatch_):
                 #// This is a verbose page match, let's check to be sure about it.
-                page = get_page_by_path(matches[varmatch[1]])
-                if (not page):
+                page_ = get_page_by_path(matches_[varmatch_[1]])
+                if (not page_):
                     continue
                 # end if
-                post_status_obj = get_post_status_object(page.post_status)
-                if (not post_status_obj.public) and (not post_status_obj.protected) and (not post_status_obj.private) and post_status_obj.exclude_from_search:
+                post_status_obj_ = get_post_status_object(page_.post_status)
+                if (not post_status_obj_.public) and (not post_status_obj_.protected) and (not post_status_obj_.private) and post_status_obj_.exclude_from_search:
                     continue
                 # end if
             # end if
             #// Got a match.
             #// Trim the query of everything up to the '?'.
-            query = php_preg_replace("!^.+\\?!", "", query)
+            query_ = php_preg_replace("!^.+\\?!", "", query_)
             #// Substitute the substring matches into the query.
-            query = addslashes(WP_MatchesMapRegex.apply(query, matches))
+            query_ = addslashes(WP_MatchesMapRegex.apply(query_, matches_))
             #// Filter out non-public query vars.
-            global wp
-            php_check_if_defined("wp")
-            parse_str(query, query_vars)
-            query = Array()
-            for key,value in query_vars:
-                if php_in_array(key, wp.public_query_vars):
-                    query[key] = value
-                    if (php_isset(lambda : post_type_query_vars[key])):
-                        query["post_type"] = post_type_query_vars[key]
-                        query["name"] = value
+            global wp_
+            php_check_if_defined("wp_")
+            parse_str(query_, query_vars_)
+            query_ = Array()
+            for key_,value_ in query_vars_:
+                if php_in_array(key_, wp_.public_query_vars):
+                    query_[key_] = value_
+                    if (php_isset(lambda : post_type_query_vars_[key_])):
+                        query_["post_type"] = post_type_query_vars_[key_]
+                        query_["name"] = value_
                     # end if
                 # end if
             # end for
             #// Resolve conflicts between posts with numeric slugs and date archive queries.
-            query = wp_resolve_numeric_slug_conflicts(query)
+            query_ = wp_resolve_numeric_slug_conflicts(query_)
             #// Do the query.
-            query = php_new_class("WP_Query", lambda : WP_Query(query))
-            if (not php_empty(lambda : query.posts)) and query.is_singular:
-                return query.post.ID
+            query_ = php_new_class("WP_Query", lambda : WP_Query(query_))
+            if (not php_empty(lambda : query_.posts)) and query_.is_singular:
+                return query_.post.ID
             else:
                 return 0
             # end if

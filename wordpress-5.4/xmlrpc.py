@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,12 +22,12 @@ php_define("XMLRPC_REQUEST", True)
 PHP_COOKIE = Array()
 #// A bug in PHP < 5.2.2 makes $HTTP_RAW_POST_DATA not set by default,
 #// but we can do it ourself.
-if (not (php_isset(lambda : HTTP_RAW_POST_DATA))):
-    HTTP_RAW_POST_DATA = php_file_get_contents("php://input")
+if (not (php_isset(lambda : HTTP_RAW_POST_DATA_))):
+    HTTP_RAW_POST_DATA_ = php_file_get_contents("php://input")
 # end if
 #// Fix for mozBlog and other cases where '<?xml' isn't on the very first line.
-if (php_isset(lambda : HTTP_RAW_POST_DATA)):
-    HTTP_RAW_POST_DATA = php_trim(HTTP_RAW_POST_DATA)
+if (php_isset(lambda : HTTP_RAW_POST_DATA_)):
+    HTTP_RAW_POST_DATA_ = php_trim(HTTP_RAW_POST_DATA_)
 # end if
 #// Include the bootstrap for setting up WordPress environment
 php_include_file(__DIR__ + "/wp-load.php", once=True)
@@ -78,7 +73,7 @@ php_include_file(ABSPATH + WPINC + "/class-wp-xmlrpc-server.php", once=True)
 #// @name post_default_title
 #// @var string
 #//
-post_default_title = ""
+post_default_title_ = ""
 #// 
 #// Filters the class used for handling XML-RPC requests.
 #// 
@@ -86,10 +81,10 @@ post_default_title = ""
 #// 
 #// @param string $class The name of the XML-RPC server class.
 #//
-wp_xmlrpc_server_class = apply_filters("wp_xmlrpc_server_class", "wp_xmlrpc_server")
-wp_xmlrpc_server = php_new_class(wp_xmlrpc_server_class, lambda : {**locals(), **globals()}[wp_xmlrpc_server_class]())
+wp_xmlrpc_server_class_ = apply_filters("wp_xmlrpc_server_class", "wp_xmlrpc_server")
+wp_xmlrpc_server_ = php_new_class(wp_xmlrpc_server_class_, lambda : {**locals(), **globals()}[wp_xmlrpc_server_class_]())
 #// Fire off the request.
-wp_xmlrpc_server.serve_request()
+wp_xmlrpc_server_.serve_request()
 php_exit(0)
 #// 
 #// logIO() - Writes logging info to a file.
@@ -100,11 +95,12 @@ php_exit(0)
 #// @param string $io Whether input or output
 #// @param string $msg Information describing logging reason.
 #//
-def logIO(io=None, msg=None, *args_):
+def logIO(io_=None, msg_=None, *_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
     _deprecated_function(__FUNCTION__, "3.4.0", "error_log()")
     if (not php_empty(lambda : PHP_GLOBALS["xmlrpc_logging"])):
-        php_error_log(io + " - " + msg)
+        php_error_log(io_ + " - " + msg_)
     # end if
 # end def logIO

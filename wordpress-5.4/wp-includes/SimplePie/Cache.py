@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,11 +60,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Caching
 #//
 class SimplePie_Cache():
+    #// 
+    #// Cache handler classes
+    #// 
+    #// These receive 3 parameters to their constructor, as documented in
+    #// {@see register()}
+    #// @var array
+    #//
     handlers = Array({"mysql": "SimplePie_Cache_MySQL", "memcache": "SimplePie_Cache_Memcache"})
     #// 
     #// Don't call the constructor. Please.
     #//
     def __init__(self):
+        
         
         pass
     # end def __init__
@@ -82,25 +85,27 @@ class SimplePie_Cache():
     #// @return SimplePie_Cache_Base Type of object depends on scheme of `$location`
     #//
     @classmethod
-    def get_handler(self, location=None, filename=None, extension=None):
+    def get_handler(self, location_=None, filename_=None, extension_=None):
         
-        type = php_explode(":", location, 2)
-        type = type[0]
-        if (not php_empty(lambda : self.handlers[type])):
-            class_ = self.handlers[type]
-            return php_new_class(class_, lambda : {**locals(), **globals()}[class_](location, filename, extension))
+        
+        type_ = php_explode(":", location_, 2)
+        type_ = type_[0]
+        if (not php_empty(lambda : self.handlers[type_])):
+            class_ = self.handlers[type_]
+            return php_new_class(class_, lambda : {**locals(), **globals()}[class_](location_, filename_, extension_))
         # end if
-        return php_new_class("SimplePie_Cache_File", lambda : SimplePie_Cache_File(location, filename, extension))
+        return php_new_class("SimplePie_Cache_File", lambda : SimplePie_Cache_File(location_, filename_, extension_))
     # end def get_handler
     #// 
     #// Create a new SimplePie_Cache object
     #// 
     #// @deprecated Use {@see get_handler} instead
     #//
-    def create(self, location=None, filename=None, extension=None):
+    def create(self, location_=None, filename_=None, extension_=None):
+        
         
         trigger_error("Cache::create() has been replaced with Cache::get_handler(). Switch to the registry system to use this.", E_USER_DEPRECATED)
-        return self.get_handler(location, filename, extension)
+        return self.get_handler(location_, filename_, extension_)
     # end def create
     #// 
     #// Register a handler
@@ -109,9 +114,10 @@ class SimplePie_Cache():
     #// @param string $class Name of handler class. Must implement SimplePie_Cache_Base
     #//
     @classmethod
-    def register(self, type=None, class_=None):
+    def register(self, type_=None, class_=None):
         
-        self.handlers[type] = class_
+        
+        self.handlers[type_] = class_
     # end def register
     #// 
     #// Parse a URL into an array
@@ -120,13 +126,14 @@ class SimplePie_Cache():
     #// @return array
     #//
     @classmethod
-    def parse_url(self, url=None):
+    def parse_url(self, url_=None):
         
-        params = php_parse_url(url)
-        params["extras"] = Array()
-        if (php_isset(lambda : params["query"])):
-            parse_str(params["query"], params["extras"])
+        
+        params_ = php_parse_url(url_)
+        params_["extras"] = Array()
+        if (php_isset(lambda : params_["query"])):
+            parse_str(params_["query"], params_["extras"])
         # end if
-        return params
+        return params_
     # end def parse_url
 # end class SimplePie_Cache

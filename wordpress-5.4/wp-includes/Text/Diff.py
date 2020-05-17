@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,6 +24,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @author  Geoffrey T. Dairiki <dairiki@dairiki.org>
 #//
 class Text_Diff():
+    #// 
+    #// Array of changes.
+    #// 
+    #// @var array
+    #//
     _edits = Array()
     #// 
     #// Computes diffs between sequences of strings.
@@ -39,35 +39,38 @@ class Text_Diff():
     #// Normally an array of two arrays, each
     #// containing the lines from a file.
     #//
-    def __init__(self, engine=None, params=None):
+    def __init__(self, engine_=None, params_=None):
+        
         
         #// Backward compatibility workaround.
-        if (not php_is_string(engine)):
-            params = Array(engine, params)
-            engine = "auto"
+        if (not php_is_string(engine_)):
+            params_ = Array(engine_, params_)
+            engine_ = "auto"
         # end if
-        if engine == "auto":
-            engine = "xdiff" if php_extension_loaded("xdiff") else "native"
+        if engine_ == "auto":
+            engine_ = "xdiff" if php_extension_loaded("xdiff") else "native"
         else:
-            engine = php_basename(engine)
+            engine_ = php_basename(engine_)
         # end if
         #// WP #7391
-        php_include_file(php_dirname(__FILE__) + "/Diff/Engine/" + engine + ".php", once=True)
-        class_ = "Text_Diff_Engine_" + engine
-        diff_engine = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
-        self._edits = call_user_func_array(Array(diff_engine, "diff"), params)
+        php_include_file(php_dirname(__FILE__) + "/Diff/Engine/" + engine_ + ".php", once=True)
+        class_ = "Text_Diff_Engine_" + engine_
+        diff_engine_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
+        self._edits = call_user_func_array(Array(diff_engine_, "diff"), params_)
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def text_diff(self, engine=None, params=None):
+    def text_diff(self, engine_=None, params_=None):
         
-        self.__init__(engine, params)
+        
+        self.__init__(engine_, params_)
     # end def text_diff
     #// 
     #// Returns the array of differences.
     #//
     def getdiff(self):
+        
         
         return self._edits
     # end def getdiff
@@ -80,13 +83,14 @@ class Text_Diff():
     #//
     def countaddedlines(self):
         
-        count = 0
-        for edit in self._edits:
-            if php_is_a(edit, "Text_Diff_Op_add") or php_is_a(edit, "Text_Diff_Op_change"):
-                count += edit.nfinal()
+        
+        count_ = 0
+        for edit_ in self._edits:
+            if php_is_a(edit_, "Text_Diff_Op_add") or php_is_a(edit_, "Text_Diff_Op_change"):
+                count_ += edit_.nfinal()
             # end if
         # end for
-        return count
+        return count_
     # end def countaddedlines
     #// 
     #// Returns the number of deleted (removed) lines in a given diff.
@@ -97,13 +101,14 @@ class Text_Diff():
     #//
     def countdeletedlines(self):
         
-        count = 0
-        for edit in self._edits:
-            if php_is_a(edit, "Text_Diff_Op_delete") or php_is_a(edit, "Text_Diff_Op_change"):
-                count += edit.norig()
+        
+        count_ = 0
+        for edit_ in self._edits:
+            if php_is_a(edit_, "Text_Diff_Op_delete") or php_is_a(edit_, "Text_Diff_Op_change"):
+                count_ += edit_.norig()
             # end if
         # end for
-        return count
+        return count_
     # end def countdeletedlines
     #// 
     #// Computes a reversed diff.
@@ -121,16 +126,17 @@ class Text_Diff():
     #//
     def reverse(self):
         
+        
         if php_version_compare(php_zend_version(), "2", ">"):
-            rev = copy.deepcopy(self)
+            rev_ = copy.deepcopy(self)
         else:
-            rev = self
+            rev_ = self
         # end if
-        rev._edits = Array()
-        for edit in self._edits:
-            rev._edits[-1] = edit.reverse()
+        rev_._edits = Array()
+        for edit_ in self._edits:
+            rev_._edits[-1] = edit_.reverse()
         # end for
-        return rev
+        return rev_
     # end def reverse
     #// 
     #// Checks for an empty diff.
@@ -139,8 +145,9 @@ class Text_Diff():
     #//
     def isempty(self):
         
-        for edit in self._edits:
-            if (not php_is_a(edit, "Text_Diff_Op_copy")):
+        
+        for edit_ in self._edits:
+            if (not php_is_a(edit_, "Text_Diff_Op_copy")):
                 return False
             # end if
         # end for
@@ -155,13 +162,14 @@ class Text_Diff():
     #//
     def lcs(self):
         
-        lcs = 0
-        for edit in self._edits:
-            if php_is_a(edit, "Text_Diff_Op_copy"):
-                lcs += php_count(edit.orig)
+        
+        lcs_ = 0
+        for edit_ in self._edits:
+            if php_is_a(edit_, "Text_Diff_Op_copy"):
+                lcs_ += php_count(edit_.orig)
             # end if
         # end for
-        return lcs
+        return lcs_
     # end def lcs
     #// 
     #// Gets the original set of lines.
@@ -172,13 +180,14 @@ class Text_Diff():
     #//
     def getoriginal(self):
         
-        lines = Array()
-        for edit in self._edits:
-            if edit.orig:
-                array_splice(lines, php_count(lines), 0, edit.orig)
+        
+        lines_ = Array()
+        for edit_ in self._edits:
+            if edit_.orig:
+                array_splice(lines_, php_count(lines_), 0, edit_.orig)
             # end if
         # end for
-        return lines
+        return lines_
     # end def getoriginal
     #// 
     #// Gets the final set of lines.
@@ -189,13 +198,14 @@ class Text_Diff():
     #//
     def getfinal(self):
         
-        lines = Array()
-        for edit in self._edits:
-            if edit.final:
-                array_splice(lines, php_count(lines), 0, edit.final)
+        
+        lines_ = Array()
+        for edit_ in self._edits:
+            if edit_.final:
+                array_splice(lines_, php_count(lines_), 0, edit_.final)
             # end if
         # end for
-        return lines
+        return lines_
     # end def getfinal
     #// 
     #// Removes trailing newlines from a line of text. This is meant to be used
@@ -204,9 +214,10 @@ class Text_Diff():
     #// @param string $line  The line to trim.
     #// @param integer $key  The index of the line in the array. Not used.
     #//
-    def trimnewlines(self, line=None, key=None):
+    def trimnewlines(self, line_=None, key_=None):
         
-        line = php_str_replace(Array("\n", "\r"), "", line)
+        
+        line_ = php_str_replace(Array("\n", "\r"), "", line_)
     # end def trimnewlines
     #// 
     #// Determines the location of the system temporary directory.
@@ -220,55 +231,57 @@ class Text_Diff():
     #//
     def _gettempdir(self):
         
-        tmp_locations = Array("/tmp", "/var/tmp", "c:\\WUTemp", "c:\\temp", "c:\\windows\\temp", "c:\\winnt\\temp")
+        
+        tmp_locations_ = Array("/tmp", "/var/tmp", "c:\\WUTemp", "c:\\temp", "c:\\windows\\temp", "c:\\winnt\\temp")
         #// Try PHP's upload_tmp_dir directive.
-        tmp = php_ini_get("upload_tmp_dir")
+        tmp_ = php_ini_get("upload_tmp_dir")
         #// Otherwise, try to determine the TMPDIR environment variable.
-        if (not php_strlen(tmp)):
-            tmp = php_getenv("TMPDIR")
+        if (not php_strlen(tmp_)):
+            tmp_ = php_getenv("TMPDIR")
         # end if
         #// If we still cannot determine a value, then cycle through a list of
         #// preset possibilities.
         while True:
             
-            if not ((not php_strlen(tmp)) and php_count(tmp_locations)):
+            if not ((not php_strlen(tmp_)) and php_count(tmp_locations_)):
                 break
             # end if
-            tmp_check = php_array_shift(tmp_locations)
-            if php_no_error(lambda: php_is_dir(tmp_check)):
-                tmp = tmp_check
+            tmp_check_ = php_array_shift(tmp_locations_)
+            if php_no_error(lambda: php_is_dir(tmp_check_)):
+                tmp_ = tmp_check_
             # end if
         # end while
         #// If it is still empty, we have failed, so return false; otherwise
         #// return the directory determined.
-        return tmp if php_strlen(tmp) else False
+        return tmp_ if php_strlen(tmp_) else False
     # end def _gettempdir
     #// 
     #// Checks a diff for validity.
     #// 
     #// This is here only for debugging purposes.
     #//
-    def _check(self, from_lines=None, to_lines=None):
+    def _check(self, from_lines_=None, to_lines_=None):
         
-        if serialize(from_lines) != serialize(self.getoriginal()):
+        
+        if serialize(from_lines_) != serialize(self.getoriginal()):
             trigger_error("Reconstructed original doesn't match", E_USER_ERROR)
         # end if
-        if serialize(to_lines) != serialize(self.getfinal()):
+        if serialize(to_lines_) != serialize(self.getfinal()):
             trigger_error("Reconstructed final doesn't match", E_USER_ERROR)
         # end if
-        rev = self.reverse()
-        if serialize(to_lines) != serialize(rev.getoriginal()):
+        rev_ = self.reverse()
+        if serialize(to_lines_) != serialize(rev_.getoriginal()):
             trigger_error("Reversed original doesn't match", E_USER_ERROR)
         # end if
-        if serialize(from_lines) != serialize(rev.getfinal()):
+        if serialize(from_lines_) != serialize(rev_.getfinal()):
             trigger_error("Reversed final doesn't match", E_USER_ERROR)
         # end if
-        prevtype = None
-        for edit in self._edits:
-            if prevtype == get_class(edit):
+        prevtype_ = None
+        for edit_ in self._edits:
+            if prevtype_ == get_class(edit_):
                 trigger_error("Edit sequence is non-optimal", E_USER_ERROR)
             # end if
-            prevtype = get_class(edit)
+            prevtype_ = get_class(edit_)
         # end for
         return True
     # end def _check
@@ -294,34 +307,36 @@ class Text_MappedDiff(Text_Diff):
     #// @param array $mapped_to_lines    This array should have the same number
     #// of elements as $to_lines.
     #//
-    def __init__(self, from_lines=None, to_lines=None, mapped_from_lines=None, mapped_to_lines=None):
+    def __init__(self, from_lines_=None, to_lines_=None, mapped_from_lines_=None, mapped_to_lines_=None):
         
-        assert(php_count(from_lines) == php_count(mapped_from_lines))
-        assert(php_count(to_lines) == php_count(mapped_to_lines))
-        super().text_diff(mapped_from_lines, mapped_to_lines)
-        xi = yi = 0
-        i = 0
-        while i < php_count(self._edits):
+        
+        assert(php_count(from_lines_) == php_count(mapped_from_lines_))
+        assert(php_count(to_lines_) == php_count(mapped_to_lines_))
+        super().text_diff(mapped_from_lines_, mapped_to_lines_)
+        xi_ = yi_ = 0
+        i_ = 0
+        while i_ < php_count(self._edits):
             
-            orig = self._edits[i].orig
-            if php_is_array(orig):
-                orig = php_array_slice(from_lines, xi, php_count(orig))
-                xi += php_count(orig)
+            orig_ = self._edits[i_].orig
+            if php_is_array(orig_):
+                orig_ = php_array_slice(from_lines_, xi_, php_count(orig_))
+                xi_ += php_count(orig_)
             # end if
-            final = self._edits[i].final
-            if php_is_array(final):
-                final = php_array_slice(to_lines, yi, php_count(final))
-                yi += php_count(final)
+            final_ = self._edits[i_].final
+            if php_is_array(final_):
+                final_ = php_array_slice(to_lines_, yi_, php_count(final_))
+                yi_ += php_count(final_)
             # end if
-            i += 1
+            i_ += 1
         # end while
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def text_mappeddiff(self, from_lines=None, to_lines=None, mapped_from_lines=None, mapped_to_lines=None):
+    def text_mappeddiff(self, from_lines_=None, to_lines_=None, mapped_from_lines_=None, mapped_to_lines_=None):
         
-        self.__init__(from_lines, to_lines, mapped_from_lines, mapped_to_lines)
+        
+        self.__init__(from_lines_, to_lines_, mapped_from_lines_, mapped_to_lines_)
     # end def text_mappeddiff
 # end class Text_MappedDiff
 #// 
@@ -335,13 +350,16 @@ class Text_Diff_Op():
     final = Array()
     def reverse(self):
         
+        
         trigger_error("Abstract method", E_USER_ERROR)
     # end def reverse
     def norig(self):
         
+        
         return php_count(self.orig) if self.orig else 0
     # end def norig
     def nfinal(self):
+        
         
         return php_count(self.final) if self.final else 0
     # end def nfinal
@@ -356,25 +374,32 @@ class Text_Diff_Op_copy(Text_Diff_Op):
     #// 
     #// PHP5 constructor.
     #//
-    def __init__(self, orig=None, final=False):
-        
-        if (not php_is_array(final)):
-            final = orig
+    def __init__(self, orig_=None, final_=None):
+        if final_ is None:
+            final_ = False
         # end if
-        self.orig = orig
-        self.final = final
+        
+        if (not php_is_array(final_)):
+            final_ = orig_
+        # end if
+        self.orig = orig_
+        self.final = final_
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def text_diff_op_copy(self, orig=None, final=False):
+    def text_diff_op_copy(self, orig_=None, final_=None):
+        if final_ is None:
+            final_ = False
+        # end if
         
-        self.__init__(orig, final)
+        self.__init__(orig_, final_)
     # end def text_diff_op_copy
     def reverse(self):
         
-        reverse = php_new_class("Text_Diff_Op_copy", lambda : Text_Diff_Op_copy(self.final, self.orig))
-        return reverse
+        
+        reverse_ = php_new_class("Text_Diff_Op_copy", lambda : Text_Diff_Op_copy(self.final, self.orig))
+        return reverse_
     # end def reverse
 # end class Text_Diff_Op_copy
 #// 
@@ -387,22 +412,25 @@ class Text_Diff_Op_delete(Text_Diff_Op):
     #// 
     #// PHP5 constructor.
     #//
-    def __init__(self, lines=None):
+    def __init__(self, lines_=None):
         
-        self.orig = lines
+        
+        self.orig = lines_
         self.final = False
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def text_diff_op_delete(self, lines=None):
+    def text_diff_op_delete(self, lines_=None):
         
-        self.__init__(lines)
+        
+        self.__init__(lines_)
     # end def text_diff_op_delete
     def reverse(self):
         
-        reverse = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(self.orig))
-        return reverse
+        
+        reverse_ = php_new_class("Text_Diff_Op_add", lambda : Text_Diff_Op_add(self.orig))
+        return reverse_
     # end def reverse
 # end class Text_Diff_Op_delete
 #// 
@@ -415,22 +443,25 @@ class Text_Diff_Op_add(Text_Diff_Op):
     #// 
     #// PHP5 constructor.
     #//
-    def __init__(self, lines=None):
+    def __init__(self, lines_=None):
         
-        self.final = lines
+        
+        self.final = lines_
         self.orig = False
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def text_diff_op_add(self, lines=None):
+    def text_diff_op_add(self, lines_=None):
         
-        self.__init__(lines)
+        
+        self.__init__(lines_)
     # end def text_diff_op_add
     def reverse(self):
         
-        reverse = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(self.final))
-        return reverse
+        
+        reverse_ = php_new_class("Text_Diff_Op_delete", lambda : Text_Diff_Op_delete(self.final))
+        return reverse_
     # end def reverse
 # end class Text_Diff_Op_add
 #// 
@@ -443,21 +474,24 @@ class Text_Diff_Op_change(Text_Diff_Op):
     #// 
     #// PHP5 constructor.
     #//
-    def __init__(self, orig=None, final=None):
+    def __init__(self, orig_=None, final_=None):
         
-        self.orig = orig
-        self.final = final
+        
+        self.orig = orig_
+        self.final = final_
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def text_diff_op_change(self, orig=None, final=None):
+    def text_diff_op_change(self, orig_=None, final_=None):
         
-        self.__init__(orig, final)
+        
+        self.__init__(orig_, final_)
     # end def text_diff_op_change
     def reverse(self):
         
-        reverse = php_new_class("Text_Diff_Op_change", lambda : Text_Diff_Op_change(self.final, self.orig))
-        return reverse
+        
+        reverse_ = php_new_class("Text_Diff_Op_change", lambda : Text_Diff_Op_change(self.final, self.orig))
+        return reverse_
     # end def reverse
 # end class Text_Diff_Op_change

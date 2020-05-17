@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -39,13 +34,69 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @link https://www.php.net/manual/en/class.arrayaccess.php
 #//
 class WP_REST_Request():
+    #// 
+    #// HTTP method.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     method = ""
+    #// 
+    #// Parameters passed to the request.
+    #// 
+    #// These typically come from the `$_GET`, `$_POST` and `$_FILES`
+    #// superglobals when being created from the global scope.
+    #// 
+    #// @since 4.4.0
+    #// @var array Contains GET, POST and FILES keys mapping to arrays of data.
+    #//
     params = Array()
+    #// 
+    #// HTTP headers for the request.
+    #// 
+    #// @since 4.4.0
+    #// @var array Map of key to value. Key is always lowercase, as per HTTP specification.
+    #//
     headers = Array()
+    #// 
+    #// Body data.
+    #// 
+    #// @since 4.4.0
+    #// @var string Binary data from the request.
+    #//
     body = None
+    #// 
+    #// Route matched for the request.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     route = Array()
+    #// 
+    #// Attributes (options) for the route that was matched.
+    #// 
+    #// This is the options array used when the route was registered, typically
+    #// containing the callback as well as the valid methods for the route.
+    #// 
+    #// @since 4.4.0
+    #// @var array Attributes for the request.
+    #//
     attributes = Array()
+    #// 
+    #// Used to determine if the JSON data has been parsed yet.
+    #// 
+    #// Allows lazy-parsing of JSON data where possible.
+    #// 
+    #// @since 4.4.0
+    #// @var bool
+    #//
     parsed_json = False
+    #// 
+    #// Used to determine if the body data has been parsed yet.
+    #// 
+    #// @since 4.4.0
+    #// @var bool
+    #//
     parsed_body = False
     #// 
     #// Constructor.
@@ -56,12 +107,15 @@ class WP_REST_Request():
     #// @param string $route      Optional. Request route. Default empty.
     #// @param array  $attributes Optional. Request attributes. Default empty array.
     #//
-    def __init__(self, method="", route="", attributes=Array()):
+    def __init__(self, method_="", route_="", attributes_=None):
+        if attributes_ is None:
+            attributes_ = Array()
+        # end if
         
         self.params = Array({"URL": Array(), "GET": Array(), "POST": Array(), "FILES": Array(), "JSON": None, "defaults": Array()})
-        self.set_method(method)
-        self.set_route(route)
-        self.set_attributes(attributes)
+        self.set_method(method_)
+        self.set_route(route_)
+        self.set_attributes(attributes_)
     # end def __init__
     #// 
     #// Retrieves the HTTP method for the request.
@@ -72,6 +126,7 @@ class WP_REST_Request():
     #//
     def get_method(self):
         
+        
         return self.method
     # end def get_method
     #// 
@@ -81,9 +136,10 @@ class WP_REST_Request():
     #// 
     #// @param string $method HTTP method.
     #//
-    def set_method(self, method=None):
+    def set_method(self, method_=None):
         
-        self.method = php_strtoupper(method)
+        
+        self.method = php_strtoupper(method_)
     # end def set_method
     #// 
     #// Retrieves all headers from the request.
@@ -93,6 +149,7 @@ class WP_REST_Request():
     #// @return array Map of key to value. Key is always lowercase, as per HTTP specification.
     #//
     def get_headers(self):
+        
         
         return self.headers
     # end def get_headers
@@ -115,11 +172,12 @@ class WP_REST_Request():
     #// @return string Canonicalized name.
     #//
     @classmethod
-    def canonicalize_header_name(self, key=None):
+    def canonicalize_header_name(self, key_=None):
         
-        key = php_strtolower(key)
-        key = php_str_replace("-", "_", key)
-        return key
+        
+        key_ = php_strtolower(key_)
+        key_ = php_str_replace("-", "_", key_)
+        return key_
     # end def canonicalize_header_name
     #// 
     #// Retrieves the given header from the request.
@@ -133,13 +191,14 @@ class WP_REST_Request():
     #// @param string $key Header name, will be canonicalized to lowercase.
     #// @return string|null String value if set, null otherwise.
     #//
-    def get_header(self, key=None):
+    def get_header(self, key_=None):
         
-        key = self.canonicalize_header_name(key)
-        if (not (php_isset(lambda : self.headers[key]))):
+        
+        key_ = self.canonicalize_header_name(key_)
+        if (not (php_isset(lambda : self.headers[key_]))):
             return None
         # end if
-        return php_implode(",", self.headers[key])
+        return php_implode(",", self.headers[key_])
     # end def get_header
     #// 
     #// Retrieves header values from the request.
@@ -149,13 +208,14 @@ class WP_REST_Request():
     #// @param string $key Header name, will be canonicalized to lowercase.
     #// @return array|null List of string values if set, null otherwise.
     #//
-    def get_header_as_array(self, key=None):
+    def get_header_as_array(self, key_=None):
         
-        key = self.canonicalize_header_name(key)
-        if (not (php_isset(lambda : self.headers[key]))):
+        
+        key_ = self.canonicalize_header_name(key_)
+        if (not (php_isset(lambda : self.headers[key_]))):
             return None
         # end if
-        return self.headers[key]
+        return self.headers[key_]
     # end def get_header_as_array
     #// 
     #// Sets the header on request.
@@ -165,11 +225,12 @@ class WP_REST_Request():
     #// @param string $key   Header name.
     #// @param string $value Header value, or list of values.
     #//
-    def set_header(self, key=None, value=None):
+    def set_header(self, key_=None, value_=None):
         
-        key = self.canonicalize_header_name(key)
-        value = value
-        self.headers[key] = value
+        
+        key_ = self.canonicalize_header_name(key_)
+        value_ = value_
+        self.headers[key_] = value_
     # end def set_header
     #// 
     #// Appends a header value for the given header.
@@ -179,14 +240,15 @@ class WP_REST_Request():
     #// @param string $key   Header name.
     #// @param string $value Header value, or list of values.
     #//
-    def add_header(self, key=None, value=None):
+    def add_header(self, key_=None, value_=None):
         
-        key = self.canonicalize_header_name(key)
-        value = value
-        if (not (php_isset(lambda : self.headers[key]))):
-            self.headers[key] = Array()
+        
+        key_ = self.canonicalize_header_name(key_)
+        value_ = value_
+        if (not (php_isset(lambda : self.headers[key_]))):
+            self.headers[key_] = Array()
         # end if
-        self.headers[key] = php_array_merge(self.headers[key], value)
+        self.headers[key_] = php_array_merge(self.headers[key_], value_)
     # end def add_header
     #// 
     #// Removes all values for a header.
@@ -195,10 +257,11 @@ class WP_REST_Request():
     #// 
     #// @param string $key Header name.
     #//
-    def remove_header(self, key=None):
+    def remove_header(self, key_=None):
         
-        key = self.canonicalize_header_name(key)
-        self.headers[key] = None
+        
+        key_ = self.canonicalize_header_name(key_)
+        self.headers[key_] = None
     # end def remove_header
     #// 
     #// Sets headers on the request.
@@ -208,13 +271,16 @@ class WP_REST_Request():
     #// @param array $headers  Map of header name to value.
     #// @param bool  $override If true, replace the request's headers. Otherwise, merge with existing.
     #//
-    def set_headers(self, headers=None, override=True):
+    def set_headers(self, headers_=None, override_=None):
+        if override_ is None:
+            override_ = True
+        # end if
         
-        if True == override:
+        if True == override_:
             self.headers = Array()
         # end if
-        for key,value in headers:
-            self.set_header(key, value)
+        for key_,value_ in headers_:
+            self.set_header(key_, value_)
         # end for
     # end def set_headers
     #// 
@@ -228,23 +294,24 @@ class WP_REST_Request():
     #//
     def get_content_type(self):
         
-        value = self.get_header("content-type")
-        if php_empty(lambda : value):
+        
+        value_ = self.get_header("content-type")
+        if php_empty(lambda : value_):
             return None
         # end if
-        parameters = ""
-        if php_strpos(value, ";"):
-            value, parameters = php_explode(";", value, 2)
+        parameters_ = ""
+        if php_strpos(value_, ";"):
+            value_, parameters_ = php_explode(";", value_, 2)
         # end if
-        value = php_strtolower(value)
-        if False == php_strpos(value, "/"):
+        value_ = php_strtolower(value_)
+        if False == php_strpos(value_, "/"):
             return None
         # end if
         #// Parse type and subtype out.
-        type, subtype = php_explode("/", value, 2)
-        data = compact("value", "type", "subtype", "parameters")
-        data = php_array_map("trim", data)
-        return data
+        type_, subtype_ = php_explode("/", value_, 2)
+        data_ = php_compact("value", "type", "subtype", "parameters")
+        data_ = php_array_map("trim", data_)
+        return data_
     # end def get_content_type
     #// 
     #// Retrieves the parameter priority order.
@@ -257,24 +324,25 @@ class WP_REST_Request():
     #//
     def get_parameter_order(self):
         
-        order = Array()
-        content_type = self.get_content_type()
-        if (php_isset(lambda : content_type["value"])) and "application/json" == content_type["value"]:
-            order[-1] = "JSON"
+        
+        order_ = Array()
+        content_type_ = self.get_content_type()
+        if (php_isset(lambda : content_type_["value"])) and "application/json" == content_type_["value"]:
+            order_[-1] = "JSON"
         # end if
         self.parse_json_params()
         #// Ensure we parse the body data.
-        body = self.get_body()
-        if "POST" != self.method and (not php_empty(lambda : body)):
+        body_ = self.get_body()
+        if "POST" != self.method and (not php_empty(lambda : body_)):
             self.parse_body_params()
         # end if
-        accepts_body_data = Array("POST", "PUT", "PATCH", "DELETE")
-        if php_in_array(self.method, accepts_body_data, True):
-            order[-1] = "POST"
+        accepts_body_data_ = Array("POST", "PUT", "PATCH", "DELETE")
+        if php_in_array(self.method, accepts_body_data_, True):
+            order_[-1] = "POST"
         # end if
-        order[-1] = "GET"
-        order[-1] = "URL"
-        order[-1] = "defaults"
+        order_[-1] = "GET"
+        order_[-1] = "URL"
+        order_[-1] = "defaults"
         #// 
         #// Filters the parameter order.
         #// 
@@ -286,7 +354,7 @@ class WP_REST_Request():
         #// @param string[]        $order Array of types to check, in order of priority.
         #// @param WP_REST_Request $this  The request object.
         #//
-        return apply_filters("rest_request_parameter_order", order, self)
+        return apply_filters("rest_request_parameter_order", order_, self)
     # end def get_parameter_order
     #// 
     #// Retrieves a parameter from the request.
@@ -296,13 +364,14 @@ class WP_REST_Request():
     #// @param string $key Parameter name.
     #// @return mixed|null Value if set, null otherwise.
     #//
-    def get_param(self, key=None):
+    def get_param(self, key_=None):
         
-        order = self.get_parameter_order()
-        for type in order:
+        
+        order_ = self.get_parameter_order()
+        for type_ in order_:
             #// Determine if we have the parameter for this type.
-            if (php_isset(lambda : self.params[type][key])):
-                return self.params[type][key]
+            if (php_isset(lambda : self.params[type_][key_])):
+                return self.params[type_][key_]
             # end if
         # end for
         return None
@@ -319,11 +388,12 @@ class WP_REST_Request():
     #// 
     #// @return bool True if a param exists for the given key.
     #//
-    def has_param(self, key=None):
+    def has_param(self, key_=None):
         
-        order = self.get_parameter_order()
-        for type in order:
-            if php_array_key_exists(key, self.params[type]):
+        
+        order_ = self.get_parameter_order()
+        for type_ in order_:
+            if php_array_key_exists(key_, self.params[type_]):
                 return True
             # end if
         # end for
@@ -337,10 +407,11 @@ class WP_REST_Request():
     #// @param string $key   Parameter name.
     #// @param mixed  $value Parameter value.
     #//
-    def set_param(self, key=None, value=None):
+    def set_param(self, key_=None, value_=None):
         
-        order = self.get_parameter_order()
-        self.params[order[0]][key] = value
+        
+        order_ = self.get_parameter_order()
+        self.params[order_[0]][key_] = value_
     # end def set_param
     #// 
     #// Retrieves merged parameters from the request.
@@ -354,17 +425,18 @@ class WP_REST_Request():
     #//
     def get_params(self):
         
-        order = self.get_parameter_order()
-        order = array_reverse(order, True)
-        params = Array()
-        for type in order:
+        
+        order_ = self.get_parameter_order()
+        order_ = array_reverse(order_, True)
+        params_ = Array()
+        for type_ in order_:
             #// array_merge() / the "+" operator will mess up
             #// numeric keys, so instead do a manual foreach.
-            for key,value in self.params[type]:
-                params[key] = value
+            for key_,value_ in self.params[type_]:
+                params_[key_] = value_
             # end for
         # end for
-        return params
+        return params_
     # end def get_params
     #// 
     #// Retrieves parameters from the route itself.
@@ -377,6 +449,7 @@ class WP_REST_Request():
     #//
     def get_url_params(self):
         
+        
         return self.params["URL"]
     # end def get_url_params
     #// 
@@ -388,9 +461,10 @@ class WP_REST_Request():
     #// 
     #// @param array $params Parameter map of key to value.
     #//
-    def set_url_params(self, params=None):
+    def set_url_params(self, params_=None):
         
-        self.params["URL"] = params
+        
+        self.params["URL"] = params_
     # end def set_url_params
     #// 
     #// Retrieves parameters from the query string.
@@ -403,6 +477,7 @@ class WP_REST_Request():
     #//
     def get_query_params(self):
         
+        
         return self.params["GET"]
     # end def get_query_params
     #// 
@@ -414,9 +489,10 @@ class WP_REST_Request():
     #// 
     #// @param array $params Parameter map of key to value.
     #//
-    def set_query_params(self, params=None):
+    def set_query_params(self, params_=None):
         
-        self.params["GET"] = params
+        
+        self.params["GET"] = params_
     # end def set_query_params
     #// 
     #// Retrieves parameters from the body.
@@ -429,6 +505,7 @@ class WP_REST_Request():
     #//
     def get_body_params(self):
         
+        
         return self.params["POST"]
     # end def get_body_params
     #// 
@@ -440,9 +517,10 @@ class WP_REST_Request():
     #// 
     #// @param array $params Parameter map of key to value.
     #//
-    def set_body_params(self, params=None):
+    def set_body_params(self, params_=None):
         
-        self.params["POST"] = params
+        
+        self.params["POST"] = params_
     # end def set_body_params
     #// 
     #// Retrieves multipart file parameters from the body.
@@ -455,6 +533,7 @@ class WP_REST_Request():
     #//
     def get_file_params(self):
         
+        
         return self.params["FILES"]
     # end def get_file_params
     #// 
@@ -466,9 +545,10 @@ class WP_REST_Request():
     #// 
     #// @param array $params Parameter map of key to value.
     #//
-    def set_file_params(self, params=None):
+    def set_file_params(self, params_=None):
         
-        self.params["FILES"] = params
+        
+        self.params["FILES"] = params_
     # end def set_file_params
     #// 
     #// Retrieves the default parameters.
@@ -481,6 +561,7 @@ class WP_REST_Request():
     #//
     def get_default_params(self):
         
+        
         return self.params["defaults"]
     # end def get_default_params
     #// 
@@ -492,9 +573,10 @@ class WP_REST_Request():
     #// 
     #// @param array $params Parameter map of key to value.
     #//
-    def set_default_params(self, params=None):
+    def set_default_params(self, params_=None):
         
-        self.params["defaults"] = params
+        
+        self.params["defaults"] = params_
     # end def set_default_params
     #// 
     #// Retrieves the request body content.
@@ -505,6 +587,7 @@ class WP_REST_Request():
     #//
     def get_body(self):
         
+        
         return self.body
     # end def get_body
     #// 
@@ -514,9 +597,10 @@ class WP_REST_Request():
     #// 
     #// @param string $data Binary data from the request body.
     #//
-    def set_body(self, data=None):
+    def set_body(self, data_=None):
         
-        self.body = data
+        
+        self.body = data_
         #// Enable lazy parsing.
         self.parsed_json = False
         self.parsed_body = False
@@ -530,6 +614,7 @@ class WP_REST_Request():
     #// @return array Parameter map of key to value.
     #//
     def get_json_params(self):
+        
         
         #// Ensure the parameters have been parsed out.
         self.parse_json_params()
@@ -546,30 +631,31 @@ class WP_REST_Request():
     #//
     def parse_json_params(self):
         
+        
         if self.parsed_json:
             return True
         # end if
         self.parsed_json = True
         #// Check that we actually got JSON.
-        content_type = self.get_content_type()
-        if php_empty(lambda : content_type) or "application/json" != content_type["value"]:
+        content_type_ = self.get_content_type()
+        if php_empty(lambda : content_type_) or "application/json" != content_type_["value"]:
             return True
         # end if
-        body = self.get_body()
-        if php_empty(lambda : body):
+        body_ = self.get_body()
+        if php_empty(lambda : body_):
             return True
         # end if
-        params = php_json_decode(body, True)
+        params_ = php_json_decode(body_, True)
         #// 
         #// Check for a parsing error.
         #//
-        if None == params and JSON_ERROR_NONE != php_json_last_error():
+        if None == params_ and JSON_ERROR_NONE != php_json_last_error():
             #// Ensure subsequent calls receive error instance.
             self.parsed_json = False
-            error_data = Array({"status": WP_Http.BAD_REQUEST, "json_error_code": php_json_last_error(), "json_error_message": json_last_error_msg()})
-            return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_json", __("Invalid JSON body passed."), error_data))
+            error_data_ = Array({"status": WP_Http.BAD_REQUEST, "json_error_code": php_json_last_error(), "json_error_message": json_last_error_msg()})
+            return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_json", __("Invalid JSON body passed."), error_data_))
         # end if
-        self.params["JSON"] = params
+        self.params["JSON"] = params_
         return True
     # end def parse_json_params
     #// 
@@ -582,6 +668,7 @@ class WP_REST_Request():
     #//
     def parse_body_params(self):
         
+        
         if self.parsed_body:
             return
         # end if
@@ -590,16 +677,16 @@ class WP_REST_Request():
         #// Check that we got URL-encoded. Treat a missing content-type as
         #// URL-encoded for maximum compatibility.
         #//
-        content_type = self.get_content_type()
-        if (not php_empty(lambda : content_type)) and "application/x-www-form-urlencoded" != content_type["value"]:
+        content_type_ = self.get_content_type()
+        if (not php_empty(lambda : content_type_)) and "application/x-www-form-urlencoded" != content_type_["value"]:
             return
         # end if
-        parse_str(self.get_body(), params)
+        parse_str(self.get_body(), params_)
         #// 
         #// Add to the POST parameters stored internally. If a user has already
         #// set these manually (via `set_body_params`), don't override them.
         #//
-        self.params["POST"] = php_array_merge(params, self.params["POST"])
+        self.params["POST"] = php_array_merge(params_, self.params["POST"])
     # end def parse_body_params
     #// 
     #// Retrieves the route that matched the request.
@@ -610,6 +697,7 @@ class WP_REST_Request():
     #//
     def get_route(self):
         
+        
         return self.route
     # end def get_route
     #// 
@@ -619,9 +707,10 @@ class WP_REST_Request():
     #// 
     #// @param string $route Route matching regex.
     #//
-    def set_route(self, route=None):
+    def set_route(self, route_=None):
         
-        self.route = route
+        
+        self.route = route_
     # end def set_route
     #// 
     #// Retrieves the attributes for the request.
@@ -634,6 +723,7 @@ class WP_REST_Request():
     #//
     def get_attributes(self):
         
+        
         return self.attributes
     # end def get_attributes
     #// 
@@ -643,9 +733,10 @@ class WP_REST_Request():
     #// 
     #// @param array $attributes Attributes for the request.
     #//
-    def set_attributes(self, attributes=None):
+    def set_attributes(self, attributes_=None):
         
-        self.attributes = attributes
+        
+        self.attributes = attributes_
     # end def set_attributes
     #// 
     #// Sanitizes (where possible) the params on the request.
@@ -659,40 +750,41 @@ class WP_REST_Request():
     #//
     def sanitize_params(self):
         
-        attributes = self.get_attributes()
+        
+        attributes_ = self.get_attributes()
         #// No arguments set, skip sanitizing.
-        if php_empty(lambda : attributes["args"]):
+        if php_empty(lambda : attributes_["args"]):
             return True
         # end if
-        order = self.get_parameter_order()
-        invalid_params = Array()
-        for type in order:
-            if php_empty(lambda : self.params[type]):
+        order_ = self.get_parameter_order()
+        invalid_params_ = Array()
+        for type_ in order_:
+            if php_empty(lambda : self.params[type_]):
                 continue
             # end if
-            for key,value in self.params[type]:
-                if (not (php_isset(lambda : attributes["args"][key]))):
+            for key_,value_ in self.params[type_]:
+                if (not (php_isset(lambda : attributes_["args"][key_]))):
                     continue
                 # end if
-                param_args = attributes["args"][key]
+                param_args_ = attributes_["args"][key_]
                 #// If the arg has a type but no sanitize_callback attribute, default to rest_parse_request_arg.
-                if (not php_array_key_exists("sanitize_callback", param_args)) and (not php_empty(lambda : param_args["type"])):
-                    param_args["sanitize_callback"] = "rest_parse_request_arg"
+                if (not php_array_key_exists("sanitize_callback", param_args_)) and (not php_empty(lambda : param_args_["type"])):
+                    param_args_["sanitize_callback"] = "rest_parse_request_arg"
                 # end if
                 #// If there's still no sanitize_callback, nothing to do here.
-                if php_empty(lambda : param_args["sanitize_callback"]):
+                if php_empty(lambda : param_args_["sanitize_callback"]):
                     continue
                 # end if
-                sanitized_value = php_call_user_func(param_args["sanitize_callback"], value, self, key)
-                if is_wp_error(sanitized_value):
-                    invalid_params[key] = sanitized_value.get_error_message()
+                sanitized_value_ = php_call_user_func(param_args_["sanitize_callback"], value_, self, key_)
+                if is_wp_error(sanitized_value_):
+                    invalid_params_[key_] = sanitized_value_.get_error_message()
                 else:
-                    self.params[type][key] = sanitized_value
+                    self.params[type_][key_] = sanitized_value_
                 # end if
             # end for
         # end for
-        if invalid_params:
-            return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("Invalid parameter(s): %s"), php_implode(", ", php_array_keys(invalid_params))), Array({"status": 400, "params": invalid_params})))
+        if invalid_params_:
+            return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("Invalid parameter(s): %s"), php_implode(", ", php_array_keys(invalid_params_))), Array({"status": 400, "params": invalid_params_})))
         # end if
         return True
     # end def sanitize_params
@@ -706,46 +798,47 @@ class WP_REST_Request():
     #//
     def has_valid_params(self):
         
+        
         #// If JSON data was passed, check for errors.
-        json_error = self.parse_json_params()
-        if is_wp_error(json_error):
-            return json_error
+        json_error_ = self.parse_json_params()
+        if is_wp_error(json_error_):
+            return json_error_
         # end if
-        attributes = self.get_attributes()
-        required = Array()
+        attributes_ = self.get_attributes()
+        required_ = Array()
         #// No arguments set, skip validation.
-        if php_empty(lambda : attributes["args"]):
+        if php_empty(lambda : attributes_["args"]):
             return True
         # end if
-        for key,arg in attributes["args"]:
-            param = self.get_param(key)
-            if (php_isset(lambda : arg["required"])) and True == arg["required"] and None == param:
-                required[-1] = key
+        for key_,arg_ in attributes_["args"]:
+            param_ = self.get_param(key_)
+            if (php_isset(lambda : arg_["required"])) and True == arg_["required"] and None == param_:
+                required_[-1] = key_
             # end if
         # end for
-        if (not php_empty(lambda : required)):
-            return php_new_class("WP_Error", lambda : WP_Error("rest_missing_callback_param", php_sprintf(__("Missing parameter(s): %s"), php_implode(", ", required)), Array({"status": 400, "params": required})))
+        if (not php_empty(lambda : required_)):
+            return php_new_class("WP_Error", lambda : WP_Error("rest_missing_callback_param", php_sprintf(__("Missing parameter(s): %s"), php_implode(", ", required_)), Array({"status": 400, "params": required_})))
         # end if
         #// 
         #// Check the validation callbacks for each registered arg.
         #// 
         #// This is done after required checking as required checking is cheaper.
         #//
-        invalid_params = Array()
-        for key,arg in attributes["args"]:
-            param = self.get_param(key)
-            if None != param and (not php_empty(lambda : arg["validate_callback"])):
-                valid_check = php_call_user_func(arg["validate_callback"], param, self, key)
-                if False == valid_check:
-                    invalid_params[key] = __("Invalid parameter.")
+        invalid_params_ = Array()
+        for key_,arg_ in attributes_["args"]:
+            param_ = self.get_param(key_)
+            if None != param_ and (not php_empty(lambda : arg_["validate_callback"])):
+                valid_check_ = php_call_user_func(arg_["validate_callback"], param_, self, key_)
+                if False == valid_check_:
+                    invalid_params_[key_] = __("Invalid parameter.")
                 # end if
-                if is_wp_error(valid_check):
-                    invalid_params[key] = valid_check.get_error_message()
+                if is_wp_error(valid_check_):
+                    invalid_params_[key_] = valid_check_.get_error_message()
                 # end if
             # end if
         # end for
-        if invalid_params:
-            return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("Invalid parameter(s): %s"), php_implode(", ", php_array_keys(invalid_params))), Array({"status": 400, "params": invalid_params})))
+        if invalid_params_:
+            return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("Invalid parameter(s): %s"), php_implode(", ", php_array_keys(invalid_params_))), Array({"status": 400, "params": invalid_params_})))
         # end if
         return True
     # end def has_valid_params
@@ -757,11 +850,12 @@ class WP_REST_Request():
     #// @param string $offset Parameter name.
     #// @return bool Whether the parameter is set.
     #//
-    def offsetexists(self, offset=None):
+    def offsetexists(self, offset_=None):
         
-        order = self.get_parameter_order()
-        for type in order:
-            if (php_isset(lambda : self.params[type][offset])):
+        
+        order_ = self.get_parameter_order()
+        for type_ in order_:
+            if (php_isset(lambda : self.params[type_][offset_])):
                 return True
             # end if
         # end for
@@ -775,9 +869,10 @@ class WP_REST_Request():
     #// @param string $offset Parameter name.
     #// @return mixed|null Value if set, null otherwise.
     #//
-    def offsetget(self, offset=None):
+    def offsetget(self, offset_=None):
         
-        return self.get_param(offset)
+        
+        return self.get_param(offset_)
     # end def offsetget
     #// 
     #// Sets a parameter on the request.
@@ -787,9 +882,10 @@ class WP_REST_Request():
     #// @param string $offset Parameter name.
     #// @param mixed  $value  Parameter value.
     #//
-    def offsetset(self, offset=None, value=None):
+    def offsetset(self, offset_=None, value_=None):
         
-        self.set_param(offset, value)
+        
+        self.set_param(offset_, value_)
     # end def offsetset
     #// 
     #// Removes a parameter from the request.
@@ -798,12 +894,13 @@ class WP_REST_Request():
     #// 
     #// @param string $offset Parameter name.
     #//
-    def offsetunset(self, offset=None):
+    def offsetunset(self, offset_=None):
         
-        order = self.get_parameter_order()
+        
+        order_ = self.get_parameter_order()
         #// Remove the offset from every group.
-        for type in order:
-            self.params[type][offset] = None
+        for type_ in order_:
+            self.params[type_][offset_] = None
         # end for
     # end def offsetunset
     #// 
@@ -815,27 +912,28 @@ class WP_REST_Request():
     #// @return WP_REST_Request|false WP_REST_Request object on success, false on failure.
     #//
     @classmethod
-    def from_url(self, url=None):
+    def from_url(self, url_=None):
         
-        bits = php_parse_url(url)
-        query_params = Array()
-        if (not php_empty(lambda : bits["query"])):
-            wp_parse_str(bits["query"], query_params)
+        
+        bits_ = php_parse_url(url_)
+        query_params_ = Array()
+        if (not php_empty(lambda : bits_["query"])):
+            wp_parse_str(bits_["query"], query_params_)
         # end if
-        api_root = rest_url()
-        if get_option("permalink_structure") and 0 == php_strpos(url, api_root):
+        api_root_ = rest_url()
+        if get_option("permalink_structure") and 0 == php_strpos(url_, api_root_):
             #// Pretty permalinks on, and URL is under the API root.
-            api_url_part = php_substr(url, php_strlen(untrailingslashit(api_root)))
-            route = php_parse_url(api_url_part, PHP_URL_PATH)
-        elif (not php_empty(lambda : query_params["rest_route"])):
+            api_url_part_ = php_substr(url_, php_strlen(untrailingslashit(api_root_)))
+            route_ = php_parse_url(api_url_part_, PHP_URL_PATH)
+        elif (not php_empty(lambda : query_params_["rest_route"])):
             #// ?rest_route=... set directly.
-            route = query_params["rest_route"]
-            query_params["rest_route"] = None
+            route_ = query_params_["rest_route"]
+            query_params_["rest_route"] = None
         # end if
-        request = False
-        if (not php_empty(lambda : route)):
-            request = php_new_class("WP_REST_Request", lambda : WP_REST_Request("GET", route))
-            request.set_query_params(query_params)
+        request_ = False
+        if (not php_empty(lambda : route_)):
+            request_ = php_new_class("WP_REST_Request", lambda : WP_REST_Request("GET", route_))
+            request_.set_query_params(query_params_)
         # end if
         #// 
         #// Filters the request generated from a URL.
@@ -846,6 +944,6 @@ class WP_REST_Request():
         #// could not be parsed.
         #// @param string                $url     URL the request was generated from.
         #//
-        return apply_filters("rest_request_from_url", request, url)
+        return apply_filters("rest_request_from_url", request_, url_)
     # end def from_url
 # end class WP_REST_Request

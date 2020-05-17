@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,8 +22,24 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Customize_Color_Control(WP_Customize_Control):
+    #// 
+    #// Type.
+    #// 
+    #// @var string
+    #//
     type = "color"
+    #// 
+    #// Statuses.
+    #// 
+    #// @var array
+    #//
     statuses = Array()
+    #// 
+    #// Mode.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     mode = "full"
     #// 
     #// Constructor.
@@ -43,10 +54,13 @@ class WP_Customize_Color_Control(WP_Customize_Control):
     #// See WP_Customize_Control::__construct() for information
     #// on accepted arguments. Default empty array.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         self.statuses = Array({"": __("Default")})
-        super().__init__(manager, id, args)
+        super().__init__(manager_, id_, args_)
     # end def __init__
     #// 
     #// Enqueue scripts/styles for the color picker.
@@ -54,6 +68,7 @@ class WP_Customize_Color_Control(WP_Customize_Control):
     #// @since 3.4.0
     #//
     def enqueue(self):
+        
         
         wp_enqueue_script("wp-color-picker")
         wp_enqueue_style("wp-color-picker")
@@ -65,6 +80,7 @@ class WP_Customize_Color_Control(WP_Customize_Control):
     #// @uses WP_Customize_Control::to_json()
     #//
     def to_json(self):
+        
         
         super().to_json()
         self.json["statuses"] = self.statuses
@@ -78,6 +94,7 @@ class WP_Customize_Color_Control(WP_Customize_Control):
     #//
     def render_content(self):
         
+        
         pass
     # end def render_content
     #// 
@@ -86,6 +103,7 @@ class WP_Customize_Color_Control(WP_Customize_Control):
     #// @since 4.1.0
     #//
     def content_template(self):
+        
         
         php_print("""       <# var defaultValue = '#RRGGBB', defaultValueAttr = '',
         isHueSlider = data.mode === 'hue';

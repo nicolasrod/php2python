@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -31,7 +26,21 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Upgrader
 #//
 class Plugin_Upgrader(WP_Upgrader):
+    #// 
+    #// Plugin upgrade result.
+    #// 
+    #// @since 2.8.0
+    #// @var array|WP_Error $result
+    #// 
+    #// @see WP_Upgrader::$result
+    #//
     result = Array()
+    #// 
+    #// Whether a bulk upgrade/installation is being performed.
+    #// 
+    #// @since 2.9.0
+    #// @var bool $bulk
+    #//
     bulk = False
     #// 
     #// Initialize the upgrade strings.
@@ -39,6 +48,7 @@ class Plugin_Upgrader(WP_Upgrader):
     #// @since 2.8.0
     #//
     def upgrade_strings(self):
+        
         
         self.strings["up_to_date"] = __("The plugin is at the latest version.")
         self.strings["no_package"] = __("Update package not available.")
@@ -57,6 +67,7 @@ class Plugin_Upgrader(WP_Upgrader):
     #// @since 2.8.0
     #//
     def install_strings(self):
+        
         
         self.strings["no_package"] = __("Installation package not available.")
         #// translators: %s: Package URL.
@@ -82,25 +93,28 @@ class Plugin_Upgrader(WP_Upgrader):
     #// }
     #// @return bool|WP_Error True if the installation was successful, false or a WP_Error otherwise.
     #//
-    def install(self, package=None, args=Array()):
+    def install(self, package_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"clear_update_cache": True})
-        parsed_args = wp_parse_args(args, defaults)
+        defaults_ = Array({"clear_update_cache": True})
+        parsed_args_ = wp_parse_args(args_, defaults_)
         self.init()
         self.install_strings()
         add_filter("upgrader_source_selection", Array(self, "check_package"))
-        if parsed_args["clear_update_cache"]:
+        if parsed_args_["clear_update_cache"]:
             #// Clear cache so wp_update_plugins() knows about the new plugin.
             add_action("upgrader_process_complete", "wp_clean_plugins_cache", 9, 0)
         # end if
-        self.run(Array({"package": package, "destination": WP_PLUGIN_DIR, "clear_destination": False, "clear_working": True, "hook_extra": Array({"type": "plugin", "action": "install"})}))
+        self.run(Array({"package": package_, "destination": WP_PLUGIN_DIR, "clear_destination": False, "clear_working": True, "hook_extra": Array({"type": "plugin", "action": "install"})}))
         remove_action("upgrader_process_complete", "wp_clean_plugins_cache", 9)
         remove_filter("upgrader_source_selection", Array(self, "check_package"))
         if (not self.result) or is_wp_error(self.result):
             return self.result
         # end if
         #// Force refresh of plugin update information.
-        wp_clean_plugins_cache(parsed_args["clear_update_cache"])
+        wp_clean_plugins_cache(parsed_args_["clear_update_cache"])
         return True
     # end def install
     #// 
@@ -118,14 +132,17 @@ class Plugin_Upgrader(WP_Upgrader):
     #// }
     #// @return bool|WP_Error True if the upgrade was successful, false or a WP_Error object otherwise.
     #//
-    def upgrade(self, plugin=None, args=Array()):
+    def upgrade(self, plugin_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"clear_update_cache": True})
-        parsed_args = wp_parse_args(args, defaults)
+        defaults_ = Array({"clear_update_cache": True})
+        parsed_args_ = wp_parse_args(args_, defaults_)
         self.init()
         self.upgrade_strings()
-        current = get_site_transient("update_plugins")
-        if (not (php_isset(lambda : current.response[plugin]))):
+        current_ = get_site_transient("update_plugins")
+        if (not (php_isset(lambda : current_.response[plugin_]))):
             self.skin.before()
             self.skin.set_result(False)
             self.skin.error("up_to_date")
@@ -133,18 +150,18 @@ class Plugin_Upgrader(WP_Upgrader):
             return False
         # end if
         #// Get the URL to the zip file.
-        r = current.response[plugin]
+        r_ = current_.response[plugin_]
         add_filter("upgrader_pre_install", Array(self, "deactivate_plugin_before_upgrade"), 10, 2)
         add_filter("upgrader_pre_install", Array(self, "active_before"), 10, 2)
         add_filter("upgrader_clear_destination", Array(self, "delete_old_plugin"), 10, 4)
         add_filter("upgrader_post_install", Array(self, "active_after"), 10, 2)
         #// There's a Trac ticket to move up the directory for zips which are made a bit differently, useful for non-.org plugins.
         #// 'source_selection' => array( $this, 'source_selection' ),
-        if parsed_args["clear_update_cache"]:
+        if parsed_args_["clear_update_cache"]:
             #// Clear cache so wp_update_plugins() knows about the new plugin.
             add_action("upgrader_process_complete", "wp_clean_plugins_cache", 9, 0)
         # end if
-        self.run(Array({"package": r.package, "destination": WP_PLUGIN_DIR, "clear_destination": True, "clear_working": True, "hook_extra": Array({"plugin": plugin, "type": "plugin", "action": "update"})}))
+        self.run(Array({"package": r_.package, "destination": WP_PLUGIN_DIR, "clear_destination": True, "clear_working": True, "hook_extra": Array({"plugin": plugin_, "type": "plugin", "action": "update"})}))
         #// Cleanup our hooks, in case something else does a upgrade on this connection.
         remove_action("upgrader_process_complete", "wp_clean_plugins_cache", 9)
         remove_filter("upgrader_pre_install", Array(self, "deactivate_plugin_before_upgrade"))
@@ -155,7 +172,7 @@ class Plugin_Upgrader(WP_Upgrader):
             return self.result
         # end if
         #// Force refresh of plugin update information.
-        wp_clean_plugins_cache(parsed_args["clear_update_cache"])
+        wp_clean_plugins_cache(parsed_args_["clear_update_cache"])
         return True
     # end def upgrade
     #// 
@@ -172,19 +189,22 @@ class Plugin_Upgrader(WP_Upgrader):
     #// }
     #// @return array|false An array of results indexed by plugin file, or false if unable to connect to the filesystem.
     #//
-    def bulk_upgrade(self, plugins=None, args=Array()):
+    def bulk_upgrade(self, plugins_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        defaults = Array({"clear_update_cache": True})
-        parsed_args = wp_parse_args(args, defaults)
+        defaults_ = Array({"clear_update_cache": True})
+        parsed_args_ = wp_parse_args(args_, defaults_)
         self.init()
         self.bulk = True
         self.upgrade_strings()
-        current = get_site_transient("update_plugins")
+        current_ = get_site_transient("update_plugins")
         add_filter("upgrader_clear_destination", Array(self, "delete_old_plugin"), 10, 4)
         self.skin.header()
         #// Connect to the filesystem first.
-        res = self.fs_connect(Array(WP_CONTENT_DIR, WP_PLUGIN_DIR))
-        if (not res):
+        res_ = self.fs_connect(Array(WP_CONTENT_DIR, WP_PLUGIN_DIR))
+        if (not res_):
             self.skin.footer()
             return False
         # end if
@@ -195,48 +215,48 @@ class Plugin_Upgrader(WP_Upgrader):
         #// - a plugin with an update available is currently active.
         #// @todo For multisite, maintenance mode should only kick in for individual sites if at all possible.
         #//
-        maintenance = is_multisite() and (not php_empty(lambda : plugins))
-        for plugin in plugins:
-            maintenance = maintenance or is_plugin_active(plugin) and (php_isset(lambda : current.response[plugin]))
+        maintenance_ = is_multisite() and (not php_empty(lambda : plugins_))
+        for plugin_ in plugins_:
+            maintenance_ = maintenance_ or is_plugin_active(plugin_) and (php_isset(lambda : current_.response[plugin_]))
         # end for
-        if maintenance:
+        if maintenance_:
             self.maintenance_mode(True)
         # end if
-        results = Array()
-        self.update_count = php_count(plugins)
+        results_ = Array()
+        self.update_count = php_count(plugins_)
         self.update_current = 0
-        for plugin in plugins:
+        for plugin_ in plugins_:
             self.update_current += 1
-            self.skin.plugin_info = get_plugin_data(WP_PLUGIN_DIR + "/" + plugin, False, True)
-            if (not (php_isset(lambda : current.response[plugin]))):
+            self.skin.plugin_info = get_plugin_data(WP_PLUGIN_DIR + "/" + plugin_, False, True)
+            if (not (php_isset(lambda : current_.response[plugin_]))):
                 self.skin.set_result("up_to_date")
                 self.skin.before()
                 self.skin.feedback("up_to_date")
                 self.skin.after()
-                results[plugin] = True
+                results_[plugin_] = True
                 continue
             # end if
             #// Get the URL to the zip file.
-            r = current.response[plugin]
-            self.skin.plugin_active = is_plugin_active(plugin)
-            result = self.run(Array({"package": r.package, "destination": WP_PLUGIN_DIR, "clear_destination": True, "clear_working": True, "is_multi": True, "hook_extra": Array({"plugin": plugin})}))
-            results[plugin] = self.result
+            r_ = current_.response[plugin_]
+            self.skin.plugin_active = is_plugin_active(plugin_)
+            result_ = self.run(Array({"package": r_.package, "destination": WP_PLUGIN_DIR, "clear_destination": True, "clear_working": True, "is_multi": True, "hook_extra": Array({"plugin": plugin_})}))
+            results_[plugin_] = self.result
             #// Prevent credentials auth screen from displaying multiple times.
-            if False == result:
+            if False == result_:
                 break
             # end if
         # end for
         #// End foreach $plugins.
         self.maintenance_mode(False)
         #// Force refresh of plugin update information.
-        wp_clean_plugins_cache(parsed_args["clear_update_cache"])
+        wp_clean_plugins_cache(parsed_args_["clear_update_cache"])
         #// This action is documented in wp-admin/includes/class-wp-upgrader.php
-        do_action("upgrader_process_complete", self, Array({"action": "update", "type": "plugin", "bulk": True, "plugins": plugins}))
+        do_action("upgrader_process_complete", self, Array({"action": "update", "type": "plugin", "bulk": True, "plugins": plugins_}))
         self.skin.bulk_footer()
         self.skin.footer()
         #// Cleanup our hooks, in case something else does a upgrade on this connection.
         remove_filter("upgrader_clear_destination", Array(self, "delete_old_plugin"))
-        return results
+        return results_
     # end def bulk_upgrade
     #// 
     #// Check a source package to be sure it contains a plugin.
@@ -252,34 +272,35 @@ class Plugin_Upgrader(WP_Upgrader):
     #// @return string|WP_Error The source as passed, or a WP_Error object
     #// if no plugins were found.
     #//
-    def check_package(self, source=None):
+    def check_package(self, source_=None):
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
-        if is_wp_error(source):
-            return source
+        
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
+        if is_wp_error(source_):
+            return source_
         # end if
-        working_directory = php_str_replace(wp_filesystem.wp_content_dir(), trailingslashit(WP_CONTENT_DIR), source)
-        if (not php_is_dir(working_directory)):
+        working_directory_ = php_str_replace(wp_filesystem_.wp_content_dir(), trailingslashit(WP_CONTENT_DIR), source_)
+        if (not php_is_dir(working_directory_)):
             #// Sanity check, if the above fails, let's not prevent installation.
-            return source
+            return source_
         # end if
         #// Check that the folder contains at least 1 valid plugin.
-        plugins_found = False
-        files = glob(working_directory + "*.php")
-        if files:
-            for file in files:
-                info = get_plugin_data(file, False, False)
-                if (not php_empty(lambda : info["Name"])):
-                    plugins_found = True
+        plugins_found_ = False
+        files_ = glob(working_directory_ + "*.php")
+        if files_:
+            for file_ in files_:
+                info_ = get_plugin_data(file_, False, False)
+                if (not php_empty(lambda : info_["Name"])):
+                    plugins_found_ = True
                     break
                 # end if
             # end for
         # end if
-        if (not plugins_found):
+        if (not plugins_found_):
             return php_new_class("WP_Error", lambda : WP_Error("incompatible_archive_no_plugins", self.strings["incompatible_archive"], __("No valid plugins were found.")))
         # end if
-        return source
+        return source_
     # end def check_package
     #// 
     #// Retrieve the path to the file that contains the plugin info.
@@ -292,6 +313,7 @@ class Plugin_Upgrader(WP_Upgrader):
     #//
     def plugin_info(self):
         
+        
         if (not php_is_array(self.result)):
             return False
         # end if
@@ -299,13 +321,13 @@ class Plugin_Upgrader(WP_Upgrader):
             return False
         # end if
         #// Ensure to pass with leading slash.
-        plugin = get_plugins("/" + self.result["destination_name"])
-        if php_empty(lambda : plugin):
+        plugin_ = get_plugins("/" + self.result["destination_name"])
+        if php_empty(lambda : plugin_):
             return False
         # end if
         #// Assume the requested plugin is the first in the list.
-        pluginfiles = php_array_keys(plugin)
-        return self.result["destination_name"] + "/" + pluginfiles[0]
+        pluginfiles_ = php_array_keys(plugin_)
+        return self.result["destination_name"] + "/" + pluginfiles_[0]
     # end def plugin_info
     #// 
     #// Deactivates a plugin before it is upgraded.
@@ -319,7 +341,8 @@ class Plugin_Upgrader(WP_Upgrader):
     #// @param array         $plugin Plugin package arguments.
     #// @return bool|WP_Error The passed in $return param or WP_Error.
     #//
-    def deactivate_plugin_before_upgrade(self, return_=None, plugin=None):
+    def deactivate_plugin_before_upgrade(self, return_=None, plugin_=None):
+        
         
         if is_wp_error(return_):
             #// Bypass.
@@ -329,13 +352,13 @@ class Plugin_Upgrader(WP_Upgrader):
         if wp_doing_cron():
             return return_
         # end if
-        plugin = plugin["plugin"] if (php_isset(lambda : plugin["plugin"])) else ""
-        if php_empty(lambda : plugin):
+        plugin_ = plugin_["plugin"] if (php_isset(lambda : plugin_["plugin"])) else ""
+        if php_empty(lambda : plugin_):
             return php_new_class("WP_Error", lambda : WP_Error("bad_request", self.strings["bad_request"]))
         # end if
-        if is_plugin_active(plugin):
+        if is_plugin_active(plugin_):
             #// Deactivate the plugin silently, Prevent deactivation hooks from running.
-            deactivate_plugins(plugin, True)
+            deactivate_plugins(plugin_, True)
         # end if
         return return_
     # end def deactivate_plugin_before_upgrade
@@ -350,7 +373,8 @@ class Plugin_Upgrader(WP_Upgrader):
     #// @param array         $plugin Plugin package arguments.
     #// @return bool|WP_Error The passed in $return param or WP_Error.
     #//
-    def active_before(self, return_=None, plugin=None):
+    def active_before(self, return_=None, plugin_=None):
+        
         
         if is_wp_error(return_):
             return return_
@@ -359,9 +383,9 @@ class Plugin_Upgrader(WP_Upgrader):
         if (not wp_doing_cron()):
             return return_
         # end if
-        plugin = plugin["plugin"] if (php_isset(lambda : plugin["plugin"])) else ""
+        plugin_ = plugin_["plugin"] if (php_isset(lambda : plugin_["plugin"])) else ""
         #// Only run if plugin is active.
-        if (not is_plugin_active(plugin)):
+        if (not is_plugin_active(plugin_)):
             return return_
         # end if
         #// Change to maintenance mode. Bulk edit handles this separately.
@@ -381,7 +405,8 @@ class Plugin_Upgrader(WP_Upgrader):
     #// @param array         $plugin Plugin package arguments.
     #// @return bool|WP_Error The passed in $return param or WP_Error.
     #//
-    def active_after(self, return_=None, plugin=None):
+    def active_after(self, return_=None, plugin_=None):
+        
         
         if is_wp_error(return_):
             return return_
@@ -390,9 +415,9 @@ class Plugin_Upgrader(WP_Upgrader):
         if (not wp_doing_cron()):
             return return_
         # end if
-        plugin = plugin["plugin"] if (php_isset(lambda : plugin["plugin"])) else ""
+        plugin_ = plugin_["plugin"] if (php_isset(lambda : plugin_["plugin"])) else ""
         #// Only run if plugin is active
-        if (not is_plugin_active(plugin)):
+        if (not is_plugin_active(plugin_)):
             return return_
         # end if
         #// Time to remove maintenance mode. Bulk edit handles this separately.
@@ -418,32 +443,33 @@ class Plugin_Upgrader(WP_Upgrader):
     #// @param array         $plugin             Extra arguments passed to hooked filters.
     #// @return bool|WP_Error
     #//
-    def delete_old_plugin(self, removed=None, local_destination=None, remote_destination=None, plugin=None):
+    def delete_old_plugin(self, removed_=None, local_destination_=None, remote_destination_=None, plugin_=None):
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
-        if is_wp_error(removed):
-            return removed
+        
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
+        if is_wp_error(removed_):
+            return removed_
             pass
         # end if
-        plugin = plugin["plugin"] if (php_isset(lambda : plugin["plugin"])) else ""
-        if php_empty(lambda : plugin):
+        plugin_ = plugin_["plugin"] if (php_isset(lambda : plugin_["plugin"])) else ""
+        if php_empty(lambda : plugin_):
             return php_new_class("WP_Error", lambda : WP_Error("bad_request", self.strings["bad_request"]))
         # end if
-        plugins_dir = wp_filesystem.wp_plugins_dir()
-        this_plugin_dir = trailingslashit(php_dirname(plugins_dir + plugin))
-        if (not wp_filesystem.exists(this_plugin_dir)):
+        plugins_dir_ = wp_filesystem_.wp_plugins_dir()
+        this_plugin_dir_ = trailingslashit(php_dirname(plugins_dir_ + plugin_))
+        if (not wp_filesystem_.exists(this_plugin_dir_)):
             #// If it's already vanished.
-            return removed
+            return removed_
         # end if
         #// If plugin is in its own directory, recursively delete the directory.
         #// Base check on if plugin includes directory separator AND that it's not the root plugin folder.
-        if php_strpos(plugin, "/") and this_plugin_dir != plugins_dir:
-            deleted = wp_filesystem.delete(this_plugin_dir, True)
+        if php_strpos(plugin_, "/") and this_plugin_dir_ != plugins_dir_:
+            deleted_ = wp_filesystem_.delete(this_plugin_dir_, True)
         else:
-            deleted = wp_filesystem.delete(plugins_dir + plugin)
+            deleted_ = wp_filesystem_.delete(plugins_dir_ + plugin_)
         # end if
-        if (not deleted):
+        if (not deleted_):
             return php_new_class("WP_Error", lambda : WP_Error("remove_old_failed", self.strings["remove_old_failed"]))
         # end if
         return True

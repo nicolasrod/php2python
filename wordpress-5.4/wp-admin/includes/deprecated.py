@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -28,7 +23,8 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @deprecated 2.1.0 Use wp_editor()
 #// @see wp_editor()
 #//
-def tinymce_include(*args_):
+def tinymce_include(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "2.1.0", "wp_editor()")
     wp_tiny_mce()
@@ -40,7 +36,8 @@ def tinymce_include(*args_):
 #// @deprecated 2.5.0
 #// 
 #//
-def documentation_link(*args_):
+def documentation_link(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "2.5.0")
 # end def documentation_link
@@ -57,10 +54,11 @@ def documentation_link(*args_):
 #// @param int $hmax Maximum wanted height
 #// @return array Shrunk dimensions (width, height).
 #//
-def wp_shrink_dimensions(width=None, height=None, wmax=128, hmax=96, *args_):
+def wp_shrink_dimensions(width_=None, height_=None, wmax_=128, hmax_=96, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0", "wp_constrain_dimensions()")
-    return wp_constrain_dimensions(width, height, wmax, hmax)
+    return wp_constrain_dimensions(width_, height_, wmax_, hmax_)
 # end def wp_shrink_dimensions
 #// 
 #// Calculated the new dimensions for a downsampled image.
@@ -73,10 +71,11 @@ def wp_shrink_dimensions(width=None, height=None, wmax=128, hmax=96, *args_):
 #// @param int $height Current height of the image
 #// @return array Shrunk dimensions (width, height).
 #//
-def get_udims(width=None, height=None, *args_):
+def get_udims(width_=None, height_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.5.0", "wp_constrain_dimensions()")
-    return wp_constrain_dimensions(width, height, 128, 96)
+    return wp_constrain_dimensions(width_, height_, 128, 96)
 # end def get_udims
 #// 
 #// Legacy function used to generate the categories checklist control.
@@ -89,12 +88,15 @@ def get_udims(width=None, height=None, *args_):
 #// @param int $parent        Unused.
 #// @param array $popular_ids Unused.
 #//
-def dropdown_categories(default=0, parent=0, popular_ids=Array(), *args_):
+def dropdown_categories(default_=0, parent_=0, popular_ids_=None, *_args_):
+    if popular_ids_ is None:
+        popular_ids_ = Array()
+    # end if
     
     _deprecated_function(__FUNCTION__, "2.6.0", "wp_category_checklist()")
-    global post_ID
-    php_check_if_defined("post_ID")
-    wp_category_checklist(post_ID)
+    global post_ID_
+    php_check_if_defined("post_ID_")
+    wp_category_checklist(post_ID_)
 # end def dropdown_categories
 #// 
 #// Legacy function used to generate a link categories checklist control.
@@ -105,12 +107,13 @@ def dropdown_categories(default=0, parent=0, popular_ids=Array(), *args_):
 #// 
 #// @param int $default Unused.
 #//
-def dropdown_link_categories(default=0, *args_):
+def dropdown_link_categories(default_=0, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "2.6.0", "wp_link_category_checklist()")
-    global link_id
-    php_check_if_defined("link_id")
-    wp_link_category_checklist(link_id)
+    global link_id_
+    php_check_if_defined("link_id_")
+    wp_link_category_checklist(link_id_)
 # end def dropdown_link_categories
 #// 
 #// Get the real filesystem path to a file to edit within the admin.
@@ -122,10 +125,11 @@ def dropdown_link_categories(default=0, *args_):
 #// @param string $file Filesystem path relative to the wp-content directory.
 #// @return string Full filesystem path to edit.
 #//
-def get_real_file_to_edit(file=None, *args_):
+def get_real_file_to_edit(file_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "2.9.0")
-    return WP_CONTENT_DIR + file
+    return WP_CONTENT_DIR + file_
 # end def get_real_file_to_edit
 #// 
 #// Legacy function used for generating a categories drop-down control.
@@ -141,23 +145,24 @@ def get_real_file_to_edit(file=None, *args_):
 #// @param array $categories  Optional. Categories to include in the control. Default 0.
 #// @return bool|null False if no categories were found.
 #//
-def wp_dropdown_cats(currentcat=0, currentparent=0, parent=0, level=0, categories=0, *args_):
+def wp_dropdown_cats(currentcat_=0, currentparent_=0, parent_=0, level_=0, categories_=0, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0", "wp_dropdown_categories()")
-    if (not categories):
-        categories = get_categories(Array({"hide_empty": 0}))
+    if (not categories_):
+        categories_ = get_categories(Array({"hide_empty": 0}))
     # end if
-    if categories:
-        for category in categories:
-            if currentcat != category.term_id and parent == category.parent:
-                pad = php_str_repeat("&#8211; ", level)
-                category.name = esc_html(category.name)
-                php_print(str("\n   <option value='") + str(category.term_id) + str("'"))
-                if currentparent == category.term_id:
+    if categories_:
+        for category_ in categories_:
+            if currentcat_ != category_.term_id and parent_ == category_.parent:
+                pad_ = php_str_repeat("&#8211; ", level_)
+                category_.name = esc_html(category_.name)
+                php_print(str("\n   <option value='") + str(category_.term_id) + str("'"))
+                if currentparent_ == category_.term_id:
                     php_print(" selected='selected'")
                 # end if
-                php_print(str(">") + str(pad) + str(category.name) + str("</option>"))
-                wp_dropdown_cats(currentcat, currentparent, category.term_id, level + 1, categories)
+                php_print(str(">") + str(pad_) + str(category_.name) + str("</option>"))
+                wp_dropdown_cats(currentcat_, currentparent_, category_.term_id, level_ + 1, categories_)
             # end if
         # end for
     else:
@@ -177,10 +182,11 @@ def wp_dropdown_cats(currentcat=0, currentparent=0, parent=0, level=0, categorie
 #// @param string $option_name The name of an option to sanitize and save.
 #// @param callable $sanitize_callback A callback function that sanitizes the option's value.
 #//
-def add_option_update_handler(option_group=None, option_name=None, sanitize_callback="", *args_):
+def add_option_update_handler(option_group_=None, option_name_=None, sanitize_callback_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0", "register_setting()")
-    register_setting(option_group, option_name, sanitize_callback)
+    register_setting(option_group_, option_name_, sanitize_callback_)
 # end def add_option_update_handler
 #// 
 #// Unregister a setting
@@ -193,10 +199,11 @@ def add_option_update_handler(option_group=None, option_name=None, sanitize_call
 #// @param string $option_name
 #// @param callable $sanitize_callback
 #//
-def remove_option_update_handler(option_group=None, option_name=None, sanitize_callback="", *args_):
+def remove_option_update_handler(option_group_=None, option_name_=None, sanitize_callback_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0", "unregister_setting()")
-    unregister_setting(option_group, option_name, sanitize_callback)
+    unregister_setting(option_group_, option_name_, sanitize_callback_)
 # end def remove_option_update_handler
 #// 
 #// Determines the language to use for CodePress syntax highlighting.
@@ -206,7 +213,8 @@ def remove_option_update_handler(option_group=None, option_name=None, sanitize_c
 #// 
 #// @param string $filename
 #//
-def codepress_get_lang(filename=None, *args_):
+def codepress_get_lang(filename_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0")
 # end def codepress_get_lang
@@ -216,7 +224,8 @@ def codepress_get_lang(filename=None, *args_):
 #// @since 2.8.0
 #// @deprecated 3.0.0
 #//
-def codepress_footer_js(*args_):
+def codepress_footer_js(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0")
 # end def codepress_footer_js
@@ -226,7 +235,8 @@ def codepress_footer_js(*args_):
 #// @since 2.8.0
 #// @deprecated 3.0.0
 #//
-def use_codepress(*args_):
+def use_codepress(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.0.0")
 # end def use_codepress
@@ -239,18 +249,19 @@ def use_codepress(*args_):
 #// 
 #// @return array List of user IDs.
 #//
-def get_author_user_ids(*args_):
+def get_author_user_ids(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
-    global wpdb
-    php_check_if_defined("wpdb")
+    global wpdb_
+    php_check_if_defined("wpdb_")
     if (not is_multisite()):
-        level_key = wpdb.get_blog_prefix() + "user_level"
+        level_key_ = wpdb_.get_blog_prefix() + "user_level"
     else:
-        level_key = wpdb.get_blog_prefix() + "capabilities"
+        level_key_ = wpdb_.get_blog_prefix() + "capabilities"
     # end if
     #// WPMU site admins don't have user_levels.
-    return wpdb.get_col(wpdb.prepare(str("SELECT user_id FROM ") + str(wpdb.usermeta) + str(" WHERE meta_key = %s AND meta_value != '0'"), level_key))
+    return wpdb_.get_col(wpdb_.prepare(str("SELECT user_id FROM ") + str(wpdb_.usermeta) + str(" WHERE meta_key = %s AND meta_value != '0'"), level_key_))
 # end def get_author_user_ids
 #// 
 #// Gets author users who can edit posts.
@@ -262,19 +273,20 @@ def get_author_user_ids(*args_):
 #// @param int $user_id User ID.
 #// @return array|bool List of editable authors. False if no editable users.
 #//
-def get_editable_authors(user_id=None, *args_):
+def get_editable_authors(user_id_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
-    global wpdb
-    php_check_if_defined("wpdb")
-    editable = get_editable_user_ids(user_id)
-    if (not editable):
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    editable_ = get_editable_user_ids(user_id_)
+    if (not editable_):
         return False
     else:
-        editable = join(",", editable)
-        authors = wpdb.get_results(str("SELECT * FROM ") + str(wpdb.users) + str(" WHERE ID IN (") + str(editable) + str(") ORDER BY display_name"))
+        editable_ = join(",", editable_)
+        authors_ = wpdb_.get_results(str("SELECT * FROM ") + str(wpdb_.users) + str(" WHERE ID IN (") + str(editable_) + str(") ORDER BY display_name"))
     # end if
-    return apply_filters("get_editable_authors", authors)
+    return apply_filters("get_editable_authors", authors_)
 # end def get_editable_authors
 #// 
 #// Gets the IDs of any users who can edit posts.
@@ -287,34 +299,37 @@ def get_editable_authors(user_id=None, *args_):
 #// @param bool $exclude_zeros Optional. Whether to exclude zeroes. Default true.
 #// @return array Array of editable user IDs, empty array otherwise.
 #//
-def get_editable_user_ids(user_id=None, exclude_zeros=True, post_type="post", *args_):
+def get_editable_user_ids(user_id_=None, exclude_zeros_=None, post_type_="post", *_args_):
+    if exclude_zeros_ is None:
+        exclude_zeros_ = True
+    # end if
     
     _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
-    global wpdb
-    php_check_if_defined("wpdb")
-    user = get_userdata(user_id)
-    if (not user):
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    user_ = get_userdata(user_id_)
+    if (not user_):
         return Array()
     # end if
-    post_type_obj = get_post_type_object(post_type)
-    if (not user.has_cap(post_type_obj.cap.edit_others_posts)):
-        if user.has_cap(post_type_obj.cap.edit_posts) or (not exclude_zeros):
-            return Array(user.ID)
+    post_type_obj_ = get_post_type_object(post_type_)
+    if (not user_.has_cap(post_type_obj_.cap.edit_others_posts)):
+        if user_.has_cap(post_type_obj_.cap.edit_posts) or (not exclude_zeros_):
+            return Array(user_.ID)
         else:
             return Array()
         # end if
     # end if
     if (not is_multisite()):
-        level_key = wpdb.get_blog_prefix() + "user_level"
+        level_key_ = wpdb_.get_blog_prefix() + "user_level"
     else:
-        level_key = wpdb.get_blog_prefix() + "capabilities"
+        level_key_ = wpdb_.get_blog_prefix() + "capabilities"
     # end if
     #// WPMU site admins don't have user_levels.
-    query = wpdb.prepare(str("SELECT user_id FROM ") + str(wpdb.usermeta) + str(" WHERE meta_key = %s"), level_key)
-    if exclude_zeros:
-        query += " AND meta_value != '0'"
+    query_ = wpdb_.prepare(str("SELECT user_id FROM ") + str(wpdb_.usermeta) + str(" WHERE meta_key = %s"), level_key_)
+    if exclude_zeros_:
+        query_ += " AND meta_value != '0'"
     # end if
-    return wpdb.get_col(query)
+    return wpdb_.get_col(query_)
 # end def get_editable_user_ids
 #// 
 #// Gets all users who are not authors.
@@ -323,18 +338,19 @@ def get_editable_user_ids(user_id=None, exclude_zeros=True, post_type="post", *a
 #// 
 #// @global wpdb $wpdb WordPress database abstraction object.
 #//
-def get_nonauthor_user_ids(*args_):
+def get_nonauthor_user_ids(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
-    global wpdb
-    php_check_if_defined("wpdb")
+    global wpdb_
+    php_check_if_defined("wpdb_")
     if (not is_multisite()):
-        level_key = wpdb.get_blog_prefix() + "user_level"
+        level_key_ = wpdb_.get_blog_prefix() + "user_level"
     else:
-        level_key = wpdb.get_blog_prefix() + "capabilities"
+        level_key_ = wpdb_.get_blog_prefix() + "capabilities"
     # end if
     #// WPMU site admins don't have user_levels.
-    return wpdb.get_col(wpdb.prepare(str("SELECT user_id FROM ") + str(wpdb.usermeta) + str(" WHERE meta_key = %s AND meta_value = '0'"), level_key))
+    return wpdb_.get_col(wpdb_.prepare(str("SELECT user_id FROM ") + str(wpdb_.usermeta) + str(" WHERE meta_key = %s AND meta_value = '0'"), level_key_))
 # end def get_nonauthor_user_ids
 if (not php_class_exists("WP_User_Search", False)):
     #// 
@@ -344,21 +360,133 @@ if (not php_class_exists("WP_User_Search", False)):
     #// @deprecated 3.1.0 Use WP_User_Query
     #//
     class WP_User_Search():
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var mixed
+        #//
         results = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var string
+        #//
         search_term = Array()
+        #// 
+        #// Page number.
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var int
+        #//
         page = Array()
+        #// 
+        #// Role name that users have.
+        #// 
+        #// @since 2.5.0
+        #// @access private
+        #// @var string
+        #//
         role = Array()
+        #// 
+        #// Raw page number.
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var int|bool
+        #//
         raw_page = Array()
+        #// 
+        #// Amount of users to display per page.
+        #// 
+        #// @since 2.1.0
+        #// @access public
+        #// @var int
+        #//
         users_per_page = 50
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var int
+        #//
         first_user = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var int
+        #//
         last_user = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var string
+        #//
         query_limit = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 3.0.0
+        #// @access private
+        #// @var string
+        #//
         query_orderby = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 3.0.0
+        #// @access private
+        #// @var string
+        #//
         query_from = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 3.0.0
+        #// @access private
+        #// @var string
+        #//
         query_where = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var int
+        #//
         total_users_for_query = 0
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var bool
+        #//
         too_many_total_users = False
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.1.0
+        #// @access private
+        #// @var WP_Error
+        #//
         search_errors = Array()
+        #// 
+        #// {@internal Missing Description}}
+        #// 
+        #// @since 2.7.0
+        #// @access private
+        #// @var string
+        #//
         paging_text = Array()
         #// 
         #// PHP5 Constructor - Sets up the object properties.
@@ -370,13 +498,14 @@ if (not php_class_exists("WP_User_Search", False)):
         #// @param string $role Role name.
         #// @return WP_User_Search
         #//
-        def __init__(self, search_term="", page="", role=""):
+        def __init__(self, search_term_="", page_="", role_=""):
+            
             
             _deprecated_function(__FUNCTION__, "3.1.0", "WP_User_Query")
-            self.search_term = wp_unslash(search_term)
-            self.raw_page = False if "" == page else php_int(page)
-            self.page = 1 if php_int("" == page) else page
-            self.role = role
+            self.search_term = wp_unslash(search_term_)
+            self.raw_page = False if "" == page_ else php_int(page_)
+            self.page = 1 if php_int("" == page_) else page_
+            self.role = role_
             self.prepare_query()
             self.query()
             self.do_paging()
@@ -391,9 +520,10 @@ if (not php_class_exists("WP_User_Search", False)):
         #// @param string $role Role name.
         #// @return WP_User_Search
         #//
-        def wp_user_search(self, search_term="", page="", role=""):
+        def wp_user_search(self, search_term_="", page_="", role_=""):
             
-            self.__init__(search_term, page, role)
+            
+            self.__init__(search_term_, page_, role_)
         # end def wp_user_search
         #// 
         #// Prepares the user search query (legacy).
@@ -403,31 +533,32 @@ if (not php_class_exists("WP_User_Search", False)):
         #//
         def prepare_query(self):
             
-            global wpdb
-            php_check_if_defined("wpdb")
+            
+            global wpdb_
+            php_check_if_defined("wpdb_")
             self.first_user = self.page - 1 * self.users_per_page
-            self.query_limit = wpdb.prepare(" LIMIT %d, %d", self.first_user, self.users_per_page)
+            self.query_limit = wpdb_.prepare(" LIMIT %d, %d", self.first_user, self.users_per_page)
             self.query_orderby = " ORDER BY user_login"
-            search_sql = ""
+            search_sql_ = ""
             if self.search_term:
-                searches = Array()
-                search_sql = "AND ("
-                for col in Array("user_login", "user_nicename", "user_email", "user_url", "display_name"):
-                    searches[-1] = wpdb.prepare(col + " LIKE %s", "%" + like_escape(self.search_term) + "%")
+                searches_ = Array()
+                search_sql_ = "AND ("
+                for col_ in Array("user_login", "user_nicename", "user_email", "user_url", "display_name"):
+                    searches_[-1] = wpdb_.prepare(col_ + " LIKE %s", "%" + like_escape(self.search_term) + "%")
                 # end for
-                search_sql += php_implode(" OR ", searches)
-                search_sql += ")"
+                search_sql_ += php_implode(" OR ", searches_)
+                search_sql_ += ")"
             # end if
-            self.query_from = str(" FROM ") + str(wpdb.users)
-            self.query_where = str(" WHERE 1=1 ") + str(search_sql)
+            self.query_from = str(" FROM ") + str(wpdb_.users)
+            self.query_where = str(" WHERE 1=1 ") + str(search_sql_)
             if self.role:
-                self.query_from += str(" INNER JOIN ") + str(wpdb.usermeta) + str(" ON ") + str(wpdb.users) + str(".ID = ") + str(wpdb.usermeta) + str(".user_id")
-                self.query_where += wpdb.prepare(str(" AND ") + str(wpdb.usermeta) + str(".meta_key = '") + str(wpdb.prefix) + str("capabilities' AND ") + str(wpdb.usermeta) + str(".meta_value LIKE %s"), "%" + self.role + "%")
+                self.query_from += str(" INNER JOIN ") + str(wpdb_.usermeta) + str(" ON ") + str(wpdb_.users) + str(".ID = ") + str(wpdb_.usermeta) + str(".user_id")
+                self.query_where += wpdb_.prepare(str(" AND ") + str(wpdb_.usermeta) + str(".meta_key = '") + str(wpdb_.prefix) + str("capabilities' AND ") + str(wpdb_.usermeta) + str(".meta_value LIKE %s"), "%" + self.role + "%")
             elif is_multisite():
-                level_key = wpdb.prefix + "capabilities"
+                level_key_ = wpdb_.prefix + "capabilities"
                 #// WPMU site admins don't have user_levels.
-                self.query_from += str(", ") + str(wpdb.usermeta)
-                self.query_where += str(" AND ") + str(wpdb.users) + str(".ID = ") + str(wpdb.usermeta) + str(".user_id AND meta_key = '") + str(level_key) + str("'")
+                self.query_from += str(", ") + str(wpdb_.usermeta)
+                self.query_where += str(" AND ") + str(wpdb_.users) + str(".ID = ") + str(wpdb_.usermeta) + str(".user_id AND meta_key = '") + str(level_key_) + str("'")
             # end if
             do_action_ref_array("pre_user_search", Array(self))
         # end def prepare_query
@@ -439,11 +570,12 @@ if (not php_class_exists("WP_User_Search", False)):
         #//
         def query(self):
             
-            global wpdb
-            php_check_if_defined("wpdb")
-            self.results = wpdb.get_col(str("SELECT DISTINCT(") + str(wpdb.users) + str(".ID)") + self.query_from + self.query_where + self.query_orderby + self.query_limit)
+            
+            global wpdb_
+            php_check_if_defined("wpdb_")
+            self.results = wpdb_.get_col(str("SELECT DISTINCT(") + str(wpdb_.users) + str(".ID)") + self.query_from + self.query_where + self.query_orderby + self.query_limit)
             if self.results:
-                self.total_users_for_query = wpdb.get_var(str("SELECT COUNT(DISTINCT(") + str(wpdb.users) + str(".ID))") + self.query_from + self.query_where)
+                self.total_users_for_query = wpdb_.get_var(str("SELECT COUNT(DISTINCT(") + str(wpdb_.users) + str(".ID))") + self.query_from + self.query_where)
             else:
                 self.search_errors = php_new_class("WP_Error", lambda : WP_Error("no_matching_users_found", __("No users found.")))
             # end if
@@ -456,6 +588,7 @@ if (not php_class_exists("WP_User_Search", False)):
         #//
         def prepare_vars_for_template_usage(self):
             
+            
             pass
         # end def prepare_vars_for_template_usage
         #// 
@@ -466,16 +599,17 @@ if (not php_class_exists("WP_User_Search", False)):
         #//
         def do_paging(self):
             
+            
             if self.total_users_for_query > self.users_per_page:
                 #// Have to page the results.
-                args = Array()
+                args_ = Array()
                 if (not php_empty(lambda : self.search_term)):
-                    args["usersearch"] = urlencode(self.search_term)
+                    args_["usersearch"] = urlencode(self.search_term)
                 # end if
                 if (not php_empty(lambda : self.role)):
-                    args["role"] = urlencode(self.role)
+                    args_["role"] = urlencode(self.role)
                 # end if
-                self.paging_text = paginate_links(Array({"total": ceil(self.total_users_for_query / self.users_per_page), "current": self.page, "base": "users.php?%_%", "format": "userspage=%#%", "add_args": args}))
+                self.paging_text = paginate_links(Array({"total": ceil(self.total_users_for_query / self.users_per_page), "current": self.page, "base": "users.php?%_%", "format": "userspage=%#%", "add_args": args_}))
                 if self.paging_text:
                     self.paging_text = php_sprintf("<span class=\"displaying-num\">" + __("Displaying %1$s&#8211;%2$s of %3$s") + "</span>%s", number_format_i18n(self.page - 1 * self.users_per_page + 1), number_format_i18n(php_min(self.page * self.users_per_page, self.total_users_for_query)), number_format_i18n(self.total_users_for_query), self.paging_text)
                 # end if
@@ -491,6 +625,7 @@ if (not php_class_exists("WP_User_Search", False)):
         #//
         def get_results(self):
             
+            
             return self.results
         # end def get_results
         #// 
@@ -502,6 +637,7 @@ if (not php_class_exists("WP_User_Search", False)):
         #// @access public
         #//
         def page_links(self):
+            
             
             php_print(self.paging_text)
         # end def page_links
@@ -517,6 +653,7 @@ if (not php_class_exists("WP_User_Search", False)):
         #//
         def results_are_paged(self):
             
+            
             if self.paging_text:
                 return True
             # end if
@@ -531,6 +668,7 @@ if (not php_class_exists("WP_User_Search", False)):
         #// @return bool
         #//
         def is_search(self):
+            
             
             if self.search_term:
                 return True
@@ -553,25 +691,26 @@ if (not php_class_exists("WP_User_Search", False)):
 #// Default 'any'.
 #// @return array List of posts from others.
 #//
-def get_others_unpublished_posts(user_id=None, type="any", *args_):
+def get_others_unpublished_posts(user_id_=None, type_="any", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.1.0")
-    global wpdb
-    php_check_if_defined("wpdb")
-    editable = get_editable_user_ids(user_id)
-    if php_in_array(type, Array("draft", "pending")):
-        type_sql = str(" post_status = '") + str(type) + str("' ")
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    editable_ = get_editable_user_ids(user_id_)
+    if php_in_array(type_, Array("draft", "pending")):
+        type_sql_ = str(" post_status = '") + str(type_) + str("' ")
     else:
-        type_sql = " ( post_status = 'draft' OR post_status = 'pending' ) "
+        type_sql_ = " ( post_status = 'draft' OR post_status = 'pending' ) "
     # end if
-    dir = "ASC" if "pending" == type else "DESC"
-    if (not editable):
-        other_unpubs = ""
+    dir_ = "ASC" if "pending" == type_ else "DESC"
+    if (not editable_):
+        other_unpubs_ = ""
     else:
-        editable = join(",", editable)
-        other_unpubs = wpdb.get_results(wpdb.prepare(str("SELECT ID, post_title, post_author FROM ") + str(wpdb.posts) + str(" WHERE post_type = 'post' AND ") + str(type_sql) + str(" AND post_author IN (") + str(editable) + str(") AND post_author != %d ORDER BY post_modified ") + str(dir), user_id))
+        editable_ = join(",", editable_)
+        other_unpubs_ = wpdb_.get_results(wpdb_.prepare(str("SELECT ID, post_title, post_author FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'post' AND ") + str(type_sql_) + str(" AND post_author IN (") + str(editable_) + str(") AND post_author != %d ORDER BY post_modified ") + str(dir_), user_id_))
     # end if
-    return apply_filters("get_others_drafts", other_unpubs)
+    return apply_filters("get_others_drafts", other_unpubs_)
 # end def get_others_unpublished_posts
 #// 
 #// Retrieve drafts from other users.
@@ -582,10 +721,11 @@ def get_others_unpublished_posts(user_id=None, type="any", *args_):
 #// @param int $user_id User ID.
 #// @return array List of drafts from other users.
 #//
-def get_others_drafts(user_id=None, *args_):
+def get_others_drafts(user_id_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.1.0")
-    return get_others_unpublished_posts(user_id, "draft")
+    return get_others_unpublished_posts(user_id_, "draft")
 # end def get_others_drafts
 #// 
 #// Retrieve pending review posts from other users.
@@ -596,10 +736,11 @@ def get_others_drafts(user_id=None, *args_):
 #// @param int $user_id User ID.
 #// @return array List of posts with pending review post type from other users.
 #//
-def get_others_pending(user_id=None, *args_):
+def get_others_pending(user_id_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.1.0")
-    return get_others_unpublished_posts(user_id, "pending")
+    return get_others_unpublished_posts(user_id_, "pending")
 # end def get_others_pending
 #// 
 #// Output the QuickPress dashboard widget.
@@ -608,7 +749,8 @@ def get_others_pending(user_id=None, *args_):
 #// @deprecated 3.2.0 Use wp_dashboard_quick_press()
 #// @see wp_dashboard_quick_press()
 #//
-def wp_dashboard_quick_press_output(*args_):
+def wp_dashboard_quick_press_output(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.2.0", "wp_dashboard_quick_press()")
     wp_dashboard_quick_press()
@@ -622,18 +764,24 @@ def wp_dashboard_quick_press_output(*args_):
 #// 
 #// @staticvar int $num
 #//
-def wp_tiny_mce(teeny=False, settings=False, *args_):
+def wp_tiny_mce(teeny_=None, settings_=None, *_args_):
+    if teeny_ is None:
+        teeny_ = False
+    # end if
+    if settings_ is None:
+        settings_ = False
+    # end if
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
-    wp_tiny_mce.num = 1
+    num_ = 1
     if (not php_class_exists("_WP_Editors", False)):
         php_include_file(ABSPATH + WPINC + "/class-wp-editor.php", once=True)
     # end if
-    editor_id = "content" + wp_tiny_mce.num
-    wp_tiny_mce.num += 1
-    set = Array({"teeny": teeny, "tinymce": settings if settings else True, "quicktags": False})
-    set = _WP_Editors.parse_settings(editor_id, set)
-    _WP_Editors.editor_settings(editor_id, set)
+    editor_id_ = "content" + num_
+    num_ += 1
+    set_ = Array({"teeny": teeny_, "tinymce": settings_ if settings_ else True, "quicktags": False})
+    set_ = _WP_Editors.parse_settings(editor_id_, set_)
+    _WP_Editors.editor_settings(editor_id_, set_)
 # end def wp_tiny_mce
 #// 
 #// Preloads TinyMCE dialogs.
@@ -641,7 +789,8 @@ def wp_tiny_mce(teeny=False, settings=False, *args_):
 #// @deprecated 3.3.0 Use wp_editor()
 #// @see wp_editor()
 #//
-def wp_preload_dialogs(*args_):
+def wp_preload_dialogs(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
 # end def wp_preload_dialogs
@@ -651,7 +800,8 @@ def wp_preload_dialogs(*args_):
 #// @deprecated 3.3.0 Use wp_editor()
 #// @see wp_editor()
 #//
-def wp_print_editor_js(*args_):
+def wp_print_editor_js(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
 # end def wp_print_editor_js
@@ -661,7 +811,8 @@ def wp_print_editor_js(*args_):
 #// @deprecated 3.3.0 Use wp_editor()
 #// @see wp_editor()
 #//
-def wp_quicktags(*args_):
+def wp_quicktags(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
 # end def wp_quicktags
@@ -672,15 +823,16 @@ def wp_quicktags(*args_):
 #// @deprecated 3.3.0 WP_Screen::render_screen_layout()
 #// @see WP_Screen::render_screen_layout()
 #//
-def screen_layout(screen=None, *args_):
+def screen_layout(screen_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "$current_screen->render_screen_layout()")
-    current_screen = get_current_screen()
-    if (not current_screen):
+    current_screen_ = get_current_screen()
+    if (not current_screen_):
         return ""
     # end if
     ob_start()
-    current_screen.render_screen_layout()
+    current_screen_.render_screen_layout()
     return ob_get_clean()
 # end def screen_layout
 #// 
@@ -690,15 +842,16 @@ def screen_layout(screen=None, *args_):
 #// @deprecated 3.3.0 Use WP_Screen::render_per_page_options()
 #// @see WP_Screen::render_per_page_options()
 #//
-def screen_options(screen=None, *args_):
+def screen_options(screen_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "$current_screen->render_per_page_options()")
-    current_screen = get_current_screen()
-    if (not current_screen):
+    current_screen_ = get_current_screen()
+    if (not current_screen_):
         return ""
     # end if
     ob_start()
-    current_screen.render_per_page_options()
+    current_screen_.render_per_page_options()
     return ob_get_clean()
 # end def screen_options
 #// 
@@ -708,10 +861,11 @@ def screen_options(screen=None, *args_):
 #// @deprecated 3.3.0 Use WP_Screen::render_screen_meta()
 #// @see WP_Screen::render_screen_meta()
 #//
-def screen_meta(screen=None, *args_):
+def screen_meta(screen_=None, *_args_):
     
-    current_screen = get_current_screen()
-    current_screen.render_screen_meta()
+    
+    current_screen_ = get_current_screen()
+    current_screen_.render_screen_meta()
 # end def screen_meta
 #// 
 #// Favorite actions were deprecated in version 3.2. Use the admin bar instead.
@@ -720,7 +874,8 @@ def screen_meta(screen=None, *args_):
 #// @deprecated 3.2.0 Use WP_Admin_Bar
 #// @see WP_Admin_Bar
 #//
-def favorite_actions(*args_):
+def favorite_actions(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.2.0", "WP_Admin_Bar")
 # end def favorite_actions
@@ -732,7 +887,8 @@ def favorite_actions(*args_):
 #// 
 #// @return null|string
 #//
-def media_upload_image(*args_):
+def media_upload_image(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
@@ -745,7 +901,8 @@ def media_upload_image(*args_):
 #// 
 #// @return null|string
 #//
-def media_upload_audio(*args_):
+def media_upload_audio(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
@@ -758,7 +915,8 @@ def media_upload_audio(*args_):
 #// 
 #// @return null|string
 #//
-def media_upload_video(*args_):
+def media_upload_video(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
@@ -771,7 +929,8 @@ def media_upload_video(*args_):
 #// 
 #// @return null|string
 #//
-def media_upload_file(*args_):
+def media_upload_file(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
@@ -784,7 +943,8 @@ def media_upload_file(*args_):
 #// 
 #// @return string
 #//
-def type_url_form_image(*args_):
+def type_url_form_image(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('image')")
     return wp_media_insert_url_form("image")
@@ -797,7 +957,8 @@ def type_url_form_image(*args_):
 #// 
 #// @return string
 #//
-def type_url_form_audio(*args_):
+def type_url_form_audio(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('audio')")
     return wp_media_insert_url_form("audio")
@@ -810,7 +971,8 @@ def type_url_form_audio(*args_):
 #// 
 #// @return string
 #//
-def type_url_form_video(*args_):
+def type_url_form_video(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('video')")
     return wp_media_insert_url_form("video")
@@ -823,7 +985,8 @@ def type_url_form_video(*args_):
 #// 
 #// @return string
 #//
-def type_url_form_file(*args_):
+def type_url_form_file(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('file')")
     return wp_media_insert_url_form("file")
@@ -840,13 +1003,14 @@ def type_url_form_file(*args_):
 #// @param string    $screen The handle for the screen to add help to. This is usually the hook name returned by the add_*_page() functions.
 #// @param string    $help   The content of an 'Overview' help tab.
 #//
-def add_contextual_help(screen=None, help=None, *args_):
+def add_contextual_help(screen_=None, help_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.3.0", "get_current_screen()->add_help_tab()")
-    if php_is_string(screen):
-        screen = convert_to_screen(screen)
+    if php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
     # end if
-    WP_Screen.add_old_compat_help(screen, help)
+    WP_Screen.add_old_compat_help(screen_, help_)
 # end def add_contextual_help
 #// 
 #// Get the allowed themes for the current site.
@@ -857,15 +1021,16 @@ def add_contextual_help(screen=None, help=None, *args_):
 #// 
 #// @return WP_Theme[] Array of WP_Theme objects keyed by their name.
 #//
-def get_allowed_themes(*args_):
+def get_allowed_themes(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_themes( array( 'allowed' => true ) )")
-    themes = wp_get_themes(Array({"allowed": True}))
-    wp_themes = Array()
-    for theme in themes:
-        wp_themes[theme.get("Name")] = theme
+    themes_ = wp_get_themes(Array({"allowed": True}))
+    wp_themes_ = Array()
+    for theme_ in themes_:
+        wp_themes_[theme_.get("Name")] = theme_
     # end for
-    return wp_themes
+    return wp_themes_
 # end def get_allowed_themes
 #// 
 #// Retrieves a list of broken themes.
@@ -876,16 +1041,17 @@ def get_allowed_themes(*args_):
 #// 
 #// @return array
 #//
-def get_broken_themes(*args_):
+def get_broken_themes(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_themes( array( 'errors' => true )")
-    themes = wp_get_themes(Array({"errors": True}))
-    broken = Array()
-    for theme in themes:
-        name = theme.get("Name")
-        broken[name] = Array({"Name": name, "Title": name, "Description": theme.errors().get_error_message()})
+    themes_ = wp_get_themes(Array({"errors": True}))
+    broken_ = Array()
+    for theme_ in themes_:
+        name_ = theme_.get("Name")
+        broken_[name_] = Array({"Name": name_, "Title": name_, "Description": theme_.errors().get_error_message()})
     # end for
-    return broken
+    return broken_
 # end def get_broken_themes
 #// 
 #// Retrieves information on the current active theme.
@@ -896,7 +1062,8 @@ def get_broken_themes(*args_):
 #// 
 #// @return WP_Theme
 #//
-def current_theme_info(*args_):
+def current_theme_info(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_theme()")
     return wp_get_theme()
@@ -908,7 +1075,8 @@ def current_theme_info(*args_):
 #// 
 #// @deprecated 3.5.0
 #//
-def _insert_into_post_button(type=None, *args_):
+def _insert_into_post_button(type_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.5.0")
 # end def _insert_into_post_button
@@ -919,7 +1087,8 @@ def _insert_into_post_button(type=None, *args_):
 #// 
 #// @deprecated 3.5.0
 #//
-def _media_button(title=None, icon=None, type=None, id=None, *args_):
+def _media_button(title_=None, icon_=None, type_=None, id_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.5.0")
 # end def _media_button
@@ -933,10 +1102,11 @@ def _media_button(title=None, icon=None, type=None, id=None, *args_):
 #// @param int $id
 #// @return object
 #//
-def get_post_to_edit(id=None, *args_):
+def get_post_to_edit(id_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.5.0", "get_post()")
-    return get_post(id, OBJECT, "edit")
+    return get_post(id_, OBJECT, "edit")
 # end def get_post_to_edit
 #// 
 #// Gets the default page information to use.
@@ -947,12 +1117,13 @@ def get_post_to_edit(id=None, *args_):
 #// 
 #// @return WP_Post Post object containing all the default post data as attributes
 #//
-def get_default_page_to_edit(*args_):
+def get_default_page_to_edit(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.5.0", "get_default_post_to_edit( 'page' )")
-    page = get_default_post_to_edit()
-    page.post_type = "page"
-    return page
+    page_ = get_default_post_to_edit()
+    page_.post_type = "page"
+    return page_
 # end def get_default_page_to_edit
 #// 
 #// This was once used to create a thumbnail from an Image given a maximum side size.
@@ -966,10 +1137,11 @@ def get_default_page_to_edit(*args_):
 #// @param mixed $deprecated Never used.
 #// @return string Thumbnail path on success, Error string on failure.
 #//
-def wp_create_thumbnail(file=None, max_side=None, deprecated="", *args_):
+def wp_create_thumbnail(file_=None, max_side_=None, deprecated_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.5.0", "image_resize()")
-    return apply_filters("wp_create_thumbnail", image_resize(file, max_side, max_side))
+    return apply_filters("wp_create_thumbnail", image_resize(file_, max_side_, max_side_))
 # end def wp_create_thumbnail
 #// 
 #// This was once used to display a meta box for the nav menu theme locations.
@@ -979,7 +1151,8 @@ def wp_create_thumbnail(file=None, max_side=None, deprecated="", *args_):
 #// @since 3.0.0
 #// @deprecated 3.6.0
 #//
-def wp_nav_menu_locations_meta_box(*args_):
+def wp_nav_menu_locations_meta_box(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.6.0")
 # end def wp_nav_menu_locations_meta_box
@@ -993,15 +1166,16 @@ def wp_nav_menu_locations_meta_box(*args_):
 #// @deprecated 3.7.0 Use Core_Upgrader
 #// @see Core_Upgrader
 #//
-def wp_update_core(current=None, feedback="", *args_):
+def wp_update_core(current_=None, feedback_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.7.0", "new Core_Upgrader();")
-    if (not php_empty(lambda : feedback)):
-        add_filter("update_feedback", feedback)
+    if (not php_empty(lambda : feedback_)):
+        add_filter("update_feedback", feedback_)
     # end if
     php_include_file(ABSPATH + "wp-admin/includes/class-wp-upgrader.php", once=False)
-    upgrader = php_new_class("Core_Upgrader", lambda : Core_Upgrader())
-    return upgrader.upgrade(current)
+    upgrader_ = php_new_class("Core_Upgrader", lambda : Core_Upgrader())
+    return upgrader_.upgrade(current_)
 # end def wp_update_core
 #// 
 #// This was once used to kick-off the Plugin Updater.
@@ -1014,15 +1188,16 @@ def wp_update_core(current=None, feedback="", *args_):
 #// @deprecated 3.7.0 Use Plugin_Upgrader
 #// @see Plugin_Upgrader
 #//
-def wp_update_plugin(plugin=None, feedback="", *args_):
+def wp_update_plugin(plugin_=None, feedback_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.7.0", "new Plugin_Upgrader();")
-    if (not php_empty(lambda : feedback)):
-        add_filter("update_feedback", feedback)
+    if (not php_empty(lambda : feedback_)):
+        add_filter("update_feedback", feedback_)
     # end if
     php_include_file(ABSPATH + "wp-admin/includes/class-wp-upgrader.php", once=False)
-    upgrader = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader())
-    return upgrader.upgrade(plugin)
+    upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader())
+    return upgrader_.upgrade(plugin_)
 # end def wp_update_plugin
 #// 
 #// This was once used to kick-off the Theme Updater.
@@ -1035,15 +1210,16 @@ def wp_update_plugin(plugin=None, feedback="", *args_):
 #// @deprecated 3.7.0 Use Theme_Upgrader
 #// @see Theme_Upgrader
 #//
-def wp_update_theme(theme=None, feedback="", *args_):
+def wp_update_theme(theme_=None, feedback_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.7.0", "new Theme_Upgrader();")
-    if (not php_empty(lambda : feedback)):
-        add_filter("update_feedback", feedback)
+    if (not php_empty(lambda : feedback_)):
+        add_filter("update_feedback", feedback_)
     # end if
     php_include_file(ABSPATH + "wp-admin/includes/class-wp-upgrader.php", once=False)
-    upgrader = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader())
-    return upgrader.upgrade(theme)
+    upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader())
+    return upgrader_.upgrade(theme_)
 # end def wp_update_theme
 #// 
 #// This was once used to display attachment links. Now it is deprecated and stubbed.
@@ -1053,7 +1229,10 @@ def wp_update_theme(theme=None, feedback="", *args_):
 #// 
 #// @param int|bool $id
 #//
-def the_attachment_links(id=False, *args_):
+def the_attachment_links(id_=None, *_args_):
+    if id_ is None:
+        id_ = False
+    # end if
     
     _deprecated_function(__FUNCTION__, "3.7.0")
 # end def the_attachment_links
@@ -1063,7 +1242,8 @@ def the_attachment_links(id=False, *args_):
 #// @since 2.7.0
 #// @deprecated 3.8.0
 #//
-def screen_icon(*args_):
+def screen_icon(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.8.0")
     php_print(get_screen_icon())
@@ -1076,7 +1256,8 @@ def screen_icon(*args_):
 #// 
 #// @return string An HTML comment explaining that icons are no longer used.
 #//
-def get_screen_icon(*args_):
+def get_screen_icon(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.8.0")
     return "<!-- Screen icons are no longer used as of WordPress 3.8. -->"
@@ -1087,7 +1268,8 @@ def get_screen_icon(*args_):
 #// @since 2.5.0
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_incoming_links_output(*args_):
+def wp_dashboard_incoming_links_output(*_args_):
+    
     
     pass
 # end def wp_dashboard_incoming_links_output
@@ -1096,7 +1278,8 @@ def wp_dashboard_incoming_links_output(*args_):
 #// 
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_secondary_output(*args_):
+def wp_dashboard_secondary_output(*_args_):
+    
     
     pass
 # end def wp_dashboard_secondary_output
@@ -1106,7 +1289,8 @@ def wp_dashboard_secondary_output(*args_):
 #// @since 2.7.0
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_incoming_links(*args_):
+def wp_dashboard_incoming_links(*_args_):
+    
     
     pass
 # end def wp_dashboard_incoming_links
@@ -1115,7 +1299,8 @@ def wp_dashboard_incoming_links(*args_):
 #// 
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_incoming_links_control(*args_):
+def wp_dashboard_incoming_links_control(*_args_):
+    
     
     pass
 # end def wp_dashboard_incoming_links_control
@@ -1124,7 +1309,8 @@ def wp_dashboard_incoming_links_control(*args_):
 #// 
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_plugins(*args_):
+def wp_dashboard_plugins(*_args_):
+    
     
     pass
 # end def wp_dashboard_plugins
@@ -1133,7 +1319,8 @@ def wp_dashboard_plugins(*args_):
 #// 
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_primary_control(*args_):
+def wp_dashboard_primary_control(*_args_):
+    
     
     pass
 # end def wp_dashboard_primary_control
@@ -1142,7 +1329,8 @@ def wp_dashboard_primary_control(*args_):
 #// 
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_recent_comments_control(*args_):
+def wp_dashboard_recent_comments_control(*_args_):
+    
     
     pass
 # end def wp_dashboard_recent_comments_control
@@ -1151,7 +1339,8 @@ def wp_dashboard_recent_comments_control(*args_):
 #// 
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_secondary(*args_):
+def wp_dashboard_secondary(*_args_):
+    
     
     pass
 # end def wp_dashboard_secondary
@@ -1160,7 +1349,8 @@ def wp_dashboard_secondary(*args_):
 #// 
 #// @deprecated 3.8.0
 #//
-def wp_dashboard_secondary_control(*args_):
+def wp_dashboard_secondary_control(*_args_):
+    
     
     pass
 # end def wp_dashboard_secondary_control
@@ -1173,22 +1363,25 @@ def wp_dashboard_secondary_control(*args_):
 #// @param string $rss  The RSS feed URL.
 #// @param array  $args Array of arguments for this RSS feed.
 #//
-def wp_dashboard_plugins_output(rss=None, args=Array(), *args_):
+def wp_dashboard_plugins_output(rss_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     _deprecated_function(__FUNCTION__, "4.8.0")
     #// Plugin feeds plus link to install them.
-    popular = fetch_feed(args["url"]["popular"])
-    plugin_slugs = get_transient("plugin_slugs")
-    if False == plugin_slugs:
-        plugin_slugs = php_array_keys(get_plugins())
-        set_transient("plugin_slugs", plugin_slugs, DAY_IN_SECONDS)
+    popular_ = fetch_feed(args_["url"]["popular"])
+    plugin_slugs_ = get_transient("plugin_slugs")
+    if False == plugin_slugs_:
+        plugin_slugs_ = php_array_keys(get_plugins())
+        set_transient("plugin_slugs", plugin_slugs_, DAY_IN_SECONDS)
     # end if
     php_print("<ul>")
-    for feed in Array(popular):
-        if is_wp_error(feed) or (not feed.get_item_quantity()):
+    for feed_ in Array(popular_):
+        if is_wp_error(feed_) or (not feed_.get_item_quantity()):
             continue
         # end if
-        items = feed.get_items(0, 5)
+        items_ = feed_.get_items(0, 5)
         #// Pick a random, non-installed plugin.
         while True:
             
@@ -1196,24 +1389,24 @@ def wp_dashboard_plugins_output(rss=None, args=Array(), *args_):
                 break
             # end if
             #// Abort this foreach loop iteration if there's no plugins left of this type.
-            if 0 == php_count(items):
+            if 0 == php_count(items_):
                 continue
             # end if
-            item_key = php_array_rand(items)
-            item = items[item_key]
-            link, frag = php_explode("#", item.get_link())
-            link = esc_url(link)
-            if php_preg_match("|/([^/]+?)/?$|", link, matches):
-                slug = matches[1]
+            item_key_ = php_array_rand(items_)
+            item_ = items_[item_key_]
+            link_, frag_ = php_explode("#", item_.get_link())
+            link_ = esc_url(link_)
+            if php_preg_match("|/([^/]+?)/?$|", link_, matches_):
+                slug_ = matches_[1]
             else:
-                items[item_key] = None
+                items_[item_key_] = None
                 continue
             # end if
             #// Is this random plugin's slug already installed? If so, try again.
-            reset(plugin_slugs)
-            for plugin_slug in plugin_slugs:
-                if slug == php_substr(plugin_slug, 0, php_strlen(slug)):
-                    items[item_key] = None
+            reset(plugin_slugs_)
+            for plugin_slug_ in plugin_slugs_:
+                if slug_ == php_substr(plugin_slug_, 0, php_strlen(slug_)):
+                    items_[item_key_] = None
                     continue
                 # end if
             # end for
@@ -1221,20 +1414,20 @@ def wp_dashboard_plugins_output(rss=None, args=Array(), *args_):
         # end while
         #// Eliminate some common badly formed plugin descriptions.
         while True:
-            item_key = php_array_rand(items)
-            if not (None != item_key and False != php_strpos(items[item_key].get_description(), "Plugin Name:")):
+            item_key_ = php_array_rand(items_)
+            if not (None != item_key_ and False != php_strpos(items_[item_key_].get_description(), "Plugin Name:")):
                 break
             # end if
-            items[item_key] = None
+            items_[item_key_] = None
         # end while
-        if (not (php_isset(lambda : items[item_key]))):
+        if (not (php_isset(lambda : items_[item_key_]))):
             continue
         # end if
-        raw_title = item.get_title()
-        ilink = wp_nonce_url("plugin-install.php?tab=plugin-information&plugin=" + slug, "install-plugin_" + slug) + "&amp;TB_iframe=true&amp;width=600&amp;height=800"
-        php_print("<li class=\"dashboard-news-plugin\"><span>" + __("Popular Plugin") + ":</span> " + esc_html(raw_title) + "&nbsp;<a href=\"" + ilink + "\" class=\"thickbox open-plugin-details-modal\" aria-label=\"" + esc_attr(php_sprintf(__("Install %s"), raw_title)) + "\">(" + __("Install") + ")</a></li>")
-        feed.__del__()
-        feed = None
+        raw_title_ = item_.get_title()
+        ilink_ = wp_nonce_url("plugin-install.php?tab=plugin-information&plugin=" + slug_, "install-plugin_" + slug_) + "&amp;TB_iframe=true&amp;width=600&amp;height=800"
+        php_print("<li class=\"dashboard-news-plugin\"><span>" + __("Popular Plugin") + ":</span> " + esc_html(raw_title_) + "&nbsp;<a href=\"" + ilink_ + "\" class=\"thickbox open-plugin-details-modal\" aria-label=\"" + esc_attr(php_sprintf(__("Install %s"), raw_title_)) + "\">(" + __("Install") + ")</a></li>")
+        feed_.__del__()
+        feed_ = None
     # end for
     php_print("</ul>")
 # end def wp_dashboard_plugins_output
@@ -1248,7 +1441,8 @@ def wp_dashboard_plugins_output(rss=None, args=Array(), *args_):
 #// @param int $old_ID
 #// @param int $new_ID
 #//
-def _relocate_children(old_ID=None, new_ID=None, *args_):
+def _relocate_children(old_ID_=None, new_ID_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "3.9.0")
 # end def _relocate_children
@@ -1275,13 +1469,14 @@ def _relocate_children(old_ID=None, new_ID=None, *args_):
 #// @param string   $icon_url   The url to the icon to be used for this menu.
 #// @return string The resulting page's hook_suffix.
 #//
-def add_object_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", icon_url="", *args_):
+def add_object_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", icon_url_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "4.5.0", "add_menu_page()")
-    global _wp_last_object_menu
-    php_check_if_defined("_wp_last_object_menu")
-    _wp_last_object_menu += 1
-    return add_menu_page(page_title, menu_title, capability, menu_slug, function, icon_url, _wp_last_object_menu)
+    global _wp_last_object_menu_
+    php_check_if_defined("_wp_last_object_menu_")
+    _wp_last_object_menu_ += 1
+    return add_menu_page(page_title_, menu_title_, capability_, menu_slug_, function_, icon_url_, _wp_last_object_menu_)
 # end def add_object_page
 #// 
 #// Add a top-level menu page in the 'utility' section.
@@ -1306,13 +1501,14 @@ def add_object_page(page_title=None, menu_title=None, capability=None, menu_slug
 #// @param string   $icon_url   The url to the icon to be used for this menu.
 #// @return string The resulting page's hook_suffix.
 #//
-def add_utility_page(page_title=None, menu_title=None, capability=None, menu_slug=None, function="", icon_url="", *args_):
+def add_utility_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", icon_url_="", *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "4.5.0", "add_menu_page()")
-    global _wp_last_utility_menu
-    php_check_if_defined("_wp_last_utility_menu")
-    _wp_last_utility_menu += 1
-    return add_menu_page(page_title, menu_title, capability, menu_slug, function, icon_url, _wp_last_utility_menu)
+    global _wp_last_utility_menu_
+    php_check_if_defined("_wp_last_utility_menu_")
+    _wp_last_utility_menu_ += 1
+    return add_menu_page(page_title_, menu_title_, capability_, menu_slug_, function_, icon_url_, _wp_last_utility_menu_)
 # end def add_utility_page
 #// 
 #// Disables autocomplete on the 'post' form (Add/Edit Post screens) for WebKit browsers,
@@ -1329,12 +1525,14 @@ def add_utility_page(page_title=None, menu_title=None, capability=None, menu_slu
 #// @global bool $is_safari
 #// @global bool $is_chrome
 #//
-def post_form_autocomplete_off(*args_):
+def post_form_autocomplete_off(*_args_):
     
-    global is_safari,is_chrome
-    php_check_if_defined("is_safari","is_chrome")
+    
+    global is_safari_
+    global is_chrome_
+    php_check_if_defined("is_safari_","is_chrome_")
     _deprecated_function(__FUNCTION__, "4.6.0")
-    if is_safari or is_chrome:
+    if is_safari_ or is_chrome_:
         php_print(" autocomplete=\"off\"")
     # end if
 # end def post_form_autocomplete_off
@@ -1344,7 +1542,8 @@ def post_form_autocomplete_off(*args_):
 #// @since 3.5.0
 #// @deprecated 4.9.0
 #//
-def options_permalink_add_js(*args_):
+def options_permalink_add_js(*_args_):
+    
     
     php_print("""   <script type=\"text/javascript\">
     jQuery(document).ready(function() {
@@ -1367,13 +1566,14 @@ if ( 'custom' == this.value )
 #// @deprecated 5.3.0
 #//
 class WP_Privacy_Data_Export_Requests_Table(WP_Privacy_Data_Export_Requests_List_Table):
-    def __init__(self, args=None):
+    def __init__(self, args_=None):
+        
         
         _deprecated_function(__CLASS__, "5.3.0", "WP_Privacy_Data_Export_Requests_List_Table")
-        if (not (php_isset(lambda : args["screen"]))) or args["screen"] == "export_personal_data":
-            args["screen"] = "export-personal-data"
+        if (not (php_isset(lambda : args_["screen"]))) or args_["screen"] == "export_personal_data":
+            args_["screen"] = "export-personal-data"
         # end if
-        super().__init__(args)
+        super().__init__(args_)
     # end def __init__
 # end class WP_Privacy_Data_Export_Requests_Table
 #// 
@@ -1383,13 +1583,14 @@ class WP_Privacy_Data_Export_Requests_Table(WP_Privacy_Data_Export_Requests_List
 #// @deprecated 5.3.0
 #//
 class WP_Privacy_Data_Removal_Requests_Table(WP_Privacy_Data_Removal_Requests_List_Table):
-    def __init__(self, args=None):
+    def __init__(self, args_=None):
+        
         
         _deprecated_function(__CLASS__, "5.3.0", "WP_Privacy_Data_Removal_Requests_List_Table")
-        if (not (php_isset(lambda : args["screen"]))) or args["screen"] == "remove_personal_data":
-            args["screen"] = "erase-personal-data"
+        if (not (php_isset(lambda : args_["screen"]))) or args_["screen"] == "remove_personal_data":
+            args_["screen"] = "erase-personal-data"
         # end if
-        super().__init__(args)
+        super().__init__(args_)
     # end def __init__
 # end class WP_Privacy_Data_Removal_Requests_Table
 #// 
@@ -1399,7 +1600,8 @@ class WP_Privacy_Data_Removal_Requests_Table(WP_Privacy_Data_Removal_Requests_Li
 #// @access private
 #// @deprecated 5.3.0
 #//
-def _wp_privacy_requests_screen_options(*args_):
+def _wp_privacy_requests_screen_options(*_args_):
+    
     
     _deprecated_function(__FUNCTION__, "5.3.0")
 # end def _wp_privacy_requests_screen_options
@@ -1413,8 +1615,9 @@ def _wp_privacy_requests_screen_options(*args_):
 #// @param int $request_id The ID of the user request.
 #// @return WP_User_Request|false
 #//
-def wp_get_user_request_data(request_id=None, *args_):
+def wp_get_user_request_data(request_id_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "5.4.0", "wp_get_user_request()")
-    return wp_get_user_request(request_id)
+    return wp_get_user_request(request_id_)
 # end def wp_get_user_request_data

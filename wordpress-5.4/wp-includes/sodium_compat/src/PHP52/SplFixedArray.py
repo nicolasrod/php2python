@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -23,15 +18,18 @@ if php_class_exists("SplFixedArray"):
 #// implementation.
 #//
 class SplFixedArray(Countable):
+    #// @var array<int, mixed>
     internalArray = Array()
+    #// @var int $size
     size = 0
     #// 
     #// SplFixedArray constructor.
     #// @param int $size
     #//
-    def __init__(self, size=0):
+    def __init__(self, size_=0):
         
-        self.size = size
+        
+        self.size = size_
         self.internalArray = Array()
     # end def __init__
     #// 
@@ -39,12 +37,14 @@ class SplFixedArray(Countable):
     #//
     def count(self):
         
+        
         return php_count(self.internalArray)
     # end def count
     #// 
     #// @return array
     #//
     def toarray(self):
+        
         
         ksort(self.internalArray)
         return self.internalArray
@@ -56,26 +56,30 @@ class SplFixedArray(Countable):
     #// @psalm-suppress MixedAssignment
     #//
     @classmethod
-    def fromarray(self, array=None, save_indexes=True):
-        global self
-        self = php_new_class("SplFixedArray", lambda : SplFixedArray(php_count(array)))
-        if save_indexes:
-            for key,value in array:
-                self[php_int(key)] = value
+    def fromarray(self, array_=None, save_indexes_=None):
+        if save_indexes_ is None:
+            save_indexes_ = True
+        # end if
+        
+        self_ = php_new_class("SplFixedArray", lambda : SplFixedArray(php_count(array_)))
+        if save_indexes_:
+            for key_,value_ in array_:
+                self_[php_int(key_)] = value_
             # end for
         else:
-            i = 0
-            for value in php_array_values(array):
-                self[i] = value
-                i += 1
+            i_ = 0
+            for value_ in php_array_values(array_):
+                self_[i_] = value_
+                i_ += 1
             # end for
         # end if
-        return self
+        return self_
     # end def fromarray
     #// 
     #// @return int
     #//
     def getsize(self):
+        
         
         return self.size
     # end def getsize
@@ -83,42 +87,47 @@ class SplFixedArray(Countable):
     #// @param int $size
     #// @return bool
     #//
-    def setsize(self, size=None):
+    def setsize(self, size_=None):
         
-        self.size = size
+        
+        self.size = size_
         return True
     # end def setsize
     #// 
     #// @param string|int $index
     #// @return bool
     #//
-    def offsetexists(self, index=None):
+    def offsetexists(self, index_=None):
         
-        return php_array_key_exists(php_int(index), self.internalArray)
+        
+        return php_array_key_exists(php_int(index_), self.internalArray)
     # end def offsetexists
     #// 
     #// @param string|int $index
     #// @return mixed
     #//
-    def offsetget(self, index=None):
+    def offsetget(self, index_=None):
         
-        return self.internalArray[php_int(index)]
+        
+        return self.internalArray[php_int(index_)]
     # end def offsetget
     #// 
     #// @param string|int $index
     #// @param mixed $newval
     #// @psalm-suppress MixedAssignment
     #//
-    def offsetset(self, index=None, newval=None):
+    def offsetset(self, index_=None, newval_=None):
         
-        self.internalArray[php_int(index)] = newval
+        
+        self.internalArray[php_int(index_)] = newval_
     # end def offsetset
     #// 
     #// @param string|int $index
     #//
-    def offsetunset(self, index=None):
+    def offsetunset(self, index_=None):
         
-        self.internalArray[php_int(index)] = None
+        
+        self.internalArray[php_int(index_)] = None
     # end def offsetunset
     #// 
     #// Rewind iterator back to the start
@@ -127,6 +136,7 @@ class SplFixedArray(Countable):
     #// @since 5.3.0
     #//
     def rewind(self):
+        
         
         reset(self.internalArray)
     # end def rewind
@@ -138,6 +148,7 @@ class SplFixedArray(Countable):
     #//
     def current(self):
         
+        
         return current(self.internalArray)
     # end def current
     #// 
@@ -146,12 +157,14 @@ class SplFixedArray(Countable):
     #//
     def key(self):
         
+        
         return key(self.internalArray)
     # end def key
     #// 
     #// @return void
     #//
     def next(self):
+        
         
         next(self.internalArray)
     # end def next
@@ -162,17 +175,19 @@ class SplFixedArray(Countable):
     #//
     def valid(self):
         
+        
         if php_empty(lambda : self.internalArray):
             return False
         # end if
-        result = next(self.internalArray) != False
+        result_ = next(self.internalArray) != False
         php_prev(self.internalArray)
-        return result
+        return result_
     # end def valid
     #// 
     #// Do nothing.
     #//
     def __wakeup(self):
+        
         
         pass
     # end def __wakeup

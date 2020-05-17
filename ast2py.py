@@ -15,14 +15,17 @@ from functools import partial
 from keyword import iskeyword
 
 # TODO: s = '$a $b' => interpolate different types, do convertion!
-# TODO: multiple autoload hooks!
 # TODO: preg patterns to python
-# TODO: pre/post inc and decrement
-# TODO: closures
-# TODO: handle \\ namespaces in class names (php_is_callable for example)
+# TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
+# TODO: php_compact("x") => should be "x_"
 
-_ = lambda x: x.replace('\r', ' ').replace('\n', '\\n').strip()
-__ = lambda x: re.sub('\n+', '\\n', x)
+
+def _(x):
+    return x.replace('\r', ' ').replace('\n', '\\n').strip()
+
+
+def __(x):
+    return re.sub('\n+', '\\n', x)
 
 
 #  TODO: this is super inefficient. fix it!
@@ -115,6 +118,34 @@ class AST:
         self.parents = []
         self.last_namespace = None
         self.static_vars = {}
+        self.channel_data = None
+
+    def push_namespace(self, name):
+        self.last_name = name
+
+    def add_namespace(self, name):
+        if self.last_namespace is not None:
+            return '.'.join([self.last_namespace, name])
+        else:
+            return name
+
+    def pop_namespace(self):
+        self.last_name = None
+
+    def push_param_init(self, name, value):
+        if self.channel_data is None:
+            self.channel_data = []
+
+        if value != 'None':
+            self.channel_data.append(
+                f'if {name} is None:\n{name} = {value}\n# end if')
+
+    def pop_params_init(self):
+        if self.channel_data is None:
+            return ''
+        param_init = '\n'.join(self.channel_data)
+        self.channel_data = None
+        return param_init
 
     def get_parent(self, level=1):
         try:
@@ -188,15 +219,13 @@ class AST:
         res = '\n'.join(res)
         return f'{docs}{res}\n'
 
-    def fix_assign_cond(self,
-                        node,
-                        name='cond',
-                        join_char='\n',
-                        var_tag='var',
-                        assign_tag=('Expr_Assign', 'Expr_AssignRef',
-                                    'Expr_AssignOp_Concat')):
+    def fix_assign_cond(self, node, name='cond', join_char='\n', var_tag='var', assign_tag=None):
         if node[name] is None:
             return '', '', ''
+
+        if assign_tag is None:
+            assign_tag = ('Expr_Assign', 'Expr_AssignRef', 'Expr_PostInc', 'Expr_PostDec'
+                          'Expr_AssignOp_Concat', 'Expr_PreInc', 'Expr_PreDec')
 
         if isinstance(node[name], list):
             cond = self.parse_children(node, name, ', ')
@@ -210,7 +239,8 @@ class AST:
             assign = self.parse(n)
             var = self.parse(n[var_tag])
             cond = cond.replace(assign, var)
-            exprs = exprs.replace(f'{var} = ', '')
+            exprs = exprs.replace(f'{var} = ', '').replace(
+                f'{var} -= ', '').replace(f'{var} += ', '')
             assigns.append(assign)
 
         if join_char is None:
@@ -268,14 +298,21 @@ class AST:
         if name in _php_globals:
             return _php_globals[name]
 
-        if iskeyword(name) or name.lower() in ['end', 'open']:
+        if iskeyword(name) or name.lower() in ['end', 'open', 'file', 'len', 'self']:
             return f'{name}_'
 
-        if name in self.static_vars:
-            if self.last_namespace is not None:
-                return '.'.join([self.last_namespace, name])
-            else:
-                assert False, f'Static variable {name} with no namespace! should not happen!'
+        wns = self.add_namespace(name)
+        if wns in self.static_vars:
+            return wns
+        return f'{name}_'
+
+    def fix_property(self, name):
+        if iskeyword(name) or name.lower() in ['end', 'open', 'file', 'len', 'self']:
+            return f'{name}_'
+
+        wns = self.add_namespace(name)
+        if wns in self.static_vars:
+            return wns
         return f'{name}'
 
     @staticmethod
@@ -474,17 +511,17 @@ class AST:
     def Stmt_Const(self, node):
         return self.parse_children(node, 'consts', '\n')
 
-    def Stmt_TraitUse(self, node): # TODO: check this!
+    def Stmt_TraitUse(self, node):  #  TODO: check this!
         return ''
 
-    def Stmt_Declare(self, node): # TODO: check this!
+    def Stmt_Declare(self, node):  #  TODO: check this!
         return ''
 
     def Expr_Variable(self, node):
         return self.fix_variables(self.parse(node['name']).replace('\n', ''))
 
     def VarLikeIdentifier(self, node):
-        name = self.fix_variables(node['name'])
+        name = self.fix_property(node['name'])
         return f'{name}'
 
     def Scalar_LNumber(self, node):
@@ -596,8 +633,9 @@ class AST:
     def Stmt_Namespace(self, node):
         name = self.parse(node['name']).replace('.', '_')
         qname = quote(name)
-        self.last_namespace = name
+        self.push_namespace(name)
         stmts = self.parse_children(node, 'stmts', '\n')
+        self.pop_namespace()
 
         if node['name'] is None:
             #  Global namespace
@@ -630,8 +668,9 @@ class {name}({name}):
 
         supers = remove_both_ends(','.join([extends, implements]))
         name = self.parse(node['name'])
-        self.last_namespace = name
+        self.push_namespace(name)
         stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
+        self.pop_namespace()
         return self.with_docs(
             node, f'''
 class {name}({supers}):
@@ -684,23 +723,28 @@ class {name}({supers}):
 
     def Stmt_Function(self, node):
         name = self.parse(node['name'])
-        self.last_namespace = name
+
+        self.push_namespace(name)
         params = self.parse_children(node, 'params', ', ').replace(' = ', '=')
+        self.pop_namespace()
+
         stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
 
         if params.find('*') == -1:
-            params = remove_both_ends(params + ', *args_')
+            params = remove_both_ends(params + ', *_args_')
 
         return self.with_docs(
             node, f'''
 {self.decorator_goto(node)}
 def {name}({params}):
+    {self.pop_params_init()}
     {self.get_global_access_for(node['stmts'])}
     {stmts}
 # end def {name}
 '''.replace('\n\n', '\n'))
 
     def Expr_Closure(self, node):
+        # TODO: add default values in the lambda
         params = self.parse_children(node, 'params', ', ')
         stmts = self.parse_children(node, 'stmts', '\n').strip()
         global_access = self.get_global_access_for(node['stmts'])
@@ -715,6 +759,7 @@ def {name}({params}):
         self.push_code(
             f'''
 def {name}({params}):
+    {self.pop_params_init()}
     {global_access}
     {stmts}
 # end def {name}''', True)
@@ -722,10 +767,11 @@ def {name}({params}):
 
     def Stmt_ClassMethod(self, node):
         name = self.fix_method(self.parse(node['name']))
-        self.last_namespace = name
-        params = 'self, ' + self.parse_children(node, 'params', ', ').replace(' = ', '=')
-        params = remove_both_ends(params)
+        self.push_namespace(name)
+        params = remove_both_ends(
+            'self, ' + self.parse_children(node, 'params', ', ').replace(' = ', '='))
         stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
+        self.pop_namespace()
         global_access = self.get_global_access_for(node['stmts'])
         decorators = '\n'.join([
             '@classmethod' if node['flags'] == 9 else '',
@@ -735,6 +781,7 @@ def {name}({params}):
             node, f'''
 {decorators}
 def {name}({params}):
+    {self.pop_params_init()}
     {global_access}
     {stmts}
 # end def {name}
@@ -746,13 +793,17 @@ def {name}({params}):
             return f'*{var}'
 
         default = self.parse(node['default'])
-        return f'{var} = {default}'
+
+        if node['default'] is not None and node['default']['nodeType'].startswith('Expr_'):
+            self.push_param_init(var, default)
+            return f'{var}=None'
+        return f'{var}={default}'
 
     def Name(self, node):
         return '.'.join(node['parts'])
 
     def Stmt_Property(self, node):
-        return self.parse_children(node, 'props', ', ')
+        return self.with_docs(node, self.parse_children(node, 'props', ', '))
 
     def Stmt_PropertyProperty(self, node):
         name = self.parse(node['name'])
@@ -774,7 +825,7 @@ def {name}({params}):
 
     def Expr_PropertyFetch(self, node):
         var = self.parse(node['var'])
-        name = self.fix_variables(self.parse(node['name']))
+        name = self.fix_property(self.parse(node['name']))
         return f'{var}.{name}'
 
     def Stmt_Nop(self, node):
@@ -931,7 +982,7 @@ while {cond}:
 
     def Expr_ClassConstFetch(self, node):
         klass = self.parse(node['class'])
-        name = self.fix_variables(self.parse(node['name']))
+        name = self.fix_property(self.parse(node['name']))
         return f'{klass}.{name}'
 
     def Scalar_EncapsedStringPart(self, node):
@@ -953,8 +1004,7 @@ while {cond}:
 
     def Stmt_StaticVar(self, node):
         name = self.parse(node['var'])
-        self.static_vars[name] = True
-
+        self.static_vars[self.add_namespace(name)] = True
         var = self.parse(node['var'])
         def_ = self.parse(node['default'])
         return f'{var} = {def_}'
@@ -1110,7 +1160,7 @@ if {cond}:
 
     def Stmt_Global(self, node):
         _vars = self.parse_children(node, 'vars')
-        varnames = ','.join(_vars)
+        varnames = '\nglobal '.join(_vars)
         qvarnames = ','.join([quote(x) for x in _vars])
         self.globals.extend(_vars)
         return self.with_docs(
@@ -1251,18 +1301,10 @@ def parse_ast(fname):
 # coding: utf-8
 
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-
-    from goto import with_goto
-
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
-
     globals()['__PHP2PY_LOADED__'] = True
 # end if
 

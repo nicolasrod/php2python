@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_HTTP_Response
 #//
 class WP_HTTP_Requests_Response(WP_HTTP_Response):
+    #// 
+    #// Requests Response object.
+    #// 
+    #// @since 4.6.0
+    #// @var Requests_Response
+    #//
     response = Array()
+    #// 
+    #// Filename the response was saved to.
+    #// 
+    #// @since 4.6.0
+    #// @var string|null
+    #//
     filename = Array()
     #// 
     #// Constructor.
@@ -37,10 +44,11 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #// @param Requests_Response $response HTTP response.
     #// @param string            $filename Optional. File name. Default empty.
     #//
-    def __init__(self, response=None, filename=""):
+    def __init__(self, response_=None, filename_=""):
         
-        self.response = response
-        self.filename = filename
+        
+        self.response = response_
+        self.filename = filename_
     # end def __init__
     #// 
     #// Retrieves the response object for the request.
@@ -50,6 +58,7 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #// @return Requests_Response HTTP response.
     #//
     def get_response_object(self):
+        
         
         return self.response
     # end def get_response_object
@@ -62,16 +71,17 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #//
     def get_headers(self):
         
+        
         #// Ensure headers remain case-insensitive.
-        converted = php_new_class("Requests_Utility_CaseInsensitiveDictionary", lambda : Requests_Utility_CaseInsensitiveDictionary())
-        for key,value in self.response.headers.getall():
-            if php_count(value) == 1:
-                converted[key] = value[0]
+        converted_ = php_new_class("Requests_Utility_CaseInsensitiveDictionary", lambda : Requests_Utility_CaseInsensitiveDictionary())
+        for key_,value_ in self.response.headers.getall():
+            if php_count(value_) == 1:
+                converted_[key_] = value_[0]
             else:
-                converted[key] = value
+                converted_[key_] = value_
             # end if
         # end for
-        return converted
+        return converted_
     # end def get_headers
     #// 
     #// Sets all header values.
@@ -80,9 +90,10 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #// 
     #// @param array $headers Map of header name to header value.
     #//
-    def set_headers(self, headers=None):
+    def set_headers(self, headers_=None):
         
-        self.response.headers = php_new_class("Requests_Response_Headers", lambda : Requests_Response_Headers(headers))
+        
+        self.response.headers = php_new_class("Requests_Response_Headers", lambda : Requests_Response_Headers(headers_))
     # end def set_headers
     #// 
     #// Sets a single HTTP header.
@@ -94,12 +105,15 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #// @param bool   $replace Optional. Whether to replace an existing header of the same name.
     #// Default true.
     #//
-    def header(self, key=None, value=None, replace=True):
-        
-        if replace:
-            self.response.headers[key] = None
+    def header(self, key_=None, value_=None, replace_=None):
+        if replace_ is None:
+            replace_ = True
         # end if
-        self.response.headers[key] = value
+        
+        if replace_:
+            self.response.headers[key_] = None
+        # end if
+        self.response.headers[key_] = value_
     # end def header
     #// 
     #// Retrieves the HTTP return code for the response.
@@ -110,6 +124,7 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #//
     def get_status(self):
         
+        
         return self.response.status_code
     # end def get_status
     #// 
@@ -119,9 +134,10 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #// 
     #// @param int $code HTTP status.
     #//
-    def set_status(self, code=None):
+    def set_status(self, code_=None):
         
-        self.response.status_code = absint(code)
+        
+        self.response.status_code = absint(code_)
     # end def set_status
     #// 
     #// Retrieves the response data.
@@ -132,6 +148,7 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #//
     def get_data(self):
         
+        
         return self.response.body
     # end def get_data
     #// 
@@ -141,9 +158,10 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #// 
     #// @param string $data Response data.
     #//
-    def set_data(self, data=None):
+    def set_data(self, data_=None):
         
-        self.response.body = data
+        
+        self.response.body = data_
     # end def set_data
     #// 
     #// Retrieves cookies from the response.
@@ -154,11 +172,12 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #//
     def get_cookies(self):
         
-        cookies = Array()
-        for cookie in self.response.cookies:
-            cookies[-1] = php_new_class("WP_Http_Cookie", lambda : WP_Http_Cookie(Array({"name": cookie.name, "value": urldecode(cookie.value), "expires": cookie.attributes["expires"] if (php_isset(lambda : cookie.attributes["expires"])) else None, "path": cookie.attributes["path"] if (php_isset(lambda : cookie.attributes["path"])) else None, "domain": cookie.attributes["domain"] if (php_isset(lambda : cookie.attributes["domain"])) else None, "host_only": cookie.flags["host-only"] if (php_isset(lambda : cookie.flags["host-only"])) else None})))
+        
+        cookies_ = Array()
+        for cookie_ in self.response.cookies:
+            cookies_[-1] = php_new_class("WP_Http_Cookie", lambda : WP_Http_Cookie(Array({"name": cookie_.name, "value": urldecode(cookie_.value), "expires": cookie_.attributes["expires"] if (php_isset(lambda : cookie_.attributes["expires"])) else None, "path": cookie_.attributes["path"] if (php_isset(lambda : cookie_.attributes["path"])) else None, "domain": cookie_.attributes["domain"] if (php_isset(lambda : cookie_.attributes["domain"])) else None, "host_only": cookie_.flags["host-only"] if (php_isset(lambda : cookie_.flags["host-only"])) else None})))
         # end for
-        return cookies
+        return cookies_
     # end def get_cookies
     #// 
     #// Converts the object to a WP_Http response array.
@@ -168,6 +187,7 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
     #// @return array WP_Http response array, per WP_Http::request().
     #//
     def to_array(self):
+        
         
         return Array({"headers": self.get_headers(), "body": self.get_data(), "response": Array({"code": self.get_status(), "message": get_status_header_desc(self.get_status())})}, {"cookies": self.get_cookies(), "filename": self.filename})
     # end def to_array

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,24 +31,25 @@ class TwentyNineteen_SVG_Icons():
     #// Gets the SVG code for a given icon.
     #//
     @classmethod
-    def get_svg(self, group=None, icon=None, size=None):
+    def get_svg(self, group_=None, icon_=None, size_=None):
         
-        if "ui" == group:
-            arr = self.ui_icons
-        elif "social" == group:
-            arr = self.social_icons
+        
+        if "ui" == group_:
+            arr_ = self.ui_icons
+        elif "social" == group_:
+            arr_ = self.social_icons
         else:
-            arr = Array()
+            arr_ = Array()
         # end if
-        if php_array_key_exists(icon, arr):
-            repl = php_sprintf("<svg class=\"svg-icon\" width=\"%d\" height=\"%d\" aria-hidden=\"true\" role=\"img\" focusable=\"false\" ", size, size)
-            svg = php_preg_replace("/^<svg /", repl, php_trim(arr[icon]))
+        if php_array_key_exists(icon_, arr_):
+            repl_ = php_sprintf("<svg class=\"svg-icon\" width=\"%d\" height=\"%d\" aria-hidden=\"true\" role=\"img\" focusable=\"false\" ", size_, size_)
+            svg_ = php_preg_replace("/^<svg /", repl_, php_trim(arr_[icon_]))
             #// Add extra attributes to SVG code.
-            svg = php_preg_replace("/([\n   ]+)/", " ", svg)
+            svg_ = php_preg_replace("/([\n  ]+)/", " ", svg_)
             #// Remove newlines & tabs.
-            svg = php_preg_replace("/>\\s*</", "><", svg)
+            svg_ = php_preg_replace("/>\\s*</", "><", svg_)
             #// Remove whitespace between SVG tags.
-            return svg
+            return svg_
         # end if
         return None
     # end def get_svg
@@ -61,29 +57,35 @@ class TwentyNineteen_SVG_Icons():
     #// Detects the social network from a URL and returns the SVG code for its icon.
     #//
     @classmethod
-    def get_social_link_svg(self, uri=None, size=None):
+    def get_social_link_svg(self, uri_=None, size_=None):
         
-        get_social_link_svg.regex_map = None
+        
+        regex_map_ = None
         #// Only compute regex map once, for performance.
-        if (not (php_isset(lambda : get_social_link_svg.regex_map))):
-            get_social_link_svg.regex_map = Array()
-            map = self.social_icons_map
+        if (not (php_isset(lambda : regex_map_))):
+            regex_map_ = Array()
+            map_ = self.social_icons_map
             #// Use reference instead of copy, to save memory.
-            for icon in php_array_keys(self.social_icons):
-                domains = map[icon] if php_array_key_exists(icon, map) else Array(php_sprintf("%s.com", icon))
-                domains = php_array_map("trim", domains)
+            for icon_ in php_array_keys(self.social_icons):
+                domains_ = map_[icon_] if php_array_key_exists(icon_, map_) else Array(php_sprintf("%s.com", icon_))
+                domains_ = php_array_map("trim", domains_)
                 #// Remove leading/trailing spaces, to prevent regex from failing to match.
-                domains = php_array_map("preg_quote", domains)
-                get_social_link_svg.regex_map[icon] = php_sprintf("/(%s)/i", php_implode("|", domains))
+                domains_ = php_array_map("preg_quote", domains_)
+                regex_map_[icon_] = php_sprintf("/(%s)/i", php_implode("|", domains_))
             # end for
         # end if
-        for icon,regex in get_social_link_svg.regex_map:
-            if php_preg_match(regex, uri):
-                return self.get_svg("social", icon, size)
+        for icon_,regex_ in regex_map_:
+            if php_preg_match(regex_, uri_):
+                return self.get_svg("social", icon_, size_)
             # end if
         # end for
         return None
     # end def get_social_link_svg
+    #// 
+    #// User Interface icons – svg sources.
+    #// 
+    #// @var array
+    #//
     ui_icons = Array({"link": """
     <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">
     <path d=\"M0 0h24v24H0z\" fill=\"none\"></path>
@@ -152,7 +154,20 @@ class TwentyNineteen_SVG_Icons():
     <path fill=\"currentColor\" fill-rule=\"nonzero\" d=\"M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zM6 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z\"/>
     </g>
     </svg>"""})
+    #// 
+    #// Social Icons – domain mappings.
+    #// 
+    #// By default, each Icon ID is matched against a .com TLD. To override this behavior,
+    #// specify all the domains it covers (including the .com TLD too, if applicable).
+    #// 
+    #// @var array
+    #//
     social_icons_map = Array({"amazon": Array("amazon.com", "amazon.cn", "amazon.in", "amazon.fr", "amazon.de", "amazon.it", "amazon.nl", "amazon.es", "amazon.co", "amazon.ca"), "apple": Array("apple.com", "itunes.com"), "behance": Array("behance.net"), "codepen": Array("codepen.io"), "facebook": Array("facebook.com", "fb.me"), "feed": Array("feed"), "google-plus": Array("plus.google.com"), "lastfm": Array("last.fm"), "mail": Array("mailto:"), "slideshare": Array("slideshare.net"), "pocket": Array("getpocket.com"), "twitch": Array("twitch.tv"), "wordpress": Array("wordpress.com", "wordpress.org")})
+    #// 
+    #// Social Icons – svg sources.
+    #// 
+    #// @var array
+    #//
     social_icons = Array({"500px": """
     <svg viewBox=\"0 0 24 24\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
     <path d=\"M6.94026,15.1412c.00437.01213.108.29862.168.44064a6.55008,6.55008,0,1,0,6.03191-9.09557,6.68654,6.68654,0,0,0-2.58357.51467A8.53914,8.53914,0,0,0,8.21268,8.61344L8.209,8.61725V3.22948l9.0504-.00008c.32934-.0036.32934-.46353.32934-.61466s0-.61091-.33035-.61467L7.47248,2a.43.43,0,0,0-.43131.42692v7.58355c0,.24466.30476.42131.58793.4819.553.11812.68074-.05864.81617-.2457l.018-.02481A10.52673,10.52673,0,0,1,9.32258,9.258a5.35268,5.35268,0,1,1,7.58985,7.54976,5.417,5.417,0,0,1-3.80867,1.56365,5.17483,5.17483,0,0,1-2.69822-.74478l.00342-4.61111a2.79372,2.79372,0,0,1,.71372-1.78792,2.61611,2.61611,0,0,1,1.98282-.89477,2.75683,2.75683,0,0,1,1.95525.79477,2.66867,2.66867,0,0,1,.79656,1.909,2.724,2.724,0,0,1-2.75849,2.748,4.94651,4.94651,0,0,1-.86254-.13719c-.31234-.093-.44519.34058-.48892.48349-.16811.54966.08453.65862.13687.67489a3.75751,3.75751,0,0,0,1.25234.18375,3.94634,3.94634,0,1,0-2.82444-6.742,3.67478,3.67478,0,0,0-1.13028,2.584l-.00041.02323c-.0035.11667-.00579,2.881-.00644,3.78811l-.00407-.00451a6.18521,6.18521,0,0,1-1.0851-1.86092c-.10544-.27856-.34358-.22925-.66857-.12917-.14192.04372-.57386.17677-.47833.489Zm4.65165-1.08338a.51346.51346,0,0,0,.19513.31818l.02276.022a.52945.52945,0,0,0,.3517.18416.24242.24242,0,0,0,.16577-.0611c.05473-.05082.67382-.67812.73287-.738l.69041.68819a.28978.28978,0,0,0,.21437.11032.53239.53239,0,0,0,.35708-.19486c.29792-.30419.14885-.46821.07676-.54751l-.69954-.69975.72952-.73469c.16-.17311.01874-.35708-.12218-.498-.20461-.20461-.402-.25742-.52855-.14083l-.7254.72665-.73354-.73375a.20128.20128,0,0,0-.14179-.05695.54135.54135,0,0,0-.34379.19648c-.22561.22555-.274.38149-.15656.5059l.73374.7315-.72942.73072A.26589.26589,0,0,0,11.59191,14.05782Zm1.59866-9.915A8.86081,8.86081,0,0,0,9.854,4.776a.26169.26169,0,0,0-.16938.22759.92978.92978,0,0,0,.08619.42094c.05682.14524.20779.531.50006.41955a8.40969,8.40969,0,0,1,2.91968-.55484,7.87875,7.87875,0,0,1,3.086.62286,8.61817,8.61817,0,0,1,2.30562,1.49315.2781.2781,0,0,0,.18318.07586c.15529,0,.30425-.15253.43167-.29551.21268-.23861.35873-.4369.1492-.63538a8.50425,8.50425,0,0,0-2.62312-1.694A9.0177,9.0177,0,0,0,13.19058,4.14283ZM19.50945,18.6236h0a.93171.93171,0,0,0-.36642-.25406.26589.26589,0,0,0-.27613.06613l-.06943.06929A7.90606,7.90606,0,0,1,7.60639,18.505a7.57284,7.57284,0,0,1-1.696-2.51537,8.58715,8.58715,0,0,1-.5147-1.77754l-.00871-.04864c-.04939-.25873-.28755-.27684-.62981-.22448-.14234.02178-.5755.088-.53426.39969l.001.00712a9.08807,9.08807,0,0,0,15.406,4.99094c.00193-.00192.04753-.04718.0725-.07436C19.79425,19.16234,19.87422,18.98728,19.50945,18.6236Z\"></path>

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -52,103 +47,111 @@ class PasswordHash():
     #// 
     #// PHP5 constructor.
     #//
-    def __init__(self, iteration_count_log2=None, portable_hashes=None):
+    def __init__(self, iteration_count_log2_=None, portable_hashes_=None):
+        
         
         self.itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        if iteration_count_log2 < 4 or iteration_count_log2 > 31:
-            iteration_count_log2 = 8
+        if iteration_count_log2_ < 4 or iteration_count_log2_ > 31:
+            iteration_count_log2_ = 8
         # end if
-        self.iteration_count_log2 = iteration_count_log2
-        self.portable_hashes = portable_hashes
+        self.iteration_count_log2 = iteration_count_log2_
+        self.portable_hashes = portable_hashes_
         self.random_state = php_microtime() + uniqid(rand(), True)
         pass
     # end def __init__
     #// 
     #// PHP4 constructor.
     #//
-    def passwordhash(self, iteration_count_log2=None, portable_hashes=None):
+    def passwordhash(self, iteration_count_log2_=None, portable_hashes_=None):
         
-        self.__init__(iteration_count_log2, portable_hashes)
+        
+        self.__init__(iteration_count_log2_, portable_hashes_)
     # end def passwordhash
-    def get_random_bytes(self, count=None):
+    def get_random_bytes(self, count_=None):
         
-        output = ""
-        fh = php_no_error(lambda: fopen("/dev/urandom", "rb"))
-        if php_no_error(lambda: php_is_readable("/dev/urandom")) and fh:
-            output = fread(fh, count)
-            php_fclose(fh)
+        
+        output_ = ""
+        fh_ = php_no_error(lambda: fopen("/dev/urandom", "rb"))
+        if php_no_error(lambda: php_is_readable("/dev/urandom")) and fh_:
+            output_ = fread(fh_, count_)
+            php_fclose(fh_)
         # end if
-        if php_strlen(output) < count:
-            output = ""
-            i = 0
-            while i < count:
+        if php_strlen(output_) < count_:
+            output_ = ""
+            i_ = 0
+            while i_ < count_:
                 
                 self.random_state = php_md5(php_microtime() + self.random_state)
-                output += pack("H*", php_md5(self.random_state))
-                i += 16
+                output_ += pack("H*", php_md5(self.random_state))
+                i_ += 16
             # end while
-            output = php_substr(output, 0, count)
+            output_ = php_substr(output_, 0, count_)
         # end if
-        return output
+        return output_
     # end def get_random_bytes
-    def encode64(self, input=None, count=None):
+    def encode64(self, input_=None, count_=None):
         
-        output = ""
-        i = 0
+        
+        output_ = ""
+        i_ = 0
         while True:
-            value = php_ord(input[i])
-            i += 1
-            output += self.itoa64[value & 63]
-            if i < count:
-                value |= php_ord(input[i]) << 8
+            value_ = php_ord(input_[i_])
+            i_ += 1
+            output_ += self.itoa64[value_ & 63]
+            if i_ < count_:
+                value_ |= php_ord(input_[i_]) << 8
             # end if
-            output += self.itoa64[value >> 6 & 63]
-            if i >= count:
+            output_ += self.itoa64[value_ >> 6 & 63]
+            i_ += 1
+            if i_ >= count_:
                 break
             # end if
-            i += 1
-            if i < count:
-                value |= php_ord(input[i]) << 16
+            i_ += 1
+            if i_ < count_:
+                value_ |= php_ord(input_[i_]) << 16
             # end if
-            output += self.itoa64[value >> 12 & 63]
-            if i >= count:
+            output_ += self.itoa64[value_ >> 12 & 63]
+            i_ += 1
+            if i_ >= count_:
                 break
             # end if
-            i += 1
-            output += self.itoa64[value >> 18 & 63]
+            i_ += 1
+            output_ += self.itoa64[value_ >> 18 & 63]
             
-            if i < count:
+            if i_ < count_:
                 break
             # end if
         # end while
-        return output
+        return output_
     # end def encode64
-    def gensalt_private(self, input=None):
+    def gensalt_private(self, input_=None):
         
-        output = "$P$"
-        output += self.itoa64[php_min(self.iteration_count_log2 + 5 if PHP_VERSION >= "5" else 3, 30)]
-        output += self.encode64(input, 6)
-        return output
+        
+        output_ = "$P$"
+        output_ += self.itoa64[php_min(self.iteration_count_log2 + 5 if PHP_VERSION >= "5" else 3, 30)]
+        output_ += self.encode64(input_, 6)
+        return output_
     # end def gensalt_private
-    def crypt_private(self, password=None, setting=None):
+    def crypt_private(self, password_=None, setting_=None):
         
-        output = "*0"
-        if php_substr(setting, 0, 2) == output:
-            output = "*1"
+        
+        output_ = "*0"
+        if php_substr(setting_, 0, 2) == output_:
+            output_ = "*1"
         # end if
-        id = php_substr(setting, 0, 3)
+        id_ = php_substr(setting_, 0, 3)
         #// # We use "$P$", phpBB3 uses "$H$" for the same thing
-        if id != "$P$" and id != "$H$":
-            return output
+        if id_ != "$P$" and id_ != "$H$":
+            return output_
         # end if
-        count_log2 = php_strpos(self.itoa64, setting[3])
-        if count_log2 < 7 or count_log2 > 30:
-            return output
+        count_log2_ = php_strpos(self.itoa64, setting_[3])
+        if count_log2_ < 7 or count_log2_ > 30:
+            return output_
         # end if
-        count = 1 << count_log2
-        salt = php_substr(setting, 4, 8)
-        if php_strlen(salt) != 8:
-            return output
+        count_ = 1 << count_log2_
+        salt_ = php_substr(setting_, 4, 8)
+        if php_strlen(salt_) != 8:
+            return output_
         # end if
         #// # We're kind of forced to use MD5 here since it's the only
         #// # cryptographic primitive available in all versions of PHP
@@ -157,43 +160,45 @@ class PasswordHash():
         #// # consequently in lower iteration counts and hashes that are
         #// # quicker to crack (by non-PHP code).
         if PHP_VERSION >= "5":
-            hash = php_md5(salt + password, True)
+            hash_ = php_md5(salt_ + password_, True)
             while True:
-                hash = php_md5(hash + password, True)
-                
-                if count -= 1:
+                hash_ = php_md5(hash_ + password_, True)
+                count_ -= 1
+                if count_:
                     break
                 # end if
             # end while
         else:
-            hash = pack("H*", php_md5(salt + password))
+            hash_ = pack("H*", php_md5(salt_ + password_))
             while True:
-                hash = pack("H*", php_md5(hash + password))
-                
-                if count -= 1:
+                hash_ = pack("H*", php_md5(hash_ + password_))
+                count_ -= 1
+                if count_:
                     break
                 # end if
             # end while
         # end if
-        output = php_substr(setting, 0, 12)
-        output += self.encode64(hash, 16)
-        return output
+        output_ = php_substr(setting_, 0, 12)
+        output_ += self.encode64(hash_, 16)
+        return output_
     # end def crypt_private
-    def gensalt_extended(self, input=None):
+    def gensalt_extended(self, input_=None):
         
-        count_log2 = php_min(self.iteration_count_log2 + 8, 24)
+        
+        count_log2_ = php_min(self.iteration_count_log2 + 8, 24)
         #// # This should be odd to not reveal weak DES keys, and the
         #// # maximum valid value is (2**24 - 1) which is odd anyway.
-        count = 1 << count_log2 - 1
-        output = "_"
-        output += self.itoa64[count & 63]
-        output += self.itoa64[count >> 6 & 63]
-        output += self.itoa64[count >> 12 & 63]
-        output += self.itoa64[count >> 18 & 63]
-        output += self.encode64(input, 3)
-        return output
+        count_ = 1 << count_log2_ - 1
+        output_ = "_"
+        output_ += self.itoa64[count_ & 63]
+        output_ += self.itoa64[count_ >> 6 & 63]
+        output_ += self.itoa64[count_ >> 12 & 63]
+        output_ += self.itoa64[count_ >> 18 & 63]
+        output_ += self.encode64(input_, 3)
+        return output_
     # end def gensalt_extended
-    def gensalt_blowfish(self, input=None):
+    def gensalt_blowfish(self, input_=None):
+        
         
         #// # This one needs to use a different order of characters and a
         #// # different encoding scheme from the one in encode64() above.
@@ -203,81 +208,83 @@ class PasswordHash():
         #// # has the 4 unused bits set to non-zero, we do not want to take
         #// # chances and we also do not want to waste an additional byte
         #// # of entropy.
-        itoa64 = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        output = "$2a$"
-        output += chr(php_ord("0") + self.iteration_count_log2 / 10)
-        output += chr(php_ord("0") + self.iteration_count_log2 % 10)
-        output += "$"
-        i = 0
+        itoa64_ = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        output_ = "$2a$"
+        output_ += chr(php_ord("0") + self.iteration_count_log2 / 10)
+        output_ += chr(php_ord("0") + self.iteration_count_log2 % 10)
+        output_ += "$"
+        i_ = 0
         while True:
-            c1 = php_ord(input[i])
-            i += 1
-            output += itoa64[c1 >> 2]
-            c1 = c1 & 3 << 4
-            if i >= 16:
-                output += itoa64[c1]
+            c1_ = php_ord(input_[i_])
+            i_ += 1
+            output_ += itoa64_[c1_ >> 2]
+            c1_ = c1_ & 3 << 4
+            if i_ >= 16:
+                output_ += itoa64_[c1_]
                 break
             # end if
-            c2 = php_ord(input[i])
-            i += 1
-            c1 |= c2 >> 4
-            output += itoa64[c1]
-            c1 = c2 & 15 << 2
-            c2 = php_ord(input[i])
-            i += 1
-            c1 |= c2 >> 6
-            output += itoa64[c1]
-            output += itoa64[c2 & 63]
+            c2_ = php_ord(input_[i_])
+            i_ += 1
+            c1_ |= c2_ >> 4
+            output_ += itoa64_[c1_]
+            c1_ = c2_ & 15 << 2
+            c2_ = php_ord(input_[i_])
+            i_ += 1
+            c1_ |= c2_ >> 6
+            output_ += itoa64_[c1_]
+            output_ += itoa64_[c2_ & 63]
             
             if 1:
                 break
             # end if
         # end while
-        return output
+        return output_
     # end def gensalt_blowfish
-    def hashpassword(self, password=None):
+    def hashpassword(self, password_=None):
         
-        if php_strlen(password) > 4096:
+        
+        if php_strlen(password_) > 4096:
             return "*"
         # end if
-        random = ""
+        random_ = ""
         if CRYPT_BLOWFISH == 1 and (not self.portable_hashes):
-            random = self.get_random_bytes(16)
-            hash = crypt(password, self.gensalt_blowfish(random))
-            if php_strlen(hash) == 60:
-                return hash
+            random_ = self.get_random_bytes(16)
+            hash_ = crypt(password_, self.gensalt_blowfish(random_))
+            if php_strlen(hash_) == 60:
+                return hash_
             # end if
         # end if
         if CRYPT_EXT_DES == 1 and (not self.portable_hashes):
-            if php_strlen(random) < 3:
-                random = self.get_random_bytes(3)
+            if php_strlen(random_) < 3:
+                random_ = self.get_random_bytes(3)
             # end if
-            hash = crypt(password, self.gensalt_extended(random))
-            if php_strlen(hash) == 20:
-                return hash
+            hash_ = crypt(password_, self.gensalt_extended(random_))
+            if php_strlen(hash_) == 20:
+                return hash_
             # end if
         # end if
-        if php_strlen(random) < 6:
-            random = self.get_random_bytes(6)
+        if php_strlen(random_) < 6:
+            random_ = self.get_random_bytes(6)
         # end if
-        hash = self.crypt_private(password, self.gensalt_private(random))
-        if php_strlen(hash) == 34:
-            return hash
+        hash_ = self.crypt_private(password_, self.gensalt_private(random_))
+        if php_strlen(hash_) == 34:
+            return hash_
         # end if
         #// # Returning '*' on error is safe here, but would _not_ be safe
         #// # in a crypt(3)-like function used _both_ for generating new
         #// # hashes and for validating passwords against existing hashes.
         return "*"
     # end def hashpassword
-    def checkpassword(self, password=None, stored_hash=None):
+    def checkpassword(self, password_=None, stored_hash_=None):
         
-        if php_strlen(password) > 4096:
+        
+        if php_strlen(password_) > 4096:
             return False
         # end if
-        hash = self.crypt_private(password, stored_hash)
-        if hash[0] == "*":
-            hash = crypt(password, stored_hash)
+        hash_ = self.crypt_private(password_, stored_hash_)
+        if hash_[0] == "*":
+            hash_ = crypt(password_, stored_hash_)
         # end if
-        return hash == stored_hash
+        return hash_ == stored_hash_
     # end def checkpassword
 # end class PasswordHash

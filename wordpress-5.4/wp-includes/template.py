@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,11 +27,14 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param array  $templates An optional list of template candidates
 #// @return string Full path to template file.
 #//
-def get_query_template(type=None, templates=Array(), *args_):
+def get_query_template(type_=None, templates_=None, *_args_):
+    if templates_ is None:
+        templates_ = Array()
+    # end if
     
-    type = php_preg_replace("|[^a-z0-9-]+|", "", type)
-    if php_empty(lambda : templates):
-        templates = Array(str(type) + str(".php"))
+    type_ = php_preg_replace("|[^a-z0-9-]+|", "", type_)
+    if php_empty(lambda : templates_):
+        templates_ = Array(str(type_) + str(".php"))
     # end if
     #// 
     #// Filters the list of template filenames that are searched for when retrieving a template to use.
@@ -50,8 +48,8 @@ def get_query_template(type=None, templates=Array(), *args_):
     #// 
     #// @param array $templates A list of template candidates, in descending order of priority.
     #//
-    templates = apply_filters(str(type) + str("_template_hierarchy"), templates)
-    template = locate_template(templates)
+    templates_ = apply_filters(str(type_) + str("_template_hierarchy"), templates_)
+    template_ = locate_template(templates_)
     #// 
     #// Filters the path of the queried template by type.
     #// 
@@ -69,7 +67,7 @@ def get_query_template(type=None, templates=Array(), *args_):
     #// @param string $type      Sanitized filename without extension.
     #// @param array  $templates A list of template candidates, in descending order of priority.
     #//
-    return apply_filters(str(type) + str("_template"), template, type, templates)
+    return apply_filters(str(type_) + str("_template"), template_, type_, templates_)
 # end def get_query_template
 #// 
 #// Retrieve path of index template in current or parent template.
@@ -83,7 +81,8 @@ def get_query_template(type=None, templates=Array(), *args_):
 #// 
 #// @return string Full path to index template file.
 #//
-def get_index_template(*args_):
+def get_index_template(*_args_):
+    
     
     return get_query_template("index")
 # end def get_index_template
@@ -99,7 +98,8 @@ def get_index_template(*args_):
 #// 
 #// @return string Full path to 404 template file.
 #//
-def get_404_template(*args_):
+def get_404_template(*_args_):
+    
     
     return get_query_template("404")
 # end def get_404_template
@@ -115,16 +115,17 @@ def get_404_template(*args_):
 #// 
 #// @return string Full path to archive template file.
 #//
-def get_archive_template(*args_):
+def get_archive_template(*_args_):
     
-    post_types = php_array_filter(get_query_var("post_type"))
-    templates = Array()
-    if php_count(post_types) == 1:
-        post_type = reset(post_types)
-        templates[-1] = str("archive-") + str(post_type) + str(".php")
+    
+    post_types_ = php_array_filter(get_query_var("post_type"))
+    templates_ = Array()
+    if php_count(post_types_) == 1:
+        post_type_ = reset(post_types_)
+        templates_[-1] = str("archive-") + str(post_type_) + str(".php")
     # end if
-    templates[-1] = "archive.php"
-    return get_query_template("archive", templates)
+    templates_[-1] = "archive.php"
+    return get_query_template("archive", templates_)
 # end def get_archive_template
 #// 
 #// Retrieve path of post type archive template in current or parent template.
@@ -138,14 +139,15 @@ def get_archive_template(*args_):
 #// 
 #// @return string Full path to archive template file.
 #//
-def get_post_type_archive_template(*args_):
+def get_post_type_archive_template(*_args_):
     
-    post_type = get_query_var("post_type")
-    if php_is_array(post_type):
-        post_type = reset(post_type)
+    
+    post_type_ = get_query_var("post_type")
+    if php_is_array(post_type_):
+        post_type_ = reset(post_type_)
     # end if
-    obj = get_post_type_object(post_type)
-    if (not type(obj).__name__ == "WP_Post_Type") or (not obj.has_archive):
+    obj_ = get_post_type_object(post_type_)
+    if (not type(obj_).__name__ == "WP_Post_Type") or (not obj_.has_archive):
         return ""
     # end if
     return get_archive_template()
@@ -174,16 +176,17 @@ def get_post_type_archive_template(*args_):
 #// 
 #// @return string Full path to author template file.
 #//
-def get_author_template(*args_):
+def get_author_template(*_args_):
     
-    author = get_queried_object()
-    templates = Array()
-    if type(author).__name__ == "WP_User":
-        templates[-1] = str("author-") + str(author.user_nicename) + str(".php")
-        templates[-1] = str("author-") + str(author.ID) + str(".php")
+    
+    author_ = get_queried_object()
+    templates_ = Array()
+    if type(author_).__name__ == "WP_User":
+        templates_[-1] = str("author-") + str(author_.user_nicename) + str(".php")
+        templates_[-1] = str("author-") + str(author_.ID) + str(".php")
     # end if
-    templates[-1] = "author.php"
-    return get_query_template("author", templates)
+    templates_[-1] = "author.php"
+    return get_query_template("author", templates_)
 # end def get_author_template
 #// 
 #// Retrieve path of category template in current or parent template.
@@ -211,20 +214,21 @@ def get_author_template(*args_):
 #// 
 #// @return string Full path to category template file.
 #//
-def get_category_template(*args_):
+def get_category_template(*_args_):
     
-    category = get_queried_object()
-    templates = Array()
-    if (not php_empty(lambda : category.slug)):
-        slug_decoded = urldecode(category.slug)
-        if slug_decoded != category.slug:
-            templates[-1] = str("category-") + str(slug_decoded) + str(".php")
+    
+    category_ = get_queried_object()
+    templates_ = Array()
+    if (not php_empty(lambda : category_.slug)):
+        slug_decoded_ = urldecode(category_.slug)
+        if slug_decoded_ != category_.slug:
+            templates_[-1] = str("category-") + str(slug_decoded_) + str(".php")
         # end if
-        templates[-1] = str("category-") + str(category.slug) + str(".php")
-        templates[-1] = str("category-") + str(category.term_id) + str(".php")
+        templates_[-1] = str("category-") + str(category_.slug) + str(".php")
+        templates_[-1] = str("category-") + str(category_.term_id) + str(".php")
     # end if
-    templates[-1] = "category.php"
-    return get_query_template("category", templates)
+    templates_[-1] = "category.php"
+    return get_query_template("category", templates_)
 # end def get_category_template
 #// 
 #// Retrieve path of tag template in current or parent template.
@@ -252,20 +256,21 @@ def get_category_template(*args_):
 #// 
 #// @return string Full path to tag template file.
 #//
-def get_tag_template(*args_):
+def get_tag_template(*_args_):
     
-    tag = get_queried_object()
-    templates = Array()
-    if (not php_empty(lambda : tag.slug)):
-        slug_decoded = urldecode(tag.slug)
-        if slug_decoded != tag.slug:
-            templates[-1] = str("tag-") + str(slug_decoded) + str(".php")
+    
+    tag_ = get_queried_object()
+    templates_ = Array()
+    if (not php_empty(lambda : tag_.slug)):
+        slug_decoded_ = urldecode(tag_.slug)
+        if slug_decoded_ != tag_.slug:
+            templates_[-1] = str("tag-") + str(slug_decoded_) + str(".php")
         # end if
-        templates[-1] = str("tag-") + str(tag.slug) + str(".php")
-        templates[-1] = str("tag-") + str(tag.term_id) + str(".php")
+        templates_[-1] = str("tag-") + str(tag_.slug) + str(".php")
+        templates_[-1] = str("tag-") + str(tag_.term_id) + str(".php")
     # end if
-    templates[-1] = "tag.php"
-    return get_query_template("tag", templates)
+    templates_[-1] = "tag.php"
+    return get_query_template("tag", templates_)
 # end def get_tag_template
 #// 
 #// Retrieve path of custom taxonomy term template in current or parent template.
@@ -293,21 +298,22 @@ def get_tag_template(*args_):
 #// 
 #// @return string Full path to custom taxonomy term template file.
 #//
-def get_taxonomy_template(*args_):
+def get_taxonomy_template(*_args_):
     
-    term = get_queried_object()
-    templates = Array()
-    if (not php_empty(lambda : term.slug)):
-        taxonomy = term.taxonomy
-        slug_decoded = urldecode(term.slug)
-        if slug_decoded != term.slug:
-            templates[-1] = str("taxonomy-") + str(taxonomy) + str("-") + str(slug_decoded) + str(".php")
+    
+    term_ = get_queried_object()
+    templates_ = Array()
+    if (not php_empty(lambda : term_.slug)):
+        taxonomy_ = term_.taxonomy
+        slug_decoded_ = urldecode(term_.slug)
+        if slug_decoded_ != term_.slug:
+            templates_[-1] = str("taxonomy-") + str(taxonomy_) + str("-") + str(slug_decoded_) + str(".php")
         # end if
-        templates[-1] = str("taxonomy-") + str(taxonomy) + str("-") + str(term.slug) + str(".php")
-        templates[-1] = str("taxonomy-") + str(taxonomy) + str(".php")
+        templates_[-1] = str("taxonomy-") + str(taxonomy_) + str("-") + str(term_.slug) + str(".php")
+        templates_[-1] = str("taxonomy-") + str(taxonomy_) + str(".php")
     # end if
-    templates[-1] = "taxonomy.php"
-    return get_query_template("taxonomy", templates)
+    templates_[-1] = "taxonomy.php"
+    return get_query_template("taxonomy", templates_)
 # end def get_taxonomy_template
 #// 
 #// Retrieve path of date template in current or parent template.
@@ -321,7 +327,8 @@ def get_taxonomy_template(*args_):
 #// 
 #// @return string Full path to date template file.
 #//
-def get_date_template(*args_):
+def get_date_template(*_args_):
+    
     
     return get_query_template("date")
 # end def get_date_template
@@ -337,10 +344,11 @@ def get_date_template(*args_):
 #// 
 #// @return string Full path to home template file.
 #//
-def get_home_template(*args_):
+def get_home_template(*_args_):
     
-    templates = Array("home.php", "index.php")
-    return get_query_template("home", templates)
+    
+    templates_ = Array("home.php", "index.php")
+    return get_query_template("home", templates_)
 # end def get_home_template
 #// 
 #// Retrieve path of front page template in current or parent template.
@@ -354,10 +362,11 @@ def get_home_template(*args_):
 #// 
 #// @return string Full path to front page template file.
 #//
-def get_front_page_template(*args_):
+def get_front_page_template(*_args_):
     
-    templates = Array("front-page.php")
-    return get_query_template("frontpage", templates)
+    
+    templates_ = Array("front-page.php")
+    return get_query_template("frontpage", templates_)
 # end def get_front_page_template
 #// 
 #// Retrieve path of Privacy Policy page template in current or parent template.
@@ -371,10 +380,11 @@ def get_front_page_template(*args_):
 #// 
 #// @return string Full path to privacy policy template file.
 #//
-def get_privacy_policy_template(*args_):
+def get_privacy_policy_template(*_args_):
     
-    templates = Array("privacy-policy.php")
-    return get_query_template("privacypolicy", templates)
+    
+    templates_ = Array("privacy-policy.php")
+    return get_query_template("privacypolicy", templates_)
 # end def get_privacy_policy_template
 #// 
 #// Retrieve path of page template in current or parent template.
@@ -404,35 +414,36 @@ def get_privacy_policy_template(*args_):
 #// 
 #// @return string Full path to page template file.
 #//
-def get_page_template(*args_):
+def get_page_template(*_args_):
     
-    id = get_queried_object_id()
-    template = get_page_template_slug()
-    pagename = get_query_var("pagename")
-    if (not pagename) and id:
+    
+    id_ = get_queried_object_id()
+    template_ = get_page_template_slug()
+    pagename_ = get_query_var("pagename")
+    if (not pagename_) and id_:
         #// If a static page is set as the front page, $pagename will not be set.
         #// Retrieve it from the queried object.
-        post = get_queried_object()
-        if post:
-            pagename = post.post_name
+        post_ = get_queried_object()
+        if post_:
+            pagename_ = post_.post_name
         # end if
     # end if
-    templates = Array()
-    if template and 0 == validate_file(template):
-        templates[-1] = template
+    templates_ = Array()
+    if template_ and 0 == validate_file(template_):
+        templates_[-1] = template_
     # end if
-    if pagename:
-        pagename_decoded = urldecode(pagename)
-        if pagename_decoded != pagename:
-            templates[-1] = str("page-") + str(pagename_decoded) + str(".php")
+    if pagename_:
+        pagename_decoded_ = urldecode(pagename_)
+        if pagename_decoded_ != pagename_:
+            templates_[-1] = str("page-") + str(pagename_decoded_) + str(".php")
         # end if
-        templates[-1] = str("page-") + str(pagename) + str(".php")
+        templates_[-1] = str("page-") + str(pagename_) + str(".php")
     # end if
-    if id:
-        templates[-1] = str("page-") + str(id) + str(".php")
+    if id_:
+        templates_[-1] = str("page-") + str(id_) + str(".php")
     # end if
-    templates[-1] = "page.php"
-    return get_query_template("page", templates)
+    templates_[-1] = "page.php"
+    return get_query_template("page", templates_)
 # end def get_page_template
 #// 
 #// Retrieve path of search template in current or parent template.
@@ -446,7 +457,8 @@ def get_page_template(*args_):
 #// 
 #// @return string Full path to search template file.
 #//
-def get_search_template(*args_):
+def get_search_template(*_args_):
+    
     
     return get_query_template("search")
 # end def get_search_template
@@ -481,24 +493,25 @@ def get_search_template(*args_):
 #// 
 #// @return string Full path to single template file.
 #//
-def get_single_template(*args_):
+def get_single_template(*_args_):
     
-    object = get_queried_object()
-    templates = Array()
-    if (not php_empty(lambda : object.post_type)):
-        template = get_page_template_slug(object)
-        if template and 0 == validate_file(template):
-            templates[-1] = template
+    
+    object_ = get_queried_object()
+    templates_ = Array()
+    if (not php_empty(lambda : object_.post_type)):
+        template_ = get_page_template_slug(object_)
+        if template_ and 0 == validate_file(template_):
+            templates_[-1] = template_
         # end if
-        name_decoded = urldecode(object.post_name)
-        if name_decoded != object.post_name:
-            templates[-1] = str("single-") + str(object.post_type) + str("-") + str(name_decoded) + str(".php")
+        name_decoded_ = urldecode(object_.post_name)
+        if name_decoded_ != object_.post_name:
+            templates_[-1] = str("single-") + str(object_.post_type) + str("-") + str(name_decoded_) + str(".php")
         # end if
-        templates[-1] = str("single-") + str(object.post_type) + str("-") + str(object.post_name) + str(".php")
-        templates[-1] = str("single-") + str(object.post_type) + str(".php")
+        templates_[-1] = str("single-") + str(object_.post_type) + str("-") + str(object_.post_name) + str(".php")
+        templates_[-1] = str("single-") + str(object_.post_type) + str(".php")
     # end if
-    templates[-1] = "single.php"
-    return get_query_template("single", templates)
+    templates_[-1] = "single.php"
+    return get_query_template("single", templates_)
 # end def get_single_template
 #// 
 #// Retrieves an embed template path in the current or parent template.
@@ -524,19 +537,20 @@ def get_single_template(*args_):
 #// 
 #// @return string Full path to embed template file.
 #//
-def get_embed_template(*args_):
+def get_embed_template(*_args_):
     
-    object = get_queried_object()
-    templates = Array()
-    if (not php_empty(lambda : object.post_type)):
-        post_format = get_post_format(object)
-        if post_format:
-            templates[-1] = str("embed-") + str(object.post_type) + str("-") + str(post_format) + str(".php")
+    
+    object_ = get_queried_object()
+    templates_ = Array()
+    if (not php_empty(lambda : object_.post_type)):
+        post_format_ = get_post_format(object_)
+        if post_format_:
+            templates_[-1] = str("embed-") + str(object_.post_type) + str("-") + str(post_format_) + str(".php")
         # end if
-        templates[-1] = str("embed-") + str(object.post_type) + str(".php")
+        templates_[-1] = str("embed-") + str(object_.post_type) + str(".php")
     # end if
-    templates[-1] = "embed.php"
-    return get_query_template("embed", templates)
+    templates_[-1] = "embed.php"
+    return get_query_template("embed", templates_)
 # end def get_embed_template
 #// 
 #// Retrieves the path of the singular template in current or parent template.
@@ -550,7 +564,8 @@ def get_embed_template(*args_):
 #// 
 #// @return string Full path to singular template file
 #//
-def get_singular_template(*args_):
+def get_singular_template(*_args_):
+    
     
     return get_query_template("singular")
 # end def get_singular_template
@@ -583,24 +598,25 @@ def get_singular_template(*args_):
 #// 
 #// @return string Full path to attachment template file.
 #//
-def get_attachment_template(*args_):
+def get_attachment_template(*_args_):
     
-    attachment = get_queried_object()
-    templates = Array()
-    if attachment:
-        if False != php_strpos(attachment.post_mime_type, "/"):
-            type, subtype = php_explode("/", attachment.post_mime_type)
+    
+    attachment_ = get_queried_object()
+    templates_ = Array()
+    if attachment_:
+        if False != php_strpos(attachment_.post_mime_type, "/"):
+            type_, subtype_ = php_explode("/", attachment_.post_mime_type)
         else:
-            type, subtype = Array(attachment.post_mime_type, "")
+            type_, subtype_ = Array(attachment_.post_mime_type, "")
         # end if
-        if (not php_empty(lambda : subtype)):
-            templates[-1] = str(type) + str("-") + str(subtype) + str(".php")
-            templates[-1] = str(subtype) + str(".php")
+        if (not php_empty(lambda : subtype_)):
+            templates_[-1] = str(type_) + str("-") + str(subtype_) + str(".php")
+            templates_[-1] = str(subtype_) + str(".php")
         # end if
-        templates[-1] = str(type) + str(".php")
+        templates_[-1] = str(type_) + str(".php")
     # end if
-    templates[-1] = "attachment.php"
-    return get_query_template("attachment", templates)
+    templates_[-1] = "attachment.php"
+    return get_query_template("attachment", templates_)
 # end def get_attachment_template
 #// 
 #// Retrieve the name of the highest priority template file that exists.
@@ -615,28 +631,34 @@ def get_attachment_template(*args_):
 #// @param bool         $require_once   Whether to require_once or require. Default true. Has no effect if $load is false.
 #// @return string The template filename if one is located.
 #//
-def locate_template(template_names=None, load=False, require_once=True, *args_):
+def locate_template(template_names_=None, load_=None, require_once_=None, *_args_):
+    if load_ is None:
+        load_ = False
+    # end if
+    if require_once_ is None:
+        require_once_ = True
+    # end if
     
-    located = ""
-    for template_name in template_names:
-        if (not template_name):
+    located_ = ""
+    for template_name_ in template_names_:
+        if (not template_name_):
             continue
         # end if
-        if php_file_exists(STYLESHEETPATH + "/" + template_name):
-            located = STYLESHEETPATH + "/" + template_name
+        if php_file_exists(STYLESHEETPATH + "/" + template_name_):
+            located_ = STYLESHEETPATH + "/" + template_name_
             break
-        elif php_file_exists(TEMPLATEPATH + "/" + template_name):
-            located = TEMPLATEPATH + "/" + template_name
+        elif php_file_exists(TEMPLATEPATH + "/" + template_name_):
+            located_ = TEMPLATEPATH + "/" + template_name_
             break
-        elif php_file_exists(ABSPATH + WPINC + "/theme-compat/" + template_name):
-            located = ABSPATH + WPINC + "/theme-compat/" + template_name
+        elif php_file_exists(ABSPATH + WPINC + "/theme-compat/" + template_name_):
+            located_ = ABSPATH + WPINC + "/theme-compat/" + template_name_
             break
         # end if
     # end for
-    if load and "" != located:
-        load_template(located, require_once)
+    if load_ and "" != located_:
+        load_template(located_, require_once_)
     # end if
-    return located
+    return located_
 # end def locate_template
 #// 
 #// Require the template file with WordPress environment.
@@ -662,11 +684,24 @@ def locate_template(template_names=None, load=False, require_once=True, *args_):
 #// @param string $_template_file Path to template file.
 #// @param bool   $require_once   Whether to require_once or require. Default true.
 #//
-def load_template(_template_file=None, require_once=True, *args_):
+def load_template(_template_file_=None, require_once_=None, *_args_):
+    if require_once_ is None:
+        require_once_ = True
+    # end if
     
-    global posts,post,wp_did_header,wp_query,wp_rewrite,wpdb,wp_version,wp,id,comment,user_ID
-    php_check_if_defined("posts","post","wp_did_header","wp_query","wp_rewrite","wpdb","wp_version","wp","id","comment","user_ID")
-    if php_is_array(wp_query.query_vars):
+    global posts_
+    global post_
+    global wp_did_header_
+    global wp_query_
+    global wp_rewrite_
+    global wpdb_
+    global wp_version_
+    global wp_
+    global id_
+    global comment_
+    global user_ID_
+    php_check_if_defined("posts_","post_","wp_did_header_","wp_query_","wp_rewrite_","wpdb_","wp_version_","wp_","id_","comment_","user_ID_")
+    if php_is_array(wp_query_.query_vars):
         #// 
         #// This use of extract() cannot be removed. There are many possible ways that
         #// templates could depend on variables that it creates existing, and no way to
@@ -676,14 +711,14 @@ def load_template(_template_file=None, require_once=True, *args_):
         #// function variables cannot be overwritten.
         #// 
         #// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-        extract(wp_query.query_vars, EXTR_SKIP)
+        extract(wp_query_.query_vars, EXTR_SKIP)
     # end if
-    if (php_isset(lambda : s)):
-        s = esc_attr(s)
+    if (php_isset(lambda : s_)):
+        s_ = esc_attr(s_)
     # end if
-    if require_once:
-        php_include_file(_template_file, once=True)
+    if require_once_:
+        php_include_file(_template_file_, once=True)
     else:
-        php_include_file(_template_file, once=False)
+        php_include_file(_template_file_, once=False)
     # end if
 # end def load_template

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -52,35 +47,36 @@ if (not php_is_callable("random_bytes")):
     #// 
     #// @return string
     #//
-    def random_bytes(bytes=None, *args_):
+    def random_bytes(bytes_=None, *_args_):
+        
         
         try: 
-            bytes = RandomCompat_intval(bytes)
-        except TypeError as ex:
+            bytes_ = RandomCompat_intval(bytes_)
+        except TypeError as ex_:
             raise php_new_class("TypeError", lambda : TypeError("random_bytes(): $bytes must be an integer"))
         # end try
-        if bytes < 1:
+        if bytes_ < 1:
             raise php_new_class("Error", lambda : Error("Length must be greater than 0"))
         # end if
         #// 
         #// \Sodium\randombytes_buf() doesn't allow more than 2147483647 bytes to be
         #// generated in one invocation.
         #//
-        if bytes > 2147483647:
-            buf = ""
-            i = 0
-            while i < bytes:
+        if bytes_ > 2147483647:
+            buf_ = ""
+            i_ = 0
+            while i_ < bytes_:
                 
-                n = 1073741824 if bytes - i > 1073741824 else bytes - i
-                buf += Sodium.randombytes_buf(n)
-                i += 1073741824
+                n_ = 1073741824 if bytes_ - i_ > 1073741824 else bytes_ - i_
+                buf_ += Sodium.randombytes_buf(n_)
+                i_ += 1073741824
             # end while
         else:
-            buf = Sodium.randombytes_buf(bytes)
+            buf_ = Sodium.randombytes_buf(bytes_)
         # end if
-        if buf != False:
-            if RandomCompat_strlen(buf) == bytes:
-                return buf
+        if buf_ != False:
+            if RandomCompat_strlen(buf_) == bytes_:
+                return buf_
             # end if
         # end if
         raise php_new_class("Exception", lambda : Exception("Could not gather sufficient random data"))

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -47,35 +42,36 @@ class Requests_IPv6():
     #// @return string The uncompressed IPv6 address
     #//
     @classmethod
-    def uncompress(self, ip=None):
+    def uncompress(self, ip_=None):
         
-        if php_substr_count(ip, "::") != 1:
-            return ip
+        
+        if php_substr_count(ip_, "::") != 1:
+            return ip_
         # end if
-        ip1, ip2 = php_explode("::", ip)
-        c1 = -1 if ip1 == "" else php_substr_count(ip1, ":")
-        c2 = -1 if ip2 == "" else php_substr_count(ip2, ":")
-        if php_strpos(ip2, ".") != False:
-            c2 += 1
+        ip1_, ip2_ = php_explode("::", ip_)
+        c1_ = -1 if ip1_ == "" else php_substr_count(ip1_, ":")
+        c2_ = -1 if ip2_ == "" else php_substr_count(ip2_, ":")
+        if php_strpos(ip2_, ".") != False:
+            c2_ += 1
         # end if
         #// ::
-        if c1 == -1 and c2 == -1:
-            ip = "0:0:0:0:0:0:0:0"
+        if c1_ == -1 and c2_ == -1:
+            ip_ = "0:0:0:0:0:0:0:0"
         else:
-            if c1 == -1:
-                fill = php_str_repeat("0:", 7 - c2)
-                ip = php_str_replace("::", fill, ip)
+            if c1_ == -1:
+                fill_ = php_str_repeat("0:", 7 - c2_)
+                ip_ = php_str_replace("::", fill_, ip_)
             else:
-                if c2 == -1:
-                    fill = php_str_repeat(":0", 7 - c1)
-                    ip = php_str_replace("::", fill, ip)
+                if c2_ == -1:
+                    fill_ = php_str_repeat(":0", 7 - c1_)
+                    ip_ = php_str_replace("::", fill_, ip_)
                 else:
-                    fill = ":" + php_str_repeat("0:", 6 - c2 - c1)
-                    ip = php_str_replace("::", fill, ip)
+                    fill_ = ":" + php_str_repeat("0:", 6 - c2_ - c1_)
+                    ip_ = php_str_replace("::", fill_, ip_)
                 # end if
             # end if
         # end if
-        return ip
+        return ip_
     # end def uncompress
     #// 
     #// Compresses an IPv6 address
@@ -92,29 +88,30 @@ class Requests_IPv6():
     #// @return string The compressed IPv6 address
     #//
     @classmethod
-    def compress(self, ip=None):
+    def compress(self, ip_=None):
+        
         
         #// Prepare the IP to be compressed
-        ip = self.uncompress(ip)
-        ip_parts = self.split_v6_v4(ip)
+        ip_ = self.uncompress(ip_)
+        ip_parts_ = self.split_v6_v4(ip_)
         #// Replace all leading zeros
-        ip_parts[0] = php_preg_replace("/(^|:)0+([0-9])/", "\\1\\2", ip_parts[0])
+        ip_parts_[0] = php_preg_replace("/(^|:)0+([0-9])/", "\\1\\2", ip_parts_[0])
         #// Find bunches of zeros
-        if preg_match_all("/(?:^|:)(?:0(?::|$))+/", ip_parts[0], matches, PREG_OFFSET_CAPTURE):
-            max = 0
-            pos = None
-            for match in matches[0]:
-                if php_strlen(match[0]) > max:
-                    max = php_strlen(match[0])
-                    pos = match[1]
+        if preg_match_all("/(?:^|:)(?:0(?::|$))+/", ip_parts_[0], matches_, PREG_OFFSET_CAPTURE):
+            max_ = 0
+            pos_ = None
+            for match_ in matches_[0]:
+                if php_strlen(match_[0]) > max_:
+                    max_ = php_strlen(match_[0])
+                    pos_ = match_[1]
                 # end if
             # end for
-            ip_parts[0] = php_substr_replace(ip_parts[0], "::", pos, max)
+            ip_parts_[0] = php_substr_replace(ip_parts_[0], "::", pos_, max_)
         # end if
-        if ip_parts[1] != "":
-            return php_implode(":", ip_parts)
+        if ip_parts_[1] != "":
+            return php_implode(":", ip_parts_)
         else:
-            return ip_parts[0]
+            return ip_parts_[0]
         # end if
     # end def compress
     #// 
@@ -129,15 +126,16 @@ class Requests_IPv6():
     #// @param string $ip An IPv6 address
     #// @return string[] [0] contains the IPv6 represented part, and [1] the IPv4 represented part
     #//
-    def split_v6_v4(self, ip=None):
+    def split_v6_v4(self, ip_=None):
         
-        if php_strpos(ip, ".") != False:
-            pos = php_strrpos(ip, ":")
-            ipv6_part = php_substr(ip, 0, pos)
-            ipv4_part = php_substr(ip, pos + 1)
-            return Array(ipv6_part, ipv4_part)
+        
+        if php_strpos(ip_, ".") != False:
+            pos_ = php_strrpos(ip_, ":")
+            ipv6_part_ = php_substr(ip_, 0, pos_)
+            ipv4_part_ = php_substr(ip_, pos_ + 1)
+            return Array(ipv6_part_, ipv4_part_)
         else:
-            return Array(ip, "")
+            return Array(ip_, "")
         # end if
     # end def split_v6_v4
     #// 
@@ -149,37 +147,38 @@ class Requests_IPv6():
     #// @return bool true if $ip is a valid IPv6 address
     #//
     @classmethod
-    def check_ipv6(self, ip=None):
+    def check_ipv6(self, ip_=None):
         
-        ip = self.uncompress(ip)
-        ipv6, ipv4 = self.split_v6_v4(ip)
-        ipv6 = php_explode(":", ipv6)
-        ipv4 = php_explode(".", ipv4)
-        if php_count(ipv6) == 8 and php_count(ipv4) == 1 or php_count(ipv6) == 6 and php_count(ipv4) == 4:
-            for ipv6_part in ipv6:
+        
+        ip_ = self.uncompress(ip_)
+        ipv6_, ipv4_ = self.split_v6_v4(ip_)
+        ipv6_ = php_explode(":", ipv6_)
+        ipv4_ = php_explode(".", ipv4_)
+        if php_count(ipv6_) == 8 and php_count(ipv4_) == 1 or php_count(ipv6_) == 6 and php_count(ipv4_) == 4:
+            for ipv6_part_ in ipv6_:
                 #// The section can't be empty
-                if ipv6_part == "":
+                if ipv6_part_ == "":
                     return False
                 # end if
                 #// Nor can it be over four characters
-                if php_strlen(ipv6_part) > 4:
+                if php_strlen(ipv6_part_) > 4:
                     return False
                 # end if
                 #// Remove leading zeros (this is safe because of the above)
-                ipv6_part = php_ltrim(ipv6_part, "0")
-                if ipv6_part == "":
-                    ipv6_part = "0"
+                ipv6_part_ = php_ltrim(ipv6_part_, "0")
+                if ipv6_part_ == "":
+                    ipv6_part_ = "0"
                 # end if
                 #// Check the value is valid
-                value = hexdec(ipv6_part)
-                if dechex(value) != php_strtolower(ipv6_part) or value < 0 or value > 65535:
+                value_ = hexdec(ipv6_part_)
+                if dechex(value_) != php_strtolower(ipv6_part_) or value_ < 0 or value_ > 65535:
                     return False
                 # end if
             # end for
-            if php_count(ipv4) == 4:
-                for ipv4_part in ipv4:
-                    value = php_int(ipv4_part)
-                    if php_str(value) != ipv4_part or value < 0 or value > 255:
+            if php_count(ipv4_) == 4:
+                for ipv4_part_ in ipv4_:
+                    value_ = php_int(ipv4_part_)
+                    if php_str(value_) != ipv4_part_ or value_ < 0 or value_ > 255:
                         return False
                     # end if
                 # end for

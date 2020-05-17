@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -28,10 +23,40 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see ArrayAccess
 #//
 class WP_Hook():
+    #// 
+    #// Hook callbacks.
+    #// 
+    #// @since 4.7.0
+    #// @var array
+    #//
     callbacks = Array()
+    #// 
+    #// The priority keys of actively running iterations of a hook.
+    #// 
+    #// @since 4.7.0
+    #// @var array
+    #//
     iterations = Array()
+    #// 
+    #// The current priority of actively running iterations of a hook.
+    #// 
+    #// @since 4.7.0
+    #// @var array
+    #//
     current_priority = Array()
+    #// 
+    #// Number of levels this hook can be recursively called.
+    #// 
+    #// @since 4.7.0
+    #// @var int
+    #//
     nesting_level = 0
+    #// 
+    #// Flag for if we're current doing an action, rather than a filter.
+    #// 
+    #// @since 4.7.0
+    #// @var bool
+    #//
     doing_action = False
     #// 
     #// Hooks a function or method to a specific filter action.
@@ -46,17 +71,18 @@ class WP_Hook():
     #// in which they were added to the action.
     #// @param int      $accepted_args   The number of arguments the function accepts.
     #//
-    def add_filter(self, tag=None, function_to_add=None, priority=None, accepted_args=None):
+    def add_filter(self, tag_=None, function_to_add_=None, priority_=None, accepted_args_=None):
         
-        idx = _wp_filter_build_unique_id(tag, function_to_add, priority)
-        priority_existed = (php_isset(lambda : self.callbacks[priority]))
-        self.callbacks[priority][idx] = Array({"function": function_to_add, "accepted_args": accepted_args})
+        
+        idx_ = _wp_filter_build_unique_id(tag_, function_to_add_, priority_)
+        priority_existed_ = (php_isset(lambda : self.callbacks[priority_]))
+        self.callbacks[priority_][idx_] = Array({"function": function_to_add_, "accepted_args": accepted_args_})
         #// If we're adding a new priority to the list, put them back in sorted order.
-        if (not priority_existed) and php_count(self.callbacks) > 1:
+        if (not priority_existed_) and php_count(self.callbacks) > 1:
             ksort(self.callbacks, SORT_NUMERIC)
         # end if
         if self.nesting_level > 0:
-            self.resort_active_iterations(priority, priority_existed)
+            self.resort_active_iterations(priority_, priority_existed_)
         # end if
     # end def add_filter
     #// 
@@ -69,60 +95,66 @@ class WP_Hook():
     #// @param bool     $priority_existed Optional. Flag for whether the priority already existed before the new
     #// filter was added. Default false.
     #//
-    def resort_active_iterations(self, new_priority=False, priority_existed=False):
+    def resort_active_iterations(self, new_priority_=None, priority_existed_=None):
+        if new_priority_ is None:
+            new_priority_ = False
+        # end if
+        if priority_existed_ is None:
+            priority_existed_ = False
+        # end if
         
-        new_priorities = php_array_keys(self.callbacks)
+        new_priorities_ = php_array_keys(self.callbacks)
         #// If there are no remaining hooks, clear out all running iterations.
-        if (not new_priorities):
-            for index,iteration in self.iterations:
-                self.iterations[index] = new_priorities
+        if (not new_priorities_):
+            for index_,iteration_ in self.iterations:
+                self.iterations[index_] = new_priorities_
             # end for
             return
         # end if
-        min = php_min(new_priorities)
-        for index,iteration in self.iterations:
-            current = current(iteration)
+        min_ = php_min(new_priorities_)
+        for index_,iteration_ in self.iterations:
+            current_ = current(iteration_)
             #// If we're already at the end of this iteration, just leave the array pointer where it is.
-            if False == current:
+            if False == current_:
                 continue
             # end if
-            iteration = new_priorities
-            if current < min:
-                array_unshift(iteration, current)
+            iteration_ = new_priorities_
+            if current_ < min_:
+                array_unshift(iteration_, current_)
                 continue
             # end if
             while True:
                 
-                if not (current(iteration) < current):
+                if not (current(iteration_) < current_):
                     break
                 # end if
-                if False == next(iteration):
+                if False == next(iteration_):
                     break
                 # end if
             # end while
             #// If we have a new priority that didn't exist, but ::apply_filters() or ::do_action() thinks it's the current priority...
-            if new_priority == self.current_priority[index] and (not priority_existed):
+            if new_priority_ == self.current_priority[index_] and (not priority_existed_):
                 #// 
                 #// ...and the new priority is the same as what $this->iterations thinks is the previous
                 #// priority, we need to move back to it.
                 #//
-                if False == current(iteration):
+                if False == current(iteration_):
                     #// If we've already moved off the end of the array, go back to the last element.
-                    prev = php_end(iteration)
+                    prev_ = php_end(iteration_)
                 else:
                     #// Otherwise, just go back to the previous element.
-                    prev = php_prev(iteration)
+                    prev_ = php_prev(iteration_)
                 # end if
-                if False == prev:
+                if False == prev_:
                     #// Start of the array. Reset, and go about our day.
-                    reset(iteration)
-                elif new_priority != prev:
+                    reset(iteration_)
+                elif new_priority_ != prev_:
                     #// Previous wasn't the same. Move forward again.
-                    next(iteration)
+                    next(iteration_)
                 # end if
             # end if
         # end for
-        iteration = None
+        iteration_ = None
     # end def resort_active_iterations
     #// 
     #// Unhooks a function or method from a specific filter action.
@@ -134,20 +166,21 @@ class WP_Hook():
     #// @param int      $priority           The exact priority used when adding the original filter callback.
     #// @return bool Whether the callback existed before it was removed.
     #//
-    def remove_filter(self, tag=None, function_to_remove=None, priority=None):
+    def remove_filter(self, tag_=None, function_to_remove_=None, priority_=None):
         
-        function_key = _wp_filter_build_unique_id(tag, function_to_remove, priority)
-        exists = (php_isset(lambda : self.callbacks[priority][function_key]))
-        if exists:
-            self.callbacks[priority][function_key] = None
-            if (not self.callbacks[priority]):
-                self.callbacks[priority] = None
+        
+        function_key_ = _wp_filter_build_unique_id(tag_, function_to_remove_, priority_)
+        exists_ = (php_isset(lambda : self.callbacks[priority_][function_key_]))
+        if exists_:
+            self.callbacks[priority_][function_key_] = None
+            if (not self.callbacks[priority_]):
+                self.callbacks[priority_] = None
                 if self.nesting_level > 0:
                     self.resort_active_iterations()
                 # end if
             # end if
         # end if
-        return exists
+        return exists_
     # end def remove_filter
     #// 
     #// Checks if a specific action has been registered for this hook.
@@ -158,18 +191,21 @@ class WP_Hook():
     #// @param callable|bool $function_to_check Optional. The callback to check for. Default false.
     #// @return bool|int The priority of that hook is returned, or false if the function is not attached.
     #//
-    def has_filter(self, tag="", function_to_check=False):
+    def has_filter(self, tag_="", function_to_check_=None):
+        if function_to_check_ is None:
+            function_to_check_ = False
+        # end if
         
-        if False == function_to_check:
+        if False == function_to_check_:
             return self.has_filters()
         # end if
-        function_key = _wp_filter_build_unique_id(tag, function_to_check, False)
-        if (not function_key):
+        function_key_ = _wp_filter_build_unique_id(tag_, function_to_check_, False)
+        if (not function_key_):
             return False
         # end if
-        for priority,callbacks in self.callbacks:
-            if (php_isset(lambda : callbacks[function_key])):
-                return priority
+        for priority_,callbacks_ in self.callbacks:
+            if (php_isset(lambda : callbacks_[function_key_])):
+                return priority_
             # end if
         # end for
         return False
@@ -183,8 +219,9 @@ class WP_Hook():
     #//
     def has_filters(self):
         
-        for callbacks in self.callbacks:
-            if callbacks:
+        
+        for callbacks_ in self.callbacks:
+            if callbacks_:
                 return True
             # end if
         # end for
@@ -197,15 +234,18 @@ class WP_Hook():
     #// 
     #// @param int|bool $priority Optional. The priority number to remove. Default false.
     #//
-    def remove_all_filters(self, priority=False):
+    def remove_all_filters(self, priority_=None):
+        if priority_ is None:
+            priority_ = False
+        # end if
         
         if (not self.callbacks):
             return
         # end if
-        if False == priority:
+        if False == priority_:
             self.callbacks = Array()
-        elif (php_isset(lambda : self.callbacks[priority])):
-            self.callbacks[priority] = None
+        elif (php_isset(lambda : self.callbacks[priority_])):
+            self.callbacks[priority_] = None
         # end if
         if self.nesting_level > 0:
             self.resort_active_iterations()
@@ -221,40 +261,41 @@ class WP_Hook():
     #// This array is expected to include $value at index 0.
     #// @return mixed The filtered value after all hooked functions are applied to it.
     #//
-    def apply_filters(self, value=None, args=None):
+    def apply_filters(self, value_=None, args_=None):
+        
         
         if (not self.callbacks):
-            return value
+            return value_
         # end if
-        nesting_level = self.nesting_level
+        nesting_level_ = self.nesting_level
         self.nesting_level += 1
-        self.iterations[nesting_level] = php_array_keys(self.callbacks)
-        num_args = php_count(args)
+        self.iterations[nesting_level_] = php_array_keys(self.callbacks)
+        num_args_ = php_count(args_)
         while True:
-            self.current_priority[nesting_level] = current(self.iterations[nesting_level])
-            priority = self.current_priority[nesting_level]
-            for the_ in self.callbacks[priority]:
+            self.current_priority[nesting_level_] = current(self.iterations[nesting_level_])
+            priority_ = self.current_priority[nesting_level_]
+            for the__ in self.callbacks[priority_]:
                 if (not self.doing_action):
-                    args[0] = value
+                    args_[0] = value_
                 # end if
                 #// Avoid the array_slice() if possible.
-                if 0 == the_["accepted_args"]:
-                    value = php_call_user_func(the_["function"])
-                elif the_["accepted_args"] >= num_args:
-                    value = call_user_func_array(the_["function"], args)
+                if 0 == the__["accepted_args"]:
+                    value_ = php_call_user_func(the__["function"])
+                elif the__["accepted_args"] >= num_args_:
+                    value_ = call_user_func_array(the__["function"], args_)
                 else:
-                    value = call_user_func_array(the_["function"], php_array_slice(args, 0, php_int(the_["accepted_args"])))
+                    value_ = call_user_func_array(the__["function"], php_array_slice(args_, 0, php_int(the__["accepted_args"])))
                 # end if
             # end for
             
-            if False != next(self.iterations[nesting_level]):
+            if False != next(self.iterations[nesting_level_]):
                 break
             # end if
         # end while
-        self.iterations[nesting_level] = None
-        self.current_priority[nesting_level] = None
+        self.iterations[nesting_level_] = None
+        self.current_priority[nesting_level_] = None
         self.nesting_level -= 1
-        return value
+        return value_
     # end def apply_filters
     #// 
     #// Calls the callback functions that have been added to an action hook.
@@ -263,10 +304,11 @@ class WP_Hook():
     #// 
     #// @param array $args Parameters to pass to the callback functions.
     #//
-    def do_action(self, args=None):
+    def do_action(self, args_=None):
+        
         
         self.doing_action = True
-        self.apply_filters("", args)
+        self.apply_filters("", args_)
         #// If there are recursive calls to the current action, we haven't finished it until we get to the last one.
         if (not self.nesting_level):
             self.doing_action = False
@@ -279,22 +321,23 @@ class WP_Hook():
     #// 
     #// @param array $args Arguments to pass to the hook callbacks. Passed by reference.
     #//
-    def do_all_hook(self, args=None):
+    def do_all_hook(self, args_=None):
         
-        nesting_level = self.nesting_level
+        
+        nesting_level_ = self.nesting_level
         self.nesting_level += 1
-        self.iterations[nesting_level] = php_array_keys(self.callbacks)
+        self.iterations[nesting_level_] = php_array_keys(self.callbacks)
         while True:
-            priority = current(self.iterations[nesting_level])
-            for the_ in self.callbacks[priority]:
-                call_user_func_array(the_["function"], args)
+            priority_ = current(self.iterations[nesting_level_])
+            for the__ in self.callbacks[priority_]:
+                call_user_func_array(the__["function"], args_)
             # end for
             
-            if False != next(self.iterations[nesting_level]):
+            if False != next(self.iterations[nesting_level_]):
                 break
             # end if
         # end while
-        self.iterations[nesting_level] = None
+        self.iterations[nesting_level_] = None
         self.nesting_level -= 1
     # end def do_all_hook
     #// 
@@ -305,6 +348,7 @@ class WP_Hook():
     #// @return int|false If the hook is running, return the current priority level. If it isn't running, return false.
     #//
     def current_priority(self):
+        
         
         if False == current(self.iterations):
             return False
@@ -320,26 +364,27 @@ class WP_Hook():
     #// @return WP_Hook[] Array of normalized filters.
     #//
     @classmethod
-    def build_preinitialized_hooks(self, filters=None):
+    def build_preinitialized_hooks(self, filters_=None):
+        
         
         #// @var WP_Hook[] $normalized
-        normalized = Array()
-        for tag,callback_groups in filters:
-            if php_is_object(callback_groups) and type(callback_groups).__name__ == "WP_Hook":
-                normalized[tag] = callback_groups
+        normalized_ = Array()
+        for tag_,callback_groups_ in filters_:
+            if php_is_object(callback_groups_) and type(callback_groups_).__name__ == "WP_Hook":
+                normalized_[tag_] = callback_groups_
                 continue
             # end if
-            hook = php_new_class("WP_Hook", lambda : WP_Hook())
+            hook_ = php_new_class("WP_Hook", lambda : WP_Hook())
             #// Loop through callback groups.
-            for priority,callbacks in callback_groups:
+            for priority_,callbacks_ in callback_groups_:
                 #// Loop through callbacks.
-                for cb in callbacks:
-                    hook.add_filter(tag, cb["function"], priority, cb["accepted_args"])
+                for cb_ in callbacks_:
+                    hook_.add_filter(tag_, cb_["function"], priority_, cb_["accepted_args"])
                 # end for
             # end for
-            normalized[tag] = hook
+            normalized_[tag_] = hook_
         # end for
-        return normalized
+        return normalized_
     # end def build_preinitialized_hooks
     #// 
     #// Determines whether an offset value exists.
@@ -351,9 +396,10 @@ class WP_Hook():
     #// @param mixed $offset An offset to check for.
     #// @return bool True if the offset exists, false otherwise.
     #//
-    def offsetexists(self, offset=None):
+    def offsetexists(self, offset_=None):
         
-        return (php_isset(lambda : self.callbacks[offset]))
+        
+        return (php_isset(lambda : self.callbacks[offset_]))
     # end def offsetexists
     #// 
     #// Retrieves a value at a specified offset.
@@ -365,9 +411,10 @@ class WP_Hook():
     #// @param mixed $offset The offset to retrieve.
     #// @return mixed If set, the value at the specified offset, null otherwise.
     #//
-    def offsetget(self, offset=None):
+    def offsetget(self, offset_=None):
         
-        return self.callbacks[offset] if (php_isset(lambda : self.callbacks[offset])) else None
+        
+        return self.callbacks[offset_] if (php_isset(lambda : self.callbacks[offset_])) else None
     # end def offsetget
     #// 
     #// Sets a value at a specified offset.
@@ -379,12 +426,13 @@ class WP_Hook():
     #// @param mixed $offset The offset to assign the value to.
     #// @param mixed $value The value to set.
     #//
-    def offsetset(self, offset=None, value=None):
+    def offsetset(self, offset_=None, value_=None):
         
-        if is_null(offset):
-            self.callbacks[-1] = value
+        
+        if is_null(offset_):
+            self.callbacks[-1] = value_
         else:
-            self.callbacks[offset] = value
+            self.callbacks[offset_] = value_
         # end if
     # end def offsetset
     #// 
@@ -396,9 +444,10 @@ class WP_Hook():
     #// 
     #// @param mixed $offset The offset to unset.
     #//
-    def offsetunset(self, offset=None):
+    def offsetunset(self, offset_=None):
         
-        self.callbacks[offset] = None
+        
+        self.callbacks[offset_] = None
     # end def offsetunset
     #// 
     #// Returns the current element.
@@ -410,6 +459,7 @@ class WP_Hook():
     #// @return array Of callbacks at current priority.
     #//
     def current(self):
+        
         
         return current(self.callbacks)
     # end def current
@@ -424,6 +474,7 @@ class WP_Hook():
     #//
     def next(self):
         
+        
         return next(self.callbacks)
     # end def next
     #// 
@@ -436,6 +487,7 @@ class WP_Hook():
     #// @return mixed Returns current priority on success, or NULL on failure
     #//
     def key(self):
+        
         
         return key(self.callbacks)
     # end def key
@@ -450,6 +502,7 @@ class WP_Hook():
     #//
     def valid(self):
         
+        
         return key(self.callbacks) != None
     # end def valid
     #// 
@@ -460,6 +513,7 @@ class WP_Hook():
     #// @link https://www.php.net/manual/en/iterator.rewind.php
     #//
     def rewind(self):
+        
         
         reset(self.callbacks)
     # end def rewind

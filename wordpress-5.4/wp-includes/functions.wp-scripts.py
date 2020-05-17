@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,14 +24,15 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return WP_Scripts WP_Scripts instance.
 #//
-def wp_scripts(*args_):
+def wp_scripts(*_args_):
     
-    global wp_scripts
-    php_check_if_defined("wp_scripts")
-    if (not type(wp_scripts).__name__ == "WP_Scripts"):
-        wp_scripts = php_new_class("WP_Scripts", lambda : WP_Scripts())
+    
+    global wp_scripts_
+    php_check_if_defined("wp_scripts_")
+    if (not type(wp_scripts_).__name__ == "WP_Scripts"):
+        wp_scripts_ = php_new_class("WP_Scripts", lambda : WP_Scripts())
     # end if
-    return wp_scripts
+    return wp_scripts_
 # end def wp_scripts
 #// 
 #// Helper function to output a _doing_it_wrong message when applicable.
@@ -46,12 +42,13 @@ def wp_scripts(*args_):
 #// 
 #// @param string $function Function name.
 #//
-def _wp_scripts_maybe_doing_it_wrong(function=None, *args_):
+def _wp_scripts_maybe_doing_it_wrong(function_=None, *_args_):
+    
     
     if did_action("init") or did_action("admin_enqueue_scripts") or did_action("wp_enqueue_scripts") or did_action("login_enqueue_scripts"):
         return
     # end if
-    _doing_it_wrong(function, php_sprintf(__("Scripts and styles should not be registered or enqueued until the %1$s, %2$s, or %3$s hooks."), "<code>wp_enqueue_scripts</code>", "<code>admin_enqueue_scripts</code>", "<code>login_enqueue_scripts</code>"), "3.3.0")
+    _doing_it_wrong(function_, php_sprintf(__("Scripts and styles should not be registered or enqueued until the %1$s, %2$s, or %3$s hooks."), "<code>wp_enqueue_scripts</code>", "<code>admin_enqueue_scripts</code>", "<code>login_enqueue_scripts</code>"), "3.3.0")
 # end def _wp_scripts_maybe_doing_it_wrong
 #// 
 #// Prints scripts in document head that are in the $handles queue.
@@ -69,7 +66,10 @@ def _wp_scripts_maybe_doing_it_wrong(function=None, *args_):
 #// @param string|bool|array $handles Optional. Scripts to be printed. Default 'false'.
 #// @return string[] On success, an array of handles of processed WP_Dependencies items; otherwise, an empty array.
 #//
-def wp_print_scripts(handles=False, *args_):
+def wp_print_scripts(handles_=None, *_args_):
+    if handles_ is None:
+        handles_ = False
+    # end if
     
     #// 
     #// Fires before scripts in the $handles queue are printed.
@@ -77,20 +77,20 @@ def wp_print_scripts(handles=False, *args_):
     #// @since 2.1.0
     #//
     do_action("wp_print_scripts")
-    if "" == handles:
+    if "" == handles_:
         #// For 'wp_head'.
-        handles = False
+        handles_ = False
     # end if
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    global wp_scripts
-    php_check_if_defined("wp_scripts")
-    if (not type(wp_scripts).__name__ == "WP_Scripts"):
-        if (not handles):
+    global wp_scripts_
+    php_check_if_defined("wp_scripts_")
+    if (not type(wp_scripts_).__name__ == "WP_Scripts"):
+        if (not handles_):
             return Array()
             pass
         # end if
     # end if
-    return wp_scripts().do_items(handles)
+    return wp_scripts().do_items(handles_)
 # end def wp_print_scripts
 #// 
 #// Adds extra code to a registered script.
@@ -110,14 +110,15 @@ def wp_print_scripts(handles=False, *args_):
 #// or after. Default 'after'.
 #// @return bool True on success, false on failure.
 #//
-def wp_add_inline_script(handle=None, data=None, position="after", *args_):
+def wp_add_inline_script(handle_=None, data_=None, position_="after", *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    if False != php_stripos(data, "</script>"):
+    if False != php_stripos(data_, "</script>"):
         _doing_it_wrong(__FUNCTION__, php_sprintf(__("Do not pass %1$s tags to %2$s."), "<code>&lt;script&gt;</code>", "<code>wp_add_inline_script()</code>"), "4.5.0")
-        data = php_trim(php_preg_replace("#<script[^>]*>(.*)</script>#is", "$1", data))
+        data_ = php_trim(php_preg_replace("#<script[^>]*>(.*)</script>#is", "$1", data_))
     # end if
-    return wp_scripts().add_inline_script(handle, data, position)
+    return wp_scripts().add_inline_script(handle_, data_, position_)
 # end def wp_add_inline_script
 #// 
 #// Register a new script.
@@ -142,15 +143,24 @@ def wp_add_inline_script(handle=None, data=None, position="after", *args_):
 #// Default 'false'.
 #// @return bool Whether the script has been registered. True on success, false on failure.
 #//
-def wp_register_script(handle=None, src=None, deps=Array(), ver=False, in_footer=False, *args_):
-    
-    wp_scripts = wp_scripts()
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    registered = wp_scripts.add(handle, src, deps, ver)
-    if in_footer:
-        wp_scripts.add_data(handle, "group", 1)
+def wp_register_script(handle_=None, src_=None, deps_=None, ver_=None, in_footer_=None, *_args_):
+    if deps_ is None:
+        deps_ = Array()
     # end if
-    return registered
+    if ver_ is None:
+        ver_ = False
+    # end if
+    if in_footer_ is None:
+        in_footer_ = False
+    # end if
+    
+    wp_scripts_ = wp_scripts()
+    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    registered_ = wp_scripts_.add(handle_, src_, deps_, ver_)
+    if in_footer_:
+        wp_scripts_.add_data(handle_, "group", 1)
+    # end if
+    return registered_
 # end def wp_register_script
 #// 
 #// Localize a script.
@@ -179,15 +189,16 @@ def wp_register_script(handle=None, src=None, deps=Array(), ver=False, in_footer
 #// @param array $l10n         The data itself. The data can be either a single or multi-dimensional array.
 #// @return bool True if the script was successfully localized, false otherwise.
 #//
-def wp_localize_script(handle=None, object_name=None, l10n=None, *args_):
+def wp_localize_script(handle_=None, object_name_=None, l10n_=None, *_args_):
     
-    global wp_scripts
-    php_check_if_defined("wp_scripts")
-    if (not type(wp_scripts).__name__ == "WP_Scripts"):
+    
+    global wp_scripts_
+    php_check_if_defined("wp_scripts_")
+    if (not type(wp_scripts_).__name__ == "WP_Scripts"):
         _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
         return False
     # end if
-    return wp_scripts.localize(handle, object_name, l10n)
+    return wp_scripts_.localize(handle_, object_name_, l10n_)
 # end def wp_localize_script
 #// 
 #// Sets translated strings for a script.
@@ -205,15 +216,16 @@ def wp_localize_script(handle=None, object_name=None, l10n=None, *args_):
 #// @param string $path   Optional. The full file path to the directory containing translation files.
 #// @return bool True if the text domain was successfully localized, false otherwise.
 #//
-def wp_set_script_translations(handle=None, domain="default", path=None, *args_):
+def wp_set_script_translations(handle_=None, domain_="default", path_=None, *_args_):
     
-    global wp_scripts
-    php_check_if_defined("wp_scripts")
-    if (not type(wp_scripts).__name__ == "WP_Scripts"):
+    
+    global wp_scripts_
+    php_check_if_defined("wp_scripts_")
+    if (not type(wp_scripts_).__name__ == "WP_Scripts"):
         _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
         return False
     # end if
-    return wp_scripts.set_translations(handle, domain, path)
+    return wp_scripts_.set_translations(handle_, domain_, path_)
 # end def wp_set_script_translations
 #// 
 #// Remove a registered script.
@@ -227,23 +239,24 @@ def wp_set_script_translations(handle=None, domain="default", path=None, *args_)
 #// 
 #// @param string $handle Name of the script to be removed.
 #//
-def wp_deregister_script(handle=None, *args_):
+def wp_deregister_script(handle_=None, *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
     #// 
     #// Do not allow accidental or negligent de-registering of critical scripts in the admin.
     #// Show minimal remorse if the correct hook is used.
     #//
-    current_filter = current_filter()
-    if is_admin() and "admin_enqueue_scripts" != current_filter or "wp-login.php" == PHP_GLOBALS["pagenow"] and "login_enqueue_scripts" != current_filter:
-        no = Array("jquery", "jquery-core", "jquery-migrate", "jquery-ui-core", "jquery-ui-accordion", "jquery-ui-autocomplete", "jquery-ui-button", "jquery-ui-datepicker", "jquery-ui-dialog", "jquery-ui-draggable", "jquery-ui-droppable", "jquery-ui-menu", "jquery-ui-mouse", "jquery-ui-position", "jquery-ui-progressbar", "jquery-ui-resizable", "jquery-ui-selectable", "jquery-ui-slider", "jquery-ui-sortable", "jquery-ui-spinner", "jquery-ui-tabs", "jquery-ui-tooltip", "jquery-ui-widget", "underscore", "backbone")
-        if php_in_array(handle, no):
-            message = php_sprintf(__("Do not deregister the %1$s script in the administration area. To target the front-end theme, use the %2$s hook."), str("<code>") + str(handle) + str("</code>"), "<code>wp_enqueue_scripts</code>")
-            _doing_it_wrong(__FUNCTION__, message, "3.6.0")
+    current_filter_ = current_filter()
+    if is_admin() and "admin_enqueue_scripts" != current_filter_ or "wp-login.php" == PHP_GLOBALS["pagenow"] and "login_enqueue_scripts" != current_filter_:
+        no_ = Array("jquery", "jquery-core", "jquery-migrate", "jquery-ui-core", "jquery-ui-accordion", "jquery-ui-autocomplete", "jquery-ui-button", "jquery-ui-datepicker", "jquery-ui-dialog", "jquery-ui-draggable", "jquery-ui-droppable", "jquery-ui-menu", "jquery-ui-mouse", "jquery-ui-position", "jquery-ui-progressbar", "jquery-ui-resizable", "jquery-ui-selectable", "jquery-ui-slider", "jquery-ui-sortable", "jquery-ui-spinner", "jquery-ui-tabs", "jquery-ui-tooltip", "jquery-ui-widget", "underscore", "backbone")
+        if php_in_array(handle_, no_):
+            message_ = php_sprintf(__("Do not deregister the %1$s script in the administration area. To target the front-end theme, use the %2$s hook."), str("<code>") + str(handle_) + str("</code>"), "<code>wp_enqueue_scripts</code>")
+            _doing_it_wrong(__FUNCTION__, message_, "3.6.0")
             return
         # end if
     # end if
-    wp_scripts().remove(handle)
+    wp_scripts().remove(handle_)
 # end def wp_deregister_script
 #// 
 #// Enqueue a script.
@@ -267,20 +280,29 @@ def wp_deregister_script(handle=None, *args_):
 #// @param bool             $in_footer Optional. Whether to enqueue the script before </body> instead of in the <head>.
 #// Default 'false'.
 #//
-def wp_enqueue_script(handle=None, src="", deps=Array(), ver=False, in_footer=False, *args_):
+def wp_enqueue_script(handle_=None, src_="", deps_=None, ver_=None, in_footer_=None, *_args_):
+    if deps_ is None:
+        deps_ = Array()
+    # end if
+    if ver_ is None:
+        ver_ = False
+    # end if
+    if in_footer_ is None:
+        in_footer_ = False
+    # end if
     
-    wp_scripts = wp_scripts()
+    wp_scripts_ = wp_scripts()
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    if src or in_footer:
-        _handle = php_explode("?", handle)
-        if src:
-            wp_scripts.add(_handle[0], src, deps, ver)
+    if src_ or in_footer_:
+        _handle_ = php_explode("?", handle_)
+        if src_:
+            wp_scripts_.add(_handle_[0], src_, deps_, ver_)
         # end if
-        if in_footer:
-            wp_scripts.add_data(_handle[0], "group", 1)
+        if in_footer_:
+            wp_scripts_.add_data(_handle_[0], "group", 1)
         # end if
     # end if
-    wp_scripts.enqueue(handle)
+    wp_scripts_.enqueue(handle_)
 # end def wp_enqueue_script
 #// 
 #// Remove a previously enqueued script.
@@ -291,10 +313,11 @@ def wp_enqueue_script(handle=None, src="", deps=Array(), ver=False, in_footer=Fa
 #// 
 #// @param string $handle Name of the script to be removed.
 #//
-def wp_dequeue_script(handle=None, *args_):
+def wp_dequeue_script(handle_=None, *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    wp_scripts().dequeue(handle)
+    wp_scripts().dequeue(handle_)
 # end def wp_dequeue_script
 #// 
 #// Determines whether a script has been added to the queue.
@@ -311,10 +334,11 @@ def wp_dequeue_script(handle=None, *args_):
 #// Accepts 'enqueued', 'registered', 'queue', 'to_do', and 'done'.
 #// @return bool Whether the script is queued.
 #//
-def wp_script_is(handle=None, list="enqueued", *args_):
+def wp_script_is(handle_=None, list_="enqueued", *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    return php_bool(wp_scripts().query(handle, list))
+    return php_bool(wp_scripts().query(handle_, list_))
 # end def wp_script_is
 #// 
 #// Add metadata to a script.
@@ -333,7 +357,8 @@ def wp_script_is(handle=None, list="enqueued", *args_):
 #// @param mixed  $value  String containing the data to be added.
 #// @return bool True on success, false on failure.
 #//
-def wp_script_add_data(handle=None, key=None, value=None, *args_):
+def wp_script_add_data(handle_=None, key_=None, value_=None, *_args_):
     
-    return wp_scripts().add_data(handle, key, value)
+    
+    return wp_scripts().add_data(handle_, key_, value_)
 # end def wp_script_add_data

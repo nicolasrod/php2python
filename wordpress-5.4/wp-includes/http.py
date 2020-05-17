@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -31,13 +26,14 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return WP_Http HTTP Transport object.
 #//
-def _wp_http_get_object(*args_):
+def _wp_http_get_object(*_args_):
     
-    _wp_http_get_object.http = None
-    if is_null(_wp_http_get_object.http):
-        _wp_http_get_object.http = php_new_class("WP_Http", lambda : WP_Http())
+    
+    http_ = None
+    if is_null(http_):
+        http_ = php_new_class("WP_Http", lambda : WP_Http())
     # end if
-    return _wp_http_get_object.http
+    return http_
 # end def _wp_http_get_object
 #// 
 #// Retrieve the raw response from a safe HTTP request.
@@ -54,11 +50,14 @@ def _wp_http_get_object(*args_):
 #// @param array  $args Optional. Request arguments. Default empty array.
 #// @return array|WP_Error The response or WP_Error on failure.
 #//
-def wp_safe_remote_request(url=None, args=Array(), *args_):
+def wp_safe_remote_request(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    args["reject_unsafe_urls"] = True
-    wp_safe_remote_request.http = _wp_http_get_object()
-    return wp_safe_remote_request.http.request(url, args)
+    args_["reject_unsafe_urls"] = True
+    http_ = _wp_http_get_object()
+    return http_.request(url_, args_)
 # end def wp_safe_remote_request
 #// 
 #// Retrieve the raw response from a safe HTTP request using the GET method.
@@ -75,11 +74,14 @@ def wp_safe_remote_request(url=None, args=Array(), *args_):
 #// @param array  $args Optional. Request arguments. Default empty array.
 #// @return array|WP_Error The response or WP_Error on failure.
 #//
-def wp_safe_remote_get(url=None, args=Array(), *args_):
+def wp_safe_remote_get(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    args["reject_unsafe_urls"] = True
-    wp_safe_remote_get.http = _wp_http_get_object()
-    return wp_safe_remote_get.http.get(url, args)
+    args_["reject_unsafe_urls"] = True
+    http_ = _wp_http_get_object()
+    return http_.get(url_, args_)
 # end def wp_safe_remote_get
 #// 
 #// Retrieve the raw response from a safe HTTP request using the POST method.
@@ -96,11 +98,14 @@ def wp_safe_remote_get(url=None, args=Array(), *args_):
 #// @param array  $args Optional. Request arguments. Default empty array.
 #// @return array|WP_Error The response or WP_Error on failure.
 #//
-def wp_safe_remote_post(url=None, args=Array(), *args_):
+def wp_safe_remote_post(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    args["reject_unsafe_urls"] = True
-    wp_safe_remote_post.http = _wp_http_get_object()
-    return wp_safe_remote_post.http.post(url, args)
+    args_["reject_unsafe_urls"] = True
+    http_ = _wp_http_get_object()
+    return http_.post(url_, args_)
 # end def wp_safe_remote_post
 #// 
 #// Retrieve the raw response from a safe HTTP request using the HEAD method.
@@ -117,11 +122,14 @@ def wp_safe_remote_post(url=None, args=Array(), *args_):
 #// @param array  $args Optional. Request arguments. Default empty array.
 #// @return array|WP_Error The response or WP_Error on failure.
 #//
-def wp_safe_remote_head(url=None, args=Array(), *args_):
+def wp_safe_remote_head(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    args["reject_unsafe_urls"] = True
-    wp_safe_remote_head.http = _wp_http_get_object()
-    return wp_safe_remote_head.http.head(url, args)
+    args_["reject_unsafe_urls"] = True
+    http_ = _wp_http_get_object()
+    return http_.head(url_, args_)
 # end def wp_safe_remote_head
 #// 
 #// Performs an HTTP request and returns its response.
@@ -153,10 +161,13 @@ def wp_safe_remote_head(url=None, args=Array(), *args_):
 #// @type WP_HTTP_Requests_Response|null $http_response Raw HTTP response object.
 #// }
 #//
-def wp_remote_request(url=None, args=Array(), *args_):
+def wp_remote_request(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    wp_remote_request.http = _wp_http_get_object()
-    return wp_remote_request.http.request(url, args)
+    http_ = _wp_http_get_object()
+    return http_.request(url_, args_)
 # end def wp_remote_request
 #// 
 #// Performs an HTTP request using the GET method and returns its response.
@@ -170,10 +181,13 @@ def wp_remote_request(url=None, args=Array(), *args_):
 #// @param array  $args Optional. Request arguments. Default empty array.
 #// @return array|WP_Error The response or WP_Error on failure.
 #//
-def wp_remote_get(url=None, args=Array(), *args_):
+def wp_remote_get(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    wp_remote_get.http = _wp_http_get_object()
-    return wp_remote_get.http.get(url, args)
+    http_ = _wp_http_get_object()
+    return http_.get(url_, args_)
 # end def wp_remote_get
 #// 
 #// Performs an HTTP request using the POST method and returns its response.
@@ -187,10 +201,13 @@ def wp_remote_get(url=None, args=Array(), *args_):
 #// @param array  $args Optional. Request arguments. Default empty array.
 #// @return array|WP_Error The response or WP_Error on failure.
 #//
-def wp_remote_post(url=None, args=Array(), *args_):
+def wp_remote_post(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    wp_remote_post.http = _wp_http_get_object()
-    return wp_remote_post.http.post(url, args)
+    http_ = _wp_http_get_object()
+    return http_.post(url_, args_)
 # end def wp_remote_post
 #// 
 #// Performs an HTTP request using the HEAD method and returns its response.
@@ -204,10 +221,13 @@ def wp_remote_post(url=None, args=Array(), *args_):
 #// @param array  $args Optional. Request arguments. Default empty array.
 #// @return array|WP_Error The response or WP_Error on failure.
 #//
-def wp_remote_head(url=None, args=Array(), *args_):
+def wp_remote_head(url_=None, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    wp_remote_head.http = _wp_http_get_object()
-    return wp_remote_head.http.head(url, args)
+    http_ = _wp_http_get_object()
+    return http_.head(url_, args_)
 # end def wp_remote_head
 #// 
 #// Retrieve only the headers from the raw response.
@@ -220,12 +240,13 @@ def wp_remote_head(url=None, args=Array(), *args_):
 #// @param array|WP_Error $response HTTP response.
 #// @return array|\Requests_Utility_CaseInsensitiveDictionary The headers of the response. Empty array if incorrect parameter given.
 #//
-def wp_remote_retrieve_headers(response=None, *args_):
+def wp_remote_retrieve_headers(response_=None, *_args_):
     
-    if is_wp_error(response) or (not (php_isset(lambda : response["headers"]))):
+    
+    if is_wp_error(response_) or (not (php_isset(lambda : response_["headers"]))):
         return Array()
     # end if
-    return response["headers"]
+    return response_["headers"]
 # end def wp_remote_retrieve_headers
 #// 
 #// Retrieve a single header by name from the raw response.
@@ -236,13 +257,14 @@ def wp_remote_retrieve_headers(response=None, *args_):
 #// @param string         $header   Header name to retrieve value from.
 #// @return string The header value. Empty string on if incorrect parameter given, or if the header doesn't exist.
 #//
-def wp_remote_retrieve_header(response=None, header=None, *args_):
+def wp_remote_retrieve_header(response_=None, header_=None, *_args_):
     
-    if is_wp_error(response) or (not (php_isset(lambda : response["headers"]))):
+    
+    if is_wp_error(response_) or (not (php_isset(lambda : response_["headers"]))):
         return ""
     # end if
-    if (php_isset(lambda : response["headers"][header])):
-        return response["headers"][header]
+    if (php_isset(lambda : response_["headers"][header_])):
+        return response_["headers"][header_]
     # end if
     return ""
 # end def wp_remote_retrieve_header
@@ -256,12 +278,13 @@ def wp_remote_retrieve_header(response=None, header=None, *args_):
 #// @param array|WP_Error $response HTTP response.
 #// @return int|string The response code as an integer. Empty string on incorrect parameter given.
 #//
-def wp_remote_retrieve_response_code(response=None, *args_):
+def wp_remote_retrieve_response_code(response_=None, *_args_):
     
-    if is_wp_error(response) or (not (php_isset(lambda : response["response"]))) or (not php_is_array(response["response"])):
+    
+    if is_wp_error(response_) or (not (php_isset(lambda : response_["response"]))) or (not php_is_array(response_["response"])):
         return ""
     # end if
-    return response["response"]["code"]
+    return response_["response"]["code"]
 # end def wp_remote_retrieve_response_code
 #// 
 #// Retrieve only the response message from the raw response.
@@ -273,12 +296,13 @@ def wp_remote_retrieve_response_code(response=None, *args_):
 #// @param array|WP_Error $response HTTP response.
 #// @return string The response message. Empty string on incorrect parameter given.
 #//
-def wp_remote_retrieve_response_message(response=None, *args_):
+def wp_remote_retrieve_response_message(response_=None, *_args_):
     
-    if is_wp_error(response) or (not (php_isset(lambda : response["response"]))) or (not php_is_array(response["response"])):
+    
+    if is_wp_error(response_) or (not (php_isset(lambda : response_["response"]))) or (not php_is_array(response_["response"])):
         return ""
     # end if
-    return response["response"]["message"]
+    return response_["response"]["message"]
 # end def wp_remote_retrieve_response_message
 #// 
 #// Retrieve only the body from the raw response.
@@ -288,12 +312,13 @@ def wp_remote_retrieve_response_message(response=None, *args_):
 #// @param array|WP_Error $response HTTP response.
 #// @return string The body of the response. Empty string if no body or incorrect parameter given.
 #//
-def wp_remote_retrieve_body(response=None, *args_):
+def wp_remote_retrieve_body(response_=None, *_args_):
     
-    if is_wp_error(response) or (not (php_isset(lambda : response["body"]))):
+    
+    if is_wp_error(response_) or (not (php_isset(lambda : response_["body"]))):
         return ""
     # end if
-    return response["body"]
+    return response_["body"]
 # end def wp_remote_retrieve_body
 #// 
 #// Retrieve only the cookies from the raw response.
@@ -303,12 +328,13 @@ def wp_remote_retrieve_body(response=None, *args_):
 #// @param array|WP_Error $response HTTP response.
 #// @return WP_Http_Cookie[] An array of `WP_Http_Cookie` objects from the response. Empty array if there are none, or the response is a WP_Error.
 #//
-def wp_remote_retrieve_cookies(response=None, *args_):
+def wp_remote_retrieve_cookies(response_=None, *_args_):
     
-    if is_wp_error(response) or php_empty(lambda : response["cookies"]):
+    
+    if is_wp_error(response_) or php_empty(lambda : response_["cookies"]):
         return Array()
     # end if
-    return response["cookies"]
+    return response_["cookies"]
 # end def wp_remote_retrieve_cookies
 #// 
 #// Retrieve a single cookie by name from the raw response.
@@ -319,15 +345,16 @@ def wp_remote_retrieve_cookies(response=None, *args_):
 #// @param string         $name     The name of the cookie to retrieve.
 #// @return WP_Http_Cookie|string The `WP_Http_Cookie` object. Empty string if the cookie isn't present in the response.
 #//
-def wp_remote_retrieve_cookie(response=None, name=None, *args_):
+def wp_remote_retrieve_cookie(response_=None, name_=None, *_args_):
     
-    cookies = wp_remote_retrieve_cookies(response)
-    if php_empty(lambda : cookies):
+    
+    cookies_ = wp_remote_retrieve_cookies(response_)
+    if php_empty(lambda : cookies_):
         return ""
     # end if
-    for cookie in cookies:
-        if cookie.name == name:
-            return cookie
+    for cookie_ in cookies_:
+        if cookie_.name == name_:
+            return cookie_
         # end if
     # end for
     return ""
@@ -341,13 +368,14 @@ def wp_remote_retrieve_cookie(response=None, name=None, *args_):
 #// @param string         $name     The name of the cookie to retrieve.
 #// @return string The value of the cookie. Empty string if the cookie isn't present in the response.
 #//
-def wp_remote_retrieve_cookie_value(response=None, name=None, *args_):
+def wp_remote_retrieve_cookie_value(response_=None, name_=None, *_args_):
     
-    cookie = wp_remote_retrieve_cookie(response, name)
-    if (not php_is_a(cookie, "WP_Http_Cookie")):
+    
+    cookie_ = wp_remote_retrieve_cookie(response_, name_)
+    if (not php_is_a(cookie_, "WP_Http_Cookie")):
         return ""
     # end if
-    return cookie.value
+    return cookie_.value
 # end def wp_remote_retrieve_cookie_value
 #// 
 #// Determines if there is an HTTP Transport that can process this request.
@@ -360,22 +388,25 @@ def wp_remote_retrieve_cookie_value(response=None, name=None, *args_):
 #// 
 #// @return bool
 #//
-def wp_http_supports(capabilities=Array(), url=None, *args_):
-    
-    wp_http_supports.http = _wp_http_get_object()
-    capabilities = wp_parse_args(capabilities)
-    count = php_count(capabilities)
-    #// If we have a numeric $capabilities array, spoof a wp_remote_request() associative $args array.
-    if count and php_count(php_array_filter(php_array_keys(capabilities), "is_numeric")) == count:
-        capabilities = php_array_combine(php_array_values(capabilities), array_fill(0, count, True))
+def wp_http_supports(capabilities_=None, url_=None, *_args_):
+    if capabilities_ is None:
+        capabilities_ = Array()
     # end if
-    if url and (not (php_isset(lambda : capabilities["ssl"]))):
-        scheme = php_parse_url(url, PHP_URL_SCHEME)
-        if "https" == scheme or "ssl" == scheme:
-            capabilities["ssl"] = True
+    
+    http_ = _wp_http_get_object()
+    capabilities_ = wp_parse_args(capabilities_)
+    count_ = php_count(capabilities_)
+    #// If we have a numeric $capabilities array, spoof a wp_remote_request() associative $args array.
+    if count_ and php_count(php_array_filter(php_array_keys(capabilities_), "is_numeric")) == count_:
+        capabilities_ = php_array_combine(php_array_values(capabilities_), array_fill(0, count_, True))
+    # end if
+    if url_ and (not (php_isset(lambda : capabilities_["ssl"]))):
+        scheme_ = php_parse_url(url_, PHP_URL_SCHEME)
+        if "https" == scheme_ or "ssl" == scheme_:
+            capabilities_["ssl"] = True
         # end if
     # end if
-    return php_bool(wp_http_supports.http._get_first_available_transport(capabilities))
+    return php_bool(http_._get_first_available_transport(capabilities_))
 # end def wp_http_supports
 #// 
 #// Get the HTTP Origin of the current request.
@@ -384,11 +415,12 @@ def wp_http_supports(capabilities=Array(), url=None, *args_):
 #// 
 #// @return string URL of the origin. Empty string if no origin.
 #//
-def get_http_origin(*args_):
+def get_http_origin(*_args_):
     
-    origin = ""
+    
+    origin_ = ""
     if (not php_empty(lambda : PHP_SERVER["HTTP_ORIGIN"])):
-        origin = PHP_SERVER["HTTP_ORIGIN"]
+        origin_ = PHP_SERVER["HTTP_ORIGIN"]
     # end if
     #// 
     #// Change the origin of an HTTP request.
@@ -397,7 +429,7 @@ def get_http_origin(*args_):
     #// 
     #// @param string $origin The original origin for the request.
     #//
-    return apply_filters("http_origin", origin)
+    return apply_filters("http_origin", origin_)
 # end def get_http_origin
 #// 
 #// Retrieve list of allowed HTTP origins.
@@ -406,12 +438,13 @@ def get_http_origin(*args_):
 #// 
 #// @return string[] Array of origin URLs.
 #//
-def get_allowed_http_origins(*args_):
+def get_allowed_http_origins(*_args_):
     
-    admin_origin = php_parse_url(admin_url())
-    home_origin = php_parse_url(home_url())
+    
+    admin_origin_ = php_parse_url(admin_url())
+    home_origin_ = php_parse_url(home_url())
     #// @todo Preserve port?
-    allowed_origins = array_unique(Array("http://" + admin_origin["host"], "https://" + admin_origin["host"], "http://" + home_origin["host"], "https://" + home_origin["host"]))
+    allowed_origins_ = array_unique(Array("http://" + admin_origin_["host"], "https://" + admin_origin_["host"], "http://" + home_origin_["host"], "https://" + home_origin_["host"]))
     #// 
     #// Change the origin types allowed for HTTP requests.
     #// 
@@ -426,7 +459,7 @@ def get_allowed_http_origins(*args_):
     #// @type string $3 Secure URL for home origin.
     #// }
     #//
-    return apply_filters("allowed_http_origins", allowed_origins)
+    return apply_filters("allowed_http_origins", allowed_origins_)
 # end def get_allowed_http_origins
 #// 
 #// Determines if the HTTP origin is an authorized one.
@@ -436,14 +469,15 @@ def get_allowed_http_origins(*args_):
 #// @param null|string $origin Origin URL. If not provided, the value of get_http_origin() is used.
 #// @return string Origin URL if allowed, empty string if not.
 #//
-def is_allowed_http_origin(origin=None, *args_):
+def is_allowed_http_origin(origin_=None, *_args_):
     
-    origin_arg = origin
-    if None == origin:
-        origin = get_http_origin()
+    
+    origin_arg_ = origin_
+    if None == origin_:
+        origin_ = get_http_origin()
     # end if
-    if origin and (not php_in_array(origin, get_allowed_http_origins())):
-        origin = ""
+    if origin_ and (not php_in_array(origin_, get_allowed_http_origins())):
+        origin_ = ""
     # end if
     #// 
     #// Change the allowed HTTP origin result.
@@ -453,7 +487,7 @@ def is_allowed_http_origin(origin=None, *args_):
     #// @param string $origin     Origin URL if allowed, empty string if not.
     #// @param string $origin_arg Original origin string passed into is_allowed_http_origin function.
     #//
-    return apply_filters("allowed_http_origin", origin, origin_arg)
+    return apply_filters("allowed_http_origin", origin_, origin_arg_)
 # end def is_allowed_http_origin
 #// 
 #// Send Access-Control-Allow-Origin and related headers if the current request
@@ -468,16 +502,17 @@ def is_allowed_http_origin(origin=None, *args_):
 #// @return string|false Returns the origin URL if headers are sent. Returns false
 #// if headers are not sent.
 #//
-def send_origin_headers(*args_):
+def send_origin_headers(*_args_):
     
-    origin = get_http_origin()
-    if is_allowed_http_origin(origin):
-        php_header("Access-Control-Allow-Origin: " + origin)
+    
+    origin_ = get_http_origin()
+    if is_allowed_http_origin(origin_):
+        php_header("Access-Control-Allow-Origin: " + origin_)
         php_header("Access-Control-Allow-Credentials: true")
         if "OPTIONS" == PHP_SERVER["REQUEST_METHOD"]:
             php_exit(0)
         # end if
-        return origin
+        return origin_
     # end if
     if "OPTIONS" == PHP_SERVER["REQUEST_METHOD"]:
         status_header(403)
@@ -493,43 +528,44 @@ def send_origin_headers(*args_):
 #// @param string $url Request URL.
 #// @return string|false URL or false on failure.
 #//
-def wp_http_validate_url(url=None, *args_):
+def wp_http_validate_url(url_=None, *_args_):
     
-    original_url = url
-    url = wp_kses_bad_protocol(url, Array("http", "https"))
-    if (not url) or php_strtolower(url) != php_strtolower(original_url):
+    
+    original_url_ = url_
+    url_ = wp_kses_bad_protocol(url_, Array("http", "https"))
+    if (not url_) or php_strtolower(url_) != php_strtolower(original_url_):
         return False
     # end if
-    parsed_url = php_no_error(lambda: php_parse_url(url))
-    if (not parsed_url) or php_empty(lambda : parsed_url["host"]):
+    parsed_url_ = php_no_error(lambda: php_parse_url(url_))
+    if (not parsed_url_) or php_empty(lambda : parsed_url_["host"]):
         return False
     # end if
-    if (php_isset(lambda : parsed_url["user"])) or (php_isset(lambda : parsed_url["pass"])):
+    if (php_isset(lambda : parsed_url_["user"])) or (php_isset(lambda : parsed_url_["pass"])):
         return False
     # end if
-    if False != strpbrk(parsed_url["host"], ":#?[]"):
+    if False != strpbrk(parsed_url_["host"], ":#?[]"):
         return False
     # end if
-    parsed_home = php_no_error(lambda: php_parse_url(get_option("home")))
-    if (php_isset(lambda : parsed_home["host"])):
-        same_host = php_strtolower(parsed_home["host"]) == php_strtolower(parsed_url["host"])
+    parsed_home_ = php_no_error(lambda: php_parse_url(get_option("home")))
+    if (php_isset(lambda : parsed_home_["host"])):
+        same_host_ = php_strtolower(parsed_home_["host"]) == php_strtolower(parsed_url_["host"])
     else:
-        same_host = False
+        same_host_ = False
     # end if
-    if (not same_host):
-        host = php_trim(parsed_url["host"], ".")
-        if php_preg_match("#^(([1-9]?\\d|1\\d\\d|25[0-5]|2[0-4]\\d)\\.){3}([1-9]?\\d|1\\d\\d|25[0-5]|2[0-4]\\d)$#", host):
-            ip = host
+    if (not same_host_):
+        host_ = php_trim(parsed_url_["host"], ".")
+        if php_preg_match("#^(([1-9]?\\d|1\\d\\d|25[0-5]|2[0-4]\\d)\\.){3}([1-9]?\\d|1\\d\\d|25[0-5]|2[0-4]\\d)$#", host_):
+            ip_ = host_
         else:
-            ip = gethostbyname(host)
-            if ip == host:
+            ip_ = gethostbyname(host_)
+            if ip_ == host_:
                 #// Error condition for gethostbyname().
                 return False
             # end if
         # end if
-        if ip:
-            parts = php_array_map("intval", php_explode(".", ip))
-            if 127 == parts[0] or 10 == parts[0] or 0 == parts[0] or 172 == parts[0] and 16 <= parts[1] and 31 >= parts[1] or 192 == parts[0] and 168 == parts[1]:
+        if ip_:
+            parts_ = php_array_map("intval", php_explode(".", ip_))
+            if 127 == parts_[0] or 10 == parts_[0] or 0 == parts_[0] or 172 == parts_[0] and 16 <= parts_[1] and 31 >= parts_[1] or 192 == parts_[0] and 168 == parts_[1]:
                 #// If host appears local, reject unless specifically allowed.
                 #// 
                 #// Check if HTTP request is external or not.
@@ -542,21 +578,21 @@ def wp_http_validate_url(url=None, *args_):
                 #// @param string $host     Host name of the requested URL.
                 #// @param string $url      Requested URL.
                 #//
-                if (not apply_filters("http_request_host_is_external", False, host, url)):
+                if (not apply_filters("http_request_host_is_external", False, host_, url_)):
                     return False
                 # end if
             # end if
         # end if
     # end if
-    if php_empty(lambda : parsed_url["port"]):
-        return url
+    if php_empty(lambda : parsed_url_["port"]):
+        return url_
     # end if
-    port = parsed_url["port"]
-    if 80 == port or 443 == port or 8080 == port:
-        return url
+    port_ = parsed_url_["port"]
+    if 80 == port_ or 443 == port_ or 8080 == port_:
+        return url_
     # end if
-    if parsed_home and same_host and (php_isset(lambda : parsed_home["port"])) and parsed_home["port"] == port:
-        return url
+    if parsed_home_ and same_host_ and (php_isset(lambda : parsed_home_["port"])) and parsed_home_["port"] == port_:
+        return url_
     # end if
     return False
 # end def wp_http_validate_url
@@ -571,12 +607,13 @@ def wp_http_validate_url(url=None, *args_):
 #// @param string $host
 #// @return bool
 #//
-def allowed_http_request_hosts(is_external=None, host=None, *args_):
+def allowed_http_request_hosts(is_external_=None, host_=None, *_args_):
     
-    if (not is_external) and wp_validate_redirect("http://" + host):
-        is_external = True
+    
+    if (not is_external_) and wp_validate_redirect("http://" + host_):
+        is_external_ = True
     # end if
-    return is_external
+    return is_external_
 # end def allowed_http_request_hosts
 #// 
 #// Whitelists any domain in a multisite installation for safe HTTP requests.
@@ -592,22 +629,23 @@ def allowed_http_request_hosts(is_external=None, host=None, *args_):
 #// @param string $host
 #// @return bool
 #//
-def ms_allowed_http_request_hosts(is_external=None, host=None, *args_):
+def ms_allowed_http_request_hosts(is_external_=None, host_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    ms_allowed_http_request_hosts.queried = Array()
-    if is_external:
-        return is_external
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    queried_ = Array()
+    if is_external_:
+        return is_external_
     # end if
-    if get_network().domain == host:
+    if get_network().domain == host_:
         return True
     # end if
-    if (php_isset(lambda : ms_allowed_http_request_hosts.queried[host])):
-        return ms_allowed_http_request_hosts.queried[host]
+    if (php_isset(lambda : queried_[host_])):
+        return queried_[host_]
     # end if
-    ms_allowed_http_request_hosts.queried[host] = php_bool(wpdb.get_var(wpdb.prepare(str("SELECT domain FROM ") + str(wpdb.blogs) + str(" WHERE domain = %s LIMIT 1"), host)))
-    return ms_allowed_http_request_hosts.queried[host]
+    queried_[host_] = php_bool(wpdb_.get_var(wpdb_.prepare(str("SELECT domain FROM ") + str(wpdb_.blogs) + str(" WHERE domain = %s LIMIT 1"), host_)))
+    return queried_[host_]
 # end def ms_allowed_http_request_hosts
 #// 
 #// A wrapper for PHP's parse_url() function that handles consistency in the return
@@ -638,28 +676,31 @@ def ms_allowed_http_request_hosts(is_external=None, host=None, *args_):
 #// doesn't exist in the given URL; a string or - in the case of
 #// PHP_URL_PORT - integer when it does. See parse_url()'s return values.
 #//
-def wp_parse_url(url=None, component=-1, *args_):
-    
-    to_unset = Array()
-    url = php_strval(url)
-    if "//" == php_substr(url, 0, 2):
-        to_unset[-1] = "scheme"
-        url = "placeholder:" + url
-    elif "/" == php_substr(url, 0, 1):
-        to_unset[-1] = "scheme"
-        to_unset[-1] = "host"
-        url = "placeholder://placeholder" + url
+def wp_parse_url(url_=None, component_=None, *_args_):
+    if component_ is None:
+        component_ = -1
     # end if
-    parts = php_no_error(lambda: php_parse_url(url))
-    if False == parts:
+    
+    to_unset_ = Array()
+    url_ = php_strval(url_)
+    if "//" == php_substr(url_, 0, 2):
+        to_unset_[-1] = "scheme"
+        url_ = "placeholder:" + url_
+    elif "/" == php_substr(url_, 0, 1):
+        to_unset_[-1] = "scheme"
+        to_unset_[-1] = "host"
+        url_ = "placeholder://placeholder" + url_
+    # end if
+    parts_ = php_no_error(lambda: php_parse_url(url_))
+    if False == parts_:
         #// Parsing failure.
-        return parts
+        return parts_
     # end if
     #// Remove the placeholder values.
-    for key in to_unset:
-        parts[key] = None
+    for key_ in to_unset_:
+        parts_[key_] = None
     # end for
-    return _get_component_from_parsed_url_array(parts, component)
+    return _get_component_from_parsed_url_array(parts_, component_)
 # end def wp_parse_url
 #// 
 #// Retrieve a specific component from a parsed URL array.
@@ -680,14 +721,17 @@ def wp_parse_url(url=None, component=-1, *args_):
 #// doesn't exist in the given URL; a string or - in the case of
 #// PHP_URL_PORT - integer when it does. See parse_url()'s return values.
 #//
-def _get_component_from_parsed_url_array(url_parts=None, component=-1, *args_):
-    
-    if -1 == component:
-        return url_parts
+def _get_component_from_parsed_url_array(url_parts_=None, component_=None, *_args_):
+    if component_ is None:
+        component_ = -1
     # end if
-    key = _wp_translate_php_url_constant_to_key(component)
-    if False != key and php_is_array(url_parts) and (php_isset(lambda : url_parts[key])):
-        return url_parts[key]
+    
+    if -1 == component_:
+        return url_parts_
+    # end if
+    key_ = _wp_translate_php_url_constant_to_key(component_)
+    if False != key_ and php_is_array(url_parts_) and (php_isset(lambda : url_parts_[key_])):
+        return url_parts_[key_]
     else:
         return None
     # end if
@@ -705,11 +749,12 @@ def _get_component_from_parsed_url_array(url_parts=None, component=-1, *args_):
 #// @param int $constant PHP_URL_* constant.
 #// @return string|false The named key or false.
 #//
-def _wp_translate_php_url_constant_to_key(constant=None, *args_):
+def _wp_translate_php_url_constant_to_key(constant_=None, *_args_):
     
-    translation = Array({PHP_URL_SCHEME: "scheme", PHP_URL_HOST: "host", PHP_URL_PORT: "port", PHP_URL_USER: "user", PHP_URL_PASS: "pass", PHP_URL_PATH: "path", PHP_URL_QUERY: "query", PHP_URL_FRAGMENT: "fragment"})
-    if (php_isset(lambda : translation[constant])):
-        return translation[constant]
+    
+    translation_ = Array({PHP_URL_SCHEME: "scheme", PHP_URL_HOST: "host", PHP_URL_PORT: "port", PHP_URL_USER: "user", PHP_URL_PASS: "pass", PHP_URL_PATH: "path", PHP_URL_QUERY: "query", PHP_URL_FRAGMENT: "fragment"})
+    if (php_isset(lambda : translation_[constant_])):
+        return translation_[constant_]
     else:
         return False
     # end if

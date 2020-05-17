@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,24 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see Walker
 #//
 class Walker_Category(Walker):
+    #// 
+    #// What the class handles.
+    #// 
+    #// @since 2.1.0
+    #// @var string
+    #// 
+    #// @see Walker::$tree_type
+    #//
     tree_type = "category"
+    #// 
+    #// Database fields to use.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #// 
+    #// @see Walker::$db_fields
+    #// @todo Decouple this
+    #//
     db_fields = Array({"parent": "parent", "id": "term_id"})
     #// 
     #// Starts the list before the elements are added.
@@ -41,13 +53,16 @@ class Walker_Category(Walker):
     #// @param array  $args   Optional. An array of arguments. Will only append content if style argument
     #// value is 'list'. See wp_list_categories(). Default empty array.
     #//
-    def start_lvl(self, output=None, depth=0, args=Array()):
+    def start_lvl(self, output_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if "list" != args["style"]:
+        if "list" != args_["style"]:
             return
         # end if
-        indent = php_str_repeat("   ", depth)
-        output += str(indent) + str("<ul class='children'>\n")
+        indent_ = php_str_repeat("  ", depth_)
+        output_ += str(indent_) + str("<ul class='children'>\n")
     # end def start_lvl
     #// 
     #// Ends the list of after the elements are added.
@@ -61,13 +76,16 @@ class Walker_Category(Walker):
     #// @param array  $args   Optional. An array of arguments. Will only append content if style argument
     #// value is 'list'. See wp_list_categories(). Default empty array.
     #//
-    def end_lvl(self, output=None, depth=0, args=Array()):
+    def end_lvl(self, output_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if "list" != args["style"]:
+        if "list" != args_["style"]:
             return
         # end if
-        indent = php_str_repeat("   ", depth)
-        output += str(indent) + str("</ul>\n")
+        indent_ = php_str_repeat("  ", depth_)
+        output_ += str(indent_) + str("</ul>\n")
     # end def end_lvl
     #// 
     #// Starts the element output.
@@ -82,17 +100,20 @@ class Walker_Category(Walker):
     #// @param array  $args     Optional. An array of arguments. See wp_list_categories(). Default empty array.
     #// @param int    $id       Optional. ID of the current category. Default 0.
     #//
-    def start_el(self, output=None, category=None, depth=0, args=Array(), id=0):
+    def start_el(self, output_=None, category_=None, depth_=0, args_=None, id_=0):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
         #// This filter is documented in wp-includes/category-template.php
-        cat_name = apply_filters("list_cats", esc_attr(category.name), category)
+        cat_name_ = apply_filters("list_cats", esc_attr(category_.name), category_)
         #// Don't generate an element if the category name is empty.
-        if "" == cat_name:
+        if "" == cat_name_:
             return
         # end if
-        atts = Array()
-        atts["href"] = get_term_link(category)
-        if args["use_desc_for_title"] and (not php_empty(lambda : category.description)):
+        atts_ = Array()
+        atts_["href"] = get_term_link(category_)
+        if args_["use_desc_for_title"] and (not php_empty(lambda : category_.description)):
             #// 
             #// Filters the category description for display.
             #// 
@@ -101,7 +122,7 @@ class Walker_Category(Walker):
             #// @param string $description Category description.
             #// @param object $category    Category object.
             #//
-            atts["title"] = strip_tags(apply_filters("category_description", category.description, category))
+            atts_["title"] = strip_tags(apply_filters("category_description", category_.description, category_))
         # end if
         #// 
         #// Filters the HTML attributes applied to a category list item's anchor element.
@@ -119,66 +140,66 @@ class Walker_Category(Walker):
         #// @param array   $args     An array of arguments.
         #// @param int     $id       ID of the current category.
         #//
-        atts = apply_filters("category_list_link_attributes", atts, category, depth, args, id)
-        attributes = ""
-        for attr,value in atts:
-            if is_scalar(value) and "" != value and False != value:
-                value = esc_url(value) if "href" == attr else esc_attr(value)
-                attributes += " " + attr + "=\"" + value + "\""
+        atts_ = apply_filters("category_list_link_attributes", atts_, category_, depth_, args_, id_)
+        attributes_ = ""
+        for attr_,value_ in atts_:
+            if is_scalar(value_) and "" != value_ and False != value_:
+                value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
+                attributes_ += " " + attr_ + "=\"" + value_ + "\""
             # end if
         # end for
-        link = php_sprintf("<a%s>%s</a>", attributes, cat_name)
-        if (not php_empty(lambda : args["feed_image"])) or (not php_empty(lambda : args["feed"])):
-            link += " "
-            if php_empty(lambda : args["feed_image"]):
-                link += "("
+        link_ = php_sprintf("<a%s>%s</a>", attributes_, cat_name_)
+        if (not php_empty(lambda : args_["feed_image"])) or (not php_empty(lambda : args_["feed"])):
+            link_ += " "
+            if php_empty(lambda : args_["feed_image"]):
+                link_ += "("
             # end if
-            link += "<a href=\"" + esc_url(get_term_feed_link(category.term_id, category.taxonomy, args["feed_type"])) + "\""
-            if php_empty(lambda : args["feed"]):
+            link_ += "<a href=\"" + esc_url(get_term_feed_link(category_.term_id, category_.taxonomy, args_["feed_type"])) + "\""
+            if php_empty(lambda : args_["feed"]):
                 #// translators: %s: Category name.
-                alt = " alt=\"" + php_sprintf(__("Feed for all posts filed under %s"), cat_name) + "\""
+                alt_ = " alt=\"" + php_sprintf(__("Feed for all posts filed under %s"), cat_name_) + "\""
             else:
-                alt = " alt=\"" + args["feed"] + "\""
-                name = args["feed"]
-                link += "" if php_empty(lambda : args["title"]) else args["title"]
+                alt_ = " alt=\"" + args_["feed"] + "\""
+                name_ = args_["feed"]
+                link_ += "" if php_empty(lambda : args_["title"]) else args_["title"]
             # end if
-            link += ">"
-            if php_empty(lambda : args["feed_image"]):
-                link += name
+            link_ += ">"
+            if php_empty(lambda : args_["feed_image"]):
+                link_ += name_
             else:
-                link += "<img src='" + esc_url(args["feed_image"]) + str("'") + str(alt) + " />"
+                link_ += "<img src='" + esc_url(args_["feed_image"]) + str("'") + str(alt_) + " />"
             # end if
-            link += "</a>"
-            if php_empty(lambda : args["feed_image"]):
-                link += ")"
+            link_ += "</a>"
+            if php_empty(lambda : args_["feed_image"]):
+                link_ += ")"
             # end if
         # end if
-        if (not php_empty(lambda : args["show_count"])):
-            link += " (" + number_format_i18n(category.count) + ")"
+        if (not php_empty(lambda : args_["show_count"])):
+            link_ += " (" + number_format_i18n(category_.count) + ")"
         # end if
-        if "list" == args["style"]:
-            output += " <li"
-            css_classes = Array("cat-item", "cat-item-" + category.term_id)
-            if (not php_empty(lambda : args["current_category"])):
+        if "list" == args_["style"]:
+            output_ += "    <li"
+            css_classes_ = Array("cat-item", "cat-item-" + category_.term_id)
+            if (not php_empty(lambda : args_["current_category"])):
                 #// 'current_category' can be an array, so we use `get_terms()`.
-                _current_terms = get_terms(Array({"taxonomy": category.taxonomy, "include": args["current_category"], "hide_empty": False}))
-                for _current_term in _current_terms:
-                    if category.term_id == _current_term.term_id:
-                        css_classes[-1] = "current-cat"
-                        link = php_str_replace("<a", "<a aria-current=\"page\"", link)
-                    elif category.term_id == _current_term.parent:
-                        css_classes[-1] = "current-cat-parent"
+                _current_terms_ = get_terms(Array({"taxonomy": category_.taxonomy, "include": args_["current_category"], "hide_empty": False}))
+                for _current_term_ in _current_terms_:
+                    if category_.term_id == _current_term_.term_id:
+                        css_classes_[-1] = "current-cat"
+                        link_ = php_str_replace("<a", "<a aria-current=\"page\"", link_)
+                    elif category_.term_id == _current_term_.parent:
+                        css_classes_[-1] = "current-cat-parent"
                     # end if
                     while True:
                         
-                        if not (_current_term.parent):
+                        if not (_current_term_.parent):
                             break
                         # end if
-                        if category.term_id == _current_term.parent:
-                            css_classes[-1] = "current-cat-ancestor"
+                        if category_.term_id == _current_term_.parent:
+                            css_classes_[-1] = "current-cat-ancestor"
                             break
                         # end if
-                        _current_term = get_term(_current_term.parent, category.taxonomy)
+                        _current_term_ = get_term(_current_term_.parent, category_.taxonomy)
                     # end while
                 # end for
             # end if
@@ -194,14 +215,14 @@ class Walker_Category(Walker):
             #// @param int    $depth       Depth of page, used for padding.
             #// @param array  $args        An array of wp_list_categories() arguments.
             #//
-            css_classes = php_implode(" ", apply_filters("category_css_class", css_classes, category, depth, args))
-            css_classes = " class=\"" + esc_attr(css_classes) + "\"" if css_classes else ""
-            output += css_classes
-            output += str(">") + str(link) + str("\n")
-        elif (php_isset(lambda : args["separator"])):
-            output += str(" ") + str(link) + args["separator"] + "\n"
+            css_classes_ = php_implode(" ", apply_filters("category_css_class", css_classes_, category_, depth_, args_))
+            css_classes_ = " class=\"" + esc_attr(css_classes_) + "\"" if css_classes_ else ""
+            output_ += css_classes_
+            output_ += str(">") + str(link_) + str("\n")
+        elif (php_isset(lambda : args_["separator"])):
+            output_ += str("    ") + str(link_) + args_["separator"] + "\n"
         else:
-            output += str(" ") + str(link) + str("<br />\n")
+            output_ += str("    ") + str(link_) + str("<br />\n")
         # end if
     # end def start_el
     #// 
@@ -217,11 +238,14 @@ class Walker_Category(Walker):
     #// @param array  $args   Optional. An array of arguments. Only uses 'list' for whether should append
     #// to output. See wp_list_categories(). Default empty array.
     #//
-    def end_el(self, output=None, page=None, depth=0, args=Array()):
+    def end_el(self, output_=None, page_=None, depth_=0, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if "list" != args["style"]:
+        if "list" != args_["style"]:
             return
         # end if
-        output += "</li>\n"
+        output_ += "</li>\n"
     # end def end_el
 # end class Walker_Category

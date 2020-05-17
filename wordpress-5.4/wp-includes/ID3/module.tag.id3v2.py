@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,7 +28,8 @@ class getid3_id3v2(getid3_handler):
     #//
     def analyze(self):
         
-        info = self.getid3.info
+        
+        info_ = self.getid3.info
         #// Overall tag structure:
         #// +-----------------------------+
         #// |      Header (10 bytes)      |
@@ -54,64 +50,64 @@ class getid3_id3v2(getid3_handler):
         #// ID3v2 flags                (%ab000000 in v2.2, %abc00000 in v2.3, %abcd0000 in v2.4.x)
         #// ID3v2 size             4 * %0xxxxxxx
         #// shortcuts
-        info["id3v2"]["header"] = True
-        thisfile_id3v2 = info["id3v2"]
-        thisfile_id3v2["flags"] = Array()
-        thisfile_id3v2_flags = thisfile_id3v2["flags"]
+        info_["id3v2"]["header"] = True
+        thisfile_id3v2_ = info_["id3v2"]
+        thisfile_id3v2_["flags"] = Array()
+        thisfile_id3v2_flags_ = thisfile_id3v2_["flags"]
         self.fseek(self.StartingOffset)
-        header = self.fread(10)
-        if php_substr(header, 0, 3) == "ID3" and php_strlen(header) == 10:
-            thisfile_id3v2["majorversion"] = php_ord(header[3])
-            thisfile_id3v2["minorversion"] = php_ord(header[4])
+        header_ = self.fread(10)
+        if php_substr(header_, 0, 3) == "ID3" and php_strlen(header_) == 10:
+            thisfile_id3v2_["majorversion"] = php_ord(header_[3])
+            thisfile_id3v2_["minorversion"] = php_ord(header_[4])
             #// shortcut
-            id3v2_majorversion = thisfile_id3v2["majorversion"]
+            id3v2_majorversion_ = thisfile_id3v2_["majorversion"]
         else:
-            info["id3v2"] = None
+            info_["id3v2"] = None
             return False
         # end if
-        if id3v2_majorversion > 4:
+        if id3v2_majorversion_ > 4:
             #// this script probably won't correctly parse ID3v2.5.x and above (if it ever exists)
-            self.error("this script only parses up to ID3v2.4.x - this tag is ID3v2." + id3v2_majorversion + "." + thisfile_id3v2["minorversion"])
+            self.error("this script only parses up to ID3v2.4.x - this tag is ID3v2." + id3v2_majorversion_ + "." + thisfile_id3v2_["minorversion"])
             return False
         # end if
-        id3_flags = php_ord(header[5])
-        for case in Switch(id3v2_majorversion):
+        id3_flags_ = php_ord(header_[5])
+        for case in Switch(id3v2_majorversion_):
             if case(2):
                 #// %ab000000 in v2.2
-                thisfile_id3v2_flags["unsynch"] = php_bool(id3_flags & 128)
+                thisfile_id3v2_flags_["unsynch"] = php_bool(id3_flags_ & 128)
                 #// a - Unsynchronisation
-                thisfile_id3v2_flags["compression"] = php_bool(id3_flags & 64)
+                thisfile_id3v2_flags_["compression"] = php_bool(id3_flags_ & 64)
                 break
             # end if
             if case(3):
                 #// %abc00000 in v2.3
-                thisfile_id3v2_flags["unsynch"] = php_bool(id3_flags & 128)
+                thisfile_id3v2_flags_["unsynch"] = php_bool(id3_flags_ & 128)
                 #// a - Unsynchronisation
-                thisfile_id3v2_flags["exthead"] = php_bool(id3_flags & 64)
+                thisfile_id3v2_flags_["exthead"] = php_bool(id3_flags_ & 64)
                 #// b - Extended header
-                thisfile_id3v2_flags["experim"] = php_bool(id3_flags & 32)
+                thisfile_id3v2_flags_["experim"] = php_bool(id3_flags_ & 32)
                 break
             # end if
             if case(4):
                 #// %abcd0000 in v2.4
-                thisfile_id3v2_flags["unsynch"] = php_bool(id3_flags & 128)
+                thisfile_id3v2_flags_["unsynch"] = php_bool(id3_flags_ & 128)
                 #// a - Unsynchronisation
-                thisfile_id3v2_flags["exthead"] = php_bool(id3_flags & 64)
+                thisfile_id3v2_flags_["exthead"] = php_bool(id3_flags_ & 64)
                 #// b - Extended header
-                thisfile_id3v2_flags["experim"] = php_bool(id3_flags & 32)
+                thisfile_id3v2_flags_["experim"] = php_bool(id3_flags_ & 32)
                 #// c - Experimental indicator
-                thisfile_id3v2_flags["isfooter"] = php_bool(id3_flags & 16)
+                thisfile_id3v2_flags_["isfooter"] = php_bool(id3_flags_ & 16)
                 break
             # end if
         # end for
-        thisfile_id3v2["headerlength"] = getid3_lib.bigendian2int(php_substr(header, 6, 4), 1) + 10
+        thisfile_id3v2_["headerlength"] = getid3_lib.bigendian2int(php_substr(header_, 6, 4), 1) + 10
         #// length of ID3v2 tag in 10-byte header doesn't include 10-byte header length
-        thisfile_id3v2["tag_offset_start"] = self.StartingOffset
-        thisfile_id3v2["tag_offset_end"] = thisfile_id3v2["tag_offset_start"] + thisfile_id3v2["headerlength"]
+        thisfile_id3v2_["tag_offset_start"] = self.StartingOffset
+        thisfile_id3v2_["tag_offset_end"] = thisfile_id3v2_["tag_offset_start"] + thisfile_id3v2_["headerlength"]
         #// create 'encoding' key - used by getid3::HandleAllTags()
         #// in ID3v2 every field can have it's own encoding type
         #// so force everything to UTF-8 so it can be handled consistantly
-        thisfile_id3v2["encoding"] = "UTF-8"
+        thisfile_id3v2_["encoding"] = "UTF-8"
         #// Frames
         #// All ID3v2 frames consists of one frame header followed by one or more
         #// fields containing the actual information. The header is always 10
@@ -120,21 +116,21 @@ class getid3_id3v2(getid3_handler):
         #// Frame ID      $xx xx xx xx  (four characters)
         #// Size      4 * %0xxxxxxx
         #// Flags         $xx xx
-        sizeofframes = thisfile_id3v2["headerlength"] - 10
+        sizeofframes_ = thisfile_id3v2_["headerlength"] - 10
         #// not including 10-byte initial header
-        if (not php_empty(lambda : thisfile_id3v2["exthead"]["length"])):
-            sizeofframes -= thisfile_id3v2["exthead"]["length"] + 4
+        if (not php_empty(lambda : thisfile_id3v2_["exthead"]["length"])):
+            sizeofframes_ -= thisfile_id3v2_["exthead"]["length"] + 4
         # end if
-        if (not php_empty(lambda : thisfile_id3v2_flags["isfooter"])):
-            sizeofframes -= 10
+        if (not php_empty(lambda : thisfile_id3v2_flags_["isfooter"])):
+            sizeofframes_ -= 10
             pass
         # end if
-        if sizeofframes > 0:
-            framedata = self.fread(sizeofframes)
+        if sizeofframes_ > 0:
+            framedata_ = self.fread(sizeofframes_)
             #// read all frames from file into $framedata variable
             #// if entire frame data is unsynched, de-unsynch it now (ID3v2.3.x)
-            if (not php_empty(lambda : thisfile_id3v2_flags["unsynch"])) and id3v2_majorversion <= 3:
-                framedata = self.deunsynchronise(framedata)
+            if (not php_empty(lambda : thisfile_id3v2_flags_["unsynch"])) and id3v2_majorversion_ <= 3:
+                framedata_ = self.deunsynchronise(framedata_)
             # end if
             #// [in ID3v2.4.0] Unsynchronisation [S:6.1] is done on frame level, instead
             #// of on tag level, making it easier to skip frames, increasing the streamability
@@ -142,32 +138,32 @@ class getid3_id3v2(getid3_handler):
             #// there exists an unsynchronised frame, while the new unsynchronisation flag in
             #// the frame header [S:4.1.2] indicates unsynchronisation.
             #// $framedataoffset = 10 + ($thisfile_id3v2['exthead']['length'] ? $thisfile_id3v2['exthead']['length'] + 4 : 0); // how many bytes into the stream - start from after the 10-byte header (and extended header length+4, if present)
-            framedataoffset = 10
+            framedataoffset_ = 10
             #// how many bytes into the stream - start from after the 10-byte header
             #// Extended Header
-            if (not php_empty(lambda : thisfile_id3v2_flags["exthead"])):
-                extended_header_offset = 0
-                if id3v2_majorversion == 3:
+            if (not php_empty(lambda : thisfile_id3v2_flags_["exthead"])):
+                extended_header_offset_ = 0
+                if id3v2_majorversion_ == 3:
                     #// v2.3 definition:
                     #// Extended header size  $xx xx xx xx   // 32-bit integer
                     #// Extended Flags        $xx xx
                     #// %x0000000 %00000000 // v2.3
                     #// x - CRC data present
                     #// Size of padding       $xx xx xx xx
-                    thisfile_id3v2["exthead"]["length"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 4), 0)
-                    extended_header_offset += 4
-                    thisfile_id3v2["exthead"]["flag_bytes"] = 2
-                    thisfile_id3v2["exthead"]["flag_raw"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, thisfile_id3v2["exthead"]["flag_bytes"]))
-                    extended_header_offset += thisfile_id3v2["exthead"]["flag_bytes"]
-                    thisfile_id3v2["exthead"]["flags"]["crc"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 32768)
-                    thisfile_id3v2["exthead"]["padding_size"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 4))
-                    extended_header_offset += 4
-                    if thisfile_id3v2["exthead"]["flags"]["crc"]:
-                        thisfile_id3v2["exthead"]["flag_data"]["crc"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 4))
-                        extended_header_offset += 4
+                    thisfile_id3v2_["exthead"]["length"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 4), 0)
+                    extended_header_offset_ += 4
+                    thisfile_id3v2_["exthead"]["flag_bytes"] = 2
+                    thisfile_id3v2_["exthead"]["flag_raw"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, thisfile_id3v2_["exthead"]["flag_bytes"]))
+                    extended_header_offset_ += thisfile_id3v2_["exthead"]["flag_bytes"]
+                    thisfile_id3v2_["exthead"]["flags"]["crc"] = php_bool(thisfile_id3v2_["exthead"]["flag_raw"] & 32768)
+                    thisfile_id3v2_["exthead"]["padding_size"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 4))
+                    extended_header_offset_ += 4
+                    if thisfile_id3v2_["exthead"]["flags"]["crc"]:
+                        thisfile_id3v2_["exthead"]["flag_data"]["crc"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 4))
+                        extended_header_offset_ += 4
                     # end if
-                    extended_header_offset += thisfile_id3v2["exthead"]["padding_size"]
-                elif id3v2_majorversion == 4:
+                    extended_header_offset_ += thisfile_id3v2_["exthead"]["padding_size"]
+                elif id3v2_majorversion_ == 4:
                     #// v2.4 definition:
                     #// Extended header size   4 * %0xxxxxxx // 28-bit synchsafe integer
                     #// Number of flag bytes       $01
@@ -180,191 +176,191 @@ class getid3_id3v2(getid3_handler):
                     #// Total frame CRC    5 * %0xxxxxxx
                     #// d - Tag restrictions
                     #// Flag data length       $01
-                    thisfile_id3v2["exthead"]["length"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 4), True)
-                    extended_header_offset += 4
-                    thisfile_id3v2["exthead"]["flag_bytes"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 1))
+                    thisfile_id3v2_["exthead"]["length"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 4), True)
+                    extended_header_offset_ += 4
+                    thisfile_id3v2_["exthead"]["flag_bytes"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 1))
                     #// should always be 1
-                    extended_header_offset += 1
-                    thisfile_id3v2["exthead"]["flag_raw"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, thisfile_id3v2["exthead"]["flag_bytes"]))
-                    extended_header_offset += thisfile_id3v2["exthead"]["flag_bytes"]
-                    thisfile_id3v2["exthead"]["flags"]["update"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 64)
-                    thisfile_id3v2["exthead"]["flags"]["crc"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 32)
-                    thisfile_id3v2["exthead"]["flags"]["restrictions"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 16)
-                    if thisfile_id3v2["exthead"]["flags"]["update"]:
-                        ext_header_chunk_length = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 1))
+                    extended_header_offset_ += 1
+                    thisfile_id3v2_["exthead"]["flag_raw"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, thisfile_id3v2_["exthead"]["flag_bytes"]))
+                    extended_header_offset_ += thisfile_id3v2_["exthead"]["flag_bytes"]
+                    thisfile_id3v2_["exthead"]["flags"]["update"] = php_bool(thisfile_id3v2_["exthead"]["flag_raw"] & 64)
+                    thisfile_id3v2_["exthead"]["flags"]["crc"] = php_bool(thisfile_id3v2_["exthead"]["flag_raw"] & 32)
+                    thisfile_id3v2_["exthead"]["flags"]["restrictions"] = php_bool(thisfile_id3v2_["exthead"]["flag_raw"] & 16)
+                    if thisfile_id3v2_["exthead"]["flags"]["update"]:
+                        ext_header_chunk_length_ = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 1))
                         #// should be 0
-                        extended_header_offset += 1
+                        extended_header_offset_ += 1
                     # end if
-                    if thisfile_id3v2["exthead"]["flags"]["crc"]:
-                        ext_header_chunk_length = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 1))
+                    if thisfile_id3v2_["exthead"]["flags"]["crc"]:
+                        ext_header_chunk_length_ = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 1))
                         #// should be 5
-                        extended_header_offset += 1
-                        thisfile_id3v2["exthead"]["flag_data"]["crc"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, ext_header_chunk_length), True, False)
-                        extended_header_offset += ext_header_chunk_length
+                        extended_header_offset_ += 1
+                        thisfile_id3v2_["exthead"]["flag_data"]["crc"] = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, ext_header_chunk_length_), True, False)
+                        extended_header_offset_ += ext_header_chunk_length_
                     # end if
-                    if thisfile_id3v2["exthead"]["flags"]["restrictions"]:
-                        ext_header_chunk_length = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 1))
+                    if thisfile_id3v2_["exthead"]["flags"]["restrictions"]:
+                        ext_header_chunk_length_ = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 1))
                         #// should be 1
-                        extended_header_offset += 1
+                        extended_header_offset_ += 1
                         #// %ppqrrstt
-                        restrictions_raw = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 1))
-                        extended_header_offset += 1
-                        thisfile_id3v2["exthead"]["flags"]["restrictions"]["tagsize"] = restrictions_raw & 192 >> 6
+                        restrictions_raw_ = getid3_lib.bigendian2int(php_substr(framedata_, extended_header_offset_, 1))
+                        extended_header_offset_ += 1
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions"]["tagsize"] = restrictions_raw_ & 192 >> 6
                         #// p - Tag size restrictions
-                        thisfile_id3v2["exthead"]["flags"]["restrictions"]["textenc"] = restrictions_raw & 32 >> 5
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions"]["textenc"] = restrictions_raw_ & 32 >> 5
                         #// q - Text encoding restrictions
-                        thisfile_id3v2["exthead"]["flags"]["restrictions"]["textsize"] = restrictions_raw & 24 >> 3
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions"]["textsize"] = restrictions_raw_ & 24 >> 3
                         #// r - Text fields size restrictions
-                        thisfile_id3v2["exthead"]["flags"]["restrictions"]["imgenc"] = restrictions_raw & 4 >> 2
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions"]["imgenc"] = restrictions_raw_ & 4 >> 2
                         #// s - Image encoding restrictions
-                        thisfile_id3v2["exthead"]["flags"]["restrictions"]["imgsize"] = restrictions_raw & 3 >> 0
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions"]["imgsize"] = restrictions_raw_ & 3 >> 0
                         #// t - Image size restrictions
-                        thisfile_id3v2["exthead"]["flags"]["restrictions_text"]["tagsize"] = self.lookupextendedheaderrestrictionstagsizelimits(thisfile_id3v2["exthead"]["flags"]["restrictions"]["tagsize"])
-                        thisfile_id3v2["exthead"]["flags"]["restrictions_text"]["textenc"] = self.lookupextendedheaderrestrictionstextencodings(thisfile_id3v2["exthead"]["flags"]["restrictions"]["textenc"])
-                        thisfile_id3v2["exthead"]["flags"]["restrictions_text"]["textsize"] = self.lookupextendedheaderrestrictionstextfieldsize(thisfile_id3v2["exthead"]["flags"]["restrictions"]["textsize"])
-                        thisfile_id3v2["exthead"]["flags"]["restrictions_text"]["imgenc"] = self.lookupextendedheaderrestrictionsimageencoding(thisfile_id3v2["exthead"]["flags"]["restrictions"]["imgenc"])
-                        thisfile_id3v2["exthead"]["flags"]["restrictions_text"]["imgsize"] = self.lookupextendedheaderrestrictionsimagesizesize(thisfile_id3v2["exthead"]["flags"]["restrictions"]["imgsize"])
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions_text"]["tagsize"] = self.lookupextendedheaderrestrictionstagsizelimits(thisfile_id3v2_["exthead"]["flags"]["restrictions"]["tagsize"])
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions_text"]["textenc"] = self.lookupextendedheaderrestrictionstextencodings(thisfile_id3v2_["exthead"]["flags"]["restrictions"]["textenc"])
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions_text"]["textsize"] = self.lookupextendedheaderrestrictionstextfieldsize(thisfile_id3v2_["exthead"]["flags"]["restrictions"]["textsize"])
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions_text"]["imgenc"] = self.lookupextendedheaderrestrictionsimageencoding(thisfile_id3v2_["exthead"]["flags"]["restrictions"]["imgenc"])
+                        thisfile_id3v2_["exthead"]["flags"]["restrictions_text"]["imgsize"] = self.lookupextendedheaderrestrictionsimagesizesize(thisfile_id3v2_["exthead"]["flags"]["restrictions"]["imgsize"])
                     # end if
-                    if thisfile_id3v2["exthead"]["length"] != extended_header_offset:
-                        self.warning("ID3v2.4 extended header length mismatch (expecting " + php_intval(thisfile_id3v2["exthead"]["length"]) + ", found " + php_intval(extended_header_offset) + ")")
+                    if thisfile_id3v2_["exthead"]["length"] != extended_header_offset_:
+                        self.warning("ID3v2.4 extended header length mismatch (expecting " + php_intval(thisfile_id3v2_["exthead"]["length"]) + ", found " + php_intval(extended_header_offset_) + ")")
                     # end if
                 # end if
-                framedataoffset += extended_header_offset
-                framedata = php_substr(framedata, extended_header_offset)
+                framedataoffset_ += extended_header_offset_
+                framedata_ = php_substr(framedata_, extended_header_offset_)
             # end if
             #// end extended header
             while True:
                 
-                if not ((php_isset(lambda : framedata)) and php_strlen(framedata) > 0):
+                if not ((php_isset(lambda : framedata_)) and php_strlen(framedata_) > 0):
                     break
                 # end if
                 #// cycle through until no more frame data is left to parse
-                if php_strlen(framedata) <= self.id3v2headerlength(id3v2_majorversion):
+                if php_strlen(framedata_) <= self.id3v2headerlength(id3v2_majorversion_):
                     #// insufficient room left in ID3v2 header for actual data - must be padding
-                    thisfile_id3v2["padding"]["start"] = framedataoffset
-                    thisfile_id3v2["padding"]["length"] = php_strlen(framedata)
-                    thisfile_id3v2["padding"]["valid"] = True
-                    i = 0
-                    while i < thisfile_id3v2["padding"]["length"]:
+                    thisfile_id3v2_["padding"]["start"] = framedataoffset_
+                    thisfile_id3v2_["padding"]["length"] = php_strlen(framedata_)
+                    thisfile_id3v2_["padding"]["valid"] = True
+                    i_ = 0
+                    while i_ < thisfile_id3v2_["padding"]["length"]:
                         
-                        if framedata[i] != " ":
-                            thisfile_id3v2["padding"]["valid"] = False
-                            thisfile_id3v2["padding"]["errorpos"] = thisfile_id3v2["padding"]["start"] + i
-                            self.warning("Invalid ID3v2 padding found at offset " + thisfile_id3v2["padding"]["errorpos"] + " (the remaining " + thisfile_id3v2["padding"]["length"] - i + " bytes are considered invalid)")
+                        if framedata_[i_] != " ":
+                            thisfile_id3v2_["padding"]["valid"] = False
+                            thisfile_id3v2_["padding"]["errorpos"] = thisfile_id3v2_["padding"]["start"] + i_
+                            self.warning("Invalid ID3v2 padding found at offset " + thisfile_id3v2_["padding"]["errorpos"] + " (the remaining " + thisfile_id3v2_["padding"]["length"] - i_ + " bytes are considered invalid)")
                             break
                         # end if
-                        i += 1
+                        i_ += 1
                     # end while
                     break
                     pass
                 # end if
-                frame_header = None
-                frame_name = None
-                frame_size = None
-                frame_flags = None
-                if id3v2_majorversion == 2:
+                frame_header_ = None
+                frame_name_ = None
+                frame_size_ = None
+                frame_flags_ = None
+                if id3v2_majorversion_ == 2:
                     #// Frame ID  $xx xx xx (three characters)
                     #// Size      $xx xx xx (24-bit integer)
                     #// Flags     $xx xx
-                    frame_header = php_substr(framedata, 0, 6)
+                    frame_header_ = php_substr(framedata_, 0, 6)
                     #// take next 6 bytes for header
-                    framedata = php_substr(framedata, 6)
+                    framedata_ = php_substr(framedata_, 6)
                     #// and leave the rest in $framedata
-                    frame_name = php_substr(frame_header, 0, 3)
-                    frame_size = getid3_lib.bigendian2int(php_substr(frame_header, 3, 3), 0)
-                    frame_flags = 0
+                    frame_name_ = php_substr(frame_header_, 0, 3)
+                    frame_size_ = getid3_lib.bigendian2int(php_substr(frame_header_, 3, 3), 0)
+                    frame_flags_ = 0
                     pass
-                elif id3v2_majorversion > 2:
+                elif id3v2_majorversion_ > 2:
                     #// Frame ID  $xx xx xx xx (four characters)
                     #// Size      $xx xx xx xx (32-bit integer in v2.3, 28-bit synchsafe in v2.4+)
                     #// Flags     $xx xx
-                    frame_header = php_substr(framedata, 0, 10)
+                    frame_header_ = php_substr(framedata_, 0, 10)
                     #// take next 10 bytes for header
-                    framedata = php_substr(framedata, 10)
+                    framedata_ = php_substr(framedata_, 10)
                     #// and leave the rest in $framedata
-                    frame_name = php_substr(frame_header, 0, 4)
-                    if id3v2_majorversion == 3:
-                        frame_size = getid3_lib.bigendian2int(php_substr(frame_header, 4, 4), 0)
+                    frame_name_ = php_substr(frame_header_, 0, 4)
+                    if id3v2_majorversion_ == 3:
+                        frame_size_ = getid3_lib.bigendian2int(php_substr(frame_header_, 4, 4), 0)
                         pass
                     else:
                         #// ID3v2.4+
-                        frame_size = getid3_lib.bigendian2int(php_substr(frame_header, 4, 4), 1)
+                        frame_size_ = getid3_lib.bigendian2int(php_substr(frame_header_, 4, 4), 1)
                         pass
                     # end if
-                    if frame_size < php_strlen(framedata) + 4:
-                        nextFrameID = php_substr(framedata, frame_size, 4)
-                        if self.isvalidid3v2framename(nextFrameID, id3v2_majorversion):
+                    if frame_size_ < php_strlen(framedata_) + 4:
+                        nextFrameID_ = php_substr(framedata_, frame_size_, 4)
+                        if self.isvalidid3v2framename(nextFrameID_, id3v2_majorversion_):
                             pass
-                        elif frame_name == " " + "MP3" or frame_name == "  " + "MP" or frame_name == " MP3" or frame_name == "MP3e":
+                        elif frame_name_ == " " + "MP3" or frame_name_ == "  " + "MP" or frame_name_ == " MP3" or frame_name_ == "MP3e":
                             pass
-                        elif id3v2_majorversion == 4 and self.isvalidid3v2framename(php_substr(framedata, getid3_lib.bigendian2int(php_substr(frame_header, 4, 4), 0), 4), 3):
+                        elif id3v2_majorversion_ == 4 and self.isvalidid3v2framename(php_substr(framedata_, getid3_lib.bigendian2int(php_substr(frame_header_, 4, 4), 0), 4), 3):
                             self.warning("ID3v2 tag written as ID3v2.4, but with non-synchsafe integers (ID3v2.3 style). Older versions of (Helium2; iTunes) are known culprits of this. Tag has been parsed as ID3v2.3")
-                            id3v2_majorversion = 3
-                            frame_size = getid3_lib.bigendian2int(php_substr(frame_header, 4, 4), 0)
+                            id3v2_majorversion_ = 3
+                            frame_size_ = getid3_lib.bigendian2int(php_substr(frame_header_, 4, 4), 0)
                             pass
                         # end if
                     # end if
-                    frame_flags = getid3_lib.bigendian2int(php_substr(frame_header, 8, 2))
+                    frame_flags_ = getid3_lib.bigendian2int(php_substr(frame_header_, 8, 2))
                 # end if
-                if id3v2_majorversion == 2 and frame_name == "   " or frame_name == "    ":
+                if id3v2_majorversion_ == 2 and frame_name_ == "   " or frame_name_ == "    ":
                     #// padding encountered
-                    thisfile_id3v2["padding"]["start"] = framedataoffset
-                    thisfile_id3v2["padding"]["length"] = php_strlen(frame_header) + php_strlen(framedata)
-                    thisfile_id3v2["padding"]["valid"] = True
-                    len = php_strlen(framedata)
-                    i = 0
-                    while i < len:
+                    thisfile_id3v2_["padding"]["start"] = framedataoffset_
+                    thisfile_id3v2_["padding"]["length"] = php_strlen(frame_header_) + php_strlen(framedata_)
+                    thisfile_id3v2_["padding"]["valid"] = True
+                    len_ = php_strlen(framedata_)
+                    i_ = 0
+                    while i_ < len_:
                         
-                        if framedata[i] != " ":
-                            thisfile_id3v2["padding"]["valid"] = False
-                            thisfile_id3v2["padding"]["errorpos"] = thisfile_id3v2["padding"]["start"] + i
-                            self.warning("Invalid ID3v2 padding found at offset " + thisfile_id3v2["padding"]["errorpos"] + " (the remaining " + thisfile_id3v2["padding"]["length"] - i + " bytes are considered invalid)")
+                        if framedata_[i_] != " ":
+                            thisfile_id3v2_["padding"]["valid"] = False
+                            thisfile_id3v2_["padding"]["errorpos"] = thisfile_id3v2_["padding"]["start"] + i_
+                            self.warning("Invalid ID3v2 padding found at offset " + thisfile_id3v2_["padding"]["errorpos"] + " (the remaining " + thisfile_id3v2_["padding"]["length"] - i_ + " bytes are considered invalid)")
                             break
                         # end if
-                        i += 1
+                        i_ += 1
                     # end while
                     break
                     pass
                 # end if
-                iTunesBrokenFrameNameFixed = self.id3v22itunesbrokenframename(frame_name)
-                if iTunesBrokenFrameNameFixed:
-                    self.warning("error parsing \"" + frame_name + "\" (" + framedataoffset + " bytes into the ID3v2." + id3v2_majorversion + " tag). (ERROR: IsValidID3v2FrameName(\"" + php_str_replace(" ", " ", frame_name) + "\", " + id3v2_majorversion + "))). [Note: this particular error has been known to happen with tags edited by iTunes (versions \"X v2.0.3\", \"v3.0.1\", \"v7.0.0.70\" are known-guilty, probably others too)]. Translated frame name from \"" + php_str_replace(" ", " ", frame_name) + "\" to \"" + iTunesBrokenFrameNameFixed + "\" for parsing.")
-                    frame_name = iTunesBrokenFrameNameFixed
+                iTunesBrokenFrameNameFixed_ = self.id3v22itunesbrokenframename(frame_name_)
+                if iTunesBrokenFrameNameFixed_:
+                    self.warning("error parsing \"" + frame_name_ + "\" (" + framedataoffset_ + " bytes into the ID3v2." + id3v2_majorversion_ + " tag). (ERROR: IsValidID3v2FrameName(\"" + php_str_replace(" ", " ", frame_name_) + "\", " + id3v2_majorversion_ + "))). [Note: this particular error has been known to happen with tags edited by iTunes (versions \"X v2.0.3\", \"v3.0.1\", \"v7.0.0.70\" are known-guilty, probably others too)]. Translated frame name from \"" + php_str_replace(" ", " ", frame_name_) + "\" to \"" + iTunesBrokenFrameNameFixed_ + "\" for parsing.")
+                    frame_name_ = iTunesBrokenFrameNameFixed_
                 # end if
-                if frame_size <= php_strlen(framedata) and self.isvalidid3v2framename(frame_name, id3v2_majorversion):
-                    parsedFrame = None
-                    parsedFrame["frame_name"] = frame_name
-                    parsedFrame["frame_flags_raw"] = frame_flags
-                    parsedFrame["data"] = php_substr(framedata, 0, frame_size)
-                    parsedFrame["datalength"] = getid3_lib.castasint(frame_size)
-                    parsedFrame["dataoffset"] = framedataoffset
-                    self.parseid3v2frame(parsedFrame)
-                    thisfile_id3v2[frame_name][-1] = parsedFrame
-                    framedata = php_substr(framedata, frame_size)
+                if frame_size_ <= php_strlen(framedata_) and self.isvalidid3v2framename(frame_name_, id3v2_majorversion_):
+                    parsedFrame_ = None
+                    parsedFrame_["frame_name"] = frame_name_
+                    parsedFrame_["frame_flags_raw"] = frame_flags_
+                    parsedFrame_["data"] = php_substr(framedata_, 0, frame_size_)
+                    parsedFrame_["datalength"] = getid3_lib.castasint(frame_size_)
+                    parsedFrame_["dataoffset"] = framedataoffset_
+                    self.parseid3v2frame(parsedFrame_)
+                    thisfile_id3v2_[frame_name_][-1] = parsedFrame_
+                    framedata_ = php_substr(framedata_, frame_size_)
                 else:
                     #// invalid frame length or FrameID
-                    if frame_size <= php_strlen(framedata):
-                        if self.isvalidid3v2framename(php_substr(framedata, frame_size, 4), id3v2_majorversion):
+                    if frame_size_ <= php_strlen(framedata_):
+                        if self.isvalidid3v2framename(php_substr(framedata_, frame_size_, 4), id3v2_majorversion_):
                             #// next frame is valid, just skip the current frame
-                            framedata = php_substr(framedata, frame_size)
+                            framedata_ = php_substr(framedata_, frame_size_)
                             self.warning("Next ID3v2 frame is valid, skipping current frame.")
                         else:
                             #// next frame is invalid too, abort processing
                             #// unset($framedata);
-                            framedata = None
+                            framedata_ = None
                             self.error("Next ID3v2 frame is also invalid, aborting processing.")
                         # end if
-                    elif frame_size == php_strlen(framedata):
+                    elif frame_size_ == php_strlen(framedata_):
                         #// this is the last frame, just skip
                         self.warning("This was the last ID3v2 frame.")
                     else:
                         #// next frame is invalid too, abort processing
                         #// unset($framedata);
-                        framedata = None
+                        framedata_ = None
                         self.warning("Invalid ID3v2 frame size, aborting.")
                     # end if
-                    if (not self.isvalidid3v2framename(frame_name, id3v2_majorversion)):
-                        for case in Switch(frame_name):
+                    if (not self.isvalidid3v2framename(frame_name_, id3v2_majorversion_)):
+                        for case in Switch(frame_name_):
                             if case("  " + "MP"):
                                 pass
                             # end if
@@ -384,21 +380,21 @@ class getid3_id3v2(getid3_handler):
                                 pass
                             # end if
                             if case("MP3"):
-                                self.warning("error parsing \"" + frame_name + "\" (" + framedataoffset + " bytes into the ID3v2." + id3v2_majorversion + " tag). (ERROR: !IsValidID3v2FrameName(\"" + php_str_replace(" ", " ", frame_name) + "\", " + id3v2_majorversion + "))). [Note: this particular error has been known to happen with tags edited by \"MP3ext (www.mutschler.de/mp3ext/)\"]")
+                                self.warning("error parsing \"" + frame_name_ + "\" (" + framedataoffset_ + " bytes into the ID3v2." + id3v2_majorversion_ + " tag). (ERROR: !IsValidID3v2FrameName(\"" + php_str_replace(" ", " ", frame_name_) + "\", " + id3v2_majorversion_ + "))). [Note: this particular error has been known to happen with tags edited by \"MP3ext (www.mutschler.de/mp3ext/)\"]")
                                 break
                             # end if
                             if case():
-                                self.warning("error parsing \"" + frame_name + "\" (" + framedataoffset + " bytes into the ID3v2." + id3v2_majorversion + " tag). (ERROR: !IsValidID3v2FrameName(\"" + php_str_replace(" ", " ", frame_name) + "\", " + id3v2_majorversion + "))).")
+                                self.warning("error parsing \"" + frame_name_ + "\" (" + framedataoffset_ + " bytes into the ID3v2." + id3v2_majorversion_ + " tag). (ERROR: !IsValidID3v2FrameName(\"" + php_str_replace(" ", " ", frame_name_) + "\", " + id3v2_majorversion_ + "))).")
                                 break
                             # end if
                         # end for
-                    elif (not (php_isset(lambda : framedata))) or frame_size > php_strlen(framedata):
-                        self.error("error parsing \"" + frame_name + "\" (" + framedataoffset + " bytes into the ID3v2." + id3v2_majorversion + " tag). (ERROR: $frame_size (" + frame_size + ") > strlen($framedata) (" + php_strlen(framedata) if (php_isset(lambda : framedata)) else "null" + ")).")
+                    elif (not (php_isset(lambda : framedata_))) or frame_size_ > php_strlen(framedata_):
+                        self.error("error parsing \"" + frame_name_ + "\" (" + framedataoffset_ + " bytes into the ID3v2." + id3v2_majorversion_ + " tag). (ERROR: $frame_size (" + frame_size_ + ") > strlen($framedata) (" + php_strlen(framedata_) if (php_isset(lambda : framedata_)) else "null" + ")).")
                     else:
-                        self.error("error parsing \"" + frame_name + "\" (" + framedataoffset + " bytes into the ID3v2." + id3v2_majorversion + " tag).")
+                        self.error("error parsing \"" + frame_name_ + "\" (" + framedataoffset_ + " bytes into the ID3v2." + id3v2_majorversion_ + " tag).")
                     # end if
                 # end if
-                framedataoffset += frame_size + self.id3v2headerlength(id3v2_majorversion)
+                framedataoffset_ += frame_size_ + self.id3v2headerlength(id3v2_majorversion_)
             # end while
         # end if
         #// Footer
@@ -407,65 +403,65 @@ class getid3_id3v2(getid3_handler):
         #// ID3v2 version              $04 00
         #// ID3v2 flags                %abcd0000
         #// ID3v2 size             4 * %0xxxxxxx
-        if (php_isset(lambda : thisfile_id3v2_flags["isfooter"])) and thisfile_id3v2_flags["isfooter"]:
-            footer = self.fread(10)
-            if php_substr(footer, 0, 3) == "3DI":
-                thisfile_id3v2["footer"] = True
-                thisfile_id3v2["majorversion_footer"] = php_ord(footer[3])
-                thisfile_id3v2["minorversion_footer"] = php_ord(footer[4])
+        if (php_isset(lambda : thisfile_id3v2_flags_["isfooter"])) and thisfile_id3v2_flags_["isfooter"]:
+            footer_ = self.fread(10)
+            if php_substr(footer_, 0, 3) == "3DI":
+                thisfile_id3v2_["footer"] = True
+                thisfile_id3v2_["majorversion_footer"] = php_ord(footer_[3])
+                thisfile_id3v2_["minorversion_footer"] = php_ord(footer_[4])
             # end if
-            if thisfile_id3v2["majorversion_footer"] <= 4:
-                id3_flags = php_ord(footer[5])
-                thisfile_id3v2_flags["unsynch_footer"] = php_bool(id3_flags & 128)
-                thisfile_id3v2_flags["extfoot_footer"] = php_bool(id3_flags & 64)
-                thisfile_id3v2_flags["experim_footer"] = php_bool(id3_flags & 32)
-                thisfile_id3v2_flags["isfooter_footer"] = php_bool(id3_flags & 16)
-                thisfile_id3v2["footerlength"] = getid3_lib.bigendian2int(php_substr(footer, 6, 4), 1)
+            if thisfile_id3v2_["majorversion_footer"] <= 4:
+                id3_flags_ = php_ord(footer_[5])
+                thisfile_id3v2_flags_["unsynch_footer"] = php_bool(id3_flags_ & 128)
+                thisfile_id3v2_flags_["extfoot_footer"] = php_bool(id3_flags_ & 64)
+                thisfile_id3v2_flags_["experim_footer"] = php_bool(id3_flags_ & 32)
+                thisfile_id3v2_flags_["isfooter_footer"] = php_bool(id3_flags_ & 16)
+                thisfile_id3v2_["footerlength"] = getid3_lib.bigendian2int(php_substr(footer_, 6, 4), 1)
             # end if
         # end if
         #// end footer
-        if (php_isset(lambda : thisfile_id3v2["comments"]["genre"])):
-            genres = Array()
-            for key,value in thisfile_id3v2["comments"]["genre"]:
-                for genre in self.parseid3v2genrestring(value):
-                    genres[-1] = genre
+        if (php_isset(lambda : thisfile_id3v2_["comments"]["genre"])):
+            genres_ = Array()
+            for key_,value_ in thisfile_id3v2_["comments"]["genre"]:
+                for genre_ in self.parseid3v2genrestring(value_):
+                    genres_[-1] = genre_
                 # end for
             # end for
-            thisfile_id3v2["comments"]["genre"] = array_unique(genres)
-            key = None
-            value = None
-            genres = None
-            genre = None
+            thisfile_id3v2_["comments"]["genre"] = array_unique(genres_)
+            key_ = None
+            value_ = None
+            genres_ = None
+            genre_ = None
         # end if
-        if (php_isset(lambda : thisfile_id3v2["comments"]["track_number"])):
-            for key,value in thisfile_id3v2["comments"]["track_number"]:
-                if php_strstr(value, "/"):
-                    thisfile_id3v2["comments"]["track_number"][key], thisfile_id3v2["comments"]["totaltracks"][key] = php_explode("/", thisfile_id3v2["comments"]["track_number"][key])
+        if (php_isset(lambda : thisfile_id3v2_["comments"]["track_number"])):
+            for key_,value_ in thisfile_id3v2_["comments"]["track_number"]:
+                if php_strstr(value_, "/"):
+                    thisfile_id3v2_["comments"]["track_number"][key_], thisfile_id3v2_["comments"]["totaltracks"][key_] = php_explode("/", thisfile_id3v2_["comments"]["track_number"][key_])
                 # end if
             # end for
         # end if
-        if (not (php_isset(lambda : thisfile_id3v2["comments"]["year"]))) and (not php_empty(lambda : thisfile_id3v2["comments"]["recording_time"][0])) and php_preg_match("#^([0-9]{4})#", php_trim(thisfile_id3v2["comments"]["recording_time"][0]), matches):
-            thisfile_id3v2["comments"]["year"] = Array(matches[1])
+        if (not (php_isset(lambda : thisfile_id3v2_["comments"]["year"]))) and (not php_empty(lambda : thisfile_id3v2_["comments"]["recording_time"][0])) and php_preg_match("#^([0-9]{4})#", php_trim(thisfile_id3v2_["comments"]["recording_time"][0]), matches_):
+            thisfile_id3v2_["comments"]["year"] = Array(matches_[1])
         # end if
-        if (not php_empty(lambda : thisfile_id3v2["TXXX"])):
+        if (not php_empty(lambda : thisfile_id3v2_["TXXX"])):
             #// MediaMonkey does this, maybe others: write a blank RGAD frame, but put replay-gain adjustment values in TXXX frames
-            for txxx_array in thisfile_id3v2["TXXX"]:
-                for case in Switch(txxx_array["description"]):
+            for txxx_array_ in thisfile_id3v2_["TXXX"]:
+                for case in Switch(txxx_array_["description"]):
                     if case("replaygain_track_gain"):
-                        if php_empty(lambda : info["replay_gain"]["track"]["adjustment"]) and (not php_empty(lambda : txxx_array["data"])):
-                            info["replay_gain"]["track"]["adjustment"] = floatval(php_trim(php_str_replace("dB", "", txxx_array["data"])))
+                        if php_empty(lambda : info_["replay_gain"]["track"]["adjustment"]) and (not php_empty(lambda : txxx_array_["data"])):
+                            info_["replay_gain"]["track"]["adjustment"] = floatval(php_trim(php_str_replace("dB", "", txxx_array_["data"])))
                         # end if
                         break
                     # end if
                     if case("replaygain_track_peak"):
-                        if php_empty(lambda : info["replay_gain"]["track"]["peak"]) and (not php_empty(lambda : txxx_array["data"])):
-                            info["replay_gain"]["track"]["peak"] = floatval(txxx_array["data"])
+                        if php_empty(lambda : info_["replay_gain"]["track"]["peak"]) and (not php_empty(lambda : txxx_array_["data"])):
+                            info_["replay_gain"]["track"]["peak"] = floatval(txxx_array_["data"])
                         # end if
                         break
                     # end if
                     if case("replaygain_album_gain"):
-                        if php_empty(lambda : info["replay_gain"]["album"]["adjustment"]) and (not php_empty(lambda : txxx_array["data"])):
-                            info["replay_gain"]["album"]["adjustment"] = floatval(php_trim(php_str_replace("dB", "", txxx_array["data"])))
+                        if php_empty(lambda : info_["replay_gain"]["album"]["adjustment"]) and (not php_empty(lambda : txxx_array_["data"])):
+                            info_["replay_gain"]["album"]["adjustment"] = floatval(php_trim(php_str_replace("dB", "", txxx_array_["data"])))
                         # end if
                         break
                     # end if
@@ -473,9 +469,9 @@ class getid3_id3v2(getid3_handler):
             # end for
         # end if
         #// Set avdataoffset
-        info["avdataoffset"] = thisfile_id3v2["headerlength"]
-        if (php_isset(lambda : thisfile_id3v2["footer"])):
-            info["avdataoffset"] += 10
+        info_["avdataoffset"] = thisfile_id3v2_["headerlength"]
+        if (php_isset(lambda : thisfile_id3v2_["footer"])):
+            info_["avdataoffset"] += 10
         # end if
         return True
     # end def analyze
@@ -484,150 +480,152 @@ class getid3_id3v2(getid3_handler):
     #// 
     #// @return array
     #//
-    def parseid3v2genrestring(self, genrestring=None):
+    def parseid3v2genrestring(self, genrestring_=None):
+        
         
         #// Parse genres into arrays of genreName and genreID
         #// ID3v2.2.x, ID3v2.3.x: '(21)' or '(4)Eurodisco' or '(51)(39)' or '(55)((I think...)'
         #// ID3v2.4.x: '21' $00 'Eurodisco' $00
-        clean_genres = Array()
+        clean_genres_ = Array()
         #// hack-fixes for some badly-written ID3v2.3 taggers, while trying not to break correctly-written tags
-        if self.getid3.info["id3v2"]["majorversion"] == 3 and (not php_preg_match("#[\\x00]#", genrestring)):
+        if self.getid3.info["id3v2"]["majorversion"] == 3 and (not php_preg_match("#[\\x00]#", genrestring_)):
             #// note: MusicBrainz Picard incorrectly stores plaintext genres separated by "/" when writing in ID3v2.3 mode, hack-fix here:
             #// replace / with NULL, then replace back the two ID3v1 genres that legitimately have "/" as part of the single genre name
-            if php_preg_match("#/#", genrestring):
-                genrestring = php_str_replace("/", " ", genrestring)
-                genrestring = php_str_replace("Pop" + " " + "Funk", "Pop/Funk", genrestring)
-                genrestring = php_str_replace("Rock" + " " + "Rock", "Folk/Rock", genrestring)
+            if php_preg_match("#/#", genrestring_):
+                genrestring_ = php_str_replace("/", " ", genrestring_)
+                genrestring_ = php_str_replace("Pop" + " " + "Funk", "Pop/Funk", genrestring_)
+                genrestring_ = php_str_replace("Rock" + " " + "Rock", "Folk/Rock", genrestring_)
             # end if
             #// some other taggers separate multiple genres with semicolon, e.g. "Heavy Metal;Thrash Metal;Metal"
-            if php_preg_match("#;#", genrestring):
-                genrestring = php_str_replace(";", " ", genrestring)
+            if php_preg_match("#;#", genrestring_):
+                genrestring_ = php_str_replace(";", " ", genrestring_)
             # end if
         # end if
-        if php_strpos(genrestring, " ") == False:
-            genrestring = php_preg_replace("#\\(([0-9]{1,3})\\)#", "$1" + " ", genrestring)
+        if php_strpos(genrestring_, " ") == False:
+            genrestring_ = php_preg_replace("#\\(([0-9]{1,3})\\)#", "$1" + " ", genrestring_)
         # end if
-        genre_elements = php_explode(" ", genrestring)
-        for element in genre_elements:
-            element = php_trim(element)
-            if element:
-                if php_preg_match("#^[0-9]{1,3}$#", element):
-                    clean_genres[-1] = getid3_id3v1.lookupgenrename(element)
+        genre_elements_ = php_explode(" ", genrestring_)
+        for element_ in genre_elements_:
+            element_ = php_trim(element_)
+            if element_:
+                if php_preg_match("#^[0-9]{1,3}$#", element_):
+                    clean_genres_[-1] = getid3_id3v1.lookupgenrename(element_)
                 else:
-                    clean_genres[-1] = php_str_replace("((", "(", element)
+                    clean_genres_[-1] = php_str_replace("((", "(", element_)
                 # end if
             # end if
         # end for
-        return clean_genres
+        return clean_genres_
     # end def parseid3v2genrestring
     #// 
     #// @param array $parsedFrame
     #// 
     #// @return bool
     #//
-    def parseid3v2frame(self, parsedFrame=None):
+    def parseid3v2frame(self, parsedFrame_=None):
+        
         
         #// shortcuts
-        info = self.getid3.info
-        id3v2_majorversion = info["id3v2"]["majorversion"]
-        parsedFrame["framenamelong"] = self.framenamelonglookup(parsedFrame["frame_name"])
-        if php_empty(lambda : parsedFrame["framenamelong"]):
-            parsedFrame["framenamelong"] = None
+        info_ = self.getid3.info
+        id3v2_majorversion_ = info_["id3v2"]["majorversion"]
+        parsedFrame_["framenamelong"] = self.framenamelonglookup(parsedFrame_["frame_name"])
+        if php_empty(lambda : parsedFrame_["framenamelong"]):
+            parsedFrame_["framenamelong"] = None
         # end if
-        parsedFrame["framenameshort"] = self.framenameshortlookup(parsedFrame["frame_name"])
-        if php_empty(lambda : parsedFrame["framenameshort"]):
-            parsedFrame["framenameshort"] = None
+        parsedFrame_["framenameshort"] = self.framenameshortlookup(parsedFrame_["frame_name"])
+        if php_empty(lambda : parsedFrame_["framenameshort"]):
+            parsedFrame_["framenameshort"] = None
         # end if
-        if id3v2_majorversion >= 3:
+        if id3v2_majorversion_ >= 3:
             #// frame flags are not part of the ID3v2.2 standard
-            if id3v2_majorversion == 3:
+            if id3v2_majorversion_ == 3:
                 #// Frame Header Flags
                 #// %abc00000 %ijk00000
-                parsedFrame["flags"]["TagAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 32768)
+                parsedFrame_["flags"]["TagAlterPreservation"] = php_bool(parsedFrame_["frame_flags_raw"] & 32768)
                 #// a - Tag alter preservation
-                parsedFrame["flags"]["FileAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 16384)
+                parsedFrame_["flags"]["FileAlterPreservation"] = php_bool(parsedFrame_["frame_flags_raw"] & 16384)
                 #// b - File alter preservation
-                parsedFrame["flags"]["ReadOnly"] = php_bool(parsedFrame["frame_flags_raw"] & 8192)
+                parsedFrame_["flags"]["ReadOnly"] = php_bool(parsedFrame_["frame_flags_raw"] & 8192)
                 #// c - Read only
-                parsedFrame["flags"]["compression"] = php_bool(parsedFrame["frame_flags_raw"] & 128)
+                parsedFrame_["flags"]["compression"] = php_bool(parsedFrame_["frame_flags_raw"] & 128)
                 #// i - Compression
-                parsedFrame["flags"]["Encryption"] = php_bool(parsedFrame["frame_flags_raw"] & 64)
+                parsedFrame_["flags"]["Encryption"] = php_bool(parsedFrame_["frame_flags_raw"] & 64)
                 #// j - Encryption
-                parsedFrame["flags"]["GroupingIdentity"] = php_bool(parsedFrame["frame_flags_raw"] & 32)
+                parsedFrame_["flags"]["GroupingIdentity"] = php_bool(parsedFrame_["frame_flags_raw"] & 32)
                 pass
-            elif id3v2_majorversion == 4:
+            elif id3v2_majorversion_ == 4:
                 #// Frame Header Flags
                 #// %0abc0000 %0h00kmnp
-                parsedFrame["flags"]["TagAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 16384)
+                parsedFrame_["flags"]["TagAlterPreservation"] = php_bool(parsedFrame_["frame_flags_raw"] & 16384)
                 #// a - Tag alter preservation
-                parsedFrame["flags"]["FileAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 8192)
+                parsedFrame_["flags"]["FileAlterPreservation"] = php_bool(parsedFrame_["frame_flags_raw"] & 8192)
                 #// b - File alter preservation
-                parsedFrame["flags"]["ReadOnly"] = php_bool(parsedFrame["frame_flags_raw"] & 4096)
+                parsedFrame_["flags"]["ReadOnly"] = php_bool(parsedFrame_["frame_flags_raw"] & 4096)
                 #// c - Read only
-                parsedFrame["flags"]["GroupingIdentity"] = php_bool(parsedFrame["frame_flags_raw"] & 64)
+                parsedFrame_["flags"]["GroupingIdentity"] = php_bool(parsedFrame_["frame_flags_raw"] & 64)
                 #// h - Grouping identity
-                parsedFrame["flags"]["compression"] = php_bool(parsedFrame["frame_flags_raw"] & 8)
+                parsedFrame_["flags"]["compression"] = php_bool(parsedFrame_["frame_flags_raw"] & 8)
                 #// k - Compression
-                parsedFrame["flags"]["Encryption"] = php_bool(parsedFrame["frame_flags_raw"] & 4)
+                parsedFrame_["flags"]["Encryption"] = php_bool(parsedFrame_["frame_flags_raw"] & 4)
                 #// m - Encryption
-                parsedFrame["flags"]["Unsynchronisation"] = php_bool(parsedFrame["frame_flags_raw"] & 2)
+                parsedFrame_["flags"]["Unsynchronisation"] = php_bool(parsedFrame_["frame_flags_raw"] & 2)
                 #// n - Unsynchronisation
-                parsedFrame["flags"]["DataLengthIndicator"] = php_bool(parsedFrame["frame_flags_raw"] & 1)
+                parsedFrame_["flags"]["DataLengthIndicator"] = php_bool(parsedFrame_["frame_flags_raw"] & 1)
                 #// p - Data length indicator
                 #// Frame-level de-unsynchronisation - ID3v2.4
-                if parsedFrame["flags"]["Unsynchronisation"]:
-                    parsedFrame["data"] = self.deunsynchronise(parsedFrame["data"])
+                if parsedFrame_["flags"]["Unsynchronisation"]:
+                    parsedFrame_["data"] = self.deunsynchronise(parsedFrame_["data"])
                 # end if
-                if parsedFrame["flags"]["DataLengthIndicator"]:
-                    parsedFrame["data_length_indicator"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], 0, 4), 1)
-                    parsedFrame["data"] = php_substr(parsedFrame["data"], 4)
+                if parsedFrame_["flags"]["DataLengthIndicator"]:
+                    parsedFrame_["data_length_indicator"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], 0, 4), 1)
+                    parsedFrame_["data"] = php_substr(parsedFrame_["data"], 4)
                 # end if
             # end if
             #// Frame-level de-compression
-            if parsedFrame["flags"]["compression"]:
-                parsedFrame["decompressed_size"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], 0, 4))
+            if parsedFrame_["flags"]["compression"]:
+                parsedFrame_["decompressed_size"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], 0, 4))
                 if (not php_function_exists("gzuncompress")):
-                    self.warning("gzuncompress() support required to decompress ID3v2 frame \"" + parsedFrame["frame_name"] + "\"")
+                    self.warning("gzuncompress() support required to decompress ID3v2 frame \"" + parsedFrame_["frame_name"] + "\"")
                 else:
-                    decompresseddata = php_no_error(lambda: gzuncompress(php_substr(parsedFrame["data"], 4)))
-                    if decompresseddata:
+                    decompresseddata_ = php_no_error(lambda: gzuncompress(php_substr(parsedFrame_["data"], 4)))
+                    if decompresseddata_:
                         #// if ($decompresseddata = @gzuncompress($parsedFrame['data'])) {
-                        parsedFrame["data"] = decompresseddata
-                        decompresseddata = None
+                        parsedFrame_["data"] = decompresseddata_
+                        decompresseddata_ = None
                     else:
-                        self.warning("gzuncompress() failed on compressed contents of ID3v2 frame \"" + parsedFrame["frame_name"] + "\"")
+                        self.warning("gzuncompress() failed on compressed contents of ID3v2 frame \"" + parsedFrame_["frame_name"] + "\"")
                     # end if
                 # end if
             # end if
         # end if
-        if (not php_empty(lambda : parsedFrame["flags"]["DataLengthIndicator"])):
-            if parsedFrame["data_length_indicator"] != php_strlen(parsedFrame["data"]):
-                self.warning("ID3v2 frame \"" + parsedFrame["frame_name"] + "\" should be " + parsedFrame["data_length_indicator"] + " bytes long according to DataLengthIndicator, but found " + php_strlen(parsedFrame["data"]) + " bytes of data")
+        if (not php_empty(lambda : parsedFrame_["flags"]["DataLengthIndicator"])):
+            if parsedFrame_["data_length_indicator"] != php_strlen(parsedFrame_["data"]):
+                self.warning("ID3v2 frame \"" + parsedFrame_["frame_name"] + "\" should be " + parsedFrame_["data_length_indicator"] + " bytes long according to DataLengthIndicator, but found " + php_strlen(parsedFrame_["data"]) + " bytes of data")
             # end if
         # end if
-        if (php_isset(lambda : parsedFrame["datalength"])) and parsedFrame["datalength"] == 0:
-            warning = "Frame \"" + parsedFrame["frame_name"] + "\" at offset " + parsedFrame["dataoffset"] + " has no data portion"
-            for case in Switch(parsedFrame["frame_name"]):
+        if (php_isset(lambda : parsedFrame_["datalength"])) and parsedFrame_["datalength"] == 0:
+            warning_ = "Frame \"" + parsedFrame_["frame_name"] + "\" at offset " + parsedFrame_["dataoffset"] + " has no data portion"
+            for case in Switch(parsedFrame_["frame_name"]):
                 if case("WCOM"):
-                    warning += " (this is known to happen with files tagged by RioPort)"
+                    warning_ += " (this is known to happen with files tagged by RioPort)"
                     break
                 # end if
                 if case():
                     break
                 # end if
             # end for
-            self.warning(warning)
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "UFID" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "UFI":
+            self.warning(warning_)
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "UFID" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "UFI":
             #// 4.1   UFI  Unique file identifier
             #// There may be more than one 'UFID' frame in a tag,
             #// but only one with the same 'Owner identifier'.
             #// <Header for 'Unique file identifier', ID: 'UFID'>
             #// Owner identifier        <text string> $00
             #// Identifier              <up to 64 bytes binary data>
-            exploded = php_explode(" ", parsedFrame["data"], 2)
-            parsedFrame["ownerid"] = exploded[0] if (php_isset(lambda : exploded[0])) else ""
-            parsedFrame["data"] = exploded[1] if (php_isset(lambda : exploded[1])) else ""
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "TXXX" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "TXX":
+            exploded_ = php_explode(" ", parsedFrame_["data"], 2)
+            parsedFrame_["ownerid"] = exploded_[0] if (php_isset(lambda : exploded_[0])) else ""
+            parsedFrame_["data"] = exploded_[1] if (php_isset(lambda : exploded_[1])) else ""
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "TXXX" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "TXX":
             #// 4.2.2 TXX  User defined text information frame
             #// There may be more than one 'TXXX' frame in each tag,
             #// but only one with the same description.
@@ -635,58 +633,60 @@ class getid3_id3v2(getid3_handler):
             #// Text encoding     $xx
             #// Description       <text string according to encoding> $00 (00)
             #// Value             <text string according to encoding>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                frame_textencoding_terminator = " "
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                frame_textencoding_terminator_ = " "
             # end if
-            frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-            if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                frame_terminatorpos += 1
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+            if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                frame_terminatorpos_ += 1
                 pass
             # end if
-            parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["description"] = php_trim(getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["description"]))
-            parsedFrame["data"] = php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator))
-            parsedFrame["data"] = self.removestringterminator(parsedFrame["data"], frame_textencoding_terminator)
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
-                commentkey = parsedFrame["description"] if parsedFrame["description"] else php_count(info["id3v2"]["comments"][parsedFrame["framenameshort"]]) if (php_isset(lambda : info["id3v2"]["comments"][parsedFrame["framenameshort"]])) else 0
-                if (not (php_isset(lambda : info["id3v2"]["comments"][parsedFrame["framenameshort"]]))) or (not php_array_key_exists(commentkey, info["id3v2"]["comments"][parsedFrame["framenameshort"]])):
-                    info["id3v2"]["comments"][parsedFrame["framenameshort"]][commentkey] = php_trim(getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["data"]))
+            parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            parsedFrame_["description"] = php_trim(getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], parsedFrame_["description"]))
+            parsedFrame_["data"] = php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_))
+            parsedFrame_["data"] = self.removestringterminator(parsedFrame_["data"], frame_textencoding_terminator_)
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
+                commentkey_ = parsedFrame_["description"] if parsedFrame_["description"] else php_count(info_["id3v2"]["comments"][parsedFrame_["framenameshort"]]) if (php_isset(lambda : info_["id3v2"]["comments"][parsedFrame_["framenameshort"]])) else 0
+                if (not (php_isset(lambda : info_["id3v2"]["comments"][parsedFrame_["framenameshort"]]))) or (not php_array_key_exists(commentkey_, info_["id3v2"]["comments"][parsedFrame_["framenameshort"]])):
+                    info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][commentkey_] = php_trim(getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], parsedFrame_["data"]))
                 else:
-                    info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = php_trim(getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["data"]))
+                    info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = php_trim(getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], parsedFrame_["data"]))
                 # end if
             # end if
             pass
-        elif parsedFrame["frame_name"][0] == "T":
+        elif parsedFrame_["frame_name"][0] == "T":
             #// 4.2. T??[?] Text information frame
             #// There may only be one text information frame of its kind in an tag.
             #// <Header for 'Text information frame', ID: 'T000' - 'TZZZ',
             #// excluding 'TXXX' described in 4.2.6.>
             #// Text encoding                $xx
             #// Information                  <text string(s) according to encoding>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
             # end if
-            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["data"] = self.removestringterminator(parsedFrame["data"], self.textencodingterminatorlookup(frame_textencoding))
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
+            parsedFrame_["data"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["data"] = self.removestringterminator(parsedFrame_["data"], self.textencodingterminatorlookup(frame_textencoding_))
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
                 #// ID3v2.3 specs say that TPE1 (and others) can contain multiple artist values separated with
                 #// This of course breaks when an artist name contains slash character, e.g. "AC/DC"
                 #// MP3tag (maybe others) implement alternative system where multiple artists are null-separated, which makes more sense
                 #// getID3 will split null-separated artists into multiple artists and leave slash-separated ones to the user
-                for case in Switch(parsedFrame["encoding"]):
+                for case in Switch(parsedFrame_["encoding"]):
                     if case("UTF-16"):
                         pass
                     # end if
@@ -694,7 +694,7 @@ class getid3_id3v2(getid3_handler):
                         pass
                     # end if
                     if case("UTF-16LE"):
-                        wordsize = 2
+                        wordsize_ = 2
                         break
                     # end if
                     if case("ISO-8859-1"):
@@ -704,36 +704,36 @@ class getid3_id3v2(getid3_handler):
                         pass
                     # end if
                     if case():
-                        wordsize = 1
+                        wordsize_ = 1
                         break
                     # end if
                 # end for
-                Txxx_elements = Array()
-                Txxx_elements_start_offset = 0
-                i = 0
-                while i < php_strlen(parsedFrame["data"]):
+                Txxx_elements_ = Array()
+                Txxx_elements_start_offset_ = 0
+                i_ = 0
+                while i_ < php_strlen(parsedFrame_["data"]):
                     
-                    if php_substr(parsedFrame["data"], i, wordsize) == php_str_repeat(" ", wordsize):
-                        Txxx_elements[-1] = php_substr(parsedFrame["data"], Txxx_elements_start_offset, i - Txxx_elements_start_offset)
-                        Txxx_elements_start_offset = i + wordsize
+                    if php_substr(parsedFrame_["data"], i_, wordsize_) == php_str_repeat(" ", wordsize_):
+                        Txxx_elements_[-1] = php_substr(parsedFrame_["data"], Txxx_elements_start_offset_, i_ - Txxx_elements_start_offset_)
+                        Txxx_elements_start_offset_ = i_ + wordsize_
                     # end if
-                    i += wordsize
+                    i_ += wordsize_
                 # end while
-                Txxx_elements[-1] = php_substr(parsedFrame["data"], Txxx_elements_start_offset, i - Txxx_elements_start_offset)
-                for Txxx_element in Txxx_elements:
-                    string = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], Txxx_element)
-                    if (not php_empty(lambda : string)):
-                        info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = string
+                Txxx_elements_[-1] = php_substr(parsedFrame_["data"], Txxx_elements_start_offset_, i_ - Txxx_elements_start_offset_)
+                for Txxx_element_ in Txxx_elements_:
+                    string_ = getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], Txxx_element_)
+                    if (not php_empty(lambda : string_)):
+                        info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = string_
                     # end if
                 # end for
-                string = None
-                wordsize = None
-                i = None
-                Txxx_elements = None
-                Txxx_element = None
-                Txxx_elements_start_offset = None
+                string_ = None
+                wordsize_ = None
+                i_ = None
+                Txxx_elements_ = None
+                Txxx_element_ = None
+                Txxx_elements_start_offset_ = None
             # end if
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "WXXX" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "WXX":
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "WXXX" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "WXX":
             #// 4.3.2 WXX  User defined URL link frame
             #// There may be more than one 'WXXX' frame in each tag,
             #// but only one with the same description
@@ -741,132 +741,134 @@ class getid3_id3v2(getid3_handler):
             #// Text encoding     $xx
             #// Description       <text string according to encoding> $00 (00)
             #// URL               <text string>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                frame_textencoding_terminator = " "
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                frame_textencoding_terminator_ = " "
             # end if
-            frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-            if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                frame_terminatorpos += 1
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+            if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                frame_terminatorpos_ += 1
                 pass
             # end if
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
             #// according to the frame text encoding
-            parsedFrame["url"] = php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator))
+            parsedFrame_["url"] = php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_))
             #// always ISO-8859-1
-            parsedFrame["description"] = self.removestringterminator(parsedFrame["description"], frame_textencoding_terminator)
-            parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and parsedFrame["url"]:
-                info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback("ISO-8859-1", info["id3v2"]["encoding"], parsedFrame["url"])
+            parsedFrame_["description"] = self.removestringterminator(parsedFrame_["description"], frame_textencoding_terminator_)
+            parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and parsedFrame_["url"]:
+                info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = getid3_lib.iconv_fallback("ISO-8859-1", info_["id3v2"]["encoding"], parsedFrame_["url"])
             # end if
-            parsedFrame["data"] = None
-        elif parsedFrame["frame_name"][0] == "W":
+            parsedFrame_["data"] = None
+        elif parsedFrame_["frame_name"][0] == "W":
             #// 4.3. W??? URL link frames
             #// There may only be one URL link frame of its kind in a tag,
             #// except when stated otherwise in the frame description
             #// <Header for 'URL link frame', ID: 'W000' - 'WZZZ', excluding 'WXXX'
             #// described in 4.3.2.>
             #// URL              <text string>
-            parsedFrame["url"] = php_trim(parsedFrame["data"])
+            parsedFrame_["url"] = php_trim(parsedFrame_["data"])
             #// always ISO-8859-1
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and parsedFrame["url"]:
-                info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback("ISO-8859-1", info["id3v2"]["encoding"], parsedFrame["url"])
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and parsedFrame_["url"]:
+                info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = getid3_lib.iconv_fallback("ISO-8859-1", info_["id3v2"]["encoding"], parsedFrame_["url"])
             # end if
-            parsedFrame["data"] = None
-        elif id3v2_majorversion == 3 and parsedFrame["frame_name"] == "IPLS" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "IPL":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ == 3 and parsedFrame_["frame_name"] == "IPLS" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "IPL":
             #// 4.4  IPL  Involved people list (ID3v2.2 only)
             #// http://id3.org/id3v2.3.0#sec4.4
             #// There may only be one 'IPL' frame in each tag
             #// <Header for 'User defined URL link frame', ID: 'IPL'>
             #// Text encoding     $xx
             #// People list strings    <textstrings>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
             # end if
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(parsedFrame["encodingid"])
-            parsedFrame["data_raw"] = php_str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(parsedFrame_["encodingid"])
+            parsedFrame_["data_raw"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
             #// https://www.getid3.org/phpBB3/viewtopic.php?t=1369
             #// "this tag typically contains null terminated strings, which are associated in pairs"
             #// "there are users that use the tag incorrectly"
-            IPLS_parts = Array()
-            if php_strpos(parsedFrame["data_raw"], " ") != False:
-                IPLS_parts_unsorted = Array()
-                if php_strlen(parsedFrame["data_raw"]) % 2 == 0 and php_substr(parsedFrame["data_raw"], 0, 2) == "ÿþ" or php_substr(parsedFrame["data_raw"], 0, 2) == "þÿ":
+            IPLS_parts_ = Array()
+            if php_strpos(parsedFrame_["data_raw"], " ") != False:
+                IPLS_parts_unsorted_ = Array()
+                if php_strlen(parsedFrame_["data_raw"]) % 2 == 0 and php_substr(parsedFrame_["data_raw"], 0, 2) == "ÿþ" or php_substr(parsedFrame_["data_raw"], 0, 2) == "þÿ":
                     #// UTF-16, be careful looking for null bytes since most 2-byte characters may contain one; you need to find twin null bytes, and on even padding
-                    thisILPS = ""
-                    i = 0
-                    while i < php_strlen(parsedFrame["data_raw"]):
+                    thisILPS_ = ""
+                    i_ = 0
+                    while i_ < php_strlen(parsedFrame_["data_raw"]):
                         
-                        twobytes = php_substr(parsedFrame["data_raw"], i, 2)
-                        if twobytes == "  ":
-                            IPLS_parts_unsorted[-1] = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], thisILPS)
-                            thisILPS = ""
+                        twobytes_ = php_substr(parsedFrame_["data_raw"], i_, 2)
+                        if twobytes_ == "  ":
+                            IPLS_parts_unsorted_[-1] = getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], thisILPS_)
+                            thisILPS_ = ""
                         else:
-                            thisILPS += twobytes
+                            thisILPS_ += twobytes_
                         # end if
-                        i += 2
+                        i_ += 2
                     # end while
-                    if php_strlen(thisILPS) > 2:
+                    if php_strlen(thisILPS_) > 2:
                         #// 2-byte BOM
-                        IPLS_parts_unsorted[-1] = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], thisILPS)
+                        IPLS_parts_unsorted_[-1] = getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], thisILPS_)
                     # end if
                 else:
                     #// ISO-8859-1 or UTF-8 or other single-byte-null character set
-                    IPLS_parts_unsorted = php_explode(" ", parsedFrame["data_raw"])
+                    IPLS_parts_unsorted_ = php_explode(" ", parsedFrame_["data_raw"])
                 # end if
-                if php_count(IPLS_parts_unsorted) == 1:
+                if php_count(IPLS_parts_unsorted_) == 1:
                     #// just a list of names, e.g. "Dino Baptiste, Jimmy Copley, John Gordon, Bernie Marsden, Sharon Watson"
-                    for key,value in IPLS_parts_unsorted:
-                        IPLS_parts_sorted = php_preg_split("#[;,\\r\\n\\t]#", value)
-                        position = ""
-                        for person in IPLS_parts_sorted:
-                            IPLS_parts[-1] = Array({"position": position, "person": person})
+                    for key_,value_ in IPLS_parts_unsorted_:
+                        IPLS_parts_sorted_ = php_preg_split("#[;,\\r\\n\\t]#", value_)
+                        position_ = ""
+                        for person_ in IPLS_parts_sorted_:
+                            IPLS_parts_[-1] = Array({"position": position_, "person": person_})
                         # end for
                     # end for
-                elif php_count(IPLS_parts_unsorted) % 2 == 0:
-                    position = ""
-                    person = ""
-                    for key,value in IPLS_parts_unsorted:
-                        if key % 2 == 0:
-                            position = value
+                elif php_count(IPLS_parts_unsorted_) % 2 == 0:
+                    position_ = ""
+                    person_ = ""
+                    for key_,value_ in IPLS_parts_unsorted_:
+                        if key_ % 2 == 0:
+                            position_ = value_
                         else:
-                            person = value
-                            IPLS_parts[-1] = Array({"position": position, "person": person})
-                            position = ""
-                            person = ""
+                            person_ = value_
+                            IPLS_parts_[-1] = Array({"position": position_, "person": person_})
+                            position_ = ""
+                            person_ = ""
                         # end if
                     # end for
                 else:
-                    for key,value in IPLS_parts_unsorted:
-                        IPLS_parts[-1] = Array(value)
+                    for key_,value_ in IPLS_parts_unsorted_:
+                        IPLS_parts_[-1] = Array(value_)
                     # end for
                 # end if
             else:
-                IPLS_parts = php_preg_split("#[;,\\r\\n\\t]#", parsedFrame["data_raw"])
+                IPLS_parts_ = php_preg_split("#[;,\\r\\n\\t]#", parsedFrame_["data_raw"])
             # end if
-            parsedFrame["data"] = IPLS_parts
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
-                info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = parsedFrame["data"]
+            parsedFrame_["data"] = IPLS_parts_
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
+                info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = parsedFrame_["data"]
             # end if
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "MCDI" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "MCI":
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "MCDI" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "MCI":
             #// 4.5   MCI  Music CD identifier
             #// There may only be one 'MCDI' frame in each tag
             #// <Header for 'Music CD identifier', ID: 'MCDI'>
             #// CD TOC                <binary data>
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
-                info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = parsedFrame["data"]
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
+                info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = parsedFrame_["data"]
             # end if
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "ETCO" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "ETC":
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "ETCO" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "ETC":
             #// 4.6   ETC  Event timing codes
             #// There may only be one 'ETCO' frame in each tag
             #// <Header for 'Event timing codes', ID: 'ETCO'>
@@ -879,22 +881,24 @@ class getid3_id3v2(getid3_handler):
             #// Time stamp      $xx (xx ...)
             #// The 'Time stamp' is set to zero if directly at the beginning of the sound
             #// or after the previous event. All events MUST be sorted in chronological order.
-            frame_offset = 0
-            parsedFrame["timestampformat"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
+            frame_offset_ = 0
+            parsedFrame_["timestampformat"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
             while True:
                 
-                if not (frame_offset < php_strlen(parsedFrame["data"])):
+                if not (frame_offset_ < php_strlen(parsedFrame_["data"])):
                     break
                 # end if
-                parsedFrame["typeid"] = php_substr(parsedFrame["data"], frame_offset, 1)
-                frame_offset += 1
-                parsedFrame["type"] = self.etcoeventlookup(parsedFrame["typeid"])
-                parsedFrame["timestamp"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-                frame_offset += 4
+                parsedFrame_["typeid"] = php_substr(parsedFrame_["data"], frame_offset_, 1)
+                frame_offset_ += 1
+                frame_offset_ += 1
+                parsedFrame_["type"] = self.etcoeventlookup(parsedFrame_["typeid"])
+                parsedFrame_["timestamp"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+                frame_offset_ += 4
             # end while
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "MLLT" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "MLL":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "MLLT" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "MLL":
             #// 4.7   MLL MPEG location lookup table
             #// There may only be one 'MLLT' frame in each tag
             #// <Header for 'Location lookup table', ID: 'MLLT'>
@@ -906,35 +910,35 @@ class getid3_id3v2(getid3_handler):
             #// Then for every reference the following data is included;
             #// Deviation in bytes         %xxx....
             #// Deviation in milliseconds  %xxx....
-            frame_offset = 0
-            parsedFrame["framesbetweenreferences"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], 0, 2))
-            parsedFrame["bytesbetweenreferences"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], 2, 3))
-            parsedFrame["msbetweenreferences"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], 5, 3))
-            parsedFrame["bitsforbytesdeviation"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], 8, 1))
-            parsedFrame["bitsformsdeviation"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], 9, 1))
-            parsedFrame["data"] = php_substr(parsedFrame["data"], 10)
-            deviationbitstream = ""
+            frame_offset_ = 0
+            parsedFrame_["framesbetweenreferences"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], 0, 2))
+            parsedFrame_["bytesbetweenreferences"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], 2, 3))
+            parsedFrame_["msbetweenreferences"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], 5, 3))
+            parsedFrame_["bitsforbytesdeviation"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], 8, 1))
+            parsedFrame_["bitsformsdeviation"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], 9, 1))
+            parsedFrame_["data"] = php_substr(parsedFrame_["data"], 10)
+            deviationbitstream_ = ""
             while True:
                 
-                if not (frame_offset < php_strlen(parsedFrame["data"])):
+                if not (frame_offset_ < php_strlen(parsedFrame_["data"])):
                     break
                 # end if
-                deviationbitstream += getid3_lib.bigendian2bin(php_substr(parsedFrame["data"], frame_offset, 1))
-                frame_offset += 1
+                deviationbitstream_ += getid3_lib.bigendian2bin(php_substr(parsedFrame_["data"], frame_offset_, 1))
+                frame_offset_ += 1
             # end while
-            reference_counter = 0
+            reference_counter_ = 0
             while True:
                 
-                if not (php_strlen(deviationbitstream) > 0):
+                if not (php_strlen(deviationbitstream_) > 0):
                     break
                 # end if
-                parsedFrame[reference_counter]["bytedeviation"] = bindec(php_substr(deviationbitstream, 0, parsedFrame["bitsforbytesdeviation"]))
-                parsedFrame[reference_counter]["msdeviation"] = bindec(php_substr(deviationbitstream, parsedFrame["bitsforbytesdeviation"], parsedFrame["bitsformsdeviation"]))
-                deviationbitstream = php_substr(deviationbitstream, parsedFrame["bitsforbytesdeviation"] + parsedFrame["bitsformsdeviation"])
-                reference_counter += 1
+                parsedFrame_[reference_counter_]["bytedeviation"] = bindec(php_substr(deviationbitstream_, 0, parsedFrame_["bitsforbytesdeviation"]))
+                parsedFrame_[reference_counter_]["msdeviation"] = bindec(php_substr(deviationbitstream_, parsedFrame_["bitsforbytesdeviation"], parsedFrame_["bitsformsdeviation"]))
+                deviationbitstream_ = php_substr(deviationbitstream_, parsedFrame_["bitsforbytesdeviation"] + parsedFrame_["bitsformsdeviation"])
+                reference_counter_ += 1
             # end while
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "SYTC" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "STC":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "SYTC" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "STC":
             #// 4.8   STC  Synchronised tempo codes
             #// There may only be one 'SYTC' frame in each tag
             #// <Header for 'Synchronised tempo codes', ID: 'SYTC'>
@@ -943,27 +947,29 @@ class getid3_id3v2(getid3_handler):
             #// Where time stamp format is:
             #// $01  (32-bit value) MPEG frames from beginning of file
             #// $02  (32-bit value) milliseconds from beginning of file
-            frame_offset = 0
-            parsedFrame["timestampformat"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            timestamp_counter = 0
+            frame_offset_ = 0
+            parsedFrame_["timestampformat"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            timestamp_counter_ = 0
             while True:
                 
-                if not (frame_offset < php_strlen(parsedFrame["data"])):
+                if not (frame_offset_ < php_strlen(parsedFrame_["data"])):
                     break
                 # end if
-                parsedFrame[timestamp_counter]["tempo"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-                frame_offset += 1
-                if parsedFrame[timestamp_counter]["tempo"] == 255:
-                    parsedFrame[timestamp_counter]["tempo"] += php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-                    frame_offset += 1
+                parsedFrame_[timestamp_counter_]["tempo"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+                frame_offset_ += 1
+                frame_offset_ += 1
+                if parsedFrame_[timestamp_counter_]["tempo"] == 255:
+                    parsedFrame_[timestamp_counter_]["tempo"] += php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+                    frame_offset_ += 1
                 # end if
-                parsedFrame[timestamp_counter]["timestamp"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-                frame_offset += 4
-                timestamp_counter += 1
+                parsedFrame_[timestamp_counter_]["timestamp"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+                frame_offset_ += 4
+                timestamp_counter_ += 1
             # end while
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "USLT" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "ULT":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "USLT" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "ULT":
             #// 4.9   ULT  Unsynchronised lyric/text transcription
             #// There may be more than one 'Unsynchronised lyrics/text transcription' frame
             #// in each tag, but only one with the same language and content descriptor.
@@ -972,34 +978,35 @@ class getid3_id3v2(getid3_handler):
             #// Language             $xx xx xx
             #// Content descriptor   <text string according to encoding> $00 (00)
             #// Lyrics/text          <full text string according to encoding>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                frame_textencoding_terminator = " "
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                frame_textencoding_terminator_ = " "
             # end if
-            frame_language = php_substr(parsedFrame["data"], frame_offset, 3)
-            frame_offset += 3
-            frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-            if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                frame_terminatorpos += 1
+            frame_language_ = php_substr(parsedFrame_["data"], frame_offset_, 3)
+            frame_offset_ += 3
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+            if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                frame_terminatorpos_ += 1
                 pass
             # end if
-            parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-            parsedFrame["data"] = php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator))
-            parsedFrame["data"] = self.removestringterminator(parsedFrame["data"], frame_textencoding_terminator)
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["language"] = frame_language
-            parsedFrame["languagename"] = self.languagelookup(frame_language, False)
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
-                info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["data"])
+            parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+            parsedFrame_["data"] = php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_))
+            parsedFrame_["data"] = self.removestringterminator(parsedFrame_["data"], frame_textencoding_terminator_)
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            parsedFrame_["language"] = frame_language_
+            parsedFrame_["languagename"] = self.languagelookup(frame_language_, False)
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
+                info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], parsedFrame_["data"])
             # end if
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "SYLT" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "SLT":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "SYLT" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "SLT":
             #// 4.10  SLT  Synchronised lyric/text
             #// There may be more than one 'SYLT' frame in each tag,
             #// but only one with the same language and content descriptor.
@@ -1014,54 +1021,57 @@ class getid3_id3v2(getid3_handler):
             #// Terminated text to be synced (typically a syllable)
             #// Sync identifier (terminator to above string)   $00 (00)
             #// Time stamp                                     $xx (xx ...)
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                frame_textencoding_terminator = " "
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                frame_textencoding_terminator_ = " "
             # end if
-            frame_language = php_substr(parsedFrame["data"], frame_offset, 3)
-            frame_offset += 3
-            parsedFrame["timestampformat"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["contenttypeid"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["contenttype"] = self.sytlcontenttypelookup(parsedFrame["contenttypeid"])
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["language"] = frame_language
-            parsedFrame["languagename"] = self.languagelookup(frame_language, False)
-            timestampindex = 0
-            frame_remainingdata = php_substr(parsedFrame["data"], frame_offset)
+            frame_language_ = php_substr(parsedFrame_["data"], frame_offset_, 3)
+            frame_offset_ += 3
+            parsedFrame_["timestampformat"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["contenttypeid"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["contenttype"] = self.sytlcontenttypelookup(parsedFrame_["contenttypeid"])
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            parsedFrame_["language"] = frame_language_
+            parsedFrame_["languagename"] = self.languagelookup(frame_language_, False)
+            timestampindex_ = 0
+            frame_remainingdata_ = php_substr(parsedFrame_["data"], frame_offset_)
             while True:
                 
-                if not (php_strlen(frame_remainingdata)):
+                if not (php_strlen(frame_remainingdata_)):
                     break
                 # end if
-                frame_offset = 0
-                frame_terminatorpos = php_strpos(frame_remainingdata, frame_textencoding_terminator)
-                if frame_terminatorpos == False:
-                    frame_remainingdata = ""
+                frame_offset_ = 0
+                frame_terminatorpos_ = php_strpos(frame_remainingdata_, frame_textencoding_terminator_)
+                if frame_terminatorpos_ == False:
+                    frame_remainingdata_ = ""
                 else:
-                    if php_ord(php_substr(frame_remainingdata, frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                        frame_terminatorpos += 1
+                    if php_ord(php_substr(frame_remainingdata_, frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                        frame_terminatorpos_ += 1
                         pass
                     # end if
-                    parsedFrame["lyrics"][timestampindex]["data"] = php_substr(frame_remainingdata, frame_offset, frame_terminatorpos - frame_offset)
-                    frame_remainingdata = php_substr(frame_remainingdata, frame_terminatorpos + php_strlen(frame_textencoding_terminator))
-                    if timestampindex == 0 and php_ord(frame_remainingdata[0]) != 0:
+                    parsedFrame_["lyrics"][timestampindex_]["data"] = php_substr(frame_remainingdata_, frame_offset_, frame_terminatorpos_ - frame_offset_)
+                    frame_remainingdata_ = php_substr(frame_remainingdata_, frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_))
+                    if timestampindex_ == 0 and php_ord(frame_remainingdata_[0]) != 0:
                         pass
                     else:
-                        parsedFrame["lyrics"][timestampindex]["timestamp"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata, 0, 4))
-                        frame_remainingdata = php_substr(frame_remainingdata, 4)
+                        parsedFrame_["lyrics"][timestampindex_]["timestamp"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata_, 0, 4))
+                        frame_remainingdata_ = php_substr(frame_remainingdata_, 4)
                     # end if
-                    timestampindex += 1
+                    timestampindex_ += 1
                 # end if
             # end while
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "COMM" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "COM":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "COMM" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "COM":
             #// 4.11  COM  Comments
             #// There may be more than one comment frame in each tag,
             #// but only one with the same language and content descriptor.
@@ -1070,43 +1080,44 @@ class getid3_id3v2(getid3_handler):
             #// Language               $xx xx xx
             #// Short content descrip. <text string according to encoding> $00 (00)
             #// The actual text        <full text string according to encoding>
-            if php_strlen(parsedFrame["data"]) < 5:
-                self.warning("Invalid data (too short) for \"" + parsedFrame["frame_name"] + "\" frame at offset " + parsedFrame["dataoffset"])
+            if php_strlen(parsedFrame_["data"]) < 5:
+                self.warning("Invalid data (too short) for \"" + parsedFrame_["frame_name"] + "\" frame at offset " + parsedFrame_["dataoffset"])
             else:
-                frame_offset = 0
-                frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-                frame_offset += 1
-                frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-                if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                    self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                    frame_textencoding_terminator = " "
+                frame_offset_ = 0
+                frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+                frame_offset_ += 1
+                frame_offset_ += 1
+                frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+                if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                    self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                    frame_textencoding_terminator_ = " "
                 # end if
-                frame_language = php_substr(parsedFrame["data"], frame_offset, 3)
-                frame_offset += 3
-                frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-                if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                    frame_terminatorpos += 1
+                frame_language_ = php_substr(parsedFrame_["data"], frame_offset_, 3)
+                frame_offset_ += 3
+                frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+                if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                    frame_terminatorpos_ += 1
                     pass
                 # end if
-                parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-                parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-                frame_text = php_str(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator)))
-                frame_text = self.removestringterminator(frame_text, frame_textencoding_terminator)
-                parsedFrame["encodingid"] = frame_textencoding
-                parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-                parsedFrame["language"] = frame_language
-                parsedFrame["languagename"] = self.languagelookup(frame_language, False)
-                parsedFrame["data"] = frame_text
-                if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
-                    commentkey = parsedFrame["description"] if parsedFrame["description"] else php_count(info["id3v2"]["comments"][parsedFrame["framenameshort"]]) if (not php_empty(lambda : info["id3v2"]["comments"][parsedFrame["framenameshort"]])) else 0
-                    if (not (php_isset(lambda : info["id3v2"]["comments"][parsedFrame["framenameshort"]]))) or (not php_array_key_exists(commentkey, info["id3v2"]["comments"][parsedFrame["framenameshort"]])):
-                        info["id3v2"]["comments"][parsedFrame["framenameshort"]][commentkey] = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["data"])
+                parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+                parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+                frame_text_ = php_str(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_)))
+                frame_text_ = self.removestringterminator(frame_text_, frame_textencoding_terminator_)
+                parsedFrame_["encodingid"] = frame_textencoding_
+                parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+                parsedFrame_["language"] = frame_language_
+                parsedFrame_["languagename"] = self.languagelookup(frame_language_, False)
+                parsedFrame_["data"] = frame_text_
+                if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
+                    commentkey_ = parsedFrame_["description"] if parsedFrame_["description"] else php_count(info_["id3v2"]["comments"][parsedFrame_["framenameshort"]]) if (not php_empty(lambda : info_["id3v2"]["comments"][parsedFrame_["framenameshort"]])) else 0
+                    if (not (php_isset(lambda : info_["id3v2"]["comments"][parsedFrame_["framenameshort"]]))) or (not php_array_key_exists(commentkey_, info_["id3v2"]["comments"][parsedFrame_["framenameshort"]])):
+                        info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][commentkey_] = getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], parsedFrame_["data"])
                     else:
-                        info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["data"])
+                        info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], parsedFrame_["data"])
                     # end if
                 # end if
             # end if
-        elif id3v2_majorversion >= 4 and parsedFrame["frame_name"] == "RVA2":
+        elif id3v2_majorversion_ >= 4 and parsedFrame_["frame_name"] == "RVA2":
             #// 4.11  RVA2 Relative volume adjustment (2) (ID3v2.4+ only)
             #// There may be more than one 'RVA2' frame in each tag,
             #// but only one with the same identification string
@@ -1119,40 +1130,42 @@ class getid3_id3v2(getid3_handler):
             #// Volume adjustment       $xx xx
             #// Bits representing peak  $xx
             #// Peak volume             $xx (xx ...)
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ")
-            frame_idstring = php_substr(parsedFrame["data"], 0, frame_terminatorpos)
-            if php_ord(frame_idstring) == 0:
-                frame_idstring = ""
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ")
+            frame_idstring_ = php_substr(parsedFrame_["data"], 0, frame_terminatorpos_)
+            if php_ord(frame_idstring_) == 0:
+                frame_idstring_ = ""
             # end if
-            frame_remainingdata = php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(" "))
-            parsedFrame["description"] = frame_idstring
-            RVA2channelcounter = 0
+            frame_remainingdata_ = php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(" "))
+            parsedFrame_["description"] = frame_idstring_
+            RVA2channelcounter_ = 0
             while True:
                 
-                if not (php_strlen(frame_remainingdata) >= 5):
+                if not (php_strlen(frame_remainingdata_) >= 5):
                     break
                 # end if
-                frame_offset = 0
-                frame_channeltypeid = php_ord(php_substr(frame_remainingdata, frame_offset, 1))
-                frame_offset += 1
-                parsedFrame[RVA2channelcounter]["channeltypeid"] = frame_channeltypeid
-                parsedFrame[RVA2channelcounter]["channeltype"] = self.rva2channeltypelookup(frame_channeltypeid)
-                parsedFrame[RVA2channelcounter]["volumeadjust"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata, frame_offset, 2), False, True)
+                frame_offset_ = 0
+                frame_channeltypeid_ = php_ord(php_substr(frame_remainingdata_, frame_offset_, 1))
+                frame_offset_ += 1
+                frame_offset_ += 1
+                parsedFrame_[RVA2channelcounter_]["channeltypeid"] = frame_channeltypeid_
+                parsedFrame_[RVA2channelcounter_]["channeltype"] = self.rva2channeltypelookup(frame_channeltypeid_)
+                parsedFrame_[RVA2channelcounter_]["volumeadjust"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata_, frame_offset_, 2), False, True)
                 #// 16-bit signed
-                frame_offset += 2
-                parsedFrame[RVA2channelcounter]["bitspeakvolume"] = php_ord(php_substr(frame_remainingdata, frame_offset, 1))
-                frame_offset += 1
-                if parsedFrame[RVA2channelcounter]["bitspeakvolume"] < 1 or parsedFrame[RVA2channelcounter]["bitspeakvolume"] > 4:
-                    self.warning("ID3v2::RVA2 frame[" + RVA2channelcounter + "] contains invalid " + parsedFrame[RVA2channelcounter]["bitspeakvolume"] + "-byte bits-representing-peak value")
+                frame_offset_ += 2
+                parsedFrame_[RVA2channelcounter_]["bitspeakvolume"] = php_ord(php_substr(frame_remainingdata_, frame_offset_, 1))
+                frame_offset_ += 1
+                frame_offset_ += 1
+                if parsedFrame_[RVA2channelcounter_]["bitspeakvolume"] < 1 or parsedFrame_[RVA2channelcounter_]["bitspeakvolume"] > 4:
+                    self.warning("ID3v2::RVA2 frame[" + RVA2channelcounter_ + "] contains invalid " + parsedFrame_[RVA2channelcounter_]["bitspeakvolume"] + "-byte bits-representing-peak value")
                     break
                 # end if
-                frame_bytespeakvolume = ceil(parsedFrame[RVA2channelcounter]["bitspeakvolume"] / 8)
-                parsedFrame[RVA2channelcounter]["peakvolume"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata, frame_offset, frame_bytespeakvolume))
-                frame_remainingdata = php_substr(frame_remainingdata, frame_offset + frame_bytespeakvolume)
-                RVA2channelcounter += 1
+                frame_bytespeakvolume_ = ceil(parsedFrame_[RVA2channelcounter_]["bitspeakvolume"] / 8)
+                parsedFrame_[RVA2channelcounter_]["peakvolume"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata_, frame_offset_, frame_bytespeakvolume_))
+                frame_remainingdata_ = php_substr(frame_remainingdata_, frame_offset_ + frame_bytespeakvolume_)
+                RVA2channelcounter_ += 1
             # end while
-            parsedFrame["data"] = None
-        elif id3v2_majorversion == 3 and parsedFrame["frame_name"] == "RVAD" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "RVA":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ == 3 and parsedFrame_["frame_name"] == "RVAD" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "RVA":
             #// 4.12  RVA  Relative volume adjustment (ID3v2.2 only)
             #// There may only be one 'RVA' frame in each tag
             #// <Header for 'Relative volume adjustment', ID: 'RVA'>
@@ -1174,73 +1187,75 @@ class getid3_id3v2(getid3_handler):
             #// ID3v2.3 only, optional (not present in ID3v2.2):
             #// Relative volume change, bass       $xx xx (xx ...) // f
             #// Peak volume bass                   $xx xx (xx ...)
-            frame_offset = 0
-            frame_incrdecrflags = getid3_lib.bigendian2bin(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["incdec"]["right"] = php_bool(php_substr(frame_incrdecrflags, 6, 1))
-            parsedFrame["incdec"]["left"] = php_bool(php_substr(frame_incrdecrflags, 7, 1))
-            parsedFrame["bitsvolume"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_bytesvolume = ceil(parsedFrame["bitsvolume"] / 8)
-            parsedFrame["volumechange"]["right"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-            if parsedFrame["incdec"]["right"] == False:
-                parsedFrame["volumechange"]["right"] *= -1
+            frame_offset_ = 0
+            frame_incrdecrflags_ = getid3_lib.bigendian2bin(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["incdec"]["right"] = php_bool(php_substr(frame_incrdecrflags_, 6, 1))
+            parsedFrame_["incdec"]["left"] = php_bool(php_substr(frame_incrdecrflags_, 7, 1))
+            parsedFrame_["bitsvolume"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_bytesvolume_ = ceil(parsedFrame_["bitsvolume"] / 8)
+            parsedFrame_["volumechange"]["right"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+            if parsedFrame_["incdec"]["right"] == False:
+                parsedFrame_["volumechange"]["right"] *= -1
             # end if
-            frame_offset += frame_bytesvolume
-            parsedFrame["volumechange"]["left"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-            if parsedFrame["incdec"]["left"] == False:
-                parsedFrame["volumechange"]["left"] *= -1
+            frame_offset_ += frame_bytesvolume_
+            parsedFrame_["volumechange"]["left"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+            if parsedFrame_["incdec"]["left"] == False:
+                parsedFrame_["volumechange"]["left"] *= -1
             # end if
-            frame_offset += frame_bytesvolume
-            parsedFrame["peakvolume"]["right"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-            frame_offset += frame_bytesvolume
-            parsedFrame["peakvolume"]["left"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-            frame_offset += frame_bytesvolume
-            if id3v2_majorversion == 3:
-                parsedFrame["data"] = php_substr(parsedFrame["data"], frame_offset)
-                if php_strlen(parsedFrame["data"]) > 0:
-                    parsedFrame["incdec"]["rightrear"] = php_bool(php_substr(frame_incrdecrflags, 4, 1))
-                    parsedFrame["incdec"]["leftrear"] = php_bool(php_substr(frame_incrdecrflags, 5, 1))
-                    parsedFrame["volumechange"]["rightrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    if parsedFrame["incdec"]["rightrear"] == False:
-                        parsedFrame["volumechange"]["rightrear"] *= -1
+            frame_offset_ += frame_bytesvolume_
+            parsedFrame_["peakvolume"]["right"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+            frame_offset_ += frame_bytesvolume_
+            parsedFrame_["peakvolume"]["left"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+            frame_offset_ += frame_bytesvolume_
+            if id3v2_majorversion_ == 3:
+                parsedFrame_["data"] = php_substr(parsedFrame_["data"], frame_offset_)
+                if php_strlen(parsedFrame_["data"]) > 0:
+                    parsedFrame_["incdec"]["rightrear"] = php_bool(php_substr(frame_incrdecrflags_, 4, 1))
+                    parsedFrame_["incdec"]["leftrear"] = php_bool(php_substr(frame_incrdecrflags_, 5, 1))
+                    parsedFrame_["volumechange"]["rightrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    if parsedFrame_["incdec"]["rightrear"] == False:
+                        parsedFrame_["volumechange"]["rightrear"] *= -1
                     # end if
-                    frame_offset += frame_bytesvolume
-                    parsedFrame["volumechange"]["leftrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    if parsedFrame["incdec"]["leftrear"] == False:
-                        parsedFrame["volumechange"]["leftrear"] *= -1
+                    frame_offset_ += frame_bytesvolume_
+                    parsedFrame_["volumechange"]["leftrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    if parsedFrame_["incdec"]["leftrear"] == False:
+                        parsedFrame_["volumechange"]["leftrear"] *= -1
                     # end if
-                    frame_offset += frame_bytesvolume
-                    parsedFrame["peakvolume"]["rightrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    frame_offset += frame_bytesvolume
-                    parsedFrame["peakvolume"]["leftrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    frame_offset += frame_bytesvolume
+                    frame_offset_ += frame_bytesvolume_
+                    parsedFrame_["peakvolume"]["rightrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    frame_offset_ += frame_bytesvolume_
+                    parsedFrame_["peakvolume"]["leftrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    frame_offset_ += frame_bytesvolume_
                 # end if
-                parsedFrame["data"] = php_substr(parsedFrame["data"], frame_offset)
-                if php_strlen(parsedFrame["data"]) > 0:
-                    parsedFrame["incdec"]["center"] = php_bool(php_substr(frame_incrdecrflags, 3, 1))
-                    parsedFrame["volumechange"]["center"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    if parsedFrame["incdec"]["center"] == False:
-                        parsedFrame["volumechange"]["center"] *= -1
+                parsedFrame_["data"] = php_substr(parsedFrame_["data"], frame_offset_)
+                if php_strlen(parsedFrame_["data"]) > 0:
+                    parsedFrame_["incdec"]["center"] = php_bool(php_substr(frame_incrdecrflags_, 3, 1))
+                    parsedFrame_["volumechange"]["center"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    if parsedFrame_["incdec"]["center"] == False:
+                        parsedFrame_["volumechange"]["center"] *= -1
                     # end if
-                    frame_offset += frame_bytesvolume
-                    parsedFrame["peakvolume"]["center"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    frame_offset += frame_bytesvolume
+                    frame_offset_ += frame_bytesvolume_
+                    parsedFrame_["peakvolume"]["center"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    frame_offset_ += frame_bytesvolume_
                 # end if
-                parsedFrame["data"] = php_substr(parsedFrame["data"], frame_offset)
-                if php_strlen(parsedFrame["data"]) > 0:
-                    parsedFrame["incdec"]["bass"] = php_bool(php_substr(frame_incrdecrflags, 2, 1))
-                    parsedFrame["volumechange"]["bass"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    if parsedFrame["incdec"]["bass"] == False:
-                        parsedFrame["volumechange"]["bass"] *= -1
+                parsedFrame_["data"] = php_substr(parsedFrame_["data"], frame_offset_)
+                if php_strlen(parsedFrame_["data"]) > 0:
+                    parsedFrame_["incdec"]["bass"] = php_bool(php_substr(frame_incrdecrflags_, 2, 1))
+                    parsedFrame_["volumechange"]["bass"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    if parsedFrame_["incdec"]["bass"] == False:
+                        parsedFrame_["volumechange"]["bass"] *= -1
                     # end if
-                    frame_offset += frame_bytesvolume
-                    parsedFrame["peakvolume"]["bass"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
-                    frame_offset += frame_bytesvolume
+                    frame_offset_ += frame_bytesvolume_
+                    parsedFrame_["peakvolume"]["bass"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesvolume_))
+                    frame_offset_ += frame_bytesvolume_
                 # end if
             # end if
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 4 and parsedFrame["frame_name"] == "EQU2":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 4 and parsedFrame_["frame_name"] == "EQU2":
             #// 4.12  EQU2 Equalisation (2) (ID3v2.4+ only)
             #// There may be more than one 'EQU2' frame in each tag,
             #// but only one with the same identification string
@@ -1252,28 +1267,29 @@ class getid3_id3v2(getid3_handler):
             #// The following is then repeated for every adjustment point
             #// Frequency          $xx xx
             #// Volume adjustment  $xx xx
-            frame_offset = 0
-            frame_interpolationmethod = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_idstring = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_idstring) == 0:
-                frame_idstring = ""
+            frame_offset_ = 0
+            frame_interpolationmethod_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_idstring_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_idstring_) == 0:
+                frame_idstring_ = ""
             # end if
-            parsedFrame["description"] = frame_idstring
-            frame_remainingdata = php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(" "))
+            parsedFrame_["description"] = frame_idstring_
+            frame_remainingdata_ = php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(" "))
             while True:
                 
-                if not (php_strlen(frame_remainingdata)):
+                if not (php_strlen(frame_remainingdata_)):
                     break
                 # end if
-                frame_frequency = getid3_lib.bigendian2int(php_substr(frame_remainingdata, 0, 2)) / 2
-                parsedFrame["data"][frame_frequency] = getid3_lib.bigendian2int(php_substr(frame_remainingdata, 2, 2), False, True)
-                frame_remainingdata = php_substr(frame_remainingdata, 4)
+                frame_frequency_ = getid3_lib.bigendian2int(php_substr(frame_remainingdata_, 0, 2)) / 2
+                parsedFrame_["data"][frame_frequency_] = getid3_lib.bigendian2int(php_substr(frame_remainingdata_, 2, 2), False, True)
+                frame_remainingdata_ = php_substr(frame_remainingdata_, 4)
             # end while
-            parsedFrame["interpolationmethod"] = frame_interpolationmethod
-            parsedFrame["data"] = None
-        elif id3v2_majorversion == 3 and parsedFrame["frame_name"] == "EQUA" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "EQU":
+            parsedFrame_["interpolationmethod"] = frame_interpolationmethod_
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ == 3 and parsedFrame_["frame_name"] == "EQUA" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "EQU":
             #// 4.13  EQU  Equalisation (ID3v2.2 only)
             #// There may only be one 'EQUA' frame in each tag
             #// <Header for 'Relative volume adjustment', ID: 'EQU'>
@@ -1284,28 +1300,29 @@ class getid3_id3v2(getid3_handler):
             #// Increment/decrement   %x (MSB of the Frequency)
             #// Frequency             (lower 15 bits)
             #// Adjustment            $xx (xx ...)
-            frame_offset = 0
-            parsedFrame["adjustmentbits"] = php_substr(parsedFrame["data"], frame_offset, 1)
-            frame_offset += 1
-            frame_adjustmentbytes = ceil(parsedFrame["adjustmentbits"] / 8)
-            frame_remainingdata = php_str(php_substr(parsedFrame["data"], frame_offset))
+            frame_offset_ = 0
+            parsedFrame_["adjustmentbits"] = php_substr(parsedFrame_["data"], frame_offset_, 1)
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_adjustmentbytes_ = ceil(parsedFrame_["adjustmentbits"] / 8)
+            frame_remainingdata_ = php_str(php_substr(parsedFrame_["data"], frame_offset_))
             while True:
                 
-                if not (php_strlen(frame_remainingdata) > 0):
+                if not (php_strlen(frame_remainingdata_) > 0):
                     break
                 # end if
-                frame_frequencystr = getid3_lib.bigendian2bin(php_substr(frame_remainingdata, 0, 2))
-                frame_incdec = php_bool(php_substr(frame_frequencystr, 0, 1))
-                frame_frequency = bindec(php_substr(frame_frequencystr, 1, 15))
-                parsedFrame[frame_frequency]["incdec"] = frame_incdec
-                parsedFrame[frame_frequency]["adjustment"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata, 2, frame_adjustmentbytes))
-                if parsedFrame[frame_frequency]["incdec"] == False:
-                    parsedFrame[frame_frequency]["adjustment"] *= -1
+                frame_frequencystr_ = getid3_lib.bigendian2bin(php_substr(frame_remainingdata_, 0, 2))
+                frame_incdec_ = php_bool(php_substr(frame_frequencystr_, 0, 1))
+                frame_frequency_ = bindec(php_substr(frame_frequencystr_, 1, 15))
+                parsedFrame_[frame_frequency_]["incdec"] = frame_incdec_
+                parsedFrame_[frame_frequency_]["adjustment"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata_, 2, frame_adjustmentbytes_))
+                if parsedFrame_[frame_frequency_]["incdec"] == False:
+                    parsedFrame_[frame_frequency_]["adjustment"] *= -1
                 # end if
-                frame_remainingdata = php_substr(frame_remainingdata, 2 + frame_adjustmentbytes)
+                frame_remainingdata_ = php_substr(frame_remainingdata_, 2 + frame_adjustmentbytes_)
             # end while
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "RVRB" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "REV":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "RVRB" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "REV":
             #// 4.14  REV  Reverb
             #// There may only be one 'RVRB' frame in each tag.
             #// <Header for 'Reverb', ID: 'RVRB'>
@@ -1319,29 +1336,37 @@ class getid3_id3v2(getid3_handler):
             #// Reverb feedback, right to left   $xx
             #// Premix left to right             $xx
             #// Premix right to left             $xx
-            frame_offset = 0
-            parsedFrame["left"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
-            frame_offset += 2
-            parsedFrame["right"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
-            frame_offset += 2
-            parsedFrame["bouncesL"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["bouncesR"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["feedbackLL"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["feedbackLR"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["feedbackRR"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["feedbackRL"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["premixLR"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["premixRL"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "APIC" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "PIC":
+            frame_offset_ = 0
+            parsedFrame_["left"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 2))
+            frame_offset_ += 2
+            parsedFrame_["right"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 2))
+            frame_offset_ += 2
+            parsedFrame_["bouncesL"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["bouncesR"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["feedbackLL"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["feedbackLR"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["feedbackRR"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["feedbackRL"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["premixLR"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["premixRL"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "APIC" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "PIC":
             #// 4.15  PIC  Attached picture
             #// There may be several pictures attached to one file,
             #// each in their individual 'APIC' frame, but only one
@@ -1353,118 +1378,120 @@ class getid3_id3v2(getid3_handler):
             #// Picture type       $xx
             #// Description        <text string according to encoding> $00 (00)
             #// Picture data       <binary data>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                frame_textencoding_terminator = " "
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                frame_textencoding_terminator_ = " "
             # end if
-            if id3v2_majorversion == 2 and php_strlen(parsedFrame["data"]) > frame_offset:
-                frame_imagetype = php_substr(parsedFrame["data"], frame_offset, 3)
-                if php_strtolower(frame_imagetype) == "ima":
+            if id3v2_majorversion_ == 2 and php_strlen(parsedFrame_["data"]) > frame_offset_:
+                frame_imagetype_ = php_substr(parsedFrame_["data"], frame_offset_, 3)
+                if php_strtolower(frame_imagetype_) == "ima":
                     #// complete hack for mp3Rage (www.chaoticsoftware.com) that puts ID3v2.3-formatted
                     #// MIME type instead of 3-char ID3v2.2-format image type  (thanks xbhoffØpacbell*net)
-                    frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-                    frame_mimetype = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-                    if php_ord(frame_mimetype) == 0:
-                        frame_mimetype = ""
+                    frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+                    frame_mimetype_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+                    if php_ord(frame_mimetype_) == 0:
+                        frame_mimetype_ = ""
                     # end if
-                    frame_imagetype = php_strtoupper(php_str_replace("image/", "", php_strtolower(frame_mimetype)))
-                    if frame_imagetype == "JPEG":
-                        frame_imagetype = "JPG"
+                    frame_imagetype_ = php_strtoupper(php_str_replace("image/", "", php_strtolower(frame_mimetype_)))
+                    if frame_imagetype_ == "JPEG":
+                        frame_imagetype_ = "JPG"
                     # end if
-                    frame_offset = frame_terminatorpos + php_strlen(" ")
+                    frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
                 else:
-                    frame_offset += 3
+                    frame_offset_ += 3
                 # end if
             # end if
-            if id3v2_majorversion > 2 and php_strlen(parsedFrame["data"]) > frame_offset:
-                frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-                frame_mimetype = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-                if php_ord(frame_mimetype) == 0:
-                    frame_mimetype = ""
+            if id3v2_majorversion_ > 2 and php_strlen(parsedFrame_["data"]) > frame_offset_:
+                frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+                frame_mimetype_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+                if php_ord(frame_mimetype_) == 0:
+                    frame_mimetype_ = ""
                 # end if
-                frame_offset = frame_terminatorpos + php_strlen(" ")
+                frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
             # end if
-            frame_picturetype = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            if frame_offset >= parsedFrame["datalength"]:
-                self.warning("data portion of APIC frame is missing at offset " + parsedFrame["dataoffset"] + 8 + frame_offset)
+            frame_picturetype_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            if frame_offset_ >= parsedFrame_["datalength"]:
+                self.warning("data portion of APIC frame is missing at offset " + parsedFrame_["dataoffset"] + 8 + frame_offset_)
             else:
-                frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-                if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                    frame_terminatorpos += 1
+                frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+                if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                    frame_terminatorpos_ += 1
                     pass
                 # end if
-                parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-                parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-                parsedFrame["encodingid"] = frame_textencoding
-                parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-                if id3v2_majorversion == 2:
-                    parsedFrame["imagetype"] = frame_imagetype if (php_isset(lambda : frame_imagetype)) else None
+                parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+                parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+                parsedFrame_["encodingid"] = frame_textencoding_
+                parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+                if id3v2_majorversion_ == 2:
+                    parsedFrame_["imagetype"] = frame_imagetype_ if (php_isset(lambda : frame_imagetype_)) else None
                 else:
-                    parsedFrame["mime"] = frame_mimetype if (php_isset(lambda : frame_mimetype)) else None
+                    parsedFrame_["mime"] = frame_mimetype_ if (php_isset(lambda : frame_mimetype_)) else None
                 # end if
-                parsedFrame["picturetypeid"] = frame_picturetype
-                parsedFrame["picturetype"] = self.apicpicturetypelookup(frame_picturetype)
-                parsedFrame["data"] = php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator))
-                parsedFrame["datalength"] = php_strlen(parsedFrame["data"])
-                parsedFrame["image_mime"] = ""
-                imageinfo = Array()
-                imagechunkcheck = getid3_lib.getdataimagesize(parsedFrame["data"], imageinfo)
-                if imagechunkcheck:
-                    if imagechunkcheck[2] >= 1 and imagechunkcheck[2] <= 3:
-                        parsedFrame["image_mime"] = image_type_to_mime_type(imagechunkcheck[2])
-                        if imagechunkcheck[0]:
-                            parsedFrame["image_width"] = imagechunkcheck[0]
+                parsedFrame_["picturetypeid"] = frame_picturetype_
+                parsedFrame_["picturetype"] = self.apicpicturetypelookup(frame_picturetype_)
+                parsedFrame_["data"] = php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_))
+                parsedFrame_["datalength"] = php_strlen(parsedFrame_["data"])
+                parsedFrame_["image_mime"] = ""
+                imageinfo_ = Array()
+                imagechunkcheck_ = getid3_lib.getdataimagesize(parsedFrame_["data"], imageinfo_)
+                if imagechunkcheck_:
+                    if imagechunkcheck_[2] >= 1 and imagechunkcheck_[2] <= 3:
+                        parsedFrame_["image_mime"] = image_type_to_mime_type(imagechunkcheck_[2])
+                        if imagechunkcheck_[0]:
+                            parsedFrame_["image_width"] = imagechunkcheck_[0]
                         # end if
-                        if imagechunkcheck[1]:
-                            parsedFrame["image_height"] = imagechunkcheck[1]
+                        if imagechunkcheck_[1]:
+                            parsedFrame_["image_height"] = imagechunkcheck_[1]
                         # end if
                     # end if
                 # end if
                 while True:
                     if self.getid3.option_save_attachments == False:
-                        parsedFrame["data"] = None
+                        parsedFrame_["data"] = None
                         break
                     # end if
-                    dir = ""
+                    dir_ = ""
                     if self.getid3.option_save_attachments == True:
                         pass
                     elif php_is_string(self.getid3.option_save_attachments):
-                        dir = php_rtrim(php_str_replace(Array("/", "\\"), DIRECTORY_SEPARATOR, self.getid3.option_save_attachments), DIRECTORY_SEPARATOR)
-                        if (not php_is_dir(dir)) or (not getID3.is_writable(dir)):
+                        dir_ = php_rtrim(php_str_replace(Array("/", "\\"), DIRECTORY_SEPARATOR, self.getid3.option_save_attachments), DIRECTORY_SEPARATOR)
+                        if (not php_is_dir(dir_)) or (not getID3.is_writable(dir_)):
                             #// cannot write, skip
-                            self.warning("attachment at " + frame_offset + " cannot be saved to \"" + dir + "\" (not writable)")
-                            parsedFrame["data"] = None
+                            self.warning("attachment at " + frame_offset_ + " cannot be saved to \"" + dir_ + "\" (not writable)")
+                            parsedFrame_["data"] = None
                             break
                         # end if
                     # end if
                     #// if we get this far, must be OK
                     if php_is_string(self.getid3.option_save_attachments):
-                        destination_filename = dir + DIRECTORY_SEPARATOR + php_md5(info["filenamepath"]) + "_" + frame_offset
-                        if (not php_file_exists(destination_filename)) or getID3.is_writable(destination_filename):
-                            file_put_contents(destination_filename, parsedFrame["data"])
+                        destination_filename_ = dir_ + DIRECTORY_SEPARATOR + php_md5(info_["filenamepath"]) + "_" + frame_offset_
+                        if (not php_file_exists(destination_filename_)) or getID3.is_writable(destination_filename_):
+                            file_put_contents(destination_filename_, parsedFrame_["data"])
                         else:
-                            self.warning("attachment at " + frame_offset + " cannot be saved to \"" + destination_filename + "\" (not writable)")
+                            self.warning("attachment at " + frame_offset_ + " cannot be saved to \"" + destination_filename_ + "\" (not writable)")
                         # end if
-                        parsedFrame["data_filename"] = destination_filename
-                        parsedFrame["data"] = None
+                        parsedFrame_["data_filename"] = destination_filename_
+                        parsedFrame_["data"] = None
                     else:
-                        if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
-                            if (not (php_isset(lambda : info["id3v2"]["comments"]["picture"]))):
-                                info["id3v2"]["comments"]["picture"] = Array()
+                        if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
+                            if (not (php_isset(lambda : info_["id3v2"]["comments"]["picture"]))):
+                                info_["id3v2"]["comments"]["picture"] = Array()
                             # end if
-                            comments_picture_data = Array()
-                            for picture_key in Array("data", "image_mime", "image_width", "image_height", "imagetype", "picturetype", "description", "datalength"):
-                                if (php_isset(lambda : parsedFrame[picture_key])):
-                                    comments_picture_data[picture_key] = parsedFrame[picture_key]
+                            comments_picture_data_ = Array()
+                            for picture_key_ in Array("data", "image_mime", "image_width", "image_height", "imagetype", "picturetype", "description", "datalength"):
+                                if (php_isset(lambda : parsedFrame_[picture_key_])):
+                                    comments_picture_data_[picture_key_] = parsedFrame_[picture_key_]
                                 # end if
                             # end for
-                            info["id3v2"]["comments"]["picture"][-1] = comments_picture_data
-                            comments_picture_data = None
+                            info_["id3v2"]["comments"]["picture"][-1] = comments_picture_data_
+                            comments_picture_data_ = None
                         # end if
                     # end if
                     
@@ -1473,7 +1500,7 @@ class getid3_id3v2(getid3_handler):
                     # end if
                 # end while
             # end if
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "GEOB" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "GEO":
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "GEOB" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "GEO":
             #// 4.16  GEO  General encapsulated object
             #// There may be more than one 'GEOB' frame in each tag,
             #// but only one with the same content descriptor
@@ -1483,53 +1510,54 @@ class getid3_id3v2(getid3_handler):
             #// Filename               <text string according to encoding> $00 (00)
             #// Content description    <text string according to encoding> $00 (00)
             #// Encapsulated object    <binary data>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                frame_textencoding_terminator = " "
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                frame_textencoding_terminator_ = " "
             # end if
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_mimetype = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_mimetype) == 0:
-                frame_mimetype = ""
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_mimetype_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_mimetype_) == 0:
+                frame_mimetype_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-            if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                frame_terminatorpos += 1
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+            if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                frame_terminatorpos_ += 1
                 pass
             # end if
-            frame_filename = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_filename) == 0:
-                frame_filename = ""
+            frame_filename_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_filename_) == 0:
+                frame_filename_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(frame_textencoding_terminator)
-            frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-            if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                frame_terminatorpos += 1
+            frame_offset_ = frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_)
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+            if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                frame_terminatorpos_ += 1
                 pass
             # end if
-            parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-            frame_offset = frame_terminatorpos + php_strlen(frame_textencoding_terminator)
-            parsedFrame["objectdata"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["mime"] = frame_mimetype
-            parsedFrame["filename"] = frame_filename
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "PCNT" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "CNT":
+            parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+            frame_offset_ = frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_)
+            parsedFrame_["objectdata"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            parsedFrame_["mime"] = frame_mimetype_
+            parsedFrame_["filename"] = frame_filename_
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "PCNT" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "CNT":
             #// 4.17  CNT  Play counter
             #// There may only be one 'PCNT' frame in each tag.
             #// When the counter reaches all one's, one byte is inserted in
             #// front of the counter thus making the counter eight bits bigger
             #// <Header for 'Play counter', ID: 'PCNT'>
             #// Counter        $xx xx xx xx (xx ...)
-            parsedFrame["data"] = getid3_lib.bigendian2int(parsedFrame["data"])
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "POPM" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "POP":
+            parsedFrame_["data"] = getid3_lib.bigendian2int(parsedFrame_["data"])
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "POPM" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "POP":
             #// 4.18  POP  Popularimeter
             #// There may be more than one 'POPM' frame in each tag,
             #// but only one with the same email address
@@ -1537,35 +1565,37 @@ class getid3_id3v2(getid3_handler):
             #// Email to user   <text string> $00
             #// Rating          $xx
             #// Counter         $xx xx xx xx (xx ...)
-            frame_offset = 0
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_emailaddress = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_emailaddress) == 0:
-                frame_emailaddress = ""
+            frame_offset_ = 0
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_emailaddress_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_emailaddress_) == 0:
+                frame_emailaddress_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            frame_rating = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["counter"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["email"] = frame_emailaddress
-            parsedFrame["rating"] = frame_rating
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "RBUF" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "BUF":
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            frame_rating_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["counter"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["email"] = frame_emailaddress_
+            parsedFrame_["rating"] = frame_rating_
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "RBUF" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "BUF":
             #// 4.19  BUF  Recommended buffer size
             #// There may only be one 'RBUF' frame in each tag
             #// <Header for 'Recommended buffer size', ID: 'RBUF'>
             #// Buffer size               $xx xx xx
             #// Embedded info flag        %0000000x
             #// Offset to next tag        $xx xx xx xx
-            frame_offset = 0
-            parsedFrame["buffersize"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 3))
-            frame_offset += 3
-            frame_embeddedinfoflags = getid3_lib.bigendian2bin(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["flags"]["embededinfo"] = php_bool(php_substr(frame_embeddedinfoflags, 7, 1))
-            parsedFrame["nexttagoffset"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-            parsedFrame["data"] = None
-        elif id3v2_majorversion == 2 and parsedFrame["frame_name"] == "CRM":
+            frame_offset_ = 0
+            parsedFrame_["buffersize"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 3))
+            frame_offset_ += 3
+            frame_embeddedinfoflags_ = getid3_lib.bigendian2bin(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["flags"]["embededinfo"] = php_bool(php_substr(frame_embeddedinfoflags_, 7, 1))
+            parsedFrame_["nexttagoffset"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "CRM":
             #// 4.20  Encrypted meta frame (ID3v2.2 only)
             #// There may be more than one 'CRM' frame in a tag,
             #// but only one with the same 'owner identifier'
@@ -1573,18 +1603,18 @@ class getid3_id3v2(getid3_handler):
             #// Owner identifier      <textstring> $00 (00)
             #// Content/explanation   <textstring> $00 (00)
             #// Encrypted datablock   <binary data>
-            frame_offset = 0
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_ownerid = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            parsedFrame["ownerid"] = frame_ownerid
-            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "AENC" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "CRA":
+            frame_offset_ = 0
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_ownerid_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            parsedFrame_["ownerid"] = frame_ownerid_
+            parsedFrame_["data"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "AENC" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "CRA":
             #// 4.21  CRA  Audio encryption
             #// There may be more than one 'AENC' frames in a tag,
             #// but only one with the same 'Owner identifier'
@@ -1593,21 +1623,21 @@ class getid3_id3v2(getid3_handler):
             #// Preview start      $xx xx
             #// Preview length     $xx xx
             #// Encryption info    <binary data>
-            frame_offset = 0
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_ownerid = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_ownerid) == 0:
-                frame_ownerid = ""
+            frame_offset_ = 0
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_ownerid_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_ownerid_) == 0:
+                frame_ownerid_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            parsedFrame["ownerid"] = frame_ownerid
-            parsedFrame["previewstart"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
-            frame_offset += 2
-            parsedFrame["previewlength"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
-            frame_offset += 2
-            parsedFrame["encryptioninfo"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "LINK" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "LNK":
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            parsedFrame_["ownerid"] = frame_ownerid_
+            parsedFrame_["previewstart"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 2))
+            frame_offset_ += 2
+            parsedFrame_["previewlength"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 2))
+            frame_offset_ += 2
+            parsedFrame_["encryptioninfo"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "LINK" or id3v2_majorversion_ == 2 and parsedFrame_["frame_name"] == "LNK":
             #// 4.22  LNK  Linked information
             #// There may be more than one 'LINK' frame in a tag,
             #// but only one with the same contents
@@ -1616,38 +1646,39 @@ class getid3_id3v2(getid3_handler):
             #// ID3v2.2  => Frame identifier   $xx xx xx
             #// URL                            <text string> $00
             #// ID and additional data         <text string(s)>
-            frame_offset = 0
-            if id3v2_majorversion == 2:
-                parsedFrame["frameid"] = php_substr(parsedFrame["data"], frame_offset, 3)
-                frame_offset += 3
+            frame_offset_ = 0
+            if id3v2_majorversion_ == 2:
+                parsedFrame_["frameid"] = php_substr(parsedFrame_["data"], frame_offset_, 3)
+                frame_offset_ += 3
             else:
-                parsedFrame["frameid"] = php_substr(parsedFrame["data"], frame_offset, 4)
-                frame_offset += 4
+                parsedFrame_["frameid"] = php_substr(parsedFrame_["data"], frame_offset_, 4)
+                frame_offset_ += 4
             # end if
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_url = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_url) == 0:
-                frame_url = ""
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_url_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_url_) == 0:
+                frame_url_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            parsedFrame["url"] = frame_url
-            parsedFrame["additionaldata"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and parsedFrame["url"]:
-                info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback_iso88591_utf8(parsedFrame["url"])
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            parsedFrame_["url"] = frame_url_
+            parsedFrame_["additionaldata"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and parsedFrame_["url"]:
+                info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = getid3_lib.iconv_fallback_iso88591_utf8(parsedFrame_["url"])
             # end if
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "POSS":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "POSS":
             #// 4.21  POSS Position synchronisation frame (ID3v2.3+ only)
             #// There may only be one 'POSS' frame in each tag
             #// <Head for 'Position synchronisation', ID: 'POSS'>
             #// Time stamp format         $xx
             #// Position                  $xx (xx ...)
-            frame_offset = 0
-            parsedFrame["timestampformat"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["position"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "USER":
+            frame_offset_ = 0
+            parsedFrame_["timestampformat"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["position"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "USER":
             #// 4.22  USER Terms of use (ID3v2.3+ only)
             #// There may be more than one 'Terms of use' frame in a tag,
             #// but only one with the same 'Language'
@@ -1655,25 +1686,26 @@ class getid3_id3v2(getid3_handler):
             #// Text encoding        $xx
             #// Language             $xx xx xx
             #// The actual text      <text string according to encoding>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
             # end if
-            frame_language = php_substr(parsedFrame["data"], frame_offset, 3)
-            frame_offset += 3
-            parsedFrame["language"] = frame_language
-            parsedFrame["languagename"] = self.languagelookup(frame_language, False)
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["data"] = self.removestringterminator(parsedFrame["data"], self.textencodingterminatorlookup(frame_textencoding))
-            if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
-                info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["data"])
+            frame_language_ = php_substr(parsedFrame_["data"], frame_offset_, 3)
+            frame_offset_ += 3
+            parsedFrame_["language"] = frame_language_
+            parsedFrame_["languagename"] = self.languagelookup(frame_language_, False)
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            parsedFrame_["data"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["data"] = self.removestringterminator(parsedFrame_["data"], self.textencodingterminatorlookup(frame_textencoding_))
+            if (not php_empty(lambda : parsedFrame_["framenameshort"])) and (not php_empty(lambda : parsedFrame_["data"])):
+                info_["id3v2"]["comments"][parsedFrame_["framenameshort"]][-1] = getid3_lib.iconv_fallback(parsedFrame_["encoding"], info_["id3v2"]["encoding"], parsedFrame_["data"])
             # end if
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "OWNE":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "OWNE":
             #// 4.23  OWNE Ownership frame (ID3v2.3+ only)
             #// There may only be one 'OWNE' frame in a tag
             #// <Header for 'Ownership frame', ID: 'OWNE'>
@@ -1681,29 +1713,30 @@ class getid3_id3v2(getid3_handler):
             #// Price paid        <text string> $00
             #// Date of purch.    <text string>
             #// Seller            <text string according to encoding>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
             # end if
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_pricepaid = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            parsedFrame["pricepaid"]["currencyid"] = php_substr(frame_pricepaid, 0, 3)
-            parsedFrame["pricepaid"]["currency"] = self.lookupcurrencyunits(parsedFrame["pricepaid"]["currencyid"])
-            parsedFrame["pricepaid"]["value"] = php_substr(frame_pricepaid, 3)
-            parsedFrame["purchasedate"] = php_substr(parsedFrame["data"], frame_offset, 8)
-            if self.isvaliddatestampstring(parsedFrame["purchasedate"]):
-                parsedFrame["purchasedateunix"] = mktime(0, 0, 0, php_substr(parsedFrame["purchasedate"], 4, 2), php_substr(parsedFrame["purchasedate"], 6, 2), php_substr(parsedFrame["purchasedate"], 0, 4))
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_pricepaid_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            parsedFrame_["pricepaid"]["currencyid"] = php_substr(frame_pricepaid_, 0, 3)
+            parsedFrame_["pricepaid"]["currency"] = self.lookupcurrencyunits(parsedFrame_["pricepaid"]["currencyid"])
+            parsedFrame_["pricepaid"]["value"] = php_substr(frame_pricepaid_, 3)
+            parsedFrame_["purchasedate"] = php_substr(parsedFrame_["data"], frame_offset_, 8)
+            if self.isvaliddatestampstring(parsedFrame_["purchasedate"]):
+                parsedFrame_["purchasedateunix"] = mktime(0, 0, 0, php_substr(parsedFrame_["purchasedate"], 4, 2), php_substr(parsedFrame_["purchasedate"], 6, 2), php_substr(parsedFrame_["purchasedate"], 0, 4))
             # end if
-            frame_offset += 8
-            parsedFrame["seller"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-            parsedFrame["seller"] = self.removestringterminator(parsedFrame["seller"], self.textencodingterminatorlookup(frame_textencoding))
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "COMR":
+            frame_offset_ += 8
+            parsedFrame_["seller"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+            parsedFrame_["seller"] = self.removestringterminator(parsedFrame_["seller"], self.textencodingterminatorlookup(frame_textencoding_))
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "COMR":
             #// 4.24  COMR Commercial frame (ID3v2.3+ only)
             #// There may be more than one 'commercial frame' in a tag,
             #// but no two may be identical
@@ -1717,63 +1750,65 @@ class getid3_id3v2(getid3_handler):
             #// Description        <text string according to encoding> $00 (00)
             #// Picture MIME type  <string> $00
             #// Seller logo        <binary data>
-            frame_offset = 0
-            frame_textencoding = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_textencoding_terminator = self.textencodingterminatorlookup(frame_textencoding)
-            if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
-                self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
-                frame_textencoding_terminator = " "
+            frame_offset_ = 0
+            frame_textencoding_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_textencoding_terminator_ = self.textencodingterminatorlookup(frame_textencoding_)
+            if id3v2_majorversion_ <= 3 and frame_textencoding_ > 1 or id3v2_majorversion_ == 4 and frame_textencoding_ > 3:
+                self.warning("Invalid text encoding byte (" + frame_textencoding_ + ") in frame \"" + parsedFrame_["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
+                frame_textencoding_terminator_ = " "
             # end if
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_pricestring = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            frame_rawpricearray = php_explode("/", frame_pricestring)
-            for key,val in frame_rawpricearray:
-                frame_currencyid = php_substr(val, 0, 3)
-                parsedFrame["price"][frame_currencyid]["currency"] = self.lookupcurrencyunits(frame_currencyid)
-                parsedFrame["price"][frame_currencyid]["value"] = php_substr(val, 3)
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_pricestring_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            frame_rawpricearray_ = php_explode("/", frame_pricestring_)
+            for key_,val_ in frame_rawpricearray_:
+                frame_currencyid_ = php_substr(val_, 0, 3)
+                parsedFrame_["price"][frame_currencyid_]["currency"] = self.lookupcurrencyunits(frame_currencyid_)
+                parsedFrame_["price"][frame_currencyid_]["value"] = php_substr(val_, 3)
             # end for
-            frame_datestring = php_substr(parsedFrame["data"], frame_offset, 8)
-            frame_offset += 8
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_contacturl = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            frame_receivedasid = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-            if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                frame_terminatorpos += 1
+            frame_datestring_ = php_substr(parsedFrame_["data"], frame_offset_, 8)
+            frame_offset_ += 8
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_contacturl_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            frame_receivedasid_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+            if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                frame_terminatorpos_ += 1
                 pass
             # end if
-            frame_sellername = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_sellername) == 0:
-                frame_sellername = ""
+            frame_sellername_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_sellername_) == 0:
+                frame_sellername_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(frame_textencoding_terminator)
-            frame_terminatorpos = php_strpos(parsedFrame["data"], frame_textencoding_terminator, frame_offset)
-            if php_ord(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator), 1)) == 0:
-                frame_terminatorpos += 1
+            frame_offset_ = frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_)
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], frame_textencoding_terminator_, frame_offset_)
+            if php_ord(php_substr(parsedFrame_["data"], frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_), 1)) == 0:
+                frame_terminatorpos_ += 1
                 pass
             # end if
-            parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-            frame_offset = frame_terminatorpos + php_strlen(frame_textencoding_terminator)
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_mimetype = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            frame_sellerlogo = php_substr(parsedFrame["data"], frame_offset)
-            parsedFrame["encodingid"] = frame_textencoding
-            parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["pricevaliduntil"] = frame_datestring
-            parsedFrame["contacturl"] = frame_contacturl
-            parsedFrame["receivedasid"] = frame_receivedasid
-            parsedFrame["receivedas"] = self.comrreceivedaslookup(frame_receivedasid)
-            parsedFrame["sellername"] = frame_sellername
-            parsedFrame["mime"] = frame_mimetype
-            parsedFrame["logo"] = frame_sellerlogo
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "ENCR":
+            parsedFrame_["description"] = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            parsedFrame_["description"] = self.makeutf16emptystringempty(parsedFrame_["description"])
+            frame_offset_ = frame_terminatorpos_ + php_strlen(frame_textencoding_terminator_)
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_mimetype_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            frame_sellerlogo_ = php_substr(parsedFrame_["data"], frame_offset_)
+            parsedFrame_["encodingid"] = frame_textencoding_
+            parsedFrame_["encoding"] = self.textencodingnamelookup(frame_textencoding_)
+            parsedFrame_["pricevaliduntil"] = frame_datestring_
+            parsedFrame_["contacturl"] = frame_contacturl_
+            parsedFrame_["receivedasid"] = frame_receivedasid_
+            parsedFrame_["receivedas"] = self.comrreceivedaslookup(frame_receivedasid_)
+            parsedFrame_["sellername"] = frame_sellername_
+            parsedFrame_["mime"] = frame_mimetype_
+            parsedFrame_["logo"] = frame_sellerlogo_
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "ENCR":
             #// 4.25  ENCR Encryption method registration (ID3v2.3+ only)
             #// There may be several 'ENCR' frames in a tag,
             #// but only one containing the same symbol
@@ -1782,18 +1817,19 @@ class getid3_id3v2(getid3_handler):
             #// Owner identifier    <text string> $00
             #// Method symbol       $xx
             #// Encryption data     <binary data>
-            frame_offset = 0
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_ownerid = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_ownerid) == 0:
-                frame_ownerid = ""
+            frame_offset_ = 0
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_ownerid_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_ownerid_) == 0:
+                frame_ownerid_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            parsedFrame["ownerid"] = frame_ownerid
-            parsedFrame["methodsymbol"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "GRID":
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            parsedFrame_["ownerid"] = frame_ownerid_
+            parsedFrame_["methodsymbol"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["data"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "GRID":
             #// 4.26  GRID Group identification registration (ID3v2.3+ only)
             #// There may be several 'GRID' frames in a tag,
             #// but only one containing the same symbol
@@ -1802,52 +1838,54 @@ class getid3_id3v2(getid3_handler):
             #// Owner identifier      <text string> $00
             #// Group symbol          $xx
             #// Group dependent data  <binary data>
-            frame_offset = 0
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_ownerid = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_ownerid) == 0:
-                frame_ownerid = ""
+            frame_offset_ = 0
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_ownerid_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_ownerid_) == 0:
+                frame_ownerid_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            parsedFrame["ownerid"] = frame_ownerid
-            parsedFrame["groupsymbol"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "PRIV":
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            parsedFrame_["ownerid"] = frame_ownerid_
+            parsedFrame_["groupsymbol"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["data"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "PRIV":
             #// 4.27  PRIV Private frame (ID3v2.3+ only)
             #// The tag may contain more than one 'PRIV' frame
             #// but only with different contents
             #// <Header for 'Private frame', ID: 'PRIV'>
             #// Owner identifier      <text string> $00
             #// The private data      <binary data>
-            frame_offset = 0
-            frame_terminatorpos = php_strpos(parsedFrame["data"], " ", frame_offset)
-            frame_ownerid = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
-            if php_ord(frame_ownerid) == 0:
-                frame_ownerid = ""
+            frame_offset_ = 0
+            frame_terminatorpos_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+            frame_ownerid_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
+            if php_ord(frame_ownerid_) == 0:
+                frame_ownerid_ = ""
             # end if
-            frame_offset = frame_terminatorpos + php_strlen(" ")
-            parsedFrame["ownerid"] = frame_ownerid
-            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-        elif id3v2_majorversion >= 4 and parsedFrame["frame_name"] == "SIGN":
+            frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
+            parsedFrame_["ownerid"] = frame_ownerid_
+            parsedFrame_["data"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+        elif id3v2_majorversion_ >= 4 and parsedFrame_["frame_name"] == "SIGN":
             #// 4.28  SIGN Signature frame (ID3v2.4+ only)
             #// There may be more than one 'signature frame' in a tag,
             #// but no two may be identical
             #// <Header for 'Signature frame', ID: 'SIGN'>
             #// Group symbol      $xx
             #// Signature         <binary data>
-            frame_offset = 0
-            parsedFrame["groupsymbol"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
-        elif id3v2_majorversion >= 4 and parsedFrame["frame_name"] == "SEEK":
+            frame_offset_ = 0
+            parsedFrame_["groupsymbol"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            parsedFrame_["data"] = php_str(php_substr(parsedFrame_["data"], frame_offset_))
+        elif id3v2_majorversion_ >= 4 and parsedFrame_["frame_name"] == "SEEK":
             #// 4.29  SEEK Seek frame (ID3v2.4+ only)
             #// There may only be one 'seek frame' in a tag
             #// <Header for 'Seek frame', ID: 'SEEK'>
             #// Minimum offset to next tag       $xx xx xx xx
-            frame_offset = 0
-            parsedFrame["data"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-        elif id3v2_majorversion >= 4 and parsedFrame["frame_name"] == "ASPI":
+            frame_offset_ = 0
+            parsedFrame_["data"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+        elif id3v2_majorversion_ >= 4 and parsedFrame_["frame_name"] == "ASPI":
             #// 4.30  ASPI Audio seek point index (ID3v2.4+ only)
             #// There may only be one 'audio seek point index' frame in a tag
             #// <Header for 'Seek Point Index', ID: 'ASPI'>
@@ -1857,25 +1895,26 @@ class getid3_id3v2(getid3_handler):
             #// Bits per index point (b)       $xx
             #// Then for every index point the following data is included:
             #// Fraction at index (Fi)          $xx (xx)
-            frame_offset = 0
-            parsedFrame["datastart"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-            frame_offset += 4
-            parsedFrame["indexeddatalength"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-            frame_offset += 4
-            parsedFrame["indexpoints"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
-            frame_offset += 2
-            parsedFrame["bitsperpoint"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            frame_bytesperpoint = ceil(parsedFrame["bitsperpoint"] / 8)
-            i = 0
-            while i < parsedFrame["indexpoints"]:
+            frame_offset_ = 0
+            parsedFrame_["datastart"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+            frame_offset_ += 4
+            parsedFrame_["indexeddatalength"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+            frame_offset_ += 4
+            parsedFrame_["indexpoints"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 2))
+            frame_offset_ += 2
+            parsedFrame_["bitsperpoint"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            frame_offset_ += 1
+            frame_bytesperpoint_ = ceil(parsedFrame_["bitsperpoint"] / 8)
+            i_ = 0
+            while i_ < parsedFrame_["indexpoints"]:
                 
-                parsedFrame["indexes"][i] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesperpoint))
-                frame_offset += frame_bytesperpoint
-                i += 1
+                parsedFrame_["indexes"][i_] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, frame_bytesperpoint_))
+                frame_offset_ += frame_bytesperpoint_
+                i_ += 1
             # end while
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "RGAD":
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "RGAD":
             #// Replay Gain Adjustment
             #// http://privatewww.essex.ac.uk/~djmrob/replaygain/file_format_id3v2.html
             #// There may only be one 'RGAD' frame in a tag
@@ -1887,34 +1926,34 @@ class getid3_id3v2(getid3_handler):
             #// b - originator code
             #// c - sign bit
             #// d - replay gain adjustment
-            frame_offset = 0
-            parsedFrame["peakamplitude"] = getid3_lib.bigendian2float(php_substr(parsedFrame["data"], frame_offset, 4))
-            frame_offset += 4
-            rg_track_adjustment = getid3_lib.dec2bin(php_substr(parsedFrame["data"], frame_offset, 2))
-            frame_offset += 2
-            rg_album_adjustment = getid3_lib.dec2bin(php_substr(parsedFrame["data"], frame_offset, 2))
-            frame_offset += 2
-            parsedFrame["raw"]["track"]["name"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment, 0, 3))
-            parsedFrame["raw"]["track"]["originator"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment, 3, 3))
-            parsedFrame["raw"]["track"]["signbit"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment, 6, 1))
-            parsedFrame["raw"]["track"]["adjustment"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment, 7, 9))
-            parsedFrame["raw"]["album"]["name"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment, 0, 3))
-            parsedFrame["raw"]["album"]["originator"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment, 3, 3))
-            parsedFrame["raw"]["album"]["signbit"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment, 6, 1))
-            parsedFrame["raw"]["album"]["adjustment"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment, 7, 9))
-            parsedFrame["track"]["name"] = getid3_lib.rgadnamelookup(parsedFrame["raw"]["track"]["name"])
-            parsedFrame["track"]["originator"] = getid3_lib.rgadoriginatorlookup(parsedFrame["raw"]["track"]["originator"])
-            parsedFrame["track"]["adjustment"] = getid3_lib.rgadadjustmentlookup(parsedFrame["raw"]["track"]["adjustment"], parsedFrame["raw"]["track"]["signbit"])
-            parsedFrame["album"]["name"] = getid3_lib.rgadnamelookup(parsedFrame["raw"]["album"]["name"])
-            parsedFrame["album"]["originator"] = getid3_lib.rgadoriginatorlookup(parsedFrame["raw"]["album"]["originator"])
-            parsedFrame["album"]["adjustment"] = getid3_lib.rgadadjustmentlookup(parsedFrame["raw"]["album"]["adjustment"], parsedFrame["raw"]["album"]["signbit"])
-            info["replay_gain"]["track"]["peak"] = parsedFrame["peakamplitude"]
-            info["replay_gain"]["track"]["originator"] = parsedFrame["track"]["originator"]
-            info["replay_gain"]["track"]["adjustment"] = parsedFrame["track"]["adjustment"]
-            info["replay_gain"]["album"]["originator"] = parsedFrame["album"]["originator"]
-            info["replay_gain"]["album"]["adjustment"] = parsedFrame["album"]["adjustment"]
-            parsedFrame["data"] = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "CHAP":
+            frame_offset_ = 0
+            parsedFrame_["peakamplitude"] = getid3_lib.bigendian2float(php_substr(parsedFrame_["data"], frame_offset_, 4))
+            frame_offset_ += 4
+            rg_track_adjustment_ = getid3_lib.dec2bin(php_substr(parsedFrame_["data"], frame_offset_, 2))
+            frame_offset_ += 2
+            rg_album_adjustment_ = getid3_lib.dec2bin(php_substr(parsedFrame_["data"], frame_offset_, 2))
+            frame_offset_ += 2
+            parsedFrame_["raw"]["track"]["name"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment_, 0, 3))
+            parsedFrame_["raw"]["track"]["originator"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment_, 3, 3))
+            parsedFrame_["raw"]["track"]["signbit"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment_, 6, 1))
+            parsedFrame_["raw"]["track"]["adjustment"] = getid3_lib.bin2dec(php_substr(rg_track_adjustment_, 7, 9))
+            parsedFrame_["raw"]["album"]["name"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment_, 0, 3))
+            parsedFrame_["raw"]["album"]["originator"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment_, 3, 3))
+            parsedFrame_["raw"]["album"]["signbit"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment_, 6, 1))
+            parsedFrame_["raw"]["album"]["adjustment"] = getid3_lib.bin2dec(php_substr(rg_album_adjustment_, 7, 9))
+            parsedFrame_["track"]["name"] = getid3_lib.rgadnamelookup(parsedFrame_["raw"]["track"]["name"])
+            parsedFrame_["track"]["originator"] = getid3_lib.rgadoriginatorlookup(parsedFrame_["raw"]["track"]["originator"])
+            parsedFrame_["track"]["adjustment"] = getid3_lib.rgadadjustmentlookup(parsedFrame_["raw"]["track"]["adjustment"], parsedFrame_["raw"]["track"]["signbit"])
+            parsedFrame_["album"]["name"] = getid3_lib.rgadnamelookup(parsedFrame_["raw"]["album"]["name"])
+            parsedFrame_["album"]["originator"] = getid3_lib.rgadoriginatorlookup(parsedFrame_["raw"]["album"]["originator"])
+            parsedFrame_["album"]["adjustment"] = getid3_lib.rgadadjustmentlookup(parsedFrame_["raw"]["album"]["adjustment"], parsedFrame_["raw"]["album"]["signbit"])
+            info_["replay_gain"]["track"]["peak"] = parsedFrame_["peakamplitude"]
+            info_["replay_gain"]["track"]["originator"] = parsedFrame_["track"]["originator"]
+            info_["replay_gain"]["track"]["adjustment"] = parsedFrame_["track"]["adjustment"]
+            info_["replay_gain"]["album"]["originator"] = parsedFrame_["album"]["originator"]
+            info_["replay_gain"]["album"]["adjustment"] = parsedFrame_["album"]["adjustment"]
+            parsedFrame_["data"] = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "CHAP":
             #// CHAP Chapters frame (ID3v2.3+ only)
             #// http://id3.org/id3v2-chapters-1.0
             #// <ID3v2.3 or ID3v2.4 frame header, ID: "CHAP">           (10 bytes)
@@ -1924,59 +1963,59 @@ class getid3_id3v2(getid3_handler):
             #// Start offset    $xx xx xx xx
             #// End offset      $xx xx xx xx
             #// <Optional embedded sub-frames>
-            frame_offset = 0
-            php_no_error(lambda: parsedFrame["element_id"] = php_explode(" ", parsedFrame["data"], 2))
-            frame_offset += php_strlen(parsedFrame["element_id"] + " ")
-            parsedFrame["time_begin"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-            frame_offset += 4
-            parsedFrame["time_end"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-            frame_offset += 4
-            if php_substr(parsedFrame["data"], frame_offset, 4) != "ÿÿÿÿ":
+            frame_offset_ = 0
+            php_no_error(lambda: parsedFrame_["element_id"] = php_explode(" ", parsedFrame_["data"], 2))
+            frame_offset_ += php_strlen(parsedFrame_["element_id"] + " ")
+            parsedFrame_["time_begin"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+            frame_offset_ += 4
+            parsedFrame_["time_end"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+            frame_offset_ += 4
+            if php_substr(parsedFrame_["data"], frame_offset_, 4) != "ÿÿÿÿ":
                 #// "If these bytes are all set to 0xFF then the value should be ignored and the start time value should be utilized."
-                parsedFrame["offset_begin"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
+                parsedFrame_["offset_begin"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
             # end if
-            frame_offset += 4
-            if php_substr(parsedFrame["data"], frame_offset, 4) != "ÿÿÿÿ":
+            frame_offset_ += 4
+            if php_substr(parsedFrame_["data"], frame_offset_, 4) != "ÿÿÿÿ":
                 #// "If these bytes are all set to 0xFF then the value should be ignored and the start time value should be utilized."
-                parsedFrame["offset_end"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
+                parsedFrame_["offset_end"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
             # end if
-            frame_offset += 4
-            if frame_offset < php_strlen(parsedFrame["data"]):
-                parsedFrame["subframes"] = Array()
+            frame_offset_ += 4
+            if frame_offset_ < php_strlen(parsedFrame_["data"]):
+                parsedFrame_["subframes"] = Array()
                 while True:
                     
-                    if not (frame_offset < php_strlen(parsedFrame["data"])):
+                    if not (frame_offset_ < php_strlen(parsedFrame_["data"])):
                         break
                     # end if
                     #// <Optional embedded sub-frames>
-                    subframe = Array()
-                    subframe["name"] = php_substr(parsedFrame["data"], frame_offset, 4)
-                    frame_offset += 4
-                    subframe["size"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-                    frame_offset += 4
-                    subframe["flags_raw"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
-                    frame_offset += 2
-                    if subframe["size"] > php_strlen(parsedFrame["data"]) - frame_offset:
-                        self.warning("CHAP subframe \"" + subframe["name"] + "\" at frame offset " + frame_offset + " claims to be \"" + subframe["size"] + "\" bytes, which is more than the available data (" + php_strlen(parsedFrame["data"]) - frame_offset + " bytes)")
+                    subframe_ = Array()
+                    subframe_["name"] = php_substr(parsedFrame_["data"], frame_offset_, 4)
+                    frame_offset_ += 4
+                    subframe_["size"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+                    frame_offset_ += 4
+                    subframe_["flags_raw"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 2))
+                    frame_offset_ += 2
+                    if subframe_["size"] > php_strlen(parsedFrame_["data"]) - frame_offset_:
+                        self.warning("CHAP subframe \"" + subframe_["name"] + "\" at frame offset " + frame_offset_ + " claims to be \"" + subframe_["size"] + "\" bytes, which is more than the available data (" + php_strlen(parsedFrame_["data"]) - frame_offset_ + " bytes)")
                         break
                     # end if
-                    subframe_rawdata = php_substr(parsedFrame["data"], frame_offset, subframe["size"])
-                    frame_offset += subframe["size"]
-                    subframe["encodingid"] = php_ord(php_substr(subframe_rawdata, 0, 1))
-                    subframe["text"] = php_substr(subframe_rawdata, 1)
-                    subframe["encoding"] = self.textencodingnamelookup(subframe["encodingid"])
-                    encoding_converted_text = php_trim(getid3_lib.iconv_fallback(subframe["encoding"], info["encoding"], subframe["text"]))
-                    for case in Switch(php_substr(encoding_converted_text, 0, 2)):
+                    subframe_rawdata_ = php_substr(parsedFrame_["data"], frame_offset_, subframe_["size"])
+                    frame_offset_ += subframe_["size"]
+                    subframe_["encodingid"] = php_ord(php_substr(subframe_rawdata_, 0, 1))
+                    subframe_["text"] = php_substr(subframe_rawdata_, 1)
+                    subframe_["encoding"] = self.textencodingnamelookup(subframe_["encodingid"])
+                    encoding_converted_text_ = php_trim(getid3_lib.iconv_fallback(subframe_["encoding"], info_["encoding"], subframe_["text"]))
+                    for case in Switch(php_substr(encoding_converted_text_, 0, 2)):
                         if case("ÿþ"):
                             pass
                         # end if
                         if case("þÿ"):
-                            for case in Switch(php_strtoupper(info["id3v2"]["encoding"])):
+                            for case in Switch(php_strtoupper(info_["id3v2"]["encoding"])):
                                 if case("ISO-8859-1"):
                                     pass
                                 # end if
                                 if case("UTF-8"):
-                                    encoding_converted_text = php_substr(encoding_converted_text, 2)
+                                    encoding_converted_text_ = php_substr(encoding_converted_text_, 2)
                                     break
                                 # end if
                                 if case():
@@ -1989,74 +2028,74 @@ class getid3_id3v2(getid3_handler):
                             break
                         # end if
                     # end for
-                    for case in Switch(subframe["name"]):
+                    for case in Switch(subframe_["name"]):
                         if case("TIT2"):
-                            parsedFrame["chapter_name"] = encoding_converted_text
-                            parsedFrame["subframes"][-1] = subframe
+                            parsedFrame_["chapter_name"] = encoding_converted_text_
+                            parsedFrame_["subframes"][-1] = subframe_
                             break
                         # end if
                         if case("TIT3"):
-                            parsedFrame["chapter_description"] = encoding_converted_text
-                            parsedFrame["subframes"][-1] = subframe
+                            parsedFrame_["chapter_description"] = encoding_converted_text_
+                            parsedFrame_["subframes"][-1] = subframe_
                             break
                         # end if
                         if case("WXXX"):
-                            subframe["chapter_url_description"], subframe["chapter_url"] = php_explode(" ", encoding_converted_text, 2)
-                            parsedFrame["chapter_url"][subframe["chapter_url_description"]] = subframe["chapter_url"]
-                            parsedFrame["subframes"][-1] = subframe
+                            subframe_["chapter_url_description"], subframe_["chapter_url"] = php_explode(" ", encoding_converted_text_, 2)
+                            parsedFrame_["chapter_url"][subframe_["chapter_url_description"]] = subframe_["chapter_url"]
+                            parsedFrame_["subframes"][-1] = subframe_
                             break
                         # end if
                         if case("APIC"):
-                            if php_preg_match("#^([^\\x00]+)*\\x00(.)([^\\x00]+)*\\x00(.+)$#s", subframe["text"], matches):
-                                dummy, subframe_apic_mime, subframe_apic_picturetype, subframe_apic_description, subframe_apic_picturedata = matches
-                                subframe["image_mime"] = php_trim(getid3_lib.iconv_fallback(subframe["encoding"], info["encoding"], subframe_apic_mime))
-                                subframe["picture_type"] = self.apicpicturetypelookup(subframe_apic_picturetype)
-                                subframe["description"] = php_trim(getid3_lib.iconv_fallback(subframe["encoding"], info["encoding"], subframe_apic_description))
-                                if php_strlen(self.textencodingterminatorlookup(subframe["encoding"])) == 2:
+                            if php_preg_match("#^([^\\x00]+)*\\x00(.)([^\\x00]+)*\\x00(.+)$#s", subframe_["text"], matches_):
+                                dummy_, subframe_apic_mime_, subframe_apic_picturetype_, subframe_apic_description_, subframe_apic_picturedata_ = matches_
+                                subframe_["image_mime"] = php_trim(getid3_lib.iconv_fallback(subframe_["encoding"], info_["encoding"], subframe_apic_mime_))
+                                subframe_["picture_type"] = self.apicpicturetypelookup(subframe_apic_picturetype_)
+                                subframe_["description"] = php_trim(getid3_lib.iconv_fallback(subframe_["encoding"], info_["encoding"], subframe_apic_description_))
+                                if php_strlen(self.textencodingterminatorlookup(subframe_["encoding"])) == 2:
                                     #// the null terminator between "description" and "picture data" could be either 1 byte (ISO-8859-1, UTF-8) or two bytes (UTF-16)
                                     #// the above regex assumes one byte, if it's actually two then strip the second one here
-                                    subframe_apic_picturedata = php_substr(subframe_apic_picturedata, 1)
+                                    subframe_apic_picturedata_ = php_substr(subframe_apic_picturedata_, 1)
                                 # end if
-                                subframe["data"] = subframe_apic_picturedata
-                                dummy = None
-                                subframe_apic_mime = None
-                                subframe_apic_picturetype = None
-                                subframe_apic_description = None
-                                subframe_apic_picturedata = None
-                                subframe["text"] = None
-                                parsedFrame["text"] = None
-                                parsedFrame["subframes"][-1] = subframe
-                                parsedFrame["picture_present"] = True
+                                subframe_["data"] = subframe_apic_picturedata_
+                                dummy_ = None
+                                subframe_apic_mime_ = None
+                                subframe_apic_picturetype_ = None
+                                subframe_apic_description_ = None
+                                subframe_apic_picturedata_ = None
+                                subframe_["text"] = None
+                                parsedFrame_["text"] = None
+                                parsedFrame_["subframes"][-1] = subframe_
+                                parsedFrame_["picture_present"] = True
                             else:
-                                self.warning("ID3v2.CHAP subframe #" + php_count(parsedFrame["subframes"]) + 1 + " \"" + subframe["name"] + "\" not in expected format")
+                                self.warning("ID3v2.CHAP subframe #" + php_count(parsedFrame_["subframes"]) + 1 + " \"" + subframe_["name"] + "\" not in expected format")
                             # end if
                             break
                         # end if
                         if case():
-                            self.warning("ID3v2.CHAP subframe \"" + subframe["name"] + "\" not handled (supported: TIT2, TIT3, WXXX, APIC)")
+                            self.warning("ID3v2.CHAP subframe \"" + subframe_["name"] + "\" not handled (supported: TIT2, TIT3, WXXX, APIC)")
                             break
                         # end if
                     # end for
                 # end while
-                subframe_rawdata = None
-                subframe = None
-                encoding_converted_text = None
-                parsedFrame["data"] = None
+                subframe_rawdata_ = None
+                subframe_ = None
+                encoding_converted_text_ = None
+                parsedFrame_["data"] = None
                 pass
             # end if
-            id3v2_chapter_entry = Array()
-            for id3v2_chapter_key in Array("id", "time_begin", "time_end", "offset_begin", "offset_end", "chapter_name", "chapter_description", "chapter_url", "picture_present"):
-                if (php_isset(lambda : parsedFrame[id3v2_chapter_key])):
-                    id3v2_chapter_entry[id3v2_chapter_key] = parsedFrame[id3v2_chapter_key]
+            id3v2_chapter_entry_ = Array()
+            for id3v2_chapter_key_ in Array("id", "time_begin", "time_end", "offset_begin", "offset_end", "chapter_name", "chapter_description", "chapter_url", "picture_present"):
+                if (php_isset(lambda : parsedFrame_[id3v2_chapter_key_])):
+                    id3v2_chapter_entry_[id3v2_chapter_key_] = parsedFrame_[id3v2_chapter_key_]
                 # end if
             # end for
-            if (not (php_isset(lambda : info["id3v2"]["chapters"]))):
-                info["id3v2"]["chapters"] = Array()
+            if (not (php_isset(lambda : info_["id3v2"]["chapters"]))):
+                info_["id3v2"]["chapters"] = Array()
             # end if
-            info["id3v2"]["chapters"][-1] = id3v2_chapter_entry
-            id3v2_chapter_entry = None
-            id3v2_chapter_key = None
-        elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "CTOC":
+            info_["id3v2"]["chapters"][-1] = id3v2_chapter_entry_
+            id3v2_chapter_entry_ = None
+            id3v2_chapter_key_ = None
+        elif id3v2_majorversion_ >= 3 and parsedFrame_["frame_name"] == "CTOC":
             #// CTOC Chapters Table Of Contents frame (ID3v2.3+ only)
             #// http://id3.org/id3v2-chapters-1.0
             #// <ID3v2.3 or ID3v2.4 frame header, ID: "CTOC">           (10 bytes)
@@ -2065,62 +2104,62 @@ class getid3_id3v2(getid3_handler):
             #// Entry count       $xx
             #// Child Element ID  <string>$00   /* zero or more child CHAP or CTOC entries
             #// <Optional embedded sub-frames>
-            frame_offset = 0
-            php_no_error(lambda: parsedFrame["element_id"] = php_explode(" ", parsedFrame["data"], 2))
-            frame_offset += php_strlen(parsedFrame["element_id"] + " ")
-            ctoc_flags_raw = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            parsedFrame["entry_count"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
-            frame_offset += 1
-            terminator_position = None
-            i = 0
-            while i < parsedFrame["entry_count"]:
+            frame_offset_ = 0
+            php_no_error(lambda: parsedFrame_["element_id"] = php_explode(" ", parsedFrame_["data"], 2))
+            frame_offset_ += php_strlen(parsedFrame_["element_id"] + " ")
+            ctoc_flags_raw_ = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            parsedFrame_["entry_count"] = php_ord(php_substr(parsedFrame_["data"], frame_offset_, 1))
+            frame_offset_ += 1
+            terminator_position_ = None
+            i_ = 0
+            while i_ < parsedFrame_["entry_count"]:
                 
-                terminator_position = php_strpos(parsedFrame["data"], " ", frame_offset)
-                parsedFrame["child_element_ids"][i] = php_substr(parsedFrame["data"], frame_offset, terminator_position - frame_offset)
-                frame_offset = terminator_position + 1
-                i += 1
+                terminator_position_ = php_strpos(parsedFrame_["data"], " ", frame_offset_)
+                parsedFrame_["child_element_ids"][i_] = php_substr(parsedFrame_["data"], frame_offset_, terminator_position_ - frame_offset_)
+                frame_offset_ = terminator_position_ + 1
+                i_ += 1
             # end while
-            parsedFrame["ctoc_flags"]["ordered"] = php_bool(ctoc_flags_raw & 1)
-            parsedFrame["ctoc_flags"]["top_level"] = php_bool(ctoc_flags_raw & 3)
-            ctoc_flags_raw = None
-            terminator_position = None
-            if frame_offset < php_strlen(parsedFrame["data"]):
-                parsedFrame["subframes"] = Array()
+            parsedFrame_["ctoc_flags"]["ordered"] = php_bool(ctoc_flags_raw_ & 1)
+            parsedFrame_["ctoc_flags"]["top_level"] = php_bool(ctoc_flags_raw_ & 3)
+            ctoc_flags_raw_ = None
+            terminator_position_ = None
+            if frame_offset_ < php_strlen(parsedFrame_["data"]):
+                parsedFrame_["subframes"] = Array()
                 while True:
                     
-                    if not (frame_offset < php_strlen(parsedFrame["data"])):
+                    if not (frame_offset_ < php_strlen(parsedFrame_["data"])):
                         break
                     # end if
                     #// <Optional embedded sub-frames>
-                    subframe = Array()
-                    subframe["name"] = php_substr(parsedFrame["data"], frame_offset, 4)
-                    frame_offset += 4
-                    subframe["size"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
-                    frame_offset += 4
-                    subframe["flags_raw"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
-                    frame_offset += 2
-                    if subframe["size"] > php_strlen(parsedFrame["data"]) - frame_offset:
-                        self.warning("CTOS subframe \"" + subframe["name"] + "\" at frame offset " + frame_offset + " claims to be \"" + subframe["size"] + "\" bytes, which is more than the available data (" + php_strlen(parsedFrame["data"]) - frame_offset + " bytes)")
+                    subframe_ = Array()
+                    subframe_["name"] = php_substr(parsedFrame_["data"], frame_offset_, 4)
+                    frame_offset_ += 4
+                    subframe_["size"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 4))
+                    frame_offset_ += 4
+                    subframe_["flags_raw"] = getid3_lib.bigendian2int(php_substr(parsedFrame_["data"], frame_offset_, 2))
+                    frame_offset_ += 2
+                    if subframe_["size"] > php_strlen(parsedFrame_["data"]) - frame_offset_:
+                        self.warning("CTOS subframe \"" + subframe_["name"] + "\" at frame offset " + frame_offset_ + " claims to be \"" + subframe_["size"] + "\" bytes, which is more than the available data (" + php_strlen(parsedFrame_["data"]) - frame_offset_ + " bytes)")
                         break
                     # end if
-                    subframe_rawdata = php_substr(parsedFrame["data"], frame_offset, subframe["size"])
-                    frame_offset += subframe["size"]
-                    subframe["encodingid"] = php_ord(php_substr(subframe_rawdata, 0, 1))
-                    subframe["text"] = php_substr(subframe_rawdata, 1)
-                    subframe["encoding"] = self.textencodingnamelookup(subframe["encodingid"])
-                    encoding_converted_text = php_trim(getid3_lib.iconv_fallback(subframe["encoding"], info["encoding"], subframe["text"]))
-                    for case in Switch(php_substr(encoding_converted_text, 0, 2)):
+                    subframe_rawdata_ = php_substr(parsedFrame_["data"], frame_offset_, subframe_["size"])
+                    frame_offset_ += subframe_["size"]
+                    subframe_["encodingid"] = php_ord(php_substr(subframe_rawdata_, 0, 1))
+                    subframe_["text"] = php_substr(subframe_rawdata_, 1)
+                    subframe_["encoding"] = self.textencodingnamelookup(subframe_["encodingid"])
+                    encoding_converted_text_ = php_trim(getid3_lib.iconv_fallback(subframe_["encoding"], info_["encoding"], subframe_["text"]))
+                    for case in Switch(php_substr(encoding_converted_text_, 0, 2)):
                         if case("ÿþ"):
                             pass
                         # end if
                         if case("þÿ"):
-                            for case in Switch(php_strtoupper(info["id3v2"]["encoding"])):
+                            for case in Switch(php_strtoupper(info_["id3v2"]["encoding"])):
                                 if case("ISO-8859-1"):
                                     pass
                                 # end if
                                 if case("UTF-8"):
-                                    encoding_converted_text = php_substr(encoding_converted_text, 2)
+                                    encoding_converted_text_ = php_substr(encoding_converted_text_, 2)
                                     break
                                 # end if
                                 if case():
@@ -2133,20 +2172,20 @@ class getid3_id3v2(getid3_handler):
                             break
                         # end if
                     # end for
-                    if subframe["name"] == "TIT2" or subframe["name"] == "TIT3":
-                        if subframe["name"] == "TIT2":
-                            parsedFrame["toc_name"] = encoding_converted_text
-                        elif subframe["name"] == "TIT3":
-                            parsedFrame["toc_description"] = encoding_converted_text
+                    if subframe_["name"] == "TIT2" or subframe_["name"] == "TIT3":
+                        if subframe_["name"] == "TIT2":
+                            parsedFrame_["toc_name"] = encoding_converted_text_
+                        elif subframe_["name"] == "TIT3":
+                            parsedFrame_["toc_description"] = encoding_converted_text_
                         # end if
-                        parsedFrame["subframes"][-1] = subframe
+                        parsedFrame_["subframes"][-1] = subframe_
                     else:
-                        self.warning("ID3v2.CTOC subframe \"" + subframe["name"] + "\" not handled (only TIT2 and TIT3)")
+                        self.warning("ID3v2.CTOC subframe \"" + subframe_["name"] + "\" not handled (only TIT2 and TIT3)")
                     # end if
                 # end while
-                subframe_rawdata = None
-                subframe = None
-                encoding_converted_text = None
+                subframe_rawdata_ = None
+                subframe_ = None
+                encoding_converted_text_ = None
             # end if
         # end if
         return True
@@ -2156,68 +2195,75 @@ class getid3_id3v2(getid3_handler):
     #// 
     #// @return string
     #//
-    def deunsynchronise(self, data=None):
+    def deunsynchronise(self, data_=None):
         
-        return php_str_replace("ÿ ", "ÿ", data)
+        
+        return php_str_replace("ÿ ", "ÿ", data_)
     # end def deunsynchronise
     #// 
     #// @param int $index
     #// 
     #// @return string
     #//
-    def lookupextendedheaderrestrictionstagsizelimits(self, index=None):
+    def lookupextendedheaderrestrictionstagsizelimits(self, index_=None):
         
-        lookupextendedheaderrestrictionstagsizelimits.LookupExtendedHeaderRestrictionsTagSizeLimits = Array({0: "No more than 128 frames and 1 MB total tag size", 1: "No more than 64 frames and 128 KB total tag size", 2: "No more than 32 frames and 40 KB total tag size", 3: "No more than 32 frames and 4 KB total tag size"})
-        return lookupextendedheaderrestrictionstagsizelimits.LookupExtendedHeaderRestrictionsTagSizeLimits[index] if (php_isset(lambda : lookupextendedheaderrestrictionstagsizelimits.LookupExtendedHeaderRestrictionsTagSizeLimits[index])) else ""
+        
+        LookupExtendedHeaderRestrictionsTagSizeLimits_ = Array({0: "No more than 128 frames and 1 MB total tag size", 1: "No more than 64 frames and 128 KB total tag size", 2: "No more than 32 frames and 40 KB total tag size", 3: "No more than 32 frames and 4 KB total tag size"})
+        return LookupExtendedHeaderRestrictionsTagSizeLimits_[index_] if (php_isset(lambda : LookupExtendedHeaderRestrictionsTagSizeLimits_[index_])) else ""
     # end def lookupextendedheaderrestrictionstagsizelimits
     #// 
     #// @param int $index
     #// 
     #// @return string
     #//
-    def lookupextendedheaderrestrictionstextencodings(self, index=None):
+    def lookupextendedheaderrestrictionstextencodings(self, index_=None):
         
-        lookupextendedheaderrestrictionstextencodings.LookupExtendedHeaderRestrictionsTextEncodings = Array({0: "No restrictions", 1: "Strings are only encoded with ISO-8859-1 or UTF-8"})
-        return lookupextendedheaderrestrictionstextencodings.LookupExtendedHeaderRestrictionsTextEncodings[index] if (php_isset(lambda : lookupextendedheaderrestrictionstextencodings.LookupExtendedHeaderRestrictionsTextEncodings[index])) else ""
+        
+        LookupExtendedHeaderRestrictionsTextEncodings_ = Array({0: "No restrictions", 1: "Strings are only encoded with ISO-8859-1 or UTF-8"})
+        return LookupExtendedHeaderRestrictionsTextEncodings_[index_] if (php_isset(lambda : LookupExtendedHeaderRestrictionsTextEncodings_[index_])) else ""
     # end def lookupextendedheaderrestrictionstextencodings
     #// 
     #// @param int $index
     #// 
     #// @return string
     #//
-    def lookupextendedheaderrestrictionstextfieldsize(self, index=None):
+    def lookupextendedheaderrestrictionstextfieldsize(self, index_=None):
         
-        lookupextendedheaderrestrictionstextfieldsize.LookupExtendedHeaderRestrictionsTextFieldSize = Array({0: "No restrictions", 1: "No string is longer than 1024 characters", 2: "No string is longer than 128 characters", 3: "No string is longer than 30 characters"})
-        return lookupextendedheaderrestrictionstextfieldsize.LookupExtendedHeaderRestrictionsTextFieldSize[index] if (php_isset(lambda : lookupextendedheaderrestrictionstextfieldsize.LookupExtendedHeaderRestrictionsTextFieldSize[index])) else ""
+        
+        LookupExtendedHeaderRestrictionsTextFieldSize_ = Array({0: "No restrictions", 1: "No string is longer than 1024 characters", 2: "No string is longer than 128 characters", 3: "No string is longer than 30 characters"})
+        return LookupExtendedHeaderRestrictionsTextFieldSize_[index_] if (php_isset(lambda : LookupExtendedHeaderRestrictionsTextFieldSize_[index_])) else ""
     # end def lookupextendedheaderrestrictionstextfieldsize
     #// 
     #// @param int $index
     #// 
     #// @return string
     #//
-    def lookupextendedheaderrestrictionsimageencoding(self, index=None):
+    def lookupextendedheaderrestrictionsimageencoding(self, index_=None):
         
-        lookupextendedheaderrestrictionsimageencoding.LookupExtendedHeaderRestrictionsImageEncoding = Array({0: "No restrictions", 1: "Images are encoded only with PNG or JPEG"})
-        return lookupextendedheaderrestrictionsimageencoding.LookupExtendedHeaderRestrictionsImageEncoding[index] if (php_isset(lambda : lookupextendedheaderrestrictionsimageencoding.LookupExtendedHeaderRestrictionsImageEncoding[index])) else ""
+        
+        LookupExtendedHeaderRestrictionsImageEncoding_ = Array({0: "No restrictions", 1: "Images are encoded only with PNG or JPEG"})
+        return LookupExtendedHeaderRestrictionsImageEncoding_[index_] if (php_isset(lambda : LookupExtendedHeaderRestrictionsImageEncoding_[index_])) else ""
     # end def lookupextendedheaderrestrictionsimageencoding
     #// 
     #// @param int $index
     #// 
     #// @return string
     #//
-    def lookupextendedheaderrestrictionsimagesizesize(self, index=None):
+    def lookupextendedheaderrestrictionsimagesizesize(self, index_=None):
         
-        lookupextendedheaderrestrictionsimagesizesize.LookupExtendedHeaderRestrictionsImageSizeSize = Array({0: "No restrictions", 1: "All images are 256x256 pixels or smaller", 2: "All images are 64x64 pixels or smaller", 3: "All images are exactly 64x64 pixels, unless required otherwise"})
-        return lookupextendedheaderrestrictionsimagesizesize.LookupExtendedHeaderRestrictionsImageSizeSize[index] if (php_isset(lambda : lookupextendedheaderrestrictionsimagesizesize.LookupExtendedHeaderRestrictionsImageSizeSize[index])) else ""
+        
+        LookupExtendedHeaderRestrictionsImageSizeSize_ = Array({0: "No restrictions", 1: "All images are 256x256 pixels or smaller", 2: "All images are 64x64 pixels or smaller", 3: "All images are exactly 64x64 pixels, unless required otherwise"})
+        return LookupExtendedHeaderRestrictionsImageSizeSize_[index_] if (php_isset(lambda : LookupExtendedHeaderRestrictionsImageSizeSize_[index_])) else ""
     # end def lookupextendedheaderrestrictionsimagesizesize
     #// 
     #// @param string $currencyid
     #// 
     #// @return string
     #//
-    def lookupcurrencyunits(self, currencyid=None):
+    def lookupcurrencyunits(self, currencyid_=None):
         
-        begin = 0
+        
+        begin_ = 0
         #// This is not a comment!
         #// AED Dirhams
         #// AFA Afghanis
@@ -2403,16 +2449,17 @@ class getid3_id3v2(getid3_handler):
         #// ZMK Kwacha
         #// ZWD Zimbabwe Dollars
         #//
-        return getid3_lib.embeddedlookup(currencyid, begin, 0, __FILE__, "id3v2-currency-units")
+        return getid3_lib.embeddedlookup(currencyid_, begin_, 0, __FILE__, "id3v2-currency-units")
     # end def lookupcurrencyunits
     #// 
     #// @param string $currencyid
     #// 
     #// @return string
     #//
-    def lookupcurrencycountry(self, currencyid=None):
+    def lookupcurrencycountry(self, currencyid_=None):
         
-        begin = 0
+        
+        begin_ = 0
         #// This is not a comment!
         #// AED United Arab Emirates
         #// AFA Afghanistan
@@ -2598,7 +2645,7 @@ class getid3_id3v2(getid3_handler):
         #// ZMK Zambia
         #// ZWD Zimbabwe
         #//
-        return getid3_lib.embeddedlookup(currencyid, begin, 0, __FILE__, "id3v2-currency-country")
+        return getid3_lib.embeddedlookup(currencyid_, begin_, 0, __FILE__, "id3v2-currency-country")
     # end def lookupcurrencycountry
     #// 
     #// @param string $languagecode
@@ -2607,10 +2654,13 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def languagelookup(self, languagecode=None, casesensitive=False):
+    def languagelookup(self, languagecode_=None, casesensitive_=None):
+        if casesensitive_ is None:
+            casesensitive_ = False
+        # end if
         
-        if (not casesensitive):
-            languagecode = php_strtolower(languagecode)
+        if (not casesensitive_):
+            languagecode_ = php_strtolower(languagecode_)
         # end if
         #// http://www.id3.org/id3v2.4.0-structure.txt
         #// [4.   ID3v2 frame overview]
@@ -2619,7 +2669,7 @@ class getid3_id3v2(getid3_handler):
         #// [ISO-639-2]. The language should be represented in lower case. If the
         #// language is not known the string "XXX" should be used.
         #// ISO 639-2 - http://www.id3.org/iso639-2.html
-        begin = 0
+        begin_ = 0
         #// This is not a comment!
         #// XXX unknown
         #// xxx unknown
@@ -3051,7 +3101,7 @@ class getid3_id3v2(getid3_handler):
         #// zul Zulu
         #// zun Zuni
         #//
-        return getid3_lib.embeddedlookup(languagecode, begin, 0, __FILE__, "id3v2-languagecode")
+        return getid3_lib.embeddedlookup(languagecode_, begin_, 0, __FILE__, "id3v2-languagecode")
     # end def languagelookup
     #// 
     #// @param int $index
@@ -3059,19 +3109,20 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def etcoeventlookup(self, index=None):
+    def etcoeventlookup(self, index_=None):
         
-        if index >= 23 and index <= 223:
+        
+        if index_ >= 23 and index_ <= 223:
             return "reserved for future use"
         # end if
-        if index >= 224 and index <= 239:
+        if index_ >= 224 and index_ <= 239:
             return "not predefined synch 0-F"
         # end if
-        if index >= 240 and index <= 252:
+        if index_ >= 240 and index_ <= 252:
             return "reserved for future use"
         # end if
-        etcoeventlookup.EventLookup = Array({0: "padding (has no meaning)", 1: "end of initial silence", 2: "intro start", 3: "main part start", 4: "outro start", 5: "outro end", 6: "verse start", 7: "refrain start", 8: "interlude start", 9: "theme start", 10: "variation start", 11: "key change", 12: "time change", 13: "momentary unwanted noise (Snap, Crackle & Pop)", 14: "sustained noise", 15: "sustained noise end", 16: "intro end", 17: "main part end", 18: "verse end", 19: "refrain end", 20: "theme end", 21: "profanity", 22: "profanity end", 253: "audio end (start of silence)", 254: "audio file ends", 255: "one more byte of events follows"})
-        return etcoeventlookup.EventLookup[index] if (php_isset(lambda : etcoeventlookup.EventLookup[index])) else ""
+        EventLookup_ = Array({0: "padding (has no meaning)", 1: "end of initial silence", 2: "intro start", 3: "main part start", 4: "outro start", 5: "outro end", 6: "verse start", 7: "refrain start", 8: "interlude start", 9: "theme start", 10: "variation start", 11: "key change", 12: "time change", 13: "momentary unwanted noise (Snap, Crackle & Pop)", 14: "sustained noise", 15: "sustained noise end", 16: "intro end", 17: "main part end", 18: "verse end", 19: "refrain end", 20: "theme end", 21: "profanity", 22: "profanity end", 253: "audio end (start of silence)", 254: "audio file ends", 255: "one more byte of events follows"})
+        return EventLookup_[index_] if (php_isset(lambda : EventLookup_[index_])) else ""
     # end def etcoeventlookup
     #// 
     #// @param int $index
@@ -3079,10 +3130,11 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def sytlcontenttypelookup(self, index=None):
+    def sytlcontenttypelookup(self, index_=None):
         
-        sytlcontenttypelookup.SYTLContentTypeLookup = Array({0: "other", 1: "lyrics", 2: "text transcription", 3: "movement/part name", 4: "events", 5: "chord", 6: "trivia/'pop up' information", 7: "URLs to webpages", 8: "URLs to images"})
-        return sytlcontenttypelookup.SYTLContentTypeLookup[index] if (php_isset(lambda : sytlcontenttypelookup.SYTLContentTypeLookup[index])) else ""
+        
+        SYTLContentTypeLookup_ = Array({0: "other", 1: "lyrics", 2: "text transcription", 3: "movement/part name", 4: "events", 5: "chord", 6: "trivia/'pop up' information", 7: "URLs to webpages", 8: "URLs to images"})
+        return SYTLContentTypeLookup_[index_] if (php_isset(lambda : SYTLContentTypeLookup_[index_])) else ""
     # end def sytlcontenttypelookup
     #// 
     #// @param int   $index
@@ -3091,13 +3143,16 @@ class getid3_id3v2(getid3_handler):
     #// @return array|string
     #//
     @classmethod
-    def apicpicturetypelookup(self, index=None, returnarray=False):
-        
-        apicpicturetypelookup.APICPictureTypeLookup = Array({0: "Other", 1: "32x32 pixels 'file icon' (PNG only)", 2: "Other file icon", 3: "Cover (front)", 4: "Cover (back)", 5: "Leaflet page", 6: "Media (e.g. label side of CD)", 7: "Lead artist/lead performer/soloist", 8: "Artist/performer", 9: "Conductor", 10: "Band/Orchestra", 11: "Composer", 12: "Lyricist/text writer", 13: "Recording Location", 14: "During recording", 15: "During performance", 16: "Movie/video screen capture", 17: "A bright coloured fish", 18: "Illustration", 19: "Band/artist logotype", 20: "Publisher/Studio logotype"})
-        if returnarray:
-            return apicpicturetypelookup.APICPictureTypeLookup
+    def apicpicturetypelookup(self, index_=None, returnarray_=None):
+        if returnarray_ is None:
+            returnarray_ = False
         # end if
-        return apicpicturetypelookup.APICPictureTypeLookup[index] if (php_isset(lambda : apicpicturetypelookup.APICPictureTypeLookup[index])) else ""
+        
+        APICPictureTypeLookup_ = Array({0: "Other", 1: "32x32 pixels 'file icon' (PNG only)", 2: "Other file icon", 3: "Cover (front)", 4: "Cover (back)", 5: "Leaflet page", 6: "Media (e.g. label side of CD)", 7: "Lead artist/lead performer/soloist", 8: "Artist/performer", 9: "Conductor", 10: "Band/Orchestra", 11: "Composer", 12: "Lyricist/text writer", 13: "Recording Location", 14: "During recording", 15: "During performance", 16: "Movie/video screen capture", 17: "A bright coloured fish", 18: "Illustration", 19: "Band/artist logotype", 20: "Publisher/Studio logotype"})
+        if returnarray_:
+            return APICPictureTypeLookup_
+        # end if
+        return APICPictureTypeLookup_[index_] if (php_isset(lambda : APICPictureTypeLookup_[index_])) else ""
     # end def apicpicturetypelookup
     #// 
     #// @param int $index
@@ -3105,10 +3160,11 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def comrreceivedaslookup(self, index=None):
+    def comrreceivedaslookup(self, index_=None):
         
-        comrreceivedaslookup.COMRReceivedAsLookup = Array({0: "Other", 1: "Standard CD album with other songs", 2: "Compressed audio on CD", 3: "File over the Internet", 4: "Stream over the Internet", 5: "As note sheets", 6: "As note sheets in a book with other sheets", 7: "Music on other media", 8: "Non-musical merchandise"})
-        return comrreceivedaslookup.COMRReceivedAsLookup[index] if (php_isset(lambda : comrreceivedaslookup.COMRReceivedAsLookup[index])) else ""
+        
+        COMRReceivedAsLookup_ = Array({0: "Other", 1: "Standard CD album with other songs", 2: "Compressed audio on CD", 3: "File over the Internet", 4: "Stream over the Internet", 5: "As note sheets", 6: "As note sheets in a book with other sheets", 7: "Music on other media", 8: "Non-musical merchandise"})
+        return COMRReceivedAsLookup_[index_] if (php_isset(lambda : COMRReceivedAsLookup_[index_])) else ""
     # end def comrreceivedaslookup
     #// 
     #// @param int $index
@@ -3116,10 +3172,11 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def rva2channeltypelookup(self, index=None):
+    def rva2channeltypelookup(self, index_=None):
         
-        rva2channeltypelookup.RVA2ChannelTypeLookup = Array({0: "Other", 1: "Master volume", 2: "Front right", 3: "Front left", 4: "Back right", 5: "Back left", 6: "Front centre", 7: "Back centre", 8: "Subwoofer"})
-        return rva2channeltypelookup.RVA2ChannelTypeLookup[index] if (php_isset(lambda : rva2channeltypelookup.RVA2ChannelTypeLookup[index])) else ""
+        
+        RVA2ChannelTypeLookup_ = Array({0: "Other", 1: "Master volume", 2: "Front right", 3: "Front left", 4: "Back right", 5: "Back left", 6: "Front centre", 7: "Back centre", 8: "Subwoofer"})
+        return RVA2ChannelTypeLookup_[index_] if (php_isset(lambda : RVA2ChannelTypeLookup_[index_])) else ""
     # end def rva2channeltypelookup
     #// 
     #// @param string $framename
@@ -3127,9 +3184,10 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def framenamelonglookup(self, framename=None):
+    def framenamelonglookup(self, framename_=None):
         
-        begin = 0
+        
+        begin_ = 0
         #// This is not a comment!
         #// AENC    Audio encryption
         #// APIC    Attached picture
@@ -3299,7 +3357,7 @@ class getid3_id3v2(getid3_handler):
         #// TSTU    Recording Studio
         #// rgad    Replay Gain Adjustment
         #//
-        return getid3_lib.embeddedlookup(framename, begin, 0, __FILE__, "id3v2-framename_long")
+        return getid3_lib.embeddedlookup(framename_, begin_, 0, __FILE__, "id3v2-framename_long")
         pass
     # end def framenamelonglookup
     #// 
@@ -3308,9 +3366,10 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def framenameshortlookup(self, framename=None):
+    def framenameshortlookup(self, framename_=None):
         
-        begin = 0
+        
+        begin_ = 0
         #// This is not a comment!
         #// AENC    audio_encryption
         #// APIC    attached_picture
@@ -3480,7 +3539,7 @@ class getid3_id3v2(getid3_handler):
         #// TSTU    recording_studio
         #// rgad    replay_gain_adjustment
         #//
-        return getid3_lib.embeddedlookup(framename, begin, 0, __FILE__, "id3v2-framename_short")
+        return getid3_lib.embeddedlookup(framename_, begin_, 0, __FILE__, "id3v2-framename_short")
     # end def framenameshortlookup
     #// 
     #// @param string $encoding
@@ -3488,10 +3547,11 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def textencodingterminatorlookup(self, encoding=None):
+    def textencodingterminatorlookup(self, encoding_=None):
         
-        textencodingterminatorlookup.TextEncodingTerminatorLookup = Array({0: " ", 1: "  ", 2: "  ", 3: " ", 255: "  "})
-        return textencodingterminatorlookup.TextEncodingTerminatorLookup[encoding] if (php_isset(lambda : textencodingterminatorlookup.TextEncodingTerminatorLookup[encoding])) else " "
+        
+        TextEncodingTerminatorLookup_ = Array({0: " ", 1: "  ", 2: "  ", 3: " ", 255: "  "})
+        return TextEncodingTerminatorLookup_[encoding_] if (php_isset(lambda : TextEncodingTerminatorLookup_[encoding_])) else " "
     # end def textencodingterminatorlookup
     #// 
     #// @param int $encoding
@@ -3499,10 +3559,11 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def textencodingnamelookup(self, encoding=None):
+    def textencodingnamelookup(self, encoding_=None):
         
-        textencodingnamelookup.TextEncodingNameLookup = Array({0: "ISO-8859-1", 1: "UTF-16", 2: "UTF-16BE", 3: "UTF-8", 255: "UTF-16BE"})
-        return textencodingnamelookup.TextEncodingNameLookup[encoding] if (php_isset(lambda : textencodingnamelookup.TextEncodingNameLookup[encoding])) else "ISO-8859-1"
+        
+        TextEncodingNameLookup_ = Array({0: "ISO-8859-1", 1: "UTF-16", 2: "UTF-16BE", 3: "UTF-8", 255: "UTF-16BE"})
+        return TextEncodingNameLookup_[encoding_] if (php_isset(lambda : TextEncodingNameLookup_[encoding_])) else "ISO-8859-1"
     # end def textencodingnamelookup
     #// 
     #// @param string $string
@@ -3511,15 +3572,16 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def removestringterminator(self, string=None, terminator=None):
+    def removestringterminator(self, string_=None, terminator_=None):
+        
         
         #// Null terminator at end of comment string is somewhat ambiguous in the specification, may or may not be implemented by various taggers. Remove terminator only if present.
         #// https://github.com/JamesHeinrich/getID3/issues/121
         #// https://community.mp3tag.de/t/x-trailing-nulls-in-id3v2-comments/19227
-        if php_substr(string, -php_strlen(terminator), php_strlen(terminator)) == terminator:
-            string = php_substr(string, 0, -php_strlen(terminator))
+        if php_substr(string_, -php_strlen(terminator_), php_strlen(terminator_)) == terminator_:
+            string_ = php_substr(string_, 0, -php_strlen(terminator_))
         # end if
-        return string
+        return string_
     # end def removestringterminator
     #// 
     #// @param string $string
@@ -3527,13 +3589,14 @@ class getid3_id3v2(getid3_handler):
     #// @return string
     #//
     @classmethod
-    def makeutf16emptystringempty(self, string=None):
+    def makeutf16emptystringempty(self, string_=None):
         
-        if php_in_array(string, Array(" ", "  ", "ÿþ", "þÿ")):
+        
+        if php_in_array(string_, Array(" ", "  ", "ÿþ", "þÿ")):
             #// if string only contains a BOM or terminator then make it actually an empty string
-            string = ""
+            string_ = ""
         # end if
-        return string
+        return string_
     # end def makeutf16emptystringempty
     #// 
     #// @param string $framename
@@ -3542,18 +3605,19 @@ class getid3_id3v2(getid3_handler):
     #// @return bool|int
     #//
     @classmethod
-    def isvalidid3v2framename(self, framename=None, id3v2majorversion=None):
+    def isvalidid3v2framename(self, framename_=None, id3v2majorversion_=None):
         
-        for case in Switch(id3v2majorversion):
+        
+        for case in Switch(id3v2majorversion_):
             if case(2):
-                return php_preg_match("#[A-Z][A-Z0-9]{2}#", framename)
+                return php_preg_match("#[A-Z][A-Z0-9]{2}#", framename_)
                 break
             # end if
             if case(3):
                 pass
             # end if
             if case(4):
-                return php_preg_match("#[A-Z][A-Z0-9]{3}#", framename)
+                return php_preg_match("#[A-Z][A-Z0-9]{3}#", framename_)
                 break
             # end if
         # end for
@@ -3567,21 +3631,27 @@ class getid3_id3v2(getid3_handler):
     #// @return bool
     #//
     @classmethod
-    def isanumber(self, numberstring=None, allowdecimal=False, allownegative=False):
+    def isanumber(self, numberstring_=None, allowdecimal_=None, allownegative_=None):
+        if allowdecimal_ is None:
+            allowdecimal_ = False
+        # end if
+        if allownegative_ is None:
+            allownegative_ = False
+        # end if
         
-        i = 0
-        while i < php_strlen(numberstring):
+        i_ = 0
+        while i_ < php_strlen(numberstring_):
             
-            if chr(numberstring[i]) < chr("0") or chr(numberstring[i]) > chr("9"):
-                if numberstring[i] == "." and allowdecimal:
+            if chr(numberstring_[i_]) < chr("0") or chr(numberstring_[i_]) > chr("9"):
+                if numberstring_[i_] == "." and allowdecimal_:
                     pass
-                elif numberstring[i] == "-" and allownegative and i == 0:
+                elif numberstring_[i_] == "-" and allownegative_ and i_ == 0:
                     pass
                 else:
                     return False
                 # end if
             # end if
-            i += 1
+            i_ += 1
         # end while
         return True
     # end def isanumber
@@ -3591,30 +3661,31 @@ class getid3_id3v2(getid3_handler):
     #// @return bool
     #//
     @classmethod
-    def isvaliddatestampstring(self, datestamp=None):
+    def isvaliddatestampstring(self, datestamp_=None):
         
-        if php_strlen(datestamp) != 8:
+        
+        if php_strlen(datestamp_) != 8:
             return False
         # end if
-        if (not self.isanumber(datestamp, False)):
+        if (not self.isanumber(datestamp_, False)):
             return False
         # end if
-        year = php_substr(datestamp, 0, 4)
-        month = php_substr(datestamp, 4, 2)
-        day = php_substr(datestamp, 6, 2)
-        if year == 0 or month == 0 or day == 0:
+        year_ = php_substr(datestamp_, 0, 4)
+        month_ = php_substr(datestamp_, 4, 2)
+        day_ = php_substr(datestamp_, 6, 2)
+        if year_ == 0 or month_ == 0 or day_ == 0:
             return False
         # end if
-        if month > 12:
+        if month_ > 12:
             return False
         # end if
-        if day > 31:
+        if day_ > 31:
             return False
         # end if
-        if day > 30 and month == 4 or month == 6 or month == 9 or month == 11:
+        if day_ > 30 and month_ == 4 or month_ == 6 or month_ == 9 or month_ == 11:
             return False
         # end if
-        if day > 29 and month == 2:
+        if day_ > 29 and month_ == 2:
             return False
         # end if
         return True
@@ -3625,9 +3696,10 @@ class getid3_id3v2(getid3_handler):
     #// @return int
     #//
     @classmethod
-    def id3v2headerlength(self, majorversion=None):
+    def id3v2headerlength(self, majorversion_=None):
         
-        return 6 if majorversion == 2 else 10
+        
+        return 6 if majorversion_ == 2 else 10
     # end def id3v2headerlength
     #// 
     #// @param string $frame_name
@@ -3635,13 +3707,14 @@ class getid3_id3v2(getid3_handler):
     #// @return string|false
     #//
     @classmethod
-    def id3v22itunesbrokenframename(self, frame_name=None):
+    def id3v22itunesbrokenframename(self, frame_name_=None):
         
-        id3v22itunesbrokenframename.ID3v22_iTunes_BrokenFrames = Array({"BUF": "RBUF", "CNT": "PCNT", "COM": "COMM", "CRA": "AENC", "EQU": "EQUA", "ETC": "ETCO", "GEO": "GEOB", "IPL": "IPLS", "LNK": "LINK", "MCI": "MCDI", "MLL": "MLLT", "PIC": "APIC", "POP": "POPM", "REV": "RVRB", "RVA": "RVAD", "SLT": "SYLT", "STC": "SYTC", "TAL": "TALB", "TBP": "TBPM", "TCM": "TCOM", "TCO": "TCON", "TCP": "TCMP", "TCR": "TCOP", "TDA": "TDAT", "TDY": "TDLY", "TEN": "TENC", "TFT": "TFLT", "TIM": "TIME", "TKE": "TKEY", "TLA": "TLAN", "TLE": "TLEN", "TMT": "TMED", "TOA": "TOPE", "TOF": "TOFN", "TOL": "TOLY", "TOR": "TORY", "TOT": "TOAL", "TP1": "TPE1", "TP2": "TPE2", "TP3": "TPE3", "TP4": "TPE4", "TPA": "TPOS", "TPB": "TPUB", "TRC": "TSRC", "TRD": "TRDA", "TRK": "TRCK", "TS2": "TSO2", "TSA": "TSOA", "TSC": "TSOC", "TSI": "TSIZ", "TSP": "TSOP", "TSS": "TSSE", "TST": "TSOT", "TT1": "TIT1", "TT2": "TIT2", "TT3": "TIT3", "TXT": "TEXT", "TXX": "TXXX", "TYE": "TYER", "UFI": "UFID", "ULT": "USLT", "WAF": "WOAF", "WAR": "WOAR", "WAS": "WOAS", "WCM": "WCOM", "WCP": "WCOP", "WPB": "WPUB", "WXX": "WXXX"})
-        if php_strlen(frame_name) == 4:
-            if php_substr(frame_name, 3, 1) == " " or php_substr(frame_name, 3, 1) == " ":
-                if (php_isset(lambda : id3v22itunesbrokenframename.ID3v22_iTunes_BrokenFrames[php_substr(frame_name, 0, 3)])):
-                    return id3v22itunesbrokenframename.ID3v22_iTunes_BrokenFrames[php_substr(frame_name, 0, 3)]
+        
+        ID3v22_iTunes_BrokenFrames_ = Array({"BUF": "RBUF", "CNT": "PCNT", "COM": "COMM", "CRA": "AENC", "EQU": "EQUA", "ETC": "ETCO", "GEO": "GEOB", "IPL": "IPLS", "LNK": "LINK", "MCI": "MCDI", "MLL": "MLLT", "PIC": "APIC", "POP": "POPM", "REV": "RVRB", "RVA": "RVAD", "SLT": "SYLT", "STC": "SYTC", "TAL": "TALB", "TBP": "TBPM", "TCM": "TCOM", "TCO": "TCON", "TCP": "TCMP", "TCR": "TCOP", "TDA": "TDAT", "TDY": "TDLY", "TEN": "TENC", "TFT": "TFLT", "TIM": "TIME", "TKE": "TKEY", "TLA": "TLAN", "TLE": "TLEN", "TMT": "TMED", "TOA": "TOPE", "TOF": "TOFN", "TOL": "TOLY", "TOR": "TORY", "TOT": "TOAL", "TP1": "TPE1", "TP2": "TPE2", "TP3": "TPE3", "TP4": "TPE4", "TPA": "TPOS", "TPB": "TPUB", "TRC": "TSRC", "TRD": "TRDA", "TRK": "TRCK", "TS2": "TSO2", "TSA": "TSOA", "TSC": "TSOC", "TSI": "TSIZ", "TSP": "TSOP", "TSS": "TSSE", "TST": "TSOT", "TT1": "TIT1", "TT2": "TIT2", "TT3": "TIT3", "TXT": "TEXT", "TXX": "TXXX", "TYE": "TYER", "UFI": "UFID", "ULT": "USLT", "WAF": "WOAF", "WAR": "WOAR", "WAS": "WOAS", "WCM": "WCOM", "WCP": "WCOP", "WPB": "WPUB", "WXX": "WXXX"})
+        if php_strlen(frame_name_) == 4:
+            if php_substr(frame_name_, 3, 1) == " " or php_substr(frame_name_, 3, 1) == " ":
+                if (php_isset(lambda : ID3v22_iTunes_BrokenFrames_[php_substr(frame_name_, 0, 3)])):
+                    return ID3v22_iTunes_BrokenFrames_[php_substr(frame_name_, 0, 3)]
                 # end if
             # end if
         # end if

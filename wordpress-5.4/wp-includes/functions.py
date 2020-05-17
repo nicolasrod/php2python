@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -38,23 +33,26 @@ php_include_file(ABSPATH + WPINC + "/option.php", once=False)
 #// @return string|int|false Formatted date string or sum of Unix timestamp and timezone offset.
 #// False on failure.
 #//
-def mysql2date(format=None, date=None, translate=True, *args_):
+def mysql2date(format_=None, date_=None, translate_=None, *_args_):
+    if translate_ is None:
+        translate_ = True
+    # end if
     
-    if php_empty(lambda : date):
+    if php_empty(lambda : date_):
         return False
     # end if
-    datetime = date_create(date, wp_timezone())
-    if False == datetime:
+    datetime_ = date_create(date_, wp_timezone())
+    if False == datetime_:
         return False
     # end if
     #// Returns a sum of timestamp with timezone offset. Ideally should never be used.
-    if "G" == format or "U" == format:
-        return datetime.gettimestamp() + datetime.getoffset()
+    if "G" == format_ or "U" == format_:
+        return datetime_.gettimestamp() + datetime_.getoffset()
     # end if
-    if translate:
-        return wp_date(format, datetime.gettimestamp())
+    if translate_:
+        return wp_date(format_, datetime_.gettimestamp())
     # end if
-    return datetime.format(format)
+    return datetime_.format(format_)
 # end def mysql2date
 #// 
 #// Retrieves the current time based on specified type.
@@ -74,18 +72,19 @@ def mysql2date(format=None, date=None, translate=True, *args_):
 #// @param int|bool $gmt  Optional. Whether to use GMT timezone. Default false.
 #// @return int|string Integer if $type is 'timestamp', string otherwise.
 #//
-def current_time(type=None, gmt=0, *args_):
+def current_time(type_=None, gmt_=0, *_args_):
+    
     
     #// Don't use non-GMT timestamp, unless you know the difference and really need to.
-    if "timestamp" == type or "U" == type:
-        return time() if gmt else time() + php_int(get_option("gmt_offset") * HOUR_IN_SECONDS)
+    if "timestamp" == type_ or "U" == type_:
+        return time() if gmt_ else time() + php_int(get_option("gmt_offset") * HOUR_IN_SECONDS)
     # end if
-    if "mysql" == type:
-        type = "Y-m-d H:i:s"
+    if "mysql" == type_:
+        type_ = "Y-m-d H:i:s"
     # end if
-    timezone = php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")) if gmt else wp_timezone()
-    datetime = php_new_class("DateTime", lambda : DateTime("now", timezone))
-    return datetime.format(type)
+    timezone_ = php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")) if gmt_ else wp_timezone()
+    datetime_ = php_new_class("DateTime", lambda : DateTime("now", timezone_))
+    return datetime_.format(type_)
 # end def current_time
 #// 
 #// Retrieves the current time as an object with the timezone from settings.
@@ -94,7 +93,8 @@ def current_time(type=None, gmt=0, *args_):
 #// 
 #// @return DateTimeImmutable Date and time object.
 #//
-def current_datetime(*args_):
+def current_datetime(*_args_):
+    
     
     return php_new_class("DateTimeImmutable", lambda : DateTimeImmutable("now", wp_timezone()))
 # end def current_datetime
@@ -108,20 +108,21 @@ def current_datetime(*args_):
 #// 
 #// @return string PHP timezone string or a ±HH:MM offset.
 #//
-def wp_timezone_string(*args_):
+def wp_timezone_string(*_args_):
     
-    timezone_string = get_option("timezone_string")
-    if timezone_string:
-        return timezone_string
+    
+    timezone_string_ = get_option("timezone_string")
+    if timezone_string_:
+        return timezone_string_
     # end if
-    offset = php_float(get_option("gmt_offset"))
-    hours = php_int(offset)
-    minutes = offset - hours
-    sign = "-" if offset < 0 else "+"
-    abs_hour = abs(hours)
-    abs_mins = abs(minutes * 60)
-    tz_offset = php_sprintf("%s%02d:%02d", sign, abs_hour, abs_mins)
-    return tz_offset
+    offset_ = php_float(get_option("gmt_offset"))
+    hours_ = php_int(offset_)
+    minutes_ = offset_ - hours_
+    sign_ = "-" if offset_ < 0 else "+"
+    abs_hour_ = abs(hours_)
+    abs_mins_ = abs(minutes_ * 60)
+    tz_offset_ = php_sprintf("%s%02d:%02d", sign_, abs_hour_, abs_mins_)
+    return tz_offset_
 # end def wp_timezone_string
 #// 
 #// Retrieves the timezone from site settings as a `DateTimeZone` object.
@@ -132,7 +133,8 @@ def wp_timezone_string(*args_):
 #// 
 #// @return DateTimeZone Timezone object.
 #//
-def wp_timezone(*args_):
+def wp_timezone(*_args_):
+    
     
     return php_new_class("DateTimeZone", lambda : DateTimeZone(wp_timezone_string()))
 # end def wp_timezone
@@ -161,34 +163,40 @@ def wp_timezone(*args_):
 #// if timestamp is not provided. Default false.
 #// @return string The date, translated if locale specifies it.
 #//
-def date_i18n(format=None, timestamp_with_offset=False, gmt=False, *args_):
+def date_i18n(format_=None, timestamp_with_offset_=None, gmt_=None, *_args_):
+    if timestamp_with_offset_ is None:
+        timestamp_with_offset_ = False
+    # end if
+    if gmt_ is None:
+        gmt_ = False
+    # end if
     
-    timestamp = timestamp_with_offset
+    timestamp_ = timestamp_with_offset_
     #// If timestamp is omitted it should be current time (summed with offset, unless `$gmt` is true).
-    if (not php_is_numeric(timestamp)):
-        timestamp = current_time("timestamp", gmt)
+    if (not php_is_numeric(timestamp_)):
+        timestamp_ = current_time("timestamp", gmt_)
     # end if
     #// 
     #// This is a legacy implementation quirk that the returned timestamp is also with offset.
     #// Ideally this function should never be used to produce a timestamp.
     #//
-    if "U" == format:
-        date = timestamp
-    elif gmt and False == timestamp_with_offset:
+    if "U" == format_:
+        date_ = timestamp_
+    elif gmt_ and False == timestamp_with_offset_:
         #// Current time in UTC.
-        date = wp_date(format, None, php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")))
-    elif False == timestamp_with_offset:
+        date_ = wp_date(format_, None, php_new_class("DateTimeZone", lambda : DateTimeZone("UTC")))
+    elif False == timestamp_with_offset_:
         #// Current time in site's timezone.
-        date = wp_date(format)
+        date_ = wp_date(format_)
     else:
         #// 
         #// Timestamp with offset is typically produced by a UTC `strtotime()` call on an input without timezone.
         #// This is the best attempt to reverse that operation into a local time to use.
         #//
-        local_time = gmdate("Y-m-d H:i:s", timestamp)
-        timezone = wp_timezone()
-        datetime = date_create(local_time, timezone)
-        date = wp_date(format, datetime.gettimestamp(), timezone)
+        local_time_ = gmdate("Y-m-d H:i:s", timestamp_)
+        timezone_ = wp_timezone()
+        datetime_ = date_create(local_time_, timezone_)
+        date_ = wp_date(format_, datetime_.gettimestamp(), timezone_)
     # end if
     #// 
     #// Filters the date formatted based on the locale.
@@ -202,8 +210,8 @@ def date_i18n(format=None, timestamp_with_offset=False, gmt=False, *args_):
     #// @param bool   $gmt       Whether to use GMT timezone. Only applies if timestamp was not provided.
     #// Default false.
     #//
-    date = apply_filters("date_i18n", date, format, timestamp, gmt)
-    return date
+    date_ = apply_filters("date_i18n", date_, format_, timestamp_, gmt_)
+    return date_
 # end def date_i18n
 #// 
 #// Retrieves the date, in localized format.
@@ -221,75 +229,76 @@ def date_i18n(format=None, timestamp_with_offset=False, gmt=False, *args_):
 #// from site settings.
 #// @return string|false The date, translated if locale specifies it. False on invalid timestamp input.
 #//
-def wp_date(format=None, timestamp=None, timezone=None, *args_):
+def wp_date(format_=None, timestamp_=None, timezone_=None, *_args_):
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    if None == timestamp:
-        timestamp = time()
-    elif (not php_is_numeric(timestamp)):
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    if None == timestamp_:
+        timestamp_ = time()
+    elif (not php_is_numeric(timestamp_)):
         return False
     # end if
-    if (not timezone):
-        timezone = wp_timezone()
+    if (not timezone_):
+        timezone_ = wp_timezone()
     # end if
-    datetime = date_create("@" + timestamp)
-    datetime.settimezone(timezone)
-    if php_empty(lambda : wp_locale.month) or php_empty(lambda : wp_locale.weekday):
-        date = datetime.format(format)
+    datetime_ = date_create("@" + timestamp_)
+    datetime_.settimezone(timezone_)
+    if php_empty(lambda : wp_locale_.month) or php_empty(lambda : wp_locale_.weekday):
+        date_ = datetime_.format(format_)
     else:
         #// We need to unpack shorthand `r` format because it has parts that might be localized.
-        format = php_preg_replace("/(?<!\\\\)r/", DATE_RFC2822, format)
-        new_format = ""
-        format_length = php_strlen(format)
-        month = wp_locale.get_month(datetime.format("m"))
-        weekday = wp_locale.get_weekday(datetime.format("w"))
-        i = 0
-        while i < format_length:
+        format_ = php_preg_replace("/(?<!\\\\)r/", DATE_RFC2822, format_)
+        new_format_ = ""
+        format_length_ = php_strlen(format_)
+        month_ = wp_locale_.get_month(datetime_.format("m"))
+        weekday_ = wp_locale_.get_weekday(datetime_.format("w"))
+        i_ = 0
+        while i_ < format_length_:
             
-            for case in Switch(format[i]):
+            for case in Switch(format_[i_]):
                 if case("D"):
-                    new_format += addcslashes(wp_locale.get_weekday_abbrev(weekday), "\\A..Za..z")
+                    new_format_ += addcslashes(wp_locale_.get_weekday_abbrev(weekday_), "\\A..Za..z")
                     break
                 # end if
                 if case("F"):
-                    new_format += addcslashes(month, "\\A..Za..z")
+                    new_format_ += addcslashes(month_, "\\A..Za..z")
                     break
                 # end if
                 if case("l"):
-                    new_format += addcslashes(weekday, "\\A..Za..z")
+                    new_format_ += addcslashes(weekday_, "\\A..Za..z")
                     break
                 # end if
                 if case("M"):
-                    new_format += addcslashes(wp_locale.get_month_abbrev(month), "\\A..Za..z")
+                    new_format_ += addcslashes(wp_locale_.get_month_abbrev(month_), "\\A..Za..z")
                     break
                 # end if
                 if case("a"):
-                    new_format += addcslashes(wp_locale.get_meridiem(datetime.format("a")), "\\A..Za..z")
+                    new_format_ += addcslashes(wp_locale_.get_meridiem(datetime_.format("a")), "\\A..Za..z")
                     break
                 # end if
                 if case("A"):
-                    new_format += addcslashes(wp_locale.get_meridiem(datetime.format("A")), "\\A..Za..z")
+                    new_format_ += addcslashes(wp_locale_.get_meridiem(datetime_.format("A")), "\\A..Za..z")
                     break
                 # end if
                 if case("\\"):
-                    new_format += format[i]
+                    new_format_ += format_[i_]
                     #// If character follows a slash, we add it without translating.
-                    if i < format_length:
-                        i += 1
-                        new_format += format[i]
+                    if i_ < format_length_:
+                        i_ += 1
+                        new_format_ += format_[i_]
                     # end if
                     break
                 # end if
                 if case():
-                    new_format += format[i]
+                    new_format_ += format_[i_]
                     break
                 # end if
             # end for
-            i += 1
+            i_ += 1
         # end while
-        date = datetime.format(new_format)
-        date = wp_maybe_decline_date(date, format)
+        date_ = datetime_.format(new_format_)
+        date_ = wp_maybe_decline_date(date_, format_)
     # end if
     #// 
     #// Filters the date formatted based on the locale.
@@ -302,8 +311,8 @@ def wp_date(format=None, timestamp=None, timezone=None, *args_):
     #// @param DateTimeZone $timezone  Timezone.
     #// 
     #//
-    date = apply_filters("wp_date", date, format, timestamp, timezone)
-    return date
+    date_ = apply_filters("wp_date", date_, format_, timestamp_, timezone_)
+    return date_
 # end def wp_date
 #// 
 #// Determines if the date should be declined.
@@ -320,67 +329,68 @@ def wp_date(format=None, timestamp=None, timezone=None, *args_):
 #// @param string $format Optional. Date format to check. Default empty string.
 #// @return string The date, declined if locale specifies it.
 #//
-def wp_maybe_decline_date(date=None, format="", *args_):
+def wp_maybe_decline_date(date_=None, format_="", *_args_):
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
     #// i18n functions are not available in SHORTINIT mode.
     if (not php_function_exists("_x")):
-        return date
+        return date_
     # end if
     #// 
     #// translators: If months in your language require a genitive case,
     #// translate this to 'on'. Do not translate into your own language.
     #//
     if "on" == _x("off", "decline months names: on or off"):
-        months = wp_locale.month
-        months_genitive = wp_locale.month_genitive
+        months_ = wp_locale_.month
+        months_genitive_ = wp_locale_.month_genitive
         #// 
         #// Match a format like 'j F Y' or 'j. F' (day of the month, followed by month name)
         #// and decline the month.
         #//
-        if format:
-            decline = php_preg_match("#[dj]\\.? F#", format)
+        if format_:
+            decline_ = php_preg_match("#[dj]\\.? F#", format_)
         else:
             #// If the format is not passed, try to guess it from the date string.
-            decline = php_preg_match("#\\b\\d{1,2}\\.? [^\\d ]+\\b#u", date)
+            decline_ = php_preg_match("#\\b\\d{1,2}\\.? [^\\d ]+\\b#u", date_)
         # end if
-        if decline:
-            for key,month in months:
-                months[key] = "# " + preg_quote(month, "#") + "\\b#u"
+        if decline_:
+            for key_,month_ in months_:
+                months_[key_] = "# " + preg_quote(month_, "#") + "\\b#u"
             # end for
-            for key,month in months_genitive:
-                months_genitive[key] = " " + month
+            for key_,month_ in months_genitive_:
+                months_genitive_[key_] = " " + month_
             # end for
-            date = php_preg_replace(months, months_genitive, date)
+            date_ = php_preg_replace(months_, months_genitive_, date_)
         # end if
         #// 
         #// Match a format like 'F jS' or 'F j' (month name, followed by day with an optional ordinal suffix)
         #// and change it to declined 'j F'.
         #//
-        if format:
-            decline = php_preg_match("#F [dj]#", format)
+        if format_:
+            decline_ = php_preg_match("#F [dj]#", format_)
         else:
             #// If the format is not passed, try to guess it from the date string.
-            decline = php_preg_match("#\\b[^\\d ]+ \\d{1,2}(st|nd|rd|th)?\\b#u", php_trim(date))
+            decline_ = php_preg_match("#\\b[^\\d ]+ \\d{1,2}(st|nd|rd|th)?\\b#u", php_trim(date_))
         # end if
-        if decline:
-            for key,month in months:
-                months[key] = "#\\b" + preg_quote(month, "#") + " (\\d{1,2})(st|nd|rd|th)?([-â]\\d{1,2})?(st|nd|rd|th)?\\b#u"
+        if decline_:
+            for key_,month_ in months_:
+                months_[key_] = "#\\b" + preg_quote(month_, "#") + " (\\d{1,2})(st|nd|rd|th)?([-â]\\d{1,2})?(st|nd|rd|th)?\\b#u"
             # end for
-            for key,month in months_genitive:
-                months_genitive[key] = "$1$3 " + month
+            for key_,month_ in months_genitive_:
+                months_genitive_[key_] = "$1$3 " + month_
             # end for
-            date = php_preg_replace(months, months_genitive, date)
+            date_ = php_preg_replace(months_, months_genitive_, date_)
         # end if
     # end if
     #// Used for locale-specific rules.
-    locale = get_locale()
-    if "ca" == locale:
+    locale_ = get_locale()
+    if "ca" == locale_:
         #// " de abril| de agost| de octubre..." -> " d'abril| d'agost| d'octubre..."
-        date = php_preg_replace("# de ([ao])#i", " d'\\1", date)
+        date_ = php_preg_replace("# de ([ao])#i", " d'\\1", date_)
     # end if
-    return date
+    return date_
 # end def wp_maybe_decline_date
 #// 
 #// Convert float number to format based on the locale.
@@ -393,14 +403,15 @@ def wp_maybe_decline_date(date=None, format="", *args_):
 #// @param int   $decimals Optional. Precision of the number of decimal places. Default 0.
 #// @return string Converted number in string format.
 #//
-def number_format_i18n(number=None, decimals=0, *args_):
+def number_format_i18n(number_=None, decimals_=0, *_args_):
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    if (php_isset(lambda : wp_locale)):
-        formatted = number_format(number, absint(decimals), wp_locale.number_format["decimal_point"], wp_locale.number_format["thousands_sep"])
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    if (php_isset(lambda : wp_locale_)):
+        formatted_ = number_format(number_, absint(decimals_), wp_locale_.number_format["decimal_point"], wp_locale_.number_format["thousands_sep"])
     else:
-        formatted = number_format(number, absint(decimals))
+        formatted_ = number_format(number_, absint(decimals_))
     # end if
     #// 
     #// Filters the number formatted based on the locale.
@@ -412,7 +423,7 @@ def number_format_i18n(number=None, decimals=0, *args_):
     #// @param float  $number    The number to convert based on locale.
     #// @param int    $decimals  Precision of the number of decimal places.
     #//
-    return apply_filters("number_format_i18n", formatted, number, decimals)
+    return apply_filters("number_format_i18n", formatted_, number_, decimals_)
 # end def number_format_i18n
 #// 
 #// Convert number of bytes largest unit bytes will fit into.
@@ -434,15 +445,16 @@ def number_format_i18n(number=None, decimals=0, *args_):
 #// @param int        $decimals Optional. Precision of number of decimal places. Default 0.
 #// @return string|false False on failure. Number string on success.
 #//
-def size_format(bytes=None, decimals=0, *args_):
+def size_format(bytes_=None, decimals_=0, *_args_):
     
-    quant = Array({"TB": TB_IN_BYTES, "GB": GB_IN_BYTES, "MB": MB_IN_BYTES, "KB": KB_IN_BYTES, "B": 1})
-    if 0 == bytes:
-        return number_format_i18n(0, decimals) + " B"
+    
+    quant_ = Array({"TB": TB_IN_BYTES, "GB": GB_IN_BYTES, "MB": MB_IN_BYTES, "KB": KB_IN_BYTES, "B": 1})
+    if 0 == bytes_:
+        return number_format_i18n(0, decimals_) + " B"
     # end if
-    for unit,mag in quant:
-        if doubleval(bytes) >= mag:
-            return number_format_i18n(bytes / mag, decimals) + " " + unit
+    for unit_,mag_ in quant_:
+        if doubleval(bytes_) >= mag_:
+            return number_format_i18n(bytes_ / mag_, decimals_) + " " + unit_
         # end if
     # end for
     return False
@@ -456,56 +468,57 @@ def size_format(bytes=None, decimals=0, *args_):
 #// with a possible prepended negative sign (-).
 #// @return string|false A human readable duration string, false on failure.
 #//
-def human_readable_duration(duration="", *args_):
+def human_readable_duration(duration_="", *_args_):
     
-    if php_empty(lambda : duration) or (not php_is_string(duration)):
+    
+    if php_empty(lambda : duration_) or (not php_is_string(duration_)):
         return False
     # end if
-    duration = php_trim(duration)
+    duration_ = php_trim(duration_)
     #// Remove prepended negative sign.
-    if "-" == php_substr(duration, 0, 1):
-        duration = php_substr(duration, 1)
+    if "-" == php_substr(duration_, 0, 1):
+        duration_ = php_substr(duration_, 1)
     # end if
     #// Extract duration parts.
-    duration_parts = array_reverse(php_explode(":", duration))
-    duration_count = php_count(duration_parts)
-    hour = None
-    minute = None
-    second = None
-    if 3 == duration_count:
+    duration_parts_ = array_reverse(php_explode(":", duration_))
+    duration_count_ = php_count(duration_parts_)
+    hour_ = None
+    minute_ = None
+    second_ = None
+    if 3 == duration_count_:
         #// Validate HH:ii:ss duration format.
-        if (not php_bool(php_preg_match("/^([0-9]+):([0-5]?[0-9]):([0-5]?[0-9])$/", duration))):
+        if (not php_bool(php_preg_match("/^([0-9]+):([0-5]?[0-9]):([0-5]?[0-9])$/", duration_))):
             return False
         # end if
         #// Three parts: hours, minutes & seconds.
-        second, minute, hour = duration_parts
-    elif 2 == duration_count:
+        second_, minute_, hour_ = duration_parts_
+    elif 2 == duration_count_:
         #// Validate ii:ss duration format.
-        if (not php_bool(php_preg_match("/^([0-5]?[0-9]):([0-5]?[0-9])$/", duration))):
+        if (not php_bool(php_preg_match("/^([0-5]?[0-9]):([0-5]?[0-9])$/", duration_))):
             return False
         # end if
         #// Two parts: minutes & seconds.
-        second, minute = duration_parts
+        second_, minute_ = duration_parts_
     else:
         return False
     # end if
-    human_readable_duration = Array()
+    human_readable_duration_ = Array()
     #// Add the hour part to the string.
-    if php_is_numeric(hour):
+    if php_is_numeric(hour_):
         #// translators: %s: Time duration in hour or hours.
-        human_readable_duration[-1] = php_sprintf(_n("%s hour", "%s hours", hour), php_int(hour))
+        human_readable_duration_[-1] = php_sprintf(_n("%s hour", "%s hours", hour_), php_int(hour_))
     # end if
     #// Add the minute part to the string.
-    if php_is_numeric(minute):
+    if php_is_numeric(minute_):
         #// translators: %s: Time duration in minute or minutes.
-        human_readable_duration[-1] = php_sprintf(_n("%s minute", "%s minutes", minute), php_int(minute))
+        human_readable_duration_[-1] = php_sprintf(_n("%s minute", "%s minutes", minute_), php_int(minute_))
     # end if
     #// Add the second part to the string.
-    if php_is_numeric(second):
+    if php_is_numeric(second_):
         #// translators: %s: Time duration in second or seconds.
-        human_readable_duration[-1] = php_sprintf(_n("%s second", "%s seconds", second), php_int(second))
+        human_readable_duration_[-1] = php_sprintf(_n("%s second", "%s seconds", second_), php_int(second_))
     # end if
-    return php_implode(", ", human_readable_duration)
+    return php_implode(", ", human_readable_duration_)
 # end def human_readable_duration
 #// 
 #// Get the week start and end from the datetime or date string from MySQL.
@@ -516,29 +529,30 @@ def human_readable_duration(duration="", *args_):
 #// @param int|string $start_of_week Optional. Start of the week as an integer. Default empty string.
 #// @return array Keys are 'start' and 'end'.
 #//
-def get_weekstartend(mysqlstring=None, start_of_week="", *args_):
+def get_weekstartend(mysqlstring_=None, start_of_week_="", *_args_):
+    
     
     #// MySQL string year.
-    my = php_substr(mysqlstring, 0, 4)
+    my_ = php_substr(mysqlstring_, 0, 4)
     #// MySQL string month.
-    mm = php_substr(mysqlstring, 8, 2)
+    mm_ = php_substr(mysqlstring_, 8, 2)
     #// MySQL string day.
-    md = php_substr(mysqlstring, 5, 2)
+    md_ = php_substr(mysqlstring_, 5, 2)
     #// The timestamp for MySQL string day.
-    day = mktime(0, 0, 0, md, mm, my)
+    day_ = mktime(0, 0, 0, md_, mm_, my_)
     #// The day of the week from the timestamp.
-    weekday = gmdate("w", day)
-    if (not php_is_numeric(start_of_week)):
-        start_of_week = get_option("start_of_week")
+    weekday_ = gmdate("w", day_)
+    if (not php_is_numeric(start_of_week_)):
+        start_of_week_ = get_option("start_of_week")
     # end if
-    if weekday < start_of_week:
-        weekday += 7
+    if weekday_ < start_of_week_:
+        weekday_ += 7
     # end if
     #// The most recent week start day on or before $day.
-    start = day - DAY_IN_SECONDS * weekday - start_of_week
+    start_ = day_ - DAY_IN_SECONDS * weekday_ - start_of_week_
     #// $start + 1 week - 1 second.
-    end_ = start + WEEK_IN_SECONDS - 1
-    return compact("start", "end")
+    end_ = start_ + WEEK_IN_SECONDS - 1
+    return php_compact("start", "end")
 # end def get_weekstartend
 #// 
 #// Unserialize value only if it was serialized.
@@ -548,13 +562,14 @@ def get_weekstartend(mysqlstring=None, start_of_week="", *args_):
 #// @param string $original Maybe unserialized original, if is needed.
 #// @return mixed Unserialized data can be any type.
 #//
-def maybe_unserialize(original=None, *args_):
+def maybe_unserialize(original_=None, *_args_):
     
-    if is_serialized(original):
+    
+    if is_serialized(original_):
         #// Don't attempt to unserialize data that wasn't serialized going in.
-        return php_no_error(lambda: unserialize(original))
+        return php_no_error(lambda: unserialize(original_))
     # end if
-    return original
+    return original_
 # end def maybe_unserialize
 #// 
 #// Check value to find if it was serialized.
@@ -568,50 +583,53 @@ def maybe_unserialize(original=None, *args_):
 #// @param bool   $strict Optional. Whether to be strict about the end of the string. Default true.
 #// @return bool False if not serialized and true if it was.
 #//
-def is_serialized(data=None, strict=True, *args_):
+def is_serialized(data_=None, strict_=None, *_args_):
+    if strict_ is None:
+        strict_ = True
+    # end if
     
     #// If it isn't a string, it isn't serialized.
-    if (not php_is_string(data)):
+    if (not php_is_string(data_)):
         return False
     # end if
-    data = php_trim(data)
-    if "N;" == data:
+    data_ = php_trim(data_)
+    if "N;" == data_:
         return True
     # end if
-    if php_strlen(data) < 4:
+    if php_strlen(data_) < 4:
         return False
     # end if
-    if ":" != data[1]:
+    if ":" != data_[1]:
         return False
     # end if
-    if strict:
-        lastc = php_substr(data, -1)
-        if ";" != lastc and "}" != lastc:
+    if strict_:
+        lastc_ = php_substr(data_, -1)
+        if ";" != lastc_ and "}" != lastc_:
             return False
         # end if
     else:
-        semicolon = php_strpos(data, ";")
-        brace = php_strpos(data, "}")
+        semicolon_ = php_strpos(data_, ";")
+        brace_ = php_strpos(data_, "}")
         #// Either ; or } must exist.
-        if False == semicolon and False == brace:
+        if False == semicolon_ and False == brace_:
             return False
         # end if
         #// But neither must be in the first X characters.
-        if False != semicolon and semicolon < 3:
+        if False != semicolon_ and semicolon_ < 3:
             return False
         # end if
-        if False != brace and brace < 4:
+        if False != brace_ and brace_ < 4:
             return False
         # end if
     # end if
-    token = data[0]
-    for case in Switch(token):
+    token_ = data_[0]
+    for case in Switch(token_):
         if case("s"):
-            if strict:
-                if "\"" != php_substr(data, -2, 1):
+            if strict_:
+                if "\"" != php_substr(data_, -2, 1):
                     return False
                 # end if
-            elif False == php_strpos(data, "\""):
+            elif False == php_strpos(data_, "\""):
                 return False
             # end if
         # end if
@@ -619,7 +637,7 @@ def is_serialized(data=None, strict=True, *args_):
             pass
         # end if
         if case("O"):
-            return php_bool(php_preg_match(str("/^") + str(token) + str(":[0-9]+:/s"), data))
+            return php_bool(php_preg_match(str("/^") + str(token_) + str(":[0-9]+:/s"), data_))
         # end if
         if case("b"):
             pass
@@ -628,8 +646,8 @@ def is_serialized(data=None, strict=True, *args_):
             pass
         # end if
         if case("d"):
-            end_ = "$" if strict else ""
-            return php_bool(php_preg_match(str("/^") + str(token) + str(":[0-9.E+-]+;") + str(end_) + str("/"), data))
+            end_ = "$" if strict_ else ""
+            return php_bool(php_preg_match(str("/^") + str(token_) + str(":[0-9.E+-]+;") + str(end_) + str("/"), data_))
         # end if
     # end for
     return False
@@ -642,22 +660,23 @@ def is_serialized(data=None, strict=True, *args_):
 #// @param string $data Serialized data.
 #// @return bool False if not a serialized string, true if it is.
 #//
-def is_serialized_string(data=None, *args_):
+def is_serialized_string(data_=None, *_args_):
+    
     
     #// if it isn't a string, it isn't a serialized string.
-    if (not php_is_string(data)):
+    if (not php_is_string(data_)):
         return False
     # end if
-    data = php_trim(data)
-    if php_strlen(data) < 4:
+    data_ = php_trim(data_)
+    if php_strlen(data_) < 4:
         return False
-    elif ":" != data[1]:
+    elif ":" != data_[1]:
         return False
-    elif ";" != php_substr(data, -1):
+    elif ";" != php_substr(data_, -1):
         return False
-    elif "s" != data[0]:
+    elif "s" != data_[0]:
         return False
-    elif "\"" != php_substr(data, -2, 1):
+    elif "\"" != php_substr(data_, -2, 1):
         return False
     else:
         return True
@@ -671,20 +690,21 @@ def is_serialized_string(data=None, *args_):
 #// @param string|array|object $data Data that might be serialized.
 #// @return mixed A scalar data
 #//
-def maybe_serialize(data=None, *args_):
+def maybe_serialize(data_=None, *_args_):
     
-    if php_is_array(data) or php_is_object(data):
-        return serialize(data)
+    
+    if php_is_array(data_) or php_is_object(data_):
+        return serialize(data_)
     # end if
     #// 
     #// Double serialization is required for backward compatibility.
     #// See https://core.trac.wordpress.org/ticket/12930
     #// Also the world will end. See WP 3.6.1.
     #//
-    if is_serialized(data, False):
-        return serialize(data)
+    if is_serialized(data_, False):
+        return serialize(data_)
     # end if
-    return data
+    return data_
 # end def maybe_serialize
 #// 
 #// Retrieve post title from XMLRPC XML.
@@ -699,16 +719,17 @@ def maybe_serialize(data=None, *args_):
 #// @param string $content XMLRPC XML Request content
 #// @return string Post title
 #//
-def xmlrpc_getposttitle(content=None, *args_):
+def xmlrpc_getposttitle(content_=None, *_args_):
     
-    global post_default_title
-    php_check_if_defined("post_default_title")
-    if php_preg_match("/<title>(.+?)<\\/title>/is", content, matchtitle):
-        post_title = matchtitle[1]
+    
+    global post_default_title_
+    php_check_if_defined("post_default_title_")
+    if php_preg_match("/<title>(.+?)<\\/title>/is", content_, matchtitle_):
+        post_title_ = matchtitle_[1]
     else:
-        post_title = post_default_title
+        post_title_ = post_default_title_
     # end if
-    return post_title
+    return post_title_
 # end def xmlrpc_getposttitle
 #// 
 #// Retrieve the post category or categories from XMLRPC XML.
@@ -724,17 +745,18 @@ def xmlrpc_getposttitle(content=None, *args_):
 #// @param string $content XMLRPC XML Request content
 #// @return string|array List of categories or category name.
 #//
-def xmlrpc_getpostcategory(content=None, *args_):
+def xmlrpc_getpostcategory(content_=None, *_args_):
     
-    global post_default_category
-    php_check_if_defined("post_default_category")
-    if php_preg_match("/<category>(.+?)<\\/category>/is", content, matchcat):
-        post_category = php_trim(matchcat[1], ",")
-        post_category = php_explode(",", post_category)
+    
+    global post_default_category_
+    php_check_if_defined("post_default_category_")
+    if php_preg_match("/<category>(.+?)<\\/category>/is", content_, matchcat_):
+        post_category_ = php_trim(matchcat_[1], ",")
+        post_category_ = php_explode(",", post_category_)
     else:
-        post_category = post_default_category
+        post_category_ = post_default_category_
     # end if
-    return post_category
+    return post_category_
 # end def xmlrpc_getpostcategory
 #// 
 #// XMLRPC XML content without title and category elements.
@@ -744,12 +766,13 @@ def xmlrpc_getpostcategory(content=None, *args_):
 #// @param string $content XML-RPC XML Request content.
 #// @return string XMLRPC XML Request content without title and category elements.
 #//
-def xmlrpc_removepostdata(content=None, *args_):
+def xmlrpc_removepostdata(content_=None, *_args_):
     
-    content = php_preg_replace("/<title>(.+?)<\\/title>/si", "", content)
-    content = php_preg_replace("/<category>(.+?)<\\/category>/si", "", content)
-    content = php_trim(content)
-    return content
+    
+    content_ = php_preg_replace("/<title>(.+?)<\\/title>/si", "", content_)
+    content_ = php_preg_replace("/<category>(.+?)<\\/category>/si", "", content_)
+    content_ = php_trim(content_)
+    return content_
 # end def xmlrpc_removepostdata
 #// 
 #// Use RegEx to extract URLs from arbitrary content.
@@ -759,11 +782,12 @@ def xmlrpc_removepostdata(content=None, *args_):
 #// @param string $content Content to extract URLs from.
 #// @return string[] Array of URLs found in passed string.
 #//
-def wp_extract_urls(content=None, *args_):
+def wp_extract_urls(content_=None, *_args_):
     
-    preg_match_all("#([\"']?)(" + "(?:([\\w-]+:)?//?)" + "[^\\s()<>]+" + "[.]" + "(?:" + "\\([\\w\\d]+\\)|" + "(?:" + "[^`!()\\[\\]{};:'\".,<>Â«Â»ââââ\\s]|" + "(?:[:]\\d+)?/?" + ")+" + ")" + ")\\1#", content, post_links)
-    post_links = array_unique(php_array_map("html_entity_decode", post_links[2]))
-    return php_array_values(post_links)
+    
+    preg_match_all("#([\"']?)(" + "(?:([\\w-]+:)?//?)" + "[^\\s()<>]+" + "[.]" + "(?:" + "\\([\\w\\d]+\\)|" + "(?:" + "[^`!()\\[\\]{};:'\".,<>Â«Â»ââââ\\s]|" + "(?:[:]\\d+)?/?" + ")+" + ")" + ")\\1#", content_, post_links_)
+    post_links_ = array_unique(php_array_map("html_entity_decode", post_links_[2]))
+    return php_array_values(post_links_)
 # end def wp_extract_urls
 #// 
 #// Check content for video and audio links to add as enclosures.
@@ -782,42 +806,43 @@ def wp_extract_urls(content=None, *args_):
 #// @param int|WP_Post    $post    Post ID or post object.
 #// @return null|bool Returns false if post is not found.
 #//
-def do_enclose(content=None, post=None, *args_):
+def do_enclose(content_=None, post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     #// @todo Tidy this code and make the debug code optional.
     php_include_file(ABSPATH + WPINC + "/class-IXR.php", once=False)
-    post = get_post(post)
-    if (not post):
+    post_ = get_post(post_)
+    if (not post_):
         return False
     # end if
-    if None == content:
-        content = post.post_content
+    if None == content_:
+        content_ = post_.post_content
     # end if
-    post_links = Array()
-    pung = get_enclosed(post.ID)
-    post_links_temp = wp_extract_urls(content)
-    for link_test in pung:
+    post_links_ = Array()
+    pung_ = get_enclosed(post_.ID)
+    post_links_temp_ = wp_extract_urls(content_)
+    for link_test_ in pung_:
         #// Link is no longer in post.
-        if (not php_in_array(link_test, post_links_temp, True)):
-            mids = wpdb.get_col(wpdb.prepare(str("SELECT meta_id FROM ") + str(wpdb.postmeta) + str(" WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s"), post.ID, wpdb.esc_like(link_test) + "%"))
-            for mid in mids:
-                delete_metadata_by_mid("post", mid)
+        if (not php_in_array(link_test_, post_links_temp_, True)):
+            mids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT meta_id FROM ") + str(wpdb_.postmeta) + str(" WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s"), post_.ID, wpdb_.esc_like(link_test_) + "%"))
+            for mid_ in mids_:
+                delete_metadata_by_mid("post", mid_)
             # end for
         # end if
     # end for
-    for link_test in post_links_temp:
+    for link_test_ in post_links_temp_:
         #// If we haven't pung it already.
-        if (not php_in_array(link_test, pung, True)):
-            test = php_no_error(lambda: php_parse_url(link_test))
-            if False == test:
+        if (not php_in_array(link_test_, pung_, True)):
+            test_ = php_no_error(lambda: php_parse_url(link_test_))
+            if False == test_:
                 continue
             # end if
-            if (php_isset(lambda : test["query"])):
-                post_links[-1] = link_test
-            elif (php_isset(lambda : test["path"])) and "/" != test["path"] and "" != test["path"]:
-                post_links[-1] = link_test
+            if (php_isset(lambda : test_["query"])):
+                post_links_[-1] = link_test_
+            elif (php_isset(lambda : test_["path"])) and "/" != test_["path"] and "" != test_["path"]:
+                post_links_[-1] = link_test_
             # end if
         # end if
     # end for
@@ -832,29 +857,29 @@ def do_enclose(content=None, post=None, *args_):
     #// @param string[] $post_links An array of enclosure links.
     #// @param int      $post_ID    Post ID.
     #//
-    post_links = apply_filters("enclosure_links", post_links, post.ID)
-    for url in post_links:
-        if "" != url and (not wpdb.get_var(wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(" WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s"), post.ID, wpdb.esc_like(url) + "%"))):
-            headers = wp_get_http_headers(url)
-            if headers:
-                len = php_int(headers["content-length"]) if (php_isset(lambda : headers["content-length"])) else 0
-                type = headers["content-type"] if (php_isset(lambda : headers["content-type"])) else ""
-                allowed_types = Array("video", "audio")
+    post_links_ = apply_filters("enclosure_links", post_links_, post_.ID)
+    for url_ in post_links_:
+        if "" != url_ and (not wpdb_.get_var(wpdb_.prepare(str("SELECT post_id FROM ") + str(wpdb_.postmeta) + str(" WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s"), post_.ID, wpdb_.esc_like(url_) + "%"))):
+            headers_ = wp_get_http_headers(url_)
+            if headers_:
+                len_ = php_int(headers_["content-length"]) if (php_isset(lambda : headers_["content-length"])) else 0
+                type_ = headers_["content-type"] if (php_isset(lambda : headers_["content-type"])) else ""
+                allowed_types_ = Array("video", "audio")
                 #// Check to see if we can figure out the mime type from the extension.
-                url_parts = php_no_error(lambda: php_parse_url(url))
-                if False != url_parts:
-                    extension = pathinfo(url_parts["path"], PATHINFO_EXTENSION)
-                    if (not php_empty(lambda : extension)):
-                        for exts,mime in wp_get_mime_types():
-                            if php_preg_match("!^(" + exts + ")$!i", extension):
-                                type = mime
+                url_parts_ = php_no_error(lambda: php_parse_url(url_))
+                if False != url_parts_:
+                    extension_ = pathinfo(url_parts_["path"], PATHINFO_EXTENSION)
+                    if (not php_empty(lambda : extension_)):
+                        for exts_,mime_ in wp_get_mime_types():
+                            if php_preg_match("!^(" + exts_ + ")$!i", extension_):
+                                type_ = mime_
                                 break
                             # end if
                         # end for
                     # end if
                 # end if
-                if php_in_array(php_substr(type, 0, php_strpos(type, "/")), allowed_types, True):
-                    add_post_meta(post.ID, "enclosure", str(url) + str("\n") + str(len) + str("\n") + str(mime) + str("\n"))
+                if php_in_array(php_substr(type_, 0, php_strpos(type_, "/")), allowed_types_, True):
+                    add_post_meta(post_.ID, "enclosure", str(url_) + str("\n") + str(len_) + str("\n") + str(mime_) + str("\n"))
                 # end if
             # end if
         # end if
@@ -869,16 +894,19 @@ def do_enclose(content=None, post=None, *args_):
 #// @param bool   $deprecated Not Used.
 #// @return bool|string False on failure, headers on success.
 #//
-def wp_get_http_headers(url=None, deprecated=False, *args_):
+def wp_get_http_headers(url_=None, deprecated_=None, *_args_):
+    if deprecated_ is None:
+        deprecated_ = False
+    # end if
     
-    if (not php_empty(lambda : deprecated)):
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.7.0")
     # end if
-    response = wp_safe_remote_head(url)
-    if is_wp_error(response):
+    response_ = wp_safe_remote_head(url_)
+    if is_wp_error(response_):
         return False
     # end if
-    return wp_remote_retrieve_headers(response)
+    return wp_remote_retrieve_headers(response_)
 # end def wp_get_http_headers
 #// 
 #// Determines whether the publish date of the current post in the loop is different
@@ -895,11 +923,13 @@ def wp_get_http_headers(url=None, deprecated=False, *args_):
 #// 
 #// @return int 1 when new day, 0 if not a new day.
 #//
-def is_new_day(*args_):
+def is_new_day(*_args_):
     
-    global currentday,previousday
-    php_check_if_defined("currentday","previousday")
-    if currentday != previousday:
+    
+    global currentday_
+    global previousday_
+    php_check_if_defined("currentday_","previousday_")
+    if currentday_ != previousday_:
         return 1
     else:
         return 0
@@ -920,9 +950,10 @@ def is_new_day(*args_):
 #// @param array $data URL-encode key/value pairs.
 #// @return string URL-encoded string.
 #//
-def build_query(data=None, *args_):
+def build_query(data_=None, *_args_):
     
-    return _http_build_query(data, None, "&", "", False)
+    
+    return _http_build_query(data_, None, "&", "", False)
 # end def build_query
 #// 
 #// From php.net (modified by Mark Jaquith to behave like the native PHP5 function).
@@ -942,36 +973,39 @@ def build_query(data=None, *args_):
 #// 
 #// @return string The query string.
 #//
-def _http_build_query(data=None, prefix=None, sep=None, key="", urlencode=True, *args_):
+def _http_build_query(data_=None, prefix_=None, sep_=None, key_="", urlencode_=None, *_args_):
+    if urlencode_ is None:
+        urlencode_ = True
+    # end if
     
-    ret = Array()
-    for k,v in data:
-        if urlencode:
-            k = urlencode(k)
+    ret_ = Array()
+    for k_,v_ in data_:
+        if urlencode_:
+            k_ = urlencode(k_)
         # end if
-        if php_is_int(k) and None != prefix:
-            k = prefix + k
+        if php_is_int(k_) and None != prefix_:
+            k_ = prefix_ + k_
         # end if
-        if (not php_empty(lambda : key)):
-            k = key + "%5B" + k + "%5D"
+        if (not php_empty(lambda : key_)):
+            k_ = key_ + "%5B" + k_ + "%5D"
         # end if
-        if None == v:
+        if None == v_:
             continue
-        elif False == v:
-            v = "0"
+        elif False == v_:
+            v_ = "0"
         # end if
-        if php_is_array(v) or php_is_object(v):
-            php_array_push(ret, _http_build_query(v, "", sep, k, urlencode))
-        elif urlencode:
-            php_array_push(ret, k + "=" + urlencode(v))
+        if php_is_array(v_) or php_is_object(v_):
+            php_array_push(ret_, _http_build_query(v_, "", sep_, k_, urlencode_))
+        elif urlencode_:
+            php_array_push(ret_, k_ + "=" + urlencode(v_))
         else:
-            php_array_push(ret, k + "=" + v)
+            php_array_push(ret_, k_ + "=" + v_)
         # end if
     # end for
-    if None == sep:
-        sep = php_ini_get("arg_separator.output")
+    if None == sep_:
+        sep_ = php_ini_get("arg_separator.output")
     # end if
-    return php_implode(sep, ret)
+    return php_implode(sep_, ret_)
 # end def _http_build_query
 #// 
 #// Retrieves a modified URL query string.
@@ -1010,67 +1044,68 @@ def _http_build_query(data=None, prefix=None, sep=None, key="", urlencode=True, 
 #// @param string       $url   Optional. A URL to act upon.
 #// @return string New URL query string (unescaped).
 #//
-def add_query_arg(*args):
+def add_query_arg(*args_):
     
-    if php_is_array(args[0]):
-        if php_count(args) < 2 or False == args[1]:
-            uri = PHP_SERVER["REQUEST_URI"]
+    
+    if php_is_array(args_[0]):
+        if php_count(args_) < 2 or False == args_[1]:
+            uri_ = PHP_SERVER["REQUEST_URI"]
         else:
-            uri = args[1]
+            uri_ = args_[1]
         # end if
     else:
-        if php_count(args) < 3 or False == args[2]:
-            uri = PHP_SERVER["REQUEST_URI"]
+        if php_count(args_) < 3 or False == args_[2]:
+            uri_ = PHP_SERVER["REQUEST_URI"]
         else:
-            uri = args[2]
+            uri_ = args_[2]
         # end if
     # end if
-    frag = php_strstr(uri, "#")
-    if frag:
-        uri = php_substr(uri, 0, -php_strlen(frag))
+    frag_ = php_strstr(uri_, "#")
+    if frag_:
+        uri_ = php_substr(uri_, 0, -php_strlen(frag_))
     else:
-        frag = ""
+        frag_ = ""
     # end if
-    if 0 == php_stripos(uri, "http://"):
-        protocol = "http://"
-        uri = php_substr(uri, 7)
-    elif 0 == php_stripos(uri, "https://"):
-        protocol = "https://"
-        uri = php_substr(uri, 8)
+    if 0 == php_stripos(uri_, "http://"):
+        protocol_ = "http://"
+        uri_ = php_substr(uri_, 7)
+    elif 0 == php_stripos(uri_, "https://"):
+        protocol_ = "https://"
+        uri_ = php_substr(uri_, 8)
     else:
-        protocol = ""
+        protocol_ = ""
     # end if
-    if php_strpos(uri, "?") != False:
-        base, query = php_explode("?", uri, 2)
-        base += "?"
-    elif protocol or php_strpos(uri, "=") == False:
-        base = uri + "?"
-        query = ""
+    if php_strpos(uri_, "?") != False:
+        base_, query_ = php_explode("?", uri_, 2)
+        base_ += "?"
+    elif protocol_ or php_strpos(uri_, "=") == False:
+        base_ = uri_ + "?"
+        query_ = ""
     else:
-        base = ""
-        query = uri
+        base_ = ""
+        query_ = uri_
     # end if
-    wp_parse_str(query, qs)
-    qs = urlencode_deep(qs)
+    wp_parse_str(query_, qs_)
+    qs_ = urlencode_deep(qs_)
     #// This re-URL-encodes things that were already in the query string.
-    if php_is_array(args[0]):
-        for k,v in args[0]:
-            qs[k] = v
+    if php_is_array(args_[0]):
+        for k_,v_ in args_[0]:
+            qs_[k_] = v_
         # end for
     else:
-        qs[args[0]] = args[1]
+        qs_[args_[0]] = args_[1]
     # end if
-    for k,v in qs:
-        if False == v:
-            qs[k] = None
+    for k_,v_ in qs_:
+        if False == v_:
+            qs_[k_] = None
         # end if
     # end for
-    ret = build_query(qs)
-    ret = php_trim(ret, "?")
-    ret = php_preg_replace("#=(&|$)#", "$1", ret)
-    ret = protocol + base + ret + frag
-    ret = php_rtrim(ret, "?")
-    return ret
+    ret_ = build_query(qs_)
+    ret_ = php_trim(ret_, "?")
+    ret_ = php_preg_replace("#=(&|$)#", "$1", ret_)
+    ret_ = protocol_ + base_ + ret_ + frag_
+    ret_ = php_rtrim(ret_, "?")
+    return ret_
 # end def add_query_arg
 #// 
 #// Removes an item or items from a query string.
@@ -1081,16 +1116,19 @@ def add_query_arg(*args):
 #// @param bool|string  $query Optional. When false uses the current URL. Default false.
 #// @return string New URL query string.
 #//
-def remove_query_arg(key=None, query=False, *args_):
-    
-    if php_is_array(key):
-        #// Removing multiple keys.
-        for k in key:
-            query = add_query_arg(k, False, query)
-        # end for
-        return query
+def remove_query_arg(key_=None, query_=None, *_args_):
+    if query_ is None:
+        query_ = False
     # end if
-    return add_query_arg(key, False, query)
+    
+    if php_is_array(key_):
+        #// Removing multiple keys.
+        for k_ in key_:
+            query_ = add_query_arg(k_, False, query_)
+        # end for
+        return query_
+    # end if
+    return add_query_arg(key_, False, query_)
 # end def remove_query_arg
 #// 
 #// Returns an array of single-use query variable names that can be removed from a URL.
@@ -1099,9 +1137,10 @@ def remove_query_arg(key=None, query=False, *args_):
 #// 
 #// @return string[] An array of parameters to remove from the URL.
 #//
-def wp_removable_query_args(*args_):
+def wp_removable_query_args(*_args_):
     
-    removable_query_args = Array("activate", "activated", "approved", "deactivate", "deleted", "disabled", "doing_wp_cron", "enabled", "error", "hotkeys_highlight_first", "hotkeys_highlight_last", "locked", "message", "same", "saved", "settings-updated", "skipped", "spammed", "trashed", "unspammed", "untrashed", "update", "updated", "wp-post-new-reload")
+    
+    removable_query_args_ = Array("activate", "activated", "approved", "deactivate", "deleted", "disabled", "doing_wp_cron", "enabled", "error", "hotkeys_highlight_first", "hotkeys_highlight_last", "locked", "message", "same", "saved", "settings-updated", "skipped", "spammed", "trashed", "unspammed", "untrashed", "update", "updated", "wp-post-new-reload")
     #// 
     #// Filters the list of query variables to remove.
     #// 
@@ -1109,7 +1148,7 @@ def wp_removable_query_args(*args_):
     #// 
     #// @param string[] $removable_query_args An array of query variables to remove from a URL.
     #//
-    return apply_filters("removable_query_args", removable_query_args)
+    return apply_filters("removable_query_args", removable_query_args_)
 # end def wp_removable_query_args
 #// 
 #// Walks the array while sanitizing the contents.
@@ -1119,16 +1158,17 @@ def wp_removable_query_args(*args_):
 #// @param array $array Array to walk while sanitizing contents.
 #// @return array Sanitized $array.
 #//
-def add_magic_quotes(array=None, *args_):
+def add_magic_quotes(array_=None, *_args_):
     
-    for k,v in array:
-        if php_is_array(v):
-            array[k] = add_magic_quotes(v)
+    
+    for k_,v_ in array_:
+        if php_is_array(v_):
+            array_[k_] = add_magic_quotes(v_)
         else:
-            array[k] = addslashes(v)
+            array_[k_] = addslashes(v_)
         # end if
     # end for
-    return array
+    return array_
 # end def add_magic_quotes
 #// 
 #// HTTP request for URI to retrieve content.
@@ -1140,19 +1180,20 @@ def add_magic_quotes(array=None, *args_):
 #// @param string $uri URI/URL of web page to retrieve.
 #// @return string|false HTTP content. False on failure.
 #//
-def wp_remote_fopen(uri=None, *args_):
+def wp_remote_fopen(uri_=None, *_args_):
     
-    parsed_url = php_no_error(lambda: php_parse_url(uri))
-    if (not parsed_url) or (not php_is_array(parsed_url)):
+    
+    parsed_url_ = php_no_error(lambda: php_parse_url(uri_))
+    if (not parsed_url_) or (not php_is_array(parsed_url_)):
         return False
     # end if
-    options = Array()
-    options["timeout"] = 10
-    response = wp_safe_remote_get(uri, options)
-    if is_wp_error(response):
+    options_ = Array()
+    options_["timeout"] = 10
+    response_ = wp_safe_remote_get(uri_, options_)
+    if is_wp_error(response_):
         return False
     # end if
-    return wp_remote_retrieve_body(response)
+    return wp_remote_retrieve_body(response_)
 # end def wp_remote_fopen
 #// 
 #// Set up the WordPress query.
@@ -1165,13 +1206,16 @@ def wp_remote_fopen(uri=None, *args_):
 #// 
 #// @param string|array $query_vars Default WP_Query arguments.
 #//
-def wp(query_vars="", *args_):
+def wp(query_vars_="", *_args_):
     
-    global wp,wp_query,wp_the_query
-    php_check_if_defined("wp","wp_query","wp_the_query")
-    wp.main(query_vars)
-    if (not (php_isset(lambda : wp_the_query))):
-        wp_the_query = wp_query
+    
+    global wp_
+    global wp_query_
+    global wp_the_query_
+    php_check_if_defined("wp_","wp_query_","wp_the_query_")
+    wp_.main(query_vars_)
+    if (not (php_isset(lambda : wp_the_query_))):
+        wp_the_query_ = wp_query_
     # end if
 # end def wp
 #// 
@@ -1187,16 +1231,17 @@ def wp(query_vars="", *args_):
 #// @param int $code HTTP status code.
 #// @return string Status description if found, an empty string otherwise.
 #//
-def get_status_header_desc(code=None, *args_):
+def get_status_header_desc(code_=None, *_args_):
     
-    global wp_header_to_desc
-    php_check_if_defined("wp_header_to_desc")
-    code = absint(code)
-    if (not (php_isset(lambda : wp_header_to_desc))):
-        wp_header_to_desc = Array({100: "Continue", 101: "Switching Protocols", 102: "Processing", 103: "Early Hints", 200: "OK", 201: "Created", 202: "Accepted", 203: "Non-Authoritative Information", 204: "No Content", 205: "Reset Content", 206: "Partial Content", 207: "Multi-Status", 226: "IM Used", 300: "Multiple Choices", 301: "Moved Permanently", 302: "Found", 303: "See Other", 304: "Not Modified", 305: "Use Proxy", 306: "Reserved", 307: "Temporary Redirect", 308: "Permanent Redirect", 400: "Bad Request", 401: "Unauthorized", 402: "Payment Required", 403: "Forbidden", 404: "Not Found", 405: "Method Not Allowed", 406: "Not Acceptable", 407: "Proxy Authentication Required", 408: "Request Timeout", 409: "Conflict", 410: "Gone", 411: "Length Required", 412: "Precondition Failed", 413: "Request Entity Too Large", 414: "Request-URI Too Long", 415: "Unsupported Media Type", 416: "Requested Range Not Satisfiable", 417: "Expectation Failed", 418: "I'm a teapot", 421: "Misdirected Request", 422: "Unprocessable Entity", 423: "Locked", 424: "Failed Dependency", 426: "Upgrade Required", 428: "Precondition Required", 429: "Too Many Requests", 431: "Request Header Fields Too Large", 451: "Unavailable For Legal Reasons", 500: "Internal Server Error", 501: "Not Implemented", 502: "Bad Gateway", 503: "Service Unavailable", 504: "Gateway Timeout", 505: "HTTP Version Not Supported", 506: "Variant Also Negotiates", 507: "Insufficient Storage", 510: "Not Extended", 511: "Network Authentication Required"})
+    
+    global wp_header_to_desc_
+    php_check_if_defined("wp_header_to_desc_")
+    code_ = absint(code_)
+    if (not (php_isset(lambda : wp_header_to_desc_))):
+        wp_header_to_desc_ = Array({100: "Continue", 101: "Switching Protocols", 102: "Processing", 103: "Early Hints", 200: "OK", 201: "Created", 202: "Accepted", 203: "Non-Authoritative Information", 204: "No Content", 205: "Reset Content", 206: "Partial Content", 207: "Multi-Status", 226: "IM Used", 300: "Multiple Choices", 301: "Moved Permanently", 302: "Found", 303: "See Other", 304: "Not Modified", 305: "Use Proxy", 306: "Reserved", 307: "Temporary Redirect", 308: "Permanent Redirect", 400: "Bad Request", 401: "Unauthorized", 402: "Payment Required", 403: "Forbidden", 404: "Not Found", 405: "Method Not Allowed", 406: "Not Acceptable", 407: "Proxy Authentication Required", 408: "Request Timeout", 409: "Conflict", 410: "Gone", 411: "Length Required", 412: "Precondition Failed", 413: "Request Entity Too Large", 414: "Request-URI Too Long", 415: "Unsupported Media Type", 416: "Requested Range Not Satisfiable", 417: "Expectation Failed", 418: "I'm a teapot", 421: "Misdirected Request", 422: "Unprocessable Entity", 423: "Locked", 424: "Failed Dependency", 426: "Upgrade Required", 428: "Precondition Required", 429: "Too Many Requests", 431: "Request Header Fields Too Large", 451: "Unavailable For Legal Reasons", 500: "Internal Server Error", 501: "Not Implemented", 502: "Bad Gateway", 503: "Service Unavailable", 504: "Gateway Timeout", 505: "HTTP Version Not Supported", 506: "Variant Also Negotiates", 507: "Insufficient Storage", 510: "Not Extended", 511: "Network Authentication Required"})
     # end if
-    if (php_isset(lambda : wp_header_to_desc[code])):
-        return wp_header_to_desc[code]
+    if (php_isset(lambda : wp_header_to_desc_[code_])):
+        return wp_header_to_desc_[code_]
     else:
         return ""
     # end if
@@ -1212,16 +1257,17 @@ def get_status_header_desc(code=None, *args_):
 #// @param int    $code        HTTP status code.
 #// @param string $description Optional. A custom description for the HTTP status.
 #//
-def status_header(code=None, description="", *args_):
+def status_header(code_=None, description_="", *_args_):
     
-    if (not description):
-        description = get_status_header_desc(code)
+    
+    if (not description_):
+        description_ = get_status_header_desc(code_)
     # end if
-    if php_empty(lambda : description):
+    if php_empty(lambda : description_):
         return
     # end if
-    protocol = wp_get_server_protocol()
-    status_header = str(protocol) + str(" ") + str(code) + str(" ") + str(description)
+    protocol_ = wp_get_server_protocol()
+    status_header_ = str(protocol_) + str(" ") + str(code_) + str(" ") + str(description_)
     if php_function_exists("apply_filters"):
         #// 
         #// Filters an HTTP status header.
@@ -1233,10 +1279,10 @@ def status_header(code=None, description="", *args_):
         #// @param string $description   Description for the status code.
         #// @param string $protocol      Server protocol.
         #//
-        status_header = apply_filters("status_header", status_header, code, description, protocol)
+        status_header_ = apply_filters("status_header", status_header_, code_, description_, protocol_)
     # end if
     if (not php_headers_sent()):
-        php_header(status_header, True, code)
+        php_header(status_header_, True, code_)
     # end if
 # end def status_header
 #// 
@@ -1249,9 +1295,10 @@ def status_header(code=None, description="", *args_):
 #// 
 #// @return array The associative array of header names and field values.
 #//
-def wp_get_nocache_headers(*args_):
+def wp_get_nocache_headers(*_args_):
     
-    headers = Array({"Expires": "Wed, 11 Jan 1984 05:00:00 GMT", "Cache-Control": "no-cache, must-revalidate, max-age=0"})
+    
+    headers_ = Array({"Expires": "Wed, 11 Jan 1984 05:00:00 GMT", "Cache-Control": "no-cache, must-revalidate, max-age=0"})
     if php_function_exists("apply_filters"):
         #// 
         #// Filters the cache-controlling headers.
@@ -1267,10 +1314,10 @@ def wp_get_nocache_headers(*args_):
         #// @type string $Cache-Control Cache-Control header.
         #// }
         #//
-        headers = apply_filters("nocache_headers", headers)
+        headers_ = apply_filters("nocache_headers", headers_)
     # end if
-    headers["Last-Modified"] = False
-    return headers
+    headers_["Last-Modified"] = False
+    return headers_
 # end def wp_get_nocache_headers
 #// 
 #// Set the headers to prevent caching for the different browsers.
@@ -1283,16 +1330,17 @@ def wp_get_nocache_headers(*args_):
 #// 
 #// @see wp_get_nocache_headers()
 #//
-def nocache_headers(*args_):
+def nocache_headers(*_args_):
+    
     
     if php_headers_sent():
         return
     # end if
-    headers = wp_get_nocache_headers()
-    headers["Last-Modified"] = None
+    headers_ = wp_get_nocache_headers()
+    headers_["Last-Modified"] = None
     php_header_remove("Last-Modified")
-    for name,field_value in headers:
-        php_header(str(name) + str(": ") + str(field_value))
+    for name_,field_value_ in headers_:
+        php_header(str(name_) + str(": ") + str(field_value_))
     # end for
 # end def nocache_headers
 #// 
@@ -1300,13 +1348,14 @@ def nocache_headers(*args_):
 #// 
 #// @since 2.1.0
 #//
-def cache_javascript_headers(*args_):
+def cache_javascript_headers(*_args_):
     
-    expiresOffset = 10 * DAY_IN_SECONDS
+    
+    expiresOffset_ = 10 * DAY_IN_SECONDS
     php_header("Content-Type: text/javascript; charset=" + get_bloginfo("charset"))
     php_header("Vary: Accept-Encoding")
     #// Handle proxies.
-    php_header("Expires: " + gmdate("D, d M Y H:i:s", time() + expiresOffset) + " GMT")
+    php_header("Expires: " + gmdate("D, d M Y H:i:s", time() + expiresOffset_) + " GMT")
 # end def cache_javascript_headers
 #// 
 #// Retrieve the number of database queries during the WordPress execution.
@@ -1317,11 +1366,12 @@ def cache_javascript_headers(*args_):
 #// 
 #// @return int Number of database queries.
 #//
-def get_num_queries(*args_):
+def get_num_queries(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    return wpdb.num_queries
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    return wpdb_.num_queries
 # end def get_num_queries
 #// 
 #// Whether input is yes or no.
@@ -1333,9 +1383,10 @@ def get_num_queries(*args_):
 #// @param string $yn Character string containing either 'y' (yes) or 'n' (no).
 #// @return bool True if yes, false on anything else.
 #//
-def bool_from_yn(yn=None, *args_):
+def bool_from_yn(yn_=None, *_args_):
     
-    return php_strtolower(yn) == "y"
+    
+    return php_strtolower(yn_) == "y"
 # end def bool_from_yn
 #// 
 #// Load the feed template from the use of an action hook.
@@ -1349,17 +1400,18 @@ def bool_from_yn(yn=None, *args_):
 #// 
 #// @global WP_Query $wp_query WordPress Query object.
 #//
-def do_feed(*args_):
+def do_feed(*_args_):
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    feed = get_query_var("feed")
+    
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    feed_ = get_query_var("feed")
     #// Remove the pad, if present.
-    feed = php_preg_replace("/^_+/", "", feed)
-    if "" == feed or "feed" == feed:
-        feed = get_default_feed()
+    feed_ = php_preg_replace("/^_+/", "", feed_)
+    if "" == feed_ or "feed" == feed_:
+        feed_ = get_default_feed()
     # end if
-    if (not has_action(str("do_feed_") + str(feed))):
+    if (not has_action(str("do_feed_") + str(feed_))):
         wp_die(__("Error: This is not a valid feed template."), "", Array({"response": 404}))
     # end if
     #// 
@@ -1374,7 +1426,7 @@ def do_feed(*args_):
     #// @param bool   $is_comment_feed Whether the feed is a comment feed.
     #// @param string $feed            The feed name.
     #//
-    do_action(str("do_feed_") + str(feed), wp_query.is_comment_feed, feed)
+    do_action(str("do_feed_") + str(feed_), wp_query_.is_comment_feed, feed_)
 # end def do_feed
 #// 
 #// Load the RDF RSS 0.91 Feed template.
@@ -1383,7 +1435,8 @@ def do_feed(*args_):
 #// 
 #// @see load_template()
 #//
-def do_feed_rdf(*args_):
+def do_feed_rdf(*_args_):
+    
     
     load_template(ABSPATH + WPINC + "/feed-rdf.php")
 # end def do_feed_rdf
@@ -1394,7 +1447,8 @@ def do_feed_rdf(*args_):
 #// 
 #// @see load_template()
 #//
-def do_feed_rss(*args_):
+def do_feed_rss(*_args_):
+    
     
     load_template(ABSPATH + WPINC + "/feed-rss.php")
 # end def do_feed_rss
@@ -1407,9 +1461,10 @@ def do_feed_rss(*args_):
 #// 
 #// @param bool $for_comments True for the comment feed, false for normal feed.
 #//
-def do_feed_rss2(for_comments=None, *args_):
+def do_feed_rss2(for_comments_=None, *_args_):
     
-    if for_comments:
+    
+    if for_comments_:
         load_template(ABSPATH + WPINC + "/feed-rss2-comments.php")
     else:
         load_template(ABSPATH + WPINC + "/feed-rss2.php")
@@ -1424,9 +1479,10 @@ def do_feed_rss2(for_comments=None, *args_):
 #// 
 #// @param bool $for_comments True for the comment feed, false for normal feed.
 #//
-def do_feed_atom(for_comments=None, *args_):
+def do_feed_atom(for_comments_=None, *_args_):
     
-    if for_comments:
+    
+    if for_comments_:
         load_template(ABSPATH + WPINC + "/feed-atom-comments.php")
     else:
         load_template(ABSPATH + WPINC + "/feed-atom.php")
@@ -1439,7 +1495,8 @@ def do_feed_atom(for_comments=None, *args_):
 #// @since 5.3.0 Remove the "Disallow: /" output if search engine visiblity is
 #// discouraged in favor of robots meta HTML tag in wp_no_robots().
 #//
-def do_robots(*args_):
+def do_robots(*_args_):
+    
     
     php_header("Content-Type: text/plain; charset=utf-8")
     #// 
@@ -1448,12 +1505,12 @@ def do_robots(*args_):
     #// @since 2.1.0
     #//
     do_action("do_robotstxt")
-    output = "User-agent: *\n"
-    public = get_option("blog_public")
-    site_url = php_parse_url(site_url())
-    path = site_url["path"] if (not php_empty(lambda : site_url["path"])) else ""
-    output += str("Disallow: ") + str(path) + str("/wp-admin/\n")
-    output += str("Allow: ") + str(path) + str("/wp-admin/admin-ajax.php\n")
+    output_ = "User-agent: *\n"
+    public_ = get_option("blog_public")
+    site_url_ = php_parse_url(site_url())
+    path_ = site_url_["path"] if (not php_empty(lambda : site_url_["path"])) else ""
+    output_ += str("Disallow: ") + str(path_) + str("/wp-admin/\n")
+    output_ += str("Allow: ") + str(path_) + str("/wp-admin/admin-ajax.php\n")
     #// 
     #// Filters the robots.txt output.
     #// 
@@ -1462,14 +1519,15 @@ def do_robots(*args_):
     #// @param string $output The robots.txt output.
     #// @param bool   $public Whether the site is considered "public".
     #//
-    php_print(apply_filters("robots_txt", output, public))
+    php_print(apply_filters("robots_txt", output_, public_))
 # end def do_robots
 #// 
 #// Display the favicon.ico file content.
 #// 
 #// @since 5.4.0
 #//
-def do_favicon(*args_):
+def do_favicon(*_args_):
+    
     
     #// 
     #// Fires when serving the favicon.ico file.
@@ -1499,10 +1557,11 @@ def do_favicon(*args_):
 #// 
 #// @return bool Whether the site is already installed.
 #//
-def is_blog_installed(*args_):
+def is_blog_installed(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     #// 
     #// Check cache first. If options table goes away and we have true
     #// cached, oh well.
@@ -1510,51 +1569,51 @@ def is_blog_installed(*args_):
     if wp_cache_get("is_blog_installed"):
         return True
     # end if
-    suppress = wpdb.suppress_errors()
+    suppress_ = wpdb_.suppress_errors()
     if (not wp_installing()):
-        alloptions = wp_load_alloptions()
+        alloptions_ = wp_load_alloptions()
     # end if
     #// If siteurl is not set to autoload, check it specifically.
-    if (not (php_isset(lambda : alloptions["siteurl"]))):
-        installed = wpdb.get_var(str("SELECT option_value FROM ") + str(wpdb.options) + str(" WHERE option_name = 'siteurl'"))
+    if (not (php_isset(lambda : alloptions_["siteurl"]))):
+        installed_ = wpdb_.get_var(str("SELECT option_value FROM ") + str(wpdb_.options) + str(" WHERE option_name = 'siteurl'"))
     else:
-        installed = alloptions["siteurl"]
+        installed_ = alloptions_["siteurl"]
     # end if
-    wpdb.suppress_errors(suppress)
-    installed = (not php_empty(lambda : installed))
-    wp_cache_set("is_blog_installed", installed)
-    if installed:
+    wpdb_.suppress_errors(suppress_)
+    installed_ = (not php_empty(lambda : installed_))
+    wp_cache_set("is_blog_installed", installed_)
+    if installed_:
         return True
     # end if
     #// If visiting repair.php, return true and let it take over.
     if php_defined("WP_REPAIRING"):
         return True
     # end if
-    suppress = wpdb.suppress_errors()
+    suppress_ = wpdb_.suppress_errors()
     #// 
     #// Loop over the WP tables. If none exist, then scratch installation is allowed.
     #// If one or more exist, suggest table repair since we got here because the
     #// options table could not be accessed.
     #//
-    wp_tables = wpdb.tables()
-    for table in wp_tables:
+    wp_tables_ = wpdb_.tables()
+    for table_ in wp_tables_:
         #// The existence of custom user tables shouldn't suggest an insane state or prevent a clean installation.
-        if php_defined("CUSTOM_USER_TABLE") and CUSTOM_USER_TABLE == table:
+        if php_defined("CUSTOM_USER_TABLE") and CUSTOM_USER_TABLE == table_:
             continue
         # end if
-        if php_defined("CUSTOM_USER_META_TABLE") and CUSTOM_USER_META_TABLE == table:
+        if php_defined("CUSTOM_USER_META_TABLE") and CUSTOM_USER_META_TABLE == table_:
             continue
         # end if
-        if (not wpdb.get_results(str("DESCRIBE ") + str(table) + str(";"))):
+        if (not wpdb_.get_results(str("DESCRIBE ") + str(table_) + str(";"))):
             continue
         # end if
         #// One or more tables exist. We are insane.
         wp_load_translations_early()
         #// Die with a DB error.
-        wpdb.error = php_sprintf(__("One or more database tables are unavailable. The database may need to be <a href=\"%s\">repaired</a>."), "maint/repair.php?referrer=is_blog_installed")
+        wpdb_.error = php_sprintf(__("One or more database tables are unavailable. The database may need to be <a href=\"%s\">repaired</a>."), "maint/repair.php?referrer=is_blog_installed")
         dead_db()
     # end for
-    wpdb.suppress_errors(suppress)
+    wpdb_.suppress_errors(suppress_)
     wp_cache_set("is_blog_installed", False)
     return False
 # end def is_blog_installed
@@ -1568,10 +1627,13 @@ def is_blog_installed(*args_):
 #// @param string     $name      Optional. Nonce name. Default '_wpnonce'.
 #// @return string Escaped URL with nonce action added.
 #//
-def wp_nonce_url(actionurl=None, action=-1, name="_wpnonce", *args_):
+def wp_nonce_url(actionurl_=None, action_=None, name_="_wpnonce", *_args_):
+    if action_ is None:
+        action_ = -1
+    # end if
     
-    actionurl = php_str_replace("&amp;", "&", actionurl)
-    return esc_html(add_query_arg(name, wp_create_nonce(action), actionurl))
+    actionurl_ = php_str_replace("&amp;", "&", actionurl_)
+    return esc_html(add_query_arg(name_, wp_create_nonce(action_), actionurl_))
 # end def wp_nonce_url
 #// 
 #// Retrieve or display nonce hidden field for forms.
@@ -1599,17 +1661,26 @@ def wp_nonce_url(actionurl=None, action=-1, name="_wpnonce", *args_):
 #// @param bool       $echo    Optional. Whether to display or return hidden form field. Default true.
 #// @return string Nonce field HTML markup.
 #//
-def wp_nonce_field(action=-1, name="_wpnonce", referer=True, echo=True, *args_):
+def wp_nonce_field(action_=None, name_="_wpnonce", referer_=None, echo_=None, *_args_):
+    if action_ is None:
+        action_ = -1
+    # end if
+    if referer_ is None:
+        referer_ = True
+    # end if
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    name = esc_attr(name)
-    nonce_field = "<input type=\"hidden\" id=\"" + name + "\" name=\"" + name + "\" value=\"" + wp_create_nonce(action) + "\" />"
-    if referer:
-        nonce_field += wp_referer_field(False)
+    name_ = esc_attr(name_)
+    nonce_field_ = "<input type=\"hidden\" id=\"" + name_ + "\" name=\"" + name_ + "\" value=\"" + wp_create_nonce(action_) + "\" />"
+    if referer_:
+        nonce_field_ += wp_referer_field(False)
     # end if
-    if echo:
-        php_print(nonce_field)
+    if echo_:
+        php_print(nonce_field_)
     # end if
-    return nonce_field
+    return nonce_field_
 # end def wp_nonce_field
 #// 
 #// Retrieve or display referer hidden field for forms.
@@ -1622,13 +1693,16 @@ def wp_nonce_field(action=-1, name="_wpnonce", referer=True, echo=True, *args_):
 #// @param bool $echo Optional. Whether to echo or return the referer field. Default true.
 #// @return string Referer field HTML markup.
 #//
-def wp_referer_field(echo=True, *args_):
-    
-    referer_field = "<input type=\"hidden\" name=\"_wp_http_referer\" value=\"" + esc_attr(wp_unslash(PHP_SERVER["REQUEST_URI"])) + "\" />"
-    if echo:
-        php_print(referer_field)
+def wp_referer_field(echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
     # end if
-    return referer_field
+    
+    referer_field_ = "<input type=\"hidden\" name=\"_wp_http_referer\" value=\"" + esc_attr(wp_unslash(PHP_SERVER["REQUEST_URI"])) + "\" />"
+    if echo_:
+        php_print(referer_field_)
+    # end if
+    return referer_field_
 # end def wp_referer_field
 #// 
 #// Retrieve or display original referer hidden field for forms.
@@ -1644,17 +1718,20 @@ def wp_referer_field(echo=True, *args_):
 #// Default 'current'.
 #// @return string Original referer field.
 #//
-def wp_original_referer_field(echo=True, jump_back_to="current", *args_):
+def wp_original_referer_field(echo_=None, jump_back_to_="current", *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    ref = wp_get_original_referer()
-    if (not ref):
-        ref = wp_get_referer() if "previous" == jump_back_to else wp_unslash(PHP_SERVER["REQUEST_URI"])
+    ref_ = wp_get_original_referer()
+    if (not ref_):
+        ref_ = wp_get_referer() if "previous" == jump_back_to_ else wp_unslash(PHP_SERVER["REQUEST_URI"])
     # end if
-    orig_referer_field = "<input type=\"hidden\" name=\"_wp_original_http_referer\" value=\"" + esc_attr(ref) + "\" />"
-    if echo:
-        php_print(orig_referer_field)
+    orig_referer_field_ = "<input type=\"hidden\" name=\"_wp_original_http_referer\" value=\"" + esc_attr(ref_) + "\" />"
+    if echo_:
+        php_print(orig_referer_field_)
     # end if
-    return orig_referer_field
+    return orig_referer_field_
 # end def wp_original_referer_field
 #// 
 #// Retrieve referer from '_wp_http_referer' or HTTP referer.
@@ -1665,14 +1742,15 @@ def wp_original_referer_field(echo=True, jump_back_to="current", *args_):
 #// 
 #// @return string|false Referer URL on success, false on failure.
 #//
-def wp_get_referer(*args_):
+def wp_get_referer(*_args_):
+    
     
     if (not php_function_exists("wp_validate_redirect")):
         return False
     # end if
-    ref = wp_get_raw_referer()
-    if ref and wp_unslash(PHP_SERVER["REQUEST_URI"]) != ref and home_url() + wp_unslash(PHP_SERVER["REQUEST_URI"]) != ref:
-        return wp_validate_redirect(ref, False)
+    ref_ = wp_get_raw_referer()
+    if ref_ and wp_unslash(PHP_SERVER["REQUEST_URI"]) != ref_ and home_url() + wp_unslash(PHP_SERVER["REQUEST_URI"]) != ref_:
+        return wp_validate_redirect(ref_, False)
     # end if
     return False
 # end def wp_get_referer
@@ -1685,7 +1763,8 @@ def wp_get_referer(*args_):
 #// 
 #// @return string|false Referer URL on success, false on failure.
 #//
-def wp_get_raw_referer(*args_):
+def wp_get_raw_referer(*_args_):
+    
     
     if (not php_empty(lambda : PHP_REQUEST["_wp_http_referer"])):
         return wp_unslash(PHP_REQUEST["_wp_http_referer"])
@@ -1701,7 +1780,8 @@ def wp_get_raw_referer(*args_):
 #// 
 #// @return string|false False if no original referer or original referer if set.
 #//
-def wp_get_original_referer(*args_):
+def wp_get_original_referer(*_args_):
+    
     
     if (not php_empty(lambda : PHP_REQUEST["_wp_original_http_referer"])) and php_function_exists("wp_validate_redirect"):
         return wp_validate_redirect(wp_unslash(PHP_REQUEST["_wp_original_http_referer"]), False)
@@ -1718,63 +1798,64 @@ def wp_get_original_referer(*args_):
 #// @param string $target Full path to attempt to create.
 #// @return bool Whether the path was created. True if path already exists.
 #//
-def wp_mkdir_p(target=None, *args_):
+def wp_mkdir_p(target_=None, *_args_):
     
-    wrapper = None
+    
+    wrapper_ = None
     #// Strip the protocol.
-    if wp_is_stream(target):
-        wrapper, target = php_explode("://", target, 2)
+    if wp_is_stream(target_):
+        wrapper_, target_ = php_explode("://", target_, 2)
     # end if
     #// From php.net/mkdir user contributed notes.
-    target = php_str_replace("//", "/", target)
+    target_ = php_str_replace("//", "/", target_)
     #// Put the wrapper back on the target.
-    if None != wrapper:
-        target = wrapper + "://" + target
+    if None != wrapper_:
+        target_ = wrapper_ + "://" + target_
     # end if
     #// 
     #// Safe mode fails with a trailing slash under certain PHP versions.
     #// Use rtrim() instead of untrailingslashit to avoid formatting.php dependency.
     #//
-    target = php_rtrim(target, "/")
-    if php_empty(lambda : target):
-        target = "/"
+    target_ = php_rtrim(target_, "/")
+    if php_empty(lambda : target_):
+        target_ = "/"
     # end if
-    if php_file_exists(target):
-        return php_no_error(lambda: php_is_dir(target))
+    if php_file_exists(target_):
+        return php_no_error(lambda: php_is_dir(target_))
     # end if
     #// Do not allow path traversals.
-    if False != php_strpos(target, "../") or False != php_strpos(target, ".." + DIRECTORY_SEPARATOR):
+    if False != php_strpos(target_, "../") or False != php_strpos(target_, ".." + DIRECTORY_SEPARATOR):
         return False
     # end if
     #// We need to find the permissions of the parent folder that exists and inherit that.
-    target_parent = php_dirname(target)
+    target_parent_ = php_dirname(target_)
     while True:
         
-        if not ("." != target_parent and (not php_is_dir(target_parent)) and php_dirname(target_parent) != target_parent):
+        if not ("." != target_parent_ and (not php_is_dir(target_parent_)) and php_dirname(target_parent_) != target_parent_):
             break
         # end if
-        target_parent = php_dirname(target_parent)
+        target_parent_ = php_dirname(target_parent_)
     # end while
     #// Get the permission bits.
-    stat = php_no_error(lambda: stat(target_parent))
-    if stat:
-        dir_perms = stat["mode"] & 4095
+    stat_ = php_no_error(lambda: stat(target_parent_))
+    if stat_:
+        dir_perms_ = stat_["mode"] & 4095
     else:
-        dir_perms = 511
+        dir_perms_ = 511
     # end if
-    if php_no_error(lambda: mkdir(target, dir_perms, True)):
+    if php_no_error(lambda: mkdir(target_, dir_perms_, True)):
         #// 
         #// If a umask is set that modifies $dir_perms, we'll have to re-set
         #// the $dir_perms correctly with chmod()
         #//
-        if dir_perms & (1 << (umask()).bit_length()) - 1 - umask() != dir_perms:
-            folder_parts = php_explode("/", php_substr(target, php_strlen(target_parent) + 1))
-            i = 1
-            c = php_count(folder_parts)
-            while i <= c:
+        if dir_perms_ & (1 << (umask()).bit_length()) - 1 - umask() != dir_perms_:
+            folder_parts_ = php_explode("/", php_substr(target_, php_strlen(target_parent_) + 1))
+            i_ = 1
+            c_ = php_count(folder_parts_)
+            while i_ <= c_:
                 
-                chmod(target_parent + "/" + php_implode("/", php_array_slice(folder_parts, 0, i)), dir_perms)
-                i += 1
+                chmod(target_parent_ + "/" + php_implode("/", php_array_slice(folder_parts_, 0, i_)), dir_perms_)
+                i_ += 1
             # end while
         # end if
         return True
@@ -1791,31 +1872,32 @@ def wp_mkdir_p(target=None, *args_):
 #// @param string $path File path.
 #// @return bool True if path is absolute, false is not absolute.
 #//
-def path_is_absolute(path=None, *args_):
+def path_is_absolute(path_=None, *_args_):
+    
     
     #// 
     #// Check to see if the path is a stream and check to see if its an actual
     #// path or file as realpath() does not support stream wrappers.
     #//
-    if wp_is_stream(path) and php_is_dir(path) or php_is_file(path):
+    if wp_is_stream(path_) and php_is_dir(path_) or php_is_file(path_):
         return True
     # end if
     #// 
     #// This is definitive if true but fails if $path does not exist or contains
     #// a symbolic link.
     #//
-    if php_realpath(path) == path:
+    if php_realpath(path_) == path_:
         return True
     # end if
-    if php_strlen(path) == 0 or "." == path[0]:
+    if php_strlen(path_) == 0 or "." == path_[0]:
         return False
     # end if
     #// Windows allows absolute paths like this.
-    if php_preg_match("#^[a-zA-Z]:\\\\#", path):
+    if php_preg_match("#^[a-zA-Z]:\\\\#", path_):
         return True
     # end if
     #// A path starting with / or \ is absolute; anything else is relative.
-    return "/" == path[0] or "\\" == path[0]
+    return "/" == path_[0] or "\\" == path_[0]
 # end def path_is_absolute
 #// 
 #// Join two filesystem paths together.
@@ -1829,12 +1911,13 @@ def path_is_absolute(path=None, *args_):
 #// @param string $path Path relative to $base.
 #// @return string The path with the base or absolute path.
 #//
-def path_join(base=None, path=None, *args_):
+def path_join(base_=None, path_=None, *_args_):
     
-    if path_is_absolute(path):
-        return path
+    
+    if path_is_absolute(path_):
+        return path_
     # end if
-    return php_rtrim(base, "/") + "/" + php_ltrim(path, "/")
+    return php_rtrim(base_, "/") + "/" + php_ltrim(path_, "/")
 # end def path_join
 #// 
 #// Normalize a filesystem path.
@@ -1852,22 +1935,23 @@ def path_join(base=None, path=None, *args_):
 #// @param string $path Path to normalize.
 #// @return string Normalized path.
 #//
-def wp_normalize_path(path=None, *args_):
+def wp_normalize_path(path_=None, *_args_):
     
-    wrapper = ""
-    if wp_is_stream(path):
-        wrapper, path = php_explode("://", path, 2)
-        wrapper += "://"
+    
+    wrapper_ = ""
+    if wp_is_stream(path_):
+        wrapper_, path_ = php_explode("://", path_, 2)
+        wrapper_ += "://"
     # end if
     #// Standardise all paths to use '/'.
-    path = php_str_replace("\\", "/", path)
+    path_ = php_str_replace("\\", "/", path_)
     #// Replace multiple slashes down to a singular, allowing for network shares having two slashes.
-    path = php_preg_replace("|(?<=.)/+|", "/", path)
+    path_ = php_preg_replace("|(?<=.)/+|", "/", path_)
     #// Windows paths should uppercase the drive letter.
-    if ":" == php_substr(path, 1, 1):
-        path = ucfirst(path)
+    if ":" == php_substr(path_, 1, 1):
+        path_ = ucfirst(path_)
     # end if
-    return wrapper + path
+    return wrapper_ + path_
 # end def wp_normalize_path
 #// 
 #// Determine a writable directory for temporary files.
@@ -1885,28 +1969,29 @@ def wp_normalize_path(path=None, *args_):
 #// 
 #// @return string Writable temporary directory.
 #//
-def get_temp_dir(*args_):
+def get_temp_dir(*_args_):
     
-    get_temp_dir.temp = ""
+    
+    temp_ = ""
     if php_defined("WP_TEMP_DIR"):
         return trailingslashit(WP_TEMP_DIR)
     # end if
-    if get_temp_dir.temp:
-        return trailingslashit(get_temp_dir.temp)
+    if temp_:
+        return trailingslashit(temp_)
     # end if
     if php_function_exists("sys_get_temp_dir"):
-        get_temp_dir.temp = php_sys_get_temp_dir()
-        if php_no_error(lambda: php_is_dir(get_temp_dir.temp)) and wp_is_writable(get_temp_dir.temp):
-            return trailingslashit(get_temp_dir.temp)
+        temp_ = php_sys_get_temp_dir()
+        if php_no_error(lambda: php_is_dir(temp_)) and wp_is_writable(temp_):
+            return trailingslashit(temp_)
         # end if
     # end if
-    get_temp_dir.temp = php_ini_get("upload_tmp_dir")
-    if php_no_error(lambda: php_is_dir(get_temp_dir.temp)) and wp_is_writable(get_temp_dir.temp):
-        return trailingslashit(get_temp_dir.temp)
+    temp_ = php_ini_get("upload_tmp_dir")
+    if php_no_error(lambda: php_is_dir(temp_)) and wp_is_writable(temp_):
+        return trailingslashit(temp_)
     # end if
-    get_temp_dir.temp = WP_CONTENT_DIR + "/"
-    if php_is_dir(get_temp_dir.temp) and wp_is_writable(get_temp_dir.temp):
-        return get_temp_dir.temp
+    temp_ = WP_CONTENT_DIR + "/"
+    if php_is_dir(temp_) and wp_is_writable(temp_):
+        return temp_
     # end if
     return "/tmp/"
 # end def get_temp_dir
@@ -1923,12 +2008,13 @@ def get_temp_dir(*args_):
 #// @param string $path Path to check for write-ability.
 #// @return bool Whether the path is writable.
 #//
-def wp_is_writable(path=None, *args_):
+def wp_is_writable(path_=None, *_args_):
+    
     
     if "WIN" == php_strtoupper(php_substr(PHP_OS, 0, 3)):
-        return win_is_writable(path)
+        return win_is_writable(path_)
     else:
-        return php_no_error(lambda: php_is_writable(path))
+        return php_no_error(lambda: php_is_writable(path_))
     # end if
 # end def wp_is_writable
 #// 
@@ -1947,24 +2033,25 @@ def wp_is_writable(path=None, *args_):
 #// @param string $path Windows path to check for write-ability.
 #// @return bool Whether the path is writable.
 #//
-def win_is_writable(path=None, *args_):
+def win_is_writable(path_=None, *_args_):
     
-    if "/" == path[php_strlen(path) - 1]:
+    
+    if "/" == path_[php_strlen(path_) - 1]:
         #// If it looks like a directory, check a random file within the directory.
-        return win_is_writable(path + uniqid(mt_rand()) + ".tmp")
-    elif php_is_dir(path):
+        return win_is_writable(path_ + uniqid(mt_rand()) + ".tmp")
+    elif php_is_dir(path_):
         #// If it's a directory (and not a file), check a random file within the directory.
-        return win_is_writable(path + "/" + uniqid(mt_rand()) + ".tmp")
+        return win_is_writable(path_ + "/" + uniqid(mt_rand()) + ".tmp")
     # end if
     #// Check tmp file for read/write capabilities.
-    should_delete_tmp_file = (not php_file_exists(path))
-    f = php_no_error(lambda: fopen(path, "a"))
-    if False == f:
+    should_delete_tmp_file_ = (not php_file_exists(path_))
+    f_ = php_no_error(lambda: fopen(path_, "a"))
+    if False == f_:
         return False
     # end if
-    php_fclose(f)
-    if should_delete_tmp_file:
-        unlink(path)
+    php_fclose(f_)
+    if should_delete_tmp_file_:
+        unlink(path_)
     # end if
     return True
 # end def win_is_writable
@@ -1981,7 +2068,8 @@ def win_is_writable(path=None, *args_):
 #// 
 #// @return array See wp_upload_dir() for description.
 #//
-def wp_get_upload_dir(*args_):
+def wp_get_upload_dir(*_args_):
+    
     
     return wp_upload_dir(None, False)
 # end def wp_get_upload_dir
@@ -2025,13 +2113,19 @@ def wp_get_upload_dir(*args_):
 #// @type string|false $error   False or error message.
 #// }
 #//
-def wp_upload_dir(time=None, create_dir=True, refresh_cache=False, *args_):
+def wp_upload_dir(time_=None, create_dir_=None, refresh_cache_=None, *_args_):
+    if create_dir_ is None:
+        create_dir_ = True
+    # end if
+    if refresh_cache_ is None:
+        refresh_cache_ = False
+    # end if
     
-    wp_upload_dir.cache = Array()
-    wp_upload_dir.tested_paths = Array()
-    key = php_sprintf("%d-%s", get_current_blog_id(), php_str(time))
-    if refresh_cache or php_empty(lambda : wp_upload_dir.cache[key]):
-        wp_upload_dir.cache[key] = _wp_upload_dir(time)
+    cache_ = Array()
+    tested_paths_ = Array()
+    key_ = php_sprintf("%d-%s", get_current_blog_id(), php_str(time_))
+    if refresh_cache_ or php_empty(lambda : cache_[key_]):
+        cache_[key_] = _wp_upload_dir(time_)
     # end if
     #// 
     #// Filters the uploads directory data.
@@ -2049,24 +2143,24 @@ def wp_upload_dir(time=None, create_dir=True, refresh_cache=False, *args_):
     #// @type string|false $error   False or error message.
     #// }
     #//
-    uploads = apply_filters("upload_dir", wp_upload_dir.cache[key])
-    if create_dir:
-        path = uploads["path"]
-        if php_array_key_exists(path, wp_upload_dir.tested_paths):
-            uploads["error"] = wp_upload_dir.tested_paths[path]
+    uploads_ = apply_filters("upload_dir", cache_[key_])
+    if create_dir_:
+        path_ = uploads_["path"]
+        if php_array_key_exists(path_, tested_paths_):
+            uploads_["error"] = tested_paths_[path_]
         else:
-            if (not wp_mkdir_p(path)):
-                if 0 == php_strpos(uploads["basedir"], ABSPATH):
-                    error_path = php_str_replace(ABSPATH, "", uploads["basedir"]) + uploads["subdir"]
+            if (not wp_mkdir_p(path_)):
+                if 0 == php_strpos(uploads_["basedir"], ABSPATH):
+                    error_path_ = php_str_replace(ABSPATH, "", uploads_["basedir"]) + uploads_["subdir"]
                 else:
-                    error_path = wp_basename(uploads["basedir"]) + uploads["subdir"]
+                    error_path_ = wp_basename(uploads_["basedir"]) + uploads_["subdir"]
                 # end if
-                uploads["error"] = php_sprintf(__("Unable to create directory %s. Is its parent directory writable by the server?"), esc_html(error_path))
+                uploads_["error"] = php_sprintf(__("Unable to create directory %s. Is its parent directory writable by the server?"), esc_html(error_path_))
             # end if
-            wp_upload_dir.tested_paths[path] = uploads["error"]
+            tested_paths_[path_] = uploads_["error"]
         # end if
     # end if
-    return uploads
+    return uploads_
 # end def wp_upload_dir
 #// 
 #// A non-filtered, non-cached version of wp_upload_dir() that doesn't check the path.
@@ -2077,24 +2171,25 @@ def wp_upload_dir(time=None, create_dir=True, refresh_cache=False, *args_):
 #// @param string $time Optional. Time formatted in 'yyyy/mm'. Default null.
 #// @return array See wp_upload_dir()
 #//
-def _wp_upload_dir(time=None, *args_):
+def _wp_upload_dir(time_=None, *_args_):
     
-    siteurl = get_option("siteurl")
-    upload_path = php_trim(get_option("upload_path"))
-    if php_empty(lambda : upload_path) or "wp-content/uploads" == upload_path:
-        dir = WP_CONTENT_DIR + "/uploads"
-    elif 0 != php_strpos(upload_path, ABSPATH):
+    
+    siteurl_ = get_option("siteurl")
+    upload_path_ = php_trim(get_option("upload_path"))
+    if php_empty(lambda : upload_path_) or "wp-content/uploads" == upload_path_:
+        dir_ = WP_CONTENT_DIR + "/uploads"
+    elif 0 != php_strpos(upload_path_, ABSPATH):
         #// $dir is absolute, $upload_path is (maybe) relative to ABSPATH.
-        dir = path_join(ABSPATH, upload_path)
+        dir_ = path_join(ABSPATH, upload_path_)
     else:
-        dir = upload_path
+        dir_ = upload_path_
     # end if
-    url = get_option("upload_url_path")
-    if (not url):
-        if php_empty(lambda : upload_path) or "wp-content/uploads" == upload_path or upload_path == dir:
-            url = WP_CONTENT_URL + "/uploads"
+    url_ = get_option("upload_url_path")
+    if (not url_):
+        if php_empty(lambda : upload_path_) or "wp-content/uploads" == upload_path_ or upload_path_ == dir_:
+            url_ = WP_CONTENT_URL + "/uploads"
         else:
-            url = trailingslashit(siteurl) + upload_path
+            url_ = trailingslashit(siteurl_) + upload_path_
         # end if
     # end if
     #// 
@@ -2102,8 +2197,8 @@ def _wp_upload_dir(time=None, *args_):
     #// We also sometimes obey UPLOADS when rewriting is enabled -- see the next block.
     #//
     if php_defined("UPLOADS") and (not is_multisite() and get_site_option("ms_files_rewriting")):
-        dir = ABSPATH + UPLOADS
-        url = trailingslashit(siteurl) + UPLOADS
+        dir_ = ABSPATH + UPLOADS
+        url_ = trailingslashit(siteurl_) + UPLOADS
     # end if
     #// If multisite (and if not the main site in a post-MU network).
     if is_multisite() and (not is_main_network() and is_main_site() and php_defined("MULTISITE")):
@@ -2117,12 +2212,12 @@ def _wp_upload_dir(time=None, *args_):
             #// had wp-content/uploads for the main site.)
             #//
             if php_defined("MULTISITE"):
-                ms_dir = "/sites/" + get_current_blog_id()
+                ms_dir_ = "/sites/" + get_current_blog_id()
             else:
-                ms_dir = "/" + get_current_blog_id()
+                ms_dir_ = "/" + get_current_blog_id()
             # end if
-            dir += ms_dir
-            url += ms_dir
+            dir_ += ms_dir_
+            url_ += ms_dir_
         elif php_defined("UPLOADS") and (not ms_is_switched()):
             #// 
             #// Handle the old-form ms-files.php rewriting if the network still has that enabled.
@@ -2138,28 +2233,28 @@ def _wp_upload_dir(time=None, *args_):
             #// rewriting in multisite, the resulting URL is /files. (#WP22702 for background.)
             #//
             if php_defined("BLOGUPLOADDIR"):
-                dir = untrailingslashit(BLOGUPLOADDIR)
+                dir_ = untrailingslashit(BLOGUPLOADDIR)
             else:
-                dir = ABSPATH + UPLOADS
+                dir_ = ABSPATH + UPLOADS
             # end if
-            url = trailingslashit(siteurl) + "files"
+            url_ = trailingslashit(siteurl_) + "files"
         # end if
     # end if
-    basedir = dir
-    baseurl = url
-    subdir = ""
+    basedir_ = dir_
+    baseurl_ = url_
+    subdir_ = ""
     if get_option("uploads_use_yearmonth_folders"):
         #// Generate the yearly and monthly directories.
-        if (not time):
-            time = current_time("mysql")
+        if (not time_):
+            time_ = current_time("mysql")
         # end if
-        y = php_substr(time, 0, 4)
-        m = php_substr(time, 5, 2)
-        subdir = str("/") + str(y) + str("/") + str(m)
+        y_ = php_substr(time_, 0, 4)
+        m_ = php_substr(time_, 5, 2)
+        subdir_ = str("/") + str(y_) + str("/") + str(m_)
     # end if
-    dir += subdir
-    url += subdir
-    return Array({"path": dir, "url": url, "subdir": subdir, "basedir": basedir, "baseurl": baseurl, "error": False})
+    dir_ += subdir_
+    url_ += subdir_
+    return Array({"path": dir_, "url": url_, "subdir": subdir_, "basedir": basedir_, "baseurl": baseurl_, "error": False})
 # end def _wp_upload_dir
 #// 
 #// Get a filename that is sanitized and unique for the given directory.
@@ -2178,94 +2273,95 @@ def _wp_upload_dir(time=None, *args_):
 #// @param callable $unique_filename_callback Callback. Default null.
 #// @return string New filename, if given wasn't unique.
 #//
-def wp_unique_filename(dir=None, filename=None, unique_filename_callback=None, *args_):
+def wp_unique_filename(dir_=None, filename_=None, unique_filename_callback_=None, *_args_):
+    
     
     #// Sanitize the file name before we begin processing.
-    filename = sanitize_file_name(filename)
-    ext2 = None
+    filename_ = sanitize_file_name(filename_)
+    ext2_ = None
     #// Separate the filename into a name and extension.
-    ext = pathinfo(filename, PATHINFO_EXTENSION)
-    name = pathinfo(filename, PATHINFO_BASENAME)
-    if ext:
-        ext = "." + ext
+    ext_ = pathinfo(filename_, PATHINFO_EXTENSION)
+    name_ = pathinfo(filename_, PATHINFO_BASENAME)
+    if ext_:
+        ext_ = "." + ext_
     # end if
     #// Edge case: if file is named '.ext', treat as an empty name.
-    if name == ext:
-        name = ""
+    if name_ == ext_:
+        name_ = ""
     # end if
     #// 
     #// Increment the file number until we have a unique file to save in $dir.
     #// Use callback if supplied.
     #//
-    if unique_filename_callback and php_is_callable(unique_filename_callback):
-        filename = php_call_user_func(unique_filename_callback, dir, name, ext)
+    if unique_filename_callback_ and php_is_callable(unique_filename_callback_):
+        filename_ = php_call_user_func(unique_filename_callback_, dir_, name_, ext_)
     else:
-        number = ""
-        fname = pathinfo(filename, PATHINFO_FILENAME)
+        number_ = ""
+        fname_ = pathinfo(filename_, PATHINFO_FILENAME)
         #// Always append a number to file names that can potentially match image sub-size file names.
-        if fname and php_preg_match("/-(?:\\d+x\\d+|scaled|rotated)$/", fname):
-            number = 1
+        if fname_ and php_preg_match("/-(?:\\d+x\\d+|scaled|rotated)$/", fname_):
+            number_ = 1
             #// At this point the file name may not be unique. This is tested below and the $number is incremented.
-            filename = php_str_replace(str(fname) + str(ext), str(fname) + str("-") + str(number) + str(ext), filename)
+            filename_ = php_str_replace(str(fname_) + str(ext_), str(fname_) + str("-") + str(number_) + str(ext_), filename_)
         # end if
         #// Change '.ext' to lower case.
-        if ext and php_strtolower(ext) != ext:
-            ext2 = php_strtolower(ext)
-            filename2 = php_preg_replace("|" + preg_quote(ext) + "$|", ext2, filename)
+        if ext_ and php_strtolower(ext_) != ext_:
+            ext2_ = php_strtolower(ext_)
+            filename2_ = php_preg_replace("|" + preg_quote(ext_) + "$|", ext2_, filename_)
             #// Check for both lower and upper case extension or image sub-sizes may be overwritten.
             while True:
                 
-                if not (php_file_exists(dir + str("/") + str(filename)) or php_file_exists(dir + str("/") + str(filename2))):
+                if not (php_file_exists(dir_ + str("/") + str(filename_)) or php_file_exists(dir_ + str("/") + str(filename2_))):
                     break
                 # end if
-                new_number = php_int(number) + 1
-                filename = php_str_replace(Array(str("-") + str(number) + str(ext), str(number) + str(ext)), str("-") + str(new_number) + str(ext), filename)
-                filename2 = php_str_replace(Array(str("-") + str(number) + str(ext2), str(number) + str(ext2)), str("-") + str(new_number) + str(ext2), filename2)
-                number = new_number
+                new_number_ = php_int(number_) + 1
+                filename_ = php_str_replace(Array(str("-") + str(number_) + str(ext_), str(number_) + str(ext_)), str("-") + str(new_number_) + str(ext_), filename_)
+                filename2_ = php_str_replace(Array(str("-") + str(number_) + str(ext2_), str(number_) + str(ext2_)), str("-") + str(new_number_) + str(ext2_), filename2_)
+                number_ = new_number_
             # end while
-            filename = filename2
+            filename_ = filename2_
         else:
             while True:
                 
-                if not (php_file_exists(dir + str("/") + str(filename))):
+                if not (php_file_exists(dir_ + str("/") + str(filename_))):
                     break
                 # end if
-                new_number = php_int(number) + 1
-                if "" == str(number) + str(ext):
-                    filename = str(filename) + str("-") + str(new_number)
+                new_number_ = php_int(number_) + 1
+                if "" == str(number_) + str(ext_):
+                    filename_ = str(filename_) + str("-") + str(new_number_)
                 else:
-                    filename = php_str_replace(Array(str("-") + str(number) + str(ext), str(number) + str(ext)), str("-") + str(new_number) + str(ext), filename)
+                    filename_ = php_str_replace(Array(str("-") + str(number_) + str(ext_), str(number_) + str(ext_)), str("-") + str(new_number_) + str(ext_), filename_)
                 # end if
-                number = new_number
+                number_ = new_number_
             # end while
         # end if
         #// Prevent collisions with existing file names that contain dimension-like strings
         #// (whether they are subsizes or originals uploaded prior to #42437).
-        upload_dir = wp_get_upload_dir()
+        upload_dir_ = wp_get_upload_dir()
         #// The (resized) image files would have name and extension, and will be in the uploads dir.
-        if name and ext and php_no_error(lambda: php_is_dir(dir)) and False != php_strpos(dir, upload_dir["basedir"]):
+        if name_ and ext_ and php_no_error(lambda: php_is_dir(dir_)) and False != php_strpos(dir_, upload_dir_["basedir"]):
             #// List of all files and directories contained in $dir.
-            files = php_no_error(lambda: scandir(dir))
-            if (not php_empty(lambda : files)):
+            files_ = php_no_error(lambda: scandir(dir_))
+            if (not php_empty(lambda : files_)):
                 #// Remove "dot" dirs.
-                files = php_array_diff(files, Array(".", ".."))
+                files_ = php_array_diff(files_, Array(".", ".."))
             # end if
-            if (not php_empty(lambda : files)):
+            if (not php_empty(lambda : files_)):
                 #// The extension case may have changed above.
-                new_ext = ext2 if (not php_empty(lambda : ext2)) else ext
+                new_ext_ = ext2_ if (not php_empty(lambda : ext2_)) else ext_
                 #// Ensure this never goes into infinite loop
                 #// as it uses pathinfo() and regex in the check, but string replacement for the changes.
-                count = php_count(files)
-                i = 0
+                count_ = php_count(files_)
+                i_ = 0
                 while True:
                     
-                    if not (i <= count and _wp_check_existing_file_names(filename, files)):
+                    if not (i_ <= count_ and _wp_check_existing_file_names(filename_, files_)):
                         break
                     # end if
-                    new_number = php_int(number) + 1
-                    filename = php_str_replace(Array(str("-") + str(number) + str(new_ext), str(number) + str(new_ext)), str("-") + str(new_number) + str(new_ext), filename)
-                    number = new_number
-                    i += 1
+                    new_number_ = php_int(number_) + 1
+                    filename_ = php_str_replace(Array(str("-") + str(number_) + str(new_ext_), str(number_) + str(new_ext_)), str("-") + str(new_number_) + str(new_ext_), filename_)
+                    number_ = new_number_
+                    i_ += 1
                 # end while
             # end if
         # end if
@@ -2280,7 +2376,7 @@ def wp_unique_filename(dir=None, filename=None, unique_filename_callback=None, *
     #// @param string        $dir                      Directory path.
     #// @param callable|null $unique_filename_callback Callback function that generates the unique file name.
     #//
-    return apply_filters("wp_unique_filename", filename, ext, dir, unique_filename_callback)
+    return apply_filters("wp_unique_filename", filename_, ext_, dir_, unique_filename_callback_)
 # end def wp_unique_filename
 #// 
 #// Helper function to check if a file name could match an existing image sub-size file name.
@@ -2292,20 +2388,21 @@ def wp_unique_filename(dir=None, filename=None, unique_filename_callback=None, *
 #// $param array  $files    An array of existing files in the directory.
 #// $return bool True if the tested file name could match an existing file, false otherwise.
 #//
-def _wp_check_existing_file_names(filename=None, files=None, *args_):
+def _wp_check_existing_file_names(filename_=None, files_=None, *_args_):
     
-    fname = pathinfo(filename, PATHINFO_FILENAME)
-    ext = pathinfo(filename, PATHINFO_EXTENSION)
+    
+    fname_ = pathinfo(filename_, PATHINFO_FILENAME)
+    ext_ = pathinfo(filename_, PATHINFO_EXTENSION)
     #// Edge case, file names like `.ext`.
-    if php_empty(lambda : fname):
+    if php_empty(lambda : fname_):
         return False
     # end if
-    if ext:
-        ext = str(".") + str(ext)
+    if ext_:
+        ext_ = str(".") + str(ext_)
     # end if
-    regex = "/^" + preg_quote(fname) + "-(?:\\d+x\\d+|scaled|rotated)" + preg_quote(ext) + "$/i"
-    for file in files:
-        if php_preg_match(regex, file):
+    regex_ = "/^" + preg_quote(fname_) + "-(?:\\d+x\\d+|scaled|rotated)" + preg_quote(ext_) + "$/i"
+    for file_ in files_:
+        if php_preg_match(regex_, file_):
             return True
         # end if
     # end for
@@ -2334,21 +2431,22 @@ def _wp_check_existing_file_names(filename=None, files=None, *args_):
 #// @param string       $time       Optional. Time formatted in 'yyyy/mm'. Default null.
 #// @return array
 #//
-def wp_upload_bits(name=None, deprecated=None, bits=None, time=None, *args_):
+def wp_upload_bits(name_=None, deprecated_=None, bits_=None, time_=None, *_args_):
     
-    if (not php_empty(lambda : deprecated)):
+    
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.0.0")
     # end if
-    if php_empty(lambda : name):
+    if php_empty(lambda : name_):
         return Array({"error": __("Empty filename")})
     # end if
-    wp_filetype = wp_check_filetype(name)
-    if (not wp_filetype["ext"]) and (not current_user_can("unfiltered_upload")):
+    wp_filetype_ = wp_check_filetype(name_)
+    if (not wp_filetype_["ext"]) and (not current_user_can("unfiltered_upload")):
         return Array({"error": __("Sorry, this file type is not permitted for security reasons.")})
     # end if
-    upload = wp_upload_dir(time)
-    if False != upload["error"]:
-        return upload
+    upload_ = wp_upload_dir(time_)
+    if False != upload_["error"]:
+        return upload_
     # end if
     #// 
     #// Filters whether to treat the upload bits as an error.
@@ -2360,39 +2458,39 @@ def wp_upload_bits(name=None, deprecated=None, bits=None, time=None, *args_):
     #// 
     #// @param array|string $upload_bits_error An array of upload bits data, or error message to return.
     #//
-    upload_bits_error = apply_filters("wp_upload_bits", Array({"name": name, "bits": bits, "time": time}))
-    if (not php_is_array(upload_bits_error)):
-        upload["error"] = upload_bits_error
-        return upload
+    upload_bits_error_ = apply_filters("wp_upload_bits", Array({"name": name_, "bits": bits_, "time": time_}))
+    if (not php_is_array(upload_bits_error_)):
+        upload_["error"] = upload_bits_error_
+        return upload_
     # end if
-    filename = wp_unique_filename(upload["path"], name)
-    new_file = upload["path"] + str("/") + str(filename)
-    if (not wp_mkdir_p(php_dirname(new_file))):
-        if 0 == php_strpos(upload["basedir"], ABSPATH):
-            error_path = php_str_replace(ABSPATH, "", upload["basedir"]) + upload["subdir"]
+    filename_ = wp_unique_filename(upload_["path"], name_)
+    new_file_ = upload_["path"] + str("/") + str(filename_)
+    if (not wp_mkdir_p(php_dirname(new_file_))):
+        if 0 == php_strpos(upload_["basedir"], ABSPATH):
+            error_path_ = php_str_replace(ABSPATH, "", upload_["basedir"]) + upload_["subdir"]
         else:
-            error_path = wp_basename(upload["basedir"]) + upload["subdir"]
+            error_path_ = wp_basename(upload_["basedir"]) + upload_["subdir"]
         # end if
-        message = php_sprintf(__("Unable to create directory %s. Is its parent directory writable by the server?"), error_path)
-        return Array({"error": message})
+        message_ = php_sprintf(__("Unable to create directory %s. Is its parent directory writable by the server?"), error_path_)
+        return Array({"error": message_})
     # end if
-    ifp = php_no_error(lambda: fopen(new_file, "wb"))
-    if (not ifp):
-        return Array({"error": php_sprintf(__("Could not write file %s"), new_file)})
+    ifp_ = php_no_error(lambda: fopen(new_file_, "wb"))
+    if (not ifp_):
+        return Array({"error": php_sprintf(__("Could not write file %s"), new_file_)})
     # end if
-    fwrite(ifp, bits)
-    php_fclose(ifp)
+    fwrite(ifp_, bits_)
+    php_fclose(ifp_)
     clearstatcache()
     #// Set correct file permissions.
-    stat = php_no_error(lambda: stat(php_dirname(new_file)))
-    perms = stat["mode"] & 4095
-    perms = perms & 438
-    chmod(new_file, perms)
+    stat_ = php_no_error(lambda: stat(php_dirname(new_file_)))
+    perms_ = stat_["mode"] & 4095
+    perms_ = perms_ & 438
+    chmod(new_file_, perms_)
     clearstatcache()
     #// Compute the URL.
-    url = upload["url"] + str("/") + str(filename)
+    url_ = upload_["url"] + str("/") + str(filename_)
     #// This filter is documented in wp-admin/includes/file.php
-    return apply_filters("wp_handle_upload", Array({"file": new_file, "url": url, "type": wp_filetype["type"], "error": False}), "sideload")
+    return apply_filters("wp_handle_upload", Array({"file": new_file_, "url": url_, "type": wp_filetype_["type"], "error": False}), "sideload")
 # end def wp_upload_bits
 #// 
 #// Retrieve the file type based on the extension name.
@@ -2402,13 +2500,14 @@ def wp_upload_bits(name=None, deprecated=None, bits=None, time=None, *args_):
 #// @param string $ext The extension to search.
 #// @return string|void The file type, example: audio, video, document, spreadsheet, etc.
 #//
-def wp_ext2type(ext=None, *args_):
+def wp_ext2type(ext_=None, *_args_):
     
-    ext = php_strtolower(ext)
-    ext2type = wp_get_ext_types()
-    for type,exts in ext2type:
-        if php_in_array(ext, exts):
-            return type
+    
+    ext_ = php_strtolower(ext_)
+    ext2type_ = wp_get_ext_types()
+    for type_,exts_ in ext2type_:
+        if php_in_array(ext_, exts_):
+            return type_
         # end if
     # end for
 # end def wp_ext2type
@@ -2428,22 +2527,23 @@ def wp_ext2type(ext=None, *args_):
 #// @type string|false $type File mime type, or false if the file doesn't match a mime type.
 #// }
 #//
-def wp_check_filetype(filename=None, mimes=None, *args_):
+def wp_check_filetype(filename_=None, mimes_=None, *_args_):
     
-    if php_empty(lambda : mimes):
-        mimes = get_allowed_mime_types()
+    
+    if php_empty(lambda : mimes_):
+        mimes_ = get_allowed_mime_types()
     # end if
-    type = False
-    ext = False
-    for ext_preg,mime_match in mimes:
-        ext_preg = "!\\.(" + ext_preg + ")$!i"
-        if php_preg_match(ext_preg, filename, ext_matches):
-            type = mime_match
-            ext = ext_matches[1]
+    type_ = False
+    ext_ = False
+    for ext_preg_,mime_match_ in mimes_:
+        ext_preg_ = "!\\.(" + ext_preg_ + ")$!i"
+        if php_preg_match(ext_preg_, filename_, ext_matches_):
+            type_ = mime_match_
+            ext_ = ext_matches_[1]
             break
         # end if
     # end for
-    return compact("ext", "type")
+    return php_compact("ext", "type")
 # end def wp_check_filetype
 #// 
 #// Attempt to determine the real file type of a file.
@@ -2469,23 +2569,24 @@ def wp_check_filetype(filename=None, mimes=None, *args_):
 #// @type string|false $proper_filename File name with its correct extension, or false if it cannot be determined.
 #// }
 #//
-def wp_check_filetype_and_ext(file=None, filename=None, mimes=None, *args_):
+def wp_check_filetype_and_ext(file_=None, filename_=None, mimes_=None, *_args_):
     
-    proper_filename = False
+    
+    proper_filename_ = False
     #// Do basic extension validation and MIME mapping.
-    wp_filetype = wp_check_filetype(filename, mimes)
-    ext = wp_filetype["ext"]
-    type = wp_filetype["type"]
+    wp_filetype_ = wp_check_filetype(filename_, mimes_)
+    ext_ = wp_filetype_["ext"]
+    type_ = wp_filetype_["type"]
     #// We can't do any further validation without a file to work with.
-    if (not php_file_exists(file)):
-        return compact("ext", "type", "proper_filename")
+    if (not php_file_exists(file_)):
+        return php_compact("ext", "type", "proper_filename")
     # end if
-    real_mime = False
+    real_mime_ = False
     #// Validate image types.
-    if type and 0 == php_strpos(type, "image/"):
+    if type_ and 0 == php_strpos(type_, "image/"):
         #// Attempt to figure out what type of image it actually is.
-        real_mime = wp_get_image_mime(file)
-        if real_mime and real_mime != type:
+        real_mime_ = wp_get_image_mime(file_)
+        if real_mime_ and real_mime_ != type_:
             #// 
             #// Filters the list mapping image mime types to their respective extensions.
             #// 
@@ -2493,84 +2594,84 @@ def wp_check_filetype_and_ext(file=None, filename=None, mimes=None, *args_):
             #// 
             #// @param  array $mime_to_ext Array of image mime types and their matching extensions.
             #//
-            mime_to_ext = apply_filters("getimagesize_mimes_to_exts", Array({"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif", "image/bmp": "bmp", "image/tiff": "tif"}))
+            mime_to_ext_ = apply_filters("getimagesize_mimes_to_exts", Array({"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif", "image/bmp": "bmp", "image/tiff": "tif"}))
             #// Replace whatever is after the last period in the filename with the correct extension.
-            if (not php_empty(lambda : mime_to_ext[real_mime])):
-                filename_parts = php_explode(".", filename)
-                php_array_pop(filename_parts)
-                filename_parts[-1] = mime_to_ext[real_mime]
-                new_filename = php_implode(".", filename_parts)
-                if new_filename != filename:
-                    proper_filename = new_filename
+            if (not php_empty(lambda : mime_to_ext_[real_mime_])):
+                filename_parts_ = php_explode(".", filename_)
+                php_array_pop(filename_parts_)
+                filename_parts_[-1] = mime_to_ext_[real_mime_]
+                new_filename_ = php_implode(".", filename_parts_)
+                if new_filename_ != filename_:
+                    proper_filename_ = new_filename_
                     pass
                 # end if
                 #// Redefine the extension / MIME.
-                wp_filetype = wp_check_filetype(new_filename, mimes)
-                ext = wp_filetype["ext"]
-                type = wp_filetype["type"]
+                wp_filetype_ = wp_check_filetype(new_filename_, mimes_)
+                ext_ = wp_filetype_["ext"]
+                type_ = wp_filetype_["type"]
             else:
                 #// Reset $real_mime and try validating again.
-                real_mime = False
+                real_mime_ = False
             # end if
         # end if
     # end if
     #// Validate files that didn't get validated during previous checks.
-    if type and (not real_mime) and php_extension_loaded("fileinfo"):
-        finfo = finfo_open(FILEINFO_MIME_TYPE)
-        real_mime = finfo_file(finfo, file)
-        finfo_close(finfo)
+    if type_ and (not real_mime_) and php_extension_loaded("fileinfo"):
+        finfo_ = finfo_open(FILEINFO_MIME_TYPE)
+        real_mime_ = finfo_file(finfo_, file_)
+        finfo_close(finfo_)
         #// fileinfo often misidentifies obscure files as one of these types.
-        nonspecific_types = Array("application/octet-stream", "application/encrypted", "application/CDFV2-encrypted", "application/zip")
+        nonspecific_types_ = Array("application/octet-stream", "application/encrypted", "application/CDFV2-encrypted", "application/zip")
         #// 
         #// If $real_mime doesn't match the content type we're expecting from the file's extension,
         #// we need to do some additional vetting. Media types and those listed in $nonspecific_types are
         #// allowed some leeway, but anything else must exactly match the real content type.
         #//
-        if php_in_array(real_mime, nonspecific_types, True):
+        if php_in_array(real_mime_, nonspecific_types_, True):
             #// File is a non-specific binary type. That's ok if it's a type that generally tends to be binary.
-            if (not php_in_array(php_substr(type, 0, strcspn(type, "/")), Array("application", "video", "audio"))):
-                type = False
-                ext = False
+            if (not php_in_array(php_substr(type_, 0, strcspn(type_, "/")), Array("application", "video", "audio"))):
+                type_ = False
+                ext_ = False
             # end if
-        elif 0 == php_strpos(real_mime, "video/") or 0 == php_strpos(real_mime, "audio/"):
+        elif 0 == php_strpos(real_mime_, "video/") or 0 == php_strpos(real_mime_, "audio/"):
             #// 
             #// For these types, only the major type must match the real value.
             #// This means that common mismatches are forgiven: application/vnd.apple.numbers is often misidentified as application/zip,
             #// and some media files are commonly named with the wrong extension (.mov instead of .mp4)
             #//
-            if php_substr(real_mime, 0, strcspn(real_mime, "/")) != php_substr(type, 0, strcspn(type, "/")):
-                type = False
-                ext = False
+            if php_substr(real_mime_, 0, strcspn(real_mime_, "/")) != php_substr(type_, 0, strcspn(type_, "/")):
+                type_ = False
+                ext_ = False
             # end if
-        elif "text/plain" == real_mime:
+        elif "text/plain" == real_mime_:
             #// A few common file types are occasionally detected as text/plain; allow those.
-            if (not php_in_array(type, Array("text/plain", "text/csv", "text/richtext", "text/tsv", "text/vtt"))):
-                type = False
-                ext = False
+            if (not php_in_array(type_, Array("text/plain", "text/csv", "text/richtext", "text/tsv", "text/vtt"))):
+                type_ = False
+                ext_ = False
             # end if
-        elif "text/rtf" == real_mime:
+        elif "text/rtf" == real_mime_:
             #// Special casing for RTF files.
-            if (not php_in_array(type, Array("text/rtf", "text/plain", "application/rtf"))):
-                type = False
-                ext = False
+            if (not php_in_array(type_, Array("text/rtf", "text/plain", "application/rtf"))):
+                type_ = False
+                ext_ = False
             # end if
         else:
-            if type != real_mime:
+            if type_ != real_mime_:
                 #// 
                 #// Everything else including image/* and application/*:
                 #// If the real content type doesn't match the file extension, assume it's dangerous.
                 #//
-                type = False
-                ext = False
+                type_ = False
+                ext_ = False
             # end if
         # end if
     # end if
     #// The mime type must be allowed.
-    if type:
-        allowed = get_allowed_mime_types()
-        if (not php_in_array(type, allowed)):
-            type = False
-            ext = False
+    if type_:
+        allowed_ = get_allowed_mime_types()
+        if (not php_in_array(type_, allowed_)):
+            type_ = False
+            ext_ = False
         # end if
     # end if
     #// 
@@ -2592,7 +2693,7 @@ def wp_check_filetype_and_ext(file=None, filename=None, mimes=None, *args_):
     #// @param string[]    $mimes                     Array of mime types keyed by their file extension regex.
     #// @param string|bool $real_mime                 The actual mime type or false if the type cannot be determined.
     #//
-    return apply_filters("wp_check_filetype_and_ext", compact("ext", "type", "proper_filename"), file, filename, mimes, real_mime)
+    return apply_filters("wp_check_filetype_and_ext", php_compact("ext", "type", "proper_filename"), file_, filename_, mimes_, real_mime_)
 # end def wp_check_filetype_and_ext
 #// 
 #// Returns the real mime type of an image file.
@@ -2604,7 +2705,8 @@ def wp_check_filetype_and_ext(file=None, filename=None, mimes=None, *args_):
 #// @param string $file Full path to the file.
 #// @return string|false The actual mime type or false if the type cannot be determined.
 #//
-def wp_get_image_mime(file=None, *args_):
+def wp_get_image_mime(file_=None, *_args_):
+    
     
     #// 
     #// Use exif_imagetype() to check the mimetype if available or fall back to
@@ -2613,18 +2715,18 @@ def wp_get_image_mime(file=None, *args_):
     #//
     try: 
         if php_is_callable("exif_imagetype"):
-            imagetype = exif_imagetype(file)
-            mime = image_type_to_mime_type(imagetype) if imagetype else False
+            imagetype_ = exif_imagetype(file_)
+            mime_ = image_type_to_mime_type(imagetype_) if imagetype_ else False
         elif php_function_exists("getimagesize"):
-            imagesize = php_no_error(lambda: getimagesize(file))
-            mime = imagesize["mime"] if (php_isset(lambda : imagesize["mime"])) else False
+            imagesize_ = php_no_error(lambda: getimagesize(file_))
+            mime_ = imagesize_["mime"] if (php_isset(lambda : imagesize_["mime"])) else False
         else:
-            mime = False
+            mime_ = False
         # end if
-    except Exception as e:
-        mime = False
+    except Exception as e_:
+        mime_ = False
     # end try
-    return mime
+    return mime_
 # end def wp_get_image_mime
 #// 
 #// Retrieve list of mime types and file extensions.
@@ -2636,7 +2738,8 @@ def wp_get_image_mime(file=None, *args_):
 #// 
 #// @return string[] Array of mime types keyed by the file extension regex corresponding to those types.
 #//
-def wp_get_mime_types(*args_):
+def wp_get_mime_types(*_args_):
+    
     
     #// 
     #// Filters the list of mime types and file extensions.
@@ -2658,7 +2761,8 @@ def wp_get_mime_types(*args_):
 #// 
 #// @return array[] Multi-dimensional array of file extensions types keyed by the type of file.
 #//
-def wp_get_ext_types(*args_):
+def wp_get_ext_types(*_args_):
+    
     
     #// 
     #// Filters file type based on the extension name.
@@ -2680,17 +2784,18 @@ def wp_get_ext_types(*args_):
 #// @return string[] Array of mime types keyed by the file extension regex corresponding
 #// to those types.
 #//
-def get_allowed_mime_types(user=None, *args_):
+def get_allowed_mime_types(user_=None, *_args_):
     
-    t = wp_get_mime_types()
-    t["swf"] = None
-    t["exe"] = None
+    
+    t_ = wp_get_mime_types()
+    t_["swf"] = None
+    t_["exe"] = None
     if php_function_exists("current_user_can"):
-        unfiltered = user_can(user, "unfiltered_html") if user else current_user_can("unfiltered_html")
+        unfiltered_ = user_can(user_, "unfiltered_html") if user_ else current_user_can("unfiltered_html")
     # end if
-    if php_empty(lambda : unfiltered):
-        t["htm|html"] = None
-        t["js"] = None
+    if php_empty(lambda : unfiltered_):
+        t_["htm|html"] = None
+        t_["js"] = None
     # end if
     #// 
     #// Filters list of allowed mime types and file extensions.
@@ -2700,7 +2805,7 @@ def get_allowed_mime_types(user=None, *args_):
     #// @param array            $t    Mime types keyed by the file extension regex corresponding to those types.
     #// @param int|WP_User|null $user User ID, User object or null if not provided (indicates current user).
     #//
-    return apply_filters("upload_mimes", t, user)
+    return apply_filters("upload_mimes", t_, user_)
 # end def get_allowed_mime_types
 #// 
 #// Display "Are You Sure" message to confirm the action being taken.
@@ -2712,21 +2817,22 @@ def get_allowed_mime_types(user=None, *args_):
 #// 
 #// @param string $action The nonce action.
 #//
-def wp_nonce_ays(action=None, *args_):
+def wp_nonce_ays(action_=None, *_args_):
     
-    if "log-out" == action:
-        html = php_sprintf(__("You are attempting to log out of %s"), get_bloginfo("name"))
-        html += "</p><p>"
-        redirect_to = PHP_REQUEST["redirect_to"] if (php_isset(lambda : PHP_REQUEST["redirect_to"])) else ""
-        html += php_sprintf(__("Do you really want to <a href=\"%s\">log out</a>?"), wp_logout_url(redirect_to))
+    
+    if "log-out" == action_:
+        html_ = php_sprintf(__("You are attempting to log out of %s"), get_bloginfo("name"))
+        html_ += "</p><p>"
+        redirect_to_ = PHP_REQUEST["redirect_to"] if (php_isset(lambda : PHP_REQUEST["redirect_to"])) else ""
+        html_ += php_sprintf(__("Do you really want to <a href=\"%s\">log out</a>?"), wp_logout_url(redirect_to_))
     else:
-        html = __("The link you followed has expired.")
+        html_ = __("The link you followed has expired.")
         if wp_get_referer():
-            html += "</p><p>"
-            html += php_sprintf("<a href=\"%s\">%s</a>", esc_url(remove_query_arg("updated", wp_get_referer())), __("Please try again."))
+            html_ += "</p><p>"
+            html_ += php_sprintf("<a href=\"%s\">%s</a>", esc_url(remove_query_arg("updated", wp_get_referer())), __("Please try again."))
         # end if
     # end if
-    wp_die(html, __("Something went wrong."), 403)
+    wp_die(html_, __("Something went wrong."), 403)
 # end def wp_nonce_ays
 #// 
 #// Kills WordPress execution and displays HTML page with an error message.
@@ -2774,15 +2880,18 @@ def wp_nonce_ays(action=None, *args_):
 #// @type bool   $exit           Whether to exit the process after completion. Default true.
 #// }
 #//
-def wp_die(message="", title="", args=Array(), *args_):
+def wp_die(message_="", title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_query
-    php_check_if_defined("wp_query")
-    if php_is_int(args):
-        args = Array({"response": args})
-    elif php_is_int(title):
-        args = Array({"response": title})
-        title = ""
+    global wp_query_
+    php_check_if_defined("wp_query_")
+    if php_is_int(args_):
+        args_ = Array({"response": args_})
+    elif php_is_int(title_):
+        args_ = Array({"response": title_})
+        title_ = ""
     # end if
     if wp_doing_ajax():
         #// 
@@ -2792,7 +2901,7 @@ def wp_die(message="", title="", args=Array(), *args_):
         #// 
         #// @param callable $function Callback function name.
         #//
-        function = apply_filters("wp_die_ajax_handler", "_ajax_wp_die_handler")
+        function_ = apply_filters("wp_die_ajax_handler", "_ajax_wp_die_handler")
     elif wp_is_json_request():
         #// 
         #// Filters the callback for killing WordPress execution for JSON requests.
@@ -2801,7 +2910,7 @@ def wp_die(message="", title="", args=Array(), *args_):
         #// 
         #// @param callable $function Callback function name.
         #//
-        function = apply_filters("wp_die_json_handler", "_json_wp_die_handler")
+        function_ = apply_filters("wp_die_json_handler", "_json_wp_die_handler")
     elif wp_is_jsonp_request():
         #// 
         #// Filters the callback for killing WordPress execution for JSONP requests.
@@ -2810,7 +2919,7 @@ def wp_die(message="", title="", args=Array(), *args_):
         #// 
         #// @param callable $function Callback function name.
         #//
-        function = apply_filters("wp_die_jsonp_handler", "_jsonp_wp_die_handler")
+        function_ = apply_filters("wp_die_jsonp_handler", "_jsonp_wp_die_handler")
     elif php_defined("XMLRPC_REQUEST") and XMLRPC_REQUEST:
         #// 
         #// Filters the callback for killing WordPress execution for XML-RPC requests.
@@ -2819,8 +2928,8 @@ def wp_die(message="", title="", args=Array(), *args_):
         #// 
         #// @param callable $function Callback function name.
         #//
-        function = apply_filters("wp_die_xmlrpc_handler", "_xmlrpc_wp_die_handler")
-    elif wp_is_xml_request() or (php_isset(lambda : wp_query)) and php_function_exists("is_feed") and is_feed() or php_function_exists("is_comment_feed") and is_comment_feed() or php_function_exists("is_trackback") and is_trackback():
+        function_ = apply_filters("wp_die_xmlrpc_handler", "_xmlrpc_wp_die_handler")
+    elif wp_is_xml_request() or (php_isset(lambda : wp_query_)) and php_function_exists("is_feed") and is_feed() or php_function_exists("is_comment_feed") and is_comment_feed() or php_function_exists("is_trackback") and is_trackback():
         #// 
         #// Filters the callback for killing WordPress execution for XML requests.
         #// 
@@ -2828,7 +2937,7 @@ def wp_die(message="", title="", args=Array(), *args_):
         #// 
         #// @param callable $function Callback function name.
         #//
-        function = apply_filters("wp_die_xml_handler", "_xml_wp_die_handler")
+        function_ = apply_filters("wp_die_xml_handler", "_xml_wp_die_handler")
     else:
         #// 
         #// Filters the callback for killing WordPress execution for all non-Ajax, non-JSON, non-XML requests.
@@ -2837,9 +2946,9 @@ def wp_die(message="", title="", args=Array(), *args_):
         #// 
         #// @param callable $function Callback function name.
         #//
-        function = apply_filters("wp_die_handler", "_default_wp_die_handler")
+        function_ = apply_filters("wp_die_handler", "_default_wp_die_handler")
     # end if
-    php_call_user_func(function, message, title, args)
+    php_call_user_func(function_, message_, title_, args_)
 # end def wp_die
 #// 
 #// Kills WordPress execution and displays HTML page with an error message.
@@ -2854,51 +2963,54 @@ def wp_die(message="", title="", args=Array(), *args_):
 #// @param string          $title   Optional. Error title. Default empty.
 #// @param string|array    $args    Optional. Arguments to control behavior. Default empty array.
 #//
-def _default_wp_die_handler(message=None, title="", args=Array(), *args_):
+def _default_wp_die_handler(message_=None, title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    message, title, parsed_args = _wp_die_process_input(message, title, args)
-    if php_is_string(message):
-        if (not php_empty(lambda : parsed_args["additional_errors"])):
-            message = php_array_merge(Array(message), wp_list_pluck(parsed_args["additional_errors"], "message"))
-            message = "<ul>\n       <li>" + join("</li>\n       <li>", message) + "</li>\n  </ul>"
+    message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
+    if php_is_string(message_):
+        if (not php_empty(lambda : parsed_args_["additional_errors"])):
+            message_ = php_array_merge(Array(message_), wp_list_pluck(parsed_args_["additional_errors"], "message"))
+            message_ = "<ul>\n      <li>" + join("</li>\n       <li>", message_) + "</li>\n </ul>"
         # end if
-        message = php_sprintf("<div class=\"wp-die-message\">%s</div>", message)
+        message_ = php_sprintf("<div class=\"wp-die-message\">%s</div>", message_)
     # end if
-    have_gettext = php_function_exists("__")
-    if (not php_empty(lambda : parsed_args["link_url"])) and (not php_empty(lambda : parsed_args["link_text"])):
-        link_url = parsed_args["link_url"]
+    have_gettext_ = php_function_exists("__")
+    if (not php_empty(lambda : parsed_args_["link_url"])) and (not php_empty(lambda : parsed_args_["link_text"])):
+        link_url_ = parsed_args_["link_url"]
         if php_function_exists("esc_url"):
-            link_url = esc_url(link_url)
+            link_url_ = esc_url(link_url_)
         # end if
-        link_text = parsed_args["link_text"]
-        message += str("\n<p><a href='") + str(link_url) + str("'>") + str(link_text) + str("</a></p>")
+        link_text_ = parsed_args_["link_text"]
+        message_ += str("\n<p><a href='") + str(link_url_) + str("'>") + str(link_text_) + str("</a></p>")
     # end if
-    if (php_isset(lambda : parsed_args["back_link"])) and parsed_args["back_link"]:
-        back_text = __("&laquo; Back") if have_gettext else "&laquo; Back"
-        message += str("\n<p><a href='javascript:history.back()'>") + str(back_text) + str("</a></p>")
+    if (php_isset(lambda : parsed_args_["back_link"])) and parsed_args_["back_link"]:
+        back_text_ = __("&laquo; Back") if have_gettext_ else "&laquo; Back"
+        message_ += str("\n<p><a href='javascript:history.back()'>") + str(back_text_) + str("</a></p>")
     # end if
     if (not did_action("admin_head")):
         if (not php_headers_sent()):
-            php_header(str("Content-Type: text/html; charset=") + str(parsed_args["charset"]))
-            status_header(parsed_args["response"])
+            php_header(str("Content-Type: text/html; charset=") + str(parsed_args_["charset"]))
+            status_header(parsed_args_["response"])
             nocache_headers()
         # end if
-        text_direction = parsed_args["text_direction"]
+        text_direction_ = parsed_args_["text_direction"]
         if php_function_exists("language_attributes") and php_function_exists("is_rtl"):
-            dir_attr = get_language_attributes()
+            dir_attr_ = get_language_attributes()
         else:
-            dir_attr = str("dir='") + str(text_direction) + str("'")
+            dir_attr_ = str("dir='") + str(text_direction_) + str("'")
         # end if
         php_print("<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\" ")
-        php_print(dir_attr)
+        php_print(dir_attr_)
         php_print(">\n<head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=")
-        php_print(parsed_args["charset"])
+        php_print(parsed_args_["charset"])
         php_print("\" />\n  <meta name=\"viewport\" content=\"width=device-width\">\n       ")
         if php_function_exists("wp_no_robots"):
             wp_no_robots()
         # end if
         php_print(" <title>")
-        php_print(title)
+        php_print(title_)
         php_print("""</title>
         <style type=\"text/css\">
         html {
@@ -3003,7 +3115,7 @@ def _default_wp_die_handler(message=None, title="", args=Array(), *args_):
         box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);
         }
         """)
-        if "rtl" == text_direction:
+        if "rtl" == text_direction_:
             php_print("body { font-family: Tahoma, Arial; }")
         # end if
         php_print("""   </style>
@@ -3013,9 +3125,9 @@ def _default_wp_die_handler(message=None, title="", args=Array(), *args_):
     # end if
     pass
     php_print(" ")
-    php_print(message)
+    php_print(message_)
     php_print("</body>\n</html>\n   ")
-    if parsed_args["exit"]:
+    if parsed_args_["exit"]:
         php_exit(0)
     # end if
 # end def _default_wp_die_handler
@@ -3031,28 +3143,31 @@ def _default_wp_die_handler(message=None, title="", args=Array(), *args_):
 #// @param string       $title   Optional. Error title (unused). Default empty.
 #// @param string|array $args    Optional. Arguments to control behavior. Default empty array.
 #//
-def _ajax_wp_die_handler(message=None, title="", args=Array(), *args_):
+def _ajax_wp_die_handler(message_=None, title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
     #// Set default 'response' to 200 for AJAX requests.
-    args = wp_parse_args(args, Array({"response": 200}))
-    message, title, parsed_args = _wp_die_process_input(message, title, args)
+    args_ = wp_parse_args(args_, Array({"response": 200}))
+    message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
     if (not php_headers_sent()):
         #// This is intentional. For backward-compatibility, support passing null here.
-        if None != args["response"]:
-            status_header(parsed_args["response"])
+        if None != args_["response"]:
+            status_header(parsed_args_["response"])
         # end if
         nocache_headers()
     # end if
-    if is_scalar(message):
-        message = php_str(message)
+    if is_scalar(message_):
+        message_ = php_str(message_)
     else:
-        message = "0"
+        message_ = "0"
     # end if
-    if parsed_args["exit"]:
-        php_print(message)
+    if parsed_args_["exit"]:
+        php_print(message_)
         php_exit()
     # end if
-    php_print(message)
+    php_print(message_)
 # end def _ajax_wp_die_handler
 #// 
 #// Kills WordPress execution and displays JSON response with an error message.
@@ -3066,19 +3181,22 @@ def _ajax_wp_die_handler(message=None, title="", args=Array(), *args_):
 #// @param string       $title   Optional. Error title. Default empty.
 #// @param string|array $args    Optional. Arguments to control behavior. Default empty array.
 #//
-def _json_wp_die_handler(message=None, title="", args=Array(), *args_):
+def _json_wp_die_handler(message_=None, title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    message, title, parsed_args = _wp_die_process_input(message, title, args)
-    data = Array({"code": parsed_args["code"], "message": message, "data": Array({"status": parsed_args["response"]})}, {"additional_errors": parsed_args["additional_errors"]})
+    message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
+    data_ = Array({"code": parsed_args_["code"], "message": message_, "data": Array({"status": parsed_args_["response"]})}, {"additional_errors": parsed_args_["additional_errors"]})
     if (not php_headers_sent()):
-        php_header(str("Content-Type: application/json; charset=") + str(parsed_args["charset"]))
-        if None != parsed_args["response"]:
-            status_header(parsed_args["response"])
+        php_header(str("Content-Type: application/json; charset=") + str(parsed_args_["charset"]))
+        if None != parsed_args_["response"]:
+            status_header(parsed_args_["response"])
         # end if
         nocache_headers()
     # end if
-    php_print(wp_json_encode(data))
-    if parsed_args["exit"]:
+    php_print(wp_json_encode(data_))
+    if parsed_args_["exit"]:
         php_exit(0)
     # end if
 # end def _json_wp_die_handler
@@ -3094,23 +3212,26 @@ def _json_wp_die_handler(message=None, title="", args=Array(), *args_):
 #// @param string       $title   Optional. Error title. Default empty.
 #// @param string|array $args    Optional. Arguments to control behavior. Default empty array.
 #//
-def _jsonp_wp_die_handler(message=None, title="", args=Array(), *args_):
+def _jsonp_wp_die_handler(message_=None, title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    message, title, parsed_args = _wp_die_process_input(message, title, args)
-    data = Array({"code": parsed_args["code"], "message": message, "data": Array({"status": parsed_args["response"]})}, {"additional_errors": parsed_args["additional_errors"]})
+    message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
+    data_ = Array({"code": parsed_args_["code"], "message": message_, "data": Array({"status": parsed_args_["response"]})}, {"additional_errors": parsed_args_["additional_errors"]})
     if (not php_headers_sent()):
-        php_header(str("Content-Type: application/javascript; charset=") + str(parsed_args["charset"]))
+        php_header(str("Content-Type: application/javascript; charset=") + str(parsed_args_["charset"]))
         php_header("X-Content-Type-Options: nosniff")
         php_header("X-Robots-Tag: noindex")
-        if None != parsed_args["response"]:
-            status_header(parsed_args["response"])
+        if None != parsed_args_["response"]:
+            status_header(parsed_args_["response"])
         # end if
         nocache_headers()
     # end if
-    result = wp_json_encode(data)
-    jsonp_callback = PHP_REQUEST["_jsonp"]
-    php_print("/**/" + jsonp_callback + "(" + result + ")")
-    if parsed_args["exit"]:
+    result_ = wp_json_encode(data_)
+    jsonp_callback_ = PHP_REQUEST["_jsonp"]
+    php_print("/**/" + jsonp_callback_ + "(" + result_ + ")")
+    if parsed_args_["exit"]:
         php_exit(0)
     # end if
 # end def _jsonp_wp_die_handler
@@ -3128,19 +3249,22 @@ def _jsonp_wp_die_handler(message=None, title="", args=Array(), *args_):
 #// @param string       $title   Optional. Error title. Default empty.
 #// @param string|array $args    Optional. Arguments to control behavior. Default empty array.
 #//
-def _xmlrpc_wp_die_handler(message=None, title="", args=Array(), *args_):
+def _xmlrpc_wp_die_handler(message_=None, title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_xmlrpc_server
-    php_check_if_defined("wp_xmlrpc_server")
-    message, title, parsed_args = _wp_die_process_input(message, title, args)
+    global wp_xmlrpc_server_
+    php_check_if_defined("wp_xmlrpc_server_")
+    message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
     if (not php_headers_sent()):
         nocache_headers()
     # end if
-    if wp_xmlrpc_server:
-        error = php_new_class("IXR_Error", lambda : IXR_Error(parsed_args["response"], message))
-        wp_xmlrpc_server.output(error.getxml())
+    if wp_xmlrpc_server_:
+        error_ = php_new_class("IXR_Error", lambda : IXR_Error(parsed_args_["response"], message_))
+        wp_xmlrpc_server_.output(error_.getxml())
     # end if
-    if parsed_args["exit"]:
+    if parsed_args_["exit"]:
         php_exit(0)
     # end if
 # end def _xmlrpc_wp_die_handler
@@ -3156,21 +3280,24 @@ def _xmlrpc_wp_die_handler(message=None, title="", args=Array(), *args_):
 #// @param string       $title   Optional. Error title. Default empty.
 #// @param string|array $args    Optional. Arguments to control behavior. Default empty array.
 #//
-def _xml_wp_die_handler(message=None, title="", args=Array(), *args_):
+def _xml_wp_die_handler(message_=None, title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    message, title, parsed_args = _wp_die_process_input(message, title, args)
-    message = htmlspecialchars(message)
-    title = htmlspecialchars(title)
-    xml = str("<error>\n    <code>") + str(parsed_args["code"]) + str("</code>\n    <title><![CDATA[") + str(title) + str("]]></title>\n    <message><![CDATA[") + str(message) + str("]]></message>\n    <data>\n        <status>") + str(parsed_args["response"]) + str("""</status>\n    </data>\n</error>\n""")
+    message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
+    message_ = htmlspecialchars(message_)
+    title_ = htmlspecialchars(title_)
+    xml_ = str("<error>\n    <code>") + str(parsed_args_["code"]) + str("</code>\n    <title><![CDATA[") + str(title_) + str("]]></title>\n    <message><![CDATA[") + str(message_) + str("]]></message>\n    <data>\n        <status>") + str(parsed_args_["response"]) + str("""</status>\n    </data>\n</error>\n""")
     if (not php_headers_sent()):
-        php_header(str("Content-Type: text/xml; charset=") + str(parsed_args["charset"]))
-        if None != parsed_args["response"]:
-            status_header(parsed_args["response"])
+        php_header(str("Content-Type: text/xml; charset=") + str(parsed_args_["charset"]))
+        if None != parsed_args_["response"]:
+            status_header(parsed_args_["response"])
         # end if
         nocache_headers()
     # end if
-    php_print(xml)
-    if parsed_args["exit"]:
+    php_print(xml_)
+    if parsed_args_["exit"]:
         php_exit(0)
     # end if
 # end def _xml_wp_die_handler
@@ -3187,18 +3314,21 @@ def _xml_wp_die_handler(message=None, title="", args=Array(), *args_):
 #// @param string       $title   Optional. Error title (unused). Default empty.
 #// @param string|array $args    Optional. Arguments to control behavior. Default empty array.
 #//
-def _scalar_wp_die_handler(message="", title="", args=Array(), *args_):
+def _scalar_wp_die_handler(message_="", title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    message, title, parsed_args = _wp_die_process_input(message, title, args)
-    if parsed_args["exit"]:
-        if is_scalar(message):
-            php_print(php_str(message))
+    message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
+    if parsed_args_["exit"]:
+        if is_scalar(message_):
+            php_print(php_str(message_))
             php_exit()
         # end if
         php_exit(0)
     # end if
-    if is_scalar(message):
-        php_print(php_str(message))
+    if is_scalar(message_):
+        php_print(php_str(message_))
     # end if
 # end def _scalar_wp_die_handler
 #// 
@@ -3218,55 +3348,58 @@ def _scalar_wp_die_handler(message="", title="", args=Array(), *args_):
 #// @type array  $2 Arguments to control behavior.
 #// }
 #//
-def _wp_die_process_input(message=None, title="", args=Array(), *args_):
+def _wp_die_process_input(message_=None, title_="", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    defaults = Array({"response": 0, "code": "", "exit": True, "back_link": False, "link_url": "", "link_text": "", "text_direction": "", "charset": "utf-8", "additional_errors": Array()})
-    args = wp_parse_args(args, defaults)
-    if php_function_exists("is_wp_error") and is_wp_error(message):
-        if (not php_empty(lambda : message.errors)):
-            errors = Array()
-            for error_code,error_messages in message.errors:
-                for error_message in error_messages:
-                    errors[-1] = Array({"code": error_code, "message": error_message, "data": message.get_error_data(error_code)})
+    defaults_ = Array({"response": 0, "code": "", "exit": True, "back_link": False, "link_url": "", "link_text": "", "text_direction": "", "charset": "utf-8", "additional_errors": Array()})
+    args_ = wp_parse_args(args_, defaults_)
+    if php_function_exists("is_wp_error") and is_wp_error(message_):
+        if (not php_empty(lambda : message_.errors)):
+            errors_ = Array()
+            for error_code_,error_messages_ in message_.errors:
+                for error_message_ in error_messages_:
+                    errors_[-1] = Array({"code": error_code_, "message": error_message_, "data": message_.get_error_data(error_code_)})
                 # end for
             # end for
-            message = errors[0]["message"]
-            if php_empty(lambda : args["code"]):
-                args["code"] = errors[0]["code"]
+            message_ = errors_[0]["message"]
+            if php_empty(lambda : args_["code"]):
+                args_["code"] = errors_[0]["code"]
             # end if
-            if php_empty(lambda : args["response"]) and php_is_array(errors[0]["data"]) and (not php_empty(lambda : errors[0]["data"]["status"])):
-                args["response"] = errors[0]["data"]["status"]
+            if php_empty(lambda : args_["response"]) and php_is_array(errors_[0]["data"]) and (not php_empty(lambda : errors_[0]["data"]["status"])):
+                args_["response"] = errors_[0]["data"]["status"]
             # end if
-            if php_empty(lambda : title) and php_is_array(errors[0]["data"]) and (not php_empty(lambda : errors[0]["data"]["title"])):
-                title = errors[0]["data"]["title"]
+            if php_empty(lambda : title_) and php_is_array(errors_[0]["data"]) and (not php_empty(lambda : errors_[0]["data"]["title"])):
+                title_ = errors_[0]["data"]["title"]
             # end if
-            errors[0] = None
-            args["additional_errors"] = php_array_values(errors)
+            errors_[0] = None
+            args_["additional_errors"] = php_array_values(errors_)
         else:
-            message = ""
+            message_ = ""
         # end if
     # end if
-    have_gettext = php_function_exists("__")
+    have_gettext_ = php_function_exists("__")
     #// The $title and these specific $args must always have a non-empty value.
-    if php_empty(lambda : args["code"]):
-        args["code"] = "wp_die"
+    if php_empty(lambda : args_["code"]):
+        args_["code"] = "wp_die"
     # end if
-    if php_empty(lambda : args["response"]):
-        args["response"] = 500
+    if php_empty(lambda : args_["response"]):
+        args_["response"] = 500
     # end if
-    if php_empty(lambda : title):
-        title = __("WordPress &rsaquo; Error") if have_gettext else "WordPress &rsaquo; Error"
+    if php_empty(lambda : title_):
+        title_ = __("WordPress &rsaquo; Error") if have_gettext_ else "WordPress &rsaquo; Error"
     # end if
-    if php_empty(lambda : args["text_direction"]) or (not php_in_array(args["text_direction"], Array("ltr", "rtl"), True)):
-        args["text_direction"] = "ltr"
+    if php_empty(lambda : args_["text_direction"]) or (not php_in_array(args_["text_direction"], Array("ltr", "rtl"), True)):
+        args_["text_direction"] = "ltr"
         if php_function_exists("is_rtl") and is_rtl():
-            args["text_direction"] = "rtl"
+            args_["text_direction"] = "rtl"
         # end if
     # end if
-    if (not php_empty(lambda : args["charset"])):
-        args["charset"] = _canonical_charset(args["charset"])
+    if (not php_empty(lambda : args_["charset"])):
+        args_["charset"] = _canonical_charset(args_["charset"])
     # end if
-    return Array(message, title, args)
+    return Array(message_, title_, args_)
 # end def _wp_die_process_input
 #// 
 #// Encode a variable into JSON, with some sanity checks.
@@ -3280,19 +3413,20 @@ def _wp_die_process_input(message=None, title="", args=Array(), *args_):
 #// greater than 0. Default 512.
 #// @return string|false The JSON encoded string, or false if it cannot be encoded.
 #//
-def wp_json_encode(data=None, options=0, depth=512, *args_):
+def wp_json_encode(data_=None, options_=0, depth_=512, *_args_):
     
-    json = php_json_encode(data, options, depth)
+    
+    json_ = php_json_encode(data_, options_, depth_)
     #// If json_encode() was successful, no need to do more sanity checking.
-    if False != json:
-        return json
+    if False != json_:
+        return json_
     # end if
     try: 
-        data = _wp_json_sanity_check(data, depth)
-    except Exception as e:
+        data_ = _wp_json_sanity_check(data_, depth_)
+    except Exception as e_:
         return False
     # end try
-    return php_json_encode(data, options, depth)
+    return php_json_encode(data_, options_, depth_)
 # end def wp_json_encode
 #// 
 #// Perform sanity checks on data that shall be encoded to JSON.
@@ -3307,51 +3441,52 @@ def wp_json_encode(data=None, options=0, depth=512, *args_):
 #// @param int   $depth Maximum depth to walk through $data. Must be greater than 0.
 #// @return mixed The sanitized data that shall be encoded to JSON.
 #//
-def _wp_json_sanity_check(data=None, depth=None, *args_):
+def _wp_json_sanity_check(data_=None, depth_=None, *_args_):
     
-    if depth < 0:
+    
+    if depth_ < 0:
         raise php_new_class("Exception", lambda : Exception("Reached depth limit"))
     # end if
-    if php_is_array(data):
-        output = Array()
-        for id,el in data:
+    if php_is_array(data_):
+        output_ = Array()
+        for id_,el_ in data_:
             #// Don't forget to sanitize the ID!
-            if php_is_string(id):
-                clean_id = _wp_json_convert_string(id)
+            if php_is_string(id_):
+                clean_id_ = _wp_json_convert_string(id_)
             else:
-                clean_id = id
+                clean_id_ = id_
             # end if
             #// Check the element type, so that we're only recursing if we really have to.
-            if php_is_array(el) or php_is_object(el):
-                output[clean_id] = _wp_json_sanity_check(el, depth - 1)
-            elif php_is_string(el):
-                output[clean_id] = _wp_json_convert_string(el)
+            if php_is_array(el_) or php_is_object(el_):
+                output_[clean_id_] = _wp_json_sanity_check(el_, depth_ - 1)
+            elif php_is_string(el_):
+                output_[clean_id_] = _wp_json_convert_string(el_)
             else:
-                output[clean_id] = el
+                output_[clean_id_] = el_
             # end if
         # end for
-    elif php_is_object(data):
-        output = php_new_class("stdClass", lambda : stdClass())
-        for id,el in data:
-            if php_is_string(id):
-                clean_id = _wp_json_convert_string(id)
+    elif php_is_object(data_):
+        output_ = php_new_class("stdClass", lambda : stdClass())
+        for id_,el_ in data_:
+            if php_is_string(id_):
+                clean_id_ = _wp_json_convert_string(id_)
             else:
-                clean_id = id
+                clean_id_ = id_
             # end if
-            if php_is_array(el) or php_is_object(el):
-                output.clean_id = _wp_json_sanity_check(el, depth - 1)
-            elif php_is_string(el):
-                output.clean_id = _wp_json_convert_string(el)
+            if php_is_array(el_) or php_is_object(el_):
+                output_.clean_id_ = _wp_json_sanity_check(el_, depth_ - 1)
+            elif php_is_string(el_):
+                output_.clean_id_ = _wp_json_convert_string(el_)
             else:
-                output.clean_id = el
+                output_.clean_id_ = el_
             # end if
         # end for
-    elif php_is_string(data):
-        return _wp_json_convert_string(data)
+    elif php_is_string(data_):
+        return _wp_json_convert_string(data_)
     else:
-        return data
+        return data_
     # end if
-    return output
+    return output_
 # end def _wp_json_sanity_check
 #// 
 #// Convert a string to UTF-8, so that it can be safely encoded to JSON.
@@ -3367,21 +3502,22 @@ def _wp_json_sanity_check(data=None, depth=None, *args_):
 #// @param string $string The string which is to be converted.
 #// @return string The checked string.
 #//
-def _wp_json_convert_string(string=None, *args_):
+def _wp_json_convert_string(string_=None, *_args_):
     
-    _wp_json_convert_string.use_mb = None
-    if is_null(_wp_json_convert_string.use_mb):
-        _wp_json_convert_string.use_mb = php_function_exists("mb_convert_encoding")
+    
+    use_mb_ = None
+    if is_null(use_mb_):
+        use_mb_ = php_function_exists("mb_convert_encoding")
     # end if
-    if _wp_json_convert_string.use_mb:
-        encoding = mb_detect_encoding(string, mb_detect_order(), True)
-        if encoding:
-            return mb_convert_encoding(string, "UTF-8", encoding)
+    if use_mb_:
+        encoding_ = mb_detect_encoding(string_, mb_detect_order(), True)
+        if encoding_:
+            return mb_convert_encoding(string_, "UTF-8", encoding_)
         else:
-            return mb_convert_encoding(string, "UTF-8", "UTF-8")
+            return mb_convert_encoding(string_, "UTF-8", "UTF-8")
         # end if
     else:
-        return wp_check_invalid_utf8(string, True)
+        return wp_check_invalid_utf8(string_, True)
     # end if
 # end def _wp_json_convert_string
 #// 
@@ -3398,10 +3534,11 @@ def _wp_json_convert_string(string=None, *args_):
 #// @param mixed $data Native representation.
 #// @return bool|int|float|null|string|array Data ready for `json_encode()`.
 #//
-def _wp_json_prepare_data(data=None, *args_):
+def _wp_json_prepare_data(data_=None, *_args_):
+    
     
     _deprecated_function(__FUNCTION__, "5.3.0")
-    return data
+    return data_
 # end def _wp_json_prepare_data
 #// 
 #// Send a JSON response back to an Ajax request.
@@ -3413,15 +3550,16 @@ def _wp_json_prepare_data(data=None, *args_):
 #// then print and die.
 #// @param int   $status_code The HTTP status code to output.
 #//
-def wp_send_json(response=None, status_code=None, *args_):
+def wp_send_json(response_=None, status_code_=None, *_args_):
+    
     
     if (not php_headers_sent()):
         php_header("Content-Type: application/json; charset=" + get_option("blog_charset"))
-        if None != status_code:
-            status_header(status_code)
+        if None != status_code_:
+            status_header(status_code_)
         # end if
     # end if
-    php_print(wp_json_encode(response))
+    php_print(wp_json_encode(response_))
     if wp_doing_ajax():
         wp_die("", "", Array({"response": None}))
     else:
@@ -3437,13 +3575,14 @@ def wp_send_json(response=None, status_code=None, *args_):
 #// @param mixed $data        Data to encode as JSON, then print and die.
 #// @param int   $status_code The HTTP status code to output.
 #//
-def wp_send_json_success(data=None, status_code=None, *args_):
+def wp_send_json_success(data_=None, status_code_=None, *_args_):
     
-    response = Array({"success": True})
-    if (php_isset(lambda : data)):
-        response["data"] = data
+    
+    response_ = Array({"success": True})
+    if (php_isset(lambda : data_)):
+        response_["data"] = data_
     # end if
-    wp_send_json(response, status_code)
+    wp_send_json(response_, status_code_)
 # end def wp_send_json_success
 #// 
 #// Send a JSON response back to an Ajax request, indicating failure.
@@ -3460,23 +3599,24 @@ def wp_send_json_success(data=None, status_code=None, *args_):
 #// @param mixed $data        Data to encode as JSON, then print and die.
 #// @param int   $status_code The HTTP status code to output.
 #//
-def wp_send_json_error(data=None, status_code=None, *args_):
+def wp_send_json_error(data_=None, status_code_=None, *_args_):
     
-    response = Array({"success": False})
-    if (php_isset(lambda : data)):
-        if is_wp_error(data):
-            result = Array()
-            for code,messages in data.errors:
-                for message in messages:
-                    result[-1] = Array({"code": code, "message": message})
+    
+    response_ = Array({"success": False})
+    if (php_isset(lambda : data_)):
+        if is_wp_error(data_):
+            result_ = Array()
+            for code_,messages_ in data_.errors:
+                for message_ in messages_:
+                    result_[-1] = Array({"code": code_, "message": message_})
                 # end for
             # end for
-            response["data"] = result
+            response_["data"] = result_
         else:
-            response["data"] = data
+            response_["data"] = data_
         # end if
     # end if
-    wp_send_json(response, status_code)
+    wp_send_json(response_, status_code_)
 # end def wp_send_json_error
 #// 
 #// Checks that a JSONP callback is a valid JavaScript callback.
@@ -3490,13 +3630,14 @@ def wp_send_json_error(data=None, status_code=None, *args_):
 #// @param string $callback Supplied JSONP callback function.
 #// @return bool True if valid callback, otherwise false.
 #//
-def wp_check_jsonp_callback(callback=None, *args_):
+def wp_check_jsonp_callback(callback_=None, *_args_):
     
-    if (not php_is_string(callback)):
+    
+    if (not php_is_string(callback_)):
         return False
     # end if
-    php_preg_replace("/[^\\w\\.]/", "", callback, -1, illegal_char_count)
-    return 0 == illegal_char_count
+    php_preg_replace("/[^\\w\\.]/", "", callback_, -1, illegal_char_count_)
+    return 0 == illegal_char_count_
 # end def wp_check_jsonp_callback
 #// 
 #// Retrieve the WordPress home page URL.
@@ -3513,12 +3654,13 @@ def wp_check_jsonp_callback(callback=None, *args_):
 #// @param string $url URL for the home location.
 #// @return string Homepage location.
 #//
-def _config_wp_home(url="", *args_):
+def _config_wp_home(url_="", *_args_):
+    
     
     if php_defined("WP_HOME"):
         return untrailingslashit(WP_HOME)
     # end if
-    return url
+    return url_
 # end def _config_wp_home
 #// 
 #// Retrieve the WordPress site URL.
@@ -3535,12 +3677,13 @@ def _config_wp_home(url="", *args_):
 #// @param string $url URL to set the WordPress site location.
 #// @return string The WordPress Site URL.
 #//
-def _config_wp_siteurl(url="", *args_):
+def _config_wp_siteurl(url_="", *_args_):
+    
     
     if php_defined("WP_SITEURL"):
         return untrailingslashit(WP_SITEURL)
     # end if
-    return url
+    return url_
 # end def _config_wp_siteurl
 #// 
 #// Delete the fresh site option.
@@ -3548,7 +3691,8 @@ def _config_wp_siteurl(url="", *args_):
 #// @since 4.7.0
 #// @access private
 #//
-def _delete_option_fresh_site(*args_):
+def _delete_option_fresh_site(*_args_):
+    
     
     update_option("fresh_site", "0")
 # end def _delete_option_fresh_site
@@ -3569,19 +3713,20 @@ def _delete_option_fresh_site(*args_):
 #// @param array $mce_init MCE settings array.
 #// @return array Direction set for 'rtl', if needed by locale.
 #//
-def _mce_set_direction(mce_init=None, *args_):
+def _mce_set_direction(mce_init_=None, *_args_):
+    
     
     if is_rtl():
-        mce_init["directionality"] = "rtl"
-        mce_init["rtl_ui"] = True
-        if (not php_empty(lambda : mce_init["plugins"])) and php_strpos(mce_init["plugins"], "directionality") == False:
-            mce_init["plugins"] += ",directionality"
+        mce_init_["directionality"] = "rtl"
+        mce_init_["rtl_ui"] = True
+        if (not php_empty(lambda : mce_init_["plugins"])) and php_strpos(mce_init_["plugins"], "directionality") == False:
+            mce_init_["plugins"] += ",directionality"
         # end if
-        if (not php_empty(lambda : mce_init["toolbar1"])) and (not php_preg_match("/\\bltr\\b/", mce_init["toolbar1"])):
-            mce_init["toolbar1"] += ",ltr"
+        if (not php_empty(lambda : mce_init_["toolbar1"])) and (not php_preg_match("/\\bltr\\b/", mce_init_["toolbar1"])):
+            mce_init_["toolbar1"] += ",ltr"
         # end if
     # end if
-    return mce_init
+    return mce_init_
 # end def _mce_set_direction
 #// 
 #// Convert smiley code to the icon graphic file equivalent.
@@ -3605,16 +3750,18 @@ def _mce_set_direction(mce_init=None, *args_):
 #// 
 #// @since 2.2.0
 #//
-def smilies_init(*args_):
+def smilies_init(*_args_):
     
-    global wpsmiliestrans,wp_smiliessearch
-    php_check_if_defined("wpsmiliestrans","wp_smiliessearch")
+    
+    global wpsmiliestrans_
+    global wp_smiliessearch_
+    php_check_if_defined("wpsmiliestrans_","wp_smiliessearch_")
     #// Don't bother setting up smilies if they are disabled.
     if (not get_option("use_smilies")):
         return
     # end if
-    if (not (php_isset(lambda : wpsmiliestrans))):
-        wpsmiliestrans = Array({":mrgreen:": "mrgreen.png", ":neutral:": "ð", ":twisted:": "ð", ":arrow:": "â¡", ":shock:": "ð¯", ":smile:": "ð", ":???:": "ð", ":cool:": "ð", ":evil:": "ð¿", ":grin:": "ð", ":idea:": "ð¡", ":oops:": "ð³", ":razz:": "ð", ":roll:": "ð", ":wink:": "ð", ":cry:": "ð¥", ":eek:": "ð®", ":lol:": "ð", ":mad:": "ð¡", ":sad:": "ð", "8-)": "ð", "8-O": "ð¯", ":-(": "ð", ":-)": "ð", ":-?": "ð", ":-D": "ð", ":-P": "ð", ":-o": "ð®", ":-x": "ð¡", ":-|": "ð", ";-)": "ð", "8O": "ð¯", ":(": "ð", ":)": "ð", ":?": "ð", ":D": "ð", ":P": "ð", ":o": "ð®", ":x": "ð¡", ":|": "ð", ";)": "ð", ":!:": "â", ":?:": "â"})
+    if (not (php_isset(lambda : wpsmiliestrans_))):
+        wpsmiliestrans_ = Array({":mrgreen:": "mrgreen.png", ":neutral:": "ð", ":twisted:": "ð", ":arrow:": "â¡", ":shock:": "ð¯", ":smile:": "ð", ":???:": "ð", ":cool:": "ð", ":evil:": "ð¿", ":grin:": "ð", ":idea:": "ð¡", ":oops:": "ð³", ":razz:": "ð", ":roll:": "ð", ":wink:": "ð", ":cry:": "ð¥", ":eek:": "ð®", ":lol:": "ð", ":mad:": "ð¡", ":sad:": "ð", "8-)": "ð", "8-O": "ð¯", ":-(": "ð", ":-)": "ð", ":-?": "ð", ":-D": "ð", ":-P": "ð", ":-o": "ð®", ":-x": "ð¡", ":-|": "ð", ";-)": "ð", "8O": "ð¯", ":(": "ð", ":)": "ð", ":?": "ð", ":D": "ð", ":P": "ð", ":o": "ð®", ":x": "ð¡", ":|": "ð", ";)": "ð", ":!:": "â", ":?:": "â"})
     # end if
     #// 
     #// Filters all the smilies.
@@ -3626,8 +3773,8 @@ def smilies_init(*args_):
     #// 
     #// @param string[] $wpsmiliestrans List of the smilies' hexadecimal representations, keyed by their smily code.
     #//
-    wpsmiliestrans = apply_filters("smilies", wpsmiliestrans)
-    if php_count(wpsmiliestrans) == 0:
+    wpsmiliestrans_ = apply_filters("smilies", wpsmiliestrans_)
+    if php_count(wpsmiliestrans_) == 0:
         return
     # end if
     #// 
@@ -3635,30 +3782,30 @@ def smilies_init(*args_):
     #// we match the longest possible smilie (:???: vs :?) as the regular
     #// expression used below is first-match
     #//
-    krsort(wpsmiliestrans)
-    spaces = wp_spaces_regexp()
+    krsort(wpsmiliestrans_)
+    spaces_ = wp_spaces_regexp()
     #// Begin first "subpattern".
-    wp_smiliessearch = "/(?<=" + spaces + "|^)"
-    subchar = ""
-    for smiley,img in wpsmiliestrans:
-        firstchar = php_substr(smiley, 0, 1)
-        rest = php_substr(smiley, 1)
+    wp_smiliessearch_ = "/(?<=" + spaces_ + "|^)"
+    subchar_ = ""
+    for smiley_,img_ in wpsmiliestrans_:
+        firstchar_ = php_substr(smiley_, 0, 1)
+        rest_ = php_substr(smiley_, 1)
         #// New subpattern?
-        if firstchar != subchar:
-            if "" != subchar:
-                wp_smiliessearch += ")(?=" + spaces + "|$)"
+        if firstchar_ != subchar_:
+            if "" != subchar_:
+                wp_smiliessearch_ += ")(?=" + spaces_ + "|$)"
                 #// End previous "subpattern".
-                wp_smiliessearch += "|(?<=" + spaces + "|^)"
+                wp_smiliessearch_ += "|(?<=" + spaces_ + "|^)"
                 pass
             # end if
-            subchar = firstchar
-            wp_smiliessearch += preg_quote(firstchar, "/") + "(?:"
+            subchar_ = firstchar_
+            wp_smiliessearch_ += preg_quote(firstchar_, "/") + "(?:"
         else:
-            wp_smiliessearch += "|"
+            wp_smiliessearch_ += "|"
         # end if
-        wp_smiliessearch += preg_quote(rest, "/")
+        wp_smiliessearch_ += preg_quote(rest_, "/")
     # end for
-    wp_smiliessearch += ")(?=" + spaces + "|$)/m"
+    wp_smiliessearch_ += ")(?=" + spaces_ + "|$)/m"
 # end def smilies_init
 #// 
 #// Merge user defined arguments into defaults array.
@@ -3673,19 +3820,20 @@ def smilies_init(*args_):
 #// @param array               $defaults Optional. Array that serves as the defaults. Default empty.
 #// @return array Merged user defined values with defaults.
 #//
-def wp_parse_args(args=None, defaults="", *args_):
+def wp_parse_args(args_=None, defaults_="", *_args_):
     
-    if php_is_object(args):
-        parsed_args = get_object_vars(args)
-    elif php_is_array(args):
-        parsed_args = args
+    
+    if php_is_object(args_):
+        parsed_args_ = get_object_vars(args_)
+    elif php_is_array(args_):
+        parsed_args_ = args_
     else:
-        wp_parse_str(args, parsed_args)
+        wp_parse_str(args_, parsed_args_)
     # end if
-    if php_is_array(defaults):
-        return php_array_merge(defaults, parsed_args)
+    if php_is_array(defaults_):
+        return php_array_merge(defaults_, parsed_args_)
     # end if
-    return parsed_args
+    return parsed_args_
 # end def wp_parse_args
 #// 
 #// Cleans up an array, comma- or space-separated list of scalar values.
@@ -3695,12 +3843,13 @@ def wp_parse_args(args=None, defaults="", *args_):
 #// @param array|string $list List of values.
 #// @return array Sanitized array of values.
 #//
-def wp_parse_list(list=None, *args_):
+def wp_parse_list(list_=None, *_args_):
     
-    if (not php_is_array(list)):
-        return php_preg_split("/[\\s,]+/", list, -1, PREG_SPLIT_NO_EMPTY)
+    
+    if (not php_is_array(list_)):
+        return php_preg_split("/[\\s,]+/", list_, -1, PREG_SPLIT_NO_EMPTY)
     # end if
-    return list
+    return list_
 # end def wp_parse_list
 #// 
 #// Clean up an array, comma- or space-separated list of IDs.
@@ -3710,10 +3859,11 @@ def wp_parse_list(list=None, *args_):
 #// @param array|string $list List of ids.
 #// @return int[] Sanitized array of IDs.
 #//
-def wp_parse_id_list(list=None, *args_):
+def wp_parse_id_list(list_=None, *_args_):
     
-    list = wp_parse_list(list)
-    return array_unique(php_array_map("absint", list))
+    
+    list_ = wp_parse_list(list_)
+    return array_unique(php_array_map("absint", list_))
 # end def wp_parse_id_list
 #// 
 #// Clean up an array, comma- or space-separated list of slugs.
@@ -3723,10 +3873,11 @@ def wp_parse_id_list(list=None, *args_):
 #// @param  array|string $list List of slugs.
 #// @return string[] Sanitized array of slugs.
 #//
-def wp_parse_slug_list(list=None, *args_):
+def wp_parse_slug_list(list_=None, *_args_):
     
-    list = wp_parse_list(list)
-    return array_unique(php_array_map("sanitize_title", list))
+    
+    list_ = wp_parse_list(list_)
+    return array_unique(php_array_map("sanitize_title", list_))
 # end def wp_parse_slug_list
 #// 
 #// Extract a slice of an array, given a list of keys.
@@ -3737,15 +3888,16 @@ def wp_parse_slug_list(list=None, *args_):
 #// @param array $keys  The list of keys.
 #// @return array The array slice.
 #//
-def wp_array_slice_assoc(array=None, keys=None, *args_):
+def wp_array_slice_assoc(array_=None, keys_=None, *_args_):
     
-    slice = Array()
-    for key in keys:
-        if (php_isset(lambda : array[key])):
-            slice[key] = array[key]
+    
+    slice_ = Array()
+    for key_ in keys_:
+        if (php_isset(lambda : array_[key_])):
+            slice_[key_] = array_[key_]
         # end if
     # end for
-    return slice
+    return slice_
 # end def wp_array_slice_assoc
 #// 
 #// Determines if the variable is a numeric-indexed array.
@@ -3755,14 +3907,15 @@ def wp_array_slice_assoc(array=None, keys=None, *args_):
 #// @param mixed $data Variable to check.
 #// @return bool Whether the variable is a list.
 #//
-def wp_is_numeric_array(data=None, *args_):
+def wp_is_numeric_array(data_=None, *_args_):
     
-    if (not php_is_array(data)):
+    
+    if (not php_is_array(data_)):
         return False
     # end if
-    keys = php_array_keys(data)
-    string_keys = php_array_filter(keys, "is_string")
-    return php_count(string_keys) == 0
+    keys_ = php_array_keys(data_)
+    string_keys_ = php_array_filter(keys_, "is_string")
+    return php_count(string_keys_) == 0
 # end def wp_is_numeric_array
 #// 
 #// Filters a list of objects, based on a set of key => value arguments.
@@ -3781,17 +3934,23 @@ def wp_is_numeric_array(data=None, *args_):
 #// Default false.
 #// @return array A list of objects or object fields.
 #//
-def wp_filter_object_list(list=None, args=Array(), operator="and", field=False, *args_):
+def wp_filter_object_list(list_=None, args_=None, operator_="and", field_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
+    if field_ is None:
+        field_ = False
+    # end if
     
-    if (not php_is_array(list)):
+    if (not php_is_array(list_)):
         return Array()
     # end if
-    util = php_new_class("WP_List_Util", lambda : WP_List_Util(list))
-    util.filter(args, operator)
-    if field:
-        util.pluck(field)
+    util_ = php_new_class("WP_List_Util", lambda : WP_List_Util(list_))
+    util_.filter(args_, operator_)
+    if field_:
+        util_.pluck(field_)
     # end if
-    return util.get_output()
+    return util_.get_output()
 # end def wp_filter_object_list
 #// 
 #// Filters a list of objects, based on a set of key => value arguments.
@@ -3808,13 +3967,16 @@ def wp_filter_object_list(list=None, args=Array(), operator="and", field=False, 
 #// match. Default 'AND'.
 #// @return array Array of found values.
 #//
-def wp_list_filter(list=None, args=Array(), operator="AND", *args_):
+def wp_list_filter(list_=None, args_=None, operator_="AND", *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    if (not php_is_array(list)):
+    if (not php_is_array(list_)):
         return Array()
     # end if
-    util = php_new_class("WP_List_Util", lambda : WP_List_Util(list))
-    return util.filter(args, operator)
+    util_ = php_new_class("WP_List_Util", lambda : WP_List_Util(list_))
+    return util_.filter(args_, operator_)
 # end def wp_list_filter
 #// 
 #// Pluck a certain field out of each object in a list.
@@ -3834,10 +3996,11 @@ def wp_list_filter(list=None, args=Array(), operator="AND", *args_):
 #// corresponding to `$index_key`. If `$index_key` is null, array keys from the original
 #// `$list` will be preserved in the results.
 #//
-def wp_list_pluck(list=None, field=None, index_key=None, *args_):
+def wp_list_pluck(list_=None, field_=None, index_key_=None, *_args_):
     
-    util = php_new_class("WP_List_Util", lambda : WP_List_Util(list))
-    return util.pluck(field, index_key)
+    
+    util_ = php_new_class("WP_List_Util", lambda : WP_List_Util(list_))
+    return util_.pluck(field_, index_key_)
 # end def wp_list_pluck
 #// 
 #// Sorts a list of objects, based on one or more orderby arguments.
@@ -3852,13 +4015,19 @@ def wp_list_pluck(list=None, field=None, index_key=None, *args_):
 #// @param bool         $preserve_keys Optional. Whether to preserve keys. Default false.
 #// @return array The sorted array.
 #//
-def wp_list_sort(list=None, orderby=Array(), order="ASC", preserve_keys=False, *args_):
+def wp_list_sort(list_=None, orderby_=None, order_="ASC", preserve_keys_=None, *_args_):
+    if orderby_ is None:
+        orderby_ = Array()
+    # end if
+    if preserve_keys_ is None:
+        preserve_keys_ = False
+    # end if
     
-    if (not php_is_array(list)):
+    if (not php_is_array(list_)):
         return Array()
     # end if
-    util = php_new_class("WP_List_Util", lambda : WP_List_Util(list))
-    return util.sort(orderby, order, preserve_keys)
+    util_ = php_new_class("WP_List_Util", lambda : WP_List_Util(list_))
+    return util_.sort(orderby_, order_, preserve_keys_)
 # end def wp_list_sort
 #// 
 #// Determines if Widgets library should be loaded.
@@ -3868,7 +4037,8 @@ def wp_list_sort(list=None, orderby=Array(), order="ASC", preserve_keys=False, *
 #// 
 #// @since 2.2.0
 #//
-def wp_maybe_load_widgets(*args_):
+def wp_maybe_load_widgets(*_args_):
+    
     
     #// 
     #// Filters whether to load the Widgets library.
@@ -3894,15 +4064,16 @@ def wp_maybe_load_widgets(*args_):
 #// 
 #// @global array $submenu
 #//
-def wp_widgets_add_menu(*args_):
+def wp_widgets_add_menu(*_args_):
     
-    global submenu
-    php_check_if_defined("submenu")
+    
+    global submenu_
+    php_check_if_defined("submenu_")
     if (not current_theme_supports("widgets")):
         return
     # end if
-    submenu["themes.php"][7] = Array(__("Widgets"), "edit_theme_options", "widgets.php")
-    ksort(submenu["themes.php"], SORT_NUMERIC)
+    submenu_["themes.php"][7] = Array(__("Widgets"), "edit_theme_options", "widgets.php")
+    ksort(submenu_["themes.php"], SORT_NUMERIC)
 # end def wp_widgets_add_menu
 #// 
 #// Flush all output buffers for PHP 5.2.
@@ -3911,14 +4082,15 @@ def wp_widgets_add_menu(*args_):
 #// 
 #// @since 2.2.0
 #//
-def wp_ob_end_flush_all(*args_):
+def wp_ob_end_flush_all(*_args_):
     
-    levels = ob_get_level()
-    i = 0
-    while i < levels:
+    
+    levels_ = ob_get_level()
+    i_ = 0
+    while i_ < levels_:
         
         ob_end_flush()
-        i += 1
+        i_ += 1
     # end while
 # end def wp_ob_end_flush_all
 #// 
@@ -3939,10 +4111,11 @@ def wp_ob_end_flush_all(*args_):
 #// 
 #// @global wpdb $wpdb WordPress database abstraction object.
 #//
-def dead_db(*args_):
+def dead_db(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     wp_load_translations_early()
     #// Load custom DB error template, if present.
     if php_file_exists(WP_CONTENT_DIR + "/db-error.php"):
@@ -3951,7 +4124,7 @@ def dead_db(*args_):
     # end if
     #// If installing or in the admin, provide the verbose message.
     if wp_installing() or php_defined("WP_ADMIN"):
-        wp_die(wpdb.error)
+        wp_die(wpdb_.error)
     # end if
     #// Otherwise, be terse.
     wp_die("<h1>" + __("Error establishing a database connection") + "</h1>", __("Database Error"))
@@ -3964,9 +4137,10 @@ def dead_db(*args_):
 #// @param mixed $maybeint Data you wish to have converted to a non-negative integer.
 #// @return int A non-negative integer.
 #//
-def absint(maybeint=None, *args_):
+def absint(maybeint_=None, *_args_):
     
-    return abs(php_intval(maybeint))
+    
+    return abs(php_intval(maybeint_))
 # end def absint
 #// 
 #// Mark a function as deprecated and inform when it has been used.
@@ -3987,7 +4161,8 @@ def absint(maybeint=None, *args_):
 #// @param string $version     The version of WordPress that deprecated the function.
 #// @param string $replacement Optional. The function that should have been called. Default null.
 #//
-def _deprecated_function(function=None, version=None, replacement=None, *args_):
+def _deprecated_function(function_=None, version_=None, replacement_=None, *_args_):
+    
     
     #// 
     #// Fires when a deprecated function is called.
@@ -3998,7 +4173,7 @@ def _deprecated_function(function=None, version=None, replacement=None, *args_):
     #// @param string $replacement The function that should have been called.
     #// @param string $version     The version of WordPress that deprecated the function.
     #//
-    do_action("deprecated_function_run", function, replacement, version)
+    do_action("deprecated_function_run", function_, replacement_, version_)
     #// 
     #// Filters whether to trigger an error for deprecated functions.
     #// 
@@ -4008,16 +4183,16 @@ def _deprecated_function(function=None, version=None, replacement=None, *args_):
     #//
     if WP_DEBUG and apply_filters("deprecated_function_trigger_error", True):
         if php_function_exists("__"):
-            if (not is_null(replacement)):
-                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), function, version, replacement), E_USER_DEPRECATED)
+            if (not is_null(replacement_)):
+                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), function_, version_, replacement_), E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), function, version), E_USER_DEPRECATED)
+                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), function_, version_), E_USER_DEPRECATED)
             # end if
         else:
-            if (not is_null(replacement)):
-                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", function, version, replacement), E_USER_DEPRECATED)
+            if (not is_null(replacement_)):
+                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", function_, version_, replacement_), E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", function, version), E_USER_DEPRECATED)
+                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", function_, version_), E_USER_DEPRECATED)
             # end if
         # end if
     # end if
@@ -4042,7 +4217,8 @@ def _deprecated_function(function=None, version=None, replacement=None, *args_):
 #// @param string $parent_class Optional. The parent class calling the deprecated constructor.
 #// Default empty string.
 #//
-def _deprecated_constructor(class_=None, version=None, parent_class="", *args_):
+def _deprecated_constructor(class_=None, version_=None, parent_class_="", *_args_):
+    
     
     #// 
     #// Fires when a deprecated constructor is called.
@@ -4054,7 +4230,7 @@ def _deprecated_constructor(class_=None, version=None, parent_class="", *args_):
     #// @param string $version      The version of WordPress that deprecated the function.
     #// @param string $parent_class The parent class calling the deprecated constructor.
     #//
-    do_action("deprecated_constructor_run", class_, version, parent_class)
+    do_action("deprecated_constructor_run", class_, version_, parent_class_)
     #// 
     #// Filters whether to trigger an error for deprecated functions.
     #// 
@@ -4066,16 +4242,16 @@ def _deprecated_constructor(class_=None, version=None, parent_class="", *args_):
     #//
     if WP_DEBUG and apply_filters("deprecated_constructor_trigger_error", True):
         if php_function_exists("__"):
-            if (not php_empty(lambda : parent_class)):
-                trigger_error(php_sprintf(__("The called constructor method for %1$s in %2$s is <strong>deprecated</strong> since version %3$s! Use %4$s instead."), class_, parent_class, version, "<code>__construct()</code>"), E_USER_DEPRECATED)
+            if (not php_empty(lambda : parent_class_)):
+                trigger_error(php_sprintf(__("The called constructor method for %1$s in %2$s is <strong>deprecated</strong> since version %3$s! Use %4$s instead."), class_, parent_class_, version_, "<code>__construct()</code>"), E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf(__("The called constructor method for %1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), class_, version, "<code>__construct()</code>"), E_USER_DEPRECATED)
+                trigger_error(php_sprintf(__("The called constructor method for %1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), class_, version_, "<code>__construct()</code>"), E_USER_DEPRECATED)
             # end if
         else:
-            if (not php_empty(lambda : parent_class)):
-                trigger_error(php_sprintf("The called constructor method for %1$s in %2$s is <strong>deprecated</strong> since version %3$s! Use %4$s instead.", class_, parent_class, version, "<code>__construct()</code>"), E_USER_DEPRECATED)
+            if (not php_empty(lambda : parent_class_)):
+                trigger_error(php_sprintf("The called constructor method for %1$s in %2$s is <strong>deprecated</strong> since version %3$s! Use %4$s instead.", class_, parent_class_, version_, "<code>__construct()</code>"), E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf("The called constructor method for %1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", class_, version, "<code>__construct()</code>"), E_USER_DEPRECATED)
+                trigger_error(php_sprintf("The called constructor method for %1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", class_, version_, "<code>__construct()</code>"), E_USER_DEPRECATED)
             # end if
         # end if
     # end if
@@ -4101,7 +4277,8 @@ def _deprecated_constructor(class_=None, version=None, parent_class="", *args_):
 #// Default null.
 #// @param string $message     Optional. A message regarding the change. Default empty.
 #//
-def _deprecated_file(file=None, version=None, replacement=None, message="", *args_):
+def _deprecated_file(file_=None, version_=None, replacement_=None, message_="", *_args_):
+    
     
     #// 
     #// Fires when a deprecated file is called.
@@ -4113,7 +4290,7 @@ def _deprecated_file(file=None, version=None, replacement=None, message="", *arg
     #// @param string $version     The version of WordPress that deprecated the file.
     #// @param string $message     A message regarding the change.
     #//
-    do_action("deprecated_file_included", file, replacement, version, message)
+    do_action("deprecated_file_included", file_, replacement_, version_, message_)
     #// 
     #// Filters whether to trigger an error for deprecated files.
     #// 
@@ -4122,18 +4299,18 @@ def _deprecated_file(file=None, version=None, replacement=None, message="", *arg
     #// @param bool $trigger Whether to trigger the error for deprecated files. Default true.
     #//
     if WP_DEBUG and apply_filters("deprecated_file_trigger_error", True):
-        message = "" if php_empty(lambda : message) else " " + message
+        message_ = "" if php_empty(lambda : message_) else " " + message_
         if php_function_exists("__"):
-            if (not is_null(replacement)):
-                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), file, version, replacement) + message, E_USER_DEPRECATED)
+            if (not is_null(replacement_)):
+                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), file_, version_, replacement_) + message_, E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), file, version) + message, E_USER_DEPRECATED)
+                trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), file_, version_) + message_, E_USER_DEPRECATED)
             # end if
         else:
-            if (not is_null(replacement)):
-                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", file, version, replacement) + message, E_USER_DEPRECATED)
+            if (not is_null(replacement_)):
+                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", file_, version_, replacement_) + message_, E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", file, version) + message, E_USER_DEPRECATED)
+                trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", file_, version_) + message_, E_USER_DEPRECATED)
             # end if
         # end if
     # end if
@@ -4164,7 +4341,8 @@ def _deprecated_file(file=None, version=None, replacement=None, message="", *arg
 #// @param string $version  The version of WordPress that deprecated the argument used.
 #// @param string $message  Optional. A message regarding the change. Default null.
 #//
-def _deprecated_argument(function=None, version=None, message=None, *args_):
+def _deprecated_argument(function_=None, version_=None, message_=None, *_args_):
+    
     
     #// 
     #// Fires when a deprecated argument is called.
@@ -4175,7 +4353,7 @@ def _deprecated_argument(function=None, version=None, message=None, *args_):
     #// @param string $message  A message regarding the change.
     #// @param string $version  The version of WordPress that deprecated the argument used.
     #//
-    do_action("deprecated_argument_run", function, message, version)
+    do_action("deprecated_argument_run", function_, message_, version_)
     #// 
     #// Filters whether to trigger an error for deprecated arguments.
     #// 
@@ -4185,16 +4363,16 @@ def _deprecated_argument(function=None, version=None, message=None, *args_):
     #//
     if WP_DEBUG and apply_filters("deprecated_argument_trigger_error", True):
         if php_function_exists("__"):
-            if (not is_null(message)):
-                trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s"), function, version, message), E_USER_DEPRECATED)
+            if (not is_null(message_)):
+                trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s"), function_, version_, message_), E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available."), function, version), E_USER_DEPRECATED)
+                trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available."), function_, version_), E_USER_DEPRECATED)
             # end if
         else:
-            if (not is_null(message)):
-                trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s", function, version, message), E_USER_DEPRECATED)
+            if (not is_null(message_)):
+                trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s", function_, version_, message_), E_USER_DEPRECATED)
             else:
-                trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available.", function, version), E_USER_DEPRECATED)
+                trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available.", function_, version_), E_USER_DEPRECATED)
             # end if
         # end if
     # end if
@@ -4219,7 +4397,8 @@ def _deprecated_argument(function=None, version=None, message=None, *args_):
 #// @param string $replacement Optional. The hook that should have been used. Default null.
 #// @param string $message     Optional. A message regarding the change. Default null.
 #//
-def _deprecated_hook(hook=None, version=None, replacement=None, message=None, *args_):
+def _deprecated_hook(hook_=None, version_=None, replacement_=None, message_=None, *_args_):
+    
     
     #// 
     #// Fires when a deprecated hook is called.
@@ -4231,7 +4410,7 @@ def _deprecated_hook(hook=None, version=None, replacement=None, message=None, *a
     #// @param string $version     The version of WordPress that deprecated the argument used.
     #// @param string $message     A message regarding the change.
     #//
-    do_action("deprecated_hook_run", hook, replacement, version, message)
+    do_action("deprecated_hook_run", hook_, replacement_, version_, message_)
     #// 
     #// Filters whether to trigger deprecated hook errors.
     #// 
@@ -4241,11 +4420,11 @@ def _deprecated_hook(hook=None, version=None, replacement=None, message=None, *a
     #// `WP_DEBUG` to be defined true.
     #//
     if WP_DEBUG and apply_filters("deprecated_hook_trigger_error", True):
-        message = "" if php_empty(lambda : message) else " " + message
-        if (not is_null(replacement)):
-            trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), hook, version, replacement) + message, E_USER_DEPRECATED)
+        message_ = "" if php_empty(lambda : message_) else " " + message_
+        if (not is_null(replacement_)):
+            trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), hook_, version_, replacement_) + message_, E_USER_DEPRECATED)
         else:
-            trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), hook, version) + message, E_USER_DEPRECATED)
+            trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), hook_, version_) + message_, E_USER_DEPRECATED)
         # end if
     # end if
 # end def _deprecated_hook
@@ -4265,7 +4444,8 @@ def _deprecated_hook(hook=None, version=None, replacement=None, message=None, *a
 #// @param string $message  A message explaining what has been done incorrectly.
 #// @param string $version  The version of WordPress where the message was added.
 #//
-def _doing_it_wrong(function=None, message=None, version=None, *args_):
+def _doing_it_wrong(function_=None, message_=None, version_=None, *_args_):
+    
     
     #// 
     #// Fires when the given function is being used incorrectly.
@@ -4276,7 +4456,7 @@ def _doing_it_wrong(function=None, message=None, version=None, *args_):
     #// @param string $message  A message explaining what has been done incorrectly.
     #// @param string $version  The version of WordPress where the message was added.
     #//
-    do_action("doing_it_wrong_run", function, message, version)
+    do_action("doing_it_wrong_run", function_, message_, version_)
     #// 
     #// Filters whether to trigger an error for _doing_it_wrong() calls.
     #// 
@@ -4288,24 +4468,24 @@ def _doing_it_wrong(function=None, message=None, version=None, *args_):
     #// @param string $message  A message explaining what has been done incorrectly.
     #// @param string $version  The version of WordPress where the message was added.
     #//
-    if WP_DEBUG and apply_filters("doing_it_wrong_trigger_error", True, function, message, version):
+    if WP_DEBUG and apply_filters("doing_it_wrong_trigger_error", True, function_, message_, version_):
         if php_function_exists("__"):
-            if is_null(version):
-                version = ""
+            if is_null(version_):
+                version_ = ""
             else:
                 #// translators: %s: Version number.
-                version = php_sprintf(__("(This message was added in version %s.)"), version)
+                version_ = php_sprintf(__("(This message was added in version %s.)"), version_)
             # end if
-            message += " " + php_sprintf(__("Please see <a href=\"%s\">Debugging in WordPress</a> for more information."), __("https://wordpress.org/support/article/debugging-in-wordpress/"))
-            trigger_error(php_sprintf(__("%1$s was called <strong>incorrectly</strong>. %2$s %3$s"), function, message, version), E_USER_NOTICE)
+            message_ += " " + php_sprintf(__("Please see <a href=\"%s\">Debugging in WordPress</a> for more information."), __("https://wordpress.org/support/article/debugging-in-wordpress/"))
+            trigger_error(php_sprintf(__("%1$s was called <strong>incorrectly</strong>. %2$s %3$s"), function_, message_, version_), E_USER_NOTICE)
         else:
-            if is_null(version):
-                version = ""
+            if is_null(version_):
+                version_ = ""
             else:
-                version = php_sprintf("(This message was added in version %s.)", version)
+                version_ = php_sprintf("(This message was added in version %s.)", version_)
             # end if
-            message += php_sprintf(" Please see <a href=\"%s\">Debugging in WordPress</a> for more information.", "https://wordpress.org/support/article/debugging-in-wordpress/")
-            trigger_error(php_sprintf("%1$s was called <strong>incorrectly</strong>. %2$s %3$s", function, message, version), E_USER_NOTICE)
+            message_ += php_sprintf(" Please see <a href=\"%s\">Debugging in WordPress</a> for more information.", "https://wordpress.org/support/article/debugging-in-wordpress/")
+            trigger_error(php_sprintf("%1$s was called <strong>incorrectly</strong>. %2$s %3$s", function_, message_, version_), E_USER_NOTICE)
         # end if
     # end if
 # end def _doing_it_wrong
@@ -4316,11 +4496,12 @@ def _doing_it_wrong(function=None, message=None, version=None, *args_):
 #// 
 #// @return bool Whether the server is running lighttpd < 1.5.0.
 #//
-def is_lighttpd_before_150(*args_):
+def is_lighttpd_before_150(*_args_):
     
-    server_parts = php_explode("/", PHP_SERVER["SERVER_SOFTWARE"] if (php_isset(lambda : PHP_SERVER["SERVER_SOFTWARE"])) else "")
-    server_parts[1] = server_parts[1] if (php_isset(lambda : server_parts[1])) else ""
-    return "lighttpd" == server_parts[0] and -1 == php_version_compare(server_parts[1], "1.5.0")
+    
+    server_parts_ = php_explode("/", PHP_SERVER["SERVER_SOFTWARE"] if (php_isset(lambda : PHP_SERVER["SERVER_SOFTWARE"])) else "")
+    server_parts_[1] = server_parts_[1] if (php_isset(lambda : server_parts_[1])) else ""
+    return "lighttpd" == server_parts_[0] and -1 == php_version_compare(server_parts_[1], "1.5.0")
 # end def is_lighttpd_before_150
 #// 
 #// Does the specified module exist in the Apache config?
@@ -4333,27 +4514,30 @@ def is_lighttpd_before_150(*args_):
 #// @param bool   $default Optional. The default return value if the module is not found. Default false.
 #// @return bool Whether the specified module is loaded.
 #//
-def apache_mod_loaded(mod=None, default=False, *args_):
+def apache_mod_loaded(mod_=None, default_=None, *_args_):
+    if default_ is None:
+        default_ = False
+    # end if
     
-    global is_apache
-    php_check_if_defined("is_apache")
-    if (not is_apache):
+    global is_apache_
+    php_check_if_defined("is_apache_")
+    if (not is_apache_):
         return False
     # end if
     if php_function_exists("apache_get_modules"):
-        mods = apache_get_modules()
-        if php_in_array(mod, mods):
+        mods_ = apache_get_modules()
+        if php_in_array(mod_, mods_):
             return True
         # end if
     elif php_function_exists("phpinfo") and False == php_strpos(php_ini_get("disable_functions"), "phpinfo"):
         ob_start()
         phpinfo(8)
-        phpinfo = ob_get_clean()
-        if False != php_strpos(phpinfo, mod):
+        phpinfo_ = ob_get_clean()
+        if False != php_strpos(phpinfo_, mod_):
             return True
         # end if
     # end if
-    return default
+    return default_
 # end def apache_mod_loaded
 #// 
 #// Check if IIS 7+ supports pretty permalinks.
@@ -4364,12 +4548,13 @@ def apache_mod_loaded(mod=None, default=False, *args_):
 #// 
 #// @return bool Whether IIS7 supports permalinks.
 #//
-def iis7_supports_permalinks(*args_):
+def iis7_supports_permalinks(*_args_):
     
-    global is_iis7
-    php_check_if_defined("is_iis7")
-    supports_permalinks = False
-    if is_iis7:
+    
+    global is_iis7_
+    php_check_if_defined("is_iis7_")
+    supports_permalinks_ = False
+    if is_iis7_:
         #// First we check if the DOMDocument class exists. If it does not exist, then we cannot
         #// easily update the xml configuration file, hence we just bail out and tell user that
         #// pretty permalinks cannot be used.
@@ -4379,7 +4564,7 @@ def iis7_supports_permalinks(*args_):
         #// Lastly we make sure that PHP is running via FastCGI. This is important because if it runs
         #// via ISAPI then pretty permalinks will not work.
         #//
-        supports_permalinks = php_class_exists("DOMDocument", False) and (php_isset(lambda : PHP_SERVER["IIS_UrlRewriteModule"])) and PHP_SAPI == "cgi-fcgi"
+        supports_permalinks_ = php_class_exists("DOMDocument", False) and (php_isset(lambda : PHP_SERVER["IIS_UrlRewriteModule"])) and PHP_SAPI == "cgi-fcgi"
     # end if
     #// 
     #// Filters whether IIS 7+ supports pretty permalinks.
@@ -4388,7 +4573,7 @@ def iis7_supports_permalinks(*args_):
     #// 
     #// @param bool $supports_permalinks Whether IIS7 supports permalinks. Default false.
     #//
-    return apply_filters("iis7_supports_permalinks", supports_permalinks)
+    return apply_filters("iis7_supports_permalinks", supports_permalinks_)
 # end def iis7_supports_permalinks
 #// 
 #// Validates a file name and path against an allowed set of rules.
@@ -4405,26 +4590,29 @@ def iis7_supports_permalinks(*args_):
 #// @param string[] $allowed_files Optional. Array of allowed files.
 #// @return int 0 means nothing is wrong, greater than 0 means something was wrong.
 #//
-def validate_file(file=None, allowed_files=Array(), *args_):
+def validate_file(file_=None, allowed_files_=None, *_args_):
+    if allowed_files_ is None:
+        allowed_files_ = Array()
+    # end if
     
     #// `../` on its own is not allowed:
-    if "../" == file:
+    if "../" == file_:
         return 1
     # end if
     #// More than one occurence of `../` is not allowed:
-    if preg_match_all("#\\.\\./#", file, matches, PREG_SET_ORDER) and php_count(matches) > 1:
+    if preg_match_all("#\\.\\./#", file_, matches_, PREG_SET_ORDER) and php_count(matches_) > 1:
         return 1
     # end if
     #// `../` which does not occur at the end of the path is not allowed:
-    if False != php_strpos(file, "../") and "../" != php_mb_substr(file, -3, 3):
+    if False != php_strpos(file_, "../") and "../" != php_mb_substr(file_, -3, 3):
         return 1
     # end if
     #// Files not in the allowed file list are not allowed:
-    if (not php_empty(lambda : allowed_files)) and (not php_in_array(file, allowed_files)):
+    if (not php_empty(lambda : allowed_files_)) and (not php_in_array(file_, allowed_files_)):
         return 3
     # end if
     #// Absolute Windows drive paths are not allowed:
-    if ":" == php_substr(file, 1, 1):
+    if ":" == php_substr(file_, 1, 1):
         return 2
     # end if
     return 0
@@ -4439,15 +4627,16 @@ def validate_file(file=None, allowed_files=Array(), *args_):
 #// @param string|bool $force Optional. Whether to force SSL in admin screens. Default null.
 #// @return bool True if forced, false if not forced.
 #//
-def force_ssl_admin(force=None, *args_):
+def force_ssl_admin(force_=None, *_args_):
     
-    force_ssl_admin.forced = False
-    if (not is_null(force)):
-        old_forced = force_ssl_admin.forced
-        force_ssl_admin.forced = force
-        return old_forced
+    
+    forced_ = False
+    if (not is_null(force_)):
+        old_forced_ = forced_
+        forced_ = force_
+        return old_forced_
     # end if
-    return force_ssl_admin.forced
+    return forced_
 # end def force_ssl_admin
 #// 
 #// Guess the URL for the site.
@@ -4459,40 +4648,41 @@ def force_ssl_admin(force=None, *args_):
 #// 
 #// @return string The guessed URL.
 #//
-def wp_guess_url(*args_):
+def wp_guess_url(*_args_):
+    
     
     if php_defined("WP_SITEURL") and "" != WP_SITEURL:
-        url = WP_SITEURL
+        url_ = WP_SITEURL
     else:
-        abspath_fix = php_str_replace("\\", "/", ABSPATH)
-        script_filename_dir = php_dirname(PHP_SERVER["SCRIPT_FILENAME"])
+        abspath_fix_ = php_str_replace("\\", "/", ABSPATH)
+        script_filename_dir_ = php_dirname(PHP_SERVER["SCRIPT_FILENAME"])
         #// The request is for the admin.
         if php_strpos(PHP_SERVER["REQUEST_URI"], "wp-admin") != False or php_strpos(PHP_SERVER["REQUEST_URI"], "wp-login.php") != False:
-            path = php_preg_replace("#/(wp-admin/.*|wp-login.php)#i", "", PHP_SERVER["REQUEST_URI"])
+            path_ = php_preg_replace("#/(wp-admin/.*|wp-login.php)#i", "", PHP_SERVER["REQUEST_URI"])
             pass
-        elif script_filename_dir + "/" == abspath_fix:
+        elif script_filename_dir_ + "/" == abspath_fix_:
             #// Strip off any file/query params in the path.
-            path = php_preg_replace("#/[^/]*$#i", "", PHP_SERVER["PHP_SELF"])
+            path_ = php_preg_replace("#/[^/]*$#i", "", PHP_SERVER["PHP_SELF"])
         else:
-            if False != php_strpos(PHP_SERVER["SCRIPT_FILENAME"], abspath_fix):
+            if False != php_strpos(PHP_SERVER["SCRIPT_FILENAME"], abspath_fix_):
                 #// Request is hitting a file inside ABSPATH.
-                directory = php_str_replace(ABSPATH, "", script_filename_dir)
+                directory_ = php_str_replace(ABSPATH, "", script_filename_dir_)
                 #// Strip off the subdirectory, and any file/query params.
-                path = php_preg_replace("#/" + preg_quote(directory, "#") + "/[^/]*$#i", "", PHP_SERVER["REQUEST_URI"])
-            elif False != php_strpos(abspath_fix, script_filename_dir):
+                path_ = php_preg_replace("#/" + preg_quote(directory_, "#") + "/[^/]*$#i", "", PHP_SERVER["REQUEST_URI"])
+            elif False != php_strpos(abspath_fix_, script_filename_dir_):
                 #// Request is hitting a file above ABSPATH.
-                subdirectory = php_substr(abspath_fix, php_strpos(abspath_fix, script_filename_dir) + php_strlen(script_filename_dir))
+                subdirectory_ = php_substr(abspath_fix_, php_strpos(abspath_fix_, script_filename_dir_) + php_strlen(script_filename_dir_))
                 #// Strip off any file/query params from the path, appending the subdirectory to the installation.
-                path = php_preg_replace("#/[^/]*$#i", "", PHP_SERVER["REQUEST_URI"]) + subdirectory
+                path_ = php_preg_replace("#/[^/]*$#i", "", PHP_SERVER["REQUEST_URI"]) + subdirectory_
             else:
-                path = PHP_SERVER["REQUEST_URI"]
+                path_ = PHP_SERVER["REQUEST_URI"]
             # end if
         # end if
-        schema = "https://" if is_ssl() else "http://"
+        schema_ = "https://" if is_ssl() else "http://"
         #// set_url_scheme() is not defined yet.
-        url = schema + PHP_SERVER["HTTP_HOST"] + path
+        url_ = schema_ + PHP_SERVER["HTTP_HOST"] + path_
     # end if
-    return php_rtrim(url, "/")
+    return php_rtrim(url_, "/")
 # end def wp_guess_url
 #// 
 #// Temporarily suspend cache additions.
@@ -4511,13 +4701,14 @@ def wp_guess_url(*args_):
 #// @param bool $suspend Optional. Suspends additions if true, re-enables them if false.
 #// @return bool The current suspend setting
 #//
-def wp_suspend_cache_addition(suspend=None, *args_):
+def wp_suspend_cache_addition(suspend_=None, *_args_):
     
-    wp_suspend_cache_addition._suspend = False
-    if php_is_bool(suspend):
-        wp_suspend_cache_addition._suspend = suspend
+    
+    _suspend_ = False
+    if php_is_bool(suspend_):
+        _suspend_ = suspend_
     # end if
-    return wp_suspend_cache_addition._suspend
+    return _suspend_
 # end def wp_suspend_cache_addition
 #// 
 #// Suspend cache invalidation.
@@ -4533,13 +4724,16 @@ def wp_suspend_cache_addition(suspend=None, *args_):
 #// @param bool $suspend Optional. Whether to suspend or enable cache invalidation. Default true.
 #// @return bool The current suspend setting.
 #//
-def wp_suspend_cache_invalidation(suspend=True, *args_):
+def wp_suspend_cache_invalidation(suspend_=None, *_args_):
+    if suspend_ is None:
+        suspend_ = True
+    # end if
     
-    global _wp_suspend_cache_invalidation
-    php_check_if_defined("_wp_suspend_cache_invalidation")
-    current_suspend = _wp_suspend_cache_invalidation
-    _wp_suspend_cache_invalidation = suspend
-    return current_suspend
+    global _wp_suspend_cache_invalidation_
+    php_check_if_defined("_wp_suspend_cache_invalidation_")
+    current_suspend_ = _wp_suspend_cache_invalidation_
+    _wp_suspend_cache_invalidation_ = suspend_
+    return current_suspend_
 # end def wp_suspend_cache_invalidation
 #// 
 #// Determine whether a site is the main site of the current network.
@@ -4553,16 +4747,17 @@ def wp_suspend_cache_invalidation(suspend=True, *args_):
 #// @return bool True if $site_id is the main site of the network, or if not
 #// running Multisite.
 #//
-def is_main_site(site_id=None, network_id=None, *args_):
+def is_main_site(site_id_=None, network_id_=None, *_args_):
+    
     
     if (not is_multisite()):
         return True
     # end if
-    if (not site_id):
-        site_id = get_current_blog_id()
+    if (not site_id_):
+        site_id_ = get_current_blog_id()
     # end if
-    site_id = php_int(site_id)
-    return get_main_site_id(network_id) == site_id
+    site_id_ = php_int(site_id_)
+    return get_main_site_id(network_id_) == site_id_
 # end def is_main_site
 #// 
 #// Gets the main site ID.
@@ -4573,16 +4768,17 @@ def is_main_site(site_id=None, network_id=None, *args_):
 #// Defaults to the current network.
 #// @return int The ID of the main site.
 #//
-def get_main_site_id(network_id=None, *args_):
+def get_main_site_id(network_id_=None, *_args_):
+    
     
     if (not is_multisite()):
         return get_current_blog_id()
     # end if
-    network = get_network(network_id)
-    if (not network):
+    network_ = get_network(network_id_)
+    if (not network_):
         return 0
     # end if
-    return network.site_id
+    return network_.site_id
 # end def get_main_site_id
 #// 
 #// Determine whether a network is the main network of the Multisite installation.
@@ -4592,16 +4788,17 @@ def get_main_site_id(network_id=None, *args_):
 #// @param int $network_id Optional. Network ID to test. Defaults to current network.
 #// @return bool True if $network_id is the main network, or if not running Multisite.
 #//
-def is_main_network(network_id=None, *args_):
+def is_main_network(network_id_=None, *_args_):
+    
     
     if (not is_multisite()):
         return True
     # end if
-    if None == network_id:
-        network_id = get_current_network_id()
+    if None == network_id_:
+        network_id_ = get_current_network_id()
     # end if
-    network_id = php_int(network_id)
-    return get_main_network_id() == network_id
+    network_id_ = php_int(network_id_)
+    return get_main_network_id() == network_id_
 # end def is_main_network
 #// 
 #// Get the main network ID.
@@ -4610,20 +4807,21 @@ def is_main_network(network_id=None, *args_):
 #// 
 #// @return int The ID of the main network.
 #//
-def get_main_network_id(*args_):
+def get_main_network_id(*_args_):
+    
     
     if (not is_multisite()):
         return 1
     # end if
-    current_network = get_network()
+    current_network_ = get_network()
     if php_defined("PRIMARY_NETWORK_ID"):
-        main_network_id = PRIMARY_NETWORK_ID
-    elif (php_isset(lambda : current_network.id)) and 1 == php_int(current_network.id):
+        main_network_id_ = PRIMARY_NETWORK_ID
+    elif (php_isset(lambda : current_network_.id)) and 1 == php_int(current_network_.id):
         #// If the current network has an ID of 1, assume it is the main network.
-        main_network_id = 1
+        main_network_id_ = 1
     else:
-        _networks = get_networks(Array({"fields": "ids", "number": 1}))
-        main_network_id = php_array_shift(_networks)
+        _networks_ = get_networks(Array({"fields": "ids", "number": 1}))
+        main_network_id_ = php_array_shift(_networks_)
     # end if
     #// 
     #// Filters the main network ID.
@@ -4632,7 +4830,7 @@ def get_main_network_id(*args_):
     #// 
     #// @param int $main_network_id The ID of the main network.
     #//
-    return php_int(apply_filters("get_main_network_id", main_network_id))
+    return php_int(apply_filters("get_main_network_id", main_network_id_))
 # end def get_main_network_id
 #// 
 #// Determine whether global terms are enabled.
@@ -4643,13 +4841,14 @@ def get_main_network_id(*args_):
 #// 
 #// @return bool True if multisite and global terms enabled.
 #//
-def global_terms_enabled(*args_):
+def global_terms_enabled(*_args_):
+    
     
     if (not is_multisite()):
         return False
     # end if
-    global_terms_enabled.global_terms = None
-    if is_null(global_terms_enabled.global_terms):
+    global_terms_ = None
+    if is_null(global_terms_):
         #// 
         #// Filters whether global terms are enabled.
         #// 
@@ -4660,14 +4859,14 @@ def global_terms_enabled(*args_):
         #// 
         #// @param null $enabled Whether global terms are enabled.
         #//
-        filter = apply_filters("global_terms_enabled", None)
-        if (not is_null(filter)):
-            global_terms_enabled.global_terms = php_bool(filter)
+        filter_ = apply_filters("global_terms_enabled", None)
+        if (not is_null(filter_)):
+            global_terms_ = php_bool(filter_)
         else:
-            global_terms_enabled.global_terms = php_bool(get_site_option("global_terms_enabled", False))
+            global_terms_ = php_bool(get_site_option("global_terms_enabled", False))
         # end if
     # end if
-    return global_terms_enabled.global_terms
+    return global_terms_
 # end def global_terms_enabled
 #// 
 #// Determines whether site meta is enabled.
@@ -4682,20 +4881,21 @@ def global_terms_enabled(*args_):
 #// 
 #// @return bool True if site meta is supported, false otherwise.
 #//
-def is_site_meta_supported(*args_):
+def is_site_meta_supported(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
     if (not is_multisite()):
         return False
     # end if
-    network_id = get_main_network_id()
-    supported = get_network_option(network_id, "site_meta_supported", False)
-    if False == supported:
-        supported = 1 if wpdb.get_var(str("SHOW TABLES LIKE '") + str(wpdb.blogmeta) + str("'")) else 0
-        update_network_option(network_id, "site_meta_supported", supported)
+    network_id_ = get_main_network_id()
+    supported_ = get_network_option(network_id_, "site_meta_supported", False)
+    if False == supported_:
+        supported_ = 1 if wpdb_.get_var(str("SHOW TABLES LIKE '") + str(wpdb_.blogmeta) + str("'")) else 0
+        update_network_option(network_id_, "site_meta_supported", supported_)
     # end if
-    return php_bool(supported)
+    return php_bool(supported_)
 # end def is_site_meta_supported
 #// 
 #// gmt_offset modification for smart timezone handling.
@@ -4706,18 +4906,19 @@ def is_site_meta_supported(*args_):
 #// 
 #// @return float|false Timezone GMT offset, false otherwise.
 #//
-def wp_timezone_override_offset(*args_):
+def wp_timezone_override_offset(*_args_):
     
-    timezone_string = get_option("timezone_string")
-    if (not timezone_string):
+    
+    timezone_string_ = get_option("timezone_string")
+    if (not timezone_string_):
         return False
     # end if
-    timezone_object = timezone_open(timezone_string)
-    datetime_object = date_create()
-    if False == timezone_object or False == datetime_object:
+    timezone_object_ = timezone_open(timezone_string_)
+    datetime_object_ = date_create()
+    if False == timezone_object_ or False == datetime_object_:
         return False
     # end if
-    return round(timezone_offset_get(timezone_object, datetime_object) / HOUR_IN_SECONDS, 2)
+    return round(timezone_offset_get(timezone_object_, datetime_object_) / HOUR_IN_SECONDS, 2)
 # end def wp_timezone_override_offset
 #// 
 #// Sort-helper for timezones.
@@ -4729,42 +4930,43 @@ def wp_timezone_override_offset(*args_):
 #// @param array $b
 #// @return int
 #//
-def _wp_timezone_choice_usort_callback(a=None, b=None, *args_):
+def _wp_timezone_choice_usort_callback(a_=None, b_=None, *_args_):
+    
     
     #// Don't use translated versions of Etc.
-    if "Etc" == a["continent"] and "Etc" == b["continent"]:
+    if "Etc" == a_["continent"] and "Etc" == b_["continent"]:
         #// Make the order of these more like the old dropdown.
-        if "GMT+" == php_substr(a["city"], 0, 4) and "GMT+" == php_substr(b["city"], 0, 4):
-            return -1 * strnatcasecmp(a["city"], b["city"])
+        if "GMT+" == php_substr(a_["city"], 0, 4) and "GMT+" == php_substr(b_["city"], 0, 4):
+            return -1 * strnatcasecmp(a_["city"], b_["city"])
         # end if
-        if "UTC" == a["city"]:
-            if "GMT+" == php_substr(b["city"], 0, 4):
+        if "UTC" == a_["city"]:
+            if "GMT+" == php_substr(b_["city"], 0, 4):
                 return 1
             # end if
             return -1
         # end if
-        if "UTC" == b["city"]:
-            if "GMT+" == php_substr(a["city"], 0, 4):
+        if "UTC" == b_["city"]:
+            if "GMT+" == php_substr(a_["city"], 0, 4):
                 return -1
             # end if
             return 1
         # end if
-        return strnatcasecmp(a["city"], b["city"])
+        return strnatcasecmp(a_["city"], b_["city"])
     # end if
-    if a["t_continent"] == b["t_continent"]:
-        if a["t_city"] == b["t_city"]:
-            return strnatcasecmp(a["t_subcity"], b["t_subcity"])
+    if a_["t_continent"] == b_["t_continent"]:
+        if a_["t_city"] == b_["t_city"]:
+            return strnatcasecmp(a_["t_subcity"], b_["t_subcity"])
         # end if
-        return strnatcasecmp(a["t_city"], b["t_city"])
+        return strnatcasecmp(a_["t_city"], b_["t_city"])
     else:
         #// Force Etc to the bottom of the list.
-        if "Etc" == a["continent"]:
+        if "Etc" == a_["continent"]:
             return 1
         # end if
-        if "Etc" == b["continent"]:
+        if "Etc" == b_["continent"]:
             return -1
         # end if
-        return strnatcasecmp(a["t_continent"], b["t_continent"])
+        return strnatcasecmp(a_["t_continent"], b_["t_continent"])
     # end if
 # end def _wp_timezone_choice_usort_callback
 #// 
@@ -4780,102 +4982,103 @@ def _wp_timezone_choice_usort_callback(a=None, b=None, *args_):
 #// @param string $locale        Optional. Locale to load the timezones in. Default current site locale.
 #// @return string
 #//
-def wp_timezone_choice(selected_zone=None, locale=None, *args_):
+def wp_timezone_choice(selected_zone_=None, locale_=None, *_args_):
     
-    wp_timezone_choice.mo_loaded = False
-    wp_timezone_choice.locale_loaded = None
-    continents = Array("Africa", "America", "Antarctica", "Arctic", "Asia", "Atlantic", "Australia", "Europe", "Indian", "Pacific")
+    
+    mo_loaded_ = False
+    locale_loaded_ = None
+    continents_ = Array("Africa", "America", "Antarctica", "Arctic", "Asia", "Atlantic", "Australia", "Europe", "Indian", "Pacific")
     #// Load translations for continents and cities.
-    if (not wp_timezone_choice.mo_loaded) or locale != wp_timezone_choice.locale_loaded:
-        wp_timezone_choice.locale_loaded = locale if locale else get_locale()
-        mofile = WP_LANG_DIR + "/continents-cities-" + wp_timezone_choice.locale_loaded + ".mo"
+    if (not mo_loaded_) or locale_ != locale_loaded_:
+        locale_loaded_ = locale_ if locale_ else get_locale()
+        mofile_ = WP_LANG_DIR + "/continents-cities-" + locale_loaded_ + ".mo"
         unload_textdomain("continents-cities")
-        load_textdomain("continents-cities", mofile)
-        wp_timezone_choice.mo_loaded = True
+        load_textdomain("continents-cities", mofile_)
+        mo_loaded_ = True
     # end if
-    zonen = Array()
-    for zone in timezone_identifiers_list():
-        zone = php_explode("/", zone)
-        if (not php_in_array(zone[0], continents)):
+    zonen_ = Array()
+    for zone_ in timezone_identifiers_list():
+        zone_ = php_explode("/", zone_)
+        if (not php_in_array(zone_[0], continents_)):
             continue
         # end if
         #// This determines what gets set and translated - we don't translate Etc/* strings here, they are done later.
-        exists = Array({0: (php_isset(lambda : zone[0])) and zone[0], 1: (php_isset(lambda : zone[1])) and zone[1], 2: (php_isset(lambda : zone[2])) and zone[2]})
-        exists[3] = exists[0] and "Etc" != zone[0]
-        exists[4] = exists[1] and exists[3]
-        exists[5] = exists[2] and exists[3]
+        exists_ = Array({0: (php_isset(lambda : zone_[0])) and zone_[0], 1: (php_isset(lambda : zone_[1])) and zone_[1], 2: (php_isset(lambda : zone_[2])) and zone_[2]})
+        exists_[3] = exists_[0] and "Etc" != zone_[0]
+        exists_[4] = exists_[1] and exists_[3]
+        exists_[5] = exists_[2] and exists_[3]
         #// phpcs:disable WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
-        zonen[-1] = Array({"continent": zone[0] if exists[0] else "", "city": zone[1] if exists[1] else "", "subcity": zone[2] if exists[2] else "", "t_continent": translate(php_str_replace("_", " ", zone[0]), "continents-cities") if exists[3] else "", "t_city": translate(php_str_replace("_", " ", zone[1]), "continents-cities") if exists[4] else "", "t_subcity": translate(php_str_replace("_", " ", zone[2]), "continents-cities") if exists[5] else ""})
+        zonen_[-1] = Array({"continent": zone_[0] if exists_[0] else "", "city": zone_[1] if exists_[1] else "", "subcity": zone_[2] if exists_[2] else "", "t_continent": translate(php_str_replace("_", " ", zone_[0]), "continents-cities") if exists_[3] else "", "t_city": translate(php_str_replace("_", " ", zone_[1]), "continents-cities") if exists_[4] else "", "t_subcity": translate(php_str_replace("_", " ", zone_[2]), "continents-cities") if exists_[5] else ""})
         pass
     # end for
-    usort(zonen, "_wp_timezone_choice_usort_callback")
-    structure = Array()
-    if php_empty(lambda : selected_zone):
-        structure[-1] = "<option selected=\"selected\" value=\"\">" + __("Select a city") + "</option>"
+    usort(zonen_, "_wp_timezone_choice_usort_callback")
+    structure_ = Array()
+    if php_empty(lambda : selected_zone_):
+        structure_[-1] = "<option selected=\"selected\" value=\"\">" + __("Select a city") + "</option>"
     # end if
-    for key,zone in zonen:
+    for key_,zone_ in zonen_:
         #// Build value in an array to join later.
-        value = Array(zone["continent"])
-        if php_empty(lambda : zone["city"]):
+        value_ = Array(zone_["continent"])
+        if php_empty(lambda : zone_["city"]):
             #// It's at the continent level (generally won't happen).
-            display = zone["t_continent"]
+            display_ = zone_["t_continent"]
         else:
             #// It's inside a continent group.
             #// Continent optgroup.
-            if (not (php_isset(lambda : zonen[key - 1]))) or zonen[key - 1]["continent"] != zone["continent"]:
-                label = zone["t_continent"]
-                structure[-1] = "<optgroup label=\"" + esc_attr(label) + "\">"
+            if (not (php_isset(lambda : zonen_[key_ - 1]))) or zonen_[key_ - 1]["continent"] != zone_["continent"]:
+                label_ = zone_["t_continent"]
+                structure_[-1] = "<optgroup label=\"" + esc_attr(label_) + "\">"
             # end if
             #// Add the city to the value.
-            value[-1] = zone["city"]
-            display = zone["t_city"]
-            if (not php_empty(lambda : zone["subcity"])):
+            value_[-1] = zone_["city"]
+            display_ = zone_["t_city"]
+            if (not php_empty(lambda : zone_["subcity"])):
                 #// Add the subcity to the value.
-                value[-1] = zone["subcity"]
-                display += " - " + zone["t_subcity"]
+                value_[-1] = zone_["subcity"]
+                display_ += " - " + zone_["t_subcity"]
             # end if
         # end if
         #// Build the value.
-        value = join("/", value)
-        selected = ""
-        if value == selected_zone:
-            selected = "selected=\"selected\" "
+        value_ = join("/", value_)
+        selected_ = ""
+        if value_ == selected_zone_:
+            selected_ = "selected=\"selected\" "
         # end if
-        structure[-1] = "<option " + selected + "value=\"" + esc_attr(value) + "\">" + esc_html(display) + "</option>"
+        structure_[-1] = "<option " + selected_ + "value=\"" + esc_attr(value_) + "\">" + esc_html(display_) + "</option>"
         #// Close continent optgroup.
-        if (not php_empty(lambda : zone["city"])) and (not (php_isset(lambda : zonen[key + 1]))) or (php_isset(lambda : zonen[key + 1])) and zonen[key + 1]["continent"] != zone["continent"]:
-            structure[-1] = "</optgroup>"
+        if (not php_empty(lambda : zone_["city"])) and (not (php_isset(lambda : zonen_[key_ + 1]))) or (php_isset(lambda : zonen_[key_ + 1])) and zonen_[key_ + 1]["continent"] != zone_["continent"]:
+            structure_[-1] = "</optgroup>"
         # end if
     # end for
     #// Do UTC.
-    structure[-1] = "<optgroup label=\"" + esc_attr__("UTC") + "\">"
-    selected = ""
-    if "UTC" == selected_zone:
-        selected = "selected=\"selected\" "
+    structure_[-1] = "<optgroup label=\"" + esc_attr__("UTC") + "\">"
+    selected_ = ""
+    if "UTC" == selected_zone_:
+        selected_ = "selected=\"selected\" "
     # end if
-    structure[-1] = "<option " + selected + "value=\"" + esc_attr("UTC") + "\">" + __("UTC") + "</option>"
-    structure[-1] = "</optgroup>"
+    structure_[-1] = "<option " + selected_ + "value=\"" + esc_attr("UTC") + "\">" + __("UTC") + "</option>"
+    structure_[-1] = "</optgroup>"
     #// Do manual UTC offsets.
-    structure[-1] = "<optgroup label=\"" + esc_attr__("Manual Offsets") + "\">"
-    offset_range = Array(-12, -11.5, -11, -10.5, -10, -9.5, -9, -8.5, -8, -7.5, -7, -6.5, -6, -5.5, -5, -4.5, -4, -3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 5.75, 6, 6.5, 7, 7.5, 8, 8.5, 8.75, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.75, 13, 13.75, 14)
-    for offset in offset_range:
-        if 0 <= offset:
-            offset_name = "+" + offset
+    structure_[-1] = "<optgroup label=\"" + esc_attr__("Manual Offsets") + "\">"
+    offset_range_ = Array(-12, -11.5, -11, -10.5, -10, -9.5, -9, -8.5, -8, -7.5, -7, -6.5, -6, -5.5, -5, -4.5, -4, -3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 5.75, 6, 6.5, 7, 7.5, 8, 8.5, 8.75, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.75, 13, 13.75, 14)
+    for offset_ in offset_range_:
+        if 0 <= offset_:
+            offset_name_ = "+" + offset_
         else:
-            offset_name = php_str(offset)
+            offset_name_ = php_str(offset_)
         # end if
-        offset_value = offset_name
-        offset_name = php_str_replace(Array(".25", ".5", ".75"), Array(":15", ":30", ":45"), offset_name)
-        offset_name = "UTC" + offset_name
-        offset_value = "UTC" + offset_value
-        selected = ""
-        if offset_value == selected_zone:
-            selected = "selected=\"selected\" "
+        offset_value_ = offset_name_
+        offset_name_ = php_str_replace(Array(".25", ".5", ".75"), Array(":15", ":30", ":45"), offset_name_)
+        offset_name_ = "UTC" + offset_name_
+        offset_value_ = "UTC" + offset_value_
+        selected_ = ""
+        if offset_value_ == selected_zone_:
+            selected_ = "selected=\"selected\" "
         # end if
-        structure[-1] = "<option " + selected + "value=\"" + esc_attr(offset_value) + "\">" + esc_html(offset_name) + "</option>"
+        structure_[-1] = "<option " + selected_ + "value=\"" + esc_attr(offset_value_) + "\">" + esc_html(offset_name_) + "</option>"
     # end for
-    structure[-1] = "</optgroup>"
-    return join("\n", structure)
+    structure_[-1] = "</optgroup>"
+    return join("\n", structure_)
 # end def wp_timezone_choice
 #// 
 #// Strip close comment and close php tags from file headers used by WP.
@@ -4888,9 +5091,10 @@ def wp_timezone_choice(selected_zone=None, locale=None, *args_):
 #// @param string $str Header comment to clean up.
 #// @return string
 #//
-def _cleanup_header_comment(str=None, *args_):
+def _cleanup_header_comment(str_=None, *_args_):
     
-    return php_trim(php_preg_replace("/\\s*(?:\\*\\/|\\?>).*/", "", str))
+    
+    return php_trim(php_preg_replace("/\\s*(?:\\*\\/|\\?>).*/", "", str_))
 # end def _cleanup_header_comment
 #// 
 #// Permanently delete comments or posts of any type that have held a status
@@ -4902,37 +5106,38 @@ def _cleanup_header_comment(str=None, *args_):
 #// 
 #// @global wpdb $wpdb WordPress database abstraction object.
 #//
-def wp_scheduled_delete(*args_):
+def wp_scheduled_delete(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    delete_timestamp = time() - DAY_IN_SECONDS * EMPTY_TRASH_DAYS
-    posts_to_delete = wpdb.get_results(wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(" WHERE meta_key = '_wp_trash_meta_time' AND meta_value < %d"), delete_timestamp), ARRAY_A)
-    for post in posts_to_delete:
-        post_id = php_int(post["post_id"])
-        if (not post_id):
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    delete_timestamp_ = time() - DAY_IN_SECONDS * EMPTY_TRASH_DAYS
+    posts_to_delete_ = wpdb_.get_results(wpdb_.prepare(str("SELECT post_id FROM ") + str(wpdb_.postmeta) + str(" WHERE meta_key = '_wp_trash_meta_time' AND meta_value < %d"), delete_timestamp_), ARRAY_A)
+    for post_ in posts_to_delete_:
+        post_id_ = php_int(post_["post_id"])
+        if (not post_id_):
             continue
         # end if
-        del_post = get_post(post_id)
-        if (not del_post) or "trash" != del_post.post_status:
-            delete_post_meta(post_id, "_wp_trash_meta_status")
-            delete_post_meta(post_id, "_wp_trash_meta_time")
+        del_post_ = get_post(post_id_)
+        if (not del_post_) or "trash" != del_post_.post_status:
+            delete_post_meta(post_id_, "_wp_trash_meta_status")
+            delete_post_meta(post_id_, "_wp_trash_meta_time")
         else:
-            wp_delete_post(post_id)
+            wp_delete_post(post_id_)
         # end if
     # end for
-    comments_to_delete = wpdb.get_results(wpdb.prepare(str("SELECT comment_id FROM ") + str(wpdb.commentmeta) + str(" WHERE meta_key = '_wp_trash_meta_time' AND meta_value < %d"), delete_timestamp), ARRAY_A)
-    for comment in comments_to_delete:
-        comment_id = php_int(comment["comment_id"])
-        if (not comment_id):
+    comments_to_delete_ = wpdb_.get_results(wpdb_.prepare(str("SELECT comment_id FROM ") + str(wpdb_.commentmeta) + str(" WHERE meta_key = '_wp_trash_meta_time' AND meta_value < %d"), delete_timestamp_), ARRAY_A)
+    for comment_ in comments_to_delete_:
+        comment_id_ = php_int(comment_["comment_id"])
+        if (not comment_id_):
             continue
         # end if
-        del_comment = get_comment(comment_id)
-        if (not del_comment) or "trash" != del_comment.comment_approved:
-            delete_comment_meta(comment_id, "_wp_trash_meta_time")
-            delete_comment_meta(comment_id, "_wp_trash_meta_status")
+        del_comment_ = get_comment(comment_id_)
+        if (not del_comment_) or "trash" != del_comment_.comment_approved:
+            delete_comment_meta(comment_id_, "_wp_trash_meta_time")
+            delete_comment_meta(comment_id_, "_wp_trash_meta_status")
         else:
-            wp_delete_comment(del_comment)
+            wp_delete_comment(del_comment_)
         # end if
     # end for
 # end def wp_scheduled_delete
@@ -4956,16 +5161,17 @@ def wp_scheduled_delete(*args_):
 #// Default empty.
 #// @return string[] Array of file header values keyed by header name.
 #//
-def get_file_data(file=None, default_headers=None, context="", *args_):
+def get_file_data(file_=None, default_headers_=None, context_="", *_args_):
+    
     
     #// We don't need to write to the file, so just open for reading.
-    fp = fopen(file, "r")
+    fp_ = fopen(file_, "r")
     #// Pull only the first 8 KB of the file in.
-    file_data = fread(fp, 8 * KB_IN_BYTES)
+    file_data_ = fread(fp_, 8 * KB_IN_BYTES)
     #// PHP will close file handle, but we are good citizens.
-    php_fclose(fp)
+    php_fclose(fp_)
     #// Make sure we catch CR-only line endings.
-    file_data = php_str_replace("\r", "\n", file_data)
+    file_data_ = php_str_replace("\r", "\n", file_data_)
     #// 
     #// Filters extra file headers by context.
     #// 
@@ -4976,22 +5182,22 @@ def get_file_data(file=None, default_headers=None, context="", *args_):
     #// 
     #// @param array $extra_context_headers Empty array by default.
     #//
-    extra_headers = apply_filters(str("extra_") + str(context) + str("_headers"), Array()) if context else Array()
-    if extra_headers:
-        extra_headers = php_array_combine(extra_headers, extra_headers)
+    extra_headers_ = apply_filters(str("extra_") + str(context_) + str("_headers"), Array()) if context_ else Array()
+    if extra_headers_:
+        extra_headers_ = php_array_combine(extra_headers_, extra_headers_)
         #// Keys equal values.
-        all_headers = php_array_merge(extra_headers, default_headers)
+        all_headers_ = php_array_merge(extra_headers_, default_headers_)
     else:
-        all_headers = default_headers
+        all_headers_ = default_headers_
     # end if
-    for field,regex in all_headers:
-        if php_preg_match("/^[ \\t\\/*#@]*" + preg_quote(regex, "/") + ":(.*)$/mi", file_data, match) and match[1]:
-            all_headers[field] = _cleanup_header_comment(match[1])
+    for field_,regex_ in all_headers_:
+        if php_preg_match("/^[ \\t\\/*#@]*" + preg_quote(regex_, "/") + ":(.*)$/mi", file_data_, match_) and match_[1]:
+            all_headers_[field_] = _cleanup_header_comment(match_[1])
         else:
-            all_headers[field] = ""
+            all_headers_[field_] = ""
         # end if
     # end for
-    return all_headers
+    return all_headers_
 # end def get_file_data
 #// 
 #// Returns true.
@@ -5004,7 +5210,8 @@ def get_file_data(file=None, default_headers=None, context="", *args_):
 #// 
 #// @return true True.
 #//
-def __return_true(*args_):
+def __return_true(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
     return True
@@ -5020,7 +5227,8 @@ def __return_true(*args_):
 #// 
 #// @return false False.
 #//
-def __return_false(*args_):
+def __return_false(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
     return False
@@ -5034,7 +5242,8 @@ def __return_false(*args_):
 #// 
 #// @return int 0.
 #//
-def __return_zero(*args_):
+def __return_zero(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
     return 0
@@ -5048,7 +5257,8 @@ def __return_zero(*args_):
 #// 
 #// @return array Empty array.
 #//
-def __return_empty_array(*args_):
+def __return_empty_array(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
     return Array()
@@ -5062,7 +5272,8 @@ def __return_empty_array(*args_):
 #// 
 #// @return null Null value.
 #//
-def __return_null(*args_):
+def __return_null(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
     return None
@@ -5078,7 +5289,8 @@ def __return_null(*args_):
 #// 
 #// @return string Empty string.
 #//
-def __return_empty_string(*args_):
+def __return_empty_string(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
     return ""
@@ -5091,7 +5303,8 @@ def __return_empty_string(*args_):
 #// @see https://blogs.msdn.com/ie/archive/2008/07/02/ie8-security-part-v-comprehensive-protection.aspx
 #// @see https://src.chromium.org/viewvc/chrome?view=rev&revision=6985
 #//
-def send_nosniff_header(*args_):
+def send_nosniff_header(*_args_):
+    
     
     php_header("X-Content-Type-Options: nosniff")
 # end def send_nosniff_header
@@ -5104,12 +5317,13 @@ def send_nosniff_header(*args_):
 #// @param string $column Database column.
 #// @return string SQL clause.
 #//
-def _wp_mysql_week(column=None, *args_):
+def _wp_mysql_week(column_=None, *_args_):
     
-    start_of_week = php_int(get_option("start_of_week"))
-    for case in Switch(start_of_week):
+    
+    start_of_week_ = php_int(get_option("start_of_week"))
+    for case in Switch(start_of_week_):
         if case(1):
-            return str("WEEK( ") + str(column) + str(", 1 )")
+            return str("WEEK( ") + str(column_) + str(", 1 )")
         # end if
         if case(2):
             pass
@@ -5124,13 +5338,13 @@ def _wp_mysql_week(column=None, *args_):
             pass
         # end if
         if case(6):
-            return str("WEEK( DATE_SUB( ") + str(column) + str(", INTERVAL ") + str(start_of_week) + str(" DAY ), 0 )")
+            return str("WEEK( DATE_SUB( ") + str(column_) + str(", INTERVAL ") + str(start_of_week_) + str(" DAY ), 0 )")
         # end if
         if case(0):
             pass
         # end if
         if case():
-            return str("WEEK( ") + str(column) + str(", 0 )")
+            return str("WEEK( ") + str(column_) + str(", 0 )")
         # end if
     # end for
 # end def _wp_mysql_week
@@ -5147,14 +5361,17 @@ def _wp_mysql_week(column=None, *args_):
 #// @param array    $callback_args Optional. Additional arguments to send to $callback.
 #// @return array IDs of all members of loop.
 #//
-def wp_find_hierarchy_loop(callback=None, start=None, start_parent=None, callback_args=Array(), *args_):
+def wp_find_hierarchy_loop(callback_=None, start_=None, start_parent_=None, callback_args_=None, *_args_):
+    if callback_args_ is None:
+        callback_args_ = Array()
+    # end if
     
-    override = Array() if is_null(start_parent) else Array({start: start_parent})
-    arbitrary_loop_member = wp_find_hierarchy_loop_tortoise_hare(callback, start, override, callback_args)
-    if (not arbitrary_loop_member):
+    override_ = Array() if is_null(start_parent_) else Array({start_: start_parent_})
+    arbitrary_loop_member_ = wp_find_hierarchy_loop_tortoise_hare(callback_, start_, override_, callback_args_)
+    if (not arbitrary_loop_member_):
         return Array()
     # end if
-    return wp_find_hierarchy_loop_tortoise_hare(callback, arbitrary_loop_member, override, callback_args, True)
+    return wp_find_hierarchy_loop_tortoise_hare(callback_, arbitrary_loop_member_, override_, callback_args_, True)
 # end def wp_find_hierarchy_loop
 #// 
 #// Use the "The Tortoise and the Hare" algorithm to detect loops.
@@ -5176,31 +5393,40 @@ def wp_find_hierarchy_loop(callback=None, start=None, start_parent=None, callbac
 #// @return mixed Scalar ID of some arbitrary member of the loop, or array of IDs of all members of loop if
 #// $_return_loop
 #//
-def wp_find_hierarchy_loop_tortoise_hare(callback=None, start=None, override=Array(), callback_args=Array(), _return_loop=False, *args_):
+def wp_find_hierarchy_loop_tortoise_hare(callback_=None, start_=None, override_=None, callback_args_=None, _return_loop_=None, *_args_):
+    if override_ is None:
+        override_ = Array()
+    # end if
+    if callback_args_ is None:
+        callback_args_ = Array()
+    # end if
+    if _return_loop_ is None:
+        _return_loop_ = False
+    # end if
     
-    tortoise = start
-    hare = start
-    evanescent_hare = start
+    tortoise_ = start_
+    hare_ = start_
+    evanescent_hare_ = start_
     return_ = Array()
     #// Set evanescent_hare to one past hare.
     #// Increment hare two steps.
     while True:
-        evanescent_hare = override[hare] if (php_isset(lambda : override[hare])) else call_user_func_array(callback, php_array_merge(Array(hare), callback_args))
-        hare = override[evanescent_hare] if (php_isset(lambda : override[evanescent_hare])) else call_user_func_array(callback, php_array_merge(Array(evanescent_hare), callback_args))
-        if not (tortoise and evanescent_hare and hare):
+        evanescent_hare_ = override_[hare_] if (php_isset(lambda : override_[hare_])) else call_user_func_array(callback_, php_array_merge(Array(hare_), callback_args_))
+        hare_ = override_[evanescent_hare_] if (php_isset(lambda : override_[evanescent_hare_])) else call_user_func_array(callback_, php_array_merge(Array(evanescent_hare_), callback_args_))
+        if not (tortoise_ and evanescent_hare_ and hare_):
             break
         # end if
-        if _return_loop:
-            return_[tortoise] = True
-            return_[evanescent_hare] = True
-            return_[hare] = True
+        if _return_loop_:
+            return_[tortoise_] = True
+            return_[evanescent_hare_] = True
+            return_[hare_] = True
         # end if
         #// Tortoise got lapped - must be a loop.
-        if tortoise == evanescent_hare or tortoise == hare:
-            return return_ if _return_loop else tortoise
+        if tortoise_ == evanescent_hare_ or tortoise_ == hare_:
+            return return_ if _return_loop_ else tortoise_
         # end if
         #// Increment tortoise by one step.
-        tortoise = override[tortoise] if (php_isset(lambda : override[tortoise])) else call_user_func_array(callback, php_array_merge(Array(tortoise), callback_args))
+        tortoise_ = override_[tortoise_] if (php_isset(lambda : override_[tortoise_])) else call_user_func_array(callback_, php_array_merge(Array(tortoise_), callback_args_))
     # end while
     return False
 # end def wp_find_hierarchy_loop_tortoise_hare
@@ -5211,7 +5437,8 @@ def wp_find_hierarchy_loop_tortoise_hare(callback=None, start=None, override=Arr
 #// 
 #// @see https://developer.mozilla.org/en/the_x-frame-options_response_header
 #//
-def send_frame_options_header(*args_):
+def send_frame_options_header(*_args_):
+    
     
     php_header("X-Frame-Options: SAMEORIGIN")
 # end def send_frame_options_header
@@ -5234,11 +5461,12 @@ def send_frame_options_header(*args_):
 #// This covers all common link protocols, except for 'javascript' which should not
 #// be allowed for untrusted users.
 #//
-def wp_allowed_protocols(*args_):
+def wp_allowed_protocols(*_args_):
     
-    wp_allowed_protocols.protocols = Array()
-    if php_empty(lambda : wp_allowed_protocols.protocols):
-        wp_allowed_protocols.protocols = Array("http", "https", "ftp", "ftps", "mailto", "news", "irc", "gopher", "nntp", "feed", "telnet", "mms", "rtsp", "sms", "svn", "tel", "fax", "xmpp", "webcal", "urn")
+    
+    protocols_ = Array()
+    if php_empty(lambda : protocols_):
+        protocols_ = Array("http", "https", "ftp", "ftps", "mailto", "news", "irc", "gopher", "nntp", "feed", "telnet", "mms", "rtsp", "sms", "svn", "tel", "fax", "xmpp", "webcal", "urn")
     # end if
     if (not did_action("wp_loaded")):
         #// 
@@ -5248,9 +5476,9 @@ def wp_allowed_protocols(*args_):
         #// 
         #// @param string[] $protocols Array of allowed protocols e.g. 'http', 'ftp', 'tel', and more.
         #//
-        wp_allowed_protocols.protocols = array_unique(apply_filters("kses_allowed_protocols", wp_allowed_protocols.protocols))
+        protocols_ = array_unique(apply_filters("kses_allowed_protocols", protocols_))
     # end if
-    return wp_allowed_protocols.protocols
+    return protocols_
 # end def wp_allowed_protocols
 #// 
 #// Return a comma-separated string of functions that have been called to get
@@ -5271,41 +5499,44 @@ def wp_allowed_protocols(*args_):
 #// @return string|array Either a string containing a reversed comma separated trace or an array
 #// of individual calls.
 #//
-def wp_debug_backtrace_summary(ignore_class=None, skip_frames=0, pretty=True, *args_):
-    
-    wp_debug_backtrace_summary.truncate_paths = None
-    trace = debug_backtrace(False)
-    caller = Array()
-    check_class = (not is_null(ignore_class))
-    skip_frames += 1
-    #// Skip this function.
-    if (not (php_isset(lambda : wp_debug_backtrace_summary.truncate_paths))):
-        wp_debug_backtrace_summary.truncate_paths = Array(wp_normalize_path(WP_CONTENT_DIR), wp_normalize_path(ABSPATH))
+def wp_debug_backtrace_summary(ignore_class_=None, skip_frames_=0, pretty_=None, *_args_):
+    if pretty_ is None:
+        pretty_ = True
     # end if
-    for call in trace:
-        if skip_frames > 0:
-            skip_frames -= 1
-        elif (php_isset(lambda : call["class"])):
-            if check_class and ignore_class == call["class"]:
+    
+    truncate_paths_ = None
+    trace_ = debug_backtrace(False)
+    caller_ = Array()
+    check_class_ = (not is_null(ignore_class_))
+    skip_frames_ += 1
+    #// Skip this function.
+    if (not (php_isset(lambda : truncate_paths_))):
+        truncate_paths_ = Array(wp_normalize_path(WP_CONTENT_DIR), wp_normalize_path(ABSPATH))
+    # end if
+    for call_ in trace_:
+        if skip_frames_ > 0:
+            skip_frames_ -= 1
+        elif (php_isset(lambda : call_["class"])):
+            if check_class_ and ignore_class_ == call_["class"]:
                 continue
                 pass
             # end if
-            caller[-1] = str(call["class"]) + str(call["type"]) + str(call["function"])
+            caller_[-1] = str(call_["class"]) + str(call_["type"]) + str(call_["function"])
         else:
-            if php_in_array(call["function"], Array("do_action", "apply_filters", "do_action_ref_array", "apply_filters_ref_array")):
-                caller[-1] = str(call["function"]) + str("('") + str(call["args"][0]) + str("')")
-            elif php_in_array(call["function"], Array("include", "include_once", "require", "require_once")):
-                filename = call["args"][0] if (php_isset(lambda : call["args"][0])) else ""
-                caller[-1] = call["function"] + "('" + php_str_replace(wp_debug_backtrace_summary.truncate_paths, "", wp_normalize_path(filename)) + "')"
+            if php_in_array(call_["function"], Array("do_action", "apply_filters", "do_action_ref_array", "apply_filters_ref_array")):
+                caller_[-1] = str(call_["function"]) + str("('") + str(call_["args"][0]) + str("')")
+            elif php_in_array(call_["function"], Array("include", "include_once", "require", "require_once")):
+                filename_ = call_["args"][0] if (php_isset(lambda : call_["args"][0])) else ""
+                caller_[-1] = call_["function"] + "('" + php_str_replace(truncate_paths_, "", wp_normalize_path(filename_)) + "')"
             else:
-                caller[-1] = call["function"]
+                caller_[-1] = call_["function"]
             # end if
         # end if
     # end for
-    if pretty:
-        return join(", ", array_reverse(caller))
+    if pretty_:
+        return join(", ", array_reverse(caller_))
     else:
-        return caller
+        return caller_
     # end if
 # end def wp_debug_backtrace_summary
 #// 
@@ -5318,16 +5549,17 @@ def wp_debug_backtrace_summary(ignore_class=None, skip_frames=0, pretty=True, *a
 #// @param string $cache_key  The cache bucket to check against.
 #// @return int[] Array of IDs not present in the cache.
 #//
-def _get_non_cached_ids(object_ids=None, cache_key=None, *args_):
+def _get_non_cached_ids(object_ids_=None, cache_key_=None, *_args_):
     
-    clean = Array()
-    for id in object_ids:
-        id = php_int(id)
-        if (not wp_cache_get(id, cache_key)):
-            clean[-1] = id
+    
+    clean_ = Array()
+    for id_ in object_ids_:
+        id_ = php_int(id_)
+        if (not wp_cache_get(id_, cache_key_)):
+            clean_[-1] = id_
         # end if
     # end for
-    return clean
+    return clean_
 # end def _get_non_cached_ids
 #// 
 #// Test if the current device has the capability to upload files.
@@ -5337,14 +5569,15 @@ def _get_non_cached_ids(object_ids=None, cache_key=None, *args_):
 #// 
 #// @return bool Whether the device is able to upload files.
 #//
-def _device_can_upload(*args_):
+def _device_can_upload(*_args_):
+    
     
     if (not wp_is_mobile()):
         return True
     # end if
-    ua = PHP_SERVER["HTTP_USER_AGENT"]
-    if php_strpos(ua, "iPhone") != False or php_strpos(ua, "iPad") != False or php_strpos(ua, "iPod") != False:
-        return php_preg_match("#OS ([\\d_]+) like Mac OS X#", ua, version) and php_version_compare(version[1], "6", ">=")
+    ua_ = PHP_SERVER["HTTP_USER_AGENT"]
+    if php_strpos(ua_, "iPhone") != False or php_strpos(ua_, "iPad") != False or php_strpos(ua_, "iPod") != False:
+        return php_preg_match("#OS ([\\d_]+) like Mac OS X#", ua_, version_) and php_version_compare(version_[1], "6", ">=")
     # end if
     return True
 # end def _device_can_upload
@@ -5356,15 +5589,16 @@ def _device_can_upload(*args_):
 #// @param string $path The resource path or URL.
 #// @return bool True if the path is a stream URL.
 #//
-def wp_is_stream(path=None, *args_):
+def wp_is_stream(path_=None, *_args_):
     
-    scheme_separator = php_strpos(path, "://")
-    if False == scheme_separator:
+    
+    scheme_separator_ = php_strpos(path_, "://")
+    if False == scheme_separator_:
         #// $path isn't a stream.
         return False
     # end if
-    stream = php_substr(path, 0, scheme_separator)
-    return php_in_array(stream, stream_get_wrappers(), True)
+    stream_ = php_substr(path_, 0, scheme_separator_)
+    return php_in_array(stream_, stream_get_wrappers(), True)
 # end def wp_is_stream
 #// 
 #// Test if the supplied date is valid for the Gregorian calendar.
@@ -5379,7 +5613,8 @@ def wp_is_stream(path=None, *args_):
 #// @param  string $source_date The date to filter.
 #// @return bool True if valid date, false if not valid date.
 #//
-def wp_checkdate(month=None, day=None, year=None, source_date=None, *args_):
+def wp_checkdate(month_=None, day_=None, year_=None, source_date_=None, *_args_):
+    
     
     #// 
     #// Filters whether the given date is valid for the Gregorian calendar.
@@ -5389,7 +5624,7 @@ def wp_checkdate(month=None, day=None, year=None, source_date=None, *args_):
     #// @param bool   $checkdate   Whether the given date is valid.
     #// @param string $source_date Date to check.
     #//
-    return apply_filters("wp_checkdate", checkdate(month, day, year), source_date)
+    return apply_filters("wp_checkdate", checkdate(month_, day_, year_), source_date_)
 # end def wp_checkdate
 #// 
 #// Load the auth check for monitoring whether the user is still logged in.
@@ -5402,7 +5637,8 @@ def wp_checkdate(month=None, day=None, year=None, source_date=None, *args_):
 #// 
 #// @since 3.6.0
 #//
-def wp_auth_check_load(*args_):
+def wp_auth_check_load(*_args_):
+    
     
     if (not is_admin()) and (not is_user_logged_in()):
         return
@@ -5410,9 +5646,9 @@ def wp_auth_check_load(*args_):
     if php_defined("IFRAME_REQUEST"):
         return
     # end if
-    screen = get_current_screen()
-    hidden = Array("update", "update-network", "update-core", "update-core-network", "upgrade", "upgrade-network", "network")
-    show = (not php_in_array(screen.id, hidden))
+    screen_ = get_current_screen()
+    hidden_ = Array("update", "update-network", "update-core", "update-core-network", "upgrade", "upgrade-network", "network")
+    show_ = (not php_in_array(screen_.id, hidden_))
     #// 
     #// Filters whether to load the authentication check.
     #// 
@@ -5424,7 +5660,7 @@ def wp_auth_check_load(*args_):
     #// @param bool      $show   Whether to load the authentication check.
     #// @param WP_Screen $screen The current screen object.
     #//
-    if apply_filters("wp_auth_check_load", show, screen):
+    if apply_filters("wp_auth_check_load", show_, screen_):
         wp_enqueue_style("wp-auth-check")
         wp_enqueue_script("wp-auth-check")
         add_action("admin_print_footer_scripts", "wp_auth_check_html", 5)
@@ -5436,11 +5672,12 @@ def wp_auth_check_load(*args_):
 #// 
 #// @since 3.6.0
 #//
-def wp_auth_check_html(*args_):
+def wp_auth_check_html(*_args_):
     
-    login_url = wp_login_url()
-    current_domain = "https://" if is_ssl() else "http://" + PHP_SERVER["HTTP_HOST"]
-    same_domain = php_strpos(login_url, current_domain) == 0
+    
+    login_url_ = wp_login_url()
+    current_domain_ = "https://" if is_ssl() else "http://" + PHP_SERVER["HTTP_HOST"]
+    same_domain_ = php_strpos(login_url_, current_domain_) == 0
     #// 
     #// Filters whether the authentication check originated at the same domain.
     #// 
@@ -5448,26 +5685,26 @@ def wp_auth_check_html(*args_):
     #// 
     #// @param bool $same_domain Whether the authentication check originated at the same domain.
     #//
-    same_domain = apply_filters("wp_auth_check_same_domain", same_domain)
-    wrap_class = "hidden" if same_domain else "hidden fallback"
+    same_domain_ = apply_filters("wp_auth_check_same_domain", same_domain_)
+    wrap_class_ = "hidden" if same_domain_ else "hidden fallback"
     php_print(" <div id=\"wp-auth-check-wrap\" class=\"")
-    php_print(wrap_class)
+    php_print(wrap_class_)
     php_print("""\">
     <div id=\"wp-auth-check-bg\"></div>
     <div id=\"wp-auth-check\">
     <button type=\"button\" class=\"wp-auth-check-close button-link\"><span class=\"screen-reader-text\">""")
     _e("Close dialog")
     php_print("</span></button>\n   ")
-    if same_domain:
-        login_src = add_query_arg(Array({"interim-login": "1", "wp_lang": get_user_locale()}), login_url)
+    if same_domain_:
+        login_src_ = add_query_arg(Array({"interim-login": "1", "wp_lang": get_user_locale()}), login_url_)
         php_print("     <div id=\"wp-auth-check-form\" class=\"loading\" data-src=\"")
-        php_print(esc_url(login_src))
+        php_print(esc_url(login_src_))
         php_print("\"></div>\n      ")
     # end if
     php_print(" <div class=\"wp-auth-fallback\">\n      <p><b class=\"wp-auth-fallback-expired\" tabindex=\"0\">")
     _e("Session expired")
     php_print("</b></p>\n       <p><a href=\"")
-    php_print(esc_url(login_url))
+    php_print(esc_url(login_url_))
     php_print("\" target=\"_blank\">")
     _e("Please log in again.")
     php_print("</a>\n       ")
@@ -5491,10 +5728,11 @@ def wp_auth_check_html(*args_):
 #// @param array $response  The Heartbeat response.
 #// @return array The Heartbeat response with 'wp-auth-check' value set.
 #//
-def wp_auth_check(response=None, *args_):
+def wp_auth_check(response_=None, *_args_):
     
-    response["wp-auth-check"] = is_user_logged_in() and php_empty(lambda : PHP_GLOBALS["login_grace_period"])
-    return response
+    
+    response_["wp-auth-check"] = is_user_logged_in() and php_empty(lambda : PHP_GLOBALS["login_grace_period"])
+    return response_
 # end def wp_auth_check
 #// 
 #// Return RegEx body to liberally match an opening HTML tag.
@@ -5512,12 +5750,13 @@ def wp_auth_check(response=None, *args_):
 #// @param string $tag An HTML tag name. Example: 'video'.
 #// @return string Tag RegEx.
 #//
-def get_tag_regex(tag=None, *args_):
+def get_tag_regex(tag_=None, *_args_):
     
-    if php_empty(lambda : tag):
+    
+    if php_empty(lambda : tag_):
         return
     # end if
-    return php_sprintf("<%1$s[^<]*(?:>[\\s\\S]*<\\/%1$s>|\\s*\\/>)", tag_escape(tag))
+    return php_sprintf("<%1$s[^<]*(?:>[\\s\\S]*<\\/%1$s>|\\s*\\/>)", tag_escape(tag_))
 # end def get_tag_regex
 #// 
 #// Retrieve a canonical form of the provided charset appropriate for passing to PHP
@@ -5531,15 +5770,16 @@ def get_tag_regex(tag=None, *args_):
 #// @param string $charset A charset name.
 #// @return string The canonical form of the charset.
 #//
-def _canonical_charset(charset=None, *args_):
+def _canonical_charset(charset_=None, *_args_):
     
-    if "utf-8" == php_strtolower(charset) or "utf8" == php_strtolower(charset):
+    
+    if "utf-8" == php_strtolower(charset_) or "utf8" == php_strtolower(charset_):
         return "UTF-8"
     # end if
-    if "iso-8859-1" == php_strtolower(charset) or "iso8859-1" == php_strtolower(charset):
+    if "iso-8859-1" == php_strtolower(charset_) or "iso8859-1" == php_strtolower(charset_):
         return "ISO-8859-1"
     # end if
-    return charset
+    return charset_
 # end def _canonical_charset
 #// 
 #// Set the mbstring internal encoding to a binary safe encoding when func_overload
@@ -5567,24 +5807,27 @@ def _canonical_charset(charset=None, *args_):
 #// @param bool $reset Optional. Whether to reset the encoding back to a previously-set encoding.
 #// Default false.
 #//
-def mbstring_binary_safe_encoding(reset=False, *args_):
-    
-    mbstring_binary_safe_encoding.encodings = Array()
-    mbstring_binary_safe_encoding.overloaded = None
-    if is_null(mbstring_binary_safe_encoding.overloaded):
-        mbstring_binary_safe_encoding.overloaded = php_function_exists("mb_internal_encoding") and php_ini_get("mbstring.func_overload") & 2
+def mbstring_binary_safe_encoding(reset_=None, *_args_):
+    if reset_ is None:
+        reset_ = False
     # end if
-    if False == mbstring_binary_safe_encoding.overloaded:
+    
+    encodings_ = Array()
+    overloaded_ = None
+    if is_null(overloaded_):
+        overloaded_ = php_function_exists("mb_internal_encoding") and php_ini_get("mbstring.func_overload") & 2
+    # end if
+    if False == overloaded_:
         return
     # end if
-    if (not reset):
-        encoding = mb_internal_encoding()
-        php_array_push(mbstring_binary_safe_encoding.encodings, encoding)
+    if (not reset_):
+        encoding_ = mb_internal_encoding()
+        php_array_push(encodings_, encoding_)
         mb_internal_encoding("ISO-8859-1")
     # end if
-    if reset and mbstring_binary_safe_encoding.encodings:
-        encoding = php_array_pop(mbstring_binary_safe_encoding.encodings)
-        mb_internal_encoding(encoding)
+    if reset_ and encodings_:
+        encoding_ = php_array_pop(encodings_)
+        mb_internal_encoding(encoding_)
     # end if
 # end def mbstring_binary_safe_encoding
 #// 
@@ -5594,7 +5837,8 @@ def mbstring_binary_safe_encoding(reset=False, *args_):
 #// 
 #// @since 3.7.0
 #//
-def reset_mbstring_encoding(*args_):
+def reset_mbstring_encoding(*_args_):
+    
     
     mbstring_binary_safe_encoding(True)
 # end def reset_mbstring_encoding
@@ -5608,15 +5852,16 @@ def reset_mbstring_encoding(*args_):
 #// @param mixed $var Boolean value to validate.
 #// @return bool Whether the value is validated.
 #//
-def wp_validate_boolean(var=None, *args_):
+def wp_validate_boolean(var_=None, *_args_):
     
-    if php_is_bool(var):
-        return var
+    
+    if php_is_bool(var_):
+        return var_
     # end if
-    if php_is_string(var) and "false" == php_strtolower(var):
+    if php_is_string(var_) and "false" == php_strtolower(var_):
         return False
     # end if
-    return php_bool(var)
+    return php_bool(var_)
 # end def wp_validate_boolean
 #// 
 #// Delete a file
@@ -5625,7 +5870,8 @@ def wp_validate_boolean(var=None, *args_):
 #// 
 #// @param string $file The path to the file to delete.
 #//
-def wp_delete_file(file=None, *args_):
+def wp_delete_file(file_=None, *_args_):
+    
     
     #// 
     #// Filters the path of the file to delete.
@@ -5634,9 +5880,9 @@ def wp_delete_file(file=None, *args_):
     #// 
     #// @param string $file Path to the file to delete.
     #//
-    delete = apply_filters("wp_delete_file", file)
-    if (not php_empty(lambda : delete)):
-        php_no_error(lambda: unlink(delete))
+    delete_ = apply_filters("wp_delete_file", file_)
+    if (not php_empty(lambda : delete_)):
+        php_no_error(lambda: unlink(delete_))
     # end if
 # end def wp_delete_file
 #// 
@@ -5648,25 +5894,26 @@ def wp_delete_file(file=None, *args_):
 #// @param string $directory Absolute path to a directory.
 #// @return bool True on success, false on failure.
 #//
-def wp_delete_file_from_directory(file=None, directory=None, *args_):
+def wp_delete_file_from_directory(file_=None, directory_=None, *_args_):
     
-    if wp_is_stream(file):
-        real_file = file
-        real_directory = directory
+    
+    if wp_is_stream(file_):
+        real_file_ = file_
+        real_directory_ = directory_
     else:
-        real_file = php_realpath(wp_normalize_path(file))
-        real_directory = php_realpath(wp_normalize_path(directory))
+        real_file_ = php_realpath(wp_normalize_path(file_))
+        real_directory_ = php_realpath(wp_normalize_path(directory_))
     # end if
-    if False != real_file:
-        real_file = wp_normalize_path(real_file)
+    if False != real_file_:
+        real_file_ = wp_normalize_path(real_file_)
     # end if
-    if False != real_directory:
-        real_directory = wp_normalize_path(real_directory)
+    if False != real_directory_:
+        real_directory_ = wp_normalize_path(real_directory_)
     # end if
-    if False == real_file or False == real_directory or php_strpos(real_file, trailingslashit(real_directory)) != 0:
+    if False == real_file_ or False == real_directory_ or php_strpos(real_file_, trailingslashit(real_directory_)) != 0:
         return False
     # end if
-    wp_delete_file(file)
+    wp_delete_file(file_)
     return True
 # end def wp_delete_file_from_directory
 #// 
@@ -5678,21 +5925,22 @@ def wp_delete_file_from_directory(file=None, directory=None, *args_):
 #// 
 #// @global WP_Post $post Global post object.
 #//
-def wp_post_preview_js(*args_):
+def wp_post_preview_js(*_args_):
     
-    global post
-    php_check_if_defined("post")
-    if (not is_preview()) or php_empty(lambda : post):
+    
+    global post_
+    php_check_if_defined("post_")
+    if (not is_preview()) or php_empty(lambda : post_):
         return
     # end if
     #// Has to match the window name used in post_submit_meta_box().
-    name = "wp-preview-" + php_int(post.ID)
+    name_ = "wp-preview-" + php_int(post_.ID)
     php_print("""   <script>
     ( function() {
     var query = document.location.search;
 if ( query && query.indexOf( 'preview=true' ) !== -1 ) {
     window.name = '""")
-    php_print(name)
+    php_print(name_)
     php_print("""';
     }
 if ( window.addEventListener ) {
@@ -5716,9 +5964,10 @@ if ( window.addEventListener ) {
 #// @param string $date_string Date string to parse and format.
 #// @return string Date formatted for ISO8601 without time zone.
 #//
-def mysql_to_rfc3339(date_string=None, *args_):
+def mysql_to_rfc3339(date_string_=None, *_args_):
     
-    return mysql2date("Y-m-d\\TH:i:s", date_string, False)
+    
+    return mysql2date("Y-m-d\\TH:i:s", date_string_, False)
 # end def mysql_to_rfc3339
 #// 
 #// Attempts to raise the PHP memory limit for memory intensive processes.
@@ -5733,21 +5982,22 @@ def mysql_to_rfc3339(date_string=None, *args_):
 #// invoked. Default 'admin'.
 #// @return bool|int|string The limit that was set or false on failure.
 #//
-def wp_raise_memory_limit(context="admin", *args_):
+def wp_raise_memory_limit(context_="admin", *_args_):
+    
     
     #// Exit early if the limit cannot be changed.
     if False == wp_is_ini_value_changeable("memory_limit"):
         return False
     # end if
-    current_limit = php_ini_get("memory_limit")
-    current_limit_int = wp_convert_hr_to_bytes(current_limit)
-    if -1 == current_limit_int:
+    current_limit_ = php_ini_get("memory_limit")
+    current_limit_int_ = wp_convert_hr_to_bytes(current_limit_)
+    if -1 == current_limit_int_:
         return False
     # end if
-    wp_max_limit = WP_MAX_MEMORY_LIMIT
-    wp_max_limit_int = wp_convert_hr_to_bytes(wp_max_limit)
-    filtered_limit = wp_max_limit
-    for case in Switch(context):
+    wp_max_limit_ = WP_MAX_MEMORY_LIMIT
+    wp_max_limit_int_ = wp_convert_hr_to_bytes(wp_max_limit_)
+    filtered_limit_ = wp_max_limit_
+    for case in Switch(context_):
         if case("admin"):
             #// 
             #// Filters the maximum memory limit available for administration screens.
@@ -5767,7 +6017,7 @@ def wp_raise_memory_limit(context="admin", *args_):
             #// @param int|string $filtered_limit The maximum WordPress memory limit. Accepts an integer
             #// (bytes), or a shorthand string notation, such as '256M'.
             #//
-            filtered_limit = apply_filters("admin_memory_limit", filtered_limit)
+            filtered_limit_ = apply_filters("admin_memory_limit", filtered_limit_)
             break
         # end if
         if case("image"):
@@ -5783,7 +6033,7 @@ def wp_raise_memory_limit(context="admin", *args_):
             #// Accepts an integer (bytes), or a shorthand string
             #// notation, such as '256M'.
             #//
-            filtered_limit = apply_filters("image_memory_limit", filtered_limit)
+            filtered_limit_ = apply_filters("image_memory_limit", filtered_limit_)
             break
         # end if
         if case():
@@ -5801,20 +6051,20 @@ def wp_raise_memory_limit(context="admin", *args_):
             #// whichever is higher. Accepts an integer (bytes), or a
             #// shorthand string notation, such as '256M'.
             #//
-            filtered_limit = apply_filters(str(context) + str("_memory_limit"), filtered_limit)
+            filtered_limit_ = apply_filters(str(context_) + str("_memory_limit"), filtered_limit_)
             break
         # end if
     # end for
-    filtered_limit_int = wp_convert_hr_to_bytes(filtered_limit)
-    if -1 == filtered_limit_int or filtered_limit_int > wp_max_limit_int and filtered_limit_int > current_limit_int:
-        if False != php_ini_set("memory_limit", filtered_limit):
-            return filtered_limit
+    filtered_limit_int_ = wp_convert_hr_to_bytes(filtered_limit_)
+    if -1 == filtered_limit_int_ or filtered_limit_int_ > wp_max_limit_int_ and filtered_limit_int_ > current_limit_int_:
+        if False != php_ini_set("memory_limit", filtered_limit_):
+            return filtered_limit_
         else:
             return False
         # end if
-    elif -1 == wp_max_limit_int or wp_max_limit_int > current_limit_int:
-        if False != php_ini_set("memory_limit", wp_max_limit):
-            return wp_max_limit
+    elif -1 == wp_max_limit_int_ or wp_max_limit_int_ > current_limit_int_:
+        if False != php_ini_set("memory_limit", wp_max_limit_):
+            return wp_max_limit_
         else:
             return False
         # end if
@@ -5828,7 +6078,8 @@ def wp_raise_memory_limit(context="admin", *args_):
 #// 
 #// @return string UUID.
 #//
-def wp_generate_uuid4(*args_):
+def wp_generate_uuid4(*_args_):
+    
     
     return php_sprintf("%04x%04x-%04x-%04x-%04x-%04x%04x%04x", mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 4095) | 16384, mt_rand(0, 16383) | 32768, mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535))
 # end def wp_generate_uuid4
@@ -5842,21 +6093,22 @@ def wp_generate_uuid4(*args_):
 #// to accept any UUID version. Otherwise, only version allowed is `4`.
 #// @return bool The string is a valid UUID or false on failure.
 #//
-def wp_is_uuid(uuid=None, version=None, *args_):
+def wp_is_uuid(uuid_=None, version_=None, *_args_):
     
-    if (not php_is_string(uuid)):
+    
+    if (not php_is_string(uuid_)):
         return False
     # end if
-    if php_is_numeric(version):
-        if 4 != php_int(version):
+    if php_is_numeric(version_):
+        if 4 != php_int(version_):
             _doing_it_wrong(__FUNCTION__, __("Only UUID V4 is supported at this time."), "4.9.0")
             return False
         # end if
-        regex = "/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/"
+        regex_ = "/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/"
     else:
-        regex = "/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/"
+        regex_ = "/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/"
     # end if
-    return php_bool(php_preg_match(regex, uuid))
+    return php_bool(php_preg_match(regex_, uuid_))
 # end def wp_is_uuid
 #// 
 #// Get unique ID.
@@ -5873,11 +6125,13 @@ def wp_is_uuid(uuid=None, version=None, *args_):
 #// @param string $prefix Prefix for the returned ID.
 #// @return string Unique ID.
 #//
-def wp_unique_id(prefix="", *args_):
+def wp_unique_id(prefix_="", *_args_):
     
-    wp_unique_id.id_counter = 0
-    wp_unique_id.id_counter += 1
-    return prefix + php_str(wp_unique_id.id_counter)
+    
+    id_counter_ = 0
+    id_counter_ += 1
+    id_counter_ += 1
+    return prefix_ + php_str(id_counter_)
 # end def wp_unique_id
 #// 
 #// Get last changed date for the specified cache group.
@@ -5888,14 +6142,15 @@ def wp_unique_id(prefix="", *args_):
 #// 
 #// @return string $last_changed UNIX timestamp with microseconds representing when the group was last changed.
 #//
-def wp_cache_get_last_changed(group=None, *args_):
+def wp_cache_get_last_changed(group_=None, *_args_):
     
-    last_changed = wp_cache_get("last_changed", group)
-    if (not last_changed):
-        last_changed = php_microtime()
-        wp_cache_set("last_changed", last_changed, group)
+    
+    last_changed_ = wp_cache_get("last_changed", group_)
+    if (not last_changed_):
+        last_changed_ = php_microtime()
+        wp_cache_set("last_changed", last_changed_, group_)
     # end if
-    return last_changed
+    return last_changed_
 # end def wp_cache_get_last_changed
 #// 
 #// Send an email to the old site admin email address when the site admin email address changes.
@@ -5906,12 +6161,13 @@ def wp_cache_get_last_changed(group=None, *args_):
 #// @param string $new_email   The new site admin email address.
 #// @param string $option_name The relevant database option name.
 #//
-def wp_site_admin_email_change_notification(old_email=None, new_email=None, option_name=None, *args_):
+def wp_site_admin_email_change_notification(old_email_=None, new_email_=None, option_name_=None, *_args_):
     
-    send = True
+    
+    send_ = True
     #// Don't send the notification to the default 'admin_email' value.
-    if "you@example.com" == old_email:
-        send = False
+    if "you@example.com" == old_email_:
+        send_ = False
     # end if
     #// 
     #// Filters whether to send the site admin email change notification email.
@@ -5922,21 +6178,21 @@ def wp_site_admin_email_change_notification(old_email=None, new_email=None, opti
     #// @param string $old_email The old site admin email address.
     #// @param string $new_email The new site admin email address.
     #//
-    send = apply_filters("send_site_admin_email_change_email", send, old_email, new_email)
-    if (not send):
+    send_ = apply_filters("send_site_admin_email_change_email", send_, old_email_, new_email_)
+    if (not send_):
         return
     # end if
     #// translators: Do not translate OLD_EMAIL, NEW_EMAIL, SITENAME, SITEURL: those are placeholders.
-    email_change_text = __("""Hi,
+    email_change_text_ = __("""Hi,
     This notice confirms that the admin email address was changed on ###SITENAME###.
     The new admin email address is ###NEW_EMAIL###.
     This email has been sent to ###OLD_EMAIL###
     Regards,
     All at ###SITENAME###
     ###SITEURL###""")
-    email_change_email = Array({"to": old_email, "subject": __("[%s] Admin Email Changed"), "message": email_change_text, "headers": ""})
+    email_change_email_ = Array({"to": old_email_, "subject": __("[%s] Admin Email Changed"), "message": email_change_text_, "headers": ""})
     #// Get site name.
-    site_name = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+    site_name_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
     #// 
     #// Filters the contents of the email notification sent when the site admin email address is changed.
     #// 
@@ -5958,12 +6214,12 @@ def wp_site_admin_email_change_notification(old_email=None, new_email=None, opti
     #// @param string $old_email The old site admin email address.
     #// @param string $new_email The new site admin email address.
     #//
-    email_change_email = apply_filters("site_admin_email_change_email", email_change_email, old_email, new_email)
-    email_change_email["message"] = php_str_replace("###OLD_EMAIL###", old_email, email_change_email["message"])
-    email_change_email["message"] = php_str_replace("###NEW_EMAIL###", new_email, email_change_email["message"])
-    email_change_email["message"] = php_str_replace("###SITENAME###", site_name, email_change_email["message"])
-    email_change_email["message"] = php_str_replace("###SITEURL###", home_url(), email_change_email["message"])
-    wp_mail(email_change_email["to"], php_sprintf(email_change_email["subject"], site_name), email_change_email["message"], email_change_email["headers"])
+    email_change_email_ = apply_filters("site_admin_email_change_email", email_change_email_, old_email_, new_email_)
+    email_change_email_["message"] = php_str_replace("###OLD_EMAIL###", old_email_, email_change_email_["message"])
+    email_change_email_["message"] = php_str_replace("###NEW_EMAIL###", new_email_, email_change_email_["message"])
+    email_change_email_["message"] = php_str_replace("###SITENAME###", site_name_, email_change_email_["message"])
+    email_change_email_["message"] = php_str_replace("###SITEURL###", home_url(), email_change_email_["message"])
+    wp_mail(email_change_email_["to"], php_sprintf(email_change_email_["subject"], site_name_), email_change_email_["message"], email_change_email_["headers"])
 # end def wp_site_admin_email_change_notification
 #// 
 #// Return an anonymized IPv4 or IPv6 address.
@@ -5975,58 +6231,61 @@ def wp_site_admin_email_change_notification(old_email=None, new_email=None, opti
 #// to anonymize it are not present. Default false, return `::` (unspecified address).
 #// @return string  The anonymized IP address.
 #//
-def wp_privacy_anonymize_ip(ip_addr=None, ipv6_fallback=False, *args_):
+def wp_privacy_anonymize_ip(ip_addr_=None, ipv6_fallback_=None, *_args_):
+    if ipv6_fallback_ is None:
+        ipv6_fallback_ = False
+    # end if
     
     #// Detect what kind of IP address this is.
-    ip_prefix = ""
-    is_ipv6 = php_substr_count(ip_addr, ":") > 1
-    is_ipv4 = 3 == php_substr_count(ip_addr, ".")
-    if is_ipv6 and is_ipv4:
+    ip_prefix_ = ""
+    is_ipv6_ = php_substr_count(ip_addr_, ":") > 1
+    is_ipv4_ = 3 == php_substr_count(ip_addr_, ".")
+    if is_ipv6_ and is_ipv4_:
         #// IPv6 compatibility mode, temporarily strip the IPv6 part, and treat it like IPv4.
-        ip_prefix = "::ffff:"
-        ip_addr = php_preg_replace("/^\\[?[0-9a-f:]*:/i", "", ip_addr)
-        ip_addr = php_str_replace("]", "", ip_addr)
-        is_ipv6 = False
+        ip_prefix_ = "::ffff:"
+        ip_addr_ = php_preg_replace("/^\\[?[0-9a-f:]*:/i", "", ip_addr_)
+        ip_addr_ = php_str_replace("]", "", ip_addr_)
+        is_ipv6_ = False
     # end if
-    if is_ipv6:
+    if is_ipv6_:
         #// IPv6 addresses will always be enclosed in [] if there's a port.
-        left_bracket = php_strpos(ip_addr, "[")
-        right_bracket = php_strpos(ip_addr, "]")
-        percent = php_strpos(ip_addr, "%")
-        netmask = "ffff:ffff:ffff:ffff:0000:0000:0000:0000"
+        left_bracket_ = php_strpos(ip_addr_, "[")
+        right_bracket_ = php_strpos(ip_addr_, "]")
+        percent_ = php_strpos(ip_addr_, "%")
+        netmask_ = "ffff:ffff:ffff:ffff:0000:0000:0000:0000"
         #// Strip the port (and [] from IPv6 addresses), if they exist.
-        if False != left_bracket and False != right_bracket:
-            ip_addr = php_substr(ip_addr, left_bracket + 1, right_bracket - left_bracket - 1)
-        elif False != left_bracket or False != right_bracket:
+        if False != left_bracket_ and False != right_bracket_:
+            ip_addr_ = php_substr(ip_addr_, left_bracket_ + 1, right_bracket_ - left_bracket_ - 1)
+        elif False != left_bracket_ or False != right_bracket_:
             #// The IP has one bracket, but not both, so it's malformed.
             return "::"
         # end if
         #// Strip the reachability scope.
-        if False != percent:
-            ip_addr = php_substr(ip_addr, 0, percent)
+        if False != percent_:
+            ip_addr_ = php_substr(ip_addr_, 0, percent_)
         # end if
         #// No invalid characters should be left.
-        if php_preg_match("/[^0-9a-f:]/i", ip_addr):
+        if php_preg_match("/[^0-9a-f:]/i", ip_addr_):
             return "::"
         # end if
         #// Partially anonymize the IP by reducing it to the corresponding network ID.
         if php_function_exists("inet_pton") and php_function_exists("inet_ntop"):
-            ip_addr = inet_ntop(inet_pton(ip_addr) & inet_pton(netmask))
-            if False == ip_addr:
+            ip_addr_ = inet_ntop(inet_pton(ip_addr_) & inet_pton(netmask_))
+            if False == ip_addr_:
                 return "::"
             # end if
-        elif (not ipv6_fallback):
+        elif (not ipv6_fallback_):
             return "::"
         # end if
-    elif is_ipv4:
+    elif is_ipv4_:
         #// Strip any port and partially anonymize the IP.
-        last_octet_position = php_strrpos(ip_addr, ".")
-        ip_addr = php_substr(ip_addr, 0, last_octet_position) + ".0"
+        last_octet_position_ = php_strrpos(ip_addr_, ".")
+        ip_addr_ = php_substr(ip_addr_, 0, last_octet_position_) + ".0"
     else:
         return "0.0.0.0"
     # end if
     #// Restore the IPv6 prefix to compatibility mode addresses.
-    return ip_prefix + ip_addr
+    return ip_prefix_ + ip_addr_
 # end def wp_privacy_anonymize_ip
 #// 
 #// Return uniform "anonymous" data by type.
@@ -6037,37 +6296,38 @@ def wp_privacy_anonymize_ip(ip_addr=None, ipv6_fallback=False, *args_):
 #// @param  string $data Optional The data to be anonymized.
 #// @return string The anonymous data for the requested type.
 #//
-def wp_privacy_anonymize_data(type=None, data="", *args_):
+def wp_privacy_anonymize_data(type_=None, data_="", *_args_):
     
-    for case in Switch(type):
+    
+    for case in Switch(type_):
         if case("email"):
-            anonymous = "deleted@site.invalid"
+            anonymous_ = "deleted@site.invalid"
             break
         # end if
         if case("url"):
-            anonymous = "https://site.invalid"
+            anonymous_ = "https://site.invalid"
             break
         # end if
         if case("ip"):
-            anonymous = wp_privacy_anonymize_ip(data)
+            anonymous_ = wp_privacy_anonymize_ip(data_)
             break
         # end if
         if case("date"):
-            anonymous = "0000-00-00 00:00:00"
+            anonymous_ = "0000-00-00 00:00:00"
             break
         # end if
         if case("text"):
             #// translators: Deleted text.
-            anonymous = __("[deleted]")
+            anonymous_ = __("[deleted]")
             break
         # end if
         if case("longtext"):
             #// translators: Deleted long text.
-            anonymous = __("This content was deleted by the author.")
+            anonymous_ = __("This content was deleted by the author.")
             break
         # end if
         if case():
-            anonymous = ""
+            anonymous_ = ""
             break
         # end if
     # end for
@@ -6080,7 +6340,7 @@ def wp_privacy_anonymize_data(type=None, data="", *args_):
     #// @param string $type      Type of the data.
     #// @param string $data      Original data.
     #//
-    return apply_filters("wp_privacy_anonymize_data", anonymous, type, data)
+    return apply_filters("wp_privacy_anonymize_data", anonymous_, type_, data_)
 # end def wp_privacy_anonymize_data
 #// 
 #// Returns the directory used to store personal data export files.
@@ -6091,10 +6351,11 @@ def wp_privacy_anonymize_data(type=None, data="", *args_):
 #// 
 #// @return string Exports directory.
 #//
-def wp_privacy_exports_dir(*args_):
+def wp_privacy_exports_dir(*_args_):
     
-    upload_dir = wp_upload_dir()
-    exports_dir = trailingslashit(upload_dir["basedir"]) + "wp-personal-data-exports/"
+    
+    upload_dir_ = wp_upload_dir()
+    exports_dir_ = trailingslashit(upload_dir_["basedir"]) + "wp-personal-data-exports/"
     #// 
     #// Filters the directory used to store personal data export files.
     #// 
@@ -6102,7 +6363,7 @@ def wp_privacy_exports_dir(*args_):
     #// 
     #// @param string $exports_dir Exports directory.
     #//
-    return apply_filters("wp_privacy_exports_dir", exports_dir)
+    return apply_filters("wp_privacy_exports_dir", exports_dir_)
 # end def wp_privacy_exports_dir
 #// 
 #// Returns the URL of the directory used to store personal data export files.
@@ -6113,10 +6374,11 @@ def wp_privacy_exports_dir(*args_):
 #// 
 #// @return string Exports directory URL.
 #//
-def wp_privacy_exports_url(*args_):
+def wp_privacy_exports_url(*_args_):
     
-    upload_dir = wp_upload_dir()
-    exports_url = trailingslashit(upload_dir["baseurl"]) + "wp-personal-data-exports/"
+    
+    upload_dir_ = wp_upload_dir()
+    exports_url_ = trailingslashit(upload_dir_["baseurl"]) + "wp-personal-data-exports/"
     #// 
     #// Filters the URL of the directory used to store personal data export files.
     #// 
@@ -6124,14 +6386,15 @@ def wp_privacy_exports_url(*args_):
     #// 
     #// @param string $exports_url Exports directory URL.
     #//
-    return apply_filters("wp_privacy_exports_url", exports_url)
+    return apply_filters("wp_privacy_exports_url", exports_url_)
 # end def wp_privacy_exports_url
 #// 
 #// Schedule a `WP_Cron` job to delete expired export files.
 #// 
 #// @since 4.9.6
 #//
-def wp_schedule_delete_old_privacy_export_files(*args_):
+def wp_schedule_delete_old_privacy_export_files(*_args_):
+    
     
     if wp_installing():
         return
@@ -6151,14 +6414,15 @@ def wp_schedule_delete_old_privacy_export_files(*args_):
 #// 
 #// @since 4.9.6
 #//
-def wp_privacy_delete_old_export_files(*args_):
+def wp_privacy_delete_old_export_files(*_args_):
     
-    exports_dir = wp_privacy_exports_dir()
-    if (not php_is_dir(exports_dir)):
+    
+    exports_dir_ = wp_privacy_exports_dir()
+    if (not php_is_dir(exports_dir_)):
         return
     # end if
     php_include_file(ABSPATH + "wp-admin/includes/file.php", once=True)
-    export_files = list_files(exports_dir, 100, Array("index.html"))
+    export_files_ = list_files(exports_dir_, 100, Array("index.html"))
     #// 
     #// Filters the lifetime, in seconds, of a personal data export file.
     #// 
@@ -6169,11 +6433,11 @@ def wp_privacy_delete_old_export_files(*args_):
     #// 
     #// @param int $expiration The expiration age of the export, in seconds.
     #//
-    expiration = apply_filters("wp_privacy_export_expiration", 3 * DAY_IN_SECONDS)
-    for export_file in export_files:
-        file_age_in_seconds = time() - filemtime(export_file)
-        if expiration < file_age_in_seconds:
-            unlink(export_file)
+    expiration_ = apply_filters("wp_privacy_export_expiration", 3 * DAY_IN_SECONDS)
+    for export_file_ in export_files_:
+        file_age_in_seconds_ = time() - filemtime(export_file_)
+        if expiration_ < file_age_in_seconds_:
+            unlink(export_file_)
         # end if
     # end for
 # end def wp_privacy_delete_old_export_files
@@ -6189,12 +6453,13 @@ def wp_privacy_delete_old_export_files(*args_):
 #// 
 #// @return string URL to learn more about updating PHP.
 #//
-def wp_get_update_php_url(*args_):
+def wp_get_update_php_url(*_args_):
     
-    default_url = wp_get_default_update_php_url()
-    update_url = default_url
+    
+    default_url_ = wp_get_default_update_php_url()
+    update_url_ = default_url_
     if False != php_getenv("WP_UPDATE_PHP_URL"):
-        update_url = php_getenv("WP_UPDATE_PHP_URL")
+        update_url_ = php_getenv("WP_UPDATE_PHP_URL")
     # end if
     #// 
     #// Filters the URL to learn more about updating the PHP version the site is running on.
@@ -6206,11 +6471,11 @@ def wp_get_update_php_url(*args_):
     #// 
     #// @param string $update_url URL to learn more about updating PHP.
     #//
-    update_url = apply_filters("wp_update_php_url", update_url)
-    if php_empty(lambda : update_url):
-        update_url = default_url
+    update_url_ = apply_filters("wp_update_php_url", update_url_)
+    if php_empty(lambda : update_url_):
+        update_url_ = default_url_
     # end if
-    return update_url
+    return update_url_
 # end def wp_get_update_php_url
 #// 
 #// Gets the default URL to learn more about updating the PHP version the site is running on.
@@ -6224,7 +6489,8 @@ def wp_get_update_php_url(*args_):
 #// 
 #// @return string Default URL to learn more about updating PHP.
 #//
-def wp_get_default_update_php_url(*args_):
+def wp_get_default_update_php_url(*_args_):
+    
     
     return _x("https://wordpress.org/support/update-php/", "localized PHP upgrade information page")
 # end def wp_get_default_update_php_url
@@ -6240,11 +6506,12 @@ def wp_get_default_update_php_url(*args_):
 #// @param string $before Markup to output before the annotation. Default `<p class="description">`.
 #// @param string $after  Markup to output after the annotation. Default `</p>`.
 #//
-def wp_update_php_annotation(before="<p class=\"description\">", after="</p>", *args_):
+def wp_update_php_annotation(before_="<p class=\"description\">", after_="</p>", *_args_):
     
-    annotation = wp_get_update_php_annotation()
-    if annotation:
-        php_print(before + annotation + after)
+    
+    annotation_ = wp_get_update_php_annotation()
+    if annotation_:
+        php_print(before_ + annotation_ + after_)
     # end if
 # end def wp_update_php_annotation
 #// 
@@ -6257,15 +6524,16 @@ def wp_update_php_annotation(before="<p class=\"description\">", after="</p>", *
 #// 
 #// @return string $message Update PHP page annotation. An empty string if no custom URLs are provided.
 #//
-def wp_get_update_php_annotation(*args_):
+def wp_get_update_php_annotation(*_args_):
     
-    update_url = wp_get_update_php_url()
-    default_url = wp_get_default_update_php_url()
-    if update_url == default_url:
+    
+    update_url_ = wp_get_update_php_url()
+    default_url_ = wp_get_default_update_php_url()
+    if update_url_ == default_url_:
         return ""
     # end if
-    annotation = php_sprintf(__("This resource is provided by your web host, and is specific to your site. For more information, <a href=\"%s\" target=\"_blank\">see the official WordPress documentation</a>."), esc_url(default_url))
-    return annotation
+    annotation_ = php_sprintf(__("This resource is provided by your web host, and is specific to your site. For more information, <a href=\"%s\" target=\"_blank\">see the official WordPress documentation</a>."), esc_url(default_url_))
+    return annotation_
 # end def wp_get_update_php_annotation
 #// 
 #// Gets the URL for directly updating the PHP version the site is running on.
@@ -6278,11 +6546,12 @@ def wp_get_update_php_annotation(*args_):
 #// 
 #// @return string URL for directly updating PHP or empty string.
 #//
-def wp_get_direct_php_update_url(*args_):
+def wp_get_direct_php_update_url(*_args_):
     
-    direct_update_url = ""
+    
+    direct_update_url_ = ""
     if False != php_getenv("WP_DIRECT_UPDATE_PHP_URL"):
-        direct_update_url = php_getenv("WP_DIRECT_UPDATE_PHP_URL")
+        direct_update_url_ = php_getenv("WP_DIRECT_UPDATE_PHP_URL")
     # end if
     #// 
     #// Filters the URL for directly updating the PHP version the site is running on from the host.
@@ -6291,8 +6560,8 @@ def wp_get_direct_php_update_url(*args_):
     #// 
     #// @param string $direct_update_url URL for directly updating PHP.
     #//
-    direct_update_url = apply_filters("wp_direct_php_update_url", direct_update_url)
-    return direct_update_url
+    direct_update_url_ = apply_filters("wp_direct_php_update_url", direct_update_url_)
+    return direct_update_url_
 # end def wp_get_direct_php_update_url
 #// 
 #// Display a button directly linking to a PHP update process.
@@ -6303,14 +6572,15 @@ def wp_get_direct_php_update_url(*args_):
 #// 
 #// @since 5.1.1
 #//
-def wp_direct_php_update_button(*args_):
+def wp_direct_php_update_button(*_args_):
     
-    direct_update_url = wp_get_direct_php_update_url()
-    if php_empty(lambda : direct_update_url):
+    
+    direct_update_url_ = wp_get_direct_php_update_url()
+    if php_empty(lambda : direct_update_url_):
         return
     # end if
     php_print("<p class=\"button-container\">")
-    printf("<a class=\"button button-primary\" href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(direct_update_url), __("Update PHP"), __("(opens in a new tab)"))
+    printf("<a class=\"button button-primary\" href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(direct_update_url_), __("Update PHP"), __("(opens in a new tab)"))
     php_print("</p>")
 # end def wp_direct_php_update_button
 #// 
@@ -6327,24 +6597,25 @@ def wp_direct_php_update_button(*args_):
 #// The timeout is global and is measured from the moment WordPress started to load.
 #// @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
 #//
-def get_dirsize(directory=None, max_execution_time=None, *args_):
+def get_dirsize(directory_=None, max_execution_time_=None, *_args_):
     
-    dirsize = get_transient("dirsize_cache")
-    if php_is_array(dirsize) and (php_isset(lambda : dirsize[directory]["size"])):
-        return dirsize[directory]["size"]
+    
+    dirsize_ = get_transient("dirsize_cache")
+    if php_is_array(dirsize_) and (php_isset(lambda : dirsize_[directory_]["size"])):
+        return dirsize_[directory_]["size"]
     # end if
-    if (not php_is_array(dirsize)):
-        dirsize = Array()
+    if (not php_is_array(dirsize_)):
+        dirsize_ = Array()
     # end if
     #// Exclude individual site directories from the total when checking the main site of a network,
     #// as they are subdirectories and should not be counted.
     if is_multisite() and is_main_site():
-        dirsize[directory]["size"] = recurse_dirsize(directory, directory + "/sites", max_execution_time)
+        dirsize_[directory_]["size"] = recurse_dirsize(directory_, directory_ + "/sites", max_execution_time_)
     else:
-        dirsize[directory]["size"] = recurse_dirsize(directory, None, max_execution_time)
+        dirsize_[directory_]["size"] = recurse_dirsize(directory_, None, max_execution_time_)
     # end if
-    set_transient("dirsize_cache", dirsize, HOUR_IN_SECONDS)
-    return dirsize[directory]["size"]
+    set_transient("dirsize_cache", dirsize_, HOUR_IN_SECONDS)
+    return dirsize_[directory_]["size"]
 # end def get_dirsize
 #// 
 #// Get the size of a directory recursively.
@@ -6363,56 +6634,57 @@ def get_dirsize(directory=None, max_execution_time=None, *args_):
 #// The timeout is global and is measured from the moment WordPress started to load.
 #// @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
 #//
-def recurse_dirsize(directory=None, exclude=None, max_execution_time=None, *args_):
+def recurse_dirsize(directory_=None, exclude_=None, max_execution_time_=None, *_args_):
     
-    size = 0
-    directory = untrailingslashit(directory)
-    if (not php_file_exists(directory)) or (not php_is_dir(directory)) or (not php_is_readable(directory)):
+    
+    size_ = 0
+    directory_ = untrailingslashit(directory_)
+    if (not php_file_exists(directory_)) or (not php_is_dir(directory_)) or (not php_is_readable(directory_)):
         return False
     # end if
-    if php_is_string(exclude) and directory == exclude or php_is_array(exclude) and php_in_array(directory, exclude, True):
+    if php_is_string(exclude_) and directory_ == exclude_ or php_is_array(exclude_) and php_in_array(directory_, exclude_, True):
         return False
     # end if
-    if None == max_execution_time:
+    if None == max_execution_time_:
         #// Keep the previous behavior but attempt to prevent fatal errors from timeout if possible.
         if php_function_exists("ini_get"):
-            max_execution_time = php_ini_get("max_execution_time")
+            max_execution_time_ = php_ini_get("max_execution_time")
         else:
             #// Disable...
-            max_execution_time = 0
+            max_execution_time_ = 0
         # end if
         #// Leave 1 second "buffer" for other operations if $max_execution_time has reasonable value.
-        if max_execution_time > 10:
-            max_execution_time -= 1
+        if max_execution_time_ > 10:
+            max_execution_time_ -= 1
         # end if
     # end if
-    handle = php_opendir(directory)
-    if handle:
+    handle_ = php_opendir(directory_)
+    if handle_:
         while True:
-            file = php_readdir(handle)
-            if not (file != False):
+            file_ = php_readdir(handle_)
+            if not (file_ != False):
                 break
             # end if
-            path = directory + "/" + file
-            if "." != file and ".." != file:
-                if php_is_file(path):
-                    size += filesize(path)
-                elif php_is_dir(path):
-                    handlesize = recurse_dirsize(path, exclude, max_execution_time)
-                    if handlesize > 0:
-                        size += handlesize
+            path_ = directory_ + "/" + file_
+            if "." != file_ and ".." != file_:
+                if php_is_file(path_):
+                    size_ += filesize(path_)
+                elif php_is_dir(path_):
+                    handlesize_ = recurse_dirsize(path_, exclude_, max_execution_time_)
+                    if handlesize_ > 0:
+                        size_ += handlesize_
                     # end if
                 # end if
-                if max_execution_time > 0 and php_microtime(True) - WP_START_TIMESTAMP > max_execution_time:
+                if max_execution_time_ > 0 and php_microtime(True) - WP_START_TIMESTAMP > max_execution_time_:
                     #// Time exceeded. Give up instead of risking a fatal timeout.
-                    size = None
+                    size_ = None
                     break
                 # end if
             # end if
         # end while
-        php_closedir(handle)
+        php_closedir(handle_)
     # end if
-    return size
+    return size_
 # end def recurse_dirsize
 #// 
 #// Checks compatibility with the current WordPress version.
@@ -6422,9 +6694,10 @@ def recurse_dirsize(directory=None, exclude=None, max_execution_time=None, *args
 #// @param string $required Minimum required WordPress version.
 #// @return bool True if required version is compatible or empty, false if not.
 #//
-def is_wp_version_compatible(required=None, *args_):
+def is_wp_version_compatible(required_=None, *_args_):
     
-    return php_empty(lambda : required) or php_version_compare(get_bloginfo("version"), required, ">=")
+    
+    return php_empty(lambda : required_) or php_version_compare(get_bloginfo("version"), required_, ">=")
 # end def is_wp_version_compatible
 #// 
 #// Checks compatibility with the current PHP version.
@@ -6434,9 +6707,10 @@ def is_wp_version_compatible(required=None, *args_):
 #// @param string $required Minimum required PHP version.
 #// @return bool True if required version is compatible or empty, false if not.
 #//
-def is_php_version_compatible(required=None, *args_):
+def is_php_version_compatible(required_=None, *_args_):
     
-    return php_empty(lambda : required) or php_version_compare(php_phpversion(), required, ">=")
+    
+    return php_empty(lambda : required_) or php_version_compare(php_phpversion(), required_, ">=")
 # end def is_php_version_compatible
 #// 
 #// Check if two numbers are nearly the same.
@@ -6450,7 +6724,8 @@ def is_php_version_compatible(required=None, *args_):
 #// @param int|float $precision The allowed variation.
 #// @return bool Whether the numbers match whithin the specified precision.
 #//
-def wp_fuzzy_number_match(expected=None, actual=None, precision=1, *args_):
+def wp_fuzzy_number_match(expected_=None, actual_=None, precision_=1, *_args_):
     
-    return abs(php_float(expected) - php_float(actual)) <= precision
+    
+    return abs(php_float(expected_) - php_float(actual_)) <= precision_
 # end def wp_fuzzy_number_match

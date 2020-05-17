@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -48,24 +43,31 @@ class Automatic_Upgrader_Skin(WP_Upgrader_Skin):
     #// @param bool          $allow_relaxed_file_ownership Optional. Whether to allow Group/World writable. Default false.
     #// @return bool True on success, false on failure.
     #//
-    def request_filesystem_credentials(self, error=False, context="", allow_relaxed_file_ownership=False):
+    def request_filesystem_credentials(self, error_=None, context_="", allow_relaxed_file_ownership_=None):
+        if error_ is None:
+            error_ = False
+        # end if
+        if allow_relaxed_file_ownership_ is None:
+            allow_relaxed_file_ownership_ = False
+        # end if
         
-        if context:
-            self.options["context"] = context
+        if context_:
+            self.options["context"] = context_
         # end if
         #// 
         #// TODO: Fix up request_filesystem_credentials(), or split it, to allow us to request a no-output version.
         #// This will output a credentials form in event of failure. We don't want that, so just hide with a buffer.
         #//
         ob_start()
-        result = super().request_filesystem_credentials(error, context, allow_relaxed_file_ownership)
+        result_ = super().request_filesystem_credentials(error_, context_, allow_relaxed_file_ownership_)
         ob_end_clean()
-        return result
+        return result_
     # end def request_filesystem_credentials
     #// 
     #// @return array
     #//
     def get_upgrade_messages(self):
+        
         
         return self.messages
     # end def get_upgrade_messages
@@ -73,34 +75,36 @@ class Automatic_Upgrader_Skin(WP_Upgrader_Skin):
     #// @param string|array|WP_Error $data
     #// @param mixed                 ...$args Optional text replacements.
     #//
-    def feedback(self, data=None, *args):
+    def feedback(self, data_=None, *args_):
         
-        if is_wp_error(data):
-            string = data.get_error_message()
-        elif php_is_array(data):
+        
+        if is_wp_error(data_):
+            string_ = data_.get_error_message()
+        elif php_is_array(data_):
             return
         else:
-            string = data
+            string_ = data_
         # end if
-        if (not php_empty(lambda : self.upgrader.strings[string])):
-            string = self.upgrader.strings[string]
+        if (not php_empty(lambda : self.upgrader.strings[string_])):
+            string_ = self.upgrader.strings[string_]
         # end if
-        if php_strpos(string, "%") != False:
-            if (not php_empty(lambda : args)):
-                string = vsprintf(string, args)
+        if php_strpos(string_, "%") != False:
+            if (not php_empty(lambda : args_)):
+                string_ = vsprintf(string_, args_)
             # end if
         # end if
-        string = php_trim(string)
+        string_ = php_trim(string_)
         #// Only allow basic HTML in the messages, as it'll be used in emails/logs rather than direct browser output.
-        string = wp_kses(string, Array({"a": Array({"href": True})}, {"br": True, "em": True, "strong": True}))
-        if php_empty(lambda : string):
+        string_ = wp_kses(string_, Array({"a": Array({"href": True})}, {"br": True, "em": True, "strong": True}))
+        if php_empty(lambda : string_):
             return
         # end if
-        self.messages[-1] = string
+        self.messages[-1] = string_
     # end def feedback
     #// 
     #//
     def header(self):
+        
         
         ob_start()
     # end def header
@@ -108,9 +112,10 @@ class Automatic_Upgrader_Skin(WP_Upgrader_Skin):
     #//
     def footer(self):
         
-        output = ob_get_clean()
-        if (not php_empty(lambda : output)):
-            self.feedback(output)
+        
+        output_ = ob_get_clean()
+        if (not php_empty(lambda : output_)):
+            self.feedback(output_)
         # end if
     # end def footer
 # end class Automatic_Upgrader_Skin

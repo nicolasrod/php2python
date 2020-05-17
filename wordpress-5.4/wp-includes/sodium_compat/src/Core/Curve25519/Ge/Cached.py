@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -19,9 +14,21 @@ if php_class_exists("ParagonIE_Sodium_Core_Curve25519_Ge_Cached", False):
 #// Class ParagonIE_Sodium_Core_Curve25519_Ge_Cached
 #//
 class ParagonIE_Sodium_Core_Curve25519_Ge_Cached():
+    #// 
+    #// @var ParagonIE_Sodium_Core_Curve25519_Fe
+    #//
     YplusX = Array()
+    #// 
+    #// @var ParagonIE_Sodium_Core_Curve25519_Fe
+    #//
     YminusX = Array()
+    #// 
+    #// @var ParagonIE_Sodium_Core_Curve25519_Fe
+    #//
     Z = Array()
+    #// 
+    #// @var ParagonIE_Sodium_Core_Curve25519_Fe
+    #//
     T2d = Array()
     #// 
     #// ParagonIE_Sodium_Core_Curve25519_Ge_Cached constructor.
@@ -33,23 +40,24 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_Cached():
     #// @param ParagonIE_Sodium_Core_Curve25519_Fe|null $Z
     #// @param ParagonIE_Sodium_Core_Curve25519_Fe|null $T2d
     #//
-    def __init__(self, YplusX=None, YminusX=None, Z=None, T2d=None):
+    def __init__(self, YplusX_=None, YminusX_=None, Z_=None, T2d_=None):
         
-        if YplusX == None:
-            YplusX = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
+        
+        if YplusX_ == None:
+            YplusX_ = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
         # end if
-        self.YplusX = YplusX
-        if YminusX == None:
-            YminusX = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
+        self.YplusX = YplusX_
+        if YminusX_ == None:
+            YminusX_ = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
         # end if
-        self.YminusX = YminusX
-        if Z == None:
-            Z = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
+        self.YminusX = YminusX_
+        if Z_ == None:
+            Z_ = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
         # end if
-        self.Z = Z
-        if T2d == None:
-            T2d = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
+        self.Z = Z_
+        if T2d_ == None:
+            T2d_ = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())
         # end if
-        self.T2d = T2d
+        self.T2d = T2d_
     # end def __init__
 # end class ParagonIE_Sodium_Core_Curve25519_Ge_Cached

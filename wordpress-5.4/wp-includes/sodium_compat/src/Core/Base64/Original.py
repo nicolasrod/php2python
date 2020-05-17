@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,9 +25,10 @@ class ParagonIE_Sodium_Core_Base64_Original():
     #// @throws TypeError
     #//
     @classmethod
-    def encode(self, src=None):
+    def encode(self, src_=None):
         
-        return self.doencode(src, True)
+        
+        return self.doencode(src_, True)
     # end def encode
     #// 
     #// Encode into Base64, no = padding
@@ -44,9 +40,10 @@ class ParagonIE_Sodium_Core_Base64_Original():
     #// @throws TypeError
     #//
     @classmethod
-    def encodeunpadded(self, src=None):
+    def encodeunpadded(self, src_=None):
         
-        return self.doencode(src, False)
+        
+        return self.doencode(src_, False)
     # end def encodeunpadded
     #// 
     #// @param string $src
@@ -54,41 +51,44 @@ class ParagonIE_Sodium_Core_Base64_Original():
     #// @return string
     #// @throws TypeError
     #//
-    def doencode(self, src=None, pad=True):
+    def doencode(self, src_=None, pad_=None):
+        if pad_ is None:
+            pad_ = True
+        # end if
         
-        dest = ""
-        srcLen = ParagonIE_Sodium_Core_Util.strlen(src)
+        dest_ = ""
+        srcLen_ = ParagonIE_Sodium_Core_Util.strlen(src_)
         #// Main loop (no padding):
-        i = 0
-        while i + 3 <= srcLen:
+        i_ = 0
+        while i_ + 3 <= srcLen_:
             
             #// @var array<int, int> $chunk
-            chunk = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src, i, 3))
-            b0 = chunk[1]
-            b1 = chunk[2]
-            b2 = chunk[3]
-            dest += self.encode6bits(b0 >> 2) + self.encode6bits(b0 << 4 | b1 >> 4 & 63) + self.encode6bits(b1 << 2 | b2 >> 6 & 63) + self.encode6bits(b2 & 63)
-            i += 3
+            chunk_ = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src_, i_, 3))
+            b0_ = chunk_[1]
+            b1_ = chunk_[2]
+            b2_ = chunk_[3]
+            dest_ += self.encode6bits(b0_ >> 2) + self.encode6bits(b0_ << 4 | b1_ >> 4 & 63) + self.encode6bits(b1_ << 2 | b2_ >> 6 & 63) + self.encode6bits(b2_ & 63)
+            i_ += 3
         # end while
         #// The last chunk, which may have padding:
-        if i < srcLen:
+        if i_ < srcLen_:
             #// @var array<int, int> $chunk
-            chunk = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src, i, srcLen - i))
-            b0 = chunk[1]
-            if i + 1 < srcLen:
-                b1 = chunk[2]
-                dest += self.encode6bits(b0 >> 2) + self.encode6bits(b0 << 4 | b1 >> 4 & 63) + self.encode6bits(b1 << 2 & 63)
-                if pad:
-                    dest += "="
+            chunk_ = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src_, i_, srcLen_ - i_))
+            b0_ = chunk_[1]
+            if i_ + 1 < srcLen_:
+                b1_ = chunk_[2]
+                dest_ += self.encode6bits(b0_ >> 2) + self.encode6bits(b0_ << 4 | b1_ >> 4 & 63) + self.encode6bits(b1_ << 2 & 63)
+                if pad_:
+                    dest_ += "="
                 # end if
             else:
-                dest += self.encode6bits(b0 >> 2) + self.encode6bits(b0 << 4 & 63)
-                if pad:
-                    dest += "=="
+                dest_ += self.encode6bits(b0_ >> 2) + self.encode6bits(b0_ << 4 & 63)
+                if pad_:
+                    dest_ += "=="
                 # end if
             # end if
         # end if
-        return dest
+        return dest_
     # end def doencode
     #// 
     #// decode from base64 into binary
@@ -103,72 +103,75 @@ class ParagonIE_Sodium_Core_Base64_Original():
     #// @psalm-suppress RedundantCondition
     #//
     @classmethod
-    def decode(self, src=None, strictPadding=False):
+    def decode(self, src_=None, strictPadding_=None):
+        if strictPadding_ is None:
+            strictPadding_ = False
+        # end if
         
         #// Remove padding
-        srcLen = ParagonIE_Sodium_Core_Util.strlen(src)
-        if srcLen == 0:
+        srcLen_ = ParagonIE_Sodium_Core_Util.strlen(src_)
+        if srcLen_ == 0:
             return ""
         # end if
-        if strictPadding:
-            if srcLen & 3 == 0:
-                if src[srcLen - 1] == "=":
-                    srcLen -= 1
-                    if src[srcLen - 1] == "=":
-                        srcLen -= 1
+        if strictPadding_:
+            if srcLen_ & 3 == 0:
+                if src_[srcLen_ - 1] == "=":
+                    srcLen_ -= 1
+                    if src_[srcLen_ - 1] == "=":
+                        srcLen_ -= 1
                     # end if
                 # end if
             # end if
-            if srcLen & 3 == 1:
+            if srcLen_ & 3 == 1:
                 raise php_new_class("RangeException", lambda : RangeException("Incorrect padding"))
             # end if
-            if src[srcLen - 1] == "=":
+            if src_[srcLen_ - 1] == "=":
                 raise php_new_class("RangeException", lambda : RangeException("Incorrect padding"))
             # end if
         else:
-            src = php_rtrim(src, "=")
-            srcLen = ParagonIE_Sodium_Core_Util.strlen(src)
+            src_ = php_rtrim(src_, "=")
+            srcLen_ = ParagonIE_Sodium_Core_Util.strlen(src_)
         # end if
-        err = 0
-        dest = ""
+        err_ = 0
+        dest_ = ""
         #// Main loop (no padding):
-        i = 0
-        while i + 4 <= srcLen:
+        i_ = 0
+        while i_ + 4 <= srcLen_:
             
             #// @var array<int, int> $chunk
-            chunk = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src, i, 4))
-            c0 = self.decode6bits(chunk[1])
-            c1 = self.decode6bits(chunk[2])
-            c2 = self.decode6bits(chunk[3])
-            c3 = self.decode6bits(chunk[4])
-            dest += pack("CCC", c0 << 2 | c1 >> 4 & 255, c1 << 4 | c2 >> 2 & 255, c2 << 6 | c3 & 255)
-            err |= c0 | c1 | c2 | c3 >> 8
-            i += 4
+            chunk_ = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src_, i_, 4))
+            c0_ = self.decode6bits(chunk_[1])
+            c1_ = self.decode6bits(chunk_[2])
+            c2_ = self.decode6bits(chunk_[3])
+            c3_ = self.decode6bits(chunk_[4])
+            dest_ += pack("CCC", c0_ << 2 | c1_ >> 4 & 255, c1_ << 4 | c2_ >> 2 & 255, c2_ << 6 | c3_ & 255)
+            err_ |= c0_ | c1_ | c2_ | c3_ >> 8
+            i_ += 4
         # end while
         #// The last chunk, which may have padding:
-        if i < srcLen:
+        if i_ < srcLen_:
             #// @var array<int, int> $chunk
-            chunk = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src, i, srcLen - i))
-            c0 = self.decode6bits(chunk[1])
-            if i + 2 < srcLen:
-                c1 = self.decode6bits(chunk[2])
-                c2 = self.decode6bits(chunk[3])
-                dest += pack("CC", c0 << 2 | c1 >> 4 & 255, c1 << 4 | c2 >> 2 & 255)
-                err |= c0 | c1 | c2 >> 8
-            elif i + 1 < srcLen:
-                c1 = self.decode6bits(chunk[2])
-                dest += pack("C", c0 << 2 | c1 >> 4 & 255)
-                err |= c0 | c1 >> 8
-            elif i < srcLen and strictPadding:
-                err |= 1
+            chunk_ = unpack("C*", ParagonIE_Sodium_Core_Util.substr(src_, i_, srcLen_ - i_))
+            c0_ = self.decode6bits(chunk_[1])
+            if i_ + 2 < srcLen_:
+                c1_ = self.decode6bits(chunk_[2])
+                c2_ = self.decode6bits(chunk_[3])
+                dest_ += pack("CC", c0_ << 2 | c1_ >> 4 & 255, c1_ << 4 | c2_ >> 2 & 255)
+                err_ |= c0_ | c1_ | c2_ >> 8
+            elif i_ + 1 < srcLen_:
+                c1_ = self.decode6bits(chunk_[2])
+                dest_ += pack("C", c0_ << 2 | c1_ >> 4 & 255)
+                err_ |= c0_ | c1_ >> 8
+            elif i_ < srcLen_ and strictPadding_:
+                err_ |= 1
             # end if
         # end if
         #// @var bool $check
-        check = err == 0
-        if (not check):
+        check_ = err_ == 0
+        if (not check_):
             raise php_new_class("RangeException", lambda : RangeException("Base64::decode() only expects characters in the correct base64 alphabet"))
         # end if
-        return dest
+        return dest_
     # end def decode
     #// COPY ParagonIE_Sodium_Core_Base64_Common ENDING HERE
     #// 
@@ -182,20 +185,21 @@ class ParagonIE_Sodium_Core_Base64_Original():
     #// @param int $src
     #// @return int
     #//
-    def decode6bits(self, src=None):
+    def decode6bits(self, src_=None):
         
-        ret = -1
+        
+        ret_ = -1
         #// if ($src > 0x40 && $src < 0x5b) $ret += $src - 0x41 + 1; // -64
-        ret += 64 - src & src - 91 >> 8 & src - 64
+        ret_ += 64 - src_ & src_ - 91 >> 8 & src_ - 64
         #// if ($src > 0x60 && $src < 0x7b) $ret += $src - 0x61 + 26 + 1; // -70
-        ret += 96 - src & src - 123 >> 8 & src - 70
+        ret_ += 96 - src_ & src_ - 123 >> 8 & src_ - 70
         #// if ($src > 0x2f && $src < 0x3a) $ret += $src - 0x30 + 52 + 1; // 5
-        ret += 47 - src & src - 58 >> 8 & src + 5
+        ret_ += 47 - src_ & src_ - 58 >> 8 & src_ + 5
         #// if ($src == 0x2b) $ret += 62 + 1;
-        ret += 42 - src & src - 44 >> 8 & 63
+        ret_ += 42 - src_ & src_ - 44 >> 8 & 63
         #// if ($src == 0x2f) ret += 63 + 1;
-        ret += 46 - src & src - 48 >> 8 & 64
-        return ret
+        ret_ += 46 - src_ & src_ - 48 >> 8 & 64
+        return ret_
     # end def decode6bits
     #// 
     #// Uses bitwise operators instead of table-lookups to turn 8-bit integers
@@ -204,17 +208,18 @@ class ParagonIE_Sodium_Core_Base64_Original():
     #// @param int $src
     #// @return string
     #//
-    def encode6bits(self, src=None):
+    def encode6bits(self, src_=None):
         
-        diff = 65
+        
+        diff_ = 65
         #// if ($src > 25) $diff += 0x61 - 0x41 - 26; // 6
-        diff += 25 - src >> 8 & 6
+        diff_ += 25 - src_ >> 8 & 6
         #// if ($src > 51) $diff += 0x30 - 0x61 - 26; // -75
-        diff -= 51 - src >> 8 & 75
+        diff_ -= 51 - src_ >> 8 & 75
         #// if ($src > 61) $diff += 0x2b - 0x30 - 10; // -15
-        diff -= 61 - src >> 8 & 15
+        diff_ -= 61 - src_ >> 8 & 15
         #// if ($src > 62) $diff += 0x2f - 0x2b - 1; // 3
-        diff += 62 - src >> 8 & 3
-        return pack("C", src + diff)
+        diff_ += 62 - src_ >> 8 & 3
+        return pack("C", src_ + diff_)
     # end def encode6bits
 # end class ParagonIE_Sodium_Core_Base64_Original

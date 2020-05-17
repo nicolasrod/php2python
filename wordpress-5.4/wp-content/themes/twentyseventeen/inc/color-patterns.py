@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -22,9 +17,10 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// Generate the CSS for the current custom color scheme.
 #//
-def twentyseventeen_custom_colors_css(*args_):
+def twentyseventeen_custom_colors_css(*_args_):
     
-    hue = absint(get_theme_mod("colorscheme_hue", 250))
+    
+    hue_ = absint(get_theme_mod("colorscheme_hue", 250))
     #// 
     #// Filter Twenty Seventeen default saturation level.
     #// 
@@ -32,10 +28,10 @@ def twentyseventeen_custom_colors_css(*args_):
     #// 
     #// @param int $saturation Color saturation level.
     #//
-    saturation = absint(apply_filters("twentyseventeen_custom_colors_saturation", 50))
-    reduced_saturation = 0.8 * saturation + "%"
-    saturation = saturation + "%"
-    css = """
+    saturation_ = absint(apply_filters("twentyseventeen_custom_colors_saturation", 50))
+    reduced_saturation_ = 0.8 * saturation_ + "%"
+    saturation_ = saturation_ + "%"
+    css_ = """
     /**
     * Twenty Seventeen: Color Patterns
     *
@@ -99,7 +95,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .widget .widget-title a:hover,
     .colors-custom .widget ul li a:focus,
     .colors-custom .widget ul li a:hover {
-    color: hsl( """ + hue + ", " + saturation + """, 0% ); /* base: #000; */
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 0% ); /* base: #000; */
     }
     .colors-custom .entry-content a,
     .colors-custom .entry-summary a,
@@ -108,13 +104,13 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .site-footer .widget-area a,
     .colors-custom .posts-navigation a,
     .colors-custom .widget_authors a strong {
-    -webkit-box-shadow: inset 0 -1px 0 hsl( """ + hue + ", " + saturation + ", 6% ); /* base: rgba(15, 15, 15, 1); */\n box-shadow: inset 0 -1px 0 hsl( " + hue + ", " + saturation + """, 6% ); /* base: rgba(15, 15, 15, 1); */
+    -webkit-box-shadow: inset 0 -1px 0 hsl( """ + hue_ + ", " + saturation_ + ", 6% ); /* base: rgba(15, 15, 15, 1); */\n   box-shadow: inset 0 -1px 0 hsl( " + hue_ + ", " + saturation_ + """, 6% ); /* base: rgba(15, 15, 15, 1); */
     }
     .colors-custom button,
     .colors-custom input[type=\"button\"],
     .colors-custom input[type=\"submit\"],
     .colors-custom .entry-footer .edit-link a.post-edit-link {
-    background-color: hsl( """ + hue + ", " + saturation + """, 13% ); /* base: #222; */
+    background-color: hsl( """ + hue_ + ", " + saturation_ + """, 13% ); /* base: #222; */
     }
     .colors-custom input[type=\"text\"]:focus,
     .colors-custom input[type=\"email\"]:focus,
@@ -155,7 +151,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .post-navigation a:hover .icon,
     .colors-custom .site-content .site-content-light,
     .colors-custom .twentyseventeen-panel .recent-posts .entry-header .edit-link {
-    color: hsl( """ + hue + ", " + saturation + """, 13% ); /* base: #222; */
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 13% ); /* base: #222; */
     }
     .colors-custom .entry-content a:focus,
     .colors-custom .entry-content a:hover,
@@ -211,7 +207,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .widget .widget-title a:hover,
     .colors-custom .widget ul li a:focus,
     .colors-custom .widget ul li a:hover {
-    -webkit-box-shadow: inset 0 0 0 hsl( """ + hue + ", " + saturation + ", 13% ), 0 3px 0 hsl( " + hue + ", " + saturation + ", 13% );\n   box-shadow: inset 0 0 0 hsl( " + hue + ", " + saturation + " , 13% ), 0 3px 0 hsl( " + hue + ", " + saturation + """, 13% );
+    -webkit-box-shadow: inset 0 0 0 hsl( """ + hue_ + ", " + saturation_ + ", 13% ), 0 3px 0 hsl( " + hue_ + ", " + saturation_ + ", 13% );\n   box-shadow: inset 0 0 0 hsl( " + hue_ + ", " + saturation_ + " , 13% ), 0 3px 0 hsl( " + hue_ + ", " + saturation_ + """, 13% );
     }
     body.colors-custom,
     .colors-custom button,
@@ -230,11 +226,11 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .nav-title,
     .colors-custom .comment-body,
     .colors-custom .site-content .wp-playlist-light .wp-playlist-current-item .wp-playlist-item-album {
-    color: hsl( """ + hue + ", " + reduced_saturation + """, 20% ); /* base: #333; */
+    color: hsl( """ + hue_ + ", " + reduced_saturation_ + """, 20% ); /* base: #333; */
     }
     .colors-custom .social-navigation a:hover,
     .colors-custom .social-navigation a:focus {
-    background: hsl( """ + hue + ", " + reduced_saturation + """, 20% ); /* base: #333; */
+    background: hsl( """ + hue_ + ", " + reduced_saturation_ + """, 20% ); /* base: #333; */
     }
     .colors-custom input[type=\"text\"]:focus,
     .colors-custom input[type=\"email\"]:focus,
@@ -253,7 +249,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom input[type=\"color\"]:focus,
     .colors-custom textarea:focus,
     .bypostauthor > .comment-body > .comment-meta > .comment-author .avatar {
-    border-color: hsl( """ + hue + ", " + reduced_saturation + """, 20% ); /* base: #333; */
+    border-color: hsl( """ + hue_ + ", " + reduced_saturation_ + """, 20% ); /* base: #333; */
     }
     .colors-custom h2,
     .colors-custom blockquote,
@@ -280,11 +276,11 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .site-info a,
     .colors-custom .wp-caption,
     .colors-custom .gallery-caption {
-    color: hsl( """ + hue + ", " + saturation + """, 40% ); /* base: #666; */
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 40% ); /* base: #666; */
     }
     .colors-custom abbr,
     .colors-custom acronym {
-    border-bottom-color: hsl( """ + hue + ", " + saturation + """, 40% ); /* base: #666; */
+    border-bottom-color: hsl( """ + hue_ + ", " + saturation_ + """, 40% ); /* base: #666; */
     }
     .colors-custom h5,
     .colors-custom .entry-meta,
@@ -303,7 +299,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .navigation-top .current_page_item > a,
     .colors-custom .main-navigation a:hover,
     .colors-custom .site-content .wp-playlist-light .wp-playlist-current-item .wp-playlist-item-artist {
-    color: hsl( """ + hue + ", " + saturation + """, 46% ); /* base: #767676; */
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 46% ); /* base: #767676; */
     }
     .colors-custom :not( .mejs-button ) > button:hover,
     .colors-custom :not( .mejs-button ) > button:focus,
@@ -320,7 +316,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .next.page-numbers:hover,
     .colors-custom .site-content .wp-playlist-light .wp-playlist-item:hover,
     .colors-custom .site-content .wp-playlist-light .wp-playlist-item:focus {
-    background: hsl( """ + esc_attr(hue) + ", " + esc_attr(saturation) + """, 46% ); /* base: #767676; */
+    background: hsl( """ + esc_attr(hue_) + ", " + esc_attr(saturation_) + """, 46% ); /* base: #767676; */
     }
     .colors-custom button.secondary:hover,
     .colors-custom button.secondary:focus,
@@ -333,7 +329,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom input[type=\"submit\"].secondary:hover,
     .colors-custom input[type=\"submit\"].secondary:focus,
     .colors-custom hr {
-    background: hsl( """ + hue + ", " + saturation + """, 73% ); /* base: #bbb; */
+    background: hsl( """ + hue_ + ", " + saturation_ + """, 73% ); /* base: #bbb; */
     }
     .colors-custom input[type=\"text\"],
     .colors-custom input[type=\"email\"],
@@ -359,14 +355,14 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .widget.widget_tag_cloud a:focus,
     .colors-custom .wp_widget_tag_cloud a:hover,
     .colors-custom .wp_widget_tag_cloud a:focus {
-    border-color: hsl( """ + hue + ", " + saturation + """, 73% ); /* base: #bbb; */
+    border-color: hsl( """ + hue_ + ", " + saturation_ + """, 73% ); /* base: #bbb; */
     }
     .colors-custom thead th {
-    border-bottom-color: hsl( """ + hue + ", " + saturation + """, 73% ); /* base: #bbb; */
+    border-bottom-color: hsl( """ + hue_ + ", " + saturation_ + """, 73% ); /* base: #bbb; */
     }
     .colors-custom .entry-footer .cat-links .icon,
     .colors-custom .entry-footer .tags-links .icon {
-    color: hsl( """ + hue + ", " + saturation + """, 73% ); /* base: #bbb; */
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 73% ); /* base: #bbb; */
     }
     .colors-custom button.secondary,
     .colors-custom input[type=\"reset\"],
@@ -375,24 +371,24 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom input[type=\"submit\"].secondary,
     .colors-custom .prev.page-numbers,
     .colors-custom .next.page-numbers {
-    background-color: hsl( """ + hue + ", " + saturation + """, 87% ); /* base: #ddd; */
+    background-color: hsl( """ + hue_ + ", " + saturation_ + """, 87% ); /* base: #ddd; */
     }
     .colors-custom .widget .tagcloud a,
     .colors-custom .widget.widget_tag_cloud a,
     .colors-custom .wp_widget_tag_cloud a {
-    border-color: hsl( """ + hue + ", " + saturation + """, 87% ); /* base: #ddd; */
+    border-color: hsl( """ + hue_ + ", " + saturation_ + """, 87% ); /* base: #ddd; */
     }
     .colors-custom.twentyseventeen-front-page article:not(.has-post-thumbnail):not(:first-child),
     .colors-custom .widget ul li {
-    border-top-color: hsl( """ + hue + ", " + saturation + """, 87% ); /* base: #ddd; */
+    border-top-color: hsl( """ + hue_ + ", " + saturation_ + """, 87% ); /* base: #ddd; */
     }
     .colors-custom .widget ul li {
-    border-bottom-color: hsl( """ + hue + ", " + saturation + """, 87% ); /* base: #ddd; */
+    border-bottom-color: hsl( """ + hue_ + ", " + saturation_ + """, 87% ); /* base: #ddd; */
     }
     .colors-custom pre,
     .colors-custom mark,
     .colors-custom ins {
-    background: hsl( """ + hue + ", " + saturation + """, 93% ); /* base: #eee; */
+    background: hsl( """ + hue_ + ", " + saturation_ + """, 93% ); /* base: #eee; */
     }
     .colors-custom .navigation-top,
     .colors-custom .main-navigation > div > ul,
@@ -400,7 +396,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .comments-pagination,
     .colors-custom .entry-footer,
     .colors-custom .site-footer {
-    border-top-color: hsl( """ + hue + ", " + saturation + """, 93% ); /* base: #eee; */
+    border-top-color: hsl( """ + hue_ + ", " + saturation_ + """, 93% ); /* base: #eee; */
     }
     .colors-custom .navigation-top,
     .colors-custom .main-navigation li,
@@ -408,14 +404,14 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .single-featured-image-header,
     .colors-custom .site-content .wp-playlist-light .wp-playlist-item,
     .colors-custom tr {
-    border-bottom-color: hsl( """ + hue + ", " + saturation + """, 93% ); /* base: #eee; */
+    border-bottom-color: hsl( """ + hue_ + ", " + saturation_ + """, 93% ); /* base: #eee; */
     }
     .colors-custom .site-content .wp-playlist-light {
-    border-color: hsl( """ + hue + ", " + saturation + """, 93% ); /* base: #eee; */
+    border-color: hsl( """ + hue_ + ", " + saturation_ + """, 93% ); /* base: #eee; */
     }
     .colors-custom .site-header,
     .colors-custom .single-featured-image-header {
-    background-color: hsl( """ + hue + ", " + saturation + """, 98% ); /* base: #fafafa; */
+    background-color: hsl( """ + hue_ + ", " + saturation_ + """, 98% ); /* base: #fafafa; */
     }
     .colors-custom button,
     .colors-custom input[type=\"button\"],
@@ -437,16 +433,16 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom.has-header-video .site-title a,
     .colors-custom.has-header-image .site-description,
     .colors-custom.has-header-video .site-description {
-    color: hsl( """ + hue + ", " + saturation + """, 100% ); /* base: #fff; */
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 100% ); /* base: #fff; */
     }
     body.colors-custom,
     .colors-custom .navigation-top,
     .colors-custom .main-navigation ul {
-    background: hsl( """ + hue + ", " + saturation + """, 100% ); /* base: #fff; */
+    background: hsl( """ + hue_ + ", " + saturation_ + """, 100% ); /* base: #fff; */
     }
     .colors-custom .widget ul li a,
     .colors-custom .site-footer .widget-area ul li a {
-    -webkit-box-shadow: inset 0 -1px 0 hsl( """ + hue + ", " + saturation + ", 100% ); /* base: rgba(255, 255, 255, 1); */\n    box-shadow: inset 0 -1px 0 hsl( " + hue + ", " + saturation + """, 100% );  /* base: rgba(255, 255, 255, 1); */
+    -webkit-box-shadow: inset 0 -1px 0 hsl( """ + hue_ + ", " + saturation_ + ", 100% ); /* base: rgba(255, 255, 255, 1); */\n  box-shadow: inset 0 -1px 0 hsl( " + hue_ + ", " + saturation_ + """, 100% );  /* base: rgba(255, 255, 255, 1); */
     }
     .colors-custom .menu-toggle,
     .colors-custom .menu-toggle:hover,
@@ -498,28 +494,28 @@ def twentyseventeen_custom_colors_css(*args_):
     @media screen and (min-width: 48em) {
     .colors-custom .nav-links .nav-previous .nav-title .icon,
     .colors-custom .nav-links .nav-next .nav-title .icon {
-    color: hsl( """ + hue + ", " + saturation + """, 20% ); /* base: #222; */
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 20% ); /* base: #222; */
     }
     .colors-custom .main-navigation li li:hover,
     .colors-custom .main-navigation li li.focus {
-    background: hsl( """ + hue + ", " + saturation + """, 46% ); /* base: #767676; */
+    background: hsl( """ + hue_ + ", " + saturation_ + """, 46% ); /* base: #767676; */
     }
     .colors-custom .navigation-top .menu-scroll-down {
-    color: hsl( """ + hue + ", " + saturation + """, 46% ); /* base: #767676; */;
+    color: hsl( """ + hue_ + ", " + saturation_ + """, 46% ); /* base: #767676; */;
     }
     .colors-custom abbr[title] {
-    border-bottom-color: hsl( """ + hue + ", " + saturation + """, 46% ); /* base: #767676; */;
+    border-bottom-color: hsl( """ + hue_ + ", " + saturation_ + """, 46% ); /* base: #767676; */;
     }
     .colors-custom .main-navigation ul ul {
-    border-color: hsl( """ + hue + ", " + saturation + ", 73% ); /* base: #bbb; */\n        background: hsl( " + hue + ", " + saturation + """, 100% ); /* base: #fff; */
+    border-color: hsl( """ + hue_ + ", " + saturation_ + ", 73% ); /* base: #bbb; */\n      background: hsl( " + hue_ + ", " + saturation_ + """, 100% ); /* base: #fff; */
     }
     .colors-custom .main-navigation ul li.menu-item-has-children:before,
     .colors-custom .main-navigation ul li.page_item_has_children:before {
-    border-bottom-color: hsl( """ + hue + ", " + saturation + """, 73% ); /* base: #bbb; */
+    border-bottom-color: hsl( """ + hue_ + ", " + saturation_ + """, 73% ); /* base: #bbb; */
     }
     .colors-custom .main-navigation ul li.menu-item-has-children:after,
     .colors-custom .main-navigation ul li.page_item_has_children:after {
-    border-bottom-color: hsl( """ + hue + ", " + saturation + """, 100% ); /* base: #fff; */
+    border-bottom-color: hsl( """ + hue_ + ", " + saturation_ + """, 100% ); /* base: #fff; */
     }
     .colors-custom .main-navigation li li.focus > a,
     .colors-custom .main-navigation li li:focus > a,
@@ -530,7 +526,7 @@ def twentyseventeen_custom_colors_css(*args_):
     .colors-custom .main-navigation li li.current-menu-item a:hover,
     .colors-custom .main-navigation li li.current_page_item a:focus,
     .colors-custom .main-navigation li li.current-menu-item a:focus {
-    color: hsl( """ + hue + ", " + saturation + ", 100% ); /* base: #fff; */\n  }\n}"
+    color: hsl( """ + hue_ + ", " + saturation_ + ", 100% ); /* base: #fff; */\n    }\n}"
     #// 
     #// Filters Twenty Seventeen custom colors CSS.
     #// 
@@ -540,5 +536,5 @@ def twentyseventeen_custom_colors_css(*args_):
     #// @param int    $hue        The user's selected color hue.
     #// @param string $saturation Filtered theme color saturation level.
     #//
-    return apply_filters("twentyseventeen_custom_colors_css", css, hue, saturation)
+    return apply_filters("twentyseventeen_custom_colors_css", css_, hue_, saturation_)
 # end def twentyseventeen_custom_colors_css

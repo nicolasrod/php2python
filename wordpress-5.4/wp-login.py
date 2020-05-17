@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -48,18 +43,21 @@ if force_ssl_admin() and (not is_ssl()):
 #// @param string   $message  Optional. Message to display in header. Default empty.
 #// @param WP_Error $wp_error Optional. The error to pass. Default is a WP_Error instance.
 #//
-def login_header(title="Log In", message="", wp_error=None, *args_):
+def login_header(title_="Log In", message_="", wp_error_=None, *_args_):
     
-    global error,interim_login,action
-    php_check_if_defined("error","interim_login","action")
+    
+    global error_
+    global interim_login_
+    global action_
+    php_check_if_defined("error_","interim_login_","action_")
     #// Don't index any of these forms.
     add_action("login_head", "wp_sensitive_page_meta")
     add_action("login_head", "wp_login_viewport_meta")
-    if (not is_wp_error(wp_error)):
-        wp_error = php_new_class("WP_Error", lambda : WP_Error())
+    if (not is_wp_error(wp_error_)):
+        wp_error_ = php_new_class("WP_Error", lambda : WP_Error())
     # end if
     #// Shake it!
-    shake_error_codes = Array("empty_password", "empty_email", "invalid_email", "invalidcombo", "empty_username", "invalid_username", "incorrect_password", "retrieve_password_email_failure")
+    shake_error_codes_ = Array("empty_password", "empty_email", "invalid_email", "invalidcombo", "empty_username", "invalid_username", "incorrect_password", "retrieve_password_email_failure")
     #// 
     #// Filters the error codes array for shaking the login form.
     #// 
@@ -67,16 +65,16 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// 
     #// @param array $shake_error_codes Error codes that shake the login form.
     #//
-    shake_error_codes = apply_filters("shake_error_codes", shake_error_codes)
-    if shake_error_codes and wp_error.has_errors() and php_in_array(wp_error.get_error_code(), shake_error_codes, True):
+    shake_error_codes_ = apply_filters("shake_error_codes", shake_error_codes_)
+    if shake_error_codes_ and wp_error_.has_errors() and php_in_array(wp_error_.get_error_code(), shake_error_codes_, True):
         add_action("login_footer", "wp_shake_js", 12)
     # end if
-    login_title = get_bloginfo("name", "display")
+    login_title_ = get_bloginfo("name", "display")
     #// translators: Login screen title. 1: Login screen name, 2: Network or site name.
-    login_title = php_sprintf(__("%1$s &lsaquo; %2$s &#8212; WordPress"), title, login_title)
+    login_title_ = php_sprintf(__("%1$s &lsaquo; %2$s &#8212; WordPress"), title_, login_title_)
     if wp_is_recovery_mode():
         #// translators: %s: Login screen title.
-        login_title = php_sprintf(__("Recovery Mode &#8212; %s"), login_title)
+        login_title_ = php_sprintf(__("Recovery Mode &#8212; %s"), login_title_)
     # end if
     #// 
     #// Filters the title tag content for login page.
@@ -86,7 +84,7 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// @param string $login_title The page title, with extra context added.
     #// @param string $title       The original page title.
     #//
-    login_title = apply_filters("login_title", login_title, title)
+    login_title_ = apply_filters("login_title", login_title_, title_)
     php_print("<!DOCTYPE html>\n    <!--[if IE 8]>\n        <html xmlns=\"http://www.w3.org/1999/xhtml\" class=\"ie8\" ")
     language_attributes()
     php_print(""">
@@ -102,7 +100,7 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     php_print("; charset=")
     bloginfo("charset")
     php_print("\" />\n  <title>")
-    php_print(login_title)
+    php_print(login_title_)
     php_print("</title>\n   ")
     wp_enqueue_style("login")
     #// 
@@ -110,7 +108,7 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// This could be added by add_action('login_head'...) like wp_shake_js(),
     #// but maybe better if it's not removable by plugins.
     #//
-    if "loggedout" == wp_error.get_error_code():
+    if "loggedout" == wp_error_.get_error_code():
         php_print("     <script>if(\"sessionStorage\" in window){try{for(var key in sessionStorage){if(key.indexOf(\"wp-autosave-\")!=-1){sessionStorage.removeItem(key)}}}catch(e){}};</script>\n      ")
     # end if
     #// 
@@ -125,7 +123,7 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// @since 2.1.0
     #//
     do_action("login_head")
-    login_header_url = __("https://wordpress.org/")
+    login_header_url_ = __("https://wordpress.org/")
     #// 
     #// Filters link URL of the header logo above login form.
     #// 
@@ -133,8 +131,8 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// 
     #// @param string $login_header_url Login header logo URL.
     #//
-    login_header_url = apply_filters("login_headerurl", login_header_url)
-    login_header_title = ""
+    login_header_url_ = apply_filters("login_headerurl", login_header_url_)
+    login_header_title_ = ""
     #// 
     #// Filters the title attribute of the header logo above login form.
     #// 
@@ -143,8 +141,8 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// 
     #// @param string $login_header_title Login header logo title attribute.
     #//
-    login_header_title = apply_filters_deprecated("login_headertitle", Array(login_header_title), "5.2.0", "login_headertext", __("Usage of the title attribute on the login logo is not recommended for accessibility reasons. Use the link text instead."))
-    login_header_text = __("Powered by WordPress") if php_empty(lambda : login_header_title) else login_header_title
+    login_header_title_ = apply_filters_deprecated("login_headertitle", Array(login_header_title_), "5.2.0", "login_headertext", __("Usage of the title attribute on the login logo is not recommended for accessibility reasons. Use the link text instead."))
+    login_header_text_ = __("Powered by WordPress") if php_empty(lambda : login_header_title_) else login_header_title_
     #// 
     #// Filters the link text of the header logo above the login form.
     #// 
@@ -152,19 +150,19 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// 
     #// @param string $login_header_text The login header logo link text.
     #//
-    login_header_text = apply_filters("login_headertext", login_header_text)
-    classes = Array("login-action-" + action, "wp-core-ui")
+    login_header_text_ = apply_filters("login_headertext", login_header_text_)
+    classes_ = Array("login-action-" + action_, "wp-core-ui")
     if is_rtl():
-        classes[-1] = "rtl"
+        classes_[-1] = "rtl"
     # end if
-    if interim_login:
-        classes[-1] = "interim-login"
+    if interim_login_:
+        classes_[-1] = "interim-login"
         php_print("     <style type=\"text/css\">html{background-color: transparent;}</style>\n     ")
-        if "success" == interim_login:
-            classes[-1] = "interim-login-success"
+        if "success" == interim_login_:
+            classes_[-1] = "interim-login-success"
         # end if
     # end if
-    classes[-1] = " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_locale())))
+    classes_[-1] = " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_locale())))
     #// 
     #// Filters the login page body classes.
     #// 
@@ -173,9 +171,9 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// @param array  $classes An array of body classes.
     #// @param string $action  The action that brought the visitor to the login page.
     #//
-    classes = apply_filters("login_body_class", classes, action)
+    classes_ = apply_filters("login_body_class", classes_, action_)
     php_print(" </head>\n   <body class=\"login no-js ")
-    php_print(esc_attr(php_implode(" ", classes)))
+    php_print(esc_attr(php_implode(" ", classes_)))
     php_print("""\">
     <script type=\"text/javascript\">
     document.body.className = document.body.className.replace('no-js','js');
@@ -188,9 +186,9 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #//
     do_action("login_header")
     php_print(" <div id=\"login\">\n        <h1><a href=\"")
-    php_print(esc_url(login_header_url))
+    php_print(esc_url(login_header_url_))
     php_print("\">")
-    php_print(login_header_text)
+    php_print(login_header_text_)
     php_print("</a></h1>\n  ")
     #// 
     #// Filters the message to display above the login form.
@@ -199,29 +197,29 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
     #// 
     #// @param string $message Login message text.
     #//
-    message = apply_filters("login_message", message)
-    if (not php_empty(lambda : message)):
-        php_print(message + "\n")
+    message_ = apply_filters("login_message", message_)
+    if (not php_empty(lambda : message_)):
+        php_print(message_ + "\n")
     # end if
     #// In case a plugin uses $error rather than the $wp_errors object.
-    if (not php_empty(lambda : error)):
-        wp_error.add("error", error)
-        error = None
+    if (not php_empty(lambda : error_)):
+        wp_error_.add("error", error_)
+        error_ = None
     # end if
-    if wp_error.has_errors():
-        errors = ""
-        messages = ""
-        for code in wp_error.get_error_codes():
-            severity = wp_error.get_error_data(code)
-            for error_message in wp_error.get_error_messages(code):
-                if "message" == severity:
-                    messages += "   " + error_message + "<br />\n"
+    if wp_error_.has_errors():
+        errors_ = ""
+        messages_ = ""
+        for code_ in wp_error_.get_error_codes():
+            severity_ = wp_error_.get_error_data(code_)
+            for error_message_ in wp_error_.get_error_messages(code_):
+                if "message" == severity_:
+                    messages_ += "  " + error_message_ + "<br />\n"
                 else:
-                    errors += " " + error_message + "<br />\n"
+                    errors_ += "    " + error_message_ + "<br />\n"
                 # end if
             # end for
         # end for
-        if (not php_empty(lambda : errors)):
+        if (not php_empty(lambda : errors_)):
             #// 
             #// Filters the error messages displayed above the login form.
             #// 
@@ -229,9 +227,9 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
             #// 
             #// @param string $errors Login error message.
             #//
-            php_print("<div id=\"login_error\">" + apply_filters("login_errors", errors) + "</div>\n")
+            php_print("<div id=\"login_error\">" + apply_filters("login_errors", errors_) + "</div>\n")
         # end if
-        if (not php_empty(lambda : messages)):
+        if (not php_empty(lambda : messages_)):
             #// 
             #// Filters instructional messages displayed above the login form.
             #// 
@@ -239,7 +237,7 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
             #// 
             #// @param string $messages Login messages.
             #//
-            php_print("<p class=\"message\">" + apply_filters("login_messages", messages) + "</p>\n")
+            php_print("<p class=\"message\">" + apply_filters("login_messages", messages_) + "</p>\n")
         # end if
     # end if
 # end def login_header
@@ -254,12 +252,13 @@ def login_header(title="Log In", message="", wp_error=None, *args_):
 #// 
 #// @param string $input_id Which input to auto-focus.
 #//
-def login_footer(input_id="", *args_):
+def login_footer(input_id_="", *_args_):
     
-    global interim_login
-    php_check_if_defined("interim_login")
+    
+    global interim_login_
+    php_check_if_defined("interim_login_")
     #// Don't allow interim logins to navigate away from the page.
-    if (not interim_login):
+    if (not interim_login_):
         php_print("     <p id=\"backtoblog\"><a href=\"")
         php_print(esc_url(home_url("/")))
         php_print("\">\n        ")
@@ -271,9 +270,9 @@ def login_footer(input_id="", *args_):
     php_print(" </div>")
     pass
     php_print("\n   ")
-    if (not php_empty(lambda : input_id)):
+    if (not php_empty(lambda : input_id_)):
         php_print("     <script type=\"text/javascript\">\n     try{document.getElementById('")
-        php_print(input_id)
+        php_print(input_id_)
         php_print("""').focus();}catch(e){}
     if(typeof wpOnload=='function')wpOnload();
         </script>
@@ -295,7 +294,8 @@ def login_footer(input_id="", *args_):
 #// 
 #// @since 3.0.0
 #//
-def wp_shake_js(*args_):
+def wp_shake_js(*_args_):
+    
     
     php_print("""   <script type=\"text/javascript\">
     document.querySelector('form').classList.add('shake');
@@ -307,7 +307,8 @@ def wp_shake_js(*args_):
 #// 
 #// @since 3.7.0
 #//
-def wp_login_viewport_meta(*args_):
+def wp_login_viewport_meta(*_args_):
+    
     
     php_print(" <meta name=\"viewport\" content=\"width=device-width\" />\n ")
 # end def wp_login_viewport_meta
@@ -318,20 +319,21 @@ def wp_login_viewport_meta(*args_):
 #// 
 #// @return bool|WP_Error True: when finish. WP_Error on error
 #//
-def retrieve_password(*args_):
+def retrieve_password(*_args_):
     
-    errors = php_new_class("WP_Error", lambda : WP_Error())
-    user_data = False
+    
+    errors_ = php_new_class("WP_Error", lambda : WP_Error())
+    user_data_ = False
     if php_empty(lambda : PHP_POST["user_login"]) or (not php_is_string(PHP_POST["user_login"])):
-        errors.add("empty_username", __("<strong>Error</strong>: Enter a username or email address."))
+        errors_.add("empty_username", __("<strong>Error</strong>: Enter a username or email address."))
     elif php_strpos(PHP_POST["user_login"], "@"):
-        user_data = get_user_by("email", php_trim(wp_unslash(PHP_POST["user_login"])))
-        if php_empty(lambda : user_data):
-            errors.add("invalid_email", __("<strong>Error</strong>: There is no account with that username or email address."))
+        user_data_ = get_user_by("email", php_trim(wp_unslash(PHP_POST["user_login"])))
+        if php_empty(lambda : user_data_):
+            errors_.add("invalid_email", __("<strong>Error</strong>: There is no account with that username or email address."))
         # end if
     else:
-        login = php_trim(wp_unslash(PHP_POST["user_login"]))
-        user_data = get_user_by("login", login)
+        login_ = php_trim(wp_unslash(PHP_POST["user_login"]))
+        user_data_ = get_user_by("login", login_)
     # end if
     #// 
     #// Fires before errors are returned from a password reset request.
@@ -344,40 +346,40 @@ def retrieve_password(*args_):
     #// by using invalid credentials.
     #// @param WP_User|false    WP_User object if found, false if the user does not exist.
     #//
-    do_action("lostpassword_post", errors, user_data)
-    if errors.has_errors():
-        return errors
+    do_action("lostpassword_post", errors_, user_data_)
+    if errors_.has_errors():
+        return errors_
     # end if
-    if (not user_data):
-        errors.add("invalidcombo", __("<strong>Error</strong>: There is no account with that username or email address."))
-        return errors
+    if (not user_data_):
+        errors_.add("invalidcombo", __("<strong>Error</strong>: There is no account with that username or email address."))
+        return errors_
     # end if
     #// Redefining user_login ensures we return the right case in the email.
-    user_login = user_data.user_login
-    user_email = user_data.user_email
-    key = get_password_reset_key(user_data)
-    if is_wp_error(key):
-        return key
+    user_login_ = user_data_.user_login
+    user_email_ = user_data_.user_email
+    key_ = get_password_reset_key(user_data_)
+    if is_wp_error(key_):
+        return key_
     # end if
     if is_multisite():
-        site_name = get_network().site_name
+        site_name_ = get_network().site_name
     else:
         #// 
         #// The blogname option is escaped with esc_html on the way into the database
         #// in sanitize_option we want to reverse this for the plain text arena of emails.
         #//
-        site_name = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
+        site_name_ = wp_specialchars_decode(get_option("blogname"), ENT_QUOTES)
     # end if
-    message = __("Someone has requested a password reset for the following account:") + "\r\n\r\n"
+    message_ = __("Someone has requested a password reset for the following account:") + "\r\n\r\n"
     #// translators: %s: Site name.
-    message += php_sprintf(__("Site Name: %s"), site_name) + "\r\n\r\n"
+    message_ += php_sprintf(__("Site Name: %s"), site_name_) + "\r\n\r\n"
     #// translators: %s: User login.
-    message += php_sprintf(__("Username: %s"), user_login) + "\r\n\r\n"
-    message += __("If this was a mistake, just ignore this email and nothing will happen.") + "\r\n\r\n"
-    message += __("To reset your password, visit the following address:") + "\r\n\r\n"
-    message += network_site_url(str("wp-login.php?action=rp&key=") + str(key) + str("&login=") + rawurlencode(user_login), "login") + "\r\n"
+    message_ += php_sprintf(__("Username: %s"), user_login_) + "\r\n\r\n"
+    message_ += __("If this was a mistake, just ignore this email and nothing will happen.") + "\r\n\r\n"
+    message_ += __("To reset your password, visit the following address:") + "\r\n\r\n"
+    message_ += network_site_url(str("wp-login.php?action=rp&key=") + str(key_) + str("&login=") + rawurlencode(user_login_), "login") + "\r\n"
     #// translators: Password reset notification email subject. %s: Site title.
-    title = php_sprintf(__("[%s] Password Reset"), site_name)
+    title_ = php_sprintf(__("[%s] Password Reset"), site_name_)
     #// 
     #// Filters the subject of the password reset email.
     #// 
@@ -388,7 +390,7 @@ def retrieve_password(*args_):
     #// @param string  $user_login The username for the user.
     #// @param WP_User $user_data  WP_User object.
     #//
-    title = apply_filters("retrieve_password_title", title, user_login, user_data)
+    title_ = apply_filters("retrieve_password_title", title_, user_login_, user_data_)
     #// 
     #// Filters the message body of the password reset mail.
     #// 
@@ -402,25 +404,25 @@ def retrieve_password(*args_):
     #// @param string  $user_login The username for the user.
     #// @param WP_User $user_data  WP_User object.
     #//
-    message = apply_filters("retrieve_password_message", message, key, user_login, user_data)
-    if message and (not wp_mail(user_email, wp_specialchars_decode(title), message)):
-        errors.add("retrieve_password_email_failure", php_sprintf(__("<strong>Error</strong>: The email could not be sent. Your site may not be correctly configured to send emails. <a href=\"%s\">Get support for resetting your password</a>."), esc_url(__("https://wordpress.org/support/article/resetting-your-password/"))))
-        return errors
+    message_ = apply_filters("retrieve_password_message", message_, key_, user_login_, user_data_)
+    if message_ and (not wp_mail(user_email_, wp_specialchars_decode(title_), message_)):
+        errors_.add("retrieve_password_email_failure", php_sprintf(__("<strong>Error</strong>: The email could not be sent. Your site may not be correctly configured to send emails. <a href=\"%s\">Get support for resetting your password</a>."), esc_url(__("https://wordpress.org/support/article/resetting-your-password/"))))
+        return errors_
     # end if
     return True
 # end def retrieve_password
 #// 
 #// Main.
 #//
-action = PHP_REQUEST["action"] if (php_isset(lambda : PHP_REQUEST["action"])) else "login"
-errors = php_new_class("WP_Error", lambda : WP_Error())
+action_ = PHP_REQUEST["action"] if (php_isset(lambda : PHP_REQUEST["action"])) else "login"
+errors_ = php_new_class("WP_Error", lambda : WP_Error())
 if (php_isset(lambda : PHP_REQUEST["key"])):
-    action = "resetpass"
+    action_ = "resetpass"
 # end if
-default_actions = Array("confirm_admin_email", "postpass", "logout", "lostpassword", "retrievepassword", "resetpass", "rp", "register", "login", "confirmaction", WP_Recovery_Mode_Link_Service.LOGIN_ACTION_ENTERED)
+default_actions_ = Array("confirm_admin_email", "postpass", "logout", "lostpassword", "retrievepassword", "resetpass", "rp", "register", "login", "confirmaction", WP_Recovery_Mode_Link_Service.LOGIN_ACTION_ENTERED)
 #// Validate action so as to default to the login screen.
-if (not php_in_array(action, default_actions, True)) and False == has_filter("login_form_" + action):
-    action = "login"
+if (not php_in_array(action_, default_actions_, True)) and False == has_filter("login_form_" + action_):
+    action_ = "login"
 # end if
 nocache_headers()
 php_header("Content-Type: " + get_bloginfo("html_type") + "; charset=" + get_bloginfo("charset"))
@@ -429,16 +431,16 @@ if php_defined("RELOCATE") and RELOCATE:
     if (php_isset(lambda : PHP_SERVER["PATH_INFO"])) and PHP_SERVER["PATH_INFO"] != PHP_SERVER["PHP_SELF"]:
         PHP_SERVER["PHP_SELF"] = php_str_replace(PHP_SERVER["PATH_INFO"], "", PHP_SERVER["PHP_SELF"])
     # end if
-    url = php_dirname(set_url_scheme("http://" + PHP_SERVER["HTTP_HOST"] + PHP_SERVER["PHP_SELF"]))
-    if get_option("siteurl") != url:
-        update_option("siteurl", url)
+    url_ = php_dirname(set_url_scheme("http://" + PHP_SERVER["HTTP_HOST"] + PHP_SERVER["PHP_SELF"]))
+    if get_option("siteurl") != url_:
+        update_option("siteurl", url_)
     # end if
 # end if
 #// Set a cookie now to see if they are supported by the browser.
-secure = "https" == php_parse_url(wp_login_url(), PHP_URL_SCHEME)
-setcookie(TEST_COOKIE, "WP Cookie check", 0, COOKIEPATH, COOKIE_DOMAIN, secure)
+secure_ = "https" == php_parse_url(wp_login_url(), PHP_URL_SCHEME)
+setcookie(TEST_COOKIE, "WP Cookie check", 0, COOKIEPATH, COOKIE_DOMAIN, secure_)
 if SITECOOKIEPATH != COOKIEPATH:
-    setcookie(TEST_COOKIE, "WP Cookie check", 0, SITECOOKIEPATH, COOKIE_DOMAIN, secure)
+    setcookie(TEST_COOKIE, "WP Cookie check", 0, SITECOOKIEPATH, COOKIE_DOMAIN, secure_)
 # end if
 #// 
 #// Fires when the login form is initialized.
@@ -455,9 +457,9 @@ do_action("login_init")
 #// 
 #// @since 2.8.0
 #//
-do_action(str("login_form_") + str(action))
-http_post = "POST" == PHP_SERVER["REQUEST_METHOD"]
-interim_login = (php_isset(lambda : PHP_REQUEST["interim-login"]))
+do_action(str("login_form_") + str(action_))
+http_post_ = "POST" == PHP_SERVER["REQUEST_METHOD"]
+interim_login_ = (php_isset(lambda : PHP_REQUEST["interim-login"]))
 #// 
 #// Filters the separator used between login form navigation links.
 #// 
@@ -465,8 +467,8 @@ interim_login = (php_isset(lambda : PHP_REQUEST["interim-login"]))
 #// 
 #// @param string $login_link_separator The separator used between login form navigation links.
 #//
-login_link_separator = apply_filters("login_link_separator", " | ")
-for case in Switch(action):
+login_link_separator_ = apply_filters("login_link_separator", " | ")
+for case in Switch(action_):
     if case("confirm_admin_email"):
         #// 
         #// Note that `is_user_logged_in()` will return false immediately after logging in
@@ -478,14 +480,14 @@ for case in Switch(action):
             php_exit(0)
         # end if
         if (not php_empty(lambda : PHP_REQUEST["redirect_to"])):
-            redirect_to = PHP_REQUEST["redirect_to"]
+            redirect_to_ = PHP_REQUEST["redirect_to"]
         else:
-            redirect_to = admin_url()
+            redirect_to_ = admin_url()
         # end if
         if current_user_can("manage_options"):
-            admin_email = get_option("admin_email")
+            admin_email_ = get_option("admin_email")
         else:
-            wp_safe_redirect(redirect_to)
+            wp_safe_redirect(redirect_to_)
             php_exit(0)
         # end if
         #// 
@@ -497,16 +499,16 @@ for case in Switch(action):
         #// 
         #// @param int $interval Interval time (in seconds). Default is 3 days.
         #//
-        remind_interval = php_int(apply_filters("admin_email_remind_interval", 3 * DAY_IN_SECONDS))
+        remind_interval_ = php_int(apply_filters("admin_email_remind_interval", 3 * DAY_IN_SECONDS))
         if (not php_empty(lambda : PHP_REQUEST["remind_me_later"])):
             if (not wp_verify_nonce(PHP_REQUEST["remind_me_later"], "remind_me_later_nonce")):
                 wp_safe_redirect(wp_login_url())
                 php_exit(0)
             # end if
-            if remind_interval > 0:
-                update_option("admin_email_lifespan", time() + remind_interval)
+            if remind_interval_ > 0:
+                update_option("admin_email_lifespan", time() + remind_interval_)
             # end if
-            wp_safe_redirect(redirect_to)
+            wp_safe_redirect(redirect_to_)
             php_exit(0)
         # end if
         if (not php_empty(lambda : PHP_POST["correct-admin-email"])):
@@ -523,14 +525,14 @@ for case in Switch(action):
             #// 
             #// @param int $interval Interval time (in seconds). Default is 6 months.
             #//
-            admin_email_check_interval = php_int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
-            if admin_email_check_interval > 0:
-                update_option("admin_email_lifespan", time() + admin_email_check_interval)
+            admin_email_check_interval_ = php_int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
+            if admin_email_check_interval_ > 0:
+                update_option("admin_email_lifespan", time() + admin_email_check_interval_)
             # end if
-            wp_safe_redirect(redirect_to)
+            wp_safe_redirect(redirect_to_)
             php_exit(0)
         # end if
-        login_header(__("Confirm your administration email"), "", errors)
+        login_header(__("Confirm your administration email"), "", errors_)
         #// 
         #// Fires before the admin email confirm form.
         #// 
@@ -539,7 +541,7 @@ for case in Switch(action):
         #// @param WP_Error $errors A `WP_Error` object containing any errors generated by using invalid
         #// credentials. Note that the error object may not contain any errors.
         #//
-        do_action("admin_email_confirm", errors)
+        do_action("admin_email_confirm", errors_)
         php_print("\n       <form class=\"admin-email-confirm-form\" name=\"admin-email-confirm-form\" action=\"")
         php_print(esc_url(site_url("wp-login.php?action=confirm_admin_email", "login_post")))
         php_print("\" method=\"post\">\n            ")
@@ -551,7 +553,7 @@ for case in Switch(action):
         do_action("admin_email_confirm_form")
         wp_nonce_field("confirm_admin_email", "confirm_admin_email_nonce")
         php_print("         <input type=\"hidden\" name=\"redirect_to\" value=\"")
-        php_print(esc_attr(redirect_to))
+        php_print(esc_attr(redirect_to_))
         php_print("""\" />
         <h1 class=\"admin-email__heading\">
         """)
@@ -560,33 +562,33 @@ for case in Switch(action):
         _e("Please verify that the <strong>administration email</strong> for this website is still correct.")
         php_print("             ")
         #// translators: URL to the WordPress help section about admin email.
-        admin_email_help_url = __("https://wordpress.org/support/article/settings-general-screen/#email-address")
+        admin_email_help_url_ = __("https://wordpress.org/support/article/settings-general-screen/#email-address")
         #// translators: accessibility text
-        accessibility_text = php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)"))
-        printf("<a href=\"%s\" rel=\"noopener noreferrer\" target=\"_blank\">%s%s</a>", esc_url(admin_email_help_url), __("Why is this important?"), accessibility_text)
+        accessibility_text_ = php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)"))
+        printf("<a href=\"%s\" rel=\"noopener noreferrer\" target=\"_blank\">%s%s</a>", esc_url(admin_email_help_url_), __("Why is this important?"), accessibility_text_)
         php_print("         </p>\n          <p class=\"admin-email__details\">\n                ")
-        printf(__("Current administration email: %s"), "<strong>" + esc_html(admin_email) + "</strong>")
+        printf(__("Current administration email: %s"), "<strong>" + esc_html(admin_email_) + "</strong>")
         php_print("         </p>\n          <p class=\"admin-email__details\">\n                ")
         _e("This email may be different from your personal email address.")
         php_print("""           </p>
         <div class=\"admin-email__actions\">
         <div class=\"admin-email__actions-primary\">
         """)
-        change_link = admin_url("options-general.php")
-        change_link = add_query_arg("highlight", "confirm_admin_email", change_link)
+        change_link_ = admin_url("options-general.php")
+        change_link_ = add_query_arg("highlight", "confirm_admin_email", change_link_)
         php_print("                 <a class=\"button button-large\" href=\"")
-        php_print(esc_url(change_link))
+        php_print(esc_url(change_link_))
         php_print("\">")
         _e("Update")
         php_print("</a>\n                   <input type=\"submit\" name=\"correct-admin-email\" id=\"correct-admin-email\" class=\"button button-primary button-large\" value=\"")
         esc_attr_e("The email is correct")
         php_print("\" />\n              </div>\n                ")
-        if remind_interval > 0:
+        if remind_interval_ > 0:
             php_print("                 <div class=\"admin-email__actions-secondary\">\n                        ")
-            remind_me_link = wp_login_url(redirect_to)
-            remind_me_link = add_query_arg(Array({"action": "confirm_admin_email", "remind_me_later": wp_create_nonce("remind_me_later_nonce")}), remind_me_link)
+            remind_me_link_ = wp_login_url(redirect_to_)
+            remind_me_link_ = add_query_arg(Array({"action": "confirm_admin_email", "remind_me_later": wp_create_nonce("remind_me_later_nonce")}), remind_me_link_)
             php_print("                     <a href=\"")
-            php_print(esc_url(remind_me_link))
+            php_print(esc_url(remind_me_link_))
             php_print("\">")
             _e("Remind me later")
             php_print("</a>\n                   </div>\n                ")
@@ -603,7 +605,7 @@ for case in Switch(action):
             php_exit(0)
         # end if
         php_include_file(ABSPATH + WPINC + "/class-phpass.php", once=True)
-        hasher = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
+        hasher_ = php_new_class("PasswordHash", lambda : PasswordHash(8, True))
         #// 
         #// Filters the life span of the post password cookie.
         #// 
@@ -614,27 +616,27 @@ for case in Switch(action):
         #// 
         #// @param int $expires The expiry time, as passed to setcookie().
         #//
-        expire = apply_filters("post_password_expires", time() + 10 * DAY_IN_SECONDS)
-        referer = wp_get_referer()
-        if referer:
-            secure = "https" == php_parse_url(referer, PHP_URL_SCHEME)
+        expire_ = apply_filters("post_password_expires", time() + 10 * DAY_IN_SECONDS)
+        referer_ = wp_get_referer()
+        if referer_:
+            secure_ = "https" == php_parse_url(referer_, PHP_URL_SCHEME)
         else:
-            secure = False
+            secure_ = False
         # end if
-        setcookie("wp-postpass_" + COOKIEHASH, hasher.hashpassword(wp_unslash(PHP_POST["post_password"])), expire, COOKIEPATH, COOKIE_DOMAIN, secure)
+        setcookie("wp-postpass_" + COOKIEHASH, hasher_.hashpassword(wp_unslash(PHP_POST["post_password"])), expire_, COOKIEPATH, COOKIE_DOMAIN, secure_)
         wp_safe_redirect(wp_get_referer())
         php_exit(0)
     # end if
     if case("logout"):
         check_admin_referer("log-out")
-        user = wp_get_current_user()
+        user_ = wp_get_current_user()
         wp_logout()
         if (not php_empty(lambda : PHP_REQUEST["redirect_to"])):
-            redirect_to = PHP_REQUEST["redirect_to"]
-            requested_redirect_to = redirect_to
+            redirect_to_ = PHP_REQUEST["redirect_to"]
+            requested_redirect_to_ = redirect_to_
         else:
-            redirect_to = add_query_arg(Array({"loggedout": "true", "wp_lang": get_user_locale(user)}), wp_login_url())
-            requested_redirect_to = ""
+            redirect_to_ = add_query_arg(Array({"loggedout": "true", "wp_lang": get_user_locale(user_)}), wp_login_url())
+            requested_redirect_to_ = ""
         # end if
         #// 
         #// Filters the log out redirect URL.
@@ -645,30 +647,30 @@ for case in Switch(action):
         #// @param string  $requested_redirect_to The requested redirect destination URL passed as a parameter.
         #// @param WP_User $user                  The WP_User object for the user that's logging out.
         #//
-        redirect_to = apply_filters("logout_redirect", redirect_to, requested_redirect_to, user)
-        wp_safe_redirect(redirect_to)
+        redirect_to_ = apply_filters("logout_redirect", redirect_to_, requested_redirect_to_, user_)
+        wp_safe_redirect(redirect_to_)
         php_exit(0)
     # end if
     if case("lostpassword"):
         pass
     # end if
     if case("retrievepassword"):
-        if http_post:
-            errors = retrieve_password()
-            if (not is_wp_error(errors)):
-                redirect_to = PHP_REQUEST["redirect_to"] if (not php_empty(lambda : PHP_REQUEST["redirect_to"])) else "wp-login.php?checkemail=confirm"
-                wp_safe_redirect(redirect_to)
+        if http_post_:
+            errors_ = retrieve_password()
+            if (not is_wp_error(errors_)):
+                redirect_to_ = PHP_REQUEST["redirect_to"] if (not php_empty(lambda : PHP_REQUEST["redirect_to"])) else "wp-login.php?checkemail=confirm"
+                wp_safe_redirect(redirect_to_)
                 php_exit(0)
             # end if
         # end if
         if (php_isset(lambda : PHP_REQUEST["error"])):
             if "invalidkey" == PHP_REQUEST["error"]:
-                errors.add("invalidkey", __("Your password reset link appears to be invalid. Please request a new link below."))
+                errors_.add("invalidkey", __("Your password reset link appears to be invalid. Please request a new link below."))
             elif "expiredkey" == PHP_REQUEST["error"]:
-                errors.add("expiredkey", __("Your password reset link has expired. Please request a new link below."))
+                errors_.add("expiredkey", __("Your password reset link has expired. Please request a new link below."))
             # end if
         # end if
-        lostpassword_redirect = PHP_REQUEST["redirect_to"] if (not php_empty(lambda : PHP_REQUEST["redirect_to"])) else ""
+        lostpassword_redirect_ = PHP_REQUEST["redirect_to"] if (not php_empty(lambda : PHP_REQUEST["redirect_to"])) else ""
         #// 
         #// Filters the URL redirected to after submitting the lostpassword/retrievepassword form.
         #// 
@@ -676,7 +678,7 @@ for case in Switch(action):
         #// 
         #// @param string $lostpassword_redirect The redirect destination URL.
         #//
-        redirect_to = apply_filters("lostpassword_redirect", lostpassword_redirect)
+        redirect_to_ = apply_filters("lostpassword_redirect", lostpassword_redirect_)
         #// 
         #// Fires before the lost password form.
         #// 
@@ -686,18 +688,18 @@ for case in Switch(action):
         #// @param WP_Error $errors A `WP_Error` object containing any errors generated by using invalid
         #// credentials. Note that the error object may not contain any errors.
         #//
-        do_action("lost_password", errors)
-        login_header(__("Lost Password"), "<p class=\"message\">" + __("Please enter your username or email address. You will receive an email message with instructions on how to reset your password.") + "</p>", errors)
-        user_login = ""
+        do_action("lost_password", errors_)
+        login_header(__("Lost Password"), "<p class=\"message\">" + __("Please enter your username or email address. You will receive an email message with instructions on how to reset your password.") + "</p>", errors_)
+        user_login_ = ""
         if (php_isset(lambda : PHP_POST["user_login"])) and php_is_string(PHP_POST["user_login"]):
-            user_login = wp_unslash(PHP_POST["user_login"])
+            user_login_ = wp_unslash(PHP_POST["user_login"])
         # end if
         php_print("\n       <form name=\"lostpasswordform\" id=\"lostpasswordform\" action=\"")
         php_print(esc_url(network_site_url("wp-login.php?action=lostpassword", "login_post")))
         php_print("\" method=\"post\">\n            <p>\n               <label for=\"user_login\">")
         _e("Username or Email Address")
         php_print("</label>\n               <input type=\"text\" name=\"user_login\" id=\"user_login\" class=\"input\" value=\"")
-        php_print(esc_attr(user_login))
+        php_print(esc_attr(user_login_))
         php_print("\" size=\"20\" autocapitalize=\"off\" />\n           </p>\n          ")
         #// 
         #// Fires inside the lostpassword form tags, before the hidden fields.
@@ -706,7 +708,7 @@ for case in Switch(action):
         #//
         do_action("lostpassword_form")
         php_print("         <input type=\"hidden\" name=\"redirect_to\" value=\"")
-        php_print(esc_attr(redirect_to))
+        php_print(esc_attr(redirect_to_))
         php_print("\" />\n          <p class=\"submit\">\n              <input type=\"submit\" name=\"wp-submit\" id=\"wp-submit\" class=\"button button-primary button-large\" value=\"")
         esc_attr_e("Get New Password")
         php_print("""\" />
@@ -719,10 +721,10 @@ for case in Switch(action):
         _e("Log in")
         php_print("</a>\n           ")
         if get_option("users_can_register"):
-            registration_url = php_sprintf("<a href=\"%s\">%s</a>", esc_url(wp_registration_url()), __("Register"))
-            php_print(esc_html(login_link_separator))
+            registration_url_ = php_sprintf("<a href=\"%s\">%s</a>", esc_url(wp_registration_url()), __("Register"))
+            php_print(esc_html(login_link_separator_))
             #// This filter is documented in wp-includes/general-template.php
-            php_print(apply_filters("register", registration_url))
+            php_print(apply_filters("register", registration_url_))
         # end if
         php_print("     </p>\n      ")
         login_footer("user_login")
@@ -732,35 +734,35 @@ for case in Switch(action):
         pass
     # end if
     if case("rp"):
-        rp_path = php_explode("?", wp_unslash(PHP_SERVER["REQUEST_URI"]))
-        rp_cookie = "wp-resetpass-" + COOKIEHASH
+        rp_path_ = php_explode("?", wp_unslash(PHP_SERVER["REQUEST_URI"]))
+        rp_cookie_ = "wp-resetpass-" + COOKIEHASH
         if (php_isset(lambda : PHP_REQUEST["key"])):
-            value = php_sprintf("%s:%s", wp_unslash(PHP_REQUEST["login"]), wp_unslash(PHP_REQUEST["key"]))
-            setcookie(rp_cookie, value, 0, rp_path, COOKIE_DOMAIN, is_ssl(), True)
+            value_ = php_sprintf("%s:%s", wp_unslash(PHP_REQUEST["login"]), wp_unslash(PHP_REQUEST["key"]))
+            setcookie(rp_cookie_, value_, 0, rp_path_, COOKIE_DOMAIN, is_ssl(), True)
             wp_safe_redirect(remove_query_arg(Array("key", "login")))
             php_exit(0)
         # end if
-        if (php_isset(lambda : PHP_COOKIE[rp_cookie])) and 0 < php_strpos(PHP_COOKIE[rp_cookie], ":"):
-            rp_login, rp_key = php_explode(":", wp_unslash(PHP_COOKIE[rp_cookie]), 2)
-            user = check_password_reset_key(rp_key, rp_login)
-            if (php_isset(lambda : PHP_POST["pass1"])) and (not hash_equals(rp_key, PHP_POST["rp_key"])):
-                user = False
+        if (php_isset(lambda : PHP_COOKIE[rp_cookie_])) and 0 < php_strpos(PHP_COOKIE[rp_cookie_], ":"):
+            rp_login_, rp_key_ = php_explode(":", wp_unslash(PHP_COOKIE[rp_cookie_]), 2)
+            user_ = check_password_reset_key(rp_key_, rp_login_)
+            if (php_isset(lambda : PHP_POST["pass1"])) and (not hash_equals(rp_key_, PHP_POST["rp_key"])):
+                user_ = False
             # end if
         else:
-            user = False
+            user_ = False
         # end if
-        if (not user) or is_wp_error(user):
-            setcookie(rp_cookie, " ", time() - YEAR_IN_SECONDS, rp_path, COOKIE_DOMAIN, is_ssl(), True)
-            if user and user.get_error_code() == "expired_key":
+        if (not user_) or is_wp_error(user_):
+            setcookie(rp_cookie_, " ", time() - YEAR_IN_SECONDS, rp_path_, COOKIE_DOMAIN, is_ssl(), True)
+            if user_ and user_.get_error_code() == "expired_key":
                 wp_redirect(site_url("wp-login.php?action=lostpassword&error=expiredkey"))
             else:
                 wp_redirect(site_url("wp-login.php?action=lostpassword&error=invalidkey"))
             # end if
             php_exit(0)
         # end if
-        errors = php_new_class("WP_Error", lambda : WP_Error())
+        errors_ = php_new_class("WP_Error", lambda : WP_Error())
         if (php_isset(lambda : PHP_POST["pass1"])) and PHP_POST["pass1"] != PHP_POST["pass2"]:
-            errors.add("password_reset_mismatch", __("The passwords do not match."))
+            errors_.add("password_reset_mismatch", __("The passwords do not match."))
         # end if
         #// 
         #// Fires before the password reset procedure is validated.
@@ -770,21 +772,21 @@ for case in Switch(action):
         #// @param WP_Error         $errors WP Error object.
         #// @param WP_User|WP_Error $user   WP_User object if the login and reset key match. WP_Error object otherwise.
         #//
-        do_action("validate_password_reset", errors, user)
-        if (not errors.has_errors()) and (php_isset(lambda : PHP_POST["pass1"])) and (not php_empty(lambda : PHP_POST["pass1"])):
-            reset_password(user, PHP_POST["pass1"])
-            setcookie(rp_cookie, " ", time() - YEAR_IN_SECONDS, rp_path, COOKIE_DOMAIN, is_ssl(), True)
+        do_action("validate_password_reset", errors_, user_)
+        if (not errors_.has_errors()) and (php_isset(lambda : PHP_POST["pass1"])) and (not php_empty(lambda : PHP_POST["pass1"])):
+            reset_password(user_, PHP_POST["pass1"])
+            setcookie(rp_cookie_, " ", time() - YEAR_IN_SECONDS, rp_path_, COOKIE_DOMAIN, is_ssl(), True)
             login_header(__("Password Reset"), "<p class=\"message reset-pass\">" + __("Your password has been reset.") + " <a href=\"" + esc_url(wp_login_url()) + "\">" + __("Log in") + "</a></p>")
             login_footer()
             php_exit(0)
         # end if
         wp_enqueue_script("utils")
         wp_enqueue_script("user-profile")
-        login_header(__("Reset Password"), "<p class=\"message reset-pass\">" + __("Enter your new password below.") + "</p>", errors)
+        login_header(__("Reset Password"), "<p class=\"message reset-pass\">" + __("Enter your new password below.") + "</p>", errors_)
         php_print("     <form name=\"resetpassform\" id=\"resetpassform\" action=\"")
         php_print(esc_url(network_site_url("wp-login.php?action=resetpass", "login_post")))
         php_print("\" method=\"post\" autocomplete=\"off\">\n           <input type=\"hidden\" id=\"user_login\" value=\"")
-        php_print(esc_attr(rp_login))
+        php_print(esc_attr(rp_login_))
         php_print("""\" autocomplete=\"off\" />
         <div class=\"user-pass1-wrap\">
         <p>
@@ -829,9 +831,9 @@ for case in Switch(action):
         #// 
         #// @param WP_User $user User object of the user whose password is being reset.
         #//
-        do_action("resetpass_form", user)
+        do_action("resetpass_form", user_)
         php_print("         <input type=\"hidden\" name=\"rp_key\" value=\"")
-        php_print(esc_attr(rp_key))
+        php_print(esc_attr(rp_key_))
         php_print("\" />\n          <p class=\"submit\">\n              <input type=\"submit\" name=\"wp-submit\" id=\"wp-submit\" class=\"button button-primary button-large\" value=\"")
         esc_attr_e("Reset Password")
         php_print("""\" />
@@ -844,10 +846,10 @@ for case in Switch(action):
         _e("Log in")
         php_print("</a>\n           ")
         if get_option("users_can_register"):
-            registration_url = php_sprintf("<a href=\"%s\">%s</a>", esc_url(wp_registration_url()), __("Register"))
-            php_print(esc_html(login_link_separator))
+            registration_url_ = php_sprintf("<a href=\"%s\">%s</a>", esc_url(wp_registration_url()), __("Register"))
+            php_print(esc_html(login_link_separator_))
             #// This filter is documented in wp-includes/general-template.php
-            php_print(apply_filters("register", registration_url))
+            php_print(apply_filters("register", registration_url_))
         # end if
         php_print("     </p>\n      ")
         login_footer("user_pass")
@@ -869,23 +871,23 @@ for case in Switch(action):
             wp_redirect(site_url("wp-login.php?registration=disabled"))
             php_exit(0)
         # end if
-        user_login = ""
-        user_email = ""
-        if http_post:
+        user_login_ = ""
+        user_email_ = ""
+        if http_post_:
             if (php_isset(lambda : PHP_POST["user_login"])) and php_is_string(PHP_POST["user_login"]):
-                user_login = wp_unslash(PHP_POST["user_login"])
+                user_login_ = wp_unslash(PHP_POST["user_login"])
             # end if
             if (php_isset(lambda : PHP_POST["user_email"])) and php_is_string(PHP_POST["user_email"]):
-                user_email = wp_unslash(PHP_POST["user_email"])
+                user_email_ = wp_unslash(PHP_POST["user_email"])
             # end if
-            errors = register_new_user(user_login, user_email)
-            if (not is_wp_error(errors)):
-                redirect_to = PHP_POST["redirect_to"] if (not php_empty(lambda : PHP_POST["redirect_to"])) else "wp-login.php?checkemail=registered"
-                wp_safe_redirect(redirect_to)
+            errors_ = register_new_user(user_login_, user_email_)
+            if (not is_wp_error(errors_)):
+                redirect_to_ = PHP_POST["redirect_to"] if (not php_empty(lambda : PHP_POST["redirect_to"])) else "wp-login.php?checkemail=registered"
+                wp_safe_redirect(redirect_to_)
                 php_exit(0)
             # end if
         # end if
-        registration_redirect = PHP_REQUEST["redirect_to"] if (not php_empty(lambda : PHP_REQUEST["redirect_to"])) else ""
+        registration_redirect_ = PHP_REQUEST["redirect_to"] if (not php_empty(lambda : PHP_REQUEST["redirect_to"])) else ""
         #// 
         #// Filters the registration redirect URL.
         #// 
@@ -893,21 +895,21 @@ for case in Switch(action):
         #// 
         #// @param string $registration_redirect The redirect destination URL.
         #//
-        redirect_to = apply_filters("registration_redirect", registration_redirect)
-        login_header(__("Registration Form"), "<p class=\"message register\">" + __("Register For This Site") + "</p>", errors)
+        redirect_to_ = apply_filters("registration_redirect", registration_redirect_)
+        login_header(__("Registration Form"), "<p class=\"message register\">" + __("Register For This Site") + "</p>", errors_)
         php_print("     <form name=\"registerform\" id=\"registerform\" action=\"")
         php_print(esc_url(site_url("wp-login.php?action=register", "login_post")))
         php_print("\" method=\"post\" novalidate=\"novalidate\">\n          <p>\n               <label for=\"user_login\">")
         _e("Username")
         php_print("</label>\n               <input type=\"text\" name=\"user_login\" id=\"user_login\" class=\"input\" value=\"")
-        php_print(esc_attr(wp_unslash(user_login)))
+        php_print(esc_attr(wp_unslash(user_login_)))
         php_print("""\" size=\"20\" autocapitalize=\"off\" />
         </p>
         <p>
         <label for=\"user_email\">""")
         _e("Email")
         php_print("</label>\n               <input type=\"email\" name=\"user_email\" id=\"user_email\" class=\"input\" value=\"")
-        php_print(esc_attr(wp_unslash(user_email)))
+        php_print(esc_attr(wp_unslash(user_email_)))
         php_print("\" size=\"25\" />\n          </p>\n          ")
         #// 
         #// Fires following the 'Email' field in the user registration form.
@@ -918,7 +920,7 @@ for case in Switch(action):
         php_print("         <p id=\"reg_passmail\">\n               ")
         _e("Registration confirmation will be emailed to you.")
         php_print("         </p>\n          <br class=\"clear\" />\n            <input type=\"hidden\" name=\"redirect_to\" value=\"")
-        php_print(esc_attr(redirect_to))
+        php_print(esc_attr(redirect_to_))
         php_print("\" />\n          <p class=\"submit\">\n              <input type=\"submit\" name=\"wp-submit\" id=\"wp-submit\" class=\"button button-primary button-large\" value=\"")
         esc_attr_e("Register")
         php_print("""\" />
@@ -930,7 +932,7 @@ for case in Switch(action):
         php_print("\">")
         _e("Log in")
         php_print("</a>\n               ")
-        php_print(esc_html(login_link_separator))
+        php_print(esc_html(login_link_separator_))
         php_print("         <a href=\"")
         php_print(esc_url(wp_lostpassword_url()))
         php_print("\">")
@@ -946,11 +948,11 @@ for case in Switch(action):
         if (not (php_isset(lambda : PHP_REQUEST["confirm_key"]))):
             wp_die(__("Missing confirm key."))
         # end if
-        request_id = php_int(PHP_REQUEST["request_id"])
-        key = sanitize_text_field(wp_unslash(PHP_REQUEST["confirm_key"]))
-        result = wp_validate_user_request_key(request_id, key)
-        if is_wp_error(result):
-            wp_die(result)
+        request_id_ = php_int(PHP_REQUEST["request_id"])
+        key_ = sanitize_text_field(wp_unslash(PHP_REQUEST["confirm_key"]))
+        result_ = wp_validate_user_request_key(request_id_, key_)
+        if is_wp_error(result_):
+            wp_die(result_)
         # end if
         #// 
         #// Fires an action hook when the account action has been confirmed by the user.
@@ -965,9 +967,9 @@ for case in Switch(action):
         #// 
         #// @param int $request_id Request ID.
         #//
-        do_action("user_request_action_confirmed", request_id)
-        message = _wp_privacy_account_request_confirmed_message(request_id)
-        login_header(__("User action confirmed."), message)
+        do_action("user_request_action_confirmed", request_id_)
+        message_ = _wp_privacy_account_request_confirmed_message(request_id_)
+        login_header(__("User action confirmed."), message_)
         login_footer()
         php_exit(0)
     # end if
@@ -975,45 +977,45 @@ for case in Switch(action):
         pass
     # end if
     if case():
-        secure_cookie = ""
-        customize_login = (php_isset(lambda : PHP_REQUEST["customize-login"]))
-        if customize_login:
+        secure_cookie_ = ""
+        customize_login_ = (php_isset(lambda : PHP_REQUEST["customize-login"]))
+        if customize_login_:
             wp_enqueue_script("customize-base")
         # end if
         #// If the user wants SSL but the session is not SSL, force a secure cookie.
         if (not php_empty(lambda : PHP_POST["log"])) and (not force_ssl_admin()):
-            user_name = sanitize_user(wp_unslash(PHP_POST["log"]))
-            user = get_user_by("login", user_name)
-            if (not user) and php_strpos(user_name, "@"):
-                user = get_user_by("email", user_name)
+            user_name_ = sanitize_user(wp_unslash(PHP_POST["log"]))
+            user_ = get_user_by("login", user_name_)
+            if (not user_) and php_strpos(user_name_, "@"):
+                user_ = get_user_by("email", user_name_)
             # end if
-            if user:
-                if get_user_option("use_ssl", user.ID):
-                    secure_cookie = True
+            if user_:
+                if get_user_option("use_ssl", user_.ID):
+                    secure_cookie_ = True
                     force_ssl_admin(True)
                 # end if
             # end if
         # end if
         if (php_isset(lambda : PHP_REQUEST["redirect_to"])):
-            redirect_to = PHP_REQUEST["redirect_to"]
+            redirect_to_ = PHP_REQUEST["redirect_to"]
             #// Redirect to HTTPS if user wants SSL.
-            if secure_cookie and False != php_strpos(redirect_to, "wp-admin"):
-                redirect_to = php_preg_replace("|^http://|", "https://", redirect_to)
+            if secure_cookie_ and False != php_strpos(redirect_to_, "wp-admin"):
+                redirect_to_ = php_preg_replace("|^http://|", "https://", redirect_to_)
             # end if
         else:
-            redirect_to = admin_url()
+            redirect_to_ = admin_url()
         # end if
-        reauth = False if php_empty(lambda : PHP_REQUEST["reauth"]) else True
-        user = wp_signon(Array(), secure_cookie)
+        reauth_ = False if php_empty(lambda : PHP_REQUEST["reauth"]) else True
+        user_ = wp_signon(Array(), secure_cookie_)
         if php_empty(lambda : PHP_COOKIE[LOGGED_IN_COOKIE]):
             if php_headers_sent():
-                user = php_new_class("WP_Error", lambda : WP_Error("test_cookie", php_sprintf(__("<strong>Error</strong>: Cookies are blocked due to unexpected output. For help, please see <a href=\"%1$s\">this documentation</a> or try the <a href=\"%2$s\">support forums</a>."), __("https://wordpress.org/support/article/cookies/"), __("https://wordpress.org/support/forums/"))))
+                user_ = php_new_class("WP_Error", lambda : WP_Error("test_cookie", php_sprintf(__("<strong>Error</strong>: Cookies are blocked due to unexpected output. For help, please see <a href=\"%1$s\">this documentation</a> or try the <a href=\"%2$s\">support forums</a>."), __("https://wordpress.org/support/article/cookies/"), __("https://wordpress.org/support/forums/"))))
             elif (php_isset(lambda : PHP_POST["testcookie"])) and php_empty(lambda : PHP_COOKIE[TEST_COOKIE]):
                 #// If cookies are disabled, we can't log in even with a valid user and password.
-                user = php_new_class("WP_Error", lambda : WP_Error("test_cookie", php_sprintf(__("<strong>Error</strong>: Cookies are blocked or not supported by your browser. You must <a href=\"%s\">enable cookies</a> to use WordPress."), __("https://wordpress.org/support/article/cookies/#enable-cookies-in-your-browser"))))
+                user_ = php_new_class("WP_Error", lambda : WP_Error("test_cookie", php_sprintf(__("<strong>Error</strong>: Cookies are blocked or not supported by your browser. You must <a href=\"%s\">enable cookies</a> to use WordPress."), __("https://wordpress.org/support/article/cookies/#enable-cookies-in-your-browser"))))
             # end if
         # end if
-        requested_redirect_to = PHP_REQUEST["redirect_to"] if (php_isset(lambda : PHP_REQUEST["redirect_to"])) else ""
+        requested_redirect_to_ = PHP_REQUEST["redirect_to"] if (php_isset(lambda : PHP_REQUEST["redirect_to"])) else ""
         #// 
         #// Filters the login redirect URL.
         #// 
@@ -1023,16 +1025,16 @@ for case in Switch(action):
         #// @param string           $requested_redirect_to The requested redirect destination URL passed as a parameter.
         #// @param WP_User|WP_Error $user                  WP_User object if login was successful, WP_Error object otherwise.
         #//
-        redirect_to = apply_filters("login_redirect", redirect_to, requested_redirect_to, user)
-        if (not is_wp_error(user)) and (not reauth):
-            if interim_login:
-                message = "<p class=\"message\">" + __("You have logged in successfully.") + "</p>"
-                interim_login = "success"
-                login_header("", message)
+        redirect_to_ = apply_filters("login_redirect", redirect_to_, requested_redirect_to_, user_)
+        if (not is_wp_error(user_)) and (not reauth_):
+            if interim_login_:
+                message_ = "<p class=\"message\">" + __("You have logged in successfully.") + "</p>"
+                interim_login_ = "success"
+                login_header("", message_)
                 php_print("             </div>\n                ")
                 #// This action is documented in wp-login.php
                 do_action("login_footer")
-                if customize_login:
+                if customize_login_:
                     php_print("                 <script type=\"text/javascript\">setTimeout( function(){ new wp.customize.Messenger({ url: '")
                     php_print(wp_customize_url())
                     php_print("', channel: 'login' }).send('login') }, 1000 );</script>\n                   ")
@@ -1041,59 +1043,59 @@ for case in Switch(action):
                 php_exit(0)
             # end if
             #// Check if it is time to add a redirect to the admin email confirmation screen.
-            if php_is_a(user, "WP_User") and user.exists() and user.has_cap("manage_options"):
-                admin_email_lifespan = php_int(get_option("admin_email_lifespan"))
+            if php_is_a(user_, "WP_User") and user_.exists() and user_.has_cap("manage_options"):
+                admin_email_lifespan_ = php_int(get_option("admin_email_lifespan"))
                 #// If `0` (or anything "falsey" as it is cast to int) is returned, the user will not be redirected
                 #// to the admin email confirmation screen.
                 #// This filter is documented in wp-login.php
-                admin_email_check_interval = php_int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
-                if admin_email_check_interval > 0 and time() > admin_email_lifespan:
-                    redirect_to = add_query_arg(Array({"action": "confirm_admin_email", "wp_lang": get_user_locale(user)}), wp_login_url(redirect_to))
+                admin_email_check_interval_ = php_int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
+                if admin_email_check_interval_ > 0 and time() > admin_email_lifespan_:
+                    redirect_to_ = add_query_arg(Array({"action": "confirm_admin_email", "wp_lang": get_user_locale(user_)}), wp_login_url(redirect_to_))
                 # end if
             # end if
-            if php_empty(lambda : redirect_to) or "wp-admin/" == redirect_to or admin_url() == redirect_to:
+            if php_empty(lambda : redirect_to_) or "wp-admin/" == redirect_to_ or admin_url() == redirect_to_:
                 #// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
-                if is_multisite() and (not get_active_blog_for_user(user.ID)) and (not is_super_admin(user.ID)):
-                    redirect_to = user_admin_url()
-                elif is_multisite() and (not user.has_cap("read")):
-                    redirect_to = get_dashboard_url(user.ID)
-                elif (not user.has_cap("edit_posts")):
-                    redirect_to = admin_url("profile.php") if user.has_cap("read") else home_url()
+                if is_multisite() and (not get_active_blog_for_user(user_.ID)) and (not is_super_admin(user_.ID)):
+                    redirect_to_ = user_admin_url()
+                elif is_multisite() and (not user_.has_cap("read")):
+                    redirect_to_ = get_dashboard_url(user_.ID)
+                elif (not user_.has_cap("edit_posts")):
+                    redirect_to_ = admin_url("profile.php") if user_.has_cap("read") else home_url()
                 # end if
-                wp_redirect(redirect_to)
+                wp_redirect(redirect_to_)
                 php_exit(0)
             # end if
-            wp_safe_redirect(redirect_to)
+            wp_safe_redirect(redirect_to_)
             php_exit(0)
         # end if
-        errors = user
+        errors_ = user_
         #// Clear errors if loggedout is set.
-        if (not php_empty(lambda : PHP_REQUEST["loggedout"])) or reauth:
-            errors = php_new_class("WP_Error", lambda : WP_Error())
+        if (not php_empty(lambda : PHP_REQUEST["loggedout"])) or reauth_:
+            errors_ = php_new_class("WP_Error", lambda : WP_Error())
         # end if
-        if php_empty(lambda : PHP_POST) and errors.get_error_codes() == Array("empty_username", "empty_password"):
-            errors = php_new_class("WP_Error", lambda : WP_Error("", ""))
+        if php_empty(lambda : PHP_POST) and errors_.get_error_codes() == Array("empty_username", "empty_password"):
+            errors_ = php_new_class("WP_Error", lambda : WP_Error("", ""))
         # end if
-        if interim_login:
-            if (not errors.has_errors()):
-                errors.add("expired", __("Your session has expired. Please log in to continue where you left off."), "message")
+        if interim_login_:
+            if (not errors_.has_errors()):
+                errors_.add("expired", __("Your session has expired. Please log in to continue where you left off."), "message")
             # end if
         else:
             #// Some parts of this script use the main login form to display a message.
             if (php_isset(lambda : PHP_REQUEST["loggedout"])) and PHP_REQUEST["loggedout"]:
-                errors.add("loggedout", __("You are now logged out."), "message")
+                errors_.add("loggedout", __("You are now logged out."), "message")
             elif (php_isset(lambda : PHP_REQUEST["registration"])) and "disabled" == PHP_REQUEST["registration"]:
-                errors.add("registerdisabled", __("User registration is currently not allowed."))
+                errors_.add("registerdisabled", __("User registration is currently not allowed."))
             elif (php_isset(lambda : PHP_REQUEST["checkemail"])) and "confirm" == PHP_REQUEST["checkemail"]:
-                errors.add("confirm", __("Check your email for the confirmation link."), "message")
+                errors_.add("confirm", __("Check your email for the confirmation link."), "message")
             elif (php_isset(lambda : PHP_REQUEST["checkemail"])) and "newpass" == PHP_REQUEST["checkemail"]:
-                errors.add("newpass", __("Check your email for your new password."), "message")
+                errors_.add("newpass", __("Check your email for your new password."), "message")
             elif (php_isset(lambda : PHP_REQUEST["checkemail"])) and "registered" == PHP_REQUEST["checkemail"]:
-                errors.add("registered", __("Registration complete. Please check your email."), "message")
-            elif php_strpos(redirect_to, "about.php?updated"):
-                errors.add("updated", __("<strong>You have successfully updated WordPress!</strong> Please log back in to see what&#8217;s new."), "message")
-            elif WP_Recovery_Mode_Link_Service.LOGIN_ACTION_ENTERED == action:
-                errors.add("enter_recovery_mode", __("Recovery Mode Initialized. Please log in to continue."), "message")
+                errors_.add("registered", __("Registration complete. Please check your email."), "message")
+            elif php_strpos(redirect_to_, "about.php?updated"):
+                errors_.add("updated", __("<strong>You have successfully updated WordPress!</strong> Please log back in to see what&#8217;s new."), "message")
+            elif WP_Recovery_Mode_Link_Service.LOGIN_ACTION_ENTERED == action_:
+                errors_.add("enter_recovery_mode", __("Recovery Mode Initialized. Please log in to continue."), "message")
             # end if
         # end if
         #// 
@@ -1104,20 +1106,20 @@ for case in Switch(action):
         #// @param WP_Error $errors      WP Error object.
         #// @param string   $redirect_to Redirect destination URL.
         #//
-        errors = apply_filters("wp_login_errors", errors, redirect_to)
+        errors_ = apply_filters("wp_login_errors", errors_, redirect_to_)
         #// Clear any stale cookies.
-        if reauth:
+        if reauth_:
             wp_clear_auth_cookie()
         # end if
-        login_header(__("Log In"), "", errors)
+        login_header(__("Log In"), "", errors_)
         if (php_isset(lambda : PHP_POST["log"])):
-            user_login = esc_attr(wp_unslash(PHP_POST["log"])) if "incorrect_password" == errors.get_error_code() or "empty_password" == errors.get_error_code() else ""
+            user_login_ = esc_attr(wp_unslash(PHP_POST["log"])) if "incorrect_password" == errors_.get_error_code() or "empty_password" == errors_.get_error_code() else ""
         # end if
-        rememberme = (not php_empty(lambda : PHP_POST["rememberme"]))
-        if errors.has_errors():
-            aria_describedby_error = " aria-describedby=\"login_error\""
+        rememberme_ = (not php_empty(lambda : PHP_POST["rememberme"]))
+        if errors_.has_errors():
+            aria_describedby_error_ = " aria-describedby=\"login_error\""
         else:
-            aria_describedby_error = ""
+            aria_describedby_error_ = ""
         # end if
         wp_enqueue_script("user-profile")
         php_print("\n       <form name=\"loginform\" id=\"loginform\" action=\"")
@@ -1125,16 +1127,16 @@ for case in Switch(action):
         php_print("\" method=\"post\">\n            <p>\n               <label for=\"user_login\">")
         _e("Username or Email Address")
         php_print("</label>\n               <input type=\"text\" name=\"log\" id=\"user_login\"")
-        php_print(aria_describedby_error)
+        php_print(aria_describedby_error_)
         php_print(" class=\"input\" value=\"")
-        php_print(esc_attr(user_login))
+        php_print(esc_attr(user_login_))
         php_print("""\" size=\"20\" autocapitalize=\"off\" />
         </p>
         <div class=\"user-pass-wrap\">
         <label for=\"user_pass\">""")
         _e("Password")
         php_print("</label>\n               <div class=\"wp-pwd\">\n                    <input type=\"password\" name=\"pwd\" id=\"user_pass\"")
-        php_print(aria_describedby_error)
+        php_print(aria_describedby_error_)
         php_print(" class=\"input password-input\" value=\"\" size=\"20\" />\n                  <button type=\"button\" class=\"button button-secondary wp-hide-pw hide-if-no-js\" data-toggle=\"0\" aria-label=\"")
         esc_attr_e("Show password")
         php_print("""\">
@@ -1150,34 +1152,34 @@ for case in Switch(action):
         #//
         do_action("login_form")
         php_print("         <p class=\"forgetmenot\"><input name=\"rememberme\" type=\"checkbox\" id=\"rememberme\" value=\"forever\" ")
-        checked(rememberme)
+        checked(rememberme_)
         php_print(" /> <label for=\"rememberme\">")
         esc_html_e("Remember Me")
         php_print("</label></p>\n           <p class=\"submit\">\n              <input type=\"submit\" name=\"wp-submit\" id=\"wp-submit\" class=\"button button-primary button-large\" value=\"")
         esc_attr_e("Log In")
         php_print("\" />\n              ")
-        if interim_login:
+        if interim_login_:
             php_print("                 <input type=\"hidden\" name=\"interim-login\" value=\"1\" />\n                  ")
         else:
             php_print("                 <input type=\"hidden\" name=\"redirect_to\" value=\"")
-            php_print(esc_attr(redirect_to))
+            php_print(esc_attr(redirect_to_))
             php_print("\" />\n                  ")
         # end if
-        if customize_login:
+        if customize_login_:
             php_print("                 <input type=\"hidden\" name=\"customize-login\" value=\"1\" />\n                    ")
         # end if
         php_print("""               <input type=\"hidden\" name=\"testcookie\" value=\"1\" />
         </p>
         </form>
         """)
-        if (not interim_login):
+        if (not interim_login_):
             php_print("         <p id=\"nav\">\n                ")
             if (not (php_isset(lambda : PHP_REQUEST["checkemail"]))) or (not php_in_array(PHP_REQUEST["checkemail"], Array("confirm", "newpass"), True)):
                 if get_option("users_can_register"):
-                    registration_url = php_sprintf("<a href=\"%s\">%s</a>", esc_url(wp_registration_url()), __("Register"))
+                    registration_url_ = php_sprintf("<a href=\"%s\">%s</a>", esc_url(wp_registration_url()), __("Register"))
                     #// This filter is documented in wp-includes/general-template.php
-                    php_print(apply_filters("register", registration_url))
-                    php_print(esc_html(login_link_separator))
+                    php_print(apply_filters("register", registration_url_))
+                    php_print(esc_html(login_link_separator_))
                 # end if
                 php_print("                 <a href=\"")
                 php_print(esc_url(wp_lostpassword_url()))
@@ -1187,21 +1189,21 @@ for case in Switch(action):
             # end if
             php_print("         </p>\n          ")
         # end if
-        login_script = "function wp_attempt_focus() {"
-        login_script += "setTimeout( function() {"
-        login_script += "try {"
-        if user_login:
-            login_script += "d = document.getElementById( \"user_pass\" ); d.value = \"\";"
+        login_script_ = "function wp_attempt_focus() {"
+        login_script_ += "setTimeout( function() {"
+        login_script_ += "try {"
+        if user_login_:
+            login_script_ += "d = document.getElementById( \"user_pass\" ); d.value = \"\";"
         else:
-            login_script += "d = document.getElementById( \"user_login\" );"
-            if errors.get_error_code() == "invalid_username":
-                login_script += "d.value = \"\";"
+            login_script_ += "d = document.getElementById( \"user_login\" );"
+            if errors_.get_error_code() == "invalid_username":
+                login_script_ += "d.value = \"\";"
             # end if
         # end if
-        login_script += "d.focus(); d.select();"
-        login_script += "} catch( er ) {}"
-        login_script += "}, 200);"
-        login_script += "}\n"
+        login_script_ += "d.focus(); d.select();"
+        login_script_ += "} catch( er ) {}"
+        login_script_ += "}, 200);"
+        login_script_ += "}\n"
         #// End of wp_attempt_focus().
         #// 
         #// Filters whether to print the call to `wp_attempt_focus()` on the login screen.
@@ -1210,15 +1212,15 @@ for case in Switch(action):
         #// 
         #// @param bool $print Whether to print the function call. Default true.
         #//
-        if apply_filters("enable_login_autofocus", True) and (not error):
-            login_script += "wp_attempt_focus();\n"
+        if apply_filters("enable_login_autofocus", True) and (not error_):
+            login_script_ += "wp_attempt_focus();\n"
         # end if
         #// Run `wpOnload()` if defined.
-        login_script += "if ( typeof wpOnload === 'function' ) { wpOnload() }"
+        login_script_ += "if ( typeof wpOnload === 'function' ) { wpOnload() }"
         php_print("     <script type=\"text/javascript\">\n         ")
-        php_print(login_script)
+        php_print(login_script_)
         php_print("     </script>\n     ")
-        if interim_login:
+        if interim_login_:
             php_print("""           <script type=\"text/javascript\">
             ( function() {
         try {

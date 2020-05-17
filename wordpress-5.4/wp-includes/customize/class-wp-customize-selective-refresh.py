@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,9 +21,33 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 class WP_Customize_Selective_Refresh():
     RENDER_QUERY_VAR = "wp_customize_render_partials"
+    #// 
+    #// Customize manager.
+    #// 
+    #// @since 4.5.0
+    #// @var WP_Customize_Manager
+    #//
     manager = Array()
+    #// 
+    #// Registered instances of WP_Customize_Partial.
+    #// 
+    #// @since 4.5.0
+    #// @var WP_Customize_Partial[]
+    #//
     partials = Array()
+    #// 
+    #// Log of errors triggered when partials are rendered.
+    #// 
+    #// @since 4.5.0
+    #// @var array
+    #//
     triggered_errors = Array()
+    #// 
+    #// Keep track of the current partial being rendered.
+    #// 
+    #// @since 4.5.0
+    #// @var string|null
+    #//
     current_partial_id = Array()
     #// 
     #// Plugin bootstrap for Partial Refresh functionality.
@@ -37,9 +56,10 @@ class WP_Customize_Selective_Refresh():
     #// 
     #// @param WP_Customize_Manager $manager Customizer bootstrap instance.
     #//
-    def __init__(self, manager=None):
+    def __init__(self, manager_=None):
         
-        self.manager = manager
+        
+        self.manager = manager_
         php_include_file(ABSPATH + WPINC + "/customize/class-wp-customize-partial.php", once=True)
         add_action("customize_preview_init", Array(self, "init_preview"))
     # end def __init__
@@ -51,6 +71,7 @@ class WP_Customize_Selective_Refresh():
     #// @return array Partials.
     #//
     def partials(self):
+        
         
         return self.partials
     # end def partials
@@ -83,20 +104,23 @@ class WP_Customize_Selective_Refresh():
     #// }
     #// @return WP_Customize_Partial             The instance of the panel that was added.
     #//
-    def add_partial(self, id=None, args=Array()):
+    def add_partial(self, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if type(id).__name__ == "WP_Customize_Partial":
-            partial = id
+        if type(id_).__name__ == "WP_Customize_Partial":
+            partial_ = id_
         else:
             class_ = "WP_Customize_Partial"
             #// This filter is documented in wp-includes/customize/class-wp-customize-selective-refresh.php
-            args = apply_filters("customize_dynamic_partial_args", args, id)
+            args_ = apply_filters("customize_dynamic_partial_args", args_, id_)
             #// This filter is documented in wp-includes/customize/class-wp-customize-selective-refresh.php
-            class_ = apply_filters("customize_dynamic_partial_class", class_, id, args)
-            partial = php_new_class(class_, lambda : {**locals(), **globals()}[class_](self, id, args))
+            class_ = apply_filters("customize_dynamic_partial_class", class_, id_, args_)
+            partial_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_](self, id_, args_))
         # end if
-        self.partials[partial.id] = partial
-        return partial
+        self.partials[partial_.id] = partial_
+        return partial_
     # end def add_partial
     #// 
     #// Retrieves a partial.
@@ -106,10 +130,11 @@ class WP_Customize_Selective_Refresh():
     #// @param string $id Customize Partial ID.
     #// @return WP_Customize_Partial|null The partial, if set. Otherwise null.
     #//
-    def get_partial(self, id=None):
+    def get_partial(self, id_=None):
         
-        if (php_isset(lambda : self.partials[id])):
-            return self.partials[id]
+        
+        if (php_isset(lambda : self.partials[id_])):
+            return self.partials[id_]
         else:
             return None
         # end if
@@ -121,9 +146,10 @@ class WP_Customize_Selective_Refresh():
     #// 
     #// @param string $id Customize Partial ID.
     #//
-    def remove_partial(self, id=None):
+    def remove_partial(self, id_=None):
         
-        self.partials[id] = None
+        
+        self.partials[id_] = None
     # end def remove_partial
     #// 
     #// Initializes the Customizer preview.
@@ -131,6 +157,7 @@ class WP_Customize_Selective_Refresh():
     #// @since 4.5.0
     #//
     def init_preview(self):
+        
         
         add_action("template_redirect", Array(self, "handle_render_partials_request"))
         add_action("wp_enqueue_scripts", Array(self, "enqueue_preview_scripts"))
@@ -142,6 +169,7 @@ class WP_Customize_Selective_Refresh():
     #//
     def enqueue_preview_scripts(self):
         
+        
         wp_enqueue_script("customize-selective-refresh")
         add_action("wp_footer", Array(self, "export_preview_data"), 1000)
     # end def enqueue_preview_scripts
@@ -152,20 +180,21 @@ class WP_Customize_Selective_Refresh():
     #//
     def export_preview_data(self):
         
-        partials = Array()
-        for partial in self.partials():
-            if partial.check_capabilities():
-                partials[partial.id] = partial.json()
+        
+        partials_ = Array()
+        for partial_ in self.partials():
+            if partial_.check_capabilities():
+                partials_[partial_.id] = partial_.json()
             # end if
         # end for
-        switched_locale = switch_to_locale(get_user_locale())
-        l10n = Array({"shiftClickToEdit": __("Shift-click to edit this element."), "clickEditMenu": __("Click to edit this menu."), "clickEditWidget": __("Click to edit this widget."), "clickEditTitle": __("Click to edit the site title."), "clickEditMisc": __("Click to edit this element."), "badDocumentWrite": php_sprintf(__("%s is forbidden"), "document.write()")})
-        if switched_locale:
+        switched_locale_ = switch_to_locale(get_user_locale())
+        l10n_ = Array({"shiftClickToEdit": __("Shift-click to edit this element."), "clickEditMenu": __("Click to edit this menu."), "clickEditWidget": __("Click to edit this widget."), "clickEditTitle": __("Click to edit the site title."), "clickEditMisc": __("Click to edit this element."), "badDocumentWrite": php_sprintf(__("%s is forbidden"), "document.write()")})
+        if switched_locale_:
             restore_previous_locale()
         # end if
-        exports = Array({"partials": partials, "renderQueryVar": self.RENDER_QUERY_VAR, "l10n": l10n})
+        exports_ = Array({"partials": partials_, "renderQueryVar": self.RENDER_QUERY_VAR, "l10n": l10n_})
         #// Export data to JS.
-        php_print(php_sprintf("<script>var _customizePartialRefreshExports = %s;</script>", wp_json_encode(exports)))
+        php_print(php_sprintf("<script>var _customizePartialRefreshExports = %s;</script>", wp_json_encode(exports_)))
     # end def export_preview_data
     #// 
     #// Registers dynamically-created partials.
@@ -177,17 +206,18 @@ class WP_Customize_Selective_Refresh():
     #// @param string[] $partial_ids Array of the partial IDs to add.
     #// @return WP_Customize_Partial[] Array of added WP_Customize_Partial instances.
     #//
-    def add_dynamic_partials(self, partial_ids=None):
+    def add_dynamic_partials(self, partial_ids_=None):
         
-        new_partials = Array()
-        for partial_id in partial_ids:
+        
+        new_partials_ = Array()
+        for partial_id_ in partial_ids_:
             #// Skip partials already created.
-            partial = self.get_partial(partial_id)
-            if partial:
+            partial_ = self.get_partial(partial_id_)
+            if partial_:
                 continue
             # end if
-            partial_args = False
-            partial_class = "WP_Customize_Partial"
+            partial_args_ = False
+            partial_class_ = "WP_Customize_Partial"
             #// 
             #// Filters a dynamic partial's constructor arguments.
             #// 
@@ -200,8 +230,8 @@ class WP_Customize_Selective_Refresh():
             #// @param false|array $partial_args The arguments to the WP_Customize_Partial constructor.
             #// @param string      $partial_id   ID for dynamic partial.
             #//
-            partial_args = apply_filters("customize_dynamic_partial_args", partial_args, partial_id)
-            if False == partial_args:
+            partial_args_ = apply_filters("customize_dynamic_partial_args", partial_args_, partial_id_)
+            if False == partial_args_:
                 continue
             # end if
             #// 
@@ -215,12 +245,12 @@ class WP_Customize_Selective_Refresh():
             #// @param string $partial_id    ID for dynamic partial.
             #// @param array  $partial_args  The arguments to the WP_Customize_Partial constructor.
             #//
-            partial_class = apply_filters("customize_dynamic_partial_class", partial_class, partial_id, partial_args)
-            partial = php_new_class(partial_class, lambda : {**locals(), **globals()}[partial_class](self, partial_id, partial_args))
-            self.add_partial(partial)
-            new_partials[-1] = partial
+            partial_class_ = apply_filters("customize_dynamic_partial_class", partial_class_, partial_id_, partial_args_)
+            partial_ = php_new_class(partial_class_, lambda : {**locals(), **globals()}[partial_class_](self, partial_id_, partial_args_))
+            self.add_partial(partial_)
+            new_partials_[-1] = partial_
         # end for
-        return new_partials
+        return new_partials_
     # end def add_dynamic_partials
     #// 
     #// Checks whether the request is for rendering partials.
@@ -233,6 +263,7 @@ class WP_Customize_Selective_Refresh():
     #// @return bool Whether the request is for rendering partials.
     #//
     def is_render_partials_request(self):
+        
         
         return (not php_empty(lambda : PHP_POST[self.RENDER_QUERY_VAR]))
     # end def is_render_partials_request
@@ -249,9 +280,10 @@ class WP_Customize_Selective_Refresh():
     #// @param string $errline Error line.
     #// @return true Always true.
     #//
-    def handle_error(self, errno=None, errstr=None, errfile=None, errline=None):
+    def handle_error(self, errno_=None, errstr_=None, errfile_=None, errline_=None):
         
-        self.triggered_errors[-1] = Array({"partial": self.current_partial_id, "error_number": errno, "error_string": errstr, "error_file": errfile, "error_line": errline})
+        
+        self.triggered_errors[-1] = Array({"partial": self.current_partial_id, "error_number": errno_, "error_string": errstr_, "error_file": errfile_, "error_line": errline_})
         return True
     # end def handle_error
     #// 
@@ -260,6 +292,7 @@ class WP_Customize_Selective_Refresh():
     #// @since 4.5.0
     #//
     def handle_render_partials_request(self):
+        
         
         if (not self.is_render_partials_request()):
             return
@@ -276,11 +309,11 @@ class WP_Customize_Selective_Refresh():
         # end if
         #// Ensure that doing selective refresh on 404 template doesn't result in fallback rendering behavior (full refreshes).
         status_header(200)
-        partials = php_json_decode(wp_unslash(PHP_POST["partials"]), True)
-        if (not php_is_array(partials)):
+        partials_ = php_json_decode(wp_unslash(PHP_POST["partials"]), True)
+        if (not php_is_array(partials_)):
             wp_send_json_error("malformed_partials")
         # end if
-        self.add_dynamic_partials(php_array_keys(partials))
+        self.add_dynamic_partials(php_array_keys(partials_))
         #// 
         #// Fires immediately before partials are rendered.
         #// 
@@ -294,27 +327,27 @@ class WP_Customize_Selective_Refresh():
         #// The array is keyed by partial ID, with each item being an array of
         #// the placements' context data.
         #//
-        do_action("customize_render_partials_before", self, partials)
+        do_action("customize_render_partials_before", self, partials_)
         set_error_handler(Array(self, "handle_error"), php_error_reporting())
-        contents = Array()
-        for partial_id,container_contexts in partials:
-            self.current_partial_id = partial_id
-            if (not php_is_array(container_contexts)):
+        contents_ = Array()
+        for partial_id_,container_contexts_ in partials_:
+            self.current_partial_id = partial_id_
+            if (not php_is_array(container_contexts_)):
                 wp_send_json_error("malformed_container_contexts")
             # end if
-            partial = self.get_partial(partial_id)
-            if (not partial) or (not partial.check_capabilities()):
-                contents[partial_id] = None
+            partial_ = self.get_partial(partial_id_)
+            if (not partial_) or (not partial_.check_capabilities()):
+                contents_[partial_id_] = None
                 continue
             # end if
-            contents[partial_id] = Array()
+            contents_[partial_id_] = Array()
             #// @todo The array should include not only the contents, but also whether the container is included?
-            if php_empty(lambda : container_contexts):
+            if php_empty(lambda : container_contexts_):
                 #// Since there are no container contexts, render just once.
-                contents[partial_id][-1] = partial.render(None)
+                contents_[partial_id_][-1] = partial_.render(None)
             else:
-                for container_context in container_contexts:
-                    contents[partial_id][-1] = partial.render(container_context)
+                for container_context_ in container_contexts_:
+                    contents_[partial_id_][-1] = partial_.render(container_context_)
                 # end for
             # end if
         # end for
@@ -333,14 +366,14 @@ class WP_Customize_Selective_Refresh():
         #// The array is keyed by partial ID, with each item being an array of
         #// the placements' context data.
         #//
-        do_action("customize_render_partials_after", self, partials)
-        response = Array({"contents": contents})
+        do_action("customize_render_partials_after", self, partials_)
+        response_ = Array({"contents": contents_})
         if php_defined("WP_DEBUG_DISPLAY") and WP_DEBUG_DISPLAY:
-            response["errors"] = self.triggered_errors
+            response_["errors"] = self.triggered_errors
         # end if
-        setting_validities = self.manager.validate_setting_values(self.manager.unsanitized_post_values())
-        exported_setting_validities = php_array_map(Array(self.manager, "prepare_setting_validity_for_js"), setting_validities)
-        response["setting_validities"] = exported_setting_validities
+        setting_validities_ = self.manager.validate_setting_values(self.manager.unsanitized_post_values())
+        exported_setting_validities_ = php_array_map(Array(self.manager, "prepare_setting_validity_for_js"), setting_validities_)
+        response_["setting_validities"] = exported_setting_validities_
         #// 
         #// Filters the response from rendering the partials.
         #// 
@@ -371,7 +404,7 @@ class WP_Customize_Selective_Refresh():
         #// The array is keyed by partial ID, with each item being an array of
         #// the placements' context data.
         #//
-        response = apply_filters("customize_render_partials_response", response, self, partials)
-        wp_send_json_success(response)
+        response_ = apply_filters("customize_render_partials_response", response_, self, partials_)
+        wp_send_json_success(response_)
     # end def handle_render_partials_request
 # end class WP_Customize_Selective_Refresh

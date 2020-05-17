@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,8 +20,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 4.4.0
 #//
 class WP_HTTP_Response():
+    #// 
+    #// Response data.
+    #// 
+    #// @since 4.4.0
+    #// @var mixed
+    #//
     data = Array()
+    #// 
+    #// Response headers.
+    #// 
+    #// @since 4.4.0
+    #// @var array
+    #//
     headers = Array()
+    #// 
+    #// Response status.
+    #// 
+    #// @since 4.4.0
+    #// @var int
+    #//
     status = Array()
     #// 
     #// Constructor.
@@ -37,11 +50,14 @@ class WP_HTTP_Response():
     #// @param int   $status  Optional. HTTP status code. Default 200.
     #// @param array $headers Optional. HTTP header map. Default empty array.
     #//
-    def __init__(self, data=None, status=200, headers=Array()):
+    def __init__(self, data_=None, status_=200, headers_=None):
+        if headers_ is None:
+            headers_ = Array()
+        # end if
         
-        self.set_data(data)
-        self.set_status(status)
-        self.set_headers(headers)
+        self.set_data(data_)
+        self.set_status(status_)
+        self.set_headers(headers_)
     # end def __init__
     #// 
     #// Retrieves headers associated with the response.
@@ -52,6 +68,7 @@ class WP_HTTP_Response():
     #//
     def get_headers(self):
         
+        
         return self.headers
     # end def get_headers
     #// 
@@ -61,9 +78,10 @@ class WP_HTTP_Response():
     #// 
     #// @param array $headers Map of header name to header value.
     #//
-    def set_headers(self, headers=None):
+    def set_headers(self, headers_=None):
         
-        self.headers = headers
+        
+        self.headers = headers_
     # end def set_headers
     #// 
     #// Sets a single HTTP header.
@@ -75,12 +93,15 @@ class WP_HTTP_Response():
     #// @param bool   $replace Optional. Whether to replace an existing header of the same name.
     #// Default true.
     #//
-    def header(self, key=None, value=None, replace=True):
+    def header(self, key_=None, value_=None, replace_=None):
+        if replace_ is None:
+            replace_ = True
+        # end if
         
-        if replace or (not (php_isset(lambda : self.headers[key]))):
-            self.headers[key] = value
+        if replace_ or (not (php_isset(lambda : self.headers[key_]))):
+            self.headers[key_] = value_
         else:
-            self.headers[key] += ", " + value
+            self.headers[key_] += ", " + value_
         # end if
     # end def header
     #// 
@@ -92,6 +113,7 @@ class WP_HTTP_Response():
     #//
     def get_status(self):
         
+        
         return self.status
     # end def get_status
     #// 
@@ -101,9 +123,10 @@ class WP_HTTP_Response():
     #// 
     #// @param int $code HTTP status.
     #//
-    def set_status(self, code=None):
+    def set_status(self, code_=None):
         
-        self.status = absint(code)
+        
+        self.status = absint(code_)
     # end def set_status
     #// 
     #// Retrieves the response data.
@@ -114,6 +137,7 @@ class WP_HTTP_Response():
     #//
     def get_data(self):
         
+        
         return self.data
     # end def get_data
     #// 
@@ -123,9 +147,10 @@ class WP_HTTP_Response():
     #// 
     #// @param mixed $data Response data.
     #//
-    def set_data(self, data=None):
+    def set_data(self, data_=None):
         
-        self.data = data
+        
+        self.data = data_
     # end def set_data
     #// 
     #// Retrieves the response data for JSON serialization.
@@ -138,6 +163,7 @@ class WP_HTTP_Response():
     #// @return mixed Any JSON-serializable value.
     #//
     def jsonserialize(self):
+        
         
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         return self.get_data()

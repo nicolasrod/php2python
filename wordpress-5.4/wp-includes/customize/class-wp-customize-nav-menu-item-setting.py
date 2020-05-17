@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,15 +28,100 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     ID_PATTERN = "/^nav_menu_item\\[(?P<id>-?\\d+)\\]$/"
     POST_TYPE = "nav_menu_item"
     TYPE = "nav_menu_item"
+    #// 
+    #// Setting type.
+    #// 
+    #// @since 4.3.0
+    #// @var string
+    #//
     type = self.TYPE
+    #// 
+    #// Default setting value.
+    #// 
+    #// @since 4.3.0
+    #// @var array
+    #// 
+    #// @see wp_setup_nav_menu_item()
+    #//
     default = Array({"object_id": 0, "object": "", "menu_item_parent": 0, "position": 0, "type": "custom", "title": "", "url": "", "target": "", "attr_title": "", "description": "", "classes": "", "xfn": "", "status": "publish", "original_title": "", "nav_menu_term_id": 0, "_invalid": False})
+    #// 
+    #// Default transport.
+    #// 
+    #// @since 4.3.0
+    #// @since 4.5.0 Default changed to 'refresh'
+    #// @var string
+    #//
     transport = "refresh"
+    #// 
+    #// The post ID represented by this setting instance. This is the db_id.
+    #// 
+    #// A negative value represents a placeholder ID for a new menu not yet saved.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #//
     post_id = Array()
+    #// 
+    #// Storage of pre-setup menu item to prevent wasted calls to wp_setup_nav_menu_item().
+    #// 
+    #// @since 4.3.0
+    #// @var array|null
+    #//
     value = Array()
+    #// 
+    #// Previous (placeholder) post ID used before creating a new menu item.
+    #// 
+    #// This value will be exported to JS via the customize_save_response filter
+    #// so that JavaScript can update the settings to refer to the newly-assigned
+    #// post ID. This value is always negative to indicate it does not refer to
+    #// a real post.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #// 
+    #// @see WP_Customize_Nav_Menu_Item_Setting::update()
+    #// @see WP_Customize_Nav_Menu_Item_Setting::amend_customize_save_response()
+    #//
     previous_post_id = Array()
+    #// 
+    #// When previewing or updating a menu item, this stores the previous nav_menu_term_id
+    #// which ensures that we can apply the proper filters.
+    #// 
+    #// @since 4.3.0
+    #// @var int
+    #//
     original_nav_menu_term_id = Array()
+    #// 
+    #// Whether or not update() was called.
+    #// 
+    #// @since 4.3.0
+    #// @var bool
+    #//
     is_updated = False
+    #// 
+    #// Status for calling the update method, used in customize_save_response filter.
+    #// 
+    #// See {@see 'customize_save_response'}.
+    #// 
+    #// When status is inserted, the placeholder post ID is stored in $previous_post_id.
+    #// When status is error, the error is stored in $update_error.
+    #// 
+    #// @since 4.3.0
+    #// @var string updated|inserted|deleted|error
+    #// 
+    #// @see WP_Customize_Nav_Menu_Item_Setting::update()
+    #// @see WP_Customize_Nav_Menu_Item_Setting::amend_customize_save_response()
+    #//
     update_status = Array()
+    #// 
+    #// Any error object returned by wp_update_nav_menu_item() when setting is updated.
+    #// 
+    #// @since 4.3.0
+    #// @var WP_Error
+    #// 
+    #// @see WP_Customize_Nav_Menu_Item_Setting::update()
+    #// @see WP_Customize_Nav_Menu_Item_Setting::amend_customize_save_response()
+    #//
     update_error = Array()
     #// 
     #// Constructor.
@@ -57,22 +137,25 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// 
     #// @throws Exception If $id is not valid for this setting type.
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if php_empty(lambda : manager.nav_menus):
+        if php_empty(lambda : manager_.nav_menus):
             raise php_new_class("Exception", lambda : Exception("Expected WP_Customize_Manager::$nav_menus to be set."))
         # end if
-        if (not php_preg_match(self.ID_PATTERN, id, matches)):
-            raise php_new_class("Exception", lambda : Exception(str("Illegal widget setting ID: ") + str(id)))
+        if (not php_preg_match(self.ID_PATTERN, id_, matches_)):
+            raise php_new_class("Exception", lambda : Exception(str("Illegal widget setting ID: ") + str(id_)))
         # end if
-        self.post_id = php_intval(matches["id"])
+        self.post_id = php_intval(matches_["id"])
         add_action("wp_update_nav_menu_item", Array(self, "flush_cached_value"), 10, 2)
-        super().__init__(manager, id, args)
+        super().__init__(manager_, id_, args_)
         #// Ensure that an initially-supplied value is valid.
         if (php_isset(lambda : self.value)):
             self.populate_value()
-            for missing in php_array_diff(php_array_keys(self.default), php_array_keys(self.value)):
-                raise php_new_class("Exception", lambda : Exception(str("Supplied nav_menu_item value missing property: ") + str(missing)))
+            for missing_ in php_array_diff(php_array_keys(self.default), php_array_keys(self.value)):
+                raise php_new_class("Exception", lambda : Exception(str("Supplied nav_menu_item value missing property: ") + str(missing_)))
             # end for
         # end if
     # end def __init__
@@ -84,10 +167,11 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @param int $menu_id       The term ID for the menu.
     #// @param int $menu_item_id  The post ID for the menu item.
     #//
-    def flush_cached_value(self, menu_id=None, menu_item_id=None):
+    def flush_cached_value(self, menu_id_=None, menu_item_id_=None):
         
-        menu_id = None
-        if menu_item_id == self.post_id:
+        
+        menu_id_ = None
+        if menu_item_id_ == self.post_id:
             self.value = None
         # end if
     # end def flush_cached_value
@@ -102,45 +186,46 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #//
     def value(self):
         
+        
         if self.is_previewed and get_current_blog_id() == self._previewed_blog_id:
-            undefined = php_new_class("stdClass", lambda : stdClass())
+            undefined_ = php_new_class("stdClass", lambda : stdClass())
             #// Symbol.
-            post_value = self.post_value(undefined)
-            if undefined == post_value:
-                value = self._original_value
+            post_value_ = self.post_value(undefined_)
+            if undefined_ == post_value_:
+                value_ = self._original_value
             else:
-                value = post_value
+                value_ = post_value_
             # end if
-            if (not php_empty(lambda : value)) and php_empty(lambda : value["original_title"]):
-                value["original_title"] = self.get_original_title(value)
+            if (not php_empty(lambda : value_)) and php_empty(lambda : value_["original_title"]):
+                value_["original_title"] = self.get_original_title(value_)
             # end if
         elif (php_isset(lambda : self.value)):
-            value = self.value
+            value_ = self.value
         else:
-            value = False
+            value_ = False
             #// Note that a ID of less than one indicates a nav_menu not yet inserted.
             if self.post_id > 0:
-                post = get_post(self.post_id)
-                if post and self.POST_TYPE == post.post_type:
-                    is_title_empty = php_empty(lambda : post.post_title)
-                    value = wp_setup_nav_menu_item(post)
-                    if is_title_empty:
-                        value["title"] = ""
+                post_ = get_post(self.post_id)
+                if post_ and self.POST_TYPE == post_.post_type:
+                    is_title_empty_ = php_empty(lambda : post_.post_title)
+                    value_ = wp_setup_nav_menu_item(post_)
+                    if is_title_empty_:
+                        value_["title"] = ""
                     # end if
                 # end if
             # end if
-            if (not php_is_array(value)):
-                value = self.default
+            if (not php_is_array(value_)):
+                value_ = self.default
             # end if
             #// Cache the value for future calls to avoid having to re-call wp_setup_nav_menu_item().
-            self.value = value
+            self.value = value_
             self.populate_value()
-            value = self.value
+            value_ = self.value
         # end if
-        if (not php_empty(lambda : value)) and php_empty(lambda : value["type_label"]):
-            value["type_label"] = self.get_type_label(value)
+        if (not php_empty(lambda : value_)) and php_empty(lambda : value_["type_label"]):
+            value_["type_label"] = self.get_type_label(value_)
         # end if
-        return value
+        return value_
     # end def value
     #// 
     #// Get original title.
@@ -150,32 +235,33 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @param object $item Nav menu item.
     #// @return string The original title.
     #//
-    def get_original_title(self, item=None):
+    def get_original_title(self, item_=None):
         
-        original_title = ""
-        if "post_type" == item.type and (not php_empty(lambda : item.object_id)):
-            original_object = get_post(item.object_id)
-            if original_object:
+        
+        original_title_ = ""
+        if "post_type" == item_.type and (not php_empty(lambda : item_.object_id)):
+            original_object_ = get_post(item_.object_id)
+            if original_object_:
                 #// This filter is documented in wp-includes/post-template.php
-                original_title = apply_filters("the_title", original_object.post_title, original_object.ID)
-                if "" == original_title:
+                original_title_ = apply_filters("the_title", original_object_.post_title, original_object_.ID)
+                if "" == original_title_:
                     #// translators: %d: ID of a post.
-                    original_title = php_sprintf(__("#%d (no title)"), original_object.ID)
+                    original_title_ = php_sprintf(__("#%d (no title)"), original_object_.ID)
                 # end if
             # end if
-        elif "taxonomy" == item.type and (not php_empty(lambda : item.object_id)):
-            original_term_title = get_term_field("name", item.object_id, item.object, "raw")
-            if (not is_wp_error(original_term_title)):
-                original_title = original_term_title
+        elif "taxonomy" == item_.type and (not php_empty(lambda : item_.object_id)):
+            original_term_title_ = get_term_field("name", item_.object_id, item_.object, "raw")
+            if (not is_wp_error(original_term_title_)):
+                original_title_ = original_term_title_
             # end if
-        elif "post_type_archive" == item.type:
-            original_object = get_post_type_object(item.object)
-            if original_object:
-                original_title = original_object.labels.archives
+        elif "post_type_archive" == item_.type:
+            original_object_ = get_post_type_object(item_.object)
+            if original_object_:
+                original_title_ = original_object_.labels.archives
             # end if
         # end if
-        original_title = html_entity_decode(original_title, ENT_QUOTES, get_bloginfo("charset"))
-        return original_title
+        original_title_ = html_entity_decode(original_title_, ENT_QUOTES, get_bloginfo("charset"))
+        return original_title_
     # end def get_original_title
     #// 
     #// Get type label.
@@ -185,28 +271,29 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @param object $item Nav menu item.
     #// @return string The type label.
     #//
-    def get_type_label(self, item=None):
+    def get_type_label(self, item_=None):
         
-        if "post_type" == item.type:
-            object = get_post_type_object(item.object)
-            if object:
-                type_label = object.labels.singular_name
+        
+        if "post_type" == item_.type:
+            object_ = get_post_type_object(item_.object)
+            if object_:
+                type_label_ = object_.labels.singular_name
             else:
-                type_label = item.object
+                type_label_ = item_.object
             # end if
-        elif "taxonomy" == item.type:
-            object = get_taxonomy(item.object)
-            if object:
-                type_label = object.labels.singular_name
+        elif "taxonomy" == item_.type:
+            object_ = get_taxonomy(item_.object)
+            if object_:
+                type_label_ = object_.labels.singular_name
             else:
-                type_label = item.object
+                type_label_ = item_.object
             # end if
-        elif "post_type_archive" == item.type:
-            type_label = __("Post Type Archive")
+        elif "post_type_archive" == item_.type:
+            type_label_ = __("Post Type Archive")
         else:
-            type_label = __("Custom Link")
+            type_label_ = __("Custom Link")
         # end if
-        return type_label
+        return type_label_
     # end def get_type_label
     #// 
     #// Ensure that the value is fully populated with the necessary properties.
@@ -218,6 +305,7 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @see WP_Customize_Nav_Menu_Item_Setting::value()
     #//
     def populate_value(self):
+        
         
         if (not php_is_array(self.value)):
             return
@@ -234,21 +322,21 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
             self.value["original_title"] = self.get_original_title(self.value)
         # end if
         if (not (php_isset(lambda : self.value["nav_menu_term_id"]))) and self.post_id > 0:
-            menus = wp_get_post_terms(self.post_id, WP_Customize_Nav_Menu_Setting.TAXONOMY, Array({"fields": "ids"}))
-            if (not php_empty(lambda : menus)):
-                self.value["nav_menu_term_id"] = php_array_shift(menus)
+            menus_ = wp_get_post_terms(self.post_id, WP_Customize_Nav_Menu_Setting.TAXONOMY, Array({"fields": "ids"}))
+            if (not php_empty(lambda : menus_)):
+                self.value["nav_menu_term_id"] = php_array_shift(menus_)
             else:
                 self.value["nav_menu_term_id"] = 0
             # end if
         # end if
-        for key in Array("object_id", "menu_item_parent", "nav_menu_term_id"):
-            if (not php_is_int(self.value[key])):
-                self.value[key] = php_intval(self.value[key])
+        for key_ in Array("object_id", "menu_item_parent", "nav_menu_term_id"):
+            if (not php_is_int(self.value[key_])):
+                self.value[key_] = php_intval(self.value[key_])
             # end if
         # end for
-        for key in Array("classes", "xfn"):
-            if php_is_array(self.value[key]):
-                self.value[key] = php_implode(" ", self.value[key])
+        for key_ in Array("classes", "xfn"):
+            if php_is_array(self.value[key_]):
+                self.value[key_] = php_implode(" ", self.value[key_])
             # end if
         # end for
         if (not (php_isset(lambda : self.value["title"]))):
@@ -256,15 +344,15 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
         # end if
         if (not (php_isset(lambda : self.value["_invalid"]))):
             self.value["_invalid"] = False
-            is_known_invalid = "post_type" == self.value["type"] or "post_type_archive" == self.value["type"] and (not post_type_exists(self.value["object"])) or "taxonomy" == self.value["type"] and (not taxonomy_exists(self.value["object"]))
-            if is_known_invalid:
+            is_known_invalid_ = "post_type" == self.value["type"] or "post_type_archive" == self.value["type"] and (not post_type_exists(self.value["object"])) or "taxonomy" == self.value["type"] and (not taxonomy_exists(self.value["object"]))
+            if is_known_invalid_:
                 self.value["_invalid"] = True
             # end if
         # end if
         #// Remove remaining properties available on a setup nav_menu_item post object which aren't relevant to the setting value.
-        irrelevant_properties = Array("ID", "comment_count", "comment_status", "db_id", "filter", "guid", "ping_status", "pinged", "post_author", "post_content", "post_content_filtered", "post_date", "post_date_gmt", "post_excerpt", "post_mime_type", "post_modified", "post_modified_gmt", "post_name", "post_parent", "post_password", "post_title", "post_type", "to_ping")
-        for property in irrelevant_properties:
-            self.value[property] = None
+        irrelevant_properties_ = Array("ID", "comment_count", "comment_status", "db_id", "filter", "guid", "ping_status", "pinged", "post_author", "post_content", "post_content_filtered", "post_date", "post_date_gmt", "post_excerpt", "post_mime_type", "post_modified", "post_modified_gmt", "post_name", "post_parent", "post_password", "post_title", "post_type", "to_ping")
+        for property_ in irrelevant_properties_:
+            self.value[property_] = None
         # end for
     # end def populate_value
     #// 
@@ -279,13 +367,14 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #//
     def preview(self):
         
+        
         if self.is_previewed:
             return False
         # end if
-        undefined = php_new_class("stdClass", lambda : stdClass())
-        is_placeholder = self.post_id < 0
-        is_dirty = undefined != self.post_value(undefined)
-        if (not is_placeholder) and (not is_dirty):
+        undefined_ = php_new_class("stdClass", lambda : stdClass())
+        is_placeholder_ = self.post_id < 0
+        is_dirty_ = undefined_ != self.post_value(undefined_)
+        if (not is_placeholder_) and (not is_dirty_):
             return False
         # end if
         self.is_previewed = True
@@ -293,8 +382,8 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
         self.original_nav_menu_term_id = self._original_value["nav_menu_term_id"]
         self._previewed_blog_id = get_current_blog_id()
         add_filter("wp_get_nav_menu_items", Array(self, "filter_wp_get_nav_menu_items"), 10, 3)
-        sort_callback = Array(__CLASS__, "sort_wp_get_nav_menu_items")
-        if (not has_filter("wp_get_nav_menu_items", sort_callback)):
+        sort_callback_ = Array(__CLASS__, "sort_wp_get_nav_menu_items")
+        if (not has_filter("wp_get_nav_menu_items", sort_callback_)):
             add_filter("wp_get_nav_menu_items", Array(__CLASS__, "sort_wp_get_nav_menu_items"), 1000, 3)
         # end if
         #// @todo Add get_post_metadata filters for plugins to add their data.
@@ -312,46 +401,47 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @param array     $args  An array of arguments used to retrieve menu item objects.
     #// @return WP_Post[] Array of menu item objects.
     #//
-    def filter_wp_get_nav_menu_items(self, items=None, menu=None, args=None):
+    def filter_wp_get_nav_menu_items(self, items_=None, menu_=None, args_=None):
         
-        this_item = self.value()
-        current_nav_menu_term_id = None
-        if (php_isset(lambda : this_item["nav_menu_term_id"])):
-            current_nav_menu_term_id = this_item["nav_menu_term_id"]
-            this_item["nav_menu_term_id"] = None
+        
+        this_item_ = self.value()
+        current_nav_menu_term_id_ = None
+        if (php_isset(lambda : this_item_["nav_menu_term_id"])):
+            current_nav_menu_term_id_ = this_item_["nav_menu_term_id"]
+            this_item_["nav_menu_term_id"] = None
         # end if
-        should_filter = menu.term_id == self.original_nav_menu_term_id or menu.term_id == current_nav_menu_term_id
-        if (not should_filter):
-            return items
+        should_filter_ = menu_.term_id == self.original_nav_menu_term_id or menu_.term_id == current_nav_menu_term_id_
+        if (not should_filter_):
+            return items_
         # end if
         #// Handle deleted menu item, or menu item moved to another menu.
-        should_remove = False == this_item or (php_isset(lambda : this_item["_invalid"])) and True == this_item["_invalid"] or self.original_nav_menu_term_id == menu.term_id and current_nav_menu_term_id != self.original_nav_menu_term_id
-        if should_remove:
-            filtered_items = Array()
-            for item in items:
-                if item.db_id != self.post_id:
-                    filtered_items[-1] = item
+        should_remove_ = False == this_item_ or (php_isset(lambda : this_item_["_invalid"])) and True == this_item_["_invalid"] or self.original_nav_menu_term_id == menu_.term_id and current_nav_menu_term_id_ != self.original_nav_menu_term_id
+        if should_remove_:
+            filtered_items_ = Array()
+            for item_ in items_:
+                if item_.db_id != self.post_id:
+                    filtered_items_[-1] = item_
                 # end if
             # end for
-            return filtered_items
+            return filtered_items_
         # end if
-        mutated = False
-        should_update = php_is_array(this_item) and current_nav_menu_term_id == menu.term_id
-        if should_update:
-            for item in items:
-                if item.db_id == self.post_id:
-                    for key,value in get_object_vars(self.value_as_wp_post_nav_menu_item()):
-                        item.key = value
+        mutated_ = False
+        should_update_ = php_is_array(this_item_) and current_nav_menu_term_id_ == menu_.term_id
+        if should_update_:
+            for item_ in items_:
+                if item_.db_id == self.post_id:
+                    for key_,value_ in get_object_vars(self.value_as_wp_post_nav_menu_item()):
+                        item_.key_ = value_
                     # end for
-                    mutated = True
+                    mutated_ = True
                 # end if
             # end for
             #// Not found so we have to append it..
-            if (not mutated):
-                items[-1] = self.value_as_wp_post_nav_menu_item()
+            if (not mutated_):
+                items_[-1] = self.value_as_wp_post_nav_menu_item()
             # end if
         # end if
-        return items
+        return items_
     # end def filter_wp_get_nav_menu_items
     #// 
     #// Re-apply the tail logic also applied on $items by wp_get_nav_menu_items().
@@ -366,22 +456,24 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @return WP_Post[] Array of menu item objects.
     #//
     @classmethod
-    def sort_wp_get_nav_menu_items(self, items=None, menu=None, args=None):
+    def sort_wp_get_nav_menu_items(self, items_=None, menu_=None, args_=None):
         
-        args["include"] = None
+        
+        args_["include"] = None
         #// Remove invalid items only in front end.
         if (not is_admin()):
-            items = php_array_filter(items, "_is_valid_nav_menu_item")
+            items_ = php_array_filter(items_, "_is_valid_nav_menu_item")
         # end if
-        if ARRAY_A == args["output"]:
-            items = wp_list_sort(items, Array({args["output_key"]: "ASC"}))
-            i = 1
-            for k,item in items:
-                items[k].args["output_key"] = i
-                i += 1
+        if ARRAY_A == args_["output"]:
+            items_ = wp_list_sort(items_, Array({args_["output_key"]: "ASC"}))
+            i_ = 1
+            for k_,item_ in items_:
+                items_[k_].args_["output_key"] = i_
+                i_ += 1
+                i_ += 1
             # end for
         # end if
-        return items
+        return items_
     # end def sort_wp_get_nav_menu_items
     #// 
     #// Get the value emulated into a WP_Post and set up as a nav_menu_item.
@@ -392,49 +484,50 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #//
     def value_as_wp_post_nav_menu_item(self):
         
-        item = self.value()
-        item.nav_menu_term_id = None
-        item.post_status = item.status
-        item.status = None
-        item.post_type = "nav_menu_item"
-        item.menu_order = item.position
-        item.position = None
-        if php_empty(lambda : item.original_title):
-            item.original_title = self.get_original_title(item)
+        
+        item_ = self.value()
+        item_.nav_menu_term_id = None
+        item_.post_status = item_.status
+        item_.status = None
+        item_.post_type = "nav_menu_item"
+        item_.menu_order = item_.position
+        item_.position = None
+        if php_empty(lambda : item_.original_title):
+            item_.original_title = self.get_original_title(item_)
         # end if
-        if php_empty(lambda : item.title) and (not php_empty(lambda : item.original_title)):
-            item.title = item.original_title
+        if php_empty(lambda : item_.title) and (not php_empty(lambda : item_.original_title)):
+            item_.title = item_.original_title
         # end if
-        if item.title:
-            item.post_title = item.title
+        if item_.title:
+            item_.post_title = item_.title
         # end if
-        item.ID = self.post_id
-        item.db_id = self.post_id
-        post = php_new_class("WP_Post", lambda : WP_Post(item))
-        if php_empty(lambda : post.post_author):
-            post.post_author = get_current_user_id()
+        item_.ID = self.post_id
+        item_.db_id = self.post_id
+        post_ = php_new_class("WP_Post", lambda : WP_Post(item_))
+        if php_empty(lambda : post_.post_author):
+            post_.post_author = get_current_user_id()
         # end if
-        if (not (php_isset(lambda : post.type_label))):
-            post.type_label = self.get_type_label(post)
+        if (not (php_isset(lambda : post_.type_label))):
+            post_.type_label = self.get_type_label(post_)
         # end if
         #// Ensure nav menu item URL is set according to linked object.
-        if "post_type" == post.type and (not php_empty(lambda : post.object_id)):
-            post.url = get_permalink(post.object_id)
-        elif "taxonomy" == post.type and (not php_empty(lambda : post.object)) and (not php_empty(lambda : post.object_id)):
-            post.url = get_term_link(php_int(post.object_id), post.object)
-        elif "post_type_archive" == post.type and (not php_empty(lambda : post.object)):
-            post.url = get_post_type_archive_link(post.object)
+        if "post_type" == post_.type and (not php_empty(lambda : post_.object_id)):
+            post_.url = get_permalink(post_.object_id)
+        elif "taxonomy" == post_.type and (not php_empty(lambda : post_.object)) and (not php_empty(lambda : post_.object_id)):
+            post_.url = get_term_link(php_int(post_.object_id), post_.object)
+        elif "post_type_archive" == post_.type and (not php_empty(lambda : post_.object)):
+            post_.url = get_post_type_archive_link(post_.object)
         # end if
-        if is_wp_error(post.url):
-            post.url = ""
+        if is_wp_error(post_.url):
+            post_.url = ""
         # end if
         #// This filter is documented in wp-includes/nav-menu.php
-        post.attr_title = apply_filters("nav_menu_attr_title", post.attr_title)
+        post_.attr_title = apply_filters("nav_menu_attr_title", post_.attr_title)
         #// This filter is documented in wp-includes/nav-menu.php
-        post.description = apply_filters("nav_menu_description", wp_trim_words(post.description, 200))
+        post_.description = apply_filters("nav_menu_description", wp_trim_words(post_.description, 200))
         #// This filter is documented in wp-includes/nav-menu.php
-        post = apply_filters("wp_setup_nav_menu_item", post)
-        return post
+        post_ = apply_filters("wp_setup_nav_menu_item", post_)
+        return post_
     # end def value_as_wp_post_nav_menu_item
     #// 
     #// Sanitize an input.
@@ -448,55 +541,56 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @return array|false|null|WP_Error Null or WP_Error if an input isn't valid. False if it is marked for deletion.
     #// Otherwise the sanitized value.
     #//
-    def sanitize(self, menu_item_value=None):
+    def sanitize(self, menu_item_value_=None):
+        
         
         #// Menu is marked for deletion.
-        if False == menu_item_value:
-            return menu_item_value
+        if False == menu_item_value_:
+            return menu_item_value_
         # end if
         #// Invalid.
-        if (not php_is_array(menu_item_value)):
+        if (not php_is_array(menu_item_value_)):
             return None
         # end if
-        default = Array({"object_id": 0, "object": "", "menu_item_parent": 0, "position": 0, "type": "custom", "title": "", "url": "", "target": "", "attr_title": "", "description": "", "classes": "", "xfn": "", "status": "publish", "original_title": "", "nav_menu_term_id": 0, "_invalid": False})
-        menu_item_value = php_array_merge(default, menu_item_value)
-        menu_item_value = wp_array_slice_assoc(menu_item_value, php_array_keys(default))
-        menu_item_value["position"] = php_intval(menu_item_value["position"])
-        for key in Array("object_id", "menu_item_parent", "nav_menu_term_id"):
+        default_ = Array({"object_id": 0, "object": "", "menu_item_parent": 0, "position": 0, "type": "custom", "title": "", "url": "", "target": "", "attr_title": "", "description": "", "classes": "", "xfn": "", "status": "publish", "original_title": "", "nav_menu_term_id": 0, "_invalid": False})
+        menu_item_value_ = php_array_merge(default_, menu_item_value_)
+        menu_item_value_ = wp_array_slice_assoc(menu_item_value_, php_array_keys(default_))
+        menu_item_value_["position"] = php_intval(menu_item_value_["position"])
+        for key_ in Array("object_id", "menu_item_parent", "nav_menu_term_id"):
             #// Note we need to allow negative-integer IDs for previewed objects not inserted yet.
-            menu_item_value[key] = php_intval(menu_item_value[key])
+            menu_item_value_[key_] = php_intval(menu_item_value_[key_])
         # end for
-        for key in Array("type", "object", "target"):
-            menu_item_value[key] = sanitize_key(menu_item_value[key])
+        for key_ in Array("type", "object", "target"):
+            menu_item_value_[key_] = sanitize_key(menu_item_value_[key_])
         # end for
-        for key in Array("xfn", "classes"):
-            value = menu_item_value[key]
-            if (not php_is_array(value)):
-                value = php_explode(" ", value)
+        for key_ in Array("xfn", "classes"):
+            value_ = menu_item_value_[key_]
+            if (not php_is_array(value_)):
+                value_ = php_explode(" ", value_)
             # end if
-            menu_item_value[key] = php_implode(" ", php_array_map("sanitize_html_class", value))
+            menu_item_value_[key_] = php_implode(" ", php_array_map("sanitize_html_class", value_))
         # end for
-        menu_item_value["original_title"] = sanitize_text_field(menu_item_value["original_title"])
+        menu_item_value_["original_title"] = sanitize_text_field(menu_item_value_["original_title"])
         #// Apply the same filters as when calling wp_insert_post().
         #// This filter is documented in wp-includes/post.php
-        menu_item_value["title"] = wp_unslash(apply_filters("title_save_pre", wp_slash(menu_item_value["title"])))
+        menu_item_value_["title"] = wp_unslash(apply_filters("title_save_pre", wp_slash(menu_item_value_["title"])))
         #// This filter is documented in wp-includes/post.php
-        menu_item_value["attr_title"] = wp_unslash(apply_filters("excerpt_save_pre", wp_slash(menu_item_value["attr_title"])))
+        menu_item_value_["attr_title"] = wp_unslash(apply_filters("excerpt_save_pre", wp_slash(menu_item_value_["attr_title"])))
         #// This filter is documented in wp-includes/post.php
-        menu_item_value["description"] = wp_unslash(apply_filters("content_save_pre", wp_slash(menu_item_value["description"])))
-        if "" != menu_item_value["url"]:
-            menu_item_value["url"] = esc_url_raw(menu_item_value["url"])
-            if "" == menu_item_value["url"]:
+        menu_item_value_["description"] = wp_unslash(apply_filters("content_save_pre", wp_slash(menu_item_value_["description"])))
+        if "" != menu_item_value_["url"]:
+            menu_item_value_["url"] = esc_url_raw(menu_item_value_["url"])
+            if "" == menu_item_value_["url"]:
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_url", __("Invalid URL.")))
                 pass
             # end if
         # end if
-        if "publish" != menu_item_value["status"]:
-            menu_item_value["status"] = "draft"
+        if "publish" != menu_item_value_["status"]:
+            menu_item_value_["status"] = "draft"
         # end if
-        menu_item_value["_invalid"] = php_bool(menu_item_value["_invalid"])
+        menu_item_value_["_invalid"] = php_bool(menu_item_value_["_invalid"])
         #// This filter is documented in wp-includes/class-wp-customize-setting.php
-        return apply_filters(str("customize_sanitize_") + str(self.id), menu_item_value, self)
+        return apply_filters(str("customize_sanitize_") + str(self.id), menu_item_value_, self)
     # end def sanitize
     #// 
     #// Creates/updates the nav_menu_item post for this setting.
@@ -516,24 +610,25 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// should consist of.
     #// @return null|void
     #//
-    def update(self, value=None):
+    def update(self, value_=None):
+        
         
         if self.is_updated:
             return
         # end if
         self.is_updated = True
-        is_placeholder = self.post_id < 0
-        is_delete = False == value
+        is_placeholder_ = self.post_id < 0
+        is_delete_ = False == value_
         #// Update the cached value.
-        self.value = value
+        self.value = value_
         add_filter("customize_save_response", Array(self, "amend_customize_save_response"))
-        if is_delete:
+        if is_delete_:
             #// If the current setting post is a placeholder, a delete request is a no-op.
-            if is_placeholder:
+            if is_placeholder_:
                 self.update_status = "deleted"
             else:
-                r = wp_delete_post(self.post_id, True)
-                if False == r:
+                r_ = wp_delete_post(self.post_id, True)
+                if False == r_:
                     self.update_error = php_new_class("WP_Error", lambda : WP_Error("delete_failure"))
                     self.update_status = "error"
                 else:
@@ -543,57 +638,57 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
             # end if
         else:
             #// Handle saving menu items for menus that are being newly-created.
-            if value["nav_menu_term_id"] < 0:
-                nav_menu_setting_id = php_sprintf("nav_menu[%s]", value["nav_menu_term_id"])
-                nav_menu_setting = self.manager.get_setting(nav_menu_setting_id)
-                if (not nav_menu_setting) or (not type(nav_menu_setting).__name__ == "WP_Customize_Nav_Menu_Setting"):
+            if value_["nav_menu_term_id"] < 0:
+                nav_menu_setting_id_ = php_sprintf("nav_menu[%s]", value_["nav_menu_term_id"])
+                nav_menu_setting_ = self.manager.get_setting(nav_menu_setting_id_)
+                if (not nav_menu_setting_) or (not type(nav_menu_setting_).__name__ == "WP_Customize_Nav_Menu_Setting"):
                     self.update_status = "error"
                     self.update_error = php_new_class("WP_Error", lambda : WP_Error("unexpected_nav_menu_setting"))
                     return
                 # end if
-                if False == nav_menu_setting.save():
+                if False == nav_menu_setting_.save():
                     self.update_status = "error"
                     self.update_error = php_new_class("WP_Error", lambda : WP_Error("nav_menu_setting_failure"))
                     return
                 # end if
-                if php_intval(value["nav_menu_term_id"]) != nav_menu_setting.previous_term_id:
+                if php_intval(value_["nav_menu_term_id"]) != nav_menu_setting_.previous_term_id:
                     self.update_status = "error"
                     self.update_error = php_new_class("WP_Error", lambda : WP_Error("unexpected_previous_term_id"))
                     return
                 # end if
-                value["nav_menu_term_id"] = nav_menu_setting.term_id
+                value_["nav_menu_term_id"] = nav_menu_setting_.term_id
             # end if
             #// Handle saving a nav menu item that is a child of a nav menu item being newly-created.
-            if value["menu_item_parent"] < 0:
-                parent_nav_menu_item_setting_id = php_sprintf("nav_menu_item[%s]", value["menu_item_parent"])
-                parent_nav_menu_item_setting = self.manager.get_setting(parent_nav_menu_item_setting_id)
-                if (not parent_nav_menu_item_setting) or (not type(parent_nav_menu_item_setting).__name__ == "WP_Customize_Nav_Menu_Item_Setting"):
+            if value_["menu_item_parent"] < 0:
+                parent_nav_menu_item_setting_id_ = php_sprintf("nav_menu_item[%s]", value_["menu_item_parent"])
+                parent_nav_menu_item_setting_ = self.manager.get_setting(parent_nav_menu_item_setting_id_)
+                if (not parent_nav_menu_item_setting_) or (not type(parent_nav_menu_item_setting_).__name__ == "WP_Customize_Nav_Menu_Item_Setting"):
                     self.update_status = "error"
                     self.update_error = php_new_class("WP_Error", lambda : WP_Error("unexpected_nav_menu_item_setting"))
                     return
                 # end if
-                if False == parent_nav_menu_item_setting.save():
+                if False == parent_nav_menu_item_setting_.save():
                     self.update_status = "error"
                     self.update_error = php_new_class("WP_Error", lambda : WP_Error("nav_menu_item_setting_failure"))
                     return
                 # end if
-                if php_intval(value["menu_item_parent"]) != parent_nav_menu_item_setting.previous_post_id:
+                if php_intval(value_["menu_item_parent"]) != parent_nav_menu_item_setting_.previous_post_id:
                     self.update_status = "error"
                     self.update_error = php_new_class("WP_Error", lambda : WP_Error("unexpected_previous_post_id"))
                     return
                 # end if
-                value["menu_item_parent"] = parent_nav_menu_item_setting.post_id
+                value_["menu_item_parent"] = parent_nav_menu_item_setting_.post_id
             # end if
             #// Insert or update menu.
-            menu_item_data = Array({"menu-item-object-id": value["object_id"], "menu-item-object": value["object"], "menu-item-parent-id": value["menu_item_parent"], "menu-item-position": value["position"], "menu-item-type": value["type"], "menu-item-title": value["title"], "menu-item-url": value["url"], "menu-item-description": value["description"], "menu-item-attr-title": value["attr_title"], "menu-item-target": value["target"], "menu-item-classes": value["classes"], "menu-item-xfn": value["xfn"], "menu-item-status": value["status"]})
-            r = wp_update_nav_menu_item(value["nav_menu_term_id"], 0 if is_placeholder else self.post_id, wp_slash(menu_item_data))
-            if is_wp_error(r):
+            menu_item_data_ = Array({"menu-item-object-id": value_["object_id"], "menu-item-object": value_["object"], "menu-item-parent-id": value_["menu_item_parent"], "menu-item-position": value_["position"], "menu-item-type": value_["type"], "menu-item-title": value_["title"], "menu-item-url": value_["url"], "menu-item-description": value_["description"], "menu-item-attr-title": value_["attr_title"], "menu-item-target": value_["target"], "menu-item-classes": value_["classes"], "menu-item-xfn": value_["xfn"], "menu-item-status": value_["status"]})
+            r_ = wp_update_nav_menu_item(value_["nav_menu_term_id"], 0 if is_placeholder_ else self.post_id, wp_slash(menu_item_data_))
+            if is_wp_error(r_):
                 self.update_status = "error"
-                self.update_error = r
+                self.update_error = r_
             else:
-                if is_placeholder:
+                if is_placeholder_:
                     self.previous_post_id = self.post_id
-                    self.post_id = r
+                    self.post_id = r_
                     self.update_status = "inserted"
                 else:
                     self.update_status = "updated"
@@ -611,12 +706,13 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
     #// @param array $data Additional information passed back to the 'saved' event on `wp.customize`.
     #// @return array Save response data.
     #//
-    def amend_customize_save_response(self, data=None):
+    def amend_customize_save_response(self, data_=None):
         
-        if (not (php_isset(lambda : data["nav_menu_item_updates"]))):
-            data["nav_menu_item_updates"] = Array()
+        
+        if (not (php_isset(lambda : data_["nav_menu_item_updates"]))):
+            data_["nav_menu_item_updates"] = Array()
         # end if
-        data["nav_menu_item_updates"][-1] = Array({"post_id": self.post_id, "previous_post_id": self.previous_post_id, "error": self.update_error.get_error_code() if self.update_error else None, "status": self.update_status})
-        return data
+        data_["nav_menu_item_updates"][-1] = Array({"post_id": self.post_id, "previous_post_id": self.previous_post_id, "error": self.update_error.get_error_code() if self.update_error else None, "status": self.update_status})
+        return data_
     # end def amend_customize_save_response
 # end class WP_Customize_Nav_Menu_Item_Setting

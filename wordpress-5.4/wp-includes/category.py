@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,10 +29,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #// }
 #// @return array List of category objects.
 #//
-def get_categories(args="", *args_):
+def get_categories(args_="", *_args_):
     
-    defaults = Array({"taxonomy": "category"})
-    args = wp_parse_args(args, defaults)
+    
+    defaults_ = Array({"taxonomy": "category"})
+    args_ = wp_parse_args(args_, defaults_)
     #// 
     #// Filters the taxonomy used to retrieve terms when calling get_categories().
     #// 
@@ -46,22 +42,22 @@ def get_categories(args="", *args_):
     #// @param string $taxonomy Taxonomy to retrieve terms from.
     #// @param array  $args     An array of arguments. See get_terms().
     #//
-    args["taxonomy"] = apply_filters("get_categories_taxonomy", args["taxonomy"], args)
+    args_["taxonomy"] = apply_filters("get_categories_taxonomy", args_["taxonomy"], args_)
     #// Back compat.
-    if (php_isset(lambda : args["type"])) and "link" == args["type"]:
+    if (php_isset(lambda : args_["type"])) and "link" == args_["type"]:
         _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("%1$s is deprecated. Use %2$s instead."), "<code>type => link</code>", "<code>taxonomy => link_category</code>"))
-        args["taxonomy"] = "link_category"
+        args_["taxonomy"] = "link_category"
     # end if
-    categories = get_terms(args)
-    if is_wp_error(categories):
-        categories = Array()
+    categories_ = get_terms(args_)
+    if is_wp_error(categories_):
+        categories_ = Array()
     else:
-        categories = categories
-        for k in php_array_keys(categories):
-            _make_cat_compat(categories[k])
+        categories_ = categories_
+        for k_ in php_array_keys(categories_):
+            _make_cat_compat(categories_[k_])
         # end for
     # end if
-    return categories
+    return categories_
 # end def get_categories
 #// 
 #// Retrieves category data given a category ID or category object.
@@ -84,14 +80,17 @@ def get_categories(args="", *args_):
 #// @return object|array|WP_Error|null Category data in type defined by $output parameter.
 #// WP_Error if $category is empty, null if it does not exist.
 #//
-def get_category(category=None, output=OBJECT, filter="raw", *args_):
-    
-    category = get_term(category, "category", output, filter)
-    if is_wp_error(category):
-        return category
+def get_category(category_=None, output_=None, filter_="raw", *_args_):
+    if output_ is None:
+        output_ = OBJECT
     # end if
-    _make_cat_compat(category)
-    return category
+    
+    category_ = get_term(category_, "category", output_, filter_)
+    if is_wp_error(category_):
+        return category_
+    # end if
+    _make_cat_compat(category_)
+    return category_
 # end def get_category
 #// 
 #// Retrieve category based on URL containing the category slug.
@@ -113,47 +112,53 @@ def get_category(category=None, output=OBJECT, filter="raw", *args_):
 #// a WP_Term object, an associative array, or a numeric array, respectively. Default OBJECT.
 #// @return WP_Term|array|WP_Error|null Type is based on $output value.
 #//
-def get_category_by_path(category_path=None, full_match=True, output=OBJECT, *args_):
+def get_category_by_path(category_path_=None, full_match_=None, output_=None, *_args_):
+    if full_match_ is None:
+        full_match_ = True
+    # end if
+    if output_ is None:
+        output_ = OBJECT
+    # end if
     
-    category_path = rawurlencode(urldecode(category_path))
-    category_path = php_str_replace("%2F", "/", category_path)
-    category_path = php_str_replace("%20", " ", category_path)
-    category_paths = "/" + php_trim(category_path, "/")
-    leaf_path = sanitize_title(php_basename(category_paths))
-    category_paths = php_explode("/", category_paths)
-    full_path = ""
-    for pathdir in category_paths:
-        full_path += "/" if "" != pathdir else "" + sanitize_title(pathdir)
+    category_path_ = rawurlencode(urldecode(category_path_))
+    category_path_ = php_str_replace("%2F", "/", category_path_)
+    category_path_ = php_str_replace("%20", " ", category_path_)
+    category_paths_ = "/" + php_trim(category_path_, "/")
+    leaf_path_ = sanitize_title(php_basename(category_paths_))
+    category_paths_ = php_explode("/", category_paths_)
+    full_path_ = ""
+    for pathdir_ in category_paths_:
+        full_path_ += "/" if "" != pathdir_ else "" + sanitize_title(pathdir_)
     # end for
-    categories = get_terms(Array({"taxonomy": "category", "get": "all", "slug": leaf_path}))
-    if php_empty(lambda : categories):
+    categories_ = get_terms(Array({"taxonomy": "category", "get": "all", "slug": leaf_path_}))
+    if php_empty(lambda : categories_):
         return
     # end if
-    for category in categories:
-        path = "/" + leaf_path
-        curcategory = category
+    for category_ in categories_:
+        path_ = "/" + leaf_path_
+        curcategory_ = category_
         while True:
             
-            if not (0 != curcategory.parent and curcategory.parent != curcategory.term_id):
+            if not (0 != curcategory_.parent and curcategory_.parent != curcategory_.term_id):
                 break
             # end if
-            curcategory = get_term(curcategory.parent, "category")
-            if is_wp_error(curcategory):
-                return curcategory
+            curcategory_ = get_term(curcategory_.parent, "category")
+            if is_wp_error(curcategory_):
+                return curcategory_
             # end if
-            path = "/" + curcategory.slug + path
+            path_ = "/" + curcategory_.slug + path_
         # end while
-        if path == full_path:
-            category = get_term(category.term_id, "category", output)
-            _make_cat_compat(category)
-            return category
+        if path_ == full_path_:
+            category_ = get_term(category_.term_id, "category", output_)
+            _make_cat_compat(category_)
+            return category_
         # end if
     # end for
     #// If full matching is not required, return the first cat that matches the leaf.
-    if (not full_match):
-        category = get_term(reset(categories).term_id, "category", output)
-        _make_cat_compat(category)
-        return category
+    if (not full_match_):
+        category_ = get_term(reset(categories_).term_id, "category", output_)
+        _make_cat_compat(category_)
+        return category_
     # end if
 # end def get_category_by_path
 #// 
@@ -164,13 +169,14 @@ def get_category_by_path(category_path=None, full_match=True, output=OBJECT, *ar
 #// @param string $slug The category slug.
 #// @return object Category data object
 #//
-def get_category_by_slug(slug=None, *args_):
+def get_category_by_slug(slug_=None, *_args_):
     
-    category = get_term_by("slug", slug, "category")
-    if category:
-        _make_cat_compat(category)
+    
+    category_ = get_term_by("slug", slug_, "category")
+    if category_:
+        _make_cat_compat(category_)
     # end if
-    return category
+    return category_
 # end def get_category_by_slug
 #// 
 #// Retrieve the ID of a category from its name.
@@ -180,12 +186,13 @@ def get_category_by_slug(slug=None, *args_):
 #// @param string $cat_name Category name.
 #// @return int 0, if failure and ID of category on success.
 #//
-def get_cat_ID(cat_name=None, *args_):
+def get_cat_ID(cat_name_=None, *_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    cat = get_term_by("name", cat_name, "category")
-    if cat:
-        return cat.term_id
+    cat_ = get_term_by("name", cat_name_, "category")
+    if cat_:
+        return cat_.term_id
     # end if
     return 0
 # end def get_cat_ID
@@ -197,14 +204,15 @@ def get_cat_ID(cat_name=None, *args_):
 #// @param int $cat_id Category ID
 #// @return string Category name, or an empty string if category doesn't exist.
 #//
-def get_cat_name(cat_id=None, *args_):
+def get_cat_name(cat_id_=None, *_args_):
     
-    cat_id = php_int(cat_id)
-    category = get_term(cat_id, "category")
-    if (not category) or is_wp_error(category):
+    
+    cat_id_ = php_int(cat_id_)
+    category_ = get_term(cat_id_, "category")
+    if (not category_) or is_wp_error(category_):
         return ""
     # end if
-    return category.name
+    return category_.name
 # end def get_cat_name
 #// 
 #// Check if a category is an ancestor of another category.
@@ -218,9 +226,10 @@ def get_cat_name(cat_id=None, *args_):
 #// @param int|object $cat2 The child category.
 #// @return bool Whether $cat2 is child of $cat1
 #//
-def cat_is_ancestor_of(cat1=None, cat2=None, *args_):
+def cat_is_ancestor_of(cat1_=None, cat2_=None, *_args_):
     
-    return term_is_ancestor_of(cat1, cat2, "category")
+    
+    return term_is_ancestor_of(cat1_, cat2_, "category")
 # end def cat_is_ancestor_of
 #// 
 #// Sanitizes category data based on context.
@@ -231,9 +240,10 @@ def cat_is_ancestor_of(cat1=None, cat2=None, *args_):
 #// @param string $context Optional. Default is 'display'.
 #// @return object|array Same type as $category with sanitized data for safe use.
 #//
-def sanitize_category(category=None, context="display", *args_):
+def sanitize_category(category_=None, context_="display", *_args_):
     
-    return sanitize_term(category, "category", context)
+    
+    return sanitize_term(category_, "category", context_)
 # end def sanitize_category
 #// 
 #// Sanitizes data in single category key field.
@@ -246,9 +256,10 @@ def sanitize_category(category=None, context="display", *args_):
 #// @param string $context What filter to use, 'raw', 'display', etc.
 #// @return mixed Same type as $value after $value has been sanitized.
 #//
-def sanitize_category_field(field=None, value=None, cat_id=None, context=None, *args_):
+def sanitize_category_field(field_=None, value_=None, cat_id_=None, context_=None, *_args_):
     
-    return sanitize_term_field(field, value, cat_id, "category", context)
+    
+    return sanitize_term_field(field_, value_, cat_id_, "category", context_)
 # end def sanitize_category_field
 #// Tags
 #// 
@@ -260,12 +271,13 @@ def sanitize_category_field(field=None, value=None, cat_id=None, context=None, *
 #// @param string|array $args Tag arguments to use when retrieving tags.
 #// @return WP_Term[]|int $tags Array of 'post_tag' term objects, or a count thereof.
 #//
-def get_tags(args="", *args_):
+def get_tags(args_="", *_args_):
     
-    defaults = Array({"taxonomy": "post_tag"})
-    args = wp_parse_args(args, defaults)
-    tags = get_terms(args)
-    if php_empty(lambda : tags):
+    
+    defaults_ = Array({"taxonomy": "post_tag"})
+    args_ = wp_parse_args(args_, defaults_)
+    tags_ = get_terms(args_)
+    if php_empty(lambda : tags_):
         return_ = Array()
         return return_
     # end if
@@ -277,8 +289,8 @@ def get_tags(args="", *args_):
     #// @param WP_Term[]|int $tags Array of 'post_tag' term objects, or a count thereof.
     #// @param array         $args An array of arguments. @see get_terms()
     #//
-    tags = apply_filters("get_tags", tags, args)
-    return tags
+    tags_ = apply_filters("get_tags", tags_, args_)
+    return tags_
 # end def get_tags
 #// 
 #// Retrieve post tag by tag ID or tag object.
@@ -300,9 +312,12 @@ def get_tags(args="", *args_):
 #// @param string             $filter Optional. Default is raw or no WordPress defined filter will applied.
 #// @return WP_Term|array|WP_Error|null Tag data in type defined by $output parameter. WP_Error if $tag is empty, null if it does not exist.
 #//
-def get_tag(tag=None, output=OBJECT, filter="raw", *args_):
+def get_tag(tag_=None, output_=None, filter_="raw", *_args_):
+    if output_ is None:
+        output_ = OBJECT
+    # end if
     
-    return get_term(tag, "post_tag", output, filter)
+    return get_term(tag_, "post_tag", output_, filter_)
 # end def get_tag
 #// Cache
 #// 
@@ -312,9 +327,10 @@ def get_tag(tag=None, output=OBJECT, filter="raw", *args_):
 #// 
 #// @param int $id Category ID
 #//
-def clean_category_cache(id=None, *args_):
+def clean_category_cache(id_=None, *_args_):
     
-    clean_term_cache(id, "category")
+    
+    clean_term_cache(id_, "category")
 # end def clean_category_cache
 #// 
 #// Update category structure to old pre-2.3 from new taxonomy structure.
@@ -336,21 +352,22 @@ def clean_category_cache(id=None, *args_):
 #// 
 #// @param array|object|WP_Term $category Category Row object or array
 #//
-def _make_cat_compat(category=None, *args_):
+def _make_cat_compat(category_=None, *_args_):
     
-    if php_is_object(category) and (not is_wp_error(category)):
-        category.cat_ID = category.term_id
-        category.category_count = category.count
-        category.category_description = category.description
-        category.cat_name = category.name
-        category.category_nicename = category.slug
-        category.category_parent = category.parent
-    elif php_is_array(category) and (php_isset(lambda : category["term_id"])):
-        category["cat_ID"] = category["term_id"]
-        category["category_count"] = category["count"]
-        category["category_description"] = category["description"]
-        category["cat_name"] = category["name"]
-        category["category_nicename"] = category["slug"]
-        category["category_parent"] = category["parent"]
+    
+    if php_is_object(category_) and (not is_wp_error(category_)):
+        category_.cat_ID = category_.term_id
+        category_.category_count = category_.count
+        category_.category_description = category_.description
+        category_.cat_name = category_.name
+        category_.category_nicename = category_.slug
+        category_.category_parent = category_.parent
+    elif php_is_array(category_) and (php_isset(lambda : category_["term_id"])):
+        category_["cat_ID"] = category_["term_id"]
+        category_["category_count"] = category_["count"]
+        category_["category_description"] = category_["description"]
+        category_["cat_name"] = category_["name"]
+        category_["category_nicename"] = category_["slug"]
+        category_["category_parent"] = category_["parent"]
     # end if
 # end def _make_cat_compat

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,7 +27,8 @@ class Requests_Hooker():
     #// @param callback $callback Function/method to call on event
     #// @param int $priority Priority number. <0 is executed earlier, >0 is executed later
     #//
-    def register(self, hook=None, callback=None, priority=0):
+    def register(self, hook_=None, callback_=None, priority_=0):
+        
         
         pass
     # end def register
@@ -43,7 +39,10 @@ class Requests_Hooker():
     #// @param array $parameters Parameters to pass to callbacks
     #// @return boolean Successfulness
     #//
-    def dispatch(self, hook=None, parameters=Array()):
+    def dispatch(self, hook_=None, parameters_=None):
+        if parameters_ is None:
+            parameters_ = Array()
+        # end if
         
         pass
     # end def dispatch

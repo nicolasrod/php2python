@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -77,15 +72,15 @@ while True:
         break
     # end if
     the_comment()
-    comment_post = get_post(comment.comment_post_ID)
-    PHP_GLOBALS["post"] = comment_post
+    comment_post_ = get_post(comment_.comment_post_ID)
+    PHP_GLOBALS["post"] = comment_post_
     php_print(" <item>\n        <title>\n       ")
     if (not is_singular()):
-        title = get_the_title(comment_post.ID)
+        title_ = get_the_title(comment_post_.ID)
         #// This filter is documented in wp-includes/feed.php
-        title = apply_filters("the_title_rss", title)
+        title_ = apply_filters("the_title_rss", title_)
         #// translators: Individual comment title. 1: Post title, 2: Comment author name.
-        printf(ent2ncr(__("Comment on %1$s by %2$s")), title, get_comment_author_rss())
+        printf(ent2ncr(__("Comment on %1$s by %2$s")), title_, get_comment_author_rss())
     else:
         #// translators: Comment author title. %s: Comment author name.
         printf(ent2ncr(__("By: %s")), get_comment_author_rss())
@@ -99,7 +94,7 @@ while True:
     php_print("</pubDate>\n     <guid isPermaLink=\"false\">")
     comment_guid()
     php_print("</guid>\n\n      ")
-    if post_password_required(comment_post):
+    if post_password_required(comment_post_):
         php_print("         <description>")
         php_print(ent2ncr(__("Protected Comments: Please enter your password to view comments.")))
         php_print("</description>\n         <content:encoded><![CDATA[")
@@ -122,7 +117,7 @@ while True:
     #// @param int $comment->comment_ID The ID of the comment being displayed.
     #// @param int $comment_post->ID    The ID of the post the comment is connected to.
     #//
-    do_action("commentrss2_item", comment.comment_ID, comment_post.ID)
+    do_action("commentrss2_item", comment_.comment_ID, comment_post_.ID)
     php_print(" </item>\n   ")
 # end while
 php_print("</channel>\n</rss>\n")

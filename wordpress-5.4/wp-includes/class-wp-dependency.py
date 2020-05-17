@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,13 +24,64 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 2.6.0
 #//
 class _WP_Dependency():
+    #// 
+    #// The handle name.
+    #// 
+    #// @since 2.6.0
+    #// @var null
+    #//
     handle = Array()
+    #// 
+    #// The handle source.
+    #// 
+    #// @since 2.6.0
+    #// @var null
+    #//
     src = Array()
+    #// 
+    #// An array of handle dependencies.
+    #// 
+    #// @since 2.6.0
+    #// @var string[]
+    #//
     deps = Array()
+    #// 
+    #// The handle version.
+    #// 
+    #// Used for cache-busting.
+    #// 
+    #// @since 2.6.0
+    #// @var bool|string
+    #//
     ver = False
+    #// 
+    #// Additional arguments for the handle.
+    #// 
+    #// @since 2.6.0
+    #// @var null
+    #//
     args = None
+    #// Custom property, such as $in_footer or $media.
+    #// 
+    #// Extra data to supply to the handle.
+    #// 
+    #// @since 2.6.0
+    #// @var array
+    #//
     extra = Array()
+    #// 
+    #// Translation textdomain set for this dependency.
+    #// 
+    #// @since 5.0.0
+    #// @var string
+    #//
     textdomain = Array()
+    #// 
+    #// Translation path set for this dependency.
+    #// 
+    #// @since 5.0.0
+    #// @var string
+    #//
     translations_path = Array()
     #// 
     #// Setup dependencies.
@@ -46,9 +92,10 @@ class _WP_Dependency():
     #// 
     #// @param ...$args Dependency information.
     #//
-    def __init__(self, *args):
+    def __init__(self, *args_):
         
-        self.handle, self.src, self.deps, self.ver, self.args = args
+        
+        self.handle, self.src, self.deps, self.ver, self.args = args_
         if (not php_is_array(self.deps)):
             self.deps = Array()
         # end if
@@ -62,12 +109,13 @@ class _WP_Dependency():
     #// @param mixed  $data The data value to add.
     #// @return bool False if not scalar, true otherwise.
     #//
-    def add_data(self, name=None, data=None):
+    def add_data(self, name_=None, data_=None):
         
-        if (not is_scalar(name)):
+        
+        if (not is_scalar(name_)):
             return False
         # end if
-        self.extra[name] = data
+        self.extra[name_] = data_
         return True
     # end def add_data
     #// 
@@ -79,13 +127,14 @@ class _WP_Dependency():
     #// @param string $path   Optional. The full file path to the directory containing translation files.
     #// @return bool False if $domain is not a string, true otherwise.
     #//
-    def set_translations(self, domain=None, path=None):
+    def set_translations(self, domain_=None, path_=None):
         
-        if (not php_is_string(domain)):
+        
+        if (not php_is_string(domain_)):
             return False
         # end if
-        self.textdomain = domain
-        self.translations_path = path
+        self.textdomain = domain_
+        self.translations_path = path_
         return True
     # end def set_translations
 # end class _WP_Dependency

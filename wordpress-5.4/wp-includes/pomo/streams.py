@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,6 +24,7 @@ if (not php_class_exists("POMO_Reader", False)):
         #//
         def __init__(self):
             
+            
             self.is_overloaded = php_ini_get("mbstring.func_overload") & 2 != 0 and php_function_exists("mb_substr")
             self._pos = 0
         # end def __init__
@@ -41,6 +37,7 @@ if (not php_class_exists("POMO_Reader", False)):
         #//
         def pomo_reader(self):
             
+            
             _deprecated_constructor(self.class_, "5.4.0", static.class_)
             self.__init__()
         # end def pomo_reader
@@ -49,10 +46,11 @@ if (not php_class_exists("POMO_Reader", False)):
         #// 
         #// @param string $endian Set the endianness of the file. Accepts 'big', or 'little'.
         #//
-        def setendian(self, endian=None):
+        def setendian(self, endian_=None):
+            
             
             #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-            self.endian = endian
+            self.endian = endian_
         # end def setendian
         #// 
         #// Reads a 32bit Integer from the Stream
@@ -62,13 +60,14 @@ if (not php_class_exists("POMO_Reader", False)):
         #//
         def readint32(self):
             
-            bytes = self.read(4)
-            if 4 != self.strlen(bytes):
+            
+            bytes_ = self.read(4)
+            if 4 != self.strlen(bytes_):
                 return False
             # end if
-            endian_letter = "N" if "big" == self.endian else "V"
-            int = unpack(endian_letter, bytes)
-            return reset(int)
+            endian_letter_ = "N" if "big" == self.endian else "V"
+            int_ = unpack(endian_letter_, bytes_)
+            return reset(int_)
         # end def readint32
         #// 
         #// Reads an array of 32-bit Integers from the Stream
@@ -77,14 +76,15 @@ if (not php_class_exists("POMO_Reader", False)):
         #// @return mixed Array of integers or false if there isn't
         #// enough data or on error
         #//
-        def readint32array(self, count=None):
+        def readint32array(self, count_=None):
             
-            bytes = self.read(4 * count)
-            if 4 * count != self.strlen(bytes):
+            
+            bytes_ = self.read(4 * count_)
+            if 4 * count_ != self.strlen(bytes_):
                 return False
             # end if
-            endian_letter = "N" if "big" == self.endian else "V"
-            return unpack(endian_letter + count, bytes)
+            endian_letter_ = "N" if "big" == self.endian else "V"
+            return unpack(endian_letter_ + count_, bytes_)
         # end def readint32array
         #// 
         #// @param string $string
@@ -92,24 +92,26 @@ if (not php_class_exists("POMO_Reader", False)):
         #// @param int    $length
         #// @return string
         #//
-        def substr(self, string=None, start=None, length=None):
+        def substr(self, string_=None, start_=None, length_=None):
+            
             
             if self.is_overloaded:
-                return php_mb_substr(string, start, length, "ascii")
+                return php_mb_substr(string_, start_, length_, "ascii")
             else:
-                return php_substr(string, start, length)
+                return php_substr(string_, start_, length_)
             # end if
         # end def substr
         #// 
         #// @param string $string
         #// @return int
         #//
-        def strlen(self, string=None):
+        def strlen(self, string_=None):
+            
             
             if self.is_overloaded:
-                return php_mb_strlen(string, "ascii")
+                return php_mb_strlen(string_, "ascii")
             else:
-                return php_strlen(string)
+                return php_strlen(string_)
             # end if
         # end def strlen
         #// 
@@ -117,26 +119,28 @@ if (not php_class_exists("POMO_Reader", False)):
         #// @param int    $chunk_size
         #// @return array
         #//
-        def str_split(self, string=None, chunk_size=None):
+        def str_split(self, string_=None, chunk_size_=None):
+            
             
             if (not php_function_exists("str_split")):
-                length = self.strlen(string)
-                out = Array()
-                i = 0
-                while i < length:
+                length_ = self.strlen(string_)
+                out_ = Array()
+                i_ = 0
+                while i_ < length_:
                     
-                    out[-1] = self.substr(string, i, chunk_size)
-                    i += chunk_size
+                    out_[-1] = self.substr(string_, i_, chunk_size_)
+                    i_ += chunk_size_
                 # end while
-                return out
+                return out_
             else:
-                return str_split(string, chunk_size)
+                return str_split(string_, chunk_size_)
             # end if
         # end def str_split
         #// 
         #// @return int
         #//
         def pos(self):
+            
             
             return self._pos
         # end def pos
@@ -145,12 +149,14 @@ if (not php_class_exists("POMO_Reader", False)):
         #//
         def is_resource(self):
             
+            
             return True
         # end def is_resource
         #// 
         #// @return true
         #//
         def close(self):
+            
             
             return True
         # end def close
@@ -161,10 +167,11 @@ if (not php_class_exists("POMO_FileReader", False)):
         #// 
         #// @param string $filename
         #//
-        def __init__(self, filename=None):
+        def __init__(self, filename_=None):
+            
             
             super().__init__()
-            self._f = fopen(filename, "rb")
+            self._f = fopen(filename_, "rb")
         # end def __init__
         #// 
         #// PHP4 constructor.
@@ -173,35 +180,39 @@ if (not php_class_exists("POMO_FileReader", False)):
         #// 
         #// @see POMO_FileReader::__construct()
         #//
-        def pomo_filereader(self, filename=None):
+        def pomo_filereader(self, filename_=None):
+            
             
             _deprecated_constructor(self.class_, "5.4.0", static.class_)
-            self.__init__(filename)
+            self.__init__(filename_)
         # end def pomo_filereader
         #// 
         #// @param int $bytes
         #// @return string|false Returns read string, otherwise false.
         #//
-        def read(self, bytes=None):
+        def read(self, bytes_=None):
             
-            return fread(self._f, bytes)
+            
+            return fread(self._f, bytes_)
         # end def read
         #// 
         #// @param int $pos
         #// @return boolean
         #//
-        def seekto(self, pos=None):
+        def seekto(self, pos_=None):
             
-            if -1 == fseek(self._f, pos, SEEK_SET):
+            
+            if -1 == fseek(self._f, pos_, SEEK_SET):
                 return False
             # end if
-            self._pos = pos
+            self._pos = pos_
             return True
         # end def seekto
         #// 
         #// @return bool
         #//
         def is_resource(self):
+            
             
             return is_resource(self._f)
         # end def is_resource
@@ -210,12 +221,14 @@ if (not php_class_exists("POMO_FileReader", False)):
         #//
         def feof(self):
             
+            
             return php_feof(self._f)
         # end def feof
         #// 
         #// @return bool
         #//
         def close(self):
+            
             
             return php_fclose(self._f)
         # end def close
@@ -224,15 +237,16 @@ if (not php_class_exists("POMO_FileReader", False)):
         #//
         def read_all(self):
             
-            all = ""
+            
+            all_ = ""
             while True:
                 
                 if not ((not self.feof())):
                     break
                 # end if
-                all += self.read(4096)
+                all_ += self.read(4096)
             # end while
-            return all
+            return all_
         # end def read_all
     # end class POMO_FileReader
 # end if
@@ -246,10 +260,11 @@ if (not php_class_exists("POMO_StringReader", False)):
         #// 
         #// PHP5 constructor.
         #//
-        def __init__(self, str=""):
+        def __init__(self, str_=""):
+            
             
             super().__init__()
-            self._str = str
+            self._str = str_
             self._pos = 0
         # end def __init__
         #// 
@@ -259,31 +274,34 @@ if (not php_class_exists("POMO_StringReader", False)):
         #// 
         #// @see POMO_StringReader::__construct()
         #//
-        def pomo_stringreader(self, str=""):
+        def pomo_stringreader(self, str_=""):
+            
             
             _deprecated_constructor(self.class_, "5.4.0", static.class_)
-            self.__init__(str)
+            self.__init__(str_)
         # end def pomo_stringreader
         #// 
         #// @param string $bytes
         #// @return string
         #//
-        def read(self, bytes=None):
+        def read(self, bytes_=None):
             
-            data = self.substr(self._str, self._pos, bytes)
-            self._pos += bytes
+            
+            data_ = self.substr(self._str, self._pos, bytes_)
+            self._pos += bytes_
             if self.strlen(self._str) < self._pos:
                 self._pos = self.strlen(self._str)
             # end if
-            return data
+            return data_
         # end def read
         #// 
         #// @param int $pos
         #// @return int
         #//
-        def seekto(self, pos=None):
+        def seekto(self, pos_=None):
             
-            self._pos = pos
+            
+            self._pos = pos_
             if self.strlen(self._str) < self._pos:
                 self._pos = self.strlen(self._str)
             # end if
@@ -294,12 +312,14 @@ if (not php_class_exists("POMO_StringReader", False)):
         #//
         def length(self):
             
+            
             return self.strlen(self._str)
         # end def length
         #// 
         #// @return string
         #//
         def read_all(self):
+            
             
             return self.substr(self._str, self._pos, self.strlen(self._str))
         # end def read_all
@@ -313,10 +333,11 @@ if (not php_class_exists("POMO_CachedFileReader", False)):
         #// 
         #// PHP5 constructor.
         #//
-        def __init__(self, filename=None):
+        def __init__(self, filename_=None):
+            
             
             super().__init__()
-            self._str = php_file_get_contents(filename)
+            self._str = php_file_get_contents(filename_)
             if False == self._str:
                 return False
             # end if
@@ -329,10 +350,11 @@ if (not php_class_exists("POMO_CachedFileReader", False)):
         #// 
         #// @see POMO_CachedFileReader::__construct()
         #//
-        def pomo_cachedfilereader(self, filename=None):
+        def pomo_cachedfilereader(self, filename_=None):
+            
             
             _deprecated_constructor(self.class_, "5.4.0", static.class_)
-            self.__init__(filename)
+            self.__init__(filename_)
         # end def pomo_cachedfilereader
     # end class POMO_CachedFileReader
 # end if
@@ -344,9 +366,10 @@ if (not php_class_exists("POMO_CachedIntFileReader", False)):
         #// 
         #// PHP5 constructor.
         #//
-        def __init__(self, filename=None):
+        def __init__(self, filename_=None):
             
-            super().__init__(filename)
+            
+            super().__init__(filename_)
         # end def __init__
         #// 
         #// PHP4 constructor.
@@ -355,10 +378,11 @@ if (not php_class_exists("POMO_CachedIntFileReader", False)):
         #// 
         #// @see POMO_CachedIntFileReader::__construct()
         #//
-        def pomo_cachedintfilereader(self, filename=None):
+        def pomo_cachedintfilereader(self, filename_=None):
+            
             
             _deprecated_constructor(self.class_, "5.4.0", static.class_)
-            self.__init__(filename)
+            self.__init__(filename_)
         # end def pomo_cachedintfilereader
     # end class POMO_CachedIntFileReader
 # end if

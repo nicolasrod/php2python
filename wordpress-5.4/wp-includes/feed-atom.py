@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -18,7 +13,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package WordPress
 #//
 php_header("Content-Type: " + feed_content_type("atom") + "; charset=" + get_option("blog_charset"), True)
-more = 1
+more_ = 1
 php_print("<?xml version=\"1.0\" encoding=\"" + get_option("blog_charset") + "\"?" + ">")
 #// This action is documented in wp-includes/feed-rss2.php
 do_action("rss_tag_pre", "atom")
@@ -66,8 +61,8 @@ while True:
     php_print(" <entry>\n       <author>\n          <name>")
     the_author()
     php_print("</name>\n            ")
-    author_url = get_the_author_meta("url")
-    if (not php_empty(lambda : author_url)):
+    author_url_ = get_the_author_meta("url")
+    if (not php_empty(lambda : author_url_)):
         php_print("             <uri>")
         the_author_meta("url")
         php_print("</uri>\n             ")

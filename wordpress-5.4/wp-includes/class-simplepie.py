@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,13 +27,14 @@ if (not php_class_exists("SimplePie", False)):
     #// 
     #// @since 3.5.0
     #//
-    def wp_simplepie_autoload(class_=None, *args_):
+    def wp_simplepie_autoload(class_=None, *_args_):
+        
         
         if 0 != php_strpos(class_, "SimplePie_"):
             return
         # end if
-        file = ABSPATH + WPINC + "/" + php_str_replace("_", "/", class_) + ".php"
-        php_include_file(file, once=False)
+        file_ = ABSPATH + WPINC + "/" + php_str_replace("_", "/", class_) + ".php"
+        php_include_file(file_, once=False)
     # end def wp_simplepie_autoload
     #// 
     #// We autoload classes we may not need.
@@ -383,33 +379,174 @@ if (not php_class_exists("SimplePie", False)):
     #// @subpackage API
     #//
     class SimplePie():
+        #// 
+        #// @var array Raw data
+        #// @access private
+        #//
         data = Array()
+        #// 
+        #// @var mixed Error string
+        #// @access private
+        #//
         error = Array()
+        #// 
+        #// @var object Instance of SimplePie_Sanitize (or other class)
+        #// @see SimplePie::set_sanitize_class()
+        #// @access private
+        #//
         sanitize = Array()
+        #// 
+        #// @var string SimplePie Useragent
+        #// @see SimplePie::set_useragent()
+        #// @access private
+        #//
         useragent = SIMPLEPIE_USERAGENT
+        #// 
+        #// @var string Feed URL
+        #// @see SimplePie::set_feed_url()
+        #// @access private
+        #//
         feed_url = Array()
-        file = Array()
+        #// 
+        #// @var object Instance of SimplePie_File to use as a feed
+        #// @see SimplePie::set_file()
+        #// @access private
+        #//
+        file_ = Array()
+        #// 
+        #// @var string Raw feed data
+        #// @see SimplePie::set_raw_data()
+        #// @access private
+        #//
         raw_data = Array()
+        #// 
+        #// @var int Timeout for fetching remote files
+        #// @see SimplePie::set_timeout()
+        #// @access private
+        #//
         timeout = 10
+        #// 
+        #// @var bool Forces fsockopen() to be used for remote files instead
+        #// of cURL, even if a new enough version is installed
+        #// @see SimplePie::force_fsockopen()
+        #// @access private
+        #//
         force_fsockopen = False
+        #// 
+        #// @var bool Force the given data/URL to be treated as a feed no matter what
+        #// it appears like
+        #// @see SimplePie::force_feed()
+        #// @access private
+        #//
         force_feed = False
+        #// 
+        #// @var bool Enable/Disable Caching
+        #// @see SimplePie::enable_cache()
+        #// @access private
+        #//
         cache = True
+        #// 
+        #// @var int Cache duration (in seconds)
+        #// @see SimplePie::set_cache_duration()
+        #// @access private
+        #//
         cache_duration = 3600
+        #// 
+        #// @var int Auto-discovery cache duration (in seconds)
+        #// @see SimplePie::set_autodiscovery_cache_duration()
+        #// @access private
+        #//
         autodiscovery_cache_duration = 604800
+        #// 7 Days.
+        #// 
+        #// @var string Cache location (relative to executing script)
+        #// @see SimplePie::set_cache_location()
+        #// @access private
+        #//
         cache_location = "./cache"
+        #// 
+        #// @var string Function that creates the cache filename
+        #// @see SimplePie::set_cache_name_function()
+        #// @access private
+        #//
         cache_name_function = "md5"
+        #// 
+        #// @var bool Reorder feed by date descending
+        #// @see SimplePie::enable_order_by_date()
+        #// @access private
+        #//
         order_by_date = True
+        #// 
+        #// @var mixed Force input encoding to be set to the follow value
+        #// (false, or anything type-cast to false, disables this feature)
+        #// @see SimplePie::set_input_encoding()
+        #// @access private
+        #//
         input_encoding = False
+        #// 
+        #// @var int Feed Autodiscovery Level
+        #// @see SimplePie::set_autodiscovery_level()
+        #// @access private
+        #//
         autodiscovery = SIMPLEPIE_LOCATOR_ALL
+        #// 
+        #// Class registry object
+        #// 
+        #// @var SimplePie_Registry
+        #//
         registry = Array()
+        #// 
+        #// @var int Maximum number of feeds to check with autodiscovery
+        #// @see SimplePie::set_max_checked_feeds()
+        #// @access private
+        #//
         max_checked_feeds = 10
+        #// 
+        #// @var array All the feeds found during the autodiscovery process
+        #// @see SimplePie::get_all_discovered_feeds()
+        #// @access private
+        #//
         all_discovered_feeds = Array()
+        #// 
+        #// @var string Web-accessible path to the handler_image.php file.
+        #// @see SimplePie::set_image_handler()
+        #// @access private
+        #//
         image_handler = ""
+        #// 
+        #// @var array Stores the URLs when multiple feeds are being initialized.
+        #// @see SimplePie::set_feed_url()
+        #// @access private
+        #//
         multifeed_url = Array()
+        #// 
+        #// @var array Stores SimplePie objects when multiple feeds initialized.
+        #// @access private
+        #//
         multifeed_objects = Array()
+        #// 
+        #// @var array Stores the get_object_vars() array for use with multifeeds.
+        #// @see SimplePie::set_feed_url()
+        #// @access private
+        #//
         config_settings = None
+        #// 
+        #// @var integer Stores the number of items to return per-feed with multifeeds.
+        #// @see SimplePie::set_item_limit()
+        #// @access private
+        #//
         item_limit = 0
+        #// 
+        #// @var array Stores the default attributes to be stripped by strip_attributes().
+        #// @see SimplePie::strip_attributes()
+        #// @access private
+        #//
         strip_attributes = Array("bgsound", "class", "expr", "id", "style", "onclick", "onerror", "onfinish", "onmouseover", "onmouseout", "onfocus", "onblur", "lowsrc", "dynsrc")
+        #// 
+        #// @var array Stores the default tags to be stripped by strip_htmltags().
+        #// @see SimplePie::strip_htmltags()
+        #// @access private
+        #//
         strip_htmltags = Array("base", "blink", "body", "doctype", "embed", "font", "form", "frame", "frameset", "html", "iframe", "input", "marquee", "meta", "noscript", "object", "param", "script", "style")
         #// 
         #// The SimplePie class contains feed level data and options
@@ -427,6 +564,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def __init__(self):
             
+            
             if php_version_compare(PHP_VERSION, "5.2", "<"):
                 trigger_error("PHP 4.x, 5.0 and 5.1 are no longer supported. Please upgrade to PHP 5.2 or newer.")
                 php_exit(0)
@@ -435,18 +573,18 @@ if (not php_class_exists("SimplePie", False)):
             self.sanitize = php_new_class("SimplePie_Sanitize", lambda : SimplePie_Sanitize())
             self.registry = php_new_class("SimplePie_Registry", lambda : SimplePie_Registry())
             if php_func_num_args() > 0:
-                level = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
-                trigger_error("Passing parameters to the constructor is no longer supported. Please use set_feed_url(), set_cache_location(), and set_cache_location() directly.", level)
-                args = php_func_get_args()
-                for case in Switch(php_count(args)):
+                level_ = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
+                trigger_error("Passing parameters to the constructor is no longer supported. Please use set_feed_url(), set_cache_location(), and set_cache_location() directly.", level_)
+                args_ = php_func_get_args()
+                for case in Switch(php_count(args_)):
                     if case(3):
-                        self.set_cache_duration(args[2])
+                        self.set_cache_duration(args_[2])
                     # end if
                     if case(2):
-                        self.set_cache_location(args[1])
+                        self.set_cache_location(args_[1])
                     # end if
                     if case(1):
-                        self.set_feed_url(args[0])
+                        self.set_feed_url(args_[0])
                         self.init()
                     # end if
                 # end for
@@ -457,6 +595,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def __tostring(self):
             
+            
             return php_md5(serialize(self.data))
         # end def __tostring
         #// 
@@ -464,19 +603,20 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def __del__(self):
             
+            
             if php_version_compare(PHP_VERSION, "5.3", "<") or (not php_gc_enabled()) and (not php_ini_get("zend.ze1_compatibility_mode")):
                 if (not php_empty(lambda : self.data["items"])):
-                    for item in self.data["items"]:
-                        item.__del__()
+                    for item_ in self.data["items"]:
+                        item_.__del__()
                     # end for
-                    item = None
+                    item_ = None
                     self.data["items"] = None
                 # end if
                 if (not php_empty(lambda : self.data["ordered_items"])):
-                    for item in self.data["ordered_items"]:
-                        item.__del__()
+                    for item_ in self.data["ordered_items"]:
+                        item_.__del__()
                     # end for
-                    item = None
+                    item_ = None
                     self.data["ordered_items"] = None
                 # end if
             # end if
@@ -490,9 +630,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @since 1.1
         #// @param bool $enable Force the given data/URL to be treated as a feed
         #//
-        def force_feed(self, enable=False):
+        def force_feed(self, enable_=None):
+            if enable_ is None:
+                enable_ = False
+            # end if
             
-            self.force_feed = php_bool(enable)
+            self.force_feed = php_bool(enable_)
         # end def force_feed
         #// 
         #// Set the URL of the feed you want to parse
@@ -509,15 +652,16 @@ if (not php_class_exists("SimplePie", False)):
         #// @see set_raw_data()
         #// @param string|array $url This is the URL (or array of URLs) that you want to parse.
         #//
-        def set_feed_url(self, url=None):
+        def set_feed_url(self, url_=None):
+            
             
             self.multifeed_url = Array()
-            if php_is_array(url):
-                for value in url:
-                    self.multifeed_url[-1] = self.registry.call("Misc", "fix_protocol", Array(value, 1))
+            if php_is_array(url_):
+                for value_ in url_:
+                    self.multifeed_url[-1] = self.registry.call("Misc", "fix_protocol", Array(value_, 1))
                 # end for
             else:
-                self.feed_url = self.registry.call("Misc", "fix_protocol", Array(url, 1))
+                self.feed_url = self.registry.call("Misc", "fix_protocol", Array(url_, 1))
             # end if
         # end def set_feed_url
         #// 
@@ -526,11 +670,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @param SimplePie_File &$file
         #// @return bool True on success, false on failure
         #//
-        def set_file(self, file=None):
+        def set_file(self, file_=None):
             
-            if type(file).__name__ == "SimplePie_File":
-                self.feed_url = file.url
-                self.file = file
+            
+            if type(file_).__name__ == "SimplePie_File":
+                self.feed_url = file_.url
+                self.file_ = file_
                 return True
             # end if
             return False
@@ -548,9 +693,10 @@ if (not php_class_exists("SimplePie", False)):
         #// @param string $data RSS or Atom data as a string.
         #// @see set_feed_url()
         #//
-        def set_raw_data(self, data=None):
+        def set_raw_data(self, data_=None):
             
-            self.raw_data = data
+            
+            self.raw_data = data_
         # end def set_raw_data
         #// 
         #// Set the the default timeout for fetching remote feeds
@@ -561,9 +707,10 @@ if (not php_class_exists("SimplePie", False)):
         #// @since 1.0 Beta 3
         #// @param int $timeout The maximum number of seconds to spend waiting to retrieve a feed.
         #//
-        def set_timeout(self, timeout=10):
+        def set_timeout(self, timeout_=10):
             
-            self.timeout = php_int(timeout)
+            
+            self.timeout = php_int(timeout_)
         # end def set_timeout
         #// 
         #// Force SimplePie to use fsockopen() instead of cURL
@@ -571,9 +718,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @since 1.0 Beta 3
         #// @param bool $enable Force fsockopen() to be used
         #//
-        def force_fsockopen(self, enable=False):
+        def force_fsockopen(self, enable_=None):
+            if enable_ is None:
+                enable_ = False
+            # end if
             
-            self.force_fsockopen = php_bool(enable)
+            self.force_fsockopen = php_bool(enable_)
         # end def force_fsockopen
         #// 
         #// Enable/disable caching in SimplePie.
@@ -584,9 +734,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @since 1.0 Preview Release
         #// @param bool $enable Enable caching
         #//
-        def enable_cache(self, enable=True):
+        def enable_cache(self, enable_=None):
+            if enable_ is None:
+                enable_ = True
+            # end if
             
-            self.cache = php_bool(enable)
+            self.cache = php_bool(enable_)
         # end def enable_cache
         #// 
         #// Set the length of time (in seconds) that the contents of a feed will be
@@ -594,9 +747,10 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param int $seconds The feed content cache duration
         #//
-        def set_cache_duration(self, seconds=3600):
+        def set_cache_duration(self, seconds_=3600):
             
-            self.cache_duration = php_int(seconds)
+            
+            self.cache_duration = php_int(seconds_)
         # end def set_cache_duration
         #// 
         #// Set the length of time (in seconds) that the autodiscovered feed URL will
@@ -604,27 +758,32 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param int $seconds The autodiscovered feed URL cache duration.
         #//
-        def set_autodiscovery_cache_duration(self, seconds=604800):
+        def set_autodiscovery_cache_duration(self, seconds_=604800):
             
-            self.autodiscovery_cache_duration = php_int(seconds)
+            
+            self.autodiscovery_cache_duration = php_int(seconds_)
         # end def set_autodiscovery_cache_duration
         #// 
         #// Set the file system location where the cached files should be stored
         #// 
         #// @param string $location The file system location.
         #//
-        def set_cache_location(self, location="./cache"):
+        def set_cache_location(self, location_="./cache"):
             
-            self.cache_location = php_str(location)
+            
+            self.cache_location = php_str(location_)
         # end def set_cache_location
         #// 
         #// Set whether feed items should be sorted into reverse chronological order
         #// 
         #// @param bool $enable Sort as reverse chronological order.
         #//
-        def enable_order_by_date(self, enable=True):
+        def enable_order_by_date(self, enable_=None):
+            if enable_ is None:
+                enable_ = True
+            # end if
             
-            self.order_by_date = php_bool(enable)
+            self.order_by_date = php_bool(enable_)
         # end def enable_order_by_date
         #// 
         #// Set the character encoding used to parse the feed
@@ -634,10 +793,13 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param string $encoding Character encoding
         #//
-        def set_input_encoding(self, encoding=False):
+        def set_input_encoding(self, encoding_=None):
+            if encoding_ is None:
+                encoding_ = False
+            # end if
             
-            if encoding:
-                self.input_encoding = php_str(encoding)
+            if encoding_:
+                self.input_encoding = php_str(encoding_)
             else:
                 self.input_encoding = False
             # end if
@@ -654,9 +816,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @see SIMPLEPIE_LOCATOR_ALL
         #// @param int $level Feed Autodiscovery Level (level can be a combination of the above constants, see bitwise OR operator)
         #//
-        def set_autodiscovery_level(self, level=SIMPLEPIE_LOCATOR_ALL):
+        def set_autodiscovery_level(self, level_=None):
+            if level_ is None:
+                level_ = SIMPLEPIE_LOCATOR_ALL
+            # end if
             
-            self.autodiscovery = php_int(level)
+            self.autodiscovery = php_int(level_)
         # end def set_autodiscovery_level
         #// 
         #// Get the class registry
@@ -666,6 +831,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return SimplePie_Registry
         #//
         def get_registry(self):
+            
             
             return self.registry
         # end def get_registry
@@ -682,12 +848,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_cache_class(self, class_="SimplePie_Cache"):
             
+            
             return self.registry.register("Cache", class_, True)
         # end def set_cache_class
         #// 
         #// Set which class SimplePie uses for auto-discovery
         #//
         def set_locator_class(self, class_="SimplePie_Locator"):
+            
             
             return self.registry.register("Locator", class_, True)
         # end def set_locator_class
@@ -696,12 +864,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_parser_class(self, class_="SimplePie_Parser"):
             
+            
             return self.registry.register("Parser", class_, True)
         # end def set_parser_class
         #// 
         #// Set which class SimplePie uses for remote file fetching
         #//
         def set_file_class(self, class_="SimplePie_File"):
+            
             
             return self.registry.register("File", class_, True)
         # end def set_file_class
@@ -710,12 +880,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_sanitize_class(self, class_="SimplePie_Sanitize"):
             
+            
             return self.registry.register("Sanitize", class_, True)
         # end def set_sanitize_class
         #// 
         #// Set which class SimplePie uses for handling feed items
         #//
         def set_item_class(self, class_="SimplePie_Item"):
+            
             
             return self.registry.register("Item", class_, True)
         # end def set_item_class
@@ -724,12 +896,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_author_class(self, class_="SimplePie_Author"):
             
+            
             return self.registry.register("Author", class_, True)
         # end def set_author_class
         #// 
         #// Set which class SimplePie uses for handling category data
         #//
         def set_category_class(self, class_="SimplePie_Category"):
+            
             
             return self.registry.register("Category", class_, True)
         # end def set_category_class
@@ -738,12 +912,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_enclosure_class(self, class_="SimplePie_Enclosure"):
             
+            
             return self.registry.register("Enclosure", class_, True)
         # end def set_enclosure_class
         #// 
         #// Set which class SimplePie uses for `<media:text>` captions
         #//
         def set_caption_class(self, class_="SimplePie_Caption"):
+            
             
             return self.registry.register("Caption", class_, True)
         # end def set_caption_class
@@ -752,12 +928,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_copyright_class(self, class_="SimplePie_Copyright"):
             
+            
             return self.registry.register("Copyright", class_, True)
         # end def set_copyright_class
         #// 
         #// Set which class SimplePie uses for `<media:credit>`
         #//
         def set_credit_class(self, class_="SimplePie_Credit"):
+            
             
             return self.registry.register("Credit", class_, True)
         # end def set_credit_class
@@ -766,12 +944,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_rating_class(self, class_="SimplePie_Rating"):
             
+            
             return self.registry.register("Rating", class_, True)
         # end def set_rating_class
         #// 
         #// Set which class SimplePie uses for `<media:restriction>`
         #//
         def set_restriction_class(self, class_="SimplePie_Restriction"):
+            
             
             return self.registry.register("Restriction", class_, True)
         # end def set_restriction_class
@@ -780,12 +960,14 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_content_type_sniffer_class(self, class_="SimplePie_Content_Type_Sniffer"):
             
+            
             return self.registry.register("Content_Type_Sniffer", class_, True)
         # end def set_content_type_sniffer_class
         #// 
         #// Set which class SimplePie uses item sources
         #//
         def set_source_class(self, class_="SimplePie_Source"):
+            
             
             return self.registry.register("Source", class_, True)
         # end def set_source_class
@@ -795,19 +977,23 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param string $ua New user agent string.
         #//
-        def set_useragent(self, ua=SIMPLEPIE_USERAGENT):
+        def set_useragent(self, ua_=None):
+            if ua_ is None:
+                ua_ = SIMPLEPIE_USERAGENT
+            # end if
             
-            self.useragent = php_str(ua)
+            self.useragent = php_str(ua_)
         # end def set_useragent
         #// 
         #// Set callback function to create cache filename with
         #// 
         #// @param mixed $function Callback function
         #//
-        def set_cache_name_function(self, function="md5"):
+        def set_cache_name_function(self, function_="md5"):
             
-            if php_is_callable(function):
-                self.cache_name_function = function
+            
+            if php_is_callable(function_):
+                self.cache_name_function = function_
             # end if
         # end def set_cache_name_function
         #// 
@@ -818,9 +1004,12 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param bool $set Whether to set them or not
         #//
-        def set_stupidly_fast(self, set=False):
+        def set_stupidly_fast(self, set_=None):
+            if set_ is None:
+                set_ = False
+            # end if
             
-            if set:
+            if set_:
                 self.enable_order_by_date(False)
                 self.remove_div(False)
                 self.strip_comments(False)
@@ -834,34 +1023,43 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param int $max Maximum number of feeds to check
         #//
-        def set_max_checked_feeds(self, max=10):
+        def set_max_checked_feeds(self, max_=10):
             
-            self.max_checked_feeds = php_int(max)
+            
+            self.max_checked_feeds = php_int(max_)
         # end def set_max_checked_feeds
-        def remove_div(self, enable=True):
-            
-            self.sanitize.remove_div(enable)
-        # end def remove_div
-        def strip_htmltags(self, tags="", encode=None):
-            
-            if tags == "":
-                tags = self.strip_htmltags
+        def remove_div(self, enable_=None):
+            if enable_ is None:
+                enable_ = True
             # end if
-            self.sanitize.strip_htmltags(tags)
-            if encode != None:
-                self.sanitize.encode_instead_of_strip(tags)
+            
+            self.sanitize.remove_div(enable_)
+        # end def remove_div
+        def strip_htmltags(self, tags_="", encode_=None):
+            
+            
+            if tags_ == "":
+                tags_ = self.strip_htmltags
+            # end if
+            self.sanitize.strip_htmltags(tags_)
+            if encode_ != None:
+                self.sanitize.encode_instead_of_strip(tags_)
             # end if
         # end def strip_htmltags
-        def encode_instead_of_strip(self, enable=True):
-            
-            self.sanitize.encode_instead_of_strip(enable)
-        # end def encode_instead_of_strip
-        def strip_attributes(self, attribs=""):
-            
-            if attribs == "":
-                attribs = self.strip_attributes
+        def encode_instead_of_strip(self, enable_=None):
+            if enable_ is None:
+                enable_ = True
             # end if
-            self.sanitize.strip_attributes(attribs)
+            
+            self.sanitize.encode_instead_of_strip(enable_)
+        # end def encode_instead_of_strip
+        def strip_attributes(self, attribs_=""):
+            
+            
+            if attribs_ == "":
+                attribs_ = self.strip_attributes
+            # end if
+            self.sanitize.strip_attributes(attribs_)
         # end def strip_attributes
         #// 
         #// Set the output encoding
@@ -885,13 +1083,17 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param string $encoding
         #//
-        def set_output_encoding(self, encoding="UTF-8"):
+        def set_output_encoding(self, encoding_="UTF-8"):
             
-            self.sanitize.set_output_encoding(encoding)
+            
+            self.sanitize.set_output_encoding(encoding_)
         # end def set_output_encoding
-        def strip_comments(self, strip=False):
+        def strip_comments(self, strip_=None):
+            if strip_ is None:
+                strip_ = False
+            # end if
             
-            self.sanitize.strip_comments(strip)
+            self.sanitize.strip_comments(strip_)
         # end def strip_comments
         #// 
         #// Set element/attribute key/value pairs of HTML attributes
@@ -904,9 +1106,10 @@ if (not php_class_exists("SimplePie", False)):
         #// @since 1.0
         #// @param array|null $element_attribute Element/attribute key/value pairs, null for default
         #//
-        def set_url_replacements(self, element_attribute=None):
+        def set_url_replacements(self, element_attribute_=None):
             
-            self.sanitize.set_url_replacements(element_attribute)
+            
+            self.sanitize.set_url_replacements(element_attribute_)
         # end def set_url_replacements
         #// 
         #// Set the handler to enable the display of cached images.
@@ -914,10 +1117,13 @@ if (not php_class_exists("SimplePie", False)):
         #// @param str $page Web-accessible path to the handler_image.php file.
         #// @param str $qs The query string that the value should be passed to.
         #//
-        def set_image_handler(self, page=False, qs="i"):
+        def set_image_handler(self, page_=None, qs_="i"):
+            if page_ is None:
+                page_ = False
+            # end if
             
-            if page != False:
-                self.sanitize.set_image_handler(page + "?" + qs + "=")
+            if page_ != False:
+                self.sanitize.set_image_handler(page_ + "?" + qs_ + "=")
             else:
                 self.image_handler = ""
             # end if
@@ -927,9 +1133,10 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param integer $limit The maximum number of items to return.
         #//
-        def set_item_limit(self, limit=0):
+        def set_item_limit(self, limit_=0):
             
-            self.item_limit = php_int(limit)
+            
+            self.item_limit = php_int(limit_)
         # end def set_item_limit
         #// 
         #// Initialize the feed object
@@ -942,19 +1149,20 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def init(self):
             
+            
             #// Check absolute bare minimum requirements.
             if (not php_extension_loaded("xml")) or (not php_extension_loaded("pcre")):
                 return False
                 #// Then check the xml extension is sane (i.e., libxml 2.7.x issue on PHP < 5.2.9 and libxml 2.7.0 to 2.7.2 on any version) if we don't have xmlreader.
             elif (not php_extension_loaded("xmlreader")):
-                init.xml_is_sane = None
-                if init.xml_is_sane == None:
-                    parser_check = xml_parser_create()
-                    xml_parse_into_struct(parser_check, "<foo>&amp;</foo>", values)
-                    xml_parser_free(parser_check)
-                    init.xml_is_sane = (php_isset(lambda : values[0]["value"]))
+                xml_is_sane_ = None
+                if xml_is_sane_ == None:
+                    parser_check_ = xml_parser_create()
+                    xml_parse_into_struct(parser_check_, "<foo>&amp;</foo>", values_)
+                    xml_parser_free(parser_check_)
+                    xml_is_sane_ = (php_isset(lambda : values_[0]["value"]))
                 # end if
-                if (not init.xml_is_sane):
+                if (not xml_is_sane_):
                     return False
                 # end if
             # end if
@@ -966,105 +1174,105 @@ if (not php_class_exists("SimplePie", False)):
             self.sanitize.pass_cache_data(self.cache, self.cache_location, self.cache_name_function, self.registry.get_class("Cache"))
             self.sanitize.pass_file_data(self.registry.get_class("File"), self.timeout, self.useragent, self.force_fsockopen)
             if (not php_empty(lambda : self.multifeed_url)):
-                i = 0
-                success = 0
+                i_ = 0
+                success_ = 0
                 self.multifeed_objects = Array()
                 self.error = Array()
-                for url in self.multifeed_url:
-                    self.multifeed_objects[i] = copy.deepcopy(self)
-                    self.multifeed_objects[i].set_feed_url(url)
-                    single_success = self.multifeed_objects[i].init()
-                    success |= single_success
-                    if (not single_success):
-                        self.error[i] = self.multifeed_objects[i].error()
+                for url_ in self.multifeed_url:
+                    self.multifeed_objects[i_] = copy.deepcopy(self)
+                    self.multifeed_objects[i_].set_feed_url(url_)
+                    single_success_ = self.multifeed_objects[i_].init()
+                    success_ |= single_success_
+                    if (not single_success_):
+                        self.error[i_] = self.multifeed_objects[i_].error()
                     # end if
-                    i += 1
+                    i_ += 1
                 # end for
-                return php_bool(success)
+                return php_bool(success_)
             elif self.feed_url == None and self.raw_data == None:
                 return False
             # end if
             self.error = None
             self.data = Array()
             self.multifeed_objects = Array()
-            cache = False
+            cache_ = False
             if self.feed_url != None:
-                parsed_feed_url = self.registry.call("Misc", "parse_url", Array(self.feed_url))
+                parsed_feed_url_ = self.registry.call("Misc", "parse_url", Array(self.feed_url))
                 #// Decide whether to enable caching
-                if self.cache and parsed_feed_url["scheme"] != "":
-                    cache = self.registry.call("Cache", "get_handler", Array(self.cache_location, php_call_user_func(self.cache_name_function, self.feed_url), "spc"))
+                if self.cache and parsed_feed_url_["scheme"] != "":
+                    cache_ = self.registry.call("Cache", "get_handler", Array(self.cache_location, php_call_user_func(self.cache_name_function, self.feed_url), "spc"))
                 # end if
                 #// Fetch the data via SimplePie_File into $this->raw_data
-                fetched = self.fetch_data(cache)
-                if fetched == True:
+                fetched_ = self.fetch_data(cache_)
+                if fetched_ == True:
                     return True
-                elif fetched == False:
+                elif fetched_ == False:
                     return False
                 # end if
-                headers, sniffed = fetched
+                headers_, sniffed_ = fetched_
             # end if
             #// Set up array of possible encodings
-            encodings = Array()
+            encodings_ = Array()
             #// First check to see if input has been overridden.
             if self.input_encoding != False:
-                encodings[-1] = self.input_encoding
+                encodings_[-1] = self.input_encoding
             # end if
-            application_types = Array("application/xml", "application/xml-dtd", "application/xml-external-parsed-entity")
-            text_types = Array("text/xml", "text/xml-external-parsed-entity")
+            application_types_ = Array("application/xml", "application/xml-dtd", "application/xml-external-parsed-entity")
+            text_types_ = Array("text/xml", "text/xml-external-parsed-entity")
             #// RFC 3023 (only applies to sniffed content)
-            if (php_isset(lambda : sniffed)):
-                if php_in_array(sniffed, application_types) or php_substr(sniffed, 0, 12) == "application/" and php_substr(sniffed, -4) == "+xml":
-                    if (php_isset(lambda : headers["content-type"])) and php_preg_match("/;\\x20?charset=([^;]*)/i", headers["content-type"], charset):
-                        encodings[-1] = php_strtoupper(charset[1])
+            if (php_isset(lambda : sniffed_)):
+                if php_in_array(sniffed_, application_types_) or php_substr(sniffed_, 0, 12) == "application/" and php_substr(sniffed_, -4) == "+xml":
+                    if (php_isset(lambda : headers_["content-type"])) and php_preg_match("/;\\x20?charset=([^;]*)/i", headers_["content-type"], charset_):
+                        encodings_[-1] = php_strtoupper(charset_[1])
                     # end if
-                    encodings = php_array_merge(encodings, self.registry.call("Misc", "xml_encoding", Array(self.raw_data, self.registry)))
-                    encodings[-1] = "UTF-8"
-                elif php_in_array(sniffed, text_types) or php_substr(sniffed, 0, 5) == "text/" and php_substr(sniffed, -4) == "+xml":
-                    if (php_isset(lambda : headers["content-type"])) and php_preg_match("/;\\x20?charset=([^;]*)/i", headers["content-type"], charset):
-                        encodings[-1] = charset[1]
+                    encodings_ = php_array_merge(encodings_, self.registry.call("Misc", "xml_encoding", Array(self.raw_data, self.registry)))
+                    encodings_[-1] = "UTF-8"
+                elif php_in_array(sniffed_, text_types_) or php_substr(sniffed_, 0, 5) == "text/" and php_substr(sniffed_, -4) == "+xml":
+                    if (php_isset(lambda : headers_["content-type"])) and php_preg_match("/;\\x20?charset=([^;]*)/i", headers_["content-type"], charset_):
+                        encodings_[-1] = charset_[1]
                     # end if
-                    encodings[-1] = "US-ASCII"
+                    encodings_[-1] = "US-ASCII"
                     #// Text MIME-type default
-                elif php_substr(sniffed, 0, 5) == "text/":
-                    encodings[-1] = "US-ASCII"
+                elif php_substr(sniffed_, 0, 5) == "text/":
+                    encodings_[-1] = "US-ASCII"
                 # end if
             # end if
             #// Fallback to XML 1.0 Appendix F.1/UTF-8/ISO-8859-1
-            encodings = php_array_merge(encodings, self.registry.call("Misc", "xml_encoding", Array(self.raw_data, self.registry)))
-            encodings[-1] = "UTF-8"
-            encodings[-1] = "ISO-8859-1"
+            encodings_ = php_array_merge(encodings_, self.registry.call("Misc", "xml_encoding", Array(self.raw_data, self.registry)))
+            encodings_[-1] = "UTF-8"
+            encodings_[-1] = "ISO-8859-1"
             #// There's no point in trying an encoding twice
-            encodings = array_unique(encodings)
+            encodings_ = array_unique(encodings_)
             #// Loop through each possible encoding, till we return something, or run out of possibilities
-            for encoding in encodings:
+            for encoding_ in encodings_:
                 #// Change the encoding to UTF-8 (as we always use UTF-8 internally)
-                utf8_data = self.registry.call("Misc", "change_encoding", Array(self.raw_data, encoding, "UTF-8"))
-                if utf8_data:
+                utf8_data_ = self.registry.call("Misc", "change_encoding", Array(self.raw_data, encoding_, "UTF-8"))
+                if utf8_data_:
                     #// Create new parser
-                    parser = self.registry.create("Parser")
+                    parser_ = self.registry.create("Parser")
                     #// If it's parsed fine
-                    if parser.parse(utf8_data, "UTF-8"):
-                        self.data = parser.get_data()
+                    if parser_.parse(utf8_data_, "UTF-8"):
+                        self.data = parser_.get_data()
                         if (not self.get_type() & (1 << (SIMPLEPIE_TYPE_NONE).bit_length()) - 1 - SIMPLEPIE_TYPE_NONE):
                             self.error = str("A feed could not be found at ") + str(self.feed_url) + str(". This does not appear to be a valid RSS or Atom feed.")
                             self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, 0))
                             return False
                         # end if
-                        if (php_isset(lambda : headers)):
-                            self.data["headers"] = headers
+                        if (php_isset(lambda : headers_)):
+                            self.data["headers"] = headers_
                         # end if
                         self.data["build"] = SIMPLEPIE_BUILD
                         #// Cache the file if caching is enabled
-                        if cache and (not cache.save(self)):
+                        if cache_ and (not cache_.save(self)):
                             trigger_error(str(self.cache_location) + str(" is not writeable. Make sure you've set the correct relative or absolute path, and that the location is server-writable."), E_USER_WARNING)
                         # end if
                         return True
                     # end if
                 # end if
             # end for
-            if (php_isset(lambda : parser)):
+            if (php_isset(lambda : parser_)):
                 #// We have an error, just set SimplePie_Misc::error to it and quit
-                self.error = php_sprintf("This XML document is invalid, likely due to invalid characters. XML error: %s at line %d, column %d", parser.get_error_string(), parser.get_current_line(), parser.get_current_column())
+                self.error = php_sprintf("This XML document is invalid, likely due to invalid characters. XML error: %s at line %d, column %d", parser_.get_error_string(), parser_.get_current_line(), parser_.get_current_column())
             else:
                 self.error = "The data could not be converted to UTF-8. You MUST have either the iconv or mbstring extension installed. Upgrading to PHP 5.x (which includes iconv) is highly recommended."
             # end if
@@ -1078,52 +1286,53 @@ if (not php_class_exists("SimplePie", False)):
         #// @param SimplePie_Cache|false $cache Cache handler, or false to not load from the cache
         #// @return array|true Returns true if the data was loaded from the cache, or an array of HTTP headers and sniffed type
         #//
-        def fetch_data(self, cache=None):
+        def fetch_data(self, cache_=None):
+            
             
             #// If it's enabled, use the cache
-            if cache:
+            if cache_:
                 #// Load the Cache
-                self.data = cache.load()
+                self.data = cache_.load()
                 if (not php_empty(lambda : self.data)):
                     #// If the cache is for an outdated build of SimplePie
                     if (not (php_isset(lambda : self.data["build"]))) or self.data["build"] != SIMPLEPIE_BUILD:
-                        cache.unlink()
+                        cache_.unlink()
                         self.data = Array()
                         #// If we've hit a collision just rerun it with caching disabled
                     elif (php_isset(lambda : self.data["url"])) and self.data["url"] != self.feed_url:
-                        cache = False
+                        cache_ = False
                         self.data = Array()
                         #// If we've got a non feed_url stored (if the page isn't actually a feed, or is a redirect) use that URL.
                     elif (php_isset(lambda : self.data["feed_url"])):
                         #// If the autodiscovery cache is still valid use it.
-                        if cache.mtime() + self.autodiscovery_cache_duration > time():
+                        if cache_.mtime() + self.autodiscovery_cache_duration > time():
                             #// Do not need to do feed autodiscovery yet.
                             if self.data["feed_url"] != self.data["url"]:
                                 self.set_feed_url(self.data["feed_url"])
                                 return self.init()
                             # end if
-                            cache.unlink()
+                            cache_.unlink()
                             self.data = Array()
                         # end if
                         #// Check if the cache has been updated
-                    elif cache.mtime() + self.cache_duration < time():
+                    elif cache_.mtime() + self.cache_duration < time():
                         #// If we have last-modified and/or etag set
                         if (php_isset(lambda : self.data["headers"]["last-modified"])) or (php_isset(lambda : self.data["headers"]["etag"])):
-                            headers = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
+                            headers_ = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
                             if (php_isset(lambda : self.data["headers"]["last-modified"])):
-                                headers["if-modified-since"] = self.data["headers"]["last-modified"]
+                                headers_["if-modified-since"] = self.data["headers"]["last-modified"]
                             # end if
                             if (php_isset(lambda : self.data["headers"]["etag"])):
-                                headers["if-none-match"] = self.data["headers"]["etag"]
+                                headers_["if-none-match"] = self.data["headers"]["etag"]
                             # end if
-                            file = self.registry.create("File", Array(self.feed_url, self.timeout / 10, 5, headers, self.useragent, self.force_fsockopen))
-                            if file.success:
-                                if file.status_code == 304:
-                                    cache.touch()
+                            file_ = self.registry.create("File", Array(self.feed_url, self.timeout / 10, 5, headers_, self.useragent, self.force_fsockopen))
+                            if file_.success:
+                                if file_.status_code == 304:
+                                    cache_.touch()
                                     return True
                                 # end if
                             else:
-                                file = None
+                                file_ = None
                             # end if
                         # end if
                     else:
@@ -1131,58 +1340,58 @@ if (not php_class_exists("SimplePie", False)):
                         return True
                     # end if
                 else:
-                    cache.unlink()
+                    cache_.unlink()
                     self.data = Array()
                 # end if
             # end if
             #// If we don't already have the file (it'll only exist if we've opened it to check if the cache has been modified), open it.
-            if (not (php_isset(lambda : file))):
-                if type(self.file).__name__ == "SimplePie_File" and self.file.url == self.feed_url:
-                    file = self.file
+            if (not (php_isset(lambda : file_))):
+                if type(self.file_).__name__ == "SimplePie_File" and self.file_.url == self.feed_url:
+                    file_ = self.file_
                 else:
-                    headers = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
-                    file = self.registry.create("File", Array(self.feed_url, self.timeout, 5, headers, self.useragent, self.force_fsockopen))
+                    headers_ = Array({"Accept": "application/atom+xml, application/rss+xml, application/rdf+xml;q=0.9, application/xml;q=0.8, text/xml;q=0.8, text/html;q=0.7, unknown/unknown;q=0.1, application/unknown;q=0.1, */*;q=0.1"})
+                    file_ = self.registry.create("File", Array(self.feed_url, self.timeout, 5, headers_, self.useragent, self.force_fsockopen))
                 # end if
             # end if
             #// If the file connection has an error, set SimplePie::error to that and quit
-            if (not file.success) and (not file.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or file.status_code == 200 or file.status_code > 206 and file.status_code < 300):
-                self.error = file.error
+            if (not file_.success) and (not file_.method & SIMPLEPIE_FILE_SOURCE_REMOTE == 0 or file_.status_code == 200 or file_.status_code > 206 and file_.status_code < 300):
+                self.error = file_.error
                 return (not php_empty(lambda : self.data))
             # end if
             if (not self.force_feed):
                 #// Check if the supplied URL is a feed, if it isn't, look for it.
-                locate = self.registry.create("Locator", Array(file, self.timeout, self.useragent, self.max_checked_feeds))
-                if (not locate.is_feed(file)):
-                    file = None
+                locate_ = self.registry.create("Locator", Array(file_, self.timeout, self.useragent, self.max_checked_feeds))
+                if (not locate_.is_feed(file_)):
+                    file_ = None
                     try: 
-                        file = locate.find(self.autodiscovery, self.all_discovered_feeds)
-                        if (not file):
+                        file_ = locate_.find(self.autodiscovery, self.all_discovered_feeds)
+                        if (not file_):
                             self.error = str("A feed could not be found at ") + str(self.feed_url) + str(". A feed with an invalid mime type may fall victim to this error, or ") + SIMPLEPIE_NAME + " was unable to auto-discover it.. Use force_feed() if you are certain this URL is a real feed."
                             self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, 0))
                             return False
                         # end if
-                    except SimplePie_Exception as e:
+                    except SimplePie_Exception as e_:
                         #// This is usually because DOMDocument doesn't exist
-                        self.error = e.getmessage()
-                        self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, e.getfile(), e.getline()))
+                        self.error = e_.getmessage()
+                        self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, e_.getfile(), e_.getline()))
                         return False
                     # end try
-                    if cache:
-                        self.data = Array({"url": self.feed_url, "feed_url": file.url, "build": SIMPLEPIE_BUILD})
-                        if (not cache.save(self)):
+                    if cache_:
+                        self.data = Array({"url": self.feed_url, "feed_url": file_.url, "build": SIMPLEPIE_BUILD})
+                        if (not cache_.save(self)):
                             trigger_error(str(self.cache_location) + str(" is not writeable. Make sure you've set the correct relative or absolute path, and that the location is server-writable."), E_USER_WARNING)
                         # end if
-                        cache = self.registry.call("Cache", "get_handler", Array(self.cache_location, php_call_user_func(self.cache_name_function, file.url), "spc"))
+                        cache_ = self.registry.call("Cache", "get_handler", Array(self.cache_location, php_call_user_func(self.cache_name_function, file_.url), "spc"))
                     # end if
-                    self.feed_url = file.url
+                    self.feed_url = file_.url
                 # end if
-                locate = None
+                locate_ = None
             # end if
-            self.raw_data = file.body
-            headers = file.headers
-            sniffer = self.registry.create("Content_Type_Sniffer", Array(file))
-            sniffed = sniffer.get_type()
-            return Array(headers, sniffed)
+            self.raw_data = file_.body
+            headers_ = file_.headers
+            sniffer_ = self.registry.create("Content_Type_Sniffer", Array(file_))
+            sniffed_ = sniffer_.get_type()
+            return Array(headers_, sniffed_)
         # end def fetch_data
         #// 
         #// Get the error message for the occurred error.
@@ -1190,6 +1399,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return string|array Error message, or array of messages for multifeeds
         #//
         def error(self):
+            
             
             return self.error
         # end def error
@@ -1203,6 +1413,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_raw_data(self):
             
+            
             return self.raw_data
         # end def get_raw_data
         #// 
@@ -1212,6 +1423,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return string
         #//
         def get_encoding(self):
+            
             
             return self.sanitize.output_encoding
         # end def get_encoding
@@ -1234,16 +1446,17 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @param string $mime MIME type to serve the page as
         #//
-        def handle_content_type(self, mime="text/html"):
+        def handle_content_type(self, mime_="text/html"):
+            
             
             if (not php_headers_sent()):
-                header = str("Content-type: ") + str(mime) + str(";")
+                header_ = str("Content-type: ") + str(mime_) + str(";")
                 if self.get_encoding():
-                    header += " charset=" + self.get_encoding()
+                    header_ += " charset=" + self.get_encoding()
                 else:
-                    header += " charset=UTF-8"
+                    header_ += " charset=UTF-8"
                 # end if
-                php_header(header)
+                php_header(header_)
             # end if
         # end def handle_content_type
         #// 
@@ -1273,6 +1486,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return int SIMPLEPIE_TYPE_* constant
         #//
         def get_type(self):
+            
             
             if (not (php_isset(lambda : self.data["type"]))):
                 self.data["type"] = SIMPLEPIE_TYPE_ALL
@@ -1345,6 +1559,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def subscribe_url(self):
             
+            
             if self.feed_url != None:
                 return self.sanitize(self.feed_url, SIMPLEPIE_CONSTRUCT_IRI)
             else:
@@ -1382,27 +1597,28 @@ if (not php_class_exists("SimplePie", False)):
         #// @param string $tag Tag name
         #// @return array
         #//
-        def get_feed_tags(self, namespace=None, tag=None):
+        def get_feed_tags(self, namespace_=None, tag_=None):
             
-            type = self.get_type()
-            if type & SIMPLEPIE_TYPE_ATOM_10:
-                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0]["child"][namespace][tag])):
-                    return self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0]["child"][namespace][tag]
+            
+            type_ = self.get_type()
+            if type_ & SIMPLEPIE_TYPE_ATOM_10:
+                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0]["child"][namespace_][tag_])):
+                    return self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0]["child"][namespace_][tag_]
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_ATOM_03:
-                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0]["child"][namespace][tag])):
-                    return self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_ATOM_03:
+                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0]["child"][namespace_][tag_])):
+                    return self.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0]["child"][namespace_][tag_]
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_RSS_RDF:
-                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0]["child"][namespace][tag])):
-                    return self.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_RSS_RDF:
+                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0]["child"][namespace_][tag_])):
+                    return self.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0]["child"][namespace_][tag_]
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_RSS_SYNDICATION:
-                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][namespace][tag])):
-                    return self.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_RSS_SYNDICATION:
+                if (php_isset(lambda : self.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][namespace_][tag_])):
+                    return self.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][namespace_][tag_]
                 # end if
             # end if
             return None
@@ -1421,36 +1637,37 @@ if (not php_class_exists("SimplePie", False)):
         #// @param string $tag Tag name
         #// @return array
         #//
-        def get_channel_tags(self, namespace=None, tag=None):
+        def get_channel_tags(self, namespace_=None, tag_=None):
             
-            type = self.get_type()
-            if type & SIMPLEPIE_TYPE_ATOM_ALL:
-                return_ = self.get_feed_tags(namespace, tag)
+            
+            type_ = self.get_type()
+            if type_ & SIMPLEPIE_TYPE_ATOM_ALL:
+                return_ = self.get_feed_tags(namespace_, tag_)
                 if return_:
                     return return_
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_RSS_10:
-                channel = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_10, "channel")
-                if channel:
-                    if (php_isset(lambda : channel[0]["child"][namespace][tag])):
-                        return channel[0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_RSS_10:
+                channel_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_10, "channel")
+                if channel_:
+                    if (php_isset(lambda : channel_[0]["child"][namespace_][tag_])):
+                        return channel_[0]["child"][namespace_][tag_]
                     # end if
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_RSS_090:
-                channel = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_090, "channel")
-                if channel:
-                    if (php_isset(lambda : channel[0]["child"][namespace][tag])):
-                        return channel[0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_RSS_090:
+                channel_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_090, "channel")
+                if channel_:
+                    if (php_isset(lambda : channel_[0]["child"][namespace_][tag_])):
+                        return channel_[0]["child"][namespace_][tag_]
                     # end if
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_RSS_SYNDICATION:
-                channel = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_20, "channel")
-                if channel:
-                    if (php_isset(lambda : channel[0]["child"][namespace][tag])):
-                        return channel[0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_RSS_SYNDICATION:
+                channel_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_20, "channel")
+                if channel_:
+                    if (php_isset(lambda : channel_[0]["child"][namespace_][tag_])):
+                        return channel_[0]["child"][namespace_][tag_]
                     # end if
                 # end if
             # end if
@@ -1470,30 +1687,31 @@ if (not php_class_exists("SimplePie", False)):
         #// @param string $tag Tag name
         #// @return array
         #//
-        def get_image_tags(self, namespace=None, tag=None):
+        def get_image_tags(self, namespace_=None, tag_=None):
             
-            type = self.get_type()
-            if type & SIMPLEPIE_TYPE_RSS_10:
-                image = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_10, "image")
-                if image:
-                    if (php_isset(lambda : image[0]["child"][namespace][tag])):
-                        return image[0]["child"][namespace][tag]
+            
+            type_ = self.get_type()
+            if type_ & SIMPLEPIE_TYPE_RSS_10:
+                image_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_10, "image")
+                if image_:
+                    if (php_isset(lambda : image_[0]["child"][namespace_][tag_])):
+                        return image_[0]["child"][namespace_][tag_]
                     # end if
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_RSS_090:
-                image = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_090, "image")
-                if image:
-                    if (php_isset(lambda : image[0]["child"][namespace][tag])):
-                        return image[0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_RSS_090:
+                image_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_090, "image")
+                if image_:
+                    if (php_isset(lambda : image_[0]["child"][namespace_][tag_])):
+                        return image_[0]["child"][namespace_][tag_]
                     # end if
                 # end if
             # end if
-            if type & SIMPLEPIE_TYPE_RSS_SYNDICATION:
-                image = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "image")
-                if image:
-                    if (php_isset(lambda : image[0]["child"][namespace][tag])):
-                        return image[0]["child"][namespace][tag]
+            if type_ & SIMPLEPIE_TYPE_RSS_SYNDICATION:
+                image_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "image")
+                if image_:
+                    if (php_isset(lambda : image_[0]["child"][namespace_][tag_])):
+                        return image_[0]["child"][namespace_][tag_]
                     # end if
                 # end if
             # end if
@@ -1511,10 +1729,13 @@ if (not php_class_exists("SimplePie", False)):
         #// @param array $element
         #// @return string
         #//
-        def get_base(self, element=Array()):
+        def get_base(self, element_=None):
+            if element_ is None:
+                element_ = Array()
+            # end if
             
-            if (not self.get_type() & SIMPLEPIE_TYPE_RSS_SYNDICATION) and (not php_empty(lambda : element["xml_base_explicit"])) and (php_isset(lambda : element["xml_base"])):
-                return element["xml_base"]
+            if (not self.get_type() & SIMPLEPIE_TYPE_RSS_SYNDICATION) and (not php_empty(lambda : element_["xml_base_explicit"])) and (php_isset(lambda : element_["xml_base"])):
+                return element_["xml_base"]
             elif self.get_link() != None:
                 return self.get_link()
             else:
@@ -1531,9 +1752,10 @@ if (not php_class_exists("SimplePie", False)):
         #// @param string $base Base URL to resolve URLs against
         #// @return string Sanitized data
         #//
-        def sanitize(self, data=None, type=None, base=""):
+        def sanitize(self, data_=None, type_=None, base_=""):
             
-            return self.sanitize.sanitize(data, type, base)
+            
+            return self.sanitize.sanitize(data_, type_, base_)
         # end def sanitize
         #// 
         #// Get the title of the feed
@@ -1544,6 +1766,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return string|null
         #//
         def get_title(self):
+            
             
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "title")
             if return_:
@@ -1577,11 +1800,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @param int $key The category that you want to return.  Remember that arrays begin with 0, not 1
         #// @return SimplePie_Category|null
         #//
-        def get_category(self, key=0):
+        def get_category(self, key_=0):
             
-            categories = self.get_categories()
-            if (php_isset(lambda : categories[key])):
-                return categories[key]
+            
+            categories_ = self.get_categories()
+            if (php_isset(lambda : categories_[key_])):
+                return categories_[key_]
             else:
                 return None
             # end if
@@ -1596,41 +1820,42 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_categories(self):
             
-            categories = Array()
-            for category in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "category"):
-                term = None
-                scheme = None
-                label = None
-                if (php_isset(lambda : category["attribs"][""]["term"])):
-                    term = self.sanitize(category["attribs"][""]["term"], SIMPLEPIE_CONSTRUCT_TEXT)
+            
+            categories_ = Array()
+            for category_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "category"):
+                term_ = None
+                scheme_ = None
+                label_ = None
+                if (php_isset(lambda : category_["attribs"][""]["term"])):
+                    term_ = self.sanitize(category_["attribs"][""]["term"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if (php_isset(lambda : category["attribs"][""]["scheme"])):
-                    scheme = self.sanitize(category["attribs"][""]["scheme"], SIMPLEPIE_CONSTRUCT_TEXT)
+                if (php_isset(lambda : category_["attribs"][""]["scheme"])):
+                    scheme_ = self.sanitize(category_["attribs"][""]["scheme"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if (php_isset(lambda : category["attribs"][""]["label"])):
-                    label = self.sanitize(category["attribs"][""]["label"], SIMPLEPIE_CONSTRUCT_TEXT)
+                if (php_isset(lambda : category_["attribs"][""]["label"])):
+                    label_ = self.sanitize(category_["attribs"][""]["label"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                categories[-1] = self.registry.create("Category", Array(term, scheme, label))
+                categories_[-1] = self.registry.create("Category", Array(term_, scheme_, label_))
             # end for
-            for category in self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "category"):
+            for category_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "category"):
                 #// This is really the label, but keep this as the term also for BC.
                 #// Label will also work on retrieving because that falls back to term.
-                term = self.sanitize(category["data"], SIMPLEPIE_CONSTRUCT_TEXT)
-                if (php_isset(lambda : category["attribs"][""]["domain"])):
-                    scheme = self.sanitize(category["attribs"][""]["domain"], SIMPLEPIE_CONSTRUCT_TEXT)
+                term_ = self.sanitize(category_["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+                if (php_isset(lambda : category_["attribs"][""]["domain"])):
+                    scheme_ = self.sanitize(category_["attribs"][""]["domain"], SIMPLEPIE_CONSTRUCT_TEXT)
                 else:
-                    scheme = None
+                    scheme_ = None
                 # end if
-                categories[-1] = self.registry.create("Category", Array(term, scheme, None))
+                categories_[-1] = self.registry.create("Category", Array(term_, scheme_, None))
             # end for
-            for category in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_11, "subject"):
-                categories[-1] = self.registry.create("Category", Array(self.sanitize(category["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
+            for category_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_11, "subject"):
+                categories_[-1] = self.registry.create("Category", Array(self.sanitize(category_["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
             # end for
-            for category in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_10, "subject"):
-                categories[-1] = self.registry.create("Category", Array(self.sanitize(category["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
+            for category_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_10, "subject"):
+                categories_[-1] = self.registry.create("Category", Array(self.sanitize(category_["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
             # end for
-            if (not php_empty(lambda : categories)):
-                return array_unique(categories)
+            if (not php_empty(lambda : categories_)):
+                return array_unique(categories_)
             else:
                 return None
             # end if
@@ -1642,11 +1867,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @param int $key The author that you want to return.  Remember that arrays begin with 0, not 1
         #// @return SimplePie_Author|null
         #//
-        def get_author(self, key=0):
+        def get_author(self, key_=0):
             
-            authors = self.get_authors()
-            if (php_isset(lambda : authors[key])):
-                return authors[key]
+            
+            authors_ = self.get_authors()
+            if (php_isset(lambda : authors_[key_])):
+                return authors_[key_]
             else:
                 return None
             # end if
@@ -1661,53 +1887,54 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_authors(self):
             
-            authors = Array()
-            for author in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "author"):
-                name = None
-                uri = None
-                email = None
-                if (php_isset(lambda : author["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"])):
-                    name = self.sanitize(author["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+            
+            authors_ = Array()
+            for author_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "author"):
+                name_ = None
+                uri_ = None
+                email_ = None
+                if (php_isset(lambda : author_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"])):
+                    name_ = self.sanitize(author_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if (php_isset(lambda : author["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"])):
-                    uri = self.sanitize(author["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(author["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]))
+                if (php_isset(lambda : author_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"])):
+                    uri_ = self.sanitize(author_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(author_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]))
                 # end if
-                if (php_isset(lambda : author["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"])):
-                    email = self.sanitize(author["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+                if (php_isset(lambda : author_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"])):
+                    email_ = self.sanitize(author_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if name != None or email != None or uri != None:
-                    authors[-1] = self.registry.create("Author", Array(name, uri, email))
+                if name_ != None or email_ != None or uri_ != None:
+                    authors_[-1] = self.registry.create("Author", Array(name_, uri_, email_))
                 # end if
             # end for
-            author = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "author")
-            if author:
-                name = None
-                url = None
-                email = None
-                if (php_isset(lambda : author[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"])):
-                    name = self.sanitize(author[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+            author_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "author")
+            if author_:
+                name_ = None
+                url_ = None
+                email_ = None
+                if (php_isset(lambda : author_[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"])):
+                    name_ = self.sanitize(author_[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if (php_isset(lambda : author[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"])):
-                    url = self.sanitize(author[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(author[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]))
+                if (php_isset(lambda : author_[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"])):
+                    url_ = self.sanitize(author_[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(author_[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]))
                 # end if
-                if (php_isset(lambda : author[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"])):
-                    email = self.sanitize(author[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+                if (php_isset(lambda : author_[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"])):
+                    email_ = self.sanitize(author_[0]["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if name != None or email != None or url != None:
-                    authors[-1] = self.registry.create("Author", Array(name, url, email))
+                if name_ != None or email_ != None or url_ != None:
+                    authors_[-1] = self.registry.create("Author", Array(name_, url_, email_))
                 # end if
             # end if
-            for author in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_11, "creator"):
-                authors[-1] = self.registry.create("Author", Array(self.sanitize(author["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
+            for author_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_11, "creator"):
+                authors_[-1] = self.registry.create("Author", Array(self.sanitize(author_["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
             # end for
-            for author in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_10, "creator"):
-                authors[-1] = self.registry.create("Author", Array(self.sanitize(author["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
+            for author_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_DC_10, "creator"):
+                authors_[-1] = self.registry.create("Author", Array(self.sanitize(author_["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
             # end for
-            for author in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ITUNES, "author"):
-                authors[-1] = self.registry.create("Author", Array(self.sanitize(author["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
+            for author_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ITUNES, "author"):
+                authors_[-1] = self.registry.create("Author", Array(self.sanitize(author_["data"], SIMPLEPIE_CONSTRUCT_TEXT), None, None))
             # end for
-            if (not php_empty(lambda : authors)):
-                return array_unique(authors)
+            if (not php_empty(lambda : authors_)):
+                return array_unique(authors_)
             else:
                 return None
             # end if
@@ -1719,11 +1946,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @param int $key The contrbutor that you want to return.  Remember that arrays begin with 0, not 1
         #// @return SimplePie_Author|null
         #//
-        def get_contributor(self, key=0):
+        def get_contributor(self, key_=0):
             
-            contributors = self.get_contributors()
-            if (php_isset(lambda : contributors[key])):
-                return contributors[key]
+            
+            contributors_ = self.get_contributors()
+            if (php_isset(lambda : contributors_[key_])):
+                return contributors_[key_]
             else:
                 return None
             # end if
@@ -1738,43 +1966,44 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_contributors(self):
             
-            contributors = Array()
-            for contributor in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "contributor"):
-                name = None
-                uri = None
-                email = None
-                if (php_isset(lambda : contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"])):
-                    name = self.sanitize(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+            
+            contributors_ = Array()
+            for contributor_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "contributor"):
+                name_ = None
+                uri_ = None
+                email_ = None
+                if (php_isset(lambda : contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"])):
+                    name_ = self.sanitize(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if (php_isset(lambda : contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"])):
-                    uri = self.sanitize(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]))
+                if (php_isset(lambda : contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"])):
+                    uri_ = self.sanitize(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["uri"][0]))
                 # end if
-                if (php_isset(lambda : contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"])):
-                    email = self.sanitize(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+                if (php_isset(lambda : contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"])):
+                    email_ = self.sanitize(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
                 # end if
-                if name != None or email != None or uri != None:
-                    contributors[-1] = self.registry.create("Author", Array(name, uri, email))
-                # end if
-            # end for
-            for contributor in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "contributor"):
-                name = None
-                url = None
-                email = None
-                if (php_isset(lambda : contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"])):
-                    name = self.sanitize(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
-                # end if
-                if (php_isset(lambda : contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"])):
-                    url = self.sanitize(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]))
-                # end if
-                if (php_isset(lambda : contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"])):
-                    email = self.sanitize(contributor["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
-                # end if
-                if name != None or email != None or url != None:
-                    contributors[-1] = self.registry.create("Author", Array(name, url, email))
+                if name_ != None or email_ != None or uri_ != None:
+                    contributors_[-1] = self.registry.create("Author", Array(name_, uri_, email_))
                 # end if
             # end for
-            if (not php_empty(lambda : contributors)):
-                return array_unique(contributors)
+            for contributor_ in self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "contributor"):
+                name_ = None
+                url_ = None
+                email_ = None
+                if (php_isset(lambda : contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"])):
+                    name_ = self.sanitize(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["name"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+                # end if
+                if (php_isset(lambda : contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"])):
+                    url_ = self.sanitize(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["url"][0]))
+                # end if
+                if (php_isset(lambda : contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"])):
+                    email_ = self.sanitize(contributor_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["email"][0]["data"], SIMPLEPIE_CONSTRUCT_TEXT)
+                # end if
+                if name_ != None or email_ != None or url_ != None:
+                    contributors_[-1] = self.registry.create("Author", Array(name_, url_, email_))
+                # end if
+            # end for
+            if (not php_empty(lambda : contributors_)):
+                return array_unique(contributors_)
             else:
                 return None
             # end if
@@ -1787,11 +2016,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @param string $rel The relationship of the link to return
         #// @return string|null Link URL
         #//
-        def get_link(self, key=0, rel="alternate"):
+        def get_link(self, key_=0, rel_="alternate"):
             
-            links = self.get_links(rel)
-            if (php_isset(lambda : links[key])):
-                return links[key]
+            
+            links_ = self.get_links(rel_)
+            if (php_isset(lambda : links_[key_])):
+                return links_[key_]
             else:
                 return None
             # end if
@@ -1809,6 +2039,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_permalink(self):
             
+            
             return self.get_link(0)
         # end def get_permalink
         #// 
@@ -1820,62 +2051,64 @@ if (not php_class_exists("SimplePie", False)):
         #// @param string $rel The relationship of links to return
         #// @return array|null Links found for the feed (strings)
         #//
-        def get_links(self, rel="alternate"):
+        def get_links(self, rel_="alternate"):
+            
             
             if (not (php_isset(lambda : self.data["links"]))):
                 self.data["links"] = Array()
-                links = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "link")
-                if links:
-                    for link in links:
-                        if (php_isset(lambda : link["attribs"][""]["href"])):
-                            link_rel = link["attribs"][""]["rel"] if (php_isset(lambda : link["attribs"][""]["rel"])) else "alternate"
-                            self.data["links"][link_rel][-1] = self.sanitize(link["attribs"][""]["href"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(link))
+                links_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "link")
+                if links_:
+                    for link_ in links_:
+                        if (php_isset(lambda : link_["attribs"][""]["href"])):
+                            link_rel_ = link_["attribs"][""]["rel"] if (php_isset(lambda : link_["attribs"][""]["rel"])) else "alternate"
+                            self.data["links"][link_rel_][-1] = self.sanitize(link_["attribs"][""]["href"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(link_))
                         # end if
                     # end for
                 # end if
-                links = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "link")
-                if links:
-                    for link in links:
-                        if (php_isset(lambda : link["attribs"][""]["href"])):
-                            link_rel = link["attribs"][""]["rel"] if (php_isset(lambda : link["attribs"][""]["rel"])) else "alternate"
-                            self.data["links"][link_rel][-1] = self.sanitize(link["attribs"][""]["href"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(link))
+                links_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "link")
+                if links_:
+                    for link_ in links_:
+                        if (php_isset(lambda : link_["attribs"][""]["href"])):
+                            link_rel_ = link_["attribs"][""]["rel"] if (php_isset(lambda : link_["attribs"][""]["rel"])) else "alternate"
+                            self.data["links"][link_rel_][-1] = self.sanitize(link_["attribs"][""]["href"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(link_))
                         # end if
                     # end for
                 # end if
-                links = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_10, "link")
-                if links:
-                    self.data["links"]["alternate"][-1] = self.sanitize(links[0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(links[0]))
+                links_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_10, "link")
+                if links_:
+                    self.data["links"]["alternate"][-1] = self.sanitize(links_[0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(links_[0]))
                 # end if
-                links = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_090, "link")
-                if links:
-                    self.data["links"]["alternate"][-1] = self.sanitize(links[0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(links[0]))
+                links_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_090, "link")
+                if links_:
+                    self.data["links"]["alternate"][-1] = self.sanitize(links_[0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(links_[0]))
                 # end if
-                links = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "link")
-                if links:
-                    self.data["links"]["alternate"][-1] = self.sanitize(links[0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(links[0]))
+                links_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "link")
+                if links_:
+                    self.data["links"]["alternate"][-1] = self.sanitize(links_[0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(links_[0]))
                 # end if
-                keys = php_array_keys(self.data["links"])
-                for key in keys:
-                    if self.registry.call("Misc", "is_isegment_nz_nc", Array(key)):
-                        if (php_isset(lambda : self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key])):
-                            self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key] = php_array_merge(self.data["links"][key], self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key])
-                            self.data["links"][key] = self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key]
+                keys_ = php_array_keys(self.data["links"])
+                for key_ in keys_:
+                    if self.registry.call("Misc", "is_isegment_nz_nc", Array(key_)):
+                        if (php_isset(lambda : self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key_])):
+                            self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key_] = php_array_merge(self.data["links"][key_], self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key_])
+                            self.data["links"][key_] = self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key_]
                         else:
-                            self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key] = self.data["links"][key]
+                            self.data["links"][SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY + key_] = self.data["links"][key_]
                         # end if
-                    elif php_substr(key, 0, 41) == SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY:
-                        self.data["links"][php_substr(key, 41)] = self.data["links"][key]
+                    elif php_substr(key_, 0, 41) == SIMPLEPIE_IANA_LINK_RELATIONS_REGISTRY:
+                        self.data["links"][php_substr(key_, 41)] = self.data["links"][key_]
                     # end if
-                    self.data["links"][key] = array_unique(self.data["links"][key])
+                    self.data["links"][key_] = array_unique(self.data["links"][key_])
                 # end for
             # end if
-            if (php_isset(lambda : self.data["links"][rel])):
-                return self.data["links"][rel]
+            if (php_isset(lambda : self.data["links"][rel_])):
+                return self.data["links"][rel_]
             else:
                 return None
             # end if
         # end def get_links
         def get_all_discovered_feeds(self):
+            
             
             return self.all_discovered_feeds
         # end def get_all_discovered_feeds
@@ -1889,6 +2122,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return string|null
         #//
         def get_description(self):
+            
             
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "subtitle")
             if return_:
@@ -1931,6 +2165,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_copyright(self):
             
+            
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "rights")
             if return_:
                 return self.sanitize(return_[0]["data"], self.registry.call("Misc", "atom_10_construct_type", Array(return_[0]["attribs"])), self.get_base(return_[0]))
@@ -1959,6 +2194,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return string|null
         #//
         def get_language(self):
+            
             
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "language")
             if return_:
@@ -1995,12 +2231,13 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_latitude(self):
             
+            
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lat")
             if return_:
                 return php_float(return_[0]["data"])
-            elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
+            elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match_):
                 return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-                return php_float(match[1])
+                return php_float(match_[1])
             else:
                 return None
             # end if
@@ -2019,15 +2256,16 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_longitude(self):
             
+            
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "long")
             if return_:
                 return php_float(return_[0]["data"])
             elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon"):
                 return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon")
                 return php_float(return_[0]["data"])
-            elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
+            elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match_):
                 return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-                return php_float(match[2])
+                return php_float(match_[2])
             else:
                 return None
             # end if
@@ -2042,6 +2280,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return string|null
         #//
         def get_image_title(self):
+            
             
             return_ = self.get_image_tags(SIMPLEPIE_NAMESPACE_RSS_10, "title")
             if return_:
@@ -2074,6 +2313,7 @@ if (not php_class_exists("SimplePie", False)):
         #// @return string|null
         #//
         def get_image_url(self):
+            
             
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_ITUNES, "image")
             if return_:
@@ -2110,6 +2350,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_image_link(self):
             
+            
             return_ = self.get_image_tags(SIMPLEPIE_NAMESPACE_RSS_10, "link")
             if return_:
                 return self.sanitize(return_[0]["data"], SIMPLEPIE_CONSTRUCT_IRI, self.get_base(return_[0]))
@@ -2135,6 +2376,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_image_width(self):
             
+            
             return_ = self.get_image_tags(SIMPLEPIE_NAMESPACE_RSS_20, "width")
             if return_:
                 return round(return_[0]["data"])
@@ -2156,6 +2398,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_image_height(self):
             
+            
             return_ = self.get_image_tags(SIMPLEPIE_NAMESPACE_RSS_20, "height")
             if return_:
                 return round(return_[0]["data"])
@@ -2174,14 +2417,15 @@ if (not php_class_exists("SimplePie", False)):
         #// @param int $max Maximum value to return. 0 for no limit
         #// @return int Number of items in the feed
         #//
-        def get_item_quantity(self, max=0):
+        def get_item_quantity(self, max_=0):
             
-            max = php_int(max)
-            qty = php_count(self.get_items())
-            if max == 0:
-                return qty
+            
+            max_ = php_int(max_)
+            qty_ = php_count(self.get_items())
+            if max_ == 0:
+                return qty_
             else:
-                return max if qty > max else qty
+                return max_ if qty_ > max_ else qty_
             # end if
         # end def get_item_quantity
         #// 
@@ -2196,11 +2440,12 @@ if (not php_class_exists("SimplePie", False)):
         #// @param int $key The item that you want to return.  Remember that arrays begin with 0, not 1
         #// @return SimplePie_Item|null
         #//
-        def get_item(self, key=0):
+        def get_item(self, key_=0):
             
-            items = self.get_items()
-            if (php_isset(lambda : items[key])):
-                return items[key]
+            
+            items_ = self.get_items()
+            if (php_isset(lambda : items_[key_])):
+                return items_[key_]
             else:
                 return None
             # end if
@@ -2218,46 +2463,47 @@ if (not php_class_exists("SimplePie", False)):
         #// @param int $end Number of items to return. 0 for all items after `$start`
         #// @return array|null List of {@see SimplePie_Item} objects
         #//
-        def get_items(self, start=0, end_=0):
+        def get_items(self, start_=0, end_=0):
+            
             
             if (not (php_isset(lambda : self.data["items"]))):
                 if (not php_empty(lambda : self.multifeed_objects)):
-                    self.data["items"] = SimplePie.merge_items(self.multifeed_objects, start, end_, self.item_limit)
+                    self.data["items"] = SimplePie.merge_items(self.multifeed_objects, start_, end_, self.item_limit)
                 else:
                     self.data["items"] = Array()
-                    items = self.get_feed_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "entry")
-                    if items:
-                        keys = php_array_keys(items)
-                        for key in keys:
-                            self.data["items"][-1] = self.registry.create("Item", Array(self, items[key]))
+                    items_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_ATOM_10, "entry")
+                    if items_:
+                        keys_ = php_array_keys(items_)
+                        for key_ in keys_:
+                            self.data["items"][-1] = self.registry.create("Item", Array(self, items_[key_]))
                         # end for
                     # end if
-                    items = self.get_feed_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "entry")
-                    if items:
-                        keys = php_array_keys(items)
-                        for key in keys:
-                            self.data["items"][-1] = self.registry.create("Item", Array(self, items[key]))
+                    items_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_ATOM_03, "entry")
+                    if items_:
+                        keys_ = php_array_keys(items_)
+                        for key_ in keys_:
+                            self.data["items"][-1] = self.registry.create("Item", Array(self, items_[key_]))
                         # end for
                     # end if
-                    items = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_10, "item")
-                    if items:
-                        keys = php_array_keys(items)
-                        for key in keys:
-                            self.data["items"][-1] = self.registry.create("Item", Array(self, items[key]))
+                    items_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_10, "item")
+                    if items_:
+                        keys_ = php_array_keys(items_)
+                        for key_ in keys_:
+                            self.data["items"][-1] = self.registry.create("Item", Array(self, items_[key_]))
                         # end for
                     # end if
-                    items = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_090, "item")
-                    if items:
-                        keys = php_array_keys(items)
-                        for key in keys:
-                            self.data["items"][-1] = self.registry.create("Item", Array(self, items[key]))
+                    items_ = self.get_feed_tags(SIMPLEPIE_NAMESPACE_RSS_090, "item")
+                    if items_:
+                        keys_ = php_array_keys(items_)
+                        for key_ in keys_:
+                            self.data["items"][-1] = self.registry.create("Item", Array(self, items_[key_]))
                         # end for
                     # end if
-                    items = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "item")
-                    if items:
-                        keys = php_array_keys(items)
-                        for key in keys:
-                            self.data["items"][-1] = self.registry.create("Item", Array(self, items[key]))
+                    items_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_RSS_20, "item")
+                    if items_:
+                        keys_ = php_array_keys(items_)
+                        for key_ in keys_:
+                            self.data["items"][-1] = self.registry.create("Item", Array(self, items_[key_]))
                         # end for
                     # end if
                 # end if
@@ -2266,28 +2512,28 @@ if (not php_class_exists("SimplePie", False)):
                 #// If we want to order it by date, check if all items have a date, and then sort it
                 if self.order_by_date and php_empty(lambda : self.multifeed_objects):
                     if (not (php_isset(lambda : self.data["ordered_items"]))):
-                        do_sort = True
-                        for item in self.data["items"]:
-                            if (not item.get_date("U")):
-                                do_sort = False
+                        do_sort_ = True
+                        for item_ in self.data["items"]:
+                            if (not item_.get_date("U")):
+                                do_sort_ = False
                                 break
                             # end if
                         # end for
-                        item = None
+                        item_ = None
                         self.data["ordered_items"] = self.data["items"]
-                        if do_sort:
+                        if do_sort_:
                             usort(self.data["ordered_items"], Array(get_class(self), "sort_items"))
                         # end if
                     # end if
-                    items = self.data["ordered_items"]
+                    items_ = self.data["ordered_items"]
                 else:
-                    items = self.data["items"]
+                    items_ = self.data["items"]
                 # end if
                 #// Slice the data as desired
                 if end_ == 0:
-                    return php_array_slice(items, start)
+                    return php_array_slice(items_, start_)
                 else:
-                    return php_array_slice(items, start, end_)
+                    return php_array_slice(items_, start_, end_)
                 # end if
             else:
                 return Array()
@@ -2298,10 +2544,13 @@ if (not php_class_exists("SimplePie", False)):
         #// 
         #// @deprecated Use your own favicon handling instead
         #//
-        def set_favicon_handler(self, page=False, qs="i"):
+        def set_favicon_handler(self, page_=None, qs_="i"):
+            if page_ is None:
+                page_ = False
+            # end if
             
-            level = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
-            trigger_error("Favicon handling has been removed, please use your own handling", level)
+            level_ = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
+            trigger_error("Favicon handling has been removed, please use your own handling", level_)
             return False
         # end def set_favicon_handler
         #// 
@@ -2311,11 +2560,12 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_favicon(self):
             
-            level = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
-            trigger_error("Favicon handling has been removed, please use your own handling", level)
-            url = self.get_link()
-            if url != None:
-                return "http://g.etfv.co/" + urlencode(url)
+            
+            level_ = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
+            trigger_error("Favicon handling has been removed, please use your own handling", level_)
+            url_ = self.get_link()
+            if url_ != None:
+                return "http://g.etfv.co/" + urlencode(url_)
             # end if
             return False
         # end def get_favicon
@@ -2326,23 +2576,24 @@ if (not php_class_exists("SimplePie", False)):
         #// @param array $args Arguments to the method
         #// @return mixed
         #//
-        def __call(self, method=None, args=None):
+        def __call(self, method_=None, args_=None):
             
-            if php_strpos(method, "subscribe_") == 0:
-                level = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
-                trigger_error("subscribe_*() has been deprecated, implement the callback yourself", level)
+            
+            if php_strpos(method_, "subscribe_") == 0:
+                level_ = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
+                trigger_error("subscribe_*() has been deprecated, implement the callback yourself", level_)
                 return ""
             # end if
-            if method == "enable_xml_dump":
-                level = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
-                trigger_error("enable_xml_dump() has been deprecated, use get_raw_data() instead", level)
+            if method_ == "enable_xml_dump":
+                level_ = E_USER_DEPRECATED if php_defined("E_USER_DEPRECATED") else E_USER_WARNING
+                trigger_error("enable_xml_dump() has been deprecated, use get_raw_data() instead", level_)
                 return False
             # end if
             class_ = get_class(self)
-            trace = debug_backtrace()
-            file = trace[0]["file"]
-            line = trace[0]["line"]
-            trigger_error(str("Call to undefined method ") + str(class_) + str("::") + str(method) + str("() in ") + str(file) + str(" on line ") + str(line), E_USER_ERROR)
+            trace_ = debug_backtrace()
+            file_ = trace_[0]["file"]
+            line_ = trace_[0]["line"]
+            trigger_error(str("Call to undefined method ") + str(class_) + str("::") + str(method_) + str("() in ") + str(file_) + str(" on line ") + str(line_), E_USER_ERROR)
         # end def __call
         #// 
         #// Sorting callback for items
@@ -2353,9 +2604,10 @@ if (not php_class_exists("SimplePie", False)):
         #// @return boolean
         #//
         @classmethod
-        def sort_items(self, a=None, b=None):
+        def sort_items(self, a_=None, b_=None):
             
-            return a.get_date("U") <= b.get_date("U")
+            
+            return a_.get_date("U") <= b_.get_date("U")
         # end def sort_items
         #// 
         #// Merge items from several feeds into one
@@ -2371,32 +2623,33 @@ if (not php_class_exists("SimplePie", False)):
         #// @return array
         #//
         @classmethod
-        def merge_items(self, urls=None, start=0, end_=0, limit=0):
+        def merge_items(self, urls_=None, start_=0, end_=0, limit_=0):
             
-            if php_is_array(urls) and sizeof(urls) > 0:
-                items = Array()
-                for arg in urls:
-                    if type(arg).__name__ == "SimplePie":
-                        items = php_array_merge(items, arg.get_items(0, limit))
+            
+            if php_is_array(urls_) and sizeof(urls_) > 0:
+                items_ = Array()
+                for arg_ in urls_:
+                    if type(arg_).__name__ == "SimplePie":
+                        items_ = php_array_merge(items_, arg_.get_items(0, limit_))
                     else:
                         trigger_error("Arguments must be SimplePie objects", E_USER_WARNING)
                     # end if
                 # end for
-                do_sort = True
-                for item in items:
-                    if (not item.get_date("U")):
-                        do_sort = False
+                do_sort_ = True
+                for item_ in items_:
+                    if (not item_.get_date("U")):
+                        do_sort_ = False
                         break
                     # end if
                 # end for
-                item = None
-                if do_sort:
-                    usort(items, Array(get_class(urls[0]), "sort_items"))
+                item_ = None
+                if do_sort_:
+                    usort(items_, Array(get_class(urls_[0]), "sort_items"))
                 # end if
                 if end_ == 0:
-                    return php_array_slice(items, start)
+                    return php_array_slice(items_, start_)
                 else:
-                    return php_array_slice(items, start, end_)
+                    return php_array_slice(items_, start_, end_)
                 # end if
             else:
                 trigger_error("Cannot merge zero SimplePie objects", E_USER_WARNING)

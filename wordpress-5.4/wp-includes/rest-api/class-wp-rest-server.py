@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -30,9 +25,33 @@ class WP_REST_Server():
     EDITABLE = "POST, PUT, PATCH"
     DELETABLE = "DELETE"
     ALLMETHODS = "GET, POST, PUT, PATCH, DELETE"
+    #// 
+    #// Namespaces registered to the server.
+    #// 
+    #// @since 4.4.0
+    #// @var array
+    #//
     namespaces = Array()
+    #// 
+    #// Endpoints registered to the server.
+    #// 
+    #// @since 4.4.0
+    #// @var array
+    #//
     endpoints = Array()
+    #// 
+    #// Options defined for the routes.
+    #// 
+    #// @since 4.4.0
+    #// @var array
+    #//
     route_options = Array()
+    #// 
+    #// Caches embedded requests.
+    #// 
+    #// @since 5.4.0
+    #// @var array
+    #//
     embed_cache = Array()
     #// 
     #// Instantiates the REST server.
@@ -40,6 +59,7 @@ class WP_REST_Server():
     #// @since 4.4.0
     #//
     def __init__(self):
+        
         
         self.endpoints = Array({"/": Array({"callback": Array(self, "get_index"), "methods": "GET", "args": Array({"context": Array({"default": "view"})})})})
     # end def __init__
@@ -52,6 +72,7 @@ class WP_REST_Server():
     #// or no authentication provided
     #//
     def check_authentication(self):
+        
         
         #// 
         #// Filters REST authentication errors.
@@ -91,28 +112,29 @@ class WP_REST_Server():
     #// @param WP_Error $error WP_Error instance.
     #// @return WP_REST_Response List of associative arrays with code and message keys.
     #//
-    def error_to_response(self, error=None):
+    def error_to_response(self, error_=None):
         
-        error_data = error.get_error_data()
-        if php_is_array(error_data) and (php_isset(lambda : error_data["status"])):
-            status = error_data["status"]
+        
+        error_data_ = error_.get_error_data()
+        if php_is_array(error_data_) and (php_isset(lambda : error_data_["status"])):
+            status_ = error_data_["status"]
         else:
-            status = 500
+            status_ = 500
         # end if
-        errors = Array()
-        for code,messages in error.errors:
-            for message in messages:
-                errors[-1] = Array({"code": code, "message": message, "data": error.get_error_data(code)})
+        errors_ = Array()
+        for code_,messages_ in error_.errors:
+            for message_ in messages_:
+                errors_[-1] = Array({"code": code_, "message": message_, "data": error_.get_error_data(code_)})
             # end for
         # end for
-        data = errors[0]
-        if php_count(errors) > 1:
+        data_ = errors_[0]
+        if php_count(errors_) > 1:
             #// Remove the primary error.
-            php_array_shift(errors)
-            data["additional_errors"] = errors
+            php_array_shift(errors_)
+            data_["additional_errors"] = errors_
         # end if
-        response = php_new_class("WP_REST_Response", lambda : WP_REST_Response(data, status))
-        return response
+        response_ = php_new_class("WP_REST_Response", lambda : WP_REST_Response(data_, status_))
+        return response_
     # end def error_to_response
     #// 
     #// Retrieves an appropriate error representation in JSON.
@@ -129,13 +151,14 @@ class WP_REST_Server():
     #// @param int    $status  Optional. HTTP status code to send. Default null.
     #// @return string JSON representation of the error
     #//
-    def json_error(self, code=None, message=None, status=None):
+    def json_error(self, code_=None, message_=None, status_=None):
         
-        if status:
-            self.set_status(status)
+        
+        if status_:
+            self.set_status(status_)
         # end if
-        error = compact("code", "message")
-        return wp_json_encode(error)
+        error_ = php_compact("code", "message")
+        return wp_json_encode(error_)
     # end def json_error
     #// 
     #// Handles serving an API request.
@@ -151,14 +174,15 @@ class WP_REST_Server():
     #// Default null.
     #// @return null|false Null if not served and a HEAD request, false otherwise.
     #//
-    def serve_request(self, path=None):
+    def serve_request(self, path_=None):
         
-        content_type = "application/javascript" if (php_isset(lambda : PHP_REQUEST["_jsonp"])) else "application/json"
-        self.send_header("Content-Type", content_type + "; charset=" + get_option("blog_charset"))
+        
+        content_type_ = "application/javascript" if (php_isset(lambda : PHP_REQUEST["_jsonp"])) else "application/json"
+        self.send_header("Content-Type", content_type_ + "; charset=" + get_option("blog_charset"))
         self.send_header("X-Robots-Tag", "noindex")
-        api_root = get_rest_url()
-        if (not php_empty(lambda : api_root)):
-            self.send_header("Link", "<" + esc_url_raw(api_root) + ">; rel=\"https://api.w.org/\"")
+        api_root_ = get_rest_url()
+        if (not php_empty(lambda : api_root_)):
+            self.send_header("Link", "<" + esc_url_raw(api_root_) + ">; rel=\"https://api.w.org/\"")
         # end if
         #// 
         #// Mitigate possible JSONP Flash attacks.
@@ -175,13 +199,13 @@ class WP_REST_Server():
         #// 
         #// @param bool $rest_send_nocache_headers Whether to send no-cache headers.
         #//
-        send_no_cache_headers = apply_filters("rest_send_nocache_headers", is_user_logged_in())
-        if send_no_cache_headers:
-            for header,header_value in wp_get_nocache_headers():
-                if php_empty(lambda : header_value):
-                    self.remove_header(header)
+        send_no_cache_headers_ = apply_filters("rest_send_nocache_headers", is_user_logged_in())
+        if send_no_cache_headers_:
+            for header_,header_value_ in wp_get_nocache_headers():
+                if php_empty(lambda : header_value_):
+                    self.remove_header(header_)
                 else:
-                    self.send_header(header, header_value)
+                    self.send_header(header_, header_value_)
                 # end if
             # end for
         # end if
@@ -202,51 +226,51 @@ class WP_REST_Server():
         #// 
         #// @param bool $jsonp_enabled Whether jsonp is enabled. Default true.
         #//
-        jsonp_enabled = apply_filters("rest_jsonp_enabled", True)
-        jsonp_callback = None
+        jsonp_enabled_ = apply_filters("rest_jsonp_enabled", True)
+        jsonp_callback_ = None
         if (php_isset(lambda : PHP_REQUEST["_jsonp"])):
-            if (not jsonp_enabled):
+            if (not jsonp_enabled_):
                 php_print(self.json_error("rest_callback_disabled", __("JSONP support is disabled on this site."), 400))
                 return False
             # end if
-            jsonp_callback = PHP_REQUEST["_jsonp"]
-            if (not wp_check_jsonp_callback(jsonp_callback)):
+            jsonp_callback_ = PHP_REQUEST["_jsonp"]
+            if (not wp_check_jsonp_callback(jsonp_callback_)):
                 php_print(self.json_error("rest_callback_invalid", __("Invalid JSONP callback function."), 400))
                 return False
             # end if
         # end if
-        if php_empty(lambda : path):
+        if php_empty(lambda : path_):
             if (php_isset(lambda : PHP_SERVER["PATH_INFO"])):
-                path = PHP_SERVER["PATH_INFO"]
+                path_ = PHP_SERVER["PATH_INFO"]
             else:
-                path = "/"
+                path_ = "/"
             # end if
         # end if
-        request = php_new_class("WP_REST_Request", lambda : WP_REST_Request(PHP_SERVER["REQUEST_METHOD"], path))
-        request.set_query_params(wp_unslash(PHP_REQUEST))
-        request.set_body_params(wp_unslash(PHP_POST))
-        request.set_file_params(PHP_FILES)
-        request.set_headers(self.get_headers(wp_unslash(PHP_SERVER)))
-        request.set_body(self.get_raw_data())
+        request_ = php_new_class("WP_REST_Request", lambda : WP_REST_Request(PHP_SERVER["REQUEST_METHOD"], path_))
+        request_.set_query_params(wp_unslash(PHP_REQUEST))
+        request_.set_body_params(wp_unslash(PHP_POST))
+        request_.set_file_params(PHP_FILES)
+        request_.set_headers(self.get_headers(wp_unslash(PHP_SERVER)))
+        request_.set_body(self.get_raw_data())
         #// 
         #// HTTP method override for clients that can't use PUT/PATCH/DELETE. First, we check
         #// $_GET['_method']. If that is not set, we check for the HTTP_X_HTTP_METHOD_OVERRIDE
         #// header.
         #//
         if (php_isset(lambda : PHP_REQUEST["_method"])):
-            request.set_method(PHP_REQUEST["_method"])
+            request_.set_method(PHP_REQUEST["_method"])
         elif (php_isset(lambda : PHP_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"])):
-            request.set_method(PHP_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"])
+            request_.set_method(PHP_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"])
         # end if
-        result = self.check_authentication()
-        if (not is_wp_error(result)):
-            result = self.dispatch(request)
+        result_ = self.check_authentication()
+        if (not is_wp_error(result_)):
+            result_ = self.dispatch(request_)
         # end if
         #// Normalize to either WP_Error or WP_REST_Response...
-        result = rest_ensure_response(result)
+        result_ = rest_ensure_response(result_)
         #// ...then convert WP_Error across.
-        if is_wp_error(result):
-            result = self.error_to_response(result)
+        if is_wp_error(result_):
+            result_ = self.error_to_response(result_)
         # end if
         #// 
         #// Filters the API response.
@@ -260,16 +284,16 @@ class WP_REST_Server():
         #// @param WP_REST_Server   $this    Server instance.
         #// @param WP_REST_Request  $request Request used to generate the response.
         #//
-        result = apply_filters("rest_post_dispatch", rest_ensure_response(result), self, request)
+        result_ = apply_filters("rest_post_dispatch", rest_ensure_response(result_), self, request_)
         #// Wrap the response in an envelope if asked for.
         if (php_isset(lambda : PHP_REQUEST["_envelope"])):
-            result = self.envelope_response(result, (php_isset(lambda : PHP_REQUEST["_embed"])))
+            result_ = self.envelope_response(result_, (php_isset(lambda : PHP_REQUEST["_embed"])))
         # end if
         #// Send extra data from response objects.
-        headers = result.get_headers()
-        self.send_headers(headers)
-        code = result.get_status()
-        self.set_status(code)
+        headers_ = result_.get_headers()
+        self.send_headers(headers_)
+        code_ = result_.get_status()
+        self.set_status(code_)
         #// 
         #// Filters whether the request has already been served.
         #// 
@@ -284,14 +308,14 @@ class WP_REST_Server():
         #// @param WP_REST_Request  $request Request used to generate the response.
         #// @param WP_REST_Server   $this    Server instance.
         #//
-        served = apply_filters("rest_pre_serve_request", False, result, request, self)
-        if (not served):
-            if "HEAD" == request.get_method():
+        served_ = apply_filters("rest_pre_serve_request", False, result_, request_, self)
+        if (not served_):
+            if "HEAD" == request_.get_method():
                 return None
             # end if
             #// Embed links inside the request.
-            embed = rest_parse_embed_param(PHP_REQUEST["_embed"]) if (php_isset(lambda : PHP_REQUEST["_embed"])) else False
-            result = self.response_to_data(result, embed)
+            embed_ = rest_parse_embed_param(PHP_REQUEST["_embed"]) if (php_isset(lambda : PHP_REQUEST["_embed"])) else False
+            result_ = self.response_to_data(result_, embed_)
             #// 
             #// Filters the API response.
             #// 
@@ -304,24 +328,24 @@ class WP_REST_Server():
             #// @param WP_REST_Server   $this    Server instance.
             #// @param WP_REST_Request  $request Request used to generate the response.
             #//
-            result = apply_filters("rest_pre_echo_response", result, self, request)
+            result_ = apply_filters("rest_pre_echo_response", result_, self, request_)
             #// The 204 response shouldn't have a body.
-            if 204 == code or None == result:
+            if 204 == code_ or None == result_:
                 return None
             # end if
-            result = wp_json_encode(result)
-            json_error_message = self.get_json_last_error()
-            if json_error_message:
-                json_error_obj = php_new_class("WP_Error", lambda : WP_Error("rest_encode_error", json_error_message, Array({"status": 500})))
-                result = self.error_to_response(json_error_obj)
-                result = wp_json_encode(result.data[0])
+            result_ = wp_json_encode(result_)
+            json_error_message_ = self.get_json_last_error()
+            if json_error_message_:
+                json_error_obj_ = php_new_class("WP_Error", lambda : WP_Error("rest_encode_error", json_error_message_, Array({"status": 500})))
+                result_ = self.error_to_response(json_error_obj_)
+                result_ = wp_json_encode(result_.data[0])
             # end if
-            if jsonp_callback:
+            if jsonp_callback_:
                 #// Prepend '/**/' to mitigate possible JSONP Flash attacks.
                 #// https://miki.it/blog/2014/7/8/abusing-jsonp-with-rosetta-flash
-                php_print("/**/" + jsonp_callback + "(" + result + ")")
+                php_print("/**/" + jsonp_callback_ + "(" + result_ + ")")
             else:
-                php_print(result)
+                php_print(result_)
             # end if
         # end if
         return None
@@ -341,27 +365,28 @@ class WP_REST_Server():
     #// @type array [$_embedded] Embeddeds.
     #// }
     #//
-    def response_to_data(self, response=None, embed=None):
+    def response_to_data(self, response_=None, embed_=None):
         
-        data = response.get_data()
-        links = self.get_compact_response_links(response)
-        if (not php_empty(lambda : links)):
+        
+        data_ = response_.get_data()
+        links_ = self.get_compact_response_links(response_)
+        if (not php_empty(lambda : links_)):
             #// Convert links to part of the data.
-            data["_links"] = links
+            data_["_links"] = links_
         # end if
-        if embed:
+        if embed_:
             self.embed_cache = Array()
             #// Determine if this is a numeric array.
-            if wp_is_numeric_array(data):
-                for key,item in data:
-                    data[key] = self.embed_links(item, embed)
+            if wp_is_numeric_array(data_):
+                for key_,item_ in data_:
+                    data_[key_] = self.embed_links(item_, embed_)
                 # end for
             else:
-                data = self.embed_links(data, embed)
+                data_ = self.embed_links(data_, embed_)
             # end if
             self.embed_cache = Array()
         # end if
-        return data
+        return data_
     # end def response_to_data
     #// 
     #// Retrieves links from a response.
@@ -375,23 +400,24 @@ class WP_REST_Server():
     #// @return array Map of link relation to list of link hashes.
     #//
     @classmethod
-    def get_response_links(self, response=None):
+    def get_response_links(self, response_=None):
         
-        links = response.get_links()
-        if php_empty(lambda : links):
+        
+        links_ = response_.get_links()
+        if php_empty(lambda : links_):
             return Array()
         # end if
         #// Convert links to part of the data.
-        data = Array()
-        for rel,items in links:
-            data[rel] = Array()
-            for item in items:
-                attributes = item["attributes"]
-                attributes["href"] = item["href"]
-                data[rel][-1] = attributes
+        data_ = Array()
+        for rel_,items_ in links_:
+            data_[rel_] = Array()
+            for item_ in items_:
+                attributes_ = item_["attributes"]
+                attributes_["href"] = item_["href"]
+                data_[rel_][-1] = attributes_
             # end for
         # end for
-        return data
+        return data_
     # end def get_response_links
     #// 
     #// Retrieves the CURIEs (compact URIs) used for relations.
@@ -405,38 +431,39 @@ class WP_REST_Server():
     #// @return array Map of link relation to list of link hashes.
     #//
     @classmethod
-    def get_compact_response_links(self, response=None):
+    def get_compact_response_links(self, response_=None):
         
-        links = self.get_response_links(response)
-        if php_empty(lambda : links):
+        
+        links_ = self.get_response_links(response_)
+        if php_empty(lambda : links_):
             return Array()
         # end if
-        curies = response.get_curies()
-        used_curies = Array()
-        for rel,items in links:
+        curies_ = response_.get_curies()
+        used_curies_ = Array()
+        for rel_,items_ in links_:
             #// Convert $rel URIs to their compact versions if they exist.
-            for curie in curies:
-                href_prefix = php_substr(curie["href"], 0, php_strpos(curie["href"], "{rel}"))
-                if php_strpos(rel, href_prefix) != 0:
+            for curie_ in curies_:
+                href_prefix_ = php_substr(curie_["href"], 0, php_strpos(curie_["href"], "{rel}"))
+                if php_strpos(rel_, href_prefix_) != 0:
                     continue
                 # end if
                 #// Relation now changes from '$uri' to '$curie:$relation'.
-                rel_regex = php_str_replace("\\{rel\\}", "(.+)", preg_quote(curie["href"], "!"))
-                php_preg_match("!" + rel_regex + "!", rel, matches)
-                if matches:
-                    new_rel = curie["name"] + ":" + matches[1]
-                    used_curies[curie["name"]] = curie
-                    links[new_rel] = items
-                    links[rel] = None
+                rel_regex_ = php_str_replace("\\{rel\\}", "(.+)", preg_quote(curie_["href"], "!"))
+                php_preg_match("!" + rel_regex_ + "!", rel_, matches_)
+                if matches_:
+                    new_rel_ = curie_["name"] + ":" + matches_[1]
+                    used_curies_[curie_["name"]] = curie_
+                    links_[new_rel_] = items_
+                    links_[rel_] = None
                     break
                 # end if
             # end for
         # end for
         #// Push the curies onto the start of the links array.
-        if used_curies:
-            links["curies"] = php_array_values(used_curies)
+        if used_curies_:
+            links_["curies"] = php_array_values(used_curies_)
         # end if
-        return links
+        return links_
     # end def get_compact_response_links
     #// 
     #// Embeds the links from the data into the request.
@@ -453,53 +480,56 @@ class WP_REST_Server():
     #// @type array [$_embedded] Embeddeds.
     #// }
     #//
-    def embed_links(self, data=None, embed=True):
-        
-        if php_empty(lambda : data["_links"]):
-            return data
+    def embed_links(self, data_=None, embed_=None):
+        if embed_ is None:
+            embed_ = True
         # end if
-        embedded = Array()
-        for rel,links in data["_links"]:
+        
+        if php_empty(lambda : data_["_links"]):
+            return data_
+        # end if
+        embedded_ = Array()
+        for rel_,links_ in data_["_links"]:
             #// If a list of relations was specified, and the link relation is not in the whitelist, don't process the link.
-            if php_is_array(embed) and (not php_in_array(rel, embed, True)):
+            if php_is_array(embed_) and (not php_in_array(rel_, embed_, True)):
                 continue
             # end if
-            embeds = Array()
-            for item in links:
+            embeds_ = Array()
+            for item_ in links_:
                 #// Determine if the link is embeddable.
-                if php_empty(lambda : item["embeddable"]):
+                if php_empty(lambda : item_["embeddable"]):
                     #// Ensure we keep the same order.
-                    embeds[-1] = Array()
+                    embeds_[-1] = Array()
                     continue
                 # end if
-                if (not php_array_key_exists(item["href"], self.embed_cache)):
+                if (not php_array_key_exists(item_["href"], self.embed_cache)):
                     #// Run through our internal routing and serve.
-                    request = WP_REST_Request.from_url(item["href"])
-                    if (not request):
-                        embeds[-1] = Array()
+                    request_ = WP_REST_Request.from_url(item_["href"])
+                    if (not request_):
+                        embeds_[-1] = Array()
                         continue
                     # end if
                     #// Embedded resources get passed context=embed.
-                    if php_empty(lambda : request["context"]):
-                        request["context"] = "embed"
+                    if php_empty(lambda : request_["context"]):
+                        request_["context"] = "embed"
                     # end if
-                    response = self.dispatch(request)
+                    response_ = self.dispatch(request_)
                     #// This filter is documented in wp-includes/rest-api/class-wp-rest-server.php
-                    response = apply_filters("rest_post_dispatch", rest_ensure_response(response), self, request)
-                    self.embed_cache[item["href"]] = self.response_to_data(response, False)
+                    response_ = apply_filters("rest_post_dispatch", rest_ensure_response(response_), self, request_)
+                    self.embed_cache[item_["href"]] = self.response_to_data(response_, False)
                 # end if
-                embeds[-1] = self.embed_cache[item["href"]]
+                embeds_[-1] = self.embed_cache[item_["href"]]
             # end for
             #// Determine if any real links were found.
-            has_links = php_count(php_array_filter(embeds))
-            if has_links:
-                embedded[rel] = embeds
+            has_links_ = php_count(php_array_filter(embeds_))
+            if has_links_:
+                embedded_[rel_] = embeds_
             # end if
         # end for
-        if (not php_empty(lambda : embedded)):
-            data["_embedded"] = embedded
+        if (not php_empty(lambda : embedded_)):
+            data_["_embedded"] = embedded_
         # end if
-        return data
+        return data_
     # end def embed_links
     #// 
     #// Wraps the response in an envelope.
@@ -514,9 +544,10 @@ class WP_REST_Server():
     #// @param bool             $embed    Whether links should be embedded.
     #// @return WP_REST_Response New response with wrapped data
     #//
-    def envelope_response(self, response=None, embed=None):
+    def envelope_response(self, response_=None, embed_=None):
         
-        envelope = Array({"body": self.response_to_data(response, embed), "status": response.get_status(), "headers": response.get_headers()})
+        
+        envelope_ = Array({"body": self.response_to_data(response_, embed_), "status": response_.get_status(), "headers": response_.get_headers()})
         #// 
         #// Filters the enveloped form of a response.
         #// 
@@ -525,9 +556,9 @@ class WP_REST_Server():
         #// @param array            $envelope Envelope data.
         #// @param WP_REST_Response $response Original response data.
         #//
-        envelope = apply_filters("rest_envelope_response", envelope, response)
+        envelope_ = apply_filters("rest_envelope_response", envelope_, response_)
         #// Ensure it's still a response and return.
-        return rest_ensure_response(envelope)
+        return rest_ensure_response(envelope_)
     # end def envelope_response
     #// 
     #// Registers a route to the server.
@@ -540,19 +571,22 @@ class WP_REST_Server():
     #// @param bool   $override   Optional. Whether the route should be overridden if it already exists.
     #// Default false.
     #//
-    def register_route(self, namespace=None, route=None, route_args=None, override=False):
+    def register_route(self, namespace_=None, route_=None, route_args_=None, override_=None):
+        if override_ is None:
+            override_ = False
+        # end if
         
-        if (not (php_isset(lambda : self.namespaces[namespace]))):
-            self.namespaces[namespace] = Array()
-            self.register_route(namespace, "/" + namespace, Array(Array({"methods": self.READABLE, "callback": Array(self, "get_namespace_index"), "args": Array({"namespace": Array({"default": namespace})}, {"context": Array({"default": "view"})})})))
+        if (not (php_isset(lambda : self.namespaces[namespace_]))):
+            self.namespaces[namespace_] = Array()
+            self.register_route(namespace_, "/" + namespace_, Array(Array({"methods": self.READABLE, "callback": Array(self, "get_namespace_index"), "args": Array({"namespace": Array({"default": namespace_})}, {"context": Array({"default": "view"})})})))
         # end if
         #// Associative to avoid double-registration.
-        self.namespaces[namespace][route] = True
-        route_args["namespace"] = namespace
-        if override or php_empty(lambda : self.endpoints[route]):
-            self.endpoints[route] = route_args
+        self.namespaces[namespace_][route_] = True
+        route_args_["namespace"] = namespace_
+        if override_ or php_empty(lambda : self.endpoints[route_]):
+            self.endpoints[route_] = route_args_
         else:
-            self.endpoints[route] = php_array_merge(self.endpoints[route], route_args)
+            self.endpoints[route_] = php_array_merge(self.endpoints[route_], route_args_)
         # end if
     # end def register_route
     #// 
@@ -577,11 +611,12 @@ class WP_REST_Server():
     #// @return array `'/path/regex' => array( $callback, $bitmask )` or
     #// `'/path/regex' => array( array( $callback, $bitmask ), ...)`.
     #//
-    def get_routes(self, namespace=""):
+    def get_routes(self, namespace_=""):
         
-        endpoints = self.endpoints
-        if namespace:
-            endpoints = wp_list_filter(endpoints, Array({"namespace": namespace}))
+        
+        endpoints_ = self.endpoints
+        if namespace_:
+            endpoints_ = wp_list_filter(endpoints_, Array({"namespace": namespace_}))
         # end if
         #// 
         #// Filters the array of available endpoints.
@@ -593,41 +628,41 @@ class WP_REST_Server():
         #// `'/path/regex' => array( $callback, $bitmask )` or
         #// `'/path/regex' => array( array( $callback, $bitmask ).
         #//
-        endpoints = apply_filters("rest_endpoints", endpoints)
+        endpoints_ = apply_filters("rest_endpoints", endpoints_)
         #// Normalise the endpoints.
-        defaults = Array({"methods": "", "accept_json": False, "accept_raw": False, "show_in_index": True, "args": Array()})
-        for route,handlers in endpoints:
-            if (php_isset(lambda : handlers["callback"])):
+        defaults_ = Array({"methods": "", "accept_json": False, "accept_raw": False, "show_in_index": True, "args": Array()})
+        for route_,handlers_ in endpoints_:
+            if (php_isset(lambda : handlers_["callback"])):
                 #// Single endpoint, add one deeper.
-                handlers = Array(handlers)
+                handlers_ = Array(handlers_)
             # end if
-            if (not (php_isset(lambda : self.route_options[route]))):
-                self.route_options[route] = Array()
+            if (not (php_isset(lambda : self.route_options[route_]))):
+                self.route_options[route_] = Array()
             # end if
-            for key,handler in handlers:
-                if (not php_is_numeric(key)):
+            for key_,handler_ in handlers_:
+                if (not php_is_numeric(key_)):
                     #// Route option, move it to the options.
-                    self.route_options[route][key] = handler
-                    handlers[key] = None
+                    self.route_options[route_][key_] = handler_
+                    handlers_[key_] = None
                     continue
                 # end if
-                handler = wp_parse_args(handler, defaults)
+                handler_ = wp_parse_args(handler_, defaults_)
                 #// Allow comma-separated HTTP methods.
-                if php_is_string(handler["methods"]):
-                    methods = php_explode(",", handler["methods"])
-                elif php_is_array(handler["methods"]):
-                    methods = handler["methods"]
+                if php_is_string(handler_["methods"]):
+                    methods_ = php_explode(",", handler_["methods"])
+                elif php_is_array(handler_["methods"]):
+                    methods_ = handler_["methods"]
                 else:
-                    methods = Array()
+                    methods_ = Array()
                 # end if
-                handler["methods"] = Array()
-                for method in methods:
-                    method = php_strtoupper(php_trim(method))
-                    handler["methods"][method] = True
+                handler_["methods"] = Array()
+                for method_ in methods_:
+                    method_ = php_strtoupper(php_trim(method_))
+                    handler_["methods"][method_] = True
                 # end for
             # end for
         # end for
-        return endpoints
+        return endpoints_
     # end def get_routes
     #// 
     #// Retrieves namespaces registered on the server.
@@ -637,6 +672,7 @@ class WP_REST_Server():
     #// @return string[] List of registered namespaces.
     #//
     def get_namespaces(self):
+        
         
         return php_array_keys(self.namespaces)
     # end def get_namespaces
@@ -648,12 +684,13 @@ class WP_REST_Server():
     #// @param string $route Route pattern to fetch options for.
     #// @return array|null Data as an associative array if found, or null if not found.
     #//
-    def get_route_options(self, route=None):
+    def get_route_options(self, route_=None):
         
-        if (not (php_isset(lambda : self.route_options[route]))):
+        
+        if (not (php_isset(lambda : self.route_options[route_]))):
             return None
         # end if
-        return self.route_options[route]
+        return self.route_options[route_]
     # end def get_route_options
     #// 
     #// Matches the request to a callback and call it.
@@ -663,7 +700,8 @@ class WP_REST_Server():
     #// @param WP_REST_Request $request Request to attempt dispatching.
     #// @return WP_REST_Response Response returned by the callback.
     #//
-    def dispatch(self, request=None):
+    def dispatch(self, request_=None):
+        
         
         #// 
         #// Filters the pre-calculated result of a REST dispatch request.
@@ -678,66 +716,66 @@ class WP_REST_Server():
         #// @param WP_REST_Server  $this    Server instance.
         #// @param WP_REST_Request $request Request used to generate the response.
         #//
-        result = apply_filters("rest_pre_dispatch", None, self, request)
-        if (not php_empty(lambda : result)):
-            return result
+        result_ = apply_filters("rest_pre_dispatch", None, self, request_)
+        if (not php_empty(lambda : result_)):
+            return result_
         # end if
-        method = request.get_method()
-        path = request.get_route()
-        with_namespace = Array()
-        for namespace in self.get_namespaces():
-            if 0 == php_strpos(trailingslashit(php_ltrim(path, "/")), namespace):
-                with_namespace[-1] = self.get_routes(namespace)
+        method_ = request_.get_method()
+        path_ = request_.get_route()
+        with_namespace_ = Array()
+        for namespace_ in self.get_namespaces():
+            if 0 == php_strpos(trailingslashit(php_ltrim(path_, "/")), namespace_):
+                with_namespace_[-1] = self.get_routes(namespace_)
             # end if
         # end for
-        if with_namespace:
-            routes = php_array_merge(with_namespace)
+        if with_namespace_:
+            routes_ = php_array_merge(with_namespace_)
         else:
-            routes = self.get_routes()
+            routes_ = self.get_routes()
         # end if
-        for route,handlers in routes:
-            match = php_preg_match("@^" + route + "$@i", path, matches)
-            if (not match):
+        for route_,handlers_ in routes_:
+            match_ = php_preg_match("@^" + route_ + "$@i", path_, matches_)
+            if (not match_):
                 continue
             # end if
-            args = Array()
-            for param,value in matches:
-                if (not php_is_int(param)):
-                    args[param] = value
+            args_ = Array()
+            for param_,value_ in matches_:
+                if (not php_is_int(param_)):
+                    args_[param_] = value_
                 # end if
             # end for
-            for handler in handlers:
-                callback = handler["callback"]
-                response = None
+            for handler_ in handlers_:
+                callback_ = handler_["callback"]
+                response_ = None
                 #// Fallback to GET method if no HEAD method is registered.
-                checked_method = method
-                if "HEAD" == method and php_empty(lambda : handler["methods"]["HEAD"]):
-                    checked_method = "GET"
+                checked_method_ = method_
+                if "HEAD" == method_ and php_empty(lambda : handler_["methods"]["HEAD"]):
+                    checked_method_ = "GET"
                 # end if
-                if php_empty(lambda : handler["methods"][checked_method]):
+                if php_empty(lambda : handler_["methods"][checked_method_]):
                     continue
                 # end if
-                if (not php_is_callable(callback)):
-                    response = php_new_class("WP_Error", lambda : WP_Error("rest_invalid_handler", __("The handler for the route is invalid"), Array({"status": 500})))
+                if (not php_is_callable(callback_)):
+                    response_ = php_new_class("WP_Error", lambda : WP_Error("rest_invalid_handler", __("The handler for the route is invalid"), Array({"status": 500})))
                 # end if
-                if (not is_wp_error(response)):
-                    args[0] = None
-                    request.set_url_params(args)
-                    request.set_attributes(handler)
-                    defaults = Array()
-                    for arg,options in handler["args"]:
-                        if (php_isset(lambda : options["default"])):
-                            defaults[arg] = options["default"]
+                if (not is_wp_error(response_)):
+                    args_[0] = None
+                    request_.set_url_params(args_)
+                    request_.set_attributes(handler_)
+                    defaults_ = Array()
+                    for arg_,options_ in handler_["args"]:
+                        if (php_isset(lambda : options_["default"])):
+                            defaults_[arg_] = options_["default"]
                         # end if
                     # end for
-                    request.set_default_params(defaults)
-                    check_required = request.has_valid_params()
-                    if is_wp_error(check_required):
-                        response = check_required
+                    request_.set_default_params(defaults_)
+                    check_required_ = request_.has_valid_params()
+                    if is_wp_error(check_required_):
+                        response_ = check_required_
                     else:
-                        check_sanitized = request.sanitize_params()
-                        if is_wp_error(check_sanitized):
-                            response = check_sanitized
+                        check_sanitized_ = request_.sanitize_params()
+                        if is_wp_error(check_sanitized_):
+                            response_ = check_sanitized_
                         # end if
                     # end if
                 # end if
@@ -757,19 +795,19 @@ class WP_REST_Server():
                 #// @param array                     $handler  Route handler used for the request.
                 #// @param WP_REST_Request           $request  Request used to generate the response.
                 #//
-                response = apply_filters("rest_request_before_callbacks", response, handler, request)
-                if (not is_wp_error(response)):
+                response_ = apply_filters("rest_request_before_callbacks", response_, handler_, request_)
+                if (not is_wp_error(response_)):
                     #// Check permission specified on the route.
-                    if (not php_empty(lambda : handler["permission_callback"])):
-                        permission = php_call_user_func(handler["permission_callback"], request)
-                        if is_wp_error(permission):
-                            response = permission
-                        elif False == permission or None == permission:
-                            response = php_new_class("WP_Error", lambda : WP_Error("rest_forbidden", __("Sorry, you are not allowed to do that."), Array({"status": rest_authorization_required_code()})))
+                    if (not php_empty(lambda : handler_["permission_callback"])):
+                        permission_ = php_call_user_func(handler_["permission_callback"], request_)
+                        if is_wp_error(permission_):
+                            response_ = permission_
+                        elif False == permission_ or None == permission_:
+                            response_ = php_new_class("WP_Error", lambda : WP_Error("rest_forbidden", __("Sorry, you are not allowed to do that."), Array({"status": rest_authorization_required_code()})))
                         # end if
                     # end if
                 # end if
-                if (not is_wp_error(response)):
+                if (not is_wp_error(response_)):
                     #// 
                     #// Filters the REST dispatch request result.
                     #// 
@@ -783,12 +821,12 @@ class WP_REST_Server():
                     #// @param string          $route           Route matched for the request.
                     #// @param array           $handler         Route handler used for the request.
                     #//
-                    dispatch_result = apply_filters("rest_dispatch_request", None, request, route, handler)
+                    dispatch_result_ = apply_filters("rest_dispatch_request", None, request_, route_, handler_)
                     #// Allow plugins to halt the request via this filter.
-                    if None != dispatch_result:
-                        response = dispatch_result
+                    if None != dispatch_result_:
+                        response_ = dispatch_result_
                     else:
-                        response = php_call_user_func(callback, request)
+                        response_ = php_call_user_func(callback_, request_)
                     # end if
                 # end if
                 #// 
@@ -811,15 +849,15 @@ class WP_REST_Server():
                 #// @param array                     $handler  Route handler used for the request.
                 #// @param WP_REST_Request           $request  Request used to generate the response.
                 #//
-                response = apply_filters("rest_request_after_callbacks", response, handler, request)
-                if is_wp_error(response):
-                    response = self.error_to_response(response)
+                response_ = apply_filters("rest_request_after_callbacks", response_, handler_, request_)
+                if is_wp_error(response_):
+                    response_ = self.error_to_response(response_)
                 else:
-                    response = rest_ensure_response(response)
+                    response_ = rest_ensure_response(response_)
                 # end if
-                response.set_matched_route(route)
-                response.set_matched_handler(handler)
-                return response
+                response_.set_matched_route(route_)
+                response_.set_matched_handler(handler_)
+                return response_
             # end for
         # end for
         return self.error_to_response(php_new_class("WP_Error", lambda : WP_Error("rest_no_route", __("No route was found matching the URL and request method"), Array({"status": 404}))))
@@ -836,8 +874,9 @@ class WP_REST_Server():
     #//
     def get_json_last_error(self):
         
-        last_error_code = php_json_last_error()
-        if JSON_ERROR_NONE == last_error_code or php_empty(lambda : last_error_code):
+        
+        last_error_code_ = php_json_last_error()
+        if JSON_ERROR_NONE == last_error_code_ or php_empty(lambda : last_error_code_):
             return False
         # end if
         return json_last_error_msg()
@@ -856,12 +895,13 @@ class WP_REST_Server():
     #// }
     #// @return WP_REST_Response The API root index data.
     #//
-    def get_index(self, request=None):
+    def get_index(self, request_=None):
+        
         
         #// General site data.
-        available = Array({"name": get_option("blogname"), "description": get_option("blogdescription"), "url": get_option("siteurl"), "home": home_url(), "gmt_offset": get_option("gmt_offset"), "timezone_string": get_option("timezone_string"), "namespaces": php_array_keys(self.namespaces), "authentication": Array(), "routes": self.get_data_for_routes(self.get_routes(), request["context"])})
-        response = php_new_class("WP_REST_Response", lambda : WP_REST_Response(available))
-        response.add_link("help", "http://v2.wp-api.org/")
+        available_ = Array({"name": get_option("blogname"), "description": get_option("blogdescription"), "url": get_option("siteurl"), "home": home_url(), "gmt_offset": get_option("gmt_offset"), "timezone_string": get_option("timezone_string"), "namespaces": php_array_keys(self.namespaces), "authentication": Array(), "routes": self.get_data_for_routes(self.get_routes(), request_["context"])})
+        response_ = php_new_class("WP_REST_Response", lambda : WP_REST_Response(available_))
+        response_.add_link("help", "http://v2.wp-api.org/")
         #// 
         #// Filters the API root index data.
         #// 
@@ -873,7 +913,7 @@ class WP_REST_Server():
         #// 
         #// @param WP_REST_Response $response Response data.
         #//
-        return apply_filters("rest_index", response)
+        return apply_filters("rest_index", response_)
     # end def get_index
     #// 
     #// Retrieves the index for a namespace.
@@ -884,18 +924,19 @@ class WP_REST_Server():
     #// @return WP_REST_Response|WP_Error WP_REST_Response instance if the index was found,
     #// WP_Error if the namespace isn't set.
     #//
-    def get_namespace_index(self, request=None):
+    def get_namespace_index(self, request_=None):
         
-        namespace = request["namespace"]
-        if (not (php_isset(lambda : self.namespaces[namespace]))):
+        
+        namespace_ = request_["namespace"]
+        if (not (php_isset(lambda : self.namespaces[namespace_]))):
             return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_namespace", __("The specified namespace could not be found."), Array({"status": 404})))
         # end if
-        routes = self.namespaces[namespace]
-        endpoints = php_array_intersect_key(self.get_routes(), routes)
-        data = Array({"namespace": namespace, "routes": self.get_data_for_routes(endpoints, request["context"])})
-        response = rest_ensure_response(data)
+        routes_ = self.namespaces[namespace_]
+        endpoints_ = php_array_intersect_key(self.get_routes(), routes_)
+        data_ = Array({"namespace": namespace_, "routes": self.get_data_for_routes(endpoints_, request_["context"])})
+        response_ = rest_ensure_response(data_)
         #// Link to the root index.
-        response.add_link("up", rest_url("/"))
+        response_.add_link("up", rest_url("/"))
         #// 
         #// Filters the namespace index data.
         #// 
@@ -907,7 +948,7 @@ class WP_REST_Server():
         #// @param WP_REST_Response $response Response data.
         #// @param WP_REST_Request  $request  Request data. The namespace is passed as the 'namespace' parameter.
         #//
-        return apply_filters("rest_namespace_index", response, request)
+        return apply_filters("rest_namespace_index", response_, request_)
     # end def get_namespace_index
     #// 
     #// Retrieves the publicly-visible data for routes.
@@ -918,13 +959,14 @@ class WP_REST_Server():
     #// @param string $context Optional. Context for data. Accepts 'view' or 'help'. Default 'view'.
     #// @return array[] Route data to expose in indexes, keyed by route.
     #//
-    def get_data_for_routes(self, routes=None, context="view"):
+    def get_data_for_routes(self, routes_=None, context_="view"):
         
-        available = Array()
+        
+        available_ = Array()
         #// Find the available routes.
-        for route,callbacks in routes:
-            data = self.get_data_for_route(route, callbacks, context)
-            if php_empty(lambda : data):
+        for route_,callbacks_ in routes_:
+            data_ = self.get_data_for_route(route_, callbacks_, context_)
+            if php_empty(lambda : data_):
                 continue
             # end if
             #// 
@@ -934,7 +976,7 @@ class WP_REST_Server():
             #// 
             #// @param WP_REST_Request $request Request data. The namespace is passed as the 'namespace' parameter.
             #//
-            available[route] = apply_filters("rest_endpoints_description", data)
+            available_[route_] = apply_filters("rest_endpoints_description", data_)
         # end for
         #// 
         #// Filters the publicly-visible data for routes.
@@ -948,7 +990,7 @@ class WP_REST_Server():
         #// @param array[] $available Route data to expose in indexes, keyed by route.
         #// @param array   $routes    Internal route data as an associative array.
         #//
-        return apply_filters("rest_route_data", available, routes)
+        return apply_filters("rest_route_data", available_, routes_)
     # end def get_data_for_routes
     #// 
     #// Retrieves publicly-visible data for the route.
@@ -960,59 +1002,60 @@ class WP_REST_Server():
     #// @param string $context   Optional. Context for the data. Accepts 'view' or 'help'. Default 'view'.
     #// @return array|null Data for the route, or null if no publicly-visible data.
     #//
-    def get_data_for_route(self, route=None, callbacks=None, context="view"):
+    def get_data_for_route(self, route_=None, callbacks_=None, context_="view"):
         
-        data = Array({"namespace": "", "methods": Array(), "endpoints": Array()})
-        if (php_isset(lambda : self.route_options[route])):
-            options = self.route_options[route]
-            if (php_isset(lambda : options["namespace"])):
-                data["namespace"] = options["namespace"]
+        
+        data_ = Array({"namespace": "", "methods": Array(), "endpoints": Array()})
+        if (php_isset(lambda : self.route_options[route_])):
+            options_ = self.route_options[route_]
+            if (php_isset(lambda : options_["namespace"])):
+                data_["namespace"] = options_["namespace"]
             # end if
-            if (php_isset(lambda : options["schema"])) and "help" == context:
-                data["schema"] = php_call_user_func(options["schema"])
+            if (php_isset(lambda : options_["schema"])) and "help" == context_:
+                data_["schema"] = php_call_user_func(options_["schema"])
             # end if
         # end if
-        route = php_preg_replace("#\\(\\?P<(\\w+?)>.*?\\)#", "{$1}", route)
-        for callback in callbacks:
+        route_ = php_preg_replace("#\\(\\?P<(\\w+?)>.*?\\)#", "{$1}", route_)
+        for callback_ in callbacks_:
             #// Skip to the next route if any callback is hidden.
-            if php_empty(lambda : callback["show_in_index"]):
+            if php_empty(lambda : callback_["show_in_index"]):
                 continue
             # end if
-            data["methods"] = php_array_merge(data["methods"], php_array_keys(callback["methods"]))
-            endpoint_data = Array({"methods": php_array_keys(callback["methods"])})
-            if (php_isset(lambda : callback["args"])):
-                endpoint_data["args"] = Array()
-                for key,opts in callback["args"]:
-                    arg_data = Array({"required": (not php_empty(lambda : opts["required"]))})
-                    if (php_isset(lambda : opts["default"])):
-                        arg_data["default"] = opts["default"]
+            data_["methods"] = php_array_merge(data_["methods"], php_array_keys(callback_["methods"]))
+            endpoint_data_ = Array({"methods": php_array_keys(callback_["methods"])})
+            if (php_isset(lambda : callback_["args"])):
+                endpoint_data_["args"] = Array()
+                for key_,opts_ in callback_["args"]:
+                    arg_data_ = Array({"required": (not php_empty(lambda : opts_["required"]))})
+                    if (php_isset(lambda : opts_["default"])):
+                        arg_data_["default"] = opts_["default"]
                     # end if
-                    if (php_isset(lambda : opts["enum"])):
-                        arg_data["enum"] = opts["enum"]
+                    if (php_isset(lambda : opts_["enum"])):
+                        arg_data_["enum"] = opts_["enum"]
                     # end if
-                    if (php_isset(lambda : opts["description"])):
-                        arg_data["description"] = opts["description"]
+                    if (php_isset(lambda : opts_["description"])):
+                        arg_data_["description"] = opts_["description"]
                     # end if
-                    if (php_isset(lambda : opts["type"])):
-                        arg_data["type"] = opts["type"]
+                    if (php_isset(lambda : opts_["type"])):
+                        arg_data_["type"] = opts_["type"]
                     # end if
-                    if (php_isset(lambda : opts["items"])):
-                        arg_data["items"] = opts["items"]
+                    if (php_isset(lambda : opts_["items"])):
+                        arg_data_["items"] = opts_["items"]
                     # end if
-                    endpoint_data["args"][key] = arg_data
+                    endpoint_data_["args"][key_] = arg_data_
                 # end for
             # end if
-            data["endpoints"][-1] = endpoint_data
+            data_["endpoints"][-1] = endpoint_data_
             #// For non-variable routes, generate links.
-            if php_strpos(route, "{") == False:
-                data["_links"] = Array({"self": Array(Array({"href": rest_url(route)}))})
+            if php_strpos(route_, "{") == False:
+                data_["_links"] = Array({"self": Array(Array({"href": rest_url(route_)}))})
             # end if
         # end for
-        if php_empty(lambda : data["methods"]):
+        if php_empty(lambda : data_["methods"]):
             #// No methods supported, hide the route.
             return None
         # end if
-        return data
+        return data_
     # end def get_data_for_route
     #// 
     #// Sends an HTTP status code.
@@ -1021,9 +1064,10 @@ class WP_REST_Server():
     #// 
     #// @param int $code HTTP status.
     #//
-    def set_status(self, code=None):
+    def set_status(self, code_=None):
         
-        status_header(code)
+        
+        status_header(code_)
     # end def set_status
     #// 
     #// Sends an HTTP header.
@@ -1033,7 +1077,8 @@ class WP_REST_Server():
     #// @param string $key Header key.
     #// @param string $value Header value.
     #//
-    def send_header(self, key=None, value=None):
+    def send_header(self, key_=None, value_=None):
+        
         
         #// 
         #// Sanitize as per RFC2616 (Section 4.2):
@@ -1042,8 +1087,8 @@ class WP_REST_Server():
         #// single SP before interpreting the field value or forwarding the
         #// message downstream.
         #//
-        value = php_preg_replace("/\\s+/", " ", value)
-        php_header(php_sprintf("%s: %s", key, value))
+        value_ = php_preg_replace("/\\s+/", " ", value_)
+        php_header(php_sprintf("%s: %s", key_, value_))
     # end def send_header
     #// 
     #// Sends multiple HTTP headers.
@@ -1052,10 +1097,11 @@ class WP_REST_Server():
     #// 
     #// @param array $headers Map of header name to header value.
     #//
-    def send_headers(self, headers=None):
+    def send_headers(self, headers_=None):
         
-        for key,value in headers:
-            self.send_header(key, value)
+        
+        for key_,value_ in headers_:
+            self.send_header(key_, value_)
         # end for
     # end def send_headers
     #// 
@@ -1065,9 +1111,10 @@ class WP_REST_Server():
     #// 
     #// @param string $key Header key.
     #//
-    def remove_header(self, key=None):
+    def remove_header(self, key_=None):
         
-        php_header_remove(key)
+        
+        php_header_remove(key_)
     # end def remove_header
     #// 
     #// Retrieves the raw request entity (body).
@@ -1081,16 +1128,17 @@ class WP_REST_Server():
     @classmethod
     def get_raw_data(self):
         
-        global HTTP_RAW_POST_DATA
-        php_check_if_defined("HTTP_RAW_POST_DATA")
+        
+        global HTTP_RAW_POST_DATA_
+        php_check_if_defined("HTTP_RAW_POST_DATA_")
         #// 
         #// A bug in PHP < 5.2.2 makes $HTTP_RAW_POST_DATA not set by default,
         #// but we can do it ourself.
         #//
-        if (not (php_isset(lambda : HTTP_RAW_POST_DATA))):
-            HTTP_RAW_POST_DATA = php_file_get_contents("php://input")
+        if (not (php_isset(lambda : HTTP_RAW_POST_DATA_))):
+            HTTP_RAW_POST_DATA_ = php_file_get_contents("php://input")
         # end if
-        return HTTP_RAW_POST_DATA
+        return HTTP_RAW_POST_DATA_
     # end def get_raw_data
     #// 
     #// Extracts headers from a PHP-style $_SERVER array.
@@ -1100,24 +1148,25 @@ class WP_REST_Server():
     #// @param array $server Associative array similar to `$_SERVER`.
     #// @return array Headers extracted from the input.
     #//
-    def get_headers(self, server=None):
+    def get_headers(self, server_=None):
         
-        headers = Array()
+        
+        headers_ = Array()
         #// CONTENT_* headers are not prefixed with HTTP_.
-        additional = Array({"CONTENT_LENGTH": True, "CONTENT_MD5": True, "CONTENT_TYPE": True})
-        for key,value in server:
-            if php_strpos(key, "HTTP_") == 0:
-                headers[php_substr(key, 5)] = value
-            elif "REDIRECT_HTTP_AUTHORIZATION" == key and php_empty(lambda : server["HTTP_AUTHORIZATION"]):
+        additional_ = Array({"CONTENT_LENGTH": True, "CONTENT_MD5": True, "CONTENT_TYPE": True})
+        for key_,value_ in server_:
+            if php_strpos(key_, "HTTP_") == 0:
+                headers_[php_substr(key_, 5)] = value_
+            elif "REDIRECT_HTTP_AUTHORIZATION" == key_ and php_empty(lambda : server_["HTTP_AUTHORIZATION"]):
                 #// 
                 #// In some server configurations, the authorization header is passed in this alternate location.
                 #// Since it would not be passed in in both places we do not check for both headers and resolve.
                 #//
-                headers["AUTHORIZATION"] = value
-            elif (php_isset(lambda : additional[key])):
-                headers[key] = value
+                headers_["AUTHORIZATION"] = value_
+            elif (php_isset(lambda : additional_[key_])):
+                headers_[key_] = value_
             # end if
         # end for
-        return headers
+        return headers_
     # end def get_headers
 # end class WP_REST_Server

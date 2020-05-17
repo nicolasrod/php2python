@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -29,14 +24,15 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return WP_Styles WP_Styles instance.
 #//
-def wp_styles(*args_):
+def wp_styles(*_args_):
     
-    global wp_styles
-    php_check_if_defined("wp_styles")
-    if (not type(wp_styles).__name__ == "WP_Styles"):
-        wp_styles = php_new_class("WP_Styles", lambda : WP_Styles())
+    
+    global wp_styles_
+    php_check_if_defined("wp_styles_")
+    if (not type(wp_styles_).__name__ == "WP_Styles"):
+        wp_styles_ = php_new_class("WP_Styles", lambda : WP_Styles())
     # end if
-    return wp_styles
+    return wp_styles_
 # end def wp_styles
 #// 
 #// Display styles that are in the $handles queue.
@@ -52,13 +48,16 @@ def wp_styles(*args_):
 #// @param string|bool|array $handles Styles to be printed. Default 'false'.
 #// @return string[] On success, an array of handles of processed WP_Dependencies items; otherwise, an empty array.
 #//
-def wp_print_styles(handles=False, *args_):
-    
-    if "" == handles:
-        #// For 'wp_head'.
-        handles = False
+def wp_print_styles(handles_=None, *_args_):
+    if handles_ is None:
+        handles_ = False
     # end if
-    if (not handles):
+    
+    if "" == handles_:
+        #// For 'wp_head'.
+        handles_ = False
+    # end if
+    if (not handles_):
         #// 
         #// Fires before styles in the $handles queue are printed.
         #// 
@@ -67,15 +66,15 @@ def wp_print_styles(handles=False, *args_):
         do_action("wp_print_styles")
     # end if
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    global wp_styles
-    php_check_if_defined("wp_styles")
-    if (not type(wp_styles).__name__ == "WP_Styles"):
-        if (not handles):
+    global wp_styles_
+    php_check_if_defined("wp_styles_")
+    if (not type(wp_styles_).__name__ == "WP_Styles"):
+        if (not handles_):
             return Array()
             pass
         # end if
     # end if
-    return wp_styles().do_items(handles)
+    return wp_styles().do_items(handles_)
 # end def wp_print_styles
 #// 
 #// Add extra CSS styles to a registered stylesheet.
@@ -93,14 +92,15 @@ def wp_print_styles(handles=False, *args_):
 #// @param string $data   String containing the CSS styles to be added.
 #// @return bool True on success, false on failure.
 #//
-def wp_add_inline_style(handle=None, data=None, *args_):
+def wp_add_inline_style(handle_=None, data_=None, *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    if False != php_stripos(data, "</style>"):
+    if False != php_stripos(data_, "</style>"):
         _doing_it_wrong(__FUNCTION__, php_sprintf(__("Do not pass %1$s tags to %2$s."), "<code>&lt;style&gt;</code>", "<code>wp_add_inline_style()</code>"), "3.7.0")
-        data = php_trim(php_preg_replace("#<style[^>]*>(.*)</style>#is", "$1", data))
+        data_ = php_trim(php_preg_replace("#<style[^>]*>(.*)</style>#is", "$1", data_))
     # end if
-    return wp_styles().add_inline_style(handle, data)
+    return wp_styles().add_inline_style(handle_, data_)
 # end def wp_add_inline_style
 #// 
 #// Register a CSS stylesheet.
@@ -124,10 +124,16 @@ def wp_add_inline_style(handle=None, data=None, *args_):
 #// '(orientation: portrait)' and '(max-width: 640px)'.
 #// @return bool Whether the style has been registered. True on success, false on failure.
 #//
-def wp_register_style(handle=None, src=None, deps=Array(), ver=False, media="all", *args_):
+def wp_register_style(handle_=None, src_=None, deps_=None, ver_=None, media_="all", *_args_):
+    if deps_ is None:
+        deps_ = Array()
+    # end if
+    if ver_ is None:
+        ver_ = False
+    # end if
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    return wp_styles().add(handle, src, deps, ver, media)
+    return wp_styles().add(handle_, src_, deps_, ver_, media_)
 # end def wp_register_style
 #// 
 #// Remove a registered stylesheet.
@@ -138,10 +144,11 @@ def wp_register_style(handle=None, src=None, deps=Array(), ver=False, media="all
 #// 
 #// @param string $handle Name of the stylesheet to be removed.
 #//
-def wp_deregister_style(handle=None, *args_):
+def wp_deregister_style(handle_=None, *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    wp_styles().remove(handle)
+    wp_styles().remove(handle_)
 # end def wp_deregister_style
 #// 
 #// Enqueue a CSS stylesheet.
@@ -166,15 +173,21 @@ def wp_deregister_style(handle=None, *args_):
 #// Default 'all'. Accepts media types like 'all', 'print' and 'screen', or media queries like
 #// '(orientation: portrait)' and '(max-width: 640px)'.
 #//
-def wp_enqueue_style(handle=None, src="", deps=Array(), ver=False, media="all", *args_):
+def wp_enqueue_style(handle_=None, src_="", deps_=None, ver_=None, media_="all", *_args_):
+    if deps_ is None:
+        deps_ = Array()
+    # end if
+    if ver_ is None:
+        ver_ = False
+    # end if
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    wp_styles = wp_styles()
-    if src:
-        _handle = php_explode("?", handle)
-        wp_styles.add(_handle[0], src, deps, ver, media)
+    wp_styles_ = wp_styles()
+    if src_:
+        _handle_ = php_explode("?", handle_)
+        wp_styles_.add(_handle_[0], src_, deps_, ver_, media_)
     # end if
-    wp_styles.enqueue(handle)
+    wp_styles_.enqueue(handle_)
 # end def wp_enqueue_style
 #// 
 #// Remove a previously enqueued CSS stylesheet.
@@ -185,10 +198,11 @@ def wp_enqueue_style(handle=None, src="", deps=Array(), ver=False, media="all", 
 #// 
 #// @param string $handle Name of the stylesheet to be removed.
 #//
-def wp_dequeue_style(handle=None, *args_):
+def wp_dequeue_style(handle_=None, *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    wp_styles().dequeue(handle)
+    wp_styles().dequeue(handle_)
 # end def wp_dequeue_style
 #// 
 #// Check whether a CSS stylesheet has been added to the queue.
@@ -200,10 +214,11 @@ def wp_dequeue_style(handle=None, *args_):
 #// Accepts 'enqueued', 'registered', 'queue', 'to_do', and 'done'.
 #// @return bool Whether style is queued.
 #//
-def wp_style_is(handle=None, list="enqueued", *args_):
+def wp_style_is(handle_=None, list_="enqueued", *_args_):
+    
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    return php_bool(wp_styles().query(handle, list))
+    return php_bool(wp_styles().query(handle_, list_))
 # end def wp_style_is
 #// 
 #// Add metadata to a CSS stylesheet.
@@ -227,7 +242,8 @@ def wp_style_is(handle=None, list="enqueued", *args_):
 #// @param mixed  $value  String containing the CSS data to be added.
 #// @return bool True on success, false on failure.
 #//
-def wp_style_add_data(handle=None, key=None, value=None, *args_):
+def wp_style_add_data(handle_=None, key_=None, value_=None, *_args_):
     
-    return wp_styles().add_data(handle, key, value)
+    
+    return wp_styles().add_data(handle_, key_, value_)
 # end def wp_style_add_data

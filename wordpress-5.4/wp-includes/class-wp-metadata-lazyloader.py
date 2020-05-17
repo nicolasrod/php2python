@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -41,7 +36,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 4.5.0
 #//
 class WP_Metadata_Lazyloader():
+    #// 
+    #// Pending objects queue.
+    #// 
+    #// @since 4.5.0
+    #// @var array
+    #//
     pending_objects = Array()
+    #// 
+    #// Settings for supported object types.
+    #// 
+    #// @since 4.5.0
+    #// @var array
+    #//
     settings = Array()
     #// 
     #// Constructor.
@@ -49,6 +56,7 @@ class WP_Metadata_Lazyloader():
     #// @since 4.5.0
     #//
     def __init__(self):
+        
         
         self.settings = Array({"term": Array({"filter": "get_term_metadata", "callback": Array(self, "lazyload_term_meta")})}, {"comment": Array({"filter": "get_comment_metadata", "callback": Array(self, "lazyload_comment_meta")})})
     # end def __init__
@@ -61,22 +69,23 @@ class WP_Metadata_Lazyloader():
     #// @param array  $object_ids  Array of object IDs.
     #// @return bool|WP_Error True on success, WP_Error on failure.
     #//
-    def queue_objects(self, object_type=None, object_ids=None):
+    def queue_objects(self, object_type_=None, object_ids_=None):
         
-        if (not (php_isset(lambda : self.settings[object_type]))):
+        
+        if (not (php_isset(lambda : self.settings[object_type_]))):
             return php_new_class("WP_Error", lambda : WP_Error("invalid_object_type", __("Invalid object type.")))
         # end if
-        type_settings = self.settings[object_type]
-        if (not (php_isset(lambda : self.pending_objects[object_type]))):
-            self.pending_objects[object_type] = Array()
+        type_settings_ = self.settings[object_type_]
+        if (not (php_isset(lambda : self.pending_objects[object_type_]))):
+            self.pending_objects[object_type_] = Array()
         # end if
-        for object_id in object_ids:
+        for object_id_ in object_ids_:
             #// Keyed by ID for faster lookup.
-            if (not (php_isset(lambda : self.pending_objects[object_type][object_id]))):
-                self.pending_objects[object_type][object_id] = 1
+            if (not (php_isset(lambda : self.pending_objects[object_type_][object_id_]))):
+                self.pending_objects[object_type_][object_id_] = 1
             # end if
         # end for
-        add_filter(type_settings["filter"], type_settings["callback"])
+        add_filter(type_settings_["filter"], type_settings_["callback"])
         #// 
         #// Fires after objects are added to the metadata lazy-load queue.
         #// 
@@ -86,7 +95,7 @@ class WP_Metadata_Lazyloader():
         #// @param string                 $object_type Type of object being queued.
         #// @param WP_Metadata_Lazyloader $lazyloader  The lazy-loader object.
         #//
-        do_action("metadata_lazyloader_queued_objects", object_ids, object_type, self)
+        do_action("metadata_lazyloader_queued_objects", object_ids_, object_type_, self)
     # end def queue_objects
     #// 
     #// Resets lazy-load queue for a given object type.
@@ -96,14 +105,15 @@ class WP_Metadata_Lazyloader():
     #// @param string $object_type Object type. Accepts 'comment' or 'term'.
     #// @return bool|WP_Error True on success, WP_Error on failure.
     #//
-    def reset_queue(self, object_type=None):
+    def reset_queue(self, object_type_=None):
         
-        if (not (php_isset(lambda : self.settings[object_type]))):
+        
+        if (not (php_isset(lambda : self.settings[object_type_]))):
             return php_new_class("WP_Error", lambda : WP_Error("invalid_object_type", __("Invalid object type.")))
         # end if
-        type_settings = self.settings[object_type]
-        self.pending_objects[object_type] = Array()
-        remove_filter(type_settings["filter"], type_settings["callback"])
+        type_settings_ = self.settings[object_type_]
+        self.pending_objects[object_type_] = Array()
+        remove_filter(type_settings_["filter"], type_settings_["callback"])
     # end def reset_queue
     #// 
     #// Lazy-loads term meta for queued terms.
@@ -117,14 +127,15 @@ class WP_Metadata_Lazyloader():
     #// @return mixed In order not to short-circuit `get_metadata()`. Generally, this is `null`, but it could be
     #// another value if filtered by a plugin.
     #//
-    def lazyload_term_meta(self, check=None):
+    def lazyload_term_meta(self, check_=None):
+        
         
         if (not php_empty(lambda : self.pending_objects["term"])):
             update_termmeta_cache(php_array_keys(self.pending_objects["term"]))
             #// No need to run again for this set of terms.
             self.reset_queue("term")
         # end if
-        return check
+        return check_
     # end def lazyload_term_meta
     #// 
     #// Lazy-loads comment meta for queued comments.
@@ -137,13 +148,14 @@ class WP_Metadata_Lazyloader():
     #// @param mixed $check The `$check` param passed from the {@see 'get_comment_metadata'} hook.
     #// @return mixed The original value of `$check`, so as not to short-circuit `get_comment_metadata()`.
     #//
-    def lazyload_comment_meta(self, check=None):
+    def lazyload_comment_meta(self, check_=None):
+        
         
         if (not php_empty(lambda : self.pending_objects["comment"])):
             update_meta_cache("comment", php_array_keys(self.pending_objects["comment"]))
             #// No need to run again for this set of comments.
             self.reset_queue("comment")
         # end if
-        return check
+        return check_
     # end def lazyload_comment_meta
 # end class WP_Metadata_Lazyloader

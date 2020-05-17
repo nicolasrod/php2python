@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -50,10 +45,61 @@ php_include_file(ABSPATH + "wp-admin/includes/class-wp-ajax-upgrader-skin.php", 
 #// @since 2.8.0
 #//
 class WP_Upgrader():
+    #// 
+    #// The error/notification strings used to update the user on the progress.
+    #// 
+    #// @since 2.8.0
+    #// @var array $strings
+    #//
     strings = Array()
+    #// 
+    #// The upgrader skin being used.
+    #// 
+    #// @since 2.8.0
+    #// @var Automatic_Upgrader_Skin|WP_Upgrader_Skin $skin
+    #//
     skin = None
+    #// 
+    #// The result of the installation.
+    #// 
+    #// This is set by WP_Upgrader::install_package(), only when the package is installed
+    #// successfully. It will then be an array, unless a WP_Error is returned by the
+    #// {@see 'upgrader_post_install'} filter. In that case, the WP_Error will be assigned to
+    #// it.
+    #// 
+    #// @since 2.8.0
+    #// 
+    #// @var array|WP_Error $result {
+    #// @type string $source             The full path to the source the files were installed from.
+    #// @type string $source_files       List of all the files in the source directory.
+    #// @type string $destination        The full path to the installation destination folder.
+    #// @type string $destination_name   The name of the destination folder, or empty if `$destination`
+    #// and `$local_destination` are the same.
+    #// @type string $local_destination  The full local path to the destination folder. This is usually
+    #// the same as `$destination`.
+    #// @type string $remote_destination The full remote path to the destination folder
+    #// (i.e., from `$wp_filesystem`).
+    #// @type bool   $clear_destination  Whether the destination folder was cleared.
+    #// }
+    #//
     result = Array()
+    #// 
+    #// The total number of updates being performed.
+    #// 
+    #// Set by the bulk update methods.
+    #// 
+    #// @since 3.0.0
+    #// @var int $update_count
+    #//
     update_count = 0
+    #// 
+    #// The current update if multiple updates are being performed.
+    #// 
+    #// Used by the bulk update methods, and incremented for each update.
+    #// 
+    #// @since 3.0.0
+    #// @var int
+    #//
     update_current = 0
     #// 
     #// Construct the upgrader with a skin.
@@ -63,12 +109,13 @@ class WP_Upgrader():
     #// @param WP_Upgrader_Skin $skin The upgrader skin to use. Default is a WP_Upgrader_Skin.
     #// instance.
     #//
-    def __init__(self, skin=None):
+    def __init__(self, skin_=None):
         
-        if None == skin:
+        
+        if None == skin_:
             self.skin = php_new_class("WP_Upgrader_Skin", lambda : WP_Upgrader_Skin())
         else:
-            self.skin = skin
+            self.skin = skin_
         # end if
     # end def __init__
     #// 
@@ -81,6 +128,7 @@ class WP_Upgrader():
     #//
     def init(self):
         
+        
         self.skin.set_upgrader(self)
         self.generic_strings()
     # end def init
@@ -90,6 +138,7 @@ class WP_Upgrader():
     #// @since 2.8.0
     #//
     def generic_strings(self):
+        
         
         self.strings["bad_request"] = __("Invalid data provided.")
         self.strings["fs_unavailable"] = __("Could not access filesystem.")
@@ -124,58 +173,64 @@ class WP_Upgrader():
     #// Default false.
     #// @return bool|WP_Error True if able to connect, false or a WP_Error otherwise.
     #//
-    def fs_connect(self, directories=Array(), allow_relaxed_file_ownership=False):
+    def fs_connect(self, directories_=None, allow_relaxed_file_ownership_=None):
+        if directories_ is None:
+            directories_ = Array()
+        # end if
+        if allow_relaxed_file_ownership_ is None:
+            allow_relaxed_file_ownership_ = False
+        # end if
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
-        credentials = self.skin.request_filesystem_credentials(False, directories[0], allow_relaxed_file_ownership)
-        if False == credentials:
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
+        credentials_ = self.skin.request_filesystem_credentials(False, directories_[0], allow_relaxed_file_ownership_)
+        if False == credentials_:
             return False
         # end if
-        if (not WP_Filesystem(credentials, directories[0], allow_relaxed_file_ownership)):
-            error = True
-            if php_is_object(wp_filesystem) and wp_filesystem.errors.has_errors():
-                error = wp_filesystem.errors
+        if (not WP_Filesystem(credentials_, directories_[0], allow_relaxed_file_ownership_)):
+            error_ = True
+            if php_is_object(wp_filesystem_) and wp_filesystem_.errors.has_errors():
+                error_ = wp_filesystem_.errors
             # end if
             #// Failed to connect. Error and request again.
-            self.skin.request_filesystem_credentials(error, directories[0], allow_relaxed_file_ownership)
+            self.skin.request_filesystem_credentials(error_, directories_[0], allow_relaxed_file_ownership_)
             return False
         # end if
-        if (not php_is_object(wp_filesystem)):
+        if (not php_is_object(wp_filesystem_)):
             return php_new_class("WP_Error", lambda : WP_Error("fs_unavailable", self.strings["fs_unavailable"]))
         # end if
-        if is_wp_error(wp_filesystem.errors) and wp_filesystem.errors.has_errors():
-            return php_new_class("WP_Error", lambda : WP_Error("fs_error", self.strings["fs_error"], wp_filesystem.errors))
+        if is_wp_error(wp_filesystem_.errors) and wp_filesystem_.errors.has_errors():
+            return php_new_class("WP_Error", lambda : WP_Error("fs_error", self.strings["fs_error"], wp_filesystem_.errors))
         # end if
-        for dir in directories:
-            for case in Switch(dir):
+        for dir_ in directories_:
+            for case in Switch(dir_):
                 if case(ABSPATH):
-                    if (not wp_filesystem.abspath()):
+                    if (not wp_filesystem_.abspath()):
                         return php_new_class("WP_Error", lambda : WP_Error("fs_no_root_dir", self.strings["fs_no_root_dir"]))
                     # end if
                     break
                 # end if
                 if case(WP_CONTENT_DIR):
-                    if (not wp_filesystem.wp_content_dir()):
+                    if (not wp_filesystem_.wp_content_dir()):
                         return php_new_class("WP_Error", lambda : WP_Error("fs_no_content_dir", self.strings["fs_no_content_dir"]))
                     # end if
                     break
                 # end if
                 if case(WP_PLUGIN_DIR):
-                    if (not wp_filesystem.wp_plugins_dir()):
+                    if (not wp_filesystem_.wp_plugins_dir()):
                         return php_new_class("WP_Error", lambda : WP_Error("fs_no_plugins_dir", self.strings["fs_no_plugins_dir"]))
                     # end if
                     break
                 # end if
                 if case(get_theme_root()):
-                    if (not wp_filesystem.wp_themes_dir()):
+                    if (not wp_filesystem_.wp_themes_dir()):
                         return php_new_class("WP_Error", lambda : WP_Error("fs_no_themes_dir", self.strings["fs_no_themes_dir"]))
                     # end if
                     break
                 # end if
                 if case():
-                    if (not wp_filesystem.find_folder(dir)):
-                        return php_new_class("WP_Error", lambda : WP_Error("fs_no_folder", php_sprintf(self.strings["fs_no_folder"], esc_html(php_basename(dir)))))
+                    if (not wp_filesystem_.find_folder(dir_)):
+                        return php_new_class("WP_Error", lambda : WP_Error("fs_no_folder", php_sprintf(self.strings["fs_no_folder"], esc_html(php_basename(dir_)))))
                     # end if
                     break
                 # end if
@@ -193,7 +248,10 @@ class WP_Upgrader():
     #// @param bool   $check_signatures Whether to validate file signatures. Default false.
     #// @return string|WP_Error The full path to the downloaded package file, or a WP_Error object.
     #//
-    def download_package(self, package=None, check_signatures=False):
+    def download_package(self, package_=None, check_signatures_=None):
+        if check_signatures_ is None:
+            check_signatures_ = False
+        # end if
         
         #// 
         #// Filters whether to return the package.
@@ -205,24 +263,24 @@ class WP_Upgrader():
         #// @param string      $package The package file name.
         #// @param WP_Upgrader $this    The WP_Upgrader instance.
         #//
-        reply = apply_filters("upgrader_pre_download", False, package, self)
-        if False != reply:
-            return reply
+        reply_ = apply_filters("upgrader_pre_download", False, package_, self)
+        if False != reply_:
+            return reply_
         # end if
-        if (not php_preg_match("!^(http|https|ftp)://!i", package)) and php_file_exists(package):
+        if (not php_preg_match("!^(http|https|ftp)://!i", package_)) and php_file_exists(package_):
             #// Local file or remote?
-            return package
+            return package_
             pass
         # end if
-        if php_empty(lambda : package):
+        if php_empty(lambda : package_):
             return php_new_class("WP_Error", lambda : WP_Error("no_package", self.strings["no_package"]))
         # end if
-        self.skin.feedback("downloading_package", package)
-        download_file = download_url(package, 300, check_signatures)
-        if is_wp_error(download_file) and (not download_file.get_error_data("softfail-filename")):
-            return php_new_class("WP_Error", lambda : WP_Error("download_failed", self.strings["download_failed"], download_file.get_error_message()))
+        self.skin.feedback("downloading_package", package_)
+        download_file_ = download_url(package_, 300, check_signatures_)
+        if is_wp_error(download_file_) and (not download_file_.get_error_data("softfail-filename")):
+            return php_new_class("WP_Error", lambda : WP_Error("download_failed", self.strings["download_failed"], download_file_.get_error_message()))
         # end if
-        return download_file
+        return download_file_
     # end def download_package
     #// 
     #// Unpack a compressed package file.
@@ -236,39 +294,42 @@ class WP_Upgrader():
     #// to unpack it. Default true.
     #// @return string|WP_Error The path to the unpacked contents, or a WP_Error on failure.
     #//
-    def unpack_package(self, package=None, delete_package=True):
+    def unpack_package(self, package_=None, delete_package_=None):
+        if delete_package_ is None:
+            delete_package_ = True
+        # end if
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
         self.skin.feedback("unpack_package")
-        upgrade_folder = wp_filesystem.wp_content_dir() + "upgrade/"
+        upgrade_folder_ = wp_filesystem_.wp_content_dir() + "upgrade/"
         #// Clean up contents of upgrade directory beforehand.
-        upgrade_files = wp_filesystem.dirlist(upgrade_folder)
-        if (not php_empty(lambda : upgrade_files)):
-            for file in upgrade_files:
-                wp_filesystem.delete(upgrade_folder + file["name"], True)
+        upgrade_files_ = wp_filesystem_.dirlist(upgrade_folder_)
+        if (not php_empty(lambda : upgrade_files_)):
+            for file_ in upgrade_files_:
+                wp_filesystem_.delete(upgrade_folder_ + file_["name"], True)
             # end for
         # end if
         #// We need a working directory - strip off any .tmp or .zip suffixes.
-        working_dir = upgrade_folder + php_basename(php_basename(package, ".tmp"), ".zip")
+        working_dir_ = upgrade_folder_ + php_basename(php_basename(package_, ".tmp"), ".zip")
         #// Clean up working directory.
-        if wp_filesystem.is_dir(working_dir):
-            wp_filesystem.delete(working_dir, True)
+        if wp_filesystem_.is_dir(working_dir_):
+            wp_filesystem_.delete(working_dir_, True)
         # end if
         #// Unzip package to working directory.
-        result = unzip_file(package, working_dir)
+        result_ = unzip_file(package_, working_dir_)
         #// Once extracted, delete the package if required.
-        if delete_package:
-            unlink(package)
+        if delete_package_:
+            unlink(package_)
         # end if
-        if is_wp_error(result):
-            wp_filesystem.delete(working_dir, True)
-            if "incompatible_archive" == result.get_error_code():
-                return php_new_class("WP_Error", lambda : WP_Error("incompatible_archive", self.strings["incompatible_archive"], result.get_error_data()))
+        if is_wp_error(result_):
+            wp_filesystem_.delete(working_dir_, True)
+            if "incompatible_archive" == result_.get_error_code():
+                return php_new_class("WP_Error", lambda : WP_Error("incompatible_archive", self.strings["incompatible_archive"], result_.get_error_data()))
             # end if
-            return result
+            return result_
         # end if
-        return working_dir
+        return working_dir_
     # end def unpack_package
     #// 
     #// Flatten the results of WP_Filesystem::dirlist() for iterating over.
@@ -280,19 +341,20 @@ class WP_Upgrader():
     #// @param  string $path          Relative path to prepend to child nodes. Optional.
     #// @return array A flattened array of the $nested_files specified.
     #//
-    def flatten_dirlist(self, nested_files=None, path=""):
+    def flatten_dirlist(self, nested_files_=None, path_=""):
         
-        files = Array()
-        for name,details in nested_files:
-            files[path + name] = details
+        
+        files_ = Array()
+        for name_,details_ in nested_files_:
+            files_[path_ + name_] = details_
             #// Append children recursively.
-            if (not php_empty(lambda : details["files"])):
-                children = self.flatten_dirlist(details["files"], path + name + "/")
+            if (not php_empty(lambda : details_["files"])):
+                children_ = self.flatten_dirlist(details_["files"], path_ + name_ + "/")
                 #// Merge keeping possible numeric keys, which array_merge() will reindex from 0..n.
-                files = files + children
+                files_ = files_ + children_
             # end if
         # end for
-        return files
+        return files_
     # end def flatten_dirlist
     #// 
     #// Clears the directory where this item is going to be installed into.
@@ -304,33 +366,34 @@ class WP_Upgrader():
     #// @param string $remote_destination The location on the remote filesystem to be cleared
     #// @return bool|WP_Error True upon success, WP_Error on failure.
     #//
-    def clear_destination(self, remote_destination=None):
+    def clear_destination(self, remote_destination_=None):
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
-        files = wp_filesystem.dirlist(remote_destination, True, True)
+        
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
+        files_ = wp_filesystem_.dirlist(remote_destination_, True, True)
         #// False indicates that the $remote_destination doesn't exist.
-        if False == files:
+        if False == files_:
             return True
         # end if
         #// Flatten the file list to iterate over.
-        files = self.flatten_dirlist(files)
+        files_ = self.flatten_dirlist(files_)
         #// Check all files are writable before attempting to clear the destination.
-        unwritable_files = Array()
+        unwritable_files_ = Array()
         #// Check writability.
-        for filename,file_details in files:
-            if (not wp_filesystem.is_writable(remote_destination + filename)):
+        for filename_,file_details_ in files_:
+            if (not wp_filesystem_.is_writable(remote_destination_ + filename_)):
                 #// Attempt to alter permissions to allow writes and try again.
-                wp_filesystem.chmod(remote_destination + filename, FS_CHMOD_DIR if "d" == file_details["type"] else FS_CHMOD_FILE)
-                if (not wp_filesystem.is_writable(remote_destination + filename)):
-                    unwritable_files[-1] = filename
+                wp_filesystem_.chmod(remote_destination_ + filename_, FS_CHMOD_DIR if "d" == file_details_["type"] else FS_CHMOD_FILE)
+                if (not wp_filesystem_.is_writable(remote_destination_ + filename_)):
+                    unwritable_files_[-1] = filename_
                 # end if
             # end if
         # end for
-        if (not php_empty(lambda : unwritable_files)):
-            return php_new_class("WP_Error", lambda : WP_Error("files_not_writable", self.strings["files_not_writable"], php_implode(", ", unwritable_files)))
+        if (not php_empty(lambda : unwritable_files_)):
+            return php_new_class("WP_Error", lambda : WP_Error("files_not_writable", self.strings["files_not_writable"], php_implode(", ", unwritable_files_)))
         # end if
-        if (not wp_filesystem.delete(remote_destination, True)):
+        if (not wp_filesystem_.delete(remote_destination_, True)):
             return php_new_class("WP_Error", lambda : WP_Error("remove_old_failed", self.strings["remove_old_failed"]))
         # end if
         return True
@@ -365,18 +428,22 @@ class WP_Upgrader():
     #// 
     #// @return array|WP_Error The result (also stored in `WP_Upgrader::$result`), or a WP_Error on failure.
     #//
-    def install_package(self, args=Array()):
+    def install_package(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        global wp_filesystem,wp_theme_directories
-        php_check_if_defined("wp_filesystem","wp_theme_directories")
-        defaults = Array({"source": "", "destination": "", "clear_destination": False, "clear_working": False, "abort_if_destination_exists": True, "hook_extra": Array()})
-        args = wp_parse_args(args, defaults)
+        global wp_filesystem_
+        global wp_theme_directories_
+        php_check_if_defined("wp_filesystem_","wp_theme_directories_")
+        defaults_ = Array({"source": "", "destination": "", "clear_destination": False, "clear_working": False, "abort_if_destination_exists": True, "hook_extra": Array()})
+        args_ = wp_parse_args(args_, defaults_)
         #// These were previously extract()'d.
-        source = args["source"]
-        destination = args["destination"]
-        clear_destination = args["clear_destination"]
+        source_ = args_["source"]
+        destination_ = args_["destination"]
+        clear_destination_ = args_["clear_destination"]
         set_time_limit(300)
-        if php_empty(lambda : source) or php_empty(lambda : destination):
+        if php_empty(lambda : source_) or php_empty(lambda : destination_):
             return php_new_class("WP_Error", lambda : WP_Error("bad_request", self.strings["bad_request"]))
         # end if
         self.skin.feedback("installing_package")
@@ -392,26 +459,26 @@ class WP_Upgrader():
         #// @param bool|WP_Error $response   Response.
         #// @param array         $hook_extra Extra arguments passed to hooked filters.
         #//
-        res = apply_filters("upgrader_pre_install", True, args["hook_extra"])
-        if is_wp_error(res):
-            return res
+        res_ = apply_filters("upgrader_pre_install", True, args_["hook_extra"])
+        if is_wp_error(res_):
+            return res_
         # end if
         #// Retain the original source and destinations.
-        remote_source = args["source"]
-        local_destination = destination
-        source_files = php_array_keys(wp_filesystem.dirlist(remote_source))
-        remote_destination = wp_filesystem.find_folder(local_destination)
+        remote_source_ = args_["source"]
+        local_destination_ = destination_
+        source_files_ = php_array_keys(wp_filesystem_.dirlist(remote_source_))
+        remote_destination_ = wp_filesystem_.find_folder(local_destination_)
         #// Locate which directory to copy to the new folder. This is based on the actual folder holding the files.
-        if 1 == php_count(source_files) and wp_filesystem.is_dir(trailingslashit(args["source"]) + source_files[0] + "/"):
+        if 1 == php_count(source_files_) and wp_filesystem_.is_dir(trailingslashit(args_["source"]) + source_files_[0] + "/"):
             #// Only one folder? Then we want its contents.
-            source = trailingslashit(args["source"]) + trailingslashit(source_files[0])
-        elif php_count(source_files) == 0:
+            source_ = trailingslashit(args_["source"]) + trailingslashit(source_files_[0])
+        elif php_count(source_files_) == 0:
             #// There are no files?
             return php_new_class("WP_Error", lambda : WP_Error("incompatible_archive_empty", self.strings["incompatible_archive"], self.strings["no_files"]))
         else:
             #// It's only a single file, the upgrader will use the folder name of this file as the destination folder.
             #// Folder name is based on zip filename.
-            source = trailingslashit(args["source"])
+            source_ = trailingslashit(args_["source"])
         # end if
         #// 
         #// Filters the source file location for the upgrade package.
@@ -424,13 +491,13 @@ class WP_Upgrader():
         #// @param WP_Upgrader $this          WP_Upgrader instance.
         #// @param array       $hook_extra    Extra arguments passed to hooked filters.
         #//
-        source = apply_filters("upgrader_source_selection", source, remote_source, self, args["hook_extra"])
-        if is_wp_error(source):
-            return source
+        source_ = apply_filters("upgrader_source_selection", source_, remote_source_, self, args_["hook_extra"])
+        if is_wp_error(source_):
+            return source_
         # end if
         #// Has the source location changed? If so, we need a new source_files list.
-        if source != remote_source:
-            source_files = php_array_keys(wp_filesystem.dirlist(source))
+        if source_ != remote_source_:
+            source_files_ = php_array_keys(wp_filesystem_.dirlist(source_))
         # end if
         #// 
         #// Protection against deleting files in any important base directories.
@@ -439,18 +506,18 @@ class WP_Upgrader():
         #// to copy the directory into the directory, whilst they pass the source
         #// as the actual files to copy.
         #//
-        protected_directories = Array(ABSPATH, WP_CONTENT_DIR, WP_PLUGIN_DIR, WP_CONTENT_DIR + "/themes")
-        if php_is_array(wp_theme_directories):
-            protected_directories = php_array_merge(protected_directories, wp_theme_directories)
+        protected_directories_ = Array(ABSPATH, WP_CONTENT_DIR, WP_PLUGIN_DIR, WP_CONTENT_DIR + "/themes")
+        if php_is_array(wp_theme_directories_):
+            protected_directories_ = php_array_merge(protected_directories_, wp_theme_directories_)
         # end if
-        if php_in_array(destination, protected_directories):
-            remote_destination = trailingslashit(remote_destination) + trailingslashit(php_basename(source))
-            destination = trailingslashit(destination) + trailingslashit(php_basename(source))
+        if php_in_array(destination_, protected_directories_):
+            remote_destination_ = trailingslashit(remote_destination_) + trailingslashit(php_basename(source_))
+            destination_ = trailingslashit(destination_) + trailingslashit(php_basename(source_))
         # end if
-        if clear_destination:
+        if clear_destination_:
             #// We're going to clear the destination if there's something there.
             self.skin.feedback("remove_old")
-            removed = self.clear_destination(remote_destination)
+            removed_ = self.clear_destination(remote_destination_)
             #// 
             #// Filters whether the upgrader cleared the destination.
             #// 
@@ -461,43 +528,43 @@ class WP_Upgrader():
             #// @param string        $remote_destination The remote package destination.
             #// @param array         $hook_extra         Extra arguments passed to hooked filters.
             #//
-            removed = apply_filters("upgrader_clear_destination", removed, local_destination, remote_destination, args["hook_extra"])
-            if is_wp_error(removed):
-                return removed
+            removed_ = apply_filters("upgrader_clear_destination", removed_, local_destination_, remote_destination_, args_["hook_extra"])
+            if is_wp_error(removed_):
+                return removed_
             # end if
-        elif args["abort_if_destination_exists"] and wp_filesystem.exists(remote_destination):
+        elif args_["abort_if_destination_exists"] and wp_filesystem_.exists(remote_destination_):
             #// If we're not clearing the destination folder and something exists there already, bail.
             #// But first check to see if there are actually any files in the folder.
-            _files = wp_filesystem.dirlist(remote_destination)
-            if (not php_empty(lambda : _files)):
-                wp_filesystem.delete(remote_source, True)
+            _files_ = wp_filesystem_.dirlist(remote_destination_)
+            if (not php_empty(lambda : _files_)):
+                wp_filesystem_.delete(remote_source_, True)
                 #// Clear out the source files.
-                return php_new_class("WP_Error", lambda : WP_Error("folder_exists", self.strings["folder_exists"], remote_destination))
+                return php_new_class("WP_Error", lambda : WP_Error("folder_exists", self.strings["folder_exists"], remote_destination_))
             # end if
         # end if
         #// Create destination if needed.
-        if (not wp_filesystem.exists(remote_destination)):
-            if (not wp_filesystem.mkdir(remote_destination, FS_CHMOD_DIR)):
-                return php_new_class("WP_Error", lambda : WP_Error("mkdir_failed_destination", self.strings["mkdir_failed"], remote_destination))
+        if (not wp_filesystem_.exists(remote_destination_)):
+            if (not wp_filesystem_.mkdir(remote_destination_, FS_CHMOD_DIR)):
+                return php_new_class("WP_Error", lambda : WP_Error("mkdir_failed_destination", self.strings["mkdir_failed"], remote_destination_))
             # end if
         # end if
         #// Copy new version of item into place.
-        result = copy_dir(source, remote_destination)
-        if is_wp_error(result):
-            if args["clear_working"]:
-                wp_filesystem.delete(remote_source, True)
+        result_ = copy_dir(source_, remote_destination_)
+        if is_wp_error(result_):
+            if args_["clear_working"]:
+                wp_filesystem_.delete(remote_source_, True)
             # end if
-            return result
+            return result_
         # end if
         #// Clear the working folder?
-        if args["clear_working"]:
-            wp_filesystem.delete(remote_source, True)
+        if args_["clear_working"]:
+            wp_filesystem_.delete(remote_source_, True)
         # end if
-        destination_name = php_basename(php_str_replace(local_destination, "", destination))
-        if "." == destination_name:
-            destination_name = ""
+        destination_name_ = php_basename(php_str_replace(local_destination_, "", destination_))
+        if "." == destination_name_:
+            destination_name_ = ""
         # end if
-        self.result = compact("source", "source_files", "destination", "destination_name", "local_destination", "remote_destination", "clear_destination")
+        self.result = php_compact("source", "source_files", "destination", "destination_name", "local_destination", "remote_destination", "clear_destination")
         #// 
         #// Filters the installation response after the installation has finished.
         #// 
@@ -507,10 +574,10 @@ class WP_Upgrader():
         #// @param array $hook_extra Extra arguments passed to hooked filters.
         #// @param array $result     Installation result data.
         #//
-        res = apply_filters("upgrader_post_install", True, args["hook_extra"], self.result)
-        if is_wp_error(res):
-            self.result = res
-            return res
+        res_ = apply_filters("upgrader_post_install", True, args_["hook_extra"], self.result)
+        if is_wp_error(res_):
+            self.result = res_
+            return res_
         # end if
         #// Bombard the calling function will all the info which we've just used.
         return self.result
@@ -548,10 +615,11 @@ class WP_Upgrader():
     #// @return array|false|WP_error The result from self::install_package() on success, otherwise a WP_Error,
     #// or false if unable to connect to the filesystem.
     #//
-    def run(self, options=None):
+    def run(self, options_=None):
         
-        defaults = Array({"package": "", "destination": "", "clear_destination": False, "abort_if_destination_exists": True, "clear_working": True, "is_multi": False, "hook_extra": Array()})
-        options = wp_parse_args(options, defaults)
+        
+        defaults_ = Array({"package": "", "destination": "", "clear_destination": False, "abort_if_destination_exists": True, "clear_working": True, "is_multi": False, "hook_extra": Array()})
+        options_ = wp_parse_args(options_, defaults_)
         #// 
         #// Filters the package options before running an update.
         #// 
@@ -582,79 +650,79 @@ class WP_Upgrader():
         #// }
         #// }
         #//
-        options = apply_filters("upgrader_package_options", options)
-        if (not options["is_multi"]):
+        options_ = apply_filters("upgrader_package_options", options_)
+        if (not options_["is_multi"]):
             #// Call $this->header separately if running multiple times.
             self.skin.header()
         # end if
         #// Connect to the filesystem first.
-        res = self.fs_connect(Array(WP_CONTENT_DIR, options["destination"]))
+        res_ = self.fs_connect(Array(WP_CONTENT_DIR, options_["destination"]))
         #// Mainly for non-connected filesystem.
-        if (not res):
-            if (not options["is_multi"]):
+        if (not res_):
+            if (not options_["is_multi"]):
                 self.skin.footer()
             # end if
             return False
         # end if
         self.skin.before()
-        if is_wp_error(res):
-            self.skin.error(res)
+        if is_wp_error(res_):
+            self.skin.error(res_)
             self.skin.after()
-            if (not options["is_multi"]):
+            if (not options_["is_multi"]):
                 self.skin.footer()
             # end if
-            return res
+            return res_
         # end if
         #// 
         #// Download the package (Note, This just returns the filename
         #// of the file if the package is a local file)
         #//
-        download = self.download_package(options["package"], True)
+        download_ = self.download_package(options_["package"], True)
         #// Allow for signature soft-fail.
         #// WARNING: This may be removed in the future.
-        if is_wp_error(download) and download.get_error_data("softfail-filename"):
+        if is_wp_error(download_) and download_.get_error_data("softfail-filename"):
             #// Don't output the 'no signature could be found' failure message for now.
-            if "signature_verification_no_signature" != download.get_error_code() or WP_DEBUG:
+            if "signature_verification_no_signature" != download_.get_error_code() or WP_DEBUG:
                 #// Output the failure error as a normal feedback, and not as an error.
-                self.skin.feedback(download.get_error_message())
+                self.skin.feedback(download_.get_error_message())
                 #// Report this failure back to WordPress.org for debugging purposes.
-                wp_version_check(Array({"signature_failure_code": download.get_error_code(), "signature_failure_data": download.get_error_data()}))
+                wp_version_check(Array({"signature_failure_code": download_.get_error_code(), "signature_failure_data": download_.get_error_data()}))
             # end if
             #// Pretend this error didn't happen.
-            download = download.get_error_data("softfail-filename")
+            download_ = download_.get_error_data("softfail-filename")
         # end if
-        if is_wp_error(download):
-            self.skin.error(download)
+        if is_wp_error(download_):
+            self.skin.error(download_)
             self.skin.after()
-            if (not options["is_multi"]):
+            if (not options_["is_multi"]):
                 self.skin.footer()
             # end if
-            return download
+            return download_
         # end if
-        delete_package = download != options["package"]
+        delete_package_ = download_ != options_["package"]
         #// Do not delete a "local" file.
         #// Unzips the file into a temporary directory.
-        working_dir = self.unpack_package(download, delete_package)
-        if is_wp_error(working_dir):
-            self.skin.error(working_dir)
+        working_dir_ = self.unpack_package(download_, delete_package_)
+        if is_wp_error(working_dir_):
+            self.skin.error(working_dir_)
             self.skin.after()
-            if (not options["is_multi"]):
+            if (not options_["is_multi"]):
                 self.skin.footer()
             # end if
-            return working_dir
+            return working_dir_
         # end if
         #// With the given options, this installs it to the destination directory.
-        result = self.install_package(Array({"source": working_dir, "destination": options["destination"], "clear_destination": options["clear_destination"], "abort_if_destination_exists": options["abort_if_destination_exists"], "clear_working": options["clear_working"], "hook_extra": options["hook_extra"]}))
-        self.skin.set_result(result)
-        if is_wp_error(result):
-            self.skin.error(result)
+        result_ = self.install_package(Array({"source": working_dir_, "destination": options_["destination"], "clear_destination": options_["clear_destination"], "abort_if_destination_exists": options_["abort_if_destination_exists"], "clear_working": options_["clear_working"], "hook_extra": options_["hook_extra"]}))
+        self.skin.set_result(result_)
+        if is_wp_error(result_):
+            self.skin.error(result_)
             self.skin.feedback("process_failed")
         else:
             #// Installation succeeded.
             self.skin.feedback("process_success")
         # end if
         self.skin.after()
-        if (not options["is_multi"]):
+        if (not options_["is_multi"]):
             #// 
             #// Fires when the upgrader process is complete.
             #// 
@@ -685,10 +753,10 @@ class WP_Upgrader():
             #// }
             #// }
             #//
-            do_action("upgrader_process_complete", self, options["hook_extra"])
+            do_action("upgrader_process_complete", self, options_["hook_extra"])
             self.skin.footer()
         # end if
-        return result
+        return result_
     # end def run
     #// 
     #// Toggle maintenance mode for the site.
@@ -701,20 +769,23 @@ class WP_Upgrader():
     #// 
     #// @param bool $enable True to enable maintenance mode, false to disable.
     #//
-    def maintenance_mode(self, enable=False):
+    def maintenance_mode(self, enable_=None):
+        if enable_ is None:
+            enable_ = False
+        # end if
         
-        global wp_filesystem
-        php_check_if_defined("wp_filesystem")
-        file = wp_filesystem.abspath() + ".maintenance"
-        if enable:
+        global wp_filesystem_
+        php_check_if_defined("wp_filesystem_")
+        file_ = wp_filesystem_.abspath() + ".maintenance"
+        if enable_:
             self.skin.feedback("maintenance_start")
             #// Create maintenance file to signal that we are upgrading.
-            maintenance_string = "<?php $upgrading = " + time() + "; ?>"
-            wp_filesystem.delete(file)
-            wp_filesystem.put_contents(file, maintenance_string, FS_CHMOD_FILE)
-        elif (not enable) and wp_filesystem.exists(file):
+            maintenance_string_ = "<?php $upgrading = " + time() + "; ?>"
+            wp_filesystem_.delete(file_)
+            wp_filesystem_.put_contents(file_, maintenance_string_, FS_CHMOD_FILE)
+        elif (not enable_) and wp_filesystem_.exists(file_):
             self.skin.feedback("maintenance_end")
-            wp_filesystem.delete(file)
+            wp_filesystem_.delete(file_)
         # end if
     # end def maintenance_mode
     #// 
@@ -728,32 +799,33 @@ class WP_Upgrader():
     #// @return bool False if a lock couldn't be created or if the lock is still valid. True otherwise.
     #//
     @classmethod
-    def create_lock(self, lock_name=None, release_timeout=None):
+    def create_lock(self, lock_name_=None, release_timeout_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        if (not release_timeout):
-            release_timeout = HOUR_IN_SECONDS
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        if (not release_timeout_):
+            release_timeout_ = HOUR_IN_SECONDS
         # end if
-        lock_option = lock_name + ".lock"
+        lock_option_ = lock_name_ + ".lock"
         #// Try to lock.
-        lock_result = wpdb.query(wpdb.prepare(str("INSERT IGNORE INTO `") + str(wpdb.options) + str("` ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */"), lock_option, time()))
-        if (not lock_result):
-            lock_result = get_option(lock_option)
+        lock_result_ = wpdb_.query(wpdb_.prepare(str("INSERT IGNORE INTO `") + str(wpdb_.options) + str("` ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */"), lock_option_, time()))
+        if (not lock_result_):
+            lock_result_ = get_option(lock_option_)
             #// If a lock couldn't be created, and there isn't a lock, bail.
-            if (not lock_result):
+            if (not lock_result_):
                 return False
             # end if
             #// Check to see if the lock is still valid. If it is, bail.
-            if lock_result > time() - release_timeout:
+            if lock_result_ > time() - release_timeout_:
                 return False
             # end if
             #// There must exist an expired lock, clear it and re-gain it.
-            WP_Upgrader.release_lock(lock_name)
-            return WP_Upgrader.create_lock(lock_name, release_timeout)
+            WP_Upgrader.release_lock(lock_name_)
+            return WP_Upgrader.create_lock(lock_name_, release_timeout_)
         # end if
         #// Update the lock, as by this point we've definitely got a lock, just need to fire the actions.
-        update_option(lock_option, time())
+        update_option(lock_option_, time())
         return True
     # end def create_lock
     #// 
@@ -767,9 +839,10 @@ class WP_Upgrader():
     #// @return bool True if the lock was successfully released. False on failure.
     #//
     @classmethod
-    def release_lock(self, lock_name=None):
+    def release_lock(self, lock_name_=None):
         
-        return delete_option(lock_name + ".lock")
+        
+        return delete_option(lock_name_ + ".lock")
     # end def release_lock
 # end class WP_Upgrader
 #// Plugin_Upgrader class

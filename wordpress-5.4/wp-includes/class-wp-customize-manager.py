@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -33,32 +28,193 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 3.4.0
 #//
 class WP_Customize_Manager():
+    #// 
+    #// An instance of the theme being previewed.
+    #// 
+    #// @since 3.4.0
+    #// @var WP_Theme
+    #//
     theme = Array()
+    #// 
+    #// The directory name of the previously active theme (within the theme_root).
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     original_stylesheet = Array()
+    #// 
+    #// Whether this is a Customizer pageload.
+    #// 
+    #// @since 3.4.0
+    #// @var bool
+    #//
     previewing = False
+    #// 
+    #// Methods and properties dealing with managing widgets in the Customizer.
+    #// 
+    #// @since 3.9.0
+    #// @var WP_Customize_Widgets
+    #//
     widgets = Array()
+    #// 
+    #// Methods and properties dealing with managing nav menus in the Customizer.
+    #// 
+    #// @since 4.3.0
+    #// @var WP_Customize_Nav_Menus
+    #//
     nav_menus = Array()
+    #// 
+    #// Methods and properties dealing with selective refresh in the Customizer preview.
+    #// 
+    #// @since 4.5.0
+    #// @var WP_Customize_Selective_Refresh
+    #//
     selective_refresh = Array()
+    #// 
+    #// Registered instances of WP_Customize_Setting.
+    #// 
+    #// @since 3.4.0
+    #// @var array
+    #//
     settings = Array()
+    #// 
+    #// Sorted top-level instances of WP_Customize_Panel and WP_Customize_Section.
+    #// 
+    #// @since 4.0.0
+    #// @var array
+    #//
     containers = Array()
+    #// 
+    #// Registered instances of WP_Customize_Panel.
+    #// 
+    #// @since 4.0.0
+    #// @var array
+    #//
     panels = Array()
+    #// 
+    #// List of core components.
+    #// 
+    #// @since 4.5.0
+    #// @var array
+    #//
     components = Array("widgets", "nav_menus")
+    #// 
+    #// Registered instances of WP_Customize_Section.
+    #// 
+    #// @since 3.4.0
+    #// @var array
+    #//
     sections = Array()
+    #// 
+    #// Registered instances of WP_Customize_Control.
+    #// 
+    #// @since 3.4.0
+    #// @var array
+    #//
     controls = Array()
+    #// 
+    #// Panel types that may be rendered from JS templates.
+    #// 
+    #// @since 4.3.0
+    #// @var array
+    #//
     registered_panel_types = Array()
+    #// 
+    #// Section types that may be rendered from JS templates.
+    #// 
+    #// @since 4.3.0
+    #// @var array
+    #//
     registered_section_types = Array()
+    #// 
+    #// Control types that may be rendered from JS templates.
+    #// 
+    #// @since 4.1.0
+    #// @var array
+    #//
     registered_control_types = Array()
+    #// 
+    #// Initial URL being previewed.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     preview_url = Array()
+    #// 
+    #// URL to link the user to when closing the Customizer.
+    #// 
+    #// @since 4.4.0
+    #// @var string
+    #//
     return_url = Array()
+    #// 
+    #// Mapping of 'panel', 'section', 'control' to the ID which should be autofocused.
+    #// 
+    #// @since 4.4.0
+    #// @var array
+    #//
     autofocus = Array()
+    #// 
+    #// Messenger channel.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     messenger_channel = Array()
+    #// 
+    #// Whether the autosave revision of the changeset should be loaded.
+    #// 
+    #// @since 4.9.0
+    #// @var bool
+    #//
     autosaved = False
+    #// 
+    #// Whether the changeset branching is allowed.
+    #// 
+    #// @since 4.9.0
+    #// @var bool
+    #//
     branching = True
+    #// 
+    #// Whether settings should be previewed.
+    #// 
+    #// @since 4.9.0
+    #// @var bool
+    #//
     settings_previewed = True
+    #// 
+    #// Whether a starter content changeset was saved.
+    #// 
+    #// @since 4.9.0
+    #// @var bool
+    #//
     saved_starter_content_changeset = False
+    #// 
+    #// Unsanitized values for Customize Settings parsed from $_POST['customized'].
+    #// 
+    #// @var array
+    #//
     _post_values = Array()
+    #// 
+    #// Changeset UUID.
+    #// 
+    #// @since 4.7.0
+    #// @var string
+    #//
     _changeset_uuid = Array()
+    #// 
+    #// Changeset post ID.
+    #// 
+    #// @since 4.7.0
+    #// @var int|false
+    #//
     _changeset_post_id = Array()
+    #// 
+    #// Changeset data loaded from a customize_changeset post.
+    #// 
+    #// @since 4.7.0
+    #// @var array|null
+    #//
     _changeset_data = Array()
     #// 
     #// Constructor.
@@ -82,33 +238,36 @@ class WP_Customize_Manager():
     #// @type bool              $autosaved          If data from a changeset's autosaved revision should be loaded if it exists. Defaults to false.
     #// }
     #//
-    def __init__(self, args=Array()):
+    def __init__(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        args = php_array_merge(php_array_fill_keys(Array("changeset_uuid", "theme", "messenger_channel", "settings_previewed", "autosaved", "branching"), None), args)
+        args_ = php_array_merge(php_array_fill_keys(Array("changeset_uuid", "theme", "messenger_channel", "settings_previewed", "autosaved", "branching"), None), args_)
         #// Note that the UUID format will be validated in the setup_theme() method.
-        if (not (php_isset(lambda : args["changeset_uuid"]))):
-            args["changeset_uuid"] = wp_generate_uuid4()
+        if (not (php_isset(lambda : args_["changeset_uuid"]))):
+            args_["changeset_uuid"] = wp_generate_uuid4()
         # end if
         #// The theme and messenger_channel should be supplied via $args,
         #// but they are also looked at in the $_REQUEST global here for back-compat.
-        if (not (php_isset(lambda : args["theme"]))):
+        if (not (php_isset(lambda : args_["theme"]))):
             if (php_isset(lambda : PHP_REQUEST["customize_theme"])):
-                args["theme"] = wp_unslash(PHP_REQUEST["customize_theme"])
+                args_["theme"] = wp_unslash(PHP_REQUEST["customize_theme"])
             elif (php_isset(lambda : PHP_REQUEST["theme"])):
                 #// Deprecated.
-                args["theme"] = wp_unslash(PHP_REQUEST["theme"])
+                args_["theme"] = wp_unslash(PHP_REQUEST["theme"])
             # end if
         # end if
-        if (not (php_isset(lambda : args["messenger_channel"]))) and (php_isset(lambda : PHP_REQUEST["customize_messenger_channel"])):
-            args["messenger_channel"] = sanitize_key(wp_unslash(PHP_REQUEST["customize_messenger_channel"]))
+        if (not (php_isset(lambda : args_["messenger_channel"]))) and (php_isset(lambda : PHP_REQUEST["customize_messenger_channel"])):
+            args_["messenger_channel"] = sanitize_key(wp_unslash(PHP_REQUEST["customize_messenger_channel"]))
         # end if
         self.original_stylesheet = get_stylesheet()
-        self.theme = wp_get_theme(args["theme"] if 0 == validate_file(args["theme"]) else None)
-        self.messenger_channel = args["messenger_channel"]
-        self._changeset_uuid = args["changeset_uuid"]
-        for key in Array("settings_previewed", "autosaved", "branching"):
-            if (php_isset(lambda : args[key])):
-                self.key = php_bool(args[key])
+        self.theme = wp_get_theme(args_["theme"] if 0 == validate_file(args_["theme"]) else None)
+        self.messenger_channel = args_["messenger_channel"]
+        self._changeset_uuid = args_["changeset_uuid"]
+        for key_ in Array("settings_previewed", "autosaved", "branching"):
+            if (php_isset(lambda : args_[key_])):
+                self.key_ = php_bool(args_[key_])
             # end if
         # end for
         php_include_file(ABSPATH + WPINC + "/class-wp-customize-setting.php", once=True)
@@ -160,14 +319,14 @@ class WP_Customize_Manager():
         #// @param string[]             $components Array of core components to load.
         #// @param WP_Customize_Manager $this       WP_Customize_Manager instance.
         #//
-        components = apply_filters("customize_loaded_components", self.components, self)
+        components_ = apply_filters("customize_loaded_components", self.components, self)
         php_include_file(ABSPATH + WPINC + "/customize/class-wp-customize-selective-refresh.php", once=True)
         self.selective_refresh = php_new_class("WP_Customize_Selective_Refresh", lambda : WP_Customize_Selective_Refresh(self))
-        if php_in_array("widgets", components, True):
+        if php_in_array("widgets", components_, True):
             php_include_file(ABSPATH + WPINC + "/class-wp-customize-widgets.php", once=True)
             self.widgets = php_new_class("WP_Customize_Widgets", lambda : WP_Customize_Widgets(self))
         # end if
-        if php_in_array("nav_menus", components, True):
+        if php_in_array("nav_menus", components_, True):
             php_include_file(ABSPATH + WPINC + "/class-wp-customize-nav-menus.php", once=True)
             self.nav_menus = php_new_class("WP_Customize_Nav_Menus", lambda : WP_Customize_Nav_Menus(self))
         # end if
@@ -215,19 +374,20 @@ class WP_Customize_Manager():
     #// @param string|null $action Whether the supplied Ajax action is being run.
     #// @return bool True if it's an Ajax request, false otherwise.
     #//
-    def doing_ajax(self, action=None):
+    def doing_ajax(self, action_=None):
+        
         
         if (not wp_doing_ajax()):
             return False
         # end if
-        if (not action):
+        if (not action_):
             return True
         else:
             #// 
             #// Note: we can't just use doing_action( "wp_ajax_{$action}" ) because we need
             #// to check before admin-ajax.php gets to that point.
             #//
-            return (php_isset(lambda : PHP_REQUEST["action"])) and wp_unslash(PHP_REQUEST["action"]) == action
+            return (php_isset(lambda : PHP_REQUEST["action"])) and wp_unslash(PHP_REQUEST["action"]) == action_
         # end if
     # end def doing_ajax
     #// 
@@ -239,29 +399,30 @@ class WP_Customize_Manager():
     #// @param string|WP_Error $ajax_message Ajax return.
     #// @param string          $message      Optional. UI message.
     #//
-    def wp_die(self, ajax_message=None, message=None):
+    def wp_die(self, ajax_message_=None, message_=None):
+        
         
         if self.doing_ajax():
-            wp_die(ajax_message)
+            wp_die(ajax_message_)
         # end if
-        if (not message):
-            message = __("Something went wrong.")
+        if (not message_):
+            message_ = __("Something went wrong.")
         # end if
         if self.messenger_channel:
             ob_start()
             wp_enqueue_scripts()
             wp_print_scripts(Array("customize-base"))
-            settings = Array({"messengerArgs": Array({"channel": self.messenger_channel, "url": wp_customize_url()})}, {"error": ajax_message})
+            settings_ = Array({"messengerArgs": Array({"channel": self.messenger_channel, "url": wp_customize_url()})}, {"error": ajax_message_})
             php_print("""           <script>
             ( function( api, settings ) {
             var preview = new api.Messenger( settings.messengerArgs );
             preview.send( 'iframe-loading-error', settings.error );
             } )( wp.customize, """)
-            php_print(wp_json_encode(settings))
+            php_print(wp_json_encode(settings_))
             php_print(" );\n            </script>\n         ")
-            message += ob_get_clean()
+            message_ += ob_get_clean()
         # end if
-        wp_die(message)
+        wp_die(message_)
     # end def wp_die
     #// 
     #// Return the Ajax wp_die() handler if it's a customized request.
@@ -272,6 +433,7 @@ class WP_Customize_Manager():
     #// @return callable Die handler.
     #//
     def wp_die_handler(self):
+        
         
         _deprecated_function(__METHOD__, "4.7.0")
         if self.doing_ajax() or (php_isset(lambda : PHP_POST["customized"])):
@@ -290,10 +452,11 @@ class WP_Customize_Manager():
     #//
     def setup_theme(self):
         
-        global pagenow
-        php_check_if_defined("pagenow")
+        
+        global pagenow_
+        php_check_if_defined("pagenow_")
         #// Check permissions for customize.php access since this method is called before customize.php can run any code.
-        if "customize.php" == pagenow and (not current_user_can("customize")):
+        if "customize.php" == pagenow_ and (not current_user_can("customize")):
             if (not is_user_logged_in()):
                 auth_redirect()
             else:
@@ -311,8 +474,8 @@ class WP_Customize_Manager():
         #// For similar behavior elsewhere in WordPress, see rest_cookie_check_errors() which logs out
         #// a user when a valid nonce isn't present.
         #//
-        has_post_data_nonce = check_ajax_referer("preview-customize_" + self.get_stylesheet(), "nonce", False) or check_ajax_referer("save-customize_" + self.get_stylesheet(), "nonce", False) or check_ajax_referer("preview-customize_" + self.get_stylesheet(), "customize_preview_nonce", False)
-        if (not current_user_can("customize")) or (not has_post_data_nonce):
+        has_post_data_nonce_ = check_ajax_referer("preview-customize_" + self.get_stylesheet(), "nonce", False) or check_ajax_referer("save-customize_" + self.get_stylesheet(), "nonce", False) or check_ajax_referer("preview-customize_" + self.get_stylesheet(), "customize_preview_nonce", False)
+        if (not current_user_can("customize")) or (not has_post_data_nonce_):
             PHP_POST["customized"] = None
             PHP_REQUEST["customized"] = None
         # end if
@@ -356,7 +519,7 @@ class WP_Customize_Manager():
         #// Import starter content at after_setup_theme:100 so that any
         #// add_theme_support( 'starter-content' ) calls will have been made.
         #//
-        if get_option("fresh_site") and "customize.php" == pagenow:
+        if get_option("fresh_site") and "customize.php" == pagenow_:
             add_action("after_setup_theme", Array(self, "import_theme_starter_content"), 100)
         # end if
         self.start_previewing_theme()
@@ -375,24 +538,25 @@ class WP_Customize_Manager():
     #//
     def establish_loaded_changeset(self):
         
-        global pagenow
-        php_check_if_defined("pagenow")
+        
+        global pagenow_
+        php_check_if_defined("pagenow_")
         if php_empty(lambda : self._changeset_uuid):
-            changeset_uuid = None
+            changeset_uuid_ = None
             if (not self.branching()) and self.is_theme_active():
-                unpublished_changeset_posts = self.get_changeset_posts(Array({"post_status": php_array_diff(get_post_stati(), Array("auto-draft", "publish", "trash", "inherit", "private")), "exclude_restore_dismissed": False, "author": "any", "posts_per_page": 1, "order": "DESC", "orderby": "date"}))
-                unpublished_changeset_post = php_array_shift(unpublished_changeset_posts)
-                if (not php_empty(lambda : unpublished_changeset_post)) and wp_is_uuid(unpublished_changeset_post.post_name):
-                    changeset_uuid = unpublished_changeset_post.post_name
+                unpublished_changeset_posts_ = self.get_changeset_posts(Array({"post_status": php_array_diff(get_post_stati(), Array("auto-draft", "publish", "trash", "inherit", "private")), "exclude_restore_dismissed": False, "author": "any", "posts_per_page": 1, "order": "DESC", "orderby": "date"}))
+                unpublished_changeset_post_ = php_array_shift(unpublished_changeset_posts_)
+                if (not php_empty(lambda : unpublished_changeset_post_)) and wp_is_uuid(unpublished_changeset_post_.post_name):
+                    changeset_uuid_ = unpublished_changeset_post_.post_name
                 # end if
             # end if
             #// If no changeset UUID has been set yet, then generate a new one.
-            if php_empty(lambda : changeset_uuid):
-                changeset_uuid = wp_generate_uuid4()
+            if php_empty(lambda : changeset_uuid_):
+                changeset_uuid_ = wp_generate_uuid4()
             # end if
-            self._changeset_uuid = changeset_uuid
+            self._changeset_uuid = changeset_uuid_
         # end if
-        if is_admin() and "customize.php" == pagenow:
+        if is_admin() and "customize.php" == pagenow_:
             self.set_changeset_lock(self.changeset_post_id())
         # end if
     # end def establish_loaded_changeset
@@ -403,8 +567,9 @@ class WP_Customize_Manager():
     #//
     def after_setup_theme(self):
         
-        doing_ajax_or_is_customized = self.doing_ajax() or (php_isset(lambda : PHP_POST["customized"]))
-        if (not doing_ajax_or_is_customized) and (not validate_current_theme()):
+        
+        doing_ajax_or_is_customized_ = self.doing_ajax() or (php_isset(lambda : PHP_POST["customized"]))
+        if (not doing_ajax_or_is_customized_) and (not validate_current_theme()):
             wp_redirect("themes.php?broken=true")
             php_exit(0)
         # end if
@@ -416,6 +581,7 @@ class WP_Customize_Manager():
     #// @since 3.4.0
     #//
     def start_previewing_theme(self):
+        
         
         #// Bail if we're already previewing.
         if self.is_preview():
@@ -451,6 +617,7 @@ class WP_Customize_Manager():
     #//
     def stop_previewing_theme(self):
         
+        
         if (not self.is_preview()):
             return
         # end if
@@ -485,6 +652,7 @@ class WP_Customize_Manager():
     #//
     def settings_previewed(self):
         
+        
         return self.settings_previewed
     # end def settings_previewed
     #// 
@@ -497,6 +665,7 @@ class WP_Customize_Manager():
     #//
     def autosaved(self):
         
+        
         return self.autosaved
     # end def autosaved
     #// 
@@ -508,6 +677,7 @@ class WP_Customize_Manager():
     #// @return bool Is changeset branching.
     #//
     def branching(self):
+        
         
         #// 
         #// Filters whether or not changeset branching is allowed.
@@ -547,6 +717,7 @@ class WP_Customize_Manager():
     #//
     def changeset_uuid(self):
         
+        
         if php_empty(lambda : self._changeset_uuid):
             self.establish_loaded_changeset()
         # end if
@@ -560,6 +731,7 @@ class WP_Customize_Manager():
     #// @return WP_Theme
     #//
     def theme(self):
+        
         
         if (not self.theme):
             self.theme = wp_get_theme()
@@ -575,6 +747,7 @@ class WP_Customize_Manager():
     #//
     def settings(self):
         
+        
         return self.settings
     # end def settings
     #// 
@@ -585,6 +758,7 @@ class WP_Customize_Manager():
     #// @return array
     #//
     def controls(self):
+        
         
         return self.controls
     # end def controls
@@ -597,6 +771,7 @@ class WP_Customize_Manager():
     #//
     def containers(self):
         
+        
         return self.containers
     # end def containers
     #// 
@@ -607,6 +782,7 @@ class WP_Customize_Manager():
     #// @return array
     #//
     def sections(self):
+        
         
         return self.sections
     # end def sections
@@ -619,6 +795,7 @@ class WP_Customize_Manager():
     #//
     def panels(self):
         
+        
         return self.panels
     # end def panels
     #// 
@@ -630,6 +807,7 @@ class WP_Customize_Manager():
     #//
     def is_theme_active(self):
         
+        
         return self.get_stylesheet() == self.original_stylesheet
     # end def is_theme_active
     #// 
@@ -638,6 +816,7 @@ class WP_Customize_Manager():
     #// @since 3.4.0
     #//
     def wp_loaded(self):
+        
         
         #// Unconditionally register core types for panels, sections, and controls
         #// in case plugin unhooks all customize_register actions.
@@ -666,8 +845,8 @@ class WP_Customize_Manager():
         #//
         do_action("customize_register", self)
         if self.settings_previewed():
-            for setting in self.settings:
-                setting.preview()
+            for setting_ in self.settings:
+                setting_.preview()
             # end for
         # end if
         if self.is_preview() and (not is_admin()):
@@ -686,13 +865,14 @@ class WP_Customize_Manager():
     #// @param int $status Status.
     #// @return int
     #//
-    def wp_redirect_status(self, status=None):
+    def wp_redirect_status(self, status_=None):
+        
         
         _deprecated_function(__FUNCTION__, "4.7.0")
         if self.is_preview() and (not is_admin()):
             return 200
         # end if
-        return status
+        return status_
     # end def wp_redirect_status
     #// 
     #// Find the changeset post ID for a given changeset UUID.
@@ -702,19 +882,20 @@ class WP_Customize_Manager():
     #// @param string $uuid Changeset UUID.
     #// @return int|null Returns post ID on success and null on failure.
     #//
-    def find_changeset_post_id(self, uuid=None):
+    def find_changeset_post_id(self, uuid_=None):
         
-        cache_group = "customize_changeset_post"
-        changeset_post_id = wp_cache_get(uuid, cache_group)
-        if changeset_post_id and "customize_changeset" == get_post_type(changeset_post_id):
-            return changeset_post_id
+        
+        cache_group_ = "customize_changeset_post"
+        changeset_post_id_ = wp_cache_get(uuid_, cache_group_)
+        if changeset_post_id_ and "customize_changeset" == get_post_type(changeset_post_id_):
+            return changeset_post_id_
         # end if
-        changeset_post_query = php_new_class("WP_Query", lambda : WP_Query(Array({"post_type": "customize_changeset", "post_status": get_post_stati(), "name": uuid, "posts_per_page": 1, "no_found_rows": True, "cache_results": True, "update_post_meta_cache": False, "update_post_term_cache": False, "lazy_load_term_meta": False})))
-        if (not php_empty(lambda : changeset_post_query.posts)):
+        changeset_post_query_ = php_new_class("WP_Query", lambda : WP_Query(Array({"post_type": "customize_changeset", "post_status": get_post_stati(), "name": uuid_, "posts_per_page": 1, "no_found_rows": True, "cache_results": True, "update_post_meta_cache": False, "update_post_term_cache": False, "lazy_load_term_meta": False})))
+        if (not php_empty(lambda : changeset_post_query_.posts)):
             #// Note: 'fields'=>'ids' is not being used in order to cache the post object as it will be needed.
-            changeset_post_id = changeset_post_query.posts[0].ID
-            wp_cache_set(uuid, changeset_post_id, cache_group)
-            return changeset_post_id
+            changeset_post_id_ = changeset_post_query_.posts[0].ID
+            wp_cache_set(uuid_, changeset_post_id_, cache_group_)
+            return changeset_post_id_
         # end if
         return None
     # end def find_changeset_post_id
@@ -733,18 +914,21 @@ class WP_Customize_Manager():
     #// }
     #// @return WP_Post[] Auto-draft changesets.
     #//
-    def get_changeset_posts(self, args=Array()):
+    def get_changeset_posts(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        default_args = Array({"exclude_restore_dismissed": True, "posts_per_page": -1, "post_type": "customize_changeset", "post_status": "auto-draft", "order": "DESC", "orderby": "date", "no_found_rows": True, "cache_results": True, "update_post_meta_cache": False, "update_post_term_cache": False, "lazy_load_term_meta": False})
+        default_args_ = Array({"exclude_restore_dismissed": True, "posts_per_page": -1, "post_type": "customize_changeset", "post_status": "auto-draft", "order": "DESC", "orderby": "date", "no_found_rows": True, "cache_results": True, "update_post_meta_cache": False, "update_post_term_cache": False, "lazy_load_term_meta": False})
         if get_current_user_id():
-            default_args["author"] = get_current_user_id()
+            default_args_["author"] = get_current_user_id()
         # end if
-        args = php_array_merge(default_args, args)
-        if (not php_empty(lambda : args["exclude_restore_dismissed"])):
-            args["exclude_restore_dismissed"] = None
-            args["meta_query"] = Array(Array({"key": "_customize_restore_dismissed", "compare": "NOT EXISTS"}))
+        args_ = php_array_merge(default_args_, args_)
+        if (not php_empty(lambda : args_["exclude_restore_dismissed"])):
+            args_["exclude_restore_dismissed"] = None
+            args_["meta_query"] = Array(Array({"key": "_customize_restore_dismissed", "compare": "NOT EXISTS"}))
         # end if
-        return get_posts(args)
+        return get_posts(args_)
     # end def get_changeset_posts
     #// 
     #// Dismiss all of the current user's auto-drafts (other than the present one).
@@ -754,17 +938,18 @@ class WP_Customize_Manager():
     #//
     def dismiss_user_auto_draft_changesets(self):
         
-        changeset_autodraft_posts = self.get_changeset_posts(Array({"post_status": "auto-draft", "exclude_restore_dismissed": True, "posts_per_page": -1}))
-        dismissed = 0
-        for autosave_autodraft_post in changeset_autodraft_posts:
-            if autosave_autodraft_post.ID == self.changeset_post_id():
+        
+        changeset_autodraft_posts_ = self.get_changeset_posts(Array({"post_status": "auto-draft", "exclude_restore_dismissed": True, "posts_per_page": -1}))
+        dismissed_ = 0
+        for autosave_autodraft_post_ in changeset_autodraft_posts_:
+            if autosave_autodraft_post_.ID == self.changeset_post_id():
                 continue
             # end if
-            if update_post_meta(autosave_autodraft_post.ID, "_customize_restore_dismissed", True):
-                dismissed += 1
+            if update_post_meta(autosave_autodraft_post_.ID, "_customize_restore_dismissed", True):
+                dismissed_ += 1
             # end if
         # end for
-        return dismissed
+        return dismissed_
     # end def dismiss_user_auto_draft_changesets
     #// 
     #// Get the changeset post id for the loaded changeset.
@@ -775,12 +960,13 @@ class WP_Customize_Manager():
     #//
     def changeset_post_id(self):
         
+        
         if (not (php_isset(lambda : self._changeset_post_id))):
-            post_id = self.find_changeset_post_id(self.changeset_uuid())
-            if (not post_id):
-                post_id = False
+            post_id_ = self.find_changeset_post_id(self.changeset_uuid())
+            if (not post_id_):
+                post_id_ = False
             # end if
-            self._changeset_post_id = post_id
+            self._changeset_post_id = post_id_
         # end if
         if False == self._changeset_post_id:
             return None
@@ -795,31 +981,32 @@ class WP_Customize_Manager():
     #// @param int $post_id Changeset post ID.
     #// @return array|WP_Error Changeset data or WP_Error on error.
     #//
-    def get_changeset_post_data(self, post_id=None):
+    def get_changeset_post_data(self, post_id_=None):
         
-        if (not post_id):
+        
+        if (not post_id_):
             return php_new_class("WP_Error", lambda : WP_Error("empty_post_id"))
         # end if
-        changeset_post = get_post(post_id)
-        if (not changeset_post):
+        changeset_post_ = get_post(post_id_)
+        if (not changeset_post_):
             return php_new_class("WP_Error", lambda : WP_Error("missing_post"))
         # end if
-        if "revision" == changeset_post.post_type:
-            if "customize_changeset" != get_post_type(changeset_post.post_parent):
+        if "revision" == changeset_post_.post_type:
+            if "customize_changeset" != get_post_type(changeset_post_.post_parent):
                 return php_new_class("WP_Error", lambda : WP_Error("wrong_post_type"))
             # end if
-        elif "customize_changeset" != changeset_post.post_type:
+        elif "customize_changeset" != changeset_post_.post_type:
             return php_new_class("WP_Error", lambda : WP_Error("wrong_post_type"))
         # end if
-        changeset_data = php_json_decode(changeset_post.post_content, True)
-        last_error = php_json_last_error()
-        if last_error:
-            return php_new_class("WP_Error", lambda : WP_Error("json_parse_error", "", last_error))
+        changeset_data_ = php_json_decode(changeset_post_.post_content, True)
+        last_error_ = php_json_last_error()
+        if last_error_:
+            return php_new_class("WP_Error", lambda : WP_Error("json_parse_error", "", last_error_))
         # end if
-        if (not php_is_array(changeset_data)):
+        if (not php_is_array(changeset_data_)):
             return php_new_class("WP_Error", lambda : WP_Error("expected_array"))
         # end if
-        return changeset_data
+        return changeset_data_
     # end def get_changeset_post_data
     #// 
     #// Get changeset data.
@@ -831,27 +1018,28 @@ class WP_Customize_Manager():
     #//
     def changeset_data(self):
         
+        
         if (php_isset(lambda : self._changeset_data)):
             return self._changeset_data
         # end if
-        changeset_post_id = self.changeset_post_id()
-        if (not changeset_post_id):
+        changeset_post_id_ = self.changeset_post_id()
+        if (not changeset_post_id_):
             self._changeset_data = Array()
         else:
             if self.autosaved() and is_user_logged_in():
-                autosave_post = wp_get_post_autosave(changeset_post_id, get_current_user_id())
-                if autosave_post:
-                    data = self.get_changeset_post_data(autosave_post.ID)
-                    if (not is_wp_error(data)):
-                        self._changeset_data = data
+                autosave_post_ = wp_get_post_autosave(changeset_post_id_, get_current_user_id())
+                if autosave_post_:
+                    data_ = self.get_changeset_post_data(autosave_post_.ID)
+                    if (not is_wp_error(data_)):
+                        self._changeset_data = data_
                     # end if
                 # end if
             # end if
             #// Load data from the changeset if it was not loaded from an autosave.
             if (not (php_isset(lambda : self._changeset_data))):
-                data = self.get_changeset_post_data(changeset_post_id)
-                if (not is_wp_error(data)):
-                    self._changeset_data = data
+                data_ = self.get_changeset_post_data(changeset_post_id_)
+                if (not is_wp_error(data_)):
+                    self._changeset_data = data_
                 else:
                     self._changeset_data = Array()
                 # end if
@@ -859,6 +1047,12 @@ class WP_Customize_Manager():
         # end if
         return self._changeset_data
     # end def changeset_data
+    #// 
+    #// Starter content setting IDs.
+    #// 
+    #// @since 4.7.0
+    #// @var array
+    #//
     pending_starter_content_settings_ids = Array()
     #// 
     #// Import theme starter content into the customized state.
@@ -867,12 +1061,15 @@ class WP_Customize_Manager():
     #// 
     #// @param array $starter_content Starter content. Defaults to `get_theme_starter_content()`.
     #//
-    def import_theme_starter_content(self, starter_content=Array()):
-        
-        if php_empty(lambda : starter_content):
-            starter_content = get_theme_starter_content()
+    def import_theme_starter_content(self, starter_content_=None):
+        if starter_content_ is None:
+            starter_content_ = Array()
         # end if
-        changeset_data = Array()
+        
+        if php_empty(lambda : starter_content_):
+            starter_content_ = get_theme_starter_content()
+        # end if
+        changeset_data_ = Array()
         if self.changeset_post_id():
             #// 
             #// Don't re-import starter content into a changeset saved persistently.
@@ -887,330 +1084,331 @@ class WP_Customize_Manager():
             if "auto-draft" != get_post_status(self.changeset_post_id()):
                 return
             # end if
-            changeset_data = self.get_changeset_post_data(self.changeset_post_id())
+            changeset_data_ = self.get_changeset_post_data(self.changeset_post_id())
         # end if
-        sidebars_widgets = starter_content["widgets"] if (php_isset(lambda : starter_content["widgets"])) and (not php_empty(lambda : self.widgets)) else Array()
-        attachments = starter_content["attachments"] if (php_isset(lambda : starter_content["attachments"])) and (not php_empty(lambda : self.nav_menus)) else Array()
-        posts = starter_content["posts"] if (php_isset(lambda : starter_content["posts"])) and (not php_empty(lambda : self.nav_menus)) else Array()
-        options = starter_content["options"] if (php_isset(lambda : starter_content["options"])) else Array()
-        nav_menus = starter_content["nav_menus"] if (php_isset(lambda : starter_content["nav_menus"])) and (not php_empty(lambda : self.nav_menus)) else Array()
-        theme_mods = starter_content["theme_mods"] if (php_isset(lambda : starter_content["theme_mods"])) else Array()
+        sidebars_widgets_ = starter_content_["widgets"] if (php_isset(lambda : starter_content_["widgets"])) and (not php_empty(lambda : self.widgets)) else Array()
+        attachments_ = starter_content_["attachments"] if (php_isset(lambda : starter_content_["attachments"])) and (not php_empty(lambda : self.nav_menus)) else Array()
+        posts_ = starter_content_["posts"] if (php_isset(lambda : starter_content_["posts"])) and (not php_empty(lambda : self.nav_menus)) else Array()
+        options_ = starter_content_["options"] if (php_isset(lambda : starter_content_["options"])) else Array()
+        nav_menus_ = starter_content_["nav_menus"] if (php_isset(lambda : starter_content_["nav_menus"])) and (not php_empty(lambda : self.nav_menus)) else Array()
+        theme_mods_ = starter_content_["theme_mods"] if (php_isset(lambda : starter_content_["theme_mods"])) else Array()
         #// Widgets.
-        max_widget_numbers = Array()
-        for sidebar_id,widgets in sidebars_widgets:
-            sidebar_widget_ids = Array()
-            for widget in widgets:
-                id_base, instance = widget
-                if (not (php_isset(lambda : max_widget_numbers[id_base]))):
+        max_widget_numbers_ = Array()
+        for sidebar_id_,widgets_ in sidebars_widgets_:
+            sidebar_widget_ids_ = Array()
+            for widget_ in widgets_:
+                id_base_, instance_ = widget_
+                if (not (php_isset(lambda : max_widget_numbers_[id_base_]))):
                     #// When $settings is an array-like object, get an intrinsic array for use with array_keys().
-                    settings = get_option(str("widget_") + str(id_base), Array())
-                    if type(settings).__name__ == "ArrayObject" or type(settings).__name__ == "ArrayIterator":
-                        settings = settings.getarraycopy()
+                    settings_ = get_option(str("widget_") + str(id_base_), Array())
+                    if type(settings_).__name__ == "ArrayObject" or type(settings_).__name__ == "ArrayIterator":
+                        settings_ = settings_.getarraycopy()
                     # end if
                     #// Find the max widget number for this type.
-                    widget_numbers = php_array_keys(settings)
-                    if php_count(widget_numbers) > 0:
-                        widget_numbers[-1] = 1
-                        max_widget_numbers[id_base] = php_max(widget_numbers)
+                    widget_numbers_ = php_array_keys(settings_)
+                    if php_count(widget_numbers_) > 0:
+                        widget_numbers_[-1] = 1
+                        max_widget_numbers_[id_base_] = php_max(widget_numbers_)
                     else:
-                        max_widget_numbers[id_base] = 1
+                        max_widget_numbers_[id_base_] = 1
                     # end if
                 # end if
-                max_widget_numbers[id_base] += 1
-                widget_id = php_sprintf("%s-%d", id_base, max_widget_numbers[id_base])
-                setting_id = php_sprintf("widget_%s[%d]", id_base, max_widget_numbers[id_base])
-                setting_value = self.widgets.sanitize_widget_js_instance(instance)
-                if php_empty(lambda : changeset_data[setting_id]) or (not php_empty(lambda : changeset_data[setting_id]["starter_content"])):
-                    self.set_post_value(setting_id, setting_value)
-                    self.pending_starter_content_settings_ids[-1] = setting_id
+                max_widget_numbers_[id_base_] += 1
+                widget_id_ = php_sprintf("%s-%d", id_base_, max_widget_numbers_[id_base_])
+                setting_id_ = php_sprintf("widget_%s[%d]", id_base_, max_widget_numbers_[id_base_])
+                setting_value_ = self.widgets.sanitize_widget_js_instance(instance_)
+                if php_empty(lambda : changeset_data_[setting_id_]) or (not php_empty(lambda : changeset_data_[setting_id_]["starter_content"])):
+                    self.set_post_value(setting_id_, setting_value_)
+                    self.pending_starter_content_settings_ids[-1] = setting_id_
                 # end if
-                sidebar_widget_ids[-1] = widget_id
+                sidebar_widget_ids_[-1] = widget_id_
             # end for
-            setting_id = php_sprintf("sidebars_widgets[%s]", sidebar_id)
-            if php_empty(lambda : changeset_data[setting_id]) or (not php_empty(lambda : changeset_data[setting_id]["starter_content"])):
-                self.set_post_value(setting_id, sidebar_widget_ids)
-                self.pending_starter_content_settings_ids[-1] = setting_id
+            setting_id_ = php_sprintf("sidebars_widgets[%s]", sidebar_id_)
+            if php_empty(lambda : changeset_data_[setting_id_]) or (not php_empty(lambda : changeset_data_[setting_id_]["starter_content"])):
+                self.set_post_value(setting_id_, sidebar_widget_ids_)
+                self.pending_starter_content_settings_ids[-1] = setting_id_
             # end if
         # end for
-        starter_content_auto_draft_post_ids = Array()
-        if (not php_empty(lambda : changeset_data["nav_menus_created_posts"]["value"])):
-            starter_content_auto_draft_post_ids = php_array_merge(starter_content_auto_draft_post_ids, changeset_data["nav_menus_created_posts"]["value"])
+        starter_content_auto_draft_post_ids_ = Array()
+        if (not php_empty(lambda : changeset_data_["nav_menus_created_posts"]["value"])):
+            starter_content_auto_draft_post_ids_ = php_array_merge(starter_content_auto_draft_post_ids_, changeset_data_["nav_menus_created_posts"]["value"])
         # end if
         #// Make an index of all the posts needed and what their slugs are.
-        needed_posts = Array()
-        attachments = self.prepare_starter_content_attachments(attachments)
-        for attachment in attachments:
-            key = "attachment:" + attachment["post_name"]
-            needed_posts[key] = True
+        needed_posts_ = Array()
+        attachments_ = self.prepare_starter_content_attachments(attachments_)
+        for attachment_ in attachments_:
+            key_ = "attachment:" + attachment_["post_name"]
+            needed_posts_[key_] = True
         # end for
-        for post_symbol in php_array_keys(posts):
-            if php_empty(lambda : posts[post_symbol]["post_name"]) and php_empty(lambda : posts[post_symbol]["post_title"]):
-                posts[post_symbol] = None
+        for post_symbol_ in php_array_keys(posts_):
+            if php_empty(lambda : posts_[post_symbol_]["post_name"]) and php_empty(lambda : posts_[post_symbol_]["post_title"]):
+                posts_[post_symbol_] = None
                 continue
             # end if
-            if php_empty(lambda : posts[post_symbol]["post_name"]):
-                posts[post_symbol]["post_name"] = sanitize_title(posts[post_symbol]["post_title"])
+            if php_empty(lambda : posts_[post_symbol_]["post_name"]):
+                posts_[post_symbol_]["post_name"] = sanitize_title(posts_[post_symbol_]["post_title"])
             # end if
-            if php_empty(lambda : posts[post_symbol]["post_type"]):
-                posts[post_symbol]["post_type"] = "post"
+            if php_empty(lambda : posts_[post_symbol_]["post_type"]):
+                posts_[post_symbol_]["post_type"] = "post"
             # end if
-            needed_posts[posts[post_symbol]["post_type"] + ":" + posts[post_symbol]["post_name"]] = True
+            needed_posts_[posts_[post_symbol_]["post_type"] + ":" + posts_[post_symbol_]["post_name"]] = True
         # end for
-        all_post_slugs = php_array_merge(wp_list_pluck(attachments, "post_name"), wp_list_pluck(posts, "post_name"))
+        all_post_slugs_ = php_array_merge(wp_list_pluck(attachments_, "post_name"), wp_list_pluck(posts_, "post_name"))
         #// 
         #// Obtain all post types referenced in starter content to use in query.
         #// This is needed because 'any' will not account for post types not yet registered.
         #//
-        post_types = php_array_filter(php_array_merge(Array("attachment"), wp_list_pluck(posts, "post_type")))
+        post_types_ = php_array_filter(php_array_merge(Array("attachment"), wp_list_pluck(posts_, "post_type")))
         #// Re-use auto-draft starter content posts referenced in the current customized state.
-        existing_starter_content_posts = Array()
-        if (not php_empty(lambda : starter_content_auto_draft_post_ids)):
-            existing_posts_query = php_new_class("WP_Query", lambda : WP_Query(Array({"post__in": starter_content_auto_draft_post_ids, "post_status": "auto-draft", "post_type": post_types, "posts_per_page": -1})))
-            for existing_post in existing_posts_query.posts:
-                post_name = existing_post.post_name
-                if php_empty(lambda : post_name):
-                    post_name = get_post_meta(existing_post.ID, "_customize_draft_post_name", True)
+        existing_starter_content_posts_ = Array()
+        if (not php_empty(lambda : starter_content_auto_draft_post_ids_)):
+            existing_posts_query_ = php_new_class("WP_Query", lambda : WP_Query(Array({"post__in": starter_content_auto_draft_post_ids_, "post_status": "auto-draft", "post_type": post_types_, "posts_per_page": -1})))
+            for existing_post_ in existing_posts_query_.posts:
+                post_name_ = existing_post_.post_name
+                if php_empty(lambda : post_name_):
+                    post_name_ = get_post_meta(existing_post_.ID, "_customize_draft_post_name", True)
                 # end if
-                existing_starter_content_posts[existing_post.post_type + ":" + post_name] = existing_post
+                existing_starter_content_posts_[existing_post_.post_type + ":" + post_name_] = existing_post_
             # end for
         # end if
         #// Re-use non-auto-draft posts.
-        if (not php_empty(lambda : all_post_slugs)):
-            existing_posts_query = php_new_class("WP_Query", lambda : WP_Query(Array({"post_name__in": all_post_slugs, "post_status": php_array_diff(get_post_stati(), Array("auto-draft")), "post_type": "any", "posts_per_page": -1})))
-            for existing_post in existing_posts_query.posts:
-                key = existing_post.post_type + ":" + existing_post.post_name
-                if (php_isset(lambda : needed_posts[key])) and (not (php_isset(lambda : existing_starter_content_posts[key]))):
-                    existing_starter_content_posts[key] = existing_post
+        if (not php_empty(lambda : all_post_slugs_)):
+            existing_posts_query_ = php_new_class("WP_Query", lambda : WP_Query(Array({"post_name__in": all_post_slugs_, "post_status": php_array_diff(get_post_stati(), Array("auto-draft")), "post_type": "any", "posts_per_page": -1})))
+            for existing_post_ in existing_posts_query_.posts:
+                key_ = existing_post_.post_type + ":" + existing_post_.post_name
+                if (php_isset(lambda : needed_posts_[key_])) and (not (php_isset(lambda : existing_starter_content_posts_[key_]))):
+                    existing_starter_content_posts_[key_] = existing_post_
                 # end if
             # end for
         # end if
         #// Attachments are technically posts but handled differently.
-        if (not php_empty(lambda : attachments)):
-            attachment_ids = Array()
-            for symbol,attachment in attachments:
-                file_array = Array({"name": attachment["file_name"]})
-                file_path = attachment["file_path"]
-                attachment_id = None
-                attached_file = None
-                if (php_isset(lambda : existing_starter_content_posts["attachment:" + attachment["post_name"]])):
-                    attachment_post = existing_starter_content_posts["attachment:" + attachment["post_name"]]
-                    attachment_id = attachment_post.ID
-                    attached_file = get_attached_file(attachment_id)
-                    if php_empty(lambda : attached_file) or (not php_file_exists(attached_file)):
-                        attachment_id = None
-                        attached_file = None
-                    elif self.get_stylesheet() != get_post_meta(attachment_post.ID, "_starter_content_theme", True):
+        if (not php_empty(lambda : attachments_)):
+            attachment_ids_ = Array()
+            for symbol_,attachment_ in attachments_:
+                file_array_ = Array({"name": attachment_["file_name"]})
+                file_path_ = attachment_["file_path"]
+                attachment_id_ = None
+                attached_file_ = None
+                if (php_isset(lambda : existing_starter_content_posts_["attachment:" + attachment_["post_name"]])):
+                    attachment_post_ = existing_starter_content_posts_["attachment:" + attachment_["post_name"]]
+                    attachment_id_ = attachment_post_.ID
+                    attached_file_ = get_attached_file(attachment_id_)
+                    if php_empty(lambda : attached_file_) or (not php_file_exists(attached_file_)):
+                        attachment_id_ = None
+                        attached_file_ = None
+                    elif self.get_stylesheet() != get_post_meta(attachment_post_.ID, "_starter_content_theme", True):
                         #// Re-generate attachment metadata since it was previously generated for a different theme.
-                        metadata = wp_generate_attachment_metadata(attachment_post.ID, attached_file)
-                        wp_update_attachment_metadata(attachment_id, metadata)
-                        update_post_meta(attachment_id, "_starter_content_theme", self.get_stylesheet())
+                        metadata_ = wp_generate_attachment_metadata(attachment_post_.ID, attached_file_)
+                        wp_update_attachment_metadata(attachment_id_, metadata_)
+                        update_post_meta(attachment_id_, "_starter_content_theme", self.get_stylesheet())
                     # end if
                 # end if
                 #// Insert the attachment auto-draft because it doesn't yet exist or the attached file is gone.
-                if (not attachment_id):
+                if (not attachment_id_):
                     #// Copy file to temp location so that original file won't get deleted from theme after sideloading.
-                    temp_file_name = wp_tempnam(wp_basename(file_path))
-                    if temp_file_name and copy(file_path, temp_file_name):
-                        file_array["tmp_name"] = temp_file_name
+                    temp_file_name_ = wp_tempnam(wp_basename(file_path_))
+                    if temp_file_name_ and copy(file_path_, temp_file_name_):
+                        file_array_["tmp_name"] = temp_file_name_
                     # end if
-                    if php_empty(lambda : file_array["tmp_name"]):
+                    if php_empty(lambda : file_array_["tmp_name"]):
                         continue
                     # end if
-                    attachment_post_data = php_array_merge(wp_array_slice_assoc(attachment, Array("post_title", "post_content", "post_excerpt")), Array({"post_status": "auto-draft"}))
-                    attachment_id = media_handle_sideload(file_array, 0, None, attachment_post_data)
-                    if is_wp_error(attachment_id):
+                    attachment_post_data_ = php_array_merge(wp_array_slice_assoc(attachment_, Array("post_title", "post_content", "post_excerpt")), Array({"post_status": "auto-draft"}))
+                    attachment_id_ = media_handle_sideload(file_array_, 0, None, attachment_post_data_)
+                    if is_wp_error(attachment_id_):
                         continue
                     # end if
-                    update_post_meta(attachment_id, "_starter_content_theme", self.get_stylesheet())
-                    update_post_meta(attachment_id, "_customize_draft_post_name", attachment["post_name"])
+                    update_post_meta(attachment_id_, "_starter_content_theme", self.get_stylesheet())
+                    update_post_meta(attachment_id_, "_customize_draft_post_name", attachment_["post_name"])
                 # end if
-                attachment_ids[symbol] = attachment_id
+                attachment_ids_[symbol_] = attachment_id_
             # end for
-            starter_content_auto_draft_post_ids = php_array_merge(starter_content_auto_draft_post_ids, php_array_values(attachment_ids))
+            starter_content_auto_draft_post_ids_ = php_array_merge(starter_content_auto_draft_post_ids_, php_array_values(attachment_ids_))
         # end if
         #// Posts & pages.
-        if (not php_empty(lambda : posts)):
-            for post_symbol in php_array_keys(posts):
-                if php_empty(lambda : posts[post_symbol]["post_type"]) or php_empty(lambda : posts[post_symbol]["post_name"]):
+        if (not php_empty(lambda : posts_)):
+            for post_symbol_ in php_array_keys(posts_):
+                if php_empty(lambda : posts_[post_symbol_]["post_type"]) or php_empty(lambda : posts_[post_symbol_]["post_name"]):
                     continue
                 # end if
-                post_type = posts[post_symbol]["post_type"]
-                if (not php_empty(lambda : posts[post_symbol]["post_name"])):
-                    post_name = posts[post_symbol]["post_name"]
-                elif (not php_empty(lambda : posts[post_symbol]["post_title"])):
-                    post_name = sanitize_title(posts[post_symbol]["post_title"])
+                post_type_ = posts_[post_symbol_]["post_type"]
+                if (not php_empty(lambda : posts_[post_symbol_]["post_name"])):
+                    post_name_ = posts_[post_symbol_]["post_name"]
+                elif (not php_empty(lambda : posts_[post_symbol_]["post_title"])):
+                    post_name_ = sanitize_title(posts_[post_symbol_]["post_title"])
                 else:
                     continue
                 # end if
                 #// Use existing auto-draft post if one already exists with the same type and name.
-                if (php_isset(lambda : existing_starter_content_posts[post_type + ":" + post_name])):
-                    posts[post_symbol]["ID"] = existing_starter_content_posts[post_type + ":" + post_name].ID
+                if (php_isset(lambda : existing_starter_content_posts_[post_type_ + ":" + post_name_])):
+                    posts_[post_symbol_]["ID"] = existing_starter_content_posts_[post_type_ + ":" + post_name_].ID
                     continue
                 # end if
                 #// Translate the featured image symbol.
-                if (not php_empty(lambda : posts[post_symbol]["thumbnail"])) and php_preg_match("/^{{(?P<symbol>.+)}}$/", posts[post_symbol]["thumbnail"], matches) and (php_isset(lambda : attachment_ids[matches["symbol"]])):
-                    posts[post_symbol]["meta_input"]["_thumbnail_id"] = attachment_ids[matches["symbol"]]
+                if (not php_empty(lambda : posts_[post_symbol_]["thumbnail"])) and php_preg_match("/^{{(?P<symbol>.+)}}$/", posts_[post_symbol_]["thumbnail"], matches_) and (php_isset(lambda : attachment_ids_[matches_["symbol"]])):
+                    posts_[post_symbol_]["meta_input"]["_thumbnail_id"] = attachment_ids_[matches_["symbol"]]
                 # end if
-                if (not php_empty(lambda : posts[post_symbol]["template"])):
-                    posts[post_symbol]["meta_input"]["_wp_page_template"] = posts[post_symbol]["template"]
+                if (not php_empty(lambda : posts_[post_symbol_]["template"])):
+                    posts_[post_symbol_]["meta_input"]["_wp_page_template"] = posts_[post_symbol_]["template"]
                 # end if
-                r = self.nav_menus.insert_auto_draft_post(posts[post_symbol])
-                if type(r).__name__ == "WP_Post":
-                    posts[post_symbol]["ID"] = r.ID
+                r_ = self.nav_menus.insert_auto_draft_post(posts_[post_symbol_])
+                if type(r_).__name__ == "WP_Post":
+                    posts_[post_symbol_]["ID"] = r_.ID
                 # end if
             # end for
-            starter_content_auto_draft_post_ids = php_array_merge(starter_content_auto_draft_post_ids, wp_list_pluck(posts, "ID"))
+            starter_content_auto_draft_post_ids_ = php_array_merge(starter_content_auto_draft_post_ids_, wp_list_pluck(posts_, "ID"))
         # end if
         #// The nav_menus_created_posts setting is why nav_menus component is dependency for adding posts.
-        if (not php_empty(lambda : self.nav_menus)) and (not php_empty(lambda : starter_content_auto_draft_post_ids)):
-            setting_id = "nav_menus_created_posts"
-            self.set_post_value(setting_id, array_unique(php_array_values(starter_content_auto_draft_post_ids)))
-            self.pending_starter_content_settings_ids[-1] = setting_id
+        if (not php_empty(lambda : self.nav_menus)) and (not php_empty(lambda : starter_content_auto_draft_post_ids_)):
+            setting_id_ = "nav_menus_created_posts"
+            self.set_post_value(setting_id_, array_unique(php_array_values(starter_content_auto_draft_post_ids_)))
+            self.pending_starter_content_settings_ids[-1] = setting_id_
         # end if
         #// Nav menus.
-        placeholder_id = -1
-        reused_nav_menu_setting_ids = Array()
-        for nav_menu_location,nav_menu in nav_menus:
-            nav_menu_term_id = None
-            nav_menu_setting_id = None
-            matches = Array()
+        placeholder_id_ = -1
+        reused_nav_menu_setting_ids_ = Array()
+        for nav_menu_location_,nav_menu_ in nav_menus_:
+            nav_menu_term_id_ = None
+            nav_menu_setting_id_ = None
+            matches_ = Array()
             #// Look for an existing placeholder menu with starter content to re-use.
-            for setting_id,setting_params in changeset_data:
-                can_reuse = (not php_empty(lambda : setting_params["starter_content"])) and (not php_in_array(setting_id, reused_nav_menu_setting_ids, True)) and php_preg_match("#^nav_menu\\[(?P<nav_menu_id>-?\\d+)\\]$#", setting_id, matches)
-                if can_reuse:
-                    nav_menu_term_id = php_intval(matches["nav_menu_id"])
-                    nav_menu_setting_id = setting_id
-                    reused_nav_menu_setting_ids[-1] = setting_id
+            for setting_id_,setting_params_ in changeset_data_:
+                can_reuse_ = (not php_empty(lambda : setting_params_["starter_content"])) and (not php_in_array(setting_id_, reused_nav_menu_setting_ids_, True)) and php_preg_match("#^nav_menu\\[(?P<nav_menu_id>-?\\d+)\\]$#", setting_id_, matches_)
+                if can_reuse_:
+                    nav_menu_term_id_ = php_intval(matches_["nav_menu_id"])
+                    nav_menu_setting_id_ = setting_id_
+                    reused_nav_menu_setting_ids_[-1] = setting_id_
                     break
                 # end if
             # end for
-            if (not nav_menu_term_id):
+            if (not nav_menu_term_id_):
                 while True:
                     
-                    if not ((php_isset(lambda : changeset_data[php_sprintf("nav_menu[%d]", placeholder_id)]))):
+                    if not ((php_isset(lambda : changeset_data_[php_sprintf("nav_menu[%d]", placeholder_id_)]))):
                         break
                     # end if
-                    placeholder_id -= 1
+                    placeholder_id_ -= 1
                 # end while
-                nav_menu_term_id = placeholder_id
-                nav_menu_setting_id = php_sprintf("nav_menu[%d]", placeholder_id)
+                nav_menu_term_id_ = placeholder_id_
+                nav_menu_setting_id_ = php_sprintf("nav_menu[%d]", placeholder_id_)
             # end if
-            self.set_post_value(nav_menu_setting_id, Array({"name": nav_menu["name"] if (php_isset(lambda : nav_menu["name"])) else nav_menu_location}))
-            self.pending_starter_content_settings_ids[-1] = nav_menu_setting_id
+            self.set_post_value(nav_menu_setting_id_, Array({"name": nav_menu_["name"] if (php_isset(lambda : nav_menu_["name"])) else nav_menu_location_}))
+            self.pending_starter_content_settings_ids[-1] = nav_menu_setting_id_
             #// @todo Add support for menu_item_parent.
-            position = 0
-            for nav_menu_item in nav_menu["items"]:
-                nav_menu_item_setting_id = php_sprintf("nav_menu_item[%d]", placeholder_id)
-                placeholder_id -= 1
-                if (not (php_isset(lambda : nav_menu_item["position"]))):
-                    nav_menu_item["position"] = position
-                    position += 1
+            position_ = 0
+            for nav_menu_item_ in nav_menu_["items"]:
+                nav_menu_item_setting_id_ = php_sprintf("nav_menu_item[%d]", placeholder_id_)
+                placeholder_id_ -= 1
+                if (not (php_isset(lambda : nav_menu_item_["position"]))):
+                    nav_menu_item_["position"] = position_
+                    position_ += 1
+                    position_ += 1
                 # end if
-                nav_menu_item["nav_menu_term_id"] = nav_menu_term_id
-                if (php_isset(lambda : nav_menu_item["object_id"])):
-                    if "post_type" == nav_menu_item["type"] and php_preg_match("/^{{(?P<symbol>.+)}}$/", nav_menu_item["object_id"], matches) and (php_isset(lambda : posts[matches["symbol"]])):
-                        nav_menu_item["object_id"] = posts[matches["symbol"]]["ID"]
-                        if php_empty(lambda : nav_menu_item["title"]):
-                            original_object = get_post(nav_menu_item["object_id"])
-                            nav_menu_item["title"] = original_object.post_title
+                nav_menu_item_["nav_menu_term_id"] = nav_menu_term_id_
+                if (php_isset(lambda : nav_menu_item_["object_id"])):
+                    if "post_type" == nav_menu_item_["type"] and php_preg_match("/^{{(?P<symbol>.+)}}$/", nav_menu_item_["object_id"], matches_) and (php_isset(lambda : posts_[matches_["symbol"]])):
+                        nav_menu_item_["object_id"] = posts_[matches_["symbol"]]["ID"]
+                        if php_empty(lambda : nav_menu_item_["title"]):
+                            original_object_ = get_post(nav_menu_item_["object_id"])
+                            nav_menu_item_["title"] = original_object_.post_title
                         # end if
                     else:
                         continue
                     # end if
                 else:
-                    nav_menu_item["object_id"] = 0
+                    nav_menu_item_["object_id"] = 0
                 # end if
-                if php_empty(lambda : changeset_data[nav_menu_item_setting_id]) or (not php_empty(lambda : changeset_data[nav_menu_item_setting_id]["starter_content"])):
-                    self.set_post_value(nav_menu_item_setting_id, nav_menu_item)
-                    self.pending_starter_content_settings_ids[-1] = nav_menu_item_setting_id
+                if php_empty(lambda : changeset_data_[nav_menu_item_setting_id_]) or (not php_empty(lambda : changeset_data_[nav_menu_item_setting_id_]["starter_content"])):
+                    self.set_post_value(nav_menu_item_setting_id_, nav_menu_item_)
+                    self.pending_starter_content_settings_ids[-1] = nav_menu_item_setting_id_
                 # end if
             # end for
-            setting_id = php_sprintf("nav_menu_locations[%s]", nav_menu_location)
-            if php_empty(lambda : changeset_data[setting_id]) or (not php_empty(lambda : changeset_data[setting_id]["starter_content"])):
-                self.set_post_value(setting_id, nav_menu_term_id)
-                self.pending_starter_content_settings_ids[-1] = setting_id
+            setting_id_ = php_sprintf("nav_menu_locations[%s]", nav_menu_location_)
+            if php_empty(lambda : changeset_data_[setting_id_]) or (not php_empty(lambda : changeset_data_[setting_id_]["starter_content"])):
+                self.set_post_value(setting_id_, nav_menu_term_id_)
+                self.pending_starter_content_settings_ids[-1] = setting_id_
             # end if
         # end for
         #// Options.
-        for name,value in options:
+        for name_,value_ in options_:
             #// Serialize the value to check for post symbols.
-            value = maybe_serialize(value)
-            if is_serialized(value):
-                if php_preg_match("/s:\\d+:\"{{(?P<symbol>.+)}}\"/", value, matches):
-                    if (php_isset(lambda : posts[matches["symbol"]])):
-                        symbol_match = posts[matches["symbol"]]["ID"]
-                    elif (php_isset(lambda : attachment_ids[matches["symbol"]])):
-                        symbol_match = attachment_ids[matches["symbol"]]
+            value_ = maybe_serialize(value_)
+            if is_serialized(value_):
+                if php_preg_match("/s:\\d+:\"{{(?P<symbol>.+)}}\"/", value_, matches_):
+                    if (php_isset(lambda : posts_[matches_["symbol"]])):
+                        symbol_match_ = posts_[matches_["symbol"]]["ID"]
+                    elif (php_isset(lambda : attachment_ids_[matches_["symbol"]])):
+                        symbol_match_ = attachment_ids_[matches_["symbol"]]
                     # end if
                     #// If we have any symbol matches, update the values.
-                    if (php_isset(lambda : symbol_match)):
+                    if (php_isset(lambda : symbol_match_)):
                         #// Replace found string matches with post IDs.
-                        value = php_str_replace(matches[0], str("i:") + str(symbol_match), value)
+                        value_ = php_str_replace(matches_[0], str("i:") + str(symbol_match_), value_)
                     else:
                         continue
                     # end if
                 # end if
-            elif php_preg_match("/^{{(?P<symbol>.+)}}$/", value, matches):
-                if (php_isset(lambda : posts[matches["symbol"]])):
-                    value = posts[matches["symbol"]]["ID"]
-                elif (php_isset(lambda : attachment_ids[matches["symbol"]])):
-                    value = attachment_ids[matches["symbol"]]
+            elif php_preg_match("/^{{(?P<symbol>.+)}}$/", value_, matches_):
+                if (php_isset(lambda : posts_[matches_["symbol"]])):
+                    value_ = posts_[matches_["symbol"]]["ID"]
+                elif (php_isset(lambda : attachment_ids_[matches_["symbol"]])):
+                    value_ = attachment_ids_[matches_["symbol"]]
                 else:
                     continue
                 # end if
             # end if
             #// Unserialize values after checking for post symbols, so they can be properly referenced.
-            value = maybe_unserialize(value)
-            if php_empty(lambda : changeset_data[name]) or (not php_empty(lambda : changeset_data[name]["starter_content"])):
-                self.set_post_value(name, value)
-                self.pending_starter_content_settings_ids[-1] = name
+            value_ = maybe_unserialize(value_)
+            if php_empty(lambda : changeset_data_[name_]) or (not php_empty(lambda : changeset_data_[name_]["starter_content"])):
+                self.set_post_value(name_, value_)
+                self.pending_starter_content_settings_ids[-1] = name_
             # end if
         # end for
         #// Theme mods.
-        for name,value in theme_mods:
+        for name_,value_ in theme_mods_:
             #// Serialize the value to check for post symbols.
-            value = maybe_serialize(value)
+            value_ = maybe_serialize(value_)
             #// Check if value was serialized.
-            if is_serialized(value):
-                if php_preg_match("/s:\\d+:\"{{(?P<symbol>.+)}}\"/", value, matches):
-                    if (php_isset(lambda : posts[matches["symbol"]])):
-                        symbol_match = posts[matches["symbol"]]["ID"]
-                    elif (php_isset(lambda : attachment_ids[matches["symbol"]])):
-                        symbol_match = attachment_ids[matches["symbol"]]
+            if is_serialized(value_):
+                if php_preg_match("/s:\\d+:\"{{(?P<symbol>.+)}}\"/", value_, matches_):
+                    if (php_isset(lambda : posts_[matches_["symbol"]])):
+                        symbol_match_ = posts_[matches_["symbol"]]["ID"]
+                    elif (php_isset(lambda : attachment_ids_[matches_["symbol"]])):
+                        symbol_match_ = attachment_ids_[matches_["symbol"]]
                     # end if
                     #// If we have any symbol matches, update the values.
-                    if (php_isset(lambda : symbol_match)):
+                    if (php_isset(lambda : symbol_match_)):
                         #// Replace found string matches with post IDs.
-                        value = php_str_replace(matches[0], str("i:") + str(symbol_match), value)
+                        value_ = php_str_replace(matches_[0], str("i:") + str(symbol_match_), value_)
                     else:
                         continue
                     # end if
                 # end if
-            elif php_preg_match("/^{{(?P<symbol>.+)}}$/", value, matches):
-                if (php_isset(lambda : posts[matches["symbol"]])):
-                    value = posts[matches["symbol"]]["ID"]
-                elif (php_isset(lambda : attachment_ids[matches["symbol"]])):
-                    value = attachment_ids[matches["symbol"]]
+            elif php_preg_match("/^{{(?P<symbol>.+)}}$/", value_, matches_):
+                if (php_isset(lambda : posts_[matches_["symbol"]])):
+                    value_ = posts_[matches_["symbol"]]["ID"]
+                elif (php_isset(lambda : attachment_ids_[matches_["symbol"]])):
+                    value_ = attachment_ids_[matches_["symbol"]]
                 else:
                     continue
                 # end if
             # end if
             #// Unserialize values after checking for post symbols, so they can be properly referenced.
-            value = maybe_unserialize(value)
+            value_ = maybe_unserialize(value_)
             #// Handle header image as special case since setting has a legacy format.
-            if "header_image" == name:
-                name = "header_image_data"
-                metadata = wp_get_attachment_metadata(value)
-                if php_empty(lambda : metadata):
+            if "header_image" == name_:
+                name_ = "header_image_data"
+                metadata_ = wp_get_attachment_metadata(value_)
+                if php_empty(lambda : metadata_):
                     continue
                 # end if
-                value = Array({"attachment_id": value, "url": wp_get_attachment_url(value), "height": metadata["height"], "width": metadata["width"]})
-            elif "background_image" == name:
-                value = wp_get_attachment_url(value)
+                value_ = Array({"attachment_id": value_, "url": wp_get_attachment_url(value_), "height": metadata_["height"], "width": metadata_["width"]})
+            elif "background_image" == name_:
+                value_ = wp_get_attachment_url(value_)
             # end if
-            if php_empty(lambda : changeset_data[name]) or (not php_empty(lambda : changeset_data[name]["starter_content"])):
-                self.set_post_value(name, value)
-                self.pending_starter_content_settings_ids[-1] = name
+            if php_empty(lambda : changeset_data_[name_]) or (not php_empty(lambda : changeset_data_[name_]["starter_content"])):
+                self.set_post_value(name_, value_)
+                self.pending_starter_content_settings_ids[-1] = name_
             # end if
         # end for
         if (not php_empty(lambda : self.pending_starter_content_settings_ids)):
@@ -1231,51 +1429,52 @@ class WP_Customize_Manager():
     #// @param array $attachments Attachments.
     #// @return array Prepared attachments.
     #//
-    def prepare_starter_content_attachments(self, attachments=None):
+    def prepare_starter_content_attachments(self, attachments_=None):
         
-        prepared_attachments = Array()
-        if php_empty(lambda : attachments):
-            return prepared_attachments
+        
+        prepared_attachments_ = Array()
+        if php_empty(lambda : attachments_):
+            return prepared_attachments_
         # end if
         #// Such is The WordPress Way.
         php_include_file(ABSPATH + "wp-admin/includes/file.php", once=True)
         php_include_file(ABSPATH + "wp-admin/includes/media.php", once=True)
         php_include_file(ABSPATH + "wp-admin/includes/image.php", once=True)
-        for symbol,attachment in attachments:
+        for symbol_,attachment_ in attachments_:
             #// A file is required and URLs to files are not currently allowed.
-            if php_empty(lambda : attachment["file"]) or php_preg_match("#^https?://$#", attachment["file"]):
+            if php_empty(lambda : attachment_["file"]) or php_preg_match("#^https?://$#", attachment_["file"]):
                 continue
             # end if
-            file_path = None
-            if php_file_exists(attachment["file"]):
-                file_path = attachment["file"]
+            file_path_ = None
+            if php_file_exists(attachment_["file"]):
+                file_path_ = attachment_["file"]
                 pass
-            elif is_child_theme() and php_file_exists(get_stylesheet_directory() + "/" + attachment["file"]):
-                file_path = get_stylesheet_directory() + "/" + attachment["file"]
-            elif php_file_exists(get_template_directory() + "/" + attachment["file"]):
-                file_path = get_template_directory() + "/" + attachment["file"]
+            elif is_child_theme() and php_file_exists(get_stylesheet_directory() + "/" + attachment_["file"]):
+                file_path_ = get_stylesheet_directory() + "/" + attachment_["file"]
+            elif php_file_exists(get_template_directory() + "/" + attachment_["file"]):
+                file_path_ = get_template_directory() + "/" + attachment_["file"]
             else:
                 continue
             # end if
-            file_name = wp_basename(attachment["file"])
+            file_name_ = wp_basename(attachment_["file"])
             #// Skip file types that are not recognized.
-            checked_filetype = wp_check_filetype(file_name)
-            if php_empty(lambda : checked_filetype["type"]):
+            checked_filetype_ = wp_check_filetype(file_name_)
+            if php_empty(lambda : checked_filetype_["type"]):
                 continue
             # end if
             #// Ensure post_name is set since not automatically derived from post_title for new auto-draft posts.
-            if php_empty(lambda : attachment["post_name"]):
-                if (not php_empty(lambda : attachment["post_title"])):
-                    attachment["post_name"] = sanitize_title(attachment["post_title"])
+            if php_empty(lambda : attachment_["post_name"]):
+                if (not php_empty(lambda : attachment_["post_title"])):
+                    attachment_["post_name"] = sanitize_title(attachment_["post_title"])
                 else:
-                    attachment["post_name"] = sanitize_title(php_preg_replace("/\\.\\w+$/", "", file_name))
+                    attachment_["post_name"] = sanitize_title(php_preg_replace("/\\.\\w+$/", "", file_name_))
                 # end if
             # end if
-            attachment["file_name"] = file_name
-            attachment["file_path"] = file_path
-            prepared_attachments[symbol] = attachment
+            attachment_["file_name"] = file_name_
+            attachment_["file_path"] = file_path_
+            prepared_attachments_[symbol_] = attachment_
         # end for
-        return prepared_attachments
+        return prepared_attachments_
     # end def prepare_starter_content_attachments
     #// 
     #// Save starter content changeset.
@@ -1283,6 +1482,7 @@ class WP_Customize_Manager():
     #// @since 4.7.0
     #//
     def _save_starter_content_changeset(self):
+        
         
         if php_empty(lambda : self.pending_starter_content_settings_ids):
             return
@@ -1318,50 +1518,53 @@ class WP_Customize_Manager():
     #// }
     #// @return array
     #//
-    def unsanitized_post_values(self, args=Array()):
+    def unsanitized_post_values(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        args = php_array_merge(Array({"exclude_changeset": False, "exclude_post_data": (not current_user_can("customize"))}), args)
-        values = Array()
+        args_ = php_array_merge(Array({"exclude_changeset": False, "exclude_post_data": (not current_user_can("customize"))}), args_)
+        values_ = Array()
         #// Let default values be from the stashed theme mods if doing a theme switch and if no changeset is present.
         if (not self.is_theme_active()):
-            stashed_theme_mods = get_option("customize_stashed_theme_mods")
-            stylesheet = self.get_stylesheet()
-            if (php_isset(lambda : stashed_theme_mods[stylesheet])):
-                values = php_array_merge(values, wp_list_pluck(stashed_theme_mods[stylesheet], "value"))
+            stashed_theme_mods_ = get_option("customize_stashed_theme_mods")
+            stylesheet_ = self.get_stylesheet()
+            if (php_isset(lambda : stashed_theme_mods_[stylesheet_])):
+                values_ = php_array_merge(values_, wp_list_pluck(stashed_theme_mods_[stylesheet_], "value"))
             # end if
         # end if
-        if (not args["exclude_changeset"]):
-            for setting_id,setting_params in self.changeset_data():
-                if (not php_array_key_exists("value", setting_params)):
+        if (not args_["exclude_changeset"]):
+            for setting_id_,setting_params_ in self.changeset_data():
+                if (not php_array_key_exists("value", setting_params_)):
                     continue
                 # end if
-                if (php_isset(lambda : setting_params["type"])) and "theme_mod" == setting_params["type"]:
+                if (php_isset(lambda : setting_params_["type"])) and "theme_mod" == setting_params_["type"]:
                     #// Ensure that theme mods values are only used if they were saved under the current theme.
-                    namespace_pattern = "/^(?P<stylesheet>.+?)::(?P<setting_id>.+)$/"
-                    if php_preg_match(namespace_pattern, setting_id, matches) and self.get_stylesheet() == matches["stylesheet"]:
-                        values[matches["setting_id"]] = setting_params["value"]
+                    namespace_pattern_ = "/^(?P<stylesheet>.+?)::(?P<setting_id>.+)$/"
+                    if php_preg_match(namespace_pattern_, setting_id_, matches_) and self.get_stylesheet() == matches_["stylesheet"]:
+                        values_[matches_["setting_id"]] = setting_params_["value"]
                     # end if
                 else:
-                    values[setting_id] = setting_params["value"]
+                    values_[setting_id_] = setting_params_["value"]
                 # end if
             # end for
         # end if
-        if (not args["exclude_post_data"]):
+        if (not args_["exclude_post_data"]):
             if (not (php_isset(lambda : self._post_values))):
                 if (php_isset(lambda : PHP_POST["customized"])):
-                    post_values = php_json_decode(wp_unslash(PHP_POST["customized"]), True)
+                    post_values_ = php_json_decode(wp_unslash(PHP_POST["customized"]), True)
                 else:
-                    post_values = Array()
+                    post_values_ = Array()
                 # end if
-                if php_is_array(post_values):
-                    self._post_values = post_values
+                if php_is_array(post_values_):
+                    self._post_values = post_values_
                 else:
                     self._post_values = Array()
                 # end if
             # end if
-            values = php_array_merge(values, self._post_values)
+            values_ = php_array_merge(values_, self._post_values)
         # end if
-        return values
+        return values_
     # end def unsanitized_post_values
     #// 
     #// Returns the sanitized value for a given setting from the current customized state.
@@ -1383,22 +1586,23 @@ class WP_Customize_Manager():
     #// or the post value is invalid (added in 4.6.0).
     #// @return string|mixed $post_value Sanitized value or the $default provided.
     #//
-    def post_value(self, setting=None, default=None):
+    def post_value(self, setting_=None, default_=None):
         
-        post_values = self.unsanitized_post_values()
-        if (not php_array_key_exists(setting.id, post_values)):
-            return default
+        
+        post_values_ = self.unsanitized_post_values()
+        if (not php_array_key_exists(setting_.id, post_values_)):
+            return default_
         # end if
-        value = post_values[setting.id]
-        valid = setting.validate(value)
-        if is_wp_error(valid):
-            return default
+        value_ = post_values_[setting_.id]
+        valid_ = setting_.validate(value_)
+        if is_wp_error(valid_):
+            return default_
         # end if
-        value = setting.sanitize(value)
-        if is_null(value) or is_wp_error(value):
-            return default
+        value_ = setting_.sanitize(value_)
+        if is_null(value_) or is_wp_error(value_):
+            return default_
         # end if
-        return value
+        return value_
     # end def post_value
     #// 
     #// Override a setting's value in the current customized state.
@@ -1411,11 +1615,12 @@ class WP_Customize_Manager():
     #// @param string $setting_id ID for the WP_Customize_Setting instance.
     #// @param mixed  $value      Post value.
     #//
-    def set_post_value(self, setting_id=None, value=None):
+    def set_post_value(self, setting_id_=None, value_=None):
+        
         
         self.unsanitized_post_values()
         #// Populate _post_values from $_POST['customized'].
-        self._post_values[setting_id] = value
+        self._post_values[setting_id_] = value_
         #// 
         #// Announce when a specific setting's unsanitized post value has been set.
         #// 
@@ -1428,7 +1633,7 @@ class WP_Customize_Manager():
         #// @param mixed                $value Unsanitized setting post value.
         #// @param WP_Customize_Manager $this  WP_Customize_Manager instance.
         #//
-        do_action(str("customize_post_value_set_") + str(setting_id), value, self)
+        do_action(str("customize_post_value_set_") + str(setting_id_), value_, self)
         #// 
         #// Announce when any setting's unsanitized post value has been set.
         #// 
@@ -1443,7 +1648,7 @@ class WP_Customize_Manager():
         #// @param mixed                $value      Unsanitized setting post value.
         #// @param WP_Customize_Manager $this       WP_Customize_Manager instance.
         #//
-        do_action("customize_post_value_set", setting_id, value, self)
+        do_action("customize_post_value_set", setting_id_, value_, self)
     # end def set_post_value
     #// 
     #// Print JavaScript settings.
@@ -1451,6 +1656,7 @@ class WP_Customize_Manager():
     #// @since 3.4.0
     #//
     def customize_preview_init(self):
+        
         
         #// 
         #// Now that Customizer previews are loaded into iframes via GET requests
@@ -1501,11 +1707,12 @@ class WP_Customize_Manager():
     #// @param array $headers Headers.
     #// @return array Headers.
     #//
-    def filter_iframe_security_headers(self, headers=None):
+    def filter_iframe_security_headers(self, headers_=None):
         
-        headers["X-Frame-Options"] = "SAMEORIGIN"
-        headers["Content-Security-Policy"] = "frame-ancestors 'self'"
-        return headers
+        
+        headers_["X-Frame-Options"] = "SAMEORIGIN"
+        headers_["Content-Security-Policy"] = "frame-ancestors 'self'"
+        return headers_
     # end def filter_iframe_security_headers
     #// 
     #// Add customize state query params to a given URL if preview is allowed.
@@ -1517,28 +1724,29 @@ class WP_Customize_Manager():
     #// @param string $url URL.
     #// @return string URL.
     #//
-    def add_state_query_params(self, url=None):
+    def add_state_query_params(self, url_=None):
         
-        parsed_original_url = wp_parse_url(url)
-        is_allowed = False
-        for allowed_url in self.get_allowed_urls():
-            parsed_allowed_url = wp_parse_url(allowed_url)
-            is_allowed = parsed_allowed_url["scheme"] == parsed_original_url["scheme"] and parsed_allowed_url["host"] == parsed_original_url["host"] and 0 == php_strpos(parsed_original_url["path"], parsed_allowed_url["path"])
-            if is_allowed:
+        
+        parsed_original_url_ = wp_parse_url(url_)
+        is_allowed_ = False
+        for allowed_url_ in self.get_allowed_urls():
+            parsed_allowed_url_ = wp_parse_url(allowed_url_)
+            is_allowed_ = parsed_allowed_url_["scheme"] == parsed_original_url_["scheme"] and parsed_allowed_url_["host"] == parsed_original_url_["host"] and 0 == php_strpos(parsed_original_url_["path"], parsed_allowed_url_["path"])
+            if is_allowed_:
                 break
             # end if
         # end for
-        if is_allowed:
-            query_params = Array({"customize_changeset_uuid": self.changeset_uuid()})
+        if is_allowed_:
+            query_params_ = Array({"customize_changeset_uuid": self.changeset_uuid()})
             if (not self.is_theme_active()):
-                query_params["customize_theme"] = self.get_stylesheet()
+                query_params_["customize_theme"] = self.get_stylesheet()
             # end if
             if self.messenger_channel:
-                query_params["customize_messenger_channel"] = self.messenger_channel
+                query_params_["customize_messenger_channel"] = self.messenger_channel
             # end if
-            url = add_query_arg(query_params, url)
+            url_ = add_query_arg(query_params_, url_)
         # end if
-        return url
+        return url_
     # end def add_state_query_params
     #// 
     #// Prevent sending a 404 status when returning the response for the customize
@@ -1548,6 +1756,7 @@ class WP_Customize_Manager():
     #// @deprecated 4.7.0
     #//
     def customize_preview_override_404_status(self):
+        
         
         _deprecated_function(__METHOD__, "4.7.0")
     # end def customize_preview_override_404_status
@@ -1559,6 +1768,7 @@ class WP_Customize_Manager():
     #//
     def customize_preview_base(self):
         
+        
         _deprecated_function(__METHOD__, "4.7.0")
     # end def customize_preview_base
     #// 
@@ -1569,6 +1779,7 @@ class WP_Customize_Manager():
     #//
     def customize_preview_html5(self):
         
+        
         _deprecated_function(__FUNCTION__, "4.7.0")
     # end def customize_preview_html5
     #// 
@@ -1577,6 +1788,7 @@ class WP_Customize_Manager():
     #// @since 4.2.0
     #//
     def customize_preview_loading_style(self):
+        
         
         php_print("""       <style>
         body.wp-customizer-unloading {
@@ -1608,6 +1820,7 @@ class WP_Customize_Manager():
     #// @since 4.7.0
     #//
     def remove_frameless_preview_messenger_channel(self):
+        
         
         if (not self.messenger_channel):
             return
@@ -1642,54 +1855,55 @@ class WP_Customize_Manager():
     #//
     def customize_preview_settings(self):
         
-        post_values = self.unsanitized_post_values(Array({"exclude_changeset": True}))
-        setting_validities = self.validate_setting_values(post_values)
-        exported_setting_validities = php_array_map(Array(self, "prepare_setting_validity_for_js"), setting_validities)
+        
+        post_values_ = self.unsanitized_post_values(Array({"exclude_changeset": True}))
+        setting_validities_ = self.validate_setting_values(post_values_)
+        exported_setting_validities_ = php_array_map(Array(self, "prepare_setting_validity_for_js"), setting_validities_)
         #// Note that the REQUEST_URI is not passed into home_url() since this breaks subdirectory installations.
-        self_url = home_url("/") if php_empty(lambda : PHP_SERVER["REQUEST_URI"]) else esc_url_raw(wp_unslash(PHP_SERVER["REQUEST_URI"]))
-        state_query_params = Array("customize_theme", "customize_changeset_uuid", "customize_messenger_channel")
-        self_url = remove_query_arg(state_query_params, self_url)
-        allowed_urls = self.get_allowed_urls()
-        allowed_hosts = Array()
-        for allowed_url in allowed_urls:
-            parsed = wp_parse_url(allowed_url)
-            if php_empty(lambda : parsed["host"]):
+        self_url_ = home_url("/") if php_empty(lambda : PHP_SERVER["REQUEST_URI"]) else esc_url_raw(wp_unslash(PHP_SERVER["REQUEST_URI"]))
+        state_query_params_ = Array("customize_theme", "customize_changeset_uuid", "customize_messenger_channel")
+        self_url_ = remove_query_arg(state_query_params_, self_url_)
+        allowed_urls_ = self.get_allowed_urls()
+        allowed_hosts_ = Array()
+        for allowed_url_ in allowed_urls_:
+            parsed_ = wp_parse_url(allowed_url_)
+            if php_empty(lambda : parsed_["host"]):
                 continue
             # end if
-            host = parsed["host"]
-            if (not php_empty(lambda : parsed["port"])):
-                host += ":" + parsed["port"]
+            host_ = parsed_["host"]
+            if (not php_empty(lambda : parsed_["port"])):
+                host_ += ":" + parsed_["port"]
             # end if
-            allowed_hosts[-1] = host
+            allowed_hosts_[-1] = host_
         # end for
-        switched_locale = switch_to_locale(get_user_locale())
-        l10n = Array({"shiftClickToEdit": __("Shift-click to edit this element."), "linkUnpreviewable": __("This link is not live-previewable."), "formUnpreviewable": __("This form is not live-previewable.")})
-        if switched_locale:
+        switched_locale_ = switch_to_locale(get_user_locale())
+        l10n_ = Array({"shiftClickToEdit": __("Shift-click to edit this element."), "linkUnpreviewable": __("This link is not live-previewable."), "formUnpreviewable": __("This form is not live-previewable.")})
+        if switched_locale_:
             restore_previous_locale()
         # end if
-        settings = Array({"changeset": Array({"uuid": self.changeset_uuid(), "autosaved": self.autosaved()})}, {"timeouts": Array({"selectiveRefresh": 250, "keepAliveSend": 1000})}, {"theme": Array({"stylesheet": self.get_stylesheet(), "active": self.is_theme_active()})}, {"url": Array({"self": self_url, "allowed": php_array_map("esc_url_raw", self.get_allowed_urls()), "allowedHosts": array_unique(allowed_hosts), "isCrossDomain": self.is_cross_domain()})}, {"channel": self.messenger_channel, "activePanels": Array(), "activeSections": Array(), "activeControls": Array(), "settingValidities": exported_setting_validities, "nonce": self.get_nonces() if current_user_can("customize") else Array(), "l10n": l10n, "_dirty": php_array_keys(post_values)})
-        for panel_id,panel in self.panels:
-            if panel.check_capabilities():
-                settings["activePanels"][panel_id] = panel.active()
-                for section_id,section in panel.sections:
-                    if section.check_capabilities():
-                        settings["activeSections"][section_id] = section.active()
+        settings_ = Array({"changeset": Array({"uuid": self.changeset_uuid(), "autosaved": self.autosaved()})}, {"timeouts": Array({"selectiveRefresh": 250, "keepAliveSend": 1000})}, {"theme": Array({"stylesheet": self.get_stylesheet(), "active": self.is_theme_active()})}, {"url": Array({"self": self_url_, "allowed": php_array_map("esc_url_raw", self.get_allowed_urls()), "allowedHosts": array_unique(allowed_hosts_), "isCrossDomain": self.is_cross_domain()})}, {"channel": self.messenger_channel, "activePanels": Array(), "activeSections": Array(), "activeControls": Array(), "settingValidities": exported_setting_validities_, "nonce": self.get_nonces() if current_user_can("customize") else Array(), "l10n": l10n_, "_dirty": php_array_keys(post_values_)})
+        for panel_id_,panel_ in self.panels:
+            if panel_.check_capabilities():
+                settings_["activePanels"][panel_id_] = panel_.active()
+                for section_id_,section_ in panel_.sections:
+                    if section_.check_capabilities():
+                        settings_["activeSections"][section_id_] = section_.active()
                     # end if
                 # end for
             # end if
         # end for
-        for id,section in self.sections:
-            if section.check_capabilities():
-                settings["activeSections"][id] = section.active()
+        for id_,section_ in self.sections:
+            if section_.check_capabilities():
+                settings_["activeSections"][id_] = section_.active()
             # end if
         # end for
-        for id,control in self.controls:
-            if control.check_capabilities():
-                settings["activeControls"][id] = control.active()
+        for id_,control_ in self.controls:
+            if control_.check_capabilities():
+                settings_["activeControls"][id_] = control_.active()
             # end if
         # end for
         php_print("     <script type=\"text/javascript\">\n         var _wpCustomizeSettings = ")
-        php_print(wp_json_encode(settings))
+        php_print(wp_json_encode(settings_))
         php_print(""";
         _wpCustomizeSettings.values = {};
         (function( v ) {
@@ -1699,9 +1913,9 @@ class WP_Customize_Manager():
         #// serialization in order to avoid a peak memory usage spike.
         #// @todo We may not even need to export the values at all since the pane syncs them anyway.
         #//
-        for id,setting in self.settings:
-            if setting.check_capabilities():
-                printf("v[%s] = %s;\n", wp_json_encode(id), wp_json_encode(setting.js_value()))
+        for id_,setting_ in self.settings:
+            if setting_.check_capabilities():
+                printf("v[%s] = %s;\n", wp_json_encode(id_), wp_json_encode(setting_.js_value()))
             # end if
         # end for
         php_print("         })( _wpCustomizeSettings.values );\n        </script>\n     ")
@@ -1713,6 +1927,7 @@ class WP_Customize_Manager():
     #// @deprecated 4.7.0
     #//
     def customize_preview_signature(self):
+        
         
         _deprecated_function(__METHOD__, "4.7.0")
     # end def customize_preview_signature
@@ -1727,6 +1942,7 @@ class WP_Customize_Manager():
     #//
     def remove_preview_signature(self, return_=None):
         
+        
         _deprecated_function(__METHOD__, "4.7.0")
         return return_
     # end def remove_preview_signature
@@ -1739,6 +1955,7 @@ class WP_Customize_Manager():
     #//
     def is_preview(self):
         
+        
         return php_bool(self.previewing)
     # end def is_preview
     #// 
@@ -1749,6 +1966,7 @@ class WP_Customize_Manager():
     #// @return string Template name.
     #//
     def get_template(self):
+        
         
         return self.theme().get_template()
     # end def get_template
@@ -1761,6 +1979,7 @@ class WP_Customize_Manager():
     #//
     def get_stylesheet(self):
         
+        
         return self.theme().get_stylesheet()
     # end def get_stylesheet
     #// 
@@ -1771,6 +1990,7 @@ class WP_Customize_Manager():
     #// @return string Theme root.
     #//
     def get_template_root(self):
+        
         
         return get_raw_theme_root(self.get_template(), True)
     # end def get_template_root
@@ -1783,6 +2003,7 @@ class WP_Customize_Manager():
     #//
     def get_stylesheet_root(self):
         
+        
         return get_raw_theme_root(self.get_stylesheet(), True)
     # end def get_stylesheet_root
     #// 
@@ -1793,7 +2014,8 @@ class WP_Customize_Manager():
     #// @param $current_theme {@internal Parameter is not used}
     #// @return string Theme name.
     #//
-    def current_theme(self, current_theme=None):
+    def current_theme(self, current_theme_=None):
+        
         
         return self.theme().display("Name")
     # end def current_theme
@@ -1819,47 +2041,50 @@ class WP_Customize_Manager():
     #// }
     #// @return array Mapping of setting IDs to return value of validate method calls, either `true` or `WP_Error`.
     #//
-    def validate_setting_values(self, setting_values=None, options=Array()):
+    def validate_setting_values(self, setting_values_=None, options_=None):
+        if options_ is None:
+            options_ = Array()
+        # end if
         
-        options = wp_parse_args(options, Array({"validate_capability": False, "validate_existence": False}))
-        validities = Array()
-        for setting_id,unsanitized_value in setting_values:
-            setting = self.get_setting(setting_id)
-            if (not setting):
-                if options["validate_existence"]:
-                    validities[setting_id] = php_new_class("WP_Error", lambda : WP_Error("unrecognized", __("Setting does not exist or is unrecognized.")))
+        options_ = wp_parse_args(options_, Array({"validate_capability": False, "validate_existence": False}))
+        validities_ = Array()
+        for setting_id_,unsanitized_value_ in setting_values_:
+            setting_ = self.get_setting(setting_id_)
+            if (not setting_):
+                if options_["validate_existence"]:
+                    validities_[setting_id_] = php_new_class("WP_Error", lambda : WP_Error("unrecognized", __("Setting does not exist or is unrecognized.")))
                 # end if
                 continue
             # end if
-            if options["validate_capability"] and (not current_user_can(setting.capability)):
-                validity = php_new_class("WP_Error", lambda : WP_Error("unauthorized", __("Unauthorized to modify setting due to capability.")))
+            if options_["validate_capability"] and (not current_user_can(setting_.capability)):
+                validity_ = php_new_class("WP_Error", lambda : WP_Error("unauthorized", __("Unauthorized to modify setting due to capability.")))
             else:
-                if is_null(unsanitized_value):
+                if is_null(unsanitized_value_):
                     continue
                 # end if
-                validity = setting.validate(unsanitized_value)
+                validity_ = setting_.validate(unsanitized_value_)
             # end if
-            if (not is_wp_error(validity)):
+            if (not is_wp_error(validity_)):
                 #// This filter is documented in wp-includes/class-wp-customize-setting.php
-                late_validity = apply_filters(str("customize_validate_") + str(setting.id), php_new_class("WP_Error", lambda : WP_Error()), unsanitized_value, setting)
-                if is_wp_error(late_validity) and late_validity.has_errors():
-                    validity = late_validity
+                late_validity_ = apply_filters(str("customize_validate_") + str(setting_.id), php_new_class("WP_Error", lambda : WP_Error()), unsanitized_value_, setting_)
+                if is_wp_error(late_validity_) and late_validity_.has_errors():
+                    validity_ = late_validity_
                 # end if
             # end if
-            if (not is_wp_error(validity)):
-                value = setting.sanitize(unsanitized_value)
-                if is_null(value):
-                    validity = False
-                elif is_wp_error(value):
-                    validity = value
+            if (not is_wp_error(validity_)):
+                value_ = setting_.sanitize(unsanitized_value_)
+                if is_null(value_):
+                    validity_ = False
+                elif is_wp_error(value_):
+                    validity_ = value_
                 # end if
             # end if
-            if False == validity:
-                validity = php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value.")))
+            if False == validity_:
+                validity_ = php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value.")))
             # end if
-            validities[setting_id] = validity
+            validities_[setting_id_] = validity_
         # end for
-        return validities
+        return validities_
     # end def validate_setting_values
     #// 
     #// Prepares setting validity for exporting to the client (JS).
@@ -1874,14 +2099,15 @@ class WP_Customize_Manager():
     #// to their respective `message` and `data` to pass into the
     #// `wp.customize.Notification` JS model.
     #//
-    def prepare_setting_validity_for_js(self, validity=None):
+    def prepare_setting_validity_for_js(self, validity_=None):
         
-        if is_wp_error(validity):
-            notification = Array()
-            for error_code,error_messages in validity.errors:
-                notification[error_code] = Array({"message": join(" ", error_messages), "data": validity.get_error_data(error_code)})
+        
+        if is_wp_error(validity_):
+            notification_ = Array()
+            for error_code_,error_messages_ in validity_.errors:
+                notification_[error_code_] = Array({"message": join(" ", error_messages_), "data": validity_.get_error_data(error_code_)})
             # end for
-            return notification
+            return notification_
         else:
             return True
         # end if
@@ -1894,50 +2120,51 @@ class WP_Customize_Manager():
     #//
     def save(self):
         
+        
         if (not is_user_logged_in()):
             wp_send_json_error("unauthenticated")
         # end if
         if (not self.is_preview()):
             wp_send_json_error("not_preview")
         # end if
-        action = "save-customize_" + self.get_stylesheet()
-        if (not check_ajax_referer(action, "nonce", False)):
+        action_ = "save-customize_" + self.get_stylesheet()
+        if (not check_ajax_referer(action_, "nonce", False)):
             wp_send_json_error("invalid_nonce")
         # end if
-        changeset_post_id = self.changeset_post_id()
-        is_new_changeset = php_empty(lambda : changeset_post_id)
-        if is_new_changeset:
+        changeset_post_id_ = self.changeset_post_id()
+        is_new_changeset_ = php_empty(lambda : changeset_post_id_)
+        if is_new_changeset_:
             if (not current_user_can(get_post_type_object("customize_changeset").cap.create_posts)):
                 wp_send_json_error("cannot_create_changeset_post")
             # end if
         else:
-            if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id)):
+            if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id_)):
                 wp_send_json_error("cannot_edit_changeset_post")
             # end if
         # end if
         if (not php_empty(lambda : PHP_POST["customize_changeset_data"])):
-            input_changeset_data = php_json_decode(wp_unslash(PHP_POST["customize_changeset_data"]), True)
-            if (not php_is_array(input_changeset_data)):
+            input_changeset_data_ = php_json_decode(wp_unslash(PHP_POST["customize_changeset_data"]), True)
+            if (not php_is_array(input_changeset_data_)):
                 wp_send_json_error("invalid_customize_changeset_data")
             # end if
         else:
-            input_changeset_data = Array()
+            input_changeset_data_ = Array()
         # end if
         #// Validate title.
-        changeset_title = None
+        changeset_title_ = None
         if (php_isset(lambda : PHP_POST["customize_changeset_title"])):
-            changeset_title = sanitize_text_field(wp_unslash(PHP_POST["customize_changeset_title"]))
+            changeset_title_ = sanitize_text_field(wp_unslash(PHP_POST["customize_changeset_title"]))
         # end if
         #// Validate changeset status param.
-        is_publish = None
-        changeset_status = None
+        is_publish_ = None
+        changeset_status_ = None
         if (php_isset(lambda : PHP_POST["customize_changeset_status"])):
-            changeset_status = wp_unslash(PHP_POST["customize_changeset_status"])
-            if (not get_post_status_object(changeset_status)) or (not php_in_array(changeset_status, Array("draft", "pending", "publish", "future"), True)):
+            changeset_status_ = wp_unslash(PHP_POST["customize_changeset_status"])
+            if (not get_post_status_object(changeset_status_)) or (not php_in_array(changeset_status_, Array("draft", "pending", "publish", "future"), True)):
                 wp_send_json_error("bad_customize_changeset_status", 400)
             # end if
-            is_publish = "publish" == changeset_status or "future" == changeset_status
-            if is_publish and (not current_user_can(get_post_type_object("customize_changeset").cap.publish_posts)):
+            is_publish_ = "publish" == changeset_status_ or "future" == changeset_status_
+            if is_publish_ and (not current_user_can(get_post_type_object("customize_changeset").cap.publish_posts)):
                 wp_send_json_error("changeset_publish_unauthorized", 403)
             # end if
         # end if
@@ -1947,84 +2174,84 @@ class WP_Customize_Manager():
         #// is parsed with strtotime() so that ISO date format may be supplied
         #// or a string like "+10 minutes".
         #//
-        changeset_date_gmt = None
+        changeset_date_gmt_ = None
         if (php_isset(lambda : PHP_POST["customize_changeset_date"])):
-            changeset_date = wp_unslash(PHP_POST["customize_changeset_date"])
-            if php_preg_match("/^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d$/", changeset_date):
-                mm = php_substr(changeset_date, 5, 2)
-                jj = php_substr(changeset_date, 8, 2)
-                aa = php_substr(changeset_date, 0, 4)
-                valid_date = wp_checkdate(mm, jj, aa, changeset_date)
-                if (not valid_date):
+            changeset_date_ = wp_unslash(PHP_POST["customize_changeset_date"])
+            if php_preg_match("/^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d$/", changeset_date_):
+                mm_ = php_substr(changeset_date_, 5, 2)
+                jj_ = php_substr(changeset_date_, 8, 2)
+                aa_ = php_substr(changeset_date_, 0, 4)
+                valid_date_ = wp_checkdate(mm_, jj_, aa_, changeset_date_)
+                if (not valid_date_):
                     wp_send_json_error("bad_customize_changeset_date", 400)
                 # end if
-                changeset_date_gmt = get_gmt_from_date(changeset_date)
+                changeset_date_gmt_ = get_gmt_from_date(changeset_date_)
             else:
-                timestamp = strtotime(changeset_date)
-                if (not timestamp):
+                timestamp_ = strtotime(changeset_date_)
+                if (not timestamp_):
                     wp_send_json_error("bad_customize_changeset_date", 400)
                 # end if
-                changeset_date_gmt = gmdate("Y-m-d H:i:s", timestamp)
+                changeset_date_gmt_ = gmdate("Y-m-d H:i:s", timestamp_)
             # end if
         # end if
-        lock_user_id = None
-        autosave = (not php_empty(lambda : PHP_POST["customize_changeset_autosave"]))
-        if (not is_new_changeset):
-            lock_user_id = wp_check_post_lock(self.changeset_post_id())
+        lock_user_id_ = None
+        autosave_ = (not php_empty(lambda : PHP_POST["customize_changeset_autosave"]))
+        if (not is_new_changeset_):
+            lock_user_id_ = wp_check_post_lock(self.changeset_post_id())
         # end if
         #// Force request to autosave when changeset is locked.
-        if lock_user_id and (not autosave):
-            autosave = True
-            changeset_status = None
-            changeset_date_gmt = None
+        if lock_user_id_ and (not autosave_):
+            autosave_ = True
+            changeset_status_ = None
+            changeset_date_gmt_ = None
         # end if
-        if autosave and (not php_defined("DOING_AUTOSAVE")):
+        if autosave_ and (not php_defined("DOING_AUTOSAVE")):
             #// Back-compat.
             php_define("DOING_AUTOSAVE", True)
         # end if
-        autosaved = False
-        r = self.save_changeset_post(Array({"status": changeset_status, "title": changeset_title, "date_gmt": changeset_date_gmt, "data": input_changeset_data, "autosave": autosave}))
-        if autosave and (not is_wp_error(r)):
-            autosaved = True
+        autosaved_ = False
+        r_ = self.save_changeset_post(Array({"status": changeset_status_, "title": changeset_title_, "date_gmt": changeset_date_gmt_, "data": input_changeset_data_, "autosave": autosave_}))
+        if autosave_ and (not is_wp_error(r_)):
+            autosaved_ = True
         # end if
         #// If the changeset was locked and an autosave request wasn't itself an error, then now explicitly return with a failure.
-        if lock_user_id and (not is_wp_error(r)):
-            r = php_new_class("WP_Error", lambda : WP_Error("changeset_locked", __("Changeset is being edited by other user."), Array({"lock_user": self.get_lock_user_data(lock_user_id)})))
+        if lock_user_id_ and (not is_wp_error(r_)):
+            r_ = php_new_class("WP_Error", lambda : WP_Error("changeset_locked", __("Changeset is being edited by other user."), Array({"lock_user": self.get_lock_user_data(lock_user_id_)})))
         # end if
-        if is_wp_error(r):
-            response = Array({"message": r.get_error_message(), "code": r.get_error_code()})
-            if php_is_array(r.get_error_data()):
-                response = php_array_merge(response, r.get_error_data())
+        if is_wp_error(r_):
+            response_ = Array({"message": r_.get_error_message(), "code": r_.get_error_code()})
+            if php_is_array(r_.get_error_data()):
+                response_ = php_array_merge(response_, r_.get_error_data())
             else:
-                response["data"] = r.get_error_data()
+                response_["data"] = r_.get_error_data()
             # end if
         else:
-            response = r
-            changeset_post = get_post(self.changeset_post_id())
+            response_ = r_
+            changeset_post_ = get_post(self.changeset_post_id())
             #// Dismiss all other auto-draft changeset posts for this user (they serve like autosave revisions), as there should only be one.
-            if is_new_changeset:
+            if is_new_changeset_:
                 self.dismiss_user_auto_draft_changesets()
             # end if
             #// Note that if the changeset status was publish, then it will get set to Trash if revisions are not supported.
-            response["changeset_status"] = changeset_post.post_status
-            if is_publish and "trash" == response["changeset_status"]:
-                response["changeset_status"] = "publish"
+            response_["changeset_status"] = changeset_post_.post_status
+            if is_publish_ and "trash" == response_["changeset_status"]:
+                response_["changeset_status"] = "publish"
             # end if
-            if "publish" != response["changeset_status"]:
-                self.set_changeset_lock(changeset_post.ID)
+            if "publish" != response_["changeset_status"]:
+                self.set_changeset_lock(changeset_post_.ID)
             # end if
-            if "future" == response["changeset_status"]:
-                response["changeset_date"] = changeset_post.post_date
+            if "future" == response_["changeset_status"]:
+                response_["changeset_date"] = changeset_post_.post_date
             # end if
-            if "publish" == response["changeset_status"] or "trash" == response["changeset_status"]:
-                response["next_changeset_uuid"] = wp_generate_uuid4()
+            if "publish" == response_["changeset_status"] or "trash" == response_["changeset_status"]:
+                response_["next_changeset_uuid"] = wp_generate_uuid4()
             # end if
         # end if
-        if autosave:
-            response["autosaved"] = autosaved
+        if autosave_:
+            response_["autosaved"] = autosaved_
         # end if
-        if (php_isset(lambda : response["setting_validities"])):
-            response["setting_validities"] = php_array_map(Array(self, "prepare_setting_validity_for_js"), response["setting_validities"])
+        if (php_isset(lambda : response_["setting_validities"])):
+            response_["setting_validities"] = php_array_map(Array(self, "prepare_setting_validity_for_js"), response_["setting_validities"])
         # end if
         #// 
         #// Filters response data for a successful customize_save Ajax request.
@@ -2037,11 +2264,11 @@ class WP_Customize_Manager():
         #// event on `wp.customize`.
         #// @param WP_Customize_Manager $this     WP_Customize_Manager instance.
         #//
-        response = apply_filters("customize_save_response", response, self)
-        if is_wp_error(r):
-            wp_send_json_error(response)
+        response_ = apply_filters("customize_save_response", response_, self)
+        if is_wp_error(r_):
+            wp_send_json_error(response_)
         else:
-            wp_send_json_success(response)
+            wp_send_json_success(response_)
         # end if
     # end def save
     #// 
@@ -2063,74 +2290,77 @@ class WP_Customize_Manager():
     #// 
     #// @return array|WP_Error Returns array on success and WP_Error with array data on error.
     #//
-    def save_changeset_post(self, args=Array()):
+    def save_changeset_post(self, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        args = php_array_merge(Array({"status": None, "title": None, "data": Array(), "date_gmt": None, "user_id": get_current_user_id(), "starter_content": False, "autosave": False}), args)
-        changeset_post_id = self.changeset_post_id()
-        existing_changeset_data = Array()
-        if changeset_post_id:
-            existing_status = get_post_status(changeset_post_id)
-            if "publish" == existing_status or "trash" == existing_status:
+        args_ = php_array_merge(Array({"status": None, "title": None, "data": Array(), "date_gmt": None, "user_id": get_current_user_id(), "starter_content": False, "autosave": False}), args_)
+        changeset_post_id_ = self.changeset_post_id()
+        existing_changeset_data_ = Array()
+        if changeset_post_id_:
+            existing_status_ = get_post_status(changeset_post_id_)
+            if "publish" == existing_status_ or "trash" == existing_status_:
                 return php_new_class("WP_Error", lambda : WP_Error("changeset_already_published", __("The previous set of changes has already been published. Please try saving your current set of changes again."), Array({"next_changeset_uuid": wp_generate_uuid4()})))
             # end if
-            existing_changeset_data = self.get_changeset_post_data(changeset_post_id)
-            if is_wp_error(existing_changeset_data):
-                return existing_changeset_data
+            existing_changeset_data_ = self.get_changeset_post_data(changeset_post_id_)
+            if is_wp_error(existing_changeset_data_):
+                return existing_changeset_data_
             # end if
         # end if
         #// Fail if attempting to publish but publish hook is missing.
-        if "publish" == args["status"] and False == has_action("transition_post_status", "_wp_customize_publish_changeset"):
+        if "publish" == args_["status"] and False == has_action("transition_post_status", "_wp_customize_publish_changeset"):
             return php_new_class("WP_Error", lambda : WP_Error("missing_publish_callback"))
         # end if
         #// Validate date.
-        now = gmdate("Y-m-d H:i:59")
-        if args["date_gmt"]:
-            is_future_dated = mysql2date("U", args["date_gmt"], False) > mysql2date("U", now, False)
-            if (not is_future_dated):
+        now_ = gmdate("Y-m-d H:i:59")
+        if args_["date_gmt"]:
+            is_future_dated_ = mysql2date("U", args_["date_gmt"], False) > mysql2date("U", now_, False)
+            if (not is_future_dated_):
                 return php_new_class("WP_Error", lambda : WP_Error("not_future_date", __("You must supply a future date to schedule.")))
                 pass
             # end if
-            if (not self.is_theme_active()) and "future" == args["status"] or is_future_dated:
+            if (not self.is_theme_active()) and "future" == args_["status"] or is_future_dated_:
                 return php_new_class("WP_Error", lambda : WP_Error("cannot_schedule_theme_switches"))
                 pass
             # end if
-            will_remain_auto_draft = (not args["status"]) and (not changeset_post_id) or "auto-draft" == get_post_status(changeset_post_id)
-            if will_remain_auto_draft:
+            will_remain_auto_draft_ = (not args_["status"]) and (not changeset_post_id_) or "auto-draft" == get_post_status(changeset_post_id_)
+            if will_remain_auto_draft_:
                 return php_new_class("WP_Error", lambda : WP_Error("cannot_supply_date_for_auto_draft_changeset"))
             # end if
-        elif changeset_post_id and "future" == args["status"]:
+        elif changeset_post_id_ and "future" == args_["status"]:
             #// Fail if the new status is future but the existing post's date is not in the future.
-            changeset_post = get_post(changeset_post_id)
-            if mysql2date("U", changeset_post.post_date_gmt, False) <= mysql2date("U", now, False):
+            changeset_post_ = get_post(changeset_post_id_)
+            if mysql2date("U", changeset_post_.post_date_gmt, False) <= mysql2date("U", now_, False):
                 return php_new_class("WP_Error", lambda : WP_Error("not_future_date", __("You must supply a future date to schedule.")))
             # end if
         # end if
-        if (not php_empty(lambda : is_future_dated)) and "publish" == args["status"]:
-            args["status"] = "future"
+        if (not php_empty(lambda : is_future_dated_)) and "publish" == args_["status"]:
+            args_["status"] = "future"
         # end if
         #// Validate autosave param. See _wp_post_revision_fields() for why these fields are disallowed.
-        if args["autosave"]:
-            if args["date_gmt"]:
+        if args_["autosave"]:
+            if args_["date_gmt"]:
                 return php_new_class("WP_Error", lambda : WP_Error("illegal_autosave_with_date_gmt"))
-            elif args["status"]:
+            elif args_["status"]:
                 return php_new_class("WP_Error", lambda : WP_Error("illegal_autosave_with_status"))
-            elif args["user_id"] and get_current_user_id() != args["user_id"]:
+            elif args_["user_id"] and get_current_user_id() != args_["user_id"]:
                 return php_new_class("WP_Error", lambda : WP_Error("illegal_autosave_with_non_current_user"))
             # end if
         # end if
         #// The request was made via wp.customize.previewer.save().
-        update_transactionally = php_bool(args["status"])
-        allow_revision = php_bool(args["status"])
+        update_transactionally_ = php_bool(args_["status"])
+        allow_revision_ = php_bool(args_["status"])
         #// Amend post values with any supplied data.
-        for setting_id,setting_params in args["data"]:
-            if php_is_array(setting_params) and php_array_key_exists("value", setting_params):
-                self.set_post_value(setting_id, setting_params["value"])
+        for setting_id_,setting_params_ in args_["data"]:
+            if php_is_array(setting_params_) and php_array_key_exists("value", setting_params_):
+                self.set_post_value(setting_id_, setting_params_["value"])
                 pass
             # end if
         # end for
         #// Note that in addition to post data, this will include any stashed theme mods.
-        post_values = self.unsanitized_post_values(Array({"exclude_changeset": True, "exclude_post_data": False}))
-        self.add_dynamic_settings(php_array_keys(post_values))
+        post_values_ = self.unsanitized_post_values(Array({"exclude_changeset": True, "exclude_post_data": False}))
+        self.add_dynamic_settings(php_array_keys(post_values_))
         #// Ensure settings get created even if they lack an input value.
         #// 
         #// Get list of IDs for settings that have values different from what is currently
@@ -2140,17 +2370,17 @@ class WP_Customize_Manager():
         #// from being blocked from saving. This also prevents a user from touching of the
         #// previous saved settings and overriding the associated user_id if they made no change.
         #//
-        changed_setting_ids = Array()
-        for setting_id,setting_value in post_values:
-            setting = self.get_setting(setting_id)
-            if setting and "theme_mod" == setting.type:
-                prefixed_setting_id = self.get_stylesheet() + "::" + setting.id
+        changed_setting_ids_ = Array()
+        for setting_id_,setting_value_ in post_values_:
+            setting_ = self.get_setting(setting_id_)
+            if setting_ and "theme_mod" == setting_.type:
+                prefixed_setting_id_ = self.get_stylesheet() + "::" + setting_.id
             else:
-                prefixed_setting_id = setting_id
+                prefixed_setting_id_ = setting_id_
             # end if
-            is_value_changed = (not (php_isset(lambda : existing_changeset_data[prefixed_setting_id]))) or (not php_array_key_exists("value", existing_changeset_data[prefixed_setting_id])) or existing_changeset_data[prefixed_setting_id]["value"] != setting_value
-            if is_value_changed:
-                changed_setting_ids[-1] = setting_id
+            is_value_changed_ = (not (php_isset(lambda : existing_changeset_data_[prefixed_setting_id_]))) or (not php_array_key_exists("value", existing_changeset_data_[prefixed_setting_id_])) or existing_changeset_data_[prefixed_setting_id_]["value"] != setting_value_
+            if is_value_changed_:
+                changed_setting_ids_[-1] = setting_id_
             # end if
         # end for
         #// 
@@ -2166,65 +2396,65 @@ class WP_Customize_Manager():
         #//
         do_action("customize_save_validation_before", self)
         #// Validate settings.
-        validated_values = php_array_merge(php_array_fill_keys(php_array_keys(args["data"]), None), post_values)
-        setting_validities = self.validate_setting_values(validated_values, Array({"validate_capability": True, "validate_existence": True}))
-        invalid_setting_count = php_count(php_array_filter(setting_validities, "is_wp_error"))
+        validated_values_ = php_array_merge(php_array_fill_keys(php_array_keys(args_["data"]), None), post_values_)
+        setting_validities_ = self.validate_setting_values(validated_values_, Array({"validate_capability": True, "validate_existence": True}))
+        invalid_setting_count_ = php_count(php_array_filter(setting_validities_, "is_wp_error"))
         #// 
         #// Short-circuit if there are invalid settings the update is transactional.
         #// A changeset update is transactional when a status is supplied in the request.
         #//
-        if update_transactionally and invalid_setting_count > 0:
-            response = Array({"setting_validities": setting_validities, "message": php_sprintf(_n("Unable to save due to %s invalid setting.", "Unable to save due to %s invalid settings.", invalid_setting_count), number_format_i18n(invalid_setting_count))})
-            return php_new_class("WP_Error", lambda : WP_Error("transaction_fail", "", response))
+        if update_transactionally_ and invalid_setting_count_ > 0:
+            response_ = Array({"setting_validities": setting_validities_, "message": php_sprintf(_n("Unable to save due to %s invalid setting.", "Unable to save due to %s invalid settings.", invalid_setting_count_), number_format_i18n(invalid_setting_count_))})
+            return php_new_class("WP_Error", lambda : WP_Error("transaction_fail", "", response_))
         # end if
         #// Obtain/merge data for changeset.
-        original_changeset_data = self.get_changeset_post_data(changeset_post_id)
-        data = original_changeset_data
-        if is_wp_error(data):
-            data = Array()
+        original_changeset_data_ = self.get_changeset_post_data(changeset_post_id_)
+        data_ = original_changeset_data_
+        if is_wp_error(data_):
+            data_ = Array()
         # end if
         #// Ensure that all post values are included in the changeset data.
-        for setting_id,post_value in post_values:
-            if (not (php_isset(lambda : args["data"][setting_id]))):
-                args["data"][setting_id] = Array()
+        for setting_id_,post_value_ in post_values_:
+            if (not (php_isset(lambda : args_["data"][setting_id_]))):
+                args_["data"][setting_id_] = Array()
             # end if
-            if (not (php_isset(lambda : args["data"][setting_id]["value"]))):
-                args["data"][setting_id]["value"] = post_value
+            if (not (php_isset(lambda : args_["data"][setting_id_]["value"]))):
+                args_["data"][setting_id_]["value"] = post_value_
             # end if
         # end for
-        for setting_id,setting_params in args["data"]:
-            setting = self.get_setting(setting_id)
-            if (not setting) or (not setting.check_capabilities()):
+        for setting_id_,setting_params_ in args_["data"]:
+            setting_ = self.get_setting(setting_id_)
+            if (not setting_) or (not setting_.check_capabilities()):
                 continue
             # end if
             #// Skip updating changeset for invalid setting values.
-            if (php_isset(lambda : setting_validities[setting_id])) and is_wp_error(setting_validities[setting_id]):
+            if (php_isset(lambda : setting_validities_[setting_id_])) and is_wp_error(setting_validities_[setting_id_]):
                 continue
             # end if
-            changeset_setting_id = setting_id
-            if "theme_mod" == setting.type:
-                changeset_setting_id = php_sprintf("%s::%s", self.get_stylesheet(), setting_id)
+            changeset_setting_id_ = setting_id_
+            if "theme_mod" == setting_.type:
+                changeset_setting_id_ = php_sprintf("%s::%s", self.get_stylesheet(), setting_id_)
             # end if
-            if None == setting_params:
-                data[changeset_setting_id] = None
+            if None == setting_params_:
+                data_[changeset_setting_id_] = None
             else:
-                if (not (php_isset(lambda : data[changeset_setting_id]))):
-                    data[changeset_setting_id] = Array()
+                if (not (php_isset(lambda : data_[changeset_setting_id_]))):
+                    data_[changeset_setting_id_] = Array()
                 # end if
                 #// Merge any additional setting params that have been supplied with the existing params.
-                merged_setting_params = php_array_merge(data[changeset_setting_id], setting_params)
+                merged_setting_params_ = php_array_merge(data_[changeset_setting_id_], setting_params_)
                 #// Skip updating setting params if unchanged (ensuring the user_id is not overwritten).
-                if data[changeset_setting_id] == merged_setting_params:
+                if data_[changeset_setting_id_] == merged_setting_params_:
                     continue
                 # end if
-                data[changeset_setting_id] = php_array_merge(merged_setting_params, Array({"type": setting.type, "user_id": args["user_id"], "date_modified_gmt": current_time("mysql", True)}))
+                data_[changeset_setting_id_] = php_array_merge(merged_setting_params_, Array({"type": setting_.type, "user_id": args_["user_id"], "date_modified_gmt": current_time("mysql", True)}))
                 #// Clear starter_content flag in data if changeset is not explicitly being updated for starter content.
-                if php_empty(lambda : args["starter_content"]):
-                    data[changeset_setting_id]["starter_content"] = None
+                if php_empty(lambda : args_["starter_content"]):
+                    data_[changeset_setting_id_]["starter_content"] = None
                 # end if
             # end if
         # end for
-        filter_context = Array({"uuid": self.changeset_uuid(), "title": args["title"], "status": args["status"], "date_gmt": args["date_gmt"], "post_id": changeset_post_id, "previous_data": Array() if is_wp_error(original_changeset_data) else original_changeset_data, "manager": self})
+        filter_context_ = Array({"uuid": self.changeset_uuid(), "title": args_["title"], "status": args_["status"], "date_gmt": args_["date_gmt"], "post_id": changeset_post_id_, "previous_data": Array() if is_wp_error(original_changeset_data_) else original_changeset_data_, "manager": self})
         #// 
         #// Filters the settings' data that will be persisted into the changeset.
         #// 
@@ -2245,9 +2475,9 @@ class WP_Customize_Manager():
         #// @type WP_Customize_Manager $manager       Manager instance.
         #// }
         #//
-        data = apply_filters("customize_changeset_save_data", data, filter_context)
+        data_ = apply_filters("customize_changeset_save_data", data_, filter_context_)
         #// Switch theme if publishing changes now.
-        if "publish" == args["status"] and (not self.is_theme_active()):
+        if "publish" == args_["status"] and (not self.is_theme_active()):
             #// Temporarily stop previewing the theme to allow switch_themes() to operate properly.
             self.stop_previewing_theme()
             switch_theme(self.get_stylesheet())
@@ -2255,37 +2485,37 @@ class WP_Customize_Manager():
             self.start_previewing_theme()
         # end if
         #// Gather the data for wp_insert_post()/wp_update_post().
-        post_array = Array({"post_content": wp_json_encode(data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)})
-        if args["title"]:
-            post_array["post_title"] = args["title"]
+        post_array_ = Array({"post_content": wp_json_encode(data_, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)})
+        if args_["title"]:
+            post_array_["post_title"] = args_["title"]
         # end if
-        if changeset_post_id:
-            post_array["ID"] = changeset_post_id
+        if changeset_post_id_:
+            post_array_["ID"] = changeset_post_id_
         else:
-            post_array["post_type"] = "customize_changeset"
-            post_array["post_name"] = self.changeset_uuid()
-            post_array["post_status"] = "auto-draft"
+            post_array_["post_type"] = "customize_changeset"
+            post_array_["post_name"] = self.changeset_uuid()
+            post_array_["post_status"] = "auto-draft"
         # end if
-        if args["status"]:
-            post_array["post_status"] = args["status"]
+        if args_["status"]:
+            post_array_["post_status"] = args_["status"]
         # end if
         #// Reset post date to now if we are publishing, otherwise pass post_date_gmt and translate for post_date.
-        if "publish" == args["status"]:
-            post_array["post_date_gmt"] = "0000-00-00 00:00:00"
-            post_array["post_date"] = "0000-00-00 00:00:00"
-        elif args["date_gmt"]:
-            post_array["post_date_gmt"] = args["date_gmt"]
-            post_array["post_date"] = get_date_from_gmt(args["date_gmt"])
-        elif changeset_post_id and "auto-draft" == get_post_status(changeset_post_id):
+        if "publish" == args_["status"]:
+            post_array_["post_date_gmt"] = "0000-00-00 00:00:00"
+            post_array_["post_date"] = "0000-00-00 00:00:00"
+        elif args_["date_gmt"]:
+            post_array_["post_date_gmt"] = args_["date_gmt"]
+            post_array_["post_date"] = get_date_from_gmt(args_["date_gmt"])
+        elif changeset_post_id_ and "auto-draft" == get_post_status(changeset_post_id_):
             #// 
             #// Keep bumping the date for the auto-draft whenever it is modified;
             #// this extends its life, preserving it from garbage-collection via
             #// wp_delete_auto_drafts().
             #//
-            post_array["post_date"] = current_time("mysql")
-            post_array["post_date_gmt"] = ""
+            post_array_["post_date"] = current_time("mysql")
+            post_array_["post_date_gmt"] = ""
         # end if
-        self.store_changeset_revision = allow_revision
+        self.store_changeset_revision = allow_revision_
         add_filter("wp_save_post_revision_post_has_changed", Array(self, "_filter_revision_post_has_changed"), 5, 3)
         #// 
         #// Update the changeset post. The publish_customize_changeset action
@@ -2293,58 +2523,58 @@ class WP_Customize_Manager():
         #// WP_Customize_Setting::save().
         #// 
         #// Prevent content filters from corrupting JSON in post_content.
-        has_kses = False != has_filter("content_save_pre", "wp_filter_post_kses")
-        if has_kses:
+        has_kses_ = False != has_filter("content_save_pre", "wp_filter_post_kses")
+        if has_kses_:
             kses_remove_filters()
         # end if
-        has_targeted_link_rel_filters = False != has_filter("content_save_pre", "wp_targeted_link_rel")
-        if has_targeted_link_rel_filters:
+        has_targeted_link_rel_filters_ = False != has_filter("content_save_pre", "wp_targeted_link_rel")
+        if has_targeted_link_rel_filters_:
             wp_remove_targeted_link_rel_filters()
         # end if
         #// Note that updating a post with publish status will trigger WP_Customize_Manager::publish_changeset_values().
-        if changeset_post_id:
-            if args["autosave"] and "auto-draft" != get_post_status(changeset_post_id):
+        if changeset_post_id_:
+            if args_["autosave"] and "auto-draft" != get_post_status(changeset_post_id_):
                 #// See _wp_translate_postdata() for why this is required as it will use the edit_post meta capability.
                 add_filter("map_meta_cap", Array(self, "grant_edit_post_capability_for_changeset"), 10, 4)
-                post_array["post_ID"] = post_array["ID"]
-                post_array["post_type"] = "customize_changeset"
-                r = wp_create_post_autosave(wp_slash(post_array))
+                post_array_["post_ID"] = post_array_["ID"]
+                post_array_["post_type"] = "customize_changeset"
+                r_ = wp_create_post_autosave(wp_slash(post_array_))
                 remove_filter("map_meta_cap", Array(self, "grant_edit_post_capability_for_changeset"), 10)
             else:
-                post_array["edit_date"] = True
+                post_array_["edit_date"] = True
                 #// Prevent date clearing.
-                r = wp_update_post(wp_slash(post_array), True)
+                r_ = wp_update_post(wp_slash(post_array_), True)
                 #// Delete autosave revision for user when the changeset is updated.
-                if (not php_empty(lambda : args["user_id"])):
-                    autosave_draft = wp_get_post_autosave(changeset_post_id, args["user_id"])
-                    if autosave_draft:
-                        wp_delete_post(autosave_draft.ID, True)
+                if (not php_empty(lambda : args_["user_id"])):
+                    autosave_draft_ = wp_get_post_autosave(changeset_post_id_, args_["user_id"])
+                    if autosave_draft_:
+                        wp_delete_post(autosave_draft_.ID, True)
                     # end if
                 # end if
             # end if
         else:
-            r = wp_insert_post(wp_slash(post_array), True)
-            if (not is_wp_error(r)):
-                self._changeset_post_id = r
+            r_ = wp_insert_post(wp_slash(post_array_), True)
+            if (not is_wp_error(r_)):
+                self._changeset_post_id = r_
                 pass
             # end if
         # end if
         #// Restore removed content filters.
-        if has_kses:
+        if has_kses_:
             kses_init_filters()
         # end if
-        if has_targeted_link_rel_filters:
+        if has_targeted_link_rel_filters_:
             wp_init_targeted_link_rel_filters()
         # end if
         self._changeset_data = None
         #// Reset so WP_Customize_Manager::changeset_data() will re-populate with updated contents.
         remove_filter("wp_save_post_revision_post_has_changed", Array(self, "_filter_revision_post_has_changed"))
-        response = Array({"setting_validities": setting_validities})
-        if is_wp_error(r):
-            response["changeset_post_save_failure"] = r.get_error_code()
-            return php_new_class("WP_Error", lambda : WP_Error("changeset_post_save_failure", "", response))
+        response_ = Array({"setting_validities": setting_validities_})
+        if is_wp_error(r_):
+            response_["changeset_post_save_failure"] = r_.get_error_code()
+            return php_new_class("WP_Error", lambda : WP_Error("changeset_post_save_failure", "", response_))
         # end if
-        return response
+        return response_
     # end def save_changeset_post
     #// 
     #// Trash or delete a changeset post.
@@ -2361,50 +2591,51 @@ class WP_Customize_Manager():
     #// @param int|WP_Post $post The changeset post.
     #// @return mixed A WP_Post object for the trashed post or an empty value on failure.
     #//
-    def trash_changeset_post(self, post=None):
+    def trash_changeset_post(self, post_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        post = get_post(post)
-        if (not type(post).__name__ == "WP_Post"):
-            return post
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        post_ = get_post(post_)
+        if (not type(post_).__name__ == "WP_Post"):
+            return post_
         # end if
-        post_id = post.ID
+        post_id_ = post_.ID
         if (not EMPTY_TRASH_DAYS):
-            return wp_delete_post(post_id, True)
+            return wp_delete_post(post_id_, True)
         # end if
-        if "trash" == get_post_status(post):
+        if "trash" == get_post_status(post_):
             return False
         # end if
         #// This filter is documented in wp-includes/post.php
-        check = apply_filters("pre_trash_post", None, post)
-        if None != check:
-            return check
+        check_ = apply_filters("pre_trash_post", None, post_)
+        if None != check_:
+            return check_
         # end if
         #// This action is documented in wp-includes/post.php
-        do_action("wp_trash_post", post_id)
-        add_post_meta(post_id, "_wp_trash_meta_status", post.post_status)
-        add_post_meta(post_id, "_wp_trash_meta_time", time())
-        old_status = post.post_status
-        new_status = "trash"
-        wpdb.update(wpdb.posts, Array({"post_status": new_status}), Array({"ID": post.ID}))
-        clean_post_cache(post.ID)
-        post.post_status = new_status
-        wp_transition_post_status(new_status, old_status, post)
+        do_action("wp_trash_post", post_id_)
+        add_post_meta(post_id_, "_wp_trash_meta_status", post_.post_status)
+        add_post_meta(post_id_, "_wp_trash_meta_time", time())
+        old_status_ = post_.post_status
+        new_status_ = "trash"
+        wpdb_.update(wpdb_.posts, Array({"post_status": new_status_}), Array({"ID": post_.ID}))
+        clean_post_cache(post_.ID)
+        post_.post_status = new_status_
+        wp_transition_post_status(new_status_, old_status_, post_)
         #// This action is documented in wp-includes/post.php
-        do_action(str("edit_post_") + str(post.post_type), post.ID, post)
+        do_action(str("edit_post_") + str(post_.post_type), post_.ID, post_)
         #// This action is documented in wp-includes/post.php
-        do_action("edit_post", post.ID, post)
+        do_action("edit_post", post_.ID, post_)
         #// This action is documented in wp-includes/post.php
-        do_action(str("save_post_") + str(post.post_type), post.ID, post, True)
+        do_action(str("save_post_") + str(post_.post_type), post_.ID, post_, True)
         #// This action is documented in wp-includes/post.php
-        do_action("save_post", post.ID, post, True)
+        do_action("save_post", post_.ID, post_, True)
         #// This action is documented in wp-includes/post.php
-        do_action("wp_insert_post", post.ID, post, True)
-        wp_trash_post_comments(post_id)
+        do_action("wp_insert_post", post_.ID, post_, True)
+        wp_trash_post_comments(post_id_)
         #// This action is documented in wp-includes/post.php
-        do_action("trashed_post", post_id)
-        return post
+        do_action("trashed_post", post_id_)
+        return post_
     # end def trash_changeset_post
     #// 
     #// Handle request to trash a changeset.
@@ -2412,6 +2643,7 @@ class WP_Customize_Manager():
     #// @since 4.9.0
     #//
     def handle_changeset_trash_request(self):
+        
         
         if (not is_user_logged_in()):
             wp_send_json_error("unauthenticated")
@@ -2422,20 +2654,20 @@ class WP_Customize_Manager():
         if (not check_ajax_referer("trash_customize_changeset", "nonce", False)):
             wp_send_json_error(Array({"code": "invalid_nonce", "message": __("There was an authentication problem. Please reload and try again.")}))
         # end if
-        changeset_post_id = self.changeset_post_id()
-        if (not changeset_post_id):
+        changeset_post_id_ = self.changeset_post_id()
+        if (not changeset_post_id_):
             wp_send_json_error(Array({"message": __("No changes saved yet, so there is nothing to trash."), "code": "non_existent_changeset"}))
             return
         # end if
-        if changeset_post_id and (not current_user_can(get_post_type_object("customize_changeset").cap.delete_post, changeset_post_id)):
+        if changeset_post_id_ and (not current_user_can(get_post_type_object("customize_changeset").cap.delete_post, changeset_post_id_)):
             wp_send_json_error(Array({"code": "changeset_trash_unauthorized", "message": __("Unable to trash changes.")}))
         # end if
-        if "trash" == get_post_status(changeset_post_id):
+        if "trash" == get_post_status(changeset_post_id_):
             wp_send_json_error(Array({"message": __("Changes have already been trashed."), "code": "changeset_already_trashed"}))
             return
         # end if
-        r = self.trash_changeset_post(changeset_post_id)
-        if (not type(r).__name__ == "WP_Post"):
+        r_ = self.trash_changeset_post(changeset_post_id_)
+        if (not type(r_).__name__ == "WP_Post"):
             wp_send_json_error(Array({"code": "changeset_trash_failure", "message": __("Unable to trash changes.")}))
         # end if
         wp_send_json_success(Array({"message": __("Changes trashed successfully.")}))
@@ -2461,13 +2693,14 @@ class WP_Customize_Manager():
     #// @param array    $args    Adds the context to the cap. Typically the object ID.
     #// @return array Capabilities.
     #//
-    def grant_edit_post_capability_for_changeset(self, caps=None, cap=None, user_id=None, args=None):
+    def grant_edit_post_capability_for_changeset(self, caps_=None, cap_=None, user_id_=None, args_=None):
         
-        if "edit_post" == cap and (not php_empty(lambda : args[0])) and "customize_changeset" == get_post_type(args[0]):
-            post_type_obj = get_post_type_object("customize_changeset")
-            caps = map_meta_cap(post_type_obj.cap.cap, user_id)
+        
+        if "edit_post" == cap_ and (not php_empty(lambda : args_[0])) and "customize_changeset" == get_post_type(args_[0]):
+            post_type_obj_ = get_post_type_object("customize_changeset")
+            caps_ = map_meta_cap(post_type_obj_.cap.cap_, user_id_)
         # end if
-        return caps
+        return caps_
     # end def grant_edit_post_capability_for_changeset
     #// 
     #// Marks the changeset post as being currently edited by the current user.
@@ -2477,18 +2710,21 @@ class WP_Customize_Manager():
     #// @param int  $changeset_post_id Changeset post id.
     #// @param bool $take_over Take over the changeset, default is false.
     #//
-    def set_changeset_lock(self, changeset_post_id=None, take_over=False):
+    def set_changeset_lock(self, changeset_post_id_=None, take_over_=None):
+        if take_over_ is None:
+            take_over_ = False
+        # end if
         
-        if changeset_post_id:
-            can_override = (not php_bool(get_post_meta(changeset_post_id, "_edit_lock", True)))
-            if take_over:
-                can_override = True
+        if changeset_post_id_:
+            can_override_ = (not php_bool(get_post_meta(changeset_post_id_, "_edit_lock", True)))
+            if take_over_:
+                can_override_ = True
             # end if
-            if can_override:
-                lock = php_sprintf("%s:%s", time(), get_current_user_id())
-                update_post_meta(changeset_post_id, "_edit_lock", lock)
+            if can_override_:
+                lock_ = php_sprintf("%s:%s", time(), get_current_user_id())
+                update_post_meta(changeset_post_id_, "_edit_lock", lock_)
             else:
-                self.refresh_changeset_lock(changeset_post_id)
+                self.refresh_changeset_lock(changeset_post_id_)
             # end if
         # end if
     # end def set_changeset_lock
@@ -2499,19 +2735,20 @@ class WP_Customize_Manager():
     #// 
     #// @param int $changeset_post_id Changeset post id.
     #//
-    def refresh_changeset_lock(self, changeset_post_id=None):
+    def refresh_changeset_lock(self, changeset_post_id_=None):
         
-        if (not changeset_post_id):
+        
+        if (not changeset_post_id_):
             return
         # end if
-        lock = get_post_meta(changeset_post_id, "_edit_lock", True)
-        lock = php_explode(":", lock)
-        if lock and (not php_empty(lambda : lock[1])):
-            user_id = php_intval(lock[1])
-            current_user_id = get_current_user_id()
-            if user_id == current_user_id:
-                lock = php_sprintf("%s:%s", time(), user_id)
-                update_post_meta(changeset_post_id, "_edit_lock", lock)
+        lock_ = get_post_meta(changeset_post_id_, "_edit_lock", True)
+        lock_ = php_explode(":", lock_)
+        if lock_ and (not php_empty(lambda : lock_[1])):
+            user_id_ = php_intval(lock_[1])
+            current_user_id_ = get_current_user_id()
+            if user_id_ == current_user_id_:
+                lock_ = php_sprintf("%s:%s", time(), user_id_)
+                update_post_meta(changeset_post_id_, "_edit_lock", lock_)
             # end if
         # end if
     # end def refresh_changeset_lock
@@ -2522,14 +2759,15 @@ class WP_Customize_Manager():
     #// @param array $settings Current settings to filter.
     #// @return array Heartbeat settings.
     #//
-    def add_customize_screen_to_heartbeat_settings(self, settings=None):
+    def add_customize_screen_to_heartbeat_settings(self, settings_=None):
         
-        global pagenow
-        php_check_if_defined("pagenow")
-        if "customize.php" == pagenow:
-            settings["screenId"] = "customize"
+        
+        global pagenow_
+        php_check_if_defined("pagenow_")
+        if "customize.php" == pagenow_:
+            settings_["screenId"] = "customize"
         # end if
-        return settings
+        return settings_
     # end def add_customize_screen_to_heartbeat_settings
     #// 
     #// Get lock user data.
@@ -2539,16 +2777,17 @@ class WP_Customize_Manager():
     #// @param int $user_id User ID.
     #// @return array|null User data formatted for client.
     #//
-    def get_lock_user_data(self, user_id=None):
+    def get_lock_user_data(self, user_id_=None):
         
-        if (not user_id):
+        
+        if (not user_id_):
             return None
         # end if
-        lock_user = get_userdata(user_id)
-        if (not lock_user):
+        lock_user_ = get_userdata(user_id_)
+        if (not lock_user_):
             return None
         # end if
-        return Array({"id": lock_user.ID, "name": lock_user.display_name, "avatar": get_avatar_url(lock_user.ID, Array({"size": 128}))})
+        return Array({"id": lock_user_.ID, "name": lock_user_.display_name, "avatar": get_avatar_url(lock_user_.ID, Array({"size": 128}))})
     # end def get_lock_user_data
     #// 
     #// Check locked changeset with heartbeat API.
@@ -2560,23 +2799,24 @@ class WP_Customize_Manager():
     #// @param string $screen_id The screen id.
     #// @return array The Heartbeat response.
     #//
-    def check_changeset_lock_with_heartbeat(self, response=None, data=None, screen_id=None):
+    def check_changeset_lock_with_heartbeat(self, response_=None, data_=None, screen_id_=None):
         
-        if (php_isset(lambda : data["changeset_uuid"])):
-            changeset_post_id = self.find_changeset_post_id(data["changeset_uuid"])
+        
+        if (php_isset(lambda : data_["changeset_uuid"])):
+            changeset_post_id_ = self.find_changeset_post_id(data_["changeset_uuid"])
         else:
-            changeset_post_id = self.changeset_post_id()
+            changeset_post_id_ = self.changeset_post_id()
         # end if
-        if php_array_key_exists("check_changeset_lock", data) and "customize" == screen_id and changeset_post_id and current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id):
-            lock_user_id = wp_check_post_lock(changeset_post_id)
-            if lock_user_id:
-                response["customize_changeset_lock_user"] = self.get_lock_user_data(lock_user_id)
+        if php_array_key_exists("check_changeset_lock", data_) and "customize" == screen_id_ and changeset_post_id_ and current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id_):
+            lock_user_id_ = wp_check_post_lock(changeset_post_id_)
+            if lock_user_id_:
+                response_["customize_changeset_lock_user"] = self.get_lock_user_data(lock_user_id_)
             else:
                 #// Refreshing time will ensure that the user is sitting on customizer and has not closed the customizer tab.
-                self.refresh_changeset_lock(changeset_post_id)
+                self.refresh_changeset_lock(changeset_post_id_)
             # end if
         # end if
-        return response
+        return response_
     # end def check_changeset_lock_with_heartbeat
     #// 
     #// Removes changeset lock when take over request is sent via Ajax.
@@ -2585,22 +2825,29 @@ class WP_Customize_Manager():
     #//
     def handle_override_changeset_lock_request(self):
         
+        
         if (not self.is_preview()):
             wp_send_json_error("not_preview", 400)
         # end if
         if (not check_ajax_referer("customize_override_changeset_lock", "nonce", False)):
             wp_send_json_error(Array({"code": "invalid_nonce", "message": __("Security check failed.")}))
         # end if
-        changeset_post_id = self.changeset_post_id()
-        if php_empty(lambda : changeset_post_id):
+        changeset_post_id_ = self.changeset_post_id()
+        if php_empty(lambda : changeset_post_id_):
             wp_send_json_error(Array({"code": "no_changeset_found_to_take_over", "message": __("No changeset found to take over")}))
         # end if
-        if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id)):
+        if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id_)):
             wp_send_json_error(Array({"code": "cannot_remove_changeset_lock", "message": __("Sorry, you are not allowed to take over.")}))
         # end if
-        self.set_changeset_lock(changeset_post_id, True)
+        self.set_changeset_lock(changeset_post_id_, True)
         wp_send_json_success("changeset_taken_over")
     # end def handle_override_changeset_lock_request
+    #// 
+    #// Whether a changeset revision should be made.
+    #// 
+    #// @since 4.7.0
+    #// @var bool
+    #//
     store_changeset_revision = Array()
     #// 
     #// Filters whether a changeset has changed to create a new revision.
@@ -2614,13 +2861,14 @@ class WP_Customize_Manager():
     #// @param WP_Post $post             The post object.
     #// @return bool Whether a revision should be made.
     #//
-    def _filter_revision_post_has_changed(self, post_has_changed=None, last_revision=None, post=None):
+    def _filter_revision_post_has_changed(self, post_has_changed_=None, last_revision_=None, post_=None):
         
-        last_revision = None
-        if "customize_changeset" == post.post_type:
-            post_has_changed = self.store_changeset_revision
+        
+        last_revision_ = None
+        if "customize_changeset" == post_.post_type:
+            post_has_changed_ = self.store_changeset_revision
         # end if
-        return post_has_changed
+        return post_has_changed_
     # end def _filter_revision_post_has_changed
     #// 
     #// Publish changeset values.
@@ -2642,53 +2890,54 @@ class WP_Customize_Manager():
     #// @param int $changeset_post_id ID for customize_changeset post. Defaults to the changeset for the current manager instance.
     #// @return true|WP_Error True or error info.
     #//
-    def _publish_changeset_values(self, changeset_post_id=None):
+    def _publish_changeset_values(self, changeset_post_id_=None):
         
-        global wpdb
-        php_check_if_defined("wpdb")
-        publishing_changeset_data = self.get_changeset_post_data(changeset_post_id)
-        if is_wp_error(publishing_changeset_data):
-            return publishing_changeset_data
+        
+        global wpdb_
+        php_check_if_defined("wpdb_")
+        publishing_changeset_data_ = self.get_changeset_post_data(changeset_post_id_)
+        if is_wp_error(publishing_changeset_data_):
+            return publishing_changeset_data_
         # end if
-        changeset_post = get_post(changeset_post_id)
+        changeset_post_ = get_post(changeset_post_id_)
         #// 
         #// Temporarily override the changeset context so that it will be read
         #// in calls to unsanitized_post_values() and so that it will be available
         #// on the $wp_customize object passed to hooks during the save logic.
         #//
-        previous_changeset_post_id = self._changeset_post_id
-        self._changeset_post_id = changeset_post_id
-        previous_changeset_uuid = self._changeset_uuid
-        self._changeset_uuid = changeset_post.post_name
-        previous_changeset_data = self._changeset_data
-        self._changeset_data = publishing_changeset_data
+        previous_changeset_post_id_ = self._changeset_post_id
+        self._changeset_post_id = changeset_post_id_
+        previous_changeset_uuid_ = self._changeset_uuid
+        self._changeset_uuid = changeset_post_.post_name
+        previous_changeset_data_ = self._changeset_data
+        self._changeset_data = publishing_changeset_data_
         #// Parse changeset data to identify theme mod settings and user IDs associated with settings to be saved.
-        setting_user_ids = Array()
-        theme_mod_settings = Array()
-        namespace_pattern = "/^(?P<stylesheet>.+?)::(?P<setting_id>.+)$/"
-        matches = Array()
-        for raw_setting_id,setting_params in self._changeset_data:
-            actual_setting_id = None
-            is_theme_mod_setting = (php_isset(lambda : setting_params["value"])) and (php_isset(lambda : setting_params["type"])) and "theme_mod" == setting_params["type"] and php_preg_match(namespace_pattern, raw_setting_id, matches)
-            if is_theme_mod_setting:
-                if (not (php_isset(lambda : theme_mod_settings[matches["stylesheet"]]))):
-                    theme_mod_settings[matches["stylesheet"]] = Array()
+        setting_user_ids_ = Array()
+        theme_mod_settings_ = Array()
+        namespace_pattern_ = "/^(?P<stylesheet>.+?)::(?P<setting_id>.+)$/"
+        matches_ = Array()
+        for raw_setting_id_,setting_params_ in self._changeset_data:
+            actual_setting_id_ = None
+            is_theme_mod_setting_ = (php_isset(lambda : setting_params_["value"])) and (php_isset(lambda : setting_params_["type"])) and "theme_mod" == setting_params_["type"] and php_preg_match(namespace_pattern_, raw_setting_id_, matches_)
+            if is_theme_mod_setting_:
+                if (not (php_isset(lambda : theme_mod_settings_[matches_["stylesheet"]]))):
+                    theme_mod_settings_[matches_["stylesheet"]] = Array()
                 # end if
-                theme_mod_settings[matches["stylesheet"]][matches["setting_id"]] = setting_params
-                if self.get_stylesheet() == matches["stylesheet"]:
-                    actual_setting_id = matches["setting_id"]
+                theme_mod_settings_[matches_["stylesheet"]][matches_["setting_id"]] = setting_params_
+                if self.get_stylesheet() == matches_["stylesheet"]:
+                    actual_setting_id_ = matches_["setting_id"]
                 # end if
             else:
-                actual_setting_id = raw_setting_id
+                actual_setting_id_ = raw_setting_id_
             # end if
             #// Keep track of the user IDs for settings actually for this theme.
-            if actual_setting_id and (php_isset(lambda : setting_params["user_id"])):
-                setting_user_ids[actual_setting_id] = setting_params["user_id"]
+            if actual_setting_id_ and (php_isset(lambda : setting_params_["user_id"])):
+                setting_user_ids_[actual_setting_id_] = setting_params_["user_id"]
             # end if
         # end for
-        changeset_setting_values = self.unsanitized_post_values(Array({"exclude_post_data": True, "exclude_changeset": False}))
-        changeset_setting_ids = php_array_keys(changeset_setting_values)
-        self.add_dynamic_settings(changeset_setting_ids)
+        changeset_setting_values_ = self.unsanitized_post_values(Array({"exclude_post_data": True, "exclude_changeset": False}))
+        changeset_setting_ids_ = php_array_keys(changeset_setting_values_)
+        self.add_dynamic_settings(changeset_setting_ids_)
         #// 
         #// Fires once the theme has switched in the Customizer, but before settings
         #// have been saved.
@@ -2704,18 +2953,18 @@ class WP_Customize_Manager():
         #// when the setting value was written into the changeset. So this is why
         #// an additional capability check is not required here.
         #//
-        original_setting_capabilities = Array()
-        for setting_id in changeset_setting_ids:
-            setting = self.get_setting(setting_id)
-            if setting and (not (php_isset(lambda : setting_user_ids[setting_id]))):
-                original_setting_capabilities[setting.id] = setting.capability
-                setting.capability = "exist"
+        original_setting_capabilities_ = Array()
+        for setting_id_ in changeset_setting_ids_:
+            setting_ = self.get_setting(setting_id_)
+            if setting_ and (not (php_isset(lambda : setting_user_ids_[setting_id_]))):
+                original_setting_capabilities_[setting_.id] = setting_.capability
+                setting_.capability = "exist"
             # end if
         # end for
-        original_user_id = get_current_user_id()
-        for setting_id in changeset_setting_ids:
-            setting = self.get_setting(setting_id)
-            if setting:
+        original_user_id_ = get_current_user_id()
+        for setting_id_ in changeset_setting_ids_:
+            setting_ = self.get_setting(setting_id_)
+            if setting_:
                 #// 
                 #// Set the current user to match the user who saved the value into
                 #// the changeset so that any filters that apply during the save
@@ -2723,20 +2972,20 @@ class WP_Customize_Manager():
                 #// will ensure, for example, that KSES won't strip unsafe HTML
                 #// when a scheduled changeset publishes via WP Cron.
                 #//
-                if (php_isset(lambda : setting_user_ids[setting_id])):
-                    wp_set_current_user(setting_user_ids[setting_id])
+                if (php_isset(lambda : setting_user_ids_[setting_id_])):
+                    wp_set_current_user(setting_user_ids_[setting_id_])
                 else:
-                    wp_set_current_user(original_user_id)
+                    wp_set_current_user(original_user_id_)
                 # end if
-                setting.save()
+                setting_.save()
             # end if
         # end for
-        wp_set_current_user(original_user_id)
+        wp_set_current_user(original_user_id_)
         #// Update the stashed theme mod settings, removing the active theme's stashed settings, if activated.
         if did_action("switch_theme"):
-            other_theme_mod_settings = theme_mod_settings
-            other_theme_mod_settings[self.get_stylesheet()] = None
-            self.update_stashed_theme_mod_settings(other_theme_mod_settings)
+            other_theme_mod_settings_ = theme_mod_settings_
+            other_theme_mod_settings_[self.get_stylesheet()] = None
+            self.update_stashed_theme_mod_settings(other_theme_mod_settings_)
         # end if
         #// 
         #// Fires after Customize settings have been saved.
@@ -2747,26 +2996,26 @@ class WP_Customize_Manager():
         #//
         do_action("customize_save_after", self)
         #// Restore original capabilities.
-        for setting_id,capability in original_setting_capabilities:
-            setting = self.get_setting(setting_id)
-            if setting:
-                setting.capability = capability
+        for setting_id_,capability_ in original_setting_capabilities_:
+            setting_ = self.get_setting(setting_id_)
+            if setting_:
+                setting_.capability = capability_
             # end if
         # end for
         #// Restore original changeset data.
-        self._changeset_data = previous_changeset_data
-        self._changeset_post_id = previous_changeset_post_id
-        self._changeset_uuid = previous_changeset_uuid
+        self._changeset_data = previous_changeset_data_
+        self._changeset_post_id = previous_changeset_post_id_
+        self._changeset_uuid = previous_changeset_uuid_
         #// 
         #// Convert all autosave revisions into their own auto-drafts so that users can be prompted to
         #// restore them when a changeset is published, but they had been locked out from including
         #// their changes in the changeset.
         #//
-        revisions = wp_get_post_revisions(changeset_post_id, Array({"check_enabled": False}))
-        for revision in revisions:
-            if False != php_strpos(revision.post_name, str(changeset_post_id) + str("-autosave")):
-                wpdb.update(wpdb.posts, Array({"post_status": "auto-draft", "post_type": "customize_changeset", "post_name": wp_generate_uuid4(), "post_parent": 0}), Array({"ID": revision.ID}))
-                clean_post_cache(revision.ID)
+        revisions_ = wp_get_post_revisions(changeset_post_id_, Array({"check_enabled": False}))
+        for revision_ in revisions_:
+            if False != php_strpos(revision_.post_name, str(changeset_post_id_) + str("-autosave")):
+                wpdb_.update(wpdb_.posts, Array({"post_status": "auto-draft", "post_type": "customize_changeset", "post_name": wp_generate_uuid4(), "post_parent": 0}), Array({"ID": revision_.ID}))
+                clean_post_cache(revision_.ID)
             # end if
         # end for
         return True
@@ -2779,26 +3028,27 @@ class WP_Customize_Manager():
     #// @param array $inactive_theme_mod_settings Mapping of stylesheet to arrays of theme mod settings.
     #// @return array|false Returns array of updated stashed theme mods or false if the update failed or there were no changes.
     #//
-    def update_stashed_theme_mod_settings(self, inactive_theme_mod_settings=None):
+    def update_stashed_theme_mod_settings(self, inactive_theme_mod_settings_=None):
         
-        stashed_theme_mod_settings = get_option("customize_stashed_theme_mods")
-        if php_empty(lambda : stashed_theme_mod_settings):
-            stashed_theme_mod_settings = Array()
+        
+        stashed_theme_mod_settings_ = get_option("customize_stashed_theme_mods")
+        if php_empty(lambda : stashed_theme_mod_settings_):
+            stashed_theme_mod_settings_ = Array()
         # end if
-        stashed_theme_mod_settings[self.get_stylesheet()] = None
+        stashed_theme_mod_settings_[self.get_stylesheet()] = None
         #// Merge inactive theme mods with the stashed theme mod settings.
-        for stylesheet,theme_mod_settings in inactive_theme_mod_settings:
-            if (not (php_isset(lambda : stashed_theme_mod_settings[stylesheet]))):
-                stashed_theme_mod_settings[stylesheet] = Array()
+        for stylesheet_,theme_mod_settings_ in inactive_theme_mod_settings_:
+            if (not (php_isset(lambda : stashed_theme_mod_settings_[stylesheet_]))):
+                stashed_theme_mod_settings_[stylesheet_] = Array()
             # end if
-            stashed_theme_mod_settings[stylesheet] = php_array_merge(stashed_theme_mod_settings[stylesheet], theme_mod_settings)
+            stashed_theme_mod_settings_[stylesheet_] = php_array_merge(stashed_theme_mod_settings_[stylesheet_], theme_mod_settings_)
         # end for
-        autoload = False
-        result = update_option("customize_stashed_theme_mods", stashed_theme_mod_settings, autoload)
-        if (not result):
+        autoload_ = False
+        result_ = update_option("customize_stashed_theme_mods", stashed_theme_mod_settings_, autoload_)
+        if (not result_):
             return False
         # end if
-        return stashed_theme_mod_settings
+        return stashed_theme_mod_settings_
     # end def update_stashed_theme_mod_settings
     #// 
     #// Refresh nonces for the current preview.
@@ -2806,6 +3056,7 @@ class WP_Customize_Manager():
     #// @since 4.2.0
     #//
     def refresh_nonces(self):
+        
         
         if (not self.is_preview()):
             wp_send_json_error("not_preview")
@@ -2819,6 +3070,7 @@ class WP_Customize_Manager():
     #//
     def handle_dismiss_autosave_or_lock_request(self):
         
+        
         #// Calls to dismiss_user_auto_draft_changesets() and wp_get_post_autosave() require non-zero get_current_user_id().
         if (not is_user_logged_in()):
             wp_send_json_error("unauthenticated", 401)
@@ -2829,36 +3081,36 @@ class WP_Customize_Manager():
         if (not check_ajax_referer("customize_dismiss_autosave_or_lock", "nonce", False)):
             wp_send_json_error("invalid_nonce", 403)
         # end if
-        changeset_post_id = self.changeset_post_id()
-        dismiss_lock = (not php_empty(lambda : PHP_POST["dismiss_lock"]))
-        dismiss_autosave = (not php_empty(lambda : PHP_POST["dismiss_autosave"]))
-        if dismiss_lock:
-            if php_empty(lambda : changeset_post_id) and (not dismiss_autosave):
+        changeset_post_id_ = self.changeset_post_id()
+        dismiss_lock_ = (not php_empty(lambda : PHP_POST["dismiss_lock"]))
+        dismiss_autosave_ = (not php_empty(lambda : PHP_POST["dismiss_autosave"]))
+        if dismiss_lock_:
+            if php_empty(lambda : changeset_post_id_) and (not dismiss_autosave_):
                 wp_send_json_error("no_changeset_to_dismiss_lock", 404)
             # end if
-            if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id)) and (not dismiss_autosave):
+            if (not current_user_can(get_post_type_object("customize_changeset").cap.edit_post, changeset_post_id_)) and (not dismiss_autosave_):
                 wp_send_json_error("cannot_remove_changeset_lock", 403)
             # end if
-            delete_post_meta(changeset_post_id, "_edit_lock")
-            if (not dismiss_autosave):
+            delete_post_meta(changeset_post_id_, "_edit_lock")
+            if (not dismiss_autosave_):
                 wp_send_json_success("changeset_lock_dismissed")
             # end if
         # end if
-        if dismiss_autosave:
-            if php_empty(lambda : changeset_post_id) or "auto-draft" == get_post_status(changeset_post_id):
-                dismissed = self.dismiss_user_auto_draft_changesets()
-                if dismissed > 0:
+        if dismiss_autosave_:
+            if php_empty(lambda : changeset_post_id_) or "auto-draft" == get_post_status(changeset_post_id_):
+                dismissed_ = self.dismiss_user_auto_draft_changesets()
+                if dismissed_ > 0:
                     wp_send_json_success("auto_draft_dismissed")
                 else:
                     wp_send_json_error("no_auto_draft_to_delete", 404)
                 # end if
             else:
-                revision = wp_get_post_autosave(changeset_post_id, get_current_user_id())
-                if revision:
-                    if (not current_user_can(get_post_type_object("customize_changeset").cap.delete_post, changeset_post_id)):
+                revision_ = wp_get_post_autosave(changeset_post_id_, get_current_user_id())
+                if revision_:
+                    if (not current_user_can(get_post_type_object("customize_changeset").cap.delete_post, changeset_post_id_)):
                         wp_send_json_error("cannot_delete_autosave_revision", 403)
                     # end if
-                    if (not wp_delete_post(revision.ID, True)):
+                    if (not wp_delete_post(revision_.ID, True)):
                         wp_send_json_error("autosave_revision_deletion_failure", 500)
                     else:
                         wp_send_json_success("autosave_revision_deleted")
@@ -2885,20 +3137,23 @@ class WP_Customize_Manager():
     #// on accepted arguments. Default empty array.
     #// @return WP_Customize_Setting The instance of the setting that was added.
     #//
-    def add_setting(self, id=None, args=Array()):
+    def add_setting(self, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        if type(id).__name__ == "WP_Customize_Setting":
-            setting = id
+        if type(id_).__name__ == "WP_Customize_Setting":
+            setting_ = id_
         else:
             class_ = "WP_Customize_Setting"
             #// This filter is documented in wp-includes/class-wp-customize-manager.php
-            args = apply_filters("customize_dynamic_setting_args", args, id)
+            args_ = apply_filters("customize_dynamic_setting_args", args_, id_)
             #// This filter is documented in wp-includes/class-wp-customize-manager.php
-            class_ = apply_filters("customize_dynamic_setting_class", class_, id, args)
-            setting = php_new_class(class_, lambda : {**locals(), **globals()}[class_](self, id, args))
+            class_ = apply_filters("customize_dynamic_setting_class", class_, id_, args_)
+            setting_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_](self, id_, args_))
         # end if
-        self.settings[setting.id] = setting
-        return setting
+        self.settings[setting_.id] = setting_
+        return setting_
     # end def add_setting
     #// 
     #// Register any dynamically-created settings, such as those from $_POST['customized']
@@ -2914,16 +3169,17 @@ class WP_Customize_Manager():
     #// @param array $setting_ids The setting IDs to add.
     #// @return array The WP_Customize_Setting objects added.
     #//
-    def add_dynamic_settings(self, setting_ids=None):
+    def add_dynamic_settings(self, setting_ids_=None):
         
-        new_settings = Array()
-        for setting_id in setting_ids:
+        
+        new_settings_ = Array()
+        for setting_id_ in setting_ids_:
             #// Skip settings already created.
-            if self.get_setting(setting_id):
+            if self.get_setting(setting_id_):
                 continue
             # end if
-            setting_args = False
-            setting_class = "WP_Customize_Setting"
+            setting_args_ = False
+            setting_class_ = "WP_Customize_Setting"
             #// 
             #// Filters a dynamic setting's constructor args.
             #// 
@@ -2936,8 +3192,8 @@ class WP_Customize_Manager():
             #// @param false|array $setting_args The arguments to the WP_Customize_Setting constructor.
             #// @param string      $setting_id   ID for dynamic setting, usually coming from `$_POST['customized']`.
             #//
-            setting_args = apply_filters("customize_dynamic_setting_args", setting_args, setting_id)
-            if False == setting_args:
+            setting_args_ = apply_filters("customize_dynamic_setting_args", setting_args_, setting_id_)
+            if False == setting_args_:
                 continue
             # end if
             #// 
@@ -2949,12 +3205,12 @@ class WP_Customize_Manager():
             #// @param string $setting_id    ID for dynamic setting, usually coming from `$_POST['customized']`.
             #// @param array  $setting_args  WP_Customize_Setting or a subclass.
             #//
-            setting_class = apply_filters("customize_dynamic_setting_class", setting_class, setting_id, setting_args)
-            setting = php_new_class(setting_class, lambda : {**locals(), **globals()}[setting_class](self, setting_id, setting_args))
-            self.add_setting(setting)
-            new_settings[-1] = setting
+            setting_class_ = apply_filters("customize_dynamic_setting_class", setting_class_, setting_id_, setting_args_)
+            setting_ = php_new_class(setting_class_, lambda : {**locals(), **globals()}[setting_class_](self, setting_id_, setting_args_))
+            self.add_setting(setting_)
+            new_settings_[-1] = setting_
         # end for
-        return new_settings
+        return new_settings_
     # end def add_dynamic_settings
     #// 
     #// Retrieve a customize setting.
@@ -2964,10 +3220,11 @@ class WP_Customize_Manager():
     #// @param string $id Customize Setting ID.
     #// @return WP_Customize_Setting|void The setting, if set.
     #//
-    def get_setting(self, id=None):
+    def get_setting(self, id_=None):
         
-        if (php_isset(lambda : self.settings[id])):
-            return self.settings[id]
+        
+        if (php_isset(lambda : self.settings[id_])):
+            return self.settings[id_]
         # end if
     # end def get_setting
     #// 
@@ -2979,9 +3236,10 @@ class WP_Customize_Manager():
     #// 
     #// @param string $id Customize Setting ID.
     #//
-    def remove_setting(self, id=None):
+    def remove_setting(self, id_=None):
         
-        self.settings[id] = None
+        
+        self.settings[id_] = None
     # end def remove_setting
     #// 
     #// Add a customize panel.
@@ -2997,15 +3255,18 @@ class WP_Customize_Manager():
     #// on accepted arguments. Default empty array.
     #// @return WP_Customize_Panel The instance of the panel that was added.
     #//
-    def add_panel(self, id=None, args=Array()):
-        
-        if type(id).__name__ == "WP_Customize_Panel":
-            panel = id
-        else:
-            panel = php_new_class("WP_Customize_Panel", lambda : WP_Customize_Panel(self, id, args))
+    def add_panel(self, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        self.panels[panel.id] = panel
-        return panel
+        
+        if type(id_).__name__ == "WP_Customize_Panel":
+            panel_ = id_
+        else:
+            panel_ = php_new_class("WP_Customize_Panel", lambda : WP_Customize_Panel(self, id_, args_))
+        # end if
+        self.panels[panel_.id] = panel_
+        return panel_
     # end def add_panel
     #// 
     #// Retrieve a customize panel.
@@ -3015,10 +3276,11 @@ class WP_Customize_Manager():
     #// @param string $id Panel ID to get.
     #// @return WP_Customize_Panel|void Requested panel instance, if set.
     #//
-    def get_panel(self, id=None):
+    def get_panel(self, id_=None):
         
-        if (php_isset(lambda : self.panels[id])):
-            return self.panels[id]
+        
+        if (php_isset(lambda : self.panels[id_])):
+            return self.panels[id_]
         # end if
     # end def get_panel
     #// 
@@ -3030,14 +3292,15 @@ class WP_Customize_Manager():
     #// 
     #// @param string $id Panel ID to remove.
     #//
-    def remove_panel(self, id=None):
+    def remove_panel(self, id_=None):
+        
         
         #// Removing core components this way is _doing_it_wrong().
-        if php_in_array(id, self.components, True):
-            message = php_sprintf(__("Removing %1$s manually will cause PHP warnings. Use the %2$s filter instead."), id, "<a href=\"" + esc_url("https://developer.wordpress.org/reference/hooks/customize_loaded_components/") + "\"><code>customize_loaded_components</code></a>")
-            _doing_it_wrong(__METHOD__, message, "4.5.0")
+        if php_in_array(id_, self.components, True):
+            message_ = php_sprintf(__("Removing %1$s manually will cause PHP warnings. Use the %2$s filter instead."), id_, "<a href=\"" + esc_url("https://developer.wordpress.org/reference/hooks/customize_loaded_components/") + "\"><code>customize_loaded_components</code></a>")
+            _doing_it_wrong(__METHOD__, message_, "4.5.0")
         # end if
-        self.panels[id] = None
+        self.panels[id_] = None
     # end def remove_panel
     #// 
     #// Register a customize panel type.
@@ -3050,9 +3313,10 @@ class WP_Customize_Manager():
     #// 
     #// @param string $panel Name of a custom panel which is a subclass of WP_Customize_Panel.
     #//
-    def register_panel_type(self, panel=None):
+    def register_panel_type(self, panel_=None):
         
-        self.registered_panel_types[-1] = panel
+        
+        self.registered_panel_types[-1] = panel_
     # end def register_panel_type
     #// 
     #// Render JS templates for all registered panel types.
@@ -3061,9 +3325,10 @@ class WP_Customize_Manager():
     #//
     def render_panel_templates(self):
         
-        for panel_type in self.registered_panel_types:
-            panel = php_new_class(panel_type, lambda : {**locals(), **globals()}[panel_type](self, "temp", Array()))
-            panel.print_template()
+        
+        for panel_type_ in self.registered_panel_types:
+            panel_ = php_new_class(panel_type_, lambda : {**locals(), **globals()}[panel_type_](self, "temp", Array()))
+            panel_.print_template()
         # end for
     # end def render_panel_templates
     #// 
@@ -3080,15 +3345,18 @@ class WP_Customize_Manager():
     #// on accepted arguments. Default empty array.
     #// @return WP_Customize_Section The instance of the section that was added.
     #//
-    def add_section(self, id=None, args=Array()):
-        
-        if type(id).__name__ == "WP_Customize_Section":
-            section = id
-        else:
-            section = php_new_class("WP_Customize_Section", lambda : WP_Customize_Section(self, id, args))
+    def add_section(self, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        self.sections[section.id] = section
-        return section
+        
+        if type(id_).__name__ == "WP_Customize_Section":
+            section_ = id_
+        else:
+            section_ = php_new_class("WP_Customize_Section", lambda : WP_Customize_Section(self, id_, args_))
+        # end if
+        self.sections[section_.id] = section_
+        return section_
     # end def add_section
     #// 
     #// Retrieve a customize section.
@@ -3098,10 +3366,11 @@ class WP_Customize_Manager():
     #// @param string $id Section ID.
     #// @return WP_Customize_Section|void The section, if set.
     #//
-    def get_section(self, id=None):
+    def get_section(self, id_=None):
         
-        if (php_isset(lambda : self.sections[id])):
-            return self.sections[id]
+        
+        if (php_isset(lambda : self.sections[id_])):
+            return self.sections[id_]
         # end if
     # end def get_section
     #// 
@@ -3113,9 +3382,10 @@ class WP_Customize_Manager():
     #// 
     #// @param string $id Section ID.
     #//
-    def remove_section(self, id=None):
+    def remove_section(self, id_=None):
         
-        self.sections[id] = None
+        
+        self.sections[id_] = None
     # end def remove_section
     #// 
     #// Register a customize section type.
@@ -3128,9 +3398,10 @@ class WP_Customize_Manager():
     #// 
     #// @param string $section Name of a custom section which is a subclass of WP_Customize_Section.
     #//
-    def register_section_type(self, section=None):
+    def register_section_type(self, section_=None):
         
-        self.registered_section_types[-1] = section
+        
+        self.registered_section_types[-1] = section_
     # end def register_section_type
     #// 
     #// Render JS templates for all registered section types.
@@ -3139,9 +3410,10 @@ class WP_Customize_Manager():
     #//
     def render_section_templates(self):
         
-        for section_type in self.registered_section_types:
-            section = php_new_class(section_type, lambda : {**locals(), **globals()}[section_type](self, "temp", Array()))
-            section.print_template()
+        
+        for section_type_ in self.registered_section_types:
+            section_ = php_new_class(section_type_, lambda : {**locals(), **globals()}[section_type_](self, "temp", Array()))
+            section_.print_template()
         # end for
     # end def render_section_templates
     #// 
@@ -3158,15 +3430,18 @@ class WP_Customize_Manager():
     #// on accepted arguments. Default empty array.
     #// @return WP_Customize_Control The instance of the control that was added.
     #//
-    def add_control(self, id=None, args=Array()):
-        
-        if type(id).__name__ == "WP_Customize_Control":
-            control = id
-        else:
-            control = php_new_class("WP_Customize_Control", lambda : WP_Customize_Control(self, id, args))
+    def add_control(self, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
         # end if
-        self.controls[control.id] = control
-        return control
+        
+        if type(id_).__name__ == "WP_Customize_Control":
+            control_ = id_
+        else:
+            control_ = php_new_class("WP_Customize_Control", lambda : WP_Customize_Control(self, id_, args_))
+        # end if
+        self.controls[control_.id] = control_
+        return control_
     # end def add_control
     #// 
     #// Retrieve a customize control.
@@ -3176,10 +3451,11 @@ class WP_Customize_Manager():
     #// @param string $id ID of the control.
     #// @return WP_Customize_Control|void The control object, if set.
     #//
-    def get_control(self, id=None):
+    def get_control(self, id_=None):
         
-        if (php_isset(lambda : self.controls[id])):
-            return self.controls[id]
+        
+        if (php_isset(lambda : self.controls[id_])):
+            return self.controls[id_]
         # end if
     # end def get_control
     #// 
@@ -3191,9 +3467,10 @@ class WP_Customize_Manager():
     #// 
     #// @param string $id ID of the control.
     #//
-    def remove_control(self, id=None):
+    def remove_control(self, id_=None):
         
-        self.controls[id] = None
+        
+        self.controls[id_] = None
     # end def remove_control
     #// 
     #// Register a customize control type.
@@ -3205,9 +3482,10 @@ class WP_Customize_Manager():
     #// @param string $control Name of a custom control which is a subclass of
     #// WP_Customize_Control.
     #//
-    def register_control_type(self, control=None):
+    def register_control_type(self, control_=None):
         
-        self.registered_control_types[-1] = control
+        
+        self.registered_control_types[-1] = control_
     # end def register_control_type
     #// 
     #// Render JS templates for all registered control types.
@@ -3216,14 +3494,15 @@ class WP_Customize_Manager():
     #//
     def render_control_templates(self):
         
+        
         if self.branching():
-            l10n = Array({"locked": __("%s is already customizing this changeset. Please wait until they are done to try customizing. Your latest changes have been autosaved."), "locked_allow_override": __("%s is already customizing this changeset. Do you want to take over?")})
+            l10n_ = Array({"locked": __("%s is already customizing this changeset. Please wait until they are done to try customizing. Your latest changes have been autosaved."), "locked_allow_override": __("%s is already customizing this changeset. Do you want to take over?")})
         else:
-            l10n = Array({"locked": __("%s is already customizing this site. Please wait until they are done to try customizing. Your latest changes have been autosaved."), "locked_allow_override": __("%s is already customizing this site. Do you want to take over?")})
+            l10n_ = Array({"locked": __("%s is already customizing this site. Please wait until they are done to try customizing. Your latest changes have been autosaved."), "locked_allow_override": __("%s is already customizing this site. Do you want to take over?")})
         # end if
-        for control_type in self.registered_control_types:
-            control = php_new_class(control_type, lambda : {**locals(), **globals()}[control_type](self, "temp", Array({"settings": Array()})))
-            control.print_template()
+        for control_type_ in self.registered_control_types:
+            control_ = php_new_class(control_type_, lambda : {**locals(), **globals()}[control_type_](self, "temp", Array({"settings": Array()})))
+            control_.print_template()
         # end for
         php_print("""
         <script type=\"text/html\" id=\"tmpl-customize-control-default-content\">
@@ -3378,9 +3657,9 @@ class WP_Customize_Manager():
         {{{ data.message }}}
         <# } else if ( data.allowOverride ) { #>
         """)
-        php_print(esc_html(php_sprintf(l10n["locked_allow_override"], "{{ data.lockUser.name }}")))
+        php_print(esc_html(php_sprintf(l10n_["locked_allow_override"], "{{ data.lockUser.name }}")))
         php_print("                     <# } else { #>\n                            ")
-        php_print(esc_html(php_sprintf(l10n["locked"], "{{ data.lockUser.name }}")))
+        php_print(esc_html(php_sprintf(l10n_["locked"], "{{ data.lockUser.name }}")))
         php_print("""                       <# } #>
         </p>
         <p class=\"notice notice-error notice-alt\" hidden></p>
@@ -3477,13 +3756,14 @@ class WP_Customize_Manager():
     #// @param WP_Customize_Panel|WP_Customize_Section|WP_Customize_Control $b Object B.
     #// @return int
     #//
-    def _cmp_priority(self, a=None, b=None):
+    def _cmp_priority(self, a_=None, b_=None):
+        
         
         _deprecated_function(__METHOD__, "4.7.0", "wp_list_sort")
-        if a.priority == b.priority:
-            return a.instance_number - b.instance_number
+        if a_.priority == b_.priority:
+            return a_.instance_number - b_.instance_number
         else:
-            return a.priority - b.priority
+            return a_.priority - b_.priority
         # end if
     # end def _cmp_priority
     #// 
@@ -3497,46 +3777,47 @@ class WP_Customize_Manager():
     #//
     def prepare_controls(self):
         
-        controls = Array()
+        
+        controls_ = Array()
         self.controls = wp_list_sort(self.controls, Array({"priority": "ASC", "instance_number": "ASC"}), "ASC", True)
-        for id,control in self.controls:
-            if (not (php_isset(lambda : self.sections[control.section]))) or (not control.check_capabilities()):
+        for id_,control_ in self.controls:
+            if (not (php_isset(lambda : self.sections[control_.section]))) or (not control_.check_capabilities()):
                 continue
             # end if
-            self.sections[control.section].controls[-1] = control
-            controls[id] = control
+            self.sections[control_.section].controls[-1] = control_
+            controls_[id_] = control_
         # end for
-        self.controls = controls
+        self.controls = controls_
         #// Prepare sections.
         self.sections = wp_list_sort(self.sections, Array({"priority": "ASC", "instance_number": "ASC"}), "ASC", True)
-        sections = Array()
-        for section in self.sections:
-            if (not section.check_capabilities()):
+        sections_ = Array()
+        for section_ in self.sections:
+            if (not section_.check_capabilities()):
                 continue
             # end if
-            section.controls = wp_list_sort(section.controls, Array({"priority": "ASC", "instance_number": "ASC"}))
-            if (not section.panel):
+            section_.controls = wp_list_sort(section_.controls, Array({"priority": "ASC", "instance_number": "ASC"}))
+            if (not section_.panel):
                 #// Top-level section.
-                sections[section.id] = section
+                sections_[section_.id] = section_
             else:
                 #// This section belongs to a panel.
-                if (php_isset(lambda : self.panels[section.panel])):
-                    self.panels[section.panel].sections[section.id] = section
+                if (php_isset(lambda : self.panels[section_.panel])):
+                    self.panels[section_.panel].sections[section_.id] = section_
                 # end if
             # end if
         # end for
-        self.sections = sections
+        self.sections = sections_
         #// Prepare panels.
         self.panels = wp_list_sort(self.panels, Array({"priority": "ASC", "instance_number": "ASC"}), "ASC", True)
-        panels = Array()
-        for panel in self.panels:
-            if (not panel.check_capabilities()):
+        panels_ = Array()
+        for panel_ in self.panels:
+            if (not panel_.check_capabilities()):
                 continue
             # end if
-            panel.sections = wp_list_sort(panel.sections, Array({"priority": "ASC", "instance_number": "ASC"}), "ASC", True)
-            panels[panel.id] = panel
+            panel_.sections = wp_list_sort(panel_.sections, Array({"priority": "ASC", "instance_number": "ASC"}), "ASC", True)
+            panels_[panel_.id] = panel_
         # end for
-        self.panels = panels
+        self.panels = panels_
         #// Sort panels and top-level sections together.
         self.containers = php_array_merge(self.panels, self.sections)
         self.containers = wp_list_sort(self.containers, Array({"priority": "ASC", "instance_number": "ASC"}), "ASC", True)
@@ -3548,8 +3829,9 @@ class WP_Customize_Manager():
     #//
     def enqueue_control_scripts(self):
         
-        for control in self.controls:
-            control.enqueue()
+        
+        for control_ in self.controls:
+            control_.enqueue()
         # end for
         if (not is_multisite()) and current_user_can("install_themes") or current_user_can("update_themes") or current_user_can("delete_themes"):
             wp_enqueue_script("updates")
@@ -3565,6 +3847,7 @@ class WP_Customize_Manager():
     #//
     def is_ios(self):
         
+        
         return wp_is_mobile() and php_preg_match("/iPad|iPod|iPhone/", PHP_SERVER["HTTP_USER_AGENT"])
     # end def is_ios
     #// 
@@ -3576,16 +3859,17 @@ class WP_Customize_Manager():
     #//
     def get_document_title_template(self):
         
+        
         if self.is_theme_active():
             #// translators: %s: Document title from the preview.
-            document_title_tmpl = __("Customize: %s")
+            document_title_tmpl_ = __("Customize: %s")
         else:
             #// translators: %s: Document title from the preview.
-            document_title_tmpl = __("Live Preview: %s")
+            document_title_tmpl_ = __("Live Preview: %s")
         # end if
-        document_title_tmpl = html_entity_decode(document_title_tmpl, ENT_QUOTES, "UTF-8")
+        document_title_tmpl_ = html_entity_decode(document_title_tmpl_, ENT_QUOTES, "UTF-8")
         #// Because exported to JS and assigned to document.title.
-        return document_title_tmpl
+        return document_title_tmpl_
     # end def get_document_title_template
     #// 
     #// Set the initial URL to be previewed.
@@ -3596,10 +3880,11 @@ class WP_Customize_Manager():
     #// 
     #// @param string $preview_url URL to be previewed.
     #//
-    def set_preview_url(self, preview_url=None):
+    def set_preview_url(self, preview_url_=None):
         
-        preview_url = esc_url_raw(preview_url)
-        self.preview_url = wp_validate_redirect(preview_url, home_url("/"))
+        
+        preview_url_ = esc_url_raw(preview_url_)
+        self.preview_url = wp_validate_redirect(preview_url_, home_url("/"))
     # end def set_preview_url
     #// 
     #// Get the initial URL to be previewed.
@@ -3610,12 +3895,13 @@ class WP_Customize_Manager():
     #//
     def get_preview_url(self):
         
+        
         if php_empty(lambda : self.preview_url):
-            preview_url = home_url("/")
+            preview_url_ = home_url("/")
         else:
-            preview_url = self.preview_url
+            preview_url_ = self.preview_url
         # end if
-        return preview_url
+        return preview_url_
     # end def get_preview_url
     #// 
     #// Determines whether the admin and the frontend are on different domains.
@@ -3626,10 +3912,11 @@ class WP_Customize_Manager():
     #//
     def is_cross_domain(self):
         
-        admin_origin = wp_parse_url(admin_url())
-        home_origin = wp_parse_url(home_url())
-        cross_domain = php_strtolower(admin_origin["host"]) != php_strtolower(home_origin["host"])
-        return cross_domain
+        
+        admin_origin_ = wp_parse_url(admin_url())
+        home_origin_ = wp_parse_url(home_url())
+        cross_domain_ = php_strtolower(admin_origin_["host"]) != php_strtolower(home_origin_["host"])
+        return cross_domain_
     # end def is_cross_domain
     #// 
     #// Get URLs allowed to be previewed.
@@ -3647,9 +3934,10 @@ class WP_Customize_Manager():
     #//
     def get_allowed_urls(self):
         
-        allowed_urls = Array(home_url("/"))
+        
+        allowed_urls_ = Array(home_url("/"))
         if is_ssl() and (not self.is_cross_domain()):
-            allowed_urls[-1] = home_url("/", "https")
+            allowed_urls_[-1] = home_url("/", "https")
         # end if
         #// 
         #// Filters the list of URLs allowed to be clicked and followed in the Customizer preview.
@@ -3658,8 +3946,8 @@ class WP_Customize_Manager():
         #// 
         #// @param string[] $allowed_urls An array of allowed URLs.
         #//
-        allowed_urls = array_unique(apply_filters("customize_allowed_urls", allowed_urls))
-        return allowed_urls
+        allowed_urls_ = array_unique(apply_filters("customize_allowed_urls", allowed_urls_))
+        return allowed_urls_
     # end def get_allowed_urls
     #// 
     #// Get messenger channel.
@@ -3669,6 +3957,7 @@ class WP_Customize_Manager():
     #// @return string Messenger channel.
     #//
     def get_messenger_channel(self):
+        
         
         return self.messenger_channel
     # end def get_messenger_channel
@@ -3681,12 +3970,13 @@ class WP_Customize_Manager():
     #// 
     #// @param string $return_url URL for return link.
     #//
-    def set_return_url(self, return_url=None):
+    def set_return_url(self, return_url_=None):
         
-        return_url = esc_url_raw(return_url)
-        return_url = remove_query_arg(wp_removable_query_args(), return_url)
-        return_url = wp_validate_redirect(return_url)
-        self.return_url = return_url
+        
+        return_url_ = esc_url_raw(return_url_)
+        return_url_ = remove_query_arg(wp_removable_query_args(), return_url_)
+        return_url_ = wp_validate_redirect(return_url_)
+        self.return_url = return_url_
     # end def set_return_url
     #// 
     #// Get URL to link the user to when closing the Customizer.
@@ -3699,32 +3989,33 @@ class WP_Customize_Manager():
     #//
     def get_return_url(self):
         
-        global _registered_pages
-        php_check_if_defined("_registered_pages")
-        referer = wp_get_referer()
-        excluded_referer_basenames = Array("customize.php", "wp-login.php")
+        
+        global _registered_pages_
+        php_check_if_defined("_registered_pages_")
+        referer_ = wp_get_referer()
+        excluded_referer_basenames_ = Array("customize.php", "wp-login.php")
         if self.return_url:
-            return_url = self.return_url
-        elif referer and (not php_in_array(wp_basename(php_parse_url(referer, PHP_URL_PATH)), excluded_referer_basenames, True)):
-            return_url = referer
+            return_url_ = self.return_url
+        elif referer_ and (not php_in_array(wp_basename(php_parse_url(referer_, PHP_URL_PATH)), excluded_referer_basenames_, True)):
+            return_url_ = referer_
         elif self.preview_url:
-            return_url = self.preview_url
+            return_url_ = self.preview_url
         else:
-            return_url = home_url("/")
+            return_url_ = home_url("/")
         # end if
-        return_url_basename = wp_basename(php_parse_url(self.return_url, PHP_URL_PATH))
-        return_url_query = php_parse_url(self.return_url, PHP_URL_QUERY)
-        if "themes.php" == return_url_basename and return_url_query:
-            parse_str(return_url_query, query_vars)
+        return_url_basename_ = wp_basename(php_parse_url(self.return_url, PHP_URL_PATH))
+        return_url_query_ = php_parse_url(self.return_url, PHP_URL_QUERY)
+        if "themes.php" == return_url_basename_ and return_url_query_:
+            parse_str(return_url_query_, query_vars_)
             #// 
             #// If the return URL is a page added by a theme to the Appearance menu via add_submenu_page(),
             #// verify that belongs to the active theme, otherwise fall back to the Themes screen.
             #//
-            if (php_isset(lambda : query_vars["page"])) and (not (php_isset(lambda : _registered_pages[str("appearance_page_") + str(query_vars["page"])]))):
-                return_url = admin_url("themes.php")
+            if (php_isset(lambda : query_vars_["page"])) and (not (php_isset(lambda : _registered_pages_[str("appearance_page_") + str(query_vars_["page"])]))):
+                return_url_ = admin_url("themes.php")
             # end if
         # end if
-        return return_url
+        return return_url_
     # end def get_return_url
     #// 
     #// Set the autofocused constructs.
@@ -3739,9 +4030,10 @@ class WP_Customize_Manager():
     #// @type string [$panel]    ID for panel to be autofocused.
     #// }
     #//
-    def set_autofocus(self, autofocus=None):
+    def set_autofocus(self, autofocus_=None):
         
-        self.autofocus = php_array_filter(wp_array_slice_assoc(autofocus, Array("panel", "section", "control")), "is_string")
+        
+        self.autofocus = php_array_filter(wp_array_slice_assoc(autofocus_, Array("panel", "section", "control")), "is_string")
     # end def set_autofocus
     #// 
     #// Get the autofocused constructs.
@@ -3758,6 +4050,7 @@ class WP_Customize_Manager():
     #//
     def get_autofocus(self):
         
+        
         return self.autofocus
     # end def get_autofocus
     #// 
@@ -3769,7 +4062,8 @@ class WP_Customize_Manager():
     #//
     def get_nonces(self):
         
-        nonces = Array({"save": wp_create_nonce("save-customize_" + self.get_stylesheet()), "preview": wp_create_nonce("preview-customize_" + self.get_stylesheet()), "switch_themes": wp_create_nonce("switch_themes"), "dismiss_autosave_or_lock": wp_create_nonce("customize_dismiss_autosave_or_lock"), "override_lock": wp_create_nonce("customize_override_changeset_lock"), "trash": wp_create_nonce("trash_customize_changeset")})
+        
+        nonces_ = Array({"save": wp_create_nonce("save-customize_" + self.get_stylesheet()), "preview": wp_create_nonce("preview-customize_" + self.get_stylesheet()), "switch_themes": wp_create_nonce("switch_themes"), "dismiss_autosave_or_lock": wp_create_nonce("customize_dismiss_autosave_or_lock"), "override_lock": wp_create_nonce("customize_override_changeset_lock"), "trash": wp_create_nonce("trash_customize_changeset")})
         #// 
         #// Filters nonces for Customizer.
         #// 
@@ -3779,8 +4073,8 @@ class WP_Customize_Manager():
         #// preview actions.
         #// @param WP_Customize_Manager $this   WP_Customize_Manager instance.
         #//
-        nonces = apply_filters("customize_refresh_nonces", nonces, self)
-        return nonces
+        nonces_ = apply_filters("customize_refresh_nonces", nonces_, self)
+        return nonces_
     # end def get_nonces
     #// 
     #// Print JavaScript settings for parent window.
@@ -3789,85 +4083,86 @@ class WP_Customize_Manager():
     #//
     def customize_pane_settings(self):
         
-        login_url = add_query_arg(Array({"interim-login": 1, "customize-login": 1}), wp_login_url())
+        
+        login_url_ = add_query_arg(Array({"interim-login": 1, "customize-login": 1}), wp_login_url())
         #// Ensure dirty flags are set for modified settings.
-        for setting_id in php_array_keys(self.unsanitized_post_values()):
-            setting = self.get_setting(setting_id)
-            if setting:
-                setting.dirty = True
+        for setting_id_ in php_array_keys(self.unsanitized_post_values()):
+            setting_ = self.get_setting(setting_id_)
+            if setting_:
+                setting_.dirty = True
             # end if
         # end for
-        autosave_revision_post = None
-        autosave_autodraft_post = None
-        changeset_post_id = self.changeset_post_id()
+        autosave_revision_post_ = None
+        autosave_autodraft_post_ = None
+        changeset_post_id_ = self.changeset_post_id()
         if (not self.saved_starter_content_changeset) and (not self.autosaved()):
-            if changeset_post_id:
+            if changeset_post_id_:
                 if is_user_logged_in():
-                    autosave_revision_post = wp_get_post_autosave(changeset_post_id, get_current_user_id())
+                    autosave_revision_post_ = wp_get_post_autosave(changeset_post_id_, get_current_user_id())
                 # end if
             else:
-                autosave_autodraft_posts = self.get_changeset_posts(Array({"posts_per_page": 1, "post_status": "auto-draft", "exclude_restore_dismissed": True}))
-                if (not php_empty(lambda : autosave_autodraft_posts)):
-                    autosave_autodraft_post = php_array_shift(autosave_autodraft_posts)
+                autosave_autodraft_posts_ = self.get_changeset_posts(Array({"posts_per_page": 1, "post_status": "auto-draft", "exclude_restore_dismissed": True}))
+                if (not php_empty(lambda : autosave_autodraft_posts_)):
+                    autosave_autodraft_post_ = php_array_shift(autosave_autodraft_posts_)
                 # end if
             # end if
         # end if
-        current_user_can_publish = current_user_can(get_post_type_object("customize_changeset").cap.publish_posts)
+        current_user_can_publish_ = current_user_can(get_post_type_object("customize_changeset").cap.publish_posts)
         #// @todo Include all of the status labels here from script-loader.php, and then allow it to be filtered.
-        status_choices = Array()
-        if current_user_can_publish:
-            status_choices[-1] = Array({"status": "publish", "label": __("Publish")})
+        status_choices_ = Array()
+        if current_user_can_publish_:
+            status_choices_[-1] = Array({"status": "publish", "label": __("Publish")})
         # end if
-        status_choices[-1] = Array({"status": "draft", "label": __("Save Draft")})
-        if current_user_can_publish:
-            status_choices[-1] = Array({"status": "future", "label": _x("Schedule", "customizer changeset action/button label")})
+        status_choices_[-1] = Array({"status": "draft", "label": __("Save Draft")})
+        if current_user_can_publish_:
+            status_choices_[-1] = Array({"status": "future", "label": _x("Schedule", "customizer changeset action/button label")})
         # end if
         #// Prepare Customizer settings to pass to JavaScript.
-        changeset_post = None
-        if changeset_post_id:
-            changeset_post = get_post(changeset_post_id)
+        changeset_post_ = None
+        if changeset_post_id_:
+            changeset_post_ = get_post(changeset_post_id_)
         # end if
         #// Determine initial date to be at present or future, not past.
-        current_time = current_time("mysql", False)
-        initial_date = current_time
-        if changeset_post:
-            initial_date = get_the_time("Y-m-d H:i:s", changeset_post.ID)
-            if initial_date < current_time:
-                initial_date = current_time
+        current_time_ = current_time("mysql", False)
+        initial_date_ = current_time_
+        if changeset_post_:
+            initial_date_ = get_the_time("Y-m-d H:i:s", changeset_post_.ID)
+            if initial_date_ < current_time_:
+                initial_date_ = current_time_
             # end if
         # end if
-        lock_user_id = False
+        lock_user_id_ = False
         if self.changeset_post_id():
-            lock_user_id = wp_check_post_lock(self.changeset_post_id())
+            lock_user_id_ = wp_check_post_lock(self.changeset_post_id())
         # end if
-        settings = Array({"changeset": Array({"uuid": self.changeset_uuid(), "branching": self.branching(), "autosaved": self.autosaved(), "hasAutosaveRevision": (not php_empty(lambda : autosave_revision_post)), "latestAutoDraftUuid": autosave_autodraft_post.post_name if autosave_autodraft_post else None, "status": changeset_post.post_status if changeset_post else "", "currentUserCanPublish": current_user_can_publish, "publishDate": initial_date, "statusChoices": status_choices, "lockUser": self.get_lock_user_data(lock_user_id) if lock_user_id else None})}, {"initialServerDate": current_time, "dateFormat": get_option("date_format"), "timeFormat": get_option("time_format"), "initialServerTimestamp": floor(php_microtime(True) * 1000), "initialClientTimestamp": -1, "timeouts": Array({"windowRefresh": 250, "changesetAutoSave": AUTOSAVE_INTERVAL * 1000, "keepAliveCheck": 2500, "reflowPaneContents": 100, "previewFrameSensitivity": 2000})}, {"theme": Array({"stylesheet": self.get_stylesheet(), "active": self.is_theme_active(), "_canInstall": current_user_can("install_themes")})}, {"url": Array({"preview": esc_url_raw(self.get_preview_url()), "return": esc_url_raw(self.get_return_url()), "parent": esc_url_raw(admin_url()), "activated": esc_url_raw(home_url("/")), "ajax": esc_url_raw(admin_url("admin-ajax.php", "relative")), "allowed": php_array_map("esc_url_raw", self.get_allowed_urls()), "isCrossDomain": self.is_cross_domain(), "home": esc_url_raw(home_url("/")), "login": esc_url_raw(login_url)})}, {"browser": Array({"mobile": wp_is_mobile(), "ios": self.is_ios()})}, {"panels": Array(), "sections": Array(), "nonce": self.get_nonces(), "autofocus": self.get_autofocus(), "documentTitleTmpl": self.get_document_title_template(), "previewableDevices": self.get_previewable_devices(), "l10n": Array({"confirmDeleteTheme": __("Are you sure you want to delete this theme?"), "themeSearchResults": __("%d themes found"), "announceThemeCount": __("Displaying %d themes"), "announceThemeDetails": __("Showing details for theme: %s")})})
+        settings_ = Array({"changeset": Array({"uuid": self.changeset_uuid(), "branching": self.branching(), "autosaved": self.autosaved(), "hasAutosaveRevision": (not php_empty(lambda : autosave_revision_post_)), "latestAutoDraftUuid": autosave_autodraft_post_.post_name if autosave_autodraft_post_ else None, "status": changeset_post_.post_status if changeset_post_ else "", "currentUserCanPublish": current_user_can_publish_, "publishDate": initial_date_, "statusChoices": status_choices_, "lockUser": self.get_lock_user_data(lock_user_id_) if lock_user_id_ else None})}, {"initialServerDate": current_time_, "dateFormat": get_option("date_format"), "timeFormat": get_option("time_format"), "initialServerTimestamp": floor(php_microtime(True) * 1000), "initialClientTimestamp": -1, "timeouts": Array({"windowRefresh": 250, "changesetAutoSave": AUTOSAVE_INTERVAL * 1000, "keepAliveCheck": 2500, "reflowPaneContents": 100, "previewFrameSensitivity": 2000})}, {"theme": Array({"stylesheet": self.get_stylesheet(), "active": self.is_theme_active(), "_canInstall": current_user_can("install_themes")})}, {"url": Array({"preview": esc_url_raw(self.get_preview_url()), "return": esc_url_raw(self.get_return_url()), "parent": esc_url_raw(admin_url()), "activated": esc_url_raw(home_url("/")), "ajax": esc_url_raw(admin_url("admin-ajax.php", "relative")), "allowed": php_array_map("esc_url_raw", self.get_allowed_urls()), "isCrossDomain": self.is_cross_domain(), "home": esc_url_raw(home_url("/")), "login": esc_url_raw(login_url_)})}, {"browser": Array({"mobile": wp_is_mobile(), "ios": self.is_ios()})}, {"panels": Array(), "sections": Array(), "nonce": self.get_nonces(), "autofocus": self.get_autofocus(), "documentTitleTmpl": self.get_document_title_template(), "previewableDevices": self.get_previewable_devices(), "l10n": Array({"confirmDeleteTheme": __("Are you sure you want to delete this theme?"), "themeSearchResults": __("%d themes found"), "announceThemeCount": __("Displaying %d themes"), "announceThemeDetails": __("Showing details for theme: %s")})})
         #// Temporarily disable installation in Customizer. See #42184.
-        filesystem_method = get_filesystem_method()
+        filesystem_method_ = get_filesystem_method()
         ob_start()
-        filesystem_credentials_are_stored = request_filesystem_credentials(self_admin_url())
+        filesystem_credentials_are_stored_ = request_filesystem_credentials(self_admin_url())
         ob_end_clean()
-        if "direct" != filesystem_method and (not filesystem_credentials_are_stored):
-            settings["theme"]["_filesystemCredentialsNeeded"] = True
+        if "direct" != filesystem_method_ and (not filesystem_credentials_are_stored_):
+            settings_["theme"]["_filesystemCredentialsNeeded"] = True
         # end if
         #// Prepare Customize Section objects to pass to JavaScript.
-        for id,section in self.sections():
-            if section.check_capabilities():
-                settings["sections"][id] = section.json()
+        for id_,section_ in self.sections():
+            if section_.check_capabilities():
+                settings_["sections"][id_] = section_.json()
             # end if
         # end for
         #// Prepare Customize Panel objects to pass to JavaScript.
-        for panel_id,panel in self.panels():
-            if panel.check_capabilities():
-                settings["panels"][panel_id] = panel.json()
-                for section_id,section in panel.sections:
-                    if section.check_capabilities():
-                        settings["sections"][section_id] = section.json()
+        for panel_id_,panel_ in self.panels():
+            if panel_.check_capabilities():
+                settings_["panels"][panel_id_] = panel_.json()
+                for section_id_,section_ in panel_.sections:
+                    if section_.check_capabilities():
+                        settings_["sections"][section_id_] = section_.json()
                     # end if
                 # end for
             # end if
         # end for
         php_print("     <script type=\"text/javascript\">\n         var _wpCustomizeSettings = ")
-        php_print(wp_json_encode(settings))
+        php_print(wp_json_encode(settings_))
         php_print(""";
         _wpCustomizeSettings.initialClientTimestamp = _.now();
         _wpCustomizeSettings.controls = {};
@@ -3875,17 +4170,17 @@ class WP_Customize_Manager():
         """)
         #// Serialize settings one by one to improve memory usage.
         php_print("(function ( s ){\n")
-        for setting in self.settings():
-            if setting.check_capabilities():
-                printf("s[%s] = %s;\n", wp_json_encode(setting.id), wp_json_encode(setting.json()))
+        for setting_ in self.settings():
+            if setting_.check_capabilities():
+                printf("s[%s] = %s;\n", wp_json_encode(setting_.id), wp_json_encode(setting_.json()))
             # end if
         # end for
         php_print("})( _wpCustomizeSettings.settings );\n")
         #// Serialize controls one by one to improve memory usage.
         php_print("(function ( c ){\n")
-        for control in self.controls():
-            if control.check_capabilities():
-                printf("c[%s] = %s;\n", wp_json_encode(control.id), wp_json_encode(control.json()))
+        for control_ in self.controls():
+            if control_.check_capabilities():
+                printf("c[%s] = %s;\n", wp_json_encode(control_.id), wp_json_encode(control_.json()))
             # end if
         # end for
         php_print("})( _wpCustomizeSettings.controls );\n")
@@ -3900,7 +4195,8 @@ class WP_Customize_Manager():
     #//
     def get_previewable_devices(self):
         
-        devices = Array({"desktop": Array({"label": __("Enter desktop preview mode"), "default": True})}, {"tablet": Array({"label": __("Enter tablet preview mode")})}, {"mobile": Array({"label": __("Enter mobile preview mode")})})
+        
+        devices_ = Array({"desktop": Array({"label": __("Enter desktop preview mode"), "default": True})}, {"tablet": Array({"label": __("Enter tablet preview mode")})}, {"mobile": Array({"label": __("Enter mobile preview mode")})})
         #// 
         #// Filters the available devices to allow previewing in the Customizer.
         #// 
@@ -3910,8 +4206,8 @@ class WP_Customize_Manager():
         #// 
         #// @param array $devices List of devices with labels and default setting.
         #//
-        devices = apply_filters("customize_previewable_devices", devices)
-        return devices
+        devices_ = apply_filters("customize_previewable_devices", devices_)
+        return devices_
     # end def get_previewable_devices
     #// 
     #// Register some default controls.
@@ -3919,6 +4215,7 @@ class WP_Customize_Manager():
     #// @since 3.4.0
     #//
     def register_controls(self):
+        
         
         #// Themes (controls are loaded via ajax)
         self.add_panel(php_new_class("WP_Customize_Themes_Panel", lambda : WP_Customize_Themes_Panel(self, "themes", Array({"title": self.theme().display("Name"), "description": "<p>" + __("Looking for a theme? You can search or browse the WordPress.org theme directory, install and preview themes, then activate them right here.") + "</p>" + "<p>" + __("While previewing a new theme, you can continue to tailor things like widgets and menus, and explore theme-specific options.") + "</p>", "capability": "switch_themes", "priority": 0}))))
@@ -3942,8 +4239,8 @@ class WP_Customize_Manager():
         self.add_setting("site_icon", Array({"type": "option", "capability": "manage_options", "transport": "postMessage"}))
         self.add_control(php_new_class("WP_Customize_Site_Icon_Control", lambda : WP_Customize_Site_Icon_Control(self, "site_icon", Array({"label": __("Site Icon"), "description": php_sprintf("<p>" + __("Site Icons are what you see in browser tabs, bookmark bars, and within the WordPress mobile apps. Upload one here!") + "</p>" + "<p>" + __("Site Icons should be square and at least %s pixels.") + "</p>", "<strong>512 &times; 512</strong>"), "section": "title_tagline", "priority": 60, "height": 512, "width": 512}))))
         self.add_setting("custom_logo", Array({"theme_supports": Array("custom-logo"), "transport": "postMessage"}))
-        custom_logo_args = get_theme_support("custom-logo")
-        self.add_control(php_new_class("WP_Customize_Cropped_Image_Control", lambda : WP_Customize_Cropped_Image_Control(self, "custom_logo", Array({"label": __("Logo"), "section": "title_tagline", "priority": 8, "height": custom_logo_args[0]["height"] if (php_isset(lambda : custom_logo_args[0]["height"])) else None, "width": custom_logo_args[0]["width"] if (php_isset(lambda : custom_logo_args[0]["width"])) else None, "flex_height": custom_logo_args[0]["flex-height"] if (php_isset(lambda : custom_logo_args[0]["flex-height"])) else None, "flex_width": custom_logo_args[0]["flex-width"] if (php_isset(lambda : custom_logo_args[0]["flex-width"])) else None, "button_labels": Array({"select": __("Select logo"), "change": __("Change logo"), "remove": __("Remove"), "default": __("Default"), "placeholder": __("No logo selected"), "frame_title": __("Select logo"), "frame_button": __("Choose logo")})}))))
+        custom_logo_args_ = get_theme_support("custom-logo")
+        self.add_control(php_new_class("WP_Customize_Cropped_Image_Control", lambda : WP_Customize_Cropped_Image_Control(self, "custom_logo", Array({"label": __("Logo"), "section": "title_tagline", "priority": 8, "height": custom_logo_args_[0]["height"] if (php_isset(lambda : custom_logo_args_[0]["height"])) else None, "width": custom_logo_args_[0]["width"] if (php_isset(lambda : custom_logo_args_[0]["width"])) else None, "flex_height": custom_logo_args_[0]["flex-height"] if (php_isset(lambda : custom_logo_args_[0]["flex-height"])) else None, "flex_width": custom_logo_args_[0]["flex-width"] if (php_isset(lambda : custom_logo_args_[0]["flex-width"])) else None, "button_labels": Array({"select": __("Select logo"), "change": __("Change logo"), "remove": __("Remove"), "default": __("Default"), "placeholder": __("No logo selected"), "frame_title": __("Select logo"), "frame_button": __("Choose logo")})}))))
         self.selective_refresh.add_partial("custom_logo", Array({"settings": Array("custom_logo"), "selector": ".custom-logo-link", "render_callback": Array(self, "_render_custom_logo_partial"), "container_inclusive": True}))
         #// Colors
         self.add_section("colors", Array({"title": __("Colors"), "priority": 40}))
@@ -3958,23 +4255,23 @@ class WP_Customize_Manager():
         self.add_control(php_new_class("WP_Customize_Color_Control", lambda : WP_Customize_Color_Control(self, "background_color", Array({"label": __("Background Color"), "section": "colors"}))))
         #// Custom Header
         if current_theme_supports("custom-header", "video"):
-            title = __("Header Media")
-            description = "<p>" + __("If you add a video, the image will be used as a fallback while the video loads.") + "</p>"
-            width = absint(get_theme_support("custom-header", "width"))
-            height = absint(get_theme_support("custom-header", "height"))
-            if width and height:
-                control_description = php_sprintf(__("Upload your video in %1$s format and minimize its file size for best results. Your theme recommends dimensions of %2$s pixels."), "<code>.mp4</code>", php_sprintf("<strong>%s &times; %s</strong>", width, height))
-            elif width:
-                control_description = php_sprintf(__("Upload your video in %1$s format and minimize its file size for best results. Your theme recommends a width of %2$s pixels."), "<code>.mp4</code>", php_sprintf("<strong>%s</strong>", width))
+            title_ = __("Header Media")
+            description_ = "<p>" + __("If you add a video, the image will be used as a fallback while the video loads.") + "</p>"
+            width_ = absint(get_theme_support("custom-header", "width"))
+            height_ = absint(get_theme_support("custom-header", "height"))
+            if width_ and height_:
+                control_description_ = php_sprintf(__("Upload your video in %1$s format and minimize its file size for best results. Your theme recommends dimensions of %2$s pixels."), "<code>.mp4</code>", php_sprintf("<strong>%s &times; %s</strong>", width_, height_))
+            elif width_:
+                control_description_ = php_sprintf(__("Upload your video in %1$s format and minimize its file size for best results. Your theme recommends a width of %2$s pixels."), "<code>.mp4</code>", php_sprintf("<strong>%s</strong>", width_))
             else:
-                control_description = php_sprintf(__("Upload your video in %1$s format and minimize its file size for best results. Your theme recommends a height of %2$s pixels."), "<code>.mp4</code>", php_sprintf("<strong>%s</strong>", height))
+                control_description_ = php_sprintf(__("Upload your video in %1$s format and minimize its file size for best results. Your theme recommends a height of %2$s pixels."), "<code>.mp4</code>", php_sprintf("<strong>%s</strong>", height_))
             # end if
         else:
-            title = __("Header Image")
-            description = ""
-            control_description = ""
+            title_ = __("Header Image")
+            description_ = ""
+            control_description_ = ""
         # end if
-        self.add_section("header_image", Array({"title": title, "description": description, "theme_supports": "custom-header", "priority": 60}))
+        self.add_section("header_image", Array({"title": title_, "description": description_, "theme_supports": "custom-header", "priority": 60}))
         self.add_setting("header_video", Array({"theme_supports": Array("custom-header", "video"), "transport": "postMessage", "sanitize_callback": "absint", "validate_callback": Array(self, "_validate_header_video")}))
         self.add_setting("external_header_video", Array({"theme_supports": Array("custom-header", "video"), "transport": "postMessage", "sanitize_callback": Array(self, "_sanitize_external_header_video"), "validate_callback": Array(self, "_validate_external_header_video")}))
         self.add_setting(php_new_class("WP_Customize_Filter_Setting", lambda : WP_Customize_Filter_Setting(self, "header_image", Array({"default": php_sprintf(get_theme_support("custom-header", "default-image"), get_template_directory_uri(), get_stylesheet_directory_uri()), "theme_supports": "custom-header"}))))
@@ -3988,7 +4285,7 @@ class WP_Customize_Manager():
             self.get_setting("header_image").transport = "postMessage"
             self.get_setting("header_image_data").transport = "postMessage"
         # end if
-        self.add_control(php_new_class("WP_Customize_Media_Control", lambda : WP_Customize_Media_Control(self, "header_video", Array({"theme_supports": Array("custom-header", "video"), "label": __("Header Video"), "description": control_description, "section": "header_image", "mime_type": "video", "active_callback": "is_header_video_active"}))))
+        self.add_control(php_new_class("WP_Customize_Media_Control", lambda : WP_Customize_Media_Control(self, "header_video", Array({"theme_supports": Array("custom-header", "video"), "label": __("Header Video"), "description": control_description_, "section": "header_image", "mime_type": "video", "active_callback": "is_header_video_active"}))))
         self.add_control("external_header_video", Array({"theme_supports": Array("custom-header", "video"), "type": "url", "description": __("Or, enter a YouTube URL:"), "section": "header_image", "active_callback": "is_header_video_active"}))
         self.add_control(php_new_class("WP_Customize_Header_Image_Control", lambda : WP_Customize_Header_Image_Control(self)))
         self.selective_refresh.add_partial("custom_header", Array({"selector": "#wp-custom-header", "render_callback": "the_custom_header_markup", "settings": Array("header_video", "external_header_video", "header_image"), "container_inclusive": True}))
@@ -4011,8 +4308,8 @@ class WP_Customize_Manager():
         #// If the theme is using the default background callback, we can update
         #// the background CSS using postMessage.
         if get_theme_support("custom-background", "wp-head-callback") == "_custom_background_cb":
-            for prop in Array("color", "image", "preset", "position_x", "position_y", "size", "repeat", "attachment"):
-                self.get_setting("background_" + prop).transport = "postMessage"
+            for prop_ in Array("color", "image", "preset", "position_x", "position_y", "size", "repeat", "attachment"):
+                self.get_setting("background_" + prop_).transport = "postMessage"
             # end for
         # end if
         #// 
@@ -4028,28 +4325,28 @@ class WP_Customize_Manager():
         self.add_setting("page_for_posts", Array({"type": "option", "capability": "manage_options"}))
         self.add_control("page_for_posts", Array({"label": __("Posts page"), "section": "static_front_page", "type": "dropdown-pages", "allow_addition": True}))
         #// Custom CSS
-        section_description = "<p>"
-        section_description += __("Add your own CSS code here to customize the appearance and layout of your site.")
-        section_description += php_sprintf(" <a href=\"%1$s\" class=\"external-link\" target=\"_blank\">%2$s<span class=\"screen-reader-text\"> %3$s</span></a>", esc_url(__("https://codex.wordpress.org/CSS")), __("Learn more about CSS"), __("(opens in a new tab)"))
-        section_description += "</p>"
-        section_description += "<p id=\"editor-keyboard-trap-help-1\">" + __("When using a keyboard to navigate:") + "</p>"
-        section_description += "<ul>"
-        section_description += "<li id=\"editor-keyboard-trap-help-2\">" + __("In the editing area, the Tab key enters a tab character.") + "</li>"
-        section_description += "<li id=\"editor-keyboard-trap-help-3\">" + __("To move away from this area, press the Esc key followed by the Tab key.") + "</li>"
-        section_description += "<li id=\"editor-keyboard-trap-help-4\">" + __("Screen reader users: when in forms mode, you may need to press the Esc key twice.") + "</li>"
-        section_description += "</ul>"
+        section_description_ = "<p>"
+        section_description_ += __("Add your own CSS code here to customize the appearance and layout of your site.")
+        section_description_ += php_sprintf(" <a href=\"%1$s\" class=\"external-link\" target=\"_blank\">%2$s<span class=\"screen-reader-text\"> %3$s</span></a>", esc_url(__("https://codex.wordpress.org/CSS")), __("Learn more about CSS"), __("(opens in a new tab)"))
+        section_description_ += "</p>"
+        section_description_ += "<p id=\"editor-keyboard-trap-help-1\">" + __("When using a keyboard to navigate:") + "</p>"
+        section_description_ += "<ul>"
+        section_description_ += "<li id=\"editor-keyboard-trap-help-2\">" + __("In the editing area, the Tab key enters a tab character.") + "</li>"
+        section_description_ += "<li id=\"editor-keyboard-trap-help-3\">" + __("To move away from this area, press the Esc key followed by the Tab key.") + "</li>"
+        section_description_ += "<li id=\"editor-keyboard-trap-help-4\">" + __("Screen reader users: when in forms mode, you may need to press the Esc key twice.") + "</li>"
+        section_description_ += "</ul>"
         if "false" != wp_get_current_user().syntax_highlighting:
-            section_description += "<p>"
-            section_description += php_sprintf(__("The edit field automatically highlights code syntax. You can disable this in your <a href=\"%1$s\" %2$s>user profile%3$s</a> to work in plain text mode."), esc_url(get_edit_profile_url()), "class=\"external-link\" target=\"_blank\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
-            section_description += "</p>"
+            section_description_ += "<p>"
+            section_description_ += php_sprintf(__("The edit field automatically highlights code syntax. You can disable this in your <a href=\"%1$s\" %2$s>user profile%3$s</a> to work in plain text mode."), esc_url(get_edit_profile_url()), "class=\"external-link\" target=\"_blank\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
+            section_description_ += "</p>"
         # end if
-        section_description += "<p class=\"section-description-buttons\">"
-        section_description += "<button type=\"button\" class=\"button-link section-description-close\">" + __("Close") + "</button>"
-        section_description += "</p>"
-        self.add_section("custom_css", Array({"title": __("Additional CSS"), "priority": 200, "description_hidden": True, "description": section_description}))
-        custom_css_setting = php_new_class("WP_Customize_Custom_CSS_Setting", lambda : WP_Customize_Custom_CSS_Setting(self, php_sprintf("custom_css[%s]", get_stylesheet()), Array({"capability": "edit_css", "default": ""})))
-        self.add_setting(custom_css_setting)
-        self.add_control(php_new_class("WP_Customize_Code_Editor_Control", lambda : WP_Customize_Code_Editor_Control(self, "custom_css", Array({"label": __("CSS code"), "section": "custom_css", "settings": Array({"default": custom_css_setting.id})}, {"code_type": "text/css", "input_attrs": Array({"aria-describedby": "editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"})}))))
+        section_description_ += "<p class=\"section-description-buttons\">"
+        section_description_ += "<button type=\"button\" class=\"button-link section-description-close\">" + __("Close") + "</button>"
+        section_description_ += "</p>"
+        self.add_section("custom_css", Array({"title": __("Additional CSS"), "priority": 200, "description_hidden": True, "description": section_description_}))
+        custom_css_setting_ = php_new_class("WP_Customize_Custom_CSS_Setting", lambda : WP_Customize_Custom_CSS_Setting(self, php_sprintf("custom_css[%s]", get_stylesheet()), Array({"capability": "edit_css", "default": ""})))
+        self.add_setting(custom_css_setting_)
+        self.add_control(php_new_class("WP_Customize_Code_Editor_Control", lambda : WP_Customize_Code_Editor_Control(self, "custom_css", Array({"label": __("CSS code"), "section": "custom_css", "settings": Array({"default": custom_css_setting_.id})}, {"code_type": "text/css", "input_attrs": Array({"aria-describedby": "editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"})}))))
     # end def register_controls
     #// 
     #// Return whether there are published pages.
@@ -4062,10 +4359,11 @@ class WP_Customize_Manager():
     #//
     def has_published_pages(self):
         
-        setting = self.get_setting("nav_menus_created_posts")
-        if setting:
-            for post_id in setting.value():
-                if "page" == get_post_type(post_id):
+        
+        setting_ = self.get_setting("nav_menus_created_posts")
+        if setting_:
+            for post_id_ in setting_.value():
+                if "page" == get_post_type(post_id_):
                     return True
                 # end if
             # end for
@@ -4081,8 +4379,9 @@ class WP_Customize_Manager():
     #//
     def register_dynamic_settings(self):
         
-        setting_ids = php_array_keys(self.unsanitized_post_values())
-        self.add_dynamic_settings(setting_ids)
+        
+        setting_ids_ = php_array_keys(self.unsanitized_post_values())
+        self.add_dynamic_settings(setting_ids_)
     # end def register_dynamic_settings
     #// 
     #// Load themes into the theme browsing/installation UI.
@@ -4091,6 +4390,7 @@ class WP_Customize_Manager():
     #//
     def handle_load_themes_request(self):
         
+        
         check_ajax_referer("switch_themes", "nonce")
         if (not current_user_can("switch_themes")):
             wp_die(-1)
@@ -4098,92 +4398,92 @@ class WP_Customize_Manager():
         if php_empty(lambda : PHP_POST["theme_action"]):
             wp_send_json_error("missing_theme_action")
         # end if
-        theme_action = sanitize_key(PHP_POST["theme_action"])
-        themes = Array()
-        args = Array()
+        theme_action_ = sanitize_key(PHP_POST["theme_action"])
+        themes_ = Array()
+        args_ = Array()
         #// Define query filters based on user input.
         if (not php_array_key_exists("search", PHP_POST)):
-            args["search"] = ""
+            args_["search"] = ""
         else:
-            args["search"] = sanitize_text_field(wp_unslash(PHP_POST["search"]))
+            args_["search"] = sanitize_text_field(wp_unslash(PHP_POST["search"]))
         # end if
         if (not php_array_key_exists("tags", PHP_POST)):
-            args["tag"] = ""
+            args_["tag"] = ""
         else:
-            args["tag"] = php_array_map("sanitize_text_field", wp_unslash(PHP_POST["tags"]))
+            args_["tag"] = php_array_map("sanitize_text_field", wp_unslash(PHP_POST["tags"]))
         # end if
         if (not php_array_key_exists("page", PHP_POST)):
-            args["page"] = 1
+            args_["page"] = 1
         else:
-            args["page"] = absint(PHP_POST["page"])
+            args_["page"] = absint(PHP_POST["page"])
         # end if
         php_include_file(ABSPATH + "wp-admin/includes/theme.php", once=True)
-        if "installed" == theme_action:
+        if "installed" == theme_action_:
             #// Load all installed themes from wp_prepare_themes_for_js().
-            themes = Array({"themes": wp_prepare_themes_for_js()})
-            for theme in themes["themes"]:
-                theme["type"] = "installed"
-                theme["active"] = (php_isset(lambda : PHP_POST["customized_theme"])) and PHP_POST["customized_theme"] == theme["id"]
+            themes_ = Array({"themes": wp_prepare_themes_for_js()})
+            for theme_ in themes_["themes"]:
+                theme_["type"] = "installed"
+                theme_["active"] = (php_isset(lambda : PHP_POST["customized_theme"])) and PHP_POST["customized_theme"] == theme_["id"]
             # end for
-        elif "wporg" == theme_action:
+        elif "wporg" == theme_action_:
             #// Load WordPress.org themes from the .org API and normalize data to match installed theme objects.
             if (not current_user_can("install_themes")):
                 wp_die(-1)
             # end if
             #// Arguments for all queries.
-            wporg_args = Array({"per_page": 100, "fields": Array({"reviews_url": True})})
-            args = php_array_merge(wporg_args, args)
-            if "" == args["search"] and "" == args["tag"]:
-                args["browse"] = "new"
+            wporg_args_ = Array({"per_page": 100, "fields": Array({"reviews_url": True})})
+            args_ = php_array_merge(wporg_args_, args_)
+            if "" == args_["search"] and "" == args_["tag"]:
+                args_["browse"] = "new"
                 pass
             # end if
             #// Load themes from the .org API.
-            themes = themes_api("query_themes", args)
-            if is_wp_error(themes):
+            themes_ = themes_api("query_themes", args_)
+            if is_wp_error(themes_):
                 wp_send_json_error()
             # end if
             #// This list matches the allowed tags in wp-admin/includes/theme-install.php.
-            themes_allowedtags = php_array_fill_keys(Array("a", "abbr", "acronym", "code", "pre", "em", "strong", "div", "p", "ul", "ol", "li", "h1", "h2", "h3", "h4", "h5", "h6", "img"), Array())
-            themes_allowedtags["a"] = php_array_fill_keys(Array("href", "title", "target"), True)
-            themes_allowedtags["acronym"]["title"] = True
-            themes_allowedtags["abbr"]["title"] = True
-            themes_allowedtags["img"] = php_array_fill_keys(Array("src", "class", "alt"), True)
+            themes_allowedtags_ = php_array_fill_keys(Array("a", "abbr", "acronym", "code", "pre", "em", "strong", "div", "p", "ul", "ol", "li", "h1", "h2", "h3", "h4", "h5", "h6", "img"), Array())
+            themes_allowedtags_["a"] = php_array_fill_keys(Array("href", "title", "target"), True)
+            themes_allowedtags_["acronym"]["title"] = True
+            themes_allowedtags_["abbr"]["title"] = True
+            themes_allowedtags_["img"] = php_array_fill_keys(Array("src", "class", "alt"), True)
             #// Prepare a list of installed themes to check against before the loop.
-            installed_themes = Array()
-            wp_themes = wp_get_themes()
-            for theme in wp_themes:
-                installed_themes[-1] = theme.get_stylesheet()
+            installed_themes_ = Array()
+            wp_themes_ = wp_get_themes()
+            for theme_ in wp_themes_:
+                installed_themes_[-1] = theme_.get_stylesheet()
             # end for
-            update_php = network_admin_url("update.php?action=install-theme")
+            update_php_ = network_admin_url("update.php?action=install-theme")
             #// Set up properties for themes available on WordPress.org.
-            for theme in themes.themes:
-                theme.install_url = add_query_arg(Array({"theme": theme.slug, "_wpnonce": wp_create_nonce("install-theme_" + theme.slug)}), update_php)
-                theme.name = wp_kses(theme.name, themes_allowedtags)
-                theme.version = wp_kses(theme.version, themes_allowedtags)
-                theme.description = wp_kses(theme.description, themes_allowedtags)
-                theme.stars = wp_star_rating(Array({"rating": theme.rating, "type": "percent", "number": theme.num_ratings, "echo": False}))
-                theme.num_ratings = number_format_i18n(theme.num_ratings)
-                theme.preview_url = set_url_scheme(theme.preview_url)
+            for theme_ in themes_.themes:
+                theme_.install_url = add_query_arg(Array({"theme": theme_.slug, "_wpnonce": wp_create_nonce("install-theme_" + theme_.slug)}), update_php_)
+                theme_.name = wp_kses(theme_.name, themes_allowedtags_)
+                theme_.version = wp_kses(theme_.version, themes_allowedtags_)
+                theme_.description = wp_kses(theme_.description, themes_allowedtags_)
+                theme_.stars = wp_star_rating(Array({"rating": theme_.rating, "type": "percent", "number": theme_.num_ratings, "echo": False}))
+                theme_.num_ratings = number_format_i18n(theme_.num_ratings)
+                theme_.preview_url = set_url_scheme(theme_.preview_url)
                 #// Handle themes that are already installed as installed themes.
-                if php_in_array(theme.slug, installed_themes, True):
-                    theme.type = "installed"
+                if php_in_array(theme_.slug, installed_themes_, True):
+                    theme_.type = "installed"
                 else:
-                    theme.type = theme_action
+                    theme_.type = theme_action_
                 # end if
                 #// Set active based on customized theme.
-                theme.active = (php_isset(lambda : PHP_POST["customized_theme"])) and PHP_POST["customized_theme"] == theme.slug
+                theme_.active = (php_isset(lambda : PHP_POST["customized_theme"])) and PHP_POST["customized_theme"] == theme_.slug
                 #// Map available theme properties to installed theme properties.
-                theme.id = theme.slug
-                theme.screenshot = Array(theme.screenshot_url)
-                theme.authorAndUri = wp_kses(theme.author["display_name"], themes_allowedtags)
-                if (php_isset(lambda : theme.parent)):
-                    theme.parent = theme.parent["slug"]
+                theme_.id = theme_.slug
+                theme_.screenshot = Array(theme_.screenshot_url)
+                theme_.authorAndUri = wp_kses(theme_.author["display_name"], themes_allowedtags_)
+                if (php_isset(lambda : theme_.parent)):
+                    theme_.parent = theme_.parent["slug"]
                 else:
-                    theme.parent = False
+                    theme_.parent = False
                 # end if
-                theme.slug = None
-                theme.screenshot_url = None
-                theme.author = None
+                theme_.slug = None
+                theme_.screenshot_url = None
+                theme_.author = None
             # end for
             pass
         # end if
@@ -4205,8 +4505,8 @@ class WP_Customize_Manager():
         #// @param array                $args    List of arguments, such as page, search term, and tags to query for.
         #// @param WP_Customize_Manager $manager Instance of Customize manager.
         #//
-        themes = apply_filters("customize_load_themes", themes, args, self)
-        wp_send_json_success(themes)
+        themes_ = apply_filters("customize_load_themes", themes_, args_, self)
+        wp_send_json_success(themes_)
     # end def handle_load_themes_request
     #// 
     #// Callback for validating the header_textcolor value.
@@ -4219,16 +4519,17 @@ class WP_Customize_Manager():
     #// @param string $color
     #// @return mixed
     #//
-    def _sanitize_header_textcolor(self, color=None):
+    def _sanitize_header_textcolor(self, color_=None):
         
-        if "blank" == color:
+        
+        if "blank" == color_:
             return "blank"
         # end if
-        color = sanitize_hex_color_no_hash(color)
-        if php_empty(lambda : color):
-            color = get_theme_support("custom-header", "default-text-color")
+        color_ = sanitize_hex_color_no_hash(color_)
+        if php_empty(lambda : color_):
+            color_ = get_theme_support("custom-header", "default-text-color")
         # end if
-        return color
+        return color_
     # end def _sanitize_header_textcolor
     #// 
     #// Callback for validating a background setting value.
@@ -4239,38 +4540,39 @@ class WP_Customize_Manager():
     #// @param WP_Customize_Setting $setting Setting.
     #// @return string|WP_Error Background value or validation error.
     #//
-    def _sanitize_background_setting(self, value=None, setting=None):
+    def _sanitize_background_setting(self, value_=None, setting_=None):
         
-        if "background_repeat" == setting.id:
-            if (not php_in_array(value, Array("repeat-x", "repeat-y", "repeat", "no-repeat"))):
+        
+        if "background_repeat" == setting_.id:
+            if (not php_in_array(value_, Array("repeat-x", "repeat-y", "repeat", "no-repeat"))):
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value for background repeat.")))
             # end if
-        elif "background_attachment" == setting.id:
-            if (not php_in_array(value, Array("fixed", "scroll"))):
+        elif "background_attachment" == setting_.id:
+            if (not php_in_array(value_, Array("fixed", "scroll"))):
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value for background attachment.")))
             # end if
-        elif "background_position_x" == setting.id:
-            if (not php_in_array(value, Array("left", "center", "right"), True)):
+        elif "background_position_x" == setting_.id:
+            if (not php_in_array(value_, Array("left", "center", "right"), True)):
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value for background position X.")))
             # end if
-        elif "background_position_y" == setting.id:
-            if (not php_in_array(value, Array("top", "center", "bottom"), True)):
+        elif "background_position_y" == setting_.id:
+            if (not php_in_array(value_, Array("top", "center", "bottom"), True)):
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value for background position Y.")))
             # end if
-        elif "background_size" == setting.id:
-            if (not php_in_array(value, Array("auto", "contain", "cover"), True)):
+        elif "background_size" == setting_.id:
+            if (not php_in_array(value_, Array("auto", "contain", "cover"), True)):
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value for background size.")))
             # end if
-        elif "background_preset" == setting.id:
-            if (not php_in_array(value, Array("default", "fill", "fit", "repeat", "custom"), True)):
+        elif "background_preset" == setting_.id:
+            if (not php_in_array(value_, Array("default", "fill", "fit", "repeat", "custom"), True)):
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value for background size.")))
             # end if
-        elif "background_image" == setting.id or "background_image_thumb" == setting.id:
-            value = "" if php_empty(lambda : value) else esc_url_raw(value)
+        elif "background_image" == setting_.id or "background_image_thumb" == setting_.id:
+            value_ = "" if php_empty(lambda : value_) else esc_url_raw(value_)
         else:
             return php_new_class("WP_Error", lambda : WP_Error("unrecognized_setting", __("Unrecognized background setting.")))
         # end if
-        return value
+        return value_
     # end def _sanitize_background_setting
     #// 
     #// Export header video settings to facilitate selective refresh.
@@ -4282,12 +4584,13 @@ class WP_Customize_Manager():
     #// @param array $partials Array of partials.
     #// @return array
     #//
-    def export_header_video_settings(self, response=None, selective_refresh=None, partials=None):
+    def export_header_video_settings(self, response_=None, selective_refresh_=None, partials_=None):
         
-        if (php_isset(lambda : partials["custom_header"])):
-            response["custom_header_settings"] = get_header_video_settings()
+        
+        if (php_isset(lambda : partials_["custom_header"])):
+            response_["custom_header_settings"] = get_header_video_settings()
         # end if
-        return response
+        return response_
     # end def export_header_video_settings
     #// 
     #// Callback for validating the header_video value.
@@ -4300,20 +4603,21 @@ class WP_Customize_Manager():
     #// @param mixed $value
     #// @return mixed
     #//
-    def _validate_header_video(self, validity=None, value=None):
+    def _validate_header_video(self, validity_=None, value_=None):
         
-        video = get_attached_file(absint(value))
-        if video:
-            size = filesize(video)
-            if size > 8 * MB_IN_BYTES:
-                validity.add("size_too_large", __("This video file is too large to use as a header video. Try a shorter video or optimize the compression settings and re-upload a file that is less than 8MB. Or, upload your video to YouTube and link it with the option below."))
+        
+        video_ = get_attached_file(absint(value_))
+        if video_:
+            size_ = filesize(video_)
+            if size_ > 8 * MB_IN_BYTES:
+                validity_.add("size_too_large", __("This video file is too large to use as a header video. Try a shorter video or optimize the compression settings and re-upload a file that is less than 8MB. Or, upload your video to YouTube and link it with the option below."))
             # end if
-            if ".mp4" != php_substr(video, -4) and ".mov" != php_substr(video, -4):
+            if ".mp4" != php_substr(video_, -4) and ".mov" != php_substr(video_, -4):
                 #// Check for .mp4 or .mov format, which (assuming h.264 encoding) are the only cross-browser-supported formats.
-                validity.add("invalid_file_type", php_sprintf(__("Only %1$s or %2$s files may be used for header video. Please convert your video file and try again, or, upload your video to YouTube and link it with the option below."), "<code>.mp4</code>", "<code>.mov</code>"))
+                validity_.add("invalid_file_type", php_sprintf(__("Only %1$s or %2$s files may be used for header video. Please convert your video file and try again, or, upload your video to YouTube and link it with the option below."), "<code>.mp4</code>", "<code>.mov</code>"))
             # end if
         # end if
-        return validity
+        return validity_
     # end def _validate_header_video
     #// 
     #// Callback for validating the external_header_video value.
@@ -4326,15 +4630,16 @@ class WP_Customize_Manager():
     #// @param mixed $value
     #// @return mixed
     #//
-    def _validate_external_header_video(self, validity=None, value=None):
+    def _validate_external_header_video(self, validity_=None, value_=None):
         
-        video = esc_url_raw(value)
-        if video:
-            if (not php_preg_match("#^https?://(?:www\\.)?(?:youtube\\.com/watch|youtu\\.be/)#", video)):
-                validity.add("invalid_url", __("Please enter a valid YouTube URL."))
+        
+        video_ = esc_url_raw(value_)
+        if video_:
+            if (not php_preg_match("#^https?://(?:www\\.)?(?:youtube\\.com/watch|youtu\\.be/)#", video_)):
+                validity_.add("invalid_url", __("Please enter a valid YouTube URL."))
             # end if
         # end if
-        return validity
+        return validity_
     # end def _validate_external_header_video
     #// 
     #// Callback for sanitizing the external_header_video value.
@@ -4344,9 +4649,10 @@ class WP_Customize_Manager():
     #// @param string $value URL.
     #// @return string Sanitized URL.
     #//
-    def _sanitize_external_header_video(self, value=None):
+    def _sanitize_external_header_video(self, value_=None):
         
-        return esc_url_raw(php_trim(value))
+        
+        return esc_url_raw(php_trim(value_))
     # end def _sanitize_external_header_video
     #// 
     #// Callback for rendering the custom logo, used in the custom_logo partial.
@@ -4364,6 +4670,7 @@ class WP_Customize_Manager():
     #// @return string Custom logo.
     #//
     def _render_custom_logo_partial(self):
+        
         
         return get_custom_logo()
     # end def _render_custom_logo_partial

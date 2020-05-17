@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,7 +21,7 @@ php_include_file(php_dirname(__DIR__) + "/admin.php", once=True)
 if (not is_multisite()):
     wp_die(__("Multisite support is not enabled."))
 # end if
-redirect_network_admin_request = 0 != strcasecmp(current_blog.domain, current_site.domain) or 0 != strcasecmp(current_blog.path, current_site.path)
+redirect_network_admin_request_ = 0 != strcasecmp(current_blog_.domain, current_site_.domain) or 0 != strcasecmp(current_blog_.path, current_site_.path)
 #// 
 #// Filters whether to redirect the request to the Network Admin.
 #// 
@@ -34,9 +29,9 @@ redirect_network_admin_request = 0 != strcasecmp(current_blog.domain, current_si
 #// 
 #// @param bool $redirect_network_admin_request Whether the request should be redirected.
 #//
-redirect_network_admin_request = apply_filters("redirect_network_admin_request", redirect_network_admin_request)
-if redirect_network_admin_request:
+redirect_network_admin_request_ = apply_filters("redirect_network_admin_request", redirect_network_admin_request_)
+if redirect_network_admin_request_:
     wp_redirect(network_admin_url())
     php_exit(0)
 # end if
-redirect_network_admin_request = None
+redirect_network_admin_request_ = None

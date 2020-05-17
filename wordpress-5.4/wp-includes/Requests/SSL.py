@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -42,37 +37,38 @@ class Requests_SSL():
     #// @return bool
     #//
     @classmethod
-    def verify_certificate(self, host=None, cert=None):
+    def verify_certificate(self, host_=None, cert_=None):
+        
         
         #// Calculate the valid wildcard match if the host is not an IP address
-        parts = php_explode(".", host)
-        if ip2long(host) == False:
-            parts[0] = "*"
+        parts_ = php_explode(".", host_)
+        if ip2long(host_) == False:
+            parts_[0] = "*"
         # end if
-        wildcard = php_implode(".", parts)
-        has_dns_alt = False
+        wildcard_ = php_implode(".", parts_)
+        has_dns_alt_ = False
         #// Check the subjectAltName
-        if (not php_empty(lambda : cert["extensions"])) and (not php_empty(lambda : cert["extensions"]["subjectAltName"])):
-            altnames = php_explode(",", cert["extensions"]["subjectAltName"])
-            for altname in altnames:
-                altname = php_trim(altname)
-                if php_strpos(altname, "DNS:") != 0:
+        if (not php_empty(lambda : cert_["extensions"])) and (not php_empty(lambda : cert_["extensions"]["subjectAltName"])):
+            altnames_ = php_explode(",", cert_["extensions"]["subjectAltName"])
+            for altname_ in altnames_:
+                altname_ = php_trim(altname_)
+                if php_strpos(altname_, "DNS:") != 0:
                     continue
                 # end if
-                has_dns_alt = True
+                has_dns_alt_ = True
                 #// Strip the 'DNS:' prefix and trim whitespace
-                altname = php_trim(php_substr(altname, 4))
+                altname_ = php_trim(php_substr(altname_, 4))
                 #// Check for a match
-                if self.match_domain(host, altname) == True:
+                if self.match_domain(host_, altname_) == True:
                     return True
                 # end if
             # end for
         # end if
         #// Fall back to checking the common name if we didn't get any dNSName
         #// alt names, as per RFC2818
-        if (not has_dns_alt) and (not php_empty(lambda : cert["subject"]["CN"])):
+        if (not has_dns_alt_) and (not php_empty(lambda : cert_["subject"]["CN"])):
             #// Check for a match
-            if self.match_domain(host, cert["subject"]["CN"]) == True:
+            if self.match_domain(host_, cert_["subject"]["CN"]) == True:
                 return True
             # end if
         # end if
@@ -95,24 +91,25 @@ class Requests_SSL():
     #// @return boolean Is the name valid?
     #//
     @classmethod
-    def verify_reference_name(self, reference=None):
+    def verify_reference_name(self, reference_=None):
         
-        parts = php_explode(".", reference)
+        
+        parts_ = php_explode(".", reference_)
         #// Check the first part of the name
-        first = php_array_shift(parts)
-        if php_strpos(first, "*") != False:
+        first_ = php_array_shift(parts_)
+        if php_strpos(first_, "*") != False:
             #// Check that the wildcard is the full part
-            if first != "*":
+            if first_ != "*":
                 return False
             # end if
             #// Check that we have at least 3 components (including first)
-            if php_count(parts) < 2:
+            if php_count(parts_) < 2:
                 return False
             # end if
         # end if
         #// Check the remaining parts
-        for part in parts:
-            if php_strpos(part, "*") != False:
+        for part_ in parts_:
+            if php_strpos(part_, "*") != False:
                 return False
             # end if
         # end for
@@ -127,24 +124,25 @@ class Requests_SSL():
     #// @return boolean Does the domain match?
     #//
     @classmethod
-    def match_domain(self, host=None, reference=None):
+    def match_domain(self, host_=None, reference_=None):
+        
         
         #// Check if the reference is blacklisted first
-        if self.verify_reference_name(reference) != True:
+        if self.verify_reference_name(reference_) != True:
             return False
         # end if
         #// Check for a direct match
-        if host == reference:
+        if host_ == reference_:
             return True
         # end if
         #// Calculate the valid wildcard match if the host is not an IP address
         #// Also validates that the host has 3 parts or more, as per Firefox's
         #// ruleset.
-        if ip2long(host) == False:
-            parts = php_explode(".", host)
-            parts[0] = "*"
-            wildcard = php_implode(".", parts)
-            if wildcard == reference:
+        if ip2long(host_) == False:
+            parts_ = php_explode(".", host_)
+            parts_[0] = "*"
+            wildcard_ = php_implode(".", parts_)
+            if wildcard_ == reference_:
                 return True
             # end if
         # end if

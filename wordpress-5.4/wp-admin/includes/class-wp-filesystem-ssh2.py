@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -47,8 +42,20 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Filesystem
 #//
 class WP_Filesystem_SSH2(WP_Filesystem_Base):
+    #// 
+    #// @since 2.7.0
+    #// @var resource
+    #//
     link = False
+    #// 
+    #// @since 2.7.0
+    #// @var resource
+    #//
     sftp_link = Array()
+    #// 
+    #// @since 2.7.0
+    #// @var bool
+    #//
     keys = False
     #// 
     #// Constructor.
@@ -57,7 +64,8 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// 
     #// @param array $opt
     #//
-    def __init__(self, opt=""):
+    def __init__(self, opt_=""):
+        
         
         self.method = "ssh2"
         self.errors = php_new_class("WP_Error", lambda : WP_Error())
@@ -71,35 +79,35 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
             return
         # end if
         #// Set defaults:
-        if php_empty(lambda : opt["port"]):
+        if php_empty(lambda : opt_["port"]):
             self.options["port"] = 22
         else:
-            self.options["port"] = opt["port"]
+            self.options["port"] = opt_["port"]
         # end if
-        if php_empty(lambda : opt["hostname"]):
+        if php_empty(lambda : opt_["hostname"]):
             self.errors.add("empty_hostname", __("SSH2 hostname is required"))
         else:
-            self.options["hostname"] = opt["hostname"]
+            self.options["hostname"] = opt_["hostname"]
         # end if
         #// Check if the options provided are OK.
-        if (not php_empty(lambda : opt["public_key"])) and (not php_empty(lambda : opt["private_key"])):
-            self.options["public_key"] = opt["public_key"]
-            self.options["private_key"] = opt["private_key"]
+        if (not php_empty(lambda : opt_["public_key"])) and (not php_empty(lambda : opt_["private_key"])):
+            self.options["public_key"] = opt_["public_key"]
+            self.options["private_key"] = opt_["private_key"]
             self.options["hostkey"] = Array({"hostkey": "ssh-rsa"})
             self.keys = True
-        elif php_empty(lambda : opt["username"]):
+        elif php_empty(lambda : opt_["username"]):
             self.errors.add("empty_username", __("SSH2 username is required"))
         # end if
-        if (not php_empty(lambda : opt["username"])):
-            self.options["username"] = opt["username"]
+        if (not php_empty(lambda : opt_["username"])):
+            self.options["username"] = opt_["username"]
         # end if
-        if php_empty(lambda : opt["password"]):
+        if php_empty(lambda : opt_["password"]):
             #// Password can be blank if we are using keys.
             if (not self.keys):
                 self.errors.add("empty_password", __("SSH2 password is required"))
             # end if
         else:
-            self.options["password"] = opt["password"]
+            self.options["password"] = opt_["password"]
         # end if
     # end def __init__
     #// 
@@ -110,6 +118,7 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @return bool True on success, false on failure.
     #//
     def connect(self):
+        
         
         if (not self.keys):
             self.link = php_no_error(lambda: ssh2_connect(self.options["hostname"], self.options["port"]))
@@ -151,12 +160,13 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $path The File/Directory path on the remote server to return
     #// @return string The ssh2.sftp:// wrapped path to use.
     #//
-    def sftp_path(self, path=None):
+    def sftp_path(self, path_=None):
         
-        if "/" == path:
-            path = "/./"
+        
+        if "/" == path_:
+            path_ = "/./"
         # end if
-        return "ssh2.sftp://" + self.sftp_link + "/" + php_ltrim(path, "/")
+        return "ssh2.sftp://" + self.sftp_link + "/" + php_ltrim(path_, "/")
     # end def sftp_path
     #// 
     #// @since 2.7.0
@@ -166,23 +176,26 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @return bool|string True on success, false on failure. String if the command was executed, `$returnbool`
     #// is false (default), and data from the resulting stream was retrieved.
     #//
-    def run_command(self, command=None, returnbool=False):
+    def run_command(self, command_=None, returnbool_=None):
+        if returnbool_ is None:
+            returnbool_ = False
+        # end if
         
         if (not self.link):
             return False
         # end if
-        stream = ssh2_exec(self.link, command)
-        if (not stream):
-            self.errors.add("command", php_sprintf(__("Unable to perform command: %s"), command))
+        stream_ = ssh2_exec(self.link, command_)
+        if (not stream_):
+            self.errors.add("command", php_sprintf(__("Unable to perform command: %s"), command_))
         else:
-            stream_set_blocking(stream, True)
-            stream_set_timeout(stream, FS_TIMEOUT)
-            data = stream_get_contents(stream)
-            php_fclose(stream)
-            if returnbool:
-                return False if False == data else "" != php_trim(data)
+            stream_set_blocking(stream_, True)
+            stream_set_timeout(stream_, FS_TIMEOUT)
+            data_ = stream_get_contents(stream_)
+            php_fclose(stream_)
+            if returnbool_:
+                return False if False == data_ else "" != php_trim(data_)
             else:
-                return data
+                return data_
             # end if
         # end if
         return False
@@ -196,9 +209,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @return string|false Read data on success, false if no temporary file could be opened,
     #// or if the file couldn't be retrieved.
     #//
-    def get_contents(self, file=None):
+    def get_contents(self, file_=None):
         
-        return php_file_get_contents(self.sftp_path(file))
+        
+        return php_file_get_contents(self.sftp_path(file_))
     # end def get_contents
     #// 
     #// Reads entire file into an array.
@@ -208,9 +222,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return array|false File contents in an array on success, false on failure.
     #//
-    def get_contents_array(self, file=None):
+    def get_contents_array(self, file_=None):
         
-        return file(self.sftp_path(file))
+        
+        return file(self.sftp_path(file_))
     # end def get_contents_array
     #// 
     #// Writes a string to a file.
@@ -223,13 +238,16 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def put_contents(self, file=None, contents=None, mode=False):
+    def put_contents(self, file_=None, contents_=None, mode_=None):
+        if mode_ is None:
+            mode_ = False
+        # end if
         
-        ret = file_put_contents(self.sftp_path(file), contents)
-        if php_strlen(contents) != ret:
+        ret_ = file_put_contents(self.sftp_path(file_), contents_)
+        if php_strlen(contents_) != ret_:
             return False
         # end if
-        self.chmod(file, mode)
+        self.chmod(file_, mode_)
         return True
     # end def put_contents
     #// 
@@ -241,11 +259,12 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #//
     def cwd(self):
         
-        cwd = ssh2_sftp_realpath(self.sftp_link, ".")
-        if cwd:
-            cwd = trailingslashit(php_trim(cwd))
+        
+        cwd_ = ssh2_sftp_realpath(self.sftp_link, ".")
+        if cwd_:
+            cwd_ = trailingslashit(php_trim(cwd_))
         # end if
-        return cwd
+        return cwd_
     # end def cwd
     #// 
     #// Changes current directory.
@@ -255,9 +274,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $dir The new current directory.
     #// @return bool True on success, false on failure.
     #//
-    def chdir(self, dir=None):
+    def chdir(self, dir_=None):
         
-        return self.run_command("cd " + dir, True)
+        
+        return self.run_command("cd " + dir_, True)
     # end def chdir
     #// 
     #// Changes the file group.
@@ -270,15 +290,18 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def chgrp(self, file=None, group=None, recursive=False):
+    def chgrp(self, file_=None, group_=None, recursive_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if (not self.exists(file)):
+        if (not self.exists(file_)):
             return False
         # end if
-        if (not recursive) or (not self.is_dir(file)):
-            return self.run_command(php_sprintf("chgrp %s %s", escapeshellarg(group), escapeshellarg(file)), True)
+        if (not recursive_) or (not self.is_dir(file_)):
+            return self.run_command(php_sprintf("chgrp %s %s", escapeshellarg(group_), escapeshellarg(file_)), True)
         # end if
-        return self.run_command(php_sprintf("chgrp -R %s %s", escapeshellarg(group), escapeshellarg(file)), True)
+        return self.run_command(php_sprintf("chgrp -R %s %s", escapeshellarg(group_), escapeshellarg(file_)), True)
     # end def chgrp
     #// 
     #// Changes filesystem permissions.
@@ -292,24 +315,30 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def chmod(self, file=None, mode=False, recursive=False):
+    def chmod(self, file_=None, mode_=None, recursive_=None):
+        if mode_ is None:
+            mode_ = False
+        # end if
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if (not self.exists(file)):
+        if (not self.exists(file_)):
             return False
         # end if
-        if (not mode):
-            if self.is_file(file):
-                mode = FS_CHMOD_FILE
-            elif self.is_dir(file):
-                mode = FS_CHMOD_DIR
+        if (not mode_):
+            if self.is_file(file_):
+                mode_ = FS_CHMOD_FILE
+            elif self.is_dir(file_):
+                mode_ = FS_CHMOD_DIR
             else:
                 return False
             # end if
         # end if
-        if (not recursive) or (not self.is_dir(file)):
-            return self.run_command(php_sprintf("chmod %o %s", mode, escapeshellarg(file)), True)
+        if (not recursive_) or (not self.is_dir(file_)):
+            return self.run_command(php_sprintf("chmod %o %s", mode_, escapeshellarg(file_)), True)
         # end if
-        return self.run_command(php_sprintf("chmod -R %o %s", mode, escapeshellarg(file)), True)
+        return self.run_command(php_sprintf("chmod -R %o %s", mode_, escapeshellarg(file_)), True)
     # end def chmod
     #// 
     #// Changes the owner of a file or directory.
@@ -322,15 +351,18 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def chown(self, file=None, owner=None, recursive=False):
+    def chown(self, file_=None, owner_=None, recursive_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        if (not self.exists(file)):
+        if (not self.exists(file_)):
             return False
         # end if
-        if (not recursive) or (not self.is_dir(file)):
-            return self.run_command(php_sprintf("chown %s %s", escapeshellarg(owner), escapeshellarg(file)), True)
+        if (not recursive_) or (not self.is_dir(file_)):
+            return self.run_command(php_sprintf("chown %s %s", escapeshellarg(owner_), escapeshellarg(file_)), True)
         # end if
-        return self.run_command(php_sprintf("chown -R %s %s", escapeshellarg(owner), escapeshellarg(file)), True)
+        return self.run_command(php_sprintf("chown -R %s %s", escapeshellarg(owner_), escapeshellarg(file_)), True)
     # end def chown
     #// 
     #// Gets the file owner.
@@ -340,17 +372,18 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string|false Username of the owner on success, false on failure.
     #//
-    def owner(self, file=None):
+    def owner(self, file_=None):
         
-        owneruid = php_no_error(lambda: fileowner(self.sftp_path(file)))
-        if (not owneruid):
+        
+        owneruid_ = php_no_error(lambda: fileowner(self.sftp_path(file_)))
+        if (not owneruid_):
             return False
         # end if
         if (not php_function_exists("posix_getpwuid")):
-            return owneruid
+            return owneruid_
         # end if
-        ownerarray = posix_getpwuid(owneruid)
-        return ownerarray["name"]
+        ownerarray_ = posix_getpwuid(owneruid_)
+        return ownerarray_["name"]
     # end def owner
     #// 
     #// Gets the permissions of the specified file or filepath in their octal format.
@@ -360,9 +393,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string Mode of the file (the last 3 digits).
     #//
-    def getchmod(self, file=None):
+    def getchmod(self, file_=None):
         
-        return php_substr(decoct(php_no_error(lambda: fileperms(self.sftp_path(file)))), -3)
+        
+        return php_substr(decoct(php_no_error(lambda: fileperms(self.sftp_path(file_)))), -3)
     # end def getchmod
     #// 
     #// Gets the file's group.
@@ -372,17 +406,18 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to the file.
     #// @return string|false The group on success, false on failure.
     #//
-    def group(self, file=None):
+    def group(self, file_=None):
         
-        gid = php_no_error(lambda: filegroup(self.sftp_path(file)))
-        if (not gid):
+        
+        gid_ = php_no_error(lambda: filegroup(self.sftp_path(file_)))
+        if (not gid_):
             return False
         # end if
         if (not php_function_exists("posix_getgrgid")):
-            return gid
+            return gid_
         # end if
-        grouparray = posix_getgrgid(gid)
-        return grouparray["name"]
+        grouparray_ = posix_getgrgid(gid_)
+        return grouparray_["name"]
     # end def group
     #// 
     #// Copies a file.
@@ -397,16 +432,22 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// 0755 for dirs. Default false.
     #// @return bool True on success, false on failure.
     #//
-    def copy(self, source=None, destination=None, overwrite=False, mode=False):
+    def copy(self, source_=None, destination_=None, overwrite_=None, mode_=None):
+        if overwrite_ is None:
+            overwrite_ = False
+        # end if
+        if mode_ is None:
+            mode_ = False
+        # end if
         
-        if (not overwrite) and self.exists(destination):
+        if (not overwrite_) and self.exists(destination_):
             return False
         # end if
-        content = self.get_contents(source)
-        if False == content:
+        content_ = self.get_contents(source_)
+        if False == content_:
             return False
         # end if
-        return self.put_contents(destination, content, mode)
+        return self.put_contents(destination_, content_, mode_)
     # end def copy
     #// 
     #// Moves a file.
@@ -419,18 +460,21 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def move(self, source=None, destination=None, overwrite=False):
+    def move(self, source_=None, destination_=None, overwrite_=None):
+        if overwrite_ is None:
+            overwrite_ = False
+        # end if
         
-        if self.exists(destination):
-            if overwrite:
+        if self.exists(destination_):
+            if overwrite_:
                 #// We need to remove the destination file before we can rename the source.
-                self.delete(destination, False, "f")
+                self.delete(destination_, False, "f")
             else:
                 #// If we're not overwriting, the rename will fail, so return early.
                 return False
             # end if
         # end if
-        return ssh2_sftp_rename(self.sftp_link, source, destination)
+        return ssh2_sftp_rename(self.sftp_link, source_, destination_)
     # end def move
     #// 
     #// Deletes a file or directory.
@@ -444,21 +488,27 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def delete(self, file=None, recursive=False, type=False):
+    def delete(self, file_=None, recursive_=None, type_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
+        if type_ is None:
+            type_ = False
+        # end if
         
-        if "f" == type or self.is_file(file):
-            return ssh2_sftp_unlink(self.sftp_link, file)
+        if "f" == type_ or self.is_file(file_):
+            return ssh2_sftp_unlink(self.sftp_link, file_)
         # end if
-        if (not recursive):
-            return ssh2_sftp_rmdir(self.sftp_link, file)
+        if (not recursive_):
+            return ssh2_sftp_rmdir(self.sftp_link, file_)
         # end if
-        filelist = self.dirlist(file)
-        if php_is_array(filelist):
-            for filename,fileinfo in filelist:
-                self.delete(file + "/" + filename, recursive, fileinfo["type"])
+        filelist_ = self.dirlist(file_)
+        if php_is_array(filelist_):
+            for filename_,fileinfo_ in filelist_:
+                self.delete(file_ + "/" + filename_, recursive_, fileinfo_["type"])
             # end for
         # end if
-        return ssh2_sftp_rmdir(self.sftp_link, file)
+        return ssh2_sftp_rmdir(self.sftp_link, file_)
     # end def delete
     #// 
     #// Checks if a file or directory exists.
@@ -468,9 +518,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to file or directory.
     #// @return bool Whether $file exists or not.
     #//
-    def exists(self, file=None):
+    def exists(self, file_=None):
         
-        return php_file_exists(self.sftp_path(file))
+        
+        return php_file_exists(self.sftp_path(file_))
     # end def exists
     #// 
     #// Checks if resource is a file.
@@ -480,9 +531,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file File path.
     #// @return bool Whether $file is a file.
     #//
-    def is_file(self, file=None):
+    def is_file(self, file_=None):
         
-        return php_is_file(self.sftp_path(file))
+        
+        return php_is_file(self.sftp_path(file_))
     # end def is_file
     #// 
     #// Checks if resource is a directory.
@@ -492,9 +544,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $path Directory path.
     #// @return bool Whether $path is a directory.
     #//
-    def is_dir(self, path=None):
+    def is_dir(self, path_=None):
         
-        return php_is_dir(self.sftp_path(path))
+        
+        return php_is_dir(self.sftp_path(path_))
     # end def is_dir
     #// 
     #// Checks if a file is readable.
@@ -504,9 +557,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return bool Whether $file is readable.
     #//
-    def is_readable(self, file=None):
+    def is_readable(self, file_=None):
         
-        return php_is_readable(self.sftp_path(file))
+        
+        return php_is_readable(self.sftp_path(file_))
     # end def is_readable
     #// 
     #// Checks if a file or directory is writable.
@@ -516,7 +570,8 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to file or directory.
     #// @return bool Whether $file is writable.
     #//
-    def is_writable(self, file=None):
+    def is_writable(self, file_=None):
+        
         
         #// PHP will base its writable checks on system_user === file_owner, not ssh_user === file_owner.
         return True
@@ -529,9 +584,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Unix timestamp representing last access time, false on failure.
     #//
-    def atime(self, file=None):
+    def atime(self, file_=None):
         
-        return fileatime(self.sftp_path(file))
+        
+        return fileatime(self.sftp_path(file_))
     # end def atime
     #// 
     #// Gets the file modification time.
@@ -541,9 +597,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Unix timestamp representing modification time, false on failure.
     #//
-    def mtime(self, file=None):
+    def mtime(self, file_=None):
         
-        return filemtime(self.sftp_path(file))
+        
+        return filemtime(self.sftp_path(file_))
     # end def mtime
     #// 
     #// Gets the file size (in bytes).
@@ -553,9 +610,10 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param string $file Path to file.
     #// @return int|false Size of the file in bytes on success, false on failure.
     #//
-    def size(self, file=None):
+    def size(self, file_=None):
         
-        return filesize(self.sftp_path(file))
+        
+        return filesize(self.sftp_path(file_))
     # end def size
     #// 
     #// Sets the access and modification times of a file.
@@ -570,7 +628,8 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @param int    $atime Optional. Access time to set for file.
     #// Default 0.
     #//
-    def touch(self, file=None, time=0, atime=0):
+    def touch(self, file_=None, time_=0, atime_=0):
+        
         
         pass
     # end def touch
@@ -588,23 +647,32 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def mkdir(self, path=None, chmod=False, chown=False, chgrp=False):
+    def mkdir(self, path_=None, chmod_=None, chown_=None, chgrp_=None):
+        if chmod_ is None:
+            chmod_ = False
+        # end if
+        if chown_ is None:
+            chown_ = False
+        # end if
+        if chgrp_ is None:
+            chgrp_ = False
+        # end if
         
-        path = untrailingslashit(path)
-        if php_empty(lambda : path):
+        path_ = untrailingslashit(path_)
+        if php_empty(lambda : path_):
             return False
         # end if
-        if (not chmod):
-            chmod = FS_CHMOD_DIR
+        if (not chmod_):
+            chmod_ = FS_CHMOD_DIR
         # end if
-        if (not ssh2_sftp_mkdir(self.sftp_link, path, chmod, True)):
+        if (not ssh2_sftp_mkdir(self.sftp_link, path_, chmod_, True)):
             return False
         # end if
-        if chown:
-            self.chown(path, chown)
+        if chown_:
+            self.chown(path_, chown_)
         # end if
-        if chgrp:
-            self.chgrp(path, chgrp)
+        if chgrp_:
+            self.chgrp(path_, chgrp_)
         # end if
         return True
     # end def mkdir
@@ -618,9 +686,12 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// Default false.
     #// @return bool True on success, false on failure.
     #//
-    def rmdir(self, path=None, recursive=False):
+    def rmdir(self, path_=None, recursive_=None):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
         
-        return self.delete(path, recursive)
+        return self.delete(path_, recursive_)
     # end def rmdir
     #// 
     #// Gets details for files in a directory or a specific file.
@@ -647,60 +718,66 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
     #// @type mixed  $files       If a directory and $recursive is true, contains another array of files.
     #// }
     #//
-    def dirlist(self, path=None, include_hidden=True, recursive=False):
-        
-        if self.is_file(path):
-            limit_file = php_basename(path)
-            path = php_dirname(path)
-        else:
-            limit_file = False
+    def dirlist(self, path_=None, include_hidden_=None, recursive_=None):
+        if include_hidden_ is None:
+            include_hidden_ = True
         # end if
-        if (not self.is_dir(path)) or (not self.is_readable(path)):
+        if recursive_ is None:
+            recursive_ = False
+        # end if
+        
+        if self.is_file(path_):
+            limit_file_ = php_basename(path_)
+            path_ = php_dirname(path_)
+        else:
+            limit_file_ = False
+        # end if
+        if (not self.is_dir(path_)) or (not self.is_readable(path_)):
             return False
         # end if
-        ret = Array()
-        dir = dir(self.sftp_path(path))
-        if (not dir):
+        ret_ = Array()
+        dir_ = dir(self.sftp_path(path_))
+        if (not dir_):
             return False
         # end if
         while True:
-            entry = dir.read()
-            if not (False != entry):
+            entry_ = dir_.read()
+            if not (False != entry_):
                 break
             # end if
-            struc = Array()
-            struc["name"] = entry
-            if "." == struc["name"] or ".." == struc["name"]:
+            struc_ = Array()
+            struc_["name"] = entry_
+            if "." == struc_["name"] or ".." == struc_["name"]:
                 continue
                 pass
             # end if
-            if (not include_hidden) and "." == struc["name"][0]:
+            if (not include_hidden_) and "." == struc_["name"][0]:
                 continue
             # end if
-            if limit_file and struc["name"] != limit_file:
+            if limit_file_ and struc_["name"] != limit_file_:
                 continue
             # end if
-            struc["perms"] = self.gethchmod(path + "/" + entry)
-            struc["permsn"] = self.getnumchmodfromh(struc["perms"])
-            struc["number"] = False
-            struc["owner"] = self.owner(path + "/" + entry)
-            struc["group"] = self.group(path + "/" + entry)
-            struc["size"] = self.size(path + "/" + entry)
-            struc["lastmodunix"] = self.mtime(path + "/" + entry)
-            struc["lastmod"] = gmdate("M j", struc["lastmodunix"])
-            struc["time"] = gmdate("h:i:s", struc["lastmodunix"])
-            struc["type"] = "d" if self.is_dir(path + "/" + entry) else "f"
-            if "d" == struc["type"]:
-                if recursive:
-                    struc["files"] = self.dirlist(path + "/" + struc["name"], include_hidden, recursive)
+            struc_["perms"] = self.gethchmod(path_ + "/" + entry_)
+            struc_["permsn"] = self.getnumchmodfromh(struc_["perms"])
+            struc_["number"] = False
+            struc_["owner"] = self.owner(path_ + "/" + entry_)
+            struc_["group"] = self.group(path_ + "/" + entry_)
+            struc_["size"] = self.size(path_ + "/" + entry_)
+            struc_["lastmodunix"] = self.mtime(path_ + "/" + entry_)
+            struc_["lastmod"] = gmdate("M j", struc_["lastmodunix"])
+            struc_["time"] = gmdate("h:i:s", struc_["lastmodunix"])
+            struc_["type"] = "d" if self.is_dir(path_ + "/" + entry_) else "f"
+            if "d" == struc_["type"]:
+                if recursive_:
+                    struc_["files"] = self.dirlist(path_ + "/" + struc_["name"], include_hidden_, recursive_)
                 else:
-                    struc["files"] = Array()
+                    struc_["files"] = Array()
                 # end if
             # end if
-            ret[struc["name"]] = struc
+            ret_[struc_["name"]] = struc_
         # end while
-        dir.close()
-        dir = None
-        return ret
+        dir_.close()
+        dir_ = None
+        return ret_
     # end def dirlist
 # end class WP_Filesystem_SSH2

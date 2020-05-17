@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -41,7 +36,8 @@ class Requests_Auth():
     #// @see Requests_Hooks::register
     #// @param Requests_Hooks $hooks Hook system
     #//
-    def register(self, hooks=None):
+    def register(self, hooks_=None):
+        
         
         pass
     # end def register

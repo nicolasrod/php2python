@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,36 +21,36 @@ if (not current_user_can("switch_themes")) and (not current_user_can("edit_theme
 if current_user_can("switch_themes") and (php_isset(lambda : PHP_REQUEST["action"])):
     if "activate" == PHP_REQUEST["action"]:
         check_admin_referer("switch-theme_" + PHP_REQUEST["stylesheet"])
-        theme = wp_get_theme(PHP_REQUEST["stylesheet"])
-        if (not theme.exists()) or (not theme.is_allowed()):
+        theme_ = wp_get_theme(PHP_REQUEST["stylesheet"])
+        if (not theme_.exists()) or (not theme_.is_allowed()):
             wp_die("<h1>" + __("Something went wrong.") + "</h1>" + "<p>" + __("The requested theme does not exist.") + "</p>", 403)
         # end if
-        switch_theme(theme.get_stylesheet())
+        switch_theme(theme_.get_stylesheet())
         wp_redirect(admin_url("themes.php?activated=true"))
         php_exit(0)
     elif "resume" == PHP_REQUEST["action"]:
         check_admin_referer("resume-theme_" + PHP_REQUEST["stylesheet"])
-        theme = wp_get_theme(PHP_REQUEST["stylesheet"])
+        theme_ = wp_get_theme(PHP_REQUEST["stylesheet"])
         if (not current_user_can("resume_theme", PHP_REQUEST["stylesheet"])):
             wp_die("<h1>" + __("You need a higher level of permission.") + "</h1>" + "<p>" + __("Sorry, you are not allowed to resume this theme.") + "</p>", 403)
         # end if
-        result = resume_theme(theme.get_stylesheet(), self_admin_url("themes.php?error=resuming"))
-        if is_wp_error(result):
-            wp_die(result)
+        result_ = resume_theme(theme_.get_stylesheet(), self_admin_url("themes.php?error=resuming"))
+        if is_wp_error(result_):
+            wp_die(result_)
         # end if
         wp_redirect(admin_url("themes.php?resumed=true"))
         php_exit(0)
     elif "delete" == PHP_REQUEST["action"]:
         check_admin_referer("delete-theme_" + PHP_REQUEST["stylesheet"])
-        theme = wp_get_theme(PHP_REQUEST["stylesheet"])
+        theme_ = wp_get_theme(PHP_REQUEST["stylesheet"])
         if (not current_user_can("delete_themes")):
             wp_die("<h1>" + __("You need a higher level of permission.") + "</h1>" + "<p>" + __("Sorry, you are not allowed to delete this item.") + "</p>", 403)
         # end if
-        if (not theme.exists()):
+        if (not theme_.exists()):
             wp_die("<h1>" + __("Something went wrong.") + "</h1>" + "<p>" + __("The requested theme does not exist.") + "</p>", 403)
         # end if
-        active = wp_get_theme()
-        if active.get("Template") == PHP_REQUEST["stylesheet"]:
+        active_ = wp_get_theme()
+        if active_.get("Template") == PHP_REQUEST["stylesheet"]:
             wp_redirect(admin_url("themes.php?delete-active-child=true"))
         else:
             delete_theme(PHP_REQUEST["stylesheet"])
@@ -64,38 +59,38 @@ if current_user_can("switch_themes") and (php_isset(lambda : PHP_REQUEST["action
         php_exit(0)
     # end if
 # end if
-title = __("Manage Themes")
-parent_file = "themes.php"
+title_ = __("Manage Themes")
+parent_file_ = "themes.php"
 #// Help tab: Overview.
 if current_user_can("switch_themes"):
-    help_overview = "<p>" + __("This screen is used for managing your installed themes. Aside from the default theme(s) included with your WordPress installation, themes are designed and developed by third parties.") + "</p>" + "<p>" + __("From this screen you can:") + "</p>" + "<ul><li>" + __("Hover or tap to see Activate and Live Preview buttons") + "</li>" + "<li>" + __("Click on the theme to see the theme name, version, author, description, tags, and the Delete link") + "</li>" + "<li>" + __("Click Customize for the current theme or Live Preview for any other theme to see a live preview") + "</li></ul>" + "<p>" + __("The current theme is displayed highlighted as the first theme.") + "</p>" + "<p>" + __("The search for installed themes will search for terms in their name, description, author, or tag.") + " <span id=\"live-search-desc\">" + __("The search results will be updated as you type.") + "</span></p>"
-    get_current_screen().add_help_tab(Array({"id": "overview", "title": __("Overview"), "content": help_overview}))
+    help_overview_ = "<p>" + __("This screen is used for managing your installed themes. Aside from the default theme(s) included with your WordPress installation, themes are designed and developed by third parties.") + "</p>" + "<p>" + __("From this screen you can:") + "</p>" + "<ul><li>" + __("Hover or tap to see Activate and Live Preview buttons") + "</li>" + "<li>" + __("Click on the theme to see the theme name, version, author, description, tags, and the Delete link") + "</li>" + "<li>" + __("Click Customize for the current theme or Live Preview for any other theme to see a live preview") + "</li></ul>" + "<p>" + __("The current theme is displayed highlighted as the first theme.") + "</p>" + "<p>" + __("The search for installed themes will search for terms in their name, description, author, or tag.") + " <span id=\"live-search-desc\">" + __("The search results will be updated as you type.") + "</span></p>"
+    get_current_screen().add_help_tab(Array({"id": "overview", "title": __("Overview"), "content": help_overview_}))
 # end if
 #// End if 'switch_themes'.
 #// Help tab: Adding Themes.
 if current_user_can("install_themes"):
     if is_multisite():
-        help_install = "<p>" + __("Installing themes on Multisite can only be done from the Network Admin section.") + "</p>"
+        help_install_ = "<p>" + __("Installing themes on Multisite can only be done from the Network Admin section.") + "</p>"
     else:
-        help_install = "<p>" + php_sprintf(__("If you would like to see more themes to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional themes from the <a href=\"%s\">WordPress Theme Directory</a>. Themes in the WordPress Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!"), __("https://wordpress.org/themes/")) + "</p>"
+        help_install_ = "<p>" + php_sprintf(__("If you would like to see more themes to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional themes from the <a href=\"%s\">WordPress Theme Directory</a>. Themes in the WordPress Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!"), __("https://wordpress.org/themes/")) + "</p>"
     # end if
-    get_current_screen().add_help_tab(Array({"id": "adding-themes", "title": __("Adding Themes"), "content": help_install}))
+    get_current_screen().add_help_tab(Array({"id": "adding-themes", "title": __("Adding Themes"), "content": help_install_}))
 # end if
 #// End if 'install_themes'.
 #// Help tab: Previewing and Customizing.
 if current_user_can("edit_theme_options") and current_user_can("customize"):
-    help_customize = "<p>" + __("Tap or hover on any theme then click the Live Preview button to see a live preview of that theme and change theme options in a separate, full-screen view. You can also find a Live Preview button at the bottom of the theme details screen. Any installed theme can be previewed and customized in this way.") + "</p>" + "<p>" + __("The theme being previewed is fully interactive &mdash; navigate to different pages to see how the theme handles posts, archives, and other page templates. The settings may differ depending on what theme features the theme being previewed supports. To accept the new settings and activate the theme all in one step, click the Publish &amp; Activate button above the menu.") + "</p>" + "<p>" + __("When previewing on smaller monitors, you can use the collapse icon at the bottom of the left-hand pane. This will hide the pane, giving you more room to preview your site in the new theme. To bring the pane back, click on the collapse icon again.") + "</p>"
-    get_current_screen().add_help_tab(Array({"id": "customize-preview-themes", "title": __("Previewing and Customizing"), "content": help_customize}))
+    help_customize_ = "<p>" + __("Tap or hover on any theme then click the Live Preview button to see a live preview of that theme and change theme options in a separate, full-screen view. You can also find a Live Preview button at the bottom of the theme details screen. Any installed theme can be previewed and customized in this way.") + "</p>" + "<p>" + __("The theme being previewed is fully interactive &mdash; navigate to different pages to see how the theme handles posts, archives, and other page templates. The settings may differ depending on what theme features the theme being previewed supports. To accept the new settings and activate the theme all in one step, click the Publish &amp; Activate button above the menu.") + "</p>" + "<p>" + __("When previewing on smaller monitors, you can use the collapse icon at the bottom of the left-hand pane. This will hide the pane, giving you more room to preview your site in the new theme. To bring the pane back, click on the collapse icon again.") + "</p>"
+    get_current_screen().add_help_tab(Array({"id": "customize-preview-themes", "title": __("Previewing and Customizing"), "content": help_customize_}))
 # end if
 #// End if 'edit_theme_options' && 'customize'.
 get_current_screen().set_help_sidebar("<p><strong>" + __("For more information:") + "</strong></p>" + "<p>" + __("<a href=\"https://wordpress.org/support/article/using-themes/\">Documentation on Using Themes</a>") + "</p>" + "<p>" + __("<a href=\"https://wordpress.org/support/\">Support</a>") + "</p>")
 if current_user_can("switch_themes"):
-    themes = wp_prepare_themes_for_js()
+    themes_ = wp_prepare_themes_for_js()
 else:
-    themes = wp_prepare_themes_for_js(Array(wp_get_theme()))
+    themes_ = wp_prepare_themes_for_js(Array(wp_get_theme()))
 # end if
 wp_reset_vars(Array("theme", "search"))
-wp_localize_script("theme", "_wpThemeSettings", Array({"themes": themes, "settings": Array({"canInstall": (not is_multisite()) and current_user_can("install_themes"), "installURI": admin_url("theme-install.php") if (not is_multisite()) and current_user_can("install_themes") else None, "confirmDelete": __("Are you sure you want to delete this theme?\n\nClick 'Cancel' to go back, 'OK' to confirm the delete."), "adminUrl": php_parse_url(admin_url(), PHP_URL_PATH)})}, {"l10n": Array({"addNew": __("Add New Theme"), "search": __("Search Installed Themes"), "searchPlaceholder": __("Search installed themes..."), "themesFound": __("Number of Themes found: %d"), "noThemesFound": __("No themes found. Try a different search.")})}))
+wp_localize_script("theme", "_wpThemeSettings", Array({"themes": themes_, "settings": Array({"canInstall": (not is_multisite()) and current_user_can("install_themes"), "installURI": admin_url("theme-install.php") if (not is_multisite()) and current_user_can("install_themes") else None, "confirmDelete": __("Are you sure you want to delete this theme?\n\nClick 'Cancel' to go back, 'OK' to confirm the delete."), "adminUrl": php_parse_url(admin_url(), PHP_URL_PATH)})}, {"l10n": Array({"addNew": __("Add New Theme"), "search": __("Search Installed Themes"), "searchPlaceholder": __("Search installed themes..."), "themesFound": __("Number of Themes found: %d"), "noThemesFound": __("No themes found. Try a different search.")})}))
 add_thickbox()
 wp_enqueue_script("theme")
 wp_enqueue_script("updates")
@@ -103,7 +98,7 @@ php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 php_print("\n<div class=\"wrap\">\n <h1 class=\"wp-heading-inline\">")
 esc_html_e("Themes")
 php_print("     <span class=\"title-count theme-count\">")
-php_print(__("&hellip;") if (not php_empty(lambda : PHP_REQUEST["search"])) else php_count(themes))
+php_print(__("&hellip;") if (not php_empty(lambda : PHP_REQUEST["search"])) else php_count(themes_))
 php_print("""</span>
 </h1>
 """)
@@ -157,9 +152,9 @@ elif (php_isset(lambda : PHP_REQUEST["error"])) and "resuming" == PHP_REQUEST["e
     _e("Theme could not be resumed because it triggered a <strong>fatal error</strong>.")
     php_print("</p></div>\n ")
 # end if
-ct = wp_get_theme()
-if ct.errors() and (not is_multisite()) or current_user_can("manage_network_themes"):
-    php_print("<div class=\"error\"><p>" + __("Error:") + " " + ct.errors().get_error_message() + "</p></div>")
+ct_ = wp_get_theme()
+if ct_.errors() and (not is_multisite()) or current_user_can("manage_network_themes"):
+    php_print("<div class=\"error\"><p>" + __("Error:") + " " + ct_.errors().get_error_message() + "</p></div>")
 # end if
 #// 
 #// Certain error codes are less fatal than others. We can still display theme information in most cases.
@@ -167,83 +162,83 @@ if ct.errors() and (not is_multisite()) or current_user_can("manage_network_them
 #// && in_array( $ct->errors()->get_error_code(), array( 'theme_no_parent', 'theme_parent_invalid', 'theme_no_index' ) ) ) ) : ?>
 #// 
 #// Pretend you didn't see this.
-current_theme_actions = Array()
-if php_is_array(submenu) and (php_isset(lambda : submenu["themes.php"])):
-    for item in submenu["themes.php"]:
+current_theme_actions_ = Array()
+if php_is_array(submenu_) and (php_isset(lambda : submenu_["themes.php"])):
+    for item_ in submenu_["themes.php"]:
         class_ = ""
-        if "themes.php" == item[2] or "theme-editor.php" == item[2] or 0 == php_strpos(item[2], "customize.php"):
+        if "themes.php" == item_[2] or "theme-editor.php" == item_[2] or 0 == php_strpos(item_[2], "customize.php"):
             continue
         # end if
         #// 0 = name, 1 = capability, 2 = file.
-        if strcmp(self, item[2]) == 0 and php_empty(lambda : parent_file) or parent_file and item[2] == parent_file:
+        if strcmp(self_, item_[2]) == 0 and php_empty(lambda : parent_file_) or parent_file_ and item_[2] == parent_file_:
             class_ = " current"
         # end if
-        if (not php_empty(lambda : submenu[item[2]])):
-            submenu[item[2]] = php_array_values(submenu[item[2]])
+        if (not php_empty(lambda : submenu_[item_[2]])):
+            submenu_[item_[2]] = php_array_values(submenu_[item_[2]])
             #// Re-index.
-            menu_hook = get_plugin_page_hook(submenu[item[2]][0][2], item[2])
-            if php_file_exists(WP_PLUGIN_DIR + str("/") + str(submenu[item[2]][0][2])) or (not php_empty(lambda : menu_hook)):
-                current_theme_actions[-1] = str("<a class='button") + str(class_) + str("' href='admin.php?page=") + str(submenu[item[2]][0][2]) + str("'>") + str(item[0]) + str("</a>")
+            menu_hook_ = get_plugin_page_hook(submenu_[item_[2]][0][2], item_[2])
+            if php_file_exists(WP_PLUGIN_DIR + str("/") + str(submenu_[item_[2]][0][2])) or (not php_empty(lambda : menu_hook_)):
+                current_theme_actions_[-1] = str("<a class='button") + str(class_) + str("' href='admin.php?page=") + str(submenu_[item_[2]][0][2]) + str("'>") + str(item_[0]) + str("</a>")
             else:
-                current_theme_actions[-1] = str("<a class='button") + str(class_) + str("' href='") + str(submenu[item[2]][0][2]) + str("'>") + str(item[0]) + str("</a>")
+                current_theme_actions_[-1] = str("<a class='button") + str(class_) + str("' href='") + str(submenu_[item_[2]][0][2]) + str("'>") + str(item_[0]) + str("</a>")
             # end if
-        elif (not php_empty(lambda : item[2])) and current_user_can(item[1]):
-            menu_file = item[2]
+        elif (not php_empty(lambda : item_[2])) and current_user_can(item_[1]):
+            menu_file_ = item_[2]
             if current_user_can("customize"):
-                if "custom-header" == menu_file:
-                    current_theme_actions[-1] = str("<a class='button hide-if-no-customize") + str(class_) + str("' href='customize.php?autofocus[control]=header_image'>") + str(item[0]) + str("</a>")
-                elif "custom-background" == menu_file:
-                    current_theme_actions[-1] = str("<a class='button hide-if-no-customize") + str(class_) + str("' href='customize.php?autofocus[control]=background_image'>") + str(item[0]) + str("</a>")
+                if "custom-header" == menu_file_:
+                    current_theme_actions_[-1] = str("<a class='button hide-if-no-customize") + str(class_) + str("' href='customize.php?autofocus[control]=header_image'>") + str(item_[0]) + str("</a>")
+                elif "custom-background" == menu_file_:
+                    current_theme_actions_[-1] = str("<a class='button hide-if-no-customize") + str(class_) + str("' href='customize.php?autofocus[control]=background_image'>") + str(item_[0]) + str("</a>")
                 # end if
             # end if
-            pos = php_strpos(menu_file, "?")
-            if False != pos:
-                menu_file = php_substr(menu_file, 0, pos)
+            pos_ = php_strpos(menu_file_, "?")
+            if False != pos_:
+                menu_file_ = php_substr(menu_file_, 0, pos_)
             # end if
-            if php_file_exists(ABSPATH + str("wp-admin/") + str(menu_file)):
-                current_theme_actions[-1] = str("<a class='button") + str(class_) + str("' href='") + str(item[2]) + str("'>") + str(item[0]) + str("</a>")
+            if php_file_exists(ABSPATH + str("wp-admin/") + str(menu_file_)):
+                current_theme_actions_[-1] = str("<a class='button") + str(class_) + str("' href='") + str(item_[2]) + str("'>") + str(item_[0]) + str("</a>")
             else:
-                current_theme_actions[-1] = str("<a class='button") + str(class_) + str("' href='themes.php?page=") + str(item[2]) + str("'>") + str(item[0]) + str("</a>")
+                current_theme_actions_[-1] = str("<a class='button") + str(class_) + str("' href='themes.php?page=") + str(item_[2]) + str("'>") + str(item_[0]) + str("</a>")
             # end if
         # end if
     # end for
 # end if
 php_print("\n")
-class_name = "theme-browser"
+class_name_ = "theme-browser"
 if (not php_empty(lambda : PHP_REQUEST["search"])):
-    class_name += " search-loading"
+    class_name_ += " search-loading"
 # end if
 php_print("<div class=\"")
-php_print(esc_attr(class_name))
+php_print(esc_attr(class_name_))
 php_print("""\">
 <div class=\"themes wp-clearfix\">
 """)
 #// 
 #// This PHP is synchronized with the tmpl-theme template below!
 #//
-for theme in themes:
-    aria_action = esc_attr(theme["id"] + "-action")
-    aria_name = esc_attr(theme["id"] + "-name")
-    active_class = ""
-    if theme["active"]:
-        active_class = " active"
+for theme_ in themes_:
+    aria_action_ = esc_attr(theme_["id"] + "-action")
+    aria_name_ = esc_attr(theme_["id"] + "-name")
+    active_class_ = ""
+    if theme_["active"]:
+        active_class_ = " active"
     # end if
     php_print("<div class=\"theme")
-    php_print(active_class)
+    php_print(active_class_)
     php_print("\" tabindex=\"0\" aria-describedby=\"")
-    php_print(aria_action + " " + aria_name)
+    php_print(aria_action_ + " " + aria_name_)
     php_print("\">\n    ")
-    if (not php_empty(lambda : theme["screenshot"][0])):
+    if (not php_empty(lambda : theme_["screenshot"][0])):
         php_print("     <div class=\"theme-screenshot\">\n          <img src=\"")
-        php_print(theme["screenshot"][0])
+        php_print(theme_["screenshot"][0])
         php_print("\" alt=\"\" />\n     </div>\n    ")
     else:
         php_print("     <div class=\"theme-screenshot blank\"></div>\n  ")
     # end if
     php_print("\n   ")
-    if theme["hasUpdate"]:
+    if theme_["hasUpdate"]:
         php_print("     <div class=\"update-message notice inline notice-warning notice-alt\">\n        ")
-        if theme["hasPackage"]:
+        if theme_["hasPackage"]:
             php_print("         <p>")
             _e("New version available. <button class=\"button-link\" type=\"button\">Update now</button>")
             php_print("</p>\n       ")
@@ -255,36 +250,36 @@ for theme in themes:
         php_print("     </div>\n    ")
     # end if
     php_print("\n   <span class=\"more-details\" id=\"")
-    php_print(aria_action)
+    php_print(aria_action_)
     php_print("\">")
     _e("Theme Details")
     php_print("</span>\n    <div class=\"theme-author\">\n      ")
     #// translators: %s: Theme author name.
-    printf(__("By %s"), theme["author"])
+    printf(__("By %s"), theme_["author"])
     php_print("""   </div>
     <div class=\"theme-id-container\">
     """)
-    if theme["active"]:
+    if theme_["active"]:
         php_print("         <h2 class=\"theme-name\" id=\"")
-        php_print(aria_name)
+        php_print(aria_name_)
         php_print("\">\n                <span>")
         _ex("Active:", "theme")
         php_print("</span> ")
-        php_print(theme["name"])
+        php_print(theme_["name"])
         php_print("         </h2>\n     ")
     else:
         php_print("         <h2 class=\"theme-name\" id=\"")
-        php_print(aria_name)
+        php_print(aria_name_)
         php_print("\">")
-        php_print(theme["name"])
+        php_print(theme_["name"])
         php_print("</h2>\n      ")
     # end if
     php_print("\n       <div class=\"theme-actions\">\n     ")
-    if theme["active"]:
+    if theme_["active"]:
         php_print("         ")
-        if theme["actions"]["customize"] and current_user_can("edit_theme_options") and current_user_can("customize"):
+        if theme_["actions"]["customize"] and current_user_can("edit_theme_options") and current_user_can("customize"):
             php_print("             <a class=\"button button-primary customize load-customize hide-if-no-customize\" href=\"")
-            php_print(theme["actions"]["customize"])
+            php_print(theme_["actions"]["customize"])
             php_print("\">")
             _e("Customize")
             php_print("</a>\n           ")
@@ -293,17 +288,17 @@ for theme in themes:
     else:
         php_print("         ")
         #// translators: %s: Theme name.
-        aria_label = php_sprintf(_x("Activate %s", "theme"), "{{ data.name }}")
+        aria_label_ = php_sprintf(_x("Activate %s", "theme"), "{{ data.name }}")
         php_print("         <a class=\"button activate\" href=\"")
-        php_print(theme["actions"]["activate"])
+        php_print(theme_["actions"]["activate"])
         php_print("\" aria-label=\"")
-        php_print(esc_attr(aria_label))
+        php_print(esc_attr(aria_label_))
         php_print("\">")
         _e("Activate")
         php_print("</a>\n           ")
         if current_user_can("edit_theme_options") and current_user_can("customize"):
             php_print("             <a class=\"button button-primary load-customize hide-if-no-customize\" href=\"")
-            php_print(theme["actions"]["customize"])
+            php_print(theme_["actions"]["customize"])
             php_print("\">")
             _e("Live Preview")
             php_print("</a>\n           ")
@@ -322,46 +317,46 @@ php_print("\"></div>\n\n<p class=\"no-themes\">")
 _e("No themes found. Try a different search.")
 php_print("</p>\n\n")
 #// List broken themes, if any.
-broken_themes = wp_get_themes(Array({"errors": True}))
-if (not is_multisite()) and current_user_can("edit_themes") and broken_themes:
+broken_themes_ = wp_get_themes(Array({"errors": True}))
+if (not is_multisite()) and current_user_can("edit_themes") and broken_themes_:
     php_print("\n<div class=\"broken-themes\">\n<h3>")
     _e("Broken Themes")
     php_print("</h3>\n<p>")
     _e("The following themes are installed but incomplete.")
     php_print("</p>\n\n ")
-    can_resume = current_user_can("resume_themes")
-    can_delete = current_user_can("delete_themes")
-    can_install = current_user_can("install_themes")
+    can_resume_ = current_user_can("resume_themes")
+    can_delete_ = current_user_can("delete_themes")
+    can_install_ = current_user_can("install_themes")
     php_print("<table>\n    <tr>\n      <th>")
     _ex("Name", "theme name")
     php_print("</th>\n      <th>")
     _e("Description")
     php_print("</th>\n      ")
-    if can_resume:
+    if can_resume_:
         php_print("         <td></td>\n     ")
     # end if
     php_print("     ")
-    if can_delete:
+    if can_delete_:
         php_print("         <td></td>\n     ")
     # end if
     php_print("     ")
-    if can_install:
+    if can_install_:
         php_print("         <td></td>\n     ")
     # end if
     php_print(" </tr>\n ")
-    for broken_theme in broken_themes:
+    for broken_theme_ in broken_themes_:
         php_print("     <tr>\n          <td>")
-        php_print(broken_theme.display("Name") if broken_theme.get("Name") else broken_theme.get_stylesheet())
+        php_print(broken_theme_.display("Name") if broken_theme_.get("Name") else broken_theme_.get_stylesheet())
         php_print("</td>\n          <td>")
-        php_print(broken_theme.errors().get_error_message())
+        php_print(broken_theme_.errors().get_error_message())
         php_print("</td>\n          ")
-        if can_resume:
-            if "theme_paused" == broken_theme.errors().get_error_code():
-                stylesheet = broken_theme.get_stylesheet()
-                resume_url = add_query_arg(Array({"action": "resume", "stylesheet": urlencode(stylesheet)}), admin_url("themes.php"))
-                resume_url = wp_nonce_url(resume_url, "resume-theme_" + stylesheet)
+        if can_resume_:
+            if "theme_paused" == broken_theme_.errors().get_error_code():
+                stylesheet_ = broken_theme_.get_stylesheet()
+                resume_url_ = add_query_arg(Array({"action": "resume", "stylesheet": urlencode(stylesheet_)}), admin_url("themes.php"))
+                resume_url_ = wp_nonce_url(resume_url_, "resume-theme_" + stylesheet_)
                 php_print("                 <td><a href=\"")
-                php_print(esc_url(resume_url))
+                php_print(esc_url(resume_url_))
                 php_print("\" class=\"button resume-theme\">")
                 _e("Resume")
                 php_print("</a></td>\n                  ")
@@ -369,24 +364,24 @@ if (not is_multisite()) and current_user_can("edit_themes") and broken_themes:
                 php_print("                 <td></td>\n                 ")
             # end if
         # end if
-        if can_delete:
-            stylesheet = broken_theme.get_stylesheet()
-            delete_url = add_query_arg(Array({"action": "delete", "stylesheet": urlencode(stylesheet)}), admin_url("themes.php"))
-            delete_url = wp_nonce_url(delete_url, "delete-theme_" + stylesheet)
+        if can_delete_:
+            stylesheet_ = broken_theme_.get_stylesheet()
+            delete_url_ = add_query_arg(Array({"action": "delete", "stylesheet": urlencode(stylesheet_)}), admin_url("themes.php"))
+            delete_url_ = wp_nonce_url(delete_url_, "delete-theme_" + stylesheet_)
             php_print("             <td><a href=\"")
-            php_print(esc_url(delete_url))
+            php_print(esc_url(delete_url_))
             php_print("\" class=\"button delete-theme\">")
             _e("Delete")
             php_print("</a></td>\n              ")
         # end if
-        if can_install and "theme_no_parent" == broken_theme.errors().get_error_code():
-            parent_theme_name = broken_theme.get("Template")
-            parent_theme = themes_api("theme_information", Array({"slug": urlencode(parent_theme_name)}))
-            if (not is_wp_error(parent_theme)):
-                install_url = add_query_arg(Array({"action": "install-theme", "theme": urlencode(parent_theme_name)}), admin_url("update.php"))
-                install_url = wp_nonce_url(install_url, "install-theme_" + parent_theme_name)
+        if can_install_ and "theme_no_parent" == broken_theme_.errors().get_error_code():
+            parent_theme_name_ = broken_theme_.get("Template")
+            parent_theme_ = themes_api("theme_information", Array({"slug": urlencode(parent_theme_name_)}))
+            if (not is_wp_error(parent_theme_)):
+                install_url_ = add_query_arg(Array({"action": "install-theme", "theme": urlencode(parent_theme_name_)}), admin_url("update.php"))
+                install_url_ = wp_nonce_url(install_url_, "install-theme_" + parent_theme_name_)
                 php_print("                 <td><a href=\"")
-                php_print(esc_url(install_url))
+                php_print(esc_url(install_url_))
                 php_print("\" class=\"button install-theme\">")
                 _e("Install Parent Theme")
                 php_print("</a></td>\n                  ")
@@ -443,9 +438,9 @@ php_print("""</a>
 <# } else { #>
 """)
 #// translators: %s: Theme name.
-aria_label = php_sprintf(_x("Activate %s", "theme"), "{{ data.name }}")
+aria_label_ = php_sprintf(_x("Activate %s", "theme"), "{{ data.name }}")
 php_print("             <a class=\"button activate\" href=\"{{{ data.actions.activate }}}\" aria-label=\"")
-php_print(aria_label)
+php_print(aria_label_)
 php_print("\">")
 _e("Activate")
 php_print("</a>\n               <a class=\"button button-primary load-customize hide-if-no-customize\" href=\"{{{ data.actions.customize }}}\">")
@@ -517,12 +512,12 @@ php_print("""</span> {{{ data.tags }}}</p>
 <a href=\"{{{ data.actions.customize }}}\" class=\"button button-primary customize load-customize hide-if-no-customize\">""")
 _e("Customize")
 php_print("</a>\n               ")
-php_print(php_implode(" ", current_theme_actions))
+php_print(php_implode(" ", current_theme_actions_))
 php_print("         </div>\n            <div class=\"inactive-theme\">\n                ")
 #// translators: %s: Theme name.
-aria_label = php_sprintf(_x("Activate %s", "theme"), "{{ data.name }}")
+aria_label_ = php_sprintf(_x("Activate %s", "theme"), "{{ data.name }}")
 php_print("             <# if ( data.actions.activate ) { #>\n                  <a href=\"{{{ data.actions.activate }}}\" class=\"button activate\" aria-label=\"")
-php_print(aria_label)
+php_print(aria_label_)
 php_print("\">")
 _e("Activate")
 php_print("</a>\n               <# } #>\n               <a href=\"{{{ data.actions.customize }}}\" class=\"button button-primary load-customize hide-if-no-customize\">")

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -46,9 +41,18 @@ php_include_file(ABSPATH + "wp-admin/includes/class-wp-internal-pointers.php", o
 #// @param bool   $checked_ontop        Optional. Whether to move checked items out of the hierarchy and to
 #// the top of the list. Default true.
 #//
-def wp_category_checklist(post_id=0, descendants_and_self=0, selected_cats=False, popular_cats=False, walker=None, checked_ontop=True, *args_):
+def wp_category_checklist(post_id_=0, descendants_and_self_=0, selected_cats_=None, popular_cats_=None, walker_=None, checked_ontop_=None, *_args_):
+    if selected_cats_ is None:
+        selected_cats_ = False
+    # end if
+    if popular_cats_ is None:
+        popular_cats_ = False
+    # end if
+    if checked_ontop_ is None:
+        checked_ontop_ = True
+    # end if
     
-    wp_terms_checklist(post_id, Array({"taxonomy": "category", "descendants_and_self": descendants_and_self, "selected_cats": selected_cats, "popular_cats": popular_cats, "walker": walker, "checked_ontop": checked_ontop}))
+    wp_terms_checklist(post_id_, Array({"taxonomy": "category", "descendants_and_self": descendants_and_self_, "selected_cats": selected_cats_, "popular_cats": popular_cats_, "walker": walker_, "checked_ontop": checked_ontop_}))
 # end def wp_category_checklist
 #// 
 #// Output an unordered list of checkbox input elements labelled with term names.
@@ -77,9 +81,12 @@ def wp_category_checklist(post_id=0, descendants_and_self=0, selected_cats=False
 #// }
 #// @return string HTML list of input elements.
 #//
-def wp_terms_checklist(post_id=0, args=Array(), *args_):
-    global self
-    defaults = Array({"descendants_and_self": 0, "selected_cats": False, "popular_cats": False, "walker": None, "taxonomy": "category", "checked_ontop": True, "echo": True})
+def wp_terms_checklist(post_id_=0, args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
+    
+    defaults_ = Array({"descendants_and_self": 0, "selected_cats": False, "popular_cats": False, "walker": None, "taxonomy": "category", "checked_ontop": True, "echo": True})
     #// 
     #// Filters the taxonomy terms checklist arguments.
     #// 
@@ -90,59 +97,59 @@ def wp_terms_checklist(post_id=0, args=Array(), *args_):
     #// @param array $args    An array of arguments.
     #// @param int   $post_id The post ID.
     #//
-    params = apply_filters("wp_terms_checklist_args", args, post_id)
-    parsed_args = wp_parse_args(params, defaults)
-    if php_empty(lambda : parsed_args["walker"]) or (not type(parsed_args["walker"]).__name__ == "Walker"):
-        walker = php_new_class("Walker_Category_Checklist", lambda : Walker_Category_Checklist())
+    params_ = apply_filters("wp_terms_checklist_args", args_, post_id_)
+    parsed_args_ = wp_parse_args(params_, defaults_)
+    if php_empty(lambda : parsed_args_["walker"]) or (not type(parsed_args_["walker"]).__name__ == "Walker"):
+        walker_ = php_new_class("Walker_Category_Checklist", lambda : Walker_Category_Checklist())
     else:
-        walker = parsed_args["walker"]
+        walker_ = parsed_args_["walker"]
     # end if
-    taxonomy = parsed_args["taxonomy"]
-    descendants_and_self = php_int(parsed_args["descendants_and_self"])
-    args = Array({"taxonomy": taxonomy})
-    tax = get_taxonomy(taxonomy)
-    args["disabled"] = (not current_user_can(tax.cap.assign_terms))
-    args["list_only"] = (not php_empty(lambda : parsed_args["list_only"]))
-    if php_is_array(parsed_args["selected_cats"]):
-        args["selected_cats"] = parsed_args["selected_cats"]
-    elif post_id:
-        args["selected_cats"] = wp_get_object_terms(post_id, taxonomy, php_array_merge(args, Array({"fields": "ids"})))
+    taxonomy_ = parsed_args_["taxonomy"]
+    descendants_and_self_ = php_int(parsed_args_["descendants_and_self"])
+    args_ = Array({"taxonomy": taxonomy_})
+    tax_ = get_taxonomy(taxonomy_)
+    args_["disabled"] = (not current_user_can(tax_.cap.assign_terms))
+    args_["list_only"] = (not php_empty(lambda : parsed_args_["list_only"]))
+    if php_is_array(parsed_args_["selected_cats"]):
+        args_["selected_cats"] = parsed_args_["selected_cats"]
+    elif post_id_:
+        args_["selected_cats"] = wp_get_object_terms(post_id_, taxonomy_, php_array_merge(args_, Array({"fields": "ids"})))
     else:
-        args["selected_cats"] = Array()
+        args_["selected_cats"] = Array()
     # end if
-    if php_is_array(parsed_args["popular_cats"]):
-        args["popular_cats"] = parsed_args["popular_cats"]
+    if php_is_array(parsed_args_["popular_cats"]):
+        args_["popular_cats"] = parsed_args_["popular_cats"]
     else:
-        args["popular_cats"] = get_terms(Array({"taxonomy": taxonomy, "fields": "ids", "orderby": "count", "order": "DESC", "number": 10, "hierarchical": False}))
+        args_["popular_cats"] = get_terms(Array({"taxonomy": taxonomy_, "fields": "ids", "orderby": "count", "order": "DESC", "number": 10, "hierarchical": False}))
     # end if
-    if descendants_and_self:
-        categories = get_terms(Array({"taxonomy": taxonomy, "child_of": descendants_and_self, "hierarchical": 0, "hide_empty": 0}))
-        self = get_term(descendants_and_self, taxonomy)
-        array_unshift(categories, self)
+    if descendants_and_self_:
+        categories_ = get_terms(Array({"taxonomy": taxonomy_, "child_of": descendants_and_self_, "hierarchical": 0, "hide_empty": 0}))
+        self_ = get_term(descendants_and_self_, taxonomy_)
+        array_unshift(categories_, self_)
     else:
-        categories = get_terms(Array({"taxonomy": taxonomy, "get": "all"}))
+        categories_ = get_terms(Array({"taxonomy": taxonomy_, "get": "all"}))
     # end if
-    output = ""
-    if parsed_args["checked_ontop"]:
+    output_ = ""
+    if parsed_args_["checked_ontop"]:
         #// Post-process $categories rather than adding an exclude to the get_terms() query
         #// to keep the query the same across all posts (for any query cache).
-        checked_categories = Array()
-        keys = php_array_keys(categories)
-        for k in keys:
-            if php_in_array(categories[k].term_id, args["selected_cats"]):
-                checked_categories[-1] = categories[k]
-                categories[k] = None
+        checked_categories_ = Array()
+        keys_ = php_array_keys(categories_)
+        for k_ in keys_:
+            if php_in_array(categories_[k_].term_id, args_["selected_cats"]):
+                checked_categories_[-1] = categories_[k_]
+                categories_[k_] = None
             # end if
         # end for
         #// Put checked categories on top.
-        output += walker.walk(checked_categories, 0, args)
+        output_ += walker_.walk(checked_categories_, 0, args_)
     # end if
     #// Then the rest of them.
-    output += walker.walk(categories, 0, args)
-    if parsed_args["echo"]:
-        php_print(output)
+    output_ += walker_.walk(categories_, 0, args_)
+    if parsed_args_["echo"]:
+        php_print(output_)
     # end if
-    return output
+    return output_
 # end def wp_terms_checklist
 #// 
 #// Retrieve a list of the most popular terms from the specified taxonomy.
@@ -160,42 +167,45 @@ def wp_terms_checklist(post_id=0, args=Array(), *args_):
 #// @param bool   $echo     Optionally output the list as well. Defaults to true.
 #// @return int[] Array of popular term IDs.
 #//
-def wp_popular_terms_checklist(taxonomy=None, default=0, number=10, echo=True, *args_):
-    
-    post = get_post()
-    if post and post.ID:
-        checked_terms = wp_get_object_terms(post.ID, taxonomy, Array({"fields": "ids"}))
-    else:
-        checked_terms = Array()
+def wp_popular_terms_checklist(taxonomy_=None, default_=0, number_=10, echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
     # end if
-    terms = get_terms(Array({"taxonomy": taxonomy, "orderby": "count", "order": "DESC", "number": number, "hierarchical": False}))
-    tax = get_taxonomy(taxonomy)
-    popular_ids = Array()
-    for term in terms:
-        popular_ids[-1] = term.term_id
-        if (not echo):
+    
+    post_ = get_post()
+    if post_ and post_.ID:
+        checked_terms_ = wp_get_object_terms(post_.ID, taxonomy_, Array({"fields": "ids"}))
+    else:
+        checked_terms_ = Array()
+    # end if
+    terms_ = get_terms(Array({"taxonomy": taxonomy_, "orderby": "count", "order": "DESC", "number": number_, "hierarchical": False}))
+    tax_ = get_taxonomy(taxonomy_)
+    popular_ids_ = Array()
+    for term_ in terms_:
+        popular_ids_[-1] = term_.term_id
+        if (not echo_):
             continue
         # end if
-        id = str("popular-") + str(taxonomy) + str("-") + str(term.term_id)
-        checked = "checked=\"checked\"" if php_in_array(term.term_id, checked_terms) else ""
+        id_ = str("popular-") + str(taxonomy_) + str("-") + str(term_.term_id)
+        checked_ = "checked=\"checked\"" if php_in_array(term_.term_id, checked_terms_) else ""
         php_print("\n       <li id=\"")
-        php_print(id)
+        php_print(id_)
         php_print("\" class=\"popular-category\">\n         <label class=\"selectit\">\n                <input id=\"in-")
-        php_print(id)
+        php_print(id_)
         php_print("\" type=\"checkbox\" ")
-        php_print(checked)
+        php_print(checked_)
         php_print(" value=\"")
-        php_print(php_int(term.term_id))
+        php_print(php_int(term_.term_id))
         php_print("\" ")
-        disabled((not current_user_can(tax.cap.assign_terms)))
+        disabled((not current_user_can(tax_.cap.assign_terms)))
         php_print(" />\n                ")
         #// This filter is documented in wp-includes/category-template.php
-        php_print(esc_html(apply_filters("the_category", term.name, "", "")))
+        php_print(esc_html(apply_filters("the_category", term_.name, "", "")))
         php_print("""           </label>
         </li>
         """)
     # end for
-    return popular_ids
+    return popular_ids_
 # end def wp_popular_terms_checklist
 #// 
 #// Outputs a link category checklist element.
@@ -204,29 +214,30 @@ def wp_popular_terms_checklist(taxonomy=None, default=0, number=10, echo=True, *
 #// 
 #// @param int $link_id
 #//
-def wp_link_category_checklist(link_id=0, *args_):
+def wp_link_category_checklist(link_id_=0, *_args_):
     
-    default = 1
-    checked_categories = Array()
-    if link_id:
-        checked_categories = wp_get_link_cats(link_id)
+    
+    default_ = 1
+    checked_categories_ = Array()
+    if link_id_:
+        checked_categories_ = wp_get_link_cats(link_id_)
         #// No selected categories, strange.
-        if (not php_count(checked_categories)):
-            checked_categories[-1] = default
+        if (not php_count(checked_categories_)):
+            checked_categories_[-1] = default_
         # end if
     else:
-        checked_categories[-1] = default
+        checked_categories_[-1] = default_
     # end if
-    categories = get_terms(Array({"taxonomy": "link_category", "orderby": "name", "hide_empty": 0}))
-    if php_empty(lambda : categories):
+    categories_ = get_terms(Array({"taxonomy": "link_category", "orderby": "name", "hide_empty": 0}))
+    if php_empty(lambda : categories_):
         return
     # end if
-    for category in categories:
-        cat_id = category.term_id
+    for category_ in categories_:
+        cat_id_ = category_.term_id
         #// This filter is documented in wp-includes/category-template.php
-        name = esc_html(apply_filters("the_category", category.name, "", ""))
-        checked = " checked=\"checked\"" if php_in_array(cat_id, checked_categories) else ""
-        php_print("<li id=\"link-category-", cat_id, "\"><label for=\"in-link-category-", cat_id, "\" class=\"selectit\"><input value=\"", cat_id, "\" type=\"checkbox\" name=\"link_category[]\" id=\"in-link-category-", cat_id, "\"", checked, "/> ", name, "</label></li>")
+        name_ = esc_html(apply_filters("the_category", category_.name, "", ""))
+        checked_ = " checked=\"checked\"" if php_in_array(cat_id_, checked_categories_) else ""
+        php_print("<li id=\"link-category-", cat_id_, "\"><label for=\"in-link-category-", cat_id_, "\" class=\"selectit\"><input value=\"", cat_id_, "\" type=\"checkbox\" name=\"link_category[]\" id=\"in-link-category-", cat_id_, "\"", checked_, "/> ", name_, "</label></li>")
     # end for
 # end def wp_link_category_checklist
 #// 
@@ -236,45 +247,46 @@ def wp_link_category_checklist(link_id=0, *args_):
 #// 
 #// @param WP_Post $post Post object.
 #//
-def get_inline_data(post=None, *args_):
+def get_inline_data(post_=None, *_args_):
     
-    post_type_object = get_post_type_object(post.post_type)
-    if (not current_user_can("edit_post", post.ID)):
+    
+    post_type_object_ = get_post_type_object(post_.post_type)
+    if (not current_user_can("edit_post", post_.ID)):
         return
     # end if
-    title = esc_textarea(php_trim(post.post_title))
-    php_print("\n<div class=\"hidden\" id=\"inline_" + post.ID + "\">\n <div class=\"post_title\">" + title + "</div>" + "<div class=\"post_name\">" + apply_filters("editable_slug", post.post_name, post) + "</div>\n <div class=\"post_author\">" + post.post_author + "</div>\n <div class=\"comment_status\">" + esc_html(post.comment_status) + "</div>\n <div class=\"ping_status\">" + esc_html(post.ping_status) + "</div>\n   <div class=\"_status\">" + esc_html(post.post_status) + "</div>\n   <div class=\"jj\">" + mysql2date("d", post.post_date, False) + "</div>\n    <div class=\"mm\">" + mysql2date("m", post.post_date, False) + "</div>\n    <div class=\"aa\">" + mysql2date("Y", post.post_date, False) + "</div>\n    <div class=\"hh\">" + mysql2date("H", post.post_date, False) + "</div>\n    <div class=\"mn\">" + mysql2date("i", post.post_date, False) + "</div>\n    <div class=\"ss\">" + mysql2date("s", post.post_date, False) + "</div>\n    <div class=\"post_password\">" + esc_html(post.post_password) + "</div>")
-    if post_type_object.hierarchical:
-        php_print("<div class=\"post_parent\">" + post.post_parent + "</div>")
+    title_ = esc_textarea(php_trim(post_.post_title))
+    php_print("\n<div class=\"hidden\" id=\"inline_" + post_.ID + "\">\n    <div class=\"post_title\">" + title_ + "</div>" + "<div class=\"post_name\">" + apply_filters("editable_slug", post_.post_name, post_) + "</div>\n  <div class=\"post_author\">" + post_.post_author + "</div>\n    <div class=\"comment_status\">" + esc_html(post_.comment_status) + "</div>\n    <div class=\"ping_status\">" + esc_html(post_.ping_status) + "</div>\n  <div class=\"_status\">" + esc_html(post_.post_status) + "</div>\n  <div class=\"jj\">" + mysql2date("d", post_.post_date, False) + "</div>\n   <div class=\"mm\">" + mysql2date("m", post_.post_date, False) + "</div>\n   <div class=\"aa\">" + mysql2date("Y", post_.post_date, False) + "</div>\n   <div class=\"hh\">" + mysql2date("H", post_.post_date, False) + "</div>\n   <div class=\"mn\">" + mysql2date("i", post_.post_date, False) + "</div>\n   <div class=\"ss\">" + mysql2date("s", post_.post_date, False) + "</div>\n   <div class=\"post_password\">" + esc_html(post_.post_password) + "</div>")
+    if post_type_object_.hierarchical:
+        php_print("<div class=\"post_parent\">" + post_.post_parent + "</div>")
     # end if
-    php_print("<div class=\"page_template\">" + esc_html(post.page_template) if post.page_template else "default" + "</div>")
-    if post_type_supports(post.post_type, "page-attributes"):
-        php_print("<div class=\"menu_order\">" + post.menu_order + "</div>")
+    php_print("<div class=\"page_template\">" + esc_html(post_.page_template) if post_.page_template else "default" + "</div>")
+    if post_type_supports(post_.post_type, "page-attributes"):
+        php_print("<div class=\"menu_order\">" + post_.menu_order + "</div>")
     # end if
-    taxonomy_names = get_object_taxonomies(post.post_type)
-    for taxonomy_name in taxonomy_names:
-        taxonomy = get_taxonomy(taxonomy_name)
-        if taxonomy.hierarchical and taxonomy.show_ui:
-            terms = get_object_term_cache(post.ID, taxonomy_name)
-            if False == terms:
-                terms = wp_get_object_terms(post.ID, taxonomy_name)
-                wp_cache_add(post.ID, wp_list_pluck(terms, "term_id"), taxonomy_name + "_relationships")
+    taxonomy_names_ = get_object_taxonomies(post_.post_type)
+    for taxonomy_name_ in taxonomy_names_:
+        taxonomy_ = get_taxonomy(taxonomy_name_)
+        if taxonomy_.hierarchical and taxonomy_.show_ui:
+            terms_ = get_object_term_cache(post_.ID, taxonomy_name_)
+            if False == terms_:
+                terms_ = wp_get_object_terms(post_.ID, taxonomy_name_)
+                wp_cache_add(post_.ID, wp_list_pluck(terms_, "term_id"), taxonomy_name_ + "_relationships")
             # end if
-            term_ids = Array() if php_empty(lambda : terms) else wp_list_pluck(terms, "term_id")
-            php_print("<div class=\"post_category\" id=\"" + taxonomy_name + "_" + post.ID + "\">" + php_implode(",", term_ids) + "</div>")
-        elif taxonomy.show_ui:
-            terms_to_edit = get_terms_to_edit(post.ID, taxonomy_name)
-            if (not php_is_string(terms_to_edit)):
-                terms_to_edit = ""
+            term_ids_ = Array() if php_empty(lambda : terms_) else wp_list_pluck(terms_, "term_id")
+            php_print("<div class=\"post_category\" id=\"" + taxonomy_name_ + "_" + post_.ID + "\">" + php_implode(",", term_ids_) + "</div>")
+        elif taxonomy_.show_ui:
+            terms_to_edit_ = get_terms_to_edit(post_.ID, taxonomy_name_)
+            if (not php_is_string(terms_to_edit_)):
+                terms_to_edit_ = ""
             # end if
-            php_print("<div class=\"tags_input\" id=\"" + taxonomy_name + "_" + post.ID + "\">" + esc_html(php_str_replace(",", ", ", terms_to_edit)) + "</div>")
+            php_print("<div class=\"tags_input\" id=\"" + taxonomy_name_ + "_" + post_.ID + "\">" + esc_html(php_str_replace(",", ", ", terms_to_edit_)) + "</div>")
         # end if
     # end for
-    if (not post_type_object.hierarchical):
-        php_print("<div class=\"sticky\">" + "sticky" if is_sticky(post.ID) else "" + "</div>")
+    if (not post_type_object_.hierarchical):
+        php_print("<div class=\"sticky\">" + "sticky" if is_sticky(post_.ID) else "" + "</div>")
     # end if
-    if post_type_supports(post.post_type, "post-formats"):
-        php_print("<div class=\"post_format\">" + esc_html(get_post_format(post.ID)) + "</div>")
+    if post_type_supports(post_.post_type, "post-formats"):
+        php_print("<div class=\"post_format\">" + esc_html(get_post_format(post_.ID)) + "</div>")
     # end if
     #// 
     #// Fires after outputting the fields for the inline editor for posts and pages.
@@ -284,7 +296,7 @@ def get_inline_data(post=None, *args_):
     #// @param WP_Post      $post             The current post object.
     #// @param WP_Post_Type $post_type_object The current post's post type object.
     #//
-    do_action("add_inline_data", post, post_type_object)
+    do_action("add_inline_data", post_, post_type_object_)
     php_print("</div>")
 # end def get_inline_data
 #// 
@@ -299,10 +311,16 @@ def get_inline_data(post=None, *args_):
 #// @param string $mode
 #// @param bool   $table_row
 #//
-def wp_comment_reply(position=1, checkbox=False, mode="single", table_row=True, *args_):
+def wp_comment_reply(position_=1, checkbox_=None, mode_="single", table_row_=None, *_args_):
+    if checkbox_ is None:
+        checkbox_ = False
+    # end if
+    if table_row_ is None:
+        table_row_ = True
+    # end if
     
-    global wp_list_table
-    php_check_if_defined("wp_list_table")
+    global wp_list_table_
+    php_check_if_defined("wp_list_table_")
     #// 
     #// Filters the in-line comment reply-to form output in the Comments
     #// list table.
@@ -318,22 +336,22 @@ def wp_comment_reply(position=1, checkbox=False, mode="single", table_row=True, 
     #// @param string $content The reply-to form content.
     #// @param array  $args    An array of default args.
     #//
-    content = apply_filters("wp_comment_reply", "", Array({"position": position, "checkbox": checkbox, "mode": mode}))
-    if (not php_empty(lambda : content)):
-        php_print(content)
+    content_ = apply_filters("wp_comment_reply", "", Array({"position": position_, "checkbox": checkbox_, "mode": mode_}))
+    if (not php_empty(lambda : content_)):
+        php_print(content_)
         return
     # end if
-    if (not wp_list_table):
-        if "single" == mode:
-            wp_list_table = _get_list_table("WP_Post_Comments_List_Table")
+    if (not wp_list_table_):
+        if "single" == mode_:
+            wp_list_table_ = _get_list_table("WP_Post_Comments_List_Table")
         else:
-            wp_list_table = _get_list_table("WP_Comments_List_Table")
+            wp_list_table_ = _get_list_table("WP_Comments_List_Table")
         # end if
     # end if
     php_print("<form method=\"get\">\n  ")
-    if table_row:
+    if table_row_:
         php_print("<table style=\"display:none;\"><tbody id=\"com-reply\"><tr id=\"replyrow\" class=\"inline-edit-row\" style=\"display:none;\"><td colspan=\"")
-        php_print(wp_list_table.get_column_count())
+        php_print(wp_list_table_.get_column_count())
         php_print("\" class=\"colspanchange\">\n")
     else:
         php_print("<div id=\"com-reply\" style=\"display:none;\"><div id=\"replyrow\" style=\"display:none;\">\n")
@@ -350,8 +368,8 @@ def wp_comment_reply(position=1, checkbox=False, mode="single", table_row=True, 
     <label for=\"replycontent\" class=\"screen-reader-text\">""")
     _e("Comment")
     php_print("</label>\n   ")
-    quicktags_settings = Array({"buttons": "strong,em,link,block,del,ins,img,ul,ol,li,code,close"})
-    wp_editor("", "replycontent", Array({"media_buttons": False, "tinymce": False, "quicktags": quicktags_settings}))
+    quicktags_settings_ = Array({"buttons": "strong,em,link,block,del,ins,img,ul,ol,li,code,close"})
+    wp_editor("", "replycontent", Array({"media_buttons": False, "tinymce": False, "quicktags": quicktags_settings_}))
     php_print("""   </div>
     <div id=\"edithead\" style=\"display:none;\">
     <div class=\"inside\">
@@ -396,18 +414,18 @@ def wp_comment_reply(position=1, checkbox=False, mode="single", table_row=True, 
     <input type=\"hidden\" name=\"comment_post_ID\" id=\"comment_post_ID\" value=\"\" />
     <input type=\"hidden\" name=\"status\" id=\"status\" value=\"\" />
     <input type=\"hidden\" name=\"position\" id=\"position\" value=\"""")
-    php_print(position)
+    php_print(position_)
     php_print("\" />\n  <input type=\"hidden\" name=\"checkbox\" id=\"checkbox\" value=\"")
-    php_print(1 if checkbox else 0)
+    php_print(1 if checkbox_ else 0)
     php_print("\" />\n  <input type=\"hidden\" name=\"mode\" id=\"mode\" value=\"")
-    php_print(esc_attr(mode))
+    php_print(esc_attr(mode_))
     php_print("\" />\n  ")
     wp_nonce_field("replyto-comment", "_ajax_nonce-replyto-comment", False)
     if current_user_can("unfiltered_html"):
         wp_nonce_field("unfiltered-html-comment", "_wp_unfiltered_html_comment", False)
     # end if
     php_print(" </fieldset>\n   ")
-    if table_row:
+    if table_row_:
         php_print("</td></tr></tbody></table>\n ")
     else:
         php_print("</div></div>\n   ")
@@ -419,7 +437,8 @@ def wp_comment_reply(position=1, checkbox=False, mode="single", table_row=True, 
 #// 
 #// @since 2.9.0
 #//
-def wp_comment_trashnotice(*args_):
+def wp_comment_trashnotice(*_args_):
+    
     
     php_print("<div class=\"hidden\" id=\"trash-undo-holder\">\n    <div class=\"trash-undo-inside\">\n     ")
     #// translators: %s: Comment author, filled by AJAX.
@@ -448,10 +467,11 @@ def wp_comment_trashnotice(*args_):
 #// 
 #// @param array $meta
 #//
-def list_meta(meta=None, *args_):
+def list_meta(meta_=None, *_args_):
+    
     
     #// Exit if no meta.
-    if (not meta):
+    if (not meta_):
         php_print("""
         <table id=\"list-table\" style=\"display: none;\">
         <thead>
@@ -466,7 +486,7 @@ def list_meta(meta=None, *args_):
         #// TBODY needed for list-manipulation JS.
         return
     # end if
-    count = 0
+    count_ = 0
     php_print("""<table id=\"list-table\">
     <thead>
     <tr>
@@ -479,8 +499,8 @@ def list_meta(meta=None, *args_):
     </thead>
     <tbody id='the-list' data-wp-lists='list:meta'>
     """)
-    for entry in meta:
-        php_print(_list_meta_row(entry, count))
+    for entry_ in meta_:
+        php_print(_list_meta_row(entry_, count_))
     # end for
     php_print(" </tbody>\n</table>\n    ")
 # end def list_meta
@@ -495,43 +515,44 @@ def list_meta(meta=None, *args_):
 #// @param int   $count
 #// @return string
 #//
-def _list_meta_row(entry=None, count=None, *args_):
+def _list_meta_row(entry_=None, count_=None, *_args_):
     
-    _list_meta_row.update_nonce = ""
-    if is_protected_meta(entry["meta_key"], "post"):
+    
+    update_nonce_ = ""
+    if is_protected_meta(entry_["meta_key"], "post"):
         return ""
     # end if
-    if (not _list_meta_row.update_nonce):
-        _list_meta_row.update_nonce = wp_create_nonce("add-meta")
+    if (not update_nonce_):
+        update_nonce_ = wp_create_nonce("add-meta")
     # end if
-    r = ""
-    count += 1
-    if is_serialized(entry["meta_value"]):
-        if is_serialized_string(entry["meta_value"]):
+    r_ = ""
+    count_ += 1
+    if is_serialized(entry_["meta_value"]):
+        if is_serialized_string(entry_["meta_value"]):
             #// This is a serialized string, so we should display it.
-            entry["meta_value"] = maybe_unserialize(entry["meta_value"])
+            entry_["meta_value"] = maybe_unserialize(entry_["meta_value"])
         else:
             #// This is a serialized array/object so we should NOT display it.
-            count -= 1
+            count_ -= 1
             return ""
         # end if
     # end if
-    entry["meta_key"] = esc_attr(entry["meta_key"])
-    entry["meta_value"] = esc_textarea(entry["meta_value"])
+    entry_["meta_key"] = esc_attr(entry_["meta_key"])
+    entry_["meta_value"] = esc_textarea(entry_["meta_value"])
     #// Using a <textarea />.
-    entry["meta_id"] = php_int(entry["meta_id"])
-    delete_nonce = wp_create_nonce("delete-meta_" + entry["meta_id"])
-    r += str("\n    <tr id='meta-") + str(entry["meta_id"]) + str("'>")
-    r += str("\n        <td class='left'><label class='screen-reader-text' for='meta-") + str(entry["meta_id"]) + str("-key'>") + __("Key") + str("</label><input name='meta[") + str(entry["meta_id"]) + str("][key]' id='meta-") + str(entry["meta_id"]) + str("-key' type='text' size='20' value='") + str(entry["meta_key"]) + str("' />")
-    r += "\n        <div class='submit'>"
-    r += get_submit_button(__("Delete"), "deletemeta small", str("deletemeta[") + str(entry["meta_id"]) + str("]"), False, Array({"data-wp-lists": str("delete:the-list:meta-") + str(entry["meta_id"]) + str("::_ajax_nonce=") + str(delete_nonce)}))
-    r += "\n        "
-    r += get_submit_button(__("Update"), "updatemeta small", str("meta-") + str(entry["meta_id"]) + str("-submit"), False, Array({"data-wp-lists": str("add:the-list:meta-") + str(entry["meta_id"]) + str("::_ajax_nonce-add-meta=") + str(_list_meta_row.update_nonce)}))
-    r += "</div>"
-    r += wp_nonce_field("change-meta", "_ajax_nonce", False, False)
-    r += "</td>"
-    r += str("\n        <td><label class='screen-reader-text' for='meta-") + str(entry["meta_id"]) + str("-value'>") + __("Value") + str("</label><textarea name='meta[") + str(entry["meta_id"]) + str("][value]' id='meta-") + str(entry["meta_id"]) + str("-value' rows='2' cols='30'>") + str(entry["meta_value"]) + str("</textarea></td>\n    </tr>")
-    return r
+    entry_["meta_id"] = php_int(entry_["meta_id"])
+    delete_nonce_ = wp_create_nonce("delete-meta_" + entry_["meta_id"])
+    r_ += str("\n   <tr id='meta-") + str(entry_["meta_id"]) + str("'>")
+    r_ += str("\n       <td class='left'><label class='screen-reader-text' for='meta-") + str(entry_["meta_id"]) + str("-key'>") + __("Key") + str("</label><input name='meta[") + str(entry_["meta_id"]) + str("][key]' id='meta-") + str(entry_["meta_id"]) + str("-key' type='text' size='20' value='") + str(entry_["meta_key"]) + str("' />")
+    r_ += "\n       <div class='submit'>"
+    r_ += get_submit_button(__("Delete"), "deletemeta small", str("deletemeta[") + str(entry_["meta_id"]) + str("]"), False, Array({"data-wp-lists": str("delete:the-list:meta-") + str(entry_["meta_id"]) + str("::_ajax_nonce=") + str(delete_nonce_)}))
+    r_ += "\n       "
+    r_ += get_submit_button(__("Update"), "updatemeta small", str("meta-") + str(entry_["meta_id"]) + str("-submit"), False, Array({"data-wp-lists": str("add:the-list:meta-") + str(entry_["meta_id"]) + str("::_ajax_nonce-add-meta=") + str(update_nonce_)}))
+    r_ += "</div>"
+    r_ += wp_nonce_field("change-meta", "_ajax_nonce", False, False)
+    r_ += "</td>"
+    r_ += str("\n       <td><label class='screen-reader-text' for='meta-") + str(entry_["meta_id"]) + str("-value'>") + __("Value") + str("</label><textarea name='meta[") + str(entry_["meta_id"]) + str("][value]' id='meta-") + str(entry_["meta_id"]) + str("-value' rows='2' cols='30'>") + str(entry_["meta_value"]) + str("</textarea></td>\n    </tr>")
+    return r_
 # end def _list_meta_row
 #// 
 #// Prints the form in the Custom Fields meta box.
@@ -542,11 +563,12 @@ def _list_meta_row(entry=None, count=None, *args_):
 #// 
 #// @param WP_Post $post Optional. The post being edited.
 #//
-def meta_form(post=None, *args_):
+def meta_form(post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post(post)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post(post_)
     #// 
     #// Filters values for the meta key dropdown in the Custom Fields meta box.
     #// 
@@ -558,8 +580,8 @@ def meta_form(post=None, *args_):
     #// @param array|null $keys Pre-defined meta keys to be used in place of a postmeta query. Default null.
     #// @param WP_Post    $post The current post object.
     #//
-    keys = apply_filters("postmeta_form_keys", None, post)
-    if None == keys:
+    keys_ = apply_filters("postmeta_form_keys", None, post_)
+    if None == keys_:
         #// 
         #// Filters the number of custom fields to retrieve for the drop-down
         #// in the Custom Fields meta box.
@@ -568,15 +590,15 @@ def meta_form(post=None, *args_):
         #// 
         #// @param int $limit Number of custom fields to retrieve. Default 30.
         #//
-        limit = apply_filters("postmeta_form_limit", 30)
-        sql = str("SELECT DISTINCT meta_key\n           FROM ") + str(wpdb.postmeta) + str("""\n            WHERE meta_key NOT BETWEEN '_' AND '_z'\n           HAVING meta_key NOT LIKE %s\n           ORDER BY meta_key\n         LIMIT %d""")
-        keys = wpdb.get_col(wpdb.prepare(sql, wpdb.esc_like("_") + "%", limit))
+        limit_ = apply_filters("postmeta_form_limit", 30)
+        sql_ = str("SELECT DISTINCT meta_key\n          FROM ") + str(wpdb_.postmeta) + str("""\n           WHERE meta_key NOT BETWEEN '_' AND '_z'\n           HAVING meta_key NOT LIKE %s\n           ORDER BY meta_key\n         LIMIT %d""")
+        keys_ = wpdb_.get_col(wpdb_.prepare(sql_, wpdb_.esc_like("_") + "%", limit_))
     # end if
-    if keys:
-        natcasesort(keys)
-        meta_key_input_id = "metakeyselect"
+    if keys_:
+        natcasesort(keys_)
+        meta_key_input_id_ = "metakeyselect"
     else:
-        meta_key_input_id = "metakeyinput"
+        meta_key_input_id_ = "metakeyinput"
     # end if
     php_print("<p><strong>")
     _e("Add New Custom Field:")
@@ -585,7 +607,7 @@ def meta_form(post=None, *args_):
     <thead>
     <tr>
     <th class=\"left\"><label for=\"""")
-    php_print(meta_key_input_id)
+    php_print(meta_key_input_id_)
     php_print("\">")
     _ex("Name", "meta name")
     php_print("</label></th>\n<th><label for=\"metavalue\">")
@@ -597,15 +619,15 @@ def meta_form(post=None, *args_):
     <tr>
     <td id=\"newmetaleft\" class=\"left\">
     """)
-    if keys:
+    if keys_:
         php_print("<select id=\"metakeyselect\" name=\"metakeyselect\">\n<option value=\"#NONE#\">")
         _e("&mdash; Select &mdash;")
         php_print("</option>\n      ")
-        for key in keys:
-            if is_protected_meta(key, "post") or (not current_user_can("add_post_meta", post.ID, key)):
+        for key_ in keys_:
+            if is_protected_meta(key_, "post") or (not current_user_can("add_post_meta", post_.ID, key_)):
                 continue
             # end if
-            php_print("\n<option value='" + esc_attr(key) + "'>" + esc_html(key) + "</option>")
+            php_print("\n<option value='" + esc_attr(key_) + "'>" + esc_html(key_) + "</option>")
         # end for
         php_print("""</select>
         <input class=\"hide-if-js\" type=\"text\" id=\"metakeyinput\" name=\"metakeyinput\" value=\"\" />
@@ -646,62 +668,63 @@ def meta_form(post=None, *args_):
 #// @param int|bool $multi     Optional. Whether the additional fields and buttons should be added.
 #// Default 0|false.
 #//
-def touch_time(edit=1, for_post=1, tab_index=0, multi=0, *args_):
+def touch_time(edit_=1, for_post_=1, tab_index_=0, multi_=0, *_args_):
     
-    global wp_locale
-    php_check_if_defined("wp_locale")
-    post = get_post()
-    if for_post:
-        edit = (not php_in_array(post.post_status, Array("draft", "pending")) and (not post.post_date_gmt) or "0000-00-00 00:00:00" == post.post_date_gmt)
+    
+    global wp_locale_
+    php_check_if_defined("wp_locale_")
+    post_ = get_post()
+    if for_post_:
+        edit_ = (not php_in_array(post_.post_status, Array("draft", "pending")) and (not post_.post_date_gmt) or "0000-00-00 00:00:00" == post_.post_date_gmt)
     # end if
-    tab_index_attribute = ""
-    if php_int(tab_index) > 0:
-        tab_index_attribute = str(" tabindex=\"") + str(tab_index) + str("\"")
+    tab_index_attribute_ = ""
+    if php_int(tab_index_) > 0:
+        tab_index_attribute_ = str(" tabindex=\"") + str(tab_index_) + str("\"")
     # end if
     #// @todo Remove this?
     #// echo '<label for="timestamp" style="display: block;"><input type="checkbox" class="checkbox" name="edit_date" value="1" id="timestamp"'.$tab_index_attribute.' /> '.__( 'Edit timestamp' ).'</label><br />';
-    post_date = post.post_date if for_post else get_comment().comment_date
-    jj = mysql2date("d", post_date, False) if edit else current_time("d")
-    mm = mysql2date("m", post_date, False) if edit else current_time("m")
-    aa = mysql2date("Y", post_date, False) if edit else current_time("Y")
-    hh = mysql2date("H", post_date, False) if edit else current_time("H")
-    mn = mysql2date("i", post_date, False) if edit else current_time("i")
-    ss = mysql2date("s", post_date, False) if edit else current_time("s")
-    cur_jj = current_time("d")
-    cur_mm = current_time("m")
-    cur_aa = current_time("Y")
-    cur_hh = current_time("H")
-    cur_mn = current_time("i")
-    month = "<label><span class=\"screen-reader-text\">" + __("Month") + "</span><select " + "" if multi else "id=\"mm\" " + "name=\"mm\"" + tab_index_attribute + ">\n"
-    i = 1
-    while i < 13:
+    post_date_ = post_.post_date if for_post_ else get_comment().comment_date
+    jj_ = mysql2date("d", post_date_, False) if edit_ else current_time("d")
+    mm_ = mysql2date("m", post_date_, False) if edit_ else current_time("m")
+    aa_ = mysql2date("Y", post_date_, False) if edit_ else current_time("Y")
+    hh_ = mysql2date("H", post_date_, False) if edit_ else current_time("H")
+    mn_ = mysql2date("i", post_date_, False) if edit_ else current_time("i")
+    ss_ = mysql2date("s", post_date_, False) if edit_ else current_time("s")
+    cur_jj_ = current_time("d")
+    cur_mm_ = current_time("m")
+    cur_aa_ = current_time("Y")
+    cur_hh_ = current_time("H")
+    cur_mn_ = current_time("i")
+    month_ = "<label><span class=\"screen-reader-text\">" + __("Month") + "</span><select " + "" if multi_ else "id=\"mm\" " + "name=\"mm\"" + tab_index_attribute_ + ">\n"
+    i_ = 1
+    while i_ < 13:
         
-        monthnum = zeroise(i, 2)
-        monthtext = wp_locale.get_month_abbrev(wp_locale.get_month(i))
-        month += "          " + "<option value=\"" + monthnum + "\" data-text=\"" + monthtext + "\" " + selected(monthnum, mm, False) + ">"
+        monthnum_ = zeroise(i_, 2)
+        monthtext_ = wp_locale_.get_month_abbrev(wp_locale_.get_month(i_))
+        month_ += "         " + "<option value=\"" + monthnum_ + "\" data-text=\"" + monthtext_ + "\" " + selected(monthnum_, mm_, False) + ">"
         #// translators: 1: Month number (01, 02, etc.), 2: Month abbreviation.
-        month += php_sprintf(__("%1$s-%2$s"), monthnum, monthtext) + "</option>\n"
-        i = i + 1
+        month_ += php_sprintf(__("%1$s-%2$s"), monthnum_, monthtext_) + "</option>\n"
+        i_ = i_ + 1
     # end while
-    month += "</select></label>"
-    day = "<label><span class=\"screen-reader-text\">" + __("Day") + "</span><input type=\"text\" " + "" if multi else "id=\"jj\" " + "name=\"jj\" value=\"" + jj + "\" size=\"2\" maxlength=\"2\"" + tab_index_attribute + " autocomplete=\"off\" /></label>"
-    year = "<label><span class=\"screen-reader-text\">" + __("Year") + "</span><input type=\"text\" " + "" if multi else "id=\"aa\" " + "name=\"aa\" value=\"" + aa + "\" size=\"4\" maxlength=\"4\"" + tab_index_attribute + " autocomplete=\"off\" /></label>"
-    hour = "<label><span class=\"screen-reader-text\">" + __("Hour") + "</span><input type=\"text\" " + "" if multi else "id=\"hh\" " + "name=\"hh\" value=\"" + hh + "\" size=\"2\" maxlength=\"2\"" + tab_index_attribute + " autocomplete=\"off\" /></label>"
-    minute = "<label><span class=\"screen-reader-text\">" + __("Minute") + "</span><input type=\"text\" " + "" if multi else "id=\"mn\" " + "name=\"mn\" value=\"" + mn + "\" size=\"2\" maxlength=\"2\"" + tab_index_attribute + " autocomplete=\"off\" /></label>"
+    month_ += "</select></label>"
+    day_ = "<label><span class=\"screen-reader-text\">" + __("Day") + "</span><input type=\"text\" " + "" if multi_ else "id=\"jj\" " + "name=\"jj\" value=\"" + jj_ + "\" size=\"2\" maxlength=\"2\"" + tab_index_attribute_ + " autocomplete=\"off\" /></label>"
+    year_ = "<label><span class=\"screen-reader-text\">" + __("Year") + "</span><input type=\"text\" " + "" if multi_ else "id=\"aa\" " + "name=\"aa\" value=\"" + aa_ + "\" size=\"4\" maxlength=\"4\"" + tab_index_attribute_ + " autocomplete=\"off\" /></label>"
+    hour_ = "<label><span class=\"screen-reader-text\">" + __("Hour") + "</span><input type=\"text\" " + "" if multi_ else "id=\"hh\" " + "name=\"hh\" value=\"" + hh_ + "\" size=\"2\" maxlength=\"2\"" + tab_index_attribute_ + " autocomplete=\"off\" /></label>"
+    minute_ = "<label><span class=\"screen-reader-text\">" + __("Minute") + "</span><input type=\"text\" " + "" if multi_ else "id=\"mn\" " + "name=\"mn\" value=\"" + mn_ + "\" size=\"2\" maxlength=\"2\"" + tab_index_attribute_ + " autocomplete=\"off\" /></label>"
     php_print("<div class=\"timestamp-wrap\">")
     #// translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute.
-    printf(__("%1$s %2$s, %3$s at %4$s:%5$s"), month, day, year, hour, minute)
-    php_print("</div><input type=\"hidden\" id=\"ss\" name=\"ss\" value=\"" + ss + "\" />")
-    if multi:
+    printf(__("%1$s %2$s, %3$s at %4$s:%5$s"), month_, day_, year_, hour_, minute_)
+    php_print("</div><input type=\"hidden\" id=\"ss\" name=\"ss\" value=\"" + ss_ + "\" />")
+    if multi_:
         return
     # end if
     php_print("\n\n")
-    map = Array({"mm": Array(mm, cur_mm), "jj": Array(jj, cur_jj), "aa": Array(aa, cur_aa), "hh": Array(hh, cur_hh), "mn": Array(mn, cur_mn)})
-    for timeunit,value in map:
-        unit, curr = value
-        php_print("<input type=\"hidden\" id=\"hidden_" + timeunit + "\" name=\"hidden_" + timeunit + "\" value=\"" + unit + "\" />" + "\n")
-        cur_timeunit = "cur_" + timeunit
-        php_print("<input type=\"hidden\" id=\"" + cur_timeunit + "\" name=\"" + cur_timeunit + "\" value=\"" + curr + "\" />" + "\n")
+    map_ = Array({"mm": Array(mm_, cur_mm_), "jj": Array(jj_, cur_jj_), "aa": Array(aa_, cur_aa_), "hh": Array(hh_, cur_hh_), "mn": Array(mn_, cur_mn_)})
+    for timeunit_,value_ in map_:
+        unit_, curr_ = value_
+        php_print("<input type=\"hidden\" id=\"hidden_" + timeunit_ + "\" name=\"hidden_" + timeunit_ + "\" value=\"" + unit_ + "\" />" + "\n")
+        cur_timeunit_ = "cur_" + timeunit_
+        php_print("<input type=\"hidden\" id=\"" + cur_timeunit_ + "\" name=\"" + cur_timeunit_ + "\" value=\"" + curr_ + "\" />" + "\n")
     # end for
     php_print("\n<p>\n<a href=\"#edit_timestamp\" class=\"save-timestamp hide-if-no-js button\">")
     _e("OK")
@@ -718,13 +741,14 @@ def touch_time(edit=1, for_post=1, tab_index=0, multi=0, *args_):
 #// @param string $default   Optional. The template file name. Default empty.
 #// @param string $post_type Optional. Post type to get templates for. Default 'post'.
 #//
-def page_template_dropdown(default="", post_type="page", *args_):
+def page_template_dropdown(default_="", post_type_="page", *_args_):
     
-    templates = get_page_templates(None, post_type)
-    ksort(templates)
-    for template in php_array_keys(templates):
-        selected = selected(default, templates[template], False)
-        php_print("\n   <option value='" + esc_attr(templates[template]) + str("' ") + str(selected) + str(">") + esc_html(template) + "</option>")
+    
+    templates_ = get_page_templates(None, post_type_)
+    ksort(templates_)
+    for template_ in php_array_keys(templates_):
+        selected_ = selected(default_, templates_[template_], False)
+        php_print("\n   <option value='" + esc_attr(templates_[template_]) + str("' ") + str(selected_) + str(">") + esc_html(template_) + "</option>")
     # end for
 # end def page_template_dropdown
 #// 
@@ -741,22 +765,23 @@ def page_template_dropdown(default="", post_type="page", *args_):
 #// @param int|WP_Post $post    Post ID or WP_Post object.
 #// @return void|false Void on success, false if the page has no children.
 #//
-def parent_dropdown(default=0, parent=0, level=0, post=None, *args_):
+def parent_dropdown(default_=0, parent_=0, level_=0, post_=None, *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    post = get_post(post)
-    items = wpdb.get_results(wpdb.prepare(str("SELECT ID, post_parent, post_title FROM ") + str(wpdb.posts) + str(" WHERE post_parent = %d AND post_type = 'page' ORDER BY menu_order"), parent))
-    if items:
-        for item in items:
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    post_ = get_post(post_)
+    items_ = wpdb_.get_results(wpdb_.prepare(str("SELECT ID, post_parent, post_title FROM ") + str(wpdb_.posts) + str(" WHERE post_parent = %d AND post_type = 'page' ORDER BY menu_order"), parent_))
+    if items_:
+        for item_ in items_:
             #// A page cannot be its own parent.
-            if post and post.ID and item.ID == post.ID:
+            if post_ and post_.ID and item_.ID == post_.ID:
                 continue
             # end if
-            pad = php_str_repeat("&nbsp;", level * 3)
-            selected = selected(default, item.ID, False)
-            php_print(str("\n   <option class='level-") + str(level) + str("' value='") + str(item.ID) + str("' ") + str(selected) + str(">") + str(pad) + str(" ") + esc_html(item.post_title) + "</option>")
-            parent_dropdown(default, item.ID, level + 1)
+            pad_ = php_str_repeat("&nbsp;", level_ * 3)
+            selected_ = selected(default_, item_.ID, False)
+            php_print(str("\n   <option class='level-") + str(level_) + str("' value='") + str(item_.ID) + str("' ") + str(selected_) + str(">") + str(pad_) + str(" ") + esc_html(item_.post_title) + "</option>")
+            parent_dropdown(default_, item_.ID, level_ + 1)
         # end for
     else:
         return False
@@ -769,20 +794,21 @@ def parent_dropdown(default=0, parent=0, level=0, post=None, *args_):
 #// 
 #// @param string $selected Slug for the role that should be already selected.
 #//
-def wp_dropdown_roles(selected="", *args_):
+def wp_dropdown_roles(selected_="", *_args_):
     
-    r = ""
-    editable_roles = array_reverse(get_editable_roles())
-    for role,details in editable_roles:
-        name = translate_user_role(details["name"])
+    
+    r_ = ""
+    editable_roles_ = array_reverse(get_editable_roles())
+    for role_,details_ in editable_roles_:
+        name_ = translate_user_role(details_["name"])
         #// Preselect specified role.
-        if selected == role:
-            r += "\n    <option selected='selected' value='" + esc_attr(role) + str("'>") + str(name) + str("</option>")
+        if selected_ == role_:
+            r_ += "\n   <option selected='selected' value='" + esc_attr(role_) + str("'>") + str(name_) + str("</option>")
         else:
-            r += "\n    <option value='" + esc_attr(role) + str("'>") + str(name) + str("</option>")
+            r_ += "\n   <option value='" + esc_attr(role_) + str("'>") + str(name_) + str("</option>")
         # end if
     # end for
-    php_print(r)
+    php_print(r_)
 # end def wp_dropdown_roles
 #// 
 #// Outputs the form used by the importers to accept the data to be imported
@@ -791,7 +817,8 @@ def wp_dropdown_roles(selected="", *args_):
 #// 
 #// @param string $action The action attribute for the form.
 #//
-def wp_import_upload_form(action=None, *args_):
+def wp_import_upload_form(action_=None, *_args_):
+    
     
     #// 
     #// Filters the maximum allowed upload size for import files.
@@ -802,22 +829,22 @@ def wp_import_upload_form(action=None, *args_):
     #// 
     #// @param int $max_upload_size Allowed upload size. Default 1 MB.
     #//
-    bytes = apply_filters("import_upload_size_limit", wp_max_upload_size())
-    size = size_format(bytes)
-    upload_dir = wp_upload_dir()
-    if (not php_empty(lambda : upload_dir["error"])):
+    bytes_ = apply_filters("import_upload_size_limit", wp_max_upload_size())
+    size_ = size_format(bytes_)
+    upload_dir_ = wp_upload_dir()
+    if (not php_empty(lambda : upload_dir_["error"])):
         php_print("     <div class=\"error\"><p>")
         _e("Before you can upload your import file, you will need to fix the following error:")
         php_print("</p>\n       <p><strong>")
-        php_print(upload_dir["error"])
+        php_print(upload_dir_["error"])
         php_print("</strong></p></div>\n                                ")
     else:
         php_print("<form enctype=\"multipart/form-data\" id=\"import-upload-form\" method=\"post\" class=\"wp-upload-form\" action=\"")
-        php_print(esc_url(wp_nonce_url(action, "import-upload")))
+        php_print(esc_url(wp_nonce_url(action_, "import-upload")))
         php_print("\">\n<p>\n       ")
-        printf("<label for=\"upload\">%s</label> (%s)", __("Choose a file from your computer:"), php_sprintf(__("Maximum size: %s"), size))
+        printf("<label for=\"upload\">%s</label> (%s)", __("Choose a file from your computer:"), php_sprintf(__("Maximum size: %s"), size_))
         php_print("<input type=\"file\" id=\"upload\" name=\"import\" size=\"25\" />\n<input type=\"hidden\" name=\"action\" value=\"save\" />\n<input type=\"hidden\" name=\"max_file_size\" value=\"")
-        php_print(bytes)
+        php_print(bytes_)
         php_print("\" />\n</p>\n        ")
         submit_button(__("Upload file and import"), "primary")
         php_print("</form>\n        ")
@@ -854,75 +881,76 @@ def wp_import_upload_form(action=None, *args_):
 #// of the box array (which is the second parameter passed
 #// to your callback). Default null.
 #//
-def add_meta_box(id=None, title=None, callback=None, screen=None, context="advanced", priority="default", callback_args=None, *args_):
+def add_meta_box(id_=None, title_=None, callback_=None, screen_=None, context_="advanced", priority_="default", callback_args_=None, *_args_):
     
-    global wp_meta_boxes
-    php_check_if_defined("wp_meta_boxes")
-    if php_empty(lambda : screen):
-        screen = get_current_screen()
-    elif php_is_string(screen):
-        screen = convert_to_screen(screen)
-    elif php_is_array(screen):
-        for single_screen in screen:
-            add_meta_box(id, title, callback, single_screen, context, priority, callback_args)
+    
+    global wp_meta_boxes_
+    php_check_if_defined("wp_meta_boxes_")
+    if php_empty(lambda : screen_):
+        screen_ = get_current_screen()
+    elif php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
+    elif php_is_array(screen_):
+        for single_screen_ in screen_:
+            add_meta_box(id_, title_, callback_, single_screen_, context_, priority_, callback_args_)
         # end for
     # end if
-    if (not (php_isset(lambda : screen.id))):
+    if (not (php_isset(lambda : screen_.id))):
         return
     # end if
-    page = screen.id
-    if (not (php_isset(lambda : wp_meta_boxes))):
-        wp_meta_boxes = Array()
+    page_ = screen_.id
+    if (not (php_isset(lambda : wp_meta_boxes_))):
+        wp_meta_boxes_ = Array()
     # end if
-    if (not (php_isset(lambda : wp_meta_boxes[page]))):
-        wp_meta_boxes[page] = Array()
+    if (not (php_isset(lambda : wp_meta_boxes_[page_]))):
+        wp_meta_boxes_[page_] = Array()
     # end if
-    if (not (php_isset(lambda : wp_meta_boxes[page][context]))):
-        wp_meta_boxes[page][context] = Array()
+    if (not (php_isset(lambda : wp_meta_boxes_[page_][context_]))):
+        wp_meta_boxes_[page_][context_] = Array()
     # end if
-    for a_context in php_array_keys(wp_meta_boxes[page]):
-        for a_priority in Array("high", "core", "default", "low"):
-            if (not (php_isset(lambda : wp_meta_boxes[page][a_context][a_priority][id]))):
+    for a_context_ in php_array_keys(wp_meta_boxes_[page_]):
+        for a_priority_ in Array("high", "core", "default", "low"):
+            if (not (php_isset(lambda : wp_meta_boxes_[page_][a_context_][a_priority_][id_]))):
                 continue
             # end if
             #// If a core box was previously added or removed by a plugin, don't add.
-            if "core" == priority:
+            if "core" == priority_:
                 #// If core box previously deleted, don't add.
-                if False == wp_meta_boxes[page][a_context][a_priority][id]:
+                if False == wp_meta_boxes_[page_][a_context_][a_priority_][id_]:
                     return
                 # end if
                 #// 
                 #// If box was added with default priority, give it core priority to
                 #// maintain sort order.
                 #//
-                if "default" == a_priority:
-                    wp_meta_boxes[page][a_context]["core"][id] = wp_meta_boxes[page][a_context]["default"][id]
-                    wp_meta_boxes[page][a_context]["default"][id] = None
+                if "default" == a_priority_:
+                    wp_meta_boxes_[page_][a_context_]["core"][id_] = wp_meta_boxes_[page_][a_context_]["default"][id_]
+                    wp_meta_boxes_[page_][a_context_]["default"][id_] = None
                 # end if
                 return
             # end if
             #// If no priority given and ID already present, use existing priority.
-            if php_empty(lambda : priority):
-                priority = a_priority
+            if php_empty(lambda : priority_):
+                priority_ = a_priority_
                 pass
-            elif "sorted" == priority:
-                title = wp_meta_boxes[page][a_context][a_priority][id]["title"]
-                callback = wp_meta_boxes[page][a_context][a_priority][id]["callback"]
-                callback_args = wp_meta_boxes[page][a_context][a_priority][id]["args"]
+            elif "sorted" == priority_:
+                title_ = wp_meta_boxes_[page_][a_context_][a_priority_][id_]["title"]
+                callback_ = wp_meta_boxes_[page_][a_context_][a_priority_][id_]["callback"]
+                callback_args_ = wp_meta_boxes_[page_][a_context_][a_priority_][id_]["args"]
             # end if
             #// An ID can be in only one priority and one context.
-            if priority != a_priority or context != a_context:
-                wp_meta_boxes[page][a_context][a_priority][id] = None
+            if priority_ != a_priority_ or context_ != a_context_:
+                wp_meta_boxes_[page_][a_context_][a_priority_][id_] = None
             # end if
         # end for
     # end for
-    if php_empty(lambda : priority):
-        priority = "low"
+    if php_empty(lambda : priority_):
+        priority_ = "low"
     # end if
-    if (not (php_isset(lambda : wp_meta_boxes[page][context][priority]))):
-        wp_meta_boxes[page][context][priority] = Array()
+    if (not (php_isset(lambda : wp_meta_boxes_[page_][context_][priority_]))):
+        wp_meta_boxes_[page_][context_][priority_] = Array()
     # end if
-    wp_meta_boxes[page][context][priority][id] = Array({"id": id, "title": title, "callback": callback, "args": callback_args})
+    wp_meta_boxes_[page_][context_][priority_][id_] = Array({"id": id_, "title": title_, "callback": callback_, "args": callback_args_})
 # end def add_meta_box
 #// 
 #// Function that renders a "fake" meta box with an information message,
@@ -940,19 +968,20 @@ def add_meta_box(id=None, title=None, callback=None, screen=None, context="advan
 #// @type array    $args         Extra meta box arguments.
 #// }
 #//
-def do_block_editor_incompatible_meta_box(object=None, box=None, *args_):
+def do_block_editor_incompatible_meta_box(object_=None, box_=None, *_args_):
     
-    plugin = _get_plugin_from_callback(box["old_callback"])
-    plugins = get_plugins()
+    
+    plugin_ = _get_plugin_from_callback(box_["old_callback"])
+    plugins_ = get_plugins()
     php_print("<p>")
-    if plugin:
+    if plugin_:
         #// translators: %s: The name of the plugin that generated this meta box.
-        printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin["Name"]) + str("</strong>"))
+        printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin_["Name"]) + str("</strong>"))
     else:
         _e("This meta box isn't compatible with the block editor.")
     # end if
     php_print("</p>")
-    if php_empty(lambda : plugins["classic-editor/classic-editor.php"]):
+    if php_empty(lambda : plugins_["classic-editor/classic-editor.php"]):
         if current_user_can("install_plugins"):
             php_print("<p>")
             printf(__("Please install the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."), esc_url(wp_nonce_url(self_admin_url("plugin-install.php?tab=favorites&user=wordpressdotorg&save=0"), "save_wporg_username_" + get_current_user_id())))
@@ -960,17 +989,17 @@ def do_block_editor_incompatible_meta_box(object=None, box=None, *args_):
         # end if
     elif is_plugin_inactive("classic-editor/classic-editor.php"):
         if current_user_can("activate_plugins"):
-            activate_url = wp_nonce_url(self_admin_url("plugins.php?action=activate&plugin=classic-editor/classic-editor.php"), "activate-plugin_classic-editor/classic-editor.php")
+            activate_url_ = wp_nonce_url(self_admin_url("plugins.php?action=activate&plugin=classic-editor/classic-editor.php"), "activate-plugin_classic-editor/classic-editor.php")
             php_print("<p>")
             #// translators: %s: A link to activate the Classic Editor plugin.
-            printf(__("Please activate the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."), esc_url(activate_url))
+            printf(__("Please activate the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."), esc_url(activate_url_))
             php_print("</p>")
         # end if
-    elif type(object).__name__ == "WP_Post":
-        edit_url = add_query_arg(Array({"classic-editor": "", "classic-editor__forget": ""}), get_edit_post_link(object))
+    elif type(object_).__name__ == "WP_Post":
+        edit_url_ = add_query_arg(Array({"classic-editor": "", "classic-editor__forget": ""}), get_edit_post_link(object_))
         php_print("<p>")
         #// translators: %s: A link to use the Classic Editor plugin.
-        printf(__("Please open the <a href=\"%s\">classic editor</a> to use this meta box."), esc_url(edit_url))
+        printf(__("Please open the <a href=\"%s\">classic editor</a> to use this meta box."), esc_url(edit_url_))
         php_print("</p>")
     # end if
 # end def do_block_editor_incompatible_meta_box
@@ -984,32 +1013,33 @@ def do_block_editor_incompatible_meta_box(object=None, box=None, *args_):
 #// @param callable $callback The callback function to check.
 #// @return array|null The plugin that the callback belongs to, or null if it doesn't belong to a plugin.
 #//
-def _get_plugin_from_callback(callback=None, *args_):
+def _get_plugin_from_callback(callback_=None, *_args_):
+    
     
     try: 
-        if php_is_array(callback):
-            reflection = php_new_class("ReflectionMethod", lambda : ReflectionMethod(callback[0], callback[1]))
-        elif php_is_string(callback) and False != php_strpos(callback, "::"):
-            reflection = php_new_class("ReflectionMethod", lambda : ReflectionMethod(callback))
+        if php_is_array(callback_):
+            reflection_ = php_new_class("ReflectionMethod", lambda : ReflectionMethod(callback_[0], callback_[1]))
+        elif php_is_string(callback_) and False != php_strpos(callback_, "::"):
+            reflection_ = php_new_class("ReflectionMethod", lambda : ReflectionMethod(callback_))
         else:
-            reflection = php_new_class("ReflectionFunction", lambda : ReflectionFunction(callback))
+            reflection_ = php_new_class("ReflectionFunction", lambda : ReflectionFunction(callback_))
         # end if
-    except ReflectionException as exception:
+    except ReflectionException as exception_:
         #// We could not properly reflect on the callable, so we abort here.
         return None
     # end try
     #// Don't show an error if it's an internal PHP function.
-    if (not reflection.isinternal()):
+    if (not reflection_.isinternal()):
         #// Only show errors if the meta box was registered by a plugin.
-        filename = wp_normalize_path(reflection.getfilename())
-        plugin_dir = wp_normalize_path(WP_PLUGIN_DIR)
-        if php_strpos(filename, plugin_dir) == 0:
-            filename = php_str_replace(plugin_dir, "", filename)
-            filename = php_preg_replace("|^/([^/]*/).*$|", "\\1", filename)
-            plugins = get_plugins()
-            for name,plugin in plugins:
-                if php_strpos(name, filename) == 0:
-                    return plugin
+        filename_ = wp_normalize_path(reflection_.getfilename())
+        plugin_dir_ = wp_normalize_path(WP_PLUGIN_DIR)
+        if php_strpos(filename_, plugin_dir_) == 0:
+            filename_ = php_str_replace(plugin_dir_, "", filename_)
+            filename_ = php_preg_replace("|^/([^/]*/).*$|", "\\1", filename_)
+            plugins_ = get_plugins()
+            for name_,plugin_ in plugins_:
+                if php_strpos(name_, filename_) == 0:
+                    return plugin_
                 # end if
             # end for
         # end if
@@ -1035,93 +1065,94 @@ def _get_plugin_from_callback(callback=None, *args_):
 #// example a `WP_Post` or `WP_Comment` object.
 #// @return int number of meta_boxes
 #//
-def do_meta_boxes(screen=None, context=None, object=None, *args_):
+def do_meta_boxes(screen_=None, context_=None, object_=None, *_args_):
     
-    global wp_meta_boxes
-    php_check_if_defined("wp_meta_boxes")
-    do_meta_boxes.already_sorted = False
-    if php_empty(lambda : screen):
-        screen = get_current_screen()
-    elif php_is_string(screen):
-        screen = convert_to_screen(screen)
+    
+    global wp_meta_boxes_
+    php_check_if_defined("wp_meta_boxes_")
+    already_sorted_ = False
+    if php_empty(lambda : screen_):
+        screen_ = get_current_screen()
+    elif php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
     # end if
-    page = screen.id
-    hidden = get_hidden_meta_boxes(screen)
-    printf("<div id=\"%s-sortables\" class=\"meta-box-sortables\">", esc_attr(context))
+    page_ = screen_.id
+    hidden_ = get_hidden_meta_boxes(screen_)
+    printf("<div id=\"%s-sortables\" class=\"meta-box-sortables\">", esc_attr(context_))
     #// Grab the ones the user has manually sorted.
     #// Pull them out of their previous context/priority and into the one the user chose.
-    sorted = get_user_option(str("meta-box-order_") + str(page))
-    if (not do_meta_boxes.already_sorted) and sorted:
-        for box_context,ids in sorted:
-            for id in php_explode(",", ids):
-                if id and "dashboard_browser_nag" != id:
-                    add_meta_box(id, None, None, screen, box_context, "sorted")
+    sorted_ = get_user_option(str("meta-box-order_") + str(page_))
+    if (not already_sorted_) and sorted_:
+        for box_context_,ids_ in sorted_:
+            for id_ in php_explode(",", ids_):
+                if id_ and "dashboard_browser_nag" != id_:
+                    add_meta_box(id_, None, None, screen_, box_context_, "sorted")
                 # end if
             # end for
         # end for
     # end if
-    do_meta_boxes.already_sorted = True
-    i = 0
-    if (php_isset(lambda : wp_meta_boxes[page][context])):
-        for priority in Array("high", "sorted", "core", "default", "low"):
-            if (php_isset(lambda : wp_meta_boxes[page][context][priority])):
-                for box in wp_meta_boxes[page][context][priority]:
-                    if False == box or (not box["title"]):
+    already_sorted_ = True
+    i_ = 0
+    if (php_isset(lambda : wp_meta_boxes_[page_][context_])):
+        for priority_ in Array("high", "sorted", "core", "default", "low"):
+            if (php_isset(lambda : wp_meta_boxes_[page_][context_][priority_])):
+                for box_ in wp_meta_boxes_[page_][context_][priority_]:
+                    if False == box_ or (not box_["title"]):
                         continue
                     # end if
-                    block_compatible = True
-                    if php_is_array(box["args"]):
+                    block_compatible_ = True
+                    if php_is_array(box_["args"]):
                         #// If a meta box is just here for back compat, don't show it in the block editor.
-                        if screen.is_block_editor() and (php_isset(lambda : box["args"]["__back_compat_meta_box"])) and box["args"]["__back_compat_meta_box"]:
+                        if screen_.is_block_editor() and (php_isset(lambda : box_["args"]["__back_compat_meta_box"])) and box_["args"]["__back_compat_meta_box"]:
                             continue
                         # end if
-                        if (php_isset(lambda : box["args"]["__block_editor_compatible_meta_box"])):
-                            block_compatible = php_bool(box["args"]["__block_editor_compatible_meta_box"])
-                            box["args"]["__block_editor_compatible_meta_box"] = None
+                        if (php_isset(lambda : box_["args"]["__block_editor_compatible_meta_box"])):
+                            block_compatible_ = php_bool(box_["args"]["__block_editor_compatible_meta_box"])
+                            box_["args"]["__block_editor_compatible_meta_box"] = None
                         # end if
                         #// If the meta box is declared as incompatible with the block editor, override the callback function.
-                        if (not block_compatible) and screen.is_block_editor():
-                            box["old_callback"] = box["callback"]
-                            box["callback"] = "do_block_editor_incompatible_meta_box"
+                        if (not block_compatible_) and screen_.is_block_editor():
+                            box_["old_callback"] = box_["callback"]
+                            box_["callback"] = "do_block_editor_incompatible_meta_box"
                         # end if
-                        if (php_isset(lambda : box["args"]["__back_compat_meta_box"])):
-                            block_compatible = block_compatible or php_bool(box["args"]["__back_compat_meta_box"])
-                            box["args"]["__back_compat_meta_box"] = None
+                        if (php_isset(lambda : box_["args"]["__back_compat_meta_box"])):
+                            block_compatible_ = block_compatible_ or php_bool(box_["args"]["__back_compat_meta_box"])
+                            box_["args"]["__back_compat_meta_box"] = None
                         # end if
                     # end if
-                    i += 1
+                    i_ += 1
                     #// get_hidden_meta_boxes() doesn't apply in the block editor.
-                    hidden_class = " hide-if-js" if (not screen.is_block_editor()) and php_in_array(box["id"], hidden) else ""
-                    php_print("<div id=\"" + box["id"] + "\" class=\"postbox " + postbox_classes(box["id"], page) + hidden_class + "\" " + ">" + "\n")
-                    if "dashboard_browser_nag" != box["id"]:
-                        widget_title = box["title"]
-                        if php_is_array(box["args"]) and (php_isset(lambda : box["args"]["__widget_basename"])):
-                            widget_title = box["args"]["__widget_basename"]
-                            box["args"]["__widget_basename"] = None
+                    hidden_class_ = " hide-if-js" if (not screen_.is_block_editor()) and php_in_array(box_["id"], hidden_) else ""
+                    php_print("<div id=\"" + box_["id"] + "\" class=\"postbox " + postbox_classes(box_["id"], page_) + hidden_class_ + "\" " + ">" + "\n")
+                    if "dashboard_browser_nag" != box_["id"]:
+                        widget_title_ = box_["title"]
+                        if php_is_array(box_["args"]) and (php_isset(lambda : box_["args"]["__widget_basename"])):
+                            widget_title_ = box_["args"]["__widget_basename"]
+                            box_["args"]["__widget_basename"] = None
                         # end if
                         php_print("<button type=\"button\" class=\"handlediv\" aria-expanded=\"true\">")
-                        php_print("<span class=\"screen-reader-text\">" + php_sprintf(__("Toggle panel: %s"), widget_title) + "</span>")
+                        php_print("<span class=\"screen-reader-text\">" + php_sprintf(__("Toggle panel: %s"), widget_title_) + "</span>")
                         php_print("<span class=\"toggle-indicator\" aria-hidden=\"true\"></span>")
                         php_print("</button>")
                     # end if
                     php_print("<h2 class=\"hndle\">")
-                    if "dashboard_php_nag" == box["id"]:
+                    if "dashboard_php_nag" == box_["id"]:
                         php_print("<span aria-hidden=\"true\" class=\"dashicons dashicons-warning\"></span>")
                         php_print("<span class=\"screen-reader-text\">" + __("Warning:") + " </span>")
                     # end if
-                    php_print(str("<span>") + str(box["title"]) + str("</span>"))
+                    php_print(str("<span>") + str(box_["title"]) + str("</span>"))
                     php_print("</h2>\n")
                     php_print("<div class=\"inside\">" + "\n")
-                    if WP_DEBUG and (not block_compatible) and "edit" == screen.parent_base and (not screen.is_block_editor()) and (not (php_isset(lambda : PHP_REQUEST["meta-box-loader"]))):
-                        plugin = _get_plugin_from_callback(box["callback"])
-                        if plugin:
+                    if WP_DEBUG and (not block_compatible_) and "edit" == screen_.parent_base and (not screen_.is_block_editor()) and (not (php_isset(lambda : PHP_REQUEST["meta-box-loader"]))):
+                        plugin_ = _get_plugin_from_callback(box_["callback"])
+                        if plugin_:
                             php_print("                         <div class=\"error inline\">\n                              <p>\n                                   ")
                             #// translators: %s: The name of the plugin that generated this meta box.
-                            printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin["Name"]) + str("</strong>"))
+                            printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin_["Name"]) + str("</strong>"))
                             php_print("                             </p>\n                          </div>\n                            ")
                         # end if
                     # end if
-                    php_call_user_func(box["callback"], object, box)
+                    php_call_user_func(box_["callback"], object_, box_)
                     php_print("</div>\n")
                     php_print("</div>\n")
                 # end for
@@ -1129,7 +1160,7 @@ def do_meta_boxes(screen=None, context=None, object=None, *args_):
         # end for
     # end if
     php_print("</div>")
-    return i
+    return i_
 # end def do_meta_boxes
 #// 
 #// Removes a meta box from one or more screens.
@@ -1149,34 +1180,35 @@ def do_meta_boxes(screen=None, context=None, object=None, *args_):
 #// include 'normal' and 'side'. Menus meta boxes (accordion sections)
 #// all use the 'side' context.
 #//
-def remove_meta_box(id=None, screen=None, context=None, *args_):
+def remove_meta_box(id_=None, screen_=None, context_=None, *_args_):
     
-    global wp_meta_boxes
-    php_check_if_defined("wp_meta_boxes")
-    if php_empty(lambda : screen):
-        screen = get_current_screen()
-    elif php_is_string(screen):
-        screen = convert_to_screen(screen)
-    elif php_is_array(screen):
-        for single_screen in screen:
-            remove_meta_box(id, single_screen, context)
+    
+    global wp_meta_boxes_
+    php_check_if_defined("wp_meta_boxes_")
+    if php_empty(lambda : screen_):
+        screen_ = get_current_screen()
+    elif php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
+    elif php_is_array(screen_):
+        for single_screen_ in screen_:
+            remove_meta_box(id_, single_screen_, context_)
         # end for
     # end if
-    if (not (php_isset(lambda : screen.id))):
+    if (not (php_isset(lambda : screen_.id))):
         return
     # end if
-    page = screen.id
-    if (not (php_isset(lambda : wp_meta_boxes))):
-        wp_meta_boxes = Array()
+    page_ = screen_.id
+    if (not (php_isset(lambda : wp_meta_boxes_))):
+        wp_meta_boxes_ = Array()
     # end if
-    if (not (php_isset(lambda : wp_meta_boxes[page]))):
-        wp_meta_boxes[page] = Array()
+    if (not (php_isset(lambda : wp_meta_boxes_[page_]))):
+        wp_meta_boxes_[page_] = Array()
     # end if
-    if (not (php_isset(lambda : wp_meta_boxes[page][context]))):
-        wp_meta_boxes[page][context] = Array()
+    if (not (php_isset(lambda : wp_meta_boxes_[page_][context_]))):
+        wp_meta_boxes_[page_][context_] = Array()
     # end if
-    for priority in Array("high", "core", "default", "low"):
-        wp_meta_boxes[page][context][priority][id] = False
+    for priority_ in Array("high", "core", "default", "low"):
+        wp_meta_boxes_[page_][context_][priority_][id_] = False
     # end for
 # end def remove_meta_box
 #// 
@@ -1195,51 +1227,52 @@ def remove_meta_box(id=None, screen=None, context=None, *args_):
 #// @param mixed         $object  gets passed to the section callback function as first parameter.
 #// @return int number of meta boxes as accordion sections.
 #//
-def do_accordion_sections(screen=None, context=None, object=None, *args_):
+def do_accordion_sections(screen_=None, context_=None, object_=None, *_args_):
     
-    global wp_meta_boxes
-    php_check_if_defined("wp_meta_boxes")
+    
+    global wp_meta_boxes_
+    php_check_if_defined("wp_meta_boxes_")
     wp_enqueue_script("accordion")
-    if php_empty(lambda : screen):
-        screen = get_current_screen()
-    elif php_is_string(screen):
-        screen = convert_to_screen(screen)
+    if php_empty(lambda : screen_):
+        screen_ = get_current_screen()
+    elif php_is_string(screen_):
+        screen_ = convert_to_screen(screen_)
     # end if
-    page = screen.id
-    hidden = get_hidden_meta_boxes(screen)
+    page_ = screen_.id
+    hidden_ = get_hidden_meta_boxes(screen_)
     php_print(" <div id=\"side-sortables\" class=\"accordion-container\">\n     <ul class=\"outer-border\">\n   ")
-    i = 0
-    first_open = False
-    if (php_isset(lambda : wp_meta_boxes[page][context])):
-        for priority in Array("high", "core", "default", "low"):
-            if (php_isset(lambda : wp_meta_boxes[page][context][priority])):
-                for box in wp_meta_boxes[page][context][priority]:
-                    if False == box or (not box["title"]):
+    i_ = 0
+    first_open_ = False
+    if (php_isset(lambda : wp_meta_boxes_[page_][context_])):
+        for priority_ in Array("high", "core", "default", "low"):
+            if (php_isset(lambda : wp_meta_boxes_[page_][context_][priority_])):
+                for box_ in wp_meta_boxes_[page_][context_][priority_]:
+                    if False == box_ or (not box_["title"]):
                         continue
                     # end if
-                    i += 1
-                    hidden_class = "hide-if-js" if php_in_array(box["id"], hidden) else ""
-                    open_class = ""
-                    if (not first_open) and php_empty(lambda : hidden_class):
-                        first_open = True
-                        open_class = "open"
+                    i_ += 1
+                    hidden_class_ = "hide-if-js" if php_in_array(box_["id"], hidden_) else ""
+                    open_class_ = ""
+                    if (not first_open_) and php_empty(lambda : hidden_class_):
+                        first_open_ = True
+                        open_class_ = "open"
                     # end if
                     php_print("                 <li class=\"control-section accordion-section ")
-                    php_print(hidden_class)
+                    php_print(hidden_class_)
                     php_print(" ")
-                    php_print(open_class)
+                    php_print(open_class_)
                     php_print(" ")
-                    php_print(esc_attr(box["id"]))
+                    php_print(esc_attr(box_["id"]))
                     php_print("\" id=\"")
-                    php_print(esc_attr(box["id"]))
+                    php_print(esc_attr(box_["id"]))
                     php_print("\">\n                        <h3 class=\"accordion-section-title hndle\" tabindex=\"0\">\n                           ")
-                    php_print(esc_html(box["title"]))
+                    php_print(esc_html(box_["title"]))
                     php_print("                         <span class=\"screen-reader-text\">")
                     _e("Press return or enter to open this section")
                     php_print("</span>\n                        </h3>\n                     <div class=\"accordion-section-content ")
-                    postbox_classes(box["id"], page)
+                    postbox_classes(box_["id"], page_)
                     php_print("\">\n                            <div class=\"inside\">\n                                ")
-                    php_call_user_func(box["callback"], object, box)
+                    php_call_user_func(box_["callback"], object_, box_)
                     php_print("""                           </div><!-- .inside -->
                     </div><!-- .accordion-section-content -->
                     </li><!-- .accordion-section -->
@@ -1249,7 +1282,7 @@ def do_accordion_sections(screen=None, context=None, object=None, *args_):
         # end for
     # end if
     php_print("     </ul><!-- .outer-border -->\n   </div><!-- .accordion-container -->\n   ")
-    return i
+    return i_
 # end def do_accordion_sections
 #// 
 #// Add a new section to a settings page.
@@ -1273,19 +1306,20 @@ def do_accordion_sections(screen=None, context=None, object=None, *args_):
 #// 'general', 'reading', 'writing', 'discussion', 'media', etc. Create your own using
 #// add_options_page();
 #//
-def add_settings_section(id=None, title=None, callback=None, page=None, *args_):
+def add_settings_section(id_=None, title_=None, callback_=None, page_=None, *_args_):
     
-    global wp_settings_sections
-    php_check_if_defined("wp_settings_sections")
-    if "misc" == page:
+    
+    global wp_settings_sections_
+    php_check_if_defined("wp_settings_sections_")
+    if "misc" == page_:
         _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
-        page = "general"
+        page_ = "general"
     # end if
-    if "privacy" == page:
+    if "privacy" == page_:
         _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
-        page = "reading"
+        page_ = "reading"
     # end if
-    wp_settings_sections[page][id] = Array({"id": id, "title": title, "callback": callback})
+    wp_settings_sections_[page_][id_] = Array({"id": id_, "title": title_, "callback": callback_})
 # end def add_settings_section
 #// 
 #// Add a new field to a section of a settings page.
@@ -1322,19 +1356,22 @@ def add_settings_section(id=None, title=None, callback=None, page=None, *args_):
 #// field is output.
 #// }
 #//
-def add_settings_field(id=None, title=None, callback=None, page=None, section="default", args=Array(), *args_):
+def add_settings_field(id_=None, title_=None, callback_=None, page_=None, section_="default", args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    global wp_settings_fields
-    php_check_if_defined("wp_settings_fields")
-    if "misc" == page:
+    global wp_settings_fields_
+    php_check_if_defined("wp_settings_fields_")
+    if "misc" == page_:
         _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
-        page = "general"
+        page_ = "general"
     # end if
-    if "privacy" == page:
+    if "privacy" == page_:
         _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
-        page = "reading"
+        page_ = "reading"
     # end if
-    wp_settings_fields[page][section][id] = Array({"id": id, "title": title, "callback": callback, "args": args})
+    wp_settings_fields_[page_][section_][id_] = Array({"id": id_, "title": title_, "callback": callback_, "args": args_})
 # end def add_settings_field
 #// 
 #// Prints out all settings sections added to a particular settings page
@@ -1349,25 +1386,27 @@ def add_settings_field(id=None, title=None, callback=None, page=None, section="d
 #// 
 #// @param string $page The slug name of the page whose settings sections you want to output.
 #//
-def do_settings_sections(page=None, *args_):
+def do_settings_sections(page_=None, *_args_):
     
-    global wp_settings_sections,wp_settings_fields
-    php_check_if_defined("wp_settings_sections","wp_settings_fields")
-    if (not (php_isset(lambda : wp_settings_sections[page]))):
+    
+    global wp_settings_sections_
+    global wp_settings_fields_
+    php_check_if_defined("wp_settings_sections_","wp_settings_fields_")
+    if (not (php_isset(lambda : wp_settings_sections_[page_]))):
         return
     # end if
-    for section in wp_settings_sections[page]:
-        if section["title"]:
-            php_print(str("<h2>") + str(section["title"]) + str("</h2>\n"))
+    for section_ in wp_settings_sections_[page_]:
+        if section_["title"]:
+            php_print(str("<h2>") + str(section_["title"]) + str("</h2>\n"))
         # end if
-        if section["callback"]:
-            php_call_user_func(section["callback"], section)
+        if section_["callback"]:
+            php_call_user_func(section_["callback"], section_)
         # end if
-        if (not (php_isset(lambda : wp_settings_fields))) or (not (php_isset(lambda : wp_settings_fields[page]))) or (not (php_isset(lambda : wp_settings_fields[page][section["id"]]))):
+        if (not (php_isset(lambda : wp_settings_fields_))) or (not (php_isset(lambda : wp_settings_fields_[page_]))) or (not (php_isset(lambda : wp_settings_fields_[page_][section_["id"]]))):
             continue
         # end if
         php_print("<table class=\"form-table\" role=\"presentation\">")
-        do_settings_fields(page, section["id"])
+        do_settings_fields(page_, section_["id"])
         php_print("</table>")
     # end for
 # end def do_settings_sections
@@ -1385,26 +1424,27 @@ def do_settings_sections(page=None, *args_):
 #// @param string $page Slug title of the admin page whose settings fields you want to show.
 #// @param string $section Slug title of the settings section whose fields you want to show.
 #//
-def do_settings_fields(page=None, section=None, *args_):
+def do_settings_fields(page_=None, section_=None, *_args_):
     
-    global wp_settings_fields
-    php_check_if_defined("wp_settings_fields")
-    if (not (php_isset(lambda : wp_settings_fields[page][section]))):
+    
+    global wp_settings_fields_
+    php_check_if_defined("wp_settings_fields_")
+    if (not (php_isset(lambda : wp_settings_fields_[page_][section_]))):
         return
     # end if
-    for field in wp_settings_fields[page][section]:
+    for field_ in wp_settings_fields_[page_][section_]:
         class_ = ""
-        if (not php_empty(lambda : field["args"]["class"])):
-            class_ = " class=\"" + esc_attr(field["args"]["class"]) + "\""
+        if (not php_empty(lambda : field_["args"]["class"])):
+            class_ = " class=\"" + esc_attr(field_["args"]["class"]) + "\""
         # end if
         php_print(str("<tr") + str(class_) + str(">"))
-        if (not php_empty(lambda : field["args"]["label_for"])):
-            php_print("<th scope=\"row\"><label for=\"" + esc_attr(field["args"]["label_for"]) + "\">" + field["title"] + "</label></th>")
+        if (not php_empty(lambda : field_["args"]["label_for"])):
+            php_print("<th scope=\"row\"><label for=\"" + esc_attr(field_["args"]["label_for"]) + "\">" + field_["title"] + "</label></th>")
         else:
-            php_print("<th scope=\"row\">" + field["title"] + "</th>")
+            php_print("<th scope=\"row\">" + field_["title"] + "</th>")
         # end if
         php_print("<td>")
-        php_call_user_func(field["callback"], field["args"])
+        php_call_user_func(field_["callback"], field_["args"])
         php_print("</td>")
         php_print("</tr>")
     # end for
@@ -1434,11 +1474,12 @@ def do_settings_fields(page=None, section=None, *args_):
 #// @param string $type    Optional. Message type, controls HTML class. Possible values include 'error',
 #// 'success', 'warning', 'info'. Default 'error'.
 #//
-def add_settings_error(setting=None, code=None, message=None, type="error", *args_):
+def add_settings_error(setting_=None, code_=None, message_=None, type_="error", *_args_):
     
-    global wp_settings_errors
-    php_check_if_defined("wp_settings_errors")
-    wp_settings_errors[-1] = Array({"setting": setting, "code": code, "message": message, "type": type})
+    
+    global wp_settings_errors_
+    php_check_if_defined("wp_settings_errors_")
+    wp_settings_errors_[-1] = Array({"setting": setting_, "code": code_, "message": message_, "type": type_})
 # end def add_settings_error
 #// 
 #// Fetch settings errors registered by add_settings_error().
@@ -1463,38 +1504,41 @@ def add_settings_error(setting=None, code=None, message=None, type="error", *arg
 #// @param boolean $sanitize Whether to re-sanitize the setting value before returning errors.
 #// @return array Array of settings errors.
 #//
-def get_settings_errors(setting="", sanitize=False, *args_):
+def get_settings_errors(setting_="", sanitize_=None, *_args_):
+    if sanitize_ is None:
+        sanitize_ = False
+    # end if
     
-    global wp_settings_errors
-    php_check_if_defined("wp_settings_errors")
+    global wp_settings_errors_
+    php_check_if_defined("wp_settings_errors_")
     #// 
     #// If $sanitize is true, manually re-run the sanitization for this option
     #// This allows the $sanitize_callback from register_setting() to run, adding
     #// any settings errors you want to show by default.
     #//
-    if sanitize:
-        sanitize_option(setting, get_option(setting))
+    if sanitize_:
+        sanitize_option(setting_, get_option(setting_))
     # end if
     #// If settings were passed back from options.php then use them.
     if (php_isset(lambda : PHP_REQUEST["settings-updated"])) and PHP_REQUEST["settings-updated"] and get_transient("settings_errors"):
-        wp_settings_errors = php_array_merge(wp_settings_errors, get_transient("settings_errors"))
+        wp_settings_errors_ = php_array_merge(wp_settings_errors_, get_transient("settings_errors"))
         delete_transient("settings_errors")
     # end if
     #// Check global in case errors have been added on this pageload.
-    if php_empty(lambda : wp_settings_errors):
+    if php_empty(lambda : wp_settings_errors_):
         return Array()
     # end if
     #// Filter the results to those of a specific setting if one was set.
-    if setting:
-        setting_errors = Array()
-        for key,details in wp_settings_errors:
-            if setting == details["setting"]:
-                setting_errors[-1] = wp_settings_errors[key]
+    if setting_:
+        setting_errors_ = Array()
+        for key_,details_ in wp_settings_errors_:
+            if setting_ == details_["setting"]:
+                setting_errors_[-1] = wp_settings_errors_[key_]
             # end if
         # end for
-        return setting_errors
+        return setting_errors_
     # end if
-    return wp_settings_errors
+    return wp_settings_errors_
 # end def get_settings_errors
 #// 
 #// Display settings errors registered by add_settings_error().
@@ -1525,30 +1569,36 @@ def get_settings_errors(setting="", sanitize=False, *args_):
 #// @param bool   $hide_on_update If set to true errors will not be shown if the settings page has
 #// already been submitted.
 #//
-def settings_errors(setting="", sanitize=False, hide_on_update=False, *args_):
+def settings_errors(setting_="", sanitize_=None, hide_on_update_=None, *_args_):
+    if sanitize_ is None:
+        sanitize_ = False
+    # end if
+    if hide_on_update_ is None:
+        hide_on_update_ = False
+    # end if
     
-    if hide_on_update and (not php_empty(lambda : PHP_REQUEST["settings-updated"])):
+    if hide_on_update_ and (not php_empty(lambda : PHP_REQUEST["settings-updated"])):
         return
     # end if
-    settings_errors = get_settings_errors(setting, sanitize)
-    if php_empty(lambda : settings_errors):
+    settings_errors_ = get_settings_errors(setting_, sanitize_)
+    if php_empty(lambda : settings_errors_):
         return
     # end if
-    output = ""
-    for key,details in settings_errors:
-        if "updated" == details["type"]:
-            details["type"] = "success"
+    output_ = ""
+    for key_,details_ in settings_errors_:
+        if "updated" == details_["type"]:
+            details_["type"] = "success"
         # end if
-        if php_in_array(details["type"], Array("error", "success", "warning", "info")):
-            details["type"] = "notice-" + details["type"]
+        if php_in_array(details_["type"], Array("error", "success", "warning", "info")):
+            details_["type"] = "notice-" + details_["type"]
         # end if
-        css_id = php_sprintf("setting-error-%s", esc_attr(details["code"]))
-        css_class = php_sprintf("notice %s settings-error is-dismissible", esc_attr(details["type"]))
-        output += str("<div id='") + str(css_id) + str("' class='") + str(css_class) + str("'> \n")
-        output += str("<p><strong>") + str(details["message"]) + str("</strong></p>")
-        output += "</div> \n"
+        css_id_ = php_sprintf("setting-error-%s", esc_attr(details_["code"]))
+        css_class_ = php_sprintf("notice %s settings-error is-dismissible", esc_attr(details_["type"]))
+        output_ += str("<div id='") + str(css_id_) + str("' class='") + str(css_class_) + str("'> \n")
+        output_ += str("<p><strong>") + str(details_["message"]) + str("</strong></p>")
+        output_ += "</div> \n"
     # end for
-    php_print(output)
+    php_print(output_)
 # end def settings_errors
 #// 
 #// Outputs the modal window used for attaching media to posts or pages in the media-listing screen.
@@ -1557,7 +1607,8 @@ def settings_errors(setting="", sanitize=False, hide_on_update=False, *args_):
 #// 
 #// @param string $found_action
 #//
-def find_posts_div(found_action="", *args_):
+def find_posts_div(found_action_="", *_args_):
+    
     
     php_print(" <div id=\"find-posts\" class=\"find-box\" style=\"display: none;\">\n       <div id=\"find-posts-head\" class=\"find-box-head\">\n          ")
     _e("Attach to existing content")
@@ -1568,9 +1619,9 @@ def find_posts_div(found_action="", *args_):
     <div class=\"find-box-inside\">
     <div class=\"find-box-search\">
     """)
-    if found_action:
+    if found_action_:
         php_print("                 <input type=\"hidden\" name=\"found_action\" value=\"")
-        php_print(esc_attr(found_action))
+        php_print(esc_attr(found_action_))
         php_print("\" />\n              ")
     # end if
     php_print("             <input type=\"hidden\" name=\"affected\" id=\"affected\" value=\"\" />\n                ")
@@ -1602,11 +1653,12 @@ def find_posts_div(found_action="", *args_):
 #// 
 #// @since 2.7.0
 #//
-def the_post_password(*args_):
+def the_post_password(*_args_):
     
-    post = get_post()
-    if (php_isset(lambda : post.post_password)):
-        php_print(esc_attr(post.post_password))
+    
+    post_ = get_post()
+    if (php_isset(lambda : post_.post_password)):
+        php_print(esc_attr(post_.post_password))
     # end if
 # end def the_post_password
 #// 
@@ -1620,13 +1672,14 @@ def the_post_password(*args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
 #// @return string The post title if set.
 #//
-def _draft_or_post_title(post=0, *args_):
+def _draft_or_post_title(post_=0, *_args_):
     
-    title = get_the_title(post)
-    if php_empty(lambda : title):
-        title = __("(no title)")
+    
+    title_ = get_the_title(post_)
+    if php_empty(lambda : title_):
+        title_ = __("(no title)")
     # end if
-    return esc_html(title)
+    return esc_html(title_)
 # end def _draft_or_post_title
 #// 
 #// Displays the search query.
@@ -1636,7 +1689,8 @@ def _draft_or_post_title(post=0, *args_):
 #// 
 #// @since 2.7.0
 #//
-def _admin_search_query(*args_):
+def _admin_search_query(*_args_):
+    
     
     php_print(esc_attr(wp_unslash(PHP_REQUEST["s"])) if (php_isset(lambda : PHP_REQUEST["s"])) else "")
 # end def _admin_search_query
@@ -1652,19 +1706,24 @@ def _admin_search_query(*args_):
 #// @param string $title      Optional. Title of the Iframe page. Default empty.
 #// @param bool   $deprecated Not used.
 #//
-def iframe_header(title="", deprecated=False, *args_):
+def iframe_header(title_="", deprecated_=None, *_args_):
+    if deprecated_ is None:
+        deprecated_ = False
+    # end if
     
     show_admin_bar(False)
-    global hook_suffix,admin_body_class,wp_locale
-    php_check_if_defined("hook_suffix","admin_body_class","wp_locale")
-    admin_body_class = php_preg_replace("/[^a-z0-9_-]+/i", "-", hook_suffix)
-    current_screen = get_current_screen()
+    global hook_suffix_
+    global admin_body_class_
+    global wp_locale_
+    php_check_if_defined("hook_suffix_","admin_body_class_","wp_locale_")
+    admin_body_class_ = php_preg_replace("/[^a-z0-9_-]+/i", "-", hook_suffix_)
+    current_screen_ = get_current_screen()
     php_header("Content-Type: " + get_option("html_type") + "; charset=" + get_option("blog_charset"))
     _wp_admin_html_begin()
     php_print("<title>")
     bloginfo("name")
     php_print(" &rsaquo; ")
-    php_print(title)
+    php_print(title_)
     php_print(" &#8212; ")
     _e("WordPress")
     php_print("</title>\n   ")
@@ -1675,51 +1734,51 @@ def iframe_header(title="", deprecated=False, *args_):
     var ajaxurl = '""")
     php_print(admin_url("admin-ajax.php", "relative"))
     php_print("',\n pagenow = '")
-    php_print(current_screen.id)
+    php_print(current_screen_.id)
     php_print("',\n typenow = '")
-    php_print(current_screen.post_type)
+    php_print(current_screen_.post_type)
     php_print("',\n adminpage = '")
-    php_print(admin_body_class)
+    php_print(admin_body_class_)
     php_print("',\n thousandsSeparator = '")
-    php_print(addslashes(wp_locale.number_format["thousands_sep"]))
+    php_print(addslashes(wp_locale_.number_format["thousands_sep"]))
     php_print("',\n decimalPoint = '")
-    php_print(addslashes(wp_locale.number_format["decimal_point"]))
+    php_print(addslashes(wp_locale_.number_format["decimal_point"]))
     php_print("',\n isRtl = ")
     php_print(php_int(is_rtl()))
     php_print(";\n</script>\n   ")
     #// This action is documented in wp-admin/admin-header.php
-    do_action("admin_enqueue_scripts", hook_suffix)
+    do_action("admin_enqueue_scripts", hook_suffix_)
     #// This action is documented in wp-admin/admin-header.php
-    do_action(str("admin_print_styles-") + str(hook_suffix))
+    do_action(str("admin_print_styles-") + str(hook_suffix_))
     #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
     #// This action is documented in wp-admin/admin-header.php
     do_action("admin_print_styles")
     #// This action is documented in wp-admin/admin-header.php
-    do_action(str("admin_print_scripts-") + str(hook_suffix))
+    do_action(str("admin_print_scripts-") + str(hook_suffix_))
     #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
     #// This action is documented in wp-admin/admin-header.php
     do_action("admin_print_scripts")
     #// This action is documented in wp-admin/admin-header.php
-    do_action(str("admin_head-") + str(hook_suffix))
+    do_action(str("admin_head-") + str(hook_suffix_))
     #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
     #// This action is documented in wp-admin/admin-header.php
     do_action("admin_head")
-    admin_body_class += " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_user_locale())))
+    admin_body_class_ += " locale-" + sanitize_html_class(php_strtolower(php_str_replace("_", "-", get_user_locale())))
     if is_rtl():
-        admin_body_class += " rtl"
+        admin_body_class_ += " rtl"
     # end if
     php_print("</head>\n    ")
     #// 
     #// @global string $body_id
     #//
-    admin_body_id = "id=\"" + PHP_GLOBALS["body_id"] + "\" " if (php_isset(lambda : PHP_GLOBALS["body_id"])) else ""
+    admin_body_id_ = "id=\"" + PHP_GLOBALS["body_id"] + "\" " if (php_isset(lambda : PHP_GLOBALS["body_id"])) else ""
     #// This filter is documented in wp-admin/admin-header.php
-    admin_body_classes = apply_filters("admin_body_class", "")
-    admin_body_classes = php_ltrim(admin_body_classes + " " + admin_body_class)
+    admin_body_classes_ = apply_filters("admin_body_class", "")
+    admin_body_classes_ = php_ltrim(admin_body_classes_ + " " + admin_body_class_)
     php_print("<body ")
-    php_print(admin_body_id)
+    php_print(admin_body_id_)
     php_print("class=\"wp-admin wp-core-ui no-js iframe ")
-    php_print(admin_body_classes)
+    php_print(admin_body_classes_)
     php_print("""\">
     <script type=\"text/javascript\">
     (function(){
@@ -1735,7 +1794,8 @@ def iframe_header(title="", deprecated=False, *args_):
 #// 
 #// @since 2.7.0
 #//
-def iframe_footer(*args_):
+def iframe_footer(*_args_):
+    
     
     #// 
     #// We're going to hide any footer output on iFrame pages,
@@ -1745,13 +1805,13 @@ def iframe_footer(*args_):
     #// 
     #// @global string $hook_suffix
     #//
-    global hook_suffix
-    php_check_if_defined("hook_suffix")
+    global hook_suffix_
+    php_check_if_defined("hook_suffix_")
     php_print(" <div class=\"hidden\">\n    ")
     #// This action is documented in wp-admin/admin-footer.php
-    do_action("admin_footer", hook_suffix)
+    do_action("admin_footer", hook_suffix_)
     #// This action is documented in wp-admin/admin-footer.php
-    do_action(str("admin_print_footer_scripts-") + str(hook_suffix))
+    do_action(str("admin_print_footer_scripts-") + str(hook_suffix_))
     #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
     #// This action is documented in wp-admin/admin-footer.php
     do_action("admin_print_footer_scripts")
@@ -1773,24 +1833,27 @@ def iframe_footer(*args_):
 #// @param bool    $echo Optional. Whether to echo the post states as an HTML string. Default true.
 #// @return string Post states string.
 #//
-def _post_states(post=None, echo=True, *args_):
+def _post_states(post_=None, echo_=None, *_args_):
+    if echo_ is None:
+        echo_ = True
+    # end if
     
-    post_states = get_post_states(post)
-    post_states_string = ""
-    if (not php_empty(lambda : post_states)):
-        state_count = php_count(post_states)
-        i = 0
-        post_states_string += " &mdash; "
-        for state in post_states:
-            i += 1
-            sep = "" if i == state_count else ", "
-            post_states_string += str("<span class='post-state'>") + str(state) + str(sep) + str("</span>")
+    post_states_ = get_post_states(post_)
+    post_states_string_ = ""
+    if (not php_empty(lambda : post_states_)):
+        state_count_ = php_count(post_states_)
+        i_ = 0
+        post_states_string_ += " &mdash; "
+        for state_ in post_states_:
+            i_ += 1
+            sep_ = "" if i_ == state_count_ else ", "
+            post_states_string_ += str("<span class='post-state'>") + str(state_) + str(sep_) + str("</span>")
         # end for
     # end if
-    if echo:
-        php_print(post_states_string)
+    if echo_:
+        php_print(post_states_string_)
     # end if
-    return post_states_string
+    return post_states_string_
 # end def _post_states
 #// 
 #// Retrieves an array of post states from a post.
@@ -1800,48 +1863,49 @@ def _post_states(post=None, echo=True, *args_):
 #// @param WP_Post $post The post to retrieve states for.
 #// @return string[] Array of post state labels keyed by their state.
 #//
-def get_post_states(post=None, *args_):
+def get_post_states(post_=None, *_args_):
     
-    post_states = Array()
+    
+    post_states_ = Array()
     if (php_isset(lambda : PHP_REQUEST["post_status"])):
-        post_status = PHP_REQUEST["post_status"]
+        post_status_ = PHP_REQUEST["post_status"]
     else:
-        post_status = ""
+        post_status_ = ""
     # end if
-    if (not php_empty(lambda : post.post_password)):
-        post_states["protected"] = _x("Password protected", "post status")
+    if (not php_empty(lambda : post_.post_password)):
+        post_states_["protected"] = _x("Password protected", "post status")
     # end if
-    if "private" == post.post_status and "private" != post_status:
-        post_states["private"] = _x("Private", "post status")
+    if "private" == post_.post_status and "private" != post_status_:
+        post_states_["private"] = _x("Private", "post status")
     # end if
-    if "draft" == post.post_status:
-        if get_post_meta(post.ID, "_customize_changeset_uuid", True):
-            post_states[-1] = __("Customization Draft")
-        elif "draft" != post_status:
-            post_states["draft"] = _x("Draft", "post status")
+    if "draft" == post_.post_status:
+        if get_post_meta(post_.ID, "_customize_changeset_uuid", True):
+            post_states_[-1] = __("Customization Draft")
+        elif "draft" != post_status_:
+            post_states_["draft"] = _x("Draft", "post status")
         # end if
-    elif "trash" == post.post_status and get_post_meta(post.ID, "_customize_changeset_uuid", True):
-        post_states[-1] = _x("Customization Draft", "post status")
+    elif "trash" == post_.post_status and get_post_meta(post_.ID, "_customize_changeset_uuid", True):
+        post_states_[-1] = _x("Customization Draft", "post status")
     # end if
-    if "pending" == post.post_status and "pending" != post_status:
-        post_states["pending"] = _x("Pending", "post status")
+    if "pending" == post_.post_status and "pending" != post_status_:
+        post_states_["pending"] = _x("Pending", "post status")
     # end if
-    if is_sticky(post.ID):
-        post_states["sticky"] = _x("Sticky", "post status")
+    if is_sticky(post_.ID):
+        post_states_["sticky"] = _x("Sticky", "post status")
     # end if
-    if "future" == post.post_status:
-        post_states["scheduled"] = _x("Scheduled", "post status")
+    if "future" == post_.post_status:
+        post_states_["scheduled"] = _x("Scheduled", "post status")
     # end if
     if "page" == get_option("show_on_front"):
-        if php_intval(get_option("page_on_front")) == post.ID:
-            post_states["page_on_front"] = _x("Front Page", "page label")
+        if php_intval(get_option("page_on_front")) == post_.ID:
+            post_states_["page_on_front"] = _x("Front Page", "page label")
         # end if
-        if php_intval(get_option("page_for_posts")) == post.ID:
-            post_states["page_for_posts"] = _x("Posts Page", "page label")
+        if php_intval(get_option("page_for_posts")) == post_.ID:
+            post_states_["page_for_posts"] = _x("Posts Page", "page label")
         # end if
     # end if
-    if php_intval(get_option("wp_page_for_privacy_policy")) == post.ID:
-        post_states["page_for_privacy_policy"] = _x("Privacy Policy Page", "page label")
+    if php_intval(get_option("wp_page_for_privacy_policy")) == post_.ID:
+        post_states_["page_for_privacy_policy"] = _x("Privacy Policy Page", "page label")
     # end if
     #// 
     #// Filters the default post display states used in the posts list table.
@@ -1852,7 +1916,7 @@ def get_post_states(post=None, *args_):
     #// @param string[] $post_states An array of post display states.
     #// @param WP_Post  $post        The current post object.
     #//
-    return apply_filters("display_post_states", post_states, post)
+    return apply_filters("display_post_states", post_states_, post_)
 # end def get_post_states
 #// 
 #// Function to echo the attachment media states as HTML.
@@ -1862,44 +1926,45 @@ def get_post_states(post=None, *args_):
 #// @param WP_Post $post The attachment post to retrieve states for.
 #// @return string Media states string.
 #//
-def _media_states(post=None, *args_):
+def _media_states(post_=None, *_args_):
     
-    media_states = Array()
-    stylesheet = get_option("stylesheet")
+    
+    media_states_ = Array()
+    stylesheet_ = get_option("stylesheet")
     if current_theme_supports("custom-header"):
-        meta_header = get_post_meta(post.ID, "_wp_attachment_is_custom_header", True)
+        meta_header_ = get_post_meta(post_.ID, "_wp_attachment_is_custom_header", True)
         if is_random_header_image():
-            header_images = wp_list_pluck(get_uploaded_header_images(), "attachment_id")
-            if meta_header == stylesheet and php_in_array(post.ID, header_images):
-                media_states[-1] = __("Header Image")
+            header_images_ = wp_list_pluck(get_uploaded_header_images(), "attachment_id")
+            if meta_header_ == stylesheet_ and php_in_array(post_.ID, header_images_):
+                media_states_[-1] = __("Header Image")
             # end if
         else:
-            header_image = get_header_image()
+            header_image_ = get_header_image()
             #// Display "Header Image" if the image was ever used as a header image.
-            if (not php_empty(lambda : meta_header)) and meta_header == stylesheet and wp_get_attachment_url(post.ID) != header_image:
-                media_states[-1] = __("Header Image")
+            if (not php_empty(lambda : meta_header_)) and meta_header_ == stylesheet_ and wp_get_attachment_url(post_.ID) != header_image_:
+                media_states_[-1] = __("Header Image")
             # end if
             #// Display "Current Header Image" if the image is currently the header image.
-            if header_image and wp_get_attachment_url(post.ID) == header_image:
-                media_states[-1] = __("Current Header Image")
+            if header_image_ and wp_get_attachment_url(post_.ID) == header_image_:
+                media_states_[-1] = __("Current Header Image")
             # end if
         # end if
     # end if
     if current_theme_supports("custom-background"):
-        meta_background = get_post_meta(post.ID, "_wp_attachment_is_custom_background", True)
-        if (not php_empty(lambda : meta_background)) and meta_background == stylesheet:
-            media_states[-1] = __("Background Image")
-            background_image = get_background_image()
-            if background_image and wp_get_attachment_url(post.ID) == background_image:
-                media_states[-1] = __("Current Background Image")
+        meta_background_ = get_post_meta(post_.ID, "_wp_attachment_is_custom_background", True)
+        if (not php_empty(lambda : meta_background_)) and meta_background_ == stylesheet_:
+            media_states_[-1] = __("Background Image")
+            background_image_ = get_background_image()
+            if background_image_ and wp_get_attachment_url(post_.ID) == background_image_:
+                media_states_[-1] = __("Current Background Image")
             # end if
         # end if
     # end if
-    if get_option("site_icon") == post.ID:
-        media_states[-1] = __("Site Icon")
+    if get_option("site_icon") == post_.ID:
+        media_states_[-1] = __("Site Icon")
     # end if
-    if get_theme_mod("custom_logo") == post.ID:
-        media_states[-1] = __("Logo")
+    if get_theme_mod("custom_logo") == post_.ID:
+        media_states_[-1] = __("Logo")
     # end if
     #// 
     #// Filters the default media display states for items in the Media list table.
@@ -1911,15 +1976,15 @@ def _media_states(post=None, *args_):
     #// 'Background Image', 'Site Icon', 'Logo'.
     #// @param WP_Post  $post         The current attachment object.
     #//
-    media_states = apply_filters("display_media_states", media_states, post)
-    if (not php_empty(lambda : media_states)):
-        state_count = php_count(media_states)
-        i = 0
+    media_states_ = apply_filters("display_media_states", media_states_, post_)
+    if (not php_empty(lambda : media_states_)):
+        state_count_ = php_count(media_states_)
+        i_ = 0
         php_print(" &mdash; ")
-        for state in media_states:
-            i += 1
-            sep = "" if i == state_count else ", "
-            php_print(str("<span class='post-state'>") + str(state) + str(sep) + str("</span>"))
+        for state_ in media_states_:
+            i_ += 1
+            sep_ = "" if i_ == state_count_ else ", "
+            php_print(str("<span class='post-state'>") + str(state_) + str(sep_) + str("</span>"))
         # end for
     # end if
 # end def _media_states
@@ -1933,7 +1998,8 @@ def _media_states(post=None, *args_):
 #// 
 #// @since 2.8.0
 #//
-def compression_test(*args_):
+def compression_test(*_args_):
+    
     
     php_print(" <script type=\"text/javascript\">\n var compressionNonce = ")
     php_print(wp_json_encode(wp_create_nonce("update_can_compress_scripts")))
@@ -2003,9 +2069,12 @@ else
 #// as a string such as 'tabindex="1"', though the array format is
 #// preferred. Default null.
 #//
-def submit_button(text=None, type="primary", name="submit", wrap=True, other_attributes=None, *args_):
+def submit_button(text_=None, type_="primary", name_="submit", wrap_=None, other_attributes_=None, *_args_):
+    if wrap_ is None:
+        wrap_ = True
+    # end if
     
-    php_print(get_submit_button(text, type, name, wrap, other_attributes))
+    php_print(get_submit_button(text_, type_, name_, wrap_, other_attributes_))
 # end def submit_button
 #// 
 #// Returns a submit button, with provided text and appropriate class
@@ -2028,61 +2097,65 @@ def submit_button(text=None, type="primary", name="submit", wrap=True, other_att
 #// Default empty.
 #// @return string Submit button HTML.
 #//
-def get_submit_button(text="", type="primary large", name="submit", wrap=True, other_attributes="", *args_):
-    
-    if (not php_is_array(type)):
-        type = php_explode(" ", type)
+def get_submit_button(text_="", type_="primary large", name_="submit", wrap_=None, other_attributes_="", *_args_):
+    if wrap_ is None:
+        wrap_ = True
     # end if
-    button_shorthand = Array("primary", "small", "large")
-    classes = Array("button")
-    for t in type:
-        if "secondary" == t or "button-secondary" == t:
+    
+    if (not php_is_array(type_)):
+        type_ = php_explode(" ", type_)
+    # end if
+    button_shorthand_ = Array("primary", "small", "large")
+    classes_ = Array("button")
+    for t_ in type_:
+        if "secondary" == t_ or "button-secondary" == t_:
             continue
         # end if
-        classes[-1] = "button-" + t if php_in_array(t, button_shorthand) else t
+        classes_[-1] = "button-" + t_ if php_in_array(t_, button_shorthand_) else t_
     # end for
     #// Remove empty items, remove duplicate items, and finally build a string.
-    class_ = php_implode(" ", array_unique(php_array_filter(classes)))
-    text = text if text else __("Save Changes")
+    class_ = php_implode(" ", array_unique(php_array_filter(classes_)))
+    text_ = text_ if text_ else __("Save Changes")
     #// Default the id attribute to $name unless an id was specifically provided in $other_attributes.
-    id = name
-    if php_is_array(other_attributes) and (php_isset(lambda : other_attributes["id"])):
-        id = other_attributes["id"]
-        other_attributes["id"] = None
+    id_ = name_
+    if php_is_array(other_attributes_) and (php_isset(lambda : other_attributes_["id"])):
+        id_ = other_attributes_["id"]
+        other_attributes_["id"] = None
     # end if
-    attributes = ""
-    if php_is_array(other_attributes):
-        for attribute,value in other_attributes:
-            attributes += attribute + "=\"" + esc_attr(value) + "\" "
+    attributes_ = ""
+    if php_is_array(other_attributes_):
+        for attribute_,value_ in other_attributes_:
+            attributes_ += attribute_ + "=\"" + esc_attr(value_) + "\" "
             pass
         # end for
-    elif (not php_empty(lambda : other_attributes)):
+    elif (not php_empty(lambda : other_attributes_)):
         #// Attributes provided as a string.
-        attributes = other_attributes
+        attributes_ = other_attributes_
     # end if
     #// Don't output empty name and id attributes.
-    name_attr = " name=\"" + esc_attr(name) + "\"" if name else ""
-    id_attr = " id=\"" + esc_attr(id) + "\"" if id else ""
-    button = "<input type=\"submit\"" + name_attr + id_attr + " class=\"" + esc_attr(class_)
-    button += "\" value=\"" + esc_attr(text) + "\" " + attributes + " />"
-    if wrap:
-        button = "<p class=\"submit\">" + button + "</p>"
+    name_attr_ = " name=\"" + esc_attr(name_) + "\"" if name_ else ""
+    id_attr_ = " id=\"" + esc_attr(id_) + "\"" if id_ else ""
+    button_ = "<input type=\"submit\"" + name_attr_ + id_attr_ + " class=\"" + esc_attr(class_)
+    button_ += "\" value=\"" + esc_attr(text_) + "\" " + attributes_ + " />"
+    if wrap_:
+        button_ = "<p class=\"submit\">" + button_ + "</p>"
     # end if
-    return button
+    return button_
 # end def get_submit_button
 #// 
 #// @global bool $is_IE
 #//
-def _wp_admin_html_begin(*args_):
+def _wp_admin_html_begin(*_args_):
     
-    global is_IE
-    php_check_if_defined("is_IE")
-    admin_html_class = "wp-toolbar" if is_admin_bar_showing() else ""
-    if is_IE:
+    
+    global is_IE_
+    php_check_if_defined("is_IE_")
+    admin_html_class_ = "wp-toolbar" if is_admin_bar_showing() else ""
+    if is_IE_:
         php_header("X-UA-Compatible: IE=edge")
     # end if
     php_print("<!DOCTYPE html>\n<!--[if IE 8]>\n<html xmlns=\"http://www.w3.org/1999/xhtml\" class=\"ie8 ")
-    php_print(admin_html_class)
+    php_print(admin_html_class_)
     php_print("\"\n ")
     #// 
     #// Fires inside the HTML tag in the admin header.
@@ -2095,7 +2168,7 @@ def _wp_admin_html_begin(*args_):
     <![endif]-->
     <!--[if !(IE 8) ]><!-->
     <html xmlns=\"http://www.w3.org/1999/xhtml\" class=\"""")
-    php_print(admin_html_class)
+    php_print(admin_html_class_)
     php_print("\"\n ")
     #// This action is documented in wp-admin/includes/template.php
     do_action("admin_xml_ns")
@@ -2117,13 +2190,14 @@ def _wp_admin_html_begin(*args_):
 #// @param string $hook_name The hook name (also known as the hook suffix) used to determine the screen.
 #// @return WP_Screen Screen object.
 #//
-def convert_to_screen(hook_name=None, *args_):
+def convert_to_screen(hook_name_=None, *_args_):
+    
     
     if (not php_class_exists("WP_Screen")):
         _doing_it_wrong("convert_to_screen(), add_meta_box()", php_sprintf(__("Likely direct inclusion of %1$s in order to use %2$s. This is very wrong. Hook the %2$s call into the %3$s action instead."), "<code>wp-admin/includes/template.php</code>", "<code>add_meta_box()</code>", "<code>add_meta_boxes</code>"), "3.3.0")
         return Array({"id": "_invalid", "base": "_are_belong_to_us"})
     # end if
-    return WP_Screen.get(hook_name)
+    return WP_Screen.get(hook_name_)
 # end def convert_to_screen
 #// 
 #// Output the HTML for restoring the post data from DOM storage
@@ -2131,7 +2205,8 @@ def convert_to_screen(hook_name=None, *args_):
 #// @since 3.6.0
 #// @access private
 #//
-def _local_storage_notice(*args_):
+def _local_storage_notice(*_args_):
+    
     
     php_print(" <div id=\"local-storage-notice\" class=\"hidden notice is-dismissible\">\n  <p class=\"local-restore\">\n       ")
     _e("The backup of this post in your browser is different from the version below.")
@@ -2167,38 +2242,41 @@ def _local_storage_notice(*args_):
 #// }
 #// @return string Star rating HTML.
 #//
-def wp_star_rating(args=Array(), *args_):
+def wp_star_rating(args_=None, *_args_):
+    if args_ is None:
+        args_ = Array()
+    # end if
     
-    defaults = Array({"rating": 0, "type": "rating", "number": 0, "echo": True})
-    parsed_args = wp_parse_args(args, defaults)
+    defaults_ = Array({"rating": 0, "type": "rating", "number": 0, "echo": True})
+    parsed_args_ = wp_parse_args(args_, defaults_)
     #// Non-English decimal places when the $rating is coming from a string.
-    rating = php_float(php_str_replace(",", ".", parsed_args["rating"]))
+    rating_ = php_float(php_str_replace(",", ".", parsed_args_["rating"]))
     #// Convert percentage to star rating, 0..5 in .5 increments.
-    if "percent" == parsed_args["type"]:
-        rating = round(rating / 10, 0) / 2
+    if "percent" == parsed_args_["type"]:
+        rating_ = round(rating_ / 10, 0) / 2
     # end if
     #// Calculate the number of each type of star needed.
-    full_stars = floor(rating)
-    half_stars = ceil(rating - full_stars)
-    empty_stars = 5 - full_stars - half_stars
-    if parsed_args["number"]:
+    full_stars_ = floor(rating_)
+    half_stars_ = ceil(rating_ - full_stars_)
+    empty_stars_ = 5 - full_stars_ - half_stars_
+    if parsed_args_["number"]:
         #// translators: 1: The rating, 2: The number of ratings.
-        format = _n("%1$s rating based on %2$s rating", "%1$s rating based on %2$s ratings", parsed_args["number"])
-        title = php_sprintf(format, number_format_i18n(rating, 1), number_format_i18n(parsed_args["number"]))
+        format_ = _n("%1$s rating based on %2$s rating", "%1$s rating based on %2$s ratings", parsed_args_["number"])
+        title_ = php_sprintf(format_, number_format_i18n(rating_, 1), number_format_i18n(parsed_args_["number"]))
     else:
         #// translators: %s: The rating.
-        title = php_sprintf(__("%s rating"), number_format_i18n(rating, 1))
+        title_ = php_sprintf(__("%s rating"), number_format_i18n(rating_, 1))
     # end if
-    output = "<div class=\"star-rating\">"
-    output += "<span class=\"screen-reader-text\">" + title + "</span>"
-    output += php_str_repeat("<div class=\"star star-full\" aria-hidden=\"true\"></div>", full_stars)
-    output += php_str_repeat("<div class=\"star star-half\" aria-hidden=\"true\"></div>", half_stars)
-    output += php_str_repeat("<div class=\"star star-empty\" aria-hidden=\"true\"></div>", empty_stars)
-    output += "</div>"
-    if parsed_args["echo"]:
-        php_print(output)
+    output_ = "<div class=\"star-rating\">"
+    output_ += "<span class=\"screen-reader-text\">" + title_ + "</span>"
+    output_ += php_str_repeat("<div class=\"star star-full\" aria-hidden=\"true\"></div>", full_stars_)
+    output_ += php_str_repeat("<div class=\"star star-half\" aria-hidden=\"true\"></div>", half_stars_)
+    output_ += php_str_repeat("<div class=\"star star-empty\" aria-hidden=\"true\"></div>", empty_stars_)
+    output_ += "</div>"
+    if parsed_args_["echo"]:
+        php_print(output_)
     # end if
-    return output
+    return output_
 # end def wp_star_rating
 #// 
 #// Output a notice when editing the page for posts (internal use only).
@@ -2206,7 +2284,8 @@ def wp_star_rating(args=Array(), *args_):
 #// @ignore
 #// @since 4.2.0
 #//
-def _wp_posts_page_notice(*args_):
+def _wp_posts_page_notice(*_args_):
+    
     
     php_print("<div class=\"notice notice-warning inline\"><p>" + __("You are currently editing the page that shows your latest posts.") + "</p></div>")
 # end def _wp_posts_page_notice

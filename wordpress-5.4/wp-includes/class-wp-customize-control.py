@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,22 +20,136 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 3.4.0
 #//
 class WP_Customize_Control():
+    #// 
+    #// Incremented with each new class instantiation, then stored in $instance_number.
+    #// 
+    #// Used when sorting two instances whose priorities are equal.
+    #// 
+    #// @since 4.1.0
+    #// @var int
+    #//
     instance_count = 0
+    #// 
+    #// Order in which this instance was created in relation to other instances.
+    #// 
+    #// @since 4.1.0
+    #// @var int
+    #//
     instance_number = Array()
+    #// 
+    #// Customizer manager.
+    #// 
+    #// @since 3.4.0
+    #// @var WP_Customize_Manager
+    #//
     manager = Array()
+    #// 
+    #// Control ID.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     id = Array()
+    #// 
+    #// All settings tied to the control.
+    #// 
+    #// @since 3.4.0
+    #// @var array
+    #//
     settings = Array()
+    #// 
+    #// The primary setting for the control (if there is one).
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     setting = "default"
+    #// 
+    #// Capability required to use this control.
+    #// 
+    #// Normally this is empty and the capability is derived from the capabilities
+    #// of the associated `$settings`.
+    #// 
+    #// @since 4.5.0
+    #// @var string
+    #//
     capability = Array()
+    #// 
+    #// Order priority to load the control in Customizer.
+    #// 
+    #// @since 3.4.0
+    #// @var int
+    #//
     priority = 10
+    #// 
+    #// Section the control belongs to.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     section = ""
+    #// 
+    #// Label for the control.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     label = ""
+    #// 
+    #// Description for the control.
+    #// 
+    #// @since 4.0.0
+    #// @var string
+    #//
     description = ""
+    #// 
+    #// List of choices for 'radio' or 'select' type controls, where values are the keys, and labels are the values.
+    #// 
+    #// @since 3.4.0
+    #// @var array
+    #//
     choices = Array()
+    #// 
+    #// List of custom input attributes for control output, where attribute names are the keys and values are the values.
+    #// 
+    #// Not used for 'checkbox', 'radio', 'select', 'textarea', or 'dropdown-pages' control types.
+    #// 
+    #// @since 4.0.0
+    #// @var array
+    #//
     input_attrs = Array()
+    #// 
+    #// Show UI for adding new content, currently only used for the dropdown-pages control.
+    #// 
+    #// @since 4.7.0
+    #// @var bool
+    #//
     allow_addition = False
+    #// 
+    #// @deprecated It is better to just call the json() method
+    #// @since 3.4.0
+    #// @var array
+    #//
     json = Array()
+    #// 
+    #// Control's Type.
+    #// 
+    #// @since 3.4.0
+    #// @var string
+    #//
     type = "text"
+    #// 
+    #// Callback.
+    #// 
+    #// @since 4.0.0
+    #// 
+    #// @see WP_Customize_Control::active()
+    #// 
+    #// @var callable Callback is called with one argument, the instance of
+    #// WP_Customize_Control, and returns bool to indicate whether
+    #// the control is active (such as it relates to the URL
+    #// currently being previewed).
+    #//
     active_callback = ""
     #// 
     #// Constructor.
@@ -87,16 +196,19 @@ class WP_Customize_Control():
     #// @type callback             $active_callback Active callback.
     #// }
     #//
-    def __init__(self, manager=None, id=None, args=Array()):
+    def __init__(self, manager_=None, id_=None, args_=None):
+        if args_ is None:
+            args_ = Array()
+        # end if
         
-        keys = php_array_keys(get_object_vars(self))
-        for key in keys:
-            if (php_isset(lambda : args[key])):
-                self.key = args[key]
+        keys_ = php_array_keys(get_object_vars(self))
+        for key_ in keys_:
+            if (php_isset(lambda : args_[key_])):
+                self.key_ = args_[key_]
             # end if
         # end for
-        self.manager = manager
-        self.id = id
+        self.manager = manager_
+        self.id = id_
         if php_empty(lambda : self.active_callback):
             self.active_callback = Array(self, "active_callback")
         # end if
@@ -104,18 +216,18 @@ class WP_Customize_Control():
         self.instance_number = self.instance_count
         #// Process settings.
         if (not (php_isset(lambda : self.settings))):
-            self.settings = id
+            self.settings = id_
         # end if
-        settings = Array()
+        settings_ = Array()
         if php_is_array(self.settings):
-            for key,setting in self.settings:
-                settings[key] = self.manager.get_setting(setting)
+            for key_,setting_ in self.settings:
+                settings_[key_] = self.manager.get_setting(setting_)
             # end for
         elif php_is_string(self.settings):
             self.setting = self.manager.get_setting(self.settings)
-            settings["default"] = self.setting
+            settings_["default"] = self.setting
         # end if
-        self.settings = settings
+        self.settings = settings_
     # end def __init__
     #// 
     #// Enqueue control related scripts/styles.
@@ -123,6 +235,7 @@ class WP_Customize_Control():
     #// @since 3.4.0
     #//
     def enqueue(self):
+        
         
         pass
     # end def enqueue
@@ -135,8 +248,9 @@ class WP_Customize_Control():
     #//
     def active(self):
         
-        control = self
-        active = php_call_user_func(self.active_callback, self)
+        
+        control_ = self
+        active_ = php_call_user_func(self.active_callback, self)
         #// 
         #// Filters response of WP_Customize_Control::active().
         #// 
@@ -145,8 +259,8 @@ class WP_Customize_Control():
         #// @param bool                 $active  Whether the Customizer control is active.
         #// @param WP_Customize_Control $control WP_Customize_Control instance.
         #//
-        active = apply_filters("customize_control_active", active, control)
-        return active
+        active_ = apply_filters("customize_control_active", active_, control_)
+        return active_
     # end def active
     #// 
     #// Default callback used when invoking WP_Customize_Control::active().
@@ -160,6 +274,7 @@ class WP_Customize_Control():
     #//
     def active_callback(self):
         
+        
         return True
     # end def active_callback
     #// 
@@ -171,10 +286,11 @@ class WP_Customize_Control():
     #// @param string $setting_key
     #// @return mixed The requested setting's value, if the setting exists.
     #//
-    def value(self, setting_key="default"):
+    def value(self, setting_key_="default"):
         
-        if (php_isset(lambda : self.settings[setting_key])):
-            return self.settings[setting_key].value()
+        
+        if (php_isset(lambda : self.settings[setting_key_])):
+            return self.settings[setting_key_].value()
         # end if
     # end def value
     #// 
@@ -184,9 +300,10 @@ class WP_Customize_Control():
     #//
     def to_json(self):
         
+        
         self.json["settings"] = Array()
-        for key,setting in self.settings:
-            self.json["settings"][key] = setting.id
+        for key_,setting_ in self.settings:
+            self.json["settings"][key_] = setting_.id
         # end for
         self.json["type"] = self.type
         self.json["priority"] = self.priority
@@ -209,6 +326,7 @@ class WP_Customize_Control():
     #//
     def json(self):
         
+        
         self.to_json()
         return self.json
     # end def json
@@ -226,16 +344,17 @@ class WP_Customize_Control():
     #//
     def check_capabilities(self):
         
+        
         if (not php_empty(lambda : self.capability)) and (not current_user_can(self.capability)):
             return False
         # end if
-        for setting in self.settings:
-            if (not setting) or (not setting.check_capabilities()):
+        for setting_ in self.settings:
+            if (not setting_) or (not setting_.check_capabilities()):
                 return False
             # end if
         # end for
-        section = self.manager.get_section(self.section)
-        if (php_isset(lambda : section)) and (not section.check_capabilities()):
+        section_ = self.manager.get_section(self.section)
+        if (php_isset(lambda : section_)) and (not section_.check_capabilities()):
             return False
         # end if
         return True
@@ -249,6 +368,7 @@ class WP_Customize_Control():
     #//
     def get_content(self):
         
+        
         ob_start()
         self.maybe_render()
         return php_trim(ob_get_clean())
@@ -260,6 +380,7 @@ class WP_Customize_Control():
     #// @uses WP_Customize_Control::render()
     #//
     def maybe_render(self):
+        
         
         if (not self.check_capabilities()):
             return
@@ -292,9 +413,10 @@ class WP_Customize_Control():
     #//
     def render(self):
         
-        id = "customize-control-" + php_str_replace(Array("[", "]"), Array("-", ""), self.id)
+        
+        id_ = "customize-control-" + php_str_replace(Array("[", "]"), Array("-", ""), self.id)
         class_ = "customize-control customize-control-" + self.type
-        printf("<li id=\"%s\" class=\"%s\">", esc_attr(id), esc_attr(class_))
+        printf("<li id=\"%s\" class=\"%s\">", esc_attr(id_), esc_attr(class_))
         self.render_content()
         php_print("</li>")
     # end def render
@@ -308,12 +430,13 @@ class WP_Customize_Control():
     #// @return string Data link parameter, a `data-customize-setting-link` attribute if the `$setting_key` refers to a pre-registered setting,
     #// and a `data-customize-setting-key-link` attribute if the setting is not yet registered.
     #//
-    def get_link(self, setting_key="default"):
+    def get_link(self, setting_key_="default"):
         
-        if (php_isset(lambda : self.settings[setting_key])) and type(self.settings[setting_key]).__name__ == "WP_Customize_Setting":
-            return "data-customize-setting-link=\"" + esc_attr(self.settings[setting_key].id) + "\""
+        
+        if (php_isset(lambda : self.settings[setting_key_])) and type(self.settings[setting_key_]).__name__ == "WP_Customize_Setting":
+            return "data-customize-setting-link=\"" + esc_attr(self.settings[setting_key_].id) + "\""
         else:
-            return "data-customize-setting-key-link=\"" + esc_attr(setting_key) + "\""
+            return "data-customize-setting-key-link=\"" + esc_attr(setting_key_) + "\""
         # end if
     # end def get_link
     #// 
@@ -324,9 +447,10 @@ class WP_Customize_Control():
     #// 
     #// @param string $setting_key
     #//
-    def link(self, setting_key="default"):
+    def link(self, setting_key_="default"):
         
-        php_print(self.get_link(setting_key))
+        
+        php_print(self.get_link(setting_key_))
     # end def link
     #// 
     #// Render the custom attributes for the control's input element.
@@ -335,8 +459,9 @@ class WP_Customize_Control():
     #//
     def input_attrs(self):
         
-        for attr,value in self.input_attrs:
-            php_print(attr + "=\"" + esc_attr(value) + "\" ")
+        
+        for attr_,value_ in self.input_attrs:
+            php_print(attr_ + "=\"" + esc_attr(value_) + "\" ")
         # end for
     # end def input_attrs
     #// 
@@ -353,15 +478,16 @@ class WP_Customize_Control():
     #//
     def render_content(self):
         
-        input_id = "_customize-input-" + self.id
-        description_id = "_customize-description-" + self.id
-        describedby_attr = " aria-describedby=\"" + esc_attr(description_id) + "\" " if (not php_empty(lambda : self.description)) else ""
+        
+        input_id_ = "_customize-input-" + self.id
+        description_id_ = "_customize-description-" + self.id
+        describedby_attr_ = " aria-describedby=\"" + esc_attr(description_id_) + "\" " if (not php_empty(lambda : self.description)) else ""
         for case in Switch(self.type):
             if case("checkbox"):
                 php_print("             <span class=\"customize-inside-control-row\">\n                 <input\n                        id=\"")
-                php_print(esc_attr(input_id))
+                php_print(esc_attr(input_id_))
                 php_print("\"\n                     ")
-                php_print(describedby_attr)
+                php_print(describedby_attr_)
                 php_print("                     type=\"checkbox\"\n                     value=\"")
                 php_print(esc_attr(self.value()))
                 php_print("\"\n                     ")
@@ -369,13 +495,13 @@ class WP_Customize_Control():
                 php_print("                     ")
                 checked(self.value())
                 php_print("                 />\n                    <label for=\"")
-                php_print(esc_attr(input_id))
+                php_print(esc_attr(input_id_))
                 php_print("\">")
                 php_print(esc_html(self.label))
                 php_print("</label>\n                   ")
                 if (not php_empty(lambda : self.description)):
                     php_print("                     <span id=\"")
-                    php_print(esc_attr(description_id))
+                    php_print(esc_attr(description_id_))
                     php_print("\" class=\"description customize-control-description\">")
                     php_print(self.description)
                     php_print("</span>\n                    ")
@@ -387,7 +513,7 @@ class WP_Customize_Control():
                 if php_empty(lambda : self.choices):
                     return
                 # end if
-                name = "_customize-radio-" + self.id
+                name_ = "_customize-radio-" + self.id
                 php_print("             ")
                 if (not php_empty(lambda : self.label)):
                     php_print("                 <span class=\"customize-control-title\">")
@@ -397,29 +523,29 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.description)):
                     php_print("                 <span id=\"")
-                    php_print(esc_attr(description_id))
+                    php_print(esc_attr(description_id_))
                     php_print("\" class=\"description customize-control-description\">")
                     php_print(self.description)
                     php_print("</span>\n                ")
                 # end if
                 php_print("\n               ")
-                for value,label in self.choices:
+                for value_,label_ in self.choices:
                     php_print("                 <span class=\"customize-inside-control-row\">\n                     <input\n                            id=\"")
-                    php_print(esc_attr(input_id + "-radio-" + value))
+                    php_print(esc_attr(input_id_ + "-radio-" + value_))
                     php_print("\"\n                         type=\"radio\"\n                            ")
-                    php_print(describedby_attr)
+                    php_print(describedby_attr_)
                     php_print("                         value=\"")
-                    php_print(esc_attr(value))
+                    php_print(esc_attr(value_))
                     php_print("\"\n                         name=\"")
-                    php_print(esc_attr(name))
+                    php_print(esc_attr(name_))
                     php_print("\"\n                         ")
                     self.link()
                     php_print("                         ")
-                    checked(self.value(), value)
+                    checked(self.value(), value_)
                     php_print("                         />\n                        <label for=\"")
-                    php_print(esc_attr(input_id + "-radio-" + value))
+                    php_print(esc_attr(input_id_ + "-radio-" + value_))
                     php_print("\">")
-                    php_print(esc_html(label))
+                    php_print(esc_html(label_))
                     php_print("</label>\n                   </span>\n               ")
                 # end for
                 php_print("             ")
@@ -432,7 +558,7 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.label)):
                     php_print("                 <label for=\"")
-                    php_print(esc_attr(input_id))
+                    php_print(esc_attr(input_id_))
                     php_print("\" class=\"customize-control-title\">")
                     php_print(esc_html(self.label))
                     php_print("</label>\n               ")
@@ -440,20 +566,20 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.description)):
                     php_print("                 <span id=\"")
-                    php_print(esc_attr(description_id))
+                    php_print(esc_attr(description_id_))
                     php_print("\" class=\"description customize-control-description\">")
                     php_print(self.description)
                     php_print("</span>\n                ")
                 # end if
                 php_print("\n               <select id=\"")
-                php_print(esc_attr(input_id))
+                php_print(esc_attr(input_id_))
                 php_print("\" ")
-                php_print(describedby_attr)
+                php_print(describedby_attr_)
                 php_print(" ")
                 self.link()
                 php_print(">\n                  ")
-                for value,label in self.choices:
-                    php_print("<option value=\"" + esc_attr(value) + "\"" + selected(self.value(), value, False) + ">" + label + "</option>")
+                for value_,label_ in self.choices:
+                    php_print("<option value=\"" + esc_attr(value_) + "\"" + selected(self.value(), value_, False) + ">" + label_ + "</option>")
                 # end for
                 php_print("             </select>\n             ")
                 break
@@ -462,7 +588,7 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.label)):
                     php_print("                 <label for=\"")
-                    php_print(esc_attr(input_id))
+                    php_print(esc_attr(input_id_))
                     php_print("\" class=\"customize-control-title\">")
                     php_print(esc_html(self.label))
                     php_print("</label>\n               ")
@@ -470,15 +596,15 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.description)):
                     php_print("                 <span id=\"")
-                    php_print(esc_attr(description_id))
+                    php_print(esc_attr(description_id_))
                     php_print("\" class=\"description customize-control-description\">")
                     php_print(self.description)
                     php_print("</span>\n                ")
                 # end if
                 php_print("             <textarea\n                 id=\"")
-                php_print(esc_attr(input_id))
+                php_print(esc_attr(input_id_))
                 php_print("\"\n                 rows=\"5\"\n                    ")
-                php_print(describedby_attr)
+                php_print(describedby_attr_)
                 php_print("                 ")
                 self.input_attrs()
                 php_print("                 ")
@@ -492,7 +618,7 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.label)):
                     php_print("                 <label for=\"")
-                    php_print(esc_attr(input_id))
+                    php_print(esc_attr(input_id_))
                     php_print("\" class=\"customize-control-title\">")
                     php_print(esc_html(self.label))
                     php_print("</label>\n               ")
@@ -500,39 +626,39 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.description)):
                     php_print("                 <span id=\"")
-                    php_print(esc_attr(description_id))
+                    php_print(esc_attr(description_id_))
                     php_print("\" class=\"description customize-control-description\">")
                     php_print(self.description)
                     php_print("</span>\n                ")
                 # end if
                 php_print("\n               ")
-                dropdown_name = "_customize-dropdown-pages-" + self.id
-                show_option_none = __("&mdash; Select &mdash;")
-                option_none_value = "0"
-                dropdown = wp_dropdown_pages(Array({"name": dropdown_name, "echo": 0, "show_option_none": show_option_none, "option_none_value": option_none_value, "selected": self.value()}))
-                if php_empty(lambda : dropdown):
-                    dropdown = php_sprintf("<select id=\"%1$s\" name=\"%1$s\">", esc_attr(dropdown_name))
-                    dropdown += php_sprintf("<option value=\"%1$s\">%2$s</option>", esc_attr(option_none_value), esc_html(show_option_none))
-                    dropdown += "</select>"
+                dropdown_name_ = "_customize-dropdown-pages-" + self.id
+                show_option_none_ = __("&mdash; Select &mdash;")
+                option_none_value_ = "0"
+                dropdown_ = wp_dropdown_pages(Array({"name": dropdown_name_, "echo": 0, "show_option_none": show_option_none_, "option_none_value": option_none_value_, "selected": self.value()}))
+                if php_empty(lambda : dropdown_):
+                    dropdown_ = php_sprintf("<select id=\"%1$s\" name=\"%1$s\">", esc_attr(dropdown_name_))
+                    dropdown_ += php_sprintf("<option value=\"%1$s\">%2$s</option>", esc_attr(option_none_value_), esc_html(show_option_none_))
+                    dropdown_ += "</select>"
                 # end if
                 #// Hackily add in the data link parameter.
-                dropdown = php_str_replace("<select", "<select " + self.get_link() + " id=\"" + esc_attr(input_id) + "\" " + describedby_attr, dropdown)
+                dropdown_ = php_str_replace("<select", "<select " + self.get_link() + " id=\"" + esc_attr(input_id_) + "\" " + describedby_attr_, dropdown_)
                 #// Even more hacikly add auto-draft page stubs.
                 #// @todo Eventually this should be removed in favor of the pages being injected into the underlying get_pages() call. See <https://github.com/xwp/wp-customize-posts/pull/250>.
-                nav_menus_created_posts_setting = self.manager.get_setting("nav_menus_created_posts")
-                if nav_menus_created_posts_setting and current_user_can("publish_pages"):
-                    auto_draft_page_options = ""
-                    for auto_draft_page_id in nav_menus_created_posts_setting.value():
-                        post = get_post(auto_draft_page_id)
-                        if post and "page" == post.post_type:
-                            auto_draft_page_options += php_sprintf("<option value=\"%1$s\">%2$s</option>", esc_attr(post.ID), esc_html(post.post_title))
+                nav_menus_created_posts_setting_ = self.manager.get_setting("nav_menus_created_posts")
+                if nav_menus_created_posts_setting_ and current_user_can("publish_pages"):
+                    auto_draft_page_options_ = ""
+                    for auto_draft_page_id_ in nav_menus_created_posts_setting_.value():
+                        post_ = get_post(auto_draft_page_id_)
+                        if post_ and "page" == post_.post_type:
+                            auto_draft_page_options_ += php_sprintf("<option value=\"%1$s\">%2$s</option>", esc_attr(post_.ID), esc_html(post_.post_title))
                         # end if
                     # end for
-                    if auto_draft_page_options:
-                        dropdown = php_str_replace("</select>", auto_draft_page_options + "</select>", dropdown)
+                    if auto_draft_page_options_:
+                        dropdown_ = php_str_replace("</select>", auto_draft_page_options_ + "</select>", dropdown_)
                     # end if
                 # end if
-                php_print(dropdown)
+                php_print(dropdown_)
                 php_print("             ")
                 if self.allow_addition and current_user_can("publish_pages") and current_user_can("edit_theme_options"):
                     pass
@@ -558,7 +684,7 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.label)):
                     php_print("                 <label for=\"")
-                    php_print(esc_attr(input_id))
+                    php_print(esc_attr(input_id_))
                     php_print("\" class=\"customize-control-title\">")
                     php_print(esc_html(self.label))
                     php_print("</label>\n               ")
@@ -566,17 +692,17 @@ class WP_Customize_Control():
                 php_print("             ")
                 if (not php_empty(lambda : self.description)):
                     php_print("                 <span id=\"")
-                    php_print(esc_attr(description_id))
+                    php_print(esc_attr(description_id_))
                     php_print("\" class=\"description customize-control-description\">")
                     php_print(self.description)
                     php_print("</span>\n                ")
                 # end if
                 php_print("             <input\n                    id=\"")
-                php_print(esc_attr(input_id))
+                php_print(esc_attr(input_id_))
                 php_print("\"\n                 type=\"")
                 php_print(esc_attr(self.type))
                 php_print("\"\n                 ")
-                php_print(describedby_attr)
+                php_print(describedby_attr_)
                 php_print("                 ")
                 self.input_attrs()
                 php_print("                 ")
@@ -605,6 +731,7 @@ class WP_Customize_Control():
     #//
     def print_template(self):
         
+        
         php_print("     <script type=\"text/html\" id=\"tmpl-customize-control-")
         php_print(self.type)
         php_print("-content\">\n            ")
@@ -622,6 +749,7 @@ class WP_Customize_Control():
     #// @since 4.1.0
     #//
     def content_template(self):
+        
         
         pass
     # end def content_template

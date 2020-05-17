@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,9 +15,9 @@ if has_custom_logo():
     php_print("</div>\n ")
 # end if
 php_print(" ")
-blog_info = get_bloginfo("name")
+blog_info_ = get_bloginfo("name")
 php_print(" ")
-if (not php_empty(lambda : blog_info)):
+if (not php_empty(lambda : blog_info_)):
     php_print("     ")
     if is_front_page() and is_home():
         php_print("         <h1 class=\"site-title\"><a href=\"")
@@ -40,10 +35,10 @@ if (not php_empty(lambda : blog_info)):
     php_print(" ")
 # end if
 php_print("\n   ")
-description = get_bloginfo("description", "display")
-if description or is_customize_preview():
+description_ = get_bloginfo("description", "display")
+if description_ or is_customize_preview():
     php_print("         <p class=\"site-description\">\n                ")
-    php_print(description)
+    php_print(description_)
     php_print("         </p>\n  ")
 # end if
 php_print(" ")

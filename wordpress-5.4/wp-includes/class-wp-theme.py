@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,22 +15,124 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 3.4.0
 #//
 class WP_Theme():
+    #// 
+    #// Whether the theme has been marked as updateable.
+    #// 
+    #// @since 4.4.0
+    #// @var bool
+    #// 
+    #// @see WP_MS_Themes_List_Table
+    #//
     update = False
+    #// 
+    #// Headers for style.css files.
+    #// 
+    #// @since 3.4.0
+    #// @since 5.4.0 Added `Requires at least` and `Requires PHP` headers.
+    #// @var array
+    #//
     file_headers = Array({"Name": "Theme Name", "ThemeURI": "Theme URI", "Description": "Description", "Author": "Author", "AuthorURI": "Author URI", "Version": "Version", "Template": "Template", "Status": "Status", "Tags": "Tags", "TextDomain": "Text Domain", "DomainPath": "Domain Path", "RequiresWP": "Requires at least", "RequiresPHP": "Requires PHP"})
+    #// 
+    #// Default themes.
+    #// 
+    #// @var array
+    #//
     default_themes = Array({"classic": "WordPress Classic", "default": "WordPress Default", "twentyten": "Twenty Ten", "twentyeleven": "Twenty Eleven", "twentytwelve": "Twenty Twelve", "twentythirteen": "Twenty Thirteen", "twentyfourteen": "Twenty Fourteen", "twentyfifteen": "Twenty Fifteen", "twentysixteen": "Twenty Sixteen", "twentyseventeen": "Twenty Seventeen", "twentynineteen": "Twenty Nineteen", "twentytwenty": "Twenty Twenty"})
+    #// 
+    #// Renamed theme tags.
+    #// 
+    #// @var array
+    #//
     tag_map = Array({"fixed-width": "fixed-layout", "flexible-width": "fluid-layout"})
+    #// 
+    #// Absolute path to the theme root, usually wp-content/themes
+    #// 
+    #// @var string
+    #//
     theme_root = Array()
+    #// 
+    #// Header data from the theme's style.css file.
+    #// 
+    #// @var array
+    #//
     headers = Array()
+    #// 
+    #// Header data from the theme's style.css file after being sanitized.
+    #// 
+    #// @var array
+    #//
     headers_sanitized = Array()
+    #// 
+    #// Header name from the theme's style.css after being translated.
+    #// 
+    #// Cached due to sorting functions running over the translated name.
+    #// 
+    #// @var string
+    #//
     name_translated = Array()
+    #// 
+    #// Errors encountered when initializing the theme.
+    #// 
+    #// @var WP_Error
+    #//
     errors = Array()
+    #// 
+    #// The directory name of the theme's files, inside the theme root.
+    #// 
+    #// In the case of a child theme, this is directory name of the child theme.
+    #// Otherwise, 'stylesheet' is the same as 'template'.
+    #// 
+    #// @var string
+    #//
     stylesheet = Array()
+    #// 
+    #// The directory name of the theme's files, inside the theme root.
+    #// 
+    #// In the case of a child theme, this is the directory name of the parent theme.
+    #// Otherwise, 'template' is the same as 'stylesheet'.
+    #// 
+    #// @var string
+    #//
     template = Array()
+    #// 
+    #// A reference to the parent theme, in the case of a child theme.
+    #// 
+    #// @var WP_Theme
+    #//
     parent = Array()
+    #// 
+    #// URL to the theme root, usually an absolute URL to wp-content/themes
+    #// 
+    #// @var string
+    #//
     theme_root_uri = Array()
+    #// 
+    #// Flag for whether the theme's textdomain is loaded.
+    #// 
+    #// @var bool
+    #//
     textdomain_loaded = Array()
+    #// 
+    #// Stores an md5 hash of the theme root, to function as the cache key.
+    #// 
+    #// @var string
+    #//
     cache_hash = Array()
+    #// 
+    #// Flag for whether the themes cache bucket should be persistently cached.
+    #// 
+    #// Default is false. Can be set with the {@see 'wp_cache_themes_persistently'} filter.
+    #// 
+    #// @var bool
+    #//
     persistently_cache = Array()
+    #// 
+    #// Expiration time for the themes cache bucket.
+    #// 
+    #// By default the bucket is not cached, so this value is useless.
+    #// 
+    #// @var bool
+    #//
     cache_expiration = 1800
     #// 
     #// Constructor for WP_Theme.
@@ -48,10 +145,11 @@ class WP_Theme():
     #// @param string $theme_root Theme root.
     #// @param WP_Theme|null $_child If this theme is a parent theme, the child may be passed for validation purposes.
     #//
-    def __init__(self, theme_dir=None, theme_root=None, _child=None):
+    def __init__(self, theme_dir_=None, theme_root_=None, _child_=None):
         
-        global wp_theme_directories
-        php_check_if_defined("wp_theme_directories")
+        
+        global wp_theme_directories_
+        php_check_if_defined("wp_theme_directories_")
         #// Initialize caching on first run.
         if (not (php_isset(lambda : self.persistently_cache))):
             #// This action is documented in wp-includes/theme.php
@@ -65,29 +163,29 @@ class WP_Theme():
                 wp_cache_add_non_persistent_groups("themes")
             # end if
         # end if
-        self.theme_root = theme_root
-        self.stylesheet = theme_dir
+        self.theme_root = theme_root_
+        self.stylesheet = theme_dir_
         #// Correct a situation where the theme is 'some-directory/some-theme' but 'some-directory' was passed in as part of the theme root instead.
-        if (not php_in_array(theme_root, wp_theme_directories)) and php_in_array(php_dirname(theme_root), wp_theme_directories):
+        if (not php_in_array(theme_root_, wp_theme_directories_)) and php_in_array(php_dirname(theme_root_), wp_theme_directories_):
             self.stylesheet = php_basename(self.theme_root) + "/" + self.stylesheet
-            self.theme_root = php_dirname(theme_root)
+            self.theme_root = php_dirname(theme_root_)
         # end if
         self.cache_hash = php_md5(self.theme_root + "/" + self.stylesheet)
-        theme_file = self.stylesheet + "/style.css"
-        cache = self.cache_get("theme")
-        if php_is_array(cache):
-            for key in Array("errors", "headers", "template"):
-                if (php_isset(lambda : cache[key])):
-                    self.key = cache[key]
+        theme_file_ = self.stylesheet + "/style.css"
+        cache_ = self.cache_get("theme")
+        if php_is_array(cache_):
+            for key_ in Array("errors", "headers", "template"):
+                if (php_isset(lambda : cache_[key_])):
+                    self.key_ = cache_[key_]
                 # end if
             # end for
             if self.errors:
                 return
             # end if
-            if (php_isset(lambda : cache["theme_root_template"])):
-                theme_root_template = cache["theme_root_template"]
+            if (php_isset(lambda : cache_["theme_root_template"])):
+                theme_root_template_ = cache_["theme_root_template"]
             # end if
-        elif (not php_file_exists(self.theme_root + "/" + theme_file)):
+        elif (not php_file_exists(self.theme_root + "/" + theme_file_)):
             self.headers["Name"] = self.stylesheet
             if (not php_file_exists(self.theme_root + "/" + self.stylesheet)):
                 self.errors = php_new_class("WP_Error", lambda : WP_Error("theme_not_found", php_sprintf(__("The theme directory \"%s\" does not exist."), esc_html(self.stylesheet))))
@@ -101,19 +199,19 @@ class WP_Theme():
                 self.errors.add("theme_root_missing", __("Error: The themes directory is either empty or doesn&#8217;t exist. Please check your installation."))
             # end if
             return
-        elif (not php_is_readable(self.theme_root + "/" + theme_file)):
+        elif (not php_is_readable(self.theme_root + "/" + theme_file_)):
             self.headers["Name"] = self.stylesheet
             self.errors = php_new_class("WP_Error", lambda : WP_Error("theme_stylesheet_not_readable", __("Stylesheet is not readable.")))
             self.template = self.stylesheet
             self.cache_add("theme", Array({"headers": self.headers, "errors": self.errors, "stylesheet": self.stylesheet, "template": self.template}))
             return
         else:
-            self.headers = get_file_data(self.theme_root + "/" + theme_file, self.file_headers, "theme")
+            self.headers = get_file_data(self.theme_root + "/" + theme_file_, self.file_headers, "theme")
             #// Default themes always trump their pretenders.
             #// Properly identify default themes that are inside a directory within wp-content/themes.
-            default_theme_slug = php_array_search(self.headers["Name"], self.default_themes)
-            if default_theme_slug:
-                if php_basename(self.stylesheet) != default_theme_slug:
+            default_theme_slug_ = php_array_search(self.headers["Name"], self.default_themes)
+            if default_theme_slug_:
+                if php_basename(self.stylesheet) != default_theme_slug_:
                     self.headers["Name"] += "/" + self.stylesheet
                 # end if
             # end if
@@ -130,24 +228,24 @@ class WP_Theme():
         if (not self.template):
             self.template = self.stylesheet
             if (not php_file_exists(self.theme_root + "/" + self.stylesheet + "/index.php")):
-                error_message = php_sprintf(__("Template is missing. Standalone themes need to have a %1$s template file. <a href=\"%2$s\">Child themes</a> need to have a Template header in the %3$s stylesheet."), "<code>index.php</code>", __("https://developer.wordpress.org/themes/advanced-topics/child-themes/"), "<code>style.css</code>")
-                self.errors = php_new_class("WP_Error", lambda : WP_Error("theme_no_index", error_message))
+                error_message_ = php_sprintf(__("Template is missing. Standalone themes need to have a %1$s template file. <a href=\"%2$s\">Child themes</a> need to have a Template header in the %3$s stylesheet."), "<code>index.php</code>", __("https://developer.wordpress.org/themes/advanced-topics/child-themes/"), "<code>style.css</code>")
+                self.errors = php_new_class("WP_Error", lambda : WP_Error("theme_no_index", error_message_))
                 self.cache_add("theme", Array({"headers": self.headers, "errors": self.errors, "stylesheet": self.stylesheet, "template": self.template}))
                 return
             # end if
         # end if
         #// If we got our data from cache, we can assume that 'template' is pointing to the right place.
-        if (not php_is_array(cache)) and self.template != self.stylesheet and (not php_file_exists(self.theme_root + "/" + self.template + "/index.php")):
+        if (not php_is_array(cache_)) and self.template != self.stylesheet and (not php_file_exists(self.theme_root + "/" + self.template + "/index.php")):
             #// If we're in a directory of themes inside /themes, look for the parent nearby.
             #// wp-content/themes/directory-of-themes
-            parent_dir = php_dirname(self.stylesheet)
-            directories = search_theme_directories()
-            if "." != parent_dir and php_file_exists(self.theme_root + "/" + parent_dir + "/" + self.template + "/index.php"):
-                self.template = parent_dir + "/" + self.template
-            elif directories and (php_isset(lambda : directories[self.template])):
+            parent_dir_ = php_dirname(self.stylesheet)
+            directories_ = search_theme_directories()
+            if "." != parent_dir_ and php_file_exists(self.theme_root + "/" + parent_dir_ + "/" + self.template + "/index.php"):
+                self.template = parent_dir_ + "/" + self.template
+            elif directories_ and (php_isset(lambda : directories_[self.template])):
                 #// Look for the template in the search_theme_directories() results, in case it is in another theme root.
                 #// We don't look into directories of themes, just the theme root.
-                theme_root_template = directories[self.template]["theme_root"]
+                theme_root_template_ = directories_[self.template]["theme_root"]
             else:
                 #// Parent theme is missing.
                 self.errors = php_new_class("WP_Error", lambda : WP_Error("theme_no_parent", php_sprintf(__("The parent theme is missing. Please install the \"%s\" parent theme."), esc_html(self.template))))
@@ -159,31 +257,31 @@ class WP_Theme():
         #// Set the parent, if we're a child theme.
         if self.template != self.stylesheet:
             #// If we are a parent, then there is a problem. Only two generations allowed! Cancel things out.
-            if type(_child).__name__ == "WP_Theme" and _child.template == self.stylesheet:
-                _child.parent = None
-                _child.errors = php_new_class("WP_Error", lambda : WP_Error("theme_parent_invalid", php_sprintf(__("The \"%s\" theme is not a valid parent theme."), esc_html(_child.template))))
-                _child.cache_add("theme", Array({"headers": _child.headers, "errors": _child.errors, "stylesheet": _child.stylesheet, "template": _child.template}))
+            if type(_child_).__name__ == "WP_Theme" and _child_.template == self.stylesheet:
+                _child_.parent = None
+                _child_.errors = php_new_class("WP_Error", lambda : WP_Error("theme_parent_invalid", php_sprintf(__("The \"%s\" theme is not a valid parent theme."), esc_html(_child_.template))))
+                _child_.cache_add("theme", Array({"headers": _child_.headers, "errors": _child_.errors, "stylesheet": _child_.stylesheet, "template": _child_.template}))
                 #// The two themes actually reference each other with the Template header.
-                if _child.stylesheet == self.template:
+                if _child_.stylesheet == self.template:
                     self.errors = php_new_class("WP_Error", lambda : WP_Error("theme_parent_invalid", php_sprintf(__("The \"%s\" theme is not a valid parent theme."), esc_html(self.template))))
                     self.cache_add("theme", Array({"headers": self.headers, "errors": self.errors, "stylesheet": self.stylesheet, "template": self.template}))
                 # end if
                 return
             # end if
             #// Set the parent. Pass the current instance so we can do the crazy checks above and assess errors.
-            self.parent = php_new_class("WP_Theme", lambda : WP_Theme(self.template, theme_root_template if (php_isset(lambda : theme_root_template)) else self.theme_root, self))
+            self.parent = php_new_class("WP_Theme", lambda : WP_Theme(self.template, theme_root_template_ if (php_isset(lambda : theme_root_template_)) else self.theme_root, self))
         # end if
         if wp_paused_themes().get(self.stylesheet) and (not is_wp_error(self.errors)) or (not (php_isset(lambda : self.errors.errors["theme_paused"]))):
             self.errors = php_new_class("WP_Error", lambda : WP_Error("theme_paused", __("This theme failed to load properly and was paused within the admin backend.")))
         # end if
         #// We're good. If we didn't retrieve from cache, set it.
-        if (not php_is_array(cache)):
-            cache = Array({"headers": self.headers, "errors": self.errors, "stylesheet": self.stylesheet, "template": self.template})
+        if (not php_is_array(cache_)):
+            cache_ = Array({"headers": self.headers, "errors": self.errors, "stylesheet": self.stylesheet, "template": self.template})
             #// If the parent theme is in another root, we'll want to cache this. Avoids an entire branch of filesystem calls above.
-            if (php_isset(lambda : theme_root_template)):
-                cache["theme_root_template"] = theme_root_template
+            if (php_isset(lambda : theme_root_template_)):
+                cache_["theme_root_template"] = theme_root_template_
             # end if
-            self.cache_add("theme", cache)
+            self.cache_add("theme", cache_)
         # end if
     # end def __init__
     #// 
@@ -194,6 +292,7 @@ class WP_Theme():
     #// @return string Theme name, ready for display (translated)
     #//
     def __tostring(self):
+        
         
         return php_str(self.display("Name"))
     # end def __tostring
@@ -207,10 +306,11 @@ class WP_Theme():
     #// @param string $offset Property to check if set.
     #// @return bool Whether the given property is set.
     #//
-    def __isset(self, offset=None):
+    def __isset(self, offset_=None):
         
-        __isset.properties = Array("name", "title", "version", "parent_theme", "template_dir", "stylesheet_dir", "template", "stylesheet", "screenshot", "description", "author", "tags", "theme_root", "theme_root_uri")
-        return php_in_array(offset, __isset.properties)
+        
+        properties_ = Array("name", "title", "version", "parent_theme", "template_dir", "stylesheet_dir", "template", "stylesheet", "screenshot", "description", "author", "tags", "theme_root", "theme_root_uri")
+        return php_in_array(offset_, properties_)
     # end def __isset
     #// 
     #// __get() magic method for properties formerly returned by current_theme_info()
@@ -220,9 +320,10 @@ class WP_Theme():
     #// @param string $offset Property to get.
     #// @return mixed Property value.
     #//
-    def __get(self, offset=None):
+    def __get(self, offset_=None):
         
-        for case in Switch(offset):
+        
+        for case in Switch(offset_):
             if case("name"):
                 pass
             # end if
@@ -266,7 +367,7 @@ class WP_Theme():
                 return self.get_theme_root_uri()
             # end if
             if case():
-                return self.offsetget(offset)
+                return self.offsetget(offset_)
             # end if
         # end for
     # end def __get
@@ -278,7 +379,8 @@ class WP_Theme():
     #// @param mixed $offset
     #// @param mixed $value
     #//
-    def offsetset(self, offset=None, value=None):
+    def offsetset(self, offset_=None, value_=None):
+        
         
         pass
     # end def offsetset
@@ -289,7 +391,8 @@ class WP_Theme():
     #// 
     #// @param mixed $offset
     #//
-    def offsetunset(self, offset=None):
+    def offsetunset(self, offset_=None):
+        
         
         pass
     # end def offsetunset
@@ -303,10 +406,11 @@ class WP_Theme():
     #// @param mixed $offset
     #// @return bool
     #//
-    def offsetexists(self, offset=None):
+    def offsetexists(self, offset_=None):
         
-        offsetexists.keys = Array("Name", "Version", "Status", "Title", "Author", "Author Name", "Author URI", "Description", "Template", "Stylesheet", "Template Files", "Stylesheet Files", "Template Dir", "Stylesheet Dir", "Screenshot", "Tags", "Theme Root", "Theme Root URI", "Parent Theme")
-        return php_in_array(offset, offsetexists.keys)
+        
+        keys_ = Array("Name", "Version", "Status", "Title", "Author", "Author Name", "Author URI", "Description", "Template", "Stylesheet", "Template Files", "Stylesheet Files", "Template Dir", "Stylesheet Dir", "Screenshot", "Tags", "Theme Root", "Theme Root URI", "Parent Theme")
+        return php_in_array(offset_, keys_)
     # end def offsetexists
     #// 
     #// Method to implement ArrayAccess for keys formerly returned by get_themes().
@@ -323,9 +427,10 @@ class WP_Theme():
     #// @param mixed $offset
     #// @return mixed
     #//
-    def offsetget(self, offset=None):
+    def offsetget(self, offset_=None):
         
-        for case in Switch(offset):
+        
+        for case in Switch(offset_):
             if case("Name"):
                 pass
             # end if
@@ -352,7 +457,7 @@ class WP_Theme():
                 pass
             # end if
             if case("Status"):
-                return self.get(offset)
+                return self.get(offset_)
             # end if
             if case("Template"):
                 return self.get_template()
@@ -401,6 +506,7 @@ class WP_Theme():
     #//
     def errors(self):
         
+        
         return self.errors if is_wp_error(self.errors) else False
     # end def errors
     #// 
@@ -415,6 +521,7 @@ class WP_Theme():
     #//
     def exists(self):
         
+        
         return (not self.errors() and php_in_array("theme_not_found", self.errors().get_error_codes()))
     # end def exists
     #// 
@@ -425,6 +532,7 @@ class WP_Theme():
     #// @return WP_Theme|false Parent theme, or false if the current theme is not a child theme.
     #//
     def parent(self):
+        
         
         return self.parent if (php_isset(lambda : self.parent)) else False
     # end def parent
@@ -439,9 +547,10 @@ class WP_Theme():
     #// @param array|string $data Data to store
     #// @return bool Return value from wp_cache_add()
     #//
-    def cache_add(self, key=None, data=None):
+    def cache_add(self, key_=None, data_=None):
         
-        return wp_cache_add(key + "-" + self.cache_hash, data, "themes", self.cache_expiration)
+        
+        return wp_cache_add(key_ + "-" + self.cache_hash, data_, "themes", self.cache_expiration)
     # end def cache_add
     #// 
     #// Gets theme data from cache.
@@ -453,9 +562,10 @@ class WP_Theme():
     #// @param string $key Type of data to retrieve (theme, screenshot, headers, post_templates)
     #// @return mixed Retrieved data
     #//
-    def cache_get(self, key=None):
+    def cache_get(self, key_=None):
         
-        return wp_cache_get(key + "-" + self.cache_hash, "themes")
+        
+        return wp_cache_get(key_ + "-" + self.cache_hash, "themes")
     # end def cache_get
     #// 
     #// Clears the cache for the theme.
@@ -464,8 +574,9 @@ class WP_Theme():
     #//
     def cache_delete(self):
         
-        for key in Array("theme", "screenshot", "headers", "post_templates"):
-            wp_cache_delete(key + "-" + self.cache_hash, "themes")
+        
+        for key_ in Array("theme", "screenshot", "headers", "post_templates"):
+            wp_cache_delete(key_ + "-" + self.cache_hash, "themes")
         # end for
         self.template = None
         self.textdomain_loaded = None
@@ -493,9 +604,10 @@ class WP_Theme():
     #// @param string $header Theme header. Name, Description, Author, Version, ThemeURI, AuthorURI, Status, Tags.
     #// @return string|array|false String or array (for Tags header) on success, false on failure.
     #//
-    def get(self, header=None):
+    def get(self, header_=None):
         
-        if (not (php_isset(lambda : self.headers[header]))):
+        
+        if (not (php_isset(lambda : self.headers[header_]))):
             return False
         # end if
         if (not (php_isset(lambda : self.headers_sanitized))):
@@ -504,19 +616,19 @@ class WP_Theme():
                 self.headers_sanitized = Array()
             # end if
         # end if
-        if (php_isset(lambda : self.headers_sanitized[header])):
-            return self.headers_sanitized[header]
+        if (php_isset(lambda : self.headers_sanitized[header_])):
+            return self.headers_sanitized[header_]
         # end if
         #// If themes are a persistent group, sanitize everything and cache it. One cache add is better than many cache sets.
         if self.persistently_cache:
-            for _header in php_array_keys(self.headers):
-                self.headers_sanitized[_header] = self.sanitize_header(_header, self.headers[_header])
+            for _header_ in php_array_keys(self.headers):
+                self.headers_sanitized[_header_] = self.sanitize_header(_header_, self.headers[_header_])
             # end for
             self.cache_add("headers", self.headers_sanitized)
         else:
-            self.headers_sanitized[header] = self.sanitize_header(header, self.headers[header])
+            self.headers_sanitized[header_] = self.sanitize_header(header_, self.headers[header_])
         # end if
-        return self.headers_sanitized[header]
+        return self.headers_sanitized[header_]
     # end def get
     #// 
     #// Gets a theme header, formatted and translated for display.
@@ -529,22 +641,28 @@ class WP_Theme():
     #// @return string|array|false Processed header. An array for Tags if `$markup` is false, string otherwise.
     #// False on failure.
     #//
-    def display(self, header=None, markup=True, translate=True):
+    def display(self, header_=None, markup_=None, translate_=None):
+        if markup_ is None:
+            markup_ = True
+        # end if
+        if translate_ is None:
+            translate_ = True
+        # end if
         
-        value = self.get(header)
-        if False == value:
+        value_ = self.get(header_)
+        if False == value_:
             return False
         # end if
-        if translate and php_empty(lambda : value) or (not self.load_textdomain()):
-            translate = False
+        if translate_ and php_empty(lambda : value_) or (not self.load_textdomain()):
+            translate_ = False
         # end if
-        if translate:
-            value = self.translate_header(header, value)
+        if translate_:
+            value_ = self.translate_header(header_, value_)
         # end if
-        if markup:
-            value = self.markup_header(header, value, translate)
+        if markup_:
+            value_ = self.markup_header(header_, value_, translate_)
         # end if
-        return value
+        return value_
     # end def display
     #// 
     #// Sanitize a theme header.
@@ -560,37 +678,38 @@ class WP_Theme():
     #// @param string $value  Value to sanitize.
     #// @return string|array An array for Tags header, string otherwise.
     #//
-    def sanitize_header(self, header=None, value=None):
+    def sanitize_header(self, header_=None, value_=None):
         
-        for case in Switch(header):
+        
+        for case in Switch(header_):
             if case("Status"):
-                if (not value):
-                    value = "publish"
+                if (not value_):
+                    value_ = "publish"
                     break
                 # end if
             # end if
             if case("Name"):
-                sanitize_header.header_tags = Array({"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
-                value = wp_kses(value, sanitize_header.header_tags)
+                header_tags_ = Array({"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
+                value_ = wp_kses(value_, header_tags_)
                 break
             # end if
             if case("Author"):
                 pass
             # end if
             if case("Description"):
-                sanitize_header.header_tags_with_a = Array({"a": Array({"href": True, "title": True})}, {"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
-                value = wp_kses(value, sanitize_header.header_tags_with_a)
+                header_tags_with_a_ = Array({"a": Array({"href": True, "title": True})}, {"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
+                value_ = wp_kses(value_, header_tags_with_a_)
                 break
             # end if
             if case("ThemeURI"):
                 pass
             # end if
             if case("AuthorURI"):
-                value = esc_url_raw(value)
+                value_ = esc_url_raw(value_)
                 break
             # end if
             if case("Tags"):
-                value = php_array_filter(php_array_map("trim", php_explode(",", strip_tags(value))))
+                value_ = php_array_filter(php_array_map("trim", php_explode(",", strip_tags(value_))))
                 break
             # end if
             if case("Version"):
@@ -600,11 +719,11 @@ class WP_Theme():
                 pass
             # end if
             if case("RequiresPHP"):
-                value = strip_tags(value)
+                value_ = strip_tags(value_)
                 break
             # end if
         # end for
-        return value
+        return value_
     # end def sanitize_header
     #// 
     #// Mark up a theme header.
@@ -618,45 +737,46 @@ class WP_Theme():
     #// @param string       $translate Whether the header has been translated.
     #// @return string Value, marked up.
     #//
-    def markup_header(self, header=None, value=None, translate=None):
+    def markup_header(self, header_=None, value_=None, translate_=None):
         
-        for case in Switch(header):
+        
+        for case in Switch(header_):
             if case("Name"):
-                if php_empty(lambda : value):
-                    value = esc_html(self.get_stylesheet())
+                if php_empty(lambda : value_):
+                    value_ = esc_html(self.get_stylesheet())
                 # end if
                 break
             # end if
             if case("Description"):
-                value = wptexturize(value)
+                value_ = wptexturize(value_)
                 break
             # end if
             if case("Author"):
                 if self.get("AuthorURI"):
-                    value = php_sprintf("<a href=\"%1$s\">%2$s</a>", self.display("AuthorURI", True, translate), value)
-                elif (not value):
-                    value = __("Anonymous")
+                    value_ = php_sprintf("<a href=\"%1$s\">%2$s</a>", self.display("AuthorURI", True, translate_), value_)
+                elif (not value_):
+                    value_ = __("Anonymous")
                 # end if
                 break
             # end if
             if case("Tags"):
-                markup_header.comma = None
-                if (not (php_isset(lambda : markup_header.comma))):
+                comma_ = None
+                if (not (php_isset(lambda : comma_))):
                     #// translators: Used between list items, there is a space after the comma.
-                    markup_header.comma = __(", ")
+                    comma_ = __(", ")
                 # end if
-                value = php_implode(markup_header.comma, value)
+                value_ = php_implode(comma_, value_)
                 break
             # end if
             if case("ThemeURI"):
                 pass
             # end if
             if case("AuthorURI"):
-                value = esc_url(value)
+                value_ = esc_url(value_)
                 break
             # end if
         # end for
-        return value
+        return value_
     # end def markup_header
     #// 
     #// Translate a theme header.
@@ -669,46 +789,47 @@ class WP_Theme():
     #// @param string|array $value  Value to translate. An array for Tags header, string otherwise.
     #// @return string|array Translated value. An array for Tags header, string otherwise.
     #//
-    def translate_header(self, header=None, value=None):
+    def translate_header(self, header_=None, value_=None):
         
-        for case in Switch(header):
+        
+        for case in Switch(header_):
             if case("Name"):
                 #// Cached for sorting reasons.
                 if (php_isset(lambda : self.name_translated)):
                     return self.name_translated
                 # end if
                 #// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.NonSingularStringLiteralDomain
-                self.name_translated = translate(value, self.get("TextDomain"))
+                self.name_translated = translate(value_, self.get("TextDomain"))
                 return self.name_translated
             # end if
             if case("Tags"):
-                if php_empty(lambda : value) or (not php_function_exists("get_theme_feature_list")):
-                    return value
+                if php_empty(lambda : value_) or (not php_function_exists("get_theme_feature_list")):
+                    return value_
                 # end if
-                translate_header.tags_list = None
-                if (not (php_isset(lambda : translate_header.tags_list))):
-                    translate_header.tags_list = Array({"black": __("Black"), "blue": __("Blue"), "brown": __("Brown"), "gray": __("Gray"), "green": __("Green"), "orange": __("Orange"), "pink": __("Pink"), "purple": __("Purple"), "red": __("Red"), "silver": __("Silver"), "tan": __("Tan"), "white": __("White"), "yellow": __("Yellow"), "dark": __("Dark"), "light": __("Light"), "fixed-layout": __("Fixed Layout"), "fluid-layout": __("Fluid Layout"), "responsive-layout": __("Responsive Layout"), "blavatar": __("Blavatar"), "photoblogging": __("Photoblogging"), "seasonal": __("Seasonal")})
-                    feature_list = get_theme_feature_list(False)
+                tags_list_ = None
+                if (not (php_isset(lambda : tags_list_))):
+                    tags_list_ = Array({"black": __("Black"), "blue": __("Blue"), "brown": __("Brown"), "gray": __("Gray"), "green": __("Green"), "orange": __("Orange"), "pink": __("Pink"), "purple": __("Purple"), "red": __("Red"), "silver": __("Silver"), "tan": __("Tan"), "white": __("White"), "yellow": __("Yellow"), "dark": __("Dark"), "light": __("Light"), "fixed-layout": __("Fixed Layout"), "fluid-layout": __("Fluid Layout"), "responsive-layout": __("Responsive Layout"), "blavatar": __("Blavatar"), "photoblogging": __("Photoblogging"), "seasonal": __("Seasonal")})
+                    feature_list_ = get_theme_feature_list(False)
                     #// No API.
-                    for tags in feature_list:
-                        translate_header.tags_list += tags
+                    for tags_ in feature_list_:
+                        tags_list_ += tags_
                     # end for
                 # end if
-                for tag in value:
-                    if (php_isset(lambda : translate_header.tags_list[tag])):
-                        tag = translate_header.tags_list[tag]
-                    elif (php_isset(lambda : self.tag_map[tag])):
-                        tag = translate_header.tags_list[self.tag_map[tag]]
+                for tag_ in value_:
+                    if (php_isset(lambda : tags_list_[tag_])):
+                        tag_ = tags_list_[tag_]
+                    elif (php_isset(lambda : self.tag_map[tag_])):
+                        tag_ = tags_list_[self.tag_map[tag_]]
                     # end if
                 # end for
-                return value
+                return value_
             # end if
             if case():
                 #// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.NonSingularStringLiteralDomain
-                value = translate(value, self.get("TextDomain"))
+                value_ = translate(value_, self.get("TextDomain"))
             # end if
         # end for
-        return value
+        return value_
     # end def translate_header
     #// 
     #// The directory name of the theme's "stylesheet" files, inside the theme root.
@@ -721,6 +842,7 @@ class WP_Theme():
     #// @return string Stylesheet
     #//
     def get_stylesheet(self):
+        
         
         return self.stylesheet
     # end def get_stylesheet
@@ -736,6 +858,7 @@ class WP_Theme():
     #//
     def get_template(self):
         
+        
         return self.template
     # end def get_template
     #// 
@@ -749,6 +872,7 @@ class WP_Theme():
     #// @return string Absolute path of the stylesheet directory.
     #//
     def get_stylesheet_directory(self):
+        
         
         if self.errors() and php_in_array("theme_root_missing", self.errors().get_error_codes()):
             return ""
@@ -767,12 +891,13 @@ class WP_Theme():
     #//
     def get_template_directory(self):
         
+        
         if self.parent():
-            theme_root = self.parent().theme_root
+            theme_root_ = self.parent().theme_root
         else:
-            theme_root = self.theme_root
+            theme_root_ = self.theme_root
         # end if
-        return theme_root + "/" + self.template
+        return theme_root_ + "/" + self.template
     # end def get_template_directory
     #// 
     #// Returns the URL to the directory of a theme's "stylesheet" files.
@@ -785,6 +910,7 @@ class WP_Theme():
     #// @return string URL to the stylesheet directory.
     #//
     def get_stylesheet_directory_uri(self):
+        
         
         return self.get_theme_root_uri() + "/" + php_str_replace("%2F", "/", rawurlencode(self.stylesheet))
     # end def get_stylesheet_directory_uri
@@ -800,12 +926,13 @@ class WP_Theme():
     #//
     def get_template_directory_uri(self):
         
+        
         if self.parent():
-            theme_root_uri = self.parent().get_theme_root_uri()
+            theme_root_uri_ = self.parent().get_theme_root_uri()
         else:
-            theme_root_uri = self.get_theme_root_uri()
+            theme_root_uri_ = self.get_theme_root_uri()
         # end if
-        return theme_root_uri + "/" + php_str_replace("%2F", "/", rawurlencode(self.template))
+        return theme_root_uri_ + "/" + php_str_replace("%2F", "/", rawurlencode(self.template))
     # end def get_template_directory_uri
     #// 
     #// The absolute path to the directory of the theme root.
@@ -817,6 +944,7 @@ class WP_Theme():
     #// @return string Theme root.
     #//
     def get_theme_root(self):
+        
         
         return self.theme_root
     # end def get_theme_root
@@ -832,6 +960,7 @@ class WP_Theme():
     #// @return string Theme root URI.
     #//
     def get_theme_root_uri(self):
+        
         
         if (not (php_isset(lambda : self.theme_root_uri))):
             self.theme_root_uri = get_theme_root_uri(self.stylesheet, self.theme_root)
@@ -851,24 +980,25 @@ class WP_Theme():
     #// @param string $uri Type of URL to return, either 'relative' or an absolute URI. Defaults to absolute URI.
     #// @return string|false Screenshot file. False if the theme does not have a screenshot.
     #//
-    def get_screenshot(self, uri="uri"):
+    def get_screenshot(self, uri_="uri"):
         
-        screenshot = self.cache_get("screenshot")
-        if screenshot:
-            if "relative" == uri:
-                return screenshot
+        
+        screenshot_ = self.cache_get("screenshot")
+        if screenshot_:
+            if "relative" == uri_:
+                return screenshot_
             # end if
-            return self.get_stylesheet_directory_uri() + "/" + screenshot
-        elif 0 == screenshot:
+            return self.get_stylesheet_directory_uri() + "/" + screenshot_
+        elif 0 == screenshot_:
             return False
         # end if
-        for ext in Array("png", "gif", "jpg", "jpeg"):
-            if php_file_exists(self.get_stylesheet_directory() + str("/screenshot.") + str(ext)):
-                self.cache_add("screenshot", "screenshot." + ext)
-                if "relative" == uri:
-                    return "screenshot." + ext
+        for ext_ in Array("png", "gif", "jpg", "jpeg"):
+            if php_file_exists(self.get_stylesheet_directory() + str("/screenshot.") + str(ext_)):
+                self.cache_add("screenshot", "screenshot." + ext_)
+                if "relative" == uri_:
+                    return "screenshot." + ext_
                 # end if
-                return self.get_stylesheet_directory_uri() + "/" + "screenshot." + ext
+                return self.get_stylesheet_directory_uri() + "/" + "screenshot." + ext_
             # end if
         # end for
         self.cache_add("screenshot", 0)
@@ -887,13 +1017,16 @@ class WP_Theme():
     #// @return string[] Array of files, keyed by the path to the file relative to the theme's directory, with the values
     #// being absolute paths.
     #//
-    def get_files(self, type=None, depth=0, search_parent=False):
-        
-        files = self.scandir(self.get_stylesheet_directory(), type, depth)
-        if search_parent and self.parent():
-            files += self.scandir(self.get_template_directory(), type, depth)
+    def get_files(self, type_=None, depth_=0, search_parent_=None):
+        if search_parent_ is None:
+            search_parent_ = False
         # end if
-        return files
+        
+        files_ = self.scandir(self.get_stylesheet_directory(), type_, depth_)
+        if search_parent_ and self.parent():
+            files_ += self.scandir(self.get_template_directory(), type_, depth_)
+        # end if
+        return files_
     # end def get_files
     #// 
     #// Returns the theme's post templates.
@@ -905,40 +1038,41 @@ class WP_Theme():
     #//
     def get_post_templates(self):
         
+        
         #// If you screw up your current theme and we invalidate your parent, most things still work. Let it slide.
         if self.errors() and self.errors().get_error_codes() != Array("theme_parent_invalid"):
             return Array()
         # end if
-        post_templates = self.cache_get("post_templates")
-        if (not php_is_array(post_templates)):
-            post_templates = Array()
-            files = self.get_files("php", 1, True)
-            for file,full_path in files:
-                if (not php_preg_match("|Template Name:(.*)$|mi", php_file_get_contents(full_path), header)):
+        post_templates_ = self.cache_get("post_templates")
+        if (not php_is_array(post_templates_)):
+            post_templates_ = Array()
+            files_ = self.get_files("php", 1, True)
+            for file_,full_path_ in files_:
+                if (not php_preg_match("|Template Name:(.*)$|mi", php_file_get_contents(full_path_), header_)):
                     continue
                 # end if
-                types = Array("page")
-                if php_preg_match("|Template Post Type:(.*)$|mi", php_file_get_contents(full_path), type):
-                    types = php_explode(",", _cleanup_header_comment(type[1]))
+                types_ = Array("page")
+                if php_preg_match("|Template Post Type:(.*)$|mi", php_file_get_contents(full_path_), type_):
+                    types_ = php_explode(",", _cleanup_header_comment(type_[1]))
                 # end if
-                for type in types:
-                    type = sanitize_key(type)
-                    if (not (php_isset(lambda : post_templates[type]))):
-                        post_templates[type] = Array()
+                for type_ in types_:
+                    type_ = sanitize_key(type_)
+                    if (not (php_isset(lambda : post_templates_[type_]))):
+                        post_templates_[type_] = Array()
                     # end if
-                    post_templates[type][file] = _cleanup_header_comment(header[1])
+                    post_templates_[type_][file_] = _cleanup_header_comment(header_[1])
                 # end for
             # end for
-            self.cache_add("post_templates", post_templates)
+            self.cache_add("post_templates", post_templates_)
         # end if
         if self.load_textdomain():
-            for post_type in post_templates:
-                for post_template in post_type:
-                    post_template = self.translate_header("Template Name", post_template)
+            for post_type_ in post_templates_:
+                for post_template_ in post_type_:
+                    post_template_ = self.translate_header("Template Name", post_template_)
                 # end for
             # end for
         # end if
-        return post_templates
+        return post_templates_
     # end def get_post_templates
     #// 
     #// Returns the theme's post templates for a given post type.
@@ -951,13 +1085,14 @@ class WP_Theme():
     #// If a post is provided, its post type is used.
     #// @return string[] Array of template header names keyed by the template file name.
     #//
-    def get_page_templates(self, post=None, post_type="page"):
+    def get_page_templates(self, post_=None, post_type_="page"):
         
-        if post:
-            post_type = get_post_type(post)
+        
+        if post_:
+            post_type_ = get_post_type(post_)
         # end if
-        post_templates = self.get_post_templates()
-        post_templates = post_templates[post_type] if (php_isset(lambda : post_templates[post_type])) else Array()
+        post_templates_ = self.get_post_templates()
+        post_templates_ = post_templates_[post_type_] if (php_isset(lambda : post_templates_[post_type_])) else Array()
         #// 
         #// Filters list of page templates for a theme.
         #// 
@@ -968,7 +1103,7 @@ class WP_Theme():
         #// @param WP_Post|null $post           The post being edited, provided for context, or null.
         #// @param string       $post_type      Post type to get the templates for.
         #//
-        post_templates = apply_filters("theme_templates", post_templates, self, post, post_type)
+        post_templates_ = apply_filters("theme_templates", post_templates_, self, post_, post_type_)
         #// 
         #// Filters list of page templates for a theme.
         #// 
@@ -983,8 +1118,8 @@ class WP_Theme():
         #// @param WP_Post|null $post           The post being edited, provided for context, or null.
         #// @param string       $post_type      Post type to get the templates for.
         #//
-        post_templates = apply_filters(str("theme_") + str(post_type) + str("_templates"), post_templates, self, post, post_type)
-        return post_templates
+        post_templates_ = apply_filters(str("theme_") + str(post_type_) + str("_templates"), post_templates_, self, post_, post_type_)
+        return post_templates_
     # end def get_page_templates
     #// 
     #// Scans a directory for files of a certain extension.
@@ -1002,21 +1137,22 @@ class WP_Theme():
     #// @return string[]|false Array of files, keyed by the path to the file relative to the `$path` directory prepended
     #// with `$relative_path`, with the values being absolute paths. False otherwise.
     #//
-    def scandir(self, path=None, extensions=None, depth=0, relative_path=""):
+    def scandir(self, path_=None, extensions_=None, depth_=0, relative_path_=""):
         
-        if (not php_is_dir(path)):
+        
+        if (not php_is_dir(path_)):
             return False
         # end if
-        if extensions:
-            extensions = extensions
-            _extensions = php_implode("|", extensions)
+        if extensions_:
+            extensions_ = extensions_
+            _extensions_ = php_implode("|", extensions_)
         # end if
-        relative_path = trailingslashit(relative_path)
-        if "/" == relative_path:
-            relative_path = ""
+        relative_path_ = trailingslashit(relative_path_)
+        if "/" == relative_path_:
+            relative_path_ = ""
         # end if
-        results = scandir(path)
-        files = Array()
+        results_ = scandir(path_)
+        files_ = Array()
         #// 
         #// Filters the array of excluded directories and files while scanning theme folder.
         #// 
@@ -1024,22 +1160,22 @@ class WP_Theme():
         #// 
         #// @param string[] $exclusions Array of excluded directories and files.
         #//
-        exclusions = apply_filters("theme_scandir_exclusions", Array("CVS", "node_modules", "vendor", "bower_components"))
-        for result in results:
-            if "." == result[0] or php_in_array(result, exclusions, True):
+        exclusions_ = apply_filters("theme_scandir_exclusions", Array("CVS", "node_modules", "vendor", "bower_components"))
+        for result_ in results_:
+            if "." == result_[0] or php_in_array(result_, exclusions_, True):
                 continue
             # end if
-            if php_is_dir(path + "/" + result):
-                if (not depth):
+            if php_is_dir(path_ + "/" + result_):
+                if (not depth_):
                     continue
                 # end if
-                found = self.scandir(path + "/" + result, extensions, depth - 1, relative_path + result)
-                files = php_array_merge_recursive(files, found)
-            elif (not extensions) or php_preg_match("~\\.(" + _extensions + ")$~", result):
-                files[relative_path + result] = path + "/" + result
+                found_ = self.scandir(path_ + "/" + result_, extensions_, depth_ - 1, relative_path_ + result_)
+                files_ = php_array_merge_recursive(files_, found_)
+            elif (not extensions_) or php_preg_match("~\\.(" + _extensions_ + ")$~", result_):
+                files_[relative_path_ + result_] = path_ + "/" + result_
             # end if
         # end for
-        return files
+        return files_
     # end def scandir
     #// 
     #// Loads the theme's textdomain.
@@ -1054,26 +1190,27 @@ class WP_Theme():
     #//
     def load_textdomain(self):
         
+        
         if (php_isset(lambda : self.textdomain_loaded)):
             return self.textdomain_loaded
         # end if
-        textdomain = self.get("TextDomain")
-        if (not textdomain):
+        textdomain_ = self.get("TextDomain")
+        if (not textdomain_):
             self.textdomain_loaded = False
             return False
         # end if
-        if is_textdomain_loaded(textdomain):
+        if is_textdomain_loaded(textdomain_):
             self.textdomain_loaded = True
             return True
         # end if
-        path = self.get_stylesheet_directory()
-        domainpath = self.get("DomainPath")
-        if domainpath:
-            path += domainpath
+        path_ = self.get_stylesheet_directory()
+        domainpath_ = self.get("DomainPath")
+        if domainpath_:
+            path_ += domainpath_
         else:
-            path += "/languages"
+            path_ += "/languages"
         # end if
-        self.textdomain_loaded = load_theme_textdomain(textdomain, path)
+        self.textdomain_loaded = load_theme_textdomain(textdomain_, path_)
         return self.textdomain_loaded
     # end def load_textdomain
     #// 
@@ -1086,20 +1223,21 @@ class WP_Theme():
     #// @param int $blog_id Optional. Ignored if only network-wide settings are checked. Defaults to current site.
     #// @return bool Whether the theme is allowed for the network. Returns true in single-site.
     #//
-    def is_allowed(self, check="both", blog_id=None):
+    def is_allowed(self, check_="both", blog_id_=None):
+        
         
         if (not is_multisite()):
             return True
         # end if
-        if "both" == check or "network" == check:
-            allowed = self.get_allowed_on_network()
-            if (not php_empty(lambda : allowed[self.get_stylesheet()])):
+        if "both" == check_ or "network" == check_:
+            allowed_ = self.get_allowed_on_network()
+            if (not php_empty(lambda : allowed_[self.get_stylesheet()])):
                 return True
             # end if
         # end if
-        if "both" == check or "site" == check:
-            allowed = self.get_allowed_on_site(blog_id)
-            if (not php_empty(lambda : allowed[self.get_stylesheet()])):
+        if "both" == check_ or "site" == check_:
+            allowed_ = self.get_allowed_on_site(blog_id_)
+            if (not php_empty(lambda : allowed_[self.get_stylesheet()])):
                 return True
             # end if
         # end if
@@ -1117,10 +1255,11 @@ class WP_Theme():
     @classmethod
     def get_core_default_theme(self):
         
-        for slug,name in array_reverse(self.default_themes):
-            theme = wp_get_theme(slug)
-            if theme.exists():
-                return theme
+        
+        for slug_,name_ in array_reverse(self.default_themes):
+            theme_ = wp_get_theme(slug_)
+            if theme_.exists():
+                return theme_
             # end if
         # end for
         return False
@@ -1134,7 +1273,8 @@ class WP_Theme():
     #// @return string[] Array of stylesheet names.
     #//
     @classmethod
-    def get_allowed(self, blog_id=None):
+    def get_allowed(self, blog_id_=None):
+        
         
         #// 
         #// Filters the array of themes allowed on the network.
@@ -1147,8 +1287,8 @@ class WP_Theme():
         #// @param string[] $allowed_themes An array of theme stylesheet names.
         #// @param int      $blog_id        ID of the site.
         #//
-        network = apply_filters("network_allowed_themes", self.get_allowed_on_network(), blog_id)
-        return network + self.get_allowed_on_site(blog_id)
+        network_ = apply_filters("network_allowed_themes", self.get_allowed_on_network(), blog_id_)
+        return network_ + self.get_allowed_on_site(blog_id_)
     # end def get_allowed
     #// 
     #// Returns array of stylesheet names of themes allowed on the network.
@@ -1162,9 +1302,10 @@ class WP_Theme():
     @classmethod
     def get_allowed_on_network(self):
         
-        get_allowed_on_network.allowed_themes = None
-        if (not (php_isset(lambda : get_allowed_on_network.allowed_themes))):
-            get_allowed_on_network.allowed_themes = get_site_option("allowedthemes")
+        
+        allowed_themes_ = None
+        if (not (php_isset(lambda : allowed_themes_))):
+            allowed_themes_ = get_site_option("allowedthemes")
         # end if
         #// 
         #// Filters the array of themes allowed on the network.
@@ -1173,8 +1314,8 @@ class WP_Theme():
         #// 
         #// @param string[] $allowed_themes An array of theme stylesheet names.
         #//
-        get_allowed_on_network.allowed_themes = apply_filters("allowed_themes", get_allowed_on_network.allowed_themes)
-        return get_allowed_on_network.allowed_themes
+        allowed_themes_ = apply_filters("allowed_themes", allowed_themes_)
+        return allowed_themes_
     # end def get_allowed_on_network
     #// 
     #// Returns array of stylesheet names of themes allowed on the site.
@@ -1187,13 +1328,14 @@ class WP_Theme():
     #// @return string[] Array of stylesheet names.
     #//
     @classmethod
-    def get_allowed_on_site(self, blog_id=None):
+    def get_allowed_on_site(self, blog_id_=None):
         
-        get_allowed_on_site.allowed_themes = Array()
-        if (not blog_id) or (not is_multisite()):
-            blog_id = get_current_blog_id()
+        
+        allowed_themes_ = Array()
+        if (not blog_id_) or (not is_multisite()):
+            blog_id_ = get_current_blog_id()
         # end if
-        if (php_isset(lambda : get_allowed_on_site.allowed_themes[blog_id])):
+        if (php_isset(lambda : allowed_themes_[blog_id_])):
             #// 
             #// Filters the array of themes allowed on the site.
             #// 
@@ -1202,53 +1344,53 @@ class WP_Theme():
             #// @param string[] $allowed_themes An array of theme stylesheet names.
             #// @param int      $blog_id        ID of the site. Defaults to current site.
             #//
-            return apply_filters("site_allowed_themes", get_allowed_on_site.allowed_themes[blog_id], blog_id)
+            return apply_filters("site_allowed_themes", allowed_themes_[blog_id_], blog_id_)
         # end if
-        current = get_current_blog_id() == blog_id
-        if current:
-            get_allowed_on_site.allowed_themes[blog_id] = get_option("allowedthemes")
+        current_ = get_current_blog_id() == blog_id_
+        if current_:
+            allowed_themes_[blog_id_] = get_option("allowedthemes")
         else:
-            switch_to_blog(blog_id)
-            get_allowed_on_site.allowed_themes[blog_id] = get_option("allowedthemes")
+            switch_to_blog(blog_id_)
+            allowed_themes_[blog_id_] = get_option("allowedthemes")
             restore_current_blog()
         # end if
         #// This is all super old MU back compat joy.
         #// 'allowedthemes' keys things by stylesheet. 'allowed_themes' keyed things by name.
-        if False == get_allowed_on_site.allowed_themes[blog_id]:
-            if current:
-                get_allowed_on_site.allowed_themes[blog_id] = get_option("allowed_themes")
+        if False == allowed_themes_[blog_id_]:
+            if current_:
+                allowed_themes_[blog_id_] = get_option("allowed_themes")
             else:
-                switch_to_blog(blog_id)
-                get_allowed_on_site.allowed_themes[blog_id] = get_option("allowed_themes")
+                switch_to_blog(blog_id_)
+                allowed_themes_[blog_id_] = get_option("allowed_themes")
                 restore_current_blog()
             # end if
-            if (not php_is_array(get_allowed_on_site.allowed_themes[blog_id])) or php_empty(lambda : get_allowed_on_site.allowed_themes[blog_id]):
-                get_allowed_on_site.allowed_themes[blog_id] = Array()
+            if (not php_is_array(allowed_themes_[blog_id_])) or php_empty(lambda : allowed_themes_[blog_id_]):
+                allowed_themes_[blog_id_] = Array()
             else:
-                converted = Array()
-                themes = wp_get_themes()
-                for stylesheet,theme_data in themes:
-                    if (php_isset(lambda : get_allowed_on_site.allowed_themes[blog_id][theme_data.get("Name")])):
-                        converted[stylesheet] = True
+                converted_ = Array()
+                themes_ = wp_get_themes()
+                for stylesheet_,theme_data_ in themes_:
+                    if (php_isset(lambda : allowed_themes_[blog_id_][theme_data_.get("Name")])):
+                        converted_[stylesheet_] = True
                     # end if
                 # end for
-                get_allowed_on_site.allowed_themes[blog_id] = converted
+                allowed_themes_[blog_id_] = converted_
             # end if
             #// Set the option so we never have to go through this pain again.
-            if is_admin() and get_allowed_on_site.allowed_themes[blog_id]:
-                if current:
-                    update_option("allowedthemes", get_allowed_on_site.allowed_themes[blog_id])
+            if is_admin() and allowed_themes_[blog_id_]:
+                if current_:
+                    update_option("allowedthemes", allowed_themes_[blog_id_])
                     delete_option("allowed_themes")
                 else:
-                    switch_to_blog(blog_id)
-                    update_option("allowedthemes", get_allowed_on_site.allowed_themes[blog_id])
+                    switch_to_blog(blog_id_)
+                    update_option("allowedthemes", allowed_themes_[blog_id_])
                     delete_option("allowed_themes")
                     restore_current_blog()
                 # end if
             # end if
         # end if
         #// This filter is documented in wp-includes/class-wp-theme.php
-        return apply_filters("site_allowed_themes", get_allowed_on_site.allowed_themes[blog_id], blog_id)
+        return apply_filters("site_allowed_themes", allowed_themes_[blog_id_], blog_id_)
     # end def get_allowed_on_site
     #// 
     #// Enables a theme for all sites on the current network.
@@ -1258,19 +1400,20 @@ class WP_Theme():
     #// @param string|string[] $stylesheets Stylesheet name or array of stylesheet names.
     #//
     @classmethod
-    def network_enable_theme(self, stylesheets=None):
+    def network_enable_theme(self, stylesheets_=None):
+        
         
         if (not is_multisite()):
             return
         # end if
-        if (not php_is_array(stylesheets)):
-            stylesheets = Array(stylesheets)
+        if (not php_is_array(stylesheets_)):
+            stylesheets_ = Array(stylesheets_)
         # end if
-        network_enable_theme.allowed_themes = get_site_option("allowedthemes")
-        for stylesheet in stylesheets:
-            network_enable_theme.allowed_themes[stylesheet] = True
+        allowed_themes_ = get_site_option("allowedthemes")
+        for stylesheet_ in stylesheets_:
+            allowed_themes_[stylesheet_] = True
         # end for
-        update_site_option("allowedthemes", network_enable_theme.allowed_themes)
+        update_site_option("allowedthemes", allowed_themes_)
     # end def network_enable_theme
     #// 
     #// Disables a theme for all sites on the current network.
@@ -1280,21 +1423,22 @@ class WP_Theme():
     #// @param string|string[] $stylesheets Stylesheet name or array of stylesheet names.
     #//
     @classmethod
-    def network_disable_theme(self, stylesheets=None):
+    def network_disable_theme(self, stylesheets_=None):
+        
         
         if (not is_multisite()):
             return
         # end if
-        if (not php_is_array(stylesheets)):
-            stylesheets = Array(stylesheets)
+        if (not php_is_array(stylesheets_)):
+            stylesheets_ = Array(stylesheets_)
         # end if
-        network_disable_theme.allowed_themes = get_site_option("allowedthemes")
-        for stylesheet in stylesheets:
-            if (php_isset(lambda : network_disable_theme.allowed_themes[stylesheet])):
-                network_disable_theme.allowed_themes[stylesheet] = None
+        allowed_themes_ = get_site_option("allowedthemes")
+        for stylesheet_ in stylesheets_:
+            if (php_isset(lambda : allowed_themes_[stylesheet_])):
+                allowed_themes_[stylesheet_] = None
             # end if
         # end for
-        update_site_option("allowedthemes", network_disable_theme.allowed_themes)
+        update_site_option("allowedthemes", allowed_themes_)
     # end def network_disable_theme
     #// 
     #// Sorts themes by name.
@@ -1304,15 +1448,16 @@ class WP_Theme():
     #// @param WP_Theme[] $themes Array of theme objects to sort (passed by reference).
     #//
     @classmethod
-    def sort_by_name(self, themes=None):
+    def sort_by_name(self, themes_=None):
+        
         
         if 0 == php_strpos(get_user_locale(), "en_"):
-            uasort(themes, Array("WP_Theme", "_name_sort"))
+            uasort(themes_, Array("WP_Theme", "_name_sort"))
         else:
-            for key,theme in themes:
-                theme.translate_header("Name", theme.headers["Name"])
+            for key_,theme_ in themes_:
+                theme_.translate_header("Name", theme_.headers["Name"])
             # end for
-            uasort(themes, Array("WP_Theme", "_name_sort_i18n"))
+            uasort(themes_, Array("WP_Theme", "_name_sort_i18n"))
         # end if
     # end def sort_by_name
     #// 
@@ -1328,9 +1473,10 @@ class WP_Theme():
     #// @return int Negative if `$a` falls lower in the natural order than `$b`. Zero if they fall equally.
     #// Greater than 0 if `$a` falls higher in the natural order than `$b`. Used with usort().
     #//
-    def _name_sort(self, a=None, b=None):
+    def _name_sort(self, a_=None, b_=None):
         
-        return strnatcasecmp(a.headers["Name"], b.headers["Name"])
+        
+        return strnatcasecmp(a_.headers["Name"], b_.headers["Name"])
     # end def _name_sort
     #// 
     #// Callback function for usort() to naturally sort themes by translated name.
@@ -1342,8 +1488,9 @@ class WP_Theme():
     #// @return int Negative if `$a` falls lower in the natural order than `$b`. Zero if they fall equally.
     #// Greater than 0 if `$a` falls higher in the natural order than `$b`. Used with usort().
     #//
-    def _name_sort_i18n(self, a=None, b=None):
+    def _name_sort_i18n(self, a_=None, b_=None):
         
-        return strnatcasecmp(a.name_translated, b.name_translated)
+        
+        return strnatcasecmp(a_.name_translated, b_.name_translated)
     # end def _name_sort_i18n
 # end class WP_Theme

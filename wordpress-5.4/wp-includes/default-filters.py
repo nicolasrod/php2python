@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,66 +20,66 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package WordPress
 #// 
 #// Strip, trim, kses, special chars for string saves.
-for filter in Array("pre_term_name", "pre_comment_author_name", "pre_link_name", "pre_link_target", "pre_link_rel", "pre_user_display_name", "pre_user_first_name", "pre_user_last_name", "pre_user_nickname"):
-    add_filter(filter, "sanitize_text_field")
-    add_filter(filter, "wp_filter_kses")
-    add_filter(filter, "_wp_specialchars", 30)
+for filter_ in Array("pre_term_name", "pre_comment_author_name", "pre_link_name", "pre_link_target", "pre_link_rel", "pre_user_display_name", "pre_user_first_name", "pre_user_last_name", "pre_user_nickname"):
+    add_filter(filter_, "sanitize_text_field")
+    add_filter(filter_, "wp_filter_kses")
+    add_filter(filter_, "_wp_specialchars", 30)
 # end for
 #// Strip, kses, special chars for string display.
-for filter in Array("term_name", "comment_author_name", "link_name", "link_target", "link_rel", "user_display_name", "user_first_name", "user_last_name", "user_nickname"):
+for filter_ in Array("term_name", "comment_author_name", "link_name", "link_target", "link_rel", "user_display_name", "user_first_name", "user_last_name", "user_nickname"):
     if is_admin():
         #// These are expensive. Run only on admin pages for defense in depth.
-        add_filter(filter, "sanitize_text_field")
-        add_filter(filter, "wp_kses_data")
+        add_filter(filter_, "sanitize_text_field")
+        add_filter(filter_, "wp_kses_data")
     # end if
-    add_filter(filter, "_wp_specialchars", 30)
+    add_filter(filter_, "_wp_specialchars", 30)
 # end for
 #// Kses only for textarea saves.
-for filter in Array("pre_term_description", "pre_link_description", "pre_link_notes", "pre_user_description"):
-    add_filter(filter, "wp_filter_kses")
+for filter_ in Array("pre_term_description", "pre_link_description", "pre_link_notes", "pre_user_description"):
+    add_filter(filter_, "wp_filter_kses")
 # end for
 #// Kses only for textarea admin displays.
 if is_admin():
-    for filter in Array("term_description", "link_description", "link_notes", "user_description"):
-        add_filter(filter, "wp_kses_data")
+    for filter_ in Array("term_description", "link_description", "link_notes", "user_description"):
+        add_filter(filter_, "wp_kses_data")
     # end for
     add_filter("comment_text", "wp_kses_post")
 # end if
 #// Email saves.
-for filter in Array("pre_comment_author_email", "pre_user_email"):
-    add_filter(filter, "trim")
-    add_filter(filter, "sanitize_email")
-    add_filter(filter, "wp_filter_kses")
+for filter_ in Array("pre_comment_author_email", "pre_user_email"):
+    add_filter(filter_, "trim")
+    add_filter(filter_, "sanitize_email")
+    add_filter(filter_, "wp_filter_kses")
 # end for
 #// Email admin display.
-for filter in Array("comment_author_email", "user_email"):
-    add_filter(filter, "sanitize_email")
+for filter_ in Array("comment_author_email", "user_email"):
+    add_filter(filter_, "sanitize_email")
     if is_admin():
-        add_filter(filter, "wp_kses_data")
+        add_filter(filter_, "wp_kses_data")
     # end if
 # end for
 #// Save URL.
-for filter in Array("pre_comment_author_url", "pre_user_url", "pre_link_url", "pre_link_image", "pre_link_rss", "pre_post_guid"):
-    add_filter(filter, "wp_strip_all_tags")
-    add_filter(filter, "esc_url_raw")
-    add_filter(filter, "wp_filter_kses")
+for filter_ in Array("pre_comment_author_url", "pre_user_url", "pre_link_url", "pre_link_image", "pre_link_rss", "pre_post_guid"):
+    add_filter(filter_, "wp_strip_all_tags")
+    add_filter(filter_, "esc_url_raw")
+    add_filter(filter_, "wp_filter_kses")
 # end for
 #// Display URL.
-for filter in Array("user_url", "link_url", "link_image", "link_rss", "comment_url", "post_guid"):
+for filter_ in Array("user_url", "link_url", "link_image", "link_rss", "comment_url", "post_guid"):
     if is_admin():
-        add_filter(filter, "wp_strip_all_tags")
+        add_filter(filter_, "wp_strip_all_tags")
     # end if
-    add_filter(filter, "esc_url")
+    add_filter(filter_, "esc_url")
     if is_admin():
-        add_filter(filter, "wp_kses_data")
+        add_filter(filter_, "wp_kses_data")
     # end if
 # end for
 #// Slugs.
 add_filter("pre_term_slug", "sanitize_title")
 add_filter("wp_insert_post_data", "_wp_customize_changeset_filter_insert_post_data", 10, 2)
 #// Keys.
-for filter in Array("pre_post_type", "pre_post_status", "pre_post_comment_status", "pre_post_ping_status"):
-    add_filter(filter, "sanitize_key")
+for filter_ in Array("pre_post_type", "pre_post_status", "pre_post_comment_status", "pre_post_ping_status"):
+    add_filter(filter_, "sanitize_key")
 # end for
 #// Mime types.
 add_filter("pre_post_mime_type", "sanitize_mime_type")
@@ -112,34 +107,34 @@ add_action("added_comment_meta", "wp_cache_set_comments_last_changed")
 add_action("updated_comment_meta", "wp_cache_set_comments_last_changed")
 add_action("deleted_comment_meta", "wp_cache_set_comments_last_changed")
 #// Places to balance tags on input.
-for filter in Array("content_save_pre", "excerpt_save_pre", "comment_save_pre", "pre_comment_content"):
-    add_filter(filter, "convert_invalid_entities")
-    add_filter(filter, "balanceTags", 50)
+for filter_ in Array("content_save_pre", "excerpt_save_pre", "comment_save_pre", "pre_comment_content"):
+    add_filter(filter_, "convert_invalid_entities")
+    add_filter(filter_, "balanceTags", 50)
 # end for
 #// Add proper rel values for links with target.
 add_action("init", "wp_init_targeted_link_rel_filters")
 #// Format strings for display.
-for filter in Array("comment_author", "term_name", "link_name", "link_description", "link_notes", "bloginfo", "wp_title", "widget_title"):
-    add_filter(filter, "wptexturize")
-    add_filter(filter, "convert_chars")
-    add_filter(filter, "esc_html")
+for filter_ in Array("comment_author", "term_name", "link_name", "link_description", "link_notes", "bloginfo", "wp_title", "widget_title"):
+    add_filter(filter_, "wptexturize")
+    add_filter(filter_, "convert_chars")
+    add_filter(filter_, "esc_html")
 # end for
 #// Format WordPress.
-for filter in Array("the_content", "the_title", "wp_title"):
-    add_filter(filter, "capital_P_dangit", 11)
+for filter_ in Array("the_content", "the_title", "wp_title"):
+    add_filter(filter_, "capital_P_dangit", 11)
 # end for
 add_filter("comment_text", "capital_P_dangit", 31)
 #// Format titles.
-for filter in Array("single_post_title", "single_cat_title", "single_tag_title", "single_month_title", "nav_menu_attr_title", "nav_menu_description"):
-    add_filter(filter, "wptexturize")
-    add_filter(filter, "strip_tags")
+for filter_ in Array("single_post_title", "single_cat_title", "single_tag_title", "single_month_title", "nav_menu_attr_title", "nav_menu_description"):
+    add_filter(filter_, "wptexturize")
+    add_filter(filter_, "strip_tags")
 # end for
 #// Format text area for display.
-for filter in Array("term_description", "get_the_post_type_description"):
-    add_filter(filter, "wptexturize")
-    add_filter(filter, "convert_chars")
-    add_filter(filter, "wpautop")
-    add_filter(filter, "shortcode_unautop")
+for filter_ in Array("term_description", "get_the_post_type_description"):
+    add_filter(filter_, "wptexturize")
+    add_filter(filter_, "convert_chars")
+    add_filter(filter_, "wpautop")
+    add_filter(filter_, "shortcode_unautop")
 # end for
 #// Format for RSS.
 add_filter("term_name_rss", "convert_chars")
@@ -202,8 +197,8 @@ add_filter("the_guid", "esc_url")
 #// Email filters.
 add_filter("wp_mail", "wp_staticize_emoji_for_email")
 #// Mark site as no longer fresh.
-for action in Array("publish_post", "publish_page", "wp_ajax_save-widget", "wp_ajax_widgets-order", "customize_save_after"):
-    add_action(action, "_delete_option_fresh_site", 0)
+for action_ in Array("publish_post", "publish_page", "wp_ajax_save-widget", "wp_ajax_widgets-order", "customize_save_after"):
+    add_action(action_, "_delete_option_fresh_site", 0)
 # end for
 #// Misc filters.
 add_filter("option_ping_sites", "privacy_ping_filter")
@@ -282,8 +277,8 @@ add_action("login_head", "wp_site_icon", 99)
 add_action("login_footer", "wp_print_footer_scripts", 20)
 add_action("login_init", "send_frame_options_header", 10, 0)
 #// Feed generator tags.
-for action in Array("rss2_head", "commentsrss2_head", "rss_head", "rdf_header", "atom_head", "comments_atom_head", "opml_head", "app_head"):
-    add_action(action, "the_generator")
+for action_ in Array("rss2_head", "commentsrss2_head", "rss_head", "rdf_header", "atom_head", "comments_atom_head", "opml_head", "app_head"):
+    add_action(action_, "the_generator")
 # end for
 #// Feed Site Icon.
 add_action("atom_head", "atom_site_icon")
@@ -508,5 +503,5 @@ add_filter("pre_oembed_result", "wp_filter_pre_oembed_result", 10, 3)
 add_filter("user_has_cap", "wp_maybe_grant_install_languages_cap", 1)
 add_filter("user_has_cap", "wp_maybe_grant_resume_extensions_caps", 1)
 add_filter("user_has_cap", "wp_maybe_grant_site_health_caps", 1, 4)
-filter = None
-action = None
+filter_ = None
+action_ = None

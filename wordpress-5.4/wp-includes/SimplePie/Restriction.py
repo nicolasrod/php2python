@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,8 +60,26 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage API
 #//
 class SimplePie_Restriction():
+    #// 
+    #// Relationship ('allow'/'deny')
+    #// 
+    #// @var string
+    #// @see get_relationship()
+    #//
     relationship = Array()
+    #// 
+    #// Type of restriction
+    #// 
+    #// @var string
+    #// @see get_type()
+    #//
     type = Array()
+    #// 
+    #// Restricted values
+    #// 
+    #// @var string
+    #// @see get_value()
+    #//
     value = Array()
     #// 
     #// Constructor, used to input the data
@@ -74,11 +87,12 @@ class SimplePie_Restriction():
     #// For documentation on all the parameters, see the corresponding
     #// properties and their accessors
     #//
-    def __init__(self, relationship=None, type=None, value=None):
+    def __init__(self, relationship_=None, type_=None, value_=None):
         
-        self.relationship = relationship
-        self.type = type
-        self.value = value
+        
+        self.relationship = relationship_
+        self.type = type_
+        self.value = value_
     # end def __init__
     #// 
     #// String-ified version
@@ -86,6 +100,7 @@ class SimplePie_Restriction():
     #// @return string
     #//
     def __tostring(self):
+        
         
         #// There is no $this->data here
         return php_md5(serialize(self))
@@ -96,6 +111,7 @@ class SimplePie_Restriction():
     #// @return string|null Either 'allow' or 'deny'
     #//
     def get_relationship(self):
+        
         
         if self.relationship != None:
             return self.relationship
@@ -110,6 +126,7 @@ class SimplePie_Restriction():
     #//
     def get_type(self):
         
+        
         if self.type != None:
             return self.type
         else:
@@ -122,6 +139,7 @@ class SimplePie_Restriction():
     #// @return string|null
     #//
     def get_value(self):
+        
         
         if self.value != None:
             return self.value

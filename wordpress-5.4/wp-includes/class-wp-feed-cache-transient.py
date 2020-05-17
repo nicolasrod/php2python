@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,8 +20,28 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 2.8.0
 #//
 class WP_Feed_Cache_Transient():
+    #// 
+    #// Holds the transient name.
+    #// 
+    #// @since 2.8.0
+    #// @var string
+    #//
     name = Array()
+    #// 
+    #// Holds the transient mod name.
+    #// 
+    #// @since 2.8.0
+    #// @var string
+    #//
     mod_name = Array()
+    #// 
+    #// Holds the cache duration in seconds.
+    #// 
+    #// Defaults to 43200 seconds (12 hours).
+    #// 
+    #// @since 2.8.0
+    #// @var int
+    #//
     lifetime = 43200
     #// 
     #// Constructor.
@@ -38,11 +53,12 @@ class WP_Feed_Cache_Transient():
     #// @param string $filename  Unique identifier for cache object.
     #// @param string $extension 'spi' or 'spc'.
     #//
-    def __init__(self, location=None, filename=None, extension=None):
+    def __init__(self, location_=None, filename_=None, extension_=None):
         
-        self.name = "feed_" + filename
-        self.mod_name = "feed_mod_" + filename
-        lifetime = self.lifetime
+        
+        self.name = "feed_" + filename_
+        self.mod_name = "feed_mod_" + filename_
+        lifetime_ = self.lifetime
         #// 
         #// Filters the transient lifetime of the feed cache.
         #// 
@@ -51,7 +67,7 @@ class WP_Feed_Cache_Transient():
         #// @param int    $lifetime Cache duration in seconds. Default is 43200 seconds (12 hours).
         #// @param string $filename Unique identifier for the cache object.
         #//
-        self.lifetime = apply_filters("wp_feed_cache_transient_lifetime", lifetime, filename)
+        self.lifetime = apply_filters("wp_feed_cache_transient_lifetime", lifetime_, filename_)
     # end def __init__
     #// 
     #// Sets the transient.
@@ -61,12 +77,13 @@ class WP_Feed_Cache_Transient():
     #// @param SimplePie $data Data to save.
     #// @return true Always true.
     #//
-    def save(self, data=None):
+    def save(self, data_=None):
         
-        if type(data).__name__ == "SimplePie":
-            data = data.data
+        
+        if type(data_).__name__ == "SimplePie":
+            data_ = data_.data
         # end if
-        set_transient(self.name, data, self.lifetime)
+        set_transient(self.name, data_, self.lifetime)
         set_transient(self.mod_name, time(), self.lifetime)
         return True
     # end def save
@@ -79,6 +96,7 @@ class WP_Feed_Cache_Transient():
     #//
     def load(self):
         
+        
         return get_transient(self.name)
     # end def load
     #// 
@@ -89,6 +107,7 @@ class WP_Feed_Cache_Transient():
     #// @return mixed Transient value.
     #//
     def mtime(self):
+        
         
         return get_transient(self.mod_name)
     # end def mtime
@@ -101,6 +120,7 @@ class WP_Feed_Cache_Transient():
     #//
     def touch(self):
         
+        
         return set_transient(self.mod_name, time(), self.lifetime)
     # end def touch
     #// 
@@ -111,6 +131,7 @@ class WP_Feed_Cache_Transient():
     #// @return true Always true.
     #//
     def unlink(self):
+        
         
         delete_transient(self.name)
         delete_transient(self.mod_name)

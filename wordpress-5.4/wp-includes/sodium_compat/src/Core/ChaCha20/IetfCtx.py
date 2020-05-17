@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -31,17 +26,18 @@ class ParagonIE_Sodium_Core_ChaCha20_IetfCtx(ParagonIE_Sodium_Core_ChaCha20_Ctx)
     #// @throws InvalidArgumentException
     #// @throws TypeError
     #//
-    def __init__(self, key="", iv="", counter=""):
+    def __init__(self, key_="", iv_="", counter_=""):
         
-        if self.strlen(iv) != 12:
+        
+        if self.strlen(iv_) != 12:
             raise php_new_class("InvalidArgumentException", lambda : InvalidArgumentException("ChaCha20 expects a 96-bit nonce in IETF mode."))
         # end if
-        super().__init__(key, self.substr(iv, 0, 8), counter)
-        if (not php_empty(lambda : counter)):
-            self.container[12] = self.load_4(self.substr(counter, 0, 4))
+        super().__init__(key_, self.substr(iv_, 0, 8), counter_)
+        if (not php_empty(lambda : counter_)):
+            self.container[12] = self.load_4(self.substr(counter_, 0, 4))
         # end if
-        self.container[13] = self.load_4(self.substr(iv, 0, 4))
-        self.container[14] = self.load_4(self.substr(iv, 4, 4))
-        self.container[15] = self.load_4(self.substr(iv, 8, 4))
+        self.container[13] = self.load_4(self.substr(iv_, 0, 4))
+        self.container[14] = self.load_4(self.substr(iv_, 4, 4))
+        self.container[15] = self.load_4(self.substr(iv_, 8, 4))
     # end def __init__
 # end class ParagonIE_Sodium_Core_ChaCha20_IetfCtx

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -38,27 +33,28 @@ class WP_Fatal_Error_Handler():
     #//
     def handle(self):
         
+        
         if php_defined("WP_SANDBOX_SCRAPING") and WP_SANDBOX_SCRAPING:
             return
         # end if
         try: 
             #// Bail if no error found.
-            error = self.detect_error()
-            if (not error):
+            error_ = self.detect_error()
+            if (not error_):
                 return
             # end if
             if (not (php_isset(lambda : PHP_GLOBALS["wp_locale"]))) and php_function_exists("load_default_textdomain"):
                 load_default_textdomain()
             # end if
-            handled = False
+            handled_ = False
             if (not is_multisite()) and wp_recovery_mode().is_initialized():
-                handled = wp_recovery_mode().handle_error(error)
+                handled_ = wp_recovery_mode().handle_error(error_)
             # end if
             #// Display the PHP error template if headers not sent.
             if is_admin() or (not php_headers_sent()):
-                self.display_error_template(error, handled)
+                self.display_error_template(error_, handled_)
             # end if
-        except Exception as e:
+        except Exception as e_:
             pass
         # end try
     # end def handle
@@ -71,16 +67,17 @@ class WP_Fatal_Error_Handler():
     #//
     def detect_error(self):
         
-        error = error_get_last()
+        
+        error_ = error_get_last()
         #// No error, just skip the error handling code.
-        if None == error:
+        if None == error_:
             return None
         # end if
         #// Bail if this error should not be handled.
-        if (not self.should_handle_error(error)):
+        if (not self.should_handle_error(error_)):
             return None
         # end if
-        return error
+        return error_
     # end def detect_error
     #// 
     #// Determines whether we are dealing with an error that WordPress should handle
@@ -91,10 +88,11 @@ class WP_Fatal_Error_Handler():
     #// @param array $error Error information retrieved from error_get_last().
     #// @return bool Whether WordPress should handle this error.
     #//
-    def should_handle_error(self, error=None):
+    def should_handle_error(self, error_=None):
         
-        error_types_to_handle = Array(E_ERROR, E_PARSE, E_USER_ERROR, E_COMPILE_ERROR, E_RECOVERABLE_ERROR)
-        if (php_isset(lambda : error["type"])) and php_in_array(error["type"], error_types_to_handle, True):
+        
+        error_types_to_handle_ = Array(E_ERROR, E_PARSE, E_USER_ERROR, E_COMPILE_ERROR, E_RECOVERABLE_ERROR)
+        if (php_isset(lambda : error_["type"])) and php_in_array(error_["type"], error_types_to_handle_, True):
             return True
         # end if
         #// 
@@ -109,7 +107,7 @@ class WP_Fatal_Error_Handler():
         #// @param bool  $should_handle_error Whether the error should be handled by the fatal error handler.
         #// @param array $error               Error information retrieved from error_get_last().
         #//
-        return php_bool(apply_filters("wp_should_handle_php_error", False, error))
+        return php_bool(apply_filters("wp_should_handle_php_error", False, error_))
     # end def should_handle_error
     #// 
     #// Displays the PHP error template and sends the HTTP status code, typically 500.
@@ -127,18 +125,19 @@ class WP_Fatal_Error_Handler():
     #// @param array         $error   Error information retrieved from `error_get_last()`.
     #// @param true|WP_Error $handled Whether Recovery Mode handled the fatal error.
     #//
-    def display_error_template(self, error=None, handled=None):
+    def display_error_template(self, error_=None, handled_=None):
+        
         
         if php_defined("WP_CONTENT_DIR"):
             #// Load custom PHP error template, if present.
-            php_error_pluggable = WP_CONTENT_DIR + "/php-error.php"
-            if php_is_readable(php_error_pluggable):
-                php_include_file(php_error_pluggable, once=True)
+            php_error_pluggable_ = WP_CONTENT_DIR + "/php-error.php"
+            if php_is_readable(php_error_pluggable_):
+                php_include_file(php_error_pluggable_, once=True)
                 return
             # end if
         # end if
         #// Otherwise, display the default error template.
-        self.display_default_error_template(error, handled)
+        self.display_default_error_template(error_, handled_)
     # end def display_error_template
     #// 
     #// Displays the default PHP error template.
@@ -155,7 +154,8 @@ class WP_Fatal_Error_Handler():
     #// @param array         $error   Error information retrieved from `error_get_last()`.
     #// @param true|WP_Error $handled Whether Recovery Mode handled the fatal error.
     #//
-    def display_default_error_template(self, error=None, handled=None):
+    def display_default_error_template(self, error_=None, handled_=None):
+        
         
         if (not php_function_exists("__")):
             wp_load_translations_early()
@@ -166,15 +166,15 @@ class WP_Fatal_Error_Handler():
         if (not php_class_exists("WP_Error")):
             php_include_file(ABSPATH + WPINC + "/class-wp-error.php", once=True)
         # end if
-        if True == handled and wp_is_recovery_mode():
-            message = __("There has been a critical error on your website, putting it in recovery mode. Please check the Themes and Plugins screens for more details. If you just installed or updated a theme or plugin, check the relevant page for that first.")
+        if True == handled_ and wp_is_recovery_mode():
+            message_ = __("There has been a critical error on your website, putting it in recovery mode. Please check the Themes and Plugins screens for more details. If you just installed or updated a theme or plugin, check the relevant page for that first.")
         elif is_protected_endpoint():
-            message = __("There has been a critical error on your website. Please check your site admin email inbox for instructions.")
+            message_ = __("There has been a critical error on your website. Please check your site admin email inbox for instructions.")
         else:
-            message = __("There has been a critical error on your website.")
+            message_ = __("There has been a critical error on your website.")
         # end if
-        message = php_sprintf("<p>%s</p><p><a href=\"%s\">%s</a></p>", message, __("https://wordpress.org/support/article/debugging-in-wordpress/"), __("Learn more about debugging in WordPress."))
-        args = Array({"response": 500, "exit": False})
+        message_ = php_sprintf("<p>%s</p><p><a href=\"%s\">%s</a></p>", message_, __("https://wordpress.org/support/article/debugging-in-wordpress/"), __("Learn more about debugging in WordPress."))
+        args_ = Array({"response": 500, "exit": False})
         #// 
         #// Filters the message that the default PHP error template displays.
         #// 
@@ -183,7 +183,7 @@ class WP_Fatal_Error_Handler():
         #// @param string $message HTML error message to display.
         #// @param array  $error   Error information retrieved from `error_get_last()`.
         #//
-        message = apply_filters("wp_php_error_message", message, error)
+        message_ = apply_filters("wp_php_error_message", message_, error_)
         #// 
         #// Filters the arguments passed to {@see wp_die()} for the default PHP error template.
         #// 
@@ -193,8 +193,8 @@ class WP_Fatal_Error_Handler():
         #// 'response' key, and optionally 'link_url' and 'link_text' keys.
         #// @param array $error Error information retrieved from `error_get_last()`.
         #//
-        args = apply_filters("wp_php_error_args", args, error)
-        wp_error = php_new_class("WP_Error", lambda : WP_Error("internal_server_error", message, Array({"error": error})))
-        wp_die(wp_error, "", args)
+        args_ = apply_filters("wp_php_error_args", args_, error_)
+        wp_error_ = php_new_class("WP_Error", lambda : WP_Error("internal_server_error", message_, Array({"error": error_})))
+        wp_die(wp_error_, "", args_)
     # end def display_default_error_template
 # end class WP_Fatal_Error_Handler

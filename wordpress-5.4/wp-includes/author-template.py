@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,11 +27,12 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param string $deprecated Deprecated.
 #// @return string|null The author's display name.
 #//
-def get_the_author(deprecated="", *args_):
+def get_the_author(deprecated_="", *_args_):
     
-    global authordata
-    php_check_if_defined("authordata")
-    if (not php_empty(lambda : deprecated)):
+    
+    global authordata_
+    php_check_if_defined("authordata_")
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.1.0")
     # end if
     #// 
@@ -46,7 +42,7 @@ def get_the_author(deprecated="", *args_):
     #// 
     #// @param string $authordata->display_name The author's display name.
     #//
-    return apply_filters("the_author", authordata.display_name if php_is_object(authordata) else None)
+    return apply_filters("the_author", authordata_.display_name if php_is_object(authordata_) else None)
 # end def get_the_author
 #// 
 #// Display the name of the author of the current post.
@@ -67,15 +63,18 @@ def get_the_author(deprecated="", *args_):
 #// @param bool   $deprecated_echo Deprecated. Use get_the_author(). Echo the string or return it.
 #// @return string|null The author's display name, from get_the_author().
 #//
-def the_author(deprecated="", deprecated_echo=True, *args_):
+def the_author(deprecated_="", deprecated_echo_=None, *_args_):
+    if deprecated_echo_ is None:
+        deprecated_echo_ = True
+    # end if
     
-    if (not php_empty(lambda : deprecated)):
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.1.0")
     # end if
-    if True != deprecated_echo:
+    if True != deprecated_echo_:
         _deprecated_argument(__FUNCTION__, "1.5.0", php_sprintf(__("Use %s instead if you do not want the value echoed."), "<code>get_the_author()</code>"))
     # end if
-    if deprecated_echo:
+    if deprecated_echo_:
         php_print(get_the_author())
     # end if
     return get_the_author()
@@ -87,11 +86,12 @@ def the_author(deprecated="", deprecated_echo=True, *args_):
 #// 
 #// @return string|void The author's display name.
 #//
-def get_the_modified_author(*args_):
+def get_the_modified_author(*_args_):
     
-    last_id = get_post_meta(get_post().ID, "_edit_last", True)
-    if last_id:
-        last_user = get_userdata(last_id)
+    
+    last_id_ = get_post_meta(get_post().ID, "_edit_last", True)
+    if last_id_:
+        last_user_ = get_userdata(last_id_)
         #// 
         #// Filters the display name of the author who last edited the current post.
         #// 
@@ -99,7 +99,7 @@ def get_the_modified_author(*args_):
         #// 
         #// @param string $last_user->display_name The author's display name.
         #//
-        return apply_filters("the_modified_author", last_user.display_name)
+        return apply_filters("the_modified_author", last_user_.display_name)
     # end if
 # end def get_the_modified_author
 #// 
@@ -110,7 +110,8 @@ def get_the_modified_author(*args_):
 #// 
 #// @see get_the_author()
 #//
-def the_modified_author(*args_):
+def the_modified_author(*_args_):
+    
     
     php_print(get_the_modified_author())
 # end def the_modified_author
@@ -155,20 +156,23 @@ def the_modified_author(*args_):
 #// @param int|false $user_id Optional. User ID.
 #// @return string The author's field from the current author's DB object, otherwise an empty string.
 #//
-def get_the_author_meta(field="", user_id=False, *args_):
+def get_the_author_meta(field_="", user_id_=None, *_args_):
+    if user_id_ is None:
+        user_id_ = False
+    # end if
     
-    original_user_id = user_id
-    if (not user_id):
-        global authordata
-        php_check_if_defined("authordata")
-        user_id = authordata.ID if (php_isset(lambda : authordata.ID)) else 0
+    original_user_id_ = user_id_
+    if (not user_id_):
+        global authordata_
+        php_check_if_defined("authordata_")
+        user_id_ = authordata_.ID if (php_isset(lambda : authordata_.ID)) else 0
     else:
-        authordata = get_userdata(user_id)
+        authordata_ = get_userdata(user_id_)
     # end if
-    if php_in_array(field, Array("login", "pass", "nicename", "email", "url", "registered", "activation_key", "status")):
-        field = "user_" + field
+    if php_in_array(field_, Array("login", "pass", "nicename", "email", "url", "registered", "activation_key", "status")):
+        field_ = "user_" + field_
     # end if
-    value = authordata.field if (php_isset(lambda : authordata.field)) else ""
+    value_ = authordata_.field_ if (php_isset(lambda : authordata_.field_)) else ""
     #// 
     #// Filters the value of the requested user metadata.
     #// 
@@ -181,7 +185,7 @@ def get_the_author_meta(field="", user_id=False, *args_):
     #// @param int       $user_id          The user ID for the value.
     #// @param int|false $original_user_id The original user ID, as passed to the function.
     #//
-    return apply_filters(str("get_the_author_") + str(field), value, user_id, original_user_id)
+    return apply_filters(str("get_the_author_") + str(field_), value_, user_id_, original_user_id_)
 # end def get_the_author_meta
 #// 
 #// Outputs the field from the user's DB object. Defaults to current post's author.
@@ -194,9 +198,12 @@ def get_the_author_meta(field="", user_id=False, *args_):
 #// 
 #// @see get_the_author_meta()
 #//
-def the_author_meta(field="", user_id=False, *args_):
+def the_author_meta(field_="", user_id_=None, *_args_):
+    if user_id_ is None:
+        user_id_ = False
+    # end if
     
-    author_meta = get_the_author_meta(field, user_id)
+    author_meta_ = get_the_author_meta(field_, user_id_)
     #// 
     #// The value of the requested user metadata.
     #// 
@@ -207,7 +214,7 @@ def the_author_meta(field="", user_id=False, *args_):
     #// @param string    $author_meta The value of the metadata.
     #// @param int|false $user_id     The user ID.
     #//
-    php_print(apply_filters(str("the_author_") + str(field), author_meta, user_id))
+    php_print(apply_filters(str("the_author_") + str(field_), author_meta_, user_id_))
 # end def the_author_meta
 #// 
 #// Retrieve either author's link or author's name.
@@ -220,7 +227,8 @@ def the_author_meta(field="", user_id=False, *args_):
 #// @return string|null An HTML link if the author's url exist in user meta,
 #// else the result of get_the_author().
 #//
-def get_the_author_link(*args_):
+def get_the_author_link(*_args_):
+    
     
     if get_the_author_meta("url"):
         return php_sprintf("<a href=\"%1$s\" title=\"%2$s\" rel=\"author external\">%3$s</a>", esc_url(get_the_author_meta("url")), esc_attr(php_sprintf(__("Visit %s&#8217;s website"), get_the_author())), get_the_author())
@@ -238,7 +246,8 @@ def get_the_author_link(*args_):
 #// 
 #// @since 2.1.0
 #//
-def the_author_link(*args_):
+def the_author_link(*_args_):
+    
     
     php_print(get_the_author_link())
 # end def the_author_link
@@ -249,13 +258,14 @@ def the_author_link(*args_):
 #// 
 #// @return int The number of posts by the author.
 #//
-def get_the_author_posts(*args_):
+def get_the_author_posts(*_args_):
     
-    post = get_post()
-    if (not post):
+    
+    post_ = get_post()
+    if (not post_):
         return 0
     # end if
-    return count_user_posts(post.post_author, post.post_type)
+    return count_user_posts(post_.post_author, post_.post_type)
 # end def get_the_author_posts
 #// 
 #// Display the number of posts by the author of the current post.
@@ -263,7 +273,8 @@ def get_the_author_posts(*args_):
 #// @link https://developer.wordpress.org/reference/functions/the_author_posts
 #// @since 0.71
 #//
-def the_author_posts(*args_):
+def the_author_posts(*_args_):
+    
     
     php_print(get_the_author_posts())
 # end def the_author_posts
@@ -278,14 +289,15 @@ def the_author_posts(*args_):
 #// 
 #// @return string An HTML link to the author page, or an empty string if $authordata isn't defined.
 #//
-def get_the_author_posts_link(*args_):
+def get_the_author_posts_link(*_args_):
     
-    global authordata
-    php_check_if_defined("authordata")
-    if (not php_is_object(authordata)):
+    
+    global authordata_
+    php_check_if_defined("authordata_")
+    if (not php_is_object(authordata_)):
         return ""
     # end if
-    link = php_sprintf("<a href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a>", esc_url(get_author_posts_url(authordata.ID, authordata.user_nicename)), esc_attr(php_sprintf(__("Posts by %s"), get_the_author())), get_the_author())
+    link_ = php_sprintf("<a href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a>", esc_url(get_author_posts_url(authordata_.ID, authordata_.user_nicename)), esc_attr(php_sprintf(__("Posts by %s"), get_the_author())), get_the_author())
     #// 
     #// Filters the link to the author page of the author of the current post.
     #// 
@@ -293,7 +305,7 @@ def get_the_author_posts_link(*args_):
     #// 
     #// @param string $link HTML link.
     #//
-    return apply_filters("the_author_posts_link", link)
+    return apply_filters("the_author_posts_link", link_)
 # end def get_the_author_posts_link
 #// 
 #// Displays an HTML link to the author page of the current post's author.
@@ -303,9 +315,10 @@ def get_the_author_posts_link(*args_):
 #// 
 #// @param string $deprecated Unused.
 #//
-def the_author_posts_link(deprecated="", *args_):
+def the_author_posts_link(deprecated_="", *_args_):
     
-    if (not php_empty(lambda : deprecated)):
+    
+    if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.1.0")
     # end if
     php_print(get_the_author_posts_link())
@@ -321,24 +334,25 @@ def the_author_posts_link(deprecated="", *args_):
 #// @param string $author_nicename Optional. The author's nicename (slug). Default empty.
 #// @return string The URL to the author's page.
 #//
-def get_author_posts_url(author_id=None, author_nicename="", *args_):
+def get_author_posts_url(author_id_=None, author_nicename_="", *_args_):
     
-    global wp_rewrite
-    php_check_if_defined("wp_rewrite")
-    auth_ID = php_int(author_id)
-    link = wp_rewrite.get_author_permastruct()
-    if php_empty(lambda : link):
-        file = home_url("/")
-        link = file + "?author=" + auth_ID
+    
+    global wp_rewrite_
+    php_check_if_defined("wp_rewrite_")
+    auth_ID_ = php_int(author_id_)
+    link_ = wp_rewrite_.get_author_permastruct()
+    if php_empty(lambda : link_):
+        file_ = home_url("/")
+        link_ = file_ + "?author=" + auth_ID_
     else:
-        if "" == author_nicename:
-            user = get_userdata(author_id)
-            if (not php_empty(lambda : user.user_nicename)):
-                author_nicename = user.user_nicename
+        if "" == author_nicename_:
+            user_ = get_userdata(author_id_)
+            if (not php_empty(lambda : user_.user_nicename)):
+                author_nicename_ = user_.user_nicename
             # end if
         # end if
-        link = php_str_replace("%author%", author_nicename, link)
-        link = home_url(user_trailingslashit(link))
+        link_ = php_str_replace("%author%", author_nicename_, link_)
+        link_ = home_url(user_trailingslashit(link_))
     # end if
     #// 
     #// Filters the URL to the author's page.
@@ -349,8 +363,8 @@ def get_author_posts_url(author_id=None, author_nicename="", *args_):
     #// @param int    $author_id       The author's id.
     #// @param string $author_nicename The author's nice name.
     #//
-    link = apply_filters("author_link", link, author_id, author_nicename)
-    return link
+    link_ = apply_filters("author_link", link_, author_id_, author_nicename_)
+    return link_
 # end def get_author_posts_url
 #// 
 #// List all the authors of the site, with several options available.
@@ -388,73 +402,74 @@ def get_author_posts_url(author_id=None, author_nicename="", *args_):
 #// }
 #// @return void|string Void if 'echo' argument is true, list of authors if 'echo' is false.
 #//
-def wp_list_authors(args="", *args_):
+def wp_list_authors(args_="", *_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    defaults = Array({"orderby": "name", "order": "ASC", "number": "", "optioncount": False, "exclude_admin": True, "show_fullname": False, "hide_empty": True, "feed": "", "feed_image": "", "feed_type": "", "echo": True, "style": "list", "html": True, "exclude": "", "include": ""})
-    args = wp_parse_args(args, defaults)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    defaults_ = Array({"orderby": "name", "order": "ASC", "number": "", "optioncount": False, "exclude_admin": True, "show_fullname": False, "hide_empty": True, "feed": "", "feed_image": "", "feed_type": "", "echo": True, "style": "list", "html": True, "exclude": "", "include": ""})
+    args_ = wp_parse_args(args_, defaults_)
     return_ = ""
-    query_args = wp_array_slice_assoc(args, Array("orderby", "order", "number", "exclude", "include"))
-    query_args["fields"] = "ids"
-    authors = get_users(query_args)
-    author_count = Array()
-    for row in wpdb.get_results(str("SELECT DISTINCT post_author, COUNT(ID) AS count FROM ") + str(wpdb.posts) + str(" WHERE ") + get_private_posts_cap_sql("post") + " GROUP BY post_author"):
-        author_count[row.post_author] = row.count
+    query_args_ = wp_array_slice_assoc(args_, Array("orderby", "order", "number", "exclude", "include"))
+    query_args_["fields"] = "ids"
+    authors_ = get_users(query_args_)
+    author_count_ = Array()
+    for row_ in wpdb_.get_results(str("SELECT DISTINCT post_author, COUNT(ID) AS count FROM ") + str(wpdb_.posts) + str(" WHERE ") + get_private_posts_cap_sql("post") + " GROUP BY post_author"):
+        author_count_[row_.post_author] = row_.count
     # end for
-    for author_id in authors:
-        posts = author_count[author_id] if (php_isset(lambda : author_count[author_id])) else 0
-        if (not posts) and args["hide_empty"]:
+    for author_id_ in authors_:
+        posts_ = author_count_[author_id_] if (php_isset(lambda : author_count_[author_id_])) else 0
+        if (not posts_) and args_["hide_empty"]:
             continue
         # end if
-        author = get_userdata(author_id)
-        if args["exclude_admin"] and "admin" == author.display_name:
+        author_ = get_userdata(author_id_)
+        if args_["exclude_admin"] and "admin" == author_.display_name:
             continue
         # end if
-        if args["show_fullname"] and author.first_name and author.last_name:
-            name = str(author.first_name) + str(" ") + str(author.last_name)
+        if args_["show_fullname"] and author_.first_name and author_.last_name:
+            name_ = str(author_.first_name) + str(" ") + str(author_.last_name)
         else:
-            name = author.display_name
+            name_ = author_.display_name
         # end if
-        if (not args["html"]):
-            return_ += name + ", "
+        if (not args_["html"]):
+            return_ += name_ + ", "
             continue
             pass
         # end if
-        if "list" == args["style"]:
+        if "list" == args_["style"]:
             return_ += "<li>"
         # end if
-        link = php_sprintf("<a href=\"%1$s\" title=\"%2$s\">%3$s</a>", get_author_posts_url(author.ID, author.user_nicename), esc_attr(php_sprintf(__("Posts by %s"), author.display_name)), name)
-        if (not php_empty(lambda : args["feed_image"])) or (not php_empty(lambda : args["feed"])):
-            link += " "
-            if php_empty(lambda : args["feed_image"]):
-                link += "("
+        link_ = php_sprintf("<a href=\"%1$s\" title=\"%2$s\">%3$s</a>", get_author_posts_url(author_.ID, author_.user_nicename), esc_attr(php_sprintf(__("Posts by %s"), author_.display_name)), name_)
+        if (not php_empty(lambda : args_["feed_image"])) or (not php_empty(lambda : args_["feed"])):
+            link_ += " "
+            if php_empty(lambda : args_["feed_image"]):
+                link_ += "("
             # end if
-            link += "<a href=\"" + get_author_feed_link(author.ID, args["feed_type"]) + "\""
-            alt = ""
-            if (not php_empty(lambda : args["feed"])):
-                alt = " alt=\"" + esc_attr(args["feed"]) + "\""
-                name = args["feed"]
+            link_ += "<a href=\"" + get_author_feed_link(author_.ID, args_["feed_type"]) + "\""
+            alt_ = ""
+            if (not php_empty(lambda : args_["feed"])):
+                alt_ = " alt=\"" + esc_attr(args_["feed"]) + "\""
+                name_ = args_["feed"]
             # end if
-            link += ">"
-            if (not php_empty(lambda : args["feed_image"])):
-                link += "<img src=\"" + esc_url(args["feed_image"]) + "\" style=\"border: none;\"" + alt + " />"
+            link_ += ">"
+            if (not php_empty(lambda : args_["feed_image"])):
+                link_ += "<img src=\"" + esc_url(args_["feed_image"]) + "\" style=\"border: none;\"" + alt_ + " />"
             else:
-                link += name
+                link_ += name_
             # end if
-            link += "</a>"
-            if php_empty(lambda : args["feed_image"]):
-                link += ")"
+            link_ += "</a>"
+            if php_empty(lambda : args_["feed_image"]):
+                link_ += ")"
             # end if
         # end if
-        if args["optioncount"]:
-            link += " (" + posts + ")"
+        if args_["optioncount"]:
+            link_ += " (" + posts_ + ")"
         # end if
-        return_ += link
-        return_ += "</li>" if "list" == args["style"] else ", "
+        return_ += link_
+        return_ += "</li>" if "list" == args_["style"] else ", "
     # end for
     return_ = php_rtrim(return_, ", ")
-    if args["echo"]:
+    if args_["echo"]:
         php_print(return_)
     else:
         return return_
@@ -475,15 +490,16 @@ def wp_list_authors(args="", *args_):
 #// 
 #// @return bool Whether or not we have more than one author
 #//
-def is_multi_author(*args_):
+def is_multi_author(*_args_):
     
-    global wpdb
-    php_check_if_defined("wpdb")
-    is_multi_author = get_transient("is_multi_author")
-    if False == is_multi_author:
-        rows = wpdb.get_col(str("SELECT DISTINCT post_author FROM ") + str(wpdb.posts) + str(" WHERE post_type = 'post' AND post_status = 'publish' LIMIT 2"))
-        is_multi_author = 1 if 1 < php_count(rows) else 0
-        set_transient("is_multi_author", is_multi_author)
+    
+    global wpdb_
+    php_check_if_defined("wpdb_")
+    is_multi_author_ = get_transient("is_multi_author")
+    if False == is_multi_author_:
+        rows_ = wpdb_.get_col(str("SELECT DISTINCT post_author FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'post' AND post_status = 'publish' LIMIT 2"))
+        is_multi_author_ = 1 if 1 < php_count(rows_) else 0
+        set_transient("is_multi_author", is_multi_author_)
     # end if
     #// 
     #// Filters whether the site has more than one author with published posts.
@@ -492,7 +508,7 @@ def is_multi_author(*args_):
     #// 
     #// @param bool $is_multi_author Whether $is_multi_author should evaluate as true.
     #//
-    return apply_filters("is_multi_author", php_bool(is_multi_author))
+    return apply_filters("is_multi_author", php_bool(is_multi_author_))
 # end def is_multi_author
 #// 
 #// Helper function to clear the cache for number of authors.
@@ -500,7 +516,8 @@ def is_multi_author(*args_):
 #// @since 3.2.0
 #// @access private
 #//
-def __clear_multi_author_cache(*args_):
+def __clear_multi_author_cache(*_args_):
+    
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
     delete_transient("is_multi_author")

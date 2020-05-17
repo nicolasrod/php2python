@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -68,8 +63,23 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @uses Memcache
 #//
 class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
+    #// 
+    #// Memcache instance
+    #// 
+    #// @var Memcache
+    #//
     cache = Array()
+    #// 
+    #// Options
+    #// 
+    #// @var array
+    #//
     options = Array()
+    #// 
+    #// Cache name
+    #// 
+    #// @var string
+    #//
     name = Array()
     #// 
     #// Create a new cache object
@@ -78,14 +88,15 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
     #// @param string $name Unique ID for the cache
     #// @param string $type Either TYPE_FEED for SimplePie data, or TYPE_IMAGE for image data
     #//
-    def __init__(self, location=None, name=None, type=None):
+    def __init__(self, location_=None, name_=None, type_=None):
+        
         
         self.options = Array({"host": "127.0.0.1", "port": 11211, "extras": Array({"timeout": 3600, "prefix": "simplepie_"})})
-        parsed = SimplePie_Cache.parse_url(location)
-        self.options["host"] = self.options["host"] if php_empty(lambda : parsed["host"]) else parsed["host"]
-        self.options["port"] = self.options["port"] if php_empty(lambda : parsed["port"]) else parsed["port"]
-        self.options["extras"] = php_array_merge(self.options["extras"], parsed["extras"])
-        self.name = self.options["extras"]["prefix"] + php_md5(str(name) + str(":") + str(type))
+        parsed_ = SimplePie_Cache.parse_url(location_)
+        self.options["host"] = self.options["host"] if php_empty(lambda : parsed_["host"]) else parsed_["host"]
+        self.options["port"] = self.options["port"] if php_empty(lambda : parsed_["port"]) else parsed_["port"]
+        self.options["extras"] = php_array_merge(self.options["extras"], parsed_["extras"])
+        self.name = self.options["extras"]["prefix"] + php_md5(str(name_) + str(":") + str(type_))
         self.cache = php_new_class("Memcache", lambda : Memcache())
         self.cache.addserver(self.options["host"], php_int(self.options["port"]))
     # end def __init__
@@ -95,12 +106,13 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
     #// @param array|SimplePie $data Data to store in the cache. If passed a SimplePie object, only cache the $data property
     #// @return bool Successfulness
     #//
-    def save(self, data=None):
+    def save(self, data_=None):
         
-        if type(data).__name__ == "SimplePie":
-            data = data.data
+        
+        if type(data_).__name__ == "SimplePie":
+            data_ = data_.data
         # end if
-        return self.cache.set(self.name, serialize(data), MEMCACHE_COMPRESSED, php_int(self.options["extras"]["timeout"]))
+        return self.cache.set(self.name, serialize(data_), MEMCACHE_COMPRESSED, php_int(self.options["extras"]["timeout"]))
     # end def save
     #// 
     #// Retrieve the data saved to the cache
@@ -109,9 +121,10 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
     #//
     def load(self):
         
-        data = self.cache.get(self.name)
-        if data != False:
-            return unserialize(data)
+        
+        data_ = self.cache.get(self.name)
+        if data_ != False:
+            return unserialize(data_)
         # end if
         return False
     # end def load
@@ -122,8 +135,9 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
     #//
     def mtime(self):
         
-        data = self.cache.get(self.name)
-        if data != False:
+        
+        data_ = self.cache.get(self.name)
+        if data_ != False:
             #// essentially ignore the mtime because Memcache expires on it's own
             return time()
         # end if
@@ -136,9 +150,10 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
     #//
     def touch(self):
         
-        data = self.cache.get(self.name)
-        if data != False:
-            return self.cache.set(self.name, data, MEMCACHE_COMPRESSED, php_int(self.duration))
+        
+        data_ = self.cache.get(self.name)
+        if data_ != False:
+            return self.cache.set(self.name, data_, MEMCACHE_COMPRESSED, php_int(self.duration))
         # end if
         return False
     # end def touch
@@ -148,6 +163,7 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
     #// @return bool Success status
     #//
     def unlink(self):
+        
         
         return self.cache.delete(self.name, 0)
     # end def unlink

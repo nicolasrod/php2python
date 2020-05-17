@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -69,55 +64,56 @@ class SimplePie_Cache_DB(SimplePie_Cache_Base):
     #// @param SimplePie $data
     #// @return array First item is the serialized data for storage, second item is the unique ID for this item
     #//
-    def prepare_simplepie_object_for_cache(self, data=None):
+    def prepare_simplepie_object_for_cache(self, data_=None):
         
-        items = data.get_items()
-        items_by_id = Array()
-        if (not php_empty(lambda : items)):
-            for item in items:
-                items_by_id[item.get_id()] = item
+        
+        items_ = data_.get_items()
+        items_by_id_ = Array()
+        if (not php_empty(lambda : items_)):
+            for item_ in items_:
+                items_by_id_[item_.get_id()] = item_
             # end for
-            if php_count(items_by_id) != php_count(items):
-                items_by_id = Array()
-                for item in items:
-                    items_by_id[item.get_id(True)] = item
+            if php_count(items_by_id_) != php_count(items_):
+                items_by_id_ = Array()
+                for item_ in items_:
+                    items_by_id_[item_.get_id(True)] = item_
                 # end for
             # end if
-            if (php_isset(lambda : data.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0])):
-                channel = data.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0]
-            elif (php_isset(lambda : data.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0])):
-                channel = data.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0]
-            elif (php_isset(lambda : data.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0])):
-                channel = data.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0]
-            elif (php_isset(lambda : data.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][SIMPLEPIE_NAMESPACE_RSS_20]["channel"][0])):
-                channel = data.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][SIMPLEPIE_NAMESPACE_RSS_20]["channel"][0]
+            if (php_isset(lambda : data_.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0])):
+                channel_ = data_.data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0]
+            elif (php_isset(lambda : data_.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0])):
+                channel_ = data_.data["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["feed"][0]
+            elif (php_isset(lambda : data_.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0])):
+                channel_ = data_.data["child"][SIMPLEPIE_NAMESPACE_RDF]["RDF"][0]
+            elif (php_isset(lambda : data_.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][SIMPLEPIE_NAMESPACE_RSS_20]["channel"][0])):
+                channel_ = data_.data["child"][SIMPLEPIE_NAMESPACE_RSS_20]["rss"][0]["child"][SIMPLEPIE_NAMESPACE_RSS_20]["channel"][0]
             else:
-                channel = None
+                channel_ = None
             # end if
-            if channel != None:
-                if (php_isset(lambda : channel["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["entry"])):
-                    channel["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["entry"] = None
+            if channel_ != None:
+                if (php_isset(lambda : channel_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["entry"])):
+                    channel_["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["entry"] = None
                 # end if
-                if (php_isset(lambda : channel["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["entry"])):
-                    channel["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["entry"] = None
+                if (php_isset(lambda : channel_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["entry"])):
+                    channel_["child"][SIMPLEPIE_NAMESPACE_ATOM_03]["entry"] = None
                 # end if
-                if (php_isset(lambda : channel["child"][SIMPLEPIE_NAMESPACE_RSS_10]["item"])):
-                    channel["child"][SIMPLEPIE_NAMESPACE_RSS_10]["item"] = None
+                if (php_isset(lambda : channel_["child"][SIMPLEPIE_NAMESPACE_RSS_10]["item"])):
+                    channel_["child"][SIMPLEPIE_NAMESPACE_RSS_10]["item"] = None
                 # end if
-                if (php_isset(lambda : channel["child"][SIMPLEPIE_NAMESPACE_RSS_090]["item"])):
-                    channel["child"][SIMPLEPIE_NAMESPACE_RSS_090]["item"] = None
+                if (php_isset(lambda : channel_["child"][SIMPLEPIE_NAMESPACE_RSS_090]["item"])):
+                    channel_["child"][SIMPLEPIE_NAMESPACE_RSS_090]["item"] = None
                 # end if
-                if (php_isset(lambda : channel["child"][SIMPLEPIE_NAMESPACE_RSS_20]["item"])):
-                    channel["child"][SIMPLEPIE_NAMESPACE_RSS_20]["item"] = None
+                if (php_isset(lambda : channel_["child"][SIMPLEPIE_NAMESPACE_RSS_20]["item"])):
+                    channel_["child"][SIMPLEPIE_NAMESPACE_RSS_20]["item"] = None
                 # end if
             # end if
-            if (php_isset(lambda : data.data["items"])):
-                data.data["items"] = None
+            if (php_isset(lambda : data_.data["items"])):
+                data_.data["items"] = None
             # end if
-            if (php_isset(lambda : data.data["ordered_items"])):
-                data.data["ordered_items"] = None
+            if (php_isset(lambda : data_.data["ordered_items"])):
+                data_.data["ordered_items"] = None
             # end if
         # end if
-        return Array(serialize(data.data), items_by_id)
+        return Array(serialize(data_.data), items_by_id_)
     # end def prepare_simplepie_object_for_cache
 # end class SimplePie_Cache_DB

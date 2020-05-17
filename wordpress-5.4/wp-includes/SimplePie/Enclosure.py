@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -65,32 +60,140 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage API
 #//
 class SimplePie_Enclosure():
+    #// 
+    #// @var string
+    #// @see get_bitrate()
+    #//
     bitrate = Array()
+    #// 
+    #// @var array
+    #// @see get_captions()
+    #//
     captions = Array()
+    #// 
+    #// @var array
+    #// @see get_categories()
+    #//
     categories = Array()
+    #// 
+    #// @var int
+    #// @see get_channels()
+    #//
     channels = Array()
+    #// 
+    #// @var SimplePie_Copyright
+    #// @see get_copyright()
+    #//
     copyright = Array()
+    #// 
+    #// @var array
+    #// @see get_credits()
+    #//
     credits = Array()
+    #// 
+    #// @var string
+    #// @see get_description()
+    #//
     description = Array()
+    #// 
+    #// @var int
+    #// @see get_duration()
+    #//
     duration = Array()
+    #// 
+    #// @var string
+    #// @see get_expression()
+    #//
     expression = Array()
+    #// 
+    #// @var string
+    #// @see get_framerate()
+    #//
     framerate = Array()
+    #// 
+    #// @var string
+    #// @see get_handler()
+    #//
     handler = Array()
+    #// 
+    #// @var array
+    #// @see get_hashes()
+    #//
     hashes = Array()
+    #// 
+    #// @var string
+    #// @see get_height()
+    #//
     height = Array()
+    #// 
+    #// @deprecated
+    #// @var null
+    #//
     javascript = Array()
+    #// 
+    #// @var array
+    #// @see get_keywords()
+    #//
     keywords = Array()
+    #// 
+    #// @var string
+    #// @see get_language()
+    #//
     lang = Array()
+    #// 
+    #// @var string
+    #// @see get_length()
+    #//
     length = Array()
+    #// 
+    #// @var string
+    #// @see get_link()
+    #//
     link = Array()
+    #// 
+    #// @var string
+    #// @see get_medium()
+    #//
     medium = Array()
+    #// 
+    #// @var string
+    #// @see get_player()
+    #//
     player = Array()
+    #// 
+    #// @var array
+    #// @see get_ratings()
+    #//
     ratings = Array()
+    #// 
+    #// @var array
+    #// @see get_restrictions()
+    #//
     restrictions = Array()
+    #// 
+    #// @var string
+    #// @see get_sampling_rate()
+    #//
     samplingrate = Array()
+    #// 
+    #// @var array
+    #// @see get_thumbnails()
+    #//
     thumbnails = Array()
+    #// 
+    #// @var string
+    #// @see get_title()
+    #//
     title = Array()
+    #// 
+    #// @var string
+    #// @see get_type()
+    #//
     type = Array()
+    #// 
+    #// @var string
+    #// @see get_width()
+    #//
     width = Array()
     #// 
     #// Constructor, used to input the data
@@ -100,37 +203,38 @@ class SimplePie_Enclosure():
     #// 
     #// @uses idna_convert If available, this will convert an IDN
     #//
-    def __init__(self, link=None, type=None, length=None, javascript=None, bitrate=None, captions=None, categories=None, channels=None, copyright=None, credits=None, description=None, duration=None, expression=None, framerate=None, hashes=None, height=None, keywords=None, lang=None, medium=None, player=None, ratings=None, restrictions=None, samplingrate=None, thumbnails=None, title=None, width=None):
+    def __init__(self, link_=None, type_=None, length_=None, javascript_=None, bitrate_=None, captions_=None, categories_=None, channels_=None, copyright_=None, credits_=None, description_=None, duration_=None, expression_=None, framerate_=None, hashes_=None, height_=None, keywords_=None, lang_=None, medium_=None, player_=None, ratings_=None, restrictions_=None, samplingrate_=None, thumbnails_=None, title_=None, width_=None):
         
-        self.bitrate = bitrate
-        self.captions = captions
-        self.categories = categories
-        self.channels = channels
-        self.copyright = copyright
-        self.credits = credits
-        self.description = description
-        self.duration = duration
-        self.expression = expression
-        self.framerate = framerate
-        self.hashes = hashes
-        self.height = height
-        self.keywords = keywords
-        self.lang = lang
-        self.length = length
-        self.link = link
-        self.medium = medium
-        self.player = player
-        self.ratings = ratings
-        self.restrictions = restrictions
-        self.samplingrate = samplingrate
-        self.thumbnails = thumbnails
-        self.title = title
-        self.type = type
-        self.width = width
+        
+        self.bitrate = bitrate_
+        self.captions = captions_
+        self.categories = categories_
+        self.channels = channels_
+        self.copyright = copyright_
+        self.credits = credits_
+        self.description = description_
+        self.duration = duration_
+        self.expression = expression_
+        self.framerate = framerate_
+        self.hashes = hashes_
+        self.height = height_
+        self.keywords = keywords_
+        self.lang = lang_
+        self.length = length_
+        self.link = link_
+        self.medium = medium_
+        self.player = player_
+        self.ratings = ratings_
+        self.restrictions = restrictions_
+        self.samplingrate = samplingrate_
+        self.thumbnails = thumbnails_
+        self.title = title_
+        self.type = type_
+        self.width = width_
         if php_class_exists("idna_convert"):
-            idn = php_new_class("idna_convert", lambda : idna_convert())
-            parsed = SimplePie_Misc.parse_url(link)
-            self.link = SimplePie_Misc.compress_parse_url(parsed["scheme"], idn.encode(parsed["authority"]), parsed["path"], parsed["query"], parsed["fragment"])
+            idn_ = php_new_class("idna_convert", lambda : idna_convert())
+            parsed_ = SimplePie_Misc.parse_url(link_)
+            self.link = SimplePie_Misc.compress_parse_url(parsed_["scheme"], idn_.encode(parsed_["authority"]), parsed_["path"], parsed_["query"], parsed_["fragment"])
         # end if
         self.handler = self.get_handler()
         pass
@@ -142,6 +246,7 @@ class SimplePie_Enclosure():
     #//
     def __tostring(self):
         
+        
         #// There is no $this->data here
         return php_md5(serialize(self))
     # end def __tostring
@@ -151,6 +256,7 @@ class SimplePie_Enclosure():
     #// @return string|null
     #//
     def get_bitrate(self):
+        
         
         if self.bitrate != None:
             return self.bitrate
@@ -164,11 +270,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return SimplePie_Caption|null
     #//
-    def get_caption(self, key=0):
+    def get_caption(self, key_=0):
         
-        captions = self.get_captions()
-        if (php_isset(lambda : captions[key])):
-            return captions[key]
+        
+        captions_ = self.get_captions()
+        if (php_isset(lambda : captions_[key_])):
+            return captions_[key_]
         else:
             return None
         # end if
@@ -179,6 +286,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of {@see SimplePie_Caption} objects
     #//
     def get_captions(self):
+        
         
         if self.captions != None:
             return self.captions
@@ -192,11 +300,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return SimplePie_Category|null
     #//
-    def get_category(self, key=0):
+    def get_category(self, key_=0):
         
-        categories = self.get_categories()
-        if (php_isset(lambda : categories[key])):
-            return categories[key]
+        
+        categories_ = self.get_categories()
+        if (php_isset(lambda : categories_[key_])):
+            return categories_[key_]
         else:
             return None
         # end if
@@ -207,6 +316,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of {@see SimplePie_Category} objects
     #//
     def get_categories(self):
+        
         
         if self.categories != None:
             return self.categories
@@ -221,6 +331,7 @@ class SimplePie_Enclosure():
     #//
     def get_channels(self):
         
+        
         if self.channels != None:
             return self.channels
         else:
@@ -234,6 +345,7 @@ class SimplePie_Enclosure():
     #//
     def get_copyright(self):
         
+        
         if self.copyright != None:
             return self.copyright
         else:
@@ -246,11 +358,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return SimplePie_Credit|null
     #//
-    def get_credit(self, key=0):
+    def get_credit(self, key_=0):
         
-        credits = self.get_credits()
-        if (php_isset(lambda : credits[key])):
-            return credits[key]
+        
+        credits_ = self.get_credits()
+        if (php_isset(lambda : credits_[key_])):
+            return credits_[key_]
         else:
             return None
         # end if
@@ -261,6 +374,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of {@see SimplePie_Credit} objects
     #//
     def get_credits(self):
+        
         
         if self.credits != None:
             return self.credits
@@ -275,6 +389,7 @@ class SimplePie_Enclosure():
     #//
     def get_description(self):
         
+        
         if self.description != None:
             return self.description
         else:
@@ -287,12 +402,15 @@ class SimplePie_Enclosure():
     #// @param string $convert Convert seconds into hh:mm:ss
     #// @return string|int|null 'hh:mm:ss' string if `$convert` was specified, otherwise integer (or null if none found)
     #//
-    def get_duration(self, convert=False):
+    def get_duration(self, convert_=None):
+        if convert_ is None:
+            convert_ = False
+        # end if
         
         if self.duration != None:
-            if convert:
-                time = SimplePie_Misc.time_hms(self.duration)
-                return time
+            if convert_:
+                time_ = SimplePie_Misc.time_hms(self.duration)
+                return time_
             else:
                 return self.duration
             # end if
@@ -307,6 +425,7 @@ class SimplePie_Enclosure():
     #//
     def get_expression(self):
         
+        
         if self.expression != None:
             return self.expression
         else:
@@ -320,10 +439,11 @@ class SimplePie_Enclosure():
     #//
     def get_extension(self):
         
+        
         if self.link != None:
-            url = SimplePie_Misc.parse_url(self.link)
-            if url["path"] != "":
-                return pathinfo(url["path"], PATHINFO_EXTENSION)
+            url_ = SimplePie_Misc.parse_url(self.link)
+            if url_["path"] != "":
+                return pathinfo(url_["path"], PATHINFO_EXTENSION)
             # end if
         # end if
         return None
@@ -334,6 +454,7 @@ class SimplePie_Enclosure():
     #// @return string|null
     #//
     def get_framerate(self):
+        
         
         if self.framerate != None:
             return self.framerate
@@ -348,6 +469,7 @@ class SimplePie_Enclosure():
     #//
     def get_handler(self):
         
+        
         return self.get_real_type(True)
     # end def get_handler
     #// 
@@ -357,11 +479,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return string|null Hash as per `media:hash`, prefixed with "$algo:"
     #//
-    def get_hash(self, key=0):
+    def get_hash(self, key_=0):
         
-        hashes = self.get_hashes()
-        if (php_isset(lambda : hashes[key])):
-            return hashes[key]
+        
+        hashes_ = self.get_hashes()
+        if (php_isset(lambda : hashes_[key_])):
+            return hashes_[key_]
         else:
             return None
         # end if
@@ -372,6 +495,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of strings, see {@see get_hash()}
     #//
     def get_hashes(self):
+        
         
         if self.hashes != None:
             return self.hashes
@@ -385,6 +509,7 @@ class SimplePie_Enclosure():
     #// @return string|null
     #//
     def get_height(self):
+        
         
         if self.height != None:
             return self.height
@@ -400,6 +525,7 @@ class SimplePie_Enclosure():
     #//
     def get_language(self):
         
+        
         if self.lang != None:
             return self.lang
         else:
@@ -412,11 +538,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return string|null
     #//
-    def get_keyword(self, key=0):
+    def get_keyword(self, key_=0):
         
-        keywords = self.get_keywords()
-        if (php_isset(lambda : keywords[key])):
-            return keywords[key]
+        
+        keywords_ = self.get_keywords()
+        if (php_isset(lambda : keywords_[key_])):
+            return keywords_[key_]
         else:
             return None
         # end if
@@ -427,6 +554,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of strings
     #//
     def get_keywords(self):
+        
         
         if self.keywords != None:
             return self.keywords
@@ -441,6 +569,7 @@ class SimplePie_Enclosure():
     #//
     def get_length(self):
         
+        
         if self.length != None:
             return self.length
         else:
@@ -453,6 +582,7 @@ class SimplePie_Enclosure():
     #// @return string|null
     #//
     def get_link(self):
+        
         
         if self.link != None:
             return urldecode(self.link)
@@ -468,6 +598,7 @@ class SimplePie_Enclosure():
     #//
     def get_medium(self):
         
+        
         if self.medium != None:
             return self.medium
         else:
@@ -482,6 +613,7 @@ class SimplePie_Enclosure():
     #//
     def get_player(self):
         
+        
         if self.player != None:
             return self.player
         else:
@@ -494,11 +626,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return SimplePie_Rating|null
     #//
-    def get_rating(self, key=0):
+    def get_rating(self, key_=0):
         
-        ratings = self.get_ratings()
-        if (php_isset(lambda : ratings[key])):
-            return ratings[key]
+        
+        ratings_ = self.get_ratings()
+        if (php_isset(lambda : ratings_[key_])):
+            return ratings_[key_]
         else:
             return None
         # end if
@@ -509,6 +642,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of {@see SimplePie_Rating} objects
     #//
     def get_ratings(self):
+        
         
         if self.ratings != None:
             return self.ratings
@@ -522,11 +656,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return SimplePie_Restriction|null
     #//
-    def get_restriction(self, key=0):
+    def get_restriction(self, key_=0):
         
-        restrictions = self.get_restrictions()
-        if (php_isset(lambda : restrictions[key])):
-            return restrictions[key]
+        
+        restrictions_ = self.get_restrictions()
+        if (php_isset(lambda : restrictions_[key_])):
+            return restrictions_[key_]
         else:
             return None
         # end if
@@ -537,6 +672,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of {@see SimplePie_Restriction} objects
     #//
     def get_restrictions(self):
+        
         
         if self.restrictions != None:
             return self.restrictions
@@ -551,6 +687,7 @@ class SimplePie_Enclosure():
     #//
     def get_sampling_rate(self):
         
+        
         if self.samplingrate != None:
             return self.samplingrate
         else:
@@ -564,9 +701,10 @@ class SimplePie_Enclosure():
     #//
     def get_size(self):
         
-        length = self.get_length()
-        if length != None:
-            return round(length / 1048576, 2)
+        
+        length_ = self.get_length()
+        if length_ != None:
+            return round(length_ / 1048576, 2)
         else:
             return None
         # end if
@@ -577,11 +715,12 @@ class SimplePie_Enclosure():
     #// @param int $key
     #// @return string|null Thumbnail URL
     #//
-    def get_thumbnail(self, key=0):
+    def get_thumbnail(self, key_=0):
         
-        thumbnails = self.get_thumbnails()
-        if (php_isset(lambda : thumbnails[key])):
-            return thumbnails[key]
+        
+        thumbnails_ = self.get_thumbnails()
+        if (php_isset(lambda : thumbnails_[key_])):
+            return thumbnails_[key_]
         else:
             return None
         # end if
@@ -592,6 +731,7 @@ class SimplePie_Enclosure():
     #// @return array|null Array of thumbnail URLs
     #//
     def get_thumbnails(self):
+        
         
         if self.thumbnails != None:
             return self.thumbnails
@@ -605,6 +745,7 @@ class SimplePie_Enclosure():
     #// @return string|null
     #//
     def get_title(self):
+        
         
         if self.title != None:
             return self.title
@@ -620,6 +761,7 @@ class SimplePie_Enclosure():
     #//
     def get_type(self):
         
+        
         if self.type != None:
             return self.type
         else:
@@ -632,6 +774,7 @@ class SimplePie_Enclosure():
     #// @return string|null
     #//
     def get_width(self):
+        
         
         if self.width != None:
             return self.width
@@ -647,9 +790,10 @@ class SimplePie_Enclosure():
     #// @param array|string $options See first paramter to {@see embed}
     #// @return string HTML string to output
     #//
-    def native_embed(self, options=""):
+    def native_embed(self, options_=""):
         
-        return self.embed(options, True)
+        
+        return self.embed(options_, True)
     # end def native_embed
     #// 
     #// Embed the enclosure using Javascript
@@ -696,161 +840,164 @@ class SimplePie_Enclosure():
     #// @param bool $native Use `<embed>`
     #// @return string HTML string to output
     #//
-    def embed(self, options="", native=False):
+    def embed(self, options_="", native_=None):
+        if native_ is None:
+            native_ = False
+        # end if
         
         #// Set up defaults
-        audio = ""
-        video = ""
-        alt = ""
-        altclass = ""
-        loop = "false"
-        width = "auto"
-        height = "auto"
-        bgcolor = "#ffffff"
-        mediaplayer = ""
-        widescreen = False
-        handler = self.get_handler()
-        type = self.get_real_type()
+        audio_ = ""
+        video_ = ""
+        alt_ = ""
+        altclass_ = ""
+        loop_ = "false"
+        width_ = "auto"
+        height_ = "auto"
+        bgcolor_ = "#ffffff"
+        mediaplayer_ = ""
+        widescreen_ = False
+        handler_ = self.get_handler()
+        type_ = self.get_real_type()
         #// Process options and reassign values as necessary
-        if php_is_array(options):
-            extract(options)
+        if php_is_array(options_):
+            extract(options_)
         else:
-            options = php_explode(",", options)
-            for option in options:
-                opt = php_explode(":", option, 2)
-                if (php_isset(lambda : opt[0]) and php_isset(lambda : opt[1])):
-                    opt[0] = php_trim(opt[0])
-                    opt[1] = php_trim(opt[1])
-                    for case in Switch(opt[0]):
+            options_ = php_explode(",", options_)
+            for option_ in options_:
+                opt_ = php_explode(":", option_, 2)
+                if (php_isset(lambda : opt_[0]) and php_isset(lambda : opt_[1])):
+                    opt_[0] = php_trim(opt_[0])
+                    opt_[1] = php_trim(opt_[1])
+                    for case in Switch(opt_[0]):
                         if case("audio"):
-                            audio = opt[1]
+                            audio_ = opt_[1]
                             break
                         # end if
                         if case("video"):
-                            video = opt[1]
+                            video_ = opt_[1]
                             break
                         # end if
                         if case("alt"):
-                            alt = opt[1]
+                            alt_ = opt_[1]
                             break
                         # end if
                         if case("altclass"):
-                            altclass = opt[1]
+                            altclass_ = opt_[1]
                             break
                         # end if
                         if case("loop"):
-                            loop = opt[1]
+                            loop_ = opt_[1]
                             break
                         # end if
                         if case("width"):
-                            width = opt[1]
+                            width_ = opt_[1]
                             break
                         # end if
                         if case("height"):
-                            height = opt[1]
+                            height_ = opt_[1]
                             break
                         # end if
                         if case("bgcolor"):
-                            bgcolor = opt[1]
+                            bgcolor_ = opt_[1]
                             break
                         # end if
                         if case("mediaplayer"):
-                            mediaplayer = opt[1]
+                            mediaplayer_ = opt_[1]
                             break
                         # end if
                         if case("widescreen"):
-                            widescreen = opt[1]
+                            widescreen_ = opt_[1]
                             break
                         # end if
                     # end for
                 # end if
             # end for
         # end if
-        mime = php_explode("/", type, 2)
-        mime = mime[0]
+        mime_ = php_explode("/", type_, 2)
+        mime_ = mime_[0]
         #// Process values for 'auto'
-        if width == "auto":
-            if mime == "video":
-                if height == "auto":
-                    width = 480
-                elif widescreen:
-                    width = round(php_intval(height) / 9 * 16)
+        if width_ == "auto":
+            if mime_ == "video":
+                if height_ == "auto":
+                    width_ = 480
+                elif widescreen_:
+                    width_ = round(php_intval(height_) / 9 * 16)
                 else:
-                    width = round(php_intval(height) / 3 * 4)
+                    width_ = round(php_intval(height_) / 3 * 4)
                 # end if
             else:
-                width = "100%"
+                width_ = "100%"
             # end if
         # end if
-        if height == "auto":
-            if mime == "audio":
-                height = 0
-            elif mime == "video":
-                if width == "auto":
-                    if widescreen:
-                        height = 270
+        if height_ == "auto":
+            if mime_ == "audio":
+                height_ = 0
+            elif mime_ == "video":
+                if width_ == "auto":
+                    if widescreen_:
+                        height_ = 270
                     else:
-                        height = 360
+                        height_ = 360
                     # end if
-                elif widescreen:
-                    height = round(php_intval(width) / 16 * 9)
+                elif widescreen_:
+                    height_ = round(php_intval(width_) / 16 * 9)
                 else:
-                    height = round(php_intval(width) / 4 * 3)
+                    height_ = round(php_intval(width_) / 4 * 3)
                 # end if
             else:
-                height = 376
+                height_ = 376
             # end if
-        elif mime == "audio":
-            height = 0
+        elif mime_ == "audio":
+            height_ = 0
         # end if
         #// Set proper placeholder value
-        if mime == "audio":
-            placeholder = audio
-        elif mime == "video":
-            placeholder = video
+        if mime_ == "audio":
+            placeholder_ = audio_
+        elif mime_ == "video":
+            placeholder_ = video_
         # end if
-        embed = ""
+        embed_ = ""
         #// Flash
-        if handler == "flash":
-            if native:
-                embed += "<embed src=\"" + self.get_link() + str("\" pluginspage=\"http://adobe.com/go/getflashplayer\" type=\"") + str(type) + str("\" quality=\"high\" width=\"") + str(width) + str("\" height=\"") + str(height) + str("\" bgcolor=\"") + str(bgcolor) + str("\" loop=\"") + str(loop) + str("\"></embed>")
+        if handler_ == "flash":
+            if native_:
+                embed_ += "<embed src=\"" + self.get_link() + str("\" pluginspage=\"http://adobe.com/go/getflashplayer\" type=\"") + str(type_) + str("\" quality=\"high\" width=\"") + str(width_) + str("\" height=\"") + str(height_) + str("\" bgcolor=\"") + str(bgcolor_) + str("\" loop=\"") + str(loop_) + str("\"></embed>")
             else:
-                embed += str("<script type='text/javascript'>embed_flash('") + str(bgcolor) + str("', '") + str(width) + str("', '") + str(height) + str("', '") + self.get_link() + str("', '") + str(loop) + str("', '") + str(type) + str("');</script>")
+                embed_ += str("<script type='text/javascript'>embed_flash('") + str(bgcolor_) + str("', '") + str(width_) + str("', '") + str(height_) + str("', '") + self.get_link() + str("', '") + str(loop_) + str("', '") + str(type_) + str("');</script>")
             # end if
             #// Flash Media Player file types.
             #// Preferred handler for MP3 file types.
-        elif handler == "fmedia" or handler == "mp3" and mediaplayer != "":
-            height += 20
-            if native:
-                embed += str("<embed src=\"") + str(mediaplayer) + str("\" pluginspage=\"http://adobe.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" quality=\"high\" width=\"") + str(width) + str("\" height=\"") + str(height) + str("\" wmode=\"transparent\" flashvars=\"file=") + rawurlencode(self.get_link() + "?file_extension=." + self.get_extension()) + str("&autostart=false&repeat=") + str(loop) + str("&showdigits=true&showfsbutton=false\"></embed>")
+        elif handler_ == "fmedia" or handler_ == "mp3" and mediaplayer_ != "":
+            height_ += 20
+            if native_:
+                embed_ += str("<embed src=\"") + str(mediaplayer_) + str("\" pluginspage=\"http://adobe.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" quality=\"high\" width=\"") + str(width_) + str("\" height=\"") + str(height_) + str("\" wmode=\"transparent\" flashvars=\"file=") + rawurlencode(self.get_link() + "?file_extension=." + self.get_extension()) + str("&autostart=false&repeat=") + str(loop_) + str("&showdigits=true&showfsbutton=false\"></embed>")
             else:
-                embed += str("<script type='text/javascript'>embed_flv('") + str(width) + str("', '") + str(height) + str("', '") + rawurlencode(self.get_link() + "?file_extension=." + self.get_extension()) + str("', '") + str(placeholder) + str("', '") + str(loop) + str("', '") + str(mediaplayer) + str("');</script>")
+                embed_ += str("<script type='text/javascript'>embed_flv('") + str(width_) + str("', '") + str(height_) + str("', '") + rawurlencode(self.get_link() + "?file_extension=." + self.get_extension()) + str("', '") + str(placeholder_) + str("', '") + str(loop_) + str("', '") + str(mediaplayer_) + str("');</script>")
             # end if
             #// QuickTime 7 file types.  Need to test with QuickTime 6.
             #// Only handle MP3's if the Flash Media Player is not present.
-        elif handler == "quicktime" or handler == "mp3" and mediaplayer == "":
-            height += 16
-            if native:
-                if placeholder != "":
-                    embed += str("<embed type=\"") + str(type) + str("\" style=\"cursor:hand; cursor:pointer;\" href=\"") + self.get_link() + str("\" src=\"") + str(placeholder) + str("\" width=\"") + str(width) + str("\" height=\"") + str(height) + str("\" autoplay=\"false\" target=\"myself\" controller=\"false\" loop=\"") + str(loop) + str("\" scale=\"aspect\" bgcolor=\"") + str(bgcolor) + str("\" pluginspage=\"http://apple.com/quicktime/download/\"></embed>")
+        elif handler_ == "quicktime" or handler_ == "mp3" and mediaplayer_ == "":
+            height_ += 16
+            if native_:
+                if placeholder_ != "":
+                    embed_ += str("<embed type=\"") + str(type_) + str("\" style=\"cursor:hand; cursor:pointer;\" href=\"") + self.get_link() + str("\" src=\"") + str(placeholder_) + str("\" width=\"") + str(width_) + str("\" height=\"") + str(height_) + str("\" autoplay=\"false\" target=\"myself\" controller=\"false\" loop=\"") + str(loop_) + str("\" scale=\"aspect\" bgcolor=\"") + str(bgcolor_) + str("\" pluginspage=\"http://apple.com/quicktime/download/\"></embed>")
                 else:
-                    embed += str("<embed type=\"") + str(type) + str("\" style=\"cursor:hand; cursor:pointer;\" src=\"") + self.get_link() + str("\" width=\"") + str(width) + str("\" height=\"") + str(height) + str("\" autoplay=\"false\" target=\"myself\" controller=\"true\" loop=\"") + str(loop) + str("\" scale=\"aspect\" bgcolor=\"") + str(bgcolor) + str("\" pluginspage=\"http://apple.com/quicktime/download/\"></embed>")
+                    embed_ += str("<embed type=\"") + str(type_) + str("\" style=\"cursor:hand; cursor:pointer;\" src=\"") + self.get_link() + str("\" width=\"") + str(width_) + str("\" height=\"") + str(height_) + str("\" autoplay=\"false\" target=\"myself\" controller=\"true\" loop=\"") + str(loop_) + str("\" scale=\"aspect\" bgcolor=\"") + str(bgcolor_) + str("\" pluginspage=\"http://apple.com/quicktime/download/\"></embed>")
                 # end if
             else:
-                embed += str("<script type='text/javascript'>embed_quicktime('") + str(type) + str("', '") + str(bgcolor) + str("', '") + str(width) + str("', '") + str(height) + str("', '") + self.get_link() + str("', '") + str(placeholder) + str("', '") + str(loop) + str("');</script>")
+                embed_ += str("<script type='text/javascript'>embed_quicktime('") + str(type_) + str("', '") + str(bgcolor_) + str("', '") + str(width_) + str("', '") + str(height_) + str("', '") + self.get_link() + str("', '") + str(placeholder_) + str("', '") + str(loop_) + str("');</script>")
             # end if
             #// Windows Media
-        elif handler == "wmedia":
-            height += 45
-            if native:
-                embed += "<embed type=\"application/x-mplayer2\" src=\"" + self.get_link() + str("\" autosize=\"1\" width=\"") + str(width) + str("\" height=\"") + str(height) + str("\" showcontrols=\"1\" showstatusbar=\"0\" showdisplay=\"0\" autostart=\"0\"></embed>")
+        elif handler_ == "wmedia":
+            height_ += 45
+            if native_:
+                embed_ += "<embed type=\"application/x-mplayer2\" src=\"" + self.get_link() + str("\" autosize=\"1\" width=\"") + str(width_) + str("\" height=\"") + str(height_) + str("\" showcontrols=\"1\" showstatusbar=\"0\" showdisplay=\"0\" autostart=\"0\"></embed>")
             else:
-                embed += str("<script type='text/javascript'>embed_wmedia('") + str(width) + str("', '") + str(height) + str("', '") + self.get_link() + "');</script>"
+                embed_ += str("<script type='text/javascript'>embed_wmedia('") + str(width_) + str("', '") + str(height_) + str("', '") + self.get_link() + "');</script>"
             # end if
         else:
-            embed += "<a href=\"" + self.get_link() + "\" class=\"" + altclass + "\">" + alt + "</a>"
+            embed_ += "<a href=\"" + self.get_link() + "\" class=\"" + altclass_ + "\">" + alt_ + "</a>"
         # end if
-        return embed
+        return embed_
     # end def embed
     #// 
     #// Get the real media type
@@ -863,32 +1010,35 @@ class SimplePie_Enclosure():
     #// @param bool $find_handler Internal use only, use {@see get_handler()} instead
     #// @return string MIME type
     #//
-    def get_real_type(self, find_handler=False):
+    def get_real_type(self, find_handler_=None):
+        if find_handler_ is None:
+            find_handler_ = False
+        # end if
         
         #// Mime-types by handler.
-        types_flash = Array("application/x-shockwave-flash", "application/futuresplash")
+        types_flash_ = Array("application/x-shockwave-flash", "application/futuresplash")
         #// Flash
-        types_fmedia = Array("video/flv", "video/x-flv", "flv-application/octet-stream")
+        types_fmedia_ = Array("video/flv", "video/x-flv", "flv-application/octet-stream")
         #// Flash Media Player
-        types_quicktime = Array("audio/3gpp", "audio/3gpp2", "audio/aac", "audio/x-aac", "audio/aiff", "audio/x-aiff", "audio/mid", "audio/midi", "audio/x-midi", "audio/mp4", "audio/m4a", "audio/x-m4a", "audio/wav", "audio/x-wav", "video/3gpp", "video/3gpp2", "video/m4v", "video/x-m4v", "video/mp4", "video/mpeg", "video/x-mpeg", "video/quicktime", "video/sd-video")
+        types_quicktime_ = Array("audio/3gpp", "audio/3gpp2", "audio/aac", "audio/x-aac", "audio/aiff", "audio/x-aiff", "audio/mid", "audio/midi", "audio/x-midi", "audio/mp4", "audio/m4a", "audio/x-m4a", "audio/wav", "audio/x-wav", "video/3gpp", "video/3gpp2", "video/m4v", "video/x-m4v", "video/mp4", "video/mpeg", "video/x-mpeg", "video/quicktime", "video/sd-video")
         #// QuickTime
-        types_wmedia = Array("application/asx", "application/x-mplayer2", "audio/x-ms-wma", "audio/x-ms-wax", "video/x-ms-asf-plugin", "video/x-ms-asf", "video/x-ms-wm", "video/x-ms-wmv", "video/x-ms-wvx")
+        types_wmedia_ = Array("application/asx", "application/x-mplayer2", "audio/x-ms-wma", "audio/x-ms-wax", "video/x-ms-asf-plugin", "video/x-ms-asf", "video/x-ms-wm", "video/x-ms-wmv", "video/x-ms-wvx")
         #// Windows Media
-        types_mp3 = Array("audio/mp3", "audio/x-mp3", "audio/mpeg", "audio/x-mpeg")
+        types_mp3_ = Array("audio/mp3", "audio/x-mp3", "audio/mpeg", "audio/x-mpeg")
         #// MP3
         if self.get_type() != None:
-            type = php_strtolower(self.type)
+            type_ = php_strtolower(self.type)
         else:
-            type = None
+            type_ = None
         # end if
         #// If we encounter an unsupported mime-type, check the file extension and guess intelligently.
-        if (not php_in_array(type, php_array_merge(types_flash, types_fmedia, types_quicktime, types_wmedia, types_mp3))):
+        if (not php_in_array(type_, php_array_merge(types_flash_, types_fmedia_, types_quicktime_, types_wmedia_, types_mp3_))):
             for case in Switch(php_strtolower(self.get_extension())):
                 if case("aac"):
                     pass
                 # end if
                 if case("adts"):
-                    type = "audio/acc"
+                    type_ = "audio/acc"
                     break
                 # end if
                 if case("aif"):
@@ -901,11 +1051,11 @@ class SimplePie_Enclosure():
                     pass
                 # end if
                 if case("cdda"):
-                    type = "audio/aiff"
+                    type_ = "audio/aiff"
                     break
                 # end if
                 if case("bwf"):
-                    type = "audio/wav"
+                    type_ = "audio/wav"
                     break
                 # end if
                 if case("kar"):
@@ -918,52 +1068,52 @@ class SimplePie_Enclosure():
                     pass
                 # end if
                 if case("smf"):
-                    type = "audio/midi"
+                    type_ = "audio/midi"
                     break
                 # end if
                 if case("m4a"):
-                    type = "audio/x-m4a"
+                    type_ = "audio/x-m4a"
                     break
                 # end if
                 if case("mp3"):
                     pass
                 # end if
                 if case("swa"):
-                    type = "audio/mp3"
+                    type_ = "audio/mp3"
                     break
                 # end if
                 if case("wav"):
-                    type = "audio/wav"
+                    type_ = "audio/wav"
                     break
                 # end if
                 if case("wax"):
-                    type = "audio/x-ms-wax"
+                    type_ = "audio/x-ms-wax"
                     break
                 # end if
                 if case("wma"):
-                    type = "audio/x-ms-wma"
+                    type_ = "audio/x-ms-wma"
                     break
                 # end if
                 if case("3gp"):
                     pass
                 # end if
                 if case("3gpp"):
-                    type = "video/3gpp"
+                    type_ = "video/3gpp"
                     break
                 # end if
                 if case("3g2"):
                     pass
                 # end if
                 if case("3gp2"):
-                    type = "video/3gpp2"
+                    type_ = "video/3gpp2"
                     break
                 # end if
                 if case("asf"):
-                    type = "video/x-ms-asf"
+                    type_ = "video/x-ms-asf"
                     break
                 # end if
                 if case("flv"):
-                    type = "video/x-flv"
+                    type_ = "video/x-flv"
                     break
                 # end if
                 if case("m1a"):
@@ -997,69 +1147,69 @@ class SimplePie_Enclosure():
                     pass
                 # end if
                 if case("mpv"):
-                    type = "video/mpeg"
+                    type_ = "video/mpeg"
                     break
                 # end if
                 if case("m4v"):
-                    type = "video/x-m4v"
+                    type_ = "video/x-m4v"
                     break
                 # end if
                 if case("mov"):
                     pass
                 # end if
                 if case("qt"):
-                    type = "video/quicktime"
+                    type_ = "video/quicktime"
                     break
                 # end if
                 if case("mp4"):
                     pass
                 # end if
                 if case("mpg4"):
-                    type = "video/mp4"
+                    type_ = "video/mp4"
                     break
                 # end if
                 if case("sdv"):
-                    type = "video/sd-video"
+                    type_ = "video/sd-video"
                     break
                 # end if
                 if case("wm"):
-                    type = "video/x-ms-wm"
+                    type_ = "video/x-ms-wm"
                     break
                 # end if
                 if case("wmv"):
-                    type = "video/x-ms-wmv"
+                    type_ = "video/x-ms-wmv"
                     break
                 # end if
                 if case("wvx"):
-                    type = "video/x-ms-wvx"
+                    type_ = "video/x-ms-wvx"
                     break
                 # end if
                 if case("spl"):
-                    type = "application/futuresplash"
+                    type_ = "application/futuresplash"
                     break
                 # end if
                 if case("swf"):
-                    type = "application/x-shockwave-flash"
+                    type_ = "application/x-shockwave-flash"
                     break
                 # end if
             # end for
         # end if
-        if find_handler:
-            if php_in_array(type, types_flash):
+        if find_handler_:
+            if php_in_array(type_, types_flash_):
                 return "flash"
-            elif php_in_array(type, types_fmedia):
+            elif php_in_array(type_, types_fmedia_):
                 return "fmedia"
-            elif php_in_array(type, types_quicktime):
+            elif php_in_array(type_, types_quicktime_):
                 return "quicktime"
-            elif php_in_array(type, types_wmedia):
+            elif php_in_array(type_, types_wmedia_):
                 return "wmedia"
-            elif php_in_array(type, types_mp3):
+            elif php_in_array(type_, types_mp3_):
                 return "mp3"
             else:
                 return None
             # end if
         else:
-            return type
+            return type_
         # end if
     # end def get_real_type
 # end class SimplePie_Enclosure

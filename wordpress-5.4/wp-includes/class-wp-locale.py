@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,14 +21,77 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @since 4.6.0 Moved to its own file from wp-includes/locale.php.
 #//
 class WP_Locale():
+    #// 
+    #// Stores the translated strings for the full weekday names.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     weekday = Array()
+    #// 
+    #// Stores the translated strings for the one character weekday names.
+    #// 
+    #// There is a hack to make sure that Tuesday and Thursday, as well
+    #// as Sunday and Saturday, don't conflict. See init() method for more.
+    #// 
+    #// @see WP_Locale::init() for how to handle the hack.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     weekday_initial = Array()
+    #// 
+    #// Stores the translated strings for the abbreviated weekday names.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     weekday_abbrev = Array()
+    #// 
+    #// Stores the translated strings for the full month names.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     month = Array()
+    #// 
+    #// Stores the translated strings for the month names in genitive case, if the locale specifies.
+    #// 
+    #// @since 4.4.0
+    #// @var array
+    #//
     month_genitive = Array()
+    #// 
+    #// Stores the translated strings for the abbreviated month names.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     month_abbrev = Array()
+    #// 
+    #// Stores the translated strings for 'am' and 'pm'.
+    #// 
+    #// Also the capitalized versions.
+    #// 
+    #// @since 2.1.0
+    #// @var array
+    #//
     meridiem = Array()
+    #// 
+    #// The text direction of the locale language.
+    #// 
+    #// Default is left to right 'ltr'.
+    #// 
+    #// @since 2.1.0
+    #// @var string
+    #//
     text_direction = "ltr"
+    #// 
+    #// The thousands separator and decimal point values used for localizing numbers.
+    #// 
+    #// @since 2.3.0
+    #// @var array
+    #//
     number_format = Array()
     #// 
     #// Constructor which calls helper methods to set up object variables.
@@ -41,6 +99,7 @@ class WP_Locale():
     #// @since 2.1.0
     #//
     def __init__(self):
+        
         
         self.init()
         self.register_globals()
@@ -58,6 +117,7 @@ class WP_Locale():
     #// @global string $wp_version     The WordPress version string.
     #//
     def init(self):
+        
         
         #// The weekdays.
         self.weekday[0] = __("Sunday")
@@ -130,13 +190,13 @@ class WP_Locale():
         #// Numbers formatting.
         #// See https://www.php.net/number_format
         #// translators: $thousands_sep argument for https://www.php.net/number_format, default is ','
-        thousands_sep = __("number_format_thousands_sep")
+        thousands_sep_ = __("number_format_thousands_sep")
         #// Replace space with a non-breaking space to avoid wrapping.
-        thousands_sep = php_str_replace(" ", "&nbsp;", thousands_sep)
-        self.number_format["thousands_sep"] = "," if "number_format_thousands_sep" == thousands_sep else thousands_sep
+        thousands_sep_ = php_str_replace(" ", "&nbsp;", thousands_sep_)
+        self.number_format["thousands_sep"] = "," if "number_format_thousands_sep" == thousands_sep_ else thousands_sep_
         #// translators: $dec_point argument for https://www.php.net/number_format, default is '.'
-        decimal_point = __("number_format_decimal_point")
-        self.number_format["decimal_point"] = "." if "number_format_decimal_point" == decimal_point else decimal_point
+        decimal_point_ = __("number_format_decimal_point")
+        self.number_format["decimal_point"] = "." if "number_format_decimal_point" == decimal_point_ else decimal_point_
         #// Set text direction.
         if (php_isset(lambda : PHP_GLOBALS["text_direction"])):
             self.text_direction = PHP_GLOBALS["text_direction"]
@@ -157,9 +217,10 @@ class WP_Locale():
     #// @param int $weekday_number 0 for Sunday through 6 Saturday.
     #// @return string Full translated weekday.
     #//
-    def get_weekday(self, weekday_number=None):
+    def get_weekday(self, weekday_number_=None):
         
-        return self.weekday[weekday_number]
+        
+        return self.weekday[weekday_number_]
     # end def get_weekday
     #// 
     #// Retrieve the translated weekday initial.
@@ -174,9 +235,10 @@ class WP_Locale():
     #// @param string $weekday_name Full translated weekday word.
     #// @return string Translated weekday initial.
     #//
-    def get_weekday_initial(self, weekday_name=None):
+    def get_weekday_initial(self, weekday_name_=None):
         
-        return self.weekday_initial[weekday_name]
+        
+        return self.weekday_initial[weekday_name_]
     # end def get_weekday_initial
     #// 
     #// Retrieve the translated weekday abbreviation.
@@ -189,9 +251,10 @@ class WP_Locale():
     #// @param string $weekday_name Full translated weekday word.
     #// @return string Translated weekday abbreviation.
     #//
-    def get_weekday_abbrev(self, weekday_name=None):
+    def get_weekday_abbrev(self, weekday_name_=None):
         
-        return self.weekday_abbrev[weekday_name]
+        
+        return self.weekday_abbrev[weekday_name_]
     # end def get_weekday_abbrev
     #// 
     #// Retrieve the full translated month by month number.
@@ -209,9 +272,10 @@ class WP_Locale():
     #// @param string|int $month_number '01' through '12'.
     #// @return string Translated full month name.
     #//
-    def get_month(self, month_number=None):
+    def get_month(self, month_number_=None):
         
-        return self.month[zeroise(month_number, 2)]
+        
+        return self.month[zeroise(month_number_, 2)]
     # end def get_month
     #// 
     #// Retrieve translated version of month abbreviation string.
@@ -224,9 +288,10 @@ class WP_Locale():
     #// @param string $month_name Translated month to get abbreviated version.
     #// @return string Translated abbreviated month.
     #//
-    def get_month_abbrev(self, month_name=None):
+    def get_month_abbrev(self, month_name_=None):
         
-        return self.month_abbrev[month_name]
+        
+        return self.month_abbrev[month_name_]
     # end def get_month_abbrev
     #// 
     #// Retrieve translated version of meridiem string.
@@ -238,9 +303,10 @@ class WP_Locale():
     #// @param string $meridiem Either 'am', 'pm', 'AM', or 'PM'. Not translated version.
     #// @return string Translated version
     #//
-    def get_meridiem(self, meridiem=None):
+    def get_meridiem(self, meridiem_=None):
         
-        return self.meridiem[meridiem]
+        
+        return self.meridiem[meridiem_]
     # end def get_meridiem
     #// 
     #// Global variables are deprecated.
@@ -258,6 +324,7 @@ class WP_Locale():
     #// @since 2.1.0
     #//
     def register_globals(self):
+        
         global PHP_GLOBALS
         PHP_GLOBALS["weekday"] = self.weekday
         PHP_GLOBALS["weekday_initial"] = self.weekday_initial
@@ -273,6 +340,7 @@ class WP_Locale():
     #//
     def is_rtl(self):
         
+        
         return "rtl" == self.text_direction
     # end def is_rtl
     #// 
@@ -285,6 +353,7 @@ class WP_Locale():
     #// @since 3.6.0
     #//
     def _strings_for_pot(self):
+        
         
         #// translators: Localized date format, see https://www.php.net/date
         __("F j, Y")

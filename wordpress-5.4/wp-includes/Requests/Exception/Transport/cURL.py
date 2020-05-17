@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -16,27 +11,46 @@ class Requests_Exception_Transport_cURL(Requests_Exception_Transport):
     EASY = "cURLEasy"
     MULTI = "cURLMulti"
     SHARE = "cURLShare"
+    #// 
+    #// cURL error code
+    #// 
+    #// @var integer
+    #//
     code = -1
+    #// 
+    #// Which type of cURL error
+    #// 
+    #// EASY|MULTI|SHARE
+    #// 
+    #// @var string
+    #//
     type = "Unknown"
+    #// 
+    #// Clear text error message
+    #// 
+    #// @var string
+    #//
     reason = "Unknown"
-    def __init__(self, message=None, type=None, data=None, code=0):
+    def __init__(self, message_=None, type_=None, data_=None, code_=0):
         
-        if type != None:
-            self.type = type
+        
+        if type_ != None:
+            self.type = type_
         # end if
-        if code != None:
-            self.code = code
+        if code_ != None:
+            self.code = code_
         # end if
-        if message != None:
-            self.reason = message
+        if message_ != None:
+            self.reason = message_
         # end if
-        message = php_sprintf("%d %s", self.code, self.reason)
-        super().__init__(message, self.type, data, self.code)
+        message_ = php_sprintf("%d %s", self.code, self.reason)
+        super().__init__(message_, self.type, data_, self.code)
     # end def __init__
     #// 
     #// Get the error message
     #//
     def getreason(self):
+        
         
         return self.reason
     # end def getreason

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -62,8 +57,27 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package SimplePie
 #//
 class SimplePie_Registry():
+    #// 
+    #// Default class mapping
+    #// 
+    #// Overriding classes *must* subclass these.
+    #// 
+    #// @var array
+    #//
     default = Array({"Cache": "SimplePie_Cache", "Locator": "SimplePie_Locator", "Parser": "SimplePie_Parser", "File": "SimplePie_File", "Sanitize": "SimplePie_Sanitize", "Item": "SimplePie_Item", "Author": "SimplePie_Author", "Category": "SimplePie_Category", "Enclosure": "SimplePie_Enclosure", "Caption": "SimplePie_Caption", "Copyright": "SimplePie_Copyright", "Credit": "SimplePie_Credit", "Rating": "SimplePie_Rating", "Restriction": "SimplePie_Restriction", "Content_Type_Sniffer": "SimplePie_Content_Type_Sniffer", "Source": "SimplePie_Source", "Misc": "SimplePie_Misc", "XML_Declaration_Parser": "SimplePie_XML_Declaration_Parser", "Parse_Date": "SimplePie_Parse_Date"})
+    #// 
+    #// Class mapping
+    #// 
+    #// @see register()
+    #// @var array
+    #//
     classes = Array()
+    #// 
+    #// Legacy classes
+    #// 
+    #// @see register()
+    #// @var array
+    #//
     legacy = Array()
     #// 
     #// Constructor
@@ -71,6 +85,7 @@ class SimplePie_Registry():
     #// No-op
     #//
     def __init__(self):
+        
         
         pass
     # end def __init__
@@ -82,13 +97,16 @@ class SimplePie_Registry():
     #// @param bool $legacy Whether to enable legacy support for this class
     #// @return bool Successfulness
     #//
-    def register(self, type=None, class_=None, legacy=False):
+    def register(self, type_=None, class_=None, legacy_=None):
+        if legacy_ is None:
+            legacy_ = False
+        # end if
         
-        if (not is_subclass_of(class_, self.default[type])):
+        if (not is_subclass_of(class_, self.default[type_])):
             return False
         # end if
-        self.classes[type] = class_
-        if legacy:
+        self.classes[type_] = class_
+        if legacy_:
             self.legacy[-1] = class_
         # end if
         return True
@@ -101,13 +119,14 @@ class SimplePie_Registry():
     #// @param string $type
     #// @return string|null
     #//
-    def get_class(self, type=None):
+    def get_class(self, type_=None):
         
-        if (not php_empty(lambda : self.classes[type])):
-            return self.classes[type]
+        
+        if (not php_empty(lambda : self.classes[type_])):
+            return self.classes[type_]
         # end if
-        if (not php_empty(lambda : self.default[type])):
-            return self.default[type]
+        if (not php_empty(lambda : self.default[type_])):
+            return self.default[type_]
         # end if
         return None
     # end def get_class
@@ -118,30 +137,33 @@ class SimplePie_Registry():
     #// @param array $parameters Parameters to pass to the constructor
     #// @return object Instance of class
     #//
-    def create(self, type=None, parameters=Array()):
+    def create(self, type_=None, parameters_=None):
+        if parameters_ is None:
+            parameters_ = Array()
+        # end if
         
-        class_ = self.get_class(type)
+        class_ = self.get_class(type_)
         if php_in_array(class_, self.legacy):
-            for case in Switch(type):
+            for case in Switch(type_):
                 if case("locator"):
                     #// Legacy: file, timeout, useragent, file_class, max_checked_feeds, content_type_sniffer_class
                     #// Specified: file, timeout, useragent, max_checked_feeds
-                    replacement = Array(self.get_class("file"), parameters[3], self.get_class("content_type_sniffer"))
-                    array_splice(parameters, 3, 1, replacement)
+                    replacement_ = Array(self.get_class("file"), parameters_[3], self.get_class("content_type_sniffer"))
+                    array_splice(parameters_, 3, 1, replacement_)
                     break
                 # end if
             # end for
         # end if
         if (not php_method_exists(class_, "__construct")):
-            instance = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
+            instance_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
         else:
-            reflector = php_new_class("ReflectionClass", lambda : ReflectionClass(class_))
-            instance = reflector.newinstanceargs(parameters)
+            reflector_ = php_new_class("ReflectionClass", lambda : ReflectionClass(class_))
+            instance_ = reflector_.newinstanceargs(parameters_)
         # end if
-        if php_method_exists(instance, "set_registry"):
-            instance.set_registry(self)
+        if php_method_exists(instance_, "set_registry"):
+            instance_.set_registry(self)
         # end if
-        return instance
+        return instance_
     # end def create
     #// 
     #// Call a static method for a type
@@ -151,23 +173,26 @@ class SimplePie_Registry():
     #// @param array $parameters
     #// @return mixed
     #//
-    def call(self, type=None, method=None, parameters=Array()):
+    def call(self, type_=None, method_=None, parameters_=None):
+        if parameters_ is None:
+            parameters_ = Array()
+        # end if
         
-        class_ = self.get_class(type)
+        class_ = self.get_class(type_)
         if php_in_array(class_, self.legacy):
-            for case in Switch(type):
+            for case in Switch(type_):
                 if case("Cache"):
                     #// For backwards compatibility with old non-static
                     #// Cache::create() methods
-                    if method == "get_handler":
-                        result = php_no_error(lambda: call_user_func_array(Array(class_, "create"), parameters))
-                        return result
+                    if method_ == "get_handler":
+                        result_ = php_no_error(lambda: call_user_func_array(Array(class_, "create"), parameters_))
+                        return result_
                     # end if
                     break
                 # end if
             # end for
         # end if
-        result = call_user_func_array(Array(class_, method), parameters)
-        return result
+        result_ = call_user_func_array(Array(class_, method_), parameters_)
+        return result_
     # end def call
 # end class SimplePie_Registry

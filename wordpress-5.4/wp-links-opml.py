@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -26,11 +21,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 php_include_file(__DIR__ + "/wp-load.php", once=True)
 php_header("Content-Type: text/xml; charset=" + get_option("blog_charset"), True)
-link_cat = ""
+link_cat_ = ""
 if (not php_empty(lambda : PHP_REQUEST["link_cat"])):
-    link_cat = PHP_REQUEST["link_cat"]
-    if (not php_in_array(link_cat, Array("all", "0"), True)):
-        link_cat = absint(php_str(urldecode(link_cat)))
+    link_cat_ = PHP_REQUEST["link_cat"]
+    if (not php_in_array(link_cat_, Array("all", "0"), True)):
+        link_cat_ = absint(php_str(urldecode(link_cat_)))
     # end if
 # end if
 php_print("<?xml version=\"1.0\"?" + ">\n")
@@ -50,19 +45,19 @@ php_print(" GMT</dateCreated>\n     ")
 #//
 do_action("opml_head")
 php_print(" </head>\n   <body>\n")
-if php_empty(lambda : link_cat):
-    cats = get_categories(Array({"taxonomy": "link_category", "hierarchical": 0}))
+if php_empty(lambda : link_cat_):
+    cats_ = get_categories(Array({"taxonomy": "link_category", "hierarchical": 0}))
 else:
-    cats = get_categories(Array({"taxonomy": "link_category", "hierarchical": 0, "include": link_cat}))
+    cats_ = get_categories(Array({"taxonomy": "link_category", "hierarchical": 0, "include": link_cat_}))
 # end if
-for cat in cats:
+for cat_ in cats_:
     #// This filter is documented in wp-includes/bookmark-template.php
-    catname = apply_filters("link_category", cat.name)
+    catname_ = apply_filters("link_category", cat_.name)
     php_print("<outline type=\"category\" title=\"")
-    php_print(esc_attr(catname))
+    php_print(esc_attr(catname_))
     php_print("\">\n    ")
-    bookmarks = get_bookmarks(Array({"category": cat.term_id}))
-    for bookmark in bookmarks:
+    bookmarks_ = get_bookmarks(Array({"category": cat_.term_id}))
+    for bookmark_ in bookmarks_:
         #// 
         #// Filters the OPML outline link title text.
         #// 
@@ -70,16 +65,16 @@ for cat in cats:
         #// 
         #// @param string $title The OPML outline title text.
         #//
-        title = apply_filters("link_title", bookmark.link_name)
+        title_ = apply_filters("link_title", bookmark_.link_name)
         php_print("<outline text=\"")
-        php_print(esc_attr(title))
+        php_print(esc_attr(title_))
         php_print("\" type=\"link\" xmlUrl=\"")
-        php_print(esc_attr(bookmark.link_rss))
+        php_print(esc_attr(bookmark_.link_rss))
         php_print("\" htmlUrl=\"")
-        php_print(esc_attr(bookmark.link_url))
+        php_print(esc_attr(bookmark_.link_url))
         php_print("\" updated=\"\n                          ")
-        if "0000-00-00 00:00:00" != bookmark.link_updated:
-            php_print(bookmark.link_updated)
+        if "0000-00-00 00:00:00" != bookmark_.link_updated:
+            php_print(bookmark_.link_updated)
         # end if
         php_print("\" />\n      ")
     # end for

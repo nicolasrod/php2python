@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -20,9 +15,9 @@ php_include_file(php_dirname(php_dirname(__FILE__)) + "/autoload.php", once=True
 #// Thus, the functions or constants just proxy to the appropriate
 #// ParagonIE_Sodium_Compat method or class constant, respectively.
 #//
-for constant in Array("BASE64_VARIANT_ORIGINAL", "BASE64_VARIANT_ORIGINAL_NO_PADDING", "BASE64_VARIANT_URLSAFE", "BASE64_VARIANT_URLSAFE_NO_PADDING", "CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_ABYTES", "CRYPTO_AEAD_AES256GCM_KEYBYTES", "CRYPTO_AEAD_AES256GCM_NSECBYTES", "CRYPTO_AEAD_AES256GCM_NPUBBYTES", "CRYPTO_AEAD_AES256GCM_ABYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_NSECBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_ABYTES", "CRYPTO_AUTH_BYTES", "CRYPTO_AUTH_KEYBYTES", "CRYPTO_BOX_SEALBYTES", "CRYPTO_BOX_SECRETKEYBYTES", "CRYPTO_BOX_PUBLICKEYBYTES", "CRYPTO_BOX_KEYPAIRBYTES", "CRYPTO_BOX_MACBYTES", "CRYPTO_BOX_NONCEBYTES", "CRYPTO_BOX_SEEDBYTES", "CRYPTO_KDF_BYTES_MIN", "CRYPTO_KDF_BYTES_MAX", "CRYPTO_KDF_CONTEXTBYTES", "CRYPTO_KDF_KEYBYTES", "CRYPTO_KX_BYTES", "CRYPTO_KX_KEYPAIRBYTES", "CRYPTO_KX_PRIMITIVE", "CRYPTO_KX_SEEDBYTES", "CRYPTO_KX_PUBLICKEYBYTES", "CRYPTO_KX_SECRETKEYBYTES", "CRYPTO_KX_SESSIONKEYBYTES", "CRYPTO_GENERICHASH_BYTES", "CRYPTO_GENERICHASH_BYTES_MIN", "CRYPTO_GENERICHASH_BYTES_MAX", "CRYPTO_GENERICHASH_KEYBYTES", "CRYPTO_GENERICHASH_KEYBYTES_MIN", "CRYPTO_GENERICHASH_KEYBYTES_MAX", "CRYPTO_PWHASH_SALTBYTES", "CRYPTO_PWHASH_STRPREFIX", "CRYPTO_PWHASH_ALG_ARGON2I13", "CRYPTO_PWHASH_ALG_ARGON2ID13", "CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE", "CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE", "CRYPTO_PWHASH_MEMLIMIT_MODERATE", "CRYPTO_PWHASH_OPSLIMIT_MODERATE", "CRYPTO_PWHASH_MEMLIMIT_SENSITIVE", "CRYPTO_PWHASH_OPSLIMIT_SENSITIVE", "CRYPTO_SCALARMULT_BYTES", "CRYPTO_SCALARMULT_SCALARBYTES", "CRYPTO_SHORTHASH_BYTES", "CRYPTO_SHORTHASH_KEYBYTES", "CRYPTO_SECRETBOX_KEYBYTES", "CRYPTO_SECRETBOX_MACBYTES", "CRYPTO_SECRETBOX_NONCEBYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_ABYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_HEADERBYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_KEYBYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PUSH", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PULL", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_REKEY", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_FINAL", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_MESSAGEBYTES_MAX", "CRYPTO_SIGN_BYTES", "CRYPTO_SIGN_SEEDBYTES", "CRYPTO_SIGN_PUBLICKEYBYTES", "CRYPTO_SIGN_SECRETKEYBYTES", "CRYPTO_SIGN_KEYPAIRBYTES", "CRYPTO_STREAM_KEYBYTES", "CRYPTO_STREAM_NONCEBYTES", "LIBRARY_VERSION_MAJOR", "LIBRARY_VERSION_MINOR", "VERSION_STRING"):
-    if (not php_defined(str("SODIUM_") + str(constant))) and php_defined(str("ParagonIE_Sodium_Compat::") + str(constant)):
-        php_define(str("SODIUM_") + str(constant), constant(str("ParagonIE_Sodium_Compat::") + str(constant)))
+for constant_ in Array("BASE64_VARIANT_ORIGINAL", "BASE64_VARIANT_ORIGINAL_NO_PADDING", "BASE64_VARIANT_URLSAFE", "BASE64_VARIANT_URLSAFE_NO_PADDING", "CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_ABYTES", "CRYPTO_AEAD_AES256GCM_KEYBYTES", "CRYPTO_AEAD_AES256GCM_NSECBYTES", "CRYPTO_AEAD_AES256GCM_NPUBBYTES", "CRYPTO_AEAD_AES256GCM_ABYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_NSECBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES", "CRYPTO_AEAD_CHACHA20POLY1305_IETF_ABYTES", "CRYPTO_AUTH_BYTES", "CRYPTO_AUTH_KEYBYTES", "CRYPTO_BOX_SEALBYTES", "CRYPTO_BOX_SECRETKEYBYTES", "CRYPTO_BOX_PUBLICKEYBYTES", "CRYPTO_BOX_KEYPAIRBYTES", "CRYPTO_BOX_MACBYTES", "CRYPTO_BOX_NONCEBYTES", "CRYPTO_BOX_SEEDBYTES", "CRYPTO_KDF_BYTES_MIN", "CRYPTO_KDF_BYTES_MAX", "CRYPTO_KDF_CONTEXTBYTES", "CRYPTO_KDF_KEYBYTES", "CRYPTO_KX_BYTES", "CRYPTO_KX_KEYPAIRBYTES", "CRYPTO_KX_PRIMITIVE", "CRYPTO_KX_SEEDBYTES", "CRYPTO_KX_PUBLICKEYBYTES", "CRYPTO_KX_SECRETKEYBYTES", "CRYPTO_KX_SESSIONKEYBYTES", "CRYPTO_GENERICHASH_BYTES", "CRYPTO_GENERICHASH_BYTES_MIN", "CRYPTO_GENERICHASH_BYTES_MAX", "CRYPTO_GENERICHASH_KEYBYTES", "CRYPTO_GENERICHASH_KEYBYTES_MIN", "CRYPTO_GENERICHASH_KEYBYTES_MAX", "CRYPTO_PWHASH_SALTBYTES", "CRYPTO_PWHASH_STRPREFIX", "CRYPTO_PWHASH_ALG_ARGON2I13", "CRYPTO_PWHASH_ALG_ARGON2ID13", "CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE", "CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE", "CRYPTO_PWHASH_MEMLIMIT_MODERATE", "CRYPTO_PWHASH_OPSLIMIT_MODERATE", "CRYPTO_PWHASH_MEMLIMIT_SENSITIVE", "CRYPTO_PWHASH_OPSLIMIT_SENSITIVE", "CRYPTO_SCALARMULT_BYTES", "CRYPTO_SCALARMULT_SCALARBYTES", "CRYPTO_SHORTHASH_BYTES", "CRYPTO_SHORTHASH_KEYBYTES", "CRYPTO_SECRETBOX_KEYBYTES", "CRYPTO_SECRETBOX_MACBYTES", "CRYPTO_SECRETBOX_NONCEBYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_ABYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_HEADERBYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_KEYBYTES", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PUSH", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PULL", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_REKEY", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_FINAL", "CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_MESSAGEBYTES_MAX", "CRYPTO_SIGN_BYTES", "CRYPTO_SIGN_SEEDBYTES", "CRYPTO_SIGN_PUBLICKEYBYTES", "CRYPTO_SIGN_SECRETKEYBYTES", "CRYPTO_SIGN_KEYPAIRBYTES", "CRYPTO_STREAM_KEYBYTES", "CRYPTO_STREAM_NONCEBYTES", "LIBRARY_VERSION_MAJOR", "LIBRARY_VERSION_MINOR", "VERSION_STRING"):
+    if (not php_defined(str("SODIUM_") + str(constant_))) and php_defined(str("ParagonIE_Sodium_Compat::") + str(constant_)):
+        php_define(str("SODIUM_") + str(constant_), constant(str("ParagonIE_Sodium_Compat::") + str(constant_)))
     # end if
 # end for
 if (not php_is_callable("sodium_add")):
@@ -33,9 +28,10 @@ if (not php_is_callable("sodium_add")):
     #// @return void
     #// @throws SodiumException
     #//
-    def sodium_add(val=None, addv=None, *args_):
+    def sodium_add(val_=None, addv_=None, *_args_):
         
-        ParagonIE_Sodium_Compat.add(val, addv)
+        
+        ParagonIE_Sodium_Compat.add(val_, addv_)
     # end def sodium_add
 # end if
 if (not php_is_callable("sodium_base642bin")):
@@ -48,9 +44,10 @@ if (not php_is_callable("sodium_base642bin")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_base642bin(string=None, variant=None, ignore="", *args_):
+    def sodium_base642bin(string_=None, variant_=None, ignore_="", *_args_):
         
-        return ParagonIE_Sodium_Compat.base642bin(string, variant, ignore)
+        
+        return ParagonIE_Sodium_Compat.base642bin(string_, variant_, ignore_)
     # end def sodium_base642bin
 # end if
 if (not php_is_callable("sodium_bin2base64")):
@@ -62,9 +59,10 @@ if (not php_is_callable("sodium_bin2base64")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_bin2base64(string=None, variant=None, *args_):
+    def sodium_bin2base64(string_=None, variant_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.bin2base64(string, variant)
+        
+        return ParagonIE_Sodium_Compat.bin2base64(string_, variant_)
     # end def sodium_bin2base64
 # end if
 if (not php_is_callable("sodium_bin2hex")):
@@ -75,9 +73,10 @@ if (not php_is_callable("sodium_bin2hex")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_bin2hex(string=None, *args_):
+    def sodium_bin2hex(string_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.bin2hex(string)
+        
+        return ParagonIE_Sodium_Compat.bin2hex(string_)
     # end def sodium_bin2hex
 # end if
 if (not php_is_callable("sodium_compare")):
@@ -89,9 +88,10 @@ if (not php_is_callable("sodium_compare")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_compare(a=None, b=None, *args_):
+    def sodium_compare(a_=None, b_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.compare(a, b)
+        
+        return ParagonIE_Sodium_Compat.compare(a_, b_)
     # end def sodium_compare
 # end if
 if (not php_is_callable("sodium_crypto_aead_aes256gcm_decrypt")):
@@ -103,13 +103,14 @@ if (not php_is_callable("sodium_crypto_aead_aes256gcm_decrypt")):
     #// @param string $key
     #// @return string|bool
     #//
-    def sodium_crypto_aead_aes256gcm_decrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_aes256gcm_decrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_aead_aes256gcm_decrypt(message, assocData, nonce, key)
-        except Error as ex:
+            return ParagonIE_Sodium_Compat.crypto_aead_aes256gcm_decrypt(message_, assocData_, nonce_, key_)
+        except Error as ex_:
             return False
-        except Exception as ex:
+        except Exception as ex_:
             return False
         # end try
     # end def sodium_crypto_aead_aes256gcm_decrypt
@@ -125,9 +126,10 @@ if (not php_is_callable("sodium_crypto_aead_aes256gcm_encrypt")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_aead_aes256gcm_encrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_aes256gcm_encrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_aead_aes256gcm_encrypt(message, assocData, nonce, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_aead_aes256gcm_encrypt(message_, assocData_, nonce_, key_)
     # end def sodium_crypto_aead_aes256gcm_encrypt
 # end if
 if (not php_is_callable("sodium_crypto_aead_aes256gcm_is_available")):
@@ -135,7 +137,8 @@ if (not php_is_callable("sodium_crypto_aead_aes256gcm_is_available")):
     #// @see ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()
     #// @return bool
     #//
-    def sodium_crypto_aead_aes256gcm_is_available(*args_):
+    def sodium_crypto_aead_aes256gcm_is_available(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_aead_aes256gcm_is_available()
     # end def sodium_crypto_aead_aes256gcm_is_available
@@ -149,13 +152,14 @@ if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_decrypt")):
     #// @param string $key
     #// @return string|bool
     #//
-    def sodium_crypto_aead_chacha20poly1305_decrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_chacha20poly1305_decrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_decrypt(message, assocData, nonce, key)
-        except Error as ex:
+            return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_decrypt(message_, assocData_, nonce_, key_)
+        except Error as ex_:
             return False
-        except Exception as ex:
+        except Exception as ex_:
             return False
         # end try
     # end def sodium_crypto_aead_chacha20poly1305_decrypt
@@ -171,9 +175,10 @@ if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_encrypt")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_aead_chacha20poly1305_encrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_chacha20poly1305_encrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_encrypt(message, assocData, nonce, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_encrypt(message_, assocData_, nonce_, key_)
     # end def sodium_crypto_aead_chacha20poly1305_encrypt
 # end if
 if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_keygen")):
@@ -182,7 +187,8 @@ if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_aead_chacha20poly1305_keygen(*args_):
+    def sodium_crypto_aead_chacha20poly1305_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_keygen()
     # end def sodium_crypto_aead_chacha20poly1305_keygen
@@ -196,13 +202,14 @@ if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_ietf_decrypt")):
     #// @param string $key
     #// @return string|bool
     #//
-    def sodium_crypto_aead_chacha20poly1305_ietf_decrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_chacha20poly1305_ietf_decrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_ietf_decrypt(message, assocData, nonce, key)
-        except Error as ex:
+            return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_ietf_decrypt(message_, assocData_, nonce_, key_)
+        except Error as ex_:
             return False
-        except Exception as ex:
+        except Exception as ex_:
             return False
         # end try
     # end def sodium_crypto_aead_chacha20poly1305_ietf_decrypt
@@ -218,9 +225,10 @@ if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_ietf_encrypt")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_aead_chacha20poly1305_ietf_encrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_chacha20poly1305_ietf_encrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_ietf_encrypt(message, assocData, nonce, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_ietf_encrypt(message_, assocData_, nonce_, key_)
     # end def sodium_crypto_aead_chacha20poly1305_ietf_encrypt
 # end if
 if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_ietf_keygen")):
@@ -229,7 +237,8 @@ if (not php_is_callable("sodium_crypto_aead_chacha20poly1305_ietf_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_aead_chacha20poly1305_ietf_keygen(*args_):
+    def sodium_crypto_aead_chacha20poly1305_ietf_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_aead_chacha20poly1305_ietf_keygen()
     # end def sodium_crypto_aead_chacha20poly1305_ietf_keygen
@@ -243,13 +252,14 @@ if (not php_is_callable("sodium_crypto_aead_xchacha20poly1305_ietf_decrypt")):
     #// @param string $key
     #// @return string|bool
     #//
-    def sodium_crypto_aead_xchacha20poly1305_ietf_decrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_xchacha20poly1305_ietf_decrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_aead_xchacha20poly1305_ietf_decrypt(message, assocData, nonce, key, True)
-        except Error as ex:
+            return ParagonIE_Sodium_Compat.crypto_aead_xchacha20poly1305_ietf_decrypt(message_, assocData_, nonce_, key_, True)
+        except Error as ex_:
             return False
-        except Exception as ex:
+        except Exception as ex_:
             return False
         # end try
     # end def sodium_crypto_aead_xchacha20poly1305_ietf_decrypt
@@ -265,9 +275,10 @@ if (not php_is_callable("sodium_crypto_aead_xchacha20poly1305_ietf_encrypt")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_aead_xchacha20poly1305_ietf_encrypt(message=None, assocData=None, nonce=None, key=None, *args_):
+    def sodium_crypto_aead_xchacha20poly1305_ietf_encrypt(message_=None, assocData_=None, nonce_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_aead_xchacha20poly1305_ietf_encrypt(message, assocData, nonce, key, True)
+        
+        return ParagonIE_Sodium_Compat.crypto_aead_xchacha20poly1305_ietf_encrypt(message_, assocData_, nonce_, key_, True)
     # end def sodium_crypto_aead_xchacha20poly1305_ietf_encrypt
 # end if
 if (not php_is_callable("sodium_crypto_aead_xchacha20poly1305_ietf_keygen")):
@@ -276,7 +287,8 @@ if (not php_is_callable("sodium_crypto_aead_xchacha20poly1305_ietf_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_aead_xchacha20poly1305_ietf_keygen(*args_):
+    def sodium_crypto_aead_xchacha20poly1305_ietf_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_aead_xchacha20poly1305_ietf_keygen()
     # end def sodium_crypto_aead_xchacha20poly1305_ietf_keygen
@@ -290,9 +302,10 @@ if (not php_is_callable("sodium_crypto_auth")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_auth(message=None, key=None, *args_):
+    def sodium_crypto_auth(message_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_auth(message, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_auth(message_, key_)
     # end def sodium_crypto_auth
 # end if
 if (not php_is_callable("sodium_crypto_auth_keygen")):
@@ -301,7 +314,8 @@ if (not php_is_callable("sodium_crypto_auth_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_auth_keygen(*args_):
+    def sodium_crypto_auth_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_auth_keygen()
     # end def sodium_crypto_auth_keygen
@@ -316,9 +330,10 @@ if (not php_is_callable("sodium_crypto_auth_verify")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_auth_verify(mac=None, message=None, key=None, *args_):
+    def sodium_crypto_auth_verify(mac_=None, message_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_auth_verify(mac, message, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_auth_verify(mac_, message_, key_)
     # end def sodium_crypto_auth_verify
 # end if
 if (not php_is_callable("sodium_crypto_box")):
@@ -331,9 +346,10 @@ if (not php_is_callable("sodium_crypto_box")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box(message=None, nonce=None, kp=None, *args_):
+    def sodium_crypto_box(message_=None, nonce_=None, kp_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_box(message, nonce, kp)
+        
+        return ParagonIE_Sodium_Compat.crypto_box(message_, nonce_, kp_)
     # end def sodium_crypto_box
 # end if
 if (not php_is_callable("sodium_crypto_box_keypair")):
@@ -343,7 +359,8 @@ if (not php_is_callable("sodium_crypto_box_keypair")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box_keypair(*args_):
+    def sodium_crypto_box_keypair(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_box_keypair()
     # end def sodium_crypto_box_keypair
@@ -357,9 +374,10 @@ if (not php_is_callable("sodium_crypto_box_keypair_from_secretkey_and_publickey"
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box_keypair_from_secretkey_and_publickey(sk=None, pk=None, *args_):
+    def sodium_crypto_box_keypair_from_secretkey_and_publickey(sk_=None, pk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_box_keypair_from_secretkey_and_publickey(sk, pk)
+        
+        return ParagonIE_Sodium_Compat.crypto_box_keypair_from_secretkey_and_publickey(sk_, pk_)
     # end def sodium_crypto_box_keypair_from_secretkey_and_publickey
 # end if
 if (not php_is_callable("sodium_crypto_box_open")):
@@ -370,13 +388,14 @@ if (not php_is_callable("sodium_crypto_box_open")):
     #// @param string $kp
     #// @return string|bool
     #//
-    def sodium_crypto_box_open(message=None, nonce=None, kp=None, *args_):
+    def sodium_crypto_box_open(message_=None, nonce_=None, kp_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_box_open(message, nonce, kp)
-        except Error as ex:
+            return ParagonIE_Sodium_Compat.crypto_box_open(message_, nonce_, kp_)
+        except Error as ex_:
             return False
-        except Exception as ex:
+        except Exception as ex_:
             return False
         # end try
     # end def sodium_crypto_box_open
@@ -389,9 +408,10 @@ if (not php_is_callable("sodium_crypto_box_publickey")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box_publickey(keypair=None, *args_):
+    def sodium_crypto_box_publickey(keypair_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_box_publickey(keypair)
+        
+        return ParagonIE_Sodium_Compat.crypto_box_publickey(keypair_)
     # end def sodium_crypto_box_publickey
 # end if
 if (not php_is_callable("sodium_crypto_box_publickey_from_secretkey")):
@@ -402,9 +422,10 @@ if (not php_is_callable("sodium_crypto_box_publickey_from_secretkey")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box_publickey_from_secretkey(sk=None, *args_):
+    def sodium_crypto_box_publickey_from_secretkey(sk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_box_publickey_from_secretkey(sk)
+        
+        return ParagonIE_Sodium_Compat.crypto_box_publickey_from_secretkey(sk_)
     # end def sodium_crypto_box_publickey_from_secretkey
 # end if
 if (not php_is_callable("sodium_crypto_box_seal")):
@@ -416,9 +437,10 @@ if (not php_is_callable("sodium_crypto_box_seal")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box_seal(message=None, publicKey=None, *args_):
+    def sodium_crypto_box_seal(message_=None, publicKey_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_box_seal(message, publicKey)
+        
+        return ParagonIE_Sodium_Compat.crypto_box_seal(message_, publicKey_)
     # end def sodium_crypto_box_seal
 # end if
 if (not php_is_callable("sodium_crypto_box_seal_open")):
@@ -429,13 +451,14 @@ if (not php_is_callable("sodium_crypto_box_seal_open")):
     #// @return string|bool
     #// @throws SodiumException
     #//
-    def sodium_crypto_box_seal_open(message=None, kp=None, *args_):
+    def sodium_crypto_box_seal_open(message_=None, kp_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_box_seal_open(message, kp)
-        except SodiumException as ex:
-            if ex.getmessage() == "Argument 2 must be CRYPTO_BOX_KEYPAIRBYTES long.":
-                raise ex
+            return ParagonIE_Sodium_Compat.crypto_box_seal_open(message_, kp_)
+        except SodiumException as ex_:
+            if ex_.getmessage() == "Argument 2 must be CRYPTO_BOX_KEYPAIRBYTES long.":
+                raise ex_
             # end if
             return False
         # end try
@@ -449,9 +472,10 @@ if (not php_is_callable("sodium_crypto_box_secretkey")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box_secretkey(keypair=None, *args_):
+    def sodium_crypto_box_secretkey(keypair_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_box_secretkey(keypair)
+        
+        return ParagonIE_Sodium_Compat.crypto_box_secretkey(keypair_)
     # end def sodium_crypto_box_secretkey
 # end if
 if (not php_is_callable("sodium_crypto_box_seed_keypair")):
@@ -462,9 +486,10 @@ if (not php_is_callable("sodium_crypto_box_seed_keypair")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_box_seed_keypair(seed=None, *args_):
+    def sodium_crypto_box_seed_keypair(seed_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_box_seed_keypair(seed)
+        
+        return ParagonIE_Sodium_Compat.crypto_box_seed_keypair(seed_)
     # end def sodium_crypto_box_seed_keypair
 # end if
 if (not php_is_callable("sodium_crypto_generichash")):
@@ -477,9 +502,10 @@ if (not php_is_callable("sodium_crypto_generichash")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_generichash(message=None, key=None, outLen=32, *args_):
+    def sodium_crypto_generichash(message_=None, key_=None, outLen_=32, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_generichash(message, key, outLen)
+        
+        return ParagonIE_Sodium_Compat.crypto_generichash(message_, key_, outLen_)
     # end def sodium_crypto_generichash
 # end if
 if (not php_is_callable("sodium_crypto_generichash_final")):
@@ -491,9 +517,10 @@ if (not php_is_callable("sodium_crypto_generichash_final")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_generichash_final(ctx=None, outputLength=32, *args_):
+    def sodium_crypto_generichash_final(ctx_=None, outputLength_=32, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_generichash_final(ctx, outputLength)
+        
+        return ParagonIE_Sodium_Compat.crypto_generichash_final(ctx_, outputLength_)
     # end def sodium_crypto_generichash_final
 # end if
 if (not php_is_callable("sodium_crypto_generichash_init")):
@@ -505,9 +532,10 @@ if (not php_is_callable("sodium_crypto_generichash_init")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_generichash_init(key=None, outLen=32, *args_):
+    def sodium_crypto_generichash_init(key_=None, outLen_=32, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_generichash_init(key, outLen)
+        
+        return ParagonIE_Sodium_Compat.crypto_generichash_init(key_, outLen_)
     # end def sodium_crypto_generichash_init
 # end if
 if (not php_is_callable("sodium_crypto_generichash_keygen")):
@@ -516,7 +544,8 @@ if (not php_is_callable("sodium_crypto_generichash_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_generichash_keygen(*args_):
+    def sodium_crypto_generichash_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_generichash_keygen()
     # end def sodium_crypto_generichash_keygen
@@ -530,9 +559,10 @@ if (not php_is_callable("sodium_crypto_generichash_update")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_generichash_update(ctx=None, message="", *args_):
+    def sodium_crypto_generichash_update(ctx_=None, message_="", *_args_):
         
-        ParagonIE_Sodium_Compat.crypto_generichash_update(ctx, message)
+        
+        ParagonIE_Sodium_Compat.crypto_generichash_update(ctx_, message_)
     # end def sodium_crypto_generichash_update
 # end if
 if (not php_is_callable("sodium_crypto_kdf_keygen")):
@@ -541,7 +571,8 @@ if (not php_is_callable("sodium_crypto_kdf_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_kdf_keygen(*args_):
+    def sodium_crypto_kdf_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_kdf_keygen()
     # end def sodium_crypto_kdf_keygen
@@ -556,9 +587,10 @@ if (not php_is_callable("sodium_crypto_kdf_derive_from_key")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_kdf_derive_from_key(subkey_len=None, subkey_id=None, context=None, key=None, *args_):
+    def sodium_crypto_kdf_derive_from_key(subkey_len_=None, subkey_id_=None, context_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_kdf_derive_from_key(subkey_len, subkey_id, context, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_kdf_derive_from_key(subkey_len_, subkey_id_, context_, key_)
     # end def sodium_crypto_kdf_derive_from_key
 # end if
 if (not php_is_callable("sodium_crypto_kx")):
@@ -572,9 +604,10 @@ if (not php_is_callable("sodium_crypto_kx")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_kx(my_secret=None, their_public=None, client_public=None, server_public=None, *args_):
+    def sodium_crypto_kx(my_secret_=None, their_public_=None, client_public_=None, server_public_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_kx(my_secret, their_public, client_public, server_public)
+        
+        return ParagonIE_Sodium_Compat.crypto_kx(my_secret_, their_public_, client_public_, server_public_)
     # end def sodium_crypto_kx
 # end if
 if (not php_is_callable("sodium_crypto_kx_seed_keypair")):
@@ -583,9 +616,10 @@ if (not php_is_callable("sodium_crypto_kx_seed_keypair")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_kx_seed_keypair(seed=None, *args_):
+    def sodium_crypto_kx_seed_keypair(seed_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_kx_seed_keypair(seed)
+        
+        return ParagonIE_Sodium_Compat.crypto_kx_seed_keypair(seed_)
     # end def sodium_crypto_kx_seed_keypair
 # end if
 if (not php_is_callable("sodium_crypto_kx_keypair")):
@@ -593,7 +627,8 @@ if (not php_is_callable("sodium_crypto_kx_keypair")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_kx_keypair(*args_):
+    def sodium_crypto_kx_keypair(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_kx_keypair()
     # end def sodium_crypto_kx_keypair
@@ -605,9 +640,10 @@ if (not php_is_callable("sodium_crypto_kx_client_session_keys")):
     #// @return array{0: string, 1: string}
     #// @throws SodiumException
     #//
-    def sodium_crypto_kx_client_session_keys(keypair=None, serverPublicKey=None, *args_):
+    def sodium_crypto_kx_client_session_keys(keypair_=None, serverPublicKey_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_kx_client_session_keys(keypair, serverPublicKey)
+        
+        return ParagonIE_Sodium_Compat.crypto_kx_client_session_keys(keypair_, serverPublicKey_)
     # end def sodium_crypto_kx_client_session_keys
 # end if
 if (not php_is_callable("sodium_crypto_kx_server_session_keys")):
@@ -617,9 +653,10 @@ if (not php_is_callable("sodium_crypto_kx_server_session_keys")):
     #// @return array{0: string, 1: string}
     #// @throws SodiumException
     #//
-    def sodium_crypto_kx_server_session_keys(keypair=None, clientPublicKey=None, *args_):
+    def sodium_crypto_kx_server_session_keys(keypair_=None, clientPublicKey_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_kx_server_session_keys(keypair, clientPublicKey)
+        
+        return ParagonIE_Sodium_Compat.crypto_kx_server_session_keys(keypair_, clientPublicKey_)
     # end def sodium_crypto_kx_server_session_keys
 # end if
 if (not php_is_callable("sodium_crypto_kx_secretkey")):
@@ -628,9 +665,10 @@ if (not php_is_callable("sodium_crypto_kx_secretkey")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_kx_secretkey(keypair=None, *args_):
+    def sodium_crypto_kx_secretkey(keypair_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_kx_secretkey(keypair)
+        
+        return ParagonIE_Sodium_Compat.crypto_kx_secretkey(keypair_)
     # end def sodium_crypto_kx_secretkey
 # end if
 if (not php_is_callable("sodium_crypto_kx_publickey")):
@@ -639,9 +677,10 @@ if (not php_is_callable("sodium_crypto_kx_publickey")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_kx_publickey(keypair=None, *args_):
+    def sodium_crypto_kx_publickey(keypair_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_kx_publickey(keypair)
+        
+        return ParagonIE_Sodium_Compat.crypto_kx_publickey(keypair_)
     # end def sodium_crypto_kx_publickey
 # end if
 if (not php_is_callable("sodium_crypto_pwhash")):
@@ -657,9 +696,10 @@ if (not php_is_callable("sodium_crypto_pwhash")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_pwhash(outlen=None, passwd=None, salt=None, opslimit=None, memlimit=None, algo=None, *args_):
+    def sodium_crypto_pwhash(outlen_=None, passwd_=None, salt_=None, opslimit_=None, memlimit_=None, algo_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_pwhash(outlen, passwd, salt, opslimit, memlimit, algo)
+        
+        return ParagonIE_Sodium_Compat.crypto_pwhash(outlen_, passwd_, salt_, opslimit_, memlimit_, algo_)
     # end def sodium_crypto_pwhash
 # end if
 if (not php_is_callable("sodium_crypto_pwhash_str")):
@@ -672,9 +712,10 @@ if (not php_is_callable("sodium_crypto_pwhash_str")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_pwhash_str(passwd=None, opslimit=None, memlimit=None, *args_):
+    def sodium_crypto_pwhash_str(passwd_=None, opslimit_=None, memlimit_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_pwhash_str(passwd, opslimit, memlimit)
+        
+        return ParagonIE_Sodium_Compat.crypto_pwhash_str(passwd_, opslimit_, memlimit_)
     # end def sodium_crypto_pwhash_str
 # end if
 if (not php_is_callable("sodium_crypto_pwhash_str_needs_rehash")):
@@ -687,9 +728,10 @@ if (not php_is_callable("sodium_crypto_pwhash_str_needs_rehash")):
     #// 
     #// @throws SodiumException
     #//
-    def sodium_crypto_pwhash_str_needs_rehash(hash=None, opslimit=None, memlimit=None, *args_):
+    def sodium_crypto_pwhash_str_needs_rehash(hash_=None, opslimit_=None, memlimit_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_pwhash_str_needs_rehash(hash, opslimit, memlimit)
+        
+        return ParagonIE_Sodium_Compat.crypto_pwhash_str_needs_rehash(hash_, opslimit_, memlimit_)
     # end def sodium_crypto_pwhash_str_needs_rehash
 # end if
 if (not php_is_callable("sodium_crypto_pwhash_str_verify")):
@@ -701,9 +743,10 @@ if (not php_is_callable("sodium_crypto_pwhash_str_verify")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_pwhash_str_verify(passwd=None, hash=None, *args_):
+    def sodium_crypto_pwhash_str_verify(passwd_=None, hash_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_pwhash_str_verify(passwd, hash)
+        
+        return ParagonIE_Sodium_Compat.crypto_pwhash_str_verify(passwd_, hash_)
     # end def sodium_crypto_pwhash_str_verify
 # end if
 if (not php_is_callable("sodium_crypto_pwhash_scryptsalsa208sha256")):
@@ -718,9 +761,10 @@ if (not php_is_callable("sodium_crypto_pwhash_scryptsalsa208sha256")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_pwhash_scryptsalsa208sha256(outlen=None, passwd=None, salt=None, opslimit=None, memlimit=None, *args_):
+    def sodium_crypto_pwhash_scryptsalsa208sha256(outlen_=None, passwd_=None, salt_=None, opslimit_=None, memlimit_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_pwhash_scryptsalsa208sha256(outlen, passwd, salt, opslimit, memlimit)
+        
+        return ParagonIE_Sodium_Compat.crypto_pwhash_scryptsalsa208sha256(outlen_, passwd_, salt_, opslimit_, memlimit_)
     # end def sodium_crypto_pwhash_scryptsalsa208sha256
 # end if
 if (not php_is_callable("sodium_crypto_pwhash_scryptsalsa208sha256_str")):
@@ -733,9 +777,10 @@ if (not php_is_callable("sodium_crypto_pwhash_scryptsalsa208sha256_str")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_pwhash_scryptsalsa208sha256_str(passwd=None, opslimit=None, memlimit=None, *args_):
+    def sodium_crypto_pwhash_scryptsalsa208sha256_str(passwd_=None, opslimit_=None, memlimit_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_pwhash_scryptsalsa208sha256_str(passwd, opslimit, memlimit)
+        
+        return ParagonIE_Sodium_Compat.crypto_pwhash_scryptsalsa208sha256_str(passwd_, opslimit_, memlimit_)
     # end def sodium_crypto_pwhash_scryptsalsa208sha256_str
 # end if
 if (not php_is_callable("sodium_crypto_pwhash_scryptsalsa208sha256_str_verify")):
@@ -747,9 +792,10 @@ if (not php_is_callable("sodium_crypto_pwhash_scryptsalsa208sha256_str_verify"))
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_pwhash_scryptsalsa208sha256_str_verify(passwd=None, hash=None, *args_):
+    def sodium_crypto_pwhash_scryptsalsa208sha256_str_verify(passwd_=None, hash_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_pwhash_scryptsalsa208sha256_str_verify(passwd, hash)
+        
+        return ParagonIE_Sodium_Compat.crypto_pwhash_scryptsalsa208sha256_str_verify(passwd_, hash_)
     # end def sodium_crypto_pwhash_scryptsalsa208sha256_str_verify
 # end if
 if (not php_is_callable("sodium_crypto_scalarmult")):
@@ -761,9 +807,10 @@ if (not php_is_callable("sodium_crypto_scalarmult")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_scalarmult(n=None, p=None, *args_):
+    def sodium_crypto_scalarmult(n_=None, p_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_scalarmult(n, p)
+        
+        return ParagonIE_Sodium_Compat.crypto_scalarmult(n_, p_)
     # end def sodium_crypto_scalarmult
 # end if
 if (not php_is_callable("sodium_crypto_scalarmult_base")):
@@ -774,9 +821,10 @@ if (not php_is_callable("sodium_crypto_scalarmult_base")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_scalarmult_base(n=None, *args_):
+    def sodium_crypto_scalarmult_base(n_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_scalarmult_base(n)
+        
+        return ParagonIE_Sodium_Compat.crypto_scalarmult_base(n_)
     # end def sodium_crypto_scalarmult_base
 # end if
 if (not php_is_callable("sodium_crypto_secretbox")):
@@ -789,9 +837,10 @@ if (not php_is_callable("sodium_crypto_secretbox")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_secretbox(message=None, nonce=None, key=None, *args_):
+    def sodium_crypto_secretbox(message_=None, nonce_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_secretbox(message, nonce, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_secretbox(message_, nonce_, key_)
     # end def sodium_crypto_secretbox
 # end if
 if (not php_is_callable("sodium_crypto_secretbox_keygen")):
@@ -800,7 +849,8 @@ if (not php_is_callable("sodium_crypto_secretbox_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_secretbox_keygen(*args_):
+    def sodium_crypto_secretbox_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_secretbox_keygen()
     # end def sodium_crypto_secretbox_keygen
@@ -813,13 +863,14 @@ if (not php_is_callable("sodium_crypto_secretbox_open")):
     #// @param string $key
     #// @return string|bool
     #//
-    def sodium_crypto_secretbox_open(message=None, nonce=None, key=None, *args_):
+    def sodium_crypto_secretbox_open(message_=None, nonce_=None, key_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_secretbox_open(message, nonce, key)
-        except Error as ex:
+            return ParagonIE_Sodium_Compat.crypto_secretbox_open(message_, nonce_, key_)
+        except Error as ex_:
             return False
-        except Exception as ex:
+        except Exception as ex_:
             return False
         # end try
     # end def sodium_crypto_secretbox_open
@@ -830,9 +881,10 @@ if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_init_push"
     #// @return array<int, string>
     #// @throws SodiumException
     #//
-    def sodium_crypto_secretstream_xchacha20poly1305_init_push(key=None, *args_):
+    def sodium_crypto_secretstream_xchacha20poly1305_init_push(key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_init_push(key)
+        
+        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_init_push(key_)
     # end def sodium_crypto_secretstream_xchacha20poly1305_init_push
 # end if
 if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_push")):
@@ -844,9 +896,10 @@ if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_push")):
     #// @return string
     #// @throws SodiumException
     #//
-    def sodium_crypto_secretstream_xchacha20poly1305_push(state=None, msg=None, aad="", tag=0, *args_):
+    def sodium_crypto_secretstream_xchacha20poly1305_push(state_=None, msg_=None, aad_="", tag_=0, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_push(state, msg, aad, tag)
+        
+        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_push(state_, msg_, aad_, tag_)
     # end def sodium_crypto_secretstream_xchacha20poly1305_push
 # end if
 if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_init_pull")):
@@ -856,9 +909,10 @@ if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_init_pull"
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_secretstream_xchacha20poly1305_init_pull(header=None, key=None, *args_):
+    def sodium_crypto_secretstream_xchacha20poly1305_init_pull(header_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_init_pull(header, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_init_pull(header_, key_)
     # end def sodium_crypto_secretstream_xchacha20poly1305_init_pull
 # end if
 if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_pull")):
@@ -869,9 +923,10 @@ if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_pull")):
     #// @return bool|array{0: string, 1: int}
     #// @throws SodiumException
     #//
-    def sodium_crypto_secretstream_xchacha20poly1305_pull(state=None, cipher=None, aad="", *args_):
+    def sodium_crypto_secretstream_xchacha20poly1305_pull(state_=None, cipher_=None, aad_="", *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_pull(state, cipher, aad)
+        
+        return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_pull(state_, cipher_, aad_)
     # end def sodium_crypto_secretstream_xchacha20poly1305_pull
 # end if
 if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_rekey")):
@@ -880,9 +935,10 @@ if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_rekey")):
     #// @return void
     #// @throws SodiumException
     #//
-    def sodium_crypto_secretstream_xchacha20poly1305_rekey(state=None, *args_):
+    def sodium_crypto_secretstream_xchacha20poly1305_rekey(state_=None, *_args_):
         
-        ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_rekey(state)
+        
+        ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_rekey(state_)
     # end def sodium_crypto_secretstream_xchacha20poly1305_rekey
 # end if
 if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_keygen")):
@@ -890,7 +946,8 @@ if (not php_is_callable("sodium_crypto_secretstream_xchacha20poly1305_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_secretstream_xchacha20poly1305_keygen(*args_):
+    def sodium_crypto_secretstream_xchacha20poly1305_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_secretstream_xchacha20poly1305_keygen()
     # end def sodium_crypto_secretstream_xchacha20poly1305_keygen
@@ -904,9 +961,10 @@ if (not php_is_callable("sodium_crypto_shorthash")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_shorthash(message=None, key="", *args_):
+    def sodium_crypto_shorthash(message_=None, key_="", *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_shorthash(message, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_shorthash(message_, key_)
     # end def sodium_crypto_shorthash
 # end if
 if (not php_is_callable("sodium_crypto_shorthash_keygen")):
@@ -915,7 +973,8 @@ if (not php_is_callable("sodium_crypto_shorthash_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_shorthash_keygen(*args_):
+    def sodium_crypto_shorthash_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_shorthash_keygen()
     # end def sodium_crypto_shorthash_keygen
@@ -929,9 +988,10 @@ if (not php_is_callable("sodium_crypto_sign")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign(message=None, sk=None, *args_):
+    def sodium_crypto_sign(message_=None, sk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign(message, sk)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign(message_, sk_)
     # end def sodium_crypto_sign
 # end if
 if (not php_is_callable("sodium_crypto_sign_detached")):
@@ -943,9 +1003,10 @@ if (not php_is_callable("sodium_crypto_sign_detached")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_detached(message=None, sk=None, *args_):
+    def sodium_crypto_sign_detached(message_=None, sk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_detached(message, sk)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_detached(message_, sk_)
     # end def sodium_crypto_sign_detached
 # end if
 if (not php_is_callable("sodium_crypto_sign_keypair_from_secretkey_and_publickey")):
@@ -957,9 +1018,10 @@ if (not php_is_callable("sodium_crypto_sign_keypair_from_secretkey_and_publickey
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_keypair_from_secretkey_and_publickey(sk=None, pk=None, *args_):
+    def sodium_crypto_sign_keypair_from_secretkey_and_publickey(sk_=None, pk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_keypair_from_secretkey_and_publickey(sk, pk)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_keypair_from_secretkey_and_publickey(sk_, pk_)
     # end def sodium_crypto_sign_keypair_from_secretkey_and_publickey
 # end if
 if (not php_is_callable("sodium_crypto_sign_keypair")):
@@ -969,7 +1031,8 @@ if (not php_is_callable("sodium_crypto_sign_keypair")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_keypair(*args_):
+    def sodium_crypto_sign_keypair(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_sign_keypair()
     # end def sodium_crypto_sign_keypair
@@ -981,13 +1044,14 @@ if (not php_is_callable("sodium_crypto_sign_open")):
     #// @param string $pk
     #// @return string|bool
     #//
-    def sodium_crypto_sign_open(signedMessage=None, pk=None, *args_):
+    def sodium_crypto_sign_open(signedMessage_=None, pk_=None, *_args_):
+        
         
         try: 
-            return ParagonIE_Sodium_Compat.crypto_sign_open(signedMessage, pk)
-        except Error as ex:
+            return ParagonIE_Sodium_Compat.crypto_sign_open(signedMessage_, pk_)
+        except Error as ex_:
             return False
-        except Exception as ex:
+        except Exception as ex_:
             return False
         # end try
     # end def sodium_crypto_sign_open
@@ -1000,9 +1064,10 @@ if (not php_is_callable("sodium_crypto_sign_publickey")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_publickey(keypair=None, *args_):
+    def sodium_crypto_sign_publickey(keypair_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_publickey(keypair)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_publickey(keypair_)
     # end def sodium_crypto_sign_publickey
 # end if
 if (not php_is_callable("sodium_crypto_sign_publickey_from_secretkey")):
@@ -1013,9 +1078,10 @@ if (not php_is_callable("sodium_crypto_sign_publickey_from_secretkey")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_publickey_from_secretkey(sk=None, *args_):
+    def sodium_crypto_sign_publickey_from_secretkey(sk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_publickey_from_secretkey(sk)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_publickey_from_secretkey(sk_)
     # end def sodium_crypto_sign_publickey_from_secretkey
 # end if
 if (not php_is_callable("sodium_crypto_sign_secretkey")):
@@ -1026,9 +1092,10 @@ if (not php_is_callable("sodium_crypto_sign_secretkey")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_secretkey(keypair=None, *args_):
+    def sodium_crypto_sign_secretkey(keypair_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_secretkey(keypair)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_secretkey(keypair_)
     # end def sodium_crypto_sign_secretkey
 # end if
 if (not php_is_callable("sodium_crypto_sign_seed_keypair")):
@@ -1039,9 +1106,10 @@ if (not php_is_callable("sodium_crypto_sign_seed_keypair")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_seed_keypair(seed=None, *args_):
+    def sodium_crypto_sign_seed_keypair(seed_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_seed_keypair(seed)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_seed_keypair(seed_)
     # end def sodium_crypto_sign_seed_keypair
 # end if
 if (not php_is_callable("sodium_crypto_sign_verify_detached")):
@@ -1054,9 +1122,10 @@ if (not php_is_callable("sodium_crypto_sign_verify_detached")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_verify_detached(signature=None, message=None, pk=None, *args_):
+    def sodium_crypto_sign_verify_detached(signature_=None, message_=None, pk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_verify_detached(signature, message, pk)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_verify_detached(signature_, message_, pk_)
     # end def sodium_crypto_sign_verify_detached
 # end if
 if (not php_is_callable("sodium_crypto_sign_ed25519_pk_to_curve25519")):
@@ -1067,9 +1136,10 @@ if (not php_is_callable("sodium_crypto_sign_ed25519_pk_to_curve25519")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_ed25519_pk_to_curve25519(pk=None, *args_):
+    def sodium_crypto_sign_ed25519_pk_to_curve25519(pk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_ed25519_pk_to_curve25519(pk)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_ed25519_pk_to_curve25519(pk_)
     # end def sodium_crypto_sign_ed25519_pk_to_curve25519
 # end if
 if (not php_is_callable("sodium_crypto_sign_ed25519_sk_to_curve25519")):
@@ -1080,9 +1150,10 @@ if (not php_is_callable("sodium_crypto_sign_ed25519_sk_to_curve25519")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_sign_ed25519_sk_to_curve25519(sk=None, *args_):
+    def sodium_crypto_sign_ed25519_sk_to_curve25519(sk_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_sign_ed25519_sk_to_curve25519(sk)
+        
+        return ParagonIE_Sodium_Compat.crypto_sign_ed25519_sk_to_curve25519(sk_)
     # end def sodium_crypto_sign_ed25519_sk_to_curve25519
 # end if
 if (not php_is_callable("sodium_crypto_stream")):
@@ -1095,9 +1166,10 @@ if (not php_is_callable("sodium_crypto_stream")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_stream(len=None, nonce=None, key=None, *args_):
+    def sodium_crypto_stream(len_=None, nonce_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_stream(len, nonce, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_stream(len_, nonce_, key_)
     # end def sodium_crypto_stream
 # end if
 if (not php_is_callable("sodium_crypto_stream_keygen")):
@@ -1106,7 +1178,8 @@ if (not php_is_callable("sodium_crypto_stream_keygen")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_crypto_stream_keygen(*args_):
+    def sodium_crypto_stream_keygen(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.crypto_stream_keygen()
     # end def sodium_crypto_stream_keygen
@@ -1121,9 +1194,10 @@ if (not php_is_callable("sodium_crypto_stream_xor")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_crypto_stream_xor(message=None, nonce=None, key=None, *args_):
+    def sodium_crypto_stream_xor(message_=None, nonce_=None, key_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.crypto_stream_xor(message, nonce, key)
+        
+        return ParagonIE_Sodium_Compat.crypto_stream_xor(message_, nonce_, key_)
     # end def sodium_crypto_stream_xor
 # end if
 if (not php_is_callable("sodium_hex2bin")):
@@ -1134,9 +1208,10 @@ if (not php_is_callable("sodium_hex2bin")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_hex2bin(string=None, *args_):
+    def sodium_hex2bin(string_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.hex2bin(string)
+        
+        return ParagonIE_Sodium_Compat.hex2bin(string_)
     # end def sodium_hex2bin
 # end if
 if (not php_is_callable("sodium_increment")):
@@ -1147,9 +1222,10 @@ if (not php_is_callable("sodium_increment")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_increment(string=None, *args_):
+    def sodium_increment(string_=None, *_args_):
         
-        ParagonIE_Sodium_Compat.increment(string)
+        
+        ParagonIE_Sodium_Compat.increment(string_)
     # end def sodium_increment
 # end if
 if (not php_is_callable("sodium_library_version_major")):
@@ -1157,7 +1233,8 @@ if (not php_is_callable("sodium_library_version_major")):
     #// @see ParagonIE_Sodium_Compat::library_version_major()
     #// @return int
     #//
-    def sodium_library_version_major(*args_):
+    def sodium_library_version_major(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.library_version_major()
     # end def sodium_library_version_major
@@ -1167,7 +1244,8 @@ if (not php_is_callable("sodium_library_version_minor")):
     #// @see ParagonIE_Sodium_Compat::library_version_minor()
     #// @return int
     #//
-    def sodium_library_version_minor(*args_):
+    def sodium_library_version_minor(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.library_version_minor()
     # end def sodium_library_version_minor
@@ -1177,7 +1255,8 @@ if (not php_is_callable("sodium_version_string")):
     #// @see ParagonIE_Sodium_Compat::version_string()
     #// @return string
     #//
-    def sodium_version_string(*args_):
+    def sodium_version_string(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.version_string()
     # end def sodium_version_string
@@ -1191,9 +1270,10 @@ if (not php_is_callable("sodium_memcmp")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_memcmp(a=None, b=None, *args_):
+    def sodium_memcmp(a_=None, b_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.memcmp(a, b)
+        
+        return ParagonIE_Sodium_Compat.memcmp(a_, b_)
     # end def sodium_memcmp
 # end if
 if (not php_is_callable("sodium_memzero")):
@@ -1204,9 +1284,10 @@ if (not php_is_callable("sodium_memzero")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_memzero(str=None, *args_):
+    def sodium_memzero(str_=None, *_args_):
         
-        ParagonIE_Sodium_Compat.memzero(str)
+        
+        ParagonIE_Sodium_Compat.memzero(str_)
     # end def sodium_memzero
 # end if
 if (not php_is_callable("sodium_pad")):
@@ -1218,9 +1299,10 @@ if (not php_is_callable("sodium_pad")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_pad(unpadded=None, blockSize=None, *args_):
+    def sodium_pad(unpadded_=None, blockSize_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.pad(unpadded, blockSize, True)
+        
+        return ParagonIE_Sodium_Compat.pad(unpadded_, blockSize_, True)
     # end def sodium_pad
 # end if
 if (not php_is_callable("sodium_unpad")):
@@ -1232,9 +1314,10 @@ if (not php_is_callable("sodium_unpad")):
     #// @throws SodiumException
     #// @throws TypeError
     #//
-    def sodium_unpad(padded=None, blockSize=None, *args_):
+    def sodium_unpad(padded_=None, blockSize_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.unpad(padded, blockSize, True)
+        
+        return ParagonIE_Sodium_Compat.unpad(padded_, blockSize_, True)
     # end def sodium_unpad
 # end if
 if (not php_is_callable("sodium_randombytes_buf")):
@@ -1244,9 +1327,10 @@ if (not php_is_callable("sodium_randombytes_buf")):
     #// @return string
     #// @throws Exception
     #//
-    def sodium_randombytes_buf(amount=None, *args_):
+    def sodium_randombytes_buf(amount_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.randombytes_buf(amount)
+        
+        return ParagonIE_Sodium_Compat.randombytes_buf(amount_)
     # end def sodium_randombytes_buf
 # end if
 if (not php_is_callable("sodium_randombytes_uniform")):
@@ -1256,9 +1340,10 @@ if (not php_is_callable("sodium_randombytes_uniform")):
     #// @return int
     #// @throws Exception
     #//
-    def sodium_randombytes_uniform(upperLimit=None, *args_):
+    def sodium_randombytes_uniform(upperLimit_=None, *_args_):
         
-        return ParagonIE_Sodium_Compat.randombytes_uniform(upperLimit)
+        
+        return ParagonIE_Sodium_Compat.randombytes_uniform(upperLimit_)
     # end def sodium_randombytes_uniform
 # end if
 if (not php_is_callable("sodium_randombytes_random16")):
@@ -1267,7 +1352,8 @@ if (not php_is_callable("sodium_randombytes_random16")):
     #// @return int
     #// @throws Exception
     #//
-    def sodium_randombytes_random16(*args_):
+    def sodium_randombytes_random16(*_args_):
+        
         
         return ParagonIE_Sodium_Compat.randombytes_random16()
     # end def sodium_randombytes_random16

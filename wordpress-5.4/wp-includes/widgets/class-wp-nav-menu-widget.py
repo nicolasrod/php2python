@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -34,8 +29,9 @@ class WP_Nav_Menu_Widget(WP_Widget):
     #//
     def __init__(self):
         
-        widget_ops = Array({"description": __("Add a navigation menu to your sidebar."), "customize_selective_refresh": True})
-        super().__init__("nav_menu", __("Navigation Menu"), widget_ops)
+        
+        widget_ops_ = Array({"description": __("Add a navigation menu to your sidebar."), "customize_selective_refresh": True})
+        super().__init__("nav_menu", __("Navigation Menu"), widget_ops_)
     # end def __init__
     #// 
     #// Outputs the content for the current Navigation Menu widget instance.
@@ -46,21 +42,22 @@ class WP_Nav_Menu_Widget(WP_Widget):
     #// 'before_widget', and 'after_widget'.
     #// @param array $instance Settings for the current Navigation Menu widget instance.
     #//
-    def widget(self, args=None, instance=None):
+    def widget(self, args_=None, instance_=None):
+        
         
         #// Get menu.
-        nav_menu = wp_get_nav_menu_object(instance["nav_menu"]) if (not php_empty(lambda : instance["nav_menu"])) else False
-        if (not nav_menu):
+        nav_menu_ = wp_get_nav_menu_object(instance_["nav_menu"]) if (not php_empty(lambda : instance_["nav_menu"])) else False
+        if (not nav_menu_):
             return
         # end if
-        title = instance["title"] if (not php_empty(lambda : instance["title"])) else ""
+        title_ = instance_["title"] if (not php_empty(lambda : instance_["title"])) else ""
         #// This filter is documented in wp-includes/widgets/class-wp-widget-pages.php
-        title = apply_filters("widget_title", title, instance, self.id_base)
-        php_print(args["before_widget"])
-        if title:
-            php_print(args["before_title"] + title + args["after_title"])
+        title_ = apply_filters("widget_title", title_, instance_, self.id_base)
+        php_print(args_["before_widget"])
+        if title_:
+            php_print(args_["before_title"] + title_ + args_["after_title"])
         # end if
-        nav_menu_args = Array({"fallback_cb": "", "menu": nav_menu})
+        nav_menu_args_ = Array({"fallback_cb": "", "menu": nav_menu_})
         #// 
         #// Filters the arguments for the Navigation Menu widget.
         #// 
@@ -77,8 +74,8 @@ class WP_Nav_Menu_Widget(WP_Widget):
         #// @param array    $args          Display arguments for the current widget.
         #// @param array    $instance      Array of settings for the current widget.
         #//
-        wp_nav_menu(apply_filters("widget_nav_menu_args", nav_menu_args, nav_menu, args, instance))
-        php_print(args["after_widget"])
+        wp_nav_menu(apply_filters("widget_nav_menu_args", nav_menu_args_, nav_menu_, args_, instance_))
+        php_print(args_["after_widget"])
     # end def widget
     #// 
     #// Handles updating settings for the current Navigation Menu widget instance.
@@ -90,16 +87,17 @@ class WP_Nav_Menu_Widget(WP_Widget):
     #// @param array $old_instance Old settings for this instance.
     #// @return array Updated settings to save.
     #//
-    def update(self, new_instance=None, old_instance=None):
+    def update(self, new_instance_=None, old_instance_=None):
         
-        instance = Array()
-        if (not php_empty(lambda : new_instance["title"])):
-            instance["title"] = sanitize_text_field(new_instance["title"])
+        
+        instance_ = Array()
+        if (not php_empty(lambda : new_instance_["title"])):
+            instance_["title"] = sanitize_text_field(new_instance_["title"])
         # end if
-        if (not php_empty(lambda : new_instance["nav_menu"])):
-            instance["nav_menu"] = php_int(new_instance["nav_menu"])
+        if (not php_empty(lambda : new_instance_["nav_menu"])):
+            instance_["nav_menu"] = php_int(new_instance_["nav_menu"])
         # end if
-        return instance
+        return instance_
     # end def update
     #// 
     #// Outputs the settings form for the Navigation Menu widget.
@@ -109,38 +107,39 @@ class WP_Nav_Menu_Widget(WP_Widget):
     #// @param array $instance Current settings.
     #// @global WP_Customize_Manager $wp_customize
     #//
-    def form(self, instance=None):
+    def form(self, instance_=None):
         
-        global wp_customize
-        php_check_if_defined("wp_customize")
-        title = instance["title"] if (php_isset(lambda : instance["title"])) else ""
-        nav_menu = instance["nav_menu"] if (php_isset(lambda : instance["nav_menu"])) else ""
+        
+        global wp_customize_
+        php_check_if_defined("wp_customize_")
+        title_ = instance_["title"] if (php_isset(lambda : instance_["title"])) else ""
+        nav_menu_ = instance_["nav_menu"] if (php_isset(lambda : instance_["nav_menu"])) else ""
         #// Get menus.
-        menus = wp_get_nav_menus()
-        empty_menus_style = ""
-        not_empty_menus_style = ""
-        if php_empty(lambda : menus):
-            empty_menus_style = " style=\"display:none\" "
+        menus_ = wp_get_nav_menus()
+        empty_menus_style_ = ""
+        not_empty_menus_style_ = ""
+        if php_empty(lambda : menus_):
+            empty_menus_style_ = " style=\"display:none\" "
         else:
-            not_empty_menus_style = " style=\"display:none\" "
+            not_empty_menus_style_ = " style=\"display:none\" "
         # end if
-        nav_menu_style = ""
-        if (not nav_menu):
-            nav_menu_style = "display: none;"
+        nav_menu_style_ = ""
+        if (not nav_menu_):
+            nav_menu_style_ = "display: none;"
         # end if
         pass
         php_print("     <p class=\"nav-menu-widget-no-menus-message\" ")
-        php_print(not_empty_menus_style)
+        php_print(not_empty_menus_style_)
         php_print(">\n          ")
-        if type(wp_customize).__name__ == "WP_Customize_Manager":
-            url = "javascript: wp.customize.panel( \"nav_menus\" ).focus();"
+        if type(wp_customize_).__name__ == "WP_Customize_Manager":
+            url_ = "javascript: wp.customize.panel( \"nav_menus\" ).focus();"
         else:
-            url = admin_url("nav-menus.php")
+            url_ = admin_url("nav-menus.php")
         # end if
         #// translators: %s: URL to create a new menu.
-        printf(__("No menus have been created yet. <a href=\"%s\">Create some</a>."), esc_attr(url))
+        printf(__("No menus have been created yet. <a href=\"%s\">Create some</a>."), esc_attr(url_))
         php_print("     </p>\n      <div class=\"nav-menu-widget-form-controls\" ")
-        php_print(empty_menus_style)
+        php_print(empty_menus_style_)
         php_print(">\n          <p>\n               <label for=\"")
         php_print(self.get_field_id("title"))
         php_print("\">")
@@ -150,7 +149,7 @@ class WP_Nav_Menu_Widget(WP_Widget):
         php_print("\" name=\"")
         php_print(self.get_field_name("title"))
         php_print("\" value=\"")
-        php_print(esc_attr(title))
+        php_print(esc_attr(title_))
         php_print("""\"/>
         </p>
         <p>
@@ -165,19 +164,19 @@ class WP_Nav_Menu_Widget(WP_Widget):
         php_print("\">\n                    <option value=\"0\">")
         _e("&mdash; Select &mdash;")
         php_print("</option>\n                  ")
-        for menu in menus:
+        for menu_ in menus_:
             php_print("                     <option value=\"")
-            php_print(esc_attr(menu.term_id))
+            php_print(esc_attr(menu_.term_id))
             php_print("\" ")
-            selected(nav_menu, menu.term_id)
+            selected(nav_menu_, menu_.term_id)
             php_print(">\n                          ")
-            php_print(esc_html(menu.name))
+            php_print(esc_html(menu_.name))
             php_print("                     </option>\n                 ")
         # end for
         php_print("             </select>\n         </p>\n          ")
-        if type(wp_customize).__name__ == "WP_Customize_Manager":
+        if type(wp_customize_).__name__ == "WP_Customize_Manager":
             php_print("             <p class=\"edit-selected-nav-menu\" style=\"")
-            php_print(nav_menu_style)
+            php_print(nav_menu_style_)
             php_print("\">\n                    <button type=\"button\" class=\"button\">")
             _e("Edit Menu")
             php_print("</button>\n              </p>\n          ")

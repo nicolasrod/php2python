@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,10 +31,10 @@ wp_enqueue_style("imgareaselect")
 wp_enqueue_script("media-gallery")
 php_header("Content-Type: " + get_option("html_type") + "; charset=" + get_option("blog_charset"))
 #// IDs should be integers.
-ID = php_int(ID) if (php_isset(lambda : ID)) else 0
-post_id = php_int(post_id) if (php_isset(lambda : post_id)) else 0
+ID_ = php_int(ID_) if (php_isset(lambda : ID_)) else 0
+post_id_ = php_int(post_id_) if (php_isset(lambda : post_id_)) else 0
 #// Require an ID for the edit screen.
-if (php_isset(lambda : action)) and "edit" == action and (not ID):
+if (php_isset(lambda : action_)) and "edit" == action_ and (not ID_):
     wp_die("<h1>" + __("Something went wrong.") + "</h1>" + "<p>" + __("Invalid item ID.") + "</p>", 403)
 # end if
 if (not php_empty(lambda : PHP_REQUEST["post_id"])) and (not current_user_can("edit_post", PHP_REQUEST["post_id"])):
@@ -47,7 +42,7 @@ if (not php_empty(lambda : PHP_REQUEST["post_id"])) and (not current_user_can("e
 # end if
 #// Upload type: image, video, file, ...?
 if (php_isset(lambda : PHP_REQUEST["type"])):
-    type = php_strval(PHP_REQUEST["type"])
+    type_ = php_strval(PHP_REQUEST["type"])
 else:
     #// 
     #// Filters the default media upload type in the legacy (pre-3.5.0) media popup.
@@ -57,11 +52,11 @@ else:
     #// @param string $type The default media upload type. Possible values include
     #// 'image', 'audio', 'video', 'file', etc. Default 'file'.
     #//
-    type = apply_filters("media_upload_default_type", "file")
+    type_ = apply_filters("media_upload_default_type", "file")
 # end if
 #// Tab: gallery, library, or type-specific.
 if (php_isset(lambda : PHP_REQUEST["tab"])):
-    tab = php_strval(PHP_REQUEST["tab"])
+    tab_ = php_strval(PHP_REQUEST["tab"])
 else:
     #// 
     #// Filters the default tab in the legacy (pre-3.5.0) media popup.
@@ -70,11 +65,11 @@ else:
     #// 
     #// @param string $type The default media popup tab. Default 'type' (From Computer).
     #//
-    tab = apply_filters("media_upload_default_tab", "type")
+    tab_ = apply_filters("media_upload_default_tab", "type")
 # end if
-body_id = "media-upload"
+body_id_ = "media-upload"
 #// Let the action code decide how to handle the request.
-if "type" == tab or "type_url" == tab or (not php_array_key_exists(tab, media_upload_tabs())):
+if "type" == tab_ or "type_url" == tab_ or (not php_array_key_exists(tab_, media_upload_tabs())):
     #// 
     #// Fires inside specific upload-type views in the legacy (pre-3.5.0)
     #// media popup based on the current tab.
@@ -89,7 +84,7 @@ if "type" == tab or "type_url" == tab or (not php_array_key_exists(tab, media_up
     #// 
     #// @since 2.5.0
     #//
-    do_action(str("media_upload_") + str(type))
+    do_action(str("media_upload_") + str(type_))
 else:
     #// 
     #// Fires inside limited and specific upload-tab views in the legacy
@@ -101,5 +96,5 @@ else:
     #// 
     #// @since 2.5.0
     #//
-    do_action(str("media_upload_") + str(tab))
+    do_action(str("media_upload_") + str(tab_))
 # end if

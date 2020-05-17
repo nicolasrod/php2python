@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -35,6 +30,7 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
     #//
     def prepare_control(self):
         
+        
         pass
     # end def prepare_control
     #// 
@@ -45,7 +41,8 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
     #// @param string $label
     #// @param mixed $callback
     #//
-    def add_tab(self, id=None, label=None, callback=None):
+    def add_tab(self, id_=None, label_=None, callback_=None):
+        
         
         _deprecated_function(__METHOD__, "4.1.0")
     # end def add_tab
@@ -55,7 +52,8 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
     #// 
     #// @param string $id
     #//
-    def remove_tab(self, id=None):
+    def remove_tab(self, id_=None):
+        
         
         _deprecated_function(__METHOD__, "4.1.0")
     # end def remove_tab
@@ -66,7 +64,8 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
     #// @param string $url
     #// @param string $thumbnail_url
     #//
-    def print_tab_image(self, url=None, thumbnail_url=None):
+    def print_tab_image(self, url_=None, thumbnail_url_=None):
+        
         
         _deprecated_function(__METHOD__, "4.1.0")
     # end def print_tab_image

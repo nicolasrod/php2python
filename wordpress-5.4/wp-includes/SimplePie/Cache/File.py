@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -61,9 +56,30 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Caching
 #//
 class SimplePie_Cache_File(SimplePie_Cache_Base):
+    #// 
+    #// Location string
+    #// 
+    #// @see SimplePie::$cache_location
+    #// @var string
+    #//
     location = Array()
+    #// 
+    #// Filename
+    #// 
+    #// @var string
+    #//
     filename = Array()
+    #// 
+    #// File extension
+    #// 
+    #// @var string
+    #//
     extension = Array()
+    #// 
+    #// File path
+    #// 
+    #// @var string
+    #//
     name = Array()
     #// 
     #// Create a new cache object
@@ -72,11 +88,12 @@ class SimplePie_Cache_File(SimplePie_Cache_Base):
     #// @param string $name Unique ID for the cache
     #// @param string $type Either TYPE_FEED for SimplePie data, or TYPE_IMAGE for image data
     #//
-    def __init__(self, location=None, name=None, type=None):
+    def __init__(self, location_=None, name_=None, type_=None):
         
-        self.location = location
-        self.filename = name
-        self.extension = type
+        
+        self.location = location_
+        self.filename = name_
+        self.extension = type_
         self.name = str(self.location) + str("/") + str(self.filename) + str(".") + str(self.extension)
     # end def __init__
     #// 
@@ -85,14 +102,15 @@ class SimplePie_Cache_File(SimplePie_Cache_Base):
     #// @param array|SimplePie $data Data to store in the cache. If passed a SimplePie object, only cache the $data property
     #// @return bool Successfulness
     #//
-    def save(self, data=None):
+    def save(self, data_=None):
+        
         
         if php_file_exists(self.name) and is_writeable(self.name) or php_file_exists(self.location) and is_writeable(self.location):
-            if type(data).__name__ == "SimplePie":
-                data = data.data
+            if type(data_).__name__ == "SimplePie":
+                data_ = data_.data
             # end if
-            data = serialize(data)
-            return php_bool(file_put_contents(self.name, data))
+            data_ = serialize(data_)
+            return php_bool(file_put_contents(self.name, data_))
         # end if
         return False
     # end def save
@@ -102,6 +120,7 @@ class SimplePie_Cache_File(SimplePie_Cache_Base):
     #// @return array Data for SimplePie::$data
     #//
     def load(self):
+        
         
         if php_file_exists(self.name) and php_is_readable(self.name):
             return unserialize(php_file_get_contents(self.name))
@@ -115,6 +134,7 @@ class SimplePie_Cache_File(SimplePie_Cache_Base):
     #//
     def mtime(self):
         
+        
         if php_file_exists(self.name):
             return filemtime(self.name)
         # end if
@@ -127,6 +147,7 @@ class SimplePie_Cache_File(SimplePie_Cache_Base):
     #//
     def touch(self):
         
+        
         if php_file_exists(self.name):
             return touch(self.name)
         # end if
@@ -138,6 +159,7 @@ class SimplePie_Cache_File(SimplePie_Cache_Base):
     #// @return bool Success status
     #//
     def unlink(self):
+        
         
         if php_file_exists(self.name):
             return unlink(self.name)

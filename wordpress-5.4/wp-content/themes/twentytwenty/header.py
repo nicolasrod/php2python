@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -36,8 +31,8 @@ php_print("""
 <div class=\"header-titles-wrapper\">
 """)
 #// Check whether the header search is activated in the customizer.
-enable_header_search = get_theme_mod("enable_header_search", True)
-if True == enable_header_search:
+enable_header_search_ = get_theme_mod("enable_header_search", True)
+if True == enable_header_search_:
     php_print("""
     <button class=\"toggle search-toggle mobile-search-toggle\" data-toggle-target=\".search-modal\" data-toggle-body-class=\"showing-search-modal\" data-set-focus=\".search-modal .search-field\" aria-expanded=\"false\">
     <span class=\"toggle-inner\">
@@ -89,7 +84,7 @@ if has_nav_menu("primary") or (not has_nav_menu("expanded")):
     </nav><!-- .primary-menu-wrapper -->
     """)
 # end if
-if True == enable_header_search or has_nav_menu("expanded"):
+if True == enable_header_search_ or has_nav_menu("expanded"):
     php_print("""
     <div class=\"header-toggles hide-no-js\">
     """)
@@ -108,7 +103,7 @@ if True == enable_header_search or has_nav_menu("expanded"):
         </div><!-- .nav-toggle-wrapper -->
         """)
     # end if
-    if True == enable_header_search:
+    if True == enable_header_search_:
         php_print("""
         <div class=\"toggle-wrapper search-toggle-wrapper\">
         <button class=\"toggle search-toggle desktop-search-toggle\" data-toggle-target=\".search-modal\" data-toggle-body-class=\"showing-search-modal\" data-set-focus=\".search-modal .search-field\" aria-expanded=\"false\">
@@ -130,7 +125,7 @@ php_print("""
 </div><!-- .header-inner -->
 """)
 #// Output the search modal (if it is activated in the customizer).
-if True == enable_header_search:
+if True == enable_header_search_:
     get_template_part("template-parts/modal-search")
 # end if
 php_print("""

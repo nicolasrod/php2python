@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -40,8 +35,13 @@ php_define("WPINC", "wp-includes")
 #// @global string $required_mysql_version The required MySQL version string.
 #// @global string $wp_local_package       Locale code of the package.
 #//
-global wp_version,wp_db_version,tinymce_version,required_php_version,required_mysql_version,wp_local_package
-php_check_if_defined("wp_version","wp_db_version","tinymce_version","required_php_version","required_mysql_version","wp_local_package")
+global wp_version_
+global wp_db_version_
+global tinymce_version_
+global required_php_version_
+global required_mysql_version_
+global wp_local_package_
+php_check_if_defined("wp_version_","wp_db_version_","tinymce_version_","required_php_version_","required_mysql_version_","wp_local_package_")
 php_include_file(ABSPATH + WPINC + "/version.php", once=False)
 php_include_file(ABSPATH + WPINC + "/load.php", once=False)
 #// Check for the required PHP version and for the MySQL extension or a database drop-in.
@@ -64,8 +64,8 @@ php_include_file(ABSPATH + WPINC + "/plugin.php", once=True)
 #// @global int $blog_id
 #// @since 2.0.0
 #//
-global blog_id
-php_check_if_defined("blog_id")
+global blog_id_
+php_check_if_defined("blog_id_")
 #// Set initial default constants including WP_MEMORY_LIMIT, WP_MAX_MEMORY_LIMIT, WP_DEBUG, SCRIPT_DEBUG, WP_CONTENT_DIR and WP_CACHE.
 wp_initial_constants()
 #// Make sure we register the shutdown handler for fatal errors as soon as possible.
@@ -97,8 +97,8 @@ if WP_CACHE and apply_filters("enable_loading_advanced_cache_dropin", True) and 
     #// For an advanced caching plugin to use. Uses a static drop-in because you would only want one.
     php_include_file(WP_CONTENT_DIR + "/advanced-cache.php", once=False)
     #// Re-initialize any hooks added manually by advanced-cache.php.
-    if wp_filter:
-        wp_filter = WP_Hook.build_preinitialized_hooks(wp_filter)
+    if wp_filter_:
+        wp_filter_ = WP_Hook.build_preinitialized_hooks(wp_filter_)
     # end if
 # end if
 #// Define WP_LANG_DIR if not set.
@@ -118,12 +118,12 @@ php_include_file(ABSPATH + WPINC + "/pomo/mo.php", once=False)
 #// @global wpdb $wpdb WordPress database abstraction object.
 #// @since 0.71
 #//
-global wpdb
-php_check_if_defined("wpdb")
+global wpdb_
+php_check_if_defined("wpdb_")
 #// Include the wpdb class and, if present, a db.php database drop-in.
 require_wp_db()
 #// Set the database table prefix and the format specifiers for database table columns.
-PHP_GLOBALS["table_prefix"] = table_prefix
+PHP_GLOBALS["table_prefix"] = table_prefix_
 wp_set_wpdb_vars()
 #// Start the WordPress object cache, or an external object cache if the drop-in is present.
 wp_start_object_cache()
@@ -283,8 +283,8 @@ if is_multisite():
 wp_plugin_directory_constants()
 PHP_GLOBALS["wp_plugin_paths"] = Array()
 #// Load must-use plugins.
-for mu_plugin in wp_get_mu_plugins():
-    php_include_file(mu_plugin, once=False)
+for mu_plugin_ in wp_get_mu_plugins():
+    php_include_file(mu_plugin_, once=False)
     #// 
     #// Fires once a single must-use plugin has loaded.
     #// 
@@ -292,14 +292,14 @@ for mu_plugin in wp_get_mu_plugins():
     #// 
     #// @param string $mu_plugin Full path to the plugin's main file.
     #//
-    do_action("mu_plugin_loaded", mu_plugin)
+    do_action("mu_plugin_loaded", mu_plugin_)
 # end for
-mu_plugin = None
+mu_plugin_ = None
 #// Load network activated plugins.
 if is_multisite():
-    for network_plugin in wp_get_active_network_plugins():
-        wp_register_plugin_realpath(network_plugin)
-        php_include_file(network_plugin, once=False)
+    for network_plugin_ in wp_get_active_network_plugins():
+        wp_register_plugin_realpath(network_plugin_)
+        php_include_file(network_plugin_, once=False)
         #// 
         #// Fires once a single network-activated plugin has loaded.
         #// 
@@ -307,9 +307,9 @@ if is_multisite():
         #// 
         #// @param string $network_plugin Full path to the plugin's main file.
         #//
-        do_action("network_plugin_loaded", network_plugin)
+        do_action("network_plugin_loaded", network_plugin_)
     # end for
-    network_plugin = None
+    network_plugin_ = None
 # end if
 #// 
 #// Fires once all must-use and network-activated plugins have loaded.
@@ -343,9 +343,9 @@ if (not php_class_exists("WP_Site_Health")):
 # end if
 WP_Site_Health.get_instance()
 #// Load active plugins.
-for plugin in wp_get_active_and_valid_plugins():
-    wp_register_plugin_realpath(plugin)
-    php_include_file(plugin, once=False)
+for plugin_ in wp_get_active_and_valid_plugins():
+    wp_register_plugin_realpath(plugin_)
+    php_include_file(plugin_, once=False)
     #// 
     #// Fires once a single activated plugin has loaded.
     #// 
@@ -353,9 +353,9 @@ for plugin in wp_get_active_and_valid_plugins():
     #// 
     #// @param string $plugin Full path to the plugin's main file.
     #//
-    do_action("plugin_loaded", plugin)
+    do_action("plugin_loaded", plugin_)
 # end for
-plugin = None
+plugin_ = None
 #// Load pluggable functions.
 php_include_file(ABSPATH + WPINC + "/pluggable.php", once=False)
 php_include_file(ABSPATH + WPINC + "/pluggable-deprecated.php", once=False)
@@ -436,12 +436,12 @@ do_action("setup_theme")
 wp_templating_constants()
 #// Load the default text localization domain.
 load_default_textdomain()
-locale = get_locale()
-locale_file = WP_LANG_DIR + str("/") + str(locale) + str(".php")
-if 0 == validate_file(locale) and php_is_readable(locale_file):
-    php_include_file(locale_file, once=False)
+locale_ = get_locale()
+locale_file_ = WP_LANG_DIR + str("/") + str(locale_) + str(".php")
+if 0 == validate_file(locale_) and php_is_readable(locale_file_):
+    php_include_file(locale_file_, once=False)
 # end if
-locale_file = None
+locale_file_ = None
 #// 
 #// WordPress Locale object for loading locale domain date and various strings.
 #// 
@@ -459,12 +459,12 @@ PHP_GLOBALS["wp_locale"] = php_new_class("WP_Locale", lambda : WP_Locale())
 PHP_GLOBALS["wp_locale_switcher"] = php_new_class("WP_Locale_Switcher", lambda : WP_Locale_Switcher())
 PHP_GLOBALS["wp_locale_switcher"].init()
 #// Load the functions for the active theme, for both parent and child theme if applicable.
-for theme in wp_get_active_and_valid_themes():
-    if php_file_exists(theme + "/functions.php"):
-        php_include_file(theme + "/functions.php", once=False)
+for theme_ in wp_get_active_and_valid_themes():
+    if php_file_exists(theme_ + "/functions.php"):
+        php_include_file(theme_ + "/functions.php", once=False)
     # end if
 # end for
-theme = None
+theme_ = None
 #// 
 #// Fires after the theme is loaded.
 #// 
@@ -487,12 +487,12 @@ PHP_GLOBALS["wp"].init()
 do_action("init")
 #// Check site status.
 if is_multisite():
-    file = ms_site_check()
-    if True != file:
-        php_include_file(file, once=False)
+    file_ = ms_site_check()
+    if True != file_:
+        php_include_file(file_, once=False)
         php_exit(0)
     # end if
-    file = None
+    file_ = None
 # end if
 #// 
 #// This hook is fired once WP, all plugins, and the theme are fully loaded and instantiated.

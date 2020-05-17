@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,11 +20,17 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Utilities
 #//
 class Requests_Hooks(Requests_Hooker):
+    #// 
+    #// Registered callbacks for each hook
+    #// 
+    #// @var array
+    #//
     hooks = Array()
     #// 
     #// Constructor
     #//
     def __init__(self):
+        
         
         pass
     # end def __init__
@@ -40,15 +41,16 @@ class Requests_Hooks(Requests_Hooker):
     #// @param callback $callback Function/method to call on event
     #// @param int $priority Priority number. <0 is executed earlier, >0 is executed later
     #//
-    def register(self, hook=None, callback=None, priority=0):
+    def register(self, hook_=None, callback_=None, priority_=0):
         
-        if (not (php_isset(lambda : self.hooks[hook]))):
-            self.hooks[hook] = Array()
+        
+        if (not (php_isset(lambda : self.hooks[hook_]))):
+            self.hooks[hook_] = Array()
         # end if
-        if (not (php_isset(lambda : self.hooks[hook][priority]))):
-            self.hooks[hook][priority] = Array()
+        if (not (php_isset(lambda : self.hooks[hook_][priority_]))):
+            self.hooks[hook_][priority_] = Array()
         # end if
-        self.hooks[hook][priority][-1] = callback
+        self.hooks[hook_][priority_][-1] = callback_
     # end def register
     #// 
     #// Dispatch a message
@@ -57,14 +59,17 @@ class Requests_Hooks(Requests_Hooker):
     #// @param array $parameters Parameters to pass to callbacks
     #// @return boolean Successfulness
     #//
-    def dispatch(self, hook=None, parameters=Array()):
+    def dispatch(self, hook_=None, parameters_=None):
+        if parameters_ is None:
+            parameters_ = Array()
+        # end if
         
-        if php_empty(lambda : self.hooks[hook]):
+        if php_empty(lambda : self.hooks[hook_]):
             return False
         # end if
-        for priority,hooked in self.hooks[hook]:
-            for callback in hooked:
-                call_user_func_array(callback, parameters)
+        for priority_,hooked_ in self.hooks[hook_]:
+            for callback_ in hooked_:
+                call_user_func_array(callback_, parameters_)
             # end for
         # end for
         return True

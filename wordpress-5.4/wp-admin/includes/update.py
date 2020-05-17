@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -25,16 +20,17 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @return object|array|false The response from the API on success, false on failure.
 #//
-def get_preferred_from_update_core(*args_):
+def get_preferred_from_update_core(*_args_):
     
-    updates = get_core_updates()
-    if (not php_is_array(updates)):
+    
+    updates_ = get_core_updates()
+    if (not php_is_array(updates_)):
         return False
     # end if
-    if php_empty(lambda : updates):
+    if php_empty(lambda : updates_):
         return Array({"response": "latest"})
     # end if
-    return updates[0]
+    return updates_[0]
 # end def get_preferred_from_update_core
 #// 
 #// Gets available core updates.
@@ -45,36 +41,39 @@ def get_preferred_from_update_core(*args_):
 #// set $options['available'] to false to skip not-dismissed updates.
 #// @return array|false Array of the update objects on success, false on failure.
 #//
-def get_core_updates(options=Array(), *args_):
-    
-    options = php_array_merge(Array({"available": True, "dismissed": False}), options)
-    dismissed = get_site_option("dismissed_update_core")
-    if (not php_is_array(dismissed)):
-        dismissed = Array()
+def get_core_updates(options_=None, *_args_):
+    if options_ is None:
+        options_ = Array()
     # end if
-    from_api = get_site_transient("update_core")
-    if (not (php_isset(lambda : from_api.updates))) or (not php_is_array(from_api.updates)):
+    
+    options_ = php_array_merge(Array({"available": True, "dismissed": False}), options_)
+    dismissed_ = get_site_option("dismissed_update_core")
+    if (not php_is_array(dismissed_)):
+        dismissed_ = Array()
+    # end if
+    from_api_ = get_site_transient("update_core")
+    if (not (php_isset(lambda : from_api_.updates))) or (not php_is_array(from_api_.updates)):
         return False
     # end if
-    updates = from_api.updates
-    result = Array()
-    for update in updates:
-        if "autoupdate" == update.response:
+    updates_ = from_api_.updates
+    result_ = Array()
+    for update_ in updates_:
+        if "autoupdate" == update_.response:
             continue
         # end if
-        if php_array_key_exists(update.current + "|" + update.locale, dismissed):
-            if options["dismissed"]:
-                update.dismissed = True
-                result[-1] = update
+        if php_array_key_exists(update_.current + "|" + update_.locale, dismissed_):
+            if options_["dismissed"]:
+                update_.dismissed = True
+                result_[-1] = update_
             # end if
         else:
-            if options["available"]:
-                update.dismissed = False
-                result[-1] = update
+            if options_["available"]:
+                update_.dismissed = False
+                result_[-1] = update_
             # end if
         # end if
     # end for
-    return result
+    return result_
 # end def get_core_updates
 #// 
 #// Gets the best available (and enabled) Auto-Update for WordPress core.
@@ -85,27 +84,28 @@ def get_core_updates(options=Array(), *args_):
 #// 
 #// @return object|false The core update offering on success, false on failure.
 #//
-def find_core_auto_update(*args_):
+def find_core_auto_update(*_args_):
     
-    updates = get_site_transient("update_core")
-    if (not updates) or php_empty(lambda : updates.updates):
+    
+    updates_ = get_site_transient("update_core")
+    if (not updates_) or php_empty(lambda : updates_.updates):
         return False
     # end if
     php_include_file(ABSPATH + "wp-admin/includes/class-wp-upgrader.php", once=True)
-    auto_update = False
-    upgrader = php_new_class("WP_Automatic_Updater", lambda : WP_Automatic_Updater())
-    for update in updates.updates:
-        if "autoupdate" != update.response:
+    auto_update_ = False
+    upgrader_ = php_new_class("WP_Automatic_Updater", lambda : WP_Automatic_Updater())
+    for update_ in updates_.updates:
+        if "autoupdate" != update_.response:
             continue
         # end if
-        if (not upgrader.should_update("core", update, ABSPATH)):
+        if (not upgrader_.should_update("core", update_, ABSPATH)):
             continue
         # end if
-        if (not auto_update) or php_version_compare(update.current, auto_update.current, ">"):
-            auto_update = update
+        if (not auto_update_) or php_version_compare(update_.current, auto_update_.current, ">"):
+            auto_update_ = update_
         # end if
     # end for
-    return auto_update
+    return auto_update_
 # end def find_core_auto_update
 #// 
 #// Gets and caches the checksums for the given version of WordPress.
@@ -116,29 +116,30 @@ def find_core_auto_update(*args_):
 #// @param string $locale  Locale to query.
 #// @return array|false An array of checksums on success, false on failure.
 #//
-def get_core_checksums(version=None, locale=None, *args_):
+def get_core_checksums(version_=None, locale_=None, *_args_):
     
-    http_url = "http://api.wordpress.org/core/checksums/1.0/?" + http_build_query(compact("version", "locale"), None, "&")
-    url = http_url
-    ssl = wp_http_supports(Array("ssl"))
-    if ssl:
-        url = set_url_scheme(url, "https")
+    
+    http_url_ = "http://api.wordpress.org/core/checksums/1.0/?" + http_build_query(php_compact("version", "locale"), None, "&")
+    url_ = http_url_
+    ssl_ = wp_http_supports(Array("ssl"))
+    if ssl_:
+        url_ = set_url_scheme(url_, "https")
     # end if
-    options = Array({"timeout": 30 if wp_doing_cron() else 3})
-    response = wp_remote_get(url, options)
-    if ssl and is_wp_error(response):
+    options_ = Array({"timeout": 30 if wp_doing_cron() else 3})
+    response_ = wp_remote_get(url_, options_)
+    if ssl_ and is_wp_error(response_):
         trigger_error(php_sprintf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/")) + " " + __("(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)"), E_USER_WARNING if php_headers_sent() or WP_DEBUG else E_USER_NOTICE)
-        response = wp_remote_get(http_url, options)
+        response_ = wp_remote_get(http_url_, options_)
     # end if
-    if is_wp_error(response) or 200 != wp_remote_retrieve_response_code(response):
+    if is_wp_error(response_) or 200 != wp_remote_retrieve_response_code(response_):
         return False
     # end if
-    body = php_trim(wp_remote_retrieve_body(response))
-    body = php_json_decode(body, True)
-    if (not php_is_array(body)) or (not (php_isset(lambda : body["checksums"]))) or (not php_is_array(body["checksums"])):
+    body_ = php_trim(wp_remote_retrieve_body(response_))
+    body_ = php_json_decode(body_, True)
+    if (not php_is_array(body_)) or (not (php_isset(lambda : body_["checksums"]))) or (not php_is_array(body_["checksums"])):
         return False
     # end if
-    return body["checksums"]
+    return body_["checksums"]
 # end def get_core_checksums
 #// 
 #// Dismisses core update.
@@ -148,11 +149,12 @@ def get_core_checksums(version=None, locale=None, *args_):
 #// @param object $update
 #// @return bool
 #//
-def dismiss_core_update(update=None, *args_):
+def dismiss_core_update(update_=None, *_args_):
     
-    dismissed = get_site_option("dismissed_update_core")
-    dismissed[update.current + "|" + update.locale] = True
-    return update_site_option("dismissed_update_core", dismissed)
+    
+    dismissed_ = get_site_option("dismissed_update_core")
+    dismissed_[update_.current + "|" + update_.locale] = True
+    return update_site_option("dismissed_update_core", dismissed_)
 # end def dismiss_core_update
 #// 
 #// Undismisses core update.
@@ -163,15 +165,16 @@ def dismiss_core_update(update=None, *args_):
 #// @param string $locale
 #// @return bool
 #//
-def undismiss_core_update(version=None, locale=None, *args_):
+def undismiss_core_update(version_=None, locale_=None, *_args_):
     
-    dismissed = get_site_option("dismissed_update_core")
-    key = version + "|" + locale
-    if (not (php_isset(lambda : dismissed[key]))):
+    
+    dismissed_ = get_site_option("dismissed_update_core")
+    key_ = version_ + "|" + locale_
+    if (not (php_isset(lambda : dismissed_[key_]))):
         return False
     # end if
-    dismissed[key] = None
-    return update_site_option("dismissed_update_core", dismissed)
+    dismissed_[key_] = None
+    return update_site_option("dismissed_update_core", dismissed_)
 # end def undismiss_core_update
 #// 
 #// Finds the available update for WordPress core.
@@ -182,16 +185,17 @@ def undismiss_core_update(version=None, locale=None, *args_):
 #// @param string $locale  Locale to find the update for.
 #// @return object|false The core update offering on success, false on failure.
 #//
-def find_core_update(version=None, locale=None, *args_):
+def find_core_update(version_=None, locale_=None, *_args_):
     
-    from_api = get_site_transient("update_core")
-    if (not (php_isset(lambda : from_api.updates))) or (not php_is_array(from_api.updates)):
+    
+    from_api_ = get_site_transient("update_core")
+    if (not (php_isset(lambda : from_api_.updates))) or (not php_is_array(from_api_.updates)):
         return False
     # end if
-    updates = from_api.updates
-    for update in updates:
-        if update.current == version and update.locale == locale:
-            return update
+    updates_ = from_api_.updates
+    for update_ in updates_:
+        if update_.current == version_ and update_.locale == locale_:
+            return update_
         # end if
     # end for
     return False
@@ -202,31 +206,32 @@ def find_core_update(version=None, locale=None, *args_):
 #// @param string $msg
 #// @return string
 #//
-def core_update_footer(msg="", *args_):
+def core_update_footer(msg_="", *_args_):
+    
     
     if (not current_user_can("update_core")):
         #// translators: %s: WordPress version.
         return php_sprintf(__("Version %s"), get_bloginfo("version", "display"))
     # end if
-    cur = get_preferred_from_update_core()
-    if (not php_is_object(cur)):
-        cur = php_new_class("stdClass", lambda : stdClass())
+    cur_ = get_preferred_from_update_core()
+    if (not php_is_object(cur_)):
+        cur_ = php_new_class("stdClass", lambda : stdClass())
     # end if
-    if (not (php_isset(lambda : cur.current))):
-        cur.current = ""
+    if (not (php_isset(lambda : cur_.current))):
+        cur_.current = ""
     # end if
-    if (not (php_isset(lambda : cur.url))):
-        cur.url = ""
+    if (not (php_isset(lambda : cur_.url))):
+        cur_.url = ""
     # end if
-    if (not (php_isset(lambda : cur.response))):
-        cur.response = ""
+    if (not (php_isset(lambda : cur_.response))):
+        cur_.response = ""
     # end if
-    for case in Switch(cur.response):
+    for case in Switch(cur_.response):
         if case("development"):
             return php_sprintf(__("You are using a development version (%1$s). Cool! Please <a href=\"%2$s\">stay updated</a>."), get_bloginfo("version", "display"), network_admin_url("update-core.php"))
         # end if
         if case("upgrade"):
-            return php_sprintf("<strong><a href=\"%s\">%s</a></strong>", network_admin_url("update-core.php"), php_sprintf(__("Get Version %s"), cur.current))
+            return php_sprintf("<strong><a href=\"%s\">%s</a></strong>", network_admin_url("update-core.php"), php_sprintf(__("Get Version %s"), cur_.current))
         # end if
         if case("latest"):
             pass
@@ -243,48 +248,50 @@ def core_update_footer(msg="", *args_):
 #// @global string $pagenow
 #// @return void|false
 #//
-def update_nag(*args_):
+def update_nag(*_args_):
+    
     
     if is_multisite() and (not current_user_can("update_core")):
         return False
     # end if
-    global pagenow
-    php_check_if_defined("pagenow")
-    if "update-core.php" == pagenow:
+    global pagenow_
+    php_check_if_defined("pagenow_")
+    if "update-core.php" == pagenow_:
         return
     # end if
-    cur = get_preferred_from_update_core()
-    if (not (php_isset(lambda : cur.response))) or "upgrade" != cur.response:
+    cur_ = get_preferred_from_update_core()
+    if (not (php_isset(lambda : cur_.response))) or "upgrade" != cur_.response:
         return False
     # end if
-    version_url = php_sprintf(esc_url(__("https://wordpress.org/support/wordpress-version/version-%s/")), sanitize_title(cur.current))
+    version_url_ = php_sprintf(esc_url(__("https://wordpress.org/support/wordpress-version/version-%s/")), sanitize_title(cur_.current))
     if current_user_can("update_core"):
-        msg = php_sprintf(__("<a href=\"%1$s\">WordPress %2$s</a> is available! <a href=\"%3$s\" aria-label=\"%4$s\">Please update now</a>."), version_url, cur.current, network_admin_url("update-core.php"), esc_attr__("Please update WordPress now"))
+        msg_ = php_sprintf(__("<a href=\"%1$s\">WordPress %2$s</a> is available! <a href=\"%3$s\" aria-label=\"%4$s\">Please update now</a>."), version_url_, cur_.current, network_admin_url("update-core.php"), esc_attr__("Please update WordPress now"))
     else:
-        msg = php_sprintf(__("<a href=\"%1$s\">WordPress %2$s</a> is available! Please notify the site administrator."), version_url, cur.current)
+        msg_ = php_sprintf(__("<a href=\"%1$s\">WordPress %2$s</a> is available! Please notify the site administrator."), version_url_, cur_.current)
     # end if
-    php_print(str("<div class='update-nag'>") + str(msg) + str("</div>"))
+    php_print(str("<div class='update-nag'>") + str(msg_) + str("</div>"))
 # end def update_nag
 #// 
 #// Displays WordPress version and active theme in the 'At a Glance' dashboard widget.
 #// 
 #// @since 2.5.0
 #//
-def update_right_now_message(*args_):
+def update_right_now_message(*_args_):
     
-    theme_name = wp_get_theme()
+    
+    theme_name_ = wp_get_theme()
     if current_user_can("switch_themes"):
-        theme_name = php_sprintf("<a href=\"themes.php\">%1$s</a>", theme_name)
+        theme_name_ = php_sprintf("<a href=\"themes.php\">%1$s</a>", theme_name_)
     # end if
-    msg = ""
+    msg_ = ""
     if current_user_can("update_core"):
-        cur = get_preferred_from_update_core()
-        if (php_isset(lambda : cur.response)) and "upgrade" == cur.response:
-            msg += php_sprintf("<a href=\"%s\" class=\"button\" aria-describedby=\"wp-version\">%s</a> ", network_admin_url("update-core.php"), php_sprintf(__("Update to %s"), cur.current if cur.current else __("Latest")))
+        cur_ = get_preferred_from_update_core()
+        if (php_isset(lambda : cur_.response)) and "upgrade" == cur_.response:
+            msg_ += php_sprintf("<a href=\"%s\" class=\"button\" aria-describedby=\"wp-version\">%s</a> ", network_admin_url("update-core.php"), php_sprintf(__("Update to %s"), cur_.current if cur_.current else __("Latest")))
         # end if
     # end if
     #// translators: 1: Version number, 2: Theme name.
-    content = __("WordPress %1$s running %2$s theme.")
+    content_ = __("WordPress %1$s running %2$s theme.")
     #// 
     #// Filters the text displayed in the 'At a Glance' dashboard widget.
     #// 
@@ -294,41 +301,43 @@ def update_right_now_message(*args_):
     #// 
     #// @param string $content Default text.
     #//
-    content = apply_filters("update_right_now_text", content)
-    msg += php_sprintf("<span id=\"wp-version\">" + content + "</span>", get_bloginfo("version", "display"), theme_name)
-    php_print(str("<p id='wp-version-message'>") + str(msg) + str("</p>"))
+    content_ = apply_filters("update_right_now_text", content_)
+    msg_ += php_sprintf("<span id=\"wp-version\">" + content_ + "</span>", get_bloginfo("version", "display"), theme_name_)
+    php_print(str("<p id='wp-version-message'>") + str(msg_) + str("</p>"))
 # end def update_right_now_message
 #// 
 #// @since 2.9.0
 #// 
 #// @return array
 #//
-def get_plugin_updates(*args_):
+def get_plugin_updates(*_args_):
     
-    all_plugins = get_plugins()
-    upgrade_plugins = Array()
-    current = get_site_transient("update_plugins")
-    for plugin_file,plugin_data in all_plugins:
-        if (php_isset(lambda : current.response[plugin_file])):
-            upgrade_plugins[plugin_file] = plugin_data
-            upgrade_plugins[plugin_file].update = current.response[plugin_file]
+    
+    all_plugins_ = get_plugins()
+    upgrade_plugins_ = Array()
+    current_ = get_site_transient("update_plugins")
+    for plugin_file_,plugin_data_ in all_plugins_:
+        if (php_isset(lambda : current_.response[plugin_file_])):
+            upgrade_plugins_[plugin_file_] = plugin_data_
+            upgrade_plugins_[plugin_file_].update = current_.response[plugin_file_]
         # end if
     # end for
-    return upgrade_plugins
+    return upgrade_plugins_
 # end def get_plugin_updates
 #// 
 #// @since 2.9.0
 #//
-def wp_plugin_update_rows(*args_):
+def wp_plugin_update_rows(*_args_):
+    
     
     if (not current_user_can("update_plugins")):
         return
     # end if
-    plugins = get_site_transient("update_plugins")
-    if (php_isset(lambda : plugins.response)) and php_is_array(plugins.response):
-        plugins = php_array_keys(plugins.response)
-        for plugin_file in plugins:
-            add_action(str("after_plugin_row_") + str(plugin_file), "wp_plugin_update_row", 10, 2)
+    plugins_ = get_site_transient("update_plugins")
+    if (php_isset(lambda : plugins_.response)) and php_is_array(plugins_.response):
+        plugins_ = php_array_keys(plugins_.response)
+        for plugin_file_ in plugins_:
+            add_action(str("after_plugin_row_") + str(plugin_file_), "wp_plugin_update_row", 10, 2)
         # end for
     # end if
 # end def wp_plugin_update_rows
@@ -341,37 +350,38 @@ def wp_plugin_update_rows(*args_):
 #// @param array  $plugin_data Plugin information.
 #// @return void|false
 #//
-def wp_plugin_update_row(file=None, plugin_data=None, *args_):
+def wp_plugin_update_row(file_=None, plugin_data_=None, *_args_):
     
-    current = get_site_transient("update_plugins")
-    if (not (php_isset(lambda : current.response[file]))):
+    
+    current_ = get_site_transient("update_plugins")
+    if (not (php_isset(lambda : current_.response[file_]))):
         return False
     # end if
-    response = current.response[file]
-    plugins_allowedtags = Array({"a": Array({"href": Array(), "title": Array()})}, {"abbr": Array({"title": Array()})}, {"acronym": Array({"title": Array()})}, {"code": Array(), "em": Array(), "strong": Array()})
-    plugin_name = wp_kses(plugin_data["Name"], plugins_allowedtags)
-    details_url = self_admin_url("plugin-install.php?tab=plugin-information&plugin=" + response.slug + "&section=changelog&TB_iframe=true&width=600&height=800")
+    response_ = current_.response[file_]
+    plugins_allowedtags_ = Array({"a": Array({"href": Array(), "title": Array()})}, {"abbr": Array({"title": Array()})}, {"acronym": Array({"title": Array()})}, {"code": Array(), "em": Array(), "strong": Array()})
+    plugin_name_ = wp_kses(plugin_data_["Name"], plugins_allowedtags_)
+    details_url_ = self_admin_url("plugin-install.php?tab=plugin-information&plugin=" + response_.slug + "&section=changelog&TB_iframe=true&width=600&height=800")
     #// @var WP_Plugins_List_Table $wp_list_table
-    wp_list_table = _get_list_table("WP_Plugins_List_Table")
+    wp_list_table_ = _get_list_table("WP_Plugins_List_Table")
     if is_network_admin() or (not is_multisite()):
         if is_network_admin():
-            active_class = " active" if is_plugin_active_for_network(file) else ""
+            active_class_ = " active" if is_plugin_active_for_network(file_) else ""
         else:
-            active_class = " active" if is_plugin_active(file) else ""
+            active_class_ = " active" if is_plugin_active(file_) else ""
         # end if
-        requires_php = response.requires_php if (php_isset(lambda : response.requires_php)) else None
-        compatible_php = is_php_version_compatible(requires_php)
-        notice_type = "notice-warning" if compatible_php else "notice-error"
-        printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\" data-plugin=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline %s notice-alt\"><p>", active_class, esc_attr(response.slug + "-update"), esc_attr(response.slug), esc_attr(file), esc_attr(wp_list_table.get_column_count()), notice_type)
+        requires_php_ = response_.requires_php if (php_isset(lambda : response_.requires_php)) else None
+        compatible_php_ = is_php_version_compatible(requires_php_)
+        notice_type_ = "notice-warning" if compatible_php_ else "notice-error"
+        printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\" data-plugin=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline %s notice-alt\"><p>", active_class_, esc_attr(response_.slug + "-update"), esc_attr(response_.slug), esc_attr(file_), esc_attr(wp_list_table_.get_column_count()), notice_type_)
         if (not current_user_can("update_plugins")):
-            printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), plugin_name, esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name, response.new_version))), esc_attr(response.new_version))
-        elif php_empty(lambda : response.package):
-            printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>"), plugin_name, esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name, response.new_version))), esc_attr(response.new_version))
+            printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version))
+        elif php_empty(lambda : response_.package):
+            printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>"), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version))
         else:
-            if compatible_php:
-                printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), plugin_name, esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name, response.new_version))), esc_attr(response.new_version), wp_nonce_url(self_admin_url("update.php?action=upgrade-plugin&plugin=") + file, "upgrade-plugin_" + file), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), plugin_name))))
+            if compatible_php_:
+                printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version), wp_nonce_url(self_admin_url("update.php?action=upgrade-plugin&plugin=") + file_, "upgrade-plugin_" + file_), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), plugin_name_))))
             else:
-                printf(__("There is a new version of %1$s available, but it doesn&#8217;t work with your version of PHP. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\">learn more about updating PHP</a>."), plugin_name, esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name, response.new_version))), esc_attr(response.new_version), esc_url(wp_get_update_php_url()))
+                printf(__("There is a new version of %1$s available, but it doesn&#8217;t work with your version of PHP. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\">learn more about updating PHP</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version), esc_url(wp_get_update_php_url()))
                 wp_update_php_annotation("<br><em>", "</em>")
             # end if
         # end if
@@ -410,7 +420,7 @@ def wp_plugin_update_row(file=None, plugin_data=None, *args_):
         #// @type string $package     Plugin update package URL.
         #// }
         #//
-        do_action(str("in_plugin_update_message-") + str(file), plugin_data, response)
+        do_action(str("in_plugin_update_message-") + str(file_), plugin_data_, response_)
         #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
         php_print("</p></div></td></tr>")
     # end if
@@ -420,32 +430,34 @@ def wp_plugin_update_row(file=None, plugin_data=None, *args_):
 #// 
 #// @return array
 #//
-def get_theme_updates(*args_):
+def get_theme_updates(*_args_):
     
-    current = get_site_transient("update_themes")
-    if (not (php_isset(lambda : current.response))):
+    
+    current_ = get_site_transient("update_themes")
+    if (not (php_isset(lambda : current_.response))):
         return Array()
     # end if
-    update_themes = Array()
-    for stylesheet,data in current.response:
-        update_themes[stylesheet] = wp_get_theme(stylesheet)
-        update_themes[stylesheet].update = data
+    update_themes_ = Array()
+    for stylesheet_,data_ in current_.response:
+        update_themes_[stylesheet_] = wp_get_theme(stylesheet_)
+        update_themes_[stylesheet_].update = data_
     # end for
-    return update_themes
+    return update_themes_
 # end def get_theme_updates
 #// 
 #// @since 3.1.0
 #//
-def wp_theme_update_rows(*args_):
+def wp_theme_update_rows(*_args_):
+    
     
     if (not current_user_can("update_themes")):
         return
     # end if
-    themes = get_site_transient("update_themes")
-    if (php_isset(lambda : themes.response)) and php_is_array(themes.response):
-        themes = php_array_keys(themes.response)
-        for theme in themes:
-            add_action(str("after_theme_row_") + str(theme), "wp_theme_update_row", 10, 2)
+    themes_ = get_site_transient("update_themes")
+    if (php_isset(lambda : themes_.response)) and php_is_array(themes_.response):
+        themes_ = php_array_keys(themes_.response)
+        for theme_ in themes_:
+            add_action(str("after_theme_row_") + str(theme_), "wp_theme_update_row", 10, 2)
         # end for
     # end if
 # end def wp_theme_update_rows
@@ -458,24 +470,25 @@ def wp_theme_update_rows(*args_):
 #// @param WP_Theme $theme     Theme object.
 #// @return void|false
 #//
-def wp_theme_update_row(theme_key=None, theme=None, *args_):
+def wp_theme_update_row(theme_key_=None, theme_=None, *_args_):
     
-    current = get_site_transient("update_themes")
-    if (not (php_isset(lambda : current.response[theme_key]))):
+    
+    current_ = get_site_transient("update_themes")
+    if (not (php_isset(lambda : current_.response[theme_key_]))):
         return False
     # end if
-    response = current.response[theme_key]
-    details_url = add_query_arg(Array({"TB_iframe": "true", "width": 1024, "height": 800}), current.response[theme_key]["url"])
+    response_ = current_.response[theme_key_]
+    details_url_ = add_query_arg(Array({"TB_iframe": "true", "width": 1024, "height": 800}), current_.response[theme_key_]["url"])
     #// @var WP_MS_Themes_List_Table $wp_list_table
-    wp_list_table = _get_list_table("WP_MS_Themes_List_Table")
-    active = " active" if theme.is_allowed("network") else ""
-    printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline notice-warning notice-alt\"><p>", active, esc_attr(theme.get_stylesheet() + "-update"), esc_attr(theme.get_stylesheet()), wp_list_table.get_column_count())
+    wp_list_table_ = _get_list_table("WP_MS_Themes_List_Table")
+    active_ = " active" if theme_.is_allowed("network") else ""
+    printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline notice-warning notice-alt\"><p>", active_, esc_attr(theme_.get_stylesheet() + "-update"), esc_attr(theme_.get_stylesheet()), wp_list_table_.get_column_count())
     if (not current_user_can("update_themes")):
-        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), theme["Name"], esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme["Name"], response["new_version"]))), response["new_version"])
-    elif php_empty(lambda : response["package"]):
-        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>"), theme["Name"], esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme["Name"], response["new_version"]))), response["new_version"])
+        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"])
+    elif php_empty(lambda : response_["package"]):
+        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>"), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"])
     else:
-        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), theme["Name"], esc_url(details_url), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme["Name"], response["new_version"]))), response["new_version"], wp_nonce_url(self_admin_url("update.php?action=upgrade-theme&theme=") + theme_key, "upgrade-theme_" + theme_key), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), theme["Name"]))))
+        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"], wp_nonce_url(self_admin_url("update.php?action=upgrade-theme&theme=") + theme_key_, "upgrade-theme_" + theme_key_), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), theme_["Name"]))))
     # end if
     #// 
     #// Fires at the end of the update message container in each
@@ -495,7 +508,7 @@ def wp_theme_update_row(theme_key=None, theme=None, *args_):
     #// @type string $package     Theme update package URL.
     #// }
     #//
-    do_action(str("in_theme_update_message-") + str(theme_key), theme, response)
+    do_action(str("in_theme_update_message-") + str(theme_key_), theme_, response_)
     #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
     php_print("</p></div></td></tr>")
 # end def wp_theme_update_row
@@ -505,15 +518,16 @@ def wp_theme_update_row(theme_key=None, theme=None, *args_):
 #// @global int $upgrading
 #// @return void|false
 #//
-def maintenance_nag(*args_):
+def maintenance_nag(*_args_):
+    
     
     #// Include an unmodified $wp_version.
     php_include_file(ABSPATH + WPINC + "/version.php", once=False)
-    global upgrading
-    php_check_if_defined("upgrading")
-    nag = (php_isset(lambda : upgrading))
-    if (not nag):
-        failed = get_site_option("auto_core_update_failed")
+    global upgrading_
+    php_check_if_defined("upgrading_")
+    nag_ = (php_isset(lambda : upgrading_))
+    if (not nag_):
+        failed_ = get_site_option("auto_core_update_failed")
         #// 
         #// If an update failed critically, we may have copied over version.php but not other files.
         #// In that case, if the installation claims we're running the version we attempted, nag.
@@ -524,20 +538,20 @@ def maintenance_nag(*args_):
         #// 
         #// This flag is cleared whenever a successful update occurs using Core_Upgrader.
         #//
-        comparison = ">=" if (not php_empty(lambda : failed["critical"])) else ">"
-        if (php_isset(lambda : failed["attempted"])) and php_version_compare(failed["attempted"], wp_version, comparison):
-            nag = True
+        comparison_ = ">=" if (not php_empty(lambda : failed_["critical"])) else ">"
+        if (php_isset(lambda : failed_["attempted"])) and php_version_compare(failed_["attempted"], wp_version_, comparison_):
+            nag_ = True
         # end if
     # end if
-    if (not nag):
+    if (not nag_):
         return False
     # end if
     if current_user_can("update_core"):
-        msg = php_sprintf(__("An automated WordPress update has failed to complete - <a href=\"%s\">please attempt the update again now</a>."), "update-core.php")
+        msg_ = php_sprintf(__("An automated WordPress update has failed to complete - <a href=\"%s\">please attempt the update again now</a>."), "update-core.php")
     else:
-        msg = __("An automated WordPress update has failed to complete! Please notify the site administrator.")
+        msg_ = __("An automated WordPress update has failed to complete! Please notify the site administrator.")
     # end if
-    php_print(str("<div class='update-nag'>") + str(msg) + str("</div>"))
+    php_print(str("<div class='update-nag'>") + str(msg_) + str("</div>"))
 # end def maintenance_nag
 #// 
 #// Prints the JavaScript templates for update admin notices.
@@ -555,7 +569,8 @@ def maintenance_nag(*args_):
 #// 
 #// @since 4.6.0
 #//
-def wp_print_admin_notice_templates(*args_):
+def wp_print_admin_notice_templates(*_args_):
+    
     
     php_print("""   <script id=\"tmpl-wp-updates-admin-notice\" type=\"text/html\">
     <div <# if ( data.id ) { #>id=\"{{ data.id }}\"<# } #> class=\"notice {{ data.className }}\"><p>{{{ data.message }}}</p></div>
@@ -638,7 +653,8 @@ def wp_print_admin_notice_templates(*args_):
 #// 
 #// @since 4.6.0
 #//
-def wp_print_update_row_templates(*args_):
+def wp_print_update_row_templates(*_args_):
+    
     
     php_print("""   <script id=\"tmpl-item-update-row\" type=\"text/template\">
     <tr class=\"plugin-update-tr update\" id=\"{{ data.slug }}-update\" data-slug=\"{{ data.slug }}\" <# if ( data.plugin ) { #>data-plugin=\"{{ data.plugin }}\"<# } #>>
@@ -666,15 +682,16 @@ def wp_print_update_row_templates(*args_):
 #// 
 #// @since 5.2.0
 #//
-def wp_recovery_mode_nag(*args_):
+def wp_recovery_mode_nag(*_args_):
+    
     
     if (not wp_is_recovery_mode()):
         return
     # end if
-    url = wp_login_url()
-    url = add_query_arg("action", WP_Recovery_Mode.EXIT_ACTION, url)
-    url = wp_nonce_url(url, WP_Recovery_Mode.EXIT_ACTION)
+    url_ = wp_login_url()
+    url_ = add_query_arg("action", WP_Recovery_Mode.EXIT_ACTION, url_)
+    url_ = wp_nonce_url(url_, WP_Recovery_Mode.EXIT_ACTION)
     php_print(" <div class=\"notice notice-info\">\n        <p>\n           ")
-    printf(__("You are in recovery mode. This means there may be an error with a theme or plugin. To exit recovery mode, log out or use the Exit button. <a href=\"%s\">Exit Recovery Mode</a>"), esc_url(url))
+    printf(__("You are in recovery mode. This means there may be an error with a theme or plugin. To exit recovery mode, log out or use the Exit button. <a href=\"%s\">Exit Recovery Mode</a>"), esc_url(url_))
     php_print("     </p>\n  </div>\n    ")
 # end def wp_recovery_mode_nag

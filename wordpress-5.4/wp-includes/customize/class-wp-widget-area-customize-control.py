@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -27,7 +22,19 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see WP_Customize_Control
 #//
 class WP_Widget_Area_Customize_Control(WP_Customize_Control):
+    #// 
+    #// Customize control type.
+    #// 
+    #// @since 3.9.0
+    #// @var string
+    #//
     type = "sidebar_widgets"
+    #// 
+    #// Sidebar ID.
+    #// 
+    #// @since 3.9.0
+    #// @var int|string
+    #//
     sidebar_id = Array()
     #// 
     #// Refreshes the parameters passed to the JavaScript via JSON.
@@ -36,10 +43,11 @@ class WP_Widget_Area_Customize_Control(WP_Customize_Control):
     #//
     def to_json(self):
         
+        
         super().to_json()
-        exported_properties = Array("sidebar_id")
-        for key in exported_properties:
-            self.json[key] = self.key
+        exported_properties_ = Array("sidebar_id")
+        for key_ in exported_properties_:
+            self.json[key_] = self.key_
         # end for
     # end def to_json
     #// 
@@ -49,19 +57,20 @@ class WP_Widget_Area_Customize_Control(WP_Customize_Control):
     #//
     def render_content(self):
         
-        id = "reorder-widgets-desc-" + php_str_replace(Array("[", "]"), Array("-", ""), self.id)
+        
+        id_ = "reorder-widgets-desc-" + php_str_replace(Array("[", "]"), Array("-", ""), self.id)
         php_print("     <button type=\"button\" class=\"button add-new-widget\" aria-expanded=\"false\" aria-controls=\"available-widgets\">\n          ")
         _e("Add a Widget")
         php_print("     </button>\n     <button type=\"button\" class=\"button-link reorder-toggle\" aria-label=\"")
         esc_attr_e("Reorder widgets")
         php_print("\" aria-describedby=\"")
-        php_print(esc_attr(id))
+        php_print(esc_attr(id_))
         php_print("\">\n            <span class=\"reorder\">")
         _e("Reorder")
         php_print("</span>\n            <span class=\"reorder-done\">")
         _e("Done")
         php_print("</span>\n        </button>\n     <p class=\"screen-reader-text\" id=\"")
-        php_print(esc_attr(id))
+        php_print(esc_attr(id_))
         php_print("\">")
         _e("When in reorder mode, additional controls to reorder widgets will be available in the widgets list above.")
         php_print("</p>\n       ")

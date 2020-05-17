@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -40,14 +35,14 @@ else:
     the_title("<h2 class=\"entry-title\"><a href=\"" + esc_url(get_permalink()) + "\" rel=\"bookmark\">", "</a></h2>")
 # end if
 php_print(" </header><!-- .entry-header -->\n\n ")
-content = apply_filters("the_content", get_the_content())
-video = False
+content_ = apply_filters("the_content", get_the_content())
+video_ = False
 #// Only get video from the content if a playlist isn't present.
-if False == php_strpos(content, "wp-playlist-script"):
-    video = get_media_embedded_in_content(content, Array("video", "object", "embed", "iframe"))
+if False == php_strpos(content_, "wp-playlist-script"):
+    video_ = get_media_embedded_in_content(content_, Array("video", "object", "embed", "iframe"))
 # end if
 php_print("\n   ")
-if "" != get_the_post_thumbnail() and (not is_single()) and php_empty(lambda : video):
+if "" != get_the_post_thumbnail() and (not is_single()) and php_empty(lambda : video_):
     php_print("     <div class=\"post-thumbnail\">\n            <a href=\"")
     the_permalink()
     php_print("\">\n                ")
@@ -59,15 +54,15 @@ php_print("""
 """)
 if (not is_single()):
     #// If not a single post, highlight the video file.
-    if (not php_empty(lambda : video)):
-        for video_html in video:
+    if (not php_empty(lambda : video_)):
+        for video_html_ in video_:
             php_print("<div class=\"entry-video\">")
-            php_print(video_html)
+            php_print(video_html_)
             php_print("</div>")
         # end for
     # end if
 # end if
-if is_single() or php_empty(lambda : video):
+if is_single() or php_empty(lambda : video_):
     the_content(php_sprintf(__("Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>", "twentyseventeen"), get_the_title()))
     wp_link_pages(Array({"before": "<div class=\"page-links\">" + __("Pages:", "twentyseventeen"), "after": "</div>", "link_before": "<span class=\"page-number\">", "link_after": "</span>"}))
 # end if
