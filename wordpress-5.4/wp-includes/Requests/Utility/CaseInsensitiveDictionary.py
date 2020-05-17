@@ -19,7 +19,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package Requests
 #// @subpackage Utilities
 #//
-class Requests_Utility_CaseInsensitiveDictionary():
+class Requests_Utility_CaseInsensitiveDictionary(ArrayAccessIteratorAggregate):
     #// 
     #// Actual item data
     #// 

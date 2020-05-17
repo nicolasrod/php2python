@@ -1,23 +1,28 @@
 # coding: utf8
 
+import atexit
+import base64
+import cgi
+import functools
+import hashlib
+import inspect
 import io
+import itertools
+import json
+import mysql.connector
 import os
 import os.path
-import cgi
-import sys
-import re
-import hashlib
-import tempfile
-import itertools
 import random
-import functools
-import base64
-import json
+import re
+import sys
+import tempfile
 
-from goto import with_goto
-from datetime import datetime
-from urllib.parse import urlparse
+from collections import namedtuple
 from contextlib import redirect_stdout
+from datetime import datetime
+from goto import with_goto
+from packaging import version
+from urllib.parse import urlparse
 
 _PHP_INCLUDES = {}
 __FILE__ = os.path.realpath(__file__)
@@ -118,8 +123,6 @@ def php_include_file(fname, once=True, redirect=False):
 
     _PHP_INCLUDES[__FILE__] = True
 
-    print(f'>>> INCLUDING: {__FILE__}')
-
     with open(__FILE__) as src:
         code = compile(src.read().replace("\x00", ""), filename, "exec")
 
@@ -142,6 +145,46 @@ def php_include_file(fname, once=True, redirect=False):
 
 # -----------------------------------------------------------------------------------
 # PHP globals
+
+
+class Traversable:
+    pass
+
+
+class Iterator:
+    pass
+
+
+class IteratorAggregate:
+    pass
+
+
+class IteratorArrayAccess:
+    pass
+
+
+class Throwable:
+    pass
+
+
+class ArrayAccess:
+    pass
+
+
+class Serializable:
+    pass
+
+
+class Closure:
+    pass
+
+
+class Generator:
+    pass
+
+
+class WeakReference:
+    pass
 
 
 class Array():
@@ -293,7 +336,8 @@ _PHP_INI_FILE_DETAILS = Array(dict(
 # =============================================================0
 
 PHP_OS = sys.platform
-PHP_GLOBALS = Array(globals())
+# TODO: probably use PHP_GLOBALS as a proxy objects and not get the reference to globals at this point
+PHP_GLOBALS = globals()
 PHP_REQUEST = Array(cgi.FieldStorage())
 PHP_SERVER = Array(os.environ)
 PHP_COOKIE = Array()
@@ -306,7 +350,7 @@ PHP_SERVER["SERVER_SOFTWARE"] = "localhost"
 PHP_SERVER["REQUEST_URI"] = "/"
 PHP_SERVER["SERVER_PORT"] = "80"
 PHP_SERVER["HTTP_ACCEPT_ENCODING"] = "*"
-PHP_SERVER["PHP_SELF"] = os.path.realpath(__file__)
+PHP_SERVER["PHP_SELF"] = __FILE__
 PHP_SAPI = ""
 PHP_POST = PHP_REQUEST
 PHP_ENV = PHP_SERVER
@@ -1312,7 +1356,7 @@ def php_is_link(_filename):
     return os.path.islink(_filename)
 
 
-def php_is_None(_var):
+def php_is_null(_var):
     return _var is None
 
 
@@ -1343,7 +1387,6 @@ def php_json_decode(_json, _assoc=False, _depth=512, _options=0):
     >>> php_json_decode("{ 'bar': 'baz' }")
 
     """
-    import json
     try:
         data = json.loads(_json)
         php_json_last_error.value = None
@@ -1360,7 +1403,6 @@ def php_json_encode(_value, _options=0, _depth=512):
     >>> php_json_encode(Array({'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5}))
     '{"a": 1, "b": 2, "c": 3, "d": 4, "e": 5}'
     """
-    import json
     try:
         data = json.dumps(_value.data if isinstance(_value, Array) else _value)
         php_json_last_error.value = None
@@ -1473,7 +1515,9 @@ def php_mysqli_real_connect(dbh_,
                             socket_=None,
                             flags_=None):
     try:
-        dbh_[-1] = php_mysqli_connect(host_, username_, passwd_, dbname_)
+        dbh_.cnx = php_mysqli_connect(host_, username_, passwd_, dbname_)
+        dbh_.connect_errno = 0
+
         return True
     except:
         return False
@@ -1489,7 +1533,6 @@ def php_mysqli_init():
 
 
 def php_mysqli_connect(host, user, pwd, db):
-    import mysql.connector
     return mysql.connector.connect(host=host,
                                    user=user,
                                    passwd=pwd,
@@ -1832,12 +1875,10 @@ def php_substr_replace(_string, _replacement, _start, _length):
 
 
 def php_sys_get_temp_dir():
-    import tempfile
     return tempfile.gettempdir()
 
 
 def php_tempnam(_dir, _prefix):
-    import tempfile
     fh, fpath = tempfile.mkstemp(prefix=_prefix, dir=_dir)
     fh.close()
     return fpath
@@ -1880,7 +1921,6 @@ def stream_get_transports():
 
 
 def php_version_compare(_v1, _v2, _operator=None):
-    from packaging import version
     """
     >>> php_version_compare('1', '1.0')
     -1
@@ -1949,8 +1989,6 @@ def php_func_num_args():
 
 
 def _get_caller_data():
-    from collections import namedtuple
-    import inspect
 
     frame = inspect.currentframe().f_back.f_back
     fcode = frame.f_code
@@ -1964,7 +2002,6 @@ def _get_caller_data():
 
 
 def php_register_shutdown_function(_callback, *args):
-    import atexit
 
     if callable(_callback):
         atexit.register(_callback)
@@ -2104,17 +2141,105 @@ def php_compact(*names):
             return x.values()
         return [x]
 
-    import inspect
-
     caller = inspect.stack()[1][0]  # caller of compact()
     vars = {}
     arr = list(itertools.chain.from_iterable([_item(x) for x in names]))
     for n in arr:
+        k = n[:-1] if n.endswith('_') else n
         if n in caller.f_locals:
-            vars[n] = caller.f_locals[n]
+            vars[k] = caller.f_locals[n]
         elif n in caller.f_globals:
-            vars[n] = caller.f_globals[n]
+            vars[k] = caller.f_globals[n]
     return vars
+
+
+def _execdb(db, sql, all=True, with_data=True):
+    r = db.cnx.cursor()
+    r.execute(sql)
+    data = None
+    if with_data:
+        data = r.fetchall() if all else r.fetchone()
+    r.close()
+    return data
+
+
+def _check_db_is_connected(dbh):
+    assert hasattr(
+        dbh, 'cnx') and dbh.cnx is not None, 'Not connected to database!'
+
+
+def php_mysqli_get_server_info(dbh):
+    _check_db_is_connected(dbh)
+
+    dbh.server_info = _execdb(dbh, 'SELECT VERSION()', False)[0]
+    return dbh.server_info
+
+
+class MySQLResult(Traversable):
+    def __init__(self, cursor):
+        self.cursor = cursor
+        self.current_field = None
+        self.field_count = None
+        # array $lengths;
+
+    @property
+    def num_rows(self):
+        # count!
+        return 1
+
+    # data_seek ( int $offset ) : bool
+    # fetch_all ([ int $resulttype = MYSQLI_NUM ] ) : mixed
+    # fetch_array ([ int $resulttype = MYSQLI_BOTH ] ) : mixed
+    # fetch_assoc ( void ) : array
+    # fetch_field_direct ( int $fieldnr ) : object
+    # fetch_field ( void ) : object
+    # fetch_fields ( void ) : array
+    # fetch_object ([ string $class_name = "stdClass" [, array $params ]] ) : object
+    # fetch_row ( void ) : mixed
+    # field_seek ( int $fieldnr ) : bool
+    # free ( void ) : void
+
+
+def php_mysqli_query(dbh, sql):
+    """
+    Returns FALSE on failure. For successful SELECT, SHOW, DESCRIBE or EXPLAIN queries mysqli_query() will return a mysqli_result object. For other successful queries mysqli_query() will return TRUE.
+    """
+    _check_db_is_connected(dbh)
+
+    try:
+        cursor = dbh.cnx.cursor()
+        cursor.execute(sql)
+        return MySQLResult(cursor)
+    except:
+        return False
+
+
+def php_mysqli_fetch_array(r):
+    return r.cursor.fetchone()
+
+
+def php_mysqli_select_db(dbh, db):
+    _check_db_is_connected(dbh)
+    _execdb(dbh, f'USE {db}', with_data=False)
+    return True
+
+
+def php_mysqli_free_result(r):
+    assert isinstance(r, MySQLResult)
+    r.cursor.close()
+
+
+def php_is_scalar(v):
+    if v is None:
+        return False
+
+    return isinstance(v, (int, float, str, bool))
+
+
+def preg_match_all(*args):
+    v = args[2]
+    v.newvalue = "asdf"
+    return Array()
 
 # ========================================================================================
 

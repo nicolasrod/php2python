@@ -186,7 +186,9 @@ class WP_Date_Query():
     #// @return array Sanitized queries.
     #//
     def sanitize_query(self, queries_=None, parent_query_=None):
-        
+        if parent_query_ is None:
+            parent_query_ = None
+        # end if
         
         cleaned_query_ = Array()
         defaults_ = Array({"column": "post_date", "compare": "=", "relation": "AND"})
@@ -785,7 +787,15 @@ class WP_Date_Query():
     #// @return string|false A query part or false on failure.
     #//
     def build_time_query(self, column_=None, compare_=None, hour_=None, minute_=None, second_=None):
-        
+        if hour_ is None:
+            hour_ = None
+        # end if
+        if minute_ is None:
+            minute_ = None
+        # end if
+        if second_ is None:
+            second_ = None
+        # end if
         
         global wpdb_
         php_check_if_defined("wpdb_")

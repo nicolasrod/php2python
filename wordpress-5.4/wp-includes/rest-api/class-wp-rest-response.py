@@ -81,7 +81,9 @@ class WP_REST_Response(WP_HTTP_Response):
     #// Default null.
     #//
     def remove_link(self, rel_=None, href_=None):
-        
+        if href_ is None:
+            href_ = None
+        # end if
         
         if (not (php_isset(lambda : self.links[rel_]))):
             return

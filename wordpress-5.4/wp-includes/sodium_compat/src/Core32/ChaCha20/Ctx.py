@@ -13,7 +13,7 @@ if php_class_exists("ParagonIE_Sodium_Core_ChaCha20_Ctx", False):
 #// 
 #// Class ParagonIE_Sodium_Core32_ChaCha20_Ctx
 #//
-class ParagonIE_Sodium_Core32_ChaCha20_Ctx(ParagonIE_Sodium_Core32_Util):
+class ParagonIE_Sodium_Core32_ChaCha20_Ctx(ParagonIE_Sodium_Core32_Util,ArrayAccess):
     #// 
     #// @var SplFixedArray internally, <int, ParagonIE_Sodium_Core32_Int32>
     #//

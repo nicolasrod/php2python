@@ -266,7 +266,7 @@ def wp_update_plugins(extra_stats_=None, *_args_):
     #// Update last_checked for current to prevent multiple blocking requests if request hangs.
     current_.last_checked = time()
     set_site_transient("update_plugins", current_)
-    to_send_ = php_compact("plugins", "active")
+    to_send_ = php_compact("plugins_", "active_")
     locales_ = php_array_values(get_available_languages())
     #// 
     #// Filters the locales requested for plugin translations.

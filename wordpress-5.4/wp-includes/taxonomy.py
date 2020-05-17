@@ -1167,7 +1167,9 @@ def unregister_term_meta(taxonomy_=None, meta_key_=None, *_args_):
 #// Returns 0 if term ID 0 is passed to the function.
 #//
 def term_exists(term_=None, taxonomy_="", parent_=None, *_args_):
-    
+    if parent_ is None:
+        parent_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -1589,7 +1591,7 @@ def wp_delete_term(term_=None, taxonomy_=None, args_=None, *_args_):
         #// @param array $edit_tt_ids An array of term taxonomy IDs for the given term.
         #//
         do_action("edit_term_taxonomies", edit_tt_ids_)
-        wpdb_.update(wpdb_.term_taxonomy, php_compact("parent"), Array({"parent": term_obj_.term_id}) + php_compact("taxonomy"))
+        wpdb_.update(wpdb_.term_taxonomy, php_compact("parent_"), Array({"parent": term_obj_.term_id}) + php_compact("taxonomy_"))
         #// Clean the cache for all child terms.
         edit_term_ids_ = wp_list_pluck(edit_ids_, "term_id")
         clean_term_cache(edit_term_ids_, taxonomy_)
@@ -1948,7 +1950,7 @@ def wp_insert_term(term_=None, taxonomy_=None, args_=None, *_args_):
         # end if
     # end if
     slug_ = wp_unique_term_slug(slug_, args_)
-    data_ = php_compact("name", "slug", "term_group")
+    data_ = php_compact("name_", "slug_", "term_group_")
     #// 
     #// Filters term data before it is inserted into the database.
     #// 
@@ -1968,7 +1970,7 @@ def wp_insert_term(term_=None, taxonomy_=None, args_=None, *_args_):
         slug_ = sanitize_title(slug_, term_id_)
         #// This action is documented in wp-includes/taxonomy.php
         do_action("edit_terms", term_id_, taxonomy_)
-        wpdb_.update(wpdb_.terms, php_compact("slug"), php_compact("term_id"))
+        wpdb_.update(wpdb_.terms, php_compact("slug_"), php_compact("term_id_"))
         #// This action is documented in wp-includes/taxonomy.php
         do_action("edited_terms", term_id_, taxonomy_)
     # end if
@@ -1976,7 +1978,7 @@ def wp_insert_term(term_=None, taxonomy_=None, args_=None, *_args_):
     if (not php_empty(lambda : tt_id_)):
         return Array({"term_id": term_id_, "term_taxonomy_id": tt_id_})
     # end if
-    if False == wpdb_.insert(wpdb_.term_taxonomy, php_compact("term_id", "taxonomy", "description", "parent") + Array({"count": 0})):
+    if False == wpdb_.insert(wpdb_.term_taxonomy, php_compact("term_id_", "taxonomy_", "description_", "parent_") + Array({"count": 0})):
         return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not insert term taxonomy into the database."), wpdb_.last_error))
     # end if
     tt_id_ = php_int(wpdb_.insert_id)
@@ -2536,7 +2538,7 @@ def wp_update_term(term_id_=None, taxonomy_=None, args_=None, *_args_):
     #// @param string $taxonomy Taxonomy slug.
     #//
     do_action("edit_terms", term_id_, taxonomy_)
-    data_ = php_compact("name", "slug", "term_group")
+    data_ = php_compact("name_", "slug_", "term_group_")
     #// 
     #// Filters term data before it is updated in the database.
     #// 
@@ -2548,10 +2550,10 @@ def wp_update_term(term_id_=None, taxonomy_=None, args_=None, *_args_):
     #// @param array  $args     Arguments passed to wp_update_term().
     #//
     data_ = apply_filters("wp_update_term_data", data_, term_id_, taxonomy_, args_)
-    wpdb_.update(wpdb_.terms, data_, php_compact("term_id"))
+    wpdb_.update(wpdb_.terms, data_, php_compact("term_id_"))
     if php_empty(lambda : slug_):
         slug_ = sanitize_title(name_, term_id_)
-        wpdb_.update(wpdb_.terms, php_compact("slug"), php_compact("term_id"))
+        wpdb_.update(wpdb_.terms, php_compact("slug_"), php_compact("term_id_"))
     # end if
     #// 
     #// Fires immediately after the given terms are edited.
@@ -2571,7 +2573,7 @@ def wp_update_term(term_id_=None, taxonomy_=None, args_=None, *_args_):
     #// @param string $taxonomy Taxonomy slug.
     #//
     do_action("edit_term_taxonomy", tt_id_, taxonomy_)
-    wpdb_.update(wpdb_.term_taxonomy, php_compact("term_id", "taxonomy", "description", "parent"), Array({"term_taxonomy_id": tt_id_}))
+    wpdb_.update(wpdb_.term_taxonomy, php_compact("term_id_", "taxonomy_", "description_", "parent_"), Array({"term_taxonomy_id": tt_id_}))
     #// 
     #// Fires immediately after a term-taxonomy relationship is updated.
     #// 
@@ -2641,7 +2643,9 @@ def wp_update_term(term_id_=None, taxonomy_=None, args_=None, *_args_):
 #// @return bool Whether term counting is enabled or disabled.
 #//
 def wp_defer_term_counting(defer_=None, *_args_):
-    
+    if defer_ is None:
+        defer_ = None
+    # end if
     
     _defer_ = False
     if php_is_bool(defer_):
@@ -3243,7 +3247,7 @@ def _update_post_term_count(terms_=None, taxonomy_=None, *_args_):
         # end if
         #// This action is documented in wp-includes/taxonomy.php
         do_action("edit_term_taxonomy", term_, taxonomy_.name)
-        wpdb_.update(wpdb_.term_taxonomy, php_compact("count"), Array({"term_taxonomy_id": term_}))
+        wpdb_.update(wpdb_.term_taxonomy, php_compact("count_"), Array({"term_taxonomy_id": term_}))
         #// This action is documented in wp-includes/taxonomy.php
         do_action("edited_term_taxonomy", term_, taxonomy_.name)
     # end for
@@ -3269,7 +3273,7 @@ def _update_generic_term_count(terms_=None, taxonomy_=None, *_args_):
         count_ = wpdb_.get_var(wpdb_.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb_.term_relationships) + str(" WHERE term_taxonomy_id = %d"), term_))
         #// This action is documented in wp-includes/taxonomy.php
         do_action("edit_term_taxonomy", term_, taxonomy_.name)
-        wpdb_.update(wpdb_.term_taxonomy, php_compact("count"), Array({"term_taxonomy_id": term_}))
+        wpdb_.update(wpdb_.term_taxonomy, php_compact("count_"), Array({"term_taxonomy_id": term_}))
         #// This action is documented in wp-includes/taxonomy.php
         do_action("edited_term_taxonomy", term_, taxonomy_.name)
     # end for
@@ -3830,7 +3834,9 @@ def get_post_taxonomies(post_=0, *_args_):
 #// @return bool|WP_Error WP_Error on input error.
 #//
 def is_object_in_term(object_id_=None, taxonomy_=None, terms_=None, *_args_):
-    
+    if terms_ is None:
+        terms_ = None
+    # end if
     
     object_id_ = php_int(object_id_)
     if (not object_id_):
@@ -4024,7 +4030,7 @@ def wp_check_term_hierarchy_for_loops(parent_=None, term_id_=None, taxonomy_=Non
 def is_taxonomy_viewable(taxonomy_=None, *_args_):
     
     
-    if is_scalar(taxonomy_):
+    if php_is_scalar(taxonomy_):
         taxonomy_ = get_taxonomy(taxonomy_)
         if (not taxonomy_):
             return False

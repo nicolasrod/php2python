@@ -887,7 +887,9 @@ def wp_kses_bad_protocol(string_=None, allowed_protocols_=None, *_args_):
 #// @return string Filtered content.
 #//
 def wp_kses_no_null(string_=None, options_=None, *_args_):
-    
+    if options_ is None:
+        options_ = None
+    # end if
     
     if (not (php_isset(lambda : options_["slash_zero"]))):
         options_ = Array({"slash_zero": "remove"})

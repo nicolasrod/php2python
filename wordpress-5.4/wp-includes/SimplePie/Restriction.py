@@ -88,7 +88,15 @@ class SimplePie_Restriction():
     #// properties and their accessors
     #//
     def __init__(self, relationship_=None, type_=None, value_=None):
-        
+        if relationship_ is None:
+            relationship_ = None
+        # end if
+        if type_ is None:
+            type_ = None
+        # end if
+        if value_ is None:
+            value_ = None
+        # end if
         
         self.relationship = relationship_
         self.type = type_

@@ -53,7 +53,9 @@ class Walker_Nav_Menu(Walker):
     #// @param stdClass $args   An object of wp_nav_menu() arguments.
     #//
     def start_lvl(self, output_=None, depth_=0, args_=None):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
             t_ = ""
@@ -90,7 +92,9 @@ class Walker_Nav_Menu(Walker):
     #// @param stdClass $args   An object of wp_nav_menu() arguments.
     #//
     def end_lvl(self, output_=None, depth_=0, args_=None):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
             t_ = ""
@@ -117,7 +121,9 @@ class Walker_Nav_Menu(Walker):
     #// @param int      $id     Current item ID.
     #//
     def start_el(self, output_=None, item_=None, depth_=0, args_=None, id_=0):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
             t_ = ""
@@ -198,7 +204,7 @@ class Walker_Nav_Menu(Walker):
         atts_ = apply_filters("nav_menu_link_attributes", atts_, item_, args_, depth_)
         attributes_ = ""
         for attr_,value_ in atts_:
-            if is_scalar(value_) and "" != value_ and False != value_:
+            if php_is_scalar(value_) and "" != value_ and False != value_:
                 value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
                 attributes_ += " " + attr_ + "=\"" + value_ + "\""
             # end if
@@ -250,7 +256,9 @@ class Walker_Nav_Menu(Walker):
     #// @param stdClass $args   An object of wp_nav_menu() arguments.
     #//
     def end_el(self, output_=None, item_=None, depth_=0, args_=None):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         if (php_isset(lambda : args_.item_spacing)) and "discard" == args_.item_spacing:
             t_ = ""

@@ -27,7 +27,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @param string $name The name of the specialised header.
 #//
 def get_header(name_=None, *_args_):
-    
+    if name_ is None:
+        name_ = None
+    # end if
     
     #// 
     #// Fires before the header template file is loaded.
@@ -60,7 +62,9 @@ def get_header(name_=None, *_args_):
 #// @param string $name The name of the specialised footer.
 #//
 def get_footer(name_=None, *_args_):
-    
+    if name_ is None:
+        name_ = None
+    # end if
     
     #// 
     #// Fires before the footer template file is loaded.
@@ -93,7 +97,9 @@ def get_footer(name_=None, *_args_):
 #// @param string $name The name of the specialised sidebar.
 #//
 def get_sidebar(name_=None, *_args_):
-    
+    if name_ is None:
+        name_ = None
+    # end if
     
     #// 
     #// Fires before the sidebar template file is loaded.
@@ -134,7 +140,9 @@ def get_sidebar(name_=None, *_args_):
 #// @param string $name The name of the specialised template.
 #//
 def get_template_part(slug_=None, name_=None, *_args_):
-    
+    if name_ is None:
+        name_ = None
+    # end if
     
     #// 
     #// Fires before the specified template part file is loaded.
@@ -2214,7 +2222,9 @@ def the_date(format_="", before_="", after_="", echo_=None, *_args_):
 #// @return string|false Date the current post was written. False on failure.
 #//
 def get_the_date(format_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -2283,7 +2293,9 @@ def the_modified_date(format_="", before_="", after_="", echo_=None, *_args_):
 #// @return string|false Date the current post was modified. False on failure.
 #//
 def get_the_modified_date(format_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -2341,7 +2353,9 @@ def the_time(format_="", *_args_):
 #// False on failure.
 #//
 def get_the_time(format_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -2381,6 +2395,9 @@ def get_the_time(format_="", post_=None, *_args_):
 def get_post_time(format_="U", gmt_=None, post_=None, translate_=None, *_args_):
     if gmt_ is None:
         gmt_ = False
+    # end if
+    if post_ is None:
+        post_ = None
     # end if
     if translate_ is None:
         translate_ = False
@@ -2441,7 +2458,9 @@ def get_post_time(format_="U", gmt_=None, post_=None, translate_=None, *_args_):
 #// @return DateTimeImmutable|false Time object on success, false on failure.
 #//
 def get_post_datetime(post_=None, field_="date", source_="local", *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -2478,7 +2497,9 @@ def get_post_datetime(post_=None, field_="date", source_="local", *_args_):
 #// @return int|false Unix timestamp on success, false on failure.
 #//
 def get_post_timestamp(post_=None, field_="date", *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     datetime_ = get_post_datetime(post_, field_)
     if False == datetime_:
@@ -2522,7 +2543,9 @@ def the_modified_time(format_="", *_args_):
 #// @return string|false Formatted date string or Unix timestamp. False on failure.
 #//
 def get_the_modified_time(format_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -2563,6 +2586,9 @@ def get_the_modified_time(format_="", post_=None, *_args_):
 def get_post_modified_time(format_="U", gmt_=None, post_=None, translate_=None, *_args_):
     if gmt_ is None:
         gmt_ = False
+    # end if
+    if post_ is None:
+        post_ = None
     # end if
     if translate_ is None:
         translate_ = False
@@ -3017,7 +3043,7 @@ def wp_resource_hints(*_args_):
         for atts_ in unique_urls_:
             html_ = ""
             for attr_,value_ in atts_:
-                if (not is_scalar(value_)) or (not php_in_array(attr_, Array("as", "crossorigin", "href", "pr", "rel", "type"), True)) and (not php_is_numeric(attr_)):
+                if (not php_is_scalar(value_)) or (not php_in_array(attr_, Array("as", "crossorigin", "href", "pr", "rel", "type"), True)) and (not php_is_numeric(attr_)):
                     continue
                 # end if
                 value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)

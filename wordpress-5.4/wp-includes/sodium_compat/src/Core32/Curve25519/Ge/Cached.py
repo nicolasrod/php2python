@@ -41,7 +41,18 @@ class ParagonIE_Sodium_Core32_Curve25519_Ge_Cached():
     #// @param ParagonIE_Sodium_Core32_Curve25519_Fe|null $T2d
     #//
     def __init__(self, YplusX_=None, YminusX_=None, Z_=None, T2d_=None):
-        
+        if YplusX_ is None:
+            YplusX_ = None
+        # end if
+        if YminusX_ is None:
+            YminusX_ = None
+        # end if
+        if Z_ is None:
+            Z_ = None
+        # end if
+        if T2d_ is None:
+            T2d_ = None
+        # end if
         
         if YplusX_ == None:
             YplusX_ = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Fe", lambda : ParagonIE_Sodium_Core32_Curve25519_Fe())

@@ -31,7 +31,9 @@ class ParagonIE_Sodium_Core32_HSalsa20(ParagonIE_Sodium_Core32_Salsa20):
     #//
     @classmethod
     def hsalsa20(self, in_=None, k_=None, c_=None):
-        
+        if c_ is None:
+            c_ = None
+        # end if
         
         #// 
         #// @var ParagonIE_Sodium_Core32_Int32 $x0

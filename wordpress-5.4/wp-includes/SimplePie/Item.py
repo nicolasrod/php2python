@@ -907,7 +907,9 @@ class SimplePie_Item():
     #// @return SimplePie_Enclosure|null
     #//
     def get_enclosure(self, key_=0, prefer_=None):
-        
+        if prefer_ is None:
+            prefer_ = None
+        # end if
         
         enclosures_ = self.get_enclosures()
         if (php_isset(lambda : enclosures_[key_])):

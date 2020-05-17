@@ -49,6 +49,9 @@ class WP_REST_Attachments_Controller(WP_REST_Posts_Controller):
         if prepared_args_ is None:
             prepared_args_ = Array()
         # end if
+        if request_ is None:
+            request_ = None
+        # end if
         
         query_args_ = super().prepare_items_query(prepared_args_, request_)
         if php_empty(lambda : query_args_["post_status"]):

@@ -286,7 +286,9 @@ class WP_Session_Tokens():
     #// @param array  $session  Optional. Session. Omitting this argument destroys the session.
     #//
     def update_session(self, verifier_=None, session_=None):
-        
+        if session_ is None:
+            session_ = None
+        # end if
         
         pass
     # end def update_session

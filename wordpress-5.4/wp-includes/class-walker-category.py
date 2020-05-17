@@ -143,7 +143,7 @@ class Walker_Category(Walker):
         atts_ = apply_filters("category_list_link_attributes", atts_, category_, depth_, args_, id_)
         attributes_ = ""
         for attr_,value_ in atts_:
-            if is_scalar(value_) and "" != value_ and False != value_:
+            if php_is_scalar(value_) and "" != value_ and False != value_:
                 value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
                 attributes_ += " " + attr_ + "=\"" + value_ + "\""
             # end if

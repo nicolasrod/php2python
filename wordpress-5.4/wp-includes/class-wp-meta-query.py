@@ -291,7 +291,9 @@ class WP_Meta_Query():
     #// }
     #//
     def get_sql(self, type_=None, primary_table_=None, primary_id_column_=None, context_=None):
-        
+        if context_ is None:
+            context_ = None
+        # end if
         
         meta_table_ = _get_meta_table(type_)
         if (not meta_table_):

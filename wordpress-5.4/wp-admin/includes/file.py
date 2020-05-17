@@ -373,14 +373,14 @@ def wp_edit_theme_plugin_file(args_=None, *_args_):
         needle_end_ = str("###### wp_scraping_result_end:") + str(scrape_key_) + str(" ######")
         #// Attempt loopback request to editor to see if user just whitescreened themselves.
         if plugin_:
-            url_ = add_query_arg(php_compact("plugin", "file"), admin_url("plugin-editor.php"))
+            url_ = add_query_arg(php_compact("plugin_", "file_"), admin_url("plugin-editor.php"))
         elif (php_isset(lambda : stylesheet_)):
             url_ = add_query_arg(Array({"theme": stylesheet_, "file": file_}), admin_url("theme-editor.php"))
         else:
             url_ = admin_url()
         # end if
         url_ = add_query_arg(scrape_params_, url_)
-        r_ = wp_remote_get(url_, php_compact("cookies", "headers", "timeout", "sslverify"))
+        r_ = wp_remote_get(url_, php_compact("cookies_", "headers_", "timeout_", "sslverify_"))
         body_ = wp_remote_retrieve_body(r_)
         scrape_result_position_ = php_strpos(body_, needle_start_)
         loopback_request_failure_ = Array({"code": "loopback_request_failed", "message": __("Unable to communicate back with site to check for fatal errors, so the PHP change was reverted. You will need to upload your PHP file change by some other means, such as by using SFTP.")})
@@ -400,7 +400,7 @@ def wp_edit_theme_plugin_file(args_=None, *_args_):
         if True == result_:
             url_ = home_url("/")
             url_ = add_query_arg(scrape_params_, url_)
-            r_ = wp_remote_get(url_, php_compact("cookies", "headers", "timeout"))
+            r_ = wp_remote_get(url_, php_compact("cookies_", "headers_", "timeout_"))
             body_ = wp_remote_retrieve_body(r_)
             scrape_result_position_ = php_strpos(body_, needle_start_)
             if False == scrape_result_position_:
@@ -706,6 +706,9 @@ def wp_handle_upload(file_=None, overrides_=None, time_=None, *_args_):
     if overrides_ is None:
         overrides_ = False
     # end if
+    if time_ is None:
+        time_ = None
+    # end if
     
     #// 
     #// $_POST['action'] must be set and its value must equal $overrides['action']
@@ -736,6 +739,9 @@ def wp_handle_upload(file_=None, overrides_=None, time_=None, *_args_):
 def wp_handle_sideload(file_=None, overrides_=None, time_=None, *_args_):
     if overrides_ is None:
         overrides_ = False
+    # end if
+    if time_ is None:
+        time_ = None
     # end if
     
     #// 
@@ -1132,7 +1138,7 @@ def _unzip_file_ziparchive(file_=None, to_=None, needed_dirs_=None, *_args_):
     if wp_doing_cron():
         available_space_ = php_no_error(lambda: disk_free_space(WP_CONTENT_DIR))
         if available_space_ and uncompressed_size_ * 2.1 > available_space_:
-            return php_new_class("WP_Error", lambda : WP_Error("disk_full_unzip_file", __("Could not copy files. You may have run out of disk space."), php_compact("uncompressed_size", "available_space")))
+            return php_new_class("WP_Error", lambda : WP_Error("disk_full_unzip_file", __("Could not copy files. You may have run out of disk space."), php_compact("uncompressed_size_", "available_space_")))
         # end if
     # end if
     needed_dirs_ = array_unique(needed_dirs_)
@@ -1246,7 +1252,7 @@ def _unzip_file_pclzip(file_=None, to_=None, needed_dirs_=None, *_args_):
     if wp_doing_cron():
         available_space_ = php_no_error(lambda: disk_free_space(WP_CONTENT_DIR))
         if available_space_ and uncompressed_size_ * 2.1 > available_space_:
-            return php_new_class("WP_Error", lambda : WP_Error("disk_full_unzip_file", __("Could not copy files. You may have run out of disk space."), php_compact("uncompressed_size", "available_space")))
+            return php_new_class("WP_Error", lambda : WP_Error("disk_full_unzip_file", __("Could not copy files. You may have run out of disk space."), php_compact("uncompressed_size_", "available_space_")))
         # end if
     # end if
     needed_dirs_ = array_unique(needed_dirs_)
@@ -1565,6 +1571,9 @@ def request_filesystem_credentials(form_post_=None, type_="", error_=None, conte
     if error_ is None:
         error_ = False
     # end if
+    if extra_fields_ is None:
+        extra_fields_ = None
+    # end if
     if allow_relaxed_file_ownership_ is None:
         allow_relaxed_file_ownership_ = False
     # end if
@@ -1603,7 +1612,7 @@ def request_filesystem_credentials(form_post_=None, type_="", error_=None, conte
     if "direct" == type_:
         return True
     # end if
-    if is_null(extra_fields_):
+    if php_is_null(extra_fields_):
         extra_fields_ = Array("version", "locale")
     # end if
     credentials_ = get_option("ftp_credentials", Array({"hostname": "", "username": ""}))

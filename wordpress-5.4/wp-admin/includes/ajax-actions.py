@@ -841,7 +841,7 @@ def wp_ajax_add_tag(*_args_):
     ob_start()
     wp_list_table_.single_row(tag_)
     parents_ = ob_get_clean()
-    x_.add(Array({"what": "taxonomy", "supplemental": php_compact("parents", "noparents")}))
+    x_.add(Array({"what": "taxonomy", "supplemental": php_compact("parents_", "noparents_")}))
     x_.add(Array({"what": "term", "position": level_, "supplemental": tag_}))
     x_.send()
 # end def wp_ajax_add_tag
@@ -990,7 +990,7 @@ def wp_ajax_replyto_comment(action_=None, *_args_):
         comment_parent_ = absint(PHP_POST["comment_ID"])
     # end if
     comment_auto_approved_ = False
-    commentdata_ = php_compact("comment_post_ID", "comment_author", "comment_author_email", "comment_author_url", "comment_content", "comment_type", "comment_parent", "user_ID")
+    commentdata_ = php_compact("comment_post_ID_", "comment_author_", "comment_author_email_", "comment_author_url_", "comment_content_", "comment_type_", "comment_parent_", "user_ID_")
     #// Automatically approve parent comment.
     if (not php_empty(lambda : PHP_POST["approve_parent"])):
         parent_ = get_comment(comment_parent_)
@@ -3092,7 +3092,7 @@ def wp_ajax_install_theme(*_args_):
     elif skin_.get_errors().has_errors():
         status_["errorMessage"] = skin_.get_error_messages()
         wp_send_json_error(status_)
-    elif is_null(result_):
+    elif php_is_null(result_):
         global wp_filesystem_
         php_check_if_defined("wp_filesystem_")
         status_["errorCode"] = "unable_to_connect_to_filesystem"
@@ -3289,7 +3289,7 @@ def wp_ajax_install_plugin(*_args_):
     elif skin_.get_errors().has_errors():
         status_["errorMessage"] = skin_.get_error_messages()
         wp_send_json_error(status_)
-    elif is_null(result_):
+    elif php_is_null(result_):
         global wp_filesystem_
         php_check_if_defined("wp_filesystem_")
         status_["errorCode"] = "unable_to_connect_to_filesystem"

@@ -44,7 +44,9 @@ def twentynineteen_get_avatar_size(*_args_):
 #// @see get_comment_class()
 #//
 def twentynineteen_is_comment_by_post_author(comment_=None, *_args_):
-    
+    if comment_ is None:
+        comment_ = None
+    # end if
     
     if php_is_object(comment_) and comment_.user_id > 0:
         user_ = get_userdata(comment_.user_id)

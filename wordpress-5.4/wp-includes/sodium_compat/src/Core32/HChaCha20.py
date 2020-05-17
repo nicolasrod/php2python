@@ -24,7 +24,9 @@ class ParagonIE_Sodium_Core32_HChaCha20(ParagonIE_Sodium_Core32_ChaCha20):
     #//
     @classmethod
     def hchacha20(self, in_="", key_="", c_=None):
-        
+        if c_ is None:
+            c_ = None
+        # end if
         
         ctx_ = Array()
         if c_ == None:

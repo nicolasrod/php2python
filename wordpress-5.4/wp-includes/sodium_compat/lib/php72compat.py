@@ -503,7 +503,9 @@ if (not php_is_callable("sodium_crypto_generichash")):
     #// @throws TypeError
     #//
     def sodium_crypto_generichash(message_=None, key_=None, outLen_=32, *_args_):
-        
+        if key_ is None:
+            key_ = None
+        # end if
         
         return ParagonIE_Sodium_Compat.crypto_generichash(message_, key_, outLen_)
     # end def sodium_crypto_generichash
@@ -533,7 +535,9 @@ if (not php_is_callable("sodium_crypto_generichash_init")):
     #// @throws TypeError
     #//
     def sodium_crypto_generichash_init(key_=None, outLen_=32, *_args_):
-        
+        if key_ is None:
+            key_ = None
+        # end if
         
         return ParagonIE_Sodium_Compat.crypto_generichash_init(key_, outLen_)
     # end def sodium_crypto_generichash_init
@@ -697,7 +701,9 @@ if (not php_is_callable("sodium_crypto_pwhash")):
     #// @throws TypeError
     #//
     def sodium_crypto_pwhash(outlen_=None, passwd_=None, salt_=None, opslimit_=None, memlimit_=None, algo_=None, *_args_):
-        
+        if algo_ is None:
+            algo_ = None
+        # end if
         
         return ParagonIE_Sodium_Compat.crypto_pwhash(outlen_, passwd_, salt_, opslimit_, memlimit_, algo_)
     # end def sodium_crypto_pwhash

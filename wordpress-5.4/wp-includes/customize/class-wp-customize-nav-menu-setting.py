@@ -473,7 +473,7 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
                     continue
                 # end if
                 post_value_ = setting_.post_value(None)
-                if (not is_null(post_value_)) and php_intval(post_value_) == self.previous_term_id:
+                if (not php_is_null(post_value_)) and php_intval(post_value_) == self.previous_term_id:
                     self.manager.set_post_value(setting_.id, self.term_id)
                     setting_.save()
                 # end if

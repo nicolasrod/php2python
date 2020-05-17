@@ -22,7 +22,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @see Iterator
 #// @see ArrayAccess
 #//
-class WP_Hook():
+class WP_Hook(IteratorArrayAccess):
     #// 
     #// Hook callbacks.
     #// 
@@ -429,7 +429,7 @@ class WP_Hook():
     def offsetset(self, offset_=None, value_=None):
         
         
-        if is_null(offset_):
+        if php_is_null(offset_):
             self.callbacks[-1] = value_
         else:
             self.callbacks[offset_] = value_

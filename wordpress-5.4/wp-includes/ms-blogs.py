@@ -119,6 +119,9 @@ def get_id_from_blogname(slug_=None, *_args_):
 #// @return WP_Site|false Blog details on success. False on failure.
 #//
 def get_blog_details(fields_=None, get_all_=None, *_args_):
+    if fields_ is None:
+        fields_ = None
+    # end if
     if get_all_ is None:
         get_all_ = True
     # end if
@@ -424,7 +427,9 @@ def delete_blog_option(id_=None, option_=None, *_args_):
 #// @return bool True on success, false on failure.
 #//
 def update_blog_option(id_=None, option_=None, value_=None, deprecated_=None, *_args_):
-    
+    if deprecated_ is None:
+        deprecated_ = None
+    # end if
     
     id_ = php_int(id_)
     if None != deprecated_:
@@ -462,7 +467,9 @@ def update_blog_option(id_=None, option_=None, value_=None, deprecated_=None, *_
 #// @return true Always returns true.
 #//
 def switch_to_blog(new_blog_id_=None, deprecated_=None, *_args_):
-    
+    if deprecated_ is None:
+        deprecated_ = None
+    # end if
     global PHP_GLOBALS
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -658,7 +665,9 @@ def update_archived(id_=None, archived_=None, *_args_):
 #// @return string|false $value
 #//
 def update_blog_status(blog_id_=None, pref_=None, value_=None, deprecated_=None, *_args_):
-    
+    if deprecated_ is None:
+        deprecated_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -791,7 +800,9 @@ def _update_posts_count_on_delete(post_id_=None, *_args_):
 #// @param WP_Post $post       Post object
 #//
 def _update_posts_count_on_transition_post_status(new_status_=None, old_status_=None, post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     if new_status_ == old_status_:
         return
@@ -822,7 +833,9 @@ def _update_posts_count_on_transition_post_status(new_status_=None, old_status_=
 #// }
 #//
 def wp_count_sites(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     if php_empty(lambda : network_id_):
         network_id_ = get_current_network_id()

@@ -65,7 +65,9 @@ def unregister_block_type(name_=None, *_args_):
 #// @return bool Whether the post has blocks.
 #//
 def has_blocks(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     if (not php_is_string(post_)):
         wp_post_ = get_post(post_)
@@ -90,7 +92,9 @@ def has_blocks(post_=None, *_args_):
 #// @return bool Whether the post content contains the specified block.
 #//
 def has_block(block_name_=None, post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     if (not has_blocks(post_)):
         return False
@@ -177,7 +181,9 @@ def serialize_block_attributes(block_attributes_=None, *_args_):
 #// @return string Block name to use for serialization.
 #//
 def strip_core_block_namespace(block_name_=None, *_args_):
-    
+    if block_name_ is None:
+        block_name_ = None
+    # end if
     
     if php_is_string(block_name_) and 0 == php_strpos(block_name_, "core/"):
         return php_substr(block_name_, 5)
@@ -195,9 +201,11 @@ def strip_core_block_namespace(block_name_=None, *_args_):
 #// @return string Comment-delimited block content.
 #//
 def get_comment_delimited_block_content(block_name_=None, block_attributes_=None, block_content_=None, *_args_):
+    if block_name_ is None:
+        block_name_ = None
+    # end if
     
-    
-    if is_null(block_name_):
+    if php_is_null(block_name_):
         return block_content_
     # end if
     serialized_block_name_ = strip_core_block_namespace(block_name_)
@@ -429,7 +437,7 @@ def render_block(block_=None, *_args_):
     #// @param array       $block      The block being rendered.
     #//
     pre_render_ = apply_filters("pre_render_block", None, block_)
-    if (not is_null(pre_render_)):
+    if (not php_is_null(pre_render_)):
         return pre_render_
     # end if
     source_block_ = block_

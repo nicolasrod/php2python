@@ -720,7 +720,7 @@ elif "do-translation-upgrade" == action_:
     nonce_ = "upgrade-translations"
     title_ = __("Update Translations")
     context_ = WP_LANG_DIR
-    upgrader_ = php_new_class("Language_Pack_Upgrader", lambda : Language_Pack_Upgrader(php_new_class("Language_Pack_Upgrader_Skin", lambda : Language_Pack_Upgrader_Skin(php_compact("url", "nonce", "title", "context")))))
+    upgrader_ = php_new_class("Language_Pack_Upgrader", lambda : Language_Pack_Upgrader(php_new_class("Language_Pack_Upgrader_Skin", lambda : Language_Pack_Upgrader_Skin(php_compact("url_", "nonce_", "title_", "context_")))))
     result_ = upgrader_.bulk_upgrade()
     wp_localize_script("updates", "_wpUpdatesItemCounts", Array({"totals": wp_get_update_data()}))
     php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)

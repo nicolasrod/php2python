@@ -209,6 +209,9 @@ class ftp_sockets(ftp_base):
         if mode_ is None:
             mode_ = FTP_ASCII
         # end if
+        if fp_ is None:
+            fp_ = None
+        # end if
         
         NewLine_ = self._eol_code[self.OS_local]
         if is_resource(fp_):
@@ -247,6 +250,9 @@ class ftp_sockets(ftp_base):
     def _data_write(self, mode_=None, fp_=None):
         if mode_ is None:
             mode_ = FTP_ASCII
+        # end if
+        if fp_ is None:
+            fp_ = None
         # end if
         
         NewLine_ = self._eol_code[self.OS_local]

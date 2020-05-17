@@ -204,7 +204,9 @@ class SimplePie_IRI():
     #// @param string $iri
     #//
     def __init__(self, iri_=None):
-        
+        if iri_ is None:
+            iri_ = None
+        # end if
         
         self.set_iri(iri_)
     # end def __init__

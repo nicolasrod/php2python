@@ -499,6 +499,9 @@ def wp_get_scheduled_event(hook_=None, args_=None, timestamp_=None, *_args_):
     if args_ is None:
         args_ = Array()
     # end if
+    if timestamp_ is None:
+        timestamp_ = None
+    # end if
     
     #// 
     #// Filter to preflight or hijack retrieving a scheduled event.

@@ -409,7 +409,7 @@ class WP_List_Table():
     def bulk_actions(self, which_=""):
         
         
-        if is_null(self._actions):
+        if php_is_null(self._actions):
             self._actions = self.get_bulk_actions()
             #// 
             #// Filters the list table Bulk Actions drop-down.
@@ -970,7 +970,7 @@ class WP_List_Table():
                     class_[-1] = "sortable"
                     class_[-1] = "asc" if desc_first_ else "desc"
                 # end if
-                column_display_name_ = "<a href=\"" + esc_url(add_query_arg(php_compact("orderby", "order"), current_url_)) + "\"><span>" + column_display_name_ + "</span><span class=\"sorting-indicator\"></span></a>"
+                column_display_name_ = "<a href=\"" + esc_url(add_query_arg(php_compact("orderby_", "order_"), current_url_)) + "\"><span>" + column_display_name_ + "</span><span class=\"sorting-indicator\"></span></a>"
             # end if
             tag_ = "td" if "cb" == column_key_ else "th"
             scope_ = "scope=\"col\"" if "th" == tag_ else ""

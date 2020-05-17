@@ -181,7 +181,7 @@ class WP_Customize_Widgets():
         widget_setting_ids_ = Array()
         incoming_setting_ids_ = php_array_keys(self.manager.unsanitized_post_values())
         for setting_id_ in incoming_setting_ids_:
-            if (not is_null(self.get_setting_type(setting_id_))):
+            if (not php_is_null(self.get_setting_type(setting_id_))):
                 widget_setting_ids_[-1] = setting_id_
             # end if
         # end for
@@ -222,7 +222,9 @@ class WP_Customize_Widgets():
     #// @return mixed Unslashed post value or default value.
     #//
     def get_post_value(self, name_=None, default_=None):
-        
+        if default_ is None:
+            default_ = None
+        # end if
         
         if (not (php_isset(lambda : PHP_POST[name_]))):
             return default_
@@ -469,7 +471,7 @@ class WP_Customize_Widgets():
         
         parsed_widget_id_ = self.parse_widget_id(widget_id_)
         setting_id_ = php_sprintf("widget_%s", parsed_widget_id_["id_base"])
-        if (not is_null(parsed_widget_id_["number"])):
+        if (not php_is_null(parsed_widget_id_["number"])):
             setting_id_ += php_sprintf("[%d]", parsed_widget_id_["number"])
         # end if
         return setting_id_
@@ -548,7 +550,7 @@ class WP_Customize_Widgets():
         # end if
         id_base_ = matches_[2]
         number_ = php_intval(matches_[3]) if (php_isset(lambda : matches_[3])) else None
-        return php_compact("id_base", "number")
+        return php_compact("id_base_", "number_")
     # end def parse_widget_setting_id
     #// 
     #// Calls admin_print_styles-widgets.php and admin_print_styles hooks to
@@ -897,7 +899,7 @@ class WP_Customize_Widgets():
         control_ = php_substr(control_markup_, 0, content_start_pos_ + php_strlen(args_[0]["before_widget_content"]))
         control_ += php_substr(control_markup_, content_end_pos_)
         content_ = php_trim(php_substr(control_markup_, content_start_pos_ + php_strlen(args_[0]["before_widget_content"]), content_end_pos_ - content_start_pos_ - php_strlen(args_[0]["before_widget_content"])))
-        return php_compact("control", "content")
+        return php_compact("control_", "content_")
     # end def get_widget_control_parts
     #// 
     #// Adds hooks for the Customizer preview.
@@ -1229,11 +1231,11 @@ class WP_Customize_Widgets():
                 return php_new_class("WP_Error", lambda : WP_Error("widget_setting_malformed"))
             # end if
             instance_ = self.sanitize_widget_instance(sanitized_widget_setting_)
-            if is_null(instance_):
+            if php_is_null(instance_):
                 self.stop_capturing_option_updates()
                 return php_new_class("WP_Error", lambda : WP_Error("widget_setting_unsanitized"))
             # end if
-            if (not is_null(parsed_id_["number"])):
+            if (not php_is_null(parsed_id_["number"])):
                 value_ = Array()
                 value_[parsed_id_["number"]] = instance_
                 key_ = "widget-" + parsed_id_["id_base"]
@@ -1296,7 +1298,7 @@ class WP_Customize_Widgets():
         # end if
         form_ = ob_get_clean()
         self.stop_capturing_option_updates()
-        return php_compact("instance", "form")
+        return php_compact("instance_", "form_")
     # end def call_widget_update
     #// 
     #// Updates widget settings asynchronously.
@@ -1345,7 +1347,7 @@ class WP_Customize_Widgets():
         # end if
         form_ = updated_widget_["form"]
         instance_ = self.sanitize_widget_js_instance(updated_widget_["instance"])
-        wp_send_json_success(php_compact("form", "instance"))
+        wp_send_json_success(php_compact("form_", "instance_"))
     # end def wp_ajax_update_widget
     #// 
     #// Selective Refresh Methods

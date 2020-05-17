@@ -452,7 +452,9 @@ def wp_set_wpdb_vars(*_args_):
 #// @return bool The current 'using' setting.
 #//
 def wp_using_ext_object_cache(using_=None, *_args_):
-    
+    if using_ is None:
+        using_ = None
+    # end if
     
     global _wp_using_ext_object_cache_
     php_check_if_defined("_wp_using_ext_object_cache_")
@@ -1139,14 +1141,16 @@ def wp_load_translations_early(*_args_):
 #// report whether WP was in installing mode prior to the change to `$is_installing`.
 #//
 def wp_installing(is_installing_=None, *_args_):
-    
+    if is_installing_ is None:
+        is_installing_ = None
+    # end if
     
     installing_ = None
     #// Support for the `WP_INSTALLING` constant, defined before WP is loaded.
-    if is_null(installing_):
+    if php_is_null(installing_):
         installing_ = php_defined("WP_INSTALLING") and WP_INSTALLING
     # end if
-    if (not is_null(is_installing_)):
+    if (not php_is_null(is_installing_)):
         old_installing_ = installing_
         installing_ = is_installing_
         return php_bool(old_installing_)

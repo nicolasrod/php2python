@@ -703,7 +703,7 @@ class Custom_Image_Header():
             if php_file_exists(file_):
                 wp_update_attachment_metadata(attachment_id_, wp_generate_attachment_metadata(attachment_id_, file_))
             # end if
-            self.set_header_image(php_compact("url", "attachment_id", "width", "height"))
+            self.set_header_image(php_compact("url_", "attachment_id_", "width_", "height_"))
             #// 
             #// Fires after the header image is set or an error is returned.
             #// 
@@ -801,7 +801,7 @@ class Custom_Image_Header():
         object_ = Array({"post_title": filename_, "post_content": url_, "post_mime_type": type_, "guid": url_, "context": "custom-header"})
         #// Save the data.
         attachment_id_ = wp_insert_attachment(object_, file_)
-        return php_compact("attachment_id", "file", "filename", "url", "type")
+        return php_compact("attachment_id_", "file_", "filename_", "url_", "type_")
     # end def step_2_manage_upload
     #// 
     #// Display third step of custom header image page.
@@ -851,7 +851,7 @@ class Custom_Image_Header():
         #// Update the attachment.
         attachment_id_ = self.insert_attachment(object_, cropped_)
         url_ = wp_get_attachment_url(attachment_id_)
-        self.set_header_image(php_compact("url", "attachment_id", "width", "height"))
+        self.set_header_image(php_compact("url_", "attachment_id_", "width_", "height_"))
         #// Cleanup.
         medium_ = php_str_replace(wp_basename(original_), "midsize-" + wp_basename(original_), original_)
         if php_file_exists(medium_):

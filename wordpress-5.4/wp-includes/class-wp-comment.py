@@ -248,7 +248,7 @@ class WP_Comment():
         defaults_ = Array({"format": "tree", "status": "all", "hierarchical": "threaded", "orderby": ""})
         _args_ = wp_parse_args(args_, defaults_)
         _args_["parent"] = self.comment_ID
-        if is_null(self.children):
+        if php_is_null(self.children):
             if self.populated_children:
                 self.children = Array()
             else:

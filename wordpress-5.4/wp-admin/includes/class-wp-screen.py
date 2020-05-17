@@ -421,7 +421,9 @@ class WP_Screen():
     #// @return bool True if the screen is in the indicated admin, false otherwise.
     #//
     def in_admin(self, admin_=None):
-        
+        if admin_ is None:
+            admin_ = None
+        # end if
         
         if php_empty(lambda : admin_):
             return php_bool(self.in_admin)
@@ -437,7 +439,9 @@ class WP_Screen():
     #// @return bool True if the block editor is being loaded, false otherwise.
     #//
     def is_block_editor(self, set_=None):
-        
+        if set_ is None:
+            set_ = None
+        # end if
         
         if None != set_:
             self.is_block_editor = php_bool(set_)

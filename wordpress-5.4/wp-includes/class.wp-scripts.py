@@ -465,7 +465,7 @@ class WP_Scripts(WP_Dependencies):
             l10n_["l10n_print_after"] = None
         # end if
         for key_,value_ in l10n_:
-            if (not is_scalar(value_)):
+            if (not php_is_scalar(value_)):
                 continue
             # end if
             l10n_[key_] = html_entity_decode(php_str(value_), ENT_QUOTES, "UTF-8")
@@ -520,7 +520,9 @@ class WP_Scripts(WP_Dependencies):
     #// @return bool True if the text domain was registered, false if not.
     #//
     def set_translations(self, handle_=None, domain_="default", path_=None):
-        
+        if path_ is None:
+            path_ = None
+        # end if
         
         if (not (php_isset(lambda : self.registered[handle_]))):
             return False

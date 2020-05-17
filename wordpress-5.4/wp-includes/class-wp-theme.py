@@ -14,7 +14,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Theme
 #// @since 3.4.0
 #//
-class WP_Theme():
+class WP_Theme(ArrayAccess):
     #// 
     #// Whether the theme has been marked as updateable.
     #// 
@@ -146,7 +146,9 @@ class WP_Theme():
     #// @param WP_Theme|null $_child If this theme is a parent theme, the child may be passed for validation purposes.
     #//
     def __init__(self, theme_dir_=None, theme_root_=None, _child_=None):
-        
+        if _child_ is None:
+            _child_ = None
+        # end if
         
         global wp_theme_directories_
         php_check_if_defined("wp_theme_directories_")
@@ -1018,6 +1020,9 @@ class WP_Theme():
     #// being absolute paths.
     #//
     def get_files(self, type_=None, depth_=0, search_parent_=None):
+        if type_ is None:
+            type_ = None
+        # end if
         if search_parent_ is None:
             search_parent_ = False
         # end if
@@ -1086,7 +1091,9 @@ class WP_Theme():
     #// @return string[] Array of template header names keyed by the template file name.
     #//
     def get_page_templates(self, post_=None, post_type_="page"):
-        
+        if post_ is None:
+            post_ = None
+        # end if
         
         if post_:
             post_type_ = get_post_type(post_)
@@ -1138,7 +1145,9 @@ class WP_Theme():
     #// with `$relative_path`, with the values being absolute paths. False otherwise.
     #//
     def scandir(self, path_=None, extensions_=None, depth_=0, relative_path_=""):
-        
+        if extensions_ is None:
+            extensions_ = None
+        # end if
         
         if (not php_is_dir(path_)):
             return False
@@ -1224,7 +1233,9 @@ class WP_Theme():
     #// @return bool Whether the theme is allowed for the network. Returns true in single-site.
     #//
     def is_allowed(self, check_="both", blog_id_=None):
-        
+        if blog_id_ is None:
+            blog_id_ = None
+        # end if
         
         if (not is_multisite()):
             return True
@@ -1274,7 +1285,9 @@ class WP_Theme():
     #//
     @classmethod
     def get_allowed(self, blog_id_=None):
-        
+        if blog_id_ is None:
+            blog_id_ = None
+        # end if
         
         #// 
         #// Filters the array of themes allowed on the network.
@@ -1329,7 +1342,9 @@ class WP_Theme():
     #//
     @classmethod
     def get_allowed_on_site(self, blog_id_=None):
-        
+        if blog_id_ is None:
+            blog_id_ = None
+        # end if
         
         allowed_themes_ = Array()
         if (not blog_id_) or (not is_multisite()):

@@ -194,7 +194,7 @@ def wp_insert_link(linkdata_=None, wp_error_=None, *_args_):
         link_category_ = Array(get_option("default_link_category"))
     # end if
     if update_:
-        if False == wpdb_.update(wpdb_.links, php_compact("link_url", "link_name", "link_image", "link_target", "link_description", "link_visible", "link_owner", "link_rating", "link_rel", "link_notes", "link_rss"), php_compact("link_id")):
+        if False == wpdb_.update(wpdb_.links, php_compact("link_url_", "link_name_", "link_image_", "link_target_", "link_description_", "link_visible_", "link_owner_", "link_rating_", "link_rel_", "link_notes_", "link_rss_"), php_compact("link_id_")):
             if wp_error_:
                 return php_new_class("WP_Error", lambda : WP_Error("db_update_error", __("Could not update link in the database"), wpdb_.last_error))
             else:
@@ -202,7 +202,7 @@ def wp_insert_link(linkdata_=None, wp_error_=None, *_args_):
             # end if
         # end if
     else:
-        if False == wpdb_.insert(wpdb_.links, php_compact("link_url", "link_name", "link_image", "link_target", "link_description", "link_visible", "link_owner", "link_rating", "link_rel", "link_notes", "link_rss")):
+        if False == wpdb_.insert(wpdb_.links, php_compact("link_url_", "link_name_", "link_image_", "link_target_", "link_description_", "link_visible_", "link_owner_", "link_rating_", "link_rel_", "link_notes_", "link_rss_")):
             if wp_error_:
                 return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not insert link into the database"), wpdb_.last_error))
             else:

@@ -143,7 +143,7 @@ class WP_Http_Curl():
             # end if
             if case():
                 curl_setopt(handle_, CURLOPT_CUSTOMREQUEST, parsed_args_["method"])
-                if (not is_null(parsed_args_["body"])):
+                if (not php_is_null(parsed_args_["body"])):
                     curl_setopt(handle_, CURLOPT_POSTFIELDS, parsed_args_["body"])
                 # end if
                 break

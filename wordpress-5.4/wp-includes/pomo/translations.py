@@ -108,7 +108,9 @@ if (not php_class_exists("Translations", False)):
         #// @return string
         #//
         def translate(self, singular_=None, context_=None):
-            
+            if context_ is None:
+                context_ = None
+            # end if
             
             entry_ = php_new_class("Translation_Entry", lambda : Translation_Entry(Array({"singular": singular_, "context": context_})))
             translated_ = self.translate_entry(entry_)
@@ -145,7 +147,9 @@ if (not php_class_exists("Translations", False)):
         #// @param string $context
         #//
         def translate_plural(self, singular_=None, plural_=None, count_=None, context_=None):
-            
+            if context_ is None:
+                context_ = None
+            # end if
             
             entry_ = php_new_class("Translation_Entry", lambda : Translation_Entry(Array({"singular": singular_, "plural": plural_, "context": context_})))
             translated_ = self.translate_entry(entry_)
@@ -197,7 +201,7 @@ if (not php_class_exists("Translations", False)):
         def gettext_select_plural_form(self, count_=None):
             
             
-            if (not (php_isset(lambda : self._gettext_select_plural_form))) or is_null(self._gettext_select_plural_form):
+            if (not (php_isset(lambda : self._gettext_select_plural_form))) or php_is_null(self._gettext_select_plural_form):
                 nplurals_, expression_ = self.nplurals_and_expression_from_header(self.get_header("Plural-Forms"))
                 self._nplurals = nplurals_
                 self._gettext_select_plural_form = self.make_plural_form_function(nplurals_, expression_)
@@ -365,7 +369,9 @@ if (not php_class_exists("NOOP_Translations", False)):
         #// @param string $context
         #//
         def translate(self, singular_=None, context_=None):
-            
+            if context_ is None:
+                context_ = None
+            # end if
             
             return singular_
         # end def translate
@@ -393,7 +399,9 @@ if (not php_class_exists("NOOP_Translations", False)):
         #// @param string $context
         #//
         def translate_plural(self, singular_=None, plural_=None, count_=None, context_=None):
-            
+            if context_ is None:
+                context_ = None
+            # end if
             
             return singular_ if 1 == count_ else plural_
         # end def translate_plural

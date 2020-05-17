@@ -836,7 +836,9 @@ def wp_save_nav_menu_items(menu_id_=0, menu_data_=None, *_args_):
 #// @return object The post type or taxonomy object.
 #//
 def _wp_nav_menu_meta_box_object(object_=None, *_args_):
-    
+    if object_ is None:
+        object_ = None
+    # end if
     
     if (php_isset(lambda : object_.name)):
         if "page" == object_.name:
@@ -1036,7 +1038,7 @@ def _wp_expand_nav_menu_post_data(*_args_):
         return
     # end if
     data_ = php_json_decode(stripslashes(PHP_POST["nav-menu-data"]))
-    if (not is_null(data_)) and data_:
+    if (not php_is_null(data_)) and data_:
         for post_input_data_ in data_:
             #// For input names that are arrays (e.g. `menu-item-db-id[3][4][5]`),
             #// derive the array path keys via regex and set the value in $_POST.

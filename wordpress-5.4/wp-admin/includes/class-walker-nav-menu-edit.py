@@ -34,7 +34,9 @@ class Walker_Nav_Menu_Edit(Walker_Nav_Menu):
     #// @param stdClass $args   Not used.
     #//
     def start_lvl(self, output_=None, depth_=0, args_=None):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         pass
     # end def start_lvl
@@ -50,7 +52,9 @@ class Walker_Nav_Menu_Edit(Walker_Nav_Menu):
     #// @param stdClass $args   Not used.
     #//
     def end_lvl(self, output_=None, depth_=0, args_=None):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         pass
     # end def end_lvl
@@ -69,7 +73,9 @@ class Walker_Nav_Menu_Edit(Walker_Nav_Menu):
     #// @param int      $id     Not used.
     #//
     def start_el(self, output_=None, item_=None, depth_=0, args_=None, id_=0):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         global _wp_nav_menu_max_depth_
         php_check_if_defined("_wp_nav_menu_max_depth_")

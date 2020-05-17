@@ -819,7 +819,9 @@ if (not php_class_exists("Services_JSON")):
         #// @todo Ultimately, this should just call PEAR::isError()
         #//
         def iserror(self, data_=None, code_=None):
-            
+            if code_ is None:
+                code_ = None
+            # end if
             
             _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
             if php_class_exists("pear"):
@@ -879,7 +881,18 @@ if (not php_class_exists("Services_JSON")):
             #// @deprecated 5.3.0 Use the PHP native JSON extension instead.
             #//
             def __init__(self, message_="unknown error", code_=None, mode_=None, options_=None, userinfo_=None):
-                
+                if code_ is None:
+                    code_ = None
+                # end if
+                if mode_ is None:
+                    mode_ = None
+                # end if
+                if options_ is None:
+                    options_ = None
+                # end if
+                if userinfo_ is None:
+                    userinfo_ = None
+                # end if
                 
                 _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
                 super().pear_error(message_, code_, mode_, options_, userinfo_)
@@ -892,7 +905,18 @@ if (not php_class_exists("Services_JSON")):
             #// @see Services_JSON_Error::__construct()
             #//
             def services_json_error(self, message_="unknown error", code_=None, mode_=None, options_=None, userinfo_=None):
-                
+                if code_ is None:
+                    code_ = None
+                # end if
+                if mode_ is None:
+                    mode_ = None
+                # end if
+                if options_ is None:
+                    options_ = None
+                # end if
+                if userinfo_ is None:
+                    userinfo_ = None
+                # end if
                 
                 _deprecated_constructor("Services_JSON_Error", "5.3.0", get_class(self))
                 self.__init__(message_, code_, mode_, options_, userinfo_)
@@ -909,7 +933,18 @@ if (not php_class_exists("Services_JSON")):
             #// @deprecated 5.3.0 Use the PHP native JSON extension instead.
             #//
             def __init__(self, message_="unknown error", code_=None, mode_=None, options_=None, userinfo_=None):
-                
+                if code_ is None:
+                    code_ = None
+                # end if
+                if mode_ is None:
+                    mode_ = None
+                # end if
+                if options_ is None:
+                    options_ = None
+                # end if
+                if userinfo_ is None:
+                    userinfo_ = None
+                # end if
                 
                 _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
             # end def __init__
@@ -921,7 +956,18 @@ if (not php_class_exists("Services_JSON")):
             #// @see Services_JSON_Error::__construct()
             #//
             def services_json_error(self, message_="unknown error", code_=None, mode_=None, options_=None, userinfo_=None):
-                
+                if code_ is None:
+                    code_ = None
+                # end if
+                if mode_ is None:
+                    mode_ = None
+                # end if
+                if options_ is None:
+                    options_ = None
+                # end if
+                if userinfo_ is None:
+                    userinfo_ = None
+                # end if
                 
                 _deprecated_constructor("Services_JSON_Error", "5.3.0", get_class(self))
                 self.__init__(message_, code_, mode_, options_, userinfo_)

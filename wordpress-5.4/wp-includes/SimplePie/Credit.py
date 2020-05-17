@@ -88,7 +88,15 @@ class SimplePie_Credit():
     #// properties and their accessors
     #//
     def __init__(self, role_=None, scheme_=None, name_=None):
-        
+        if role_ is None:
+            role_ = None
+        # end if
+        if scheme_ is None:
+            scheme_ = None
+        # end if
+        if name_ is None:
+            name_ = None
+        # end if
         
         self.role = role_
         self.scheme = scheme_

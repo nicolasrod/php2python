@@ -394,7 +394,7 @@ def wp_register_sidebar_widget(id_=None, name_=None, output_callback_=None, opti
 def wp_widget_description(id_=None, *_args_):
     
     
-    if (not is_scalar(id_)):
+    if (not php_is_scalar(id_)):
         return
     # end if
     global wp_registered_widgets_
@@ -419,7 +419,7 @@ def wp_widget_description(id_=None, *_args_):
 def wp_sidebar_description(id_=None, *_args_):
     
     
-    if (not is_scalar(id_)):
+    if (not php_is_scalar(id_)):
         return
     # end if
     global wp_registered_sidebars_
@@ -1465,7 +1465,9 @@ def wp_widget_rss_output(rss_=None, args_=None, *_args_):
 #// @param array $inputs Override default display options.
 #//
 def wp_widget_rss_form(args_=None, inputs_=None, *_args_):
-    
+    if inputs_ is None:
+        inputs_ = None
+    # end if
     
     default_inputs_ = Array({"url": True, "title": True, "items": True, "show_summary": True, "show_author": True, "show_date": True})
     inputs_ = wp_parse_args(inputs_, default_inputs_)
@@ -1631,7 +1633,7 @@ def wp_widget_rss_process(widget_rss_=None, check_feed_=None, *_args_):
             rss_ = None
         # end if
     # end if
-    return php_compact("title", "url", "link", "items", "error", "show_summary", "show_author", "show_date")
+    return php_compact("title_", "url_", "link_", "items_", "error_", "show_summary_", "show_author_", "show_date_")
 # end def wp_widget_rss_process
 #// 
 #// Registers all of the default WordPress widgets on startup.

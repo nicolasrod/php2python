@@ -230,7 +230,12 @@ def date_i18n(format_=None, timestamp_with_offset_=None, gmt_=None, *_args_):
 #// @return string|false The date, translated if locale specifies it. False on invalid timestamp input.
 #//
 def wp_date(format_=None, timestamp_=None, timezone_=None, *_args_):
-    
+    if timestamp_ is None:
+        timestamp_ = None
+    # end if
+    if timezone_ is None:
+        timezone_ = None
+    # end if
     
     global wp_locale_
     php_check_if_defined("wp_locale_")
@@ -552,7 +557,7 @@ def get_weekstartend(mysqlstring_=None, start_of_week_="", *_args_):
     start_ = day_ - DAY_IN_SECONDS * weekday_ - start_of_week_
     #// $start + 1 week - 1 second.
     end_ = start_ + WEEK_IN_SECONDS - 1
-    return php_compact("start", "end")
+    return php_compact("start_", "end_")
 # end def get_weekstartend
 #// 
 #// Unserialize value only if it was serialized.
@@ -807,7 +812,9 @@ def wp_extract_urls(content_=None, *_args_):
 #// @return null|bool Returns false if post is not found.
 #//
 def do_enclose(content_=None, post_=None, *_args_):
-    
+    if content_ is None:
+        content_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -974,6 +981,12 @@ def build_query(data_=None, *_args_):
 #// @return string The query string.
 #//
 def _http_build_query(data_=None, prefix_=None, sep_=None, key_="", urlencode_=None, *_args_):
+    if prefix_ is None:
+        prefix_ = None
+    # end if
+    if sep_ is None:
+        sep_ = None
+    # end if
     if urlencode_ is None:
         urlencode_ = True
     # end if
@@ -2114,6 +2127,9 @@ def wp_get_upload_dir(*_args_):
 #// }
 #//
 def wp_upload_dir(time_=None, create_dir_=None, refresh_cache_=None, *_args_):
+    if time_ is None:
+        time_ = None
+    # end if
     if create_dir_ is None:
         create_dir_ = True
     # end if
@@ -2172,7 +2188,9 @@ def wp_upload_dir(time_=None, create_dir_=None, refresh_cache_=None, *_args_):
 #// @return array See wp_upload_dir()
 #//
 def _wp_upload_dir(time_=None, *_args_):
-    
+    if time_ is None:
+        time_ = None
+    # end if
     
     siteurl_ = get_option("siteurl")
     upload_path_ = php_trim(get_option("upload_path"))
@@ -2274,7 +2292,9 @@ def _wp_upload_dir(time_=None, *_args_):
 #// @return string New filename, if given wasn't unique.
 #//
 def wp_unique_filename(dir_=None, filename_=None, unique_filename_callback_=None, *_args_):
-    
+    if unique_filename_callback_ is None:
+        unique_filename_callback_ = None
+    # end if
     
     #// Sanitize the file name before we begin processing.
     filename_ = sanitize_file_name(filename_)
@@ -2432,7 +2452,9 @@ def _wp_check_existing_file_names(filename_=None, files_=None, *_args_):
 #// @return array
 #//
 def wp_upload_bits(name_=None, deprecated_=None, bits_=None, time_=None, *_args_):
-    
+    if time_ is None:
+        time_ = None
+    # end if
     
     if (not php_empty(lambda : deprecated_)):
         _deprecated_argument(__FUNCTION__, "2.0.0")
@@ -2528,7 +2550,9 @@ def wp_ext2type(ext_=None, *_args_):
 #// }
 #//
 def wp_check_filetype(filename_=None, mimes_=None, *_args_):
-    
+    if mimes_ is None:
+        mimes_ = None
+    # end if
     
     if php_empty(lambda : mimes_):
         mimes_ = get_allowed_mime_types()
@@ -2543,7 +2567,7 @@ def wp_check_filetype(filename_=None, mimes_=None, *_args_):
             break
         # end if
     # end for
-    return php_compact("ext", "type")
+    return php_compact("ext_", "type_")
 # end def wp_check_filetype
 #// 
 #// Attempt to determine the real file type of a file.
@@ -2570,7 +2594,9 @@ def wp_check_filetype(filename_=None, mimes_=None, *_args_):
 #// }
 #//
 def wp_check_filetype_and_ext(file_=None, filename_=None, mimes_=None, *_args_):
-    
+    if mimes_ is None:
+        mimes_ = None
+    # end if
     
     proper_filename_ = False
     #// Do basic extension validation and MIME mapping.
@@ -2579,7 +2605,7 @@ def wp_check_filetype_and_ext(file_=None, filename_=None, mimes_=None, *_args_):
     type_ = wp_filetype_["type"]
     #// We can't do any further validation without a file to work with.
     if (not php_file_exists(file_)):
-        return php_compact("ext", "type", "proper_filename")
+        return php_compact("ext_", "type_", "proper_filename_")
     # end if
     real_mime_ = False
     #// Validate image types.
@@ -2693,7 +2719,7 @@ def wp_check_filetype_and_ext(file_=None, filename_=None, mimes_=None, *_args_):
     #// @param string[]    $mimes                     Array of mime types keyed by their file extension regex.
     #// @param string|bool $real_mime                 The actual mime type or false if the type cannot be determined.
     #//
-    return apply_filters("wp_check_filetype_and_ext", php_compact("ext", "type", "proper_filename"), file_, filename_, mimes_, real_mime_)
+    return apply_filters("wp_check_filetype_and_ext", php_compact("ext_", "type_", "proper_filename_"), file_, filename_, mimes_, real_mime_)
 # end def wp_check_filetype_and_ext
 #// 
 #// Returns the real mime type of an image file.
@@ -2785,7 +2811,9 @@ def wp_get_ext_types(*_args_):
 #// to those types.
 #//
 def get_allowed_mime_types(user_=None, *_args_):
-    
+    if user_ is None:
+        user_ = None
+    # end if
     
     t_ = wp_get_mime_types()
     t_["swf"] = None
@@ -3158,7 +3186,7 @@ def _ajax_wp_die_handler(message_=None, title_="", args_=None, *_args_):
         # end if
         nocache_headers()
     # end if
-    if is_scalar(message_):
+    if php_is_scalar(message_):
         message_ = php_str(message_)
     else:
         message_ = "0"
@@ -3321,13 +3349,13 @@ def _scalar_wp_die_handler(message_="", title_="", args_=None, *_args_):
     
     message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
     if parsed_args_["exit"]:
-        if is_scalar(message_):
+        if php_is_scalar(message_):
             php_print(php_str(message_))
             php_exit()
         # end if
         php_exit(0)
     # end if
-    if is_scalar(message_):
+    if php_is_scalar(message_):
         php_print(php_str(message_))
     # end if
 # end def _scalar_wp_die_handler
@@ -3506,7 +3534,7 @@ def _wp_json_convert_string(string_=None, *_args_):
     
     
     use_mb_ = None
-    if is_null(use_mb_):
+    if php_is_null(use_mb_):
         use_mb_ = php_function_exists("mb_convert_encoding")
     # end if
     if use_mb_:
@@ -3551,7 +3579,9 @@ def _wp_json_prepare_data(data_=None, *_args_):
 #// @param int   $status_code The HTTP status code to output.
 #//
 def wp_send_json(response_=None, status_code_=None, *_args_):
-    
+    if status_code_ is None:
+        status_code_ = None
+    # end if
     
     if (not php_headers_sent()):
         php_header("Content-Type: application/json; charset=" + get_option("blog_charset"))
@@ -3576,7 +3606,12 @@ def wp_send_json(response_=None, status_code_=None, *_args_):
 #// @param int   $status_code The HTTP status code to output.
 #//
 def wp_send_json_success(data_=None, status_code_=None, *_args_):
-    
+    if data_ is None:
+        data_ = None
+    # end if
+    if status_code_ is None:
+        status_code_ = None
+    # end if
     
     response_ = Array({"success": True})
     if (php_isset(lambda : data_)):
@@ -3600,7 +3635,12 @@ def wp_send_json_success(data_=None, status_code_=None, *_args_):
 #// @param int   $status_code The HTTP status code to output.
 #//
 def wp_send_json_error(data_=None, status_code_=None, *_args_):
-    
+    if data_ is None:
+        data_ = None
+    # end if
+    if status_code_ is None:
+        status_code_ = None
+    # end if
     
     response_ = Array({"success": False})
     if (php_isset(lambda : data_)):
@@ -3997,7 +4037,9 @@ def wp_list_filter(list_=None, args_=None, operator_="AND", *_args_):
 #// `$list` will be preserved in the results.
 #//
 def wp_list_pluck(list_=None, field_=None, index_key_=None, *_args_):
-    
+    if index_key_ is None:
+        index_key_ = None
+    # end if
     
     util_ = php_new_class("WP_List_Util", lambda : WP_List_Util(list_))
     return util_.pluck(field_, index_key_)
@@ -4162,7 +4204,9 @@ def absint(maybeint_=None, *_args_):
 #// @param string $replacement Optional. The function that should have been called. Default null.
 #//
 def _deprecated_function(function_=None, version_=None, replacement_=None, *_args_):
-    
+    if replacement_ is None:
+        replacement_ = None
+    # end if
     
     #// 
     #// Fires when a deprecated function is called.
@@ -4183,13 +4227,13 @@ def _deprecated_function(function_=None, version_=None, replacement_=None, *_arg
     #//
     if WP_DEBUG and apply_filters("deprecated_function_trigger_error", True):
         if php_function_exists("__"):
-            if (not is_null(replacement_)):
+            if (not php_is_null(replacement_)):
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), function_, version_, replacement_), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), function_, version_), E_USER_DEPRECATED)
             # end if
         else:
-            if (not is_null(replacement_)):
+            if (not php_is_null(replacement_)):
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", function_, version_, replacement_), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", function_, version_), E_USER_DEPRECATED)
@@ -4278,7 +4322,9 @@ def _deprecated_constructor(class_=None, version_=None, parent_class_="", *_args
 #// @param string $message     Optional. A message regarding the change. Default empty.
 #//
 def _deprecated_file(file_=None, version_=None, replacement_=None, message_="", *_args_):
-    
+    if replacement_ is None:
+        replacement_ = None
+    # end if
     
     #// 
     #// Fires when a deprecated file is called.
@@ -4301,13 +4347,13 @@ def _deprecated_file(file_=None, version_=None, replacement_=None, message_="", 
     if WP_DEBUG and apply_filters("deprecated_file_trigger_error", True):
         message_ = "" if php_empty(lambda : message_) else " " + message_
         if php_function_exists("__"):
-            if (not is_null(replacement_)):
+            if (not php_is_null(replacement_)):
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), file_, version_, replacement_) + message_, E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), file_, version_) + message_, E_USER_DEPRECATED)
             # end if
         else:
-            if (not is_null(replacement_)):
+            if (not php_is_null(replacement_)):
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", file_, version_, replacement_) + message_, E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", file_, version_) + message_, E_USER_DEPRECATED)
@@ -4342,7 +4388,9 @@ def _deprecated_file(file_=None, version_=None, replacement_=None, message_="", 
 #// @param string $message  Optional. A message regarding the change. Default null.
 #//
 def _deprecated_argument(function_=None, version_=None, message_=None, *_args_):
-    
+    if message_ is None:
+        message_ = None
+    # end if
     
     #// 
     #// Fires when a deprecated argument is called.
@@ -4363,13 +4411,13 @@ def _deprecated_argument(function_=None, version_=None, message_=None, *_args_):
     #//
     if WP_DEBUG and apply_filters("deprecated_argument_trigger_error", True):
         if php_function_exists("__"):
-            if (not is_null(message_)):
+            if (not php_is_null(message_)):
                 trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s"), function_, version_, message_), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available."), function_, version_), E_USER_DEPRECATED)
             # end if
         else:
-            if (not is_null(message_)):
+            if (not php_is_null(message_)):
                 trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s", function_, version_, message_), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available.", function_, version_), E_USER_DEPRECATED)
@@ -4398,7 +4446,12 @@ def _deprecated_argument(function_=None, version_=None, message_=None, *_args_):
 #// @param string $message     Optional. A message regarding the change. Default null.
 #//
 def _deprecated_hook(hook_=None, version_=None, replacement_=None, message_=None, *_args_):
-    
+    if replacement_ is None:
+        replacement_ = None
+    # end if
+    if message_ is None:
+        message_ = None
+    # end if
     
     #// 
     #// Fires when a deprecated hook is called.
@@ -4421,7 +4474,7 @@ def _deprecated_hook(hook_=None, version_=None, replacement_=None, message_=None
     #//
     if WP_DEBUG and apply_filters("deprecated_hook_trigger_error", True):
         message_ = "" if php_empty(lambda : message_) else " " + message_
-        if (not is_null(replacement_)):
+        if (not php_is_null(replacement_)):
             trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), hook_, version_, replacement_) + message_, E_USER_DEPRECATED)
         else:
             trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), hook_, version_) + message_, E_USER_DEPRECATED)
@@ -4470,7 +4523,7 @@ def _doing_it_wrong(function_=None, message_=None, version_=None, *_args_):
     #//
     if WP_DEBUG and apply_filters("doing_it_wrong_trigger_error", True, function_, message_, version_):
         if php_function_exists("__"):
-            if is_null(version_):
+            if php_is_null(version_):
                 version_ = ""
             else:
                 #// translators: %s: Version number.
@@ -4479,7 +4532,7 @@ def _doing_it_wrong(function_=None, message_=None, version_=None, *_args_):
             message_ += " " + php_sprintf(__("Please see <a href=\"%s\">Debugging in WordPress</a> for more information."), __("https://wordpress.org/support/article/debugging-in-wordpress/"))
             trigger_error(php_sprintf(__("%1$s was called <strong>incorrectly</strong>. %2$s %3$s"), function_, message_, version_), E_USER_NOTICE)
         else:
-            if is_null(version_):
+            if php_is_null(version_):
                 version_ = ""
             else:
                 version_ = php_sprintf("(This message was added in version %s.)", version_)
@@ -4628,10 +4681,12 @@ def validate_file(file_=None, allowed_files_=None, *_args_):
 #// @return bool True if forced, false if not forced.
 #//
 def force_ssl_admin(force_=None, *_args_):
-    
+    if force_ is None:
+        force_ = None
+    # end if
     
     forced_ = False
-    if (not is_null(force_)):
+    if (not php_is_null(force_)):
         old_forced_ = forced_
         forced_ = force_
         return old_forced_
@@ -4702,7 +4757,9 @@ def wp_guess_url(*_args_):
 #// @return bool The current suspend setting
 #//
 def wp_suspend_cache_addition(suspend_=None, *_args_):
-    
+    if suspend_ is None:
+        suspend_ = None
+    # end if
     
     _suspend_ = False
     if php_is_bool(suspend_):
@@ -4748,7 +4805,12 @@ def wp_suspend_cache_invalidation(suspend_=None, *_args_):
 #// running Multisite.
 #//
 def is_main_site(site_id_=None, network_id_=None, *_args_):
-    
+    if site_id_ is None:
+        site_id_ = None
+    # end if
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     if (not is_multisite()):
         return True
@@ -4769,7 +4831,9 @@ def is_main_site(site_id_=None, network_id_=None, *_args_):
 #// @return int The ID of the main site.
 #//
 def get_main_site_id(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     if (not is_multisite()):
         return get_current_blog_id()
@@ -4789,7 +4853,9 @@ def get_main_site_id(network_id_=None, *_args_):
 #// @return bool True if $network_id is the main network, or if not running Multisite.
 #//
 def is_main_network(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     if (not is_multisite()):
         return True
@@ -4848,7 +4914,7 @@ def global_terms_enabled(*_args_):
         return False
     # end if
     global_terms_ = None
-    if is_null(global_terms_):
+    if php_is_null(global_terms_):
         #// 
         #// Filters whether global terms are enabled.
         #// 
@@ -4860,7 +4926,7 @@ def global_terms_enabled(*_args_):
         #// @param null $enabled Whether global terms are enabled.
         #//
         filter_ = apply_filters("global_terms_enabled", None)
-        if (not is_null(filter_)):
+        if (not php_is_null(filter_)):
             global_terms_ = php_bool(filter_)
         else:
             global_terms_ = php_bool(get_site_option("global_terms_enabled", False))
@@ -4983,7 +5049,9 @@ def _wp_timezone_choice_usort_callback(a_=None, b_=None, *_args_):
 #// @return string
 #//
 def wp_timezone_choice(selected_zone_=None, locale_=None, *_args_):
-    
+    if locale_ is None:
+        locale_ = None
+    # end if
     
     mo_loaded_ = False
     locale_loaded_ = None
@@ -5366,7 +5434,7 @@ def wp_find_hierarchy_loop(callback_=None, start_=None, start_parent_=None, call
         callback_args_ = Array()
     # end if
     
-    override_ = Array() if is_null(start_parent_) else Array({start_: start_parent_})
+    override_ = Array() if php_is_null(start_parent_) else Array({start_: start_parent_})
     arbitrary_loop_member_ = wp_find_hierarchy_loop_tortoise_hare(callback_, start_, override_, callback_args_)
     if (not arbitrary_loop_member_):
         return Array()
@@ -5500,6 +5568,9 @@ def wp_allowed_protocols(*_args_):
 #// of individual calls.
 #//
 def wp_debug_backtrace_summary(ignore_class_=None, skip_frames_=0, pretty_=None, *_args_):
+    if ignore_class_ is None:
+        ignore_class_ = None
+    # end if
     if pretty_ is None:
         pretty_ = True
     # end if
@@ -5507,7 +5578,7 @@ def wp_debug_backtrace_summary(ignore_class_=None, skip_frames_=0, pretty_=None,
     truncate_paths_ = None
     trace_ = debug_backtrace(False)
     caller_ = Array()
-    check_class_ = (not is_null(ignore_class_))
+    check_class_ = (not php_is_null(ignore_class_))
     skip_frames_ += 1
     #// Skip this function.
     if (not (php_isset(lambda : truncate_paths_))):
@@ -5814,7 +5885,7 @@ def mbstring_binary_safe_encoding(reset_=None, *_args_):
     
     encodings_ = Array()
     overloaded_ = None
-    if is_null(overloaded_):
+    if php_is_null(overloaded_):
         overloaded_ = php_function_exists("mb_internal_encoding") and php_ini_get("mbstring.func_overload") & 2
     # end if
     if False == overloaded_:
@@ -6094,7 +6165,9 @@ def wp_generate_uuid4(*_args_):
 #// @return bool The string is a valid UUID or false on failure.
 #//
 def wp_is_uuid(uuid_=None, version_=None, *_args_):
-    
+    if version_ is None:
+        version_ = None
+    # end if
     
     if (not php_is_string(uuid_)):
         return False
@@ -6598,7 +6671,9 @@ def wp_direct_php_update_button(*_args_):
 #// @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
 #//
 def get_dirsize(directory_=None, max_execution_time_=None, *_args_):
-    
+    if max_execution_time_ is None:
+        max_execution_time_ = None
+    # end if
     
     dirsize_ = get_transient("dirsize_cache")
     if php_is_array(dirsize_) and (php_isset(lambda : dirsize_[directory_]["size"])):
@@ -6635,7 +6710,12 @@ def get_dirsize(directory_=None, max_execution_time_=None, *_args_):
 #// @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
 #//
 def recurse_dirsize(directory_=None, exclude_=None, max_execution_time_=None, *_args_):
-    
+    if exclude_ is None:
+        exclude_ = None
+    # end if
+    if max_execution_time_ is None:
+        max_execution_time_ = None
+    # end if
     
     size_ = 0
     directory_ = untrailingslashit(directory_)

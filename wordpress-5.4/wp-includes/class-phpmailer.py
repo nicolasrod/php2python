@@ -563,7 +563,9 @@ class PHPMailer():
     #// @param boolean $exceptions Should we throw external exceptions?
     #//
     def __init__(self, exceptions_=None):
-        
+        if exceptions_ is None:
+            exceptions_ = None
+        # end if
         
         if exceptions_ != None:
             self.exceptions = php_bool(exceptions_)
@@ -604,7 +606,7 @@ class PHPMailer():
         # end if
         #// Can't use additional_parameters in safe_mode, calling mail() with null params breaks
         #// @link http://php.net/manual/en/function.mail.php
-        if php_ini_get("safe_mode") or (not self.UseSendmailOptions) or is_null(params_):
+        if php_ini_get("safe_mode") or (not self.UseSendmailOptions) or php_is_null(params_):
             result_ = php_no_error(lambda: mail(to_, subject_, body_, header_))
         else:
             result_ = php_no_error(lambda: mail(to_, subject_, body_, header_, params_))
@@ -974,9 +976,11 @@ class PHPMailer():
     #//
     @classmethod
     def validateaddress(self, address_=None, patternselect_=None):
+        if patternselect_ is None:
+            patternselect_ = None
+        # end if
         
-        
-        if is_null(patternselect_):
+        if php_is_null(patternselect_):
             patternselect_ = self.validator
         # end if
         if php_is_callable(patternselect_):
@@ -1458,13 +1462,15 @@ class PHPMailer():
     #// @return boolean
     #//
     def smtpconnect(self, options_=None):
+        if options_ is None:
+            options_ = None
+        # end if
         
-        
-        if is_null(self.smtp):
+        if php_is_null(self.smtp):
             self.smtp = self.getsmtpinstance()
         # end if
         #// If no options are provided, use whatever is set in the instance
-        if is_null(options_):
+        if php_is_null(options_):
             options_ = self.SMTPOptions
         # end if
         #// Already connected?
@@ -1556,7 +1562,7 @@ class PHPMailer():
         #// If we get here, all connection attempts have failed, so close connection hard
         self.smtp.close()
         #// As we've caught all exceptions, just report whatever the last one was
-        if self.exceptions and (not is_null(lastexception_)):
+        if self.exceptions and (not php_is_null(lastexception_)):
             raise lastexception_
         # end if
         return False
@@ -1900,7 +1906,7 @@ class PHPMailer():
             self.lastMessageID = php_sprintf("<%s@%s>", self.uniqueid, self.serverhostname())
         # end if
         result_ += self.headerline("Message-ID", self.lastMessageID)
-        if (not is_null(self.Priority)):
+        if (not php_is_null(self.Priority)):
             result_ += self.headerline("X-Priority", self.Priority)
         # end if
         if self.XMailer == "":
@@ -2630,7 +2636,9 @@ class PHPMailer():
     #// @return string
     #//
     def base64encodewrapmb(self, str_=None, linebreak_=None):
-        
+        if linebreak_ is None:
+            linebreak_ = None
+        # end if
         
         start_ = "=?" + self.CharSet + "?B?"
         end_ = "?="
@@ -2979,7 +2987,7 @@ class PHPMailer():
         
         
         self.error_count += 1
-        if self.Mailer == "smtp" and (not is_null(self.smtp)):
+        if self.Mailer == "smtp" and (not php_is_null(self.smtp)):
             lasterror_ = self.smtp.geterror()
             if (not php_empty(lambda : lasterror_["error"])):
                 msg_ += self.lang("smtp_error") + lasterror_["error"]
@@ -3096,7 +3104,9 @@ class PHPMailer():
     #// @return void
     #//
     def addcustomheader(self, name_=None, value_=None):
-        
+        if value_ is None:
+            value_ = None
+        # end if
         
         if value_ == None:
             #// Value passed in as name:value
@@ -3262,7 +3272,9 @@ class PHPMailer():
     #//
     @classmethod
     def mb_pathinfo(self, path_=None, options_=None):
-        
+        if options_ is None:
+            options_ = None
+        # end if
         
         ret_ = Array({"dirname": "", "basename": "", "extension": "", "filename": ""})
         pathinfo_ = Array()

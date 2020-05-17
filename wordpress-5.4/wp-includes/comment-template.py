@@ -155,7 +155,9 @@ def comment_author_email(comment_ID_=0, *_args_):
 #// @param int|WP_Comment $comment  Optional. Comment ID or WP_Comment object. Default is the current comment.
 #//
 def comment_author_email_link(linktext_="", before_="", after_="", comment_=None, *_args_):
-    
+    if comment_ is None:
+        comment_ = None
+    # end if
     
     link_ = get_comment_author_email_link(linktext_, before_, after_, comment_)
     if link_:
@@ -183,7 +185,9 @@ def comment_author_email_link(linktext_="", before_="", after_="", comment_=None
 #// via the {@see 'comment_email'} filter with antispambot().
 #//
 def get_comment_author_email_link(linktext_="", before_="", after_="", comment_=None, *_args_):
-    
+    if comment_ is None:
+        comment_ = None
+    # end if
     
     comment_ = get_comment(comment_)
     #// 
@@ -439,6 +443,12 @@ def comment_author_url_link(linktext_="", before_="", after_="", comment_=0, *_a
 #// @return void|string Void if `$echo` argument is true, comment classes if `$echo` is false.
 #//
 def comment_class(class_="", comment_=None, post_id_=None, echo_=None, *_args_):
+    if comment_ is None:
+        comment_ = None
+    # end if
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     if echo_ is None:
         echo_ = True
     # end if
@@ -467,7 +477,12 @@ def comment_class(class_="", comment_=None, post_id_=None, echo_=None, *_args_):
 #// @return string[] An array of classes.
 #//
 def get_comment_class(class_="", comment_id_=None, post_id_=None, *_args_):
-    
+    if comment_id_ is None:
+        comment_id_ = None
+    # end if
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     global comment_alt_
     global comment_depth_
@@ -712,6 +727,9 @@ def comment_ID(*_args_):
 #// @return string The permalink to the given comment.
 #//
 def get_comment_link(comment_=None, args_=None, *_args_):
+    if comment_ is None:
+        comment_ = None
+    # end if
     if args_ is None:
         args_ = Array()
     # end if
@@ -728,7 +746,7 @@ def get_comment_link(comment_=None, args_=None, *_args_):
     args_ = wp_parse_args(args_, defaults_)
     link_ = get_permalink(comment_.comment_post_ID)
     #// The 'cpage' param takes precedence.
-    if (not is_null(args_["cpage"])):
+    if (not php_is_null(args_["cpage"])):
         cpage_ = args_["cpage"]
         pass
     else:
@@ -1244,7 +1262,9 @@ def trackback_rdf(deprecated_="", *_args_):
 #// @return bool True if the comments are open.
 #//
 def comments_open(post_id_=None, *_args_):
-    
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     _post_ = get_post(post_id_)
     post_id_ = _post_.ID if _post_ else 0
@@ -1272,7 +1292,9 @@ def comments_open(post_id_=None, *_args_):
 #// @return bool True if pings are accepted
 #//
 def pings_open(post_id_=None, *_args_):
-    
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     _post_ = get_post(post_id_)
     post_id_ = _post_.ID if _post_ else 0
@@ -1627,6 +1649,12 @@ def get_comment_reply_link(args_=None, comment_=None, post_=None, *_args_):
     if args_ is None:
         args_ = Array()
     # end if
+    if comment_ is None:
+        comment_ = None
+    # end if
+    if post_ is None:
+        post_ = None
+    # end if
     
     defaults_ = Array({"add_below": "comment", "respond_id": "respond", "reply_text": __("Reply"), "reply_to_text": __("Reply to %s"), "login_text": __("Log in to Reply"), "max_depth": 0, "depth": 0, "before": "", "after": ""})
     args_ = wp_parse_args(args_, defaults_)
@@ -1694,6 +1722,12 @@ def comment_reply_link(args_=None, comment_=None, post_=None, *_args_):
     if args_ is None:
         args_ = Array()
     # end if
+    if comment_ is None:
+        comment_ = None
+    # end if
+    if post_ is None:
+        post_ = None
+    # end if
     
     php_print(get_comment_reply_link(args_, comment_, post_))
 # end def comment_reply_link
@@ -1723,6 +1757,9 @@ def comment_reply_link(args_=None, comment_=None, post_=None, *_args_):
 def get_post_reply_link(args_=None, post_=None, *_args_):
     if args_ is None:
         args_ = Array()
+    # end if
+    if post_ is None:
+        post_ = None
     # end if
     
     defaults_ = Array({"add_below": "post", "respond_id": "respond", "reply_text": __("Leave a Comment"), "login_text": __("Log in to leave a Comment"), "before": "", "after": ""})
@@ -1762,6 +1799,9 @@ def get_post_reply_link(args_=None, post_=None, *_args_):
 def post_reply_link(args_=None, post_=None, *_args_):
     if args_ is None:
         args_ = Array()
+    # end if
+    if post_ is None:
+        post_ = None
     # end if
     
     php_print(get_post_reply_link(args_, post_))
@@ -1939,6 +1979,9 @@ def comment_form_title(noreplytext_=None, replytext_=None, linktoparent_=None, *
 def wp_list_comments(args_=None, comments_=None, *_args_):
     if args_ is None:
         args_ = Array()
+    # end if
+    if comments_ is None:
+        comments_ = None
     # end if
     
     global wp_query_
@@ -2155,6 +2198,9 @@ def wp_list_comments(args_=None, comments_=None, *_args_):
 def comment_form(args_=None, post_id_=None, *_args_):
     if args_ is None:
         args_ = Array()
+    # end if
+    if post_id_ is None:
+        post_id_ = None
     # end if
     
     if None == post_id_:

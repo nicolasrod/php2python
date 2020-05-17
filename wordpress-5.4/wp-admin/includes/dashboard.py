@@ -157,13 +157,18 @@ def wp_dashboard_setup(*_args_):
 #// (which is the second parameter passed to your callback). Default null.
 #//
 def wp_add_dashboard_widget(widget_id_=None, widget_name_=None, callback_=None, control_callback_=None, callback_args_=None, *_args_):
-    
+    if control_callback_ is None:
+        control_callback_ = None
+    # end if
+    if callback_args_ is None:
+        callback_args_ = None
+    # end if
     
     screen_ = get_current_screen()
     global wp_dashboard_control_callbacks_
     php_check_if_defined("wp_dashboard_control_callbacks_")
     private_callback_args_ = Array({"__widget_basename": widget_name_})
-    if is_null(callback_args_):
+    if php_is_null(callback_args_):
         callback_args_ = private_callback_args_
     elif php_is_array(callback_args_):
         callback_args_ = php_array_merge(callback_args_, private_callback_args_)
@@ -927,7 +932,7 @@ def wp_dashboard_trigger_widget_control(widget_control_id_=None, *_args_):
     
     global wp_dashboard_control_callbacks_
     php_check_if_defined("wp_dashboard_control_callbacks_")
-    if is_scalar(widget_control_id_) and widget_control_id_ and (php_isset(lambda : wp_dashboard_control_callbacks_[widget_control_id_])) and php_is_callable(wp_dashboard_control_callbacks_[widget_control_id_]):
+    if php_is_scalar(widget_control_id_) and widget_control_id_ and (php_isset(lambda : wp_dashboard_control_callbacks_[widget_control_id_])) and php_is_callable(wp_dashboard_control_callbacks_[widget_control_id_]):
         php_call_user_func(wp_dashboard_control_callbacks_[widget_control_id_], "", Array({"id": widget_control_id_, "callback": wp_dashboard_control_callbacks_[widget_control_id_]}))
     # end if
 # end def wp_dashboard_trigger_widget_control

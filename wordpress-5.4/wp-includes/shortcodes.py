@@ -254,7 +254,9 @@ def do_shortcode(content_=None, ignore_html_=None, *_args_):
 #// @return string The shortcode search regular expression
 #//
 def get_shortcode_regex(tagnames_=None, *_args_):
-    
+    if tagnames_ is None:
+        tagnames_ = None
+    # end if
     
     global shortcode_tags_
     php_check_if_defined("shortcode_tags_")

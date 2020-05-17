@@ -135,6 +135,9 @@ def wp_cache_get(key_=None, group_="", force_=None, found_=None, *_args_):
     if force_ is None:
         force_ = False
     # end if
+    if found_ is None:
+        found_ = None
+    # end if
     
     global wp_object_cache_
     php_check_if_defined("wp_object_cache_")

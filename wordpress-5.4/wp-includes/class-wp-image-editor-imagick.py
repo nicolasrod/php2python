@@ -156,7 +156,9 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return true|WP_Error True if set successfully; WP_Error on failure.
     #//
     def set_quality(self, quality_=None):
-        
+        if quality_ is None:
+            quality_ = None
+        # end if
         
         quality_result_ = super().set_quality(quality_)
         if is_wp_error(quality_result_):
@@ -187,7 +189,12 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return true|WP_Error
     #//
     def update_size(self, width_=None, height_=None):
-        
+        if width_ is None:
+            width_ = None
+        # end if
+        if height_ is None:
+            height_ = None
+        # end if
         
         size_ = None
         if (not width_) or (not height_):
@@ -452,6 +459,12 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return bool|WP_Error
     #//
     def crop(self, src_x_=None, src_y_=None, src_w_=None, src_h_=None, dst_w_=None, dst_h_=None, src_abs_=None):
+        if dst_w_ is None:
+            dst_w_ = None
+        # end if
+        if dst_h_ is None:
+            dst_h_ = None
+        # end if
         if src_abs_ is None:
             src_abs_ = False
         # end if
@@ -573,7 +586,12 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return array|WP_Error {'path'=>string, 'file'=>string, 'width'=>int, 'height'=>int, 'mime-type'=>string}
     #//
     def save(self, destfilename_=None, mime_type_=None):
-        
+        if destfilename_ is None:
+            destfilename_ = None
+        # end if
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         saved_ = self._save(self.image, destfilename_, mime_type_)
         if (not is_wp_error(saved_)):
@@ -594,7 +612,12 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return array|WP_Error
     #//
     def _save(self, image_=None, filename_=None, mime_type_=None):
-        
+        if filename_ is None:
+            filename_ = None
+        # end if
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         filename_, extension_, mime_type_ = self.get_output_format(filename_, mime_type_)
         if (not filename_):
@@ -626,7 +649,9 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
     #// @return bool|WP_Error True on success, WP_Error object on failure.
     #//
     def stream(self, mime_type_=None):
-        
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         filename_, extension_, mime_type_ = self.get_output_format(None, mime_type_)
         try: 

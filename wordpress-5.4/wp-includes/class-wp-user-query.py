@@ -72,7 +72,9 @@ class WP_User_Query():
     #// @param null|string|array $query Optional. The query variables.
     #//
     def __init__(self, query_=None):
-        
+        if query_ is None:
+            query_ = None
+        # end if
         
         if (not php_empty(lambda : query_)):
             self.prepare_query(query_)

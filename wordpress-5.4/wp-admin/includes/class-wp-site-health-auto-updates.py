@@ -36,7 +36,7 @@ class WP_Site_Health_Auto_Updates():
         
         tests_ = Array(self.test_constants("WP_AUTO_UPDATE_CORE", True), self.test_wp_version_check_attached(), self.test_filters_automatic_updater_disabled(), self.test_wp_automatic_updates_disabled(), self.test_if_failed_update(), self.test_vcs_abspath(), self.test_check_wp_filesystem_method(), self.test_all_files_writable(), self.test_accepts_dev_updates(), self.test_accepts_minor_updates())
         tests_ = php_array_filter(tests_)
-        def _closure_e6a2ac24(test_=None):
+        def _closure_05fbdf67(test_=None):
             
             
             test_ = test_
@@ -44,8 +44,8 @@ class WP_Site_Health_Auto_Updates():
                 test_.severity = "warning"
             # end if
             return test_
-        # end def _closure_e6a2ac24
-        tests_ = php_array_map((lambda *args, **kwargs: _closure_e6a2ac24(*args, **kwargs)), tests_)
+        # end def _closure_05fbdf67
+        tests_ = php_array_map((lambda *args, **kwargs: _closure_05fbdf67(*args, **kwargs)), tests_)
         return tests_
     # end def run_tests
     #// 
@@ -87,7 +87,7 @@ class WP_Site_Health_Auto_Updates():
             headers_["Authorization"] = "Basic " + php_base64_encode(wp_unslash(PHP_SERVER["PHP_AUTH_USER"]) + ":" + wp_unslash(PHP_SERVER["PHP_AUTH_PW"]))
         # end if
         url_ = add_query_arg(Array({"health-check-test-wp_version_check": True}), admin_url("site-health.php"))
-        test_ = wp_remote_get(url_, php_compact("cookies", "headers", "timeout", "sslverify"))
+        test_ = wp_remote_get(url_, php_compact("cookies_", "headers_", "timeout_", "sslverify_"))
         if is_wp_error(test_):
             return Array({"description": php_sprintf(__("Could not confirm that the %s filter is available."), "<code>wp_version_check()</code>"), "severity": "warning"})
         # end if

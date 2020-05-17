@@ -702,7 +702,7 @@ class Akismet_Admin():
         if (not php_empty(lambda : akismet_account_[1])):
             akismet_account_ = php_json_decode(akismet_account_[1])
         # end if
-        Akismet.log(php_compact("akismet_account"))
+        Akismet.log(php_compact("akismet_account_"))
         return akismet_account_
     # end def verify_wpcom_key
     @classmethod
@@ -799,7 +799,7 @@ class Akismet_Admin():
                 # end if
             # end if
         # end if
-        Akismet.view("start", php_compact("akismet_user"))
+        Akismet.view("start", php_compact("akismet_user_"))
         pass
     # end def display_start_page
     @classmethod
@@ -879,8 +879,8 @@ class Akismet_Admin():
         #// $notices[] = array( 'type' => 'limit-reached', 'level' => 'yellow' );
         #// $notices[] = array( 'type' => 'limit-reached', 'level' => 'red' );
         #//
-        Akismet.log(php_compact("stat_totals", "akismet_user"))
-        Akismet.view("config", php_compact("api_key", "akismet_user", "stat_totals", "notices"))
+        Akismet.log(php_compact("stat_totals_", "akismet_user_"))
+        Akismet.view("config", php_compact("api_key_", "akismet_user_", "stat_totals_", "notices_"))
     # end def display_configuration_page
     @classmethod
     def display_notice(self):
@@ -950,11 +950,11 @@ class Akismet_Admin():
                         # end if
                         if property_exists(type_, "status"):
                             type_ = wp_kses(type_.status, self.allowed)
-                            Akismet.view("notice", php_compact("type", "notice_header", "notice_text"))
+                            Akismet.view("notice", php_compact("type_", "notice_header_", "notice_text_"))
                             self.notices[index_] = None
                         # end if
                     else:
-                        Akismet.view("notice", php_compact("type"))
+                        Akismet.view("notice", php_compact("type_"))
                         self.notices[index_] = None
                     # end if
                 # end for
@@ -975,7 +975,7 @@ class Akismet_Admin():
         xml_.addcall("wpcom.getUserID")
         xml_.addcall("akismet.getAPIKey")
         xml_.query()
-        Akismet.log(php_compact("xml"))
+        Akismet.log(php_compact("xml_"))
         if (not xml_.iserror()):
             responses_ = xml_.getresponse()
             if php_count(responses_) > 1:
@@ -992,7 +992,7 @@ class Akismet_Admin():
                     api_key_ = second_response_value_
                     user_id_ = php_int(first_response_value_)
                 # end if
-                return php_compact("api_key", "user_id")
+                return php_compact("api_key_", "user_id_")
             # end if
         # end if
         return False

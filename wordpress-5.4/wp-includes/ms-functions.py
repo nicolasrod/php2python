@@ -114,7 +114,9 @@ def get_active_blog_for_user(user_id_=None, *_args_):
 #// @return int Number of active users on the network.
 #//
 def get_user_count(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     return get_network_option(network_id_, "user_count")
 # end def get_user_count
@@ -131,7 +133,9 @@ def get_user_count(network_id_=None, *_args_):
 #// @return int Number of active sites on the network.
 #//
 def get_blog_count(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     return get_network_option(network_id_, "blog_count")
 # end def get_blog_count
@@ -1827,7 +1831,9 @@ def fix_phpmailer_messageid(phpmailer_=None, *_args_):
 #// @return bool
 #//
 def is_user_spammy(user_=None, *_args_):
-    
+    if user_ is None:
+        user_ = None
+    # end if
     
     if (not type(user_).__name__ == "WP_User"):
         if user_:
@@ -1960,7 +1966,9 @@ def wp_schedule_update_network_counts(*_args_):
 #// @param int|null $network_id ID of the network. Default is the current network.
 #//
 def wp_update_network_counts(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     wp_update_network_user_counts(network_id_)
     wp_update_network_site_counts(network_id_)
@@ -1977,7 +1985,9 @@ def wp_update_network_counts(network_id_=None, *_args_):
 #// @param int|null $network_id ID of the network. Default is the current network.
 #//
 def wp_maybe_update_network_site_counts(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     is_small_network_ = (not wp_is_large_network("sites", network_id_))
     #// 
@@ -2007,7 +2017,9 @@ def wp_maybe_update_network_site_counts(network_id_=None, *_args_):
 #// @param int|null $network_id ID of the network. Default is the current network.
 #//
 def wp_maybe_update_network_user_counts(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     is_small_network_ = (not wp_is_large_network("users", network_id_))
     #// This filter is documented in wp-includes/ms-functions.php
@@ -2025,7 +2037,9 @@ def wp_maybe_update_network_user_counts(network_id_=None, *_args_):
 #// @param int|null $network_id ID of the network. Default is the current network.
 #//
 def wp_update_network_site_counts(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     network_id_ = php_int(network_id_)
     if (not network_id_):
@@ -2045,7 +2059,9 @@ def wp_update_network_site_counts(network_id_=None, *_args_):
 #// @param int|null $network_id ID of the network. Default is the current network.
 #//
 def wp_update_network_user_counts(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -2171,7 +2187,9 @@ def upload_size_limit_filter(size_=None, *_args_):
 #// @return bool True if the network meets the criteria for large. False otherwise.
 #//
 def wp_is_large_network(using_="sites", network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     network_id_ = php_int(network_id_)
     if (not network_id_):

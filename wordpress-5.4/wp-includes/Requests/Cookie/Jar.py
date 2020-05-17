@@ -19,7 +19,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @package Requests
 #// @subpackage Cookies
 #//
-class Requests_Cookie_Jar():
+class Requests_Cookie_Jar(ArrayAccessIteratorAggregate):
     #// 
     #// Actual item data
     #// 
@@ -45,7 +45,9 @@ class Requests_Cookie_Jar():
     #// @return Requests_Cookie
     #//
     def normalize_cookie(self, cookie_=None, key_=None):
-        
+        if key_ is None:
+            key_ = None
+        # end if
         
         if type(cookie_).__name__ == "Requests_Cookie":
             return cookie_
@@ -60,7 +62,9 @@ class Requests_Cookie_Jar():
     #// @return Requests_Cookie
     #//
     def normalizecookie(self, cookie_=None, key_=None):
-        
+        if key_ is None:
+            key_ = None
+        # end if
         
         return self.normalize_cookie(cookie_, key_)
     # end def normalizecookie

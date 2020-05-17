@@ -359,7 +359,9 @@ class Sodium(Sodium):
         #// @throws \TypeError
         #//
         def crypto_generichash(message_=None, key_=None, outLen_=32, *_args_):
-            
+            if key_ is None:
+                key_ = None
+            # end if
             
             return ParagonIE_Sodium_Compat.crypto_generichash(message_, key_, outLen_)
         # end def crypto_generichash
@@ -389,7 +391,9 @@ class Sodium(Sodium):
         #// @throws \TypeError
         #//
         def crypto_generichash_init(key_=None, outLen_=32, *_args_):
-            
+            if key_ is None:
+                key_ = None
+            # end if
             
             return ParagonIE_Sodium_Compat.crypto_generichash_init(key_, outLen_)
         # end def crypto_generichash_init

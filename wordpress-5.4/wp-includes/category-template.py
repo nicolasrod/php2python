@@ -258,7 +258,9 @@ def get_the_category_list(separator_="", parents_="", post_id_=None, *_args_):
 #// @return bool True if the current post is in any of the given categories.
 #//
 def in_category(category_=None, post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     if php_empty(lambda : category_):
         return False
@@ -1029,7 +1031,9 @@ def get_the_tag_list(before_="", sep_="", after_="", id_=0, *_args_):
 #// @param string $after Optional. After list.
 #//
 def the_tags(before_=None, sep_=", ", after_="", *_args_):
-    
+    if before_ is None:
+        before_ = None
+    # end if
     
     if None == before_:
         before_ = __("Tags: ")
@@ -1063,7 +1067,9 @@ def tag_description(tag_=0, *_args_):
 #// @return string Term description, available.
 #//
 def term_description(term_=0, deprecated_=None, *_args_):
-    
+    if deprecated_ is None:
+        deprecated_ = None
+    # end if
     
     if (not term_) and is_tax() or is_tag() or is_category():
         term_ = get_queried_object()
@@ -1252,7 +1258,9 @@ def the_terms(id_=None, taxonomy_=None, before_="", sep_=", ", after_="", *_args
 #// @return bool True if the current post has any of the given categories (or any category, if no category specified).
 #//
 def has_category(category_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     return has_term(category_, "category", post_)
 # end def has_category
@@ -1278,7 +1286,9 @@ def has_category(category_="", post_=None, *_args_):
 #// @return bool True if the current post has any of the given tags (or any tag, if no tag specified).
 #//
 def has_tag(tag_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     return has_term(tag_, "post_tag", post_)
 # end def has_tag
@@ -1297,7 +1307,9 @@ def has_tag(tag_="", post_=None, *_args_):
 #// @return bool True if the current post has any of the given tags (or any tag, if no tag specified).
 #//
 def has_term(term_="", taxonomy_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):

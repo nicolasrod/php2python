@@ -194,7 +194,9 @@ def the_title_rss(*_args_):
 #// @return string The filtered content.
 #//
 def get_the_content_feed(feed_type_=None, *_args_):
-    
+    if feed_type_ is None:
+        feed_type_ = None
+    # end if
     
     if (not feed_type_):
         feed_type_ = get_default_feed()
@@ -221,7 +223,9 @@ def get_the_content_feed(feed_type_=None, *_args_):
 #// @param string $feed_type The type of feed. rss2 | atom | rss | rdf
 #//
 def the_content_feed(feed_type_=None, *_args_):
-    
+    if feed_type_ is None:
+        feed_type_ = None
+    # end if
     
     php_print(get_the_content_feed(feed_type_))
 # end def the_content_feed
@@ -286,7 +290,9 @@ def comments_link_feed(*_args_):
 #// @param int|WP_Comment $comment_id Optional comment object or id. Defaults to global comment object.
 #//
 def comment_guid(comment_id_=None, *_args_):
-    
+    if comment_id_ is None:
+        comment_id_ = None
+    # end if
     
     php_print(esc_url(get_comment_guid(comment_id_)))
 # end def comment_guid
@@ -299,7 +305,9 @@ def comment_guid(comment_id_=None, *_args_):
 #// @return string|false GUID for comment on success, false on failure.
 #//
 def get_comment_guid(comment_id_=None, *_args_):
-    
+    if comment_id_ is None:
+        comment_id_ = None
+    # end if
     
     comment_ = get_comment(comment_id_)
     if (not php_is_object(comment_)):
@@ -316,7 +324,9 @@ def get_comment_guid(comment_id_=None, *_args_):
 #// @param int|WP_Comment $comment Optional. Comment object or id. Defaults to global comment object.
 #//
 def comment_link(comment_=None, *_args_):
-    
+    if comment_ is None:
+        comment_ = None
+    # end if
     
     #// 
     #// Filters the current comment's permalink.
@@ -392,7 +402,9 @@ def comment_text_rss(*_args_):
 #// @return string All of the post categories for displaying in the feed.
 #//
 def get_the_category_rss(type_=None, *_args_):
-    
+    if type_ is None:
+        type_ = None
+    # end if
     
     if php_empty(lambda : type_):
         type_ = get_default_feed()
@@ -445,7 +457,9 @@ def get_the_category_rss(type_=None, *_args_):
 #// @param string $type Optional, default is the type returned by get_default_feed().
 #//
 def the_category_rss(type_=None, *_args_):
-    
+    if type_ is None:
+        type_ = None
+    # end if
     
     php_print(get_the_category_rss(type_))
 # end def the_category_rss

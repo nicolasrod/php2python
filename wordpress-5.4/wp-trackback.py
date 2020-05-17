@@ -120,7 +120,7 @@ if (not php_empty(lambda : tb_url_)) and (not php_empty(lambda : title_)):
     if dupe_:
         trackback_response(1, __("We already have a ping from that URL for this post."))
     # end if
-    commentdata_ = php_compact("comment_post_ID", "comment_author", "comment_author_email", "comment_author_url", "comment_content", "comment_type")
+    commentdata_ = php_compact("comment_post_ID_", "comment_author_", "comment_author_email_", "comment_author_url_", "comment_content_", "comment_type_")
     result_ = wp_new_comment(commentdata_)
     if is_wp_error(result_):
         trackback_response(1, result_.get_error_message())

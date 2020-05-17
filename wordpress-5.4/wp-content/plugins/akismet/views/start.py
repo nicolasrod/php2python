@@ -25,7 +25,7 @@ php_print("     <div class=\"akismet-boxes\">\n         ")
 if Akismet.predefined_api_key():
     Akismet.view("predefined")
 elif akismet_user_ and php_in_array(akismet_user_.status, Array("active", "active-dunning", "no-sub", "missing", "cancelled", "suspended")):
-    Akismet.view("connect-jp", php_compact("akismet_user"))
+    Akismet.view("connect-jp", php_compact("akismet_user_"))
 else:
     Akismet.view("activate")
 # end if

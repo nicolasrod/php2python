@@ -39,7 +39,9 @@ class Requests_Exception(Exception):
     #// @param integer $code Exception numerical code, if applicable
     #//
     def __init__(self, message_=None, type_=None, data_=None, code_=0):
-        
+        if data_ is None:
+            data_ = None
+        # end if
         
         super().__init__(message_, code_)
         self.type = type_

@@ -116,7 +116,7 @@ class WP_Terms_List_Table(WP_List_Table):
             args_["order"] = php_trim(wp_unslash(PHP_REQUEST["order"]))
         # end if
         self.callback_args = args_
-        self.set_pagination_args(Array({"total_items": wp_count_terms(self.screen.taxonomy, php_compact("search")), "per_page": tags_per_page_}))
+        self.set_pagination_args(Array({"total_items": wp_count_terms(self.screen.taxonomy, php_compact("search_")), "per_page": tags_per_page_}))
     # end def prepare_items
     #// 
     #// @return bool

@@ -161,7 +161,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         
         
         term_ = None
-        if is_null(term_):
+        if php_is_null(term_):
             term_ = wp_unslash(PHP_REQUEST["s"])
         # end if
         for field_ in Array("Name", "Description", "Author", "Author", "AuthorURI"):

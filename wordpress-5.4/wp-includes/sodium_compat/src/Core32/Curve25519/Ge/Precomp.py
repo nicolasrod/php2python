@@ -38,7 +38,15 @@ class ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp():
     #// @throws TypeError
     #//
     def __init__(self, yplusx_=None, yminusx_=None, xy2d_=None):
-        
+        if yplusx_ is None:
+            yplusx_ = None
+        # end if
+        if yminusx_ is None:
+            yminusx_ = None
+        # end if
+        if xy2d_ is None:
+            xy2d_ = None
+        # end if
         
         if yplusx_ == None:
             yplusx_ = ParagonIE_Sodium_Core32_Curve25519.fe_0()

@@ -22,7 +22,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @return string|false The format if successful. False otherwise.
 #//
 def get_post_format(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -50,6 +52,9 @@ def get_post_format(post_=None, *_args_):
 def has_post_format(format_=None, post_=None, *_args_):
     if format_ is None:
         format_ = Array()
+    # end if
+    if post_ is None:
+        post_ = None
     # end if
     
     prefixed_ = Array()

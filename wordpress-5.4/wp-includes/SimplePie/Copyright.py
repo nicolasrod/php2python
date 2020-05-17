@@ -81,7 +81,12 @@ class SimplePie_Copyright():
     #// properties and their accessors
     #//
     def __init__(self, url_=None, label_=None):
-        
+        if url_ is None:
+            url_ = None
+        # end if
+        if label_ is None:
+            label_ = None
+        # end if
         
         self.url = url_
         self.label = label_

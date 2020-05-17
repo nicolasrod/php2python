@@ -93,7 +93,9 @@ def display_header(body_classes_="", *_args_):
 #// @param string|null $error
 #//
 def display_setup_form(error_=None, *_args_):
-    
+    if error_ is None:
+        error_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -107,7 +109,7 @@ def display_setup_form(error_=None, *_args_):
     weblog_title_ = php_trim(wp_unslash(PHP_POST["weblog_title"])) if (php_isset(lambda : PHP_POST["weblog_title"])) else ""
     user_name_ = php_trim(wp_unslash(PHP_POST["user_name"])) if (php_isset(lambda : PHP_POST["user_name"])) else ""
     admin_email_ = php_trim(wp_unslash(PHP_POST["admin_email"])) if (php_isset(lambda : PHP_POST["admin_email"])) else ""
-    if (not is_null(error_)):
+    if (not php_is_null(error_)):
         php_print("<h1>")
         _ex("Welcome", "Howdy")
         php_print("</h1>\n<p class=\"message\">")

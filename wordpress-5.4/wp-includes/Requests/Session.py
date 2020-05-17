@@ -67,6 +67,9 @@ class Requests_Session():
     #// @param array $options Default options for requests
     #//
     def __init__(self, url_=None, headers_=None, data_=None, options_=None):
+        if url_ is None:
+            url_ = None
+        # end if
         if headers_ is None:
             headers_ = Array()
         # end if
@@ -269,7 +272,7 @@ class Requests_Session():
             options_ = Array()
         # end if
         
-        request_ = self.merge_request(php_compact("url", "headers", "data", "options"))
+        request_ = self.merge_request(php_compact("url_", "headers_", "data_", "options_"))
         return Requests.request(request_["url"], request_["headers"], request_["data"], type_, request_["options"])
     # end def request
     #// 

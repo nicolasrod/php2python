@@ -500,7 +500,9 @@ class Theme_Upgrader(WP_Upgrader):
     #// and the last result isn't set.
     #//
     def theme_info(self, theme_=None):
-        
+        if theme_ is None:
+            theme_ = None
+        # end if
         
         if php_empty(lambda : theme_):
             if (not php_empty(lambda : self.result["destination_name"])):

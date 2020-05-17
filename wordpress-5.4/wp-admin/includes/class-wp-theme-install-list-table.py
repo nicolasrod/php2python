@@ -451,7 +451,7 @@ class WP_Theme_Install_List_Table(WP_Themes_List_Table):
         global tab_
         global type_
         php_check_if_defined("tab_","type_")
-        super()._js_vars(php_compact("tab", "type"))
+        super()._js_vars(php_compact("tab_", "type_"))
     # end def _js_vars
     #// 
     #// Check to see if the theme is already installed.

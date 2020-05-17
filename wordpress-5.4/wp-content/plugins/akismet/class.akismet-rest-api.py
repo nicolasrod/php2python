@@ -33,7 +33,9 @@ class Akismet_REST_API():
     #//
     @classmethod
     def get_key(self, request_=None):
-        
+        if request_ is None:
+            request_ = None
+        # end if
         
         return rest_ensure_response(Akismet.get_api_key())
     # end def get_key
@@ -81,7 +83,9 @@ class Akismet_REST_API():
     #//
     @classmethod
     def get_settings(self, request_=None):
-        
+        if request_ is None:
+            request_ = None
+        # end if
         
         return rest_ensure_response(Array({"akismet_strictness": get_option("akismet_strictness", "1") == "1", "akismet_show_user_comments_approved": get_option("akismet_show_user_comments_approved", "1") == "1"}))
     # end def get_settings
@@ -97,7 +101,7 @@ class Akismet_REST_API():
         
         for setting_key_ in Array("akismet_strictness", "akismet_show_user_comments_approved"):
             setting_value_ = request_.get_param(setting_key_)
-            if is_null(setting_value_):
+            if php_is_null(setting_value_):
                 continue
             # end if
             #// From 4.7+, WP core will ensure that these are always boolean

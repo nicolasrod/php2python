@@ -102,7 +102,21 @@ class SimplePie_Caption():
     #// properties and their accessors
     #//
     def __init__(self, type_=None, lang_=None, startTime_=None, endTime_=None, text_=None):
-        
+        if type_ is None:
+            type_ = None
+        # end if
+        if lang_ is None:
+            lang_ = None
+        # end if
+        if startTime_ is None:
+            startTime_ = None
+        # end if
+        if endTime_ is None:
+            endTime_ = None
+        # end if
+        if text_ is None:
+            text_ = None
+        # end if
         
         self.type = type_
         self.lang = lang_

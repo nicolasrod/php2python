@@ -15,7 +15,7 @@ if php_class_exists("ParagonIE_Sodium_Core32_Curve25519_Fe", False):
 #// 
 #// This represents a Field Element
 #//
-class ParagonIE_Sodium_Core32_Curve25519_Fe():
+class ParagonIE_Sodium_Core32_Curve25519_Fe(ArrayAccess):
     #// 
     #// @var array<int, ParagonIE_Sodium_Core32_Int32>
     #//
@@ -35,7 +35,9 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #//
     @classmethod
     def fromarray(self, array_=None, save_indexes_=None):
-        
+        if save_indexes_ is None:
+            save_indexes_ = None
+        # end if
         
         count_ = php_count(array_)
         if save_indexes_:
@@ -75,7 +77,9 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     #//
     @classmethod
     def fromintarray(self, array_=None, save_indexes_=None):
-        
+        if save_indexes_ is None:
+            save_indexes_ = None
+        # end if
         
         count_ = php_count(array_)
         if save_indexes_:
@@ -125,7 +129,7 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
         if (not type(value_).__name__ == "ParagonIE_Sodium_Core32_Int32"):
             raise php_new_class("InvalidArgumentException", lambda : InvalidArgumentException("Expected an instance of ParagonIE_Sodium_Core32_Int32"))
         # end if
-        if is_null(offset_):
+        if php_is_null(offset_):
             self.container[-1] = value_
         else:
             ParagonIE_Sodium_Core32_Util.declarescalartype(offset_, "int", 1)

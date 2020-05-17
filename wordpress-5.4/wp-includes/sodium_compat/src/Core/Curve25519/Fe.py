@@ -15,7 +15,7 @@ if php_class_exists("ParagonIE_Sodium_Core_Curve25519_Fe", False):
 #// 
 #// This represents a Field Element
 #//
-class ParagonIE_Sodium_Core_Curve25519_Fe():
+class ParagonIE_Sodium_Core_Curve25519_Fe(ArrayAccess):
     #// 
     #// @var array<int, int>
     #//
@@ -33,7 +33,9 @@ class ParagonIE_Sodium_Core_Curve25519_Fe():
     #//
     @classmethod
     def fromarray(self, array_=None, save_indexes_=None):
-        
+        if save_indexes_ is None:
+            save_indexes_ = None
+        # end if
         
         count_ = php_count(array_)
         if save_indexes_:
@@ -75,7 +77,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe():
         if (not php_is_int(value_)):
             raise php_new_class("InvalidArgumentException", lambda : InvalidArgumentException("Expected an integer"))
         # end if
-        if is_null(offset_):
+        if php_is_null(offset_):
             self.container[-1] = value_
         else:
             self.container[offset_] = value_

@@ -42,7 +42,9 @@ class Requests_Auth_Basic(Requests_Auth):
     #// @param array|null $args Array of user and password. Must have exactly two elements
     #//
     def __init__(self, args_=None):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         if php_is_array(args_):
             if php_count(args_) != 2:

@@ -379,6 +379,9 @@ def media_handle_upload(file_id_=None, post_id_=None, post_data_=None, overrides
 #// @return int|WP_Error The ID of the attachment or a WP_Error on failure.
 #//
 def media_handle_sideload(file_array_=None, post_id_=0, desc_=None, post_data_=None, *_args_):
+    if desc_ is None:
+        desc_ = None
+    # end if
     if post_data_ is None:
         post_data_ = Array()
     # end if
@@ -571,7 +574,15 @@ def media_buttons(editor_id_="content", *_args_):
 #// @return string
 #//
 def get_upload_iframe_src(type_=None, post_id_=None, tab_=None, *_args_):
-    
+    if type_ is None:
+        type_ = None
+    # end if
+    if post_id_ is None:
+        post_id_ = None
+    # end if
+    if tab_ is None:
+        tab_ = None
+    # end if
     
     global post_ID_
     php_check_if_defined("post_ID_")
@@ -826,7 +837,9 @@ def wp_media_upload_handler(*_args_):
 #// @return string|WP_Error Populated HTML img tag on success, WP_Error object otherwise.
 #//
 def media_sideload_image(file_=None, post_id_=0, desc_=None, return_="html", *_args_):
-    
+    if desc_ is None:
+        desc_ = None
+    # end if
     
     if (not php_empty(lambda : file_)):
         #// Set variables for storage, fix file filename for query strings.
@@ -1142,7 +1155,9 @@ def image_media_send_to_editor(html_=None, attachment_id_=None, attachment_=None
 #// @return array
 #//
 def get_attachment_fields_to_edit(post_=None, errors_=None, *_args_):
-    
+    if errors_ is None:
+        errors_ = None
+    # end if
     
     if php_is_int(post_):
         post_ = get_post(post_)
@@ -1263,7 +1278,9 @@ def get_media_items(post_id_=None, errors_=None, *_args_):
 #// @return string HTML form for attachment.
 #//
 def get_media_item(attachment_id_=None, args_=None, *_args_):
-    
+    if args_ is None:
+        args_ = None
+    # end if
     
     global redir_tab_
     php_check_if_defined("redir_tab_")
@@ -1459,7 +1476,9 @@ def get_media_item(attachment_id_=None, args_=None, *_args_):
 #// @return array
 #//
 def get_compat_media_markup(attachment_id_=None, args_=None, *_args_):
-    
+    if args_ is None:
+        args_ = None
+    # end if
     
     post_ = get_post(attachment_id_)
     default_args_ = Array({"errors": None, "in_modal": False})
@@ -1619,7 +1638,9 @@ def media_upload_header(*_args_):
 #// @param array $errors
 #//
 def media_upload_form(errors_=None, *_args_):
-    
+    if errors_ is None:
+        errors_ = None
+    # end if
     
     global type_
     global tab_
@@ -1793,7 +1814,12 @@ def media_upload_form(errors_=None, *_args_):
 #// @param integer $id
 #//
 def media_upload_type_form(type_="file", errors_=None, id_=None, *_args_):
-    
+    if errors_ is None:
+        errors_ = None
+    # end if
+    if id_ is None:
+        id_ = None
+    # end if
     
     media_upload_header()
     post_id_ = php_intval(PHP_REQUEST["post_id"]) if (php_isset(lambda : PHP_REQUEST["post_id"])) else 0
@@ -1864,7 +1890,15 @@ if ( preloaded.length > 0 ) {
 #// @param integer $id
 #//
 def media_upload_type_url_form(type_=None, errors_=None, id_=None, *_args_):
-    
+    if type_ is None:
+        type_ = None
+    # end if
+    if errors_ is None:
+        errors_ = None
+    # end if
+    if id_ is None:
+        id_ = None
+    # end if
     
     if None == type_:
         type_ = "image"

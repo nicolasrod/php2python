@@ -33,7 +33,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// @link https://www.php.net/manual/en/class.arrayaccess.php
 #//
-class WP_REST_Request():
+class WP_REST_Request(ArrayAccess):
     #// 
     #// HTTP method.
     #// 
@@ -309,7 +309,7 @@ class WP_REST_Request():
         # end if
         #// Parse type and subtype out.
         type_, subtype_ = php_explode("/", value_, 2)
-        data_ = php_compact("value", "type", "subtype", "parameters")
+        data_ = php_compact("value_", "type_", "subtype_", "parameters_")
         data_ = php_array_map("trim", data_)
         return data_
     # end def get_content_type

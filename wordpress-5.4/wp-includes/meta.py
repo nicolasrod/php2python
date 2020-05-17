@@ -195,7 +195,7 @@ def update_metadata(meta_type_=None, object_id_=None, meta_key_=None, meta_value
     # end if
     _meta_value_ = meta_value_
     meta_value_ = maybe_serialize(meta_value_)
-    data_ = php_compact("meta_value")
+    data_ = php_compact("meta_value_")
     where_ = Array({column_: object_id_, "meta_key": meta_key_})
     if (not php_empty(lambda : prev_value_)):
         prev_value_ = maybe_serialize(prev_value_)
@@ -893,7 +893,9 @@ def wp_metadata_lazyloader(*_args_):
 #// @return array Associative array of `JOIN` and `WHERE` SQL.
 #//
 def get_meta_sql(meta_query_=None, type_=None, primary_table_=None, primary_id_column_=None, context_=None, *_args_):
-    
+    if context_ is None:
+        context_ = None
+    # end if
     
     meta_query_obj_ = php_new_class("WP_Meta_Query", lambda : WP_Meta_Query(meta_query_))
     return meta_query_obj_.get_sql(type_, primary_table_, primary_id_column_, context_)
@@ -1040,7 +1042,9 @@ def sanitize_meta(meta_key_=None, meta_value_=None, object_type_=None, object_su
 #// but will not add to the global registry.
 #//
 def register_meta(object_type_=None, meta_key_=None, args_=None, deprecated_=None, *_args_):
-    
+    if deprecated_ is None:
+        deprecated_ = None
+    # end if
     
     global wp_meta_keys_
     php_check_if_defined("wp_meta_keys_")

@@ -204,7 +204,84 @@ class SimplePie_Enclosure():
     #// @uses idna_convert If available, this will convert an IDN
     #//
     def __init__(self, link_=None, type_=None, length_=None, javascript_=None, bitrate_=None, captions_=None, categories_=None, channels_=None, copyright_=None, credits_=None, description_=None, duration_=None, expression_=None, framerate_=None, hashes_=None, height_=None, keywords_=None, lang_=None, medium_=None, player_=None, ratings_=None, restrictions_=None, samplingrate_=None, thumbnails_=None, title_=None, width_=None):
-        
+        if link_ is None:
+            link_ = None
+        # end if
+        if type_ is None:
+            type_ = None
+        # end if
+        if length_ is None:
+            length_ = None
+        # end if
+        if javascript_ is None:
+            javascript_ = None
+        # end if
+        if bitrate_ is None:
+            bitrate_ = None
+        # end if
+        if captions_ is None:
+            captions_ = None
+        # end if
+        if categories_ is None:
+            categories_ = None
+        # end if
+        if channels_ is None:
+            channels_ = None
+        # end if
+        if copyright_ is None:
+            copyright_ = None
+        # end if
+        if credits_ is None:
+            credits_ = None
+        # end if
+        if description_ is None:
+            description_ = None
+        # end if
+        if duration_ is None:
+            duration_ = None
+        # end if
+        if expression_ is None:
+            expression_ = None
+        # end if
+        if framerate_ is None:
+            framerate_ = None
+        # end if
+        if hashes_ is None:
+            hashes_ = None
+        # end if
+        if height_ is None:
+            height_ = None
+        # end if
+        if keywords_ is None:
+            keywords_ = None
+        # end if
+        if lang_ is None:
+            lang_ = None
+        # end if
+        if medium_ is None:
+            medium_ = None
+        # end if
+        if player_ is None:
+            player_ = None
+        # end if
+        if ratings_ is None:
+            ratings_ = None
+        # end if
+        if restrictions_ is None:
+            restrictions_ = None
+        # end if
+        if samplingrate_ is None:
+            samplingrate_ = None
+        # end if
+        if thumbnails_ is None:
+            thumbnails_ = None
+        # end if
+        if title_ is None:
+            title_ = None
+        # end if
+        if width_ is None:
+            width_ = None
+        # end if
         
         self.bitrate = bitrate_
         self.captions = captions_

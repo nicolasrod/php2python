@@ -304,9 +304,11 @@ class ftp_base():
         return True
     # end def _settype
     def passive(self, pasv_=None):
+        if pasv_ is None:
+            pasv_ = None
+        # end if
         
-        
-        if is_null(pasv_):
+        if php_is_null(pasv_):
             self._passive = (not self._passive)
         else:
             self._passive = pasv_
@@ -384,7 +386,9 @@ class ftp_base():
         return True
     # end def settimeout
     def connect(self, server_=None):
-        
+        if server_ is None:
+            server_ = None
+        # end if
         
         if (not php_empty(lambda : server_)):
             if (not self.setserver(server_)):
@@ -456,14 +460,19 @@ class ftp_base():
         return True
     # end def quit
     def login(self, user_=None, pass_=None):
+        if user_ is None:
+            user_ = None
+        # end if
+        if pass_ is None:
+            pass_ = None
+        # end if
         
-        
-        if (not is_null(user_)):
+        if (not php_is_null(user_)):
             self._login = user_
         else:
             self._login = "anonymous"
         # end if
-        if (not is_null(pass_)):
+        if (not php_is_null(pass_)):
             self._password = pass_
         else:
             self._password = "anon@anon.com"
@@ -769,9 +778,11 @@ class ftp_base():
         return out_
     # end def fget
     def get(self, remotefile_=None, localfile_=None, rest_=0):
+        if localfile_ is None:
+            localfile_ = None
+        # end if
         
-        
-        if is_null(localfile_):
+        if php_is_null(localfile_):
             localfile_ = remotefile_
         # end if
         if php_no_error(lambda: php_file_exists(localfile_)):
@@ -856,9 +867,11 @@ class ftp_base():
         return ret_
     # end def fput
     def put(self, localfile_=None, remotefile_=None, rest_=0):
+        if remotefile_ is None:
+            remotefile_ = None
+        # end if
         
-        
-        if is_null(remotefile_):
+        if php_is_null(remotefile_):
             remotefile_ = localfile_
         # end if
         if (not php_file_exists(localfile_)):
@@ -908,6 +921,9 @@ class ftp_base():
         return ret_
     # end def put
     def mput(self, local_=".", remote_=None, continious_=None):
+        if remote_ is None:
+            remote_ = None
+        # end if
         if continious_ is None:
             continious_ = False
         # end if
@@ -1074,7 +1090,9 @@ class ftp_base():
         return r_
     # end def mmkdir
     def glob(self, pattern_=None, handle_=None):
-        
+        if handle_ is None:
+            handle_ = None
+        # end if
         
         path_ = output_ = None
         if PHP_OS == "WIN32":

@@ -281,7 +281,12 @@ class WP_Customize_Selective_Refresh():
     #// @return true Always true.
     #//
     def handle_error(self, errno_=None, errstr_=None, errfile_=None, errline_=None):
-        
+        if errfile_ is None:
+            errfile_ = None
+        # end if
+        if errline_ is None:
+            errline_ = None
+        # end if
         
         self.triggered_errors[-1] = Array({"partial": self.current_partial_id, "error_number": errno_, "error_string": errstr_, "error_file": errfile_, "error_line": errline_})
         return True

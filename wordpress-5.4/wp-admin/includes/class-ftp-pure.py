@@ -161,6 +161,9 @@ class ftp_pure(ftp_base):
         if mode_ is None:
             mode_ = FTP_ASCII
         # end if
+        if fp_ is None:
+            fp_ = None
+        # end if
         
         if is_resource(fp_):
             out_ = 0
@@ -191,6 +194,9 @@ class ftp_pure(ftp_base):
     def _data_write(self, mode_=None, fp_=None):
         if mode_ is None:
             mode_ = FTP_ASCII
+        # end if
+        if fp_ is None:
+            fp_ = None
         # end if
         
         if is_resource(fp_):

@@ -149,7 +149,9 @@ def wp_get_revision_ui_diff(post_=None, compare_from_=None, compare_to_=None, *_
 #// @return array An associative array of revision data and related settings.
 #//
 def wp_prepare_revisions_for_js(post_=None, selected_revision_id_=None, from_=None, *_args_):
-    
+    if from_ is None:
+        from_ = None
+    # end if
     
     post_ = get_post(post_)
     authors_ = Array()

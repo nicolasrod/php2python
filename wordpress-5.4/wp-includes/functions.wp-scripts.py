@@ -217,7 +217,9 @@ def wp_localize_script(handle_=None, object_name_=None, l10n_=None, *_args_):
 #// @return bool True if the text domain was successfully localized, false otherwise.
 #//
 def wp_set_script_translations(handle_=None, domain_="default", path_=None, *_args_):
-    
+    if path_ is None:
+        path_ = None
+    # end if
     
     global wp_scripts_
     php_check_if_defined("wp_scripts_")

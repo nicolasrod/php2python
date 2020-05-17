@@ -64,13 +64,17 @@ class Akismet():
     # end def get_api_key
     @classmethod
     def check_key_status(self, key_=None, ip_=None):
-        
+        if ip_ is None:
+            ip_ = None
+        # end if
         
         return self.http_post(Akismet.build_query(Array({"key": key_, "blog": get_option("home")})), "verify-key", ip_)
     # end def check_key_status
     @classmethod
     def verify_key(self, key_=None, ip_=None):
-        
+        if ip_ is None:
+            ip_ = None
+        # end if
         
         #// Shortcut for obviously invalid keys.
         if php_strlen(key_) != 12:
@@ -202,7 +206,7 @@ class Akismet():
             # end if
         # end for
         post_ = get_post(comment_["comment_post_ID"])
-        if (not is_null(post_)):
+        if (not php_is_null(post_)):
             #// $post can technically be null, although in the past, it's always been an indicator of another plugin interfering.
             comment_["comment_post_modified_gmt"] = post_.post_modified_gmt
         # end if
@@ -276,7 +280,7 @@ class Akismet():
     def set_last_comment(self, comment_=None):
         
         
-        if is_null(comment_):
+        if php_is_null(comment_):
             self.last_comment = None
         else:
             #// We filter it here so that it matches the filtered comment data that we'll have to compare against later.
@@ -515,7 +519,12 @@ class Akismet():
     #//
     @classmethod
     def update_comment_history(self, comment_id_=None, message_=None, event_=None, meta_=None):
-        
+        if event_ is None:
+            event_ = None
+        # end if
+        if meta_ is None:
+            meta_ = None
+        # end if
         
         global current_user_
         php_check_if_defined("current_user_")
@@ -678,7 +687,7 @@ class Akismet():
             comment_.is_test = "true"
         # end if
         post_ = get_post(comment_.comment_post_ID)
-        if (not is_null(post_)):
+        if (not php_is_null(post_)):
             comment_.comment_post_modified_gmt = post_.post_modified_gmt
         # end if
         response_ = Akismet.http_post(Akismet.build_query(comment_), "submit-spam")
@@ -730,7 +739,7 @@ class Akismet():
             comment_.is_test = "true"
         # end if
         post_ = get_post(comment_.comment_post_ID)
-        if (not is_null(post_)):
+        if (not php_is_null(post_)):
             comment_.comment_post_modified_gmt = post_.post_modified_gmt
         # end if
         response_ = self.http_post(Akismet.build_query(comment_), "submit-ham")
@@ -958,7 +967,7 @@ class Akismet():
     def last_comment_status(self, approved_=None, comment_=None):
         
         
-        if is_null(self.last_comment_result):
+        if php_is_null(self.last_comment_result):
             #// We didn't have reason to store the result of the last check.
             return approved_
         # end if
@@ -1032,7 +1041,9 @@ class Akismet():
     #//
     @classmethod
     def http_post(self, request_=None, path_=None, ip_=None):
-        
+        if ip_ is None:
+            ip_ = None
+        # end if
         
         akismet_ua_ = php_sprintf("WordPress/%s | Akismet/%s", PHP_GLOBALS["wp_version"], constant("AKISMET_VERSION"))
         akismet_ua_ = apply_filters("akismet_ua", akismet_ua_)
@@ -1071,21 +1082,21 @@ class Akismet():
             do_action("akismet_https_request_pre")
         # end if
         response_ = wp_remote_post(akismet_url_, http_args_)
-        Akismet.log(php_compact("akismet_url", "http_args", "response"))
+        Akismet.log(php_compact("akismet_url_", "http_args_", "response_"))
         if ssl_ and is_wp_error(response_):
             do_action("akismet_https_request_failure", response_)
             #// Intermittent connection problems may cause the first HTTPS
             #// request to fail and subsequent HTTP requests to succeed randomly.
             #// Retry the HTTPS request once before disabling SSL for a time.
             response_ = wp_remote_post(akismet_url_, http_args_)
-            Akismet.log(php_compact("akismet_url", "http_args", "response"))
+            Akismet.log(php_compact("akismet_url_", "http_args_", "response_"))
             if is_wp_error(response_):
                 ssl_failed_ = True
                 do_action("akismet_https_request_failure", response_)
                 do_action("akismet_http_request_pre")
                 #// Try the request again without SSL.
                 response_ = wp_remote_post(http_akismet_url_, http_args_)
-                Akismet.log(php_compact("http_akismet_url", "http_args", "response"))
+                Akismet.log(php_compact("http_akismet_url_", "http_args_", "response_"))
             # end if
         # end if
         if is_wp_error(response_):
@@ -1278,7 +1289,7 @@ class Akismet():
         
         
         if apply_filters("akismet_debug_log", php_defined("WP_DEBUG") and WP_DEBUG and php_defined("WP_DEBUG_LOG") and WP_DEBUG_LOG and php_defined("AKISMET_DEBUG") and AKISMET_DEBUG):
-            php_error_log(print_r(php_compact("akismet_debug"), True))
+            php_error_log(print_r(php_compact("akismet_debug_"), True))
         # end if
     # end def log
     @classmethod
@@ -1327,7 +1338,7 @@ class Akismet():
         # end if
         meta_value_ = meta_value_
         for key_,value_ in meta_value_:
-            if (not (php_isset(lambda : self.comment_as_submitted_allowed_keys[key_]))) or (not is_scalar(value_)):
+            if (not (php_isset(lambda : self.comment_as_submitted_allowed_keys[key_]))) or (not php_is_scalar(value_)):
                 meta_value_[key_] = None
             # end if
         # end for

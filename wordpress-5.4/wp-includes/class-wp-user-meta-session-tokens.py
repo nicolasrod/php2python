@@ -79,7 +79,9 @@ class WP_User_Meta_Session_Tokens(WP_Session_Tokens):
     #// @param array  $session  Optional. Session. Omitting this argument destroys the session.
     #//
     def update_session(self, verifier_=None, session_=None):
-        
+        if session_ is None:
+            session_ = None
+        # end if
         
         sessions_ = self.get_sessions()
         if session_:

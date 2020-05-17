@@ -89,7 +89,15 @@ class SimplePie_Author():
     #// @param string $email
     #//
     def __init__(self, name_=None, link_=None, email_=None):
-        
+        if name_ is None:
+            name_ = None
+        # end if
+        if link_ is None:
+            link_ = None
+        # end if
+        if email_ is None:
+            email_ = None
+        # end if
         
         self.name = name_
         self.link = link_

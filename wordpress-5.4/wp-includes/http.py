@@ -30,7 +30,7 @@ def _wp_http_get_object(*_args_):
     
     
     http_ = None
-    if is_null(http_):
+    if php_is_null(http_):
         http_ = php_new_class("WP_Http", lambda : WP_Http())
     # end if
     return http_
@@ -392,6 +392,9 @@ def wp_http_supports(capabilities_=None, url_=None, *_args_):
     if capabilities_ is None:
         capabilities_ = Array()
     # end if
+    if url_ is None:
+        url_ = None
+    # end if
     
     http_ = _wp_http_get_object()
     capabilities_ = wp_parse_args(capabilities_)
@@ -470,7 +473,9 @@ def get_allowed_http_origins(*_args_):
 #// @return string Origin URL if allowed, empty string if not.
 #//
 def is_allowed_http_origin(origin_=None, *_args_):
-    
+    if origin_ is None:
+        origin_ = None
+    # end if
     
     origin_arg_ = origin_
     if None == origin_:

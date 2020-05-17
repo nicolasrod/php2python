@@ -28,6 +28,9 @@ def _wp_translate_postdata(update_=None, post_data_=None, *_args_):
     if update_ is None:
         update_ = False
     # end if
+    if post_data_ is None:
+        post_data_ = None
+    # end if
     
     if php_empty(lambda : post_data_):
         post_data_ = PHP_POST
@@ -185,7 +188,9 @@ def _wp_translate_postdata(update_=None, post_data_=None, *_args_):
 #// @return array|WP_Error Array of post data on success, WP_Error on failure.
 #//
 def _wp_get_allowed_postdata(post_data_=None, *_args_):
-    
+    if post_data_ is None:
+        post_data_ = None
+    # end if
     
     if php_empty(lambda : post_data_):
         post_data_ = PHP_POST
@@ -207,7 +212,9 @@ def _wp_get_allowed_postdata(post_data_=None, *_args_):
 #// @return int Post ID.
 #//
 def edit_post(post_data_=None, *_args_):
-    
+    if post_data_ is None:
+        post_data_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -394,7 +401,9 @@ def edit_post(post_data_=None, *_args_):
 #// @return array
 #//
 def bulk_edit_posts(post_data_=None, *_args_):
-    
+    if post_data_ is None:
+        post_data_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -1011,7 +1020,7 @@ def wp_edit_posts_query(q_=None, *_args_):
     #// @param string $post_type      The post type.
     #//
     posts_per_page_ = apply_filters("edit_posts_per_page", posts_per_page_, post_type_)
-    query_ = php_compact("post_type", "post_status", "perm", "order", "orderby", "posts_per_page")
+    query_ = php_compact("post_type_", "post_status_", "perm_", "order_", "orderby_", "posts_per_page_")
     #// Hierarchical types require special args.
     if is_post_type_hierarchical(post_type_) and php_empty(lambda : orderby_):
         query_["orderby"] = "menu_order title"
@@ -1159,7 +1168,12 @@ def postbox_classes(box_id_=None, screen_id_=None, *_args_):
 #// }
 #//
 def get_sample_permalink(id_=None, title_=None, name_=None, *_args_):
-    
+    if title_ is None:
+        title_ = None
+    # end if
+    if name_ is None:
+        name_ = None
+    # end if
     
     post_ = get_post(id_)
     if (not post_):
@@ -1176,7 +1190,7 @@ def get_sample_permalink(id_=None, title_=None, name_=None, *_args_):
     # end if
     #// If the user wants to set a new name -- override the current one.
     #// Note: if empty name is supplied -- use the title instead, see #6072.
-    if (not is_null(name_)):
+    if (not php_is_null(name_)):
         post_.post_name = sanitize_title(name_ if name_ else title_, post_.ID)
     # end if
     post_.post_name = wp_unique_post_slug(post_.post_name, post_.ID, post_.post_status, post_.post_type, post_.post_parent)
@@ -1234,7 +1248,12 @@ def get_sample_permalink(id_=None, title_=None, name_=None, *_args_):
 #// @return string The HTML of the sample permalink slug editor.
 #//
 def get_sample_permalink_html(id_=None, new_title_=None, new_slug_=None, *_args_):
-    
+    if new_title_ is None:
+        new_title_ = None
+    # end if
+    if new_slug_ is None:
+        new_slug_ = None
+    # end if
     
     post_ = get_post(id_)
     if (not post_):
@@ -1309,7 +1328,12 @@ def get_sample_permalink_html(id_=None, new_title_=None, new_slug_=None, *_args_
 #// @return string html
 #//
 def _wp_post_thumbnail_html(thumbnail_id_=None, post_=None, *_args_):
-    
+    if thumbnail_id_ is None:
+        thumbnail_id_ = None
+    # end if
+    if post_ is None:
+        post_ = None
+    # end if
     
     _wp_additional_image_sizes_ = wp_get_additional_image_sizes()
     post_ = get_post(post_)

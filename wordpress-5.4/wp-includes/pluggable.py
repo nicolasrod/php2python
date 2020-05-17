@@ -178,7 +178,7 @@ if (not php_function_exists("wp_mail")):
         #// @param array $args A compacted array of wp_mail() arguments, including the "to" email,
         #// subject, message, headers, and attachments values.
         #//
-        atts_ = apply_filters("wp_mail", php_compact("to", "subject", "message", "headers", "attachments"))
+        atts_ = apply_filters("wp_mail", php_compact("to_", "subject_", "message_", "headers_", "attachments_"))
         if (php_isset(lambda : atts_["to"])):
             to_ = atts_["to"]
         # end if
@@ -339,7 +339,7 @@ if (not php_function_exists("wp_mail")):
         try: 
             phpmailer_.setfrom(from_email_, from_name_, False)
         except phpmailerException as e_:
-            mail_error_data_ = php_compact("to", "subject", "message", "headers", "attachments")
+            mail_error_data_ = php_compact("to_", "subject_", "message_", "headers_", "attachments_")
             mail_error_data_["phpmailer_exception_code"] = e_.getcode()
             #// This filter is documented in wp-includes/pluggable.php
             do_action("wp_mail_failed", php_new_class("WP_Error", lambda : WP_Error("wp_mail_failed", e_.getmessage(), mail_error_data_)))
@@ -349,7 +349,7 @@ if (not php_function_exists("wp_mail")):
         phpmailer_.Subject = subject_
         phpmailer_.Body = message_
         #// Set destination addresses, using appropriate methods for handling addresses.
-        address_headers_ = php_compact("to", "cc", "bcc", "reply_to")
+        address_headers_ = php_compact("to_", "cc_", "bcc_", "reply_to_")
         for address_header_,addresses_ in address_headers_:
             if php_empty(lambda : addresses_):
                 continue
@@ -452,7 +452,7 @@ if (not php_function_exists("wp_mail")):
         try: 
             return phpmailer_.send()
         except phpmailerException as e_:
-            mail_error_data_ = php_compact("to", "subject", "message", "headers", "attachments")
+            mail_error_data_ = php_compact("to_", "subject_", "message_", "headers_", "attachments_")
             mail_error_data_["phpmailer_exception_code"] = e_.getcode()
             #// 
             #// Fires after a phpmailerException is caught.
@@ -748,7 +748,7 @@ if (not php_function_exists("wp_parse_auth_cookie")):
             return False
         # end if
         username_, expiration_, token_, hmac_ = cookie_elements_
-        return php_compact("username", "expiration", "token", "hmac", "scheme")
+        return php_compact("username_", "expiration_", "token_", "hmac_", "scheme_")
     # end def wp_parse_auth_cookie
 # end if
 if (not php_function_exists("wp_set_auth_cookie")):
@@ -1388,7 +1388,9 @@ if (not php_function_exists("wp_notify_postauthor")):
     #// @return bool True on completion. False if no email addresses were specified.
     #//
     def wp_notify_postauthor(comment_id_=None, deprecated_=None, *_args_):
-        
+        if deprecated_ is None:
+            deprecated_ = None
+        # end if
         
         if None != deprecated_:
             _deprecated_argument(__FUNCTION__, "3.8.0")
@@ -1794,7 +1796,9 @@ if (not php_function_exists("wp_new_user_notification")):
     #// string (admin only), 'user', or 'both' (admin and user). Default empty.
     #//
     def wp_new_user_notification(user_id_=None, deprecated_=None, notify_="", *_args_):
-        
+        if deprecated_ is None:
+            deprecated_ = None
+        # end if
         
         if None != deprecated_:
             _deprecated_argument(__FUNCTION__, "4.3.1")
@@ -2385,7 +2389,9 @@ if (not php_function_exists("get_avatar")):
     #// @return string|false `<img>` tag for the user's avatar. False on failure.
     #//
     def get_avatar(id_or_email_=None, size_=96, default_="", alt_="", args_=None, *_args_):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         defaults_ = Array({"size": 96, "height": None, "width": None, "default": get_option("avatar_default", "mystery"), "force_default": False, "rating": get_option("avatar_rating"), "scheme": None, "alt": "", "class": None, "force_display": False, "extra_attr": ""})
         if php_empty(lambda : args_):
@@ -2418,7 +2424,7 @@ if (not php_function_exists("get_avatar")):
         #// @param array       $args        Arguments passed to get_avatar_url(), after processing.
         #//
         avatar_ = apply_filters("pre_get_avatar", None, id_or_email_, args_)
-        if (not is_null(avatar_)):
+        if (not php_is_null(avatar_)):
             #// This filter is documented in wp-includes/pluggable.php
             return apply_filters("get_avatar", avatar_, id_or_email_, args_["size"], args_["default"], args_["alt"], args_)
         # end if
@@ -2493,7 +2499,9 @@ if (not php_function_exists("wp_text_diff")):
     #// @return string Empty string if strings are equivalent or HTML with differences.
     #//
     def wp_text_diff(left_string_=None, right_string_=None, args_=None, *_args_):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         defaults_ = Array({"title": "", "title_left": "", "title_right": "", "show_split_view": True})
         args_ = wp_parse_args(args_, defaults_)

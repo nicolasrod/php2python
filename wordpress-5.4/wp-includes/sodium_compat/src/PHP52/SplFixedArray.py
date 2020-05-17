@@ -17,7 +17,7 @@ if php_class_exists("SplFixedArray"):
 #// the range as indexes. The advantage is that it allows a faster array
 #// implementation.
 #//
-class SplFixedArray(Countable):
+class SplFixedArray(IteratorArrayAccessCountable):
     #// @var array<int, mixed>
     internalArray = Array()
     #// @var int $size

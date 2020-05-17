@@ -123,7 +123,9 @@ if (not php_function_exists("twentynineteen_get_user_avatar_markup")):
     #// Returns the HTML markup to generate a user avatar.
     #//
     def twentynineteen_get_user_avatar_markup(id_or_email_=None, *_args_):
-        
+        if id_or_email_ is None:
+            id_or_email_ = None
+        # end if
         
         if (not (php_isset(lambda : id_or_email_))):
             id_or_email_ = get_current_user_id()

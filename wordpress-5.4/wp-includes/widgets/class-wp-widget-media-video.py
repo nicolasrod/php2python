@@ -80,7 +80,7 @@ class WP_Widget_Media_Video(WP_Widget_Media):
         vimeo_pattern_ = "#^https?://(.+\\.)?vimeo\\.com/.*#"
         if attachment_ or php_preg_match(youtube_pattern_, src_) or php_preg_match(vimeo_pattern_, src_):
             add_filter("wp_video_shortcode", Array(self, "inject_video_max_width_style"))
-            php_print(wp_video_shortcode(php_array_merge(instance_, php_compact("src")), instance_["content"]))
+            php_print(wp_video_shortcode(php_array_merge(instance_, php_compact("src_")), instance_["content"]))
             remove_filter("wp_video_shortcode", Array(self, "inject_video_max_width_style"))
         else:
             php_print(self.inject_video_max_width_style(wp_oembed_get(src_)))

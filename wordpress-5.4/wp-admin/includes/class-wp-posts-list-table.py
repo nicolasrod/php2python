@@ -819,7 +819,7 @@ class WP_Posts_List_Table(WP_List_Table):
                         break
                     # end if
                     parent_ = get_post(find_main_page_)
-                    if is_null(parent_):
+                    if php_is_null(parent_):
                         break
                     # end if
                     self.current_level += 1

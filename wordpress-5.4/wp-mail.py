@@ -195,7 +195,7 @@ while i_ <= count_:
         post_title_ = subject_
     # end if
     post_category_ = Array(get_option("default_email_category"))
-    post_data_ = php_compact("post_content", "post_title", "post_date", "post_date_gmt", "post_author", "post_category", "post_status")
+    post_data_ = php_compact("post_content_", "post_title_", "post_date_", "post_date_gmt_", "post_author_", "post_category_", "post_status_")
     post_data_ = wp_slash(post_data_)
     post_ID_ = wp_insert_post(post_data_)
     if is_wp_error(post_ID_):

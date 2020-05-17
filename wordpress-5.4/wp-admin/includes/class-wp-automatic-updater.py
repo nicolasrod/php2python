@@ -553,7 +553,9 @@ class WP_Automatic_Updater():
     #// @param mixed  $result      Optional. The result for the core update. Can be WP_Error.
     #//
     def send_email(self, type_=None, core_update_=None, result_=None):
-        
+        if result_ is None:
+            result_ = None
+        # end if
         
         update_site_option("auto_core_update_notified", Array({"type": type_, "email": get_site_option("admin_email"), "version": core_update_.current, "timestamp": time()}))
         next_user_core_update_ = get_preferred_from_update_core()
@@ -712,7 +714,7 @@ class WP_Automatic_Updater():
         # end if
         to_ = get_site_option("admin_email")
         headers_ = ""
-        email_ = php_compact("to", "subject", "body", "headers")
+        email_ = php_compact("to_", "subject_", "body_", "headers_")
         #// 
         #// Filters the email sent following an automatic background core update.
         #// 

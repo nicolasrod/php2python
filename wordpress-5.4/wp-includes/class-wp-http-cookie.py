@@ -158,7 +158,7 @@ class WP_Http_Cookie():
     def test(self, url_=None):
         
         
-        if is_null(self.name):
+        if php_is_null(self.name):
             return False
         # end if
         #// Expires - if expired then nothing else matters.

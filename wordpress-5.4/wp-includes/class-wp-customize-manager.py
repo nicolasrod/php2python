@@ -375,7 +375,9 @@ class WP_Customize_Manager():
     #// @return bool True if it's an Ajax request, false otherwise.
     #//
     def doing_ajax(self, action_=None):
-        
+        if action_ is None:
+            action_ = None
+        # end if
         
         if (not wp_doing_ajax()):
             return False
@@ -400,7 +402,9 @@ class WP_Customize_Manager():
     #// @param string          $message      Optional. UI message.
     #//
     def wp_die(self, ajax_message_=None, message_=None):
-        
+        if message_ is None:
+            message_ = None
+        # end if
         
         if self.doing_ajax():
             wp_die(ajax_message_)
@@ -1587,7 +1591,9 @@ class WP_Customize_Manager():
     #// @return string|mixed $post_value Sanitized value or the $default provided.
     #//
     def post_value(self, setting_=None, default_=None):
-        
+        if default_ is None:
+            default_ = None
+        # end if
         
         post_values_ = self.unsanitized_post_values()
         if (not php_array_key_exists(setting_.id, post_values_)):
@@ -1599,7 +1605,7 @@ class WP_Customize_Manager():
             return default_
         # end if
         value_ = setting_.sanitize(value_)
-        if is_null(value_) or is_wp_error(value_):
+        if php_is_null(value_) or is_wp_error(value_):
             return default_
         # end if
         return value_
@@ -1941,7 +1947,9 @@ class WP_Customize_Manager():
     #// @return mixed Value passed through for {@see 'wp_die_handler'} filter.
     #//
     def remove_preview_signature(self, return_=None):
-        
+        if return_ is None:
+            return_ = None
+        # end if
         
         _deprecated_function(__METHOD__, "4.7.0")
         return return_
@@ -2059,7 +2067,7 @@ class WP_Customize_Manager():
             if options_["validate_capability"] and (not current_user_can(setting_.capability)):
                 validity_ = php_new_class("WP_Error", lambda : WP_Error("unauthorized", __("Unauthorized to modify setting due to capability.")))
             else:
-                if is_null(unsanitized_value_):
+                if php_is_null(unsanitized_value_):
                     continue
                 # end if
                 validity_ = setting_.validate(unsanitized_value_)
@@ -2073,7 +2081,7 @@ class WP_Customize_Manager():
             # end if
             if (not is_wp_error(validity_)):
                 value_ = setting_.sanitize(unsanitized_value_)
-                if is_null(value_):
+                if php_is_null(value_):
                     validity_ = False
                 elif is_wp_error(value_):
                     validity_ = value_

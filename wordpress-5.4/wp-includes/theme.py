@@ -1748,7 +1748,7 @@ def wp_update_custom_css_post(css_=None, args_=None, *_args_):
     #// @type string $stylesheet   The stylesheet (theme) being updated.
     #// }
     #//
-    data_ = apply_filters("update_custom_css_data", data_, php_array_merge(args_, php_compact("css")))
+    data_ = apply_filters("update_custom_css_data", data_, php_array_merge(args_, php_compact("css_")))
     post_data_ = Array({"post_title": args_["stylesheet"], "post_name": sanitize_title(args_["stylesheet"]), "post_type": "custom_css", "post_status": "publish", "post_content": data_["css"], "post_content_filtered": data_["preprocessed"]})
     #// Update post if it already exists, otherwise create a new one.
     post_ = wp_get_custom_css_post(args_["stylesheet"])
@@ -2069,7 +2069,7 @@ def add_theme_support(feature_=None, *args_):
             defaults_ = Array({"width": None, "height": None, "flex-width": False, "flex-height": False, "header-text": ""})
             args_[0] = wp_parse_args(php_array_intersect_key(args_[0], defaults_), defaults_)
             #// Allow full flexibility if no size is specified.
-            if is_null(args_[0]["width"]) and is_null(args_[0]["height"]):
+            if php_is_null(args_[0]["width"]) and php_is_null(args_[0]["height"]):
                 args_[0]["flex-width"] = True
                 args_[0]["flex-height"] = True
             # end if
@@ -2613,7 +2613,7 @@ def _wp_customize_include(*_args_):
     is_customize_save_action_ = wp_doing_ajax() and (php_isset(lambda : PHP_REQUEST["action"])) and "customize_save" == wp_unslash(PHP_REQUEST["action"])
     settings_previewed_ = (not is_customize_save_action_)
     php_include_file(ABSPATH + WPINC + "/class-wp-customize-manager.php", once=True)
-    PHP_GLOBALS["wp_customize"] = php_new_class("WP_Customize_Manager", lambda : WP_Customize_Manager(php_compact("changeset_uuid", "theme", "messenger_channel", "settings_previewed", "autosaved", "branching")))
+    PHP_GLOBALS["wp_customize"] = php_new_class("WP_Customize_Manager", lambda : WP_Customize_Manager(php_compact("changeset_uuid_", "theme_", "messenger_channel_", "settings_previewed_", "autosaved_", "branching_")))
 # end def _wp_customize_include
 #// 
 #// Publishes a snapshot's changes.

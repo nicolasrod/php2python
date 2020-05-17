@@ -241,6 +241,9 @@ class WP_Dependencies():
         if ver_ is None:
             ver_ = False
         # end if
+        if args_ is None:
+            args_ = None
+        # end if
         
         if (php_isset(lambda : self.registered[handle_])):
             return False

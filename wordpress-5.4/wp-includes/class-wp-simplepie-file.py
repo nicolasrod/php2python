@@ -39,6 +39,12 @@ class WP_SimplePie_File(SimplePie_File):
     #// connection or not. Default false.
     #//
     def __init__(self, url_=None, timeout_=10, redirects_=5, headers_=None, useragent_=None, force_fsockopen_=None):
+        if headers_ is None:
+            headers_ = None
+        # end if
+        if useragent_ is None:
+            useragent_ = None
+        # end if
         if force_fsockopen_ is None:
             force_fsockopen_ = False
         # end if

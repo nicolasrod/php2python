@@ -44,7 +44,9 @@ if force_ssl_admin() and (not is_ssl()):
 #// @param WP_Error $wp_error Optional. The error to pass. Default is a WP_Error instance.
 #//
 def login_header(title_="Log In", message_="", wp_error_=None, *_args_):
-    
+    if wp_error_ is None:
+        wp_error_ = None
+    # end if
     
     global error_
     global interim_login_

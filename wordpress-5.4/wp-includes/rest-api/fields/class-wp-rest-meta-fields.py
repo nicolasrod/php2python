@@ -147,7 +147,7 @@ class WP_REST_Meta_Fields():
             #// A null value means reset the field, which is essentially deleting it
             #// from the database and then relying on the default value.
             #//
-            if is_null(meta_[name_]):
+            if php_is_null(meta_[name_]):
                 args_ = self.get_registered_fields()[meta_key_]
                 if args_["single"]:
                     current_ = get_metadata(self.get_meta_type(), object_id_, meta_key_, True)

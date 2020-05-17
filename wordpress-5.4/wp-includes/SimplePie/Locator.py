@@ -71,7 +71,9 @@ class SimplePie_Locator():
     max_checked_feeds = 10
     registry = Array()
     def __init__(self, file_=None, timeout_=10, useragent_=None, max_checked_feeds_=10):
-        
+        if useragent_ is None:
+            useragent_ = None
+        # end if
         
         self.file_ = file_
         self.useragent = useragent_

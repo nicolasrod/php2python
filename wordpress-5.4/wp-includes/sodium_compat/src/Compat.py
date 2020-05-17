@@ -1237,7 +1237,7 @@ class ParagonIE_Sodium_Compat():
         
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(message_, "string", 1)
-        if is_null(key_):
+        if php_is_null(key_):
             key_ = ""
         # end if
         ParagonIE_Sodium_Core_Util.declarescalartype(key_, "string", 2)
@@ -1328,7 +1328,7 @@ class ParagonIE_Sodium_Compat():
         # end if
         
         #// Type checks:
-        if is_null(key_):
+        if php_is_null(key_):
             key_ = ""
         # end if
         ParagonIE_Sodium_Core_Util.declarescalartype(key_, "string", 1)
@@ -1373,7 +1373,7 @@ class ParagonIE_Sodium_Compat():
         # end if
         
         #// Type checks:
-        if is_null(key_):
+        if php_is_null(key_):
             key_ = ""
         # end if
         ParagonIE_Sodium_Core_Util.declarescalartype(key_, "string", 1)
@@ -1682,7 +1682,9 @@ class ParagonIE_Sodium_Compat():
     #//
     @classmethod
     def crypto_pwhash(self, outlen_=None, passwd_=None, salt_=None, opslimit_=None, memlimit_=None, alg_=None):
-        
+        if alg_ is None:
+            alg_ = None
+        # end if
         
         ParagonIE_Sodium_Core_Util.declarescalartype(outlen_, "int", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(passwd_, "string", 2)
@@ -1690,7 +1692,7 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(opslimit_, "int", 4)
         ParagonIE_Sodium_Core_Util.declarescalartype(memlimit_, "int", 5)
         if self.usenewsodiumapi():
-            if (not is_null(alg_)):
+            if (not php_is_null(alg_)):
                 ParagonIE_Sodium_Core_Util.declarescalartype(alg_, "int", 6)
                 return sodium_crypto_pwhash(outlen_, passwd_, salt_, opslimit_, memlimit_, alg_)
             # end if

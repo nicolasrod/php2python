@@ -289,7 +289,7 @@ class WP():
                     self.query_vars[wpvar_] = php_str(self.query_vars[wpvar_])
                 else:
                     for vkey_,v_ in self.query_vars[wpvar_]:
-                        if is_scalar(v_):
+                        if php_is_scalar(v_):
                             self.query_vars[wpvar_][vkey_] = php_str(v_)
                         # end if
                     # end for
@@ -474,7 +474,7 @@ class WP():
         for wpvar_ in php_array_keys(self.query_vars):
             if "" != self.query_vars[wpvar_]:
                 self.query_string += "" if php_strlen(self.query_string) < 1 else "&"
-                if (not is_scalar(self.query_vars[wpvar_])):
+                if (not php_is_scalar(self.query_vars[wpvar_])):
                     continue
                 # end if
                 self.query_string += wpvar_ + "=" + rawurlencode(self.query_vars[wpvar_])

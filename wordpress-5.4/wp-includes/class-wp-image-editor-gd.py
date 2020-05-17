@@ -301,6 +301,12 @@ class WP_Image_Editor_GD(WP_Image_Editor):
     #// @return bool|WP_Error
     #//
     def crop(self, src_x_=None, src_y_=None, src_w_=None, src_h_=None, dst_w_=None, dst_h_=None, src_abs_=None):
+        if dst_w_ is None:
+            dst_w_ = None
+        # end if
+        if dst_h_ is None:
+            dst_h_ = None
+        # end if
         if src_abs_ is None:
             src_abs_ = False
         # end if
@@ -394,7 +400,12 @@ class WP_Image_Editor_GD(WP_Image_Editor):
     #// @return array|WP_Error {'path'=>string, 'file'=>string, 'width'=>int, 'height'=>int, 'mime-type'=>string}
     #//
     def save(self, filename_=None, mime_type_=None):
-        
+        if filename_ is None:
+            filename_ = None
+        # end if
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         saved_ = self._save(self.image, filename_, mime_type_)
         if (not is_wp_error(saved_)):
@@ -410,7 +421,12 @@ class WP_Image_Editor_GD(WP_Image_Editor):
     #// @return array|WP_Error
     #//
     def _save(self, image_=None, filename_=None, mime_type_=None):
-        
+        if filename_ is None:
+            filename_ = None
+        # end if
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         filename_, extension_, mime_type_ = self.get_output_format(filename_, mime_type_)
         if (not filename_):
@@ -458,7 +474,9 @@ class WP_Image_Editor_GD(WP_Image_Editor):
     #// @return bool True on success, false on failure.
     #//
     def stream(self, mime_type_=None):
-        
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         filename_, extension_, mime_type_ = self.get_output_format(None, mime_type_)
         for case in Switch(mime_type_):

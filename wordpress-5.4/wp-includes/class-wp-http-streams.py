@@ -171,7 +171,7 @@ class WP_Http_Streams():
             strHeaders_ += proxy_.authentication_header() + "\r\n"
         # end if
         strHeaders_ += "\r\n"
-        if (not is_null(parsed_args_["body"])):
+        if (not php_is_null(parsed_args_["body"])):
             strHeaders_ += parsed_args_["body"]
         # end if
         fwrite(handle_, strHeaders_)

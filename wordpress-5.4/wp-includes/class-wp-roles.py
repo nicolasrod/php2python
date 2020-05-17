@@ -84,7 +84,9 @@ class WP_Roles():
     #// @param int $site_id Site ID to initialize roles for. Default is the current site.
     #//
     def __init__(self, site_id_=None):
-        
+        if site_id_ is None:
+            site_id_ = None
+        # end if
         
         global wp_user_roles_
         php_check_if_defined("wp_user_roles_")
@@ -313,7 +315,9 @@ class WP_Roles():
     #// @param int $site_id Site ID to initialize roles for. Default is the current site.
     #//
     def for_site(self, site_id_=None):
-        
+        if site_id_ is None:
+            site_id_ = None
+        # end if
         
         global wpdb_
         php_check_if_defined("wpdb_")

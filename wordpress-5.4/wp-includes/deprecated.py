@@ -627,7 +627,7 @@ def list_cats(optionall_=1, all_="All", sort_column_="ID", sort_order_="asc", fi
     # end if
     
     _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_categories()")
-    query_ = php_compact("optionall", "all", "sort_column", "sort_order", "file", "list", "optiondates", "optioncount", "hide_empty", "use_desc_for_title", "children", "child_of", "categories", "recurse", "feed", "feed_image", "exclude", "hierarchical")
+    query_ = php_compact("optionall_", "all_", "sort_column_", "sort_order_", "file_", "list_", "optiondates_", "optioncount_", "hide_empty_", "use_desc_for_title_", "children_", "child_of_", "categories_", "recurse_", "feed_", "feed_image_", "exclude_", "hierarchical_")
     return wp_list_cats(query_)
 # end def list_cats
 #// 
@@ -700,7 +700,7 @@ def dropdown_cats(optionall_=1, all_="All", orderby_="ID", order_="asc", show_la
     if optionnone_:
         show_option_none_ = __("None")
     # end if
-    vars_ = php_compact("show_option_all", "show_option_none", "orderby", "order", "show_last_update", "show_count", "hide_empty", "selected", "exclude")
+    vars_ = php_compact("show_option_all_", "show_option_none_", "orderby_", "order_", "show_last_update_", "show_count_", "hide_empty_", "selected_", "exclude_")
     query_ = add_query_arg(vars_, "")
     return wp_dropdown_categories(query_)
 # end def dropdown_cats
@@ -734,7 +734,7 @@ def list_authors(optioncount_=None, exclude_admin_=None, show_fullname_=None, hi
     # end if
     
     _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_authors()")
-    args_ = php_compact("optioncount", "exclude_admin", "show_fullname", "hide_empty", "feed", "feed_image")
+    args_ = php_compact("optioncount_", "exclude_admin_", "show_fullname_", "hide_empty_", "feed_", "feed_image_")
     return wp_list_authors(args_)
 # end def list_authors
 #// 
@@ -796,7 +796,7 @@ def get_archives(type_="", limit_="", format_="html", before_="", after_="", sho
     # end if
     
     _deprecated_function(__FUNCTION__, "2.1.0", "wp_get_archives()")
-    args_ = php_compact("type", "limit", "format", "before", "after", "show_post_count")
+    args_ = php_compact("type_", "limit_", "format_", "before_", "after_", "show_post_count_")
     return wp_get_archives(args_)
 # end def get_archives
 #// 
@@ -841,7 +841,7 @@ def link_pages(before_="<br />", after_="<br />", next_or_number_="number", next
     
     
     _deprecated_function(__FUNCTION__, "2.1.0", "wp_link_pages()")
-    args_ = php_compact("before", "after", "next_or_number", "nextpagelink", "previouspagelink", "pagelink", "more_file")
+    args_ = php_compact("before_", "after_", "next_or_number_", "nextpagelink_", "previouspagelink_", "pagelink_", "more_file_")
     return wp_link_pages(args_)
 # end def link_pages
 #// 
@@ -2113,7 +2113,9 @@ def get_link(bookmark_id_=None, output_=None, filter_="raw", *_args_):
 #// @return string The cleaned URL.
 #//
 def sanitize_url(url_=None, protocols_=None, *_args_):
-    
+    if protocols_ is None:
+        protocols_ = None
+    # end if
     
     _deprecated_function(__FUNCTION__, "2.8.0", "esc_url_raw()")
     return esc_url_raw(url_, protocols_)
@@ -2135,7 +2137,9 @@ def sanitize_url(url_=None, protocols_=None, *_args_):
 #// @return string The cleaned $url after the {@see 'clean_url'} filter is applied.
 #//
 def clean_url(url_=None, protocols_=None, context_="display", *_args_):
-    
+    if protocols_ is None:
+        protocols_ = None
+    # end if
     
     if context_ == "db":
         _deprecated_function("clean_url( $context = 'db' )", "3.0.0", "esc_url_raw()")
@@ -2454,9 +2458,9 @@ def update_usermeta(user_id_=None, meta_key_=None, meta_value_=None, *_args_):
         do_action("update_usermeta", cur_.umeta_id, user_id_, meta_key_, meta_value_)
     # end if
     if (not cur_):
-        wpdb_.insert(wpdb_.usermeta, php_compact("user_id", "meta_key", "meta_value"))
+        wpdb_.insert(wpdb_.usermeta, php_compact("user_id_", "meta_key_", "meta_value_"))
     elif cur_.meta_value != meta_value_:
-        wpdb_.update(wpdb_.usermeta, php_compact("meta_value"), php_compact("user_id", "meta_key"))
+        wpdb_.update(wpdb_.usermeta, php_compact("meta_value_"), php_compact("user_id_", "meta_key_"))
     else:
         return False
     # end if
@@ -3273,7 +3277,9 @@ def wp_explain_nonce(action_=None, *_args_):
 #// @param int $post_id An optional post ID.
 #//
 def sticky_class(post_id_=None, *_args_):
-    
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     _deprecated_function(__FUNCTION__, "3.5.0", "post_class()")
     if is_sticky(post_id_):
@@ -3357,6 +3363,12 @@ def wp_load_image(file_=None, *_args_):
 def image_resize(file_=None, max_w_=None, max_h_=None, crop_=None, suffix_=None, dest_path_=None, jpeg_quality_=90, *_args_):
     if crop_ is None:
         crop_ = False
+    # end if
+    if suffix_ is None:
+        suffix_ = None
+    # end if
+    if dest_path_ is None:
+        dest_path_ = None
     # end if
     
     _deprecated_function(__FUNCTION__, "3.5.0", "wp_get_image_editor()")
@@ -3843,7 +3855,9 @@ def wp_get_http(url_=None, file_path_=None, red_=1, *_args_):
 #// @return bool True if forced, false if not forced.
 #//
 def force_ssl_login(force_=None, *_args_):
-    
+    if force_ is None:
+        force_ = None
+    # end if
     
     _deprecated_function(__FUNCTION__, "4.4.0", "force_ssl_admin()")
     return force_ssl_admin(force_)

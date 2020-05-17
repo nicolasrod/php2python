@@ -299,7 +299,9 @@ class WP_Widget_Media(WP_Widget):
     #// @return array
     #//
     def display_media_state(self, states_=None, post_=None):
-        
+        if post_ is None:
+            post_ = None
+        # end if
         
         if (not post_):
             post_ = get_post()

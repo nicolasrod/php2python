@@ -32,7 +32,9 @@ class Requests_Exception_Transport_cURL(Requests_Exception_Transport):
     #//
     reason = "Unknown"
     def __init__(self, message_=None, type_=None, data_=None, code_=0):
-        
+        if data_ is None:
+            data_ = None
+        # end if
         
         if type_ != None:
             self.type = type_

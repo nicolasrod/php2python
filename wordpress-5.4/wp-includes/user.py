@@ -801,7 +801,9 @@ def update_user_meta(user_id_=None, meta_key_=None, meta_value_=None, prev_value
 #// }
 #//
 def count_users(strategy_="time", site_id_=None, *_args_):
-    
+    if site_id_ is None:
+        site_id_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -1576,13 +1578,13 @@ def wp_insert_user(userdata_=None, *_args_):
     meta_["use_ssl"] = 0 if php_empty(lambda : userdata_["use_ssl"]) else php_bool(userdata_["use_ssl"])
     meta_["show_admin_bar_front"] = "true" if php_empty(lambda : userdata_["show_admin_bar_front"]) else userdata_["show_admin_bar_front"]
     meta_["locale"] = userdata_["locale"] if (php_isset(lambda : userdata_["locale"])) else ""
-    compacted_ = php_compact("user_pass", "user_nicename", "user_email", "user_url", "user_registered", "user_activation_key", "display_name")
+    compacted_ = php_compact("user_pass_", "user_nicename_", "user_email_", "user_url_", "user_registered_", "user_activation_key_", "display_name_")
     data_ = wp_unslash(compacted_)
     if (not update_):
-        data_ = data_ + php_compact("user_login")
+        data_ = data_ + php_compact("user_login_")
     # end if
     if is_multisite():
-        data_ = data_ + php_compact("spam")
+        data_ = data_ + php_compact("spam_")
     # end if
     #// 
     #// Filters user data before the record is created or updated.
@@ -1614,7 +1616,7 @@ def wp_insert_user(userdata_=None, *_args_):
         if user_email_ != old_user_data_.user_email:
             data_["user_activation_key"] = ""
         # end if
-        wpdb_.update(wpdb_.users, data_, php_compact("ID"))
+        wpdb_.update(wpdb_.users, data_, php_compact("ID_"))
         user_id_ = php_int(ID_)
     else:
         wpdb_.insert(wpdb_.users, data_)
@@ -1915,7 +1917,7 @@ def wp_create_user(username_=None, password_=None, email_="", *_args_):
     user_login_ = wp_slash(username_)
     user_email_ = wp_slash(email_)
     user_pass_ = password_
-    userdata_ = php_compact("user_login", "user_email", "user_pass")
+    userdata_ = php_compact("user_login_", "user_email_", "user_pass_")
     return wp_insert_user(userdata_)
 # end def wp_create_user
 #// 
@@ -1947,7 +1949,9 @@ def _get_additional_user_keys(user_=None, *_args_):
 #// @return string[] Array of contact method labels keyed by contact method.
 #//
 def wp_get_user_contact_methods(user_=None, *_args_):
-    
+    if user_ is None:
+        user_ = None
+    # end if
     
     methods_ = Array()
     if get_site_option("initial_db_version") < 23588:
@@ -1975,7 +1979,9 @@ def wp_get_user_contact_methods(user_=None, *_args_):
 #// @return string[] Array of contact method labels keyed by contact method.
 #//
 def _wp_get_user_contactmethods(user_=None, *_args_):
-    
+    if user_ is None:
+        user_ = None
+    # end if
     
     return wp_get_user_contact_methods(user_)
 # end def _wp_get_user_contactmethods
@@ -2380,7 +2386,9 @@ def wp_destroy_all_sessions(*_args_):
 #// @return string[] Array of user IDs as strings.
 #//
 def wp_get_users_with_no_role(site_id_=None, *_args_):
-    
+    if site_id_ is None:
+        site_id_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")

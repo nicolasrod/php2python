@@ -316,6 +316,9 @@ def get_extended(post_=None, *_args_):
 #// When $output is OBJECT, a `WP_Post` instance is returned.
 #//
 def get_post(post_=None, output_=None, filter_="raw", *_args_):
+    if post_ is None:
+        post_ = None
+    # end if
     if output_ is None:
         output_ = OBJECT
     # end if
@@ -401,7 +404,9 @@ def get_post_ancestors(post_=None, *_args_):
 #// @return string The value of the post field on success, empty string on failure.
 #//
 def get_post_field(field_=None, post_=None, context_="display", *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -424,7 +429,9 @@ def get_post_field(field_=None, post_=None, context_="display", *_args_):
 #// @return string|false The mime type on success, false on failure.
 #//
 def get_post_mime_type(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if php_is_object(post_):
@@ -444,7 +451,9 @@ def get_post_mime_type(post_=None, *_args_):
 #// @return string|false Post status on success, false on failure.
 #//
 def get_post_status(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not php_is_object(post_)):
@@ -724,7 +733,9 @@ def post_type_exists(post_type_=None, *_args_):
 #// @return string|false          Post type on success, false on failure.
 #//
 def get_post_type(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if post_:
@@ -750,7 +761,7 @@ def get_post_type_object(post_type_=None, *_args_):
     
     global wp_post_types_
     php_check_if_defined("wp_post_types_")
-    if (not is_scalar(post_type_)) or php_empty(lambda : wp_post_types_[post_type_]):
+    if (not php_is_scalar(post_type_)) or php_empty(lambda : wp_post_types_[post_type_]):
         return None
     # end if
     return wp_post_types_[post_type_]
@@ -1093,7 +1104,9 @@ def get_post_type_capabilities(args_=None, *_args_):
 #// @param string[] $capabilities Post type meta capabilities.
 #//
 def _post_type_meta_capabilities(capabilities_=None, *_args_):
-    
+    if capabilities_ is None:
+        capabilities_ = None
+    # end if
     
     global post_type_meta_caps_
     php_check_if_defined("post_type_meta_caps_")
@@ -1421,7 +1434,7 @@ def set_post_type(post_id_=0, post_type_="post", *_args_):
 def is_post_type_viewable(post_type_=None, *_args_):
     
     
-    if is_scalar(post_type_):
+    if php_is_scalar(post_type_):
         post_type_ = get_post_type_object(post_type_)
         if (not post_type_):
             return False
@@ -1454,7 +1467,9 @@ def is_post_type_viewable(post_type_=None, *_args_):
 #// @return WP_Post[]|int[] Array of post objects or post IDs.
 #//
 def get_posts(args_=None, *_args_):
-    
+    if args_ is None:
+        args_ = None
+    # end if
     
     defaults_ = Array({"numberposts": 5, "category": 0, "orderby": "date", "order": "DESC", "include": Array(), "exclude": Array(), "meta_key": "", "meta_value": "", "post_type": "post", "suppress_filters": True})
     parsed_args_ = wp_parse_args(args_, defaults_)
@@ -2546,7 +2561,9 @@ def wp_untrash_post(post_id_=0, *_args_):
 #// @return mixed|void False on failure.
 #//
 def wp_trash_post_comments(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -2598,7 +2615,9 @@ def wp_trash_post_comments(post_=None, *_args_):
 #// @return true|void
 #//
 def wp_untrash_post_comments(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -2843,7 +2862,7 @@ def wp_insert_post(postarr_=None, wp_error_=None, *_args_):
         #// Get the post ID and GUID.
         post_ID_ = postarr_["ID"]
         post_before_ = get_post(post_ID_)
-        if is_null(post_before_):
+        if php_is_null(post_before_):
             if wp_error_:
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_post", __("Invalid post ID.")))
             # end if
@@ -3024,7 +3043,7 @@ def wp_insert_post(postarr_=None, wp_error_=None, *_args_):
     else:
         post_parent_ = 0
     # end if
-    new_postarr_ = php_array_merge(Array({"ID": post_ID_}), php_compact(php_array_diff(php_array_keys(defaults_), Array("context", "filter"))))
+    new_postarr_ = php_array_merge(Array({"ID": post_ID_}), php_compact(php_array_diff(php_array_keys(defaults_), Array("context_", "filter"))))
     #// 
     #// Filters the post parent -- used to check for and prevent hierarchy loops.
     #// 
@@ -3071,7 +3090,7 @@ def wp_insert_post(postarr_=None, wp_error_=None, *_args_):
     #// Don't unslash.
     post_mime_type_ = postarr_["post_mime_type"] if (php_isset(lambda : postarr_["post_mime_type"])) else ""
     #// Expected_slashed (everything!).
-    data_ = php_compact("post_author", "post_date", "post_date_gmt", "post_content", "post_content_filtered", "post_title", "post_excerpt", "post_status", "post_type", "comment_status", "ping_status", "post_password", "post_name", "to_ping", "pinged", "post_modified", "post_modified_gmt", "post_parent", "menu_order", "post_mime_type", "guid")
+    data_ = php_compact("post_author_", "post_date_", "post_date_gmt_", "post_content_", "post_content_filtered_", "post_title_", "post_excerpt_", "post_status_", "post_type_", "comment_status_", "ping_status_", "post_password_", "post_name_", "to_ping_", "pinged_", "post_modified_", "post_modified_gmt_", "post_parent_", "menu_order_", "post_mime_type_", "guid_")
     emoji_fields_ = Array("post_title", "post_content", "post_excerpt")
     for emoji_field_ in emoji_fields_:
         if (php_isset(lambda : data_[emoji_field_])):
@@ -3352,7 +3371,7 @@ def wp_update_post(postarr_=None, wp_error_=None, *_args_):
     # end if
     #// First, get all of the original fields.
     post_ = get_post(postarr_["ID"], ARRAY_A)
-    if is_null(post_):
+    if php_is_null(post_):
         if wp_error_:
             return php_new_class("WP_Error", lambda : WP_Error("invalid_post", __("Invalid post ID.")))
         # end if
@@ -5041,7 +5060,9 @@ def wp_get_attachment_thumb_url(post_id_=0, *_args_):
 #// @return bool True if one of the accepted types, false otherwise.
 #//
 def wp_attachment_is(type_=None, post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -5093,7 +5114,9 @@ def wp_attachment_is(type_=None, post_=None, *_args_):
 #// @return bool Whether the attachment is an image.
 #//
 def wp_attachment_is_image(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     return wp_attachment_is("image", post_)
 # end def wp_attachment_is_image
@@ -5352,6 +5375,9 @@ def get_private_posts_cap_sql(post_type_=None, *_args_):
 def get_posts_by_author_sql(post_type_=None, full_=None, post_author_=None, public_only_=None, *_args_):
     if full_ is None:
         full_ = True
+    # end if
+    if post_author_ is None:
+        post_author_ = None
     # end if
     if public_only_ is None:
         public_only_ = False

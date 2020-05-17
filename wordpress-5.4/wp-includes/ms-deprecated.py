@@ -684,7 +684,9 @@ def install_blog_defaults(blog_id_=None, user_id_=None, *_args_):
 #// @return int   The initially passed $value.
 #//
 def update_user_status(id_=None, pref_=None, value_=None, deprecated_=None, *_args_):
-    
+    if deprecated_ is None:
+        deprecated_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")

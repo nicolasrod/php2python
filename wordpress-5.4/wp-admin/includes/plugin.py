@@ -692,6 +692,9 @@ def deactivate_plugins(plugins_=None, silent_=None, network_wide_=None, *_args_)
     if silent_ is None:
         silent_ = False
     # end if
+    if network_wide_ is None:
+        network_wide_ = None
+    # end if
     
     if is_multisite():
         network_current_ = get_site_option("active_sitewide_plugins", Array())
@@ -1153,7 +1156,9 @@ def uninstall_plugin(plugin_=None, *_args_):
 #// @return string The resulting page's hook_suffix.
 #//
 def add_menu_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", icon_url_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     global menu_
     global admin_page_hooks_
@@ -1220,7 +1225,9 @@ def add_menu_page(page_title_=None, menu_title_=None, capability_=None, menu_slu
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_submenu_page(parent_slug_=None, page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     global submenu_
     global menu_
@@ -1319,7 +1326,9 @@ def add_submenu_page(parent_slug_=None, page_title_=None, menu_title_=None, capa
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_management_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("tools.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_management_page
@@ -1344,7 +1353,9 @@ def add_management_page(page_title_=None, menu_title_=None, capability_=None, me
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_options_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("options-general.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_options_page
@@ -1369,7 +1380,9 @@ def add_options_page(page_title_=None, menu_title_=None, capability_=None, menu_
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_theme_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("themes.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_theme_page
@@ -1394,7 +1407,9 @@ def add_theme_page(page_title_=None, menu_title_=None, capability_=None, menu_sl
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_plugins_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("plugins.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_plugins_page
@@ -1419,7 +1434,9 @@ def add_plugins_page(page_title_=None, menu_title_=None, capability_=None, menu_
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_users_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     if current_user_can("edit_users"):
         parent_ = "users.php"
@@ -1449,7 +1466,9 @@ def add_users_page(page_title_=None, menu_title_=None, capability_=None, menu_sl
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_dashboard_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("index.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_dashboard_page
@@ -1474,7 +1493,9 @@ def add_dashboard_page(page_title_=None, menu_title_=None, capability_=None, men
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_posts_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("edit.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_posts_page
@@ -1499,7 +1520,9 @@ def add_posts_page(page_title_=None, menu_title_=None, capability_=None, menu_sl
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_media_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("upload.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_media_page
@@ -1524,7 +1547,9 @@ def add_media_page(page_title_=None, menu_title_=None, capability_=None, menu_sl
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_links_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("link-manager.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_links_page
@@ -1549,7 +1574,9 @@ def add_links_page(page_title_=None, menu_title_=None, capability_=None, menu_sl
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_pages_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("edit.php?post_type=page", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_pages_page
@@ -1574,7 +1601,9 @@ def add_pages_page(page_title_=None, menu_title_=None, capability_=None, menu_sl
 #// @return string|false The resulting page's hook_suffix, or false if the user does not have the capability required.
 #//
 def add_comments_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", position_=None, *_args_):
-    
+    if position_ is None:
+        position_ = None
+    # end if
     
     return add_submenu_page("edit-comments.php", page_title_, menu_title_, capability_, menu_slug_, function_, position_)
 # end def add_comments_page

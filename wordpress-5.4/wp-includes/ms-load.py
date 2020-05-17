@@ -129,7 +129,9 @@ def ms_site_check(*_args_):
 #// @return WP_Network|false Network object if successful. False when no network is found.
 #//
 def get_network_by_path(domain_=None, path_=None, segments_=None, *_args_):
-    
+    if segments_ is None:
+        segments_ = None
+    # end if
     
     return WP_Network.get_by_path(domain_, path_, segments_)
 # end def get_network_by_path
@@ -154,7 +156,9 @@ def get_network_by_path(domain_=None, path_=None, segments_=None, *_args_):
 #// @return WP_Site|false Site object if successful. False when no site is found.
 #//
 def get_site_by_path(domain_=None, path_=None, segments_=None, *_args_):
-    
+    if segments_ is None:
+        segments_ = None
+    # end if
     
     path_segments_ = php_array_filter(php_explode("/", php_trim(path_, "/")))
     #// 

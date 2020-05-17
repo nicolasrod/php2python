@@ -262,9 +262,11 @@ class WP_Privacy_Policy_Content():
     #//
     @classmethod
     def notice(self, post_=None):
+        if post_ is None:
+            post_ = None
+        # end if
         
-        
-        if is_null(post_):
+        if php_is_null(post_):
             global post_
             php_check_if_defined("post_")
         else:

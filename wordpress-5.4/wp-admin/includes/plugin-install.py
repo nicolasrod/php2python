@@ -458,7 +458,7 @@ def install_plugin_install_status(api_=None, loop_=None, *_args_):
         url_ += "&amp;from=" + urlencode(wp_unslash(PHP_REQUEST["from"]))
     # end if
     file_ = update_file_
-    return php_compact("status", "url", "version", "file")
+    return php_compact("status_", "url_", "version_", "file_")
 # end def install_plugin_install_status
 #// 
 #// Display plugin information in dialog box form.

@@ -99,7 +99,7 @@ class WP_Ajax_Response():
                     error_data_ = get_object_vars(error_data_)
                 # end if
                 response_ += str("<wp_error_data code='") + str(code_) + str("'") + str(class_) + str(">")
-                if is_scalar(error_data_):
+                if php_is_scalar(error_data_):
                     response_ += str("<![CDATA[") + str(error_data_) + str("]]>")
                 elif php_is_array(error_data_):
                     for k_,v_ in error_data_:

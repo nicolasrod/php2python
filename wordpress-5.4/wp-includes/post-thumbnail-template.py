@@ -30,7 +30,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @return bool Whether the post has an image attached.
 #//
 def has_post_thumbnail(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     thumbnail_id_ = get_post_thumbnail_id(post_)
     has_thumbnail_ = php_bool(thumbnail_id_)
@@ -55,7 +57,9 @@ def has_post_thumbnail(post_=None, *_args_):
 #// @return int|string Post thumbnail ID or empty string if the post does not exist.
 #//
 def get_post_thumbnail_id(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -97,7 +101,9 @@ def the_post_thumbnail(size_="post-thumbnail", attr_="", *_args_):
 #// @param WP_Query $wp_query Optional. A WP_Query instance. Defaults to the $wp_query global.
 #//
 def update_post_thumbnail_cache(wp_query_=None, *_args_):
-    
+    if wp_query_ is None:
+        wp_query_ = None
+    # end if
     
     if (not wp_query_):
         wp_query_ = PHP_GLOBALS["wp_query"]
@@ -138,7 +144,9 @@ def update_post_thumbnail_cache(wp_query_=None, *_args_):
 #// @return string The post thumbnail image tag.
 #//
 def get_the_post_thumbnail(post_=None, size_="post-thumbnail", attr_="", *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -213,7 +221,9 @@ def get_the_post_thumbnail(post_=None, size_="post-thumbnail", attr_="", *_args_
 #// @return string|false Post thumbnail URL or false if no URL is available.
 #//
 def get_the_post_thumbnail_url(post_=None, size_="post-thumbnail", *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_thumbnail_id_ = get_post_thumbnail_id(post_)
     if (not post_thumbnail_id_):
@@ -247,7 +257,9 @@ def the_post_thumbnail_url(size_="post-thumbnail", *_args_):
 #// @return string Post thumbnail caption.
 #//
 def get_the_post_thumbnail_caption(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_thumbnail_id_ = get_post_thumbnail_id(post_)
     if (not post_thumbnail_id_):
@@ -267,7 +279,9 @@ def get_the_post_thumbnail_caption(post_=None, *_args_):
 #// @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
 #//
 def the_post_thumbnail_caption(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     #// 
     #// Filters the displayed post thumbnail caption.

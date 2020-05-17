@@ -199,6 +199,9 @@ class SMTP():
     #// @return boolean
     #//
     def connect(self, host_=None, port_=None, timeout_=30, options_=None):
+        if port_ is None:
+            port_ = None
+        # end if
         if options_ is None:
             options_ = Array()
         # end if
@@ -206,7 +209,7 @@ class SMTP():
         streamok_ = None
         #// This is enabled by default since 5.0.0 but some providers disable it
         #// Check this once and cache the result
-        if is_null(streamok_):
+        if php_is_null(streamok_):
             streamok_ = php_function_exists("stream_socket_client")
         # end if
         #// Clear errors to avoid confusion
@@ -296,7 +299,12 @@ class SMTP():
     #// @return bool True if successfully authenticated.* @access public
     #//
     def authenticate(self, username_=None, password_=None, authtype_=None, realm_="", workstation_="", OAuth_=None):
-        
+        if authtype_ is None:
+            authtype_ = None
+        # end if
+        if OAuth_ is None:
+            OAuth_ = None
+        # end if
         
         if (not self.server_caps):
             self.seterror("Authentication is not allowed before HELO/EHLO")

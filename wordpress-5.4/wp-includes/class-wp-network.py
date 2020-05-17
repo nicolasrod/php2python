@@ -323,7 +323,9 @@ class WP_Network():
     #//
     @classmethod
     def get_by_path(self, domain_="", path_="", segments_=None):
-        
+        if segments_ is None:
+            segments_ = None
+        # end if
         
         domains_ = Array(domain_)
         pieces_ = php_explode(".", domain_)

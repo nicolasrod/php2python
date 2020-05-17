@@ -1036,7 +1036,9 @@ if (not php_class_exists("SimplePie", False)):
             self.sanitize.remove_div(enable_)
         # end def remove_div
         def strip_htmltags(self, tags_="", encode_=None):
-            
+            if encode_ is None:
+                encode_ = None
+            # end if
             
             if tags_ == "":
                 tags_ = self.strip_htmltags
@@ -1107,7 +1109,9 @@ if (not php_class_exists("SimplePie", False)):
         #// @param array|null $element_attribute Element/attribute key/value pairs, null for default
         #//
         def set_url_replacements(self, element_attribute_=None):
-            
+            if element_attribute_ is None:
+                element_attribute_ = None
+            # end if
             
             self.sanitize.set_url_replacements(element_attribute_)
         # end def set_url_replacements

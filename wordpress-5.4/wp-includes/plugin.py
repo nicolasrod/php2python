@@ -364,7 +364,9 @@ def current_action(*_args_):
 #// @return bool Whether the filter is currently in the stack.
 #//
 def doing_filter(filter_=None, *_args_):
-    
+    if filter_ is None:
+        filter_ = None
+    # end if
     
     global wp_current_filter_
     php_check_if_defined("wp_current_filter_")
@@ -383,7 +385,9 @@ def doing_filter(filter_=None, *_args_):
 #// @return bool Whether the action is currently in the stack.
 #//
 def doing_action(action_=None, *_args_):
-    
+    if action_ is None:
+        action_ = None
+    # end if
     
     return doing_filter(action_)
 # end def doing_action
@@ -634,7 +638,12 @@ def remove_all_actions(tag_=None, priority_=None, *_args_):
 #// @param string $message     Optional. A message regarding the change. Default null.
 #//
 def apply_filters_deprecated(tag_=None, args_=None, version_=None, replacement_=None, message_=None, *_args_):
-    
+    if replacement_ is None:
+        replacement_ = None
+    # end if
+    if message_ is None:
+        message_ = None
+    # end if
     
     if (not has_filter(tag_)):
         return args_[0]
@@ -660,7 +669,12 @@ def apply_filters_deprecated(tag_=None, args_=None, version_=None, replacement_=
 #// @param string $message     Optional. A message regarding the change. Default null.
 #//
 def do_action_deprecated(tag_=None, args_=None, version_=None, replacement_=None, message_=None, *_args_):
-    
+    if replacement_ is None:
+        replacement_ = None
+    # end if
+    if message_ is None:
+        message_ = None
+    # end if
     
     if (not has_action(tag_)):
         return

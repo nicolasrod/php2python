@@ -627,8 +627,8 @@ class wpdb():
             charset_ = DB_CHARSET
         # end if
         charset_collate_ = self.determine_charset(charset_, collate_)
-        self.charset = charset_collate_["charset_"]
-        self.collate = charset_collate_["collate_"]
+        self.charset = charset_collate_["charset"]
+        self.collate = charset_collate_["collate"]
     # end def init_charset
     #// 
     #// Determines the best charset and collation to use given a charset and collation.
@@ -683,7 +683,12 @@ class wpdb():
     #// @param string   $collate Optional. The collation. Default null.
     #//
     def set_charset(self, dbh_=None, charset_=None, collate_=None):
-        
+        if charset_ is None:
+            charset_ = None
+        # end if
+        if collate_ is None:
+            collate_ = None
+        # end if
         
         if (not (php_isset(lambda : charset_))):
             charset_ = self.charset
@@ -702,7 +707,7 @@ class wpdb():
                     if (not php_empty(lambda : collate_)):
                         query_ += self.prepare(" COLLATE %s", collate_)
                     # end if
-                    mysqli_query(dbh_, query_)
+                    php_mysqli_query(dbh_, query_)
                 # end if
             else:
                 if php_function_exists("mysql_set_charset") and self.has_cap("set_charset"):
@@ -735,7 +740,7 @@ class wpdb():
         
         if php_empty(lambda : modes_):
             if self.use_mysqli:
-                res_ = mysqli_query(self.dbh, "SELECT @@SESSION.sql_mode")
+                res_ = php_mysqli_query(self.dbh, "SELECT @@SESSION.sql_mode")
             else:
                 res_ = mysql_query("SELECT @@SESSION.sql_mode", self.dbh)
             # end if
@@ -743,7 +748,7 @@ class wpdb():
                 return
             # end if
             if self.use_mysqli:
-                modes_array_ = mysqli_fetch_array(res_)
+                modes_array_ = php_mysqli_fetch_array(res_)
                 if php_empty(lambda : modes_array_[0]):
                     return
                 # end if
@@ -772,7 +777,7 @@ class wpdb():
         # end for
         modes_str_ = php_implode(",", modes_)
         if self.use_mysqli:
-            mysqli_query(self.dbh, str("SET SESSION sql_mode='") + str(modes_str_) + str("'"))
+            php_mysqli_query(self.dbh, str("SET SESSION sql_mode='") + str(modes_str_) + str("'"))
         else:
             mysql_query(str("SET SESSION sql_mode='") + str(modes_str_) + str("'"), self.dbh)
         # end if
@@ -850,7 +855,9 @@ class wpdb():
     #// @return string Blog prefix.
     #//
     def get_blog_prefix(self, blog_id_=None):
-        
+        if blog_id_ is None:
+            blog_id_ = None
+        # end if
         
         if is_multisite():
             if None == blog_id_:
@@ -965,13 +972,15 @@ class wpdb():
     #// @param resource|null $dbh Optional link identifier.
     #//
     def select(self, db_=None, dbh_=None):
+        if dbh_ is None:
+            dbh_ = None
+        # end if
         
-        
-        if is_null(dbh_):
+        if php_is_null(dbh_):
             dbh_ = self.dbh
         # end if
         if self.use_mysqli:
-            success_ = mysqli_select_db(dbh_, db_)
+            success_ = php_mysqli_select_db(dbh_, db_)
         else:
             success_ = mysql_select_db(db_, dbh_)
         # end if
@@ -1160,7 +1169,7 @@ class wpdb():
     def prepare(self, query_=None, *args_):
         
         
-        if is_null(query_):
+        if php_is_null(query_):
             return
         # end if
         #// This is not meant to be foolproof -- but it will catch obviously incorrect usage.
@@ -1175,7 +1184,7 @@ class wpdb():
             args_ = args_[0]
         # end if
         for arg_ in args_:
-            if (not is_scalar(arg_)) and (not is_null(arg_)):
+            if (not php_is_scalar(arg_)) and (not php_is_null(arg_)):
                 wp_load_translations_early()
                 _doing_it_wrong("wpdb::prepare", php_sprintf(__("Unsupported value type (%s)."), gettype(arg_)), "4.8.2")
             # end if
@@ -1208,6 +1217,7 @@ class wpdb():
         query_ = php_preg_replace(str("/%(?:%|$|(?!(") + str(allowed_format_) + str(")?[sdF]))/"), "%%\\1", query_)
         #// Escape any unescaped percents.
         #// Count the number of valid placeholders in the query.
+        matches_ = Array()
         placeholders_ = preg_match_all(str("/(^|[^%]|(%%)+)%(") + str(allowed_format_) + str(")?[sdF]/"), query_, matches_)
         if php_count(args_) != placeholders_:
             if 1 == placeholders_ and passed_as_array_:
@@ -1385,7 +1395,7 @@ class wpdb():
         self.num_rows = 0
         self.last_error = ""
         if self.use_mysqli and type(self.result).__name__ == "mysqli_result":
-            mysqli_free_result(self.result)
+            php_mysqli_free_result(self.result)
             self.result = None
             #// Sanity check before using the handle.
             if php_empty(lambda : self.dbh) or (not type(self.dbh).__name__ == "mysqli"):
@@ -1791,7 +1801,7 @@ class wpdb():
             self.timer_start()
         # end if
         if (not php_empty(lambda : self.dbh)) and self.use_mysqli:
-            self.result = mysqli_query(self.dbh, query_)
+            self.result = php_mysqli_query(self.dbh, query_)
         elif (not php_empty(lambda : self.dbh)):
             self.result = mysql_query(query_, self.dbh)
         # end if
@@ -1912,7 +1922,9 @@ class wpdb():
     #// @return int|false The number of rows inserted, or false on error.
     #//
     def insert(self, table_=None, data_=None, format_=None):
-        
+        if format_ is None:
+            format_ = None
+        # end if
         
         return self._insert_replace_helper(table_, data_, format_, "INSERT")
     # end def insert
@@ -1938,7 +1950,9 @@ class wpdb():
     #// @return int|false The number of rows affected, or false on error.
     #//
     def replace(self, table_=None, data_=None, format_=None):
-        
+        if format_ is None:
+            format_ = None
+        # end if
         
         return self._insert_replace_helper(table_, data_, format_, "REPLACE")
     # end def replace
@@ -1964,7 +1978,9 @@ class wpdb():
     #// @return int|false The number of rows affected, or false on error.
     #//
     def _insert_replace_helper(self, table_=None, data_=None, format_=None, type_="INSERT"):
-        
+        if format_ is None:
+            format_ = None
+        # end if
         
         self.insert_id = 0
         if (not php_in_array(php_strtoupper(type_), Array("REPLACE", "INSERT"))):
@@ -1977,7 +1993,7 @@ class wpdb():
         formats_ = Array()
         values_ = Array()
         for value_ in data_:
-            if is_null(value_["value"]):
+            if php_is_null(value_["value"]):
                 formats_[-1] = "NULL"
                 continue
             # end if
@@ -2021,7 +2037,12 @@ class wpdb():
     #// @return int|false The number of rows updated, or false on error.
     #//
     def update(self, table_=None, data_=None, where_=None, format_=None, where_format_=None):
-        
+        if format_ is None:
+            format_ = None
+        # end if
+        if where_format_ is None:
+            where_format_ = None
+        # end if
         
         if (not php_is_array(data_)) or (not php_is_array(where_)):
             return False
@@ -2038,7 +2059,7 @@ class wpdb():
         conditions_ = Array()
         values_ = Array()
         for field_,value_ in data_:
-            if is_null(value_["value"]):
+            if php_is_null(value_["value"]):
                 fields_[-1] = str("`") + str(field_) + str("` = NULL")
                 continue
             # end if
@@ -2046,7 +2067,7 @@ class wpdb():
             values_[-1] = value_["value"]
         # end for
         for field_,value_ in where_:
-            if is_null(value_["value"]):
+            if php_is_null(value_["value"]):
                 conditions_[-1] = str("`") + str(field_) + str("` IS NULL")
                 continue
             # end if
@@ -2082,7 +2103,9 @@ class wpdb():
     #// @return int|false The number of rows updated, or false on error.
     #//
     def delete(self, table_=None, where_=None, where_format_=None):
-        
+        if where_format_ is None:
+            where_format_ = None
+        # end if
         
         if (not php_is_array(where_)):
             return False
@@ -2094,7 +2117,7 @@ class wpdb():
         conditions_ = Array()
         values_ = Array()
         for field_,value_ in where_:
-            if is_null(value_["value"]):
+            if php_is_null(value_["value"]):
                 conditions_[-1] = str("`") + str(field_) + str("` IS NULL")
                 continue
             # end if
@@ -2248,7 +2271,9 @@ class wpdb():
     #// @return string|null Database query result (as string), or null on failure
     #//
     def get_var(self, query_=None, x_=0, y_=0):
-        
+        if query_ is None:
+            query_ = None
+        # end if
         
         self.func_call = str("$db->get_var(\"") + str(query_) + str("\", ") + str(x_) + str(", ") + str(y_) + str(")")
         if self.check_current_query and self.check_safe_collation(query_):
@@ -2278,6 +2303,9 @@ class wpdb():
     #// @return array|object|null|void Database query result in format specified by $output or null on failure
     #//
     def get_row(self, query_=None, output_=None, y_=0):
+        if query_ is None:
+            query_ = None
+        # end if
         if output_ is None:
             output_ = OBJECT
         # end if
@@ -2321,7 +2349,9 @@ class wpdb():
     #// @return array Database query result. Array indexed from 0 by SQL result row number.
     #//
     def get_col(self, query_=None, x_=0):
-        
+        if query_ is None:
+            query_ = None
+        # end if
         
         if self.check_current_query and self.check_safe_collation(query_):
             self.check_current_query = False
@@ -2358,6 +2388,9 @@ class wpdb():
     #// @return array|object|null Database query results
     #//
     def get_results(self, query_=None, output_=None):
+        if query_ is None:
+            query_ = None
+        # end if
         if output_ is None:
             output_ = OBJECT
         # end if
@@ -3245,7 +3278,7 @@ class wpdb():
         
         
         if self.use_mysqli:
-            server_info_ = mysqli_get_server_info(self.dbh)
+            server_info_ = php_mysqli_get_server_info(self.dbh)
         else:
             server_info_ = mysql_get_server_info(self.dbh)
         # end if

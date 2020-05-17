@@ -73,6 +73,9 @@ class Requests_Cookie():
         if flags_ is None:
             flags_ = Array()
         # end if
+        if reference_time_ is None:
+            reference_time_ = None
+        # end if
         
         self.name = name_
         self.value = value_
@@ -371,7 +374,9 @@ class Requests_Cookie():
     #//
     @classmethod
     def parse(self, string_=None, name_="", reference_time_=None):
-        
+        if reference_time_ is None:
+            reference_time_ = None
+        # end if
         
         parts_ = php_explode(";", string_)
         kvparts_ = php_array_shift(parts_)
@@ -417,7 +422,12 @@ class Requests_Cookie():
     #//
     @classmethod
     def parse_from_headers(self, headers_=None, origin_=None, time_=None):
-        
+        if origin_ is None:
+            origin_ = None
+        # end if
+        if time_ is None:
+            time_ = None
+        # end if
         
         cookie_headers_ = headers_.getvalues("Set-Cookie")
         if php_empty(lambda : cookie_headers_):

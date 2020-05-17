@@ -17,7 +17,8 @@ from keyword import iskeyword
 # TODO: s = '$a $b' => interpolate different types, do convertion!
 # TODO: preg patterns to python
 # TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
-# TODO: php_compact("x") => should be "x_"
+# TODO: php_compact("x") => should be "x_" (wp-includes/wp-db.py -630)
+# TODO: fix php_sprintf placeholders
 
 
 def _(x):
@@ -59,16 +60,7 @@ def quote(x):
 
 
 def fix_interface(implements):
-    # TODO: Implement these interfaces in php_compat instead?
-    php_interfaces = [
-        'Traversable', 'Iterator', 'IteratorAggregate', 'Throwable',
-        'ArrayAccess', 'Serializable', 'Closure', 'Generator', 'WeakReference'
-    ]
-
-    return ''.join([
-        x.strip() for x in implements.split(',')
-        if x.strip() not in php_interfaces
-    ])
+    return ''.join([x.strip() for x in implements.split(',')])
 
 
 def remove_both_ends(ln, chars=(',', ' ')):
@@ -136,7 +128,7 @@ class AST:
         if self.channel_data is None:
             self.channel_data = []
 
-        if value != 'None':
+        if value is not None:
             self.channel_data.append(
                 f'if {name} is None:\n{name} = {value}\n# end if')
 
@@ -292,8 +284,8 @@ class AST:
         return any([x.startswith('Expr_') for x in self.frames[:-1]])
 
     def fix_variables(self, name):
-        if '[' in name:
-            return name
+        # if '[' in name:
+        #    return name
 
         if name in _php_globals:
             return _php_globals[name]
@@ -968,7 +960,11 @@ while {cond}:
         fn = self.parse(node['name']).strip()
 
         if fn.lower() == 'get_locals':
-            fn = 'php_get_locals(locals(), inspect.currentframe().f_code.co_varnames)'
+            fn = 'php_get_locals(locals(), inspect.currentframe()   .f_code.co_varnames)'
+        if fn.lower() == 'compact':
+            fn = 'php_compact'
+            args = args.replace('",', '_",')
+            args = re.sub('"$', '_"', args)
         else:
             fn = f'php_{fn}' if fn in PHP_FUNCTIONS else fn
 

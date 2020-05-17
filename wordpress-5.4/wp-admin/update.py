@@ -40,7 +40,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         nonce_ = "bulk-update-plugins"
         wp_enqueue_script("updates")
         iframe_header()
-        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Bulk_Plugin_Upgrader_Skin", lambda : Bulk_Plugin_Upgrader_Skin(php_compact("nonce", "url")))))
+        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Bulk_Plugin_Upgrader_Skin", lambda : Bulk_Plugin_Upgrader_Skin(php_compact("nonce_", "url_")))))
         upgrader_.bulk_upgrade(plugins_)
         iframe_footer()
     elif "upgrade-plugin" == action_:
@@ -55,7 +55,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
         nonce_ = "upgrade-plugin_" + plugin_
         url_ = "update.php?action=upgrade-plugin&plugin=" + urlencode(plugin_)
-        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Plugin_Upgrader_Skin", lambda : Plugin_Upgrader_Skin(php_compact("title", "nonce", "url", "plugin")))))
+        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Plugin_Upgrader_Skin", lambda : Plugin_Upgrader_Skin(php_compact("title_", "nonce_", "url_", "plugin_")))))
         upgrader_.upgrade(plugin_)
         php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
     elif "activate-plugin" == action_:
@@ -106,7 +106,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         # end if
         type_ = "web"
         #// Install plugin type, From Web or an Upload.
-        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Plugin_Installer_Skin", lambda : Plugin_Installer_Skin(php_compact("title", "url", "nonce", "plugin", "api")))))
+        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Plugin_Installer_Skin", lambda : Plugin_Installer_Skin(php_compact("title_", "url_", "nonce_", "plugin_", "api_")))))
         upgrader_.install(api_.download_link)
         php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
     elif "upload-plugin" == action_:
@@ -125,7 +125,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         url_ = add_query_arg(Array({"package": file_upload_.id}), "update.php?action=upload-plugin")
         type_ = "upload"
         #// Install plugin type, From Web or an Upload.
-        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Plugin_Installer_Skin", lambda : Plugin_Installer_Skin(php_compact("type", "title", "nonce", "url")))))
+        upgrader_ = php_new_class("Plugin_Upgrader", lambda : Plugin_Upgrader(php_new_class("Plugin_Installer_Skin", lambda : Plugin_Installer_Skin(php_compact("type_", "title_", "nonce_", "url_")))))
         result_ = upgrader_.install(file_upload_.package)
         if result_ or is_wp_error(result_):
             file_upload_.cleanup()
@@ -143,7 +143,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
         nonce_ = "upgrade-theme_" + theme_
         url_ = "update.php?action=upgrade-theme&theme=" + urlencode(theme_)
-        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Theme_Upgrader_Skin", lambda : Theme_Upgrader_Skin(php_compact("title", "nonce", "url", "theme")))))
+        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Theme_Upgrader_Skin", lambda : Theme_Upgrader_Skin(php_compact("title_", "nonce_", "url_", "theme_")))))
         upgrader_.upgrade(theme_)
         php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
     elif "update-selected-themes" == action_:
@@ -163,7 +163,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         nonce_ = "bulk-update-themes"
         wp_enqueue_script("updates")
         iframe_header()
-        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Bulk_Theme_Upgrader_Skin", lambda : Bulk_Theme_Upgrader_Skin(php_compact("nonce", "url")))))
+        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Bulk_Theme_Upgrader_Skin", lambda : Bulk_Theme_Upgrader_Skin(php_compact("nonce_", "url_")))))
         upgrader_.bulk_upgrade(themes_)
         iframe_footer()
     elif "install-theme" == action_:
@@ -188,7 +188,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         url_ = "update.php?action=install-theme&theme=" + urlencode(theme_)
         type_ = "web"
         #// Install theme type, From Web or an Upload.
-        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Theme_Installer_Skin", lambda : Theme_Installer_Skin(php_compact("title", "url", "nonce", "plugin", "api")))))
+        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Theme_Installer_Skin", lambda : Theme_Installer_Skin(php_compact("title_", "url_", "nonce_", "plugin_", "api_")))))
         upgrader_.install(api_.download_link)
         php_include_file(ABSPATH + "wp-admin/admin-footer.php", once=True)
     elif "upload-theme" == action_:
@@ -207,7 +207,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         url_ = add_query_arg(Array({"package": file_upload_.id}), "update.php?action=upload-theme")
         type_ = "upload"
         #// Install theme type, From Web or an Upload.
-        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Theme_Installer_Skin", lambda : Theme_Installer_Skin(php_compact("type", "title", "nonce", "url")))))
+        upgrader_ = php_new_class("Theme_Upgrader", lambda : Theme_Upgrader(php_new_class("Theme_Installer_Skin", lambda : Theme_Installer_Skin(php_compact("type_", "title_", "nonce_", "url_")))))
         result_ = upgrader_.install(file_upload_.package)
         if result_ or is_wp_error(result_):
             file_upload_.cleanup()

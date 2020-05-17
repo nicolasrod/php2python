@@ -74,7 +74,7 @@ class WP_Widget_Media_Audio(WP_Widget_Media):
         else:
             src_ = instance_["url"]
         # end if
-        php_print(wp_audio_shortcode(php_array_merge(instance_, php_compact("src"))))
+        php_print(wp_audio_shortcode(php_array_merge(instance_, php_compact("src_"))))
     # end def render_media
     #// 
     #// Enqueue preview scripts.

@@ -185,6 +185,9 @@ def get_approved_comments(post_id_=None, args_=None, *_args_):
 #// @return WP_Comment|array|null Depends on $output value.
 #//
 def get_comment(comment_=None, output_=None, *_args_):
+    if comment_ is None:
+        comment_ = None
+    # end if
     if output_ is None:
         output_ = OBJECT
     # end if
@@ -900,7 +903,15 @@ def separate_comments(comments_=None, *_args_):
 #// @return int Number of comment pages.
 #//
 def get_comment_pages_count(comments_=None, per_page_=None, threaded_=None, *_args_):
-    
+    if comments_ is None:
+        comments_ = None
+    # end if
+    if per_page_ is None:
+        per_page_ = None
+    # end if
+    if threaded_ is None:
+        threaded_ = None
+    # end if
     
     global wp_query_
     php_check_if_defined("wp_query_")
@@ -1646,7 +1657,7 @@ def wp_get_current_commenter(*_args_):
     #// @type string $comment_author_url   The URL address of the current commenter, or an empty string.
     #// }
     #//
-    return apply_filters("wp_get_current_commenter", php_compact("comment_author", "comment_author_email", "comment_author_url"))
+    return apply_filters("wp_get_current_commenter", php_compact("comment_author_", "comment_author_email_", "comment_author_url_"))
 # end def wp_get_current_commenter
 #// 
 #// Get unapproved comment author's email.
@@ -1729,7 +1740,7 @@ def wp_insert_comment(commentdata_=None, *_args_):
     comment_type_ = "" if (not (php_isset(lambda : data_["comment_type"]))) else data_["comment_type"]
     comment_parent_ = 0 if (not (php_isset(lambda : data_["comment_parent"]))) else data_["comment_parent"]
     user_id_ = 0 if (not (php_isset(lambda : data_["user_id"]))) else data_["user_id"]
-    compacted_ = php_compact("comment_post_ID", "comment_author", "comment_author_email", "comment_author_url", "comment_author_IP", "comment_date", "comment_date_gmt", "comment_content", "comment_karma", "comment_approved", "comment_agent", "comment_type", "comment_parent", "user_id")
+    compacted_ = php_compact("comment_post_ID_", "comment_author_", "comment_author_email_", "comment_author_url_", "comment_author_IP_", "comment_date_", "comment_date_gmt_", "comment_content_", "comment_karma_", "comment_approved_", "comment_agent_", "comment_type_", "comment_parent_", "user_id_")
     if (not wpdb_.insert(wpdb_.comments, compacted_)):
         return False
     # end if
@@ -2171,7 +2182,7 @@ def wp_update_comment(commentarr_=None, *_args_):
     data_ = apply_filters("wp_update_comment_data", data_, comment_, commentarr_)
     keys_ = Array("comment_post_ID", "comment_content", "comment_author", "comment_author_email", "comment_approved", "comment_karma", "comment_author_url", "comment_date", "comment_date_gmt", "comment_type", "comment_parent", "user_id", "comment_agent", "comment_author_IP")
     data_ = wp_array_slice_assoc(data_, keys_)
-    rval_ = wpdb_.update(wpdb_.comments, data_, php_compact("comment_ID"))
+    rval_ = wpdb_.update(wpdb_.comments, data_, php_compact("comment_ID_"))
     #// If metadata is provided, store it.
     if (php_isset(lambda : commentarr_["comment_meta"])) and php_is_array(commentarr_["comment_meta"]):
         for meta_key_,meta_value_ in commentarr_["comment_meta"]:
@@ -2211,7 +2222,9 @@ def wp_update_comment(commentarr_=None, *_args_):
 #// @return bool
 #//
 def wp_defer_comment_counting(defer_=None, *_args_):
-    
+    if defer_ is None:
+        defer_ = None
+    # end if
     
     _defer_ = False
     if php_is_bool(defer_):
@@ -2305,7 +2318,7 @@ def wp_update_comment_count_now(post_id_=None, *_args_):
     #// @param int      $post_id Post ID.
     #//
     new_ = apply_filters("pre_wp_update_comment_count_now", None, old_, post_id_)
-    if is_null(new_):
+    if php_is_null(new_):
         new_ = php_int(wpdb_.get_var(wpdb_.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb_.comments) + str(" WHERE comment_post_ID = %d AND comment_approved = '1'"), post_id_)))
     else:
         new_ = php_int(new_)
@@ -3017,7 +3030,7 @@ def wp_handle_comment_submission(comment_data_=None, *_args_):
             return php_new_class("WP_Error", lambda : WP_Error("require_valid_email", __("<strong>Error</strong>: Please enter a valid email address."), 200))
         # end if
     # end if
-    commentdata_ = php_compact("comment_post_ID", "comment_author", "comment_author_email", "comment_author_url", "comment_content", "comment_type", "comment_parent", "user_ID")
+    commentdata_ = php_compact("comment_post_ID_", "comment_author_", "comment_author_email_", "comment_author_url_", "comment_content_", "comment_type_", "comment_parent_", "user_ID_")
     #// 
     #// Filters whether an empty comment should be allowed.
     #// 

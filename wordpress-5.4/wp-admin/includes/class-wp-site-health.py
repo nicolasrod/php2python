@@ -159,7 +159,7 @@ class WP_Site_Health():
         php_check_if_defined("wpdb_")
         if wpdb_.use_mysqli:
             #// phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_get_server_info
-            mysql_server_type_ = mysqli_get_server_info(wpdb_.dbh)
+            mysql_server_type_ = php_mysqli_get_server_info(wpdb_.dbh)
         else:
             #// phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysql_get_server_info,PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved
             mysql_server_type_ = mysql_get_server_info(wpdb_.dbh)
@@ -445,7 +445,18 @@ class WP_Site_Health():
     #// @return bool Whether or not the extension and function are available.
     #//
     def test_php_extension_availability(self, extension_=None, function_=None, constant_=None, class_=None):
-        
+        if extension_ is None:
+            extension_ = None
+        # end if
+        if function_ is None:
+            function_ = None
+        # end if
+        if constant_ is None:
+            constant_ = None
+        # end if
+        if class_ is None:
+            class_ = None
+        # end if
         
         #// If no extension or function is passed, claim to fail testing, as we have nothing to test against.
         if (not extension_) and (not function_) and (not constant_) and (not class_):
@@ -924,7 +935,7 @@ class WP_Site_Health():
         url_ = rest_url("wp/v2/types/post")
         #// The context for this is editing with the new block editor.
         url_ = add_query_arg(Array({"context": "edit"}), url_)
-        r_ = wp_remote_get(url_, php_compact("cookies", "headers", "timeout", "sslverify"))
+        r_ = wp_remote_get(url_, php_compact("cookies_", "headers_", "timeout_", "sslverify_"))
         if is_wp_error(r_):
             result_["status"] = "critical"
             result_["label"] = __("The REST API encountered an error")
@@ -1121,7 +1132,7 @@ class WP_Site_Health():
             headers_["Authorization"] = "Basic " + php_base64_encode(wp_unslash(PHP_SERVER["PHP_AUTH_USER"]) + ":" + wp_unslash(PHP_SERVER["PHP_AUTH_PW"]))
         # end if
         url_ = admin_url()
-        r_ = wp_remote_get(url_, php_compact("cookies", "headers", "timeout", "sslverify"))
+        r_ = wp_remote_get(url_, php_compact("cookies_", "headers_", "timeout_", "sslverify_"))
         if is_wp_error(r_):
             return Array({"status": "critical", "message": php_sprintf("%s<br>%s", __("The loopback request to your site failed, this means features relying on them are not currently working as expected."), php_sprintf(__("Error: %1$s (%2$s)"), r_.get_error_message(), r_.get_error_code()))})
         # end if

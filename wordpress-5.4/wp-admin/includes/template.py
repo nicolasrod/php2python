@@ -48,6 +48,9 @@ def wp_category_checklist(post_id_=0, descendants_and_self_=0, selected_cats_=No
     if popular_cats_ is None:
         popular_cats_ = False
     # end if
+    if walker_ is None:
+        walker_ = None
+    # end if
     if checked_ontop_ is None:
         checked_ontop_ = True
     # end if
@@ -564,7 +567,9 @@ def _list_meta_row(entry_=None, count_=None, *_args_):
 #// @param WP_Post $post Optional. The post being edited.
 #//
 def meta_form(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -766,7 +771,9 @@ def page_template_dropdown(default_="", post_type_="page", *_args_):
 #// @return void|false Void on success, false if the page has no children.
 #//
 def parent_dropdown(default_=0, parent_=0, level_=0, post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -882,7 +889,12 @@ def wp_import_upload_form(action_=None, *_args_):
 #// to your callback). Default null.
 #//
 def add_meta_box(id_=None, title_=None, callback_=None, screen_=None, context_="advanced", priority_="default", callback_args_=None, *_args_):
-    
+    if screen_ is None:
+        screen_ = None
+    # end if
+    if callback_args_ is None:
+        callback_args_ = None
+    # end if
     
     global wp_meta_boxes_
     php_check_if_defined("wp_meta_boxes_")
@@ -2070,8 +2082,14 @@ else
 #// preferred. Default null.
 #//
 def submit_button(text_=None, type_="primary", name_="submit", wrap_=None, other_attributes_=None, *_args_):
+    if text_ is None:
+        text_ = None
+    # end if
     if wrap_ is None:
         wrap_ = True
+    # end if
+    if other_attributes_ is None:
+        other_attributes_ = None
     # end if
     
     php_print(get_submit_button(text_, type_, name_, wrap_, other_attributes_))

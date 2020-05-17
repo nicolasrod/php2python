@@ -236,6 +236,9 @@ def get_the_guid(post_=0, *_args_):
 #// @param bool   $strip_teaser   Optional. Strip teaser content before the more text. Default is false.
 #//
 def the_content(more_link_text_=None, strip_teaser_=None, *_args_):
+    if more_link_text_ is None:
+        more_link_text_ = None
+    # end if
     if strip_teaser_ is None:
         strip_teaser_ = False
     # end if
@@ -271,8 +274,14 @@ def the_content(more_link_text_=None, strip_teaser_=None, *_args_):
 #// @return string
 #//
 def get_the_content(more_link_text_=None, strip_teaser_=None, post_=None, *_args_):
+    if more_link_text_ is None:
+        more_link_text_ = None
+    # end if
     if strip_teaser_ is None:
         strip_teaser_ = False
+    # end if
+    if post_ is None:
+        post_ = None
     # end if
     
     global page_
@@ -286,7 +295,7 @@ def get_the_content(more_link_text_=None, strip_teaser_=None, post_=None, *_args
         return ""
     # end if
     if None == post_:
-        elements_ = php_compact("page", "more", "preview", "pages", "multipage")
+        elements_ = php_compact("page_", "more_", "preview_", "pages_", "multipage_")
     else:
         elements_ = generate_postdata(_post_)
     # end if
@@ -376,7 +385,9 @@ def the_excerpt(*_args_):
 #// @return string Post excerpt.
 #//
 def get_the_excerpt(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     if php_is_bool(post_):
         _deprecated_argument(__FUNCTION__, "2.3.0")
@@ -426,7 +437,9 @@ def has_excerpt(post_=0, *_args_):
 #// @param int|WP_Post  $post_id Optional. Post ID or post object. Defaults to the global `$post`.
 #//
 def post_class(class_="", post_id_=None, *_args_):
-    
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     #// Separates classes with a single space, collates classes for post DIV.
     php_print("class=\"" + join(" ", get_post_class(class_, post_id_)) + "\"")
@@ -453,7 +466,9 @@ def post_class(class_="", post_id_=None, *_args_):
 #// @return string[] Array of class names.
 #//
 def get_post_class(class_="", post_id_=None, *_args_):
-    
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     post_ = get_post(post_id_)
     classes_ = Array()
@@ -768,7 +783,9 @@ def get_body_class(class_="", *_args_):
 #// @return bool false if a password is not required or the correct password cookie is present, true otherwise.
 #//
 def post_password_required(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if php_empty(lambda : post_.post_password):
@@ -1598,7 +1615,9 @@ def is_page_template(template_="", *_args_):
 #// is in use. Returns false if the post does not exist.
 #//
 def get_page_template_slug(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):

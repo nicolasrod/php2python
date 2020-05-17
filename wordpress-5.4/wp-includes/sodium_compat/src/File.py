@@ -316,7 +316,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
             raise php_new_class("TypeError", lambda : TypeError("Argument 1 must be a string, " + gettype(filePath_) + " given."))
         # end if
         if (not php_is_string(key_)):
-            if is_null(key_):
+            if php_is_null(key_):
                 key_ = ""
             else:
                 raise php_new_class("TypeError", lambda : TypeError("Argument 2 must be a string, " + gettype(key_) + " given."))

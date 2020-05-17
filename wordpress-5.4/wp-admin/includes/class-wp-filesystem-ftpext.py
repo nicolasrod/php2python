@@ -586,7 +586,7 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
         
         
         is_windows_ = None
-        if is_null(is_windows_):
+        if php_is_null(is_windows_):
             is_windows_ = php_stripos(ftp_systype(self.link), "win") != False
         # end if
         if is_windows_ and php_preg_match("/([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)/", line_, lucifer_):

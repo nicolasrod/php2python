@@ -513,7 +513,15 @@ class ParagonIE_Sodium_Core32_BLAKE2b(ParagonIE_Sodium_Core_Util):
     #//
     @classmethod
     def init(self, key_=None, outlen_=64, salt_=None, personal_=None):
-        
+        if key_ is None:
+            key_ = None
+        # end if
+        if salt_ is None:
+            salt_ = None
+        # end if
+        if personal_ is None:
+            personal_ = None
+        # end if
         
         self.pseudoconstructor()
         klen_ = 0

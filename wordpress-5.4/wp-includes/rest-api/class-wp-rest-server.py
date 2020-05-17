@@ -152,12 +152,14 @@ class WP_REST_Server():
     #// @return string JSON representation of the error
     #//
     def json_error(self, code_=None, message_=None, status_=None):
-        
+        if status_ is None:
+            status_ = None
+        # end if
         
         if status_:
             self.set_status(status_)
         # end if
-        error_ = php_compact("code", "message")
+        error_ = php_compact("code_", "message_")
         return wp_json_encode(error_)
     # end def json_error
     #// 
@@ -175,7 +177,9 @@ class WP_REST_Server():
     #// @return null|false Null if not served and a HEAD request, false otherwise.
     #//
     def serve_request(self, path_=None):
-        
+        if path_ is None:
+            path_ = None
+        # end if
         
         content_type_ = "application/javascript" if (php_isset(lambda : PHP_REQUEST["_jsonp"])) else "application/json"
         self.send_header("Content-Type", content_type_ + "; charset=" + get_option("blog_charset"))

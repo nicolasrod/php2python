@@ -28,7 +28,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @return mixed
 #//
 def category_exists(cat_name_=None, parent_=None, *_args_):
-    
+    if parent_ is None:
+        parent_ = None
+    # end if
     
     id_ = term_exists(cat_name_, "category", parent_)
     if php_is_array(id_):
@@ -147,7 +149,7 @@ def wp_insert_category(catarr_=None, wp_error_=None, *_args_):
     if php_empty(lambda : parent_) or (not term_exists(parent_, catarr_["taxonomy"])) or catarr_["cat_ID"] and term_is_ancestor_of(catarr_["cat_ID"], parent_, catarr_["taxonomy"]):
         parent_ = 0
     # end if
-    args_ = php_compact("name", "slug", "parent", "description")
+    args_ = php_compact("name_", "slug_", "parent_", "description_")
     if update_:
         catarr_["cat_ID"] = wp_update_term(catarr_["cat_ID"], catarr_["taxonomy"], args_)
     else:

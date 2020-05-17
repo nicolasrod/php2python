@@ -40,7 +40,7 @@ def _wp_post_revision_fields(post_=None, deprecated_=None, *_args_):
     if (not php_is_array(post_)):
         post_ = get_post(post_, ARRAY_A)
     # end if
-    if is_null(fields_):
+    if php_is_null(fields_):
         #// Allow these to be versioned.
         fields_ = Array({"post_title": __("Title"), "post_content": __("Content"), "post_excerpt": __("Excerpt")})
     # end if
@@ -286,6 +286,9 @@ def wp_is_post_autosave(post_=None, *_args_):
 #// @return int|WP_Error WP_Error or 0 if error, new revision ID if success.
 #//
 def _wp_put_post_revision(post_=None, autosave_=None, *_args_):
+    if post_ is None:
+        post_ = None
+    # end if
     if autosave_ is None:
         autosave_ = False
     # end if
@@ -366,7 +369,9 @@ def wp_get_post_revision(post_=None, output_=None, filter_="raw", *_args_):
 #// @return int|false|null Null if error, false if no fields to restore, (int) post ID if success.
 #//
 def wp_restore_post_revision(revision_id_=None, fields_=None, *_args_):
-    
+    if fields_ is None:
+        fields_ = None
+    # end if
     
     revision_ = wp_get_post_revision(revision_id_, ARRAY_A)
     if (not revision_):
@@ -445,7 +450,9 @@ def wp_delete_post_revision(revision_id_=None, *_args_):
 #// @return array An array of revisions, or an empty array if none.
 #//
 def wp_get_post_revisions(post_id_=0, args_=None, *_args_):
-    
+    if args_ is None:
+        args_ = None
+    # end if
     
     post_ = get_post(post_id_)
     if (not post_) or php_empty(lambda : post_.ID):

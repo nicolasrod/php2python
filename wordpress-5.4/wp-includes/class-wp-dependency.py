@@ -112,7 +112,7 @@ class _WP_Dependency():
     def add_data(self, name_=None, data_=None):
         
         
-        if (not is_scalar(name_)):
+        if (not php_is_scalar(name_)):
             return False
         # end if
         self.extra[name_] = data_
@@ -128,7 +128,9 @@ class _WP_Dependency():
     #// @return bool False if $domain is not a string, true otherwise.
     #//
     def set_translations(self, domain_=None, path_=None):
-        
+        if path_ is None:
+            path_ = None
+        # end if
         
         if (not php_is_string(domain_)):
             return False

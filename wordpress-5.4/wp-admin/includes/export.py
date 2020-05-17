@@ -350,7 +350,9 @@ def export_wp(args_=None, *_args_):
     #// @param int[] $post_ids Optional. Array of post IDs to filter the query by.
     #//
     def wxr_authors_list(post_ids_=None, *_args_):
-        
+        if post_ids_ is None:
+            post_ids_ = None
+        # end if
         
         global wpdb_
         php_check_if_defined("wpdb_")

@@ -229,7 +229,7 @@ class WP_Http():
                 return response_
             # end if
         # end if
-        if is_null(parsed_args_["headers"]):
+        if php_is_null(parsed_args_["headers"]):
             parsed_args_["headers"] = Array()
         # end if
         #// WP allows passing in headers as a string, weirdly.
@@ -353,7 +353,7 @@ class WP_Http():
         for name_,value_ in cookies_:
             if type(value_).__name__ == "WP_Http_Cookie":
                 cookie_jar_[value_.name] = php_new_class("Requests_Cookie", lambda : Requests_Cookie(value_.name, value_.value, value_.get_attributes(), Array({"host-only": value_.host_only})))
-            elif is_scalar(value_):
+            elif php_is_scalar(value_):
                 cookie_jar_[name_] = php_new_class("Requests_Cookie", lambda : Requests_Cookie(name_, value_))
             # end if
         # end for
@@ -411,7 +411,9 @@ class WP_Http():
     #// False if no transport claims to support the request.
     #//
     def _get_first_available_transport(self, args_=None, url_=None):
-        
+        if url_ is None:
+            url_ = None
+        # end if
         
         transports_ = Array("curl", "streams")
         #// 

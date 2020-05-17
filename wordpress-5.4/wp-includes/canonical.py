@@ -503,6 +503,9 @@ def redirect_canonical(requested_url_=None, do_redirect_=None, *_args_):
             #// @return string Lowercased version of the first match.
             #//
             def lowercase_octets(matches_=None, *_args_):
+                if requested_url_ is None:
+                    requested_url_ = None
+                # end if
                 if do_redirect_ is None:
                     do_redirect_ = True
                 # end if

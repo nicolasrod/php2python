@@ -700,7 +700,7 @@ def upgrade_130(*_args_):
             else:
                 guid_ = post_.guid
             # end if
-            wpdb_.update(wpdb_.posts, php_compact("post_title", "post_content", "post_excerpt", "guid"), Array({"ID": post_.ID}))
+            wpdb_.update(wpdb_.posts, php_compact("post_title_", "post_content_", "post_excerpt_", "guid_"), Array({"ID": post_.ID}))
         # end for
     # end if
     #// Remove extraneous backslashes.
@@ -709,7 +709,7 @@ def upgrade_130(*_args_):
         for comment_ in comments_:
             comment_content_ = deslash(comment_.comment_content)
             comment_author_ = deslash(comment_.comment_author)
-            wpdb_.update(wpdb_.comments, php_compact("comment_content", "comment_author"), Array({"comment_ID": comment_.comment_ID}))
+            wpdb_.update(wpdb_.comments, php_compact("comment_content_", "comment_author_"), Array({"comment_ID": comment_.comment_ID}))
         # end for
     # end if
     #// Remove extraneous backslashes.
@@ -718,7 +718,7 @@ def upgrade_130(*_args_):
         for link_ in links_:
             link_name_ = deslash(link_.link_name)
             link_description_ = deslash(link_.link_description)
-            wpdb_.update(wpdb_.links, php_compact("link_name", "link_description"), Array({"link_id": link_.link_id}))
+            wpdb_.update(wpdb_.links, php_compact("link_name_", "link_description_"), Array({"link_id": link_.link_id}))
         # end for
     # end if
     active_plugins_ = __get_option("active_plugins")
@@ -975,13 +975,13 @@ def upgrade_230(*_args_):
             have_tags_ = True
             count_ = php_int(category_.tag_count)
             taxonomy_ = "post_tag"
-            wpdb_.insert(wpdb_.term_taxonomy, php_compact("term_id", "taxonomy", "description", "parent", "count"))
+            wpdb_.insert(wpdb_.term_taxonomy, php_compact("term_id_", "taxonomy_", "description_", "parent_", "count_"))
             tt_ids_[term_id_][taxonomy_] = php_int(wpdb_.insert_id)
         # end if
         if php_empty(lambda : count_):
             count_ = 0
             taxonomy_ = "category"
-            wpdb_.insert(wpdb_.term_taxonomy, php_compact("term_id", "taxonomy", "description", "parent", "count"))
+            wpdb_.insert(wpdb_.term_taxonomy, php_compact("term_id_", "taxonomy_", "description_", "parent_", "count_"))
             tt_ids_[term_id_][taxonomy_] = php_int(wpdb_.insert_id)
         # end if
     # end for
@@ -1026,7 +1026,7 @@ def upgrade_230(*_args_):
                 term_id_ = exists_[0].term_id
             # end if
             if php_empty(lambda : term_id_):
-                wpdb_.insert(wpdb_.terms, php_compact("name", "slug", "term_group"))
+                wpdb_.insert(wpdb_.terms, php_compact("name_", "slug_", "term_group_"))
                 term_id_ = php_int(wpdb_.insert_id)
             # end if
             link_cat_id_map_[cat_id_] = term_id_

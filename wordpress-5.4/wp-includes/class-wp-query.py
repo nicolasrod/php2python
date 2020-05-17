@@ -654,7 +654,7 @@ class WP_Query():
         elif (not php_empty(lambda : qv_["favicon"])):
             self.is_favicon = True
         # end if
-        if (not is_scalar(qv_["p"])) or qv_["p"] < 0:
+        if (not php_is_scalar(qv_["p"])) or qv_["p"] < 0:
             qv_["p"] = 0
             qv_["error"] = "404"
         else:
@@ -665,7 +665,7 @@ class WP_Query():
         qv_["monthnum"] = absint(qv_["monthnum"])
         qv_["day"] = absint(qv_["day"])
         qv_["w"] = absint(qv_["w"])
-        qv_["m"] = php_preg_replace("|[^0-9]|", "", qv_["m"]) if is_scalar(qv_["m"]) else ""
+        qv_["m"] = php_preg_replace("|[^0-9]|", "", qv_["m"]) if php_is_scalar(qv_["m"]) else ""
         qv_["paged"] = absint(qv_["paged"])
         qv_["cat"] = php_preg_replace("|[^0-9,-]|", "", qv_["cat"])
         #// Comma-separated list of positive or negative integers.
@@ -687,7 +687,7 @@ class WP_Query():
             qv_["menu_order"] = absint(qv_["menu_order"])
         # end if
         #// Fairly insane upper bound for search string lengths.
-        if (not is_scalar(qv_["s"])) or (not php_empty(lambda : qv_["s"])) and php_strlen(qv_["s"]) > 1600:
+        if (not php_is_scalar(qv_["s"])) or (not php_empty(lambda : qv_["s"])) and php_strlen(qv_["s"]) > 1600:
             qv_["s"] = ""
         # end if
         #// Compat. Map subpost to attachment.
@@ -3875,7 +3875,7 @@ class WP_Query():
         else:
             multipage_ = 0
         # end if
-        elements_ = php_compact("id", "authordata", "currentday", "currentmonth", "page", "pages", "multipage", "more", "numpages")
+        elements_ = php_compact("id_", "authordata_", "currentday_", "currentmonth_", "page_", "pages_", "multipage_", "more_", "numpages_")
         return elements_
     # end def generate_postdata
     #// 

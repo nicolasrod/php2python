@@ -527,7 +527,9 @@ def _nx(single_=None, plural_=None, number_=None, context_=None, domain_="defaul
 #// }
 #//
 def _n_noop(singular_=None, plural_=None, domain_=None, *_args_):
-    
+    if domain_ is None:
+        domain_ = None
+    # end if
     
     return Array({0: singular_, 1: plural_, "singular": singular_, "plural": plural_, "context": None, "domain": domain_})
 # end def _n_noop
@@ -567,7 +569,9 @@ def _n_noop(singular_=None, plural_=None, domain_=None, *_args_):
 #// }
 #//
 def _nx_noop(singular_=None, plural_=None, context_=None, domain_=None, *_args_):
-    
+    if domain_ is None:
+        domain_ = None
+    # end if
     
     return Array({0: singular_, 1: plural_, 2: context_, "singular": singular_, "plural": plural_, "context": context_, "domain": domain_})
 # end def _nx_noop
@@ -734,7 +738,9 @@ def unload_textdomain(domain_=None, *_args_):
 #// @return bool Whether the textdomain was loaded.
 #//
 def load_default_textdomain(locale_=None, *_args_):
-    
+    if locale_ is None:
+        locale_ = None
+    # end if
     
     if None == locale_:
         locale_ = determine_locale()
@@ -908,7 +914,9 @@ def load_child_theme_textdomain(domain_=None, path_=None, *_args_):
 #// in JSON encoding otherwise.
 #//
 def load_script_textdomain(handle_=None, domain_="default", path_=None, *_args_):
-    
+    if path_ is None:
+        path_ = None
+    # end if
     
     wp_scripts_ = wp_scripts()
     if (not (php_isset(lambda : wp_scripts_.registered[handle_]))):
@@ -1239,10 +1247,12 @@ def translate_user_role(name_=None, domain_="default", *_args_):
 #// @return string[] An array of language codes or an empty array if no languages are present. Language codes are formed by stripping the .mo extension from the language file names.
 #//
 def get_available_languages(dir_=None, *_args_):
-    
+    if dir_ is None:
+        dir_ = None
+    # end if
     
     languages_ = Array()
-    lang_files_ = glob(WP_LANG_DIR if is_null(dir_) else dir_ + "/*.mo")
+    lang_files_ = glob(WP_LANG_DIR if php_is_null(dir_) else dir_ + "/*.mo")
     if lang_files_:
         for lang_file_ in lang_files_:
             lang_file_ = php_basename(lang_file_, ".mo")

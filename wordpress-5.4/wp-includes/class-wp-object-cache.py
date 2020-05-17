@@ -279,6 +279,9 @@ class WP_Object_Cache():
         if force_ is None:
             force_ = False
         # end if
+        if found_ is None:
+            found_ = None
+        # end if
         
         if php_empty(lambda : group_):
             group_ = "default"

@@ -40,7 +40,12 @@ class Requests_Exception_HTTP(Requests_Exception):
     #// @param mixed $data Associated data
     #//
     def __init__(self, reason_=None, data_=None):
-        
+        if reason_ is None:
+            reason_ = None
+        # end if
+        if data_ is None:
+            data_ = None
+        # end if
         
         if reason_ != None:
             self.reason = reason_

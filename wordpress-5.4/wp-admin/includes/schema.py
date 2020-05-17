@@ -42,7 +42,9 @@ charset_collate_ = wpdb_.get_charset_collate()
 #// @return string The SQL needed to create the requested tables.
 #//
 def wp_get_db_schema(scope_="all", blog_id_=None, *_args_):
-    
+    if blog_id_ is None:
+        blog_id_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")

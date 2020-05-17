@@ -1354,6 +1354,7 @@ class wpdb {
 		$query = preg_replace( "/%(?:%|$|(?!($allowed_format)?[sdF]))/", '%%\\1', $query ); // Escape any unescaped percents.
 
 		// Count the number of valid placeholders in the query.
+                $matches = array();
 		$placeholders = preg_match_all( "/(^|[^%]|(%%)+)%($allowed_format)?[sdF]/", $query, $matches );
 
 		if ( count( $args ) !== $placeholders ) {

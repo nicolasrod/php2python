@@ -94,7 +94,9 @@ if (not php_is_callable("RandomCompat_substr")):
         #// @return string
         #//
         def RandomCompat_substr(binary_string_=None, start_=None, length_=None, *_args_):
-            
+            if length_ is None:
+                length_ = None
+            # end if
             
             if (not php_is_string(binary_string_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): First argument should be a string"))
@@ -135,7 +137,9 @@ if (not php_is_callable("RandomCompat_substr")):
         #// @return string
         #//
         def RandomCompat_substr(binary_string_=None, start_=None, length_=None, *_args_):
-            
+            if length_ is None:
+                length_ = None
+            # end if
             
             if (not php_is_string(binary_string_)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): First argument should be a string"))

@@ -66,7 +66,9 @@ def wp_get_additional_image_sizes(*_args_):
 #// }
 #//
 def image_constrain_size_for_editor(width_=None, height_=None, size_="medium", context_=None, *_args_):
-    
+    if context_ is None:
+        context_ = None
+    # end if
     
     global content_width_
     php_check_if_defined("content_width_")
@@ -1085,7 +1087,9 @@ def _wp_get_image_size_from_meta(size_name_=None, image_meta_=None, *_args_):
 #// @return string|bool A 'srcset' value string or false.
 #//
 def wp_get_attachment_image_srcset(attachment_id_=None, size_="medium", image_meta_=None, *_args_):
-    
+    if image_meta_ is None:
+        image_meta_ = None
+    # end if
     
     image_ = wp_get_attachment_image_src(attachment_id_, size_)
     if (not image_):
@@ -1287,7 +1291,9 @@ def wp_calculate_image_srcset(size_array_=None, image_src_=None, image_meta_=Non
 #// @return string|bool A valid source size value for use in a 'sizes' attribute or false.
 #//
 def wp_get_attachment_image_sizes(attachment_id_=None, size_="medium", image_meta_=None, *_args_):
-    
+    if image_meta_ is None:
+        image_meta_ = None
+    # end if
     
     image_ = wp_get_attachment_image_src(attachment_id_, size_)
     if (not image_):
@@ -1315,7 +1321,12 @@ def wp_get_attachment_image_sizes(attachment_id_=None, size_="medium", image_met
 #// @return string|bool A valid source size value for use in a 'sizes' attribute or false.
 #//
 def wp_calculate_image_sizes(size_=None, image_src_=None, image_meta_=None, attachment_id_=0, *_args_):
-    
+    if image_src_ is None:
+        image_src_ = None
+    # end if
+    if image_meta_ is None:
+        image_meta_ = None
+    # end if
     
     width_ = 0
     if php_is_array(size_):
@@ -1546,7 +1557,9 @@ add_shortcode("caption", "img_caption_shortcode")
 #// @return string HTML content to display the caption.
 #//
 def img_caption_shortcode(attr_=None, content_=None, *_args_):
-    
+    if content_ is None:
+        content_ = None
+    # end if
     
     #// New-style shortcode with the caption inside the shortcode with the link and image tags.
     if (not (php_isset(lambda : attr_["caption"]))):
@@ -1986,22 +1999,22 @@ def wp_playlist_shortcode(attr_=None, *_args_):
                     width_ = default_width_
                     height_ = default_height_
                 # end if
-                track_["dimensions"] = Array({"original": php_compact("width", "height"), "resized": Array({"width": theme_width_, "height": theme_height_})})
+                track_["dimensions"] = Array({"original": php_compact("width_", "height_"), "resized": Array({"width": theme_width_, "height": theme_height_})})
             # end if
         # end if
         if atts_["images"]:
             thumb_id_ = get_post_thumbnail_id(attachment_.ID)
             if (not php_empty(lambda : thumb_id_)):
                 src_, width_, height_ = wp_get_attachment_image_src(thumb_id_, "full")
-                track_["image"] = php_compact("src", "width", "height")
+                track_["image"] = php_compact("src_", "width_", "height_")
                 src_, width_, height_ = wp_get_attachment_image_src(thumb_id_, "thumbnail")
-                track_["thumb"] = php_compact("src", "width", "height")
+                track_["thumb"] = php_compact("src_", "width_", "height_")
             else:
                 src_ = wp_mime_type_icon(attachment_.ID)
                 width_ = 48
                 height_ = 64
-                track_["image"] = php_compact("src", "width", "height")
-                track_["thumb"] = php_compact("src", "width", "height")
+                track_["image"] = php_compact("src_", "width_", "height_")
+                track_["thumb"] = php_compact("src_", "width_", "height_")
             # end if
         # end if
         tracks_[-1] = track_
@@ -3046,15 +3059,15 @@ def wp_prepare_attachment_for_js(attachment_=None, *_args_):
         id_ = get_post_thumbnail_id(attachment_.ID)
         if (not php_empty(lambda : id_)):
             src_, width_, height_ = wp_get_attachment_image_src(id_, "full")
-            response_["image"] = php_compact("src", "width", "height")
+            response_["image"] = php_compact("src_", "width_", "height_")
             src_, width_, height_ = wp_get_attachment_image_src(id_, "thumbnail")
-            response_["thumb"] = php_compact("src", "width", "height")
+            response_["thumb"] = php_compact("src_", "width_", "height_")
         else:
             src_ = wp_mime_type_icon(attachment_.ID)
             width_ = 48
             height_ = 64
-            response_["image"] = php_compact("src", "width", "height")
-            response_["thumb"] = php_compact("src", "width", "height")
+            response_["image"] = php_compact("src_", "width_", "height_")
+            response_["thumb"] = php_compact("src_", "width_", "height_")
         # end if
     # end if
     if php_function_exists("get_compat_media_markup"):
@@ -3303,7 +3316,9 @@ def get_attached_media(type_=None, post_=0, *_args_):
 #// @return string[] Array of found HTML media elements.
 #//
 def get_media_embedded_in_content(content_=None, types_=None, *_args_):
-    
+    if types_ is None:
+        types_ = None
+    # end if
     
     html_ = Array()
     #// 

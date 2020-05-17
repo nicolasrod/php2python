@@ -95,7 +95,12 @@ class WP_Image_Editor():
     #// @return array|WP_Error {'path'=>string, 'file'=>string, 'width'=>int, 'height'=>int, 'mime-type'=>string}
     #//
     def save(self, destfilename_=None, mime_type_=None):
-        
+        if destfilename_ is None:
+            destfilename_ = None
+        # end if
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         pass
     # end def save
@@ -159,6 +164,12 @@ class WP_Image_Editor():
     #// @return bool|WP_Error
     #//
     def crop(self, src_x_=None, src_y_=None, src_w_=None, src_h_=None, dst_w_=None, dst_h_=None, src_abs_=None):
+        if dst_w_ is None:
+            dst_w_ = None
+        # end if
+        if dst_h_ is None:
+            dst_h_ = None
+        # end if
         if src_abs_ is None:
             src_abs_ = False
         # end if
@@ -204,7 +215,9 @@ class WP_Image_Editor():
     #// @return bool|WP_Error True on success, WP_Error object or false on failure.
     #//
     def stream(self, mime_type_=None):
-        
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         pass
     # end def stream
@@ -235,7 +248,12 @@ class WP_Image_Editor():
     #// @return true
     #//
     def update_size(self, width_=None, height_=None):
-        
+        if width_ is None:
+            width_ = None
+        # end if
+        if height_ is None:
+            height_ = None
+        # end if
         
         self.size = Array({"width": php_int(width_), "height": php_int(height_)})
         return True
@@ -264,7 +282,9 @@ class WP_Image_Editor():
     #// @return true|WP_Error True if set successfully; WP_Error on failure.
     #//
     def set_quality(self, quality_=None):
-        
+        if quality_ is None:
+            quality_ = None
+        # end if
         
         if None == quality_:
             #// 
@@ -330,7 +350,12 @@ class WP_Image_Editor():
     #// @return array { filename|null, extension, mime-type }
     #//
     def get_output_format(self, filename_=None, mime_type_=None):
-        
+        if filename_ is None:
+            filename_ = None
+        # end if
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         new_ext_ = None
         #// By default, assume specified type takes priority.
@@ -384,7 +409,15 @@ class WP_Image_Editor():
     #// @return string filename
     #//
     def generate_filename(self, suffix_=None, dest_path_=None, extension_=None):
-        
+        if suffix_ is None:
+            suffix_ = None
+        # end if
+        if dest_path_ is None:
+            dest_path_ = None
+        # end if
+        if extension_ is None:
+            extension_ = None
+        # end if
         
         #// $suffix will be appended to the destination filename, just before the extension.
         if (not suffix_):
@@ -394,7 +427,7 @@ class WP_Image_Editor():
         ext_ = pathinfo(self.file_, PATHINFO_EXTENSION)
         name_ = wp_basename(self.file_, str(".") + str(ext_))
         new_ext_ = php_strtolower(extension_ if extension_ else ext_)
-        if (not is_null(dest_path_)):
+        if (not php_is_null(dest_path_)):
             _dest_path_ = php_realpath(dest_path_)
             if _dest_path_:
                 dir_ = _dest_path_
@@ -539,7 +572,9 @@ class WP_Image_Editor():
     #// @return string|false
     #//
     def get_mime_type(self, extension_=None):
-        
+        if extension_ is None:
+            extension_ = None
+        # end if
         
         if (not extension_):
             return False
@@ -563,7 +598,9 @@ class WP_Image_Editor():
     #// @return string|false
     #//
     def get_extension(self, mime_type_=None):
-        
+        if mime_type_ is None:
+            mime_type_ = None
+        # end if
         
         extensions_ = php_explode("|", php_array_search(mime_type_, wp_get_mime_types()))
         if php_empty(lambda : extensions_[0]):

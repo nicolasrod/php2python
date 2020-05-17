@@ -101,7 +101,9 @@ if (not php_function_exists("twentyseventeen_edit_link")):
 #// @param integer              $id Front page section to display.
 #//
 def twentyseventeen_front_page_section(partial_=None, id_=0, *_args_):
-    
+    if partial_ is None:
+        partial_ = None
+    # end if
     
     if php_is_a(partial_, "WP_Customize_Partial"):
         #// Find out the id and set it up during a selective refresh.

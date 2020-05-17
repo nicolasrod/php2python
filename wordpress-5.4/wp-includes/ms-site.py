@@ -264,7 +264,9 @@ def wp_delete_site(site_id_=None, *_args_):
 #// @return WP_Site|null The site object or null if not found.
 #//
 def get_site(site_=None, *_args_):
-    
+    if site_ is None:
+        site_ = None
+    # end if
     
     if php_empty(lambda : site_):
         site_ = get_current_blog_id()
@@ -441,7 +443,9 @@ def get_sites(args_=None, *_args_):
 #// error occurred.
 #//
 def wp_prepare_site_data(data_=None, defaults_=None, old_site_=None, *_args_):
-    
+    if old_site_ is None:
+        old_site_ = None
+    # end if
     
     #// Maintain backward-compatibility with `$site_id` as network ID.
     if (php_isset(lambda : data_["site_id"])):
@@ -544,7 +548,9 @@ def wp_normalize_site_data(data_=None, *_args_):
 #// or null if it is a new site being inserted.
 #//
 def wp_validate_site_data(errors_=None, data_=None, old_site_=None, *_args_):
-    
+    if old_site_ is None:
+        old_site_ = None
+    # end if
     
     #// A domain must always be present.
     if php_empty(lambda : data_["domain"]):
@@ -1021,7 +1027,9 @@ def delete_site_meta_by_key(meta_key_=None, *_args_):
 #// state of that site. Default null.
 #//
 def wp_maybe_update_network_site_counts_on_update(new_site_=None, old_site_=None, *_args_):
-    
+    if old_site_ is None:
+        old_site_ = None
+    # end if
     
     if None == old_site_:
         wp_maybe_update_network_site_counts(new_site_.network_id)
@@ -1042,7 +1050,9 @@ def wp_maybe_update_network_site_counts_on_update(new_site_=None, old_site_=None
 #// state of that site. Default null.
 #//
 def wp_maybe_transition_site_statuses_on_update(new_site_=None, old_site_=None, *_args_):
-    
+    if old_site_ is None:
+        old_site_ = None
+    # end if
     
     site_id_ = new_site_.id
     #// Use the default values for a site if no previous state is given.

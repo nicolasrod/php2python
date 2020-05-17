@@ -28,7 +28,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @return WP_Network|null The network object or null if not found.
 #//
 def get_network(network_=None, *_args_):
-    
+    if network_ is None:
+        network_ = None
+    # end if
     
     global current_site_
     php_check_if_defined("current_site_")

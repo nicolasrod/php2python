@@ -30,7 +30,9 @@ class ParagonIE_Sodium_Core_HSalsa20(ParagonIE_Sodium_Core_Salsa20):
     #//
     @classmethod
     def hsalsa20(self, in_=None, k_=None, c_=None):
-        
+        if c_ is None:
+            c_ = None
+        # end if
         
         if c_ == None:
             x0_ = 1634760805

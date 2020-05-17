@@ -36,7 +36,9 @@ if (not php_function_exists("_")):
 #// 'reset': Used for testing - restore default behavior of this function
 #//
 def _wp_can_use_pcre_u(set_=None, *_args_):
-    
+    if set_ is None:
+        set_ = None
+    # end if
     
     utf8_pcre_ = "reset"
     if None != set_:
@@ -65,7 +67,12 @@ if (not php_function_exists("mb_substr")):
     #// @return string Extracted substring.
     #//
     def mb_substr(str_=None, start_=None, length_=None, encoding_=None, *_args_):
-        
+        if length_ is None:
+            length_ = None
+        # end if
+        if encoding_ is None:
+            encoding_ = None
+        # end if
         
         return _mb_substr(str_, start_, length_, encoding_)
     # end def mb_substr
@@ -88,7 +95,12 @@ if (not php_function_exists("mb_substr")):
 #// @return string Extracted substring.
 #//
 def _mb_substr(str_=None, start_=None, length_=None, encoding_=None, *_args_):
-    
+    if length_ is None:
+        length_ = None
+    # end if
+    if encoding_ is None:
+        encoding_ = None
+    # end if
     
     if None == encoding_:
         encoding_ = get_option("blog_charset")
@@ -98,12 +110,12 @@ def _mb_substr(str_=None, start_=None, length_=None, encoding_=None, *_args_):
     #// charset just use built-in substr().
     #//
     if (not php_in_array(encoding_, Array("utf8", "utf-8", "UTF8", "UTF-8"))):
-        return php_substr(str_, start_) if is_null(length_) else php_substr(str_, start_, length_)
+        return php_substr(str_, start_) if php_is_null(length_) else php_substr(str_, start_, length_)
     # end if
     if _wp_can_use_pcre_u():
         #// Use the regex unicode support to separate the UTF-8 characters into an array.
         preg_match_all("/./us", str_, match_)
-        chars_ = php_array_slice(match_[0], start_) if is_null(length_) else php_array_slice(match_[0], start_, length_)
+        chars_ = php_array_slice(match_[0], start_) if php_is_null(length_) else php_array_slice(match_[0], start_, length_)
         return php_implode("", chars_)
     # end if
     regex_ = """/(
@@ -150,7 +162,9 @@ if (not php_function_exists("mb_strlen")):
     #// @return int String length of `$str`.
     #//
     def mb_strlen(str_=None, encoding_=None, *_args_):
-        
+        if encoding_ is None:
+            encoding_ = None
+        # end if
         
         return _mb_strlen(str_, encoding_)
     # end def mb_strlen
@@ -170,7 +184,9 @@ if (not php_function_exists("mb_strlen")):
 #// @return int String length of `$str`.
 #//
 def _mb_strlen(str_=None, encoding_=None, *_args_):
-    
+    if encoding_ is None:
+        encoding_ = None
+    # end if
     
     if None == encoding_:
         encoding_ = get_option("blog_charset")

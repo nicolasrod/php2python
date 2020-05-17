@@ -51,6 +51,9 @@ class WP_HTTP_Response():
     #// @param array $headers Optional. HTTP header map. Default empty array.
     #//
     def __init__(self, data_=None, status_=200, headers_=None):
+        if data_ is None:
+            data_ = None
+        # end if
         if headers_ is None:
             headers_ = Array()
         # end if

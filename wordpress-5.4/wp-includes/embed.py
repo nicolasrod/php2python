@@ -99,7 +99,7 @@ def wp_embed_defaults(url_="", *_args_):
     #// }
     #// @param string $url  The URL that should be embedded.
     #//
-    return apply_filters("embed_defaults", php_compact("width", "height"), url_)
+    return apply_filters("embed_defaults", php_compact("width_", "height_"), url_)
 # end def wp_embed_defaults
 #// 
 #// Attempts to fetch the embed HTML for a provided URL using oEmbed.
@@ -133,7 +133,7 @@ def _wp_oembed_get_object(*_args_):
     
     
     wp_oembed_ = None
-    if is_null(wp_oembed_):
+    if php_is_null(wp_oembed_):
         wp_oembed_ = php_new_class("WP_oEmbed", lambda : WP_oEmbed())
     # end if
     return wp_oembed_
@@ -378,7 +378,9 @@ def wp_oembed_add_host_js(*_args_):
 #// @return string|false The post embed URL on success, false if the post doesn't exist.
 #//
 def get_post_embed_url(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -439,7 +441,9 @@ def get_oembed_endpoint_url(permalink_="", format_="json", *_args_):
 #// @return string|false Embed code on success, false if post doesn't exist.
 #//
 def get_post_embed_html(width_=None, height_=None, post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -689,7 +693,9 @@ def _oembed_rest_pre_serve_request(served_=None, result_=None, request_=None, se
 #// @return string|false XML string on success, false on error.
 #//
 def _oembed_create_xml(data_=None, node_=None, *_args_):
-    
+    if node_ is None:
+        node_ = None
+    # end if
     
     if (not php_is_array(data_)) or php_empty(lambda : data_):
         return False

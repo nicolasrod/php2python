@@ -690,6 +690,9 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         if prepared_args_ is None:
             prepared_args_ = Array()
         # end if
+        if request_ is None:
+            request_ = None
+        # end if
         
         query_args_ = Array()
         for key_,value_ in prepared_args_:
@@ -728,7 +731,9 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
     #// @return string|null ISO8601/RFC3339 formatted datetime.
     #//
     def prepare_date_response(self, date_gmt_=None, date_=None):
-        
+        if date_ is None:
+            date_ = None
+        # end if
         
         #// Use the date if passed.
         if (php_isset(lambda : date_)):

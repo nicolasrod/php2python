@@ -528,7 +528,9 @@ class WP_Customize_Setting():
     #// @return mixed The default value on failure, otherwise the sanitized and validated value.
     #//
     def post_value(self, default_=None):
-        
+        if default_ is None:
+            default_ = None
+        # end if
         
         return self.manager.post_value(self, default_)
     # end def post_value
@@ -569,7 +571,7 @@ class WP_Customize_Setting():
         if is_wp_error(value_):
             return value_
         # end if
-        if is_null(value_):
+        if php_is_null(value_):
             return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value.")))
         # end if
         validity_ = php_new_class("WP_Error", lambda : WP_Error())
@@ -601,7 +603,9 @@ class WP_Customize_Setting():
     #// @return mixed
     #//
     def get_root_value(self, default_=None):
-        
+        if default_ is None:
+            default_ = None
+        # end if
         
         id_base_ = self.id_data["base"]
         if "option" == self.type:
@@ -893,7 +897,9 @@ class WP_Customize_Setting():
     #// @return mixed The requested value or the default value.
     #//
     def multidimensional_get(self, root_=None, keys_=None, default_=None):
-        
+        if default_ is None:
+            default_ = None
+        # end if
         
         if php_empty(lambda : keys_):
             #// If there are no keys, test the root.

@@ -125,7 +125,9 @@ def twentytwenty_site_description(echo_=None, *_args_):
 #// @return bool
 #//
 def twentytwenty_is_comment_by_post_author(comment_=None, *_args_):
-    
+    if comment_ is None:
+        comment_ = None
+    # end if
     
     if php_is_object(comment_) and comment_.user_id > 0:
         user_ = get_userdata(comment_.user_id)
@@ -163,7 +165,9 @@ add_filter("comment_reply_link", "twentytwenty_filter_comment_reply_link")
 #// @param string $location Which post meta location to output – single or preview.
 #//
 def twentytwenty_the_post_meta(post_id_=None, location_="single-top", *_args_):
-    
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     php_print(twentytwenty_get_post_meta(post_id_, location_))
     pass
@@ -196,7 +200,9 @@ add_filter("edit_post_link", "twentytwenty_edit_post_link", 10, 3)
 #// @param string $location The location where the meta is shown.
 #//
 def twentytwenty_get_post_meta(post_id_=None, location_="single-top", *_args_):
-    
+    if post_id_ is None:
+        post_id_ = None
+    # end if
     
     #// Require post ID.
     if (not post_id_):

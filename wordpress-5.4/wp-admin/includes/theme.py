@@ -110,7 +110,9 @@ def delete_theme(stylesheet_=None, redirect_="", *_args_):
 #// @return string[] Array of template file names keyed by the template header name.
 #//
 def get_page_templates(post_=None, post_type_="page", *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     return php_array_flip(wp_get_theme().get_page_templates(post_, post_type_))
 # end def get_page_templates
@@ -434,7 +436,9 @@ def themes_api(action_=None, args_=None, *_args_):
 #// @return array An associative array of theme data, sorted by name.
 #//
 def wp_prepare_themes_for_js(themes_=None, *_args_):
-    
+    if themes_ is None:
+        themes_ = None
+    # end if
     
     current_theme_ = get_stylesheet()
     #// 

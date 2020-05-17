@@ -556,7 +556,7 @@ class WP_Term_Query():
         #// @param string[] $taxonomies An array of taxonomy names.
         #// @param array    $args       An array of term query arguments.
         #//
-        clauses_ = apply_filters("terms_clauses", php_compact("fields", "join", "where", "distinct", "orderby", "order", "limits"), taxonomies_, args_)
+        clauses_ = apply_filters("terms_clauses", php_compact("fields_", "join_", "where_", "distinct_", "orderby_", "order_", "limits_"), taxonomies_, args_)
         fields_ = clauses_["fields"] if (php_isset(lambda : clauses_["fields"])) else ""
         join_ = clauses_["join"] if (php_isset(lambda : clauses_["join"])) else ""
         where_ = clauses_["where"] if (php_isset(lambda : clauses_["where"])) else ""

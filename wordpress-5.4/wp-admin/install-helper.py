@@ -172,7 +172,18 @@ def maybe_drop_column(table_name_=None, column_name_=None, drop_ddl_=None, *_arg
 #// @return bool True, if matches. False, if not matching.
 #//
 def check_column(table_name_=None, col_name_=None, col_type_=None, is_null_=None, key_=None, default_=None, extra_=None, *_args_):
-    
+    if is_null_ is None:
+        is_null_ = None
+    # end if
+    if key_ is None:
+        key_ = None
+    # end if
+    if default_ is None:
+        default_ = None
+    # end if
+    if extra_ is None:
+        extra_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")

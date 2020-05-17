@@ -58,7 +58,9 @@ class Requests_Proxy_HTTP(Requests_Proxy):
     #// @param array|null $args Array of user and password. Must have exactly two elements
     #//
     def __init__(self, args_=None):
-        
+        if args_ is None:
+            args_ = None
+        # end if
         
         if php_is_string(args_):
             self.proxy = args_

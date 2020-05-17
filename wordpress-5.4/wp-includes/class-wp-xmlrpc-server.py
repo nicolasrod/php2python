@@ -4036,7 +4036,7 @@ class wp_xmlrpc_server(IXR_Server):
         post_content_ = xmlrpc_removepostdata(content_)
         post_date_ = current_time("mysql")
         post_date_gmt_ = current_time("mysql", 1)
-        post_data_ = php_compact("post_author", "post_date", "post_date_gmt", "post_content", "post_title", "post_category", "post_status")
+        post_data_ = php_compact("post_author_", "post_date_", "post_date_gmt_", "post_content_", "post_title_", "post_category_", "post_status_")
         post_ID_ = wp_insert_post(post_data_)
         if is_wp_error(post_ID_):
             return php_new_class("IXR_Error", lambda : IXR_Error(500, post_ID_.get_error_message()))
@@ -4468,7 +4468,7 @@ class wp_xmlrpc_server(IXR_Server):
                 # end for
             # end if
         # end if
-        postdata_ = php_compact("post_author", "post_date", "post_date_gmt", "post_content", "post_title", "post_category", "post_status", "post_excerpt", "comment_status", "ping_status", "to_ping", "post_type", "post_name", "post_password", "post_parent", "menu_order", "tags_input", "page_template")
+        postdata_ = php_compact("post_author_", "post_date_", "post_date_gmt_", "post_content_", "post_title_", "post_category_", "post_status_", "post_excerpt_", "comment_status_", "ping_status_", "to_ping_", "post_type_", "post_name_", "post_password_", "post_parent_", "menu_order_", "tags_input_", "page_template_")
         post_ID_ = get_default_post_to_edit(post_type_, True).ID
         postdata_["ID"] = post_ID_
         #// Only posts can be sticky.
@@ -4832,7 +4832,7 @@ class wp_xmlrpc_server(IXR_Server):
             post_date_gmt_ = postdata_["post_date_gmt"]
         # end if
         #// We've got all the data -- post it.
-        newpost_ = php_compact("ID", "post_content", "post_title", "post_category", "post_status", "post_excerpt", "comment_status", "ping_status", "edit_date", "post_date", "post_date_gmt", "to_ping", "post_name", "post_password", "post_parent", "menu_order", "post_author", "tags_input", "page_template")
+        newpost_ = php_compact("ID_", "post_content_", "post_title_", "post_category_", "post_status_", "post_excerpt_", "comment_status_", "ping_status_", "edit_date_", "post_date_", "post_date_gmt_", "to_ping_", "post_name_", "post_password_", "post_parent_", "menu_order_", "post_author_", "tags_input_", "page_template_")
         result_ = wp_update_post(newpost_, True)
         if is_wp_error(result_):
             return php_new_class("IXR_Error", lambda : IXR_Error(500, result_.get_error_message()))
@@ -5671,7 +5671,7 @@ class wp_xmlrpc_server(IXR_Server):
         comment_content_ = context_
         self.escape(comment_content_)
         comment_type_ = "pingback"
-        commentdata_ = php_compact("comment_post_ID", "comment_author", "comment_author_url", "comment_author_email", "comment_content", "comment_type", "remote_source", "remote_source_original")
+        commentdata_ = php_compact("comment_post_ID_", "comment_author_", "comment_author_url_", "comment_author_email_", "comment_content_", "comment_type_", "remote_source_", "remote_source_original_")
         comment_ID_ = wp_new_comment(commentdata_)
         if is_wp_error(comment_ID_):
             return self.pingback_error(0, comment_ID_.get_error_message())

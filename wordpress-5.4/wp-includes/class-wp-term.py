@@ -110,7 +110,9 @@ class WP_Term():
     #//
     @classmethod
     def get_instance(self, term_id_=None, taxonomy_=None):
-        
+        if taxonomy_ is None:
+            taxonomy_ = None
+        # end if
         
         global wpdb_
         php_check_if_defined("wpdb_")

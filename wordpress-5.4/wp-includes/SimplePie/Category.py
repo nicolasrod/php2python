@@ -89,7 +89,15 @@ class SimplePie_Category():
     #// @param string $label
     #//
     def __init__(self, term_=None, scheme_=None, label_=None):
-        
+        if term_ is None:
+            term_ = None
+        # end if
+        if scheme_ is None:
+            scheme_ = None
+        # end if
+        if label_ is None:
+            label_ = None
+        # end if
         
         self.term = term_
         self.scheme = scheme_

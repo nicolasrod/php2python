@@ -40,7 +40,12 @@ class Requests_Exception_HTTP_Unknown(Requests_Exception_HTTP):
     #// @param mixed $data Associated data
     #//
     def __init__(self, reason_=None, data_=None):
-        
+        if reason_ is None:
+            reason_ = None
+        # end if
+        if data_ is None:
+            data_ = None
+        # end if
         
         if type(data_).__name__ == "Requests_Response":
             self.code = data_.status_code

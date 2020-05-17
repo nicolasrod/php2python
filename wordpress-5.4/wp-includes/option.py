@@ -245,7 +245,9 @@ def wp_load_alloptions(force_cache_=None, *_args_):
 #// @param int $network_id Optional site ID for which to query the options. Defaults to the current site.
 #//
 def wp_load_core_site_options(network_id_=None, *_args_):
-    
+    if network_id_ is None:
+        network_id_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -290,7 +292,9 @@ def wp_load_core_site_options(network_id_=None, *_args_):
 #// @return bool False if value was not updated and true if value was updated.
 #//
 def update_option(option_=None, value_=None, autoload_=None, *_args_):
-    
+    if autoload_ is None:
+        autoload_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")
@@ -530,7 +534,7 @@ def delete_option(option_=None, *_args_):
     wp_protect_special_option(option_)
     #// Get the ID, if no ID then return.
     row_ = wpdb_.get_row(wpdb_.prepare(str("SELECT autoload FROM ") + str(wpdb_.options) + str(" WHERE option_name = %s"), option_))
-    if is_null(row_):
+    if php_is_null(row_):
         return False
     # end if
     #// 
@@ -1370,7 +1374,7 @@ def delete_network_option(network_id_=None, option_=None, *_args_):
         result_ = delete_option(option_)
     else:
         row_ = wpdb_.get_row(wpdb_.prepare(str("SELECT meta_id FROM ") + str(wpdb_.sitemeta) + str(" WHERE meta_key = %s AND site_id = %d"), option_, network_id_))
-        if is_null(row_) or (not row_.meta_id):
+        if php_is_null(row_) or (not row_.meta_id):
             return False
         # end if
         cache_key_ = str(network_id_) + str(":") + str(option_)

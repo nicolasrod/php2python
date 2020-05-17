@@ -36,7 +36,15 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_P2():
     #// @param ParagonIE_Sodium_Core_Curve25519_Fe|null $z
     #//
     def __init__(self, x_=None, y_=None, z_=None):
-        
+        if x_ is None:
+            x_ = None
+        # end if
+        if y_ is None:
+            y_ = None
+        # end if
+        if z_ is None:
+            z_ = None
+        # end if
         
         if x_ == None:
             x_ = php_new_class("ParagonIE_Sodium_Core_Curve25519_Fe", lambda : ParagonIE_Sodium_Core_Curve25519_Fe())

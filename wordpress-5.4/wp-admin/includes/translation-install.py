@@ -23,7 +23,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @return object|WP_Error On success an object of translations, WP_Error on failure.
 #//
 def translations_api(type_=None, args_=None, *_args_):
-    
+    if args_ is None:
+        args_ = None
+    # end if
     
     #// Include an unmodified $wp_version.
     php_include_file(ABSPATH + WPINC + "/version.php", once=False)

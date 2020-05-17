@@ -44,7 +44,18 @@ class ParagonIE_Sodium_Core32_Curve25519_Ge_P1p1():
     #// @throws TypeError
     #//
     def __init__(self, x_=None, y_=None, z_=None, t_=None):
-        
+        if x_ is None:
+            x_ = None
+        # end if
+        if y_ is None:
+            y_ = None
+        # end if
+        if z_ is None:
+            z_ = None
+        # end if
+        if t_ is None:
+            t_ = None
+        # end if
         
         if x_ == None:
             x_ = ParagonIE_Sodium_Core32_Curve25519.fe_0()

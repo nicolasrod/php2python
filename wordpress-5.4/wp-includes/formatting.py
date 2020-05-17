@@ -3110,7 +3110,9 @@ def human_time_diff(from_=None, to_=0, *_args_):
 #// @return string The excerpt.
 #//
 def wp_trim_excerpt(text_="", post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     raw_excerpt_ = text_
     if "" == text_:
@@ -3166,7 +3168,9 @@ def wp_trim_excerpt(text_="", post_=None, *_args_):
 #// @return string Trimmed text.
 #//
 def wp_trim_words(text_=None, num_words_=55, more_=None, *_args_):
-    
+    if more_ is None:
+        more_ = None
+    # end if
     
     if None == more_:
         more_ = __("&hellip;")
@@ -3254,7 +3258,9 @@ def ent2ncr(text_=None, *_args_):
 #// @return string The formatted text after filter is applied.
 #//
 def format_for_editor(text_=None, default_editor_=None, *_args_):
-    
+    if default_editor_ is None:
+        default_editor_ = None
+    # end if
     
     if text_:
         text_ = htmlspecialchars(text_, ENT_NOQUOTES, get_option("blog_charset"))
@@ -3341,7 +3347,9 @@ def esc_sql(data_=None, *_args_):
 #// @return string The cleaned $url after the {@see 'clean_url'} filter is applied.
 #//
 def esc_url(url_=None, protocols_=None, _context_="display", *_args_):
-    
+    if protocols_ is None:
+        protocols_ = None
+    # end if
     
     original_url_ = url_
     if "" == url_:
@@ -3430,7 +3438,9 @@ def esc_url(url_=None, protocols_=None, _context_="display", *_args_):
 #// @return string The cleaned URL.
 #//
 def esc_url_raw(url_=None, protocols_=None, *_args_):
-    
+    if protocols_ is None:
+        protocols_ = None
+    # end if
     
     return esc_url(url_, protocols_, "db")
 # end def esc_url_raw
@@ -4185,7 +4195,9 @@ def wp_sprintf_l(pattern_=None, args_=None, *_args_):
 #// @return string The excerpt.
 #//
 def wp_html_excerpt(str_=None, count_=None, more_=None, *_args_):
-    
+    if more_ is None:
+        more_ = None
+    # end if
     
     if None == more_:
         more_ = ""

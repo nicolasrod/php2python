@@ -2071,7 +2071,9 @@ class getid3_lib():
     #//
     @classmethod
     def mb_basename(self, path_=None, suffix_=None):
-        
+        if suffix_ is None:
+            suffix_ = None
+        # end if
         
         splited_ = php_preg_split("#/#", php_rtrim(path_, "/ "))
         return php_substr(php_basename("X" + splited_[php_count(splited_) - 1], suffix_), 1)

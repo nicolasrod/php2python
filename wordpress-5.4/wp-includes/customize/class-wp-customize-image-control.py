@@ -65,7 +65,9 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
     #// @param string $thumbnail_url
     #//
     def print_tab_image(self, url_=None, thumbnail_url_=None):
-        
+        if thumbnail_url_ is None:
+            thumbnail_url_ = None
+        # end if
         
         _deprecated_function(__METHOD__, "4.1.0")
     # end def print_tab_image

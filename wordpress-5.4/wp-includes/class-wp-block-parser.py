@@ -151,7 +151,12 @@ class WP_Block_Parser_Frame():
     #// @param int                   $leading_html_start Byte offset into document where leading HTML before token starts.
     #//
     def __init__(self, block_=None, token_start_=None, token_length_=None, prev_offset_=None, leading_html_start_=None):
-        
+        if prev_offset_ is None:
+            prev_offset_ = None
+        # end if
+        if leading_html_start_ is None:
+            leading_html_start_ = None
+        # end if
         
         self.block = block_
         self.token_start = token_start_
@@ -439,7 +444,9 @@ class WP_Block_Parser():
     #// @param null $length how many bytes of document text to output.
     #//
     def add_freeform(self, length_=None):
-        
+        if length_ is None:
+            length_ = None
+        # end if
         
         length_ = length_ if length_ else php_strlen(self.document) - self.offset
         if 0 == length_:
@@ -459,7 +466,9 @@ class WP_Block_Parser():
     #// @param int|null              $last_offset  Last byte offset into document if continuing form earlier output.
     #//
     def add_inner_block(self, block_=None, token_start_=None, token_length_=None, last_offset_=None):
-        
+        if last_offset_ is None:
+            last_offset_ = None
+        # end if
         
         parent_ = self.stack[php_count(self.stack) - 1]
         parent_.block.innerBlocks[-1] = block_
@@ -479,7 +488,9 @@ class WP_Block_Parser():
     #// @param int|null $end_offset byte offset into document for where we should stop sending text output as HTML.
     #//
     def add_block_from_stack(self, end_offset_=None):
-        
+        if end_offset_ is None:
+            end_offset_ = None
+        # end if
         
         stack_top_ = php_array_pop(self.stack)
         prev_offset_ = stack_top_.prev_offset

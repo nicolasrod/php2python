@@ -382,7 +382,12 @@ class getID3():
     #// @throws getid3_exception
     #//
     def openfile(self, filename_=None, filesize_=None, fp_=None):
-        
+        if filesize_ is None:
+            filesize_ = None
+        # end if
+        if fp_ is None:
+            fp_ = None
+        # end if
         
         try: 
             if (not php_empty(lambda : self.startup_error)):
@@ -427,7 +432,7 @@ class getID3():
                 # end if
                 raise php_new_class("getid3_exception", lambda : getid3_exception("Could not open \"" + filename_ + "\" (" + php_implode("; ", errormessagelist_) + ")"))
             # end if
-            self.info["filesize"] = filesize_ if (not is_null(filesize_)) else filesize(filename_)
+            self.info["filesize"] = filesize_ if (not php_is_null(filesize_)) else filesize(filename_)
             #// set redundant parameters - might be needed in some include file
             #// filenames / filepaths in getID3 are always expressed with forward slashes (unix-style) for both Windows and other to try and minimize confusion
             filename_ = php_str_replace("\\", "/", filename_)
@@ -490,7 +495,12 @@ class getID3():
     #// @return array
     #//
     def analyze(self, filename_=None, filesize_=None, original_filename_="", fp_=None):
-        
+        if filesize_ is None:
+            filesize_ = None
+        # end if
+        if fp_ is None:
+            fp_ = None
+        # end if
         
         try: 
             if (not self.openfile(filename_, filesize_, fp_)):
@@ -1232,7 +1242,9 @@ class getid3_handler():
     #// @param string $call_module
     #//
     def __init__(self, getid3_=None, call_module_=None):
-        
+        if call_module_ is None:
+            call_module_ = None
+        # end if
         
         self.getid3 = getid3_
         if call_module_:
@@ -1444,7 +1456,9 @@ class getid3_handler():
     #// @throws getid3_exception
     #//
     def saveattachment(self, name_=None, offset_=None, length_=None, image_mime_=None):
-        
+        if image_mime_ is None:
+            image_mime_ = None
+        # end if
         
         try: 
             #// do not extract at all

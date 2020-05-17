@@ -119,7 +119,7 @@ def find_core_auto_update(*_args_):
 def get_core_checksums(version_=None, locale_=None, *_args_):
     
     
-    http_url_ = "http://api.wordpress.org/core/checksums/1.0/?" + http_build_query(php_compact("version", "locale"), None, "&")
+    http_url_ = "http://api.wordpress.org/core/checksums/1.0/?" + http_build_query(php_compact("version_", "locale_"), None, "&")
     url_ = http_url_
     ssl_ = wp_http_supports(Array("ssl"))
     if ssl_:

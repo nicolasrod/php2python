@@ -391,6 +391,9 @@ def _get_page_link(post_=None, leavename_=None, sample_=None, *_args_):
 #// @return string The attachment permalink.
 #//
 def get_attachment_link(post_=None, leavename_=None, *_args_):
+    if post_ is None:
+        post_ = None
+    # end if
     if leavename_ is None:
         leavename_ = False
     # end if
@@ -913,7 +916,9 @@ def get_edit_tag_link(tag_id_=None, taxonomy_="post_tag", *_args_):
 #// Default null.
 #//
 def edit_tag_link(link_="", before_="", after_="", tag_=None, *_args_):
-    
+    if tag_ is None:
+        tag_ = None
+    # end if
     
     link_ = edit_term_link(link_, "", "", tag_, False)
     #// 
@@ -986,11 +991,14 @@ def get_edit_term_link(term_id_=None, taxonomy_="", object_type_="", *_args_):
 #// @return string|void HTML content.
 #//
 def edit_term_link(link_="", before_="", after_="", term_=None, echo_=None, *_args_):
+    if term_ is None:
+        term_ = None
+    # end if
     if echo_ is None:
         echo_ = True
     # end if
     
-    if is_null(term_):
+    if php_is_null(term_):
         term_ = get_queried_object()
     # end if
     if (not term_):
@@ -1239,6 +1247,9 @@ def get_post_type_archive_feed_link(post_type_=None, feed_="", *_args_):
 #// @return string|null URL used for the post preview, or null if the post does not exist.
 #//
 def get_preview_post_link(post_=None, query_args_=None, preview_link_="", *_args_):
+    if post_ is None:
+        post_ = None
+    # end if
     if query_args_ is None:
         query_args_ = Array()
     # end if
@@ -1330,7 +1341,9 @@ def get_edit_post_link(id_=0, context_="display", *_args_):
 #// @param string      $class  Optional. Add custom class to link. Default 'post-edit-link'.
 #//
 def edit_post_link(text_=None, before_="", after_="", id_=0, class_="post-edit-link", *_args_):
-    
+    if text_ is None:
+        text_ = None
+    # end if
     
     post_ = get_post(id_)
     if (not post_):
@@ -1434,7 +1447,9 @@ def get_edit_comment_link(comment_id_=0, *_args_):
 #// @param string $after  Optional. Display after edit link. Default empty.
 #//
 def edit_comment_link(text_=None, before_="", after_="", *_args_):
-    
+    if text_ is None:
+        text_ = None
+    # end if
     
     comment_ = get_comment()
     if (not current_user_can("edit_comment", comment_.comment_ID)):
@@ -1492,7 +1507,9 @@ def get_edit_bookmark_link(link_=0, *_args_):
 #// @param int    $bookmark Optional. Bookmark ID. Default is the current bookmark.
 #//
 def edit_bookmark_link(link_="", before_="", after_="", bookmark_=None, *_args_):
-    
+    if bookmark_ is None:
+        bookmark_ = None
+    # end if
     
     bookmark_ = get_bookmark(bookmark_)
     if (not current_user_can("manage_links")):
@@ -1521,7 +1538,9 @@ def edit_bookmark_link(link_="", before_="", after_="", bookmark_=None, *_args_)
 #// @return string URL to edit user page or empty string.
 #//
 def get_edit_user_link(user_id_=None, *_args_):
-    
+    if user_id_ is None:
+        user_id_ = None
+    # end if
     
     if (not user_id_):
         user_id_ = get_current_user_id()
@@ -2234,7 +2253,9 @@ def next_posts(max_page_=0, echo_=None, *_args_):
 #// @return string|void HTML-formatted next posts page link.
 #//
 def get_next_posts_link(label_=None, max_page_=0, *_args_):
-    
+    if label_ is None:
+        label_ = None
+    # end if
     
     global paged_
     global wp_query_
@@ -2270,7 +2291,9 @@ def get_next_posts_link(label_=None, max_page_=0, *_args_):
 #// @param int    $max_page Optional. Max pages. Default 0.
 #//
 def next_posts_link(label_=None, max_page_=0, *_args_):
-    
+    if label_ is None:
+        label_ = None
+    # end if
     
     php_print(get_next_posts_link(label_, max_page_))
 # end def next_posts_link
@@ -2331,7 +2354,9 @@ def previous_posts(echo_=None, *_args_):
 #// @return string|void HTML-formatted previous page link.
 #//
 def get_previous_posts_link(label_=None, *_args_):
-    
+    if label_ is None:
+        label_ = None
+    # end if
     
     global paged_
     php_check_if_defined("paged_")
@@ -2358,7 +2383,9 @@ def get_previous_posts_link(label_=None, *_args_):
 #// @param string $label Optional. Previous page link text.
 #//
 def previous_posts_link(label_=None, *_args_):
-    
+    if label_ is None:
+        label_ = None
+    # end if
     
     php_print(get_previous_posts_link(label_))
 # end def previous_posts_link
@@ -2417,7 +2444,7 @@ def get_posts_nav_link(args_=None, *_args_):
 def posts_nav_link(sep_="", prelabel_="", nxtlabel_="", *_args_):
     
     
-    args_ = php_array_filter(php_compact("sep", "prelabel", "nxtlabel"))
+    args_ = php_array_filter(php_compact("sep_", "prelabel_", "nxtlabel_"))
     php_print(get_posts_nav_link(args_))
 # end def posts_nav_link
 #// 
@@ -2947,7 +2974,9 @@ def the_comments_pagination(args_=None, *_args_):
 #// @return string Home URL link with optional path appended.
 #//
 def home_url(path_="", scheme_=None, *_args_):
-    
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     return get_home_url(None, path_, scheme_)
 # end def home_url
@@ -2969,7 +2998,12 @@ def home_url(path_="", scheme_=None, *_args_):
 #// @return string Home URL link with optional path appended.
 #//
 def get_home_url(blog_id_=None, path_="", scheme_=None, *_args_):
-    
+    if blog_id_ is None:
+        blog_id_ = None
+    # end if
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     global pagenow_
     php_check_if_defined("pagenow_")
@@ -3020,7 +3054,9 @@ def get_home_url(blog_id_=None, path_="", scheme_=None, *_args_):
 #// @return string Site URL link with optional path appended.
 #//
 def site_url(path_="", scheme_=None, *_args_):
-    
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     return get_site_url(None, path_, scheme_)
 # end def site_url
@@ -3042,7 +3078,12 @@ def site_url(path_="", scheme_=None, *_args_):
 #// @return string Site URL link with optional path appended.
 #//
 def get_site_url(blog_id_=None, path_="", scheme_=None, *_args_):
-    
+    if blog_id_ is None:
+        blog_id_ = None
+    # end if
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     if php_empty(lambda : blog_id_) or (not is_multisite()):
         url_ = get_option("siteurl")
@@ -3096,7 +3137,9 @@ def admin_url(path_="", scheme_="admin", *_args_):
 #// @return string Admin URL link with optional path appended.
 #//
 def get_admin_url(blog_id_=None, path_="", scheme_="admin", *_args_):
-    
+    if blog_id_ is None:
+        blog_id_ = None
+    # end if
     
     url_ = get_site_url(blog_id_, "wp-admin/", scheme_)
     if path_ and php_is_string(path_):
@@ -3124,7 +3167,9 @@ def get_admin_url(blog_id_=None, path_="", scheme_="admin", *_args_):
 #// @return string Includes URL link with optional path appended.
 #//
 def includes_url(path_="", scheme_=None, *_args_):
-    
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     url_ = site_url("/" + WPINC + "/", scheme_)
     if path_ and php_is_string(path_):
@@ -3232,7 +3277,9 @@ def plugins_url(path_="", plugin_="", *_args_):
 #// @return string Site URL link with optional path appended.
 #//
 def network_site_url(path_="", scheme_=None, *_args_):
-    
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     if (not is_multisite()):
         return site_url(path_, scheme_)
@@ -3274,7 +3321,9 @@ def network_site_url(path_="", scheme_=None, *_args_):
 #// @return string Home URL link with optional path appended.
 #//
 def network_home_url(path_="", scheme_=None, *_args_):
-    
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     if (not is_multisite()):
         return home_url(path_, scheme_)
@@ -3407,7 +3456,9 @@ def self_admin_url(path_="", scheme_="admin", *_args_):
 #// @return string $url URL with chosen scheme.
 #//
 def set_url_scheme(url_=None, scheme_=None, *_args_):
-    
+    if scheme_ is None:
+        scheme_ = None
+    # end if
     
     orig_scheme_ = scheme_
     if (not scheme_):
@@ -3538,7 +3589,9 @@ def get_edit_profile_url(user_id_=0, scheme_="admin", *_args_):
 #// been published yet.
 #//
 def wp_get_canonical_url(post_=None, *_args_):
-    
+    if post_ is None:
+        post_ = None
+    # end if
     
     post_ = get_post(post_)
     if (not post_):
@@ -3772,7 +3825,9 @@ def the_shortlink(text_="", title_="", before_="", after_="", *_args_):
 #// @return string|false The URL of the avatar on success, false on failure.
 #//
 def get_avatar_url(id_or_email_=None, args_=None, *_args_):
-    
+    if args_ is None:
+        args_ = None
+    # end if
     
     args_ = get_avatar_data(id_or_email_, args_)
     return args_["url"]
@@ -3835,7 +3890,9 @@ def is_avatar_comment_type(comment_type_=None, *_args_):
 #// }
 #//
 def get_avatar_data(id_or_email_=None, args_=None, *_args_):
-    
+    if args_ is None:
+        args_ = None
+    # end if
     
     args_ = wp_parse_args(args_, Array({"size": 96, "height": None, "width": None, "default": get_option("avatar_default", "mystery"), "force_default": False, "rating": get_option("avatar_rating"), "scheme": None, "processed_args": None, "extra_attr": ""}))
     if php_is_numeric(args_["size"]):

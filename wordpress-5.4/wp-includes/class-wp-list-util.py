@@ -139,7 +139,9 @@ class WP_List_Util():
     #// `$list` will be preserved in the results.
     #//
     def pluck(self, field_=None, index_key_=None):
-        
+        if index_key_ is None:
+            index_key_ = None
+        # end if
         
         newlist_ = Array()
         if (not index_key_):

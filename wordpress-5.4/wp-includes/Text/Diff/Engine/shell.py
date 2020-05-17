@@ -55,7 +55,7 @@ class Text_Diff_Engine_shell():
         diff_ = shell_exec(self._diffCommand + " " + from_file_ + " " + to_file_)
         unlink(from_file_)
         unlink(to_file_)
-        if is_null(diff_):
+        if php_is_null(diff_):
             #// No changes were made
             return Array(php_new_class("Text_Diff_Op_copy", lambda : Text_Diff_Op_copy(from_lines_)))
         # end if

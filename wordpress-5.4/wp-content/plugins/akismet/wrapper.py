@@ -20,7 +20,9 @@ def akismet_test_mode(*_args_):
     return Akismet.is_test_mode()
 # end def akismet_test_mode
 def akismet_http_post(request_=None, host_=None, path_=None, port_=80, ip_=None, *_args_):
-    
+    if ip_ is None:
+        ip_ = None
+    # end if
     
     path_ = php_str_replace("/1.1/", "", path_)
     return Akismet.http_post(request_, path_, ip_)
@@ -210,7 +212,9 @@ def akismet_get_key(*_args_):
     return Akismet.get_api_key()
 # end def akismet_get_key
 def akismet_check_key_status(key_=None, ip_=None, *_args_):
-    
+    if ip_ is None:
+        ip_ = None
+    # end if
     
     return Akismet.check_key_status(key_, ip_)
 # end def akismet_check_key_status
@@ -220,7 +224,9 @@ def akismet_update_alert(response_=None, *_args_):
     return Akismet.update_alert(response_)
 # end def akismet_update_alert
 def akismet_verify_key(key_=None, ip_=None, *_args_):
-    
+    if ip_ is None:
+        ip_ = None
+    # end if
     
     return Akismet.verify_key(key_, ip_)
 # end def akismet_verify_key
@@ -245,7 +251,9 @@ def akismet_get_user_comments_approved(user_id_=None, comment_author_email_=None
     return Akismet.get_user_comments_approved(user_id_, comment_author_email_, comment_author_, comment_author_url_)
 # end def akismet_get_user_comments_approved
 def akismet_update_comment_history(comment_id_=None, message_=None, event_=None, *_args_):
-    
+    if event_ is None:
+        event_ = None
+    # end if
     
     return Akismet.update_comment_history(comment_id_, message_, event_)
 # end def akismet_update_comment_history

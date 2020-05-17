@@ -196,7 +196,9 @@ class SimplePie_Sanitize():
     #// @param array|null $element_attribute Element/attribute key/value pairs, null for default
     #//
     def set_url_replacements(self, element_attribute_=None):
-        
+        if element_attribute_ is None:
+            element_attribute_ = None
+        # end if
         
         if element_attribute_ == None:
             element_attribute_ = Array({"a": "href", "area": "href", "blockquote": "cite", "del": "cite", "form": "action", "img": Array("longdesc", "src"), "input": "src", "ins": "cite", "q": "cite"})

@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 if '__PHP2PY_LOADED__' not in globals():
-    import cgi
     import os
-    import os.path
-    import copy
-    import sys
-    from goto import with_goto
     with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
@@ -32,11 +27,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #// 
 #// MySQL settings - You can get this info from your web host ** //
 #// The name of the database for WordPress
-php_define("DB_NAME", "database_name_here")
+php_define("DB_NAME", "wp")
 #// MySQL database username
-php_define("DB_USER", "username_here")
+php_define("DB_USER", "root")
 #// MySQL database password
-php_define("DB_PASSWORD", "password_here")
+php_define("DB_PASSWORD", "")
 #// MySQL hostname
 php_define("DB_HOST", "localhost")
 #// Database Charset to use in creating database tables.
@@ -67,7 +62,7 @@ php_define("NONCE_SALT", "put your unique phrase here")
 #// You can have multiple installations in one database if you give each
 #// a unique prefix. Only numbers, letters, and underscores please!
 #//
-table_prefix = "wp_"
+table_prefix_ = "wp_power2017"
 #// 
 #// For developers: WordPress debugging mode.
 #// 

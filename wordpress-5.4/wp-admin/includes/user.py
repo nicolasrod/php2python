@@ -308,7 +308,9 @@ def get_users_drafts(user_id_=None, *_args_):
 #// @return bool True when finished.
 #//
 def wp_delete_user(id_=None, reassign_=None, *_args_):
-    
+    if reassign_ is None:
+        reassign_ = None
+    # end if
     
     global wpdb_
     php_check_if_defined("wpdb_")

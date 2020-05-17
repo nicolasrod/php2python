@@ -110,7 +110,9 @@ class WP_Upgrader():
     #// instance.
     #//
     def __init__(self, skin_=None):
-        
+        if skin_ is None:
+            skin_ = None
+        # end if
         
         if None == skin_:
             self.skin = php_new_class("WP_Upgrader_Skin", lambda : WP_Upgrader_Skin())
@@ -564,7 +566,7 @@ class WP_Upgrader():
         if "." == destination_name_:
             destination_name_ = ""
         # end if
-        self.result = php_compact("source", "source_files", "destination", "destination_name", "local_destination", "remote_destination", "clear_destination")
+        self.result = php_compact("source_", "source_files_", "destination_", "destination_name_", "local_destination_", "remote_destination_", "clear_destination_")
         #// 
         #// Filters the installation response after the installation has finished.
         #// 
@@ -800,7 +802,9 @@ class WP_Upgrader():
     #//
     @classmethod
     def create_lock(self, lock_name_=None, release_timeout_=None):
-        
+        if release_timeout_ is None:
+            release_timeout_ = None
+        # end if
         
         global wpdb_
         php_check_if_defined("wpdb_")

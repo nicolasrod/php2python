@@ -81,7 +81,12 @@ class SimplePie_Rating():
     #// properties and their accessors
     #//
     def __init__(self, scheme_=None, value_=None):
-        
+        if scheme_ is None:
+            scheme_ = None
+        # end if
+        if value_ is None:
+            value_ = None
+        # end if
         
         self.scheme = scheme_
         self.value = value_

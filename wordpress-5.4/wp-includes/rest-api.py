@@ -313,7 +313,9 @@ def rest_get_url_prefix(*_args_):
 #// @return string Full URL to the endpoint.
 #//
 def get_rest_url(blog_id_=None, path_="/", scheme_="rest", *_args_):
-    
+    if blog_id_ is None:
+        blog_id_ = None
+    # end if
     
     if php_empty(lambda : path_):
         path_ = "/"
@@ -1149,7 +1151,7 @@ def rest_validate_value_from_schema(value_=None, args_=None, param_="", *_args_)
         return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("%1$s is not of type %2$s."), param_, php_implode(",", args_["type"]))))
     # end if
     if "array" == args_["type"]:
-        if (not is_null(value_)):
+        if (not php_is_null(value_)):
             value_ = wp_parse_list(value_)
         # end if
         if (not wp_is_numeric_array(value_)):

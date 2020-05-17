@@ -92,7 +92,7 @@ if "POST" == PHP_SERVER["REQUEST_METHOD"]:
         php_exit(0)
     # end if
 # end if
-settings_ = Array({"codeEditor": wp_enqueue_code_editor(php_compact("file"))})
+settings_ = Array({"codeEditor": wp_enqueue_code_editor(php_compact("file_"))})
 wp_enqueue_script("wp-theme-plugin-editor")
 wp_add_inline_script("wp-theme-plugin-editor", php_sprintf("jQuery( function( $ ) { wp.themePluginEditor.init( $( \"#template\" ), %s ); } )", wp_json_encode(settings_)))
 wp_add_inline_script("wp-theme-plugin-editor", "wp.themePluginEditor.themeOrPlugin = \"theme\";")
