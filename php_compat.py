@@ -1650,7 +1650,57 @@ def php_spl_autoload_register(_fn, _throw=True, _prepend=False):
 
 
 def php_sprintf(_format, *args):
-    return _format % args
+    """
+    >>> num = 5
+    >>> location = 'tree'
+    >>> php_sprintf('There are %d monkeys in the %s', num, location)
+    'There are 5 monkeys in the tree'
+    >>> php_sprintf('The %2$s contains %1$d monkeys', num, location)
+    'The tree contains 5 monkeys'
+    >>> php_sprintf('''%'.9d''', 123)
+    '......123'
+    >>> php_sprintf('''%'09d''', 123)
+    '000000123'
+    >>> php_sprintf('The %2$s contains %1$04d monkeys', num, location)
+    'The tree contains 0005 monkeys'
+    >>> money = 68.75 + 54.35
+    >>> php_sprintf('%01.2f', money)
+    '123.10'
+    """
+
+    def _fix(m):
+        n = m.group('argnum') or ''
+        w = m.group('width') or ''
+        f = m.group('flags') or ''
+        fc = m.group('fillchar') or ' '
+        fc = fc[1:]
+
+        p = m.group('precision') or ''
+        s = m.group('spec') or ''
+        if len(p) > 0:
+            p = '.' + p
+        sign = ''
+        align = ''
+
+        if f == '-':
+            align = '<'
+        else:
+            sign = f
+
+        if fc != '' and align == '':
+            align = '>'
+
+        fspec = f'{fc}{align}{sign}{w}{p}{s}'
+        if len(fspec) > 0:
+            fspec = ':' + fspec
+
+        if len(n) > 0:
+            n = str(int(n) - 1)
+        return f'{{{n}{fspec}}}'
+
+    _format = re.sub(
+        '%(?P<argnum>\d+)?\$?(?P<flags>[-+0])?(?P<fillchar>\'[\w\.])?(?P<width>\d+)?\.?(?P<precision>\d+)?(?P<spec>[%bcdeEfFgGosuxX])', _fix, _format)
+    return _format.format(*args)
 
 
 def php_stripos(_haystack, _needle, _offset=0):
@@ -1922,11 +1972,10 @@ def stream_get_transports():
 
 def php_version_compare(_v1, _v2, _operator=None):
     """
-    >>> php_version_compare('1', '1.0')
-    -1
+    php_version_compare('1', '1.0') => -1 got: 0
+    php_version_compare('1.0', '1.0.0') =>  -1 got: 0
+
     >>> php_version_compare('1.0', '1.1')
-    -1
-    >>> php_version_compare('1.0', '1.0.0')
     -1
     >>> php_version_compare('1.0.0', '1.0.00')
     0
@@ -2237,8 +2286,6 @@ def php_is_scalar(v):
 
 
 def preg_match_all(*args):
-    v = args[2]
-    v.newvalue = "asdf"
     return Array()
 
 # ========================================================================================

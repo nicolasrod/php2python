@@ -1217,8 +1217,9 @@ class wpdb():
         query_ = php_preg_replace(str("/%(?:%|$|(?!(") + str(allowed_format_) + str(")?[sdF]))/"), "%%\\1", query_)
         #// Escape any unescaped percents.
         #// Count the number of valid placeholders in the query.
-        matches_ = Array()
+        matches_ = 0
         placeholders_ = preg_match_all(str("/(^|[^%]|(%%)+)%(") + str(allowed_format_) + str(")?[sdF]/"), query_, matches_)
+        placeholders_ = 0
         if php_count(args_) != placeholders_:
             if 1 == placeholders_ and passed_as_array_:
                 #// If the passed query only expected one argument, but the wrong number of arguments were sent as an array, bail.
