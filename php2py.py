@@ -50,7 +50,7 @@ def main():
         print(f"[-] Error readin file {args.folder}!")
         sys.exit(1)
 
-    resource.setrlimit(resource.RLIMIT_NOFILE, (8000, 8000))
+    # resource.setrlimit(resource.RLIMIT_NOFILE, (8000, 8000))
 
     procs = []
     for root, dirs, files in os.walk(args.folder):
@@ -59,12 +59,13 @@ def main():
             
             if not fname.lower().endswith(".php"):
                 continue
+
             
             fullname = os.path.join(root, fname)
             basename, _ = os.path.splitext(fullname)
             fname_ast = f"{basename}.ast"
             fname_py = f"{basename}.py"
-
+            
             if args.resume and os.path.exists(fname_py):
                 continue
 
@@ -72,7 +73,7 @@ def main():
             procs.append(proc)
             proc.start()
             
-            if len(procs) == 10:
+            if len(procs) == 4:
                 for proc in procs:
                     proc.join()
                 procs = []

@@ -1,6 +1,0 @@
-{
-    "require-dev": {
-        "phpstan/phpstan": "^0.12.19",
-        "rector/rector": "^0.7.21"
-    }
-}
