@@ -7,7 +7,13 @@ Requirements
 ------------
 
 - PHP 7 with Package PHP-Parser installed (https://github.com/nikic/PHP-Parser#quick-start)
-- Python 3 with Package goto-statement installed (https://pypi.org/project/goto-statement/)
+- Python 3 with Package goto-statement installed and the MySQL connector:
+  https://pypi.org/project/goto-statement/
+  https://pypi.org/project/mysql-connector-python/
+
+```
+$ python3 -m pip install goto-statement mysql-connector-python
+```
 
 
 Converting WordPress source code to Python
