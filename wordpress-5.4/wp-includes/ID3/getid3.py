@@ -312,7 +312,7 @@ class getID3():
                     if php_strpos(value_, " ") != False:
                         if (not php_empty(lambda : path_so_far_)):
                             commandline_ = "dir /x " + escapeshellarg(php_implode(DIRECTORY_SEPARATOR, path_so_far_))
-                            dir_listing_ = os.system("commandline_")
+                            dir_listing_ = php_exec("commandline_")
                             lines_ = php_explode("\n", dir_listing_)
                             for line_ in lines_:
                                 line_ = php_trim(line_)
@@ -929,13 +929,13 @@ class getID3():
                 if GETID3_OS_ISWINDOWS:
                     if php_file_exists(GETID3_HELPERAPPSDIR + "vorbiscomment.exe"):
                         commandline_ = "\"" + GETID3_HELPERAPPSDIR + "vorbiscomment.exe\" -w -c \"" + empty_ + "\" \"" + file_ + "\" \"" + temp_ + "\""
-                        VorbisCommentError_ = os.system("commandline_")
+                        VorbisCommentError_ = php_exec("commandline_")
                     else:
                         VorbisCommentError_ = "vorbiscomment.exe not found in " + GETID3_HELPERAPPSDIR
                     # end if
                 else:
                     commandline_ = "vorbiscomment -w -c " + escapeshellarg(empty_) + " " + escapeshellarg(file_) + " " + escapeshellarg(temp_) + " 2>&1"
-                    VorbisCommentError_ = os.system("commandline_")
+                    VorbisCommentError_ = php_exec("commandline_")
                 # end if
                 if (not php_empty(lambda : VorbisCommentError_)):
                     self.warning("Failed making system call to vorbiscomment(.exe) - " + algorithm_ + "_data will be incorrect. If vorbiscomment is unavailable, please download from http://www.vorbis.com/download.psp and put in the getID3() directory. Error returned: " + VorbisCommentError_)

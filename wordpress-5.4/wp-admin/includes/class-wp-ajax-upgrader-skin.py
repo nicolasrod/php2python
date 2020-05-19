@@ -99,7 +99,7 @@ class WP_Ajax_Upgrader_Skin(Automatic_Upgrader_Skin):
             # end if
             if False != php_strpos(string_, "%"):
                 if (not php_empty(lambda : args_)):
-                    string_ = vsprintf(string_, args_)
+                    string_ = php_vsprintf(string_, args_)
                 # end if
             # end if
             #// Count existing errors to generate a unique error code.

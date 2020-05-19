@@ -95,7 +95,7 @@ def wp_credits_section_title(group_data_=None, *_args_):
             title_ = _x("Translators", "Translate this to be the equivalent of English Translators in your language for the credits page Translators section")
         elif (php_isset(lambda : group_data_["placeholders"])):
             #// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
-            title_ = vsprintf(translate(group_data_["name"]), group_data_["placeholders"])
+            title_ = php_vsprintf(translate(group_data_["name"]), group_data_["placeholders"])
         else:
             #// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
             title_ = translate(group_data_["name"])

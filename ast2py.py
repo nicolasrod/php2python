@@ -13,6 +13,7 @@ import re
 from php_compat import PHP_FUNCTIONS
 from functools import partial
 from keyword import iskeyword
+from contextlib import contextmanager
 
 # TODO: s = '$a $b' => interpolate different types, do convertion!
 # TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
@@ -95,6 +96,12 @@ _php_globals = {
 
 fix_comment_line = partial(remove_both_ends, chars=('*', '/', ' ', '\t'))
 
+@contextmanager
+def namespace(self, name):
+    self.last_name = name
+    yield
+    self.last_name = None
+
 
 class AST:
     def __init__(self):
@@ -109,17 +116,11 @@ class AST:
         self.static_vars = {}
         self.channel_data = None
 
-    def push_namespace(self, name):
-        self.last_name = name
-
     def add_namespace(self, name):
         if self.last_namespace is not None:
             return '.'.join([self.last_namespace, name])
         else:
             return name
-
-    def pop_namespace(self):
-        self.last_name = None
 
     def push_param_init(self, name, value):
         if self.channel_data is None:
@@ -608,7 +609,6 @@ class AST:
         return f'yield from php_yield({{ {k}: {v} }})'
 
     def Expr_YieldForm(self, node):
-        # TODO: finish this node!
         k = self.parse(node['key'])
         v = self.parse(node['value'])
 
@@ -619,10 +619,10 @@ class AST:
     def Stmt_Namespace(self, node):
         name = self.parse(node['name']).replace('.', '_')
         qname = quote(name)
-        self.push_namespace(name)
-        stmts = self.parse_children(node, 'stmts', '\n')
-        self.pop_namespace()
-
+        
+        with namespace(self, name):
+            stmts = self.parse_children(node, 'stmts', '\n')
+        
         if node['name'] is None:
             #  Global namespace
             return f'{stmts}\n'
@@ -654,9 +654,9 @@ class {name}({name}):
 
         supers = remove_both_ends(','.join([extends, implements]))
         name = self.parse(node['name'])
-        self.push_namespace(name)
-        stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
-        self.pop_namespace()
+        with namespace(self, name):
+            stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
+        
         return self.with_docs(
             node, f'''
 class {name}({supers}):
@@ -710,11 +710,9 @@ class {name}({supers}):
     def Stmt_Function(self, node):
         name = self.parse(node['name'])
 
-        self.push_namespace(name)
-        params = self.parse_children(node, 'params', ', ').replace(' = ', '=')
-        self.pop_namespace()
-
-        stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
+        with namespace(self, name):
+            params = self.parse_children(node, 'params', ', ').replace(' = ', '=')
+            stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
 
         if params.find('*') == -1:
             params = remove_both_ends(params + ', *_args_')
@@ -753,11 +751,11 @@ def {name}({params}):
 
     def Stmt_ClassMethod(self, node):
         name = self.fix_method(self.parse(node['name']))
-        self.push_namespace(name)
-        params = remove_both_ends(
-            'self, ' + self.parse_children(node, 'params', ', ').replace(' = ', '='))
-        stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
-        self.pop_namespace()
+        with namespace(self, name):
+            params = remove_both_ends(
+                'self, ' + self.parse_children(node, 'params', ', ').replace(' = ', '='))
+            stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
+        
         global_access = self.get_global_access_for(node['stmts'])
         decorators = '\n'.join([
             '@classmethod' if node['flags'] == 9 else '',

@@ -90,7 +90,7 @@ class Automatic_Upgrader_Skin(WP_Upgrader_Skin):
         # end if
         if php_strpos(string_, "%") != False:
             if (not php_empty(lambda : args_)):
-                string_ = vsprintf(string_, args_)
+                string_ = php_vsprintf(string_, args_)
             # end if
         # end if
         string_ = php_trim(string_)

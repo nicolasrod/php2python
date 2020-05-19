@@ -185,7 +185,7 @@ class WP_Debug_Data():
         info_["wp-media"]["fields"]["gd_version"] = Array({"label": __("GD version"), "value": gd_["GD Version"] if php_is_array(gd_) else not_available_, "debug": gd_["GD Version"] if php_is_array(gd_) else "not available"})
         #// Get Ghostscript information, if available.
         if php_function_exists("exec"):
-            gs_ = exec("gs --version")
+            gs_ = php_exec("gs --version")
             if php_empty(lambda : gs_):
                 gs_ = not_available_
                 gs_debug_ = "not available"

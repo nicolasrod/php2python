@@ -941,7 +941,7 @@ if (not php_class_exists("Snoopy", False)):
             if self.read_timeout > 0:
                 cmdline_params_ += " -m " + escapeshellarg(self.read_timeout)
             # end if
-            exec(self.curl_path + " " + cmdline_params_ + " " + escapeshellarg(URI_), results_, return_)
+            php_exec(self.curl_path + " " + cmdline_params_ + " " + escapeshellarg(URI_), results_, return_)
             if return_:
                 self.error = str("Error: cURL could not retrieve the document, error ") + str(return_) + str(".")
                 return False

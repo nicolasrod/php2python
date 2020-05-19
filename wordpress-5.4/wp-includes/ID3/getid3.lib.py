@@ -2022,7 +2022,7 @@ class getid3_lib():
             commandline_ = "ls -l " + escapeshellarg(path_) + " | awk '{print $5}'"
         # end if
         if (php_isset(lambda : commandline_)):
-            output_ = php_trim(os.system("commandline_"))
+            output_ = php_trim(php_exec("commandline_"))
             if ctype_digit(output_):
                 filesize_ = php_float(output_)
             # end if

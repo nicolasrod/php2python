@@ -1268,15 +1268,15 @@ def get_custom_header(*_args_):
         if (not data_) and current_theme_supports("custom-header", "default-image"):
             directory_args_ = Array(get_template_directory_uri(), get_stylesheet_directory_uri())
             data_ = Array()
-            data_["url"] = vsprintf(get_theme_support("custom-header", "default-image"), directory_args_)
+            data_["url"] = php_vsprintf(get_theme_support("custom-header", "default-image"), directory_args_)
             data_["thumbnail_url"] = data_["url"]
             if (not php_empty(lambda : _wp_default_headers_)):
                 for default_header_ in _wp_default_headers_:
-                    url_ = vsprintf(default_header_["url"], directory_args_)
+                    url_ = php_vsprintf(default_header_["url"], directory_args_)
                     if data_["url"] == url_:
                         data_ = default_header_
                         data_["url"] = url_
-                        data_["thumbnail_url"] = vsprintf(data_["thumbnail_url"], directory_args_)
+                        data_["thumbnail_url"] = php_vsprintf(data_["thumbnail_url"], directory_args_)
                         break
                     # end if
                 # end for

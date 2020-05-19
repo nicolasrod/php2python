@@ -770,8 +770,7 @@ class wpdb():
         #// @param array $incompatible_modes An array of incompatible modes.
         #//
         incompatible_modes_ = apply_filters("incompatible_sql_modes", self.incompatible_modes)
-        
-        for i_,mode_ in modes_.items():
+        for i_,mode_ in modes_:
             if php_in_array(mode_, incompatible_modes_):
                 modes_[i_] = None
             # end if
@@ -1236,7 +1235,7 @@ class wpdb():
             # end if
         # end if
         php_array_walk(args_, Array(self, "escape_by_ref"))
-        query_ = vsprintf(query_, args_)
+        query_ = php_vsprintf(query_, args_)
         return self.add_placeholder_escape(query_)
     # end def prepare
     #// 
@@ -1861,8 +1860,6 @@ class wpdb():
             #// Old WP installs may not have AUTH_SALT defined.
             salt_ = AUTH_SALT if php_defined("AUTH_SALT") and AUTH_SALT else php_str(rand())
             placeholder_ = "{" + php_hash_hmac(algo_, php_uniqid(salt_, True), salt_) + "}"
-
-            print(">>>", placeholder_, type(placeholder_))
         # end if
         #// 
         #// Add the filter to remove the placeholder escaper. Uses priority 0, so that anything

@@ -165,7 +165,7 @@ class WP_Upgrader_Skin():
             if args_:
                 args_ = php_array_map("strip_tags", args_)
                 args_ = php_array_map("esc_html", args_)
-                string_ = vsprintf(string_, args_)
+                string_ = php_vsprintf(string_, args_)
             # end if
         # end if
         if php_empty(lambda : string_):
