@@ -615,7 +615,7 @@ if (not php_function_exists("wp_validate_auth_cookie")):
         key_ = wp_hash(username_ + "|" + pass_frag_ + "|" + expiration_ + "|" + token_, scheme_)
         #// If ext/hash is not present, compat.php's hash_hmac() does not support sha256.
         algo_ = "sha256" if php_function_exists("hash") else "sha1"
-        hash_ = hash_hmac(algo_, username_ + "|" + expiration_ + "|" + token_, key_)
+        hash_ = php_hash_hmac(algo_, username_ + "|" + expiration_ + "|" + token_, key_)
         if (not hash_equals(hash_, hmac_)):
             #// 
             #// Fires if a bad authentication cookie hash is encountered.
@@ -684,7 +684,7 @@ if (not php_function_exists("wp_generate_auth_cookie")):
         key_ = wp_hash(user_.user_login + "|" + pass_frag_ + "|" + expiration_ + "|" + token_, scheme_)
         #// If ext/hash is not present, compat.php's hash_hmac() does not support sha256.
         algo_ = "sha256" if php_function_exists("hash") else "sha1"
-        hash_ = hash_hmac(algo_, user_.user_login + "|" + expiration_ + "|" + token_, key_)
+        hash_ = php_hash_hmac(algo_, user_.user_login + "|" + expiration_ + "|" + token_, key_)
         cookie_ = user_.user_login + "|" + expiration_ + "|" + token_ + "|" + hash_
         #// 
         #// Filters the authentication cookie.
@@ -2088,7 +2088,7 @@ if (not php_function_exists("wp_salt")):
                     update_site_option("secret_key", values_["key"])
                 # end if
             # end if
-            values_["salt"] = hash_hmac("md5", scheme_, values_["key"])
+            values_["salt"] = php_hash_hmac("md5", scheme_, values_["key"])
         # end if
         cached_salts_[scheme_] = values_["key"] + values_["salt"]
         #// This filter is documented in wp-includes/pluggable.php
@@ -2109,7 +2109,7 @@ if (not php_function_exists("wp_hash")):
         
         
         salt_ = wp_salt(scheme_)
-        return hash_hmac("md5", data_, salt_)
+        return php_hash_hmac("md5", data_, salt_)
     # end def wp_hash
 # end if
 if (not php_function_exists("wp_hash_password")):

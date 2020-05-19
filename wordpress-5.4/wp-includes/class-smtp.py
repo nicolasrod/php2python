@@ -397,7 +397,7 @@ class SMTP():
         
         
         if php_function_exists("hash_hmac"):
-            return hash_hmac("md5", data_, key_)
+            return php_hash_hmac("md5", data_, key_)
         # end if
         #// The following borrowed from
         #// http://php.net/manual/en/function.mhash.php#27225

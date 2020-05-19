@@ -5,6 +5,7 @@ import base64
 import cgi
 import functools
 import hashlib
+import hmac
 import inspect
 import io
 import itertools
@@ -24,6 +25,7 @@ from datetime import datetime
 from goto import with_goto
 from packaging import version
 from urllib.parse import urlparse
+import subprocess
 
 _PHP_INCLUDES = {}
 __FILE__ = os.path.realpath(__file__)
@@ -1717,7 +1719,13 @@ def php_sprintf(_format, *args):
     _format = re.sub(
         '%(?P<argnum>\d+)?\$?(?P<flags>[-+0])?(?P<fillchar>\'[\w\.])?(?P<width>\d+)?\.?(?P<precision>\d+)?(?P<spec>[%bcdeEfFgGosuxX])', _fix, _format)
 
+    print(_format)
+    print(args)
     return _format.format(*args)
+
+
+def php_vsprintf(fmt, args):
+    return php_sprintf(fmt, *args)
 
 
 def php_stripos(_haystack, _needle, _offset=0):
@@ -1794,6 +1802,7 @@ def php_str_replace(_search, _replace, _subject, _count=None):
     """
     assert _count is None, '_count parameter not implemented!'
 
+    print("***", type(_search), type(_subject), type(_replace))
     if not isinstance(_search, Array):
         return _subject.replace(_search, _replace)
 
@@ -2336,7 +2345,7 @@ def php_array_walk(arr, fn, user_data=None):
 
 
 def php_mysqli_real_escape_string(dbh, s):
-    return dbh.cnx._cmysql.escape_string(s)
+    return dbh.cnx._cmysql.escape_string(s).decode('utf-8')
 
 
 def php_uniqid(prefix=None, more_entropy=False):
@@ -2350,8 +2359,45 @@ def php_uniqid(prefix=None, more_entropy=False):
 
     return data
 
-# ========================================================================================
 
+def php_hash_hmac_algos():
+    return Array('md5', 'sha1')
+
+
+def php_hash_hmac(algo, data, key, raw_output_=None, *_args_):
+    if raw_output_ is None:
+        raw_output_ = False
+
+    print(">>>", algo)
+    print(data, "--", key)
+    m = hmac.new(key.encode('ascii'), digestmod=getattr(
+        hashlib, algo.lower().strip()))
+    m.update(data.encode('ascii'))
+
+    if raw_output_:
+        return m.digest()
+
+    data = m.hexdigest()
+    return data
+
+
+def php_exec(cmd, out=None, exitcode=None):
+    proc = subprocess.run(..., check=False, text=True, stdout=subprocess.PIPE)
+
+    lines = proc.stdout.strip().split('\n')
+
+    if isinstance(out, Array):
+        for it in lines:
+            out[-1] = it
+
+    assert exitcode is not None and not isinstance(exitcode, Array), 'exitcode should be an array in Python! FIX THIS!'
+
+    if exitcode is not None:
+        exitcode[-1] = proc.returncode
+
+    return lines[-1]
+
+# ========================================================================================
 
 defs = locals().copy()
 PHP_FUNCTIONS = [

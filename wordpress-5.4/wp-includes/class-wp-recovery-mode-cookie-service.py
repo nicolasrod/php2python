@@ -214,6 +214,6 @@ class WP_Recovery_Mode_Cookie_Service():
             auth_salt_ = AUTH_SALT
         # end if
         secret_ = auth_key_ + auth_salt_
-        return hash_hmac("sha1", data_, secret_)
+        return php_hash_hmac("sha1", data_, secret_)
     # end def recovery_mode_hash
 # end class WP_Recovery_Mode_Cookie_Service

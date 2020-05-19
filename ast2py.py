@@ -15,10 +15,7 @@ from functools import partial
 from keyword import iskeyword
 
 # TODO: s = '$a $b' => interpolate different types, do convertion!
-# TODO: preg patterns to python
 # TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
-# TODO: php_compact("x") => should be "x_" (wp-includes/wp-db.py -630)
-# TODO: fix php_sprintf placeholders
 
 
 def _(x):
@@ -217,7 +214,7 @@ class AST:
 
         if assign_tag is None:
             assign_tag = ('Expr_Assign', 'Expr_AssignRef', 'Expr_PostInc', 'Expr_PostDec'
-                          'Expr_AssignOp_Concat', 'Expr_PreInc', 'Expr_PreDec')
+                          'Expr_AssignOp_Concat', 'Expr_PreInc', 'Expr_PreDec')  # TODO: assign could be pre or post expr!
 
         if isinstance(node[name], list):
             cond = self.parse_children(node, name, ', ')
@@ -549,7 +546,7 @@ class AST:
 
     def Expr_ShellExec(self, node):
         cmd = quote(self.parse_children(node, 'parts', ' '))
-        return f'os.system({cmd})'
+        return f'php_exec({cmd})'
 
     def Name_FullyQualified(self, node):
         name = self.parse_children(node, 'parts', '.')
