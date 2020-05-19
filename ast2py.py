@@ -563,9 +563,6 @@ class AST:
         rhs = self.parse(node['expr'])
         return f'type({rhs}).__name__ == {lhs}'
 
-    def _pre_post_varname(self, node):
-        return
-
     def Expr_PreInc(self, node):
         var = self.parse(node['var'])
 
