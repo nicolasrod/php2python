@@ -214,7 +214,7 @@ if (not php_class_exists("POMO_FileReader", False)):
         def is_resource(self):
             
             
-            return is_resource(self._f)
+            return php_is_resource(self._f)
         # end def is_resource
         #// 
         #// @return bool

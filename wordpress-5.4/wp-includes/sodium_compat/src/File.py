@@ -60,12 +60,12 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $ifp
         ifp_ = fopen(inputFile_, "rb")
-        if (not is_resource(ifp_)):
+        if (not php_is_resource(ifp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $ofp
         ofp_ = fopen(outputFile_, "wb")
-        if (not is_resource(ofp_)):
+        if (not php_is_resource(ofp_)):
             php_fclose(ifp_)
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open output file for writing"))
         # end if
@@ -122,12 +122,12 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $ifp
         ifp_ = fopen(inputFile_, "rb")
-        if (not is_resource(ifp_)):
+        if (not php_is_resource(ifp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $ofp
         ofp_ = fopen(outputFile_, "wb")
-        if (not is_resource(ofp_)):
+        if (not php_is_resource(ofp_)):
             php_fclose(ifp_)
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open output file for writing"))
         # end if
@@ -180,12 +180,12 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $ifp
         ifp_ = fopen(inputFile_, "rb")
-        if (not is_resource(ifp_)):
+        if (not php_is_resource(ifp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $ofp
         ofp_ = fopen(outputFile_, "wb")
-        if (not is_resource(ofp_)):
+        if (not php_is_resource(ofp_)):
             php_fclose(ifp_)
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open output file for writing"))
         # end if
@@ -264,12 +264,12 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $ifp
         ifp_ = fopen(inputFile_, "rb")
-        if (not is_resource(ifp_)):
+        if (not php_is_resource(ifp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $ofp
         ofp_ = fopen(outputFile_, "wb")
-        if (not is_resource(ofp_)):
+        if (not php_is_resource(ofp_)):
             php_fclose(ifp_)
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open output file for writing"))
         # end if
@@ -350,7 +350,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $fp
         fp_ = fopen(filePath_, "rb")
-        if (not is_resource(fp_)):
+        if (not php_is_resource(fp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         ctx_ = ParagonIE_Sodium_Compat.crypto_generichash_init(key_, outputLength_)
@@ -415,12 +415,12 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $ifp
         ifp_ = fopen(inputFile_, "rb")
-        if (not is_resource(ifp_)):
+        if (not php_is_resource(ifp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $ofp
         ofp_ = fopen(outputFile_, "wb")
-        if (not is_resource(ofp_)):
+        if (not php_is_resource(ofp_)):
             php_fclose(ifp_)
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open output file for writing"))
         # end if
@@ -477,12 +477,12 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $ifp
         ifp_ = fopen(inputFile_, "rb")
-        if (not is_resource(ifp_)):
+        if (not php_is_resource(ifp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $ofp
         ofp_ = fopen(outputFile_, "wb")
-        if (not is_resource(ofp_)):
+        if (not php_is_resource(ofp_)):
             php_fclose(ifp_)
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open output file for writing"))
         # end if
@@ -533,7 +533,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $fp
         fp_ = fopen(filePath_, "rb")
-        if (not is_resource(fp_)):
+        if (not php_is_resource(fp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var string $az
@@ -641,7 +641,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         # end if
         #// @var resource $fp
         fp_ = fopen(filePath_, "rb")
-        if (not is_resource(fp_)):
+        if (not php_is_resource(fp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var bool The original value of ParagonIE_Sodium_Compat::$fastMult
@@ -918,7 +918,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         
         #// Type checks:
         if PHP_VERSION_ID < 70200:
-            if (not is_resource(hash_)):
+            if (not php_is_resource(hash_)):
                 raise php_new_class("TypeError", lambda : TypeError("Argument 1 must be a resource, " + gettype(hash_) + " given."))
             # end if
         else:
@@ -926,7 +926,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
                 raise php_new_class("TypeError", lambda : TypeError("Argument 1 must be an object (PHP 7.2+), " + gettype(hash_) + " given."))
             # end if
         # end if
-        if (not is_resource(fp_)):
+        if (not php_is_resource(fp_)):
             raise php_new_class("TypeError", lambda : TypeError("Argument 2 must be a resource, " + gettype(fp_) + " given."))
         # end if
         if (not php_is_int(size_)):
@@ -976,7 +976,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         #// @var int $size
         #// @var resource|bool $fp
         fp_ = fopen(filePath_, "rb")
-        if (not is_resource(fp_)):
+        if (not php_is_resource(fp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $fp
@@ -1063,7 +1063,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         #// @var int $size
         #// @var resource|bool $fp
         fp_ = fopen(filePath_, "rb")
-        if (not is_resource(fp_)):
+        if (not php_is_resource(fp_)):
             raise php_new_class("SodiumException", lambda : SodiumException("Could not open input file for reading"))
         # end if
         #// @var resource $fp

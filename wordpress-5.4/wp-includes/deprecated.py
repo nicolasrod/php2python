@@ -3330,7 +3330,7 @@ def wp_load_image(file_=None, *_args_):
     #// Set artificially high because GD uses uncompressed images in memory.
     wp_raise_memory_limit("image")
     image_ = imagecreatefromstring(php_file_get_contents(file_))
-    if (not is_resource(image_)):
+    if (not php_is_resource(image_)):
         #// translators: %s: File name.
         return php_sprintf(__("File &#8220;%s&#8221; is not an image."), file_)
     # end if

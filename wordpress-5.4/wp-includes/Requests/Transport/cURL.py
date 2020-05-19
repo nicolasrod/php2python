@@ -109,7 +109,7 @@ class Requests_Transport_cURL(Requests_Transport):
     def __del__(self):
         
         
-        if is_resource(self.handle):
+        if php_is_resource(self.handle):
             curl_close(self.handle)
         # end if
     # end def __del__

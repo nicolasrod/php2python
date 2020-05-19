@@ -1506,7 +1506,7 @@ class getid3_handler():
             # end if
         except Exception as e_:
             #// close and remove dest file if created
-            if (php_isset(lambda : fp_dest_)) and is_resource(fp_dest_):
+            if (php_isset(lambda : fp_dest_)) and php_is_resource(fp_dest_):
                 php_fclose(fp_dest_)
             # end if
             if (php_isset(lambda : dest_)) and php_file_exists(dest_):
