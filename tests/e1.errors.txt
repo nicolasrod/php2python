@@ -1,9 +1,0 @@
-Traceback (most recent call last):
-  File "ast2py.py", line 41, in is_valid_code
-    ast.parse(src.replace("\x00", ""))
-  File "/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/lib/python3.7/ast.py", line 35, in parse
-    return compile(source, filename, mode, PyCF_ONLY_AST)
-  File "<unknown>", line 18
-    php_print(b += 1+1-1)
-                 ^
-SyntaxError: invalid syntax
