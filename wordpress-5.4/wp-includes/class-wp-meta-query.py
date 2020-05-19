@@ -163,7 +163,7 @@ class WP_Meta_Query():
         if (not php_is_array(queries_)):
             return clean_queries_
         # end if
-        for key_,query_ in queries_:
+        for key_,query_ in queries_.items():
             if "relation" == key_:
                 relation_ = query_
             elif (not php_is_array(query_)):
@@ -385,7 +385,7 @@ class WP_Meta_Query():
             indent_ += "  "
             i_ += 1
         # end while
-        for key_,clause_ in query_:
+        for key_,clause_ in query_.items():
             if "relation" == key_:
                 relation_ = query_["relation"]
             elif php_is_array(clause_):

@@ -120,7 +120,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         #// For each known parameter which is both registered and present in the request,
         #// set the parameter's value on the query $args.
         #//
-        for api_param_,wp_param_ in parameter_mappings_:
+        for api_param_,wp_param_ in parameter_mappings_.items():
             if (php_isset(lambda : registered_[api_param_]) and php_isset(lambda : request_[api_param_])):
                 args_[wp_param_] = request_[api_param_]
             # end if
@@ -695,7 +695,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         # end if
         
         query_args_ = Array()
-        for key_,value_ in prepared_args_:
+        for key_,value_ in prepared_args_.items():
             #// 
             #// Filters the query_vars used in get_items() for the constructed query.
             #// 

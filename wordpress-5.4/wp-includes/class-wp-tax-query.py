@@ -133,7 +133,7 @@ class WP_Tax_Query():
         
         cleaned_query_ = Array()
         defaults_ = Array({"taxonomy": "", "terms": Array(), "field": "term_id", "operator": "IN", "include_children": True})
-        for key_,query_ in queries_:
+        for key_,query_ in queries_.items():
             if "relation" == key_:
                 cleaned_query_["relation"] = self.sanitize_relation(query_)
                 pass
@@ -291,7 +291,7 @@ class WP_Tax_Query():
             indent_ += "  "
             i_ += 1
         # end while
-        for key_,clause_ in query_:
+        for key_,clause_ in query_.items():
             if "relation" == key_:
                 relation_ = query_["relation"]
             elif php_is_array(clause_):

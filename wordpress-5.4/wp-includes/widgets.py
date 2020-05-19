@@ -627,7 +627,7 @@ def dynamic_sidebar(index_=1, *_args_):
         index_ = str("sidebar-") + str(index_)
     else:
         index_ = sanitize_title(index_)
-        for key_,value_ in wp_registered_sidebars_:
+        for key_,value_ in wp_registered_sidebars_.items():
             if sanitize_title(value_["name"]) == index_:
                 index_ = key_
                 break
@@ -811,7 +811,7 @@ def is_active_widget(callback_=None, widget_id_=None, id_base_=None, skip_inacti
     php_check_if_defined("wp_registered_widgets_")
     sidebars_widgets_ = wp_get_sidebars_widgets()
     if php_is_array(sidebars_widgets_):
-        for sidebar_,widgets_ in sidebars_widgets_:
+        for sidebar_,widgets_ in sidebars_widgets_.items():
             if skip_inactive_ and "wp_inactive_widgets" == sidebar_ or "orphaned_widgets" == php_substr(sidebar_, 0, 16):
                 continue
             # end if
@@ -849,7 +849,7 @@ def is_dynamic_sidebar(*_args_):
     global wp_registered_sidebars_
     php_check_if_defined("wp_registered_widgets_","wp_registered_sidebars_")
     sidebars_widgets_ = get_option("sidebars_widgets")
-    for index_,sidebar_ in wp_registered_sidebars_:
+    for index_,sidebar_ in wp_registered_sidebars_.items():
         if (not php_empty(lambda : sidebars_widgets_[index_])):
             for widget_ in sidebars_widgets_[index_]:
                 if php_array_key_exists(widget_, wp_registered_widgets_):
@@ -977,7 +977,7 @@ def wp_get_widget_defaults(*_args_):
     global wp_registered_sidebars_
     php_check_if_defined("wp_registered_sidebars_")
     defaults_ = Array()
-    for index_,sidebar_ in wp_registered_sidebars_:
+    for index_,sidebar_ in wp_registered_sidebars_.items():
         defaults_[index_] = Array()
     # end for
     return defaults_
@@ -1024,9 +1024,9 @@ def wp_convert_widget_settings(base_name_=None, option_name_=None, settings_=Non
             # end if
             sidebars_widgets_ = PHP_GLOBALS["_wp_sidebars_widgets"]
         # end if
-        for index_,sidebar_ in sidebars_widgets_:
+        for index_,sidebar_ in sidebars_widgets_.items():
             if php_is_array(sidebar_):
-                for i_,name_ in sidebar_:
+                for i_,name_ in sidebar_.items():
                     if base_name_ == name_:
                         sidebars_widgets_[index_][i_] = str(name_) + str("-2")
                         changed_ = True
@@ -1181,7 +1181,7 @@ def retrieve_widgets(theme_changed_=None, *_args_):
     #// Find hidden/lost multi-widget instances.
     shown_widgets_ = call_user_func_array("array_merge", sidebars_widgets_)
     lost_widgets_ = php_array_diff(registered_widgets_ids_, shown_widgets_)
-    for key_,widget_id_ in lost_widgets_:
+    for key_,widget_id_ in lost_widgets_.items():
         number_ = php_preg_replace("/.+?-([0-9]+)$/", "$1", widget_id_)
         #// Only keep active and default widgets.
         if php_is_numeric(number_) and php_int(number_) < 2:
@@ -1213,7 +1213,7 @@ def wp_map_sidebars_widgets(existing_sidebars_widgets_=None, *_args_):
     if (not php_is_array(existing_sidebars_widgets_)) or php_empty(lambda : existing_sidebars_widgets_):
         return new_sidebars_widgets_
     # end if
-    for sidebar_,widgets_ in existing_sidebars_widgets_:
+    for sidebar_,widgets_ in existing_sidebars_widgets_.items():
         if "wp_inactive_widgets" == sidebar_ or "orphaned_widgets" == php_substr(sidebar_, 0, 16):
             new_sidebars_widgets_["wp_inactive_widgets"] = php_array_merge(new_sidebars_widgets_["wp_inactive_widgets"], widgets_)
             existing_sidebars_widgets_[sidebar_] = None
@@ -1226,7 +1226,7 @@ def wp_map_sidebars_widgets(existing_sidebars_widgets_=None, *_args_):
     # end if
     #// Map locations with the same slug.
     existing_sidebars_ = php_array_keys(existing_sidebars_widgets_)
-    for sidebar_,name_ in wp_registered_sidebars_:
+    for sidebar_,name_ in wp_registered_sidebars_.items():
         if php_in_array(sidebar_, existing_sidebars_, True):
             new_sidebars_widgets_[sidebar_] = existing_sidebars_widgets_[sidebar_]
             existing_sidebars_widgets_[sidebar_] = None
@@ -1246,13 +1246,13 @@ def wp_map_sidebars_widgets(existing_sidebars_widgets_=None, *_args_):
             #// ...and see if any of these slugs...
             for slug_ in slug_group_:
                 #// ...and any of the new sidebars...
-                for new_sidebar_,args_ in wp_registered_sidebars_:
+                for new_sidebar_,args_ in wp_registered_sidebars_.items():
                     #// ...actually match!
                     if False == php_stripos(new_sidebar_, slug_) and False == php_stripos(slug_, new_sidebar_):
                         continue
                     # end if
                     #// Then see if any of the existing sidebars...
-                    for sidebar_,widgets_ in existing_sidebars_widgets_:
+                    for sidebar_,widgets_ in existing_sidebars_widgets_.items():
                         #// ...and any slug in the same group...
                         for slug_ in slug_group_:
                             #// ... have a match as well.
@@ -1290,13 +1290,13 @@ def wp_map_sidebars_widgets(existing_sidebars_widgets_=None, *_args_):
         #// Remove empty sidebars, no need to map those.
         old_sidebars_widgets_ = php_array_filter(old_sidebars_widgets_)
         #// Only check sidebars that are empty or have not been mapped to yet.
-        for new_sidebar_,new_widgets_ in new_sidebars_widgets_:
+        for new_sidebar_,new_widgets_ in new_sidebars_widgets_.items():
             if php_array_key_exists(new_sidebar_, old_sidebars_widgets_) and (not php_empty(lambda : new_widgets_)):
                 old_sidebars_widgets_[new_sidebar_] = None
             # end if
         # end for
         #// Remove orphaned widgets, we're only interested in previously active sidebars.
-        for sidebar_,widgets_ in old_sidebars_widgets_:
+        for sidebar_,widgets_ in old_sidebars_widgets_.items():
             if "orphaned_widgets" == php_substr(sidebar_, 0, 16):
                 old_sidebars_widgets_[sidebar_] = None
             # end if
@@ -1304,11 +1304,11 @@ def wp_map_sidebars_widgets(existing_sidebars_widgets_=None, *_args_):
         old_sidebars_widgets_ = _wp_remove_unregistered_widgets(old_sidebars_widgets_)
         if (not php_empty(lambda : old_sidebars_widgets_)):
             #// Go through each remaining sidebar...
-            for old_sidebar_,old_widgets_ in old_sidebars_widgets_:
+            for old_sidebar_,old_widgets_ in old_sidebars_widgets_.items():
                 #// ...and check every new sidebar...
-                for new_sidebar_,new_widgets_ in new_sidebars_widgets_:
+                for new_sidebar_,new_widgets_ in new_sidebars_widgets_.items():
                     #// ...for every widget we're trying to revive.
-                    for key_,widget_id_ in old_widgets_:
+                    for key_,widget_id_ in old_widgets_.items():
                         active_key_ = php_array_search(widget_id_, new_widgets_, True)
                         #// If the widget is used elsewhere...
                         if False != active_key_:
@@ -1350,7 +1350,7 @@ def _wp_remove_unregistered_widgets(sidebars_widgets_=None, whitelist_=None, *_a
     if php_empty(lambda : whitelist_):
         whitelist_ = php_array_keys(PHP_GLOBALS["wp_registered_widgets"])
     # end if
-    for sidebar_,widgets_ in sidebars_widgets_:
+    for sidebar_,widgets_ in sidebars_widgets_.items():
         if php_is_array(widgets_):
             sidebars_widgets_[sidebar_] = php_array_intersect(widgets_, whitelist_)
         # end if

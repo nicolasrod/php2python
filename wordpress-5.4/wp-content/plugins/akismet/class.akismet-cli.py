@@ -73,7 +73,7 @@ class Akismet_CLI(WP_CLI_Command):
         while True:
             result_counts_ = Akismet_Admin.recheck_queue_portion(start_, batch_size_)
             if result_counts_["processed"] > 0:
-                for key_,count_ in result_counts_:
+                for key_,count_ in result_counts_.items():
                     if (not (php_isset(lambda : total_counts_[key_]))):
                         total_counts_[key_] = count_
                     else:

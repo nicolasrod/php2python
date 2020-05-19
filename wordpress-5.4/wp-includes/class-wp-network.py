@@ -127,7 +127,7 @@ class WP_Network():
     def __init__(self, network_=None):
         
         
-        for key_,value_ in get_object_vars(network_):
+        for key_,value_ in get_object_vars(network_).items():
             self.key_ = value_
         # end for
         self._set_site_name()

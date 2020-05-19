@@ -81,7 +81,7 @@ if (not php_class_exists("Translations", False)):
         def set_headers(self, headers_=None):
             
             
-            for header_,value_ in headers_:
+            for header_,value_ in headers_.items():
                 self.set_header(header_, value_)
             # end for
         # end def set_headers

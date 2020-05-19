@@ -80,7 +80,7 @@ class IXR_Client():
         self.headers["Content-Type"] = "text/xml"
         self.headers["User-Agent"] = self.useragent
         self.headers["Content-Length"] = length_
-        for header_,value_ in self.headers:
+        for header_,value_ in self.headers.items():
             request_ += str(header_) + str(": ") + str(value_) + str(r_)
         # end for
         request_ += r_

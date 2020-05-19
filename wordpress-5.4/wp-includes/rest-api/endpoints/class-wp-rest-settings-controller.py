@@ -71,7 +71,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
         
         options_ = self.get_registered_options()
         response_ = Array()
-        for name_,args_ in options_:
+        for name_,args_ in options_.items():
             #// 
             #// Filters the value of a setting recognized by the REST API.
             #// 
@@ -134,7 +134,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
         
         options_ = self.get_registered_options()
         params_ = request_.get_params()
-        for name_,args_ in options_:
+        for name_,args_ in options_.items():
             if (not php_array_key_exists(name_, params_)):
                 continue
             # end if
@@ -194,7 +194,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
         
         
         rest_options_ = Array()
-        for name_,args_ in get_registered_settings():
+        for name_,args_ in get_registered_settings().items():
             if php_empty(lambda : args_["show_in_rest"]):
                 continue
             # end if
@@ -238,7 +238,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
         # end if
         options_ = self.get_registered_options()
         schema_ = Array({"$schema": "http://json-schema.org/draft-04/schema#", "title": "settings", "type": "object", "properties": Array()})
-        for option_name_,option_ in options_:
+        for option_name_,option_ in options_.items():
             schema_["properties"][option_name_] = option_["schema"]
             schema_["properties"][option_name_]["arg_options"] = Array({"sanitize_callback": Array(self, "sanitize_callback")})
         # end for
@@ -284,7 +284,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
         
         for case in Switch(schema_["type"]):
             if case("object"):
-                for key_,child_schema_ in schema_["properties"]:
+                for key_,child_schema_ in schema_["properties"].items():
                     schema_["properties"][key_] = self.set_additional_properties_to_false(child_schema_)
                 # end for
                 schema_["additionalProperties"] = False

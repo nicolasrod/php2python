@@ -321,13 +321,13 @@ for case in Switch(step_):
                 # end while
             else:
                 secret_keys_ = php_explode("\n", wp_remote_retrieve_body(secret_keys_))
-                for k_,v_ in secret_keys_:
+                for k_,v_ in secret_keys_.items():
                     secret_keys_[k_] = php_substr(v_, 28, 64)
                 # end for
             # end if
         # end try
         key_ = 0
-        for line_num_,line_ in config_file_:
+        for line_num_,line_ in config_file_.items():
             if "$table_prefix =" == php_substr(line_, 0, 15):
                 config_file_[line_num_] = "$table_prefix = '" + addcslashes(prefix_, "\\'") + "';\r\n"
                 continue

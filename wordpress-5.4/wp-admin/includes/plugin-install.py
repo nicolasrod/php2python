@@ -408,7 +408,7 @@ def install_plugin_install_status(api_=None, loop_=None, *_args_):
     #//
     update_plugins_ = get_site_transient("update_plugins")
     if (php_isset(lambda : update_plugins_.response)):
-        for file_,plugin_ in update_plugins_.response:
+        for file_,plugin_ in update_plugins_.response.items():
             if plugin_.slug == api_.slug:
                 status_ = "update_available"
                 update_file_ = file_
@@ -482,7 +482,7 @@ def install_plugin_information(*_args_):
     plugins_allowedtags_ = Array({"a": Array({"href": Array(), "title": Array(), "target": Array()})}, {"abbr": Array({"title": Array()})}, {"acronym": Array({"title": Array()})}, {"code": Array(), "pre": Array(), "em": Array(), "strong": Array(), "div": Array({"class": Array()})}, {"span": Array({"class": Array()})}, {"p": Array(), "br": Array(), "ul": Array(), "ol": Array(), "li": Array(), "h1": Array(), "h2": Array(), "h3": Array(), "h4": Array(), "h5": Array(), "h6": Array(), "img": Array({"src": Array(), "class": Array(), "alt": Array()})}, {"blockquote": Array({"cite": True})})
     plugins_section_titles_ = Array({"description": _x("Description", "Plugin installer section title"), "installation": _x("Installation", "Plugin installer section title"), "faq": _x("FAQ", "Plugin installer section title"), "screenshots": _x("Screenshots", "Plugin installer section title"), "changelog": _x("Changelog", "Plugin installer section title"), "reviews": _x("Reviews", "Plugin installer section title"), "other_notes": _x("Other Notes", "Plugin installer section title")})
     #// Sanitize HTML.
-    for section_name_,content_ in api_.sections:
+    for section_name_,content_ in api_.sections.items():
         api_.sections[section_name_] = wp_kses(content_, plugins_allowedtags_)
     # end for
     for key_ in Array("version", "author", "requires", "tested", "homepage", "downloaded", "slug"):
@@ -520,7 +520,7 @@ def install_plugin_information(*_args_):
     php_print("<div id=\"plugin-information-scrollable\">")
     php_print(str("<div id='") + str(_tab_) + str("-title' class='") + str(_with_banner_) + str("'><div class='vignette'></div><h2>") + str(api_.name) + str("</h2></div>"))
     php_print(str("<div id='") + str(_tab_) + str("-tabs' class='") + str(_with_banner_) + str("'>\n"))
-    for section_name_,content_ in api_.sections:
+    for section_name_,content_ in api_.sections.items():
         if "reviews" == section_name_ and php_empty(lambda : api_.ratings) or 0 == array_sum(api_.ratings):
             continue
         # end if
@@ -640,7 +640,7 @@ def install_plugin_information(*_args_):
         php_print("</h3>\n          <p class=\"fyi-description\">")
         _e("Read all reviews on WordPress.org or write your own!")
         php_print("</p>\n           ")
-        for key_,ratecount_ in api_.ratings:
+        for key_,ratecount_ in api_.ratings.items():
             #// Avoid div-by-zero.
             _rating_ = ratecount_ / api_.num_ratings if api_.num_ratings else 0
             aria_label_ = esc_attr(php_sprintf(_n("Reviews with %1$d star: %2$s. Opens in a new tab.", "Reviews with %1$d stars: %2$s. Opens in a new tab.", key_), key_, number_format_i18n(ratecount_)))
@@ -657,7 +657,7 @@ def install_plugin_information(*_args_):
         php_print("         <h3>")
         _e("Contributors")
         php_print("</h3>\n          <ul class=\"contributors\">\n               ")
-        for contrib_username_,contrib_details_ in api_.contributors:
+        for contrib_username_,contrib_details_ in api_.contributors.items():
             contrib_name_ = contrib_details_["display_name"]
             if (not contrib_name_):
                 contrib_name_ = contrib_username_
@@ -706,7 +706,7 @@ def install_plugin_information(*_args_):
         # end if
         php_print("</p></div>")
     # end if
-    for section_name_,content_ in api_.sections:
+    for section_name_,content_ in api_.sections.items():
         content_ = links_add_base_url(content_, "https://wordpress.org/plugins/" + api_.slug + "/")
         content_ = links_add_target(content_, "_blank")
         san_section_ = esc_attr(section_name_)

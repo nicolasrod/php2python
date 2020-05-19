@@ -1098,7 +1098,7 @@ class WP_Customize_Manager():
         theme_mods_ = starter_content_["theme_mods"] if (php_isset(lambda : starter_content_["theme_mods"])) else Array()
         #// Widgets.
         max_widget_numbers_ = Array()
-        for sidebar_id_,widgets_ in sidebars_widgets_:
+        for sidebar_id_,widgets_ in sidebars_widgets_.items():
             sidebar_widget_ids_ = Array()
             for widget_ in widgets_:
                 id_base_, instance_ = widget_
@@ -1188,7 +1188,7 @@ class WP_Customize_Manager():
         #// Attachments are technically posts but handled differently.
         if (not php_empty(lambda : attachments_)):
             attachment_ids_ = Array()
-            for symbol_,attachment_ in attachments_:
+            for symbol_,attachment_ in attachments_.items():
                 file_array_ = Array({"name": attachment_["file_name"]})
                 file_path_ = attachment_["file_path"]
                 attachment_id_ = None
@@ -1271,12 +1271,12 @@ class WP_Customize_Manager():
         #// Nav menus.
         placeholder_id_ = -1
         reused_nav_menu_setting_ids_ = Array()
-        for nav_menu_location_,nav_menu_ in nav_menus_:
+        for nav_menu_location_,nav_menu_ in nav_menus_.items():
             nav_menu_term_id_ = None
             nav_menu_setting_id_ = None
             matches_ = Array()
             #// Look for an existing placeholder menu with starter content to re-use.
-            for setting_id_,setting_params_ in changeset_data_:
+            for setting_id_,setting_params_ in changeset_data_.items():
                 can_reuse_ = (not php_empty(lambda : setting_params_["starter_content"])) and (not php_in_array(setting_id_, reused_nav_menu_setting_ids_, True)) and php_preg_match("#^nav_menu\\[(?P<nav_menu_id>-?\\d+)\\]$#", setting_id_, matches_)
                 if can_reuse_:
                     nav_menu_term_id_ = php_intval(matches_["nav_menu_id"])
@@ -1334,7 +1334,7 @@ class WP_Customize_Manager():
             # end if
         # end for
         #// Options.
-        for name_,value_ in options_:
+        for name_,value_ in options_.items():
             #// Serialize the value to check for post symbols.
             value_ = maybe_serialize(value_)
             if is_serialized(value_):
@@ -1369,7 +1369,7 @@ class WP_Customize_Manager():
             # end if
         # end for
         #// Theme mods.
-        for name_,value_ in theme_mods_:
+        for name_,value_ in theme_mods_.items():
             #// Serialize the value to check for post symbols.
             value_ = maybe_serialize(value_)
             #// Check if value was serialized.
@@ -1444,7 +1444,7 @@ class WP_Customize_Manager():
         php_include_file(ABSPATH + "wp-admin/includes/file.php", once=True)
         php_include_file(ABSPATH + "wp-admin/includes/media.php", once=True)
         php_include_file(ABSPATH + "wp-admin/includes/image.php", once=True)
-        for symbol_,attachment_ in attachments_:
+        for symbol_,attachment_ in attachments_.items():
             #// A file is required and URLs to files are not currently allowed.
             if php_empty(lambda : attachment_["file"]) or php_preg_match("#^https?://$#", attachment_["file"]):
                 continue
@@ -1538,7 +1538,7 @@ class WP_Customize_Manager():
             # end if
         # end if
         if (not args_["exclude_changeset"]):
-            for setting_id_,setting_params_ in self.changeset_data():
+            for setting_id_,setting_params_ in self.changeset_data().items():
                 if (not php_array_key_exists("value", setting_params_)):
                     continue
                 # end if
@@ -1888,22 +1888,22 @@ class WP_Customize_Manager():
             restore_previous_locale()
         # end if
         settings_ = Array({"changeset": Array({"uuid": self.changeset_uuid(), "autosaved": self.autosaved()})}, {"timeouts": Array({"selectiveRefresh": 250, "keepAliveSend": 1000})}, {"theme": Array({"stylesheet": self.get_stylesheet(), "active": self.is_theme_active()})}, {"url": Array({"self": self_url_, "allowed": php_array_map("esc_url_raw", self.get_allowed_urls()), "allowedHosts": array_unique(allowed_hosts_), "isCrossDomain": self.is_cross_domain()})}, {"channel": self.messenger_channel, "activePanels": Array(), "activeSections": Array(), "activeControls": Array(), "settingValidities": exported_setting_validities_, "nonce": self.get_nonces() if current_user_can("customize") else Array(), "l10n": l10n_, "_dirty": php_array_keys(post_values_)})
-        for panel_id_,panel_ in self.panels:
+        for panel_id_,panel_ in self.panels.items():
             if panel_.check_capabilities():
                 settings_["activePanels"][panel_id_] = panel_.active()
-                for section_id_,section_ in panel_.sections:
+                for section_id_,section_ in panel_.sections.items():
                     if section_.check_capabilities():
                         settings_["activeSections"][section_id_] = section_.active()
                     # end if
                 # end for
             # end if
         # end for
-        for id_,section_ in self.sections:
+        for id_,section_ in self.sections.items():
             if section_.check_capabilities():
                 settings_["activeSections"][id_] = section_.active()
             # end if
         # end for
-        for id_,control_ in self.controls:
+        for id_,control_ in self.controls.items():
             if control_.check_capabilities():
                 settings_["activeControls"][id_] = control_.active()
             # end if
@@ -1919,7 +1919,7 @@ class WP_Customize_Manager():
         #// serialization in order to avoid a peak memory usage spike.
         #// @todo We may not even need to export the values at all since the pane syncs them anyway.
         #//
-        for id_,setting_ in self.settings:
+        for id_,setting_ in self.settings.items():
             if setting_.check_capabilities():
                 printf("v[%s] = %s;\n", wp_json_encode(id_), wp_json_encode(setting_.js_value()))
             # end if
@@ -2056,7 +2056,7 @@ class WP_Customize_Manager():
         
         options_ = wp_parse_args(options_, Array({"validate_capability": False, "validate_existence": False}))
         validities_ = Array()
-        for setting_id_,unsanitized_value_ in setting_values_:
+        for setting_id_,unsanitized_value_ in setting_values_.items():
             setting_ = self.get_setting(setting_id_)
             if (not setting_):
                 if options_["validate_existence"]:
@@ -2112,7 +2112,7 @@ class WP_Customize_Manager():
         
         if is_wp_error(validity_):
             notification_ = Array()
-            for error_code_,error_messages_ in validity_.errors:
+            for error_code_,error_messages_ in validity_.errors.items():
                 notification_[error_code_] = Array({"message": join(" ", error_messages_), "data": validity_.get_error_data(error_code_)})
             # end for
             return notification_
@@ -2360,7 +2360,7 @@ class WP_Customize_Manager():
         update_transactionally_ = php_bool(args_["status"])
         allow_revision_ = php_bool(args_["status"])
         #// Amend post values with any supplied data.
-        for setting_id_,setting_params_ in args_["data"]:
+        for setting_id_,setting_params_ in args_["data"].items():
             if php_is_array(setting_params_) and php_array_key_exists("value", setting_params_):
                 self.set_post_value(setting_id_, setting_params_["value"])
                 pass
@@ -2379,7 +2379,7 @@ class WP_Customize_Manager():
         #// previous saved settings and overriding the associated user_id if they made no change.
         #//
         changed_setting_ids_ = Array()
-        for setting_id_,setting_value_ in post_values_:
+        for setting_id_,setting_value_ in post_values_.items():
             setting_ = self.get_setting(setting_id_)
             if setting_ and "theme_mod" == setting_.type:
                 prefixed_setting_id_ = self.get_stylesheet() + "::" + setting_.id
@@ -2422,7 +2422,7 @@ class WP_Customize_Manager():
             data_ = Array()
         # end if
         #// Ensure that all post values are included in the changeset data.
-        for setting_id_,post_value_ in post_values_:
+        for setting_id_,post_value_ in post_values_.items():
             if (not (php_isset(lambda : args_["data"][setting_id_]))):
                 args_["data"][setting_id_] = Array()
             # end if
@@ -2430,7 +2430,7 @@ class WP_Customize_Manager():
                 args_["data"][setting_id_]["value"] = post_value_
             # end if
         # end for
-        for setting_id_,setting_params_ in args_["data"]:
+        for setting_id_,setting_params_ in args_["data"].items():
             setting_ = self.get_setting(setting_id_)
             if (not setting_) or (not setting_.check_capabilities()):
                 continue
@@ -2924,7 +2924,7 @@ class WP_Customize_Manager():
         theme_mod_settings_ = Array()
         namespace_pattern_ = "/^(?P<stylesheet>.+?)::(?P<setting_id>.+)$/"
         matches_ = Array()
-        for raw_setting_id_,setting_params_ in self._changeset_data:
+        for raw_setting_id_,setting_params_ in self._changeset_data.items():
             actual_setting_id_ = None
             is_theme_mod_setting_ = (php_isset(lambda : setting_params_["value"])) and (php_isset(lambda : setting_params_["type"])) and "theme_mod" == setting_params_["type"] and php_preg_match(namespace_pattern_, raw_setting_id_, matches_)
             if is_theme_mod_setting_:
@@ -3004,7 +3004,7 @@ class WP_Customize_Manager():
         #//
         do_action("customize_save_after", self)
         #// Restore original capabilities.
-        for setting_id_,capability_ in original_setting_capabilities_:
+        for setting_id_,capability_ in original_setting_capabilities_.items():
             setting_ = self.get_setting(setting_id_)
             if setting_:
                 setting_.capability = capability_
@@ -3045,7 +3045,7 @@ class WP_Customize_Manager():
         # end if
         stashed_theme_mod_settings_[self.get_stylesheet()] = None
         #// Merge inactive theme mods with the stashed theme mod settings.
-        for stylesheet_,theme_mod_settings_ in inactive_theme_mod_settings_:
+        for stylesheet_,theme_mod_settings_ in inactive_theme_mod_settings_.items():
             if (not (php_isset(lambda : stashed_theme_mod_settings_[stylesheet_]))):
                 stashed_theme_mod_settings_[stylesheet_] = Array()
             # end if
@@ -3788,7 +3788,7 @@ class WP_Customize_Manager():
         
         controls_ = Array()
         self.controls = wp_list_sort(self.controls, Array({"priority": "ASC", "instance_number": "ASC"}), "ASC", True)
-        for id_,control_ in self.controls:
+        for id_,control_ in self.controls.items():
             if (not (php_isset(lambda : self.sections[control_.section]))) or (not control_.check_capabilities()):
                 continue
             # end if
@@ -4153,16 +4153,16 @@ class WP_Customize_Manager():
             settings_["theme"]["_filesystemCredentialsNeeded"] = True
         # end if
         #// Prepare Customize Section objects to pass to JavaScript.
-        for id_,section_ in self.sections():
+        for id_,section_ in self.sections().items():
             if section_.check_capabilities():
                 settings_["sections"][id_] = section_.json()
             # end if
         # end for
         #// Prepare Customize Panel objects to pass to JavaScript.
-        for panel_id_,panel_ in self.panels():
+        for panel_id_,panel_ in self.panels().items():
             if panel_.check_capabilities():
                 settings_["panels"][panel_id_] = panel_.json()
-                for section_id_,section_ in panel_.sections:
+                for section_id_,section_ in panel_.sections.items():
                     if section_.check_capabilities():
                         settings_["sections"][section_id_] = section_.json()
                     # end if

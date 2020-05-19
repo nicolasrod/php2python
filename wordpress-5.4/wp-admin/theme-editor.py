@@ -162,7 +162,7 @@ php_print("""</h2>
 <strong><label for=\"theme\">""")
 _e("Select theme to edit:")
 php_print(" </label></strong>\n     <select name=\"theme\" id=\"theme\">\n      ")
-for a_stylesheet_,a_theme_ in wp_get_themes(Array({"errors": None})):
+for a_stylesheet_,a_theme_ in wp_get_themes(Array({"errors": None})).items():
     if a_theme_.errors() and "theme_no_stylesheet" == a_theme_.errors().get_error_code():
         continue
     # end if

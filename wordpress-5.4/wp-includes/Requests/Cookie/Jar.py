@@ -159,7 +159,7 @@ class Requests_Cookie_Jar(ArrayAccessIteratorAggregate):
         # end if
         if (not php_empty(lambda : self.cookies)):
             cookies_ = Array()
-            for key_,cookie_ in self.cookies:
+            for key_,cookie_ in self.cookies.items():
                 cookie_ = self.normalize_cookie(cookie_, key_)
                 #// Skip expired cookies
                 if cookie_.is_expired():

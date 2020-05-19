@@ -334,7 +334,7 @@ class Custom_Background():
             php_print("</span></legend>\n<div class=\"background-position-control\">\n          ")
             for group_ in background_position_options_:
                 php_print(" <div class=\"button-group\">\n              ")
-                for value_,input_ in group_:
+                for value_,input_ in group_.items():
                     php_print("     <label>\n           <input class=\"screen-reader-text\" name=\"background-position\" type=\"radio\" value=\"")
                     php_print(esc_attr(value_))
                     php_print("\"")

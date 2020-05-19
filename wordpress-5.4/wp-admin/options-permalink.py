@@ -221,7 +221,7 @@ if (not php_empty(lambda : available_tags_)):
     php_print("                 <p>")
     _e("Available tags:")
     php_print("</p>\n                   <ul role=\"list\">\n                        ")
-    for tag_,explanation_ in available_tags_:
+    for tag_,explanation_ in available_tags_.items():
         php_print("""                           <li>
         <button type=\"button\"
     class=\"button button-secondary\"

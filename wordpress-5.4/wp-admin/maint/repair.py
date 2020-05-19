@@ -124,7 +124,7 @@ elif (php_isset(lambda : PHP_REQUEST["repair"])):
     if problems_:
         printf("<p>" + __("Some database problems could not be repaired. Please copy-and-paste the following list of errors to the <a href=\"%s\">WordPress support forums</a> to get additional assistance.") + "</p>", __("https://wordpress.org/support/forum/how-to-and-troubleshooting"))
         problem_output_ = ""
-        for table_,problem_ in problems_:
+        for table_,problem_ in problems_.items():
             problem_output_ += str(table_) + str(": ") + str(problem_) + str("\n")
         # end for
         php_print("<p><textarea name=\"errors\" id=\"errors\" rows=\"20\" cols=\"60\">" + esc_textarea(problem_output_) + "</textarea></p>")

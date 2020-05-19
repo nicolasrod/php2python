@@ -165,7 +165,7 @@ php_print("""</h2>
 <strong><label for=\"plugin\">""")
 _e("Select plugin to edit:")
 php_print(" </label></strong>\n     <select name=\"plugin\" id=\"plugin\">\n        ")
-for plugin_key_,a_plugin_ in plugins_:
+for plugin_key_,a_plugin_ in plugins_.items():
     plugin_name_ = a_plugin_["Name"]
     if plugin_key_ == plugin_:
         selected_ = " selected='selected'"

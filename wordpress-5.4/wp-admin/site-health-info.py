@@ -97,7 +97,7 @@ php_print("""</span>
 <div id=\"health-check-debug\" class=\"health-check-accordion\">
 """)
 sizes_fields_ = Array("uploads_size", "themes_size", "plugins_size", "wordpress_size", "database_size", "total_size")
-for section_,details_ in info_:
+for section_,details_ in info_.items():
     if (not (php_isset(lambda : details_["fields"]))) or php_empty(lambda : details_["fields"]):
         continue
     # end if
@@ -123,10 +123,10 @@ for section_,details_ in info_:
         printf("<p>%s</p>", details_["description"])
     # end if
     php_print("             <table class=\"widefat striped health-check-table\" role=\"presentation\">\n                    <tbody>\n                   ")
-    for field_name_,field_ in details_["fields"]:
+    for field_name_,field_ in details_["fields"].items():
         if php_is_array(field_["value"]):
             values_ = "<ul>"
-            for name_,value_ in field_["value"]:
+            for name_,value_ in field_["value"].items():
                 values_ += php_sprintf("<li>%s: %s</li>", esc_html(name_), esc_html(value_))
             # end for
             values_ += "</ul>"

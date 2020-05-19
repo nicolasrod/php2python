@@ -167,7 +167,7 @@ class WP_Users_List_Table(WP_List_Table):
         current_link_attributes_ = " class=\"current\" aria-current=\"page\"" if php_empty(lambda : role_) else ""
         role_links_ = Array()
         role_links_["all"] = php_sprintf("<a href=\"%s\"%s>%s</a>", url_, current_link_attributes_, php_sprintf(_nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", total_users_, "users"), number_format_i18n(total_users_)))
-        for this_role_,name_ in wp_roles_.get_names():
+        for this_role_,name_ in wp_roles_.get_names().items():
             if (not (php_isset(lambda : avail_roles_[this_role_]))):
                 continue
             # end if
@@ -322,7 +322,7 @@ class WP_Users_List_Table(WP_List_Table):
         if (not self.is_site_users):
             post_counts_ = count_many_users_posts(php_array_keys(self.items))
         # end if
-        for userid_,user_object_ in self.items:
+        for userid_,user_object_ in self.items.items():
             php_print("\n   " + self.single_row(user_object_, "", "", post_counts_[userid_] if (php_isset(lambda : post_counts_)) else 0))
         # end for
     # end def display_rows
@@ -407,7 +407,7 @@ class WP_Users_List_Table(WP_List_Table):
         roles_list_ = php_implode(", ", user_roles_)
         r_ = str("<tr id='user-") + str(user_object_.ID) + str("'>")
         columns_, hidden_, sortable_, primary_ = self.get_column_info()
-        for column_name_,column_display_name_ in columns_:
+        for column_name_,column_display_name_ in columns_.items():
             classes_ = str(column_name_) + str(" column-") + str(column_name_)
             if primary_ == column_name_:
                 classes_ += " has-row-actions column-primary"

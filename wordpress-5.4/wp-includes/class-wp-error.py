@@ -112,7 +112,7 @@ class WP_Error():
         #// Return all messages if no code specified.
         if php_empty(lambda : code_):
             all_messages_ = Array()
-            for code_,messages_ in self.errors:
+            for code_,messages_ in self.errors.items():
                 all_messages_ = php_array_merge(all_messages_, messages_)
             # end for
             return all_messages_

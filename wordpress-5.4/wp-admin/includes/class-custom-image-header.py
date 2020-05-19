@@ -250,7 +250,7 @@ class Custom_Image_Header():
             php_print("</div>")
         # end if
         php_print("<div class=\"available-headers\">")
-        for header_key_,header_ in headers_:
+        for header_key_,header_ in headers_.items():
             header_thumbnail_ = header_["thumbnail_url"]
             header_url_ = header_["url"]
             header_alt_text_ = "" if php_empty(lambda : header_["alt_text"]) else header_["alt_text"]
@@ -993,7 +993,7 @@ class Custom_Image_Header():
         # end if
         default_ = php_sprintf(default_, get_template_directory_uri(), get_stylesheet_directory_uri())
         default_data_ = Array()
-        for header_,details_ in self.default_headers:
+        for header_,details_ in self.default_headers.items():
             if details_["url"] == default_:
                 default_data_ = details_
                 break
@@ -1230,7 +1230,7 @@ class Custom_Image_Header():
         # end if
         default_ = php_sprintf(default_, get_template_directory_uri(), get_stylesheet_directory_uri())
         already_has_default_ = False
-        for k_,h_ in self.default_headers:
+        for k_,h_ in self.default_headers.items():
             if h_["url"] == default_:
                 already_has_default_ = True
                 break

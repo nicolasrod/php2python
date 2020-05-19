@@ -79,7 +79,7 @@ class WP_Hook(IteratorArrayAccess):
         self.callbacks[priority_][idx_] = Array({"function": function_to_add_, "accepted_args": accepted_args_})
         #// If we're adding a new priority to the list, put them back in sorted order.
         if (not priority_existed_) and php_count(self.callbacks) > 1:
-            ksort(self.callbacks, SORT_NUMERIC)
+            php_ksort(self.callbacks, SORT_NUMERIC)
         # end if
         if self.nesting_level > 0:
             self.resort_active_iterations(priority_, priority_existed_)
@@ -106,13 +106,13 @@ class WP_Hook(IteratorArrayAccess):
         new_priorities_ = php_array_keys(self.callbacks)
         #// If there are no remaining hooks, clear out all running iterations.
         if (not new_priorities_):
-            for index_,iteration_ in self.iterations:
+            for index_,iteration_ in self.iterations.items():
                 self.iterations[index_] = new_priorities_
             # end for
             return
         # end if
         min_ = php_min(new_priorities_)
-        for index_,iteration_ in self.iterations:
+        for index_,iteration_ in self.iterations.items():
             current_ = current(iteration_)
             #// If we're already at the end of this iteration, just leave the array pointer where it is.
             if False == current_:
@@ -203,7 +203,7 @@ class WP_Hook(IteratorArrayAccess):
         if (not function_key_):
             return False
         # end if
-        for priority_,callbacks_ in self.callbacks:
+        for priority_,callbacks_ in self.callbacks.items():
             if (php_isset(lambda : callbacks_[function_key_])):
                 return priority_
             # end if
@@ -369,14 +369,14 @@ class WP_Hook(IteratorArrayAccess):
         
         #// @var WP_Hook[] $normalized
         normalized_ = Array()
-        for tag_,callback_groups_ in filters_:
+        for tag_,callback_groups_ in filters_.items():
             if php_is_object(callback_groups_) and type(callback_groups_).__name__ == "WP_Hook":
                 normalized_[tag_] = callback_groups_
                 continue
             # end if
             hook_ = php_new_class("WP_Hook", lambda : WP_Hook())
             #// Loop through callback groups.
-            for priority_,callbacks_ in callback_groups_:
+            for priority_,callbacks_ in callback_groups_.items():
                 #// Loop through callbacks.
                 for cb_ in callbacks_:
                     hook_.add_filter(tag_, cb_["function"], priority_, cb_["accepted_args"])

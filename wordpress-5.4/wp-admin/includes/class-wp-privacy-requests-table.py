@@ -140,7 +140,7 @@ class WP_Privacy_Requests_Table(WP_List_Table):
         current_link_attributes_ = " class=\"current\" aria-current=\"page\"" if php_empty(lambda : current_status_) else ""
         status_label_ = php_sprintf(_nx("All <span class=\"count\">(%s)</span>", "All <span class=\"count\">(%s)</span>", total_requests_, "requests"), number_format_i18n(total_requests_))
         views_["all"] = php_sprintf("<a href=\"%s\"%s>%s</a>", esc_url(admin_url_), current_link_attributes_, status_label_)
-        for status_,label_ in statuses_:
+        for status_,label_ in statuses_.items():
             post_status_ = get_post_status_object(status_)
             if (not post_status_):
                 continue

@@ -273,7 +273,7 @@ class WP_Plugin_Install_List_Table(WP_List_Table):
         global tab_
         php_check_if_defined("tabs_","tab_")
         display_tabs_ = Array()
-        for action_,text_ in tabs_:
+        for action_,text_ in tabs_.items():
             current_link_attributes_ = " class=\"current\" aria-current=\"page\"" if action_ == tab_ else ""
             href_ = self_admin_url("plugin-install.php?tab=" + action_)
             display_tabs_["plugin-install-" + action_] = str("<a href='") + str(href_) + str("'") + str(current_link_attributes_) + str(">") + str(text_) + str("</a>")
@@ -293,7 +293,7 @@ class WP_Plugin_Install_List_Table(WP_List_Table):
         self.screen.render_screen_reader_content("heading_views")
         php_print("<div class=\"wp-filter\">\n  <ul class=\"filter-links\">\n       ")
         if (not php_empty(lambda : views_)):
-            for class_,view_ in views_:
+            for class_,view_ in views_.items():
                 views_[class_] = str("  <li class='") + str(class_) + str("'>") + str(view_)
             # end for
             php_print(php_implode(" </li>\n", views_) + "</li>\n")

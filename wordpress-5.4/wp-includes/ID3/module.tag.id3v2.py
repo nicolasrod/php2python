@@ -422,7 +422,7 @@ class getid3_id3v2(getid3_handler):
         #// end footer
         if (php_isset(lambda : thisfile_id3v2_["comments"]["genre"])):
             genres_ = Array()
-            for key_,value_ in thisfile_id3v2_["comments"]["genre"]:
+            for key_,value_ in thisfile_id3v2_["comments"]["genre"].items():
                 for genre_ in self.parseid3v2genrestring(value_):
                     genres_[-1] = genre_
                 # end for
@@ -434,7 +434,7 @@ class getid3_id3v2(getid3_handler):
             genre_ = None
         # end if
         if (php_isset(lambda : thisfile_id3v2_["comments"]["track_number"])):
-            for key_,value_ in thisfile_id3v2_["comments"]["track_number"]:
+            for key_,value_ in thisfile_id3v2_["comments"]["track_number"].items():
                 if php_strstr(value_, "/"):
                     thisfile_id3v2_["comments"]["track_number"][key_], thisfile_id3v2_["comments"]["totaltracks"][key_] = php_explode("/", thisfile_id3v2_["comments"]["track_number"][key_])
                 # end if
@@ -828,7 +828,7 @@ class getid3_id3v2(getid3_handler):
                 # end if
                 if php_count(IPLS_parts_unsorted_) == 1:
                     #// just a list of names, e.g. "Dino Baptiste, Jimmy Copley, John Gordon, Bernie Marsden, Sharon Watson"
-                    for key_,value_ in IPLS_parts_unsorted_:
+                    for key_,value_ in IPLS_parts_unsorted_.items():
                         IPLS_parts_sorted_ = php_preg_split("#[;,\\r\\n\\t]#", value_)
                         position_ = ""
                         for person_ in IPLS_parts_sorted_:
@@ -838,7 +838,7 @@ class getid3_id3v2(getid3_handler):
                 elif php_count(IPLS_parts_unsorted_) % 2 == 0:
                     position_ = ""
                     person_ = ""
-                    for key_,value_ in IPLS_parts_unsorted_:
+                    for key_,value_ in IPLS_parts_unsorted_.items():
                         if key_ % 2 == 0:
                             position_ = value_
                         else:
@@ -849,7 +849,7 @@ class getid3_id3v2(getid3_handler):
                         # end if
                     # end for
                 else:
-                    for key_,value_ in IPLS_parts_unsorted_:
+                    for key_,value_ in IPLS_parts_unsorted_.items():
                         IPLS_parts_[-1] = Array(value_)
                     # end for
                 # end if
@@ -1763,7 +1763,7 @@ class getid3_id3v2(getid3_handler):
             frame_pricestring_ = php_substr(parsedFrame_["data"], frame_offset_, frame_terminatorpos_ - frame_offset_)
             frame_offset_ = frame_terminatorpos_ + php_strlen(" ")
             frame_rawpricearray_ = php_explode("/", frame_pricestring_)
-            for key_,val_ in frame_rawpricearray_:
+            for key_,val_ in frame_rawpricearray_.items():
                 frame_currencyid_ = php_substr(val_, 0, 3)
                 parsedFrame_["price"][frame_currencyid_]["currency"] = self.lookupcurrencyunits(frame_currencyid_)
                 parsedFrame_["price"][frame_currencyid_]["value"] = php_substr(val_, 3)

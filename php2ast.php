@@ -45,7 +45,7 @@ function php2ast()
         echo json_encode(utf8ize($ast));
     } catch (Error $error) {
         echo "[-] Error parsing {$fname}: {$error->getMessage()}\n";
-        return;
+        exit(3);
     }
 }
 

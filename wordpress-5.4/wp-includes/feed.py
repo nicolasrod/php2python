@@ -501,7 +501,7 @@ def rss_enclosure(*_args_):
     if post_password_required():
         return
     # end if
-    for key_,val_ in get_post_custom():
+    for key_,val_ in get_post_custom().items():
         if "enclosure" == key_:
             for enc_ in val_:
                 enclosure_ = php_explode("\n", enc_)
@@ -539,7 +539,7 @@ def atom_enclosure(*_args_):
     if post_password_required():
         return
     # end if
-    for key_,val_ in get_post_custom():
+    for key_,val_ in get_post_custom().items():
         if "enclosure" == key_:
             for enc_ in val_:
                 enclosure_ = php_explode("\n", enc_)

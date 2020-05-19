@@ -254,7 +254,7 @@ class WP_Filesystem_ftpsockets(WP_Filesystem_Base):
         #// chmod any sub-objects if recursive.
         if recursive_ and self.is_dir(file_):
             filelist_ = self.dirlist(file_)
-            for filename_,filemeta_ in filelist_:
+            for filename_,filemeta_ in filelist_.items():
                 self.chmod(file_ + "/" + filename_, mode_, recursive_)
             # end for
         # end if

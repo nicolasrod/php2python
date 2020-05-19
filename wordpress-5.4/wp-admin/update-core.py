@@ -275,7 +275,7 @@ def list_plugin_updates(*_args_):
     </thead>
     <tbody class=\"plugins\">
     """)
-    for plugin_file_,plugin_data_ in plugins_:
+    for plugin_file_,plugin_data_ in plugins_.items():
         plugin_data_ = _get_plugin_data_markup_translate(plugin_file_, plugin_data_, False, True)
         icon_ = "<span class=\"dashicons dashicons-admin-plugins\"></span>"
         preferred_icons_ = Array("svg", "2x", "1x", "default")
@@ -397,7 +397,7 @@ def list_theme_updates(*_args_):
     </thead>
     <tbody class=\"plugins\">
     """)
-    for stylesheet_,theme_ in themes_:
+    for stylesheet_,theme_ in themes_.items():
         checkbox_id_ = "checkbox_" + php_md5(theme_.get("Name"))
         php_print(" <tr>\n      <td class=\"check-column\">\n           <input type=\"checkbox\" name=\"checked[]\" id=\"")
         php_print(checkbox_id_)

@@ -254,7 +254,7 @@ class SimplePie_Sanitize():
                 # end if
                 #// Replace relative URLs
                 self.base = base_
-                for element_,attributes_ in self.replace_url_attributes:
+                for element_,attributes_ in self.replace_url_attributes.items():
                     self.replace_urls(document_, element_, attributes_)
                 # end for
                 #// If image handling (caching, etc.) is enabled, cache and rewrite all the image tags.
@@ -381,7 +381,7 @@ class SimplePie_Sanitize():
                     text_ = "<" + tag_
                     if element_.hasattributes():
                         attrs_ = Array()
-                        for name_,attr_ in element_.attributes:
+                        for name_,attr_ in element_.attributes.items():
                             value_ = attr_.value
                             #// In XHTML, empty values should never exist, so we repeat the value
                             if php_empty(lambda : value_) and type_ & SIMPLEPIE_CONSTRUCT_XHTML:

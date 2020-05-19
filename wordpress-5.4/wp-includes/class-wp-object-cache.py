@@ -432,7 +432,7 @@ class WP_Object_Cache():
         php_print(str("<strong>Cache Misses:</strong> ") + str(self.cache_misses) + str("<br />"))
         php_print("</p>")
         php_print("<ul>")
-        for group_,cache_ in self.cache:
+        for group_,cache_ in self.cache.items():
             php_print(str("<li><strong>Group:</strong> ") + str(group_) + str(" - ( ") + number_format(php_strlen(serialize(cache_)) / KB_IN_BYTES, 2) + "k )</li>")
         # end for
         php_print("</ul>")
@@ -467,3 +467,8 @@ class WP_Object_Cache():
         return (php_isset(lambda : self.cache[group_])) and (php_isset(lambda : self.cache[group_][key_])) or php_array_key_exists(key_, self.cache[group_])
     # end def _exists
 # end class WP_Object_Cache
+global wp_object_cache_
+php_check_if_defined("wp_object_cache_")
+if (not (php_isset(lambda : wp_object_cache_))):
+    wp_object_cache_ = php_new_class("WP_Object_Cache", lambda : WP_Object_Cache())
+# end if

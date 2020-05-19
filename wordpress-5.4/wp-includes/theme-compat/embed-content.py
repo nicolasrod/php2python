@@ -33,7 +33,7 @@ if thumbnail_id_:
     #// Fallback.
     meta_ = wp_get_attachment_metadata(thumbnail_id_)
     if (not php_empty(lambda : meta_["sizes"])):
-        for size_,data_ in meta_["sizes"]:
+        for size_,data_ in meta_["sizes"].items():
             if data_["height"] > 0 and data_["width"] / data_["height"] > aspect_ratio_:
                 aspect_ratio_ = data_["width"] / data_["height"]
                 measurements_ = Array(data_["width"], data_["height"])

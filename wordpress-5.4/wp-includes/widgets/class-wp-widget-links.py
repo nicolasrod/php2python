@@ -83,7 +83,7 @@ class WP_Widget_Links(WP_Widget):
         
         new_instance_ = new_instance_
         instance_ = Array({"images": 0, "name": 0, "description": 0, "rating": 0})
-        for field_,val_ in instance_:
+        for field_,val_ in instance_.items():
             if (php_isset(lambda : new_instance_[field_])):
                 instance_[field_] = 1
             # end if

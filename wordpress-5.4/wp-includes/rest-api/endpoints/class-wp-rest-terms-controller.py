@@ -124,7 +124,7 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
         #// For each known parameter which is both registered and present in the request,
         #// set the parameter's value on the query $prepared_args.
         #//
-        for api_param_,wp_param_ in parameter_mappings_:
+        for api_param_,wp_param_ in parameter_mappings_.items():
             if (php_isset(lambda : registered_[api_param_]) and php_isset(lambda : request_[api_param_])):
                 prepared_args_[wp_param_] = request_[api_param_]
             # end if

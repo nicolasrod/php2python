@@ -370,7 +370,7 @@ class WP_MS_Users_List_Table(WP_List_Table):
             actions_ = apply_filters("ms_user_list_site_actions", actions_, val_.userblog_id)
             i_ = 0
             action_count_ = php_count(actions_)
-            for action_,link_ in actions_:
+            for action_,link_ in actions_.items():
                 i_ += 1
                 sep_ = "" if i_ == action_count_ else " | "
                 php_print(str("<span class='") + str(action_) + str("'>") + str(link_) + str(sep_) + str("</span>"))
@@ -398,7 +398,7 @@ class WP_MS_Users_List_Table(WP_List_Table):
         for user_ in self.items:
             class_ = ""
             status_list_ = Array({"spam": "site-spammed", "deleted": "site-deleted"})
-            for status_,col_ in status_list_:
+            for status_,col_ in status_list_.items():
                 if user_.status_:
                     class_ += str(" ") + str(col_)
                 # end if

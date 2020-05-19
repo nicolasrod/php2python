@@ -70,7 +70,7 @@ class WP_HTTP_IXR_Client(IXR_Client):
         url_ = self.scheme + "://" + self.server + port_ + self.path
         args_ = Array({"headers": Array({"Content-Type": "text/xml"})}, {"user-agent": self.useragent, "body": xml_})
         #// Merge Custom headers ala #8145.
-        for header_,value_ in self.headers:
+        for header_,value_ in self.headers.items():
             args_["headers"][header_] = value_
         # end for
         #// 

@@ -1333,7 +1333,7 @@ def wp_get_pomo_file_data(po_file_=None, *_args_):
     
     
     headers_ = get_file_data(po_file_, Array({"POT-Creation-Date": "\"POT-Creation-Date", "PO-Revision-Date": "\"PO-Revision-Date", "Project-Id-Version": "\"Project-Id-Version", "X-Generator": "\"X-Generator"}))
-    for header_,value_ in headers_:
+    for header_,value_ in headers_.items():
         #// Remove possible contextual '\n' and closing double quote.
         headers_[header_] = php_preg_replace("~(\\\\n)?\"$~", "", value_)
     # end for

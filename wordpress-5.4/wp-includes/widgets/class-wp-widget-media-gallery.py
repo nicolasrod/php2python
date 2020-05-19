@@ -84,7 +84,7 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
         handle_ = "media-gallery-widget"
         wp_enqueue_script(handle_)
         exported_schema_ = Array()
-        for field_,field_schema_ in self.get_instance_schema():
+        for field_,field_schema_ in self.get_instance_schema().items():
             exported_schema_[field_] = wp_array_slice_assoc(field_schema_, Array("type", "default", "enum", "minimum", "format", "media_prop", "should_preview_update", "items"))
         # end for
         wp_add_inline_script(handle_, php_sprintf("wp.mediaWidgets.modelConstructors[ %s ].prototype.schema = %s;", wp_json_encode(self.id_base), wp_json_encode(exported_schema_)))

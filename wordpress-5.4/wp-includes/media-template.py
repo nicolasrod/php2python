@@ -101,7 +101,7 @@ class=\"wp-video-shortcode {{ classes.join( ' ' ) }}\"
     <# if ( h ) { #>height=\"{{ h }}\"<# } #>
     """)
     props_ = Array({"poster": "", "preload": "metadata"})
-    for key_,value_ in props_:
+    for key_,value_ in props_.items():
         if php_empty(lambda : value_):
             php_print("     <#\n        if ( ! _.isUndefined( data.model.")
             php_print(key_)
@@ -477,7 +477,7 @@ if ( data.width ) {
         """)
     # end if
     php_print("             <# if ( 'audio' === data.type ) { #>\n              ")
-    for key_,label_ in Array({"artist": __("Artist"), "album": __("Album")}):
+    for key_,label_ in Array({"artist": __("Artist"), "album": __("Album")}).items():
         php_print("             <span class=\"setting\" data-setting=\"")
         php_print(esc_attr(key_))
         php_print("\">\n                    <label for=\"attachment-details-two-column-")
@@ -710,7 +710,7 @@ if ( 'image' === data.type ) { #>
         """)
     # end if
     php_print("     <# if ( 'audio' === data.type ) { #>\n      ")
-    for key_,label_ in Array({"artist": __("Artist"), "album": __("Album")}):
+    for key_,label_ in Array({"artist": __("Artist"), "album": __("Album")}).items():
         php_print("     <span class=\"setting\" data-setting=\"")
         php_print(esc_attr(key_))
         php_print("\">\n            <label for=\"attachment-details-")
@@ -858,7 +858,7 @@ if ( 'image' === data.type ) { #>
     """)
     #// This filter is documented in wp-admin/includes/media.php
     sizes_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
-    for value_,name_ in sizes_:
+    for value_,name_ in sizes_.items():
         php_print("                     <#\n                        var size = data.sizes['")
         php_print(esc_js(value_))
         php_print("'];\n                        if ( size ) { #>\n                          <option value=\"")
@@ -942,7 +942,7 @@ if ( 'image' === data.type ) { #>
     """)
     #// This filter is documented in wp-admin/includes/media.php
     size_names_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
-    for size_,label_ in size_names_:
+    for size_,label_ in size_names_.items():
         php_print("                 <option value=\"")
         php_print(esc_attr(size_))
         php_print("\">\n                        ")
@@ -1130,7 +1130,7 @@ if ( 'image' === data.type ) { #>
     """)
     #// This filter is documented in wp-admin/includes/media.php
     sizes_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
-    for value_,name_ in sizes_:
+    for value_,name_ in sizes_.items():
         php_print("                                     <#\n                                        var size = data.sizes['")
         php_print(esc_js(value_))
         php_print("'];\n                                        if ( size ) { #>\n                                          <option value=\"")

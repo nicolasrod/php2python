@@ -440,7 +440,7 @@ class WP_Post_Type():
                 # end if
             # end if
         # end if
-        for property_name_,property_value_ in args_:
+        for property_name_,property_value_ in args_.items():
             self.property_name_ = property_value_
         # end for
         self.labels = get_post_type_labels(self)
@@ -455,7 +455,7 @@ class WP_Post_Type():
         
         
         if (not php_empty(lambda : self.supports)):
-            for feature_,args_ in self.supports:
+            for feature_,args_ in self.supports.items():
                 if php_is_array(args_):
                     add_post_type_support(self.name, feature_, args_)
                 else:
@@ -585,7 +585,7 @@ class WP_Post_Type():
         if False != self.rewrite:
             remove_rewrite_tag(str("%") + str(self.name) + str("%"))
             remove_permastruct(self.name)
-            for regex_,query_ in wp_rewrite_.extra_rules_top:
+            for regex_,query_ in wp_rewrite_.extra_rules_top.items():
                 if False != php_strpos(query_, str("index.php?post_type=") + str(self.name)):
                     wp_rewrite_.extra_rules_top[regex_] = None
                 # end if

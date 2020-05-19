@@ -215,7 +215,7 @@ class WP_Site_Health():
             result_["description"] = php_sprintf("<p>%s</p>", __("We were unable to check if any new versions of WordPress are available."))
             result_["actions"] = php_sprintf("<a href=\"%s\">%s</a>", esc_url(admin_url("update-core.php?force-check=1")), __("Check for updates manually"))
         else:
-            for core_,update_ in core_updates_:
+            for core_,update_ in core_updates_.items():
                 if "upgrade" == update_.response:
                     current_version_ = php_explode(".", core_current_version_)
                     new_version_ = php_explode(".", update_.version)
@@ -262,7 +262,7 @@ class WP_Site_Health():
         plugins_total_ = 0
         plugins_need_update_ = 0
         #// Loop over the available plugins and check their versions and active state.
-        for plugin_path_,plugin_ in plugins_:
+        for plugin_path_,plugin_ in plugins_.items():
             plugins_total_ += 1
             if is_plugin_active(plugin_path_):
                 plugins_active_ += 1
@@ -334,7 +334,7 @@ class WP_Site_Health():
                 using_default_theme_ = True
             # end if
         # end if
-        for theme_slug_,theme_ in all_themes_:
+        for theme_slug_,theme_ in all_themes_.items():
             themes_total_ += 1
             if php_array_key_exists(theme_slug_, theme_updates_):
                 themes_need_updates_ += 1
@@ -515,7 +515,7 @@ class WP_Site_Health():
         #//
         modules_ = apply_filters("site_status_test_php_modules", modules_)
         failures_ = Array()
-        for library_,module_ in modules_:
+        for library_,module_ in modules_.items():
             extension_ = module_["extension"] if (php_isset(lambda : module_["extension"])) else None
             function_ = module_["function"] if (php_isset(lambda : module_["function"])) else None
             constant_ = module_["constant"] if (php_isset(lambda : module_["constant"])) else None
@@ -1052,9 +1052,9 @@ class WP_Site_Health():
             return
         # end if
         self.crons = Array()
-        for time_,cron_ in cron_tasks_:
-            for hook_,dings_ in cron_:
-                for sig_,data_ in dings_:
+        for time_,cron_ in cron_tasks_.items():
+            for hook_,dings_ in cron_.items():
+                for sig_,data_ in dings_.items():
                     self.crons[str(hook_) + str("-") + str(sig_) + str("-") + str(time_)] = Array({"hook": hook_, "time": time_, "sig": sig_, "args": data_["args"], "schedule": data_["schedule"], "interval": data_["interval"] if (php_isset(lambda : data_["interval"])) else None})
                 # end for
             # end for
@@ -1076,7 +1076,7 @@ class WP_Site_Health():
         if is_wp_error(self.crons):
             return self.crons
         # end if
-        for id_,cron_ in self.crons:
+        for id_,cron_ in self.crons.items():
             if cron_.time - time() < self.timeout_missed_cron:
                 self.last_missed_cron = cron_.hook
                 return True
@@ -1100,7 +1100,7 @@ class WP_Site_Health():
         if is_wp_error(self.crons):
             return self.crons
         # end if
-        for id_,cron_ in self.crons:
+        for id_,cron_ in self.crons.items():
             cron_offset_ = cron_.time - time()
             if cron_offset_ >= self.timeout_missed_cron and cron_offset_ < self.timeout_late_cron:
                 self.last_late_cron = cron_.hook

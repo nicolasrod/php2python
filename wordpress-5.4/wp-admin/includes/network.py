@@ -408,7 +408,7 @@ def network_step2(errors_=None, *_args_):
     </textarea>
     """)
     keys_salts_ = Array({"AUTH_KEY": "", "SECURE_AUTH_KEY": "", "LOGGED_IN_KEY": "", "NONCE_KEY": "", "AUTH_SALT": "", "SECURE_AUTH_SALT": "", "LOGGED_IN_SALT": "", "NONCE_SALT": ""})
-    for c_,v_ in keys_salts_:
+    for c_,v_ in keys_salts_.items():
         if php_defined(c_):
             keys_salts_[c_] = None
         # end if
@@ -417,12 +417,12 @@ def network_step2(errors_=None, *_args_):
         keys_salts_str_ = ""
         from_api_ = wp_remote_get("https://api.wordpress.org/secret-key/1.1/salt/")
         if is_wp_error(from_api_):
-            for c_,v_ in keys_salts_:
+            for c_,v_ in keys_salts_.items():
                 keys_salts_str_ += str("\ndefine( '") + str(c_) + str("', '") + wp_generate_password(64, True, True) + "' );"
             # end for
         else:
             from_api_ = php_explode("\n", wp_remote_retrieve_body(from_api_))
-            for c_,v_ in keys_salts_:
+            for c_,v_ in keys_salts_.items():
                 keys_salts_str_ += str("\ndefine( '") + str(c_) + str("', '") + php_substr(php_array_shift(from_api_), 28, 64) + "' );"
             # end for
         # end if

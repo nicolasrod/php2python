@@ -50,7 +50,7 @@ if PHP_POST:
     do_action("wpmuadminedit")
     check_admin_referer("siteoptions")
     checked_options_ = Array({"menu_items": Array(), "registrationnotification": "no", "upload_space_check_disabled": 1, "add_new_users": 0})
-    for option_name_,option_unchecked_value_ in checked_options_:
+    for option_name_,option_unchecked_value_ in checked_options_.items():
         if (not (php_isset(lambda : PHP_POST[option_name_]))):
             PHP_POST[option_name_] = option_unchecked_value_
         # end if
@@ -404,7 +404,7 @@ menu_perms_ = get_site_option("menu_items")
 #//
 menu_items_ = apply_filters("mu_menu_items", Array({"plugins": __("Plugins")}))
 php_print("<fieldset><legend class=\"screen-reader-text\">" + __("Enable menus") + "</legend>")
-for key_,val_ in menu_items_:
+for key_,val_ in menu_items_.items():
     php_print("<label><input type='checkbox' name='menu_items[" + key_ + "]' value='1'" + checked(menu_perms_[key_], "1", False) if (php_isset(lambda : menu_perms_[key_])) else "" + " /> " + esc_html(val_) + "</label><br/>")
 # end for
 php_print("</fieldset>")

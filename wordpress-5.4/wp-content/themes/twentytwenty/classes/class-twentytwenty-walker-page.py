@@ -81,7 +81,7 @@ if (not php_class_exists("TwentyTwenty_Walker_Page")):
             #// This filter is documented in wp-includes/class-walker-page.php
             atts_ = apply_filters("page_menu_link_attributes", atts_, page_, depth_, args_, current_page_)
             attributes_ = ""
-            for attr_,value_ in atts_:
+            for attr_,value_ in atts_.items():
                 if (not php_empty(lambda : value_)):
                     value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
                     attributes_ += " " + attr_ + "=\"" + value_ + "\""

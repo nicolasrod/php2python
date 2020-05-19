@@ -108,7 +108,7 @@ def wp_schedule_single_event(timestamp_=None, hook_=None, args_=None, *_args_):
     else:
         max_timestamp_ = event_.timestamp + 10 * MINUTE_IN_SECONDS
     # end if
-    for event_timestamp_,cron_ in crons_:
+    for event_timestamp_,cron_ in crons_.items():
         if event_timestamp_ < min_timestamp_:
             continue
         # end if
@@ -405,7 +405,7 @@ def wp_clear_scheduled_hook(hook_=None, args_=None, *_args_):
     # end if
     results_ = Array()
     key_ = php_md5(serialize(args_))
-    for timestamp_,cron_ in crons_:
+    for timestamp_,cron_ in crons_.items():
         if (php_isset(lambda : cron_[hook_][key_])):
             results_[-1] = wp_unschedule_event(timestamp_, hook_, args_)
         # end if
@@ -459,7 +459,7 @@ def wp_unschedule_hook(hook_=None, *_args_):
         return 0
     # end if
     results_ = Array()
-    for timestamp_,args_ in crons_:
+    for timestamp_,args_ in crons_.items():
         if (not php_empty(lambda : crons_[timestamp_][hook_])):
             results_[-1] = php_count(crons_[timestamp_][hook_])
         # end if
@@ -536,7 +536,7 @@ def wp_get_scheduled_event(hook_=None, args_=None, timestamp_=None, *_args_):
     if (not timestamp_):
         #// Get next event.
         next_ = False
-        for timestamp_,cron_ in crons_:
+        for timestamp_,cron_ in crons_.items():
             if (php_isset(lambda : cron_[hook_][key_])):
                 next_ = timestamp_
                 break
@@ -694,11 +694,11 @@ def wp_cron(*_args_):
     # end if
     schedules_ = wp_get_schedules()
     results_ = Array()
-    for timestamp_,cronhooks_ in crons_:
+    for timestamp_,cronhooks_ in crons_.items():
         if timestamp_ > gmt_time_:
             break
         # end if
-        for hook_,args_ in cronhooks_:
+        for hook_,args_ in cronhooks_.items():
             if (php_isset(lambda : schedules_[hook_]["callback"])) and (not php_call_user_func(schedules_[hook_]["callback"])):
                 continue
             # end if
@@ -825,7 +825,7 @@ def wp_get_ready_cron_jobs(*_args_):
         return Array()
     # end if
     results_ = Array()
-    for timestamp_,cronhooks_ in crons_:
+    for timestamp_,cronhooks_ in crons_.items():
         if timestamp_ > gmt_time_:
             break
         # end if
@@ -892,8 +892,8 @@ def _upgrade_cron_array(cron_=None, *_args_):
         return cron_
     # end if
     new_cron_ = Array()
-    for timestamp_,hooks_ in cron_:
-        for hook_,args_ in hooks_:
+    for timestamp_,hooks_ in cron_.items():
+        for hook_,args_ in hooks_.items():
             key_ = php_md5(serialize(args_["args"]))
             new_cron_[timestamp_][hook_][key_] = args_
         # end for

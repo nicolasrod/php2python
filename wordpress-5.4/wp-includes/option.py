@@ -1003,7 +1003,7 @@ def wp_set_all_user_settings(user_settings_=None, *_args_):
         return
     # end if
     settings_ = ""
-    for name_,value_ in user_settings_:
+    for name_,value_ in user_settings_.items():
         _name_ = php_preg_replace("/[^A-Za-z0-9_-]+/", "", name_)
         _value_ = php_preg_replace("/[^A-Za-z0-9_-]+/", "", value_)
         if (not php_empty(lambda : _name_)):

@@ -60,7 +60,7 @@ php_print("</p>\n\n")
 #// Registered (already installed) importers. They're stored in the global $wp_importers.
 importers_ = get_importers()
 #// If a popular importer is not registered, create a dummy registration that links to the plugin installer.
-for pop_importer_,pop_data_ in popular_importers_:
+for pop_importer_,pop_data_ in popular_importers_.items():
     if (php_isset(lambda : importers_[pop_importer_])):
         continue
     # end if
@@ -76,7 +76,7 @@ if php_empty(lambda : importers_):
 else:
     uasort(importers_, "_usort_by_first_member")
     php_print("<table class=\"widefat importers striped\">\n\n  ")
-    for importer_id_,data_ in importers_:
+    for importer_id_,data_ in importers_.items():
         plugin_slug_ = ""
         action_ = ""
         is_plugin_installed_ = False

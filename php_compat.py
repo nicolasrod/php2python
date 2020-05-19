@@ -126,6 +126,8 @@ def php_include_file(fname, once=True, redirect=False):
 
     _PHP_INCLUDES[__FILE__] = True
 
+    print(">> INCLUDING: ", __FILE__)
+
     with open(__FILE__) as src:
         code = compile(src.read().replace("\x00", ""), filename, "exec")
 
@@ -150,9 +152,11 @@ def php_include_file(fname, once=True, redirect=False):
 # PHP globals
 
 
-class Traversable:
+class Resource:
     pass
 
+class Traversable:
+    pass
 
 class Iterator:
     pass
@@ -198,13 +202,12 @@ class Array():
         for item in items:
             self.extend(item, _preserve=_preserve)
 
+    def __delitem__(self, key):
+        del self.data[key]
+
     def __getitem__(self, k):
-        if isinstance(k, int):
-            if not k in self.data:
-                self.data[k] = Array()
-            return self.data[k]
-        if isinstance(k, str):
-            return self.data[k]
+        if isinstance(k, (int, str)):
+            return self.data.get(k, Array())
         else:
             return list(self.data.items())[k.start:k.stop:k.step]
 
@@ -243,16 +246,16 @@ class Array():
             yield from self.data.values()
 
     def items(self):
-        return self.data.items()
+        return self.data.copy().items()
 
     def get_keys(self):
-        return list(self.data.keys())
+        return list(self.data.copy().keys())
 
     def has_key(self, k):
         return k in self.data
 
     def values(self):
-        return list(self.data.values())
+        return list(self.data.copy().values())
 
     def __len__(self):
         return len(self.data.items())
@@ -321,10 +324,6 @@ class Array():
         self.pos = None
         self.iter = None
 
-
-#
-class HandleObj:
-    pass
 
 # =============================================================0
 # Load "PHP" INI file
@@ -437,6 +436,7 @@ SEEK_SET = _Id()
 SODIUM_CRYPTO_GENERICHASH_BYTES = _Id()
 SORT_REGULAR = _Id()
 SORT_STRING = _Id()
+SORT_NUMERIC = _Id()
 SSH2_TERM_UNIT_CHARS = _Id()
 STR_PAD_RIGHT = _Id()
 STR_PAD_LEFT = _Id()
@@ -1290,7 +1290,7 @@ def php_implode(*args):
 
     _glue = args[0] if isinstance(args[0], str) else args[1]
     _array = args[1] if isinstance(args[1], Array) else args[0]
-    return _glue.join(_array.values())
+    return _glue.join([str(x) for x in _array.values()])
 
 
 def php_in_array(_needle, _haystack, _strict=False):
@@ -1338,7 +1338,7 @@ def php_is_a(_object, _class_name, _allow_string=False):
 
 
 def php_is_array(_var):
-    return isinstance(_var, list)
+    return isinstance(_var, Array)
 
 
 def php_is_bool(_var):
@@ -1380,6 +1380,9 @@ def php_is_null(_var):
 
 def php_is_numeric(_var):
     return isinstance(_var, int) or isinstance(_var, float)
+
+def php_is_resource(_var):
+    return isinstance(_var, Resource)
 
 
 def php_is_object(_var):
@@ -1542,7 +1545,7 @@ def php_mysqli_real_connect(dbh_,
 
 
 def php_mysqli_init():
-    dbh = HandleObj()
+    dbh = Resource()
     for it in ['affected_rows', 'connect_errno', 'connect_error', 'errno', 'error_list', 'error', 'field_count',
                'client_info', 'client_version', 'host_info', 'protocol_version', 'server_info', 'server_version',
                'info', 'insert_id', 'sqlstate', 'thread_id', 'warning_count']:
@@ -1558,7 +1561,7 @@ def php_mysqli_connect(host, user, pwd, db):
 
 
 def php_opendir(_path, _context=None):
-    dh = HandleObj()
+    dh = Resource()
     dh.path = _path
     dh.context = _context
     dh.files = os.listdir(_path)
@@ -1719,8 +1722,6 @@ def php_sprintf(_format, *args):
     _format = re.sub(
         '%(?P<argnum>\d+)?\$?(?P<flags>[-+0])?(?P<fillchar>\'[\w\.])?(?P<width>\d+)?\.?(?P<precision>\d+)?(?P<spec>[%bcdeEfFgGosuxX])', _fix, _format)
 
-    print(_format)
-    print(args)
     return _format.format(*args)
 
 
@@ -1802,7 +1803,6 @@ def php_str_replace(_search, _replace, _subject, _count=None):
     """
     assert _count is None, '_count parameter not implemented!'
 
-    print("***", type(_search), type(_subject), type(_replace))
     if not isinstance(_search, Array):
         return _subject.replace(_search, _replace)
 
@@ -2079,9 +2079,9 @@ def _get_caller_data():
         'CallerInfo', 'name, num_args, args_name, locals, globals')
     return CallerInfo(name=fcode.co_name,
                       num_args=fcode.co_argcount,
-                      args_name=fcode.co_varnames[:fcode.co_argcount],
-                      locals=frame.f_locals,
-                      globals=frame.f_globals)
+                      args_name=Array(fcode.co_varnames[:fcode.co_argcount]),
+                      locals=Array(frame.f_locals),
+                      globals=Array(frame.f_globals))
 
 
 def php_register_shutdown_function(_callback, *args):
@@ -2091,7 +2091,7 @@ def php_register_shutdown_function(_callback, *args):
         return
 
     if isinstance(_callback, str):
-        fn = globals[_callback]
+        fn = globals()[_callback]
         atexit.register(fn)
         return
 
@@ -2109,10 +2109,12 @@ $scheduler->registerShutdownEvent('scheduler::staticTest');
     assert False, 'wrong turn!'
 
 
-def php_date_default_timezone_get(): pass
+def php_date_default_timezone_get():
+    pass
 
 
-def php_date_default_timezone_set(_timezone_identifier): pass
+def php_date_default_timezone_set(_timezone_identifier):
+    pass
 
 
 def php_strncmp(s1, s2, l):
@@ -2380,24 +2382,58 @@ def php_hash_hmac(algo, data, key, raw_output_=None, *_args_):
     data = m.hexdigest()
     return data
 
+def php_shell_exec(_cmd):
+    """
+    >>> php_shell_exec('true')
+    ''
+    >>> php_shell_exec('echo 42')
+    '42'
+    >>> php_shell_exec('false')
+    False
+    """
+    out = Array()
+    code = Array()
+    php_exec(_cmd, out, code, shell=True)
+    if int(code[0]) != 0:
+        return False
 
-def php_exec(cmd, out=None, exitcode=None):
-    proc = subprocess.run(..., check=False, text=True, stdout=subprocess.PIPE)
+    return "\n".join(out.values())    
 
+
+def php_exec(cmd, out=None, exitcode=None, shell=False):
+    proc = subprocess.run(cmd, check=False, text=True, shell=shell, stdout=subprocess.PIPE)
     lines = proc.stdout.strip().split('\n')
 
     if isinstance(out, Array):
         for it in lines:
             out[-1] = it
 
-    assert exitcode is not None and not isinstance(exitcode, Array), 'exitcode should be an array in Python! FIX THIS!'
-
     if exitcode is not None:
+        assert isinstance(exitcode, Array), 'exitcode should be an array in Python! FIX THIS!'
         exitcode[-1] = proc.returncode
 
     return lines[-1]
 
+
+def php_ksort(arr, flags=None):
+    """
+    >>> fruits = Array({'d': 'lemon', "a": "orange", "b": "banana", "c": "apple"})
+    >>> php_ksort(fruits)
+    True
+    >>> fruits
+    {'a': 'orange', 'b': 'banana', 'c': 'apple', 'd': 'lemon'}
+    """
+    tmp = Array()
+    for it in sorted(arr.get_keys()):
+        tmp[it] = arr[it]
+        del arr[it]
+
+    for k, v in tmp.items():
+        arr[k] = v
+    return True
+
 # ========================================================================================
+
 
 defs = locals().copy()
 PHP_FUNCTIONS = [

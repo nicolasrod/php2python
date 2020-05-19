@@ -122,7 +122,7 @@ class WP_REST_Server():
             status_ = 500
         # end if
         errors_ = Array()
-        for code_,messages_ in error_.errors:
+        for code_,messages_ in error_.errors.items():
             for message_ in messages_:
                 errors_[-1] = Array({"code": code_, "message": message_, "data": error_.get_error_data(code_)})
             # end for
@@ -205,7 +205,7 @@ class WP_REST_Server():
         #//
         send_no_cache_headers_ = apply_filters("rest_send_nocache_headers", is_user_logged_in())
         if send_no_cache_headers_:
-            for header_,header_value_ in wp_get_nocache_headers():
+            for header_,header_value_ in wp_get_nocache_headers().items():
                 if php_empty(lambda : header_value_):
                     self.remove_header(header_)
                 else:
@@ -382,7 +382,7 @@ class WP_REST_Server():
             self.embed_cache = Array()
             #// Determine if this is a numeric array.
             if wp_is_numeric_array(data_):
-                for key_,item_ in data_:
+                for key_,item_ in data_.items():
                     data_[key_] = self.embed_links(item_, embed_)
                 # end for
             else:
@@ -413,7 +413,7 @@ class WP_REST_Server():
         # end if
         #// Convert links to part of the data.
         data_ = Array()
-        for rel_,items_ in links_:
+        for rel_,items_ in links_.items():
             data_[rel_] = Array()
             for item_ in items_:
                 attributes_ = item_["attributes"]
@@ -444,7 +444,7 @@ class WP_REST_Server():
         # end if
         curies_ = response_.get_curies()
         used_curies_ = Array()
-        for rel_,items_ in links_:
+        for rel_,items_ in links_.items():
             #// Convert $rel URIs to their compact versions if they exist.
             for curie_ in curies_:
                 href_prefix_ = php_substr(curie_["href"], 0, php_strpos(curie_["href"], "{rel}"))
@@ -493,7 +493,7 @@ class WP_REST_Server():
             return data_
         # end if
         embedded_ = Array()
-        for rel_,links_ in data_["_links"]:
+        for rel_,links_ in data_["_links"].items():
             #// If a list of relations was specified, and the link relation is not in the whitelist, don't process the link.
             if php_is_array(embed_) and (not php_in_array(rel_, embed_, True)):
                 continue
@@ -635,7 +635,7 @@ class WP_REST_Server():
         endpoints_ = apply_filters("rest_endpoints", endpoints_)
         #// Normalise the endpoints.
         defaults_ = Array({"methods": "", "accept_json": False, "accept_raw": False, "show_in_index": True, "args": Array()})
-        for route_,handlers_ in endpoints_:
+        for route_,handlers_ in endpoints_.items():
             if (php_isset(lambda : handlers_["callback"])):
                 #// Single endpoint, add one deeper.
                 handlers_ = Array(handlers_)
@@ -643,7 +643,7 @@ class WP_REST_Server():
             if (not (php_isset(lambda : self.route_options[route_]))):
                 self.route_options[route_] = Array()
             # end if
-            for key_,handler_ in handlers_:
+            for key_,handler_ in handlers_.items():
                 if (not php_is_numeric(key_)):
                     #// Route option, move it to the options.
                     self.route_options[route_][key_] = handler_
@@ -737,13 +737,13 @@ class WP_REST_Server():
         else:
             routes_ = self.get_routes()
         # end if
-        for route_,handlers_ in routes_:
+        for route_,handlers_ in routes_.items():
             match_ = php_preg_match("@^" + route_ + "$@i", path_, matches_)
             if (not match_):
                 continue
             # end if
             args_ = Array()
-            for param_,value_ in matches_:
+            for param_,value_ in matches_.items():
                 if (not php_is_int(param_)):
                     args_[param_] = value_
                 # end if
@@ -767,7 +767,7 @@ class WP_REST_Server():
                     request_.set_url_params(args_)
                     request_.set_attributes(handler_)
                     defaults_ = Array()
-                    for arg_,options_ in handler_["args"]:
+                    for arg_,options_ in handler_["args"].items():
                         if (php_isset(lambda : options_["default"])):
                             defaults_[arg_] = options_["default"]
                         # end if
@@ -968,7 +968,7 @@ class WP_REST_Server():
         
         available_ = Array()
         #// Find the available routes.
-        for route_,callbacks_ in routes_:
+        for route_,callbacks_ in routes_.items():
             data_ = self.get_data_for_route(route_, callbacks_, context_)
             if php_empty(lambda : data_):
                 continue
@@ -1029,7 +1029,7 @@ class WP_REST_Server():
             endpoint_data_ = Array({"methods": php_array_keys(callback_["methods"])})
             if (php_isset(lambda : callback_["args"])):
                 endpoint_data_["args"] = Array()
-                for key_,opts_ in callback_["args"]:
+                for key_,opts_ in callback_["args"].items():
                     arg_data_ = Array({"required": (not php_empty(lambda : opts_["required"]))})
                     if (php_isset(lambda : opts_["default"])):
                         arg_data_["default"] = opts_["default"]
@@ -1104,7 +1104,7 @@ class WP_REST_Server():
     def send_headers(self, headers_=None):
         
         
-        for key_,value_ in headers_:
+        for key_,value_ in headers_.items():
             self.send_header(key_, value_)
         # end for
     # end def send_headers
@@ -1158,7 +1158,7 @@ class WP_REST_Server():
         headers_ = Array()
         #// CONTENT_* headers are not prefixed with HTTP_.
         additional_ = Array({"CONTENT_LENGTH": True, "CONTENT_MD5": True, "CONTENT_TYPE": True})
-        for key_,value_ in server_:
+        for key_,value_ in server_.items():
             if php_strpos(key_, "HTTP_") == 0:
                 headers_[php_substr(key_, 5)] = value_
             elif "REDIRECT_HTTP_AUTHORIZATION" == key_ and php_empty(lambda : server_["HTTP_AUTHORIZATION"]):

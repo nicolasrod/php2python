@@ -308,7 +308,7 @@ class getID3():
             elif php_strpos(php_realpath(helperappsdir_), " ") != False:
                 DirPieces_ = php_explode(DIRECTORY_SEPARATOR, php_realpath(helperappsdir_))
                 path_so_far_ = Array()
-                for key_,value_ in DirPieces_:
+                for key_,value_ in DirPieces_.items():
                     if php_strpos(value_, " ") != False:
                         if (not php_empty(lambda : path_so_far_)):
                             commandline_ = "dir /x " + escapeshellarg(php_implode(DIRECTORY_SEPARATOR, path_so_far_))
@@ -365,7 +365,7 @@ class getID3():
         if (not php_is_array(optArray_)) or php_empty(lambda : optArray_):
             return False
         # end if
-        for opt_,val_ in optArray_:
+        for opt_,val_ in optArray_.items():
             if (php_isset(lambda : self.opt_)) == False:
                 continue
             # end if
@@ -507,7 +507,7 @@ class getID3():
                 return self.info
             # end if
             #// Handle tags
-            for tag_name_,tag_key_ in Array({"id3v2": "id3v2", "id3v1": "id3v1", "apetag": "ape", "lyrics3": "lyrics3"}):
+            for tag_name_,tag_key_ in Array({"id3v2": "id3v2", "id3v1": "id3v1", "apetag": "ape", "lyrics3": "lyrics3"}).items():
                 option_tag_ = "option_tag_" + tag_name_
                 if self.option_tag_:
                     self.include_module("tag." + tag_name_)
@@ -523,7 +523,7 @@ class getID3():
             if (php_isset(lambda : self.info["id3v2"]["tag_offset_start"])):
                 self.info["avdataoffset"] = php_max(self.info["avdataoffset"], self.info["id3v2"]["tag_offset_end"])
             # end if
-            for tag_name_,tag_key_ in Array({"id3v1": "id3v1", "apetag": "ape", "lyrics3": "lyrics3"}):
+            for tag_name_,tag_key_ in Array({"id3v1": "id3v1", "apetag": "ape", "lyrics3": "lyrics3"}).items():
                 if (php_isset(lambda : self.info[tag_key_]["tag_offset_start"])):
                     self.info["avdataend"] = php_min(self.info["avdataend"], self.info[tag_key_]["tag_offset_start"])
                 # end if
@@ -667,7 +667,7 @@ class getID3():
         
         #// remove possible empty keys
         AVpossibleEmptyKeys_ = Array("dataformat", "bits_per_sample", "encoder_options", "streams", "bitrate")
-        for dummy_,key_ in AVpossibleEmptyKeys_:
+        for dummy_,key_ in AVpossibleEmptyKeys_.items():
             if php_empty(lambda : self.info["audio"][key_]) and (php_isset(lambda : self.info["audio"][key_])):
                 self.info["audio"][key_] = None
             # end if
@@ -677,7 +677,7 @@ class getID3():
         # end for
         #// remove empty root keys
         if (not php_empty(lambda : self.info)):
-            for key_,value_ in self.info:
+            for key_,value_ in self.info.items():
                 if php_empty(lambda : self.info[key_]) and self.info[key_] != 0 and self.info[key_] != "0":
                     self.info[key_] = None
                 # end if
@@ -730,7 +730,7 @@ class getID3():
         #// and in the case of ISO CD image, 6 bytes offset 32kb from the start
         #// of the file).
         #// Identify file format - loop through $format_info and detect with reg expr
-        for format_name_,info_ in self.getfileformatarray():
+        for format_name_,info_ in self.getfileformatarray().items():
             #// The /s switch on preg_match() forces preg_match() NOT to treat
             #// newline (0x0A) characters as special chars but do a binary match
             if (not php_empty(lambda : info_["pattern"])) and php_preg_match("#" + info_["pattern"] + "#s", filedata_):
@@ -770,7 +770,7 @@ class getID3():
             return
         # end if
         #// loop thru array
-        for key_,value_ in array_:
+        for key_,value_ in array_.items():
             #// go recursive
             if php_is_array(value_):
                 self.charconvert(array_[key_], encoding_)
@@ -791,7 +791,7 @@ class getID3():
             tags_ = Array({"asf": Array("asf", "UTF-16LE"), "midi": Array("midi", "ISO-8859-1"), "nsv": Array("nsv", "ISO-8859-1"), "ogg": Array("vorbiscomment", "UTF-8"), "png": Array("png", "UTF-8"), "tiff": Array("tiff", "ISO-8859-1"), "quicktime": Array("quicktime", "UTF-8"), "real": Array("real", "ISO-8859-1"), "vqf": Array("vqf", "ISO-8859-1"), "zip": Array("zip", "ISO-8859-1"), "riff": Array("riff", "ISO-8859-1"), "lyrics3": Array("lyrics3", "ISO-8859-1"), "id3v1": Array("id3v1", self.encoding_id3v1), "id3v2": Array("id3v2", "UTF-8"), "ape": Array("ape", "UTF-8"), "cue": Array("cue", "ISO-8859-1"), "matroska": Array("matroska", "UTF-8"), "flac": Array("vorbiscomment", "UTF-8"), "divxtag": Array("divx", "ISO-8859-1"), "iptc": Array("iptc", "ISO-8859-1")})
         # end if
         #// loop through comments array
-        for comment_name_,tagname_encoding_array_ in tags_:
+        for comment_name_,tagname_encoding_array_ in tags_.items():
             tag_name_, encoding_ = tagname_encoding_array_
             #// fill in default encoding type if not already present
             if (php_isset(lambda : self.info[comment_name_])) and (not (php_isset(lambda : self.info[comment_name_]["encoding"]))):
@@ -799,8 +799,8 @@ class getID3():
             # end if
             #// copy comments if key name set
             if (not php_empty(lambda : self.info[comment_name_]["comments"])):
-                for tag_key_,valuearray_ in self.info[comment_name_]["comments"]:
-                    for key_,value_ in valuearray_:
+                for tag_key_,valuearray_ in self.info[comment_name_]["comments"].items():
+                    for key_,value_ in valuearray_.items():
                         if php_is_string(value_):
                             value_ = php_trim(value_, " \r\n    ")
                             pass
@@ -823,7 +823,7 @@ class getID3():
                 self.charconvert(self.info["tags"][tag_name_], self.info[comment_name_]["encoding"])
                 #// only copy gets converted!
                 if self.option_tags_html:
-                    for tag_key_,valuearray_ in self.info["tags"][tag_name_]:
+                    for tag_key_,valuearray_ in self.info["tags"][tag_name_].items():
                         if tag_key_ == "picture":
                             continue
                         # end if
@@ -835,10 +835,10 @@ class getID3():
         #// pictures can take up a lot of space, and we don't need multiple copies of them; let there be a single copy in [comments][picture], and not elsewhere
         if (not php_empty(lambda : self.info["tags"])):
             unset_keys_ = Array("tags", "tags_html")
-            for tagtype_,tagarray_ in self.info["tags"]:
-                for tagname_,tagdata_ in tagarray_:
+            for tagtype_,tagarray_ in self.info["tags"].items():
+                for tagname_,tagdata_ in tagarray_.items():
                     if tagname_ == "picture":
-                        for key_,tagarray_ in tagdata_:
+                        for key_,tagarray_ in tagdata_.items():
                             self.info["comments"]["picture"][-1] = tagarray_
                             if (php_isset(lambda : tagarray_["data"])) and (php_isset(lambda : tagarray_["image_mime"])):
                                 if (php_isset(lambda : self.info["tags"][tagtype_][tagname_][key_])):
@@ -1109,7 +1109,7 @@ class getID3():
         # end if
         self.info["audio"]["compression_ratio"] = self.info["audio"]["bitrate"] / self.info["audio"]["channels"] * self.info["audio"]["sample_rate"] * self.info["audio"]["bits_per_sample"] if (not php_empty(lambda : self.info["audio"]["bits_per_sample"])) else 16
         if (not php_empty(lambda : self.info["audio"]["streams"])):
-            for streamnumber_,streamdata_ in self.info["audio"]["streams"]:
+            for streamnumber_,streamdata_ in self.info["audio"]["streams"].items():
                 if (not php_empty(lambda : streamdata_["bitrate"])) and (not php_empty(lambda : streamdata_["channels"])) and (not php_empty(lambda : streamdata_["sample_rate"])):
                     self.info["audio"]["streams"][streamnumber_]["compression_ratio"] = streamdata_["bitrate"] / streamdata_["channels"] * streamdata_["sample_rate"] * streamdata_["bits_per_sample"] if (not php_empty(lambda : streamdata_["bits_per_sample"])) else 16
                 # end if
@@ -1150,7 +1150,7 @@ class getID3():
         
         if (not php_empty(lambda : self.info["audio"]["bitrate"])) or (not php_empty(lambda : self.info["audio"]["channels"])) or (not php_empty(lambda : self.info["audio"]["sample_rate"])):
             if (not (php_isset(lambda : self.info["audio"]["streams"]))):
-                for key_,value_ in self.info["audio"]:
+                for key_,value_ in self.info["audio"].items():
                     if key_ != "streams":
                         self.info["audio"]["streams"][0][key_] = value_
                     # end if

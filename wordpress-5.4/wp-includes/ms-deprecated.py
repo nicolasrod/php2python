@@ -242,7 +242,7 @@ def get_most_active_blogs(num_=10, display_=None, *_args_):
         reset(blogs_)
         most_active_ = Array()
         blog_list_ = Array()
-        for key_,details_ in blogs_:
+        for key_,details_ in blogs_.items():
             most_active_[details_["blog_id"]] = details_["postcount"]
             blog_list_[details_["blog_id"]] = details_
             pass
@@ -250,7 +250,7 @@ def get_most_active_blogs(num_=10, display_=None, *_args_):
         arsort(most_active_)
         reset(most_active_)
         t_ = Array()
-        for key_,details_ in most_active_:
+        for key_,details_ in most_active_.items():
             t_[key_] = blog_list_[key_]
         # end for
         most_active_ = None
@@ -259,7 +259,7 @@ def get_most_active_blogs(num_=10, display_=None, *_args_):
     if display_:
         if php_is_array(most_active_):
             reset(most_active_)
-            for key_,details_ in most_active_:
+            for key_,details_ in most_active_.items():
                 url_ = esc_url("http://" + details_["domain"] + details_["path"])
                 php_print("<li>" + details_["postcount"] + str(" <a href='") + str(url_) + str("'>") + str(url_) + str("</a></li>"))
             # end for

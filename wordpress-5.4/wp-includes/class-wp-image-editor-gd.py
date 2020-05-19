@@ -103,7 +103,7 @@ class WP_Image_Editor_GD(WP_Image_Editor):
         #// Set artificially high because GD uses uncompressed images in memory.
         wp_raise_memory_limit("image")
         self.image = php_no_error(lambda: imagecreatefromstring(php_file_get_contents(self.file_)))
-        if (not is_resource(self.image)):
+        if (not php_is_resource(self.image)):
             return php_new_class("WP_Error", lambda : WP_Error("invalid_image", __("File is not an image."), self.file_))
         # end if
         size_ = php_no_error(lambda: getimagesize(self.file_))
@@ -167,7 +167,7 @@ class WP_Image_Editor_GD(WP_Image_Editor):
             return True
         # end if
         resized_ = self._resize(max_w_, max_h_, crop_)
-        if is_resource(resized_):
+        if php_is_resource(resized_):
             imagedestroy(self.image)
             self.image = resized_
             return True
@@ -194,7 +194,7 @@ class WP_Image_Editor_GD(WP_Image_Editor):
         dst_x_, dst_y_, src_x_, src_y_, dst_w_, dst_h_, src_w_, src_h_ = dims_
         resized_ = wp_imagecreatetruecolor(dst_w_, dst_h_)
         imagecopyresampled(resized_, self.image, dst_x_, dst_y_, src_x_, src_y_, dst_w_, dst_h_, src_w_, src_h_)
-        if is_resource(resized_):
+        if php_is_resource(resized_):
             self.update_size(dst_w_, dst_h_)
             return resized_
         # end if
@@ -234,7 +234,7 @@ class WP_Image_Editor_GD(WP_Image_Editor):
         
         
         metadata_ = Array()
-        for size_,size_data_ in sizes_:
+        for size_,size_data_ in sizes_.items():
             meta_ = self.make_subsize(size_data_)
             if (not is_wp_error(meta_)):
                 metadata_[size_] = meta_
@@ -328,7 +328,7 @@ class WP_Image_Editor_GD(WP_Image_Editor):
             imageantialias(dst_, True)
         # end if
         imagecopyresampled(dst_, self.image, 0, 0, src_x_, src_y_, dst_w_, dst_h_, src_w_, src_h_)
-        if is_resource(dst_):
+        if php_is_resource(dst_):
             imagedestroy(self.image)
             self.image = dst_
             self.update_size()
@@ -351,7 +351,7 @@ class WP_Image_Editor_GD(WP_Image_Editor):
         if php_function_exists("imagerotate"):
             transparency_ = imagecolorallocatealpha(self.image, 255, 255, 255, 127)
             rotated_ = imagerotate(self.image, angle_, transparency_)
-            if is_resource(rotated_):
+            if php_is_resource(rotated_):
                 imagealphablending(rotated_, True)
                 imagesavealpha(rotated_, True)
                 imagedestroy(self.image)
@@ -377,7 +377,7 @@ class WP_Image_Editor_GD(WP_Image_Editor):
         w_ = self.size["width"]
         h_ = self.size["height"]
         dst_ = wp_imagecreatetruecolor(w_, h_)
-        if is_resource(dst_):
+        if php_is_resource(dst_):
             sx_ = w_ - 1 if vert_ else 0
             sy_ = h_ - 1 if horz_ else 0
             sw_ = -w_ if vert_ else w_

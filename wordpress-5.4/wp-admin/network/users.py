@@ -126,8 +126,8 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
                 wp_die(__("Sorry, you are not allowed to access this page."), 403)
             # end if
             if (not php_empty(lambda : PHP_POST["blog"])) and php_is_array(PHP_POST["blog"]):
-                for id_,users_ in PHP_POST["blog"]:
-                    for blogid_,user_id_ in users_:
+                for id_,users_ in PHP_POST["blog"].items():
+                    for blogid_,user_id_ in users_.items():
                         if (not current_user_can("delete_user", id_)):
                             continue
                         # end if

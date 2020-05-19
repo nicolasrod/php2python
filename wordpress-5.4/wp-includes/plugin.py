@@ -705,7 +705,7 @@ def plugin_basename(file_=None, *_args_):
     #// $wp_plugin_paths contains normalized paths.
     file_ = wp_normalize_path(file_)
     arsort(wp_plugin_paths_)
-    for dir_,realdir_ in wp_plugin_paths_:
+    for dir_,realdir_ in wp_plugin_paths_.items():
         if php_strpos(file_, realdir_) == 0:
             file_ = dir_ + php_substr(file_, php_strlen(realdir_))
         # end if

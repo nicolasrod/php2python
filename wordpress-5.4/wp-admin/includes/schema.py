@@ -188,7 +188,7 @@ def populate_options(options_=None, *_args_):
     existing_options_ = wpdb_.get_col(str("SELECT option_name FROM ") + str(wpdb_.options) + str(" WHERE option_name in ( ") + str(keys_) + str(" )"))
     #// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
     insert_ = ""
-    for option_,value_ in options_:
+    for option_,value_ in options_.items():
         if php_in_array(option_, existing_options_):
             continue
         # end if
@@ -677,7 +677,7 @@ def populate_network_meta(network_id_=None, meta_=None, *_args_):
     #//
     sitemeta_ = apply_filters("populate_network_meta", sitemeta_, network_id_)
     insert_ = ""
-    for meta_key_,meta_value_ in sitemeta_:
+    for meta_key_,meta_value_ in sitemeta_.items():
         if php_is_array(meta_value_):
             meta_value_ = serialize(meta_value_)
         # end if
@@ -723,7 +723,7 @@ def populate_site_meta(site_id_=None, meta_=None, *_args_):
     #//
     site_meta_ = apply_filters("populate_site_meta", meta_, site_id_)
     insert_ = ""
-    for meta_key_,meta_value_ in site_meta_:
+    for meta_key_,meta_value_ in site_meta_.items():
         if php_is_array(meta_value_):
             meta_value_ = serialize(meta_value_)
         # end if

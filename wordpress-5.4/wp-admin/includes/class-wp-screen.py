@@ -576,7 +576,7 @@ class WP_Screen():
                 priorities_[help_tab_["priority"]] = Array(help_tab_)
             # end if
         # end for
-        ksort(priorities_)
+        php_ksort(priorities_)
         sorted_ = Array()
         for list_ in priorities_:
             for tab_ in list_:
@@ -1087,7 +1087,7 @@ class WP_Screen():
         php_print(legend_)
         php_print("</legend>\n      ")
         special_ = Array("_title", "cb", "comment", "media", "name", "title", "username", "blogname")
-        for column_,title_ in columns_:
+        for column_,title_ in columns_.items():
             #// Can't hide these for they are special.
             if php_in_array(column_, special_):
                 continue

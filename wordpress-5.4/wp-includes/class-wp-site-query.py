@@ -335,7 +335,7 @@ class WP_Site_Query():
         elif (not php_empty(lambda : self.query_vars["orderby"])):
             ordersby_ = self.query_vars["orderby"] if php_is_array(self.query_vars["orderby"]) else php_preg_split("/[,\\s]/", self.query_vars["orderby"])
             orderby_array_ = Array()
-            for _key_,_value_ in ordersby_:
+            for _key_,_value_ in ordersby_.items():
                 if (not _value_):
                     continue
                 # end if

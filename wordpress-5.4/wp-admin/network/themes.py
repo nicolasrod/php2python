@@ -104,7 +104,7 @@ if action_:
                 php_exit(0)
             # end if
             theme_info_ = Array()
-            for key_,theme_ in themes_:
+            for key_,theme_ in themes_.items():
                 theme_info_[theme_] = wp_get_theme(theme_)
             # end for
             php_include_file(ABSPATH + "wp-admin/update.php", once=False)

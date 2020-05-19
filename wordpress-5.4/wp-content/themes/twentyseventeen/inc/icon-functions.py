@@ -121,7 +121,7 @@ def twentyseventeen_nav_menu_social_icons(item_output_=None, item_=None, depth_=
     social_icons_ = twentyseventeen_social_links_icons()
     #// Change SVG icon inside social links menu if there is supported URL.
     if "social" == args_.theme_location:
-        for attr_,value_ in social_icons_:
+        for attr_,value_ in social_icons_.items():
             if False != php_strpos(item_output_, attr_):
                 item_output_ = php_str_replace(args_.link_after, "</span>" + twentyseventeen_get_svg(Array({"icon": esc_attr(value_)})), item_output_)
             # end if

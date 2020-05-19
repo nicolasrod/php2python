@@ -655,7 +655,7 @@ def confirm_delete_users(users_=None, *_args_):
                 php_print("             <td><fieldset><p><legend>\n             ")
                 printf(__("What should be done with content owned by %s?"), "<em>" + delete_user_.user_login + "</em>")
                 php_print("             </legend></p>\n             ")
-                for key_,details_ in blogs_:
+                for key_,details_ in blogs_.items():
                     blog_users_ = get_users(Array({"blog_id": details_.userblog_id, "fields": Array("ID", "user_login")}))
                     if php_is_array(blog_users_) and (not php_empty(lambda : blog_users_)):
                         user_site_ = "<a href='" + esc_url(get_home_url(details_.userblog_id)) + str("'>") + str(details_.blogname) + str("</a>")
@@ -778,7 +778,7 @@ def network_edit_site_nav(args_=None, *_args_):
     #// Setup the links array.
     screen_links_ = Array()
     #// Loop through tabs.
-    for link_id_,link_ in parsed_args_["links"]:
+    for link_id_,link_ in parsed_args_["links"].items():
         #// Skip link if user can't access.
         if (not current_user_can(link_["cap"], parsed_args_["blog_id"])):
             continue

@@ -240,7 +240,7 @@ class SMTP():
             restore_error_handler()
         # end if
         #// Verify we connected properly
-        if (not is_resource(self.smtp_conn)):
+        if (not php_is_resource(self.smtp_conn)):
             self.seterror("Failed to connect to server", errno_, errstr_)
             self.edebug("SMTP ERROR: " + self.error["error"] + str(": ") + str(errstr_) + str(" (") + str(errno_) + str(")"), self.DEBUG_CLIENT)
             return False
@@ -425,7 +425,7 @@ class SMTP():
     def connected(self):
         
         
-        if is_resource(self.smtp_conn):
+        if php_is_resource(self.smtp_conn):
             sock_status_ = stream_get_meta_data(self.smtp_conn)
             if sock_status_["eof"]:
                 #// The socket is valid but we are not connected
@@ -451,7 +451,7 @@ class SMTP():
         self.seterror("")
         self.server_caps = None
         self.helo_rply = None
-        if is_resource(self.smtp_conn):
+        if php_is_resource(self.smtp_conn):
             #// close the connection and cleanup
             php_fclose(self.smtp_conn)
             self.smtp_conn = None
@@ -596,7 +596,7 @@ class SMTP():
         
         self.server_caps = Array()
         lines_ = php_explode("\n", self.helo_rply)
-        for n_,s_ in lines_:
+        for n_,s_ in lines_.items():
             #// First 4 chars contain response code followed by - or space
             s_ = php_trim(php_substr(s_, 4))
             if php_empty(lambda : s_):
@@ -892,7 +892,7 @@ class SMTP():
         
         
         #// If the connection is bad, give up straight away
-        if (not is_resource(self.smtp_conn)):
+        if (not php_is_resource(self.smtp_conn)):
             return ""
         # end if
         data_ = ""
@@ -903,7 +903,7 @@ class SMTP():
         # end if
         while True:
             
-            if not (is_resource(self.smtp_conn) and (not php_feof(self.smtp_conn))):
+            if not (php_is_resource(self.smtp_conn) and (not php_feof(self.smtp_conn))):
                 break
             # end if
             str_ = php_no_error(lambda: php_fgets(self.smtp_conn, 515))

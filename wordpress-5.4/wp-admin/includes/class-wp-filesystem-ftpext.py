@@ -253,7 +253,7 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
         #// chmod any sub-objects if recursive.
         if recursive_ and self.is_dir(file_):
             filelist_ = self.dirlist(file_)
-            for filename_,filemeta_ in filelist_:
+            for filename_,filemeta_ in filelist_.items():
                 self.chmod(file_ + "/" + filename_, mode_, recursive_)
             # end for
         # end if
@@ -715,7 +715,7 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
             return False
         # end if
         dirlist_ = Array()
-        for k_,v_ in list_:
+        for k_,v_ in list_.items():
             entry_ = self.parselisting(v_)
             if php_empty(lambda : entry_):
                 continue

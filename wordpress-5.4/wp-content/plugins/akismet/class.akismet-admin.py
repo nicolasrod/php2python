@@ -403,7 +403,7 @@ class Akismet_Admin():
         #// add a History item to the hover links, just after Edit
         if akismet_result_:
             b_ = Array()
-            for k_,item_ in a_:
+            for k_,item_ in a_.items():
                 b_[k_] = item_
                 if k_ == "edit" or k_ == "unspam":
                     b_["history"] = "<a href=\"comment.php?action=editcomment&amp;c=" + comment_.comment_ID + "#akismet-status\" title=\"" + esc_attr__("View comment history", "akismet") + "\"> " + esc_html__("History", "akismet") + "</a>"
@@ -939,7 +939,7 @@ class Akismet_Admin():
             Akismet.view("notice", Array({"type": "servers-be-down"}))
         else:
             if (not php_empty(lambda : self.notices)):
-                for index_,type_ in self.notices:
+                for index_,type_ in self.notices.items():
                     if php_is_object(type_):
                         notice_header_ = notice_text_
                         if property_exists(type_, "notice_header"):

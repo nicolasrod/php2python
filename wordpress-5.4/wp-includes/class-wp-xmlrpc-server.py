@@ -3353,7 +3353,7 @@ class wp_xmlrpc_server(IXR_Server):
             return php_new_class("IXR_Error", lambda : IXR_Error(403, __("Sorry, you are not allowed to update options.")))
         # end if
         option_names_ = Array()
-        for o_name_,o_value_ in options_:
+        for o_name_,o_value_ in options_.items():
             option_names_[-1] = o_name_
             if (not php_array_key_exists(o_name_, self.blog_options)):
                 continue
@@ -4959,7 +4959,7 @@ class wp_xmlrpc_server(IXR_Server):
                 sticky_ = True
             # end if
             enclosure_ = Array()
-            for key_,val_ in get_post_custom(post_ID_):
+            for key_,val_ in get_post_custom(post_ID_).items():
                 if "enclosure" == key_:
                     for enc_ in val_:
                         encdata_ = php_explode("\n", enc_)

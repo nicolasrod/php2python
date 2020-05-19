@@ -186,7 +186,7 @@ class WP_MS_Sites_List_Table(WP_List_Table):
         view_links_ = Array()
         requested_status_ = wp_unslash(php_trim(PHP_REQUEST["status"])) if (php_isset(lambda : PHP_REQUEST["status"])) else ""
         url_ = "sites.php"
-        for status_,label_count_ in statuses_:
+        for status_,label_count_ in statuses_.items():
             current_link_attributes_ = " class=\"current\" aria-current=\"page\"" if requested_status_ == status_ or "" == requested_status_ and "all" == status_ else ""
             if php_int(counts_[status_]) > 0:
                 label_ = php_sprintf(translate_nooped_plural(label_count_, counts_[status_]), number_format_i18n(counts_[status_]))
@@ -475,7 +475,7 @@ class WP_MS_Sites_List_Table(WP_List_Table):
             blog_ = blog_.to_array()
             class_ = ""
             reset(self.status_list)
-            for status_,col_ in self.status_list:
+            for status_,col_ in self.status_list.items():
                 if 1 == blog_[status_]:
                     class_ = str(" class='") + str(col_[0]) + str("'")
                 # end if
@@ -503,7 +503,7 @@ class WP_MS_Sites_List_Table(WP_List_Table):
         # end if
         reset(self.status_list)
         site_status_ = wp_unslash(php_trim(PHP_REQUEST["status"])) if (php_isset(lambda : PHP_REQUEST["status"])) else ""
-        for status_,col_ in self.status_list:
+        for status_,col_ in self.status_list.items():
             if 1 == php_intval(_site_.status_) and site_status_ != status_:
                 site_states_[col_[0]] = col_[1]
             # end if

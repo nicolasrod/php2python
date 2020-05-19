@@ -257,7 +257,7 @@ class Requests_Transport_fsockopen(Requests_Transport):
         
         responses_ = Array()
         class_ = get_class(self)
-        for id_,request_ in requests_:
+        for id_,request_ in requests_.items():
             try: 
                 handler_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
                 responses_[id_] = handler_.request(request_["url"], request_["headers"], request_["data"], request_["options"])

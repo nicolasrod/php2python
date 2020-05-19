@@ -381,7 +381,7 @@ class WP_Rewrite():
         posts_ = array_reverse(posts_, True)
         page_uris_ = Array()
         page_attachment_uris_ = Array()
-        for id_,post_ in posts_:
+        for id_,post_ in posts_.items():
             #// URL => page name.
             uri_ = get_page_uri(id_)
             attachments_ = wpdb_.get_results(wpdb_.prepare(str("SELECT ID, post_name, post_parent FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'attachment' AND post_parent = %d"), id_))
@@ -941,7 +941,7 @@ class WP_Rewrite():
             # end if
             #// Do endpoints.
             if endpoints_:
-                for regex_,ep_ in ep_query_append_:
+                for regex_,ep_ in ep_query_append_.items():
                     #// Add the endpoints on if the mask fits.
                     if ep_[0] & ep_mask_ or ep_[0] & ep_mask_specific_:
                         rewrite_[match_ + regex_] = index_ + "?" + query_ + ep_[1] + self.preg_index(num_toks_ + 2)
@@ -1022,7 +1022,7 @@ class WP_Rewrite():
                     subembedquery_ = subquery_ + "&embed=true"
                     #// Do endpoints for attachments.
                     if (not php_empty(lambda : endpoints_)):
-                        for regex_,ep_ in ep_query_append_:
+                        for regex_,ep_ in ep_query_append_.items():
                             if ep_[0] & EP_ATTACHMENT:
                                 rewrite_[sub1_ + regex_] = subquery_ + ep_[1] + self.preg_index(3)
                                 rewrite_[sub2_ + regex_] = subquery_ + ep_[1] + self.preg_index(3)
@@ -1222,7 +1222,7 @@ class WP_Rewrite():
         #//
         page_rewrite_ = apply_filters("page_rewrite_rules", page_rewrite_)
         #// Extra permastructs.
-        for permastructname_,struct_ in self.extra_permastructs:
+        for permastructname_,struct_ in self.extra_permastructs.items():
             if php_is_array(struct_):
                 if php_count(struct_) == 2:
                     rules_ = self.generate_rewrite_rules(struct_[0], struct_[1])
@@ -1343,7 +1343,7 @@ class WP_Rewrite():
         #// Prevent -f checks on index.php.
         rules_ += "RewriteRule ^index\\.php$ - [L]\n"
         #// Add in the rules that don't redirect to WP's index.php (and thus shouldn't be handled by WP at all).
-        for match_,query_ in self.non_wp_rules:
+        for match_,query_ in self.non_wp_rules.items():
             #// Apache 1.3 does not support the reluctant (non-greedy) modifier.
             match_ = php_str_replace(".+?", ".+", match_)
             rules_ += "RewriteRule ^" + match_ + " " + home_root_ + query_ + " [QSA,L]\n"
@@ -1353,7 +1353,7 @@ class WP_Rewrite():
             rewrite_ = self.rewrite_rules()
             num_rules_ = php_count(rewrite_)
             rules_ += "RewriteCond %{REQUEST_FILENAME} -f [OR]\n" + "RewriteCond %{REQUEST_FILENAME} -d\n" + str("RewriteRule ^.*$ - [S=") + str(num_rules_) + str("]\n")
-            for match_,query_ in rewrite_:
+            for match_,query_ in rewrite_.items():
                 #// Apache 1.3 does not support the reluctant (non-greedy) modifier.
                 match_ = php_str_replace(".+?", ".+", match_)
                 if php_strpos(query_, self.index) != False:

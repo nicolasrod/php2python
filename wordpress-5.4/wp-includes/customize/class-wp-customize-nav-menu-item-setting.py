@@ -430,7 +430,7 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
         if should_update_:
             for item_ in items_:
                 if item_.db_id == self.post_id:
-                    for key_,value_ in get_object_vars(self.value_as_wp_post_nav_menu_item()):
+                    for key_,value_ in get_object_vars(self.value_as_wp_post_nav_menu_item()).items():
                         item_.key_ = value_
                     # end for
                     mutated_ = True
@@ -467,7 +467,7 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
         if ARRAY_A == args_["output"]:
             items_ = wp_list_sort(items_, Array({args_["output_key"]: "ASC"}))
             i_ = 1
-            for k_,item_ in items_:
+            for k_,item_ in items_.items():
                 items_[k_].args_["output_key"] = i_
                 i_ += 1
                 i_ += 1

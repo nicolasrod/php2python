@@ -736,7 +736,7 @@ if (not php_class_exists("Snoopy", False)):
                 reset(self.cookies)
                 if php_count(self.cookies) > 0:
                     cookie_headers_ += "Cookie: "
-                    for cookieKey_,cookieVal_ in self.cookies:
+                    for cookieKey_,cookieVal_ in self.cookies.items():
                         cookie_headers_ += cookieKey_ + "=" + urlencode(cookieVal_) + "; "
                     # end for
                     headers_ += php_substr(cookie_headers_, 0, -2) + "\r\n"
@@ -899,7 +899,7 @@ if (not php_class_exists("Snoopy", False)):
                 reset(self.cookies)
                 if php_count(self.cookies) > 0:
                     cookie_str_ = "Cookie: "
-                    for cookieKey_,cookieVal_ in self.cookies:
+                    for cookieKey_,cookieVal_ in self.cookies.items():
                         cookie_str_ += cookieKey_ + "=" + urlencode(cookieVal_) + "; "
                     # end for
                     headers_[-1] = php_substr(cookie_str_, 0, -2)

@@ -1607,7 +1607,7 @@ class ParagonIE_Sodium_Core_Curve25519(ParagonIE_Sodium_Core_Curve25519_H):
         if base_ == None:
             base_ = Array()
             #// @var int $i
-            for i_,bas_ in self.base:
+            for i_,bas_ in self.base.items():
                 j_ = 0
                 while j_ < 8:
                     

@@ -350,7 +350,7 @@ class WP_Http():
         
         
         cookie_jar_ = php_new_class("Requests_Cookie_Jar", lambda : Requests_Cookie_Jar())
-        for name_,value_ in cookies_:
+        for name_,value_ in cookies_.items():
             if type(value_).__name__ == "WP_Http_Cookie":
                 cookie_jar_[value_.name] = php_new_class("Requests_Cookie", lambda : Requests_Cookie(value_.name, value_.value, value_.get_attributes(), Array({"host-only": value_.host_only})))
             elif php_is_scalar(value_):
@@ -658,7 +658,7 @@ class WP_Http():
         #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         if (not php_empty(lambda : r_["cookies"])):
             #// Upgrade any name => value cookie pairs to WP_HTTP_Cookie instances.
-            for name_,value_ in r_["cookies"]:
+            for name_,value_ in r_["cookies"].items():
                 if (not php_is_object(value_)):
                     r_["cookies"][name_] = php_new_class("WP_Http_Cookie", lambda : WP_Http_Cookie(Array({"name": name_, "value": value_})))
                 # end if

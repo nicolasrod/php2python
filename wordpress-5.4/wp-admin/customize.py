@@ -199,7 +199,7 @@ previewable_devices_ = wp_customize_.get_previewable_devices()
 php_print("         ")
 if (not php_empty(lambda : previewable_devices_)):
     php_print("         <div class=\"devices-wrapper\">\n               <div class=\"devices\">\n                   ")
-    for device_,settings_ in previewable_devices_:
+    for device_,settings_ in previewable_devices_.items():
         php_print("                     ")
         if php_empty(lambda : settings_["label"]):
             continue

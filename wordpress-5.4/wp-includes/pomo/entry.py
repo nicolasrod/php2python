@@ -54,7 +54,7 @@ if (not php_class_exists("Translation_Entry", False)):
                 return
             # end if
             #// Get member variable values from args hash.
-            for varname_,value_ in args_:
+            for varname_,value_ in args_.items():
                 self.varname_ = value_
             # end for
             if (php_isset(lambda : args_["plural"])) and args_["plural"]:

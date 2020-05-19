@@ -2891,7 +2891,7 @@ class PHPMailer():
         
         
         RecipientsQueue_ = self.RecipientsQueue
-        for address_,params_ in RecipientsQueue_:
+        for address_,params_ in RecipientsQueue_.items():
             if params_[0] == kind_:
                 self.RecipientsQueue[address_] = None
             # end if
@@ -3151,7 +3151,7 @@ class PHPMailer():
                 #// Ensure $basedir has a trailing
                 basedir_ += "/"
             # end if
-            for imgindex_,url_ in images_[2]:
+            for imgindex_,url_ in images_[2].items():
                 #// Convert data URIs into embedded images
                 if php_preg_match("#^data:(image[^;,]*)(;base64)?,#", url_, match_):
                     data_ = php_substr(url_, php_strpos(url_, ","))
@@ -3469,7 +3469,7 @@ class PHPMailer():
         
         signHeader_ = php_preg_replace("/\\r\\n\\s+/", " ", signHeader_)
         lines_ = php_explode("\r\n", signHeader_)
-        for key_,line_ in lines_:
+        for key_,line_ in lines_.items():
             heading_, value_ = php_explode(":", line_, 2)
             heading_ = php_strtolower(heading_)
             value_ = php_preg_replace("/\\s{2,}/", " ", value_)

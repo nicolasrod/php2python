@@ -215,7 +215,7 @@ class WP_Widget_Media(WP_Widget):
         
         
         schema_ = self.get_instance_schema()
-        for field_,field_schema_ in schema_:
+        for field_,field_schema_ in schema_.items():
             if (not php_array_key_exists(field_, new_instance_)):
                 continue
             # end if
@@ -276,7 +276,7 @@ class WP_Widget_Media(WP_Widget):
         
         instance_schema_ = self.get_instance_schema()
         instance_ = wp_array_slice_assoc(wp_parse_args(instance_, wp_list_pluck(instance_schema_, "default")), php_array_keys(instance_schema_))
-        for name_,value_ in instance_:
+        for name_,value_ in instance_.items():
             php_print("         <input\n                type=\"hidden\"\n               data-property=\"")
             php_print(esc_attr(name_))
             php_print("\"\n             class=\"media-widget-instance-property\"\n              name=\"")

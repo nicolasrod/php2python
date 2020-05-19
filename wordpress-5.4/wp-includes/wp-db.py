@@ -68,7 +68,7 @@ class wpdb():
     #// @since 2.5.0
     #// @var bool
     #//
-    suppress_errors = False
+    suppress_errors_ = False
     #// 
     #// The last error during query.
     #// 
@@ -238,7 +238,7 @@ class wpdb():
     #// @see wpdb::tables()
     #// @var array
     #//
-    tables = Array("posts", "comments", "links", "options", "postmeta", "terms", "term_taxonomy", "term_relationships", "termmeta", "commentmeta")
+    tables_ = Array("posts", "comments", "links", "options", "postmeta", "terms", "term_taxonomy", "term_relationships", "termmeta", "commentmeta")
     #// 
     #// List of deprecated WordPress tables
     #// 
@@ -770,7 +770,7 @@ class wpdb():
         #// @param array $incompatible_modes An array of incompatible modes.
         #//
         incompatible_modes_ = apply_filters("incompatible_sql_modes", self.incompatible_modes)
-        for i_,mode_ in modes_:
+        for i_,mode_ in modes_.items():
             if php_in_array(mode_, incompatible_modes_):
                 modes_[i_] = None
             # end if
@@ -805,17 +805,17 @@ class wpdb():
         # end if
         self.base_prefix = prefix_
         if set_table_names_:
-            for table_,prefixed_table_ in self.tables("global"):
+            for table_,prefixed_table_ in self.tables("global").items():
                 self.table_ = prefixed_table_
             # end for
             if is_multisite() and php_empty(lambda : self.blogid):
                 return old_prefix_
             # end if
             self.prefix = self.get_blog_prefix()
-            for table_,prefixed_table_ in self.tables("blog"):
+            for table_,prefixed_table_ in self.tables("blog").items():
                 self.table_ = prefixed_table_
             # end for
-            for table_,prefixed_table_ in self.tables("old"):
+            for table_,prefixed_table_ in self.tables("old").items():
                 self.table_ = prefixed_table_
             # end for
         # end if
@@ -839,10 +839,10 @@ class wpdb():
         old_blog_id_ = self.blogid
         self.blogid = blog_id_
         self.prefix = self.get_blog_prefix()
-        for table_,prefixed_table_ in self.tables("blog"):
+        for table_,prefixed_table_ in self.tables("blog").items():
             self.table_ = prefixed_table_
         # end for
-        for table_,prefixed_table_ in self.tables("old"):
+        for table_,prefixed_table_ in self.tables("old").items():
             self.table_ = prefixed_table_
         # end for
         return old_blog_id_
@@ -907,14 +907,14 @@ class wpdb():
         
         for case in Switch(scope_):
             if case("all"):
-                tables_ = php_array_merge(self.global_tables, self.tables)
+                tables_ = php_array_merge(self.global_tables, self.tables_)
                 if is_multisite():
                     tables_ = php_array_merge(tables_, self.ms_global_tables)
                 # end if
                 break
             # end if
             if case("blog"):
-                tables_ = self.tables
+                tables_ = self.tables_
                 break
             # end if
             if case("global"):
@@ -943,7 +943,7 @@ class wpdb():
             blog_prefix_ = self.get_blog_prefix(blog_id_)
             base_prefix_ = self.base_prefix
             global_tables_ = php_array_merge(self.global_tables, self.ms_global_tables)
-            for k_,table_ in tables_:
+            for k_,table_ in tables_.items():
                 if php_in_array(table_, global_tables_):
                     tables_[table_] = base_prefix_ + table_
                 else:
@@ -1065,7 +1065,7 @@ class wpdb():
         
         
         if php_is_array(data_):
-            for k_,v_ in data_:
+            for k_,v_ in data_.items():
                 if php_is_array(v_):
                     data_[k_] = self._escape(v_)
                 else:
@@ -1097,7 +1097,7 @@ class wpdb():
             _deprecated_function(__METHOD__, "3.6.0", "wpdb::prepare() or esc_sql()")
         # end if
         if php_is_array(data_):
-            for k_,v_ in data_:
+            for k_,v_ in data_.items():
                 if php_is_array(v_):
                     data_[k_] = self.escape(v_, "recursive")
                 else:
@@ -1288,7 +1288,7 @@ class wpdb():
             # end if
         # end if
         EZSQL_ERROR_[-1] = Array({"query": self.last_query, "error_str": str_})
-        if self.suppress_errors:
+        if self.suppress_errors_:
             return False
         # end if
         wp_load_translations_early()
@@ -1376,8 +1376,8 @@ class wpdb():
             suppress_ = True
         # end if
         
-        errors_ = self.suppress_errors
-        self.suppress_errors = php_bool(suppress_)
+        errors_ = self.suppress_errors_
+        self.suppress_errors_ = php_bool(suppress_)
         return errors_
     # end def suppress_errors
     #// 
@@ -1409,7 +1409,7 @@ class wpdb():
                 # end if
                 mysqli_next_result(self.dbh)
             # end while
-        elif is_resource(self.result):
+        elif php_is_resource(self.result):
             mysql_free_result(self.result)
         # end if
     # end def flush
@@ -1702,7 +1702,7 @@ class wpdb():
                     mysql_errno_ = 2006
                 # end if
             else:
-                if is_resource(self.dbh):
+                if php_is_resource(self.dbh):
                     mysql_errno_ = mysql_errno(self.dbh)
                 else:
                     mysql_errno_ = 2006
@@ -1725,7 +1725,7 @@ class wpdb():
                 self.last_error = __("Unable to retrieve the error message from MySQL")
             # end if
         else:
-            if is_resource(self.dbh):
+            if php_is_resource(self.dbh):
                 self.last_error = mysql_error(self.dbh)
             else:
                 self.last_error = __("Unable to retrieve the error message from MySQL")
@@ -1768,7 +1768,7 @@ class wpdb():
                     self.last_result[num_rows_] = row_
                     num_rows_ += 1
                 # end while
-            elif is_resource(self.result):
+            elif php_is_resource(self.result):
                 while True:
                     row_ = mysql_fetch_object(self.result)
                     if not (row_):
@@ -2058,7 +2058,7 @@ class wpdb():
         fields_ = Array()
         conditions_ = Array()
         values_ = Array()
-        for field_,value_ in data_:
+        for field_,value_ in data_.items():
             if php_is_null(value_["value"]):
                 fields_[-1] = str("`") + str(field_) + str("` = NULL")
                 continue
@@ -2066,7 +2066,7 @@ class wpdb():
             fields_[-1] = str("`") + str(field_) + str("` = ") + value_["format"]
             values_[-1] = value_["value"]
         # end for
-        for field_,value_ in where_:
+        for field_,value_ in where_.items():
             if php_is_null(value_["value"]):
                 conditions_[-1] = str("`") + str(field_) + str("` IS NULL")
                 continue
@@ -2116,7 +2116,7 @@ class wpdb():
         # end if
         conditions_ = Array()
         values_ = Array()
-        for field_,value_ in where_:
+        for field_,value_ in where_.items():
             if php_is_null(value_["value"]):
                 conditions_[-1] = str("`") + str(field_) + str("` IS NULL")
                 continue
@@ -2182,7 +2182,7 @@ class wpdb():
         
         formats_ = format_
         original_formats_ = formats_
-        for field_,value_ in data_:
+        for field_,value_ in data_.items():
             value_ = Array({"value": value_, "format": "%s"})
             if (not php_empty(lambda : format_)):
                 value_["format"] = php_array_shift(formats_)
@@ -2209,7 +2209,7 @@ class wpdb():
     def process_field_charsets(self, data_=None, table_=None):
         
         
-        for field_,value_ in data_:
+        for field_,value_ in data_.items():
             if "%d" == value_["format"] or "%f" == value_["format"]:
                 #// 
                 #// We can skip this field if we know it isn't a string.
@@ -2239,7 +2239,7 @@ class wpdb():
     def process_field_lengths(self, data_=None, table_=None):
         
         
-        for field_,value_ in data_:
+        for field_,value_ in data_.items():
             if "%d" == value_["format"] or "%f" == value_["format"]:
                 #// 
                 #// We can skip this field if we know it isn't a string.
@@ -2826,7 +2826,7 @@ class wpdb():
         #// Remove by reference.
         if db_check_string_:
             queries_ = Array()
-            for col_,value_ in data_:
+            for col_,value_ in data_.items():
                 if (not php_empty(lambda : value_["db"])):
                     #// We're going to need to truncate by characters or bytes, depending on the length value we have.
                     if (php_isset(lambda : value_["length"]["type"])) and "byte" == value_["length"]["type"]:
@@ -2855,7 +2855,7 @@ class wpdb():
                 # end if
             # end for
             sql_ = Array()
-            for column_,query_ in queries_:
+            for column_,query_ in queries_.items():
                 if (not query_):
                     continue
                 # end if
@@ -3088,7 +3088,7 @@ class wpdb():
                     error_ = mysqli_connect_error()
                 # end if
             else:
-                if is_resource(self.dbh):
+                if php_is_resource(self.dbh):
                     error_ = mysql_error(self.dbh)
                 else:
                     error_ = mysql_error()

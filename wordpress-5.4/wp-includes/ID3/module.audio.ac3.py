@@ -512,7 +512,7 @@ class getid3_ac3(getid3_handler):
             thisfile_ac3_["service_type"] = self.servicetypelookup(thisfile_ac3_raw_bsi_["bsmod"], thisfile_ac3_raw_bsi_["acmod"])
         # end if
         ac3_coding_mode_ = self.audiocodingmodelookup(thisfile_ac3_raw_bsi_["acmod"])
-        for key_,value_ in ac3_coding_mode_:
+        for key_,value_ in ac3_coding_mode_.items():
             thisfile_ac3_[key_] = value_
         # end for
         for case in Switch(thisfile_ac3_raw_bsi_["acmod"]):

@@ -545,7 +545,7 @@ def _rotate_image_resource(img_=None, angle_=None, *_args_):
     _deprecated_function(__FUNCTION__, "3.5.0", "WP_Image_Editor::rotate()")
     if php_function_exists("imagerotate"):
         rotated_ = imagerotate(img_, angle_, 0)
-        if is_resource(rotated_):
+        if php_is_resource(rotated_):
             imagedestroy(img_)
             img_ = rotated_
         # end if
@@ -572,7 +572,7 @@ def _flip_image_resource(img_=None, horz_=None, vert_=None, *_args_):
     w_ = imagesx(img_)
     h_ = imagesy(img_)
     dst_ = wp_imagecreatetruecolor(w_, h_)
-    if is_resource(dst_):
+    if php_is_resource(dst_):
         sx_ = w_ - 1 if vert_ else 0
         sy_ = h_ - 1 if horz_ else 0
         sw_ = -w_ if vert_ else w_
@@ -601,7 +601,7 @@ def _crop_image_resource(img_=None, x_=None, y_=None, w_=None, h_=None, *_args_)
     
     
     dst_ = wp_imagecreatetruecolor(w_, h_)
-    if is_resource(dst_):
+    if php_is_resource(dst_):
         if imagecopy(dst_, img_, 0, 0, x_, y_, w_, h_):
             imagedestroy(img_)
             img_ = dst_
@@ -622,7 +622,7 @@ i_ += 1
 def image_edit_apply_changes(image_=None, changes_=None, *_args_):
     
     
-    if is_resource(image_):
+    if php_is_resource(image_):
         #// translators: 1: $image, 2: WP_Image_Editor
         _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("%1$s needs to be a %2$s object."), "$image", "WP_Image_Editor"))
     # end if
@@ -630,7 +630,7 @@ def image_edit_apply_changes(image_=None, changes_=None, *_args_):
         return image_
     # end if
     #// Expand change operations.
-    for key_,obj_ in changes_:
+    for key_,obj_ in changes_.items():
         if (php_isset(lambda : obj_.r)):
             obj_.type = "rotate"
             obj_.angle = obj_.r
@@ -689,7 +689,7 @@ def image_edit_apply_changes(image_=None, changes_=None, *_args_):
         #// @param array           $changes Array of change operations.
         #//
         image_ = apply_filters("wp_image_editor_before_change", image_, changes_)
-    elif is_resource(image_):
+    elif php_is_resource(image_):
         #// 
         #// Filters the GD image resource before applying changes to the image.
         #// 

@@ -88,7 +88,7 @@ def the_media_upload_tabs(*_args_):
             #// This filter is documented in wp-admin/media-upload.php
             current_ = apply_filters("media_upload_default_tab", default_)
         # end if
-        for callback_,text_ in tabs_:
+        for callback_,text_ in tabs_.items():
             class_ = ""
             if current_ == callback_:
                 class_ = " class='current'"
@@ -626,7 +626,7 @@ def media_upload_form_handler(*_args_):
         send_id_ = php_int(reset(keys_))
     # end if
     if (not php_empty(lambda : PHP_POST["attachments"])):
-        for attachment_id_,attachment_ in PHP_POST["attachments"]:
+        for attachment_id_,attachment_ in PHP_POST["attachments"].items():
             post_ = get_post(attachment_id_, ARRAY_A)
             _post_ = post_
             if (not current_user_can("edit_post", attachment_id_)):
@@ -947,7 +947,7 @@ def image_align_input_fields(post_=None, checked_="", *_args_):
         checked_ = "none"
     # end if
     out_ = Array()
-    for name_,label_ in alignments_:
+    for name_,label_ in alignments_.items():
         name_ = esc_attr(name_)
         out_[-1] = str("<input type='radio' name='attachments[") + str(post_.ID) + str("][align]' id='image-align-") + str(name_) + str("-") + str(post_.ID) + str("' value='") + str(name_) + str("'") + " checked='checked'" if checked_ == name_ else "" + str(" /><label for='image-align-") + str(name_) + str("-") + str(post_.ID) + str("' class='align image-align-") + str(name_) + str("-label'>") + str(label_) + str("</label>")
     # end for
@@ -978,7 +978,7 @@ def image_size_input_fields(post_=None, check_="", *_args_):
         check_ = get_user_setting("imgsize", "medium")
     # end if
     out_ = Array()
-    for size_,label_ in size_names_:
+    for size_,label_ in size_names_.items():
         downsize_ = image_downsize(post_.ID, size_)
         checked_ = ""
         #// Is this size selectable?
@@ -1255,7 +1255,7 @@ def get_media_items(post_id_=None, errors_=None, *_args_):
         # end if
     # end if
     output_ = ""
-    for id_,attachment_ in attachments_:
+    for id_,attachment_ in attachments_.items():
         if "trash" == attachment_.post_status:
             continue
         # end if
@@ -1328,7 +1328,7 @@ def get_media_item(attachment_id_=None, args_=None, *_args_):
     display_title_ = "<div class='filename new'><span class='title'>" + wp_html_excerpt(display_title_, 60, "&hellip;") + "</span></div>" if parsed_args_["show_title"] else ""
     gallery_ = (php_isset(lambda : PHP_REQUEST["tab"])) and "gallery" == PHP_REQUEST["tab"] or (php_isset(lambda : redir_tab_)) and "gallery" == redir_tab_
     order_ = ""
-    for key_,val_ in form_fields_:
+    for key_,val_ in form_fields_.items():
         if "menu_order" == key_:
             if gallery_:
                 order_ = str("<div class='menu_order'> <input class='menu_order_input' type='text' id='attachments[") + str(attachment_id_) + str("][menu_order]' name='attachments[") + str(attachment_id_) + str("][menu_order]' value='") + esc_attr(val_["value"]) + "' /></div>"
@@ -1399,7 +1399,7 @@ def get_media_item(attachment_id_=None, args_=None, *_args_):
         form_fields_["buttons"] = Array({"tr": "        <tr class='submit'><td></td><td class='savesend'>" + parsed_args_["send"] + str(" ") + str(thumbnail_) + str(" ") + str(delete_) + str("</td></tr>\n")})
     # end if
     hidden_fields_ = Array()
-    for id_,field_ in form_fields_:
+    for id_,field_ in form_fields_.items():
         if "_" == id_[0]:
             continue
         # end if
@@ -1441,13 +1441,13 @@ def get_media_item(attachment_id_=None, args_=None, *_args_):
             # end for
         # end if
         if (not php_empty(lambda : field_["extra_rows"])):
-            for class_,rows_ in field_["extra_rows"]:
+            for class_,rows_ in field_["extra_rows"].items():
                 for html_ in rows_:
                     extra_rows_[class_][-1] = html_
                 # end for
             # end for
         # end if
-        for class_,rows_ in extra_rows_:
+        for class_,rows_ in extra_rows_.items():
             for html_ in rows_:
                 item_ += str("      <tr><td></td><td class='") + str(class_) + str("'>") + str(html_) + str("</td></tr>\n")
             # end for
@@ -1458,7 +1458,7 @@ def get_media_item(attachment_id_=None, args_=None, *_args_):
     # end if
     item_ += "  </tbody>\n"
     item_ += "  </table>\n"
-    for name_,value_ in hidden_fields_:
+    for name_,value_ in hidden_fields_.items():
         item_ += str("  <input type='hidden' name='") + str(name_) + str("' id='") + str(name_) + str("' value='") + esc_attr(value_) + "' />\n"
     # end for
     if post_.post_parent < 1 and (php_isset(lambda : PHP_REQUEST["post_id"])):
@@ -1535,7 +1535,7 @@ def get_compat_media_markup(attachment_id_=None, args_=None, *_args_):
     defaults_ = Array({"input": "text", "required": False, "value": "", "extra_rows": Array(), "show_in_edit": True, "show_in_modal": True})
     hidden_fields_ = Array()
     item_ = ""
-    for id_,field_ in form_fields_:
+    for id_,field_ in form_fields_.items():
         if "_" == id_[0]:
             continue
         # end if
@@ -1583,13 +1583,13 @@ def get_compat_media_markup(attachment_id_=None, args_=None, *_args_):
             # end for
         # end if
         if (not php_empty(lambda : field_["extra_rows"])):
-            for class_,rows_ in field_["extra_rows"]:
+            for class_,rows_ in field_["extra_rows"].items():
                 for html_ in rows_:
                     extra_rows_[class_][-1] = html_
                 # end for
             # end for
         # end if
-        for class_,rows_ in extra_rows_:
+        for class_,rows_ in extra_rows_.items():
             for html_ in rows_:
                 item_ += str("      <tr><td></td><td class='") + str(class_) + str("'>") + str(html_) + str("</td></tr>\n")
             # end for
@@ -1601,7 +1601,7 @@ def get_compat_media_markup(attachment_id_=None, args_=None, *_args_):
     if item_:
         item_ = "<p class=\"media-types media-types-required-info\">" + php_sprintf(__("Required fields are marked %s"), "<span class=\"required\">*</span>") + "</p>" + "<table class=\"compat-attachment-fields\">" + item_ + "</table>"
     # end if
-    for hidden_field_,value_ in hidden_fields_:
+    for hidden_field_,value_ in hidden_fields_.items():
         item_ += "<input type=\"hidden\" name=\"" + esc_attr(hidden_field_) + "\" value=\"" + esc_attr(value_) + "\" />" + "\n"
     # end for
     if item_:
@@ -2271,7 +2271,7 @@ def media_upload_library_form(errors_=None, *_args_):
     type_links_ = Array()
     _num_posts_ = wp_count_attachments()
     matches_ = wp_match_mime_types(php_array_keys(post_mime_types_), php_array_keys(_num_posts_))
-    for _type_,reals_ in matches_:
+    for _type_,reals_ in matches_.items():
         for real_ in reals_:
             if (php_isset(lambda : num_posts_[_type_])):
                 num_posts_[_type_] += _num_posts_[real_]
@@ -2291,7 +2291,7 @@ def media_upload_library_form(errors_=None, *_args_):
         class_ = ""
     # end if
     type_links_[-1] = "<li><a href=\"" + esc_url(add_query_arg(Array({"post_mime_type": "all", "paged": False, "m": False}))) + "\"" + class_ + ">" + __("All Types") + "</a>"
-    for mime_type_,label_ in post_mime_types_:
+    for mime_type_,label_ in post_mime_types_.items():
         class_ = ""
         if (not wp_match_mime_types(mime_type_, avail_post_mime_types_)):
             continue
@@ -2750,7 +2750,7 @@ def attachment_submitbox_metadata(*_args_):
         #// @param WP_Post $post   WP_Post object for the current attachment.
         #//
         fields_ = apply_filters("media_submitbox_misc_sections", fields_, post_)
-        for key_,label_ in fields_:
+        for key_,label_ in fields_.items():
             if php_empty(lambda : meta_[key_]):
                 continue
             # end if
@@ -2788,7 +2788,7 @@ def attachment_submitbox_metadata(*_args_):
         #// @param WP_Post $post   WP_Post object for the current attachment.
         #//
         audio_fields_ = apply_filters("audio_submitbox_misc_sections", fields_, post_)
-        for key_,label_ in audio_fields_:
+        for key_,label_ in audio_fields_.items():
             if php_empty(lambda : meta_["audio"][key_]):
                 continue
             # end if
@@ -2831,7 +2831,7 @@ def wp_add_id3_tag_data(metadata_=None, data_=None, *_args_):
     
     for version_ in Array("id3v2", "id3v1"):
         if (not php_empty(lambda : data_[version_]["comments"])):
-            for key_,list_ in data_[version_]["comments"]:
+            for key_,list_ in data_[version_]["comments"].items():
                 if "length" != key_ and (not php_empty(lambda : list_)):
                     metadata_[key_] = wp_kses_post(reset(list_))
                     #// Fix bug in byte stream analysis.

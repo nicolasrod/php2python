@@ -290,7 +290,7 @@ def _wp_menu_item_classes_by_context(menu_items_=None, *_args_):
                 if php_is_array(terms_):
                     possible_object_parents_ = php_array_merge(possible_object_parents_, terms_)
                     term_to_ancestor_ = Array()
-                    for anc_,descs_ in term_hierarchy_:
+                    for anc_,descs_ in term_hierarchy_.items():
                         for desc_ in descs_:
                             term_to_ancestor_[desc_] = anc_
                         # end for
@@ -317,7 +317,7 @@ def _wp_menu_item_classes_by_context(menu_items_=None, *_args_):
     elif (not php_empty(lambda : queried_object_.taxonomy)) and is_taxonomy_hierarchical(queried_object_.taxonomy):
         term_hierarchy_ = _get_term_hierarchy(queried_object_.taxonomy)
         term_to_ancestor_ = Array()
-        for anc_,descs_ in term_hierarchy_:
+        for anc_,descs_ in term_hierarchy_.items():
             for desc_ in descs_:
                 term_to_ancestor_[desc_] = anc_
             # end for
@@ -342,7 +342,7 @@ def _wp_menu_item_classes_by_context(menu_items_=None, *_args_):
     front_page_url_ = home_url()
     front_page_id_ = php_int(get_option("page_on_front"))
     privacy_policy_page_id_ = php_int(get_option("wp_page_for_privacy_policy"))
-    for key_,menu_item_ in menu_items_:
+    for key_,menu_item_ in menu_items_.items():
         menu_items_[key_].current = False
         classes_ = menu_item_.classes
         classes_[-1] = "menu-item"
@@ -443,7 +443,7 @@ def _wp_menu_item_classes_by_context(menu_items_=None, *_args_):
     active_parent_item_ids_ = php_array_filter(array_unique(active_parent_item_ids_))
     active_parent_object_ids_ = php_array_filter(array_unique(active_parent_object_ids_))
     #// Set parent's class.
-    for key_,parent_item_ in menu_items_:
+    for key_,parent_item_ in menu_items_.items():
         classes_ = parent_item_.classes
         menu_items_[key_].current_item_ancestor = False
         menu_items_[key_].current_item_parent = False

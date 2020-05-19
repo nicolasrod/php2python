@@ -32,7 +32,7 @@ class getid3_asf(getid3_handler):
         #// extends getid3_handler::__construct()
         #// initialize all GUID constants
         GUIDarray_ = self.knownguids()
-        for GUIDname_,hexstringvalue_ in GUIDarray_:
+        for GUIDname_,hexstringvalue_ in GUIDarray_.items():
             if (not php_defined(GUIDname_)):
                 php_define(GUIDname_, self.guidtobytestring(hexstringvalue_))
             # end if
@@ -689,7 +689,7 @@ class getid3_asf(getid3_handler):
                     thisfile_asf_contentdescriptionobject_["rating"] = php_substr(ASFHeaderData_, offset_, thisfile_asf_contentdescriptionobject_["rating_length"])
                     offset_ += thisfile_asf_contentdescriptionobject_["rating_length"]
                     ASFcommentKeysToCopy_ = Array({"title": "title", "author": "artist", "copyright": "copyright", "description": "comment", "rating": "rating"})
-                    for keytocopyfrom_,keytocopyto_ in ASFcommentKeysToCopy_:
+                    for keytocopyfrom_,keytocopyto_ in ASFcommentKeysToCopy_.items():
                         if (not php_empty(lambda : thisfile_asf_contentdescriptionobject_[keytocopyfrom_])):
                             thisfile_asf_comments_[keytocopyto_][-1] = self.trimterm(thisfile_asf_contentdescriptionobject_[keytocopyfrom_])
                         # end if
@@ -801,7 +801,7 @@ class getid3_asf(getid3_handler):
                             if case("tracknumber"):
                                 #// be careful casting to int: casting unicode strings to int gives unexpected results (stops parsing at first non-numeric character)
                                 thisfile_asf_comments_["track_number"] = Array(self.trimterm(thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current_["value"]))
-                                for key_,value_ in thisfile_asf_comments_["track_number"]:
+                                for key_,value_ in thisfile_asf_comments_["track_number"].items():
                                     if php_preg_match("/^[0-9\\x00]+$/", value_):
                                         thisfile_asf_comments_["track_number"][key_] = php_intval(php_str_replace(" ", "", value_))
                                     # end if
@@ -855,7 +855,7 @@ class getid3_asf(getid3_handler):
                             # end if
                             if case("wm/picture"):
                                 WMpicture_ = self.asf_wmpicture(thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current_["value"])
-                                for key_,value_ in WMpicture_:
+                                for key_,value_ in WMpicture_.items():
                                     thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current_[key_] = value_
                                 # end for
                                 WMpicture_ = None
@@ -985,7 +985,7 @@ class getid3_asf(getid3_handler):
         if (php_isset(lambda : thisfile_asf_["stream_properties_object"])) and php_is_array(thisfile_asf_["stream_properties_object"]):
             thisfile_audio_["bitrate"] = 0
             thisfile_video_["bitrate"] = 0
-            for streamnumber_,streamdata_ in thisfile_asf_["stream_properties_object"]:
+            for streamnumber_,streamdata_ in thisfile_asf_["stream_properties_object"].items():
                 for case in Switch(streamdata_["stream_type"]):
                     if case(GETID3_ASF_Audio_Media):
                         #// Field Name                   Field Type   Size (bits)
@@ -1015,7 +1015,7 @@ class getid3_asf(getid3_handler):
                             # end if
                         # end for
                         if (not php_empty(lambda : thisfile_asf_["stream_bitrate_properties_object"]["bitrate_records"])):
-                            for dummy_,dataarray_ in thisfile_asf_["stream_bitrate_properties_object"]["bitrate_records"]:
+                            for dummy_,dataarray_ in thisfile_asf_["stream_bitrate_properties_object"]["bitrate_records"].items():
                                 if (php_isset(lambda : dataarray_["flags"]["stream_number"])) and dataarray_["flags"]["stream_number"] == streamnumber_:
                                     thisfile_asf_audiomedia_currentstream_["bitrate"] = dataarray_["bitrate"]
                                     thisfile_audio_["bitrate"] += dataarray_["bitrate"]
@@ -1096,7 +1096,7 @@ class getid3_asf(getid3_handler):
                         videomediaoffset_ += 4
                         thisfile_asf_videomedia_currentstream_["format_data"]["codec_data"] = php_substr(streamdata_["type_specific_data"], videomediaoffset_)
                         if (not php_empty(lambda : thisfile_asf_["stream_bitrate_properties_object"]["bitrate_records"])):
-                            for dummy_,dataarray_ in thisfile_asf_["stream_bitrate_properties_object"]["bitrate_records"]:
+                            for dummy_,dataarray_ in thisfile_asf_["stream_bitrate_properties_object"]["bitrate_records"].items():
                                 if (php_isset(lambda : dataarray_["flags"]["stream_number"])) and dataarray_["flags"]["stream_number"] == streamnumber_:
                                     thisfile_asf_videomedia_currentstream_["bitrate"] = dataarray_["bitrate"]
                                     thisfile_video_["streams"][streamnumber_]["bitrate"] = dataarray_["bitrate"]
@@ -1299,7 +1299,7 @@ class getid3_asf(getid3_handler):
             # end for
         # end while
         if (php_isset(lambda : thisfile_asf_codeclistobject_["codec_entries"])) and php_is_array(thisfile_asf_codeclistobject_["codec_entries"]):
-            for streamnumber_,streamdata_ in thisfile_asf_codeclistobject_["codec_entries"]:
+            for streamnumber_,streamdata_ in thisfile_asf_codeclistobject_["codec_entries"].items():
                 for case in Switch(streamdata_["information"]):
                     if case("WMV1"):
                         pass
@@ -1380,7 +1380,7 @@ class getid3_asf(getid3_handler):
             # end if
         # end for
         if (php_isset(lambda : thisfile_asf_codeclistobject_["codec_entries"])):
-            for streamnumber_,streamdata_ in thisfile_asf_codeclistobject_["codec_entries"]:
+            for streamnumber_,streamdata_ in thisfile_asf_codeclistobject_["codec_entries"].items():
                 for case in Switch(streamdata_["type_raw"]):
                     if case(1):
                         #// video
@@ -1414,7 +1414,7 @@ class getid3_asf(getid3_handler):
         if (not php_empty(lambda : thisfile_video_["streams"])):
             thisfile_video_["resolution_x"] = 0
             thisfile_video_["resolution_y"] = 0
-            for key_,valuearray_ in thisfile_video_["streams"]:
+            for key_,valuearray_ in thisfile_video_["streams"].items():
                 if valuearray_["resolution_x"] > thisfile_video_["resolution_x"] or valuearray_["resolution_y"] > thisfile_video_["resolution_y"]:
                     thisfile_video_["resolution_x"] = valuearray_["resolution_x"]
                     thisfile_video_["resolution_y"] = valuearray_["resolution_y"]
@@ -1785,7 +1785,7 @@ class getid3_asf(getid3_handler):
                         offset_ += descriptionRecord_["data_length"]
                         if php_preg_match("#^WM/Picture$#", php_str_replace(" ", "", php_trim(descriptionRecord_["name"]))):
                             WMpicture_ = self.asf_wmpicture(descriptionRecord_["data"])
-                            for key_,value_ in WMpicture_:
+                            for key_,value_ in WMpicture_.items():
                                 descriptionRecord_["data"] = WMpicture_
                             # end for
                             WMpicture_ = None

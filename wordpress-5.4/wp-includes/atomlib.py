@@ -214,7 +214,7 @@ class AtomParser():
             # end if
             attrs_prefix_ = Array()
             #// resolve prefixes for attributes
-            for key_,value_ in attrs_:
+            for key_,value_ in attrs_.items():
                 with_prefix_ = self.ns_to_prefix(key_, True)
                 attrs_prefix_[with_prefix_[1]] = self.xml_escape(value_)
             # end for

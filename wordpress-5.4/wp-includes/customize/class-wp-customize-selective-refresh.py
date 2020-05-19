@@ -335,7 +335,7 @@ class WP_Customize_Selective_Refresh():
         do_action("customize_render_partials_before", self, partials_)
         set_error_handler(Array(self, "handle_error"), php_error_reporting())
         contents_ = Array()
-        for partial_id_,container_contexts_ in partials_:
+        for partial_id_,container_contexts_ in partials_.items():
             self.current_partial_id = partial_id_
             if (not php_is_array(container_contexts_)):
                 wp_send_json_error("malformed_container_contexts")

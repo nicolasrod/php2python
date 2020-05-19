@@ -243,7 +243,7 @@ class WP_Post():
     def __init__(self, post_=None):
         
         
-        for key_,value_ in get_object_vars(post_):
+        for key_,value_ in get_object_vars(post_).items():
             self.key_ = value_
         # end for
     # end def __init__

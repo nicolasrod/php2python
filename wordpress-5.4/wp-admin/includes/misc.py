@@ -134,7 +134,7 @@ def insert_with_markers(filename_=None, marker_=None, insertion_=None, *_args_):
     switched_locale_ = switch_to_locale(get_locale())
     instructions_ = php_sprintf(__("The directives (lines) between `BEGIN %1$s` and `END %1$s` are\ndynamically generated, and should only be modified via WordPress filters.\nAny changes to the directives between these markers will be overwritten."), marker_)
     instructions_ = php_explode("\n", instructions_)
-    for line_,text_ in instructions_:
+    for line_,text_ in instructions_.items():
         instructions_[line_] = "# " + text_
     # end for
     #// 
@@ -313,7 +313,7 @@ def wp_make_theme_file_tree(allowed_files_=None, *_args_):
     
     
     tree_list_ = Array()
-    for file_name_,absolute_filename_ in allowed_files_:
+    for file_name_,absolute_filename_ in allowed_files_.items():
         list_ = php_explode("/", file_name_)
         last_dir_ = tree_list_
         for dir_ in list_:
@@ -347,7 +347,7 @@ def wp_print_theme_file_tree(tree_=None, level_=2, size_=1, index_=1, *_args_):
     if php_is_array(tree_):
         index_ = 0
         size_ = php_count(tree_)
-        for label_,theme_file_ in tree_:
+        for label_,theme_file_ in tree_.items():
             index_ += 1
             if (not php_is_array(theme_file_)):
                 wp_print_theme_file_tree(theme_file_, level_, index_, size_)
@@ -439,7 +439,7 @@ def wp_print_plugin_file_tree(tree_=None, label_="", level_=2, size_=1, index_=1
     if php_is_array(tree_):
         index_ = 0
         size_ = php_count(tree_)
-        for label_,plugin_file_ in tree_:
+        for label_,plugin_file_ in tree_.items():
             index_ += 1
             if (not php_is_array(plugin_file_)):
                 wp_print_plugin_file_tree(plugin_file_, label_, level_, index_, size_)
@@ -881,7 +881,7 @@ def admin_color_scheme_picker(user_id_=None, *_args_):
     
     global _wp_admin_css_colors_
     php_check_if_defined("_wp_admin_css_colors_")
-    ksort(_wp_admin_css_colors_)
+    php_ksort(_wp_admin_css_colors_)
     if (php_isset(lambda : _wp_admin_css_colors_["fresh"])):
         #// Set Default ('fresh') and Light should go first.
         _wp_admin_css_colors_ = php_array_filter(php_array_merge(Array({"fresh": "", "light": ""}), _wp_admin_css_colors_))
@@ -894,7 +894,7 @@ def admin_color_scheme_picker(user_id_=None, *_args_):
     _e("Admin Color Scheme")
     php_print("</span></legend>\n       ")
     wp_nonce_field("save-color-scheme", "color-nonce", False)
-    for color_,color_info_ in _wp_admin_css_colors_:
+    for color_,color_info_ in _wp_admin_css_colors_.items():
         php_print("         <div class=\"color-option ")
         php_print("selected" if color_ == current_color_ else "")
         php_print("\">\n                <input name=\"admin_color\" id=\"admin_color_")

@@ -27,7 +27,7 @@ if (not php_in_array(protocol_, Array("HTTP/1.1", "HTTP/2", "HTTP/2.0"))):
 # end if
 load_ = PHP_REQUEST["load"]
 if php_is_array(load_):
-    ksort(load_)
+    php_ksort(load_)
     load_ = php_implode("", load_)
 # end if
 load_ = php_preg_replace("/[^a-z0-9,_-]+/i", "", load_)

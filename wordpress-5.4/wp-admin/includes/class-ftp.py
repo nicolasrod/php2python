@@ -701,7 +701,7 @@ class ftp_base():
         # end if
         f_ = php_preg_split("/[" + CRLF + "]+/", php_preg_replace("/[0-9]{3}[ -].*[" + CRLF + "]+/", "", self._message), -1, PREG_SPLIT_NO_EMPTY)
         self._features = Array()
-        for k_,v_ in f_:
+        for k_,v_ in f_.items():
             v_ = php_explode(" ", php_trim(v_))
             self._features[php_array_shift(v_)] = v_
         # end for
@@ -996,7 +996,7 @@ class ftp_base():
                 return False
             # end if
         # end if
-        for k_,v_ in list_:
+        for k_,v_ in list_.items():
             list_[k_] = self.parselisting(v_)
             if (not list_[k_]) or list_[k_]["name"] == "." or list_[k_]["name"] == "..":
                 list_[k_] = None
@@ -1039,7 +1039,7 @@ class ftp_base():
             self.pusherror("mdel", "can't read remote folder list", "Can't read remote folder \"" + remote_ + "\" contents")
             return False
         # end if
-        for k_,v_ in list_:
+        for k_,v_ in list_.items():
             list_[k_] = self.parselisting(v_)
             if (not list_[k_]) or list_[k_]["name"] == "." or list_[k_]["name"] == "..":
                 list_[k_] = None
@@ -1180,7 +1180,7 @@ class ftp_base():
             return False
         # end if
         dirlist_ = Array()
-        for k_,v_ in list_:
+        for k_,v_ in list_.items():
             entry_ = self.parselisting(v_)
             if php_empty(lambda : entry_):
                 continue

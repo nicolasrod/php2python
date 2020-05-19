@@ -17,7 +17,7 @@ from contextlib import contextmanager
 
 # TODO: s = '$a $b' => interpolate different types, do convertion!
 # TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
-
+# TODO: alert when a class has a propert and a method named the same. not valid in python
 
 def _(x):
     return x.replace('\r', ' ').replace('\n', '\\n').strip()
@@ -850,11 +850,12 @@ def {name}({params}):
             self.parse(node['keyVar']) or '',
             self.parse(node['valueVar']) or ''
         ]))
+        get_items = '.items()' if kvs.find(',') != -1 else ''
         expr = self.parse(node['expr'])
         stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
         return self.with_docs(
             node, f'''
-for {kvs} in {expr}:
+for {kvs} in {expr}{get_items}:
     {stmts}
 # end for
 ''')

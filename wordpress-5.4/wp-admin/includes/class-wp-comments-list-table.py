@@ -184,7 +184,7 @@ class WP_Comments_List_Table(WP_List_Table):
         if (not php_empty(lambda : comment_type_)) and "all" != comment_type_:
             link_ = add_query_arg("comment_type", comment_type_, link_)
         # end if
-        for status_,label_ in stati_:
+        for status_,label_ in stati_.items():
             current_link_attributes_ = ""
             if status_ == comment_status_:
                 current_link_attributes_ = " class=\"current\" aria-current=\"page\""
@@ -284,7 +284,7 @@ class WP_Comments_List_Table(WP_List_Table):
             #// @param string[] $comment_types An array of comment types. Accepts 'Comments', 'Pings'.
             #//
             comment_types_ = apply_filters("admin_comment_types_dropdown", Array({"comment": __("Comments"), "pings": __("Pings")}))
-            for type_,label_ in comment_types_:
+            for type_,label_ in comment_types_.items():
                 php_print(" " + "<option value=\"" + esc_attr(type_) + "\"" + selected(comment_type_, type_, False) + str(">") + str(label_) + str("</option>\n"))
             # end for
             php_print(" </select>\n         ")
@@ -513,7 +513,7 @@ class WP_Comments_List_Table(WP_List_Table):
         actions_ = apply_filters("comment_row_actions", php_array_filter(actions_), comment_)
         i_ = 0
         out_ += "<div class=\"row-actions\">"
-        for action_,link_ in actions_:
+        for action_,link_ in actions_.items():
             i_ += 1
             sep_ = "" if "approve" == action_ or "unapprove" == action_ and 2 == i_ or 1 == i_ else " | "
             #// Reply and quickedit need a hide-if-no-js span when not added with ajax.

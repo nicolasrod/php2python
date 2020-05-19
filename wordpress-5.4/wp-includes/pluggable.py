@@ -350,7 +350,7 @@ if (not php_function_exists("wp_mail")):
         phpmailer_.Body = message_
         #// Set destination addresses, using appropriate methods for handling addresses.
         address_headers_ = php_compact("to_", "cc_", "bcc_", "reply_to_")
-        for address_header_,addresses_ in address_headers_:
+        for address_header_,addresses_ in address_headers_.items():
             if php_empty(lambda : addresses_):
                 continue
             # end if
@@ -421,7 +421,7 @@ if (not php_function_exists("wp_mail")):
         phpmailer_.CharSet = apply_filters("wp_mail_charset", charset_)
         #// Set custom headers.
         if (not php_empty(lambda : headers_)):
-            for name_,content_ in headers_:
+            for name_,content_ in headers_.items():
                 #// Only add custom headers not added automatically by PHPMailer.
                 if (not php_in_array(name_, Array("MIME-Version", "X-Mailer"))):
                     phpmailer_.addcustomheader(php_sprintf("%1$s: %2$s", name_, content_))

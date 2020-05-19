@@ -428,7 +428,7 @@ class WP_Customize_Nav_Menus():
             # end if
             mapped_nav_menu_locations_ = wp_map_nav_menu_locations(theme_mods_["nav_menu_locations"], self.original_nav_menu_locations)
         # end if
-        for location_,description_ in locations_:
+        for location_,description_ in locations_.items():
             setting_id_ = str("nav_menu_locations[") + str(location_) + str("]")
             setting_ = self.manager.get_setting(setting_id_)
             if setting_:
@@ -454,7 +454,7 @@ class WP_Customize_Nav_Menus():
             self.manager.add_setting(php_new_class("WP_Customize_Nav_Menu_Setting", lambda : WP_Customize_Nav_Menu_Setting(self.manager, nav_menu_setting_id_, Array({"transport": "postMessage"}))))
             #// Add the menu contents.
             menu_items_ = wp_get_nav_menu_items(menu_id_)
-            for i_,item_ in php_array_values(menu_items_):
+            for i_,item_ in php_array_values(menu_items_).items():
                 #// Create a setting for each menu item (which doesn't actually manage data, currently).
                 menu_item_setting_id_ = "nav_menu_item[" + item_.ID + "]"
                 value_ = item_
@@ -502,13 +502,13 @@ class WP_Customize_Nav_Menus():
         item_types_ = Array()
         post_types_ = get_post_types(Array({"show_in_nav_menus": True}), "objects")
         if post_types_:
-            for slug_,post_type_ in post_types_:
+            for slug_,post_type_ in post_types_.items():
                 item_types_[-1] = Array({"title": post_type_.labels.name, "type_label": post_type_.labels.singular_name, "type": "post_type", "object": post_type_.name})
             # end for
         # end if
         taxonomies_ = get_taxonomies(Array({"show_in_nav_menus": True}), "objects")
         if taxonomies_:
-            for slug_,taxonomy_ in taxonomies_:
+            for slug_,taxonomy_ in taxonomies_.items():
                 if "post_format" == taxonomy_ and (not current_theme_supports("post-formats")):
                     continue
                 # end if
@@ -745,7 +745,7 @@ class WP_Customize_Nav_Menus():
         #// Ensure the page post type comes first in the list.
         item_types_ = self.available_item_types()
         page_item_type_ = None
-        for i_,item_type_ in item_types_:
+        for i_,item_type_ in item_types_.items():
             if (php_isset(lambda : item_type_["object"])) and "page" == item_type_["object"]:
                 page_item_type_ = item_type_
                 item_types_[i_] = None
@@ -1024,7 +1024,7 @@ class WP_Customize_Nav_Menus():
         if (not php_empty(lambda : exported_args_["menu"])) and php_is_object(exported_args_["menu"]):
             exported_args_["menu"] = exported_args_["menu"].term_id
         # end if
-        ksort(exported_args_)
+        php_ksort(exported_args_)
         exported_args_["args_hmac"] = self.hash_nav_menu_args(exported_args_)
         args_["customize_preview_nav_menus_args"] = exported_args_
         self.preview_nav_menu_instance_args[exported_args_["args_hmac"]] = exported_args_
@@ -1128,7 +1128,7 @@ class WP_Customize_Nav_Menus():
         # end if
         nav_menu_args_hmac_ = nav_menu_args_["args_hmac"]
         nav_menu_args_["args_hmac"] = None
-        ksort(nav_menu_args_)
+        php_ksort(nav_menu_args_)
         if (not hash_equals(self.hash_nav_menu_args(nav_menu_args_), nav_menu_args_hmac_)):
             #// Error: args_hmac_mismatch.
             return False

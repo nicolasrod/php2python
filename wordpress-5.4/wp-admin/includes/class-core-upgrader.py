@@ -336,7 +336,7 @@ class Core_Upgrader(WP_Upgrader):
         if (not php_is_array(checksums_)):
             return False
         # end if
-        for file_,checksum_ in checksums_:
+        for file_,checksum_ in checksums_.items():
             #// Skip files which get updated.
             if "wp-content" == php_substr(file_, 0, 10):
                 continue

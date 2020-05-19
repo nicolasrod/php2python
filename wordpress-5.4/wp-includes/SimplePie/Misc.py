@@ -138,7 +138,7 @@ class SimplePie_Misc():
         
         
         full_ = str("<") + str(element_["tag"])
-        for key_,value_ in element_["attribs"]:
+        for key_,value_ in element_["attribs"].items():
             key_ = php_strtolower(key_)
             full_ += str(" ") + str(key_) + str("=\"") + htmlspecialchars(value_["data"]) + "\""
         # end for

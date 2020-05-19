@@ -229,7 +229,7 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
         is_delete_ = False == setting_value_
         index_ = -1
         #// Find the existing menu item's position in the list.
-        for i_,menu_ in menus_:
+        for i_,menu_ in menus_.items():
             if php_int(self.term_id) == php_int(menu_.term_id) or php_int(self.previous_term_id) == php_int(menu_.term_id):
                 index_ = i_
                 break

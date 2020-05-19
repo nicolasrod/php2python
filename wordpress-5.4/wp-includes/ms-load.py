@@ -457,7 +457,7 @@ def ms_not_installed(domain_=None, path_=None, *_args_):
     msg_ += "<p><strong>" + __("What do I do now?") + "</strong> "
     msg_ += php_sprintf(__("Read the <a href=\"%s\" target=\"_blank\">bug report</a> page. Some of the guidelines there may help you figure out what went wrong."), __("https://wordpress.org/support/article/debugging-a-wordpress-network/"))
     msg_ += " " + __("If you&#8217;re still stuck with this message, then check that your database contains the following tables:") + "</p><ul>"
-    for t_,table_ in wpdb_.tables("global"):
+    for t_,table_ in wpdb_.tables("global").items():
         if "sitecategories" == t_:
             continue
         # end if

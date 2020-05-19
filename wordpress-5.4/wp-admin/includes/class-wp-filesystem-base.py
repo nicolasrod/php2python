@@ -191,7 +191,7 @@ class WP_Filesystem_Base():
         if php_stripos(self.method, "ftp") != False:
             constant_overrides_ = Array({"FTP_BASE": ABSPATH, "FTP_CONTENT_DIR": WP_CONTENT_DIR, "FTP_PLUGIN_DIR": WP_PLUGIN_DIR, "FTP_LANG_DIR": WP_LANG_DIR})
             #// Direct matches ( folder = CONSTANT/ ).
-            for constant_,dir_ in constant_overrides_:
+            for constant_,dir_ in constant_overrides_.items():
                 if (not php_defined(constant_)):
                     continue
                 # end if
@@ -200,7 +200,7 @@ class WP_Filesystem_Base():
                 # end if
             # end for
             #// Prefix matches ( folder = CONSTANT/subdir ),
-            for constant_,dir_ in constant_overrides_:
+            for constant_,dir_ in constant_overrides_.items():
                 if (not php_defined(constant_)):
                     continue
                 # end if
@@ -268,7 +268,7 @@ class WP_Filesystem_Base():
         last_index_ = php_array_pop(folder_part_keys_)
         last_path_ = folder_parts_[last_index_]
         files_ = self.dirlist(base_)
-        for index_,key_ in folder_parts_:
+        for index_,key_ in folder_parts_.items():
             if index_ == last_index_:
                 continue
                 pass

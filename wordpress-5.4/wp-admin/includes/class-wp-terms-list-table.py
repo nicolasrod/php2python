@@ -237,7 +237,7 @@ class WP_Terms_List_Table(WP_List_Table):
         
         
         end_ = start_ + per_page_
-        for key_,term_ in terms_:
+        for key_,term_ in terms_.items():
             if count_ >= end_:
                 break
             # end if
@@ -554,7 +554,7 @@ class WP_Terms_List_Table(WP_List_Table):
         """)
         core_columns_ = Array({"cb": True, "description": True, "name": True, "slug": True, "posts": True})
         columns_ = self.get_column_info()
-        for column_name_,column_display_name_ in columns_:
+        for column_name_,column_display_name_ in columns_.items():
             if (php_isset(lambda : core_columns_[column_name_])):
                 continue
             # end if

@@ -443,7 +443,7 @@ class getid3_matroska(getid3_handler):
         # end try
         #// calculate playtime
         if (php_isset(lambda : info_["matroska"]["info"])) and php_is_array(info_["matroska"]["info"]):
-            for key_,infoarray_ in info_["matroska"]["info"]:
+            for key_,infoarray_ in info_["matroska"]["info"].items():
                 if (php_isset(lambda : infoarray_["Duration"])):
                     #// TimecodeScale is how many nanoseconds each Duration unit is
                     info_["playtime_seconds"] = infoarray_["Duration"] * infoarray_["TimecodeScale"] if (php_isset(lambda : infoarray_["TimecodeScale"])) else 1000000 / 1000000000
@@ -453,13 +453,13 @@ class getid3_matroska(getid3_handler):
         # end if
         #// extract tags
         if (php_isset(lambda : info_["matroska"]["tags"])) and php_is_array(info_["matroska"]["tags"]):
-            for key_,infoarray_ in info_["matroska"]["tags"]:
+            for key_,infoarray_ in info_["matroska"]["tags"].items():
                 self.extractcommentssimpletag(infoarray_)
             # end for
         # end if
         #// process tracks
         if (php_isset(lambda : info_["matroska"]["tracks"]["tracks"])) and php_is_array(info_["matroska"]["tracks"]["tracks"]):
-            for key_,trackarray_ in info_["matroska"]["tracks"]["tracks"]:
+            for key_,trackarray_ in info_["matroska"]["tracks"]["tracks"].items():
                 track_info_ = Array()
                 track_info_["dataformat"] = self.codecidtocommonname(trackarray_["CodecID"])
                 track_info_["default"] = trackarray_["FlagDefault"] if (php_isset(lambda : trackarray_["FlagDefault"])) else True
@@ -566,7 +566,7 @@ class getid3_matroska(getid3_handler):
                                 if (not php_empty(lambda : getid3_temp_.info[header_data_key_])):
                                     info_["matroska"]["track_codec_parsed"][trackarray_["TrackNumber"]] = getid3_temp_.info[header_data_key_]
                                     if (php_isset(lambda : getid3_temp_.info["audio"])) and php_is_array(getid3_temp_.info["audio"]):
-                                        for sub_key_,value_ in getid3_temp_.info["audio"]:
+                                        for sub_key_,value_ in getid3_temp_.info["audio"].items():
                                             track_info_[sub_key_] = value_
                                         # end for
                                     # end if
@@ -625,7 +625,7 @@ class getid3_matroska(getid3_handler):
                                 if (not php_empty(lambda : getid3_temp_.info["ogg"])):
                                     info_["matroska"]["track_codec_parsed"][trackarray_["TrackNumber"]] = getid3_temp_.info["ogg"]
                                     if (php_isset(lambda : getid3_temp_.info["audio"])) and php_is_array(getid3_temp_.info["audio"]):
-                                        for sub_key_,value_ in getid3_temp_.info["audio"]:
+                                        for sub_key_,value_ in getid3_temp_.info["audio"].items():
                                             track_info_[sub_key_] = value_
                                         # end for
                                     # end if
@@ -653,7 +653,7 @@ class getid3_matroska(getid3_handler):
                             if case("A_MS/ACM"):
                                 getid3_lib.includedependency(GETID3_INCLUDEPATH + "module.audio-video.riff.php", __FILE__, True)
                                 parsed_ = getid3_riff.parsewaveformatex(trackarray_["CodecPrivate"])
-                                for sub_key_,value_ in parsed_:
+                                for sub_key_,value_ in parsed_.items():
                                     if sub_key_ != "raw":
                                         track_info_[sub_key_] = value_
                                     # end if
@@ -680,7 +680,7 @@ class getid3_matroska(getid3_handler):
         # end if
         #// process attachments
         if (php_isset(lambda : info_["matroska"]["attachments"])) and self.getid3.option_save_attachments != getID3.ATTACHMENTS_NONE:
-            for i_,entry_ in info_["matroska"]["attachments"]:
+            for i_,entry_ in info_["matroska"]["attachments"].items():
                 if php_strpos(entry_["FileMimeType"], "image/") == 0 and (not php_empty(lambda : entry_["FileData"])):
                     info_["matroska"]["comments"]["picture"][-1] = Array({"data": entry_["FileData"], "image_mime": entry_["FileMimeType"], "filename": entry_["FileName"]})
                 # end if
@@ -1800,7 +1800,7 @@ class getid3_matroska(getid3_handler):
         
         
         if (not php_empty(lambda : SimpleTagArray_["SimpleTag"])):
-            for SimpleTagKey_,SimpleTagData_ in SimpleTagArray_["SimpleTag"]:
+            for SimpleTagKey_,SimpleTagData_ in SimpleTagArray_["SimpleTag"].items():
                 if (not php_empty(lambda : SimpleTagData_["TagName"])) and (not php_empty(lambda : SimpleTagData_["TagString"])):
                     self.getid3.info["matroska"]["comments"][php_strtolower(SimpleTagData_["TagName"])][-1] = SimpleTagData_["TagString"]
                 # end if

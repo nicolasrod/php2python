@@ -112,7 +112,7 @@ class WP_REST_Response(WP_HTTP_Response):
     def add_links(self, links_=None):
         
         
-        for rel_,set_ in links_:
+        for rel_,set_ in links_.items():
             #// If it's a single link, wrap with an array for consistent handling.
             if (php_isset(lambda : set_["href"])):
                 set_ = Array(set_)
@@ -155,7 +155,7 @@ class WP_REST_Response(WP_HTTP_Response):
         # end if
         
         header_ = "<" + link_ + ">; rel=\"" + rel_ + "\""
-        for key_,value_ in other_:
+        for key_,value_ in other_.items():
             if "title" == key_:
                 value_ = "\"" + value_ + "\""
             # end if

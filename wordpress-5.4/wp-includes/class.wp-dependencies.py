@@ -110,7 +110,7 @@ class WP_Dependencies():
         #//
         handles_ = self.queue if False == handles_ else handles_
         self.all_deps(handles_)
-        for key_,handle_ in self.to_do:
+        for key_,handle_ in self.to_do.items():
             if (not php_in_array(handle_, self.done, True)) and (php_isset(lambda : self.registered[handle_])):
                 #// 
                 #// Attempt to process the item. If successful,

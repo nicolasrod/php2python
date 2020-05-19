@@ -107,7 +107,7 @@ class WP_REST_Themes_Controller(WP_REST_Controller):
         if php_in_array("theme_supports", fields_, True):
             item_schemas_ = self.get_item_schema()
             theme_supports_ = item_schemas_["properties"]["theme_supports"]["properties"]
-            for name_,schema_ in theme_supports_:
+            for name_,schema_ in theme_supports_.items():
                 if "formats" == name_:
                     continue
                 # end if

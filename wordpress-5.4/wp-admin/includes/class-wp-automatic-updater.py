@@ -746,7 +746,7 @@ class WP_Automatic_Updater():
         
         
         update_count_ = 0
-        for type_,updates_ in self.update_results:
+        for type_,updates_ in self.update_results.items():
             update_count_ += php_count(updates_)
         # end for
         body_ = Array()
@@ -828,7 +828,7 @@ class WP_Automatic_Updater():
                     if "rollback_was_required" == update_.result.get_error_code():
                         results_ = update_.result.get_error_data()
                     # end if
-                    for result_type_,result_ in results_:
+                    for result_type_,result_ in results_.items():
                         if (not is_wp_error(result_)):
                             continue
                         # end if

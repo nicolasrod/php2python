@@ -279,7 +279,7 @@ class WP_REST_Request(ArrayAccess):
         if True == override_:
             self.headers = Array()
         # end if
-        for key_,value_ in headers_:
+        for key_,value_ in headers_.items():
             self.set_header(key_, value_)
         # end for
     # end def set_headers
@@ -432,7 +432,7 @@ class WP_REST_Request(ArrayAccess):
         for type_ in order_:
             #// array_merge() / the "+" operator will mess up
             #// numeric keys, so instead do a manual foreach.
-            for key_,value_ in self.params[type_]:
+            for key_,value_ in self.params[type_].items():
                 params_[key_] = value_
             # end for
         # end for
@@ -762,7 +762,7 @@ class WP_REST_Request(ArrayAccess):
             if php_empty(lambda : self.params[type_]):
                 continue
             # end if
-            for key_,value_ in self.params[type_]:
+            for key_,value_ in self.params[type_].items():
                 if (not (php_isset(lambda : attributes_["args"][key_]))):
                     continue
                 # end if
@@ -810,7 +810,7 @@ class WP_REST_Request(ArrayAccess):
         if php_empty(lambda : attributes_["args"]):
             return True
         # end if
-        for key_,arg_ in attributes_["args"]:
+        for key_,arg_ in attributes_["args"].items():
             param_ = self.get_param(key_)
             if (php_isset(lambda : arg_["required"])) and True == arg_["required"] and None == param_:
                 required_[-1] = key_
@@ -825,7 +825,7 @@ class WP_REST_Request(ArrayAccess):
         #// This is done after required checking as required checking is cheaper.
         #//
         invalid_params_ = Array()
-        for key_,arg_ in attributes_["args"]:
+        for key_,arg_ in attributes_["args"].items():
             param_ = self.get_param(key_)
             if None != param_ and (not php_empty(lambda : arg_["validate_callback"])):
                 valid_check_ = php_call_user_func(arg_["validate_callback"], param_, self, key_)

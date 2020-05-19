@@ -46,7 +46,7 @@ class SplFixedArray(IteratorArrayAccessCountable):
     def toarray(self):
         
         
-        ksort(self.internalArray)
+        php_ksort(self.internalArray)
         return self.internalArray
     # end def toarray
     #// 
@@ -63,7 +63,7 @@ class SplFixedArray(IteratorArrayAccessCountable):
         
         self_ = php_new_class("SplFixedArray", lambda : SplFixedArray(php_count(array_)))
         if save_indexes_:
-            for key_,value_ in array_:
+            for key_,value_ in array_.items():
                 self_[php_int(key_)] = value_
             # end for
         else:

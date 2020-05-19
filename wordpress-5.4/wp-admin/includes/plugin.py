@@ -924,7 +924,7 @@ def delete_plugins(plugins_=None, deprecated_="", *_args_):
         plugin_slug_ = php_dirname(plugin_file_)
         if "." != plugin_slug_ and (not php_empty(lambda : plugin_translations_[plugin_slug_])):
             translations_ = plugin_translations_[plugin_slug_]
-            for translation_,data_ in translations_:
+            for translation_,data_ in translations_.items():
                 wp_filesystem_.delete(WP_LANG_DIR + "/plugins/" + plugin_slug_ + "-" + translation_ + ".po")
                 wp_filesystem_.delete(WP_LANG_DIR + "/plugins/" + plugin_slug_ + "-" + translation_ + ".mo")
                 json_translation_files_ = glob(WP_LANG_DIR + "/plugins/" + plugin_slug_ + "-" + translation_ + "-*.json")
@@ -1288,7 +1288,7 @@ def add_submenu_page(parent_slug_=None, page_title_=None, menu_title_=None, capa
         # end if
     # end if
     #// Sort the parent array.
-    ksort(submenu_[parent_slug_])
+    php_ksort(submenu_[parent_slug_])
     hookname_ = get_plugin_page_hookname(menu_slug_, parent_slug_)
     if (not php_empty(lambda : function_)) and (not php_empty(lambda : hookname_)):
         add_action(hookname_, function_)
@@ -1622,7 +1622,7 @@ def remove_menu_page(menu_slug_=None, *_args_):
     
     global menu_
     php_check_if_defined("menu_")
-    for i_,item_ in menu_:
+    for i_,item_ in menu_.items():
         if menu_slug_ == item_[2]:
             menu_[i_] = None
             return item_
@@ -1649,7 +1649,7 @@ def remove_submenu_page(menu_slug_=None, submenu_slug_=None, *_args_):
     if (not (php_isset(lambda : submenu_[menu_slug_]))):
         return False
     # end if
-    for i_,item_ in submenu_[menu_slug_]:
+    for i_,item_ in submenu_[menu_slug_].items():
         if submenu_slug_ == item_[2]:
             submenu_[menu_slug_][i_] = None
             return item_
@@ -2041,7 +2041,7 @@ def add_option_whitelist(new_options_=None, options_="", *_args_):
     else:
         whitelist_options_ = options_
     # end if
-    for page_,keys_ in new_options_:
+    for page_,keys_ in new_options_.items():
         for key_ in keys_:
             if (not (php_isset(lambda : whitelist_options_[page_]))) or (not php_is_array(whitelist_options_[page_])):
                 whitelist_options_[page_] = Array()
@@ -2076,7 +2076,7 @@ def remove_option_whitelist(del_options_=None, options_="", *_args_):
     else:
         whitelist_options_ = options_
     # end if
-    for page_,keys_ in del_options_:
+    for page_,keys_ in del_options_.items():
         for key_ in keys_:
             if (php_isset(lambda : whitelist_options_[page_])) and php_is_array(whitelist_options_[page_]):
                 pos_ = php_array_search(key_, whitelist_options_[page_])

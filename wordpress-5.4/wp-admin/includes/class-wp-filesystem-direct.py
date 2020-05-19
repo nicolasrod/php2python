@@ -184,7 +184,7 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
         #// Is a directory, and we want recursive.
         file_ = trailingslashit(file_)
         filelist_ = self.dirlist(file_)
-        for filename_,filemeta_ in filelist_:
+        for filename_,filemeta_ in filelist_.items():
             self.chmod(file_ + filename_, mode_, recursive_)
         # end for
         return True
@@ -375,7 +375,7 @@ class WP_Filesystem_Direct(WP_Filesystem_Base):
         filelist_ = self.dirlist(file_, True)
         retval_ = True
         if php_is_array(filelist_):
-            for filename_,fileinfo_ in filelist_:
+            for filename_,fileinfo_ in filelist_.items():
                 if (not self.delete(file_ + filename_, recursive_, fileinfo_["type"])):
                     retval_ = False
                 # end if

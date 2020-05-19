@@ -1670,7 +1670,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         base_ = None
         if base_ == None:
             base_ = Array()
-            for i_,bas_ in self.base:
+            for i_,bas_ in self.base.items():
                 j_ = 0
                 while j_ < 8:
                     

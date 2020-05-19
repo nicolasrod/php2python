@@ -504,7 +504,7 @@ class WP_Filesystem_SSH2(WP_Filesystem_Base):
         # end if
         filelist_ = self.dirlist(file_)
         if php_is_array(filelist_):
-            for filename_,fileinfo_ in filelist_:
+            for filename_,fileinfo_ in filelist_.items():
                 self.delete(file_ + "/" + filename_, recursive_, fileinfo_["type"])
             # end for
         # end if

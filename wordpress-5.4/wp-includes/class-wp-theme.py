@@ -1052,7 +1052,7 @@ class WP_Theme(ArrayAccess):
         if (not php_is_array(post_templates_)):
             post_templates_ = Array()
             files_ = self.get_files("php", 1, True)
-            for file_,full_path_ in files_:
+            for file_,full_path_ in files_.items():
                 if (not php_preg_match("|Template Name:(.*)$|mi", php_file_get_contents(full_path_), header_)):
                     continue
                 # end if
@@ -1267,7 +1267,7 @@ class WP_Theme(ArrayAccess):
     def get_core_default_theme(self):
         
         
-        for slug_,name_ in array_reverse(self.default_themes):
+        for slug_,name_ in array_reverse(self.default_themes).items():
             theme_ = wp_get_theme(slug_)
             if theme_.exists():
                 return theme_
@@ -1384,7 +1384,7 @@ class WP_Theme(ArrayAccess):
             else:
                 converted_ = Array()
                 themes_ = wp_get_themes()
-                for stylesheet_,theme_data_ in themes_:
+                for stylesheet_,theme_data_ in themes_.items():
                     if (php_isset(lambda : allowed_themes_[blog_id_][theme_data_.get("Name")])):
                         converted_[stylesheet_] = True
                     # end if
@@ -1469,7 +1469,7 @@ class WP_Theme(ArrayAccess):
         if 0 == php_strpos(get_user_locale(), "en_"):
             uasort(themes_, Array("WP_Theme", "_name_sort"))
         else:
-            for key_,theme_ in themes_:
+            for key_,theme_ in themes_.items():
                 theme_.translate_header("Name", theme_.headers["Name"])
             # end for
             uasort(themes_, Array("WP_Theme", "_name_sort_i18n"))

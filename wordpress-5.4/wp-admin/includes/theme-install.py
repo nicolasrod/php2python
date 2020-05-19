@@ -124,11 +124,11 @@ def install_themes_dashboard(*_args_):
     """)
     feature_list_ = get_theme_feature_list()
     php_print("<div class=\"feature-filter\">")
-    for feature_name_,features_ in feature_list_:
+    for feature_name_,features_ in feature_list_.items():
         feature_name_ = esc_html(feature_name_)
         php_print("<div class=\"feature-name\">" + feature_name_ + "</div>")
         php_print("<ol class=\"feature-group\">")
-        for feature_,feature_name_ in features_:
+        for feature_,feature_name_ in features_.items():
             feature_name_ = esc_html(feature_name_)
             feature_ = esc_attr(feature_)
             php_print("\n<li>\n <input type=\"checkbox\" name=\"features[]\" id=\"feature-id-")

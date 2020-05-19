@@ -188,7 +188,7 @@ class WP_Comment():
     def __init__(self, comment_=None):
         
         
-        for key_,value_ in get_object_vars(comment_):
+        for key_,value_ in get_object_vars(comment_).items():
             self.key_ = value_
         # end for
     # end def __init__

@@ -63,7 +63,7 @@ class WP_Themes_List_Table(WP_List_Table):
             self.features = PHP_REQUEST["features"]
         # end if
         if self.search_terms or self.features:
-            for key_,theme_ in themes_:
+            for key_,theme_ in themes_.items():
                 if (not self.search_theme(theme_)):
                     themes_[key_] = None
                 # end if

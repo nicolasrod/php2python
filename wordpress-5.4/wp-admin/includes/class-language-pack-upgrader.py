@@ -73,7 +73,7 @@ class Language_Pack_Upgrader(WP_Upgrader):
         if check_vcs_.is_vcs_checkout(WP_CONTENT_DIR):
             return
         # end if
-        for key_,language_update_ in language_updates_:
+        for key_,language_update_ in language_updates_.items():
             update_ = (not php_empty(lambda : language_update_.autoupdate))
             #// 
             #// Filters whether to asynchronously update translation for core, a plugin, or a theme.
@@ -284,7 +284,7 @@ class Language_Pack_Upgrader(WP_Upgrader):
         #// Check to see if a .po and .mo exist in the folder.
         po_ = False
         mo_ = False
-        for file_,filedata_ in files_:
+        for file_,filedata_ in files_.items():
             if ".po" == php_substr(file_, -3):
                 po_ = True
             elif ".mo" == php_substr(file_, -3):

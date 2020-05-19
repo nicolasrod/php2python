@@ -268,7 +268,7 @@ class getid3_flv(getid3_handler):
                         info_["flv"]["meta"][eventName_] = reader_.readdata()
                         reader_ = None
                         copykeys_ = Array({"framerate": "frame_rate", "width": "resolution_x", "height": "resolution_y", "audiodatarate": "bitrate", "videodatarate": "bitrate"})
-                        for sourcekey_,destkey_ in copykeys_:
+                        for sourcekey_,destkey_ in copykeys_.items():
                             if (php_isset(lambda : info_["flv"]["meta"]["onMetaData"][sourcekey_])):
                                 for case in Switch(sourcekey_):
                                     if case("width"):

@@ -839,7 +839,7 @@ def post_custom_meta_box(post_=None, *_args_):
     
     php_print("<div id=\"postcustomstuff\">\n<div id=\"ajax-response\"></div>\n ")
     metadata_ = has_meta(post_.ID)
-    for key_,value_ in metadata_:
+    for key_,value_ in metadata_.items():
         if is_protected_meta(metadata_[key_]["meta_key"], "post") or (not current_user_can("edit_post_meta", post_.ID, metadata_[key_]["meta_key"])):
             metadata_[key_] = None
         # end if
@@ -1540,7 +1540,7 @@ def attachment_id3_data_meta_box(post_=None, *_args_):
     if (not php_empty(lambda : post_.ID)):
         meta_ = wp_get_attachment_metadata(post_.ID)
     # end if
-    for key_,label_ in wp_get_attachment_id3_keys(post_, "edit"):
+    for key_,label_ in wp_get_attachment_id3_keys(post_, "edit").items():
         value_ = ""
         if (not php_empty(lambda : meta_[key_])):
             value_ = meta_[key_]

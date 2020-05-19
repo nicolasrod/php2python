@@ -164,7 +164,7 @@ php_print("""</th>
 <legend class=\"screen-reader-text\">""")
 _e("Set site attributes")
 php_print("</legend>\n          ")
-for field_key_,field_label_ in attribute_fields_:
+for field_key_,field_label_ in attribute_fields_.items():
     php_print("             <label><input type=\"checkbox\" name=\"blog[")
     php_print(field_key_)
     php_print("]\" value=\"1\" ")

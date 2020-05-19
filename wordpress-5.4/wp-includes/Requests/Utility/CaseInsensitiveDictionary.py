@@ -36,7 +36,7 @@ class Requests_Utility_CaseInsensitiveDictionary(ArrayAccessIteratorAggregate):
             data_ = Array()
         # end if
         
-        for key_,value_ in data_:
+        for key_,value_ in data_.items():
             self.offsetset(key_, value_)
         # end for
     # end def __init__

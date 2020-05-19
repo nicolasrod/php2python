@@ -67,7 +67,7 @@ class Requests_Hooks(Requests_Hooker):
         if php_empty(lambda : self.hooks[hook_]):
             return False
         # end if
-        for priority_,hooked_ in self.hooks[hook_]:
+        for priority_,hooked_ in self.hooks[hook_].items():
             for callback_ in hooked_:
                 call_user_func_array(callback_, parameters_)
             # end for

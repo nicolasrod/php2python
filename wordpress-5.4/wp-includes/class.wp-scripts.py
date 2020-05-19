@@ -464,7 +464,7 @@ class WP_Scripts(WP_Dependencies):
             after_ = l10n_["l10n_print_after"]
             l10n_["l10n_print_after"] = None
         # end if
-        for key_,value_ in l10n_:
+        for key_,value_ in l10n_.items():
             if (not php_is_scalar(value_)):
                 continue
             # end if

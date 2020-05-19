@@ -388,7 +388,7 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
         
         
         metadata_ = Array()
-        for size_,size_data_ in sizes_:
+        for size_,size_data_ in sizes_.items():
             meta_ = self.make_subsize(size_data_)
             if (not is_wp_error(meta_)):
                 metadata_[size_] = meta_
@@ -697,7 +697,7 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
         protected_profiles_ = Array("icc", "icm", "iptc", "exif", "xmp")
         try: 
             #// Strip profiles.
-            for key_,value_ in self.image.getimageprofiles("*", True):
+            for key_,value_ in self.image.getimageprofiles("*", True).items():
                 if (not php_in_array(key_, protected_profiles_, True)):
                     self.image.removeimageprofile(key_)
                 # end if

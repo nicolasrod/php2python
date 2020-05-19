@@ -9,15 +9,23 @@ import resource
 import multiprocessing as mp
 import time
 import json
+import subprocess
 
-from subprocess import check_output
+def runbin(cmd):
+    ps = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE)
+    ret = ps.returncode
+    return (int(ret), ps.stdout)
 
 def convert(fname, fname_ast, fname_py, args):
     if not args.quiet:
         print(f"[+] Converting {fname}...")
 
-    ast = check_output(["php", "php2ast.php", fname], encoding='UTF-8')
+    ret, ast = runbin(["php", "php2ast.php", fname])
 
+    if ret != 0:
+        print(ast)
+        return
+    
     with open(fname_ast, "w") as f:
         data = json.loads(ast)
         json.dump(data, f, indent=2)

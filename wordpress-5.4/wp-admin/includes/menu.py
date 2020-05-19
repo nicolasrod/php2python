@@ -75,8 +75,8 @@ compat_ = None
 _wp_submenu_nopriv_ = Array()
 _wp_menu_nopriv_ = Array()
 #// Loop over submenus and remove pages for which the user does not have privs.
-for parent_,sub_ in submenu_:
-    for index_,data_ in sub_:
+for parent_,sub_ in submenu_.items():
+    for index_,data_ in sub_.items():
         if (not current_user_can(data_[1])):
             submenu_[parent_][index_] = None
             _wp_submenu_nopriv_[parent_][data_[2]] = True
@@ -95,7 +95,7 @@ parent_ = None
 #// Menus for which the original parent is not accessible due to lack of privileges
 #// will have the next submenu in line be assigned as the new menu parent.
 #//
-for id_,data_ in menu_:
+for id_,data_ in menu_.items():
     if php_empty(lambda : submenu_[data_[2]]):
         continue
     # end if
@@ -110,7 +110,7 @@ for id_,data_ in menu_:
     if new_parent_ != old_parent_:
         _wp_real_parent_file_[old_parent_] = new_parent_
         menu_[id_][2] = new_parent_
-        for index_,data_ in submenu_[old_parent_]:
+        for index_,data_ in submenu_[old_parent_].items():
             submenu_[new_parent_][index_] = submenu_[old_parent_][index_]
             submenu_[old_parent_][index_] = None
         # end for
@@ -159,7 +159,7 @@ else:
 #// Remove menus that have no accessible submenus and require privileges
 #// that the user does not have. Run re-parent loop again.
 #//
-for id_,data_ in menu_:
+for id_,data_ in menu_.items():
     if (not current_user_can(data_[1])):
         _wp_menu_nopriv_[data_[2]] = True
     # end if
@@ -208,7 +208,7 @@ def add_menu_classes(menu_=None, *_args_):
     lastorder_ = False
     i_ = 0
     mc_ = php_count(menu_)
-    for order_,top_ in menu_:
+    for order_,top_ in menu_.items():
         i_ += 1
         if 0 == order_:
             #// Dashboard is always shown/single.
@@ -312,7 +312,7 @@ if apply_filters("custom_menu_order", False):
 # end if
 #// Prevent adjacent separators.
 prev_menu_was_separator_ = False
-for id_,data_ in menu_:
+for id_,data_ in menu_.items():
     if False == php_stristr(data_[4], "wp-menu-separator"):
         #// This item is not a separator, so falsey the toggler and do nothing.
         prev_menu_was_separator_ = False

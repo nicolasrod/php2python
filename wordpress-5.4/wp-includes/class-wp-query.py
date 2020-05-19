@@ -952,7 +952,7 @@ class WP_Query():
         if (not php_empty(lambda : q_["taxonomy"])) and (not php_empty(lambda : q_["term"])):
             tax_query_[-1] = Array({"taxonomy": q_["taxonomy"], "terms": Array(q_["term"]), "field": "slug"})
         # end if
-        for taxonomy_,t_ in get_taxonomies(Array(), "objects"):
+        for taxonomy_,t_ in get_taxonomies(Array(), "objects").items():
             if "post_tag" == taxonomy_:
                 continue
                 pass
@@ -1837,7 +1837,7 @@ class WP_Query():
             #// first taxonomy other than 'post_tag' or 'category'.
             #//
             if (not (php_isset(lambda : q_["taxonomy"]))):
-                for queried_taxonomy_,queried_items_ in self.tax_query.queried_terms:
+                for queried_taxonomy_,queried_items_ in self.tax_query.queried_terms.items():
                     if php_empty(lambda : queried_items_["terms"][0]):
                         continue
                     # end if
@@ -1853,7 +1853,7 @@ class WP_Query():
                 # end for
             # end if
             #// 'cat', 'category_name', 'tag_id'.
-            for queried_taxonomy_,queried_items_ in self.tax_query.queried_terms:
+            for queried_taxonomy_,queried_items_ in self.tax_query.queried_terms.items():
                 if php_empty(lambda : queried_items_["terms"][0]):
                     continue
                 # end if
@@ -1966,7 +1966,7 @@ class WP_Query():
         else:
             orderby_array_ = Array()
             if php_is_array(q_["orderby"]):
-                for _orderby_,order_ in q_["orderby"]:
+                for _orderby_,order_ in q_["orderby"].items():
                     orderby_ = addslashes_gpc(urldecode(_orderby_))
                     parsed_ = self.parse_orderby(orderby_)
                     if (not parsed_):
@@ -1978,7 +1978,7 @@ class WP_Query():
             else:
                 q_["orderby"] = urldecode(q_["orderby"])
                 q_["orderby"] = addslashes_gpc(q_["orderby"])
-                for i_,orderby_ in php_explode(" ", q_["orderby"]):
+                for i_,orderby_ in php_explode(" ", q_["orderby"]).items():
                     parsed_ = self.parse_orderby(orderby_)
                     #// Only allow certain values for safety.
                     if (not parsed_):
@@ -2122,7 +2122,7 @@ class WP_Query():
             # end if
             if post_status_join_:
                 join_ += str(" LEFT JOIN ") + str(wpdb_.posts) + str(" AS p2 ON (") + str(wpdb_.posts) + str(".post_parent = p2.ID) ")
-                for index_,statuswhere_ in statuswheres_:
+                for index_,statuswhere_ in statuswheres_.items():
                     statuswheres_[index_] = str("(") + str(statuswhere_) + str(" OR (") + str(wpdb_.posts) + str(".post_status = 'inherit' AND ") + php_str_replace(wpdb_.posts, "p2", statuswhere_) + "))"
                 # end for
             # end if
@@ -2536,7 +2536,7 @@ class WP_Query():
             self.post_count = php_count(self.posts)
             self.set_found_posts(q_, limits_)
             r_ = Array()
-            for key_,post_ in self.posts:
+            for key_,post_ in self.posts.items():
                 self.posts[key_].ID = php_int(post_.ID)
                 self.posts[key_].post_parent = php_int(post_.post_parent)
                 r_[php_int(post_.ID)] = php_int(post_.post_parent)

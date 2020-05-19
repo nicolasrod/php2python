@@ -55,7 +55,7 @@ sidebars_widgets_ = wp_get_sidebars_widgets()
 if php_empty(lambda : sidebars_widgets_):
     sidebars_widgets_ = wp_get_widget_defaults()
 # end if
-for sidebar_id_,widgets_ in sidebars_widgets_:
+for sidebar_id_,widgets_ in sidebars_widgets_.items():
     if "wp_inactive_widgets" == sidebar_id_:
         continue
     # end if
@@ -77,7 +77,7 @@ if (php_isset(lambda : PHP_POST["savewidget"])) or (php_isset(lambda : PHP_POST[
     check_admin_referer(str("save-delete-widget-") + str(widget_id_))
     number_ = php_int(PHP_POST["multi_number"]) if (php_isset(lambda : PHP_POST["multi_number"])) else ""
     if number_:
-        for key_,val_ in PHP_POST:
+        for key_,val_ in PHP_POST.items():
             if php_is_array(val_) and php_preg_match("/__i__|%i%/", key(val_)):
                 PHP_POST[key_] = Array({number_: php_array_shift(val_)})
                 break
@@ -108,7 +108,7 @@ if (php_isset(lambda : PHP_POST["savewidget"])) or (php_isset(lambda : PHP_POST[
         do_action("delete_widget", widget_id_, sidebar_id_, id_base_)
     # end if
     PHP_POST["widget-id"] = sidebar_
-    for name_,control_ in wp_registered_widget_updates_:
+    for name_,control_ in wp_registered_widget_updates_.items():
         if name_ != id_base_ or (not php_is_callable(control_["callback"])):
             continue
         # end if
@@ -120,7 +120,7 @@ if (php_isset(lambda : PHP_POST["savewidget"])) or (php_isset(lambda : PHP_POST[
     sidebars_widgets_[sidebar_id_] = sidebar_
     #// Remove old position.
     if (not (php_isset(lambda : PHP_POST["delete_widget"]))):
-        for key_,sb_ in sidebars_widgets_:
+        for key_,sb_ in sidebars_widgets_.items():
             if php_is_array(sb_):
                 sidebars_widgets_[key_] = php_array_diff(sb_, Array(widget_id_))
             # end if
@@ -135,7 +135,7 @@ if (php_isset(lambda : PHP_POST["savewidget"])) or (php_isset(lambda : PHP_POST[
 if (php_isset(lambda : PHP_POST["removeinactivewidgets"])):
     check_admin_referer("remove-inactive-widgets", "_wpnonce_remove_inactive_widgets")
     if PHP_POST["removeinactivewidgets"]:
-        for key_,widget_id_ in sidebars_widgets_["wp_inactive_widgets"]:
+        for key_,widget_id_ in sidebars_widgets_["wp_inactive_widgets"].items():
             pieces_ = php_explode("-", widget_id_)
             multi_number_ = php_array_pop(pieces_)
             id_base_ = php_implode("-", pieces_)
@@ -215,7 +215,7 @@ if (php_isset(lambda : PHP_REQUEST["editwidget"])) and PHP_REQUEST["editwidget"]
     php_print("</th><th>")
     _e("Position")
     php_print("</th></tr></thead><tbody>\n  ")
-    for sbname_,sbvalue_ in wp_registered_sidebars_:
+    for sbname_,sbvalue_ in wp_registered_sidebars_.items():
         php_print("     <tr><td><label><input type='radio' name='sidebar' value='" + esc_attr(sbname_) + "'" + checked(sbname_, sidebar_, False) + str(" /> ") + str(sbvalue_["name"]) + str("</label></td><td>"))
         if "wp_inactive_widgets" == sbname_ or "orphaned_widgets" == php_substr(sbname_, 0, 16):
             php_print("&nbsp;")
@@ -349,7 +349,7 @@ php_print("""           </div>
 </div>
 """)
 theme_sidebars_ = Array()
-for sidebar_,registered_sidebar_ in wp_registered_sidebars_:
+for sidebar_,registered_sidebar_ in wp_registered_sidebars_.items():
     if False != php_strpos(registered_sidebar_["class"], "inactive-sidebar") or "orphaned_widgets" == php_substr(sidebar_, 0, 16):
         wrap_class_ = "widgets-holder-wrap"
         if (not php_empty(lambda : registered_sidebar_["class"])):
@@ -399,7 +399,7 @@ else:
 php_print("<div class=\"widget-liquid-right\">\n<div id=\"widgets-right\" class=\"wp-clearfix")
 php_print(single_sidebar_class_)
 php_print("\">\n<div class=\"sidebars-column-1\">\n")
-for sidebar_,registered_sidebar_ in theme_sidebars_:
+for sidebar_,registered_sidebar_ in theme_sidebars_.items():
     wrap_class_ = "widgets-holder-wrap"
     if (not php_empty(lambda : registered_sidebar_["class"])):
         wrap_class_ += " sidebar-" + registered_sidebar_["class"]

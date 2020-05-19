@@ -214,7 +214,7 @@ class ftp_sockets(ftp_base):
         # end if
         
         NewLine_ = self._eol_code[self.OS_local]
-        if is_resource(fp_):
+        if php_is_resource(fp_):
             out_ = 0
         else:
             out_ = ""
@@ -239,7 +239,7 @@ class ftp_sockets(ftp_base):
             if mode_ != FTP_BINARY:
                 block_ = php_preg_replace("/\r\n|\r|\n/", self._eol_code[self.OS_local], block_)
             # end if
-            if is_resource(fp_):
+            if php_is_resource(fp_):
                 out_ += fwrite(fp_, block_, php_strlen(block_))
             else:
                 out_ += block_
@@ -256,7 +256,7 @@ class ftp_sockets(ftp_base):
         # end if
         
         NewLine_ = self._eol_code[self.OS_local]
-        if is_resource(fp_):
+        if php_is_resource(fp_):
             out_ = 0
         else:
             out_ = ""
@@ -270,7 +270,7 @@ class ftp_sockets(ftp_base):
                 return False
             # end if
         # end if
-        if is_resource(fp_):
+        if php_is_resource(fp_):
             while True:
                 
                 if not ((not php_feof(fp_))):

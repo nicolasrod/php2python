@@ -236,7 +236,7 @@ def get_children(args_="", output_=None, *_args_):
         return children_
     # end if
     update_post_cache(children_)
-    for key_,child_ in children_:
+    for key_,child_ in children_.items():
         kids_[child_.ID] = children_[key_]
     # end for
     if OBJECT == output_:
@@ -1110,7 +1110,7 @@ def _post_type_meta_capabilities(capabilities_=None, *_args_):
     
     global post_type_meta_caps_
     php_check_if_defined("post_type_meta_caps_")
-    for core_,custom_ in capabilities_:
+    for core_,custom_ in capabilities_.items():
         if php_in_array(core_, Array("read_post", "delete_post", "edit_post")):
             post_type_meta_caps_[custom_] = core_
         # end if
@@ -1242,7 +1242,7 @@ def _get_custom_object_labels(object_=None, nohier_vs_hier_defaults_=None, *_arg
         object_.labels["archives"] = object_.labels["all_items"]
     # end if
     defaults_ = Array()
-    for key_,value_ in nohier_vs_hier_defaults_:
+    for key_,value_ in nohier_vs_hier_defaults_.items():
         defaults_[key_] = value_[1] if object_.hierarchical else value_[0]
     # end for
     labels_ = php_array_merge(defaults_, object_.labels)
@@ -2137,7 +2137,7 @@ def get_post_mime_types(*_args_):
     post_mime_types_ = Array({"image": Array(__("Images"), __("Manage Images"), _n_noop("Image <span class=\"count\">(%s)</span>", "Images <span class=\"count\">(%s)</span>")), "audio": Array(__("Audio"), __("Manage Audio"), _n_noop("Audio <span class=\"count\">(%s)</span>", "Audio <span class=\"count\">(%s)</span>")), "video": Array(__("Video"), __("Manage Video"), _n_noop("Video <span class=\"count\">(%s)</span>", "Video <span class=\"count\">(%s)</span>")), "document": Array(__("Documents"), __("Manage Documents"), _n_noop("Document <span class=\"count\">(%s)</span>", "Documents <span class=\"count\">(%s)</span>")), "spreadsheet": Array(__("Spreadsheets"), __("Manage Spreadsheets"), _n_noop("Spreadsheet <span class=\"count\">(%s)</span>", "Spreadsheets <span class=\"count\">(%s)</span>")), "archive": Array(_x("Archives", "file type group"), __("Manage Archives"), _n_noop("Archive <span class=\"count\">(%s)</span>", "Archives <span class=\"count\">(%s)</span>"))})
     ext_types_ = wp_get_ext_types()
     mime_types_ = wp_get_mime_types()
-    for group_,labels_ in post_mime_types_:
+    for group_,labels_ in post_mime_types_.items():
         if php_in_array(group_, Array("image", "audio", "video")):
             continue
         # end if
@@ -2147,7 +2147,7 @@ def get_post_mime_types(*_args_):
         # end if
         group_mime_types_ = Array()
         for extension_ in ext_types_[group_]:
-            for exts_,mime_ in mime_types_:
+            for exts_,mime_ in mime_types_.items():
                 if php_preg_match("!^(" + exts_ + ")$!i", extension_):
                     group_mime_types_[-1] = mime_
                     break
@@ -2206,7 +2206,7 @@ def wp_match_mime_types(wildcard_mime_types_=None, real_mime_types_=None, *_args
     # end for
     asort(patternses_)
     for patterns_ in patternses_:
-        for type_,pattern_ in patterns_:
+        for type_,pattern_ in patterns_.items():
             for real_ in real_mime_types_:
                 if php_preg_match(str("#") + str(pattern_) + str("#"), real_) and php_empty(lambda : matches_[type_]) or False == php_array_search(real_, matches_[type_]):
                     matches_[type_][-1] = real_
@@ -2640,10 +2640,10 @@ def wp_untrash_post_comments(post_=None, *_args_):
     do_action("untrash_post_comments", post_id_)
     #// Restore each comment to its original status.
     group_by_status_ = Array()
-    for comment_id_,comment_status_ in statuses_:
+    for comment_id_,comment_status_ in statuses_.items():
         group_by_status_[comment_status_][-1] = comment_id_
     # end for
-    for status_,comments_ in group_by_status_:
+    for status_,comments_ in group_by_status_.items():
         #// Sanity check. This shouldn't happen.
         if "post-trashed" == status_:
             status_ = "0"
@@ -2774,7 +2774,7 @@ def wp_get_recent_posts(args_=None, output_=None, *_args_):
     results_ = get_posts(parsed_args_)
     #// Backward compatibility. Prior to 3.1 expected posts to be returned in array.
     if ARRAY_A == output_:
-        for key_,result_ in results_:
+        for key_,result_ in results_.items():
             results_[key_] = get_object_vars(result_)
         # end for
         return results_ if results_ else Array()
@@ -3172,7 +3172,7 @@ def wp_insert_post(postarr_=None, wp_error_=None, *_args_):
     # end if
     #// New-style support for all custom taxonomies.
     if (not php_empty(lambda : postarr_["tax_input"])):
-        for taxonomy_,tags_ in postarr_["tax_input"]:
+        for taxonomy_,tags_ in postarr_["tax_input"].items():
             taxonomy_obj_ = get_taxonomy(taxonomy_)
             if (not taxonomy_obj_):
                 #// translators: %s: Taxonomy name.
@@ -3189,7 +3189,7 @@ def wp_insert_post(postarr_=None, wp_error_=None, *_args_):
         # end for
     # end if
     if (not php_empty(lambda : postarr_["meta_input"])):
-        for field_,value_ in postarr_["meta_input"]:
+        for field_,value_ in postarr_["meta_input"].items():
             update_post_meta(post_ID_, field_, value_)
         # end for
     # end if
@@ -3925,7 +3925,7 @@ def get_enclosed(post_id_=None, *_args_):
     if (not php_is_array(custom_fields_)):
         return pung_
     # end if
-    for key_,val_ in custom_fields_:
+    for key_,val_ in custom_fields_.items():
         if "enclosure" != key_ or (not php_is_array(val_)):
             continue
         # end if
@@ -4773,7 +4773,7 @@ def wp_delete_attachment_files(post_id_=None, meta_=None, backup_sizes_=None, fi
     #// Remove intermediate and backup images if there are any.
     if (php_isset(lambda : meta_["sizes"])) and php_is_array(meta_["sizes"]):
         intermediate_dir_ = path_join(uploadpath_["basedir"], php_dirname(file_))
-        for size_,sizeinfo_ in meta_["sizes"]:
+        for size_,sizeinfo_ in meta_["sizes"].items():
             intermediate_file_ = php_str_replace(wp_basename(file_), sizeinfo_["file"], file_)
             if (not php_empty(lambda : intermediate_file_)):
                 intermediate_file_ = path_join(uploadpath_["basedir"], intermediate_file_)
@@ -5219,7 +5219,7 @@ def wp_mime_type_icon(mime_=0, *_args_):
         # end if
         types_ = Array()
         #// Icon wp_basename - extension = MIME wildcard.
-        for file_,uri_ in icon_files_:
+        for file_,uri_ in icon_files_.items():
             types_[php_preg_replace("/^([^.]*).*$/", "$1", wp_basename(file_))] = icon_files_[file_]
         # end for
         if (not php_empty(lambda : mime_)):
@@ -5229,7 +5229,7 @@ def wp_mime_type_icon(mime_=0, *_args_):
         # end if
         matches_ = wp_match_mime_types(php_array_keys(types_), post_mimes_)
         matches_["default"] = Array("default")
-        for match_,wilds_ in matches_:
+        for match_,wilds_ in matches_.items():
             for wild_ in wilds_:
                 if (not (php_isset(lambda : types_[wild_]))):
                     continue

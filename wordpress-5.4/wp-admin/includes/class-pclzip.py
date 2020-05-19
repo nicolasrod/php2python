@@ -1546,7 +1546,7 @@ class PclZip():
         
         v_result_ = 1
         #// ----- For each file in the list check the attributes
-        for v_key_,v_value_ in p_file_list_:
+        for v_key_,v_value_ in p_file_list_.items():
             #// ----- Check if the option is supported
             if (not (php_isset(lambda : v_requested_options_[v_key_]))):
                 #// ----- Error log

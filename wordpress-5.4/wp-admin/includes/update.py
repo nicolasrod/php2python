@@ -316,7 +316,7 @@ def get_plugin_updates(*_args_):
     all_plugins_ = get_plugins()
     upgrade_plugins_ = Array()
     current_ = get_site_transient("update_plugins")
-    for plugin_file_,plugin_data_ in all_plugins_:
+    for plugin_file_,plugin_data_ in all_plugins_.items():
         if (php_isset(lambda : current_.response[plugin_file_])):
             upgrade_plugins_[plugin_file_] = plugin_data_
             upgrade_plugins_[plugin_file_].update = current_.response[plugin_file_]
@@ -438,7 +438,7 @@ def get_theme_updates(*_args_):
         return Array()
     # end if
     update_themes_ = Array()
-    for stylesheet_,data_ in current_.response:
+    for stylesheet_,data_ in current_.response.items():
         update_themes_[stylesheet_] = wp_get_theme(stylesheet_)
         update_themes_[stylesheet_].update = data_
     # end for

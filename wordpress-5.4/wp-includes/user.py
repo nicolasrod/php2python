@@ -838,7 +838,7 @@ def count_users(strategy_="time", site_id_=None, *_args_):
         # end if
         #// Build a CPU-intensive query that will return concise information.
         select_count_ = Array()
-        for this_role_,name_ in avail_roles_:
+        for this_role_,name_ in avail_roles_.items():
             select_count_[-1] = wpdb_.prepare("COUNT(NULLIF(`meta_value` LIKE %s, false))", "%" + wpdb_.esc_like("\"" + this_role_ + "\"") + "%")
         # end for
         select_count_[-1] = "COUNT(NULLIF(`meta_value` = 'a:0:{}', false))"
@@ -848,7 +848,7 @@ def count_users(strategy_="time", site_id_=None, *_args_):
         #// Run the previous loop again to associate results with role names.
         col_ = 0
         role_counts_ = Array()
-        for this_role_,name_ in avail_roles_:
+        for this_role_,name_ in avail_roles_.items():
             count_ = php_int(row_[col_])
             col_ += 1
             col_ += 1
@@ -874,7 +874,7 @@ def count_users(strategy_="time", site_id_=None, *_args_):
             if php_empty(lambda : b_roles_):
                 avail_roles_["none"] += 1
             # end if
-            for b_role_,val_ in b_roles_:
+            for b_role_,val_ in b_roles_.items():
                 if (php_isset(lambda : avail_roles_[b_role_])):
                     avail_roles_[b_role_] += 1
                 else:
@@ -1653,10 +1653,10 @@ def wp_insert_user(userdata_=None, *_args_):
     #//
     meta_ = apply_filters("insert_user_meta", meta_, user_, update_)
     #// Update user meta.
-    for key_,value_ in meta_:
+    for key_,value_ in meta_.items():
         update_user_meta(user_id_, key_, value_)
     # end for
-    for key_,value_ in wp_get_user_contact_methods(user_):
+    for key_,value_ in wp_get_user_contact_methods(user_).items():
         if (php_isset(lambda : userdata_[key_])):
             update_user_meta(user_id_, key_, userdata_[key_])
         # end if
@@ -2621,7 +2621,7 @@ def wp_user_personal_data_exporter(email_address_=None, *_args_):
     user_meta_ = get_user_meta(user_.ID)
     user_props_to_export_ = Array({"ID": __("User ID"), "user_login": __("User Login Name"), "user_nicename": __("User Nice Name"), "user_email": __("User Email"), "user_url": __("User URL"), "user_registered": __("User Registration Date"), "display_name": __("User Display Name"), "nickname": __("User Nickname"), "first_name": __("User First Name"), "last_name": __("User Last Name"), "description": __("User Description")})
     user_data_to_export_ = Array()
-    for key_,name_ in user_props_to_export_:
+    for key_,name_ in user_props_to_export_.items():
         value_ = ""
         for case in Switch(key_):
             if case("ID"):
@@ -2697,7 +2697,7 @@ def wp_user_personal_data_exporter(email_address_=None, *_args_):
         location_ = maybe_unserialize(user_meta_["community-events-location"][0])
         location_props_to_export_ = Array({"description": __("City"), "country": __("Country"), "latitude": __("Latitude"), "longitude": __("Longitude"), "ip": __("IP")})
         location_data_to_export_ = Array()
-        for key_,name_ in location_props_to_export_:
+        for key_,name_ in location_props_to_export_.items():
             if (not php_empty(lambda : location_[key_])):
                 location_data_to_export_[-1] = Array({"name": name_, "value": location_[key_]})
             # end if
@@ -2707,9 +2707,9 @@ def wp_user_personal_data_exporter(email_address_=None, *_args_):
     if (php_isset(lambda : user_meta_["session_tokens"])):
         session_tokens_ = maybe_unserialize(user_meta_["session_tokens"][0])
         session_tokens_props_to_export_ = Array({"expiration": __("Expiration"), "ip": __("IP"), "ua": __("User Agent"), "login": __("Last Login")})
-        for token_key_,session_token_ in session_tokens_:
+        for token_key_,session_token_ in session_tokens_.items():
             session_tokens_data_to_export_ = Array()
-            for key_,name_ in session_tokens_props_to_export_:
+            for key_,name_ in session_tokens_props_to_export_.items():
                 if (not php_empty(lambda : session_token_[key_])):
                     value_ = session_token_[key_]
                     if php_in_array(key_, Array("expiration", "login")):

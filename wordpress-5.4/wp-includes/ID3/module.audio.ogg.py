@@ -699,7 +699,7 @@ class getid3_ogg(getid3_handler):
         #// Replay Gain Adjustment
         #// http://privatewww.essex.ac.uk/~djmrob/replaygain
         if (php_isset(lambda : info_["ogg"]["comments"])) and php_is_array(info_["ogg"]["comments"]):
-            for index_,commentvalue_ in info_["ogg"]["comments"]:
+            for index_,commentvalue_ in info_["ogg"]["comments"].items():
                 for case in Switch(index_):
                     if case("rg_audiophile"):
                         pass
@@ -776,7 +776,7 @@ class getid3_ogg(getid3_handler):
         while i_ < SegmentNumber_:
             
             segmentlength_ = 0
-            for key_,value_ in OggInfoArray_["segment_table"]:
+            for key_,value_ in OggInfoArray_["segment_table"].items():
                 segmentlength_ += value_
                 if value_ < 255:
                     break

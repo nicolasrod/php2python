@@ -71,7 +71,7 @@ php_print("""</label></th>
 <option value=\"0\">""")
 php_print(get_post_format_string("standard"))
 php_print("</option>\n")
-for format_slug_,format_name_ in post_formats_:
+for format_slug_,format_name_ in post_formats_.items():
     php_print("     <option")
     selected(get_option("default_post_format"), format_slug_)
     php_print(" value=\"")

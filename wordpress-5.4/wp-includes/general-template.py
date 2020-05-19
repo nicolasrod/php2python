@@ -2133,10 +2133,10 @@ def allowed_tags(*_args_):
     global allowedtags_
     php_check_if_defined("allowedtags_")
     allowed_ = ""
-    for tag_,attributes_ in allowedtags_:
+    for tag_,attributes_ in allowedtags_.items():
         allowed_ += "<" + tag_
         if 0 < php_count(attributes_):
-            for attribute_,limits_ in attributes_:
+            for attribute_,limits_ in attributes_.items():
                 allowed_ += " " + attribute_ + "=\"\""
             # end for
         # end if
@@ -2996,7 +2996,7 @@ def wp_resource_hints(*_args_):
     #// 
     #// This filter is documented in wp-includes/formatting.php
     hints_["dns-prefetch"][-1] = apply_filters("emoji_svg_url", "https://s.w.org/images/core/emoji/12.0.0-1/svg/")
-    for relation_type_,urls_ in hints_:
+    for relation_type_,urls_ in hints_.items():
         unique_urls_ = Array()
         #// 
         #// Filters domains and URLs for resource hints of relation type.
@@ -3007,7 +3007,7 @@ def wp_resource_hints(*_args_):
         #// @param string $relation_type The relation type the URLs are printed for, e.g. 'preconnect' or 'prerender'.
         #//
         urls_ = apply_filters("wp_resource_hints", urls_, relation_type_)
-        for key_,url_ in urls_:
+        for key_,url_ in urls_.items():
             atts_ = Array()
             if php_is_array(url_):
                 if (php_isset(lambda : url_["href"])):
@@ -3042,7 +3042,7 @@ def wp_resource_hints(*_args_):
         # end for
         for atts_ in unique_urls_:
             html_ = ""
-            for attr_,value_ in atts_:
+            for attr_,value_ in atts_.items():
                 if (not php_is_scalar(value_)) or (not php_in_array(attr_, Array("as", "crossorigin", "href", "pr", "rel", "type"), True)) and (not php_is_numeric(attr_)):
                     continue
                 # end if
@@ -3363,7 +3363,7 @@ def wp_get_code_editor_settings(args_=None, *_args_):
         # end if
     elif (php_isset(lambda : args_["file"])) and False != php_strpos(php_basename(args_["file"]), "."):
         extension_ = php_strtolower(pathinfo(args_["file"], PATHINFO_EXTENSION))
-        for exts_,mime_ in wp_get_mime_types():
+        for exts_,mime_ in wp_get_mime_types().items():
             if php_preg_match("!^(" + exts_ + ")$!i", extension_):
                 type_ = mime_
                 break
@@ -3525,7 +3525,7 @@ def wp_get_code_editor_settings(args_=None, *_args_):
         settings_["codemirror"]["gutters"][-1] = "CodeMirror-lint-markers"
     # end if
     #// Let settings supplied via args override any defaults.
-    for key_,value_ in wp_array_slice_assoc(args_, Array("codemirror", "csslint", "jshint", "htmlhint")):
+    for key_,value_ in wp_array_slice_assoc(args_, Array("codemirror", "csslint", "jshint", "htmlhint")).items():
         settings_[key_] = php_array_merge(settings_[key_], value_)
     # end for
     #// 
@@ -3765,7 +3765,7 @@ def paginate_links(args_="", *_args_):
         #// Find the query args of the requested URL.
         wp_parse_str(url_parts_[1], url_query_args_)
         #// Remove the format argument from the array of query arguments, to avoid overwriting custom format.
-        for format_arg_,format_arg_value_ in format_args_:
+        for format_arg_,format_arg_value_ in format_args_.items():
             url_query_args_[format_arg_] = None
         # end for
         args_["add_args"] = php_array_merge(args_["add_args"], urlencode_deep(url_query_args_))

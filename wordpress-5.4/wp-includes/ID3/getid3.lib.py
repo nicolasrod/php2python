@@ -623,7 +623,7 @@ class getid3_lib():
             return False
         # end if
         newarray_ = array1_
-        for key_,val_ in array2_:
+        for key_,val_ in array2_.items():
             if php_is_array(val_) and (php_isset(lambda : newarray_[key_])) and php_is_array(newarray_[key_]):
                 newarray_[key_] = self.array_merge_clobber(newarray_[key_], val_)
             else:
@@ -646,7 +646,7 @@ class getid3_lib():
             return False
         # end if
         newarray_ = array1_
-        for key_,val_ in array2_:
+        for key_,val_ in array2_.items():
             if php_is_array(val_) and (php_isset(lambda : newarray_[key_])) and php_is_array(newarray_[key_]):
                 newarray_[key_] = self.array_merge_noclobber(newarray_[key_], val_)
             elif (not (php_isset(lambda : newarray_[key_]))):
@@ -670,7 +670,7 @@ class getid3_lib():
         # end if
         #// # naturally, this only works non-recursively
         newarray_ = php_array_flip(array1_)
-        for key_,val_ in php_array_flip(array2_):
+        for key_,val_ in php_array_flip(array2_).items():
             if (not (php_isset(lambda : newarray_[key_]))):
                 newarray_[key_] = php_count(newarray_)
             # end if
@@ -686,8 +686,8 @@ class getid3_lib():
     def ksort_recursive(self, theArray_=None):
         
         
-        ksort(theArray_)
-        for key_,value_ in theArray_:
+        php_ksort(theArray_)
+        for key_,value_ in theArray_.items():
             if php_is_array(value_):
                 self.ksort_recursive(theArray_[key_])
             # end if
@@ -823,7 +823,7 @@ class getid3_lib():
         
         maxvalue_ = False
         maxkey_ = False
-        for key_,value_ in arraydata_:
+        for key_,value_ in arraydata_.items():
             if (not php_is_array(value_)):
                 if value_ > maxvalue_:
                     maxvalue_ = value_
@@ -847,7 +847,7 @@ class getid3_lib():
         
         minvalue_ = False
         minkey_ = False
-        for key_,value_ in arraydata_:
+        for key_,value_ in arraydata_.items():
             if (not php_is_array(value_)):
                 if value_ > minvalue_:
                     minvalue_ = value_
@@ -890,7 +890,7 @@ class getid3_lib():
             return XMLobject_
         # end if
         XMLarray_ = get_object_vars(XMLobject_) if type(XMLobject_).__name__ == "SimpleXMLElement" else XMLobject_
-        for key_,value_ in XMLarray_:
+        for key_,value_ in XMLarray_.items():
             XMLarray_[key_] = self.simplexmlelement2array(value_)
         # end for
         return XMLarray_
@@ -1500,7 +1500,7 @@ class getid3_lib():
             return self.multibytecharstring2html(data_, charset_)
         elif php_is_array(data_):
             return_data_ = Array()
-            for key_,value_ in data_:
+            for key_,value_ in data_.items():
                 return_data_[key_] = self.recursivemultibytecharstring2html(value_, charset_)
             # end for
             return return_data_
@@ -1833,15 +1833,15 @@ class getid3_lib():
         
         #// Copy all entries from ['tags'] into common ['comments']
         if (not php_empty(lambda : ThisFileInfo_["tags"])):
-            for tagtype_,tagarray_ in ThisFileInfo_["tags"]:
-                for tagname_,tagdata_ in tagarray_:
-                    for key_,value_ in tagdata_:
+            for tagtype_,tagarray_ in ThisFileInfo_["tags"].items():
+                for tagname_,tagdata_ in tagarray_.items():
+                    for key_,value_ in tagdata_.items():
                         if (not php_empty(lambda : value_)):
                             if php_empty(lambda : ThisFileInfo_["comments"][tagname_]):
                                 pass
                             elif tagtype_ == "id3v1":
                                 newvaluelength_ = php_strlen(php_trim(value_))
-                                for existingkey_,existingvalue_ in ThisFileInfo_["comments"][tagname_]:
+                                for existingkey_,existingvalue_ in ThisFileInfo_["comments"][tagname_].items():
                                     oldvaluelength_ = php_strlen(php_trim(existingvalue_))
                                     if newvaluelength_ <= oldvaluelength_ and php_substr(existingvalue_, 0, newvaluelength_) == php_trim(value_):
                                         break
@@ -1849,7 +1849,7 @@ class getid3_lib():
                                 # end for
                             elif (not php_is_array(value_)):
                                 newvaluelength_ = php_strlen(php_trim(value_))
-                                for existingkey_,existingvalue_ in ThisFileInfo_["comments"][tagname_]:
+                                for existingkey_,existingvalue_ in ThisFileInfo_["comments"][tagname_].items():
                                     oldvaluelength_ = php_strlen(php_trim(existingvalue_))
                                     if php_strlen(existingvalue_) > 10 and newvaluelength_ > oldvaluelength_ and php_substr(php_trim(value_), 0, php_strlen(existingvalue_)) == existingvalue_:
                                         ThisFileInfo_["comments"][tagname_][existingkey_] = php_trim(value_)
@@ -1875,7 +1875,7 @@ class getid3_lib():
             # end for
             #// attempt to standardize spelling of returned keys
             StandardizeFieldNames_ = Array({"tracknumber": "track_number", "track": "track_number"})
-            for badkey_,goodkey_ in StandardizeFieldNames_:
+            for badkey_,goodkey_ in StandardizeFieldNames_.items():
                 if php_array_key_exists(badkey_, ThisFileInfo_["comments"]) and (not php_array_key_exists(goodkey_, ThisFileInfo_["comments"])):
                     ThisFileInfo_["comments"][goodkey_] = ThisFileInfo_["comments"][badkey_]
                     ThisFileInfo_["comments"][badkey_] = None
@@ -1883,11 +1883,11 @@ class getid3_lib():
             # end for
             #// Copy to ['comments_html']
             if (not php_empty(lambda : ThisFileInfo_["comments"])):
-                for field_,values_ in ThisFileInfo_["comments"]:
+                for field_,values_ in ThisFileInfo_["comments"].items():
                     if field_ == "picture":
                         continue
                     # end if
-                    for index_,value_ in values_:
+                    for index_,value_ in values_.items():
                         if php_is_array(value_):
                             ThisFileInfo_["comments_html"][field_][index_] = value_
                         else:

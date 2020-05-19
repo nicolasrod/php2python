@@ -67,7 +67,7 @@ class wpdb {
 	 * @since 2.5.0
 	 * @var bool
 	 */
-	var $suppress_errors = false;
+	var $suppress_errors_ = false;
 
 	/**
 	 * The last error during query.
@@ -258,7 +258,7 @@ class wpdb {
 	 * @see wpdb::tables()
 	 * @var array
 	 */
-	var $tables = array(
+	var $tables_ = array(
 		'posts',
 		'comments',
 		'links',
@@ -1007,13 +1007,13 @@ class wpdb {
 	public function tables( $scope = 'all', $prefix = true, $blog_id = 0 ) {
 		switch ( $scope ) {
 			case 'all':
-				$tables = array_merge( $this->global_tables, $this->tables );
+				$tables = array_merge( $this->global_tables, $this->tables_ );
 				if ( is_multisite() ) {
 					$tables = array_merge( $tables, $this->ms_global_tables );
 				}
 				break;
 			case 'blog':
-				$tables = $this->tables;
+				$tables = $this->tables_;
 				break;
 			case 'global':
 				$tables = $this->global_tables;
@@ -1444,7 +1444,7 @@ class wpdb {
 			'error_str' => $str,
 		);
 
-		if ( $this->suppress_errors ) {
+		if ( $this->suppress_errors_ ) {
 			return false;
 		}
 
@@ -1542,8 +1542,8 @@ class wpdb {
 	 * @return bool Old value
 	 */
 	public function suppress_errors( $suppress = true ) {
-		$errors                = $this->suppress_errors;
-		$this->suppress_errors = (bool) $suppress;
+		$errors                = $this->suppress_errors_;
+		$this->suppress_errors_ = (bool) $suppress;
 		return $errors;
 	}
 

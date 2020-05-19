@@ -809,7 +809,7 @@ def wp_save_nav_menu_items(menu_id_=0, menu_data_=None, *_args_):
     items_saved_ = Array()
     if 0 == menu_id_ or is_nav_menu(menu_id_):
         #// Loop through all the menu items' POST values.
-        for _possible_db_id_,_item_object_data_ in menu_data_:
+        for _possible_db_id_,_item_object_data_ in menu_data_.items():
             if php_empty(lambda : _item_object_data_["menu-item-object-id"]) and (not (php_isset(lambda : _item_object_data_["menu-item-type"]))) or php_in_array(_item_object_data_["menu-item-url"], Array("https://", "http://", "")) or (not "custom" == _item_object_data_["menu-item-type"] and (not (php_isset(lambda : _item_object_data_["menu-item-db-id"])))) or (not php_empty(lambda : _item_object_data_["menu-item-db-id"])):
                 continue
             # end if
@@ -971,7 +971,7 @@ def wp_nav_menu_update_menu_items(nav_menu_selected_id_=None, nav_menu_selected_
     wp_defer_term_counting(True)
     #// Loop through all the menu items' POST variables.
     if (not php_empty(lambda : PHP_POST["menu-item-db-id"])):
-        for _key_,k_ in PHP_POST["menu-item-db-id"]:
+        for _key_,k_ in PHP_POST["menu-item-db-id"].items():
             #// Menu item title can't be blank.
             if (not (php_isset(lambda : PHP_POST["menu-item-title"][_key_]))) or "" == PHP_POST["menu-item-title"][_key_]:
                 continue

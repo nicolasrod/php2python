@@ -33,7 +33,7 @@ if "grid" == mode_:
     q_["s"] = None
     vars_ = wp_edit_attachments_query_vars(q_)
     ignore_ = Array("mode", "post_type", "post_status", "posts_per_page")
-    for key_,value_ in vars_:
+    for key_,value_ in vars_.items():
         if (not value_) or php_in_array(key_, ignore_):
             vars_[key_] = None
         # end if

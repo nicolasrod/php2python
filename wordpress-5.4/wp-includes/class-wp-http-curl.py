@@ -175,7 +175,7 @@ class WP_Http_Curl():
         if (not php_empty(lambda : parsed_args_["headers"])):
             #// cURL expects full header strings in each element.
             headers_ = Array()
-            for name_,value_ in parsed_args_["headers"]:
+            for name_,value_ in parsed_args_["headers"].items():
                 headers_[-1] = str(name_) + str(": ") + str(value_)
             # end for
             curl_setopt(handle_, CURLOPT_HTTPHEADER, headers_)

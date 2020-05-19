@@ -473,3 +473,9 @@ class WP_Object_Cache {
 		return isset( $this->cache[ $group ] ) && ( isset( $this->cache[ $group ][ $key ] ) || array_key_exists( $key, $this->cache[ $group ] ) );
 	}
 }
+
+global $wp_object_cache;
+
+if (! isset($wp_object_cache)) {
+    $wp_object_cache = new WP_Object_Cache;
+}

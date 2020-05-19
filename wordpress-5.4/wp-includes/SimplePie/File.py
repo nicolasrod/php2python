@@ -100,7 +100,7 @@ class SimplePie_File():
                 self.method = SIMPLEPIE_FILE_SOURCE_REMOTE | SIMPLEPIE_FILE_SOURCE_CURL
                 fp_ = curl_init()
                 headers2_ = Array()
-                for key_,value_ in headers_:
+                for key_,value_ in headers_.items():
                     headers2_[-1] = str(key_) + str(": ") + str(value_)
                 # end for
                 if php_version_compare(SimplePie_Misc.get_curl_version(), "7.10.5", ">="):
@@ -178,7 +178,7 @@ class SimplePie_File():
                     if (php_isset(lambda : url_parts_["user"])) and (php_isset(lambda : url_parts_["pass"])):
                         out_ += "Authorization: Basic " + php_base64_encode(str(url_parts_["user"]) + str(":") + str(url_parts_["pass"])) + "\r\n"
                     # end if
-                    for key_,value_ in headers_:
+                    for key_,value_ in headers_.items():
                         out_ += str(key_) + str(": ") + str(value_) + str("\r\n")
                     # end for
                     out_ += "Connection: Close\r\n\r\n"

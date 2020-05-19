@@ -703,7 +703,7 @@ def _oembed_create_xml(data_=None, node_=None, *_args_):
     if None == node_:
         node_ = php_new_class("SimpleXMLElement", lambda : SimpleXMLElement("<oembed></oembed>"))
     # end if
-    for key_,value_ in data_:
+    for key_,value_ in data_.items():
         if php_is_numeric(key_):
             key_ = "oembed"
         # end if

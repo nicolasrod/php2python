@@ -254,7 +254,7 @@ php_print("</th>\n<td><fieldset><legend class=\"screen-reader-text\"><span>")
 _e("Maximum Rating")
 php_print("</span></legend>\n\n")
 ratings_ = Array({"G": __("G &#8212; Suitable for all audiences"), "PG": __("PG &#8212; Possibly offensive, usually for audiences 13 and above"), "R": __("R &#8212; Intended for adult audiences above 17"), "X": __("X &#8212; Even more mature than above")})
-for key_,rating_ in ratings_:
+for key_,rating_ in ratings_.items():
     selected_ = "checked=\"checked\"" if get_option("avatar_rating") == key_ else ""
     php_print("\n   <label><input type='radio' name='avatar_rating' value='" + esc_attr(key_) + str("' ") + str(selected_) + str("/> ") + str(rating_) + str("</label><br />"))
 # end for
@@ -290,7 +290,7 @@ default_ = get_option("avatar_default", "mystery")
 avatar_list_ = ""
 #// Force avatars on to display these choices.
 add_filter("pre_option_show_avatars", "__return_true", 100)
-for default_key_,default_name_ in avatar_defaults_:
+for default_key_,default_name_ in avatar_defaults_.items():
     selected_ = "checked=\"checked\" " if default_ == default_key_ else ""
     avatar_list_ += str("\n <label><input type='radio' name='avatar_default' id='avatar_") + str(default_key_) + str("' value='") + esc_attr(default_key_) + str("' ") + str(selected_) + str("/> ")
     avatar_list_ += get_avatar(user_email_, 32, default_key_, "", Array({"force_default": True}))

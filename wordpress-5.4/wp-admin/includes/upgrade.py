@@ -1330,9 +1330,9 @@ def upgrade_330(*_args_):
     # end if
     for case in Switch(sidebars_widgets_["array_version"]):
         if case(1):
-            for index_,sidebar_ in sidebars_widgets_:
+            for index_,sidebar_ in sidebars_widgets_.items():
                 if php_is_array(sidebar_):
-                    for i_,name_ in sidebar_:
+                    for i_,name_ in sidebar_.items():
                         id_ = php_strtolower(name_)
                         if (php_isset(lambda : wp_registered_widgets_[id_])):
                             _sidebars_widgets_[index_][i_] = id_
@@ -1344,7 +1344,7 @@ def upgrade_330(*_args_):
                             continue
                         # end if
                         found_ = False
-                        for widget_id_,widget_ in wp_registered_widgets_:
+                        for widget_id_,widget_ in wp_registered_widgets_.items():
                             if php_strtolower(widget_["name"]) == php_strtolower(name_):
                                 _sidebars_widgets_[index_][i_] = widget_["id"]
                                 found_ = True
@@ -1692,7 +1692,7 @@ def upgrade_460(*_args_):
     if wp_current_db_version_ < 37965:
         uninstall_plugins_ = get_option("uninstall_plugins", Array())
         if (not php_empty(lambda : uninstall_plugins_)):
-            for basename_,callback_ in uninstall_plugins_:
+            for basename_,callback_ in uninstall_plugins_.items():
                 if php_is_array(callback_) and php_is_object(callback_[0]):
                     uninstall_plugins_[basename_] = None
                 # end if
@@ -1813,7 +1813,7 @@ def upgrade_network(*_args_):
         if False == allowedthemes_ and php_is_array(allowed_themes_) and allowed_themes_:
             converted_ = Array()
             themes_ = wp_get_themes()
-            for stylesheet_,theme_data_ in themes_:
+            for stylesheet_,theme_data_ in themes_.items():
                 if (php_isset(lambda : allowed_themes_[theme_data_.get("Name")])):
                     converted_[stylesheet_] = True
                 # end if
@@ -2206,7 +2206,7 @@ def dbDelta(queries_="", execute_=None, *_args_):
     text_fields_ = Array("tinytext", "text", "mediumtext", "longtext")
     blob_fields_ = Array("tinyblob", "blob", "mediumblob", "longblob")
     global_tables_ = wpdb_.tables("global")
-    for table_,qry_ in cqueries_:
+    for table_,qry_ in cqueries_.items():
         #// Upgrade global tables only for the main site. Don't upgrade at all if conditions are not optimal.
         if php_in_array(table_, global_tables_) and (not wp_should_upgrade_global_tables()):
             cqueries_[table_] = None
@@ -2281,7 +2281,7 @@ def dbDelta(queries_="", execute_=None, *_args_):
                     index_columns_ = php_array_map("trim", php_explode(",", index_matches_["index_columns"]))
                     index_columns_without_subparts_ = index_columns_
                     #// Normalize columns.
-                    for id_,index_column_ in index_columns_:
+                    for id_,index_column_ in index_columns_.items():
                         #// Extract column name and number of indexed characters (sub_part).
                         php_preg_match("/" + "`?" + "(?P<column_name>" + "(?:[0-9a-zA-Z$_-]|[\\xC2-\\xDF][\\x80-\\xBF])+" + ")" + "`?" + "(?:" + "\\s*" + "\\(" + "\\s*" + "(?P<sub_part>" + "\\d+" + ")" + "\\s*" + "\\)" + ")?" + "/", index_column_, index_column_matches_)
                         #// Escape the column name with backticks.
@@ -2355,7 +2355,7 @@ def dbDelta(queries_="", execute_=None, *_args_):
             # end if
         # end for
         #// For every remaining field specified for the table.
-        for fieldname_,fielddef_ in cfields_:
+        for fieldname_,fielddef_ in cfields_.items():
             #// Push a query line into $cqueries that adds the field to that table.
             cqueries_[-1] = str("ALTER TABLE ") + str(table_) + str(" ADD COLUMN ") + str(fielddef_)
             for_update_[table_ + "." + fieldname_] = "Added column " + table_ + "." + fieldname_
@@ -2374,7 +2374,7 @@ def dbDelta(queries_="", execute_=None, *_args_):
                 index_ary_[keyname_]["index_type"] = tableindex_.Index_type
             # end for
             #// For each actual index in the index array.
-            for index_name_,index_data_ in index_ary_:
+            for index_name_,index_data_ in index_ary_.items():
                 #// Build a create string to compare to the query.
                 index_string_ = ""
                 if "primary" == index_name_:
@@ -2491,7 +2491,7 @@ def make_site_theme_from_oldschool(theme_name_=None, template_=None, *_args_):
     #// TODO: This does not copy arbitrary include dependencies. Only the standard WP files are copied.
     #//
     files_ = Array({"index.php": "index.php", "wp-layout.css": "style.css", "wp-comments.php": "comments.php", "wp-comments-popup.php": "comments-popup.php"})
-    for oldfile_,newfile_ in files_:
+    for oldfile_,newfile_ in files_.items():
         if "index.php" == oldfile_:
             oldpath_ = home_path_
         else:

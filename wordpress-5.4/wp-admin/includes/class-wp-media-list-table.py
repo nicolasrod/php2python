@@ -91,7 +91,7 @@ class WP_Media_List_Table(WP_List_Table):
         type_links_ = Array()
         filter_ = "" if php_empty(lambda : PHP_REQUEST["attachment-filter"]) else PHP_REQUEST["attachment-filter"]
         type_links_["all"] = php_sprintf("<option value=\"\"%s>%s</option>", selected(filter_, True, False), __("All media items"))
-        for mime_type_,label_ in post_mime_types_:
+        for mime_type_,label_ in post_mime_types_.items():
             if (not wp_match_mime_types(mime_type_, avail_post_mime_types_)):
                 continue
             # end if
@@ -204,7 +204,7 @@ class WP_Media_List_Table(WP_List_Table):
         _e("Filter by type")
         php_print("</label>\n       <select class=\"attachment-filters\" name=\"attachment-filter\" id=\"attachment-filter\">\n         ")
         if (not php_empty(lambda : views_)):
-            for class_,view_ in views_:
+            for class_,view_ in views_.items():
                 php_print(str(" ") + str(view_) + str("\n"))
             # end for
         # end if
@@ -215,7 +215,7 @@ class WP_Media_List_Table(WP_List_Table):
         #// Back compat for pre-4.0 view links.
         if (not php_empty(lambda : views_)):
             php_print("<ul class=\"filter-links\">")
-            for class_,view_ in views_:
+            for class_,view_ in views_.items():
                 php_print(str("<li class='") + str(class_) + str("'>") + str(view_) + str("</li>"))
             # end for
             php_print("</ul>")

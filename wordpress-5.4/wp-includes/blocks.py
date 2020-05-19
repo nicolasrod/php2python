@@ -304,7 +304,7 @@ def filter_block_kses(block_=None, allowed_html_=None, allowed_protocols_=None, 
     
     block_["attrs"] = filter_block_kses_value(block_["attrs"], allowed_html_, allowed_protocols_)
     if php_is_array(block_["innerBlocks"]):
-        for i_,inner_block_ in block_["innerBlocks"]:
+        for i_,inner_block_ in block_["innerBlocks"].items():
             block_["innerBlocks"][i_] = filter_block_kses(inner_block_, allowed_html_, allowed_protocols_)
         # end for
     # end if
@@ -329,7 +329,7 @@ def filter_block_kses_value(value_=None, allowed_html_=None, allowed_protocols_=
     # end if
     
     if php_is_array(value_):
-        for key_,inner_value_ in value_:
+        for key_,inner_value_ in value_.items():
             filtered_key_ = filter_block_kses_value(key_, allowed_html_, allowed_protocols_)
             filtered_value_ = filter_block_kses_value(inner_value_, allowed_html_, allowed_protocols_)
             if filtered_key_ != key_:

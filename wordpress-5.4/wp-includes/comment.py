@@ -1066,7 +1066,7 @@ def wp_get_comment_fields_max_lengths(*_args_):
     php_check_if_defined("wpdb_")
     lengths_ = Array({"comment_author": 245, "comment_author_email": 100, "comment_author_url": 200, "comment_content": 65525})
     if wpdb_.is_mysql:
-        for column_,length_ in lengths_:
+        for column_,length_ in lengths_.items():
             col_length_ = wpdb_.get_col_length(wpdb_.comments, column_)
             max_length_ = 0
             #// No point if we can't get the DB column lengths.
@@ -1755,7 +1755,7 @@ def wp_insert_comment(commentdata_=None, *_args_):
     comment_ = get_comment(id_)
     #// If metadata is provided, store it.
     if (php_isset(lambda : commentdata_["comment_meta"])) and php_is_array(commentdata_["comment_meta"]):
-        for meta_key_,meta_value_ in commentdata_["comment_meta"]:
+        for meta_key_,meta_value_ in commentdata_["comment_meta"].items():
             add_comment_meta(comment_.comment_ID, meta_key_, meta_value_, True)
         # end for
     # end if
@@ -2185,7 +2185,7 @@ def wp_update_comment(commentarr_=None, *_args_):
     rval_ = wpdb_.update(wpdb_.comments, data_, php_compact("comment_ID_"))
     #// If metadata is provided, store it.
     if (php_isset(lambda : commentarr_["comment_meta"])) and php_is_array(commentarr_["comment_meta"]):
-        for meta_key_,meta_value_ in commentarr_["comment_meta"]:
+        for meta_key_,meta_value_ in commentarr_["comment_meta"].items():
             update_comment_meta(comment_ID_, meta_key_, meta_value_)
         # end for
     # end if
@@ -2269,7 +2269,7 @@ def wp_update_comment_count(post_id_=None, do_deferred_=None, *_args_):
     # end if
     if do_deferred_:
         _deferred_ = array_unique(_deferred_)
-        for i_,_post_id_ in _deferred_:
+        for i_,_post_id_ in _deferred_.items():
             wp_update_comment_count_now(_post_id_)
             _deferred_[i_] = None
             pass
@@ -3090,7 +3090,7 @@ def wp_comments_personal_data_exporter(email_address_=None, page_=1, *_args_):
     comment_prop_to_export_ = Array({"comment_author": __("Comment Author"), "comment_author_email": __("Comment Author Email"), "comment_author_url": __("Comment Author URL"), "comment_author_IP": __("Comment Author IP"), "comment_agent": __("Comment Author User Agent"), "comment_date": __("Comment Date"), "comment_content": __("Comment Content"), "comment_link": __("Comment URL")})
     for comment_ in comments_:
         comment_data_to_export_ = Array()
-        for key_,name_ in comment_prop_to_export_:
+        for key_,name_ in comment_prop_to_export_.items():
             value_ = ""
             for case in Switch(key_):
                 if case("comment_author"):

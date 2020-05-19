@@ -107,7 +107,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         # end if
         current_ = get_site_transient("update_themes")
         maybe_update_ = current_user_can("update_themes") and (not self.is_site_themes) and current_
-        for key_,theme_ in themes_["all"]:
+        for key_,theme_ in themes_["all"].items():
             if self.is_site_themes and theme_.is_allowed("network"):
                 themes_["all"][key_] = None
                 continue
@@ -124,7 +124,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
             themes_["search"] = php_array_filter(php_array_merge(themes_["all"], themes_["broken"]), Array(self, "_search_callback"))
         # end if
         totals_ = Array()
-        for type_,list_ in themes_:
+        for type_,list_ in themes_.items():
             totals_[type_] = php_count(list_)
         # end for
         if php_empty(lambda : themes_[status_]) and (not php_in_array(status_, Array("all", "search"))):
@@ -254,7 +254,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         global status_
         php_check_if_defined("totals_","status_")
         status_links_ = Array()
-        for type_,count_ in totals_:
+        for type_,count_ in totals_.items():
             if (not count_):
                 continue
             # end if
@@ -548,7 +548,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         
         
         columns_, hidden_, sortable_, primary_ = self.get_column_info()
-        for column_name_,column_display_name_ in columns_:
+        for column_name_,column_display_name_ in columns_.items():
             extra_classes_ = ""
             if php_in_array(column_name_, hidden_):
                 extra_classes_ += " hidden"

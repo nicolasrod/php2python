@@ -111,7 +111,7 @@ def get_object_taxonomies(object_=None, output_="names", *_args_):
     # end if
     object_ = object_
     taxonomies_ = Array()
-    for tax_name_,tax_obj_ in wp_taxonomies_:
+    for tax_name_,tax_obj_ in wp_taxonomies_.items():
         if php_array_intersect(object_, tax_obj_.object_type):
             if "names" == output_:
                 taxonomies_[-1] = tax_name_
@@ -1751,7 +1751,7 @@ def wp_get_object_terms(object_ids_=None, taxonomies_=None, args_=None, *_args_)
     #//
     terms_ = Array()
     if php_count(taxonomies_) > 1:
-        for index_,taxonomy_ in taxonomies_:
+        for index_,taxonomy_ in taxonomies_.items():
             t_ = get_taxonomy(taxonomy_)
             if (php_isset(lambda : t_.args)) and php_is_array(t_.args) and php_array_merge(args_, t_.args) != args_:
                 taxonomies_[index_] = None
@@ -2973,8 +2973,8 @@ def update_object_term_cache(object_ids_=None, object_type_=None, *_args_):
             # end if
         # end for
     # end for
-    for id_,value_ in object_terms_:
-        for taxonomy_,terms_ in value_:
+    for id_,value_ in object_terms_.items():
+        for taxonomy_,terms_ in value_.items():
             wp_cache_add(id_, terms_, str(taxonomy_) + str("_relationships"))
         # end for
     # end for
@@ -3021,7 +3021,7 @@ def _get_term_hierarchy(taxonomy_=None, *_args_):
     # end if
     children_ = Array()
     terms_ = get_terms(Array({"taxonomy": taxonomy_, "get": "all", "orderby": "id", "fields": "id=>parent", "update_term_meta_cache": False}))
-    for term_id_,parent_ in terms_:
+    for term_id_,parent_ in terms_.items():
         if parent_ > 0:
             children_[parent_][-1] = term_id_
         # end if
@@ -3128,7 +3128,7 @@ def _pad_term_counts(terms_=None, taxonomy_=None, *_args_):
     term_items_ = Array()
     terms_by_id_ = Array()
     term_ids_ = Array()
-    for key_,term_ in terms_:
+    for key_,term_ in terms_.items():
         terms_by_id_[term_.term_id] = terms_[key_]
         term_ids_[term_.term_taxonomy_id] = term_.term_id
     # end for
@@ -3153,7 +3153,7 @@ def _pad_term_counts(terms_=None, taxonomy_=None, *_args_):
             # end if
             ancestors_[-1] = child_
             if (not php_empty(lambda : term_items_[term_id_])):
-                for item_id_,touches_ in term_items_[term_id_]:
+                for item_id_,touches_ in term_items_[term_id_].items():
                     term_items_[parent_][item_id_] += 1
                     term_items_[parent_][item_id_] += 1
                     term_items_[parent_][item_id_] += 1
@@ -3167,7 +3167,7 @@ def _pad_term_counts(terms_=None, taxonomy_=None, *_args_):
         # end while
     # end for
     #// Transfer the touched cells.
-    for id_,items_ in term_items_:
+    for id_,items_ in term_items_.items():
         if (php_isset(lambda : terms_by_id_[id_])):
             terms_by_id_[id_].count = php_count(items_)
         # end if
@@ -3548,7 +3548,7 @@ def _wp_check_split_nav_menu_terms(term_id_=None, new_term_id_=None, term_taxono
     # end if
     #// Update menu locations.
     locations_ = get_nav_menu_locations()
-    for location_,menu_id_ in locations_:
+    for location_,menu_id_ in locations_.items():
         if term_id_ == menu_id_:
             locations_[location_] = new_term_id_
         # end if

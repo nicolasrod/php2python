@@ -113,7 +113,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         if case("allblogs"):
             if (php_isset(lambda : PHP_POST["action"])) or (php_isset(lambda : PHP_POST["action2"])) and (php_isset(lambda : PHP_POST["allblogs"])):
                 doaction_ = PHP_POST["action"] if -1 != PHP_POST["action"] else PHP_POST["action2"]
-                for key_,val_ in PHP_POST["allblogs"]:
+                for key_,val_ in PHP_POST["allblogs"].items():
                     if "0" != val_ and get_network().site_id != val_:
                         for case in Switch(doaction_):
                             if case("delete"):

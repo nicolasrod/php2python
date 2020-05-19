@@ -171,7 +171,7 @@ class WP_Theme_Install_List_Table(WP_Themes_List_Table):
         global tab_
         php_check_if_defined("tabs_","tab_")
         display_tabs_ = Array()
-        for action_,text_ in tabs_:
+        for action_,text_ in tabs_.items():
             current_link_attributes_ = " class=\"current\" aria-current=\"page\"" if action_ == tab_ else ""
             href_ = self_admin_url("theme-install.php?tab=" + action_)
             display_tabs_["theme-install-" + action_] = str("<a href='") + str(href_) + str("'") + str(current_link_attributes_) + str(">") + str(text_) + str("</a>")

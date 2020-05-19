@@ -127,7 +127,7 @@ class WP_Plugins_List_Table(WP_List_Table):
             # end if
             if current_user_can("update_plugins"):
                 current_ = get_site_transient("update_plugins")
-                for plugin_file_,plugin_data_ in plugins_["all"]:
+                for plugin_file_,plugin_data_ in plugins_["all"].items():
                     if (php_isset(lambda : current_.response[plugin_file_])):
                         plugins_["all"][plugin_file_]["update"] = True
                         plugins_["upgrade"][plugin_file_] = plugins_["all"][plugin_file_]
@@ -157,7 +157,7 @@ class WP_Plugins_List_Table(WP_List_Table):
         else:
             recently_activated_ = get_option("recently_activated", Array())
         # end if
-        for key_,time_ in recently_activated_:
+        for key_,time_ in recently_activated_.items():
             if time_ + WEEK_IN_SECONDS < time():
                 recently_activated_[key_] = None
             # end if
@@ -168,7 +168,7 @@ class WP_Plugins_List_Table(WP_List_Table):
             update_option("recently_activated", recently_activated_)
         # end if
         plugin_info_ = get_site_transient("update_plugins")
-        for plugin_file_,plugin_data_ in plugins_["all"]:
+        for plugin_file_,plugin_data_ in plugins_["all"].items():
             #// Extra info if known. array_merge() ensures $plugin_data has precedence if keys collide.
             if (php_isset(lambda : plugin_info_.response[plugin_file_])):
                 plugin_data_ = php_array_merge(plugin_info_.response[plugin_file_], plugin_data_)
@@ -221,20 +221,20 @@ class WP_Plugins_List_Table(WP_List_Table):
             plugins_["search"] = php_array_filter(plugins_["all"], Array(self, "_search_callback"))
         # end if
         totals_ = Array()
-        for type_,list_ in plugins_:
+        for type_,list_ in plugins_.items():
             totals_[type_] = php_count(list_)
         # end for
         if php_empty(lambda : plugins_[status_]) and (not php_in_array(status_, Array("all", "search"))):
             status_ = "all"
         # end if
         self.items = Array()
-        for plugin_file_,plugin_data_ in plugins_[status_]:
+        for plugin_file_,plugin_data_ in plugins_[status_].items():
             #// Translate, don't apply markup, sanitize HTML.
             self.items[plugin_file_] = _get_plugin_data_markup_translate(plugin_file_, plugin_data_, False, True)
         # end for
         total_this_page_ = totals_[status_]
         js_plugins_ = Array()
-        for key_,list_ in plugins_:
+        for key_,list_ in plugins_.items():
             js_plugins_[key_] = php_array_keys(list_)
         # end for
         wp_localize_script("updates", "_wpUpdatesItemCounts", Array({"plugins": js_plugins_, "totals": wp_get_update_data()}))
@@ -382,7 +382,7 @@ class WP_Plugins_List_Table(WP_List_Table):
         global status_
         php_check_if_defined("totals_","status_")
         status_links_ = Array()
-        for type_,count_ in totals_:
+        for type_,count_ in totals_.items():
             if (not count_):
                 continue
             # end if
@@ -518,7 +518,7 @@ class WP_Plugins_List_Table(WP_List_Table):
         if is_multisite() and (not self.screen.in_admin("network")) and php_in_array(status_, Array("mustuse", "dropins")):
             return
         # end if
-        for plugin_file_,plugin_data_ in self.items:
+        for plugin_file_,plugin_data_ in self.items.items():
             self.single_row(Array(plugin_file_, plugin_data_))
         # end for
     # end def display_rows
@@ -705,7 +705,7 @@ class WP_Plugins_List_Table(WP_List_Table):
         plugin_slug_ = plugin_data_["slug"] if (php_isset(lambda : plugin_data_["slug"])) else sanitize_title(plugin_name_)
         printf("<tr class=\"%s\" data-slug=\"%s\" data-plugin=\"%s\">", esc_attr(class_), esc_attr(plugin_slug_), esc_attr(plugin_file_))
         columns_, hidden_, sortable_, primary_ = self.get_column_info()
-        for column_name_,column_display_name_ in columns_:
+        for column_name_,column_display_name_ in columns_.items():
             extra_classes_ = ""
             if php_in_array(column_name_, hidden_):
                 extra_classes_ = " hidden"

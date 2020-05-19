@@ -33,7 +33,7 @@ installed_themes_ = search_theme_directories()
 if False == installed_themes_:
     installed_themes_ = Array()
 # end if
-for k_,v_ in installed_themes_:
+for k_,v_ in installed_themes_.items():
     if False != php_strpos(k_, "/"):
         installed_themes_[k_] = None
     # end if
@@ -142,12 +142,12 @@ _e("Clear")
 php_print("</button>\n          </div>\n        ")
 feature_list_ = get_theme_feature_list(False)
 #// Use the core list, rather than the .org API, due to inconsistencies and to ensure tags are translated.
-for feature_name_,features_ in feature_list_:
+for feature_name_,features_ in feature_list_.items():
     php_print("<fieldset class=\"filter-group\">")
     feature_name_ = esc_html(feature_name_)
     php_print("<legend>" + feature_name_ + "</legend>")
     php_print("<div class=\"filter-group-feature\">")
-    for feature_,feature_name_ in features_:
+    for feature_,feature_name_ in features_.items():
         feature_ = esc_attr(feature_)
         php_print("<input type=\"checkbox\" id=\"filter-id-" + feature_ + "\" value=\"" + feature_ + "\" /> ")
         php_print("<label for=\"filter-id-" + feature_ + "\">" + feature_name_ + "</label>")

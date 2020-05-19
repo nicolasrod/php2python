@@ -220,7 +220,7 @@ class WP_Customize_Control():
         # end if
         settings_ = Array()
         if php_is_array(self.settings):
-            for key_,setting_ in self.settings:
+            for key_,setting_ in self.settings.items():
                 settings_[key_] = self.manager.get_setting(setting_)
             # end for
         elif php_is_string(self.settings):
@@ -302,7 +302,7 @@ class WP_Customize_Control():
         
         
         self.json["settings"] = Array()
-        for key_,setting_ in self.settings:
+        for key_,setting_ in self.settings.items():
             self.json["settings"][key_] = setting_.id
         # end for
         self.json["type"] = self.type
@@ -460,7 +460,7 @@ class WP_Customize_Control():
     def input_attrs(self):
         
         
-        for attr_,value_ in self.input_attrs:
+        for attr_,value_ in self.input_attrs.items():
             php_print(attr_ + "=\"" + esc_attr(value_) + "\" ")
         # end for
     # end def input_attrs
@@ -529,7 +529,7 @@ class WP_Customize_Control():
                     php_print("</span>\n                ")
                 # end if
                 php_print("\n               ")
-                for value_,label_ in self.choices:
+                for value_,label_ in self.choices.items():
                     php_print("                 <span class=\"customize-inside-control-row\">\n                     <input\n                            id=\"")
                     php_print(esc_attr(input_id_ + "-radio-" + value_))
                     php_print("\"\n                         type=\"radio\"\n                            ")
@@ -578,7 +578,7 @@ class WP_Customize_Control():
                 php_print(" ")
                 self.link()
                 php_print(">\n                  ")
-                for value_,label_ in self.choices:
+                for value_,label_ in self.choices.items():
                     php_print("<option value=\"" + esc_attr(value_) + "\"" + selected(self.value(), value_, False) + ">" + label_ + "</option>")
                 # end for
                 php_print("             </select>\n             ")

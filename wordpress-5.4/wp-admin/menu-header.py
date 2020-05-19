@@ -84,7 +84,7 @@ def _wp_menu_output(menu_=None, submenu_=None, submenu_as_parent_=None, *_args_)
     php_check_if_defined("self_","parent_file_","submenu_file_","plugin_page_","typenow_")
     first_ = True
     #// 0 = menu_title, 1 = capability, 2 = menu_slug, 3 = page_title, 4 = classes, 5 = hookname, 6 = icon_url.
-    for key_,item_ in menu_:
+    for key_,item_ in menu_.items():
         admin_is_parent_ = False
         class_ = Array()
         aria_attributes_ = ""
@@ -185,7 +185,7 @@ def _wp_menu_output(menu_=None, submenu_=None, submenu_as_parent_=None, *_args_)
             php_print(str("<li class='wp-submenu-head' aria-hidden='true'>") + str(item_[0]) + str("</li>"))
             first_ = True
             #// 0 = menu_title, 1 = capability, 2 = menu_slug, 3 = page_title, 4 = classes.
-            for sub_key_,sub_item_ in submenu_items_:
+            for sub_key_,sub_item_ in submenu_items_.items():
                 if (not current_user_can(sub_item_[1])):
                     continue
                 # end if

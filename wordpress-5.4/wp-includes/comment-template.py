@@ -1688,7 +1688,7 @@ def get_comment_reply_link(args_=None, comment_=None, post_=None, *_args_):
     else:
         data_attributes_ = Array({"commentid": comment_.comment_ID, "postid": post_.ID, "belowelement": args_["add_below"] + "-" + comment_.comment_ID, "respondelement": args_["respond_id"]})
         data_attribute_string_ = ""
-        for name_,value_ in data_attributes_:
+        for name_,value_ in data_attributes_.items():
             data_attribute_string_ += str(" data-") + str(name_) + str("=\"") + esc_attr(value_) + "\""
         # end for
         data_attribute_string_ = php_trim(data_attribute_string_)
@@ -2332,7 +2332,7 @@ def comment_form(args_=None, post_id_=None, *_args_):
         #// Get the first and the last field name, excluding the textarea.
         first_field_ = reset(comment_field_keys_)
         last_field_ = php_end(comment_field_keys_)
-        for name_,field_ in comment_fields_:
+        for name_,field_ in comment_fields_.items():
             if "comment" == name_:
                 #// 
                 #// Filters the content of the comment textarea field for display.

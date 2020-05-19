@@ -74,7 +74,7 @@ class WP_HTTP_Requests_Response(WP_HTTP_Response):
         
         #// Ensure headers remain case-insensitive.
         converted_ = php_new_class("Requests_Utility_CaseInsensitiveDictionary", lambda : Requests_Utility_CaseInsensitiveDictionary())
-        for key_,value_ in self.response.headers.getall():
+        for key_,value_ in self.response.headers.getall().items():
             if php_count(value_) == 1:
                 converted_[key_] = value_[0]
             else:

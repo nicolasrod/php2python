@@ -545,7 +545,7 @@ def wp_kses_attr_check(name_=None, value_=None, whole_=None, vless_=None, elemen
     # end if
     if php_is_array(allowed_attr_[name_low_]):
         #// There are some checks.
-        for currkey_,currval_ in allowed_attr_[name_low_]:
+        for currkey_,currval_ in allowed_attr_[name_low_].items():
             if (not wp_kses_check_attr_val(value_, vless_, currkey_, currval_)):
                 name_ = ""
                 value_ = ""
@@ -928,10 +928,10 @@ def wp_kses_array_lc(inarray_=None, *_args_):
     
     
     outarray_ = Array()
-    for inkey_,inval_ in inarray_:
+    for inkey_,inval_ in inarray_.items():
         outkey_ = php_strtolower(inkey_)
         outarray_[outkey_] = Array()
-        for inkey2_,inval2_ in inval_:
+        for inkey2_,inval2_ in inval_.items():
             outkey2_ = php_strtolower(inkey2_)
             outarray_[outkey_][outkey2_] = inval2_
         # end for

@@ -76,7 +76,7 @@ def wp_get_themes(args_=None, *_args_):
     # end if
     themes_ = Array()
     _themes_ = Array()
-    for theme_,theme_root_ in theme_directories_:
+    for theme_,theme_root_ in theme_directories_.items():
         if (php_isset(lambda : _themes_[theme_root_["theme_root"] + "/" + theme_])):
             themes_[theme_] = _themes_[theme_root_["theme_root"] + "/" + theme_]
         else:
@@ -85,7 +85,7 @@ def wp_get_themes(args_=None, *_args_):
         # end if
     # end for
     if None != args_["errors"]:
-        for theme_,wp_theme_ in themes_:
+        for theme_,wp_theme_ in themes_.items():
             if wp_theme_.errors() != args_["errors"]:
                 themes_[theme_] = None
             # end if
@@ -474,7 +474,7 @@ def search_theme_directories(force_=None, *_args_):
     if cache_expiration_:
         cached_roots_ = get_site_transient("theme_roots")
         if php_is_array(cached_roots_):
-            for theme_dir_,theme_root_ in cached_roots_:
+            for theme_dir_,theme_root_ in cached_roots_.items():
                 #// A cached theme root is no longer around, so skip it.
                 if (not (php_isset(lambda : relative_theme_roots_[theme_root_]))):
                     continue
@@ -535,7 +535,7 @@ def search_theme_directories(force_=None, *_args_):
     asort(found_themes_)
     theme_roots_ = Array()
     relative_theme_roots_ = php_array_flip(relative_theme_roots_)
-    for theme_dir_,theme_data_ in found_themes_:
+    for theme_dir_,theme_data_ in found_themes_.items():
         theme_roots_[theme_dir_] = relative_theme_roots_[theme_data_["theme_root"]]
         pass
     # end for
@@ -1084,7 +1084,7 @@ def get_header_image_tag(attr_=None, *_args_):
     # end if
     attr_ = php_array_map("esc_attr", attr_)
     html_ = "<img"
-    for name_,value_ in attr_:
+    for name_,value_ in attr_.items():
         html_ += " " + name_ + "=\"" + value_ + "\""
     # end for
     html_ += " />"
@@ -1849,7 +1849,7 @@ def get_editor_stylesheets(*_args_):
         style_uri_ = get_stylesheet_directory_uri()
         style_dir_ = get_stylesheet_directory()
         #// Support externally referenced styles (like, say, fonts).
-        for key_,file_ in editor_styles_:
+        for key_,file_ in editor_styles_.items():
             if php_preg_match("~^(https?:)?//~", file_):
                 stylesheets_[-1] = esc_url_raw(file_)
                 editor_styles_[key_] = None
@@ -1859,7 +1859,7 @@ def get_editor_stylesheets(*_args_):
         if is_child_theme():
             template_uri_ = get_template_directory_uri()
             template_dir_ = get_template_directory()
-            for key_,file_ in editor_styles_:
+            for key_,file_ in editor_styles_.items():
                 if file_ and php_file_exists(str(template_dir_) + str("/") + str(file_)):
                     stylesheets_[-1] = str(template_uri_) + str("/") + str(file_)
                 # end if
@@ -1898,7 +1898,7 @@ def get_theme_starter_content(*_args_):
     # end if
     core_content_ = Array({"widgets": Array({"text_business_info": Array("text", Array({"title": _x("Find Us", "Theme starter content"), "text": join("", Array("<strong>" + _x("Address", "Theme starter content") + "</strong>\n", _x("123 Main Street", "Theme starter content") + "\n" + _x("New York, NY 10001", "Theme starter content") + "\n\n", "<strong>" + _x("Hours", "Theme starter content") + "</strong>\n", _x("Monday&ndash;Friday: 9:00AM&ndash;5:00PM", "Theme starter content") + "\n" + _x("Saturday &amp; Sunday: 11:00AM&ndash;3:00PM", "Theme starter content"))), "filter": True, "visual": True}))}, {"text_about": Array("text", Array({"title": _x("About This Site", "Theme starter content"), "text": _x("This may be a good place to introduce yourself and your site or include some credits.", "Theme starter content"), "filter": True, "visual": True}))}, {"archives": Array("archives", Array({"title": _x("Archives", "Theme starter content")}))}, {"calendar": Array("calendar", Array({"title": _x("Calendar", "Theme starter content")}))}, {"categories": Array("categories", Array({"title": _x("Categories", "Theme starter content")}))}, {"meta": Array("meta", Array({"title": _x("Meta", "Theme starter content")}))}, {"recent-comments": Array("recent-comments", Array({"title": _x("Recent Comments", "Theme starter content")}))}, {"recent-posts": Array("recent-posts", Array({"title": _x("Recent Posts", "Theme starter content")}))}, {"search": Array("search", Array({"title": _x("Search", "Theme starter content")}))})}, {"nav_menus": Array({"link_home": Array({"type": "custom", "title": _x("Home", "Theme starter content"), "url": home_url("/")})}, {"page_home": Array({"type": "post_type", "object": "page", "object_id": "{{home}}"})}, {"page_about": Array({"type": "post_type", "object": "page", "object_id": "{{about}}"})}, {"page_blog": Array({"type": "post_type", "object": "page", "object_id": "{{blog}}"})}, {"page_news": Array({"type": "post_type", "object": "page", "object_id": "{{news}}"})}, {"page_contact": Array({"type": "post_type", "object": "page", "object_id": "{{contact}}"})}, {"link_email": Array({"title": _x("Email", "Theme starter content"), "url": "mailto:wordpress@example.com"})}, {"link_facebook": Array({"title": _x("Facebook", "Theme starter content"), "url": "https://www.facebook.com/wordpress"})}, {"link_foursquare": Array({"title": _x("Foursquare", "Theme starter content"), "url": "https://foursquare.com/"})}, {"link_github": Array({"title": _x("GitHub", "Theme starter content"), "url": "https://github.com/wordpress/"})}, {"link_instagram": Array({"title": _x("Instagram", "Theme starter content"), "url": "https://www.instagram.com/explore/tags/wordcamp/"})}, {"link_linkedin": Array({"title": _x("LinkedIn", "Theme starter content"), "url": "https://www.linkedin.com/company/1089783"})}, {"link_pinterest": Array({"title": _x("Pinterest", "Theme starter content"), "url": "https://www.pinterest.com/"})}, {"link_twitter": Array({"title": _x("Twitter", "Theme starter content"), "url": "https://twitter.com/wordpress"})}, {"link_yelp": Array({"title": _x("Yelp", "Theme starter content"), "url": "https://www.yelp.com"})}, {"link_youtube": Array({"title": _x("YouTube", "Theme starter content"), "url": "https://www.youtube.com/channel/UCdof4Ju7amm1chz1gi1T2ZA"})})}, {"posts": Array({"home": Array({"post_type": "page", "post_title": _x("Home", "Theme starter content"), "post_content": php_sprintf("<!-- wp:paragraph -->\n<p>%s</p>\n<!-- /wp:paragraph -->", _x("Welcome to your site! This is your homepage, which is what most visitors will see when they come to your site for the first time.", "Theme starter content"))})}, {"about": Array({"post_type": "page", "post_title": _x("About", "Theme starter content"), "post_content": php_sprintf("<!-- wp:paragraph -->\n<p>%s</p>\n<!-- /wp:paragraph -->", _x("You might be an artist who would like to introduce yourself and your work here or maybe you&rsquo;re a business with a mission to describe.", "Theme starter content"))})}, {"contact": Array({"post_type": "page", "post_title": _x("Contact", "Theme starter content"), "post_content": php_sprintf("<!-- wp:paragraph -->\n<p>%s</p>\n<!-- /wp:paragraph -->", _x("This is a page with some basic contact information, such as an address and phone number. You might also try a plugin to add a contact form.", "Theme starter content"))})}, {"blog": Array({"post_type": "page", "post_title": _x("Blog", "Theme starter content")})}, {"news": Array({"post_type": "page", "post_title": _x("News", "Theme starter content")})}, {"homepage-section": Array({"post_type": "page", "post_title": _x("A homepage section", "Theme starter content"), "post_content": php_sprintf("<!-- wp:paragraph -->\n<p>%s</p>\n<!-- /wp:paragraph -->", _x("This is an example of a homepage section. Homepage sections can be any page other than the homepage itself, including the page that shows your latest blog posts.", "Theme starter content"))})})})
     content_ = Array()
-    for type_,args_ in config_:
+    for type_,args_ in config_.items():
         for case in Switch(type_):
             if case("options"):
                 pass
@@ -1908,8 +1908,8 @@ def get_theme_starter_content(*_args_):
                 break
             # end if
             if case("widgets"):
-                for sidebar_id_,widgets_ in config_[type_]:
-                    for id_,widget_ in widgets_:
+                for sidebar_id_,widgets_ in config_[type_].items():
+                    for id_,widget_ in widgets_.items():
                         if php_is_array(widget_):
                             #// Item extends core content.
                             if (not php_empty(lambda : core_content_[type_][id_])):
@@ -1924,13 +1924,13 @@ def get_theme_starter_content(*_args_):
                 break
             # end if
             if case("nav_menus"):
-                for nav_menu_location_,nav_menu_ in config_[type_]:
+                for nav_menu_location_,nav_menu_ in config_[type_].items():
                     #// Ensure nav menus get a name.
                     if php_empty(lambda : nav_menu_["name"]):
                         nav_menu_["name"] = nav_menu_location_
                     # end if
                     content_[type_][nav_menu_location_]["name"] = nav_menu_["name"]
-                    for id_,nav_menu_item_ in nav_menu_["items"]:
+                    for id_,nav_menu_item_ in nav_menu_["items"].items():
                         if php_is_array(nav_menu_item_):
                             #// Item extends core content.
                             if (not php_empty(lambda : core_content_[type_][id_])):
@@ -1945,7 +1945,7 @@ def get_theme_starter_content(*_args_):
                 break
             # end if
             if case("attachments"):
-                for id_,item_ in config_[type_]:
+                for id_,item_ in config_[type_].items():
                     if (not php_empty(lambda : item_["file"])):
                         content_[type_][id_] = item_
                     # end if
@@ -1953,7 +1953,7 @@ def get_theme_starter_content(*_args_):
                 break
             # end if
             if case("posts"):
-                for id_,item_ in config_[type_]:
+                for id_,item_ in config_[type_].items():
                     if php_is_array(item_):
                         #// Item extends core content.
                         if (not php_empty(lambda : core_content_[type_][id_])):

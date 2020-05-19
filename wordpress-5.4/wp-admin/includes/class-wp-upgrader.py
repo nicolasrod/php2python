@@ -347,7 +347,7 @@ class WP_Upgrader():
         
         
         files_ = Array()
-        for name_,details_ in nested_files_:
+        for name_,details_ in nested_files_.items():
             files_[path_ + name_] = details_
             #// Append children recursively.
             if (not php_empty(lambda : details_["files"])):
@@ -383,7 +383,7 @@ class WP_Upgrader():
         #// Check all files are writable before attempting to clear the destination.
         unwritable_files_ = Array()
         #// Check writability.
-        for filename_,file_details_ in files_:
+        for filename_,file_details_ in files_.items():
             if (not wp_filesystem_.is_writable(remote_destination_ + filename_)):
                 #// Attempt to alter permissions to allow writes and try again.
                 wp_filesystem_.chmod(remote_destination_ + filename_, FS_CHMOD_DIR if "d" == file_details_["type"] else FS_CHMOD_FILE)

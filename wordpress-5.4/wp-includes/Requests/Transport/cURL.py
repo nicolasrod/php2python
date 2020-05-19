@@ -194,7 +194,7 @@ class Requests_Transport_cURL(Requests_Transport):
         subrequests_ = Array()
         subhandles_ = Array()
         class_ = get_class(self)
-        for id_,request_ in requests_:
+        for id_,request_ in requests_.items():
             subrequests_[id_] = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
             subhandles_[id_] = subrequests_[id_].get_subrequest_handle(request_["url"], request_["headers"], request_["data"], request_["options"])
             request_["options"]["hooks"].dispatch("curl.before_multi_add", Array(subhandles_[id_]))
@@ -225,7 +225,7 @@ class Requests_Transport_cURL(Requests_Transport):
                 # end if
             # end while
             #// Parse the finished requests before we start getting the new ones
-            for key_,done_ in to_process_:
+            for key_,done_ in to_process_.items():
                 options_ = requests_[key_]["options"]
                 if CURLE_OK != done_["result"]:
                     #// get error string for handle.

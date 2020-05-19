@@ -224,7 +224,7 @@ for case in Switch(action_):
     if case("update"):
         check_admin_referer("update-nav_menu", "update-nav-menu-nonce")
         #// Remove menu locations that have been unchecked.
-        for location_,description_ in locations_:
+        for location_,description_ in locations_.items():
             if php_empty(lambda : PHP_POST["menu-locations"]) or php_empty(lambda : PHP_POST["menu-locations"][location_]) and (php_isset(lambda : menu_locations_[location_])) and menu_locations_[location_] == nav_menu_selected_id_:
                 menu_locations_[location_] = None
             # end if
@@ -255,7 +255,7 @@ for case in Switch(action_):
                         wp_nav_menu_update_menu_items(nav_menu_selected_id_, nav_menu_selected_title_)
                         #// Auto-save nav_menu_locations.
                         locations_ = get_nav_menu_locations()
-                        for location_,menu_id_ in locations_:
+                        for location_,menu_id_ in locations_.items():
                             locations_[location_] = nav_menu_selected_id_
                             break
                             pass
@@ -375,7 +375,7 @@ if (not nav_menu_selected_title_) and is_nav_menu(nav_menu_selected_id_):
     nav_menu_selected_title_ = _menu_object_.name if (not is_wp_error(_menu_object_)) else ""
 # end if
 #// Generate truncated menu names.
-for key_,_nav_menu_ in nav_menus_:
+for key_,_nav_menu_ in nav_menus_.items():
     nav_menus_[key_].truncated_name = wp_html_excerpt(_nav_menu_.name, 40, "&hellip;")
 # end for
 #// Retrieve menu locations.
@@ -516,7 +516,7 @@ if locations_screen_:
     </thead>
     <tbody class=\"menu-locations\">
     """)
-    for _location_,_name_ in locations_:
+    for _location_,_name_ in locations_.items():
         php_print("                 <tr class=\"menu-locations-row\">\n                     <td class=\"menu-location-title\"><label for=\"locations-")
         php_print(_location_)
         php_print("\">")
@@ -779,7 +779,7 @@ else:
         php_print("\n                                   <fieldset class=\"menu-settings-group menu-theme-locations\">\n                                     <legend class=\"menu-settings-group-name howto\">")
         _e("Display location")
         php_print("</legend>\n                                      ")
-        for location_,description_ in locations_:
+        for location_,description_ in locations_.items():
             php_print("                                     <div class=\"menu-settings-input checkbox-input\">\n                                            <input type=\"checkbox\"")
             checked((php_isset(lambda : menu_locations_[location_])) and menu_locations_[location_] == nav_menu_selected_id_)
             php_print(" name=\"menu-locations[")

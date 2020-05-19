@@ -85,7 +85,7 @@ class WP_Privacy_Policy_Content():
         # end if
         new_ = self.policy_content
         #// Remove the extra values added to the meta.
-        for key_,data_ in old_:
+        for key_,data_ in old_.items():
             if (not php_empty(lambda : data_["removed"])):
                 old_[key_] = None
                 continue
@@ -148,7 +148,7 @@ class WP_Privacy_Policy_Content():
         old_ = get_post_meta(policy_page_id_, "_wp_suggested_privacy_policy_content")
         done_ = Array()
         update_cache_ = False
-        for old_key_,old_data_ in old_:
+        for old_key_,old_data_ in old_.items():
             if (not php_empty(lambda : old_data_["removed"])):
                 #// Remove the old policy text.
                 update_cache_ = True
@@ -193,8 +193,8 @@ class WP_Privacy_Policy_Content():
             old_ = get_post_meta(policy_page_id_, "_wp_suggested_privacy_policy_content")
         # end if
         #// Check for no-changes and updates.
-        for new_key_,new_data_ in new_:
-            for old_key_,old_data_ in old_:
+        for new_key_,new_data_ in new_.items():
+            for old_key_,old_data_ in old_.items():
                 found_ = False
                 if new_data_["policy_text"] == old_data_["policy_text"]:
                     #// Use the new plugin name in case it was changed, translated, etc.
@@ -568,7 +568,7 @@ class WP_Privacy_Policy_Content():
             strings_[-1] = "</div>"
         # end if
         if blocks_:
-            for key_,string_ in strings_:
+            for key_,string_ in strings_.items():
                 if 0 == php_strpos(string_, "<p>"):
                     strings_[key_] = "<!-- wp:paragraph -->" + string_ + "<!-- /wp:paragraph -->"
                 # end if

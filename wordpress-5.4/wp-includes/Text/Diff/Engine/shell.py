@@ -52,7 +52,7 @@ class Text_Diff_Engine_shell():
         fp_ = fopen(to_file_, "w")
         fwrite(fp_, php_implode("\n", to_lines_))
         php_fclose(fp_)
-        diff_ = shell_exec(self._diffCommand + " " + from_file_ + " " + to_file_)
+        diff_ = php_shell_exec(self._diffCommand + " " + from_file_ + " " + to_file_)
         unlink(from_file_)
         unlink(to_file_)
         if php_is_null(diff_):

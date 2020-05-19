@@ -298,7 +298,7 @@ def edit_post(post_data_=None, *_args_):
         if (not php_is_array(id3data_)):
             id3data_ = Array()
         # end if
-        for key_,label_ in wp_get_attachment_id3_keys(post_, "edit"):
+        for key_,label_ in wp_get_attachment_id3_keys(post_, "edit").items():
             if (php_isset(lambda : post_data_["id3_" + key_])):
                 id3data_[key_] = sanitize_text_field(wp_unslash(post_data_["id3_" + key_]))
             # end if
@@ -307,7 +307,7 @@ def edit_post(post_data_=None, *_args_):
     # end if
     #// Meta stuff.
     if (php_isset(lambda : post_data_["meta"])) and post_data_["meta"]:
-        for key_,value_ in post_data_["meta"]:
+        for key_,value_ in post_data_["meta"].items():
             meta_ = get_post_meta_by_id(key_)
             if (not meta_):
                 continue
@@ -325,7 +325,7 @@ def edit_post(post_data_=None, *_args_):
         # end for
     # end if
     if (php_isset(lambda : post_data_["deletemeta"])) and post_data_["deletemeta"]:
-        for key_,value_ in post_data_["deletemeta"]:
+        for key_,value_ in post_data_["deletemeta"].items():
             meta_ = get_post_meta_by_id(key_)
             if (not meta_):
                 continue
@@ -355,7 +355,7 @@ def edit_post(post_data_=None, *_args_):
     # end if
     #// Convert taxonomy input to term IDs, to avoid ambiguity.
     if (php_isset(lambda : post_data_["tax_input"])):
-        for taxonomy_,terms_ in post_data_["tax_input"]:
+        for taxonomy_,terms_ in post_data_["tax_input"].items():
             tax_object_ = get_taxonomy(taxonomy_)
             if tax_object_ and (php_isset(lambda : tax_object_.meta_box_sanitize_cb)):
                 translated_["tax_input"][taxonomy_] = call_user_func_array(tax_object_.meta_box_sanitize_cb, Array(taxonomy_, terms_))
@@ -451,7 +451,7 @@ def bulk_edit_posts(post_data_=None, *_args_):
     # end if
     tax_input_ = Array()
     if (php_isset(lambda : post_data_["tax_input"])):
-        for tax_name_,terms_ in post_data_["tax_input"]:
+        for tax_name_,terms_ in post_data_["tax_input"].items():
             if php_empty(lambda : terms_):
                 continue
             # end if
@@ -913,7 +913,7 @@ def _fix_attachment_links(post_=None, *_args_):
     site_url_ = php_substr(site_url_, php_int(php_strpos(site_url_, "://")))
     #// Remove the http(s).
     replace_ = ""
-    for key_,value_ in link_matches_[1]:
+    for key_,value_ in link_matches_[1].items():
         if (not php_strpos(value_, "?attachment_id=")) or (not php_strpos(value_, "wp-att-")) or (not php_preg_match("/href=([\"'])[^\"']*\\?attachment_id=(\\d+)[^\"']*\\1/", value_, url_match_)) or (not php_preg_match("/rel=[\"'][^\"']*wp-att-(\\d+)/", value_, rel_match_)):
             continue
         # end if
@@ -1948,7 +1948,7 @@ def get_block_editor_server_block_settings(*_args_):
     block_registry_ = WP_Block_Type_Registry.get_instance()
     blocks_ = Array()
     keys_to_pick_ = Array("title", "description", "icon", "category", "keywords", "parent", "supports", "attributes", "styles")
-    for block_name_,block_type_ in block_registry_.get_all_registered():
+    for block_name_,block_type_ in block_registry_.get_all_registered().items():
         for key_ in keys_to_pick_:
             if (not (php_isset(lambda : block_type_.key_))):
                 continue

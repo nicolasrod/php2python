@@ -293,7 +293,7 @@ def wptexturize_primes(haystack_=None, needle_=None, prime_=None, open_quote_=No
     flag_after_digit_ = str("/(?<=\\d)") + str(flag_) + str("/")
     flag_no_digit_ = str("/(?<!\\d)") + str(flag_) + str("/")
     sentences_ = php_explode(open_quote_, haystack_)
-    for key_,sentence_ in sentences_:
+    for key_,sentence_ in sentences_.items():
         if False == php_strpos(sentence_, needle_):
             continue
         elif 0 != key_ and 0 == php_substr_count(sentence_, close_quote_):
@@ -637,7 +637,7 @@ def wp_replace_in_html_tags(haystack_=None, replace_pairs_=None, *_args_):
     #// Optimize when searching for one item.
     if 1 == php_count(replace_pairs_):
         #// Extract $needle and $replace.
-        for needle_,replace_ in replace_pairs_:
+        for needle_,replace_ in replace_pairs_.items():
             pass
         # end for
         #// Loop through delimiters (elements) only.
@@ -1521,7 +1521,7 @@ def sanitize_file_name(filename_=None, *_args_):
         filename_ += "." + part_
         if php_preg_match("/^[a-zA-Z]{2,5}\\d?$/", part_):
             allowed_ = False
-            for ext_preg_,mime_match_ in mimes_:
+            for ext_preg_,mime_match_ in mimes_.items():
                 ext_preg_ = "!^(" + ext_preg_ + ")$!i"
                 if php_preg_match(ext_preg_, part_):
                     allowed_ = True
@@ -2455,7 +2455,7 @@ def wp_rel_callback(matches_=None, rel_=None, *_args_):
         rel_ = php_implode(" ", parts_)
         atts_["rel"] = None
         html_ = ""
-        for name_,value_ in atts_:
+        for name_,value_ in atts_.items():
             if (php_isset(lambda : value_["vless"])) and "y" == value_["vless"]:
                 html_ += name_ + " "
             else:
@@ -3954,12 +3954,12 @@ def map_deep(value_=None, callback_=None, *_args_):
     
     
     if php_is_array(value_):
-        for index_,item_ in value_:
+        for index_,item_ in value_.items():
             value_[index_] = map_deep(item_, callback_)
         # end for
     elif php_is_object(value_):
         object_vars_ = get_object_vars(value_)
-        for property_name_,property_value_ in object_vars_:
+        for property_name_,property_value_ in object_vars_.items():
             value_.property_name_ = map_deep(property_value_, callback_)
         # end for
     else:
@@ -4528,7 +4528,7 @@ def sanitize_trackback_urls(to_ping_=None, *_args_):
     
     
     urls_to_ping_ = php_preg_split("/[\\r\\n\\t ]/", php_trim(to_ping_), -1, PREG_SPLIT_NO_EMPTY)
-    for k_,url_ in urls_to_ping_:
+    for k_,url_ in urls_to_ping_.items():
         if (not php_preg_match("#^https?://.#i", url_)):
             urls_to_ping_[k_] = None
         # end if
@@ -4563,7 +4563,7 @@ def wp_slash(value_=None, *_args_):
     
     
     if php_is_array(value_):
-        for k_,v_ in value_:
+        for k_,v_ in value_.items():
             if php_is_array(v_):
                 value_[k_] = wp_slash(v_)
             else:
@@ -4841,7 +4841,7 @@ def wp_staticize_emoji(text_=None, *_args_):
         # end if
         #// If it's not a tag and not in ignore block.
         if "" == ignore_block_element_ and php_strlen(content_) > 0 and "<" != content_[0] and False != php_strpos(content_, "&#x"):
-            for emojum_,emoji_char_ in possible_emoji_:
+            for emojum_,emoji_char_ in possible_emoji_.items():
                 if False == php_strpos(content_, emojum_):
                     continue
                 # end if

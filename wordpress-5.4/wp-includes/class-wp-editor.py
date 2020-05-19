@@ -384,7 +384,7 @@ class _WP_Editors():
                         loaded_langs_ = Array()
                         strings_ = ""
                         if (not php_empty(lambda : mce_external_languages_)):
-                            for name_,path_ in mce_external_languages_:
+                            for name_,path_ in mce_external_languages_.items():
                                 if php_no_error(lambda: php_is_file(path_)) and php_no_error(lambda: php_is_readable(path_)):
                                     php_include_file(path_, once=False)
                                     ext_plugins_ += strings_ + "\n"
@@ -392,7 +392,7 @@ class _WP_Editors():
                                 # end if
                             # end for
                         # end if
-                        for name_,url_ in mce_external_plugins_:
+                        for name_,url_ in mce_external_plugins_.items():
                             if php_in_array(name_, plugins_, True):
                                 mce_external_plugins_[name_] = None
                                 continue
@@ -451,7 +451,7 @@ class _WP_Editors():
                     editor_styles_ = get_editor_stylesheets()
                     if (not php_empty(lambda : editor_styles_)):
                         #// Force urlencoding of commas.
-                        for key_,url_ in editor_styles_:
+                        for key_,url_ in editor_styles_.items():
                             if php_strpos(url_, ",") != False:
                                 editor_styles_[key_] = php_str_replace(",", "%2C", url_)
                             # end if
@@ -630,7 +630,7 @@ class _WP_Editors():
         
         
         options_ = ""
-        for key_,value_ in init_:
+        for key_,value_ in init_.items():
             if php_is_bool(value_):
                 val_ = "true" if value_ else "false"
                 options_ += key_ + ":" + val_ + ","
@@ -828,7 +828,7 @@ class _WP_Editors():
         global tinymce_version_
         php_check_if_defined("tinymce_version_")
         shortcut_labels_ = Array()
-        for name_,value_ in self.get_translation():
+        for name_,value_ in self.get_translation().items():
             if php_is_array(value_):
                 shortcut_labels_[name_] = value_[1]
             # end if
@@ -894,7 +894,7 @@ class _WP_Editors():
             mce_locale_ = self.get_mce_locale()
         # end if
         mce_translation_ = self.get_translation()
-        for name_,value_ in mce_translation_:
+        for name_,value_ in mce_translation_.items():
             if php_is_array(value_):
                 mce_translation_[name_] = value_[0]
             # end if
@@ -908,7 +908,7 @@ class _WP_Editors():
         #// @param string $mce_locale      Locale.
         #//
         mce_translation_ = apply_filters("wp_mce_translation", mce_translation_, mce_locale_)
-        for key_,value_ in mce_translation_:
+        for key_,value_ in mce_translation_.items():
             #// Remove strings that are not translated.
             if key_ == value_:
                 mce_translation_[key_] = None
@@ -997,7 +997,7 @@ class _WP_Editors():
         mceInit_ = ""
         qtInit_ = ""
         if tmce_on_:
-            for editor_id_,init_ in self.mce_settings:
+            for editor_id_,init_ in self.mce_settings.items():
                 options_ = self._parse_init(init_)
                 mceInit_ += str("'") + str(editor_id_) + str("':") + str(options_) + str(",")
             # end for
@@ -1006,7 +1006,7 @@ class _WP_Editors():
             mceInit_ = "{}"
         # end if
         if (not php_empty(lambda : self.qt_settings)):
-            for editor_id_,init_ in self.qt_settings:
+            for editor_id_,init_ in self.qt_settings.items():
                 options_ = self._parse_init(init_)
                 qtInit_ += str("'") + str(editor_id_) + str("':") + str(options_) + str(",")
             # end for

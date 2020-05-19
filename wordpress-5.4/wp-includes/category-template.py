@@ -617,7 +617,7 @@ def wp_tag_cloud(args_="", *_args_):
     if php_empty(lambda : tags_) or is_wp_error(tags_):
         return
     # end if
-    for key_,tag_ in tags_:
+    for key_,tag_ in tags_.items():
         if "edit" == args_["link"]:
             link_ = get_edit_term_link(tag_.term_id, tag_.taxonomy, args_["post_type"])
         else:
@@ -770,7 +770,7 @@ def wp_generate_tag_cloud(tags_=None, args_="", *_args_):
     counts_ = Array()
     real_counts_ = Array()
     #// For the alt tag.
-    for key_,tag_ in tags_:
+    for key_,tag_ in tags_.items():
         real_counts_[key_] = tag_.count
         counts_[key_] = php_call_user_func(args_["topic_count_scale_callback"], tag_.count)
     # end for
@@ -801,7 +801,7 @@ def wp_generate_tag_cloud(tags_=None, args_="", *_args_):
     # end if
     #// Assemble the data that will be used to generate the tag cloud markup.
     tags_data_ = Array()
-    for key_,tag_ in tags_:
+    for key_,tag_ in tags_.items():
         tag_id_ = tag_.id if (php_isset(lambda : tag_.id)) else key_
         count_ = counts_[key_]
         real_count_ = real_counts_[key_]
@@ -822,7 +822,7 @@ def wp_generate_tag_cloud(tags_=None, args_="", *_args_):
     tags_data_ = apply_filters("wp_generate_tag_cloud_data", tags_data_)
     a_ = Array()
     #// Generate the output links array.
-    for key_,tag_data_ in tags_data_:
+    for key_,tag_data_ in tags_data_.items():
         class_ = tag_data_["class"] + " tag-link-position-" + key_ + 1
         a_[-1] = php_sprintf("<a href=\"%1$s\"%2$s class=\"%3$s\" style=\"font-size: %4$s;\"%5$s>%6$s%7$s</a>", esc_url(tag_data_["url"]), tag_data_["role"], esc_attr(class_), esc_attr(php_str_replace(",", ".", tag_data_["font_size"]) + args_["unit"]), tag_data_["aria_label"], esc_html(tag_data_["name"]), tag_data_["show_count"])
     # end for

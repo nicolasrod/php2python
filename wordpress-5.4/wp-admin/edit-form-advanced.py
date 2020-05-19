@@ -154,7 +154,7 @@ nonce_action_ = "update-post_" + post_ID_
 form_extra_ += "<input type='hidden' id='post_ID' name='post_ID' value='" + esc_attr(post_ID_) + "' />"
 #// Detect if there exists an autosave newer than the post and if that autosave is different than the post.
 if autosave_ and mysql2date("U", autosave_.post_modified_gmt, False) > mysql2date("U", post_.post_modified_gmt, False):
-    for autosave_field_,_autosave_field_ in _wp_post_revision_fields(post_):
+    for autosave_field_,_autosave_field_ in _wp_post_revision_fields(post_).items():
         if normalize_whitespace(autosave_.autosave_field_) != normalize_whitespace(post_.autosave_field_):
             notice_ = php_sprintf(__("There is an autosave of this post that is more recent than the version below. <a href=\"%s\">View the autosave</a>"), get_edit_post_link(autosave_.ID))
             break

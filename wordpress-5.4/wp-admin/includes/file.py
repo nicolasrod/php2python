@@ -1326,7 +1326,7 @@ def copy_dir(from_=None, to_=None, skip_list_=None, *_args_):
     dirlist_ = wp_filesystem_.dirlist(from_)
     from_ = trailingslashit(from_)
     to_ = trailingslashit(to_)
-    for filename_,fileinfo_ in dirlist_:
+    for filename_,fileinfo_ in dirlist_.items():
         if php_in_array(filename_, skip_list_, True):
             continue
         # end if
@@ -1784,7 +1784,7 @@ def request_filesystem_credentials(form_post_=None, type_="", error_=None, conte
     _e("Connection Type")
     php_print("</legend>\n  ")
     disabled_ = disabled(php_defined("FTP_SSL") and FTP_SSL or php_defined("FTP_SSH") and FTP_SSH, True, False)
-    for name_,text_ in types_:
+    for name_,text_ in types_.items():
         php_print(" <label for=\"")
         php_print(esc_attr(name_))
         php_print("\">\n        <input type=\"radio\" name=\"connection_type\" id=\"")

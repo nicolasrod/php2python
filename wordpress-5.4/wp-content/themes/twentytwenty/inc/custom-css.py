@@ -87,9 +87,9 @@ if (not php_function_exists("twentytwenty_get_customizer_css")):
         if "front-end" == type_:
             #// Auto-calculated colors.
             elements_definitions_ = twentytwenty_get_elements_array()
-            for context_,props_ in elements_definitions_:
-                for key_,definitions_ in props_:
-                    for property_,elements_ in definitions_:
+            for context_,props_ in elements_definitions_.items():
+                for key_,definitions_ in props_.items():
+                    for property_,elements_ in definitions_.items():
                         #// 
                         #// If we don't have an elements array or it is empty
                         #// then skip this iteration early;

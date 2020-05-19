@@ -313,7 +313,7 @@ class WP_Taxonomy():
                 # end if
             # end for
         # end if
-        for property_name_,property_value_ in args_:
+        for property_name_,property_value_ in args_.items():
             self.property_name_ = property_value_
         # end for
         self.labels = get_taxonomy_labels(self)

@@ -38,7 +38,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])) and "update-site" == PHP_REQUEST[
     switch_to_blog(id_)
     skip_options_ = Array("allowedthemes")
     #// Don't update these options since they are handled elsewhere in the form.
-    for key_,val_ in PHP_POST["option"]:
+    for key_,val_ in PHP_POST["option"].items():
         key_ = wp_unslash(key_)
         val_ = wp_unslash(val_)
         if 0 == key_ or php_is_array(val_) or php_in_array(key_, skip_options_):

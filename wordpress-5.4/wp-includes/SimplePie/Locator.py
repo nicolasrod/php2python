@@ -260,7 +260,7 @@ class SimplePie_Locator():
     def extension(self, array_=None):
         
         
-        for key_,value_ in array_:
+        for key_,value_ in array_.items():
             if self.checked_feeds == self.max_checked_feeds:
                 break
             # end if
@@ -280,7 +280,7 @@ class SimplePie_Locator():
     def body(self, array_=None):
         
         
-        for key_,value_ in array_:
+        for key_,value_ in array_.items():
             if self.checked_feeds == self.max_checked_feeds:
                 break
             # end if

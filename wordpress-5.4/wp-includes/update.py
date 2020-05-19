@@ -144,7 +144,7 @@ def wp_version_check(extra_stats_=None, force_check_=None, *_args_):
     # end if
     offers_ = body_["offers"]
     for offer_ in offers_:
-        for offer_key_,value_ in offer_:
+        for offer_key_,value_ in offer_.items():
             if "packages" == offer_key_:
                 offer_["packages"] = php_array_intersect_key(php_array_map("esc_url", offer_["packages"]), php_array_fill_keys(Array("full", "no_content", "new_bundled", "partial", "rollback"), ""))
             elif "download" == offer_key_:
@@ -244,14 +244,14 @@ def wp_update_plugins(extra_stats_=None, *_args_):
     time_not_changed_ = (php_isset(lambda : current_.last_checked)) and timeout_ > time() - current_.last_checked
     if time_not_changed_ and (not extra_stats_):
         plugin_changed_ = False
-        for file_,p_ in plugins_:
+        for file_,p_ in plugins_.items():
             new_option_.checked[file_] = p_["Version"]
             if (not (php_isset(lambda : current_.checked[file_]))) or php_strval(current_.checked[file_]) != php_strval(p_["Version"]):
                 plugin_changed_ = True
             # end if
         # end for
         if (php_isset(lambda : current_.response)) and php_is_array(current_.response):
-            for plugin_file_,update_details_ in current_.response:
+            for plugin_file_,update_details_ in current_.response.items():
                 if (not (php_isset(lambda : plugins_[plugin_file_]))):
                     plugin_changed_ = True
                     break
@@ -396,13 +396,13 @@ def wp_update_themes(extra_stats_=None, *_args_):
     time_not_changed_ = (php_isset(lambda : last_update_.last_checked)) and timeout_ > time() - last_update_.last_checked
     if time_not_changed_ and (not extra_stats_):
         theme_changed_ = False
-        for slug_,v_ in checked_:
+        for slug_,v_ in checked_.items():
             if (not (php_isset(lambda : last_update_.checked[slug_]))) or php_strval(last_update_.checked[slug_]) != php_strval(v_):
                 theme_changed_ = True
             # end if
         # end for
         if (php_isset(lambda : last_update_.response)) and php_is_array(last_update_.response):
-            for slug_,update_details_ in last_update_.response:
+            for slug_,update_details_ in last_update_.response.items():
                 if (not (php_isset(lambda : checked_[slug_]))):
                     theme_changed_ = True
                     break
@@ -488,7 +488,7 @@ def wp_get_translation_updates(*_args_):
     
     updates_ = Array()
     transients_ = Array({"update_core": "core", "update_plugins": "plugin", "update_themes": "theme"})
-    for transient_,type_ in transients_:
+    for transient_,type_ in transients_.items():
         transient_ = get_site_transient(transient_)
         if php_empty(lambda : transient_.translations):
             continue

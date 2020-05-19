@@ -366,7 +366,7 @@ class Walker():
             end_ = total_top_ - oldstart_
         # end if
         if (not php_empty(lambda : args_[0]["reverse_children"])):
-            for parent_,children_ in children_elements_:
+            for parent_,children_ in children_elements_.items():
                 children_elements_[parent_] = array_reverse(children_)
             # end for
         # end if

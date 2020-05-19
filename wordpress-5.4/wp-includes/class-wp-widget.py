@@ -431,7 +431,7 @@ class WP_Widget():
             else:
                 return
             # end if
-            for number_,new_instance_ in settings_:
+            for number_,new_instance_ in settings_.items():
                 new_instance_ = stripslashes_deep(new_instance_)
                 self._set(number_)
                 old_instance_ = all_instances_[number_] if (php_isset(lambda : all_instances_[number_])) else Array()

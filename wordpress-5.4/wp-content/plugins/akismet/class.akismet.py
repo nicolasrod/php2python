@@ -188,12 +188,12 @@ class Akismet():
         if self.is_test_mode():
             comment_["is_test"] = "true"
         # end if
-        for key_,value_ in PHP_POST:
+        for key_,value_ in PHP_POST.items():
             if php_is_string(value_):
                 comment_[str("POST_") + str(key_)] = value_
             # end if
         # end for
-        for key_,value_ in PHP_SERVER:
+        for key_,value_ in PHP_SERVER.items():
             if (not php_is_string(value_)):
                 continue
             # end if
@@ -1203,7 +1203,7 @@ class Akismet():
             plugins_ = get_option("active_plugins")
             akismet_ = plugin_basename(AKISMET__PLUGIN_DIR + "akismet.php")
             update_ = False
-            for i_,plugin_ in plugins_:
+            for i_,plugin_ in plugins_.items():
                 if plugin_ == akismet_:
                     plugins_[i_] = False
                     update_ = True
@@ -1222,7 +1222,7 @@ class Akismet():
         # end if
         
         args_ = apply_filters("akismet_view_arguments", args_, name_)
-        for key_,val_ in args_:
+        for key_,val_ in args_.items():
             key__ = val_
         # end for
         load_plugin_textdomain("akismet")
@@ -1337,7 +1337,7 @@ class Akismet():
             return meta_value_
         # end if
         meta_value_ = meta_value_
-        for key_,value_ in meta_value_:
+        for key_,value_ in meta_value_.items():
             if (not (php_isset(lambda : self.comment_as_submitted_allowed_keys[key_]))) or (not php_is_scalar(value_)):
                 meta_value_[key_] = None
             # end if

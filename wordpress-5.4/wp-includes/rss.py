@@ -482,7 +482,7 @@ def _fetch_remote_file(url_=None, headers_="", *_args_):
     #// Snoopy returns headers unprocessed.
     #// Also note, WP_HTTP lowercases all keys, Snoopy did not.
     return_headers_ = Array()
-    for key_,value_ in wp_remote_retrieve_headers(resp_):
+    for key_,value_ in wp_remote_retrieve_headers(resp_).items():
         if (not php_is_array(value_)):
             return_headers_[-1] = str(key_) + str(": ") + str(value_)
         else:

@@ -2741,8 +2741,8 @@ def get_user_metavalues(ids_=None, *_args_):
         objects_[id_] = Array()
     # end for
     metas_ = update_meta_cache("user", ids_)
-    for id_,meta_ in metas_:
-        for key_,metavalues_ in meta_:
+    for id_,meta_ in metas_.items():
+        for key_,metavalues_ in meta_.items():
             for value_ in metavalues_:
                 objects_[id_][-1] = Array({"user_id": id_, "meta_key": key_, "meta_value": value_})
             # end for

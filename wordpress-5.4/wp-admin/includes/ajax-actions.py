@@ -871,7 +871,7 @@ def wp_ajax_get_tagcloud(*_args_):
     if is_wp_error(tags_):
         wp_die(tags_.get_error_message())
     # end if
-    for key_,tag_ in tags_:
+    for key_,tag_ in tags_.items():
         tags_[key_].link = "#"
         tags_[key_].id = tag_.term_id
     # end for
@@ -1527,7 +1527,7 @@ def wp_ajax_inline_save(*_args_):
     # end if
     #// Exclude terms from taxonomies that are not supposed to appear in Quick Edit.
     if (not php_empty(lambda : data_["tax_input"])):
-        for taxonomy_,terms_ in data_["tax_input"]:
+        for taxonomy_,terms_ in data_["tax_input"].items():
             tax_object_ = get_taxonomy(taxonomy_)
             #// This filter is documented in wp-admin/includes/class-wp-posts-list-table.php
             if (not apply_filters("quick_edit_show_taxonomy", tax_object_.show_in_quick_edit, taxonomy_, post_["post_type"])):
@@ -1691,11 +1691,11 @@ def wp_ajax_widgets_order(*_args_):
     #// Save widgets order for all sidebars.
     if php_is_array(PHP_POST["sidebars"]):
         sidebars_ = Array()
-        for key_,val_ in wp_unslash(PHP_POST["sidebars"]):
+        for key_,val_ in wp_unslash(PHP_POST["sidebars"]).items():
             sb_ = Array()
             if (not php_empty(lambda : val_)):
                 val_ = php_explode(",", val_)
-                for k_,v_ in val_:
+                for k_,v_ in val_.items():
                     if php_strpos(v_, "widget-") == False:
                         continue
                     # end if
@@ -1773,7 +1773,7 @@ def wp_ajax_save_widget(*_args_):
         sidebar_[-1] = widget_id_
     # end if
     PHP_POST["widget-id"] = sidebar_
-    for name_,control_ in wp_registered_widget_updates_:
+    for name_,control_ in wp_registered_widget_updates_.items():
         if name_ == id_base_:
             if (not php_is_callable(control_["callback"])):
                 continue
@@ -1836,7 +1836,7 @@ def wp_ajax_delete_inactive_widgets(*_args_):
     #// This action is documented in wp-admin/widgets.php
     do_action("sidebar_admin_setup")
     sidebars_widgets_ = wp_get_sidebars_widgets()
-    for key_,widget_id_ in sidebars_widgets_["wp_inactive_widgets"]:
+    for key_,widget_id_ in sidebars_widgets_["wp_inactive_widgets"].items():
         pieces_ = php_explode("-", widget_id_)
         multi_number_ = php_array_pop(pieces_)
         id_base_ = php_implode("-", pieces_)
@@ -2336,7 +2336,7 @@ def wp_ajax_save_attachment(*_args_):
             changed_ = True
             id3data_ = Array()
         # end if
-        for key_,label_ in wp_get_attachment_id3_keys(post_, "edit"):
+        for key_,label_ in wp_get_attachment_id3_keys(post_, "edit").items():
             if (php_isset(lambda : changes_[key_])):
                 changed_ = True
                 id3data_[key_] = sanitize_text_field(wp_unslash(changes_[key_]))
@@ -2421,7 +2421,7 @@ def wp_ajax_save_attachment_order(*_args_):
     if (not current_user_can("edit_post", post_id_)):
         wp_send_json_error()
     # end if
-    for attachment_id_,menu_order_ in attachments_:
+    for attachment_id_,menu_order_ in attachments_.items():
         if (not current_user_can("edit_post", attachment_id_)):
             continue
         # end if
@@ -3894,7 +3894,7 @@ def wp_ajax_health_check_get_sizes(*_args_):
     # end if
     sizes_data_ = WP_Debug_Data.get_sizes()
     all_sizes_ = Array({"raw": 0})
-    for name_,value_ in sizes_data_:
+    for name_,value_ in sizes_data_.items():
         name_ = sanitize_text_field(name_)
         data_ = Array()
         if (php_isset(lambda : value_["size"])):

@@ -220,7 +220,7 @@ class Requests_Cookie():
     def normalize(self):
         
         
-        for key_,value_ in self.attributes:
+        for key_,value_ in self.attributes.items():
             orig_value_ = value_
             value_ = self.normalize_attribute(key_, value_)
             if value_ == None:
@@ -328,7 +328,7 @@ class Requests_Cookie():
         header_value_ = self.format_for_header()
         if (not php_empty(lambda : self.attributes)):
             parts_ = Array()
-            for key_,value_ in self.attributes:
+            for key_,value_ in self.attributes.items():
                 #// Ignore non-associative attributes
                 if php_is_numeric(key_):
                     parts_[-1] = value_

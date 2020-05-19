@@ -161,7 +161,7 @@ class WP_Http_Streams():
             strHeaders_ += "User-agent: " + parsed_args_["user-agent"] + "\r\n"
         # end if
         if php_is_array(parsed_args_["headers"]):
-            for header_,headerValue_ in parsed_args_["headers"]:
+            for header_,headerValue_ in parsed_args_["headers"].items():
                 strHeaders_ += header_ + ": " + headerValue_ + "\r\n"
             # end for
         else:

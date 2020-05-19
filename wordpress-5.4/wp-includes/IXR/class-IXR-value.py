@@ -31,7 +31,7 @@ class IXR_Value():
         self.type = type_
         if type_ == "struct":
             #// Turn all the values in the array in to new IXR_Value objects
-            for key_,value_ in self.data:
+            for key_,value_ in self.data.items():
                 self.data[key_] = php_new_class("IXR_Value", lambda : IXR_Value(value_))
             # end for
         # end if
@@ -121,7 +121,7 @@ class IXR_Value():
             # end if
             if case("struct"):
                 return_ = "<struct>" + "\n"
-                for name_,value_ in self.data:
+                for name_,value_ in self.data.items():
                     name_ = htmlspecialchars(name_)
                     return_ += str("  <member><name>") + str(name_) + str("</name><value>")
                     return_ += value_.getxml() + "</value></member>\n"
@@ -150,7 +150,7 @@ class IXR_Value():
         
         
         expected_ = 0
-        for key_,value_ in array_:
+        for key_,value_ in array_.items():
             if php_str(key_) != php_str(expected_):
                 return True
             # end if

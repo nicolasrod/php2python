@@ -70,7 +70,7 @@ def register_rest_route(namespace_=None, route_=None, args_=None, override_=None
         args_ = Array(args_)
     # end if
     defaults_ = Array({"methods": "GET", "callback": None, "args": Array()})
-    for key_,arg_group_ in args_:
+    for key_,arg_group_ in args_.items():
         if (not php_is_numeric(key_)):
             continue
         # end if
@@ -583,13 +583,13 @@ def rest_handle_options_request(response_=None, handler_=None, request_=None, *_
     # end if
     response_ = php_new_class("WP_REST_Response", lambda : WP_REST_Response())
     data_ = Array()
-    for route_,endpoints_ in handler_.get_routes():
+    for route_,endpoints_ in handler_.get_routes().items():
         match_ = php_preg_match("@^" + route_ + "$@i", request_.get_route(), matches_)
         if (not match_):
             continue
         # end if
         args_ = Array()
-        for param_,value_ in matches_:
+        for param_,value_ in matches_.items():
             if (not php_is_int(param_)):
                 args_[param_] = value_
             # end if
@@ -627,7 +627,7 @@ def rest_send_allow_header(response_=None, server_=None, request_=None, *_args_)
     allowed_methods_ = Array()
     #// Get the allowed methods across the routes.
     for _handler_ in routes_[matched_route_]:
-        for handler_method_,value_ in _handler_["methods"]:
+        for handler_method_,value_ in _handler_["methods"].items():
             if (not php_empty(lambda : _handler_["permission_callback"])):
                 permission_ = php_call_user_func(_handler_["permission_callback"], request_)
                 allowed_methods_[handler_method_] = True == permission_
@@ -655,7 +655,7 @@ def _rest_array_intersect_key_recursive(array1_=None, array2_=None, *_args_):
     
     
     array1_ = php_array_intersect_key(array1_, array2_)
-    for key_,value_ in array1_:
+    for key_,value_ in array1_.items():
         if php_is_array(value_) and php_is_array(array2_[key_]):
             array1_[key_] = _rest_array_intersect_key_recursive(value_, array2_[key_])
         # end if
@@ -1158,7 +1158,7 @@ def rest_validate_value_from_schema(value_=None, args_=None, param_="", *_args_)
             #// translators: 1: Parameter, 2: Type name.
             return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("%1$s is not of type %2$s."), param_, "array")))
         # end if
-        for index_,v_ in value_:
+        for index_,v_ in value_.items():
             is_valid_ = rest_validate_value_from_schema(v_, args_["items"], param_ + "[" + index_ + "]")
             if is_wp_error(is_valid_):
                 return is_valid_
@@ -1179,7 +1179,7 @@ def rest_validate_value_from_schema(value_=None, args_=None, param_="", *_args_)
             #// translators: 1: Parameter, 2: Type name.
             return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("%1$s is not of type %2$s."), param_, "object")))
         # end if
-        for property_,v_ in value_:
+        for property_,v_ in value_.items():
             if (php_isset(lambda : args_["properties"][property_])):
                 is_valid_ = rest_validate_value_from_schema(v_, args_["properties"][property_], param_ + "[" + property_ + "]")
                 if is_wp_error(is_valid_):
@@ -1328,7 +1328,7 @@ def rest_sanitize_value_from_schema(value_=None, args_=None, *_args_):
             return value_
         # end if
         value_ = wp_parse_list(value_)
-        for index_,v_ in value_:
+        for index_,v_ in value_.items():
             value_[index_] = rest_sanitize_value_from_schema(v_, args_["items"])
         # end for
         #// Normalize to numeric array so nothing unexpected is in the keys.
@@ -1345,7 +1345,7 @@ def rest_sanitize_value_from_schema(value_=None, args_=None, *_args_):
         if (not php_is_array(value_)):
             return Array()
         # end if
-        for property_,v_ in value_:
+        for property_,v_ in value_.items():
             if (php_isset(lambda : args_["properties"][property_])):
                 value_[property_] = rest_sanitize_value_from_schema(v_, args_["properties"][property_])
             elif (php_isset(lambda : args_["additionalProperties"])):

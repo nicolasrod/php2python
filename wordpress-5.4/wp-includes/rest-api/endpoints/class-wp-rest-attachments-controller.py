@@ -377,7 +377,7 @@ class WP_REST_Attachments_Controller(WP_REST_Posts_Controller):
             if php_empty(lambda : data_["media_details"]):
                 data_["media_details"] = php_new_class("stdClass", lambda : stdClass())
             elif (not php_empty(lambda : data_["media_details"]["sizes"])):
-                for size_,size_data_ in data_["media_details"]["sizes"]:
+                for size_,size_data_ in data_["media_details"]["sizes"].items():
                     if (php_isset(lambda : size_data_["mime-type"])):
                         size_data_["mime_type"] = size_data_["mime-type"]
                         size_data_["mime-type"] = None
@@ -412,7 +412,7 @@ class WP_REST_Attachments_Controller(WP_REST_Posts_Controller):
         links_ = response_.get_links()
         #// Wrap the data in a response object.
         response_ = rest_ensure_response(data_)
-        for rel_,rel_links_ in links_:
+        for rel_,rel_links_ in links_.items():
             for link_ in rel_links_:
                 response_.add_link(rel_, link_["href"], link_["attributes"])
             # end for

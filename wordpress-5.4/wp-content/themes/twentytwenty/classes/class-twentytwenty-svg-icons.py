@@ -79,7 +79,7 @@ if (not php_class_exists("TwentyTwenty_SVG_Icons")):
                     regex_map_[icon_] = php_sprintf("/(%s)/i", php_implode("|", domains_))
                 # end for
             # end if
-            for icon_,regex_ in regex_map_:
+            for icon_,regex_ in regex_map_.items():
                 if php_preg_match(regex_, uri_):
                     return twentytwenty_get_theme_svg(icon_, "social")
                 # end if

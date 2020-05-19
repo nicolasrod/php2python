@@ -203,7 +203,7 @@ class Walker_Nav_Menu(Walker):
         #//
         atts_ = apply_filters("nav_menu_link_attributes", atts_, item_, args_, depth_)
         attributes_ = ""
-        for attr_,value_ in atts_:
+        for attr_,value_ in atts_.items():
             if php_is_scalar(value_) and "" != value_ and False != value_:
                 value_ = esc_url(value_) if "href" == attr_ else esc_attr(value_)
                 attributes_ += " " + attr_ + "=\"" + value_ + "\""

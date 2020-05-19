@@ -172,7 +172,7 @@ class getid3_quicktime(getid3_handler):
             info_["video"]["bitrate"] = info_["bitrate"] - info_["audio"]["bitrate"]
         # end if
         if (not php_empty(lambda : info_["playtime_seconds"])) and (not (php_isset(lambda : info_["video"]["frame_rate"]))) and (not php_empty(lambda : info_["quicktime"]["stts_framecount"])):
-            for key_,samples_count_ in info_["quicktime"]["stts_framecount"]:
+            for key_,samples_count_ in info_["quicktime"]["stts_framecount"].items():
                 samples_per_second_ = samples_count_ / info_["playtime_seconds"]
                 if samples_per_second_ > 240:
                     pass
@@ -313,9 +313,9 @@ class getid3_quicktime(getid3_handler):
                     isVideo_ = False
                     framerate_ = 0
                     framecount_ = 0
-                    for key_,value_array_ in atom_structure_["subatoms"]:
+                    for key_,value_array_ in atom_structure_["subatoms"].items():
                         if (php_isset(lambda : value_array_["sample_description_table"])):
-                            for key2_,value_array2_ in value_array_["sample_description_table"]:
+                            for key2_,value_array2_ in value_array_["sample_description_table"].items():
                                 if (php_isset(lambda : value_array2_["data_format"])):
                                     for case in Switch(value_array2_["data_format"]):
                                         if case("avc1"):
@@ -333,7 +333,7 @@ class getid3_quicktime(getid3_handler):
                                 # end if
                             # end for
                         elif (php_isset(lambda : value_array_["time_to_sample_table"])):
-                            for key2_,value_array2_ in value_array_["time_to_sample_table"]:
+                            for key2_,value_array2_ in value_array_["time_to_sample_table"].items():
                                 if (php_isset(lambda : value_array2_["sample_count"])) and (php_isset(lambda : value_array2_["sample_duration"])) and value_array2_["sample_duration"] > 0:
                                     framerate_ = round(info_["quicktime"]["time_scale"] / value_array2_["sample_duration"], 3)
                                     framecount_ = value_array2_["sample_count"]
@@ -2048,12 +2048,12 @@ class getid3_quicktime(getid3_handler):
                     if php_strlen(atom_data_) > 0:
                         if php_strlen(atom_data_) % GPS_rowsize_ == 0:
                             atom_structure_["gps_toc"] = Array()
-                            for counter_,datapair_ in str_split(atom_data_, GPS_rowsize_):
+                            for counter_,datapair_ in str_split(atom_data_, GPS_rowsize_).items():
                                 atom_structure_["gps_toc"][-1] = unpack("Noffset/Nsize", php_substr(atom_data_, counter_ * GPS_rowsize_, GPS_rowsize_))
                             # end for
                             atom_structure_["gps_entries"] = Array()
                             previous_offset_ = self.ftell()
-                            for key_,gps_pointer_ in atom_structure_["gps_toc"]:
+                            for key_,gps_pointer_ in atom_structure_["gps_toc"].items():
                                 if key_ == 0:
                                     continue
                                 # end if
@@ -3145,7 +3145,7 @@ class getid3_quicktime(getid3_handler):
     def search_tag_by_key(self, info_=None, tag_=None, history_=None, result_=None):
         
         
-        for key_,value_ in info_:
+        for key_,value_ in info_.items():
             key_history_ = history_ + "/" + key_
             if key_ == tag_:
                 result_[-1] = Array(key_history_, info_)
@@ -3166,7 +3166,7 @@ class getid3_quicktime(getid3_handler):
     def search_tag_by_pair(self, info_=None, k_=None, v_=None, history_=None, result_=None):
         
         
-        for key_,value_ in info_:
+        for key_,value_ in info_.items():
             key_history_ = history_ + "/" + key_
             if key_ == k_ and value_ == v_:
                 result_[-1] = Array(key_history_, info_)

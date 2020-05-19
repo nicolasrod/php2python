@@ -379,7 +379,7 @@ class WP_List_Table():
         # end if
         self.screen.render_screen_reader_content("heading_views")
         php_print("<ul class='subsubsub'>\n")
-        for class_,view_ in views_:
+        for class_,view_ in views_.items():
             views_[class_] = str("  <li class='") + str(class_) + str("'>") + str(view_)
         # end for
         php_print(php_implode(" |</li>\n", views_) + "</li>\n")
@@ -435,7 +435,7 @@ class WP_List_Table():
         php_print("<label for=\"bulk-action-selector-" + esc_attr(which_) + "\" class=\"screen-reader-text\">" + __("Select bulk action") + "</label>")
         php_print("<select name=\"action" + two_ + "\" id=\"bulk-action-selector-" + esc_attr(which_) + "\">\n")
         php_print("<option value=\"-1\">" + __("Bulk Actions") + "</option>\n")
-        for name_,title_ in self._actions:
+        for name_,title_ in self._actions.items():
             class_ = " class=\"hide-if-no-js\"" if "edit" == name_ else ""
             php_print(" " + "<option value=\"" + name_ + "\"" + class_ + ">" + title_ + "</option>\n")
         # end for
@@ -484,7 +484,7 @@ class WP_List_Table():
             return ""
         # end if
         out_ = "<div class=\"" + "row-actions visible" if always_visible_ else "row-actions" + "\">"
-        for action_,link_ in actions_:
+        for action_,link_ in actions_.items():
             i_ += 1
             sep_ = "" if i_ == action_count_ else " | "
             out_ += str("<span class='") + str(action_) + str("'>") + str(link_) + str(sep_) + str("</span>")
@@ -571,7 +571,7 @@ class WP_List_Table():
         php_print("     <input type=\"hidden\" name=\"mode\" value=\"")
         php_print(esc_attr(current_mode_))
         php_print("\" />\n      <div class=\"view-switch\">\n       ")
-        for mode_,title_ in self.modes:
+        for mode_,title_ in self.modes.items():
             classes_ = Array("view-" + mode_)
             aria_current_ = ""
             if current_mode_ == mode_:
@@ -799,7 +799,7 @@ class WP_List_Table():
         # end if
         #// We need a primary defined so responsive views show something,
         #// so let's fall back to the first non-checkbox column.
-        for col_,column_name_ in columns_:
+        for col_,column_name_ in columns_.items():
             if "cb" == col_:
                 continue
             # end if
@@ -866,7 +866,7 @@ class WP_List_Table():
             #// Back-compat for list tables that have been manually setting $_column_headers for horse reasons.
             #// In 4.3, we added a fourth argument for primary column.
             column_headers_ = Array(Array(), Array(), Array(), self.get_primary_column_name())
-            for key_,value_ in self._column_headers:
+            for key_,value_ in self._column_headers.items():
                 column_headers_[key_] = value_
             # end for
             return column_headers_
@@ -886,7 +886,7 @@ class WP_List_Table():
         #//
         _sortable_ = apply_filters(str("manage_") + str(self.screen.id) + str("_sortable_columns"), sortable_columns_)
         sortable_ = Array()
-        for id_,data_ in _sortable_:
+        for id_,data_ in _sortable_.items():
             if php_empty(lambda : data_):
                 continue
             # end if
@@ -946,7 +946,7 @@ class WP_List_Table():
             columns_["cb"] = "<label class=\"screen-reader-text\" for=\"cb-select-all-" + cb_counter_ + "\">" + __("Select All") + "</label>" + "<input id=\"cb-select-all-" + cb_counter_ + "\" type=\"checkbox\" />"
             cb_counter_ += 1
         # end if
-        for column_key_,column_display_name_ in columns_:
+        for column_key_,column_display_name_ in columns_.items():
             class_ = Array("manage-column", str("column-") + str(column_key_))
             if php_in_array(column_key_, hidden_):
                 class_[-1] = "hidden"
@@ -1140,7 +1140,7 @@ class WP_List_Table():
         
         
         columns_, hidden_, sortable_, primary_ = self.get_column_info()
-        for column_name_,column_display_name_ in columns_:
+        for column_name_,column_display_name_ in columns_.items():
             classes_ = str(column_name_) + str(" column-") + str(column_name_)
             if primary_ == column_name_:
                 classes_ += " has-row-actions column-primary"

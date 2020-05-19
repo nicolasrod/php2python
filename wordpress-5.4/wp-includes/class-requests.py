@@ -133,7 +133,7 @@ class Requests():
         #// Caching code, don't bother testing coverage
         #// @codeCoverageIgnoreStart
         #// array of capabilities as a string to be used as an array key
-        ksort(capabilities_)
+        php_ksort(capabilities_)
         cap_string_ = serialize(capabilities_)
         #// Don't search for a transport if it's already been done for these $capabilities
         if (php_isset(lambda : self.transport[cap_string_])) and self.transport[cap_string_] != None:
@@ -451,7 +451,7 @@ class Requests():
                 options_["hooks"].register("multiple.request.complete", options_["complete"])
             # end if
         # end if
-        for id_,request_ in requests_:
+        for id_,request_ in requests_.items():
             if (not (php_isset(lambda : request_["headers"]))):
                 request_["headers"] = Array()
             # end if
@@ -489,7 +489,7 @@ class Requests():
             transport_ = self.get_transport()
         # end if
         responses_ = transport_.request_multiple(requests_, options_)
-        for id_,response_ in responses_:
+        for id_,response_ in responses_.items():
             #// If our hook got messed with somehow, ensure we end up with the
             #// correct response
             if php_is_string(response_):
@@ -762,7 +762,7 @@ class Requests():
         
         
         return_ = Array()
-        for key_,value_ in array_:
+        for key_,value_ in array_.items():
             return_[-1] = php_sprintf("%s: %s", key_, value_)
         # end for
         return return_

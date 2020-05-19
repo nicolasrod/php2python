@@ -208,7 +208,7 @@ class WP():
                     matches_ = Array("")
                 # end if
             else:
-                for match_,query_ in rewrite_:
+                for match_,query_ in rewrite_.items():
                     #// If the requested file is the anchor of the match, prepend it to the path info.
                     if (not php_empty(lambda : requested_file_)) and php_strpos(match_, requested_file_) == 0 and requested_file_ != requested_path_:
                         request_match_ = requested_file_ + "/" + requested_path_
@@ -267,7 +267,7 @@ class WP():
         #// @param string[] $public_query_vars The array of whitelisted query variable names.
         #//
         self.public_query_vars = apply_filters("query_vars", self.public_query_vars)
-        for post_type_,t_ in get_post_types(Array(), "objects"):
+        for post_type_,t_ in get_post_types(Array(), "objects").items():
             if is_post_type_viewable(t_) and t_.query_var:
                 post_type_query_vars_[t_.query_var] = post_type_
             # end if
@@ -288,7 +288,7 @@ class WP():
                 if (not php_is_array(self.query_vars[wpvar_])):
                     self.query_vars[wpvar_] = php_str(self.query_vars[wpvar_])
                 else:
-                    for vkey_,v_ in self.query_vars[wpvar_]:
+                    for vkey_,v_ in self.query_vars[wpvar_].items():
                         if php_is_scalar(v_):
                             self.query_vars[wpvar_][vkey_] = php_str(v_)
                         # end if
@@ -301,14 +301,14 @@ class WP():
             # end if
         # end for
         #// Convert urldecoded spaces back into '+'.
-        for taxonomy_,t_ in get_taxonomies(Array(), "objects"):
+        for taxonomy_,t_ in get_taxonomies(Array(), "objects").items():
             if t_.query_var and (php_isset(lambda : self.query_vars[t_.query_var])):
                 self.query_vars[t_.query_var] = php_str_replace(" ", "+", self.query_vars[t_.query_var])
             # end if
         # end for
         #// Don't allow non-publicly queryable taxonomies to be queried from the front end.
         if (not is_admin()):
-            for taxonomy_,t_ in get_taxonomies(Array({"publicly_queryable": False}), "objects"):
+            for taxonomy_,t_ in get_taxonomies(Array({"publicly_queryable": False}), "objects").items():
                 #// 
                 #// Disallow when set to the 'taxonomy' query var.
                 #// Non-publicly queryable taxonomies cannot register custom query vars. See register_taxonomy().
@@ -443,7 +443,7 @@ class WP():
             # end if
         # end if
         if (not php_headers_sent()):
-            for name_,field_value_ in headers_:
+            for name_,field_value_ in headers_.items():
                 php_header(str(name_) + str(": ") + str(field_value_))
             # end for
         # end if
@@ -518,7 +518,7 @@ class WP():
         global wp_query_
         php_check_if_defined("wp_query_")
         #// Extract updated query vars back into global namespace.
-        for key_,value_ in wp_query_.query_vars:
+        for key_,value_ in wp_query_.query_vars.items():
             PHP_GLOBALS[key_] = value_
         # end for
         PHP_GLOBALS["query_string"] = self.query_string

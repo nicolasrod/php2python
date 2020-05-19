@@ -238,11 +238,11 @@ def _post_format_get_terms(terms_=None, taxonomies_=None, args_=None, *_args_):
     
     if php_in_array("post_format", taxonomies_):
         if (php_isset(lambda : args_["fields"])) and "names" == args_["fields"]:
-            for order_,name_ in terms_:
+            for order_,name_ in terms_.items():
                 terms_[order_] = get_post_format_string(php_str_replace("post-format-", "", name_))
             # end for
         else:
-            for order_,term_ in terms_:
+            for order_,term_ in terms_.items():
                 if (php_isset(lambda : term_.taxonomy)) and "post_format" == term_.taxonomy:
                     terms_[order_].name = get_post_format_string(php_str_replace("post-format-", "", term_.slug))
                 # end if
@@ -263,7 +263,7 @@ def _post_format_get_terms(terms_=None, taxonomies_=None, args_=None, *_args_):
 def _post_format_wp_get_object_terms(terms_=None, *_args_):
     
     
-    for order_,term_ in terms_:
+    for order_,term_ in terms_.items():
         if (php_isset(lambda : term_.taxonomy)) and "post_format" == term_.taxonomy:
             terms_[order_].name = get_post_format_string(php_str_replace("post-format-", "", term_.slug))
         # end if

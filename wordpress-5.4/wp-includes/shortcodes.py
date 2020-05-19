@@ -530,7 +530,7 @@ def shortcode_atts(pairs_=None, atts_=None, shortcode_="", *_args_):
     
     atts_ = atts_
     out_ = Array()
-    for name_,default_ in pairs_:
+    for name_,default_ in pairs_.items():
         if php_array_key_exists(name_, atts_):
             out_[name_] = atts_[name_]
         else:

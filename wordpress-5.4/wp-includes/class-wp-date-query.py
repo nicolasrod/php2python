@@ -193,13 +193,13 @@ class WP_Date_Query():
         cleaned_query_ = Array()
         defaults_ = Array({"column": "post_date", "compare": "=", "relation": "AND"})
         #// Numeric keys should always have array values.
-        for qkey_,qvalue_ in queries_:
+        for qkey_,qvalue_ in queries_.items():
             if php_is_numeric(qkey_) and (not php_is_array(qvalue_)):
                 queries_[qkey_] = None
             # end if
         # end for
         #// Each query should have a value for each default key. Inherit from the parent when possible.
-        for dkey_,dvalue_ in defaults_:
+        for dkey_,dvalue_ in defaults_.items():
             if (php_isset(lambda : queries_[dkey_])):
                 continue
             # end if
@@ -213,7 +213,7 @@ class WP_Date_Query():
         if self.is_first_order_clause(queries_):
             self.validate_date_values(queries_)
         # end if
-        for key_,q_ in queries_:
+        for key_,q_ in queries_.items():
             if (not php_is_array(q_)) or php_in_array(key_, self.time_keys, True):
                 #// This is a first-order query. Trust the values and sanitize when building SQL.
                 cleaned_query_[key_] = q_
@@ -335,7 +335,7 @@ class WP_Date_Query():
         #// Seconds per minute.
         min_max_checks_["second"] = Array({"min": 0, "max": 59})
         #// Concatenate and throw a notice for each invalid value.
-        for key_,check_ in min_max_checks_:
+        for key_,check_ in min_max_checks_.items():
             if (not php_array_key_exists(key_, date_query_)):
                 continue
             # end if
@@ -415,7 +415,7 @@ class WP_Date_Query():
             # end if
             known_columns_ = Array({wpdb_.posts: Array("post_date", "post_date_gmt", "post_modified", "post_modified_gmt"), wpdb_.comments: Array("comment_date", "comment_date_gmt"), wpdb_.users: Array("user_registered"), wpdb_.blogs: Array("registered", "last_updated")})
             #// If it's a known column name, add the appropriate table prefix.
-            for table_name_,table_columns_ in known_columns_:
+            for table_name_,table_columns_ in known_columns_.items():
                 if php_in_array(column_, table_columns_):
                     column_ = table_name_ + "." + column_
                     break
@@ -501,7 +501,7 @@ class WP_Date_Query():
             indent_ += "  "
             i_ += 1
         # end while
-        for key_,clause_ in query_:
+        for key_,clause_ in query_.items():
             if "relation" == key_:
                 relation_ = query_["relation"]
             elif php_is_array(clause_):
@@ -604,7 +604,7 @@ class WP_Date_Query():
         #// Specific value queries.
         date_units_ = Array({"YEAR": Array("year"), "MONTH": Array("month", "monthnum"), "_wp_mysql_week": Array("week", "w"), "DAYOFYEAR": Array("dayofyear"), "DAYOFMONTH": Array("day"), "DAYOFWEEK": Array("dayofweek"), "WEEKDAY": Array("dayofweek_iso")})
         #// Check of the possible date units and add them to the query.
-        for sql_part_,query_parts_ in date_units_:
+        for sql_part_,query_parts_ in date_units_.items():
             for query_part_ in query_parts_:
                 if (php_isset(lambda : query_[query_part_])):
                     value_ = self.build_value(compare_, query_[query_part_])

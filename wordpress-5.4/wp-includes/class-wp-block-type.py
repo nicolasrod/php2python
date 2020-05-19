@@ -142,7 +142,7 @@ class WP_Block_Type():
         if (not (php_isset(lambda : self.attributes))):
             return attributes_
         # end if
-        for attribute_name_,value_ in attributes_:
+        for attribute_name_,value_ in attributes_.items():
             #// If the attribute is not defined by the block type, it cannot be
             #// validated.
             if (not (php_isset(lambda : self.attributes[attribute_name_]))):
@@ -161,7 +161,7 @@ class WP_Block_Type():
         #// Populate values of any missing attributes for which the block type
         #// defines a default.
         missing_schema_attributes_ = php_array_diff_key(self.attributes, attributes_)
-        for attribute_name_,schema_ in missing_schema_attributes_:
+        for attribute_name_,schema_ in missing_schema_attributes_.items():
             if (php_isset(lambda : schema_["default"])):
                 attributes_[attribute_name_] = schema_["default"]
             # end if
@@ -180,7 +180,7 @@ class WP_Block_Type():
         
         args_ = wp_parse_args(args_, Array({"render_callback": None}))
         args_["name"] = self.name
-        for property_name_,property_value_ in args_:
+        for property_name_,property_value_ in args_.items():
             self.property_name_ = property_value_
         # end for
     # end def set_props

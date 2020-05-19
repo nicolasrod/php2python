@@ -635,7 +635,7 @@ class WP_Term_Query():
         # end if
         #// Make sure we show empty categories that have children.
         if hierarchical_ and args_["hide_empty"] and php_is_array(terms_):
-            for k_,term_ in terms_:
+            for k_,term_ in terms_.items():
                 if (not term_.count):
                     children_ = get_term_children(term_.term_id, term_.taxonomy)
                     if php_is_array(children_):
@@ -884,7 +884,7 @@ class WP_Term_Query():
         if (not php_is_array(term_ids_)):
             return terms_
         # end if
-        for key_,term_id_ in term_ids_:
+        for key_,term_id_ in term_ids_.items():
             term_ = get_term(term_id_)
             if type(term_).__name__ == "WP_Term":
                 terms_[key_] = term_

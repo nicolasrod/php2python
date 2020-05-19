@@ -151,7 +151,7 @@ def next_widget_id_number(id_base_=None, *_args_):
     global wp_registered_widgets_
     php_check_if_defined("wp_registered_widgets_")
     number_ = 1
-    for widget_id_,widget_ in wp_registered_widgets_:
+    for widget_id_,widget_ in wp_registered_widgets_.items():
         if php_preg_match("/" + id_base_ + "-([0-9]+)$/", widget_id_, matches_):
             number_ = php_max(number_, matches_[1])
         # end if

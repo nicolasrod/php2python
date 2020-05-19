@@ -336,7 +336,7 @@ class WP_Community_Events():
         
         
         if (php_isset(lambda : response_body_["events"])):
-            for key_,event_ in response_body_["events"]:
+            for key_,event_ in response_body_["events"].items():
                 timestamp_ = strtotime(event_["date"])
                 #// 
                 #// The `date_format` option is not used because it's important
@@ -390,7 +390,7 @@ class WP_Community_Events():
         if (php_isset(lambda : response_body_["events"])):
             wordcamps_ = Array()
             today_ = current_time("Y-m-d")
-            for key_,event_ in response_body_["events"]:
+            for key_,event_ in response_body_["events"].items():
                 #// 
                 #// Skip WordCamps, because they might be multi-day events.
                 #// Save a copy so they can be pinned later.

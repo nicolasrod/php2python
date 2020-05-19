@@ -108,10 +108,10 @@ class WP_List_Util():
         # end if
         count_ = php_count(args_)
         filtered_ = Array()
-        for key_,obj_ in self.output:
+        for key_,obj_ in self.output.items():
             to_match_ = obj_
             matched_ = 0
-            for m_key_,m_value_ in args_:
+            for m_key_,m_value_ in args_.items():
                 if php_array_key_exists(m_key_, to_match_) and m_value_ == to_match_[m_key_]:
                     matched_ += 1
                 # end if
@@ -149,7 +149,7 @@ class WP_List_Util():
             #// This is simple. Could at some point wrap array_column()
             #// if we knew we had an array of arrays.
             #//
-            for key_,value_ in self.output:
+            for key_,value_ in self.output.items():
                 if php_is_object(value_):
                     newlist_[key_] = value_.field_
                 else:
@@ -207,7 +207,7 @@ class WP_List_Util():
         if php_is_string(orderby_):
             orderby_ = Array({orderby_: order_})
         # end if
-        for field_,direction_ in orderby_:
+        for field_,direction_ in orderby_.items():
             orderby_[field_] = "DESC" if "DESC" == php_strtoupper(direction_) else "ASC"
         # end for
         self.orderby = orderby_
@@ -238,7 +238,7 @@ class WP_List_Util():
         # end if
         a_ = a_
         b_ = b_
-        for field_,direction_ in self.orderby:
+        for field_,direction_ in self.orderby.items():
             if (not (php_isset(lambda : a_[field_]))) or (not (php_isset(lambda : b_[field_]))):
                 continue
             # end if

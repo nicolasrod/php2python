@@ -368,7 +368,7 @@ class WP_User_Query():
             ordersby_ = php_preg_split("/[,\\s]+/", qv_["orderby"])
         # end if
         orderby_array_ = Array()
-        for _key_,_value_ in ordersby_:
+        for _key_,_value_ in ordersby_.items():
             if (not _value_):
                 continue
             # end if
@@ -543,7 +543,7 @@ class WP_User_Query():
             # end for
             self.results = r_
         elif "all" == qv_["fields"]:
-            for key_,user_ in self.results:
+            for key_,user_ in self.results.items():
                 self.results[key_] = php_new_class("WP_User", lambda : WP_User(user_, "", qv_["blog_id"]))
             # end for
         # end if

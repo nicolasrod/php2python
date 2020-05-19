@@ -182,7 +182,7 @@ class WP_Site():
     def __init__(self, site_=None):
         
         
-        for key_,value_ in get_object_vars(site_):
+        for key_,value_ in get_object_vars(site_).items():
             self.key_ = value_
         # end for
     # end def __init__
@@ -339,7 +339,7 @@ class WP_Site():
             switch_to_blog(self.blog_id)
             #// Create a raw copy of the object for backward compatibility with the filter below.
             details_ = php_new_class("stdClass", lambda : stdClass())
-            for key_,value_ in get_object_vars(self):
+            for key_,value_ in get_object_vars(self).items():
                 details_.key_ = value_
             # end for
             details_.blogname = get_option("blogname")

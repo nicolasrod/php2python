@@ -78,7 +78,7 @@ def get_active_blog_for_user(user_id_=None, *_args_):
         #// If a user's primary blog is shut down, check their other blogs.
         ret_ = False
         if php_is_array(blogs_) and php_count(blogs_) > 0:
-            for blog_id_,blog_ in blogs_:
+            for blog_id_,blog_ in blogs_.items():
                 if get_current_network_id() != blog_.site_id:
                     continue
                 # end if
@@ -1494,7 +1494,7 @@ def check_upload_mimes(mimes_=None, *_args_):
     site_exts_ = php_explode(" ", get_site_option("upload_filetypes", "jpg jpeg png gif"))
     site_mimes_ = Array()
     for ext_ in site_exts_:
-        for ext_pattern_,mime_ in mimes_:
+        for ext_pattern_,mime_ in mimes_.items():
             if "" != ext_ and False != php_strpos(ext_pattern_, ext_):
                 site_mimes_[ext_pattern_] = mime_
             # end if

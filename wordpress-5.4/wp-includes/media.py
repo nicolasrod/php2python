@@ -741,7 +741,7 @@ def image_get_intermediate_size(post_id_=None, size_="thumbnail", *_args_):
             imagedata_["height"] = imagedata_["sizes"]["full"]["height"]
             imagedata_["width"] = imagedata_["sizes"]["full"]["width"]
         # end if
-        for _size_,data_ in imagedata_["sizes"]:
+        for _size_,data_ in imagedata_["sizes"].items():
             #// If there's an exact match to an existing image size, short circuit.
             if php_intval(data_["width"]) == php_intval(size_[0]) and php_intval(data_["height"]) == php_intval(size_[1]):
                 candidates_[data_["width"] * data_["height"]] = data_
@@ -763,7 +763,7 @@ def image_get_intermediate_size(post_id_=None, size_="thumbnail", *_args_):
         if (not php_empty(lambda : candidates_)):
             #// Sort the array by size if we have more than one candidate.
             if 1 < php_count(candidates_):
-                ksort(candidates_)
+                php_ksort(candidates_)
             # end if
             data_ = php_array_shift(candidates_)
             pass
@@ -1001,7 +1001,7 @@ def wp_get_attachment_image(attachment_id_=None, size_="thumbnail", icon_=None, 
         attr_ = apply_filters("wp_get_attachment_image_attributes", attr_, attachment_, size_)
         attr_ = php_array_map("esc_attr", attr_)
         html_ = php_rtrim(str("<img ") + str(hwstring_))
-        for name_,value_ in attr_:
+        for name_,value_ in attr_.items():
             html_ += str(" ") + str(name_) + str("=") + "\"" + value_ + "\""
         # end for
         html_ += " />"
@@ -1400,7 +1400,7 @@ def wp_make_content_images_responsive(content_=None, *_args_):
         #//
         _prime_post_caches(php_array_keys(attachment_ids_), False, True)
     # end if
-    for image_,attachment_id_ in selected_images_:
+    for image_,attachment_id_ in selected_images_.items():
         image_meta_ = wp_get_attachment_metadata(attachment_id_)
         content_ = php_str_replace(image_, wp_image_add_srcset_and_sizes(image_, image_meta_, attachment_id_), content_)
     # end for
@@ -1713,7 +1713,7 @@ def gallery_shortcode(attr_=None, *_args_):
     if (not php_empty(lambda : atts_["include"])):
         _attachments_ = get_posts(Array({"include": atts_["include"], "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": atts_["order"], "orderby": atts_["orderby"]}))
         attachments_ = Array()
-        for key_,val_ in _attachments_:
+        for key_,val_ in _attachments_.items():
             attachments_[val_.ID] = _attachments_[key_]
         # end for
     elif (not php_empty(lambda : atts_["exclude"])):
@@ -1726,7 +1726,7 @@ def gallery_shortcode(attr_=None, *_args_):
     # end if
     if is_feed():
         output_ = "\n"
-        for att_id_,attachment_ in attachments_:
+        for att_id_,attachment_ in attachments_.items():
             output_ += wp_get_attachment_link(att_id_, atts_["size"], True) + "\n"
         # end for
         return output_
@@ -1774,7 +1774,7 @@ def gallery_shortcode(attr_=None, *_args_):
     #//
     output_ = apply_filters("gallery_style", gallery_style_ + gallery_div_)
     i_ = 0
-    for id_,attachment_ in attachments_:
+    for id_,attachment_ in attachments_.items():
         attr_ = Array({"aria-describedby": str(selector_) + str("-") + str(id_)}) if php_trim(attachment_.post_excerpt) else ""
         if (not php_empty(lambda : atts_["link"])) and "file" == atts_["link"]:
             image_output_ = wp_get_attachment_link(id_, atts_["size"], False, False, False, attr_)
@@ -1949,7 +1949,7 @@ def wp_playlist_shortcode(attr_=None, *_args_):
         args_["include"] = atts_["include"]
         _attachments_ = get_posts(args_)
         attachments_ = Array()
-        for key_,val_ in _attachments_:
+        for key_,val_ in _attachments_.items():
             attachments_[val_.ID] = _attachments_[key_]
         # end for
     elif (not php_empty(lambda : atts_["exclude"])):
@@ -1965,7 +1965,7 @@ def wp_playlist_shortcode(attr_=None, *_args_):
     # end if
     if is_feed():
         output_ = "\n"
-        for att_id_,attachment_ in attachments_:
+        for att_id_,attachment_ in attachments_.items():
             output_ += wp_get_attachment_link(att_id_) + "\n"
         # end for
         return output_
@@ -1985,7 +1985,7 @@ def wp_playlist_shortcode(attr_=None, *_args_):
         track_["meta"] = Array()
         meta_ = wp_get_attachment_metadata(attachment_.ID)
         if (not php_empty(lambda : meta_)):
-            for key_,label_ in wp_get_attachment_id3_keys(attachment_):
+            for key_,label_ in wp_get_attachment_id3_keys(attachment_).items():
                 if (not php_empty(lambda : meta_[key_])):
                     track_["meta"][key_] = meta_[key_]
                 # end if
@@ -2058,7 +2058,7 @@ def wp_playlist_shortcode(attr_=None, *_args_):
     <noscript>
     <ol>
     """)
-    for att_id_,attachment_ in attachments_:
+    for att_id_,attachment_ in attachments_.items():
         printf("<li>%s</li>", wp_get_attachment_link(att_id_))
     # end for
     php_print(" </ol>\n </noscript>\n   <script type=\"application/json\" class=\"wp-playlist-script\">")
@@ -2252,7 +2252,7 @@ def wp_audio_shortcode(attr_=None, content_="", *_args_):
         # end if
     # end for
     attr_strings_ = Array()
-    for k_,v_ in html_atts_:
+    for k_,v_ in html_atts_.items():
         attr_strings_[-1] = k_ + "=\"" + esc_attr(v_) + "\""
     # end for
     html_ = ""
@@ -2473,7 +2473,7 @@ def wp_video_shortcode(attr_=None, content_="", *_args_):
         # end if
     # end for
     attr_strings_ = Array()
-    for k_,v_ in html_atts_:
+    for k_,v_ in html_atts_.items():
         attr_strings_[-1] = k_ + "=\"" + esc_attr(v_) + "\""
     # end for
     html_ = ""
@@ -2588,7 +2588,7 @@ def adjacent_image_link(prev_=None, size_="thumbnail", text_=None, *_args_):
     
     post_ = get_post()
     attachments_ = php_array_values(get_children(Array({"post_parent": post_.post_parent, "post_status": "inherit", "post_type": "attachment", "post_mime_type": "image", "order": "ASC", "orderby": "menu_order ID"})))
-    for k_,attachment_ in attachments_:
+    for k_,attachment_ in attachments_.items():
         if php_intval(attachment_.ID) == php_intval(post_.ID):
             break
         # end if
@@ -2714,7 +2714,7 @@ def wp_imagecreatetruecolor(width_=None, height_=None, *_args_):
     
     
     img_ = imagecreatetruecolor(width_, height_)
-    if is_resource(img_) and php_function_exists("imagealphablending") and php_function_exists("imagesavealpha"):
+    if php_is_resource(img_) and php_function_exists("imagealphablending") and php_function_exists("imagesavealpha"):
         imagealphablending(img_, False)
         imagesavealpha(img_, True)
     # end if
@@ -3002,7 +3002,7 @@ def wp_prepare_attachment_for_js(attachment_=None, *_args_):
         #// If the filter does not return something, then image_downsize() is just an expensive way
         #// to check the image metadata, which we do second.
         #//
-        for size_,label_ in possible_sizes_:
+        for size_,label_ in possible_sizes_.items():
             #// This filter is documented in wp-includes/media.php
             downsize_ = apply_filters("image_downsize", False, attachment_.ID, size_)
             if downsize_:
@@ -3050,7 +3050,7 @@ def wp_prepare_attachment_for_js(attachment_=None, *_args_):
             response_["fileLengthHumanReadable"] = human_readable_duration(meta_["length_formatted"])
         # end if
         response_["meta"] = Array()
-        for key_,label_ in wp_get_attachment_id3_keys(attachment_, "js"):
+        for key_,label_ in wp_get_attachment_id3_keys(attachment_, "js").items():
             response_["meta"][key_] = False
             if (not php_empty(lambda : meta_[key_])):
                 response_["meta"][key_] = meta_[key_]
@@ -3129,7 +3129,7 @@ def wp_enqueue_media(args_=None, *_args_):
     mimes_ = get_allowed_mime_types()
     ext_mimes_ = Array()
     for ext_ in exts_:
-        for ext_preg_,mime_match_ in mimes_:
+        for ext_preg_,mime_match_ in mimes_.items():
             if php_preg_match("#" + ext_ + "#i", ext_preg_):
                 ext_mimes_[ext_] = mime_match_
                 break

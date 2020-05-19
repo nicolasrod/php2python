@@ -361,10 +361,10 @@ def wp_maybe_decline_date(date_=None, format_="", *_args_):
             decline_ = php_preg_match("#\\b\\d{1,2}\\.? [^\\d ]+\\b#u", date_)
         # end if
         if decline_:
-            for key_,month_ in months_:
+            for key_,month_ in months_.items():
                 months_[key_] = "# " + preg_quote(month_, "#") + "\\b#u"
             # end for
-            for key_,month_ in months_genitive_:
+            for key_,month_ in months_genitive_.items():
                 months_genitive_[key_] = " " + month_
             # end for
             date_ = php_preg_replace(months_, months_genitive_, date_)
@@ -380,10 +380,10 @@ def wp_maybe_decline_date(date_=None, format_="", *_args_):
             decline_ = php_preg_match("#\\b[^\\d ]+ \\d{1,2}(st|nd|rd|th)?\\b#u", php_trim(date_))
         # end if
         if decline_:
-            for key_,month_ in months_:
+            for key_,month_ in months_.items():
                 months_[key_] = "#\\b" + preg_quote(month_, "#") + " (\\d{1,2})(st|nd|rd|th)?([-â]\\d{1,2})?(st|nd|rd|th)?\\b#u"
             # end for
-            for key_,month_ in months_genitive_:
+            for key_,month_ in months_genitive_.items():
                 months_genitive_[key_] = "$1$3 " + month_
             # end for
             date_ = php_preg_replace(months_, months_genitive_, date_)
@@ -457,7 +457,7 @@ def size_format(bytes_=None, decimals_=0, *_args_):
     if 0 == bytes_:
         return number_format_i18n(0, decimals_) + " B"
     # end if
-    for unit_,mag_ in quant_:
+    for unit_,mag_ in quant_.items():
         if doubleval(bytes_) >= mag_:
             return number_format_i18n(bytes_ / mag_, decimals_) + " " + unit_
         # end if
@@ -877,7 +877,7 @@ def do_enclose(content_=None, post_=None, *_args_):
                 if False != url_parts_:
                     extension_ = pathinfo(url_parts_["path"], PATHINFO_EXTENSION)
                     if (not php_empty(lambda : extension_)):
-                        for exts_,mime_ in wp_get_mime_types():
+                        for exts_,mime_ in wp_get_mime_types().items():
                             if php_preg_match("!^(" + exts_ + ")$!i", extension_):
                                 type_ = mime_
                                 break
@@ -992,7 +992,7 @@ def _http_build_query(data_=None, prefix_=None, sep_=None, key_="", urlencode_=N
     # end if
     
     ret_ = Array()
-    for k_,v_ in data_:
+    for k_,v_ in data_.items():
         if urlencode_:
             k_ = urlencode(k_)
         # end if
@@ -1102,13 +1102,13 @@ def add_query_arg(*args_):
     qs_ = urlencode_deep(qs_)
     #// This re-URL-encodes things that were already in the query string.
     if php_is_array(args_[0]):
-        for k_,v_ in args_[0]:
+        for k_,v_ in args_[0].items():
             qs_[k_] = v_
         # end for
     else:
         qs_[args_[0]] = args_[1]
     # end if
-    for k_,v_ in qs_:
+    for k_,v_ in qs_.items():
         if False == v_:
             qs_[k_] = None
         # end if
@@ -1174,7 +1174,7 @@ def wp_removable_query_args(*_args_):
 def add_magic_quotes(array_=None, *_args_):
     
     
-    for k_,v_ in array_:
+    for k_,v_ in array_.items():
         if php_is_array(v_):
             array_[k_] = add_magic_quotes(v_)
         else:
@@ -1352,7 +1352,7 @@ def nocache_headers(*_args_):
     headers_ = wp_get_nocache_headers()
     headers_["Last-Modified"] = None
     php_header_remove("Last-Modified")
-    for name_,field_value_ in headers_:
+    for name_,field_value_ in headers_.items():
         php_header(str(name_) + str(": ") + str(field_value_))
     # end for
 # end def nocache_headers
@@ -2527,7 +2527,7 @@ def wp_ext2type(ext_=None, *_args_):
     
     ext_ = php_strtolower(ext_)
     ext2type_ = wp_get_ext_types()
-    for type_,exts_ in ext2type_:
+    for type_,exts_ in ext2type_.items():
         if php_in_array(ext_, exts_):
             return type_
         # end if
@@ -2559,7 +2559,7 @@ def wp_check_filetype(filename_=None, mimes_=None, *_args_):
     # end if
     type_ = False
     ext_ = False
-    for ext_preg_,mime_match_ in mimes_:
+    for ext_preg_,mime_match_ in mimes_.items():
         ext_preg_ = "!\\.(" + ext_preg_ + ")$!i"
         if php_preg_match(ext_preg_, filename_, ext_matches_):
             type_ = mime_match_
@@ -3386,7 +3386,7 @@ def _wp_die_process_input(message_=None, title_="", args_=None, *_args_):
     if php_function_exists("is_wp_error") and is_wp_error(message_):
         if (not php_empty(lambda : message_.errors)):
             errors_ = Array()
-            for error_code_,error_messages_ in message_.errors:
+            for error_code_,error_messages_ in message_.errors.items():
                 for error_message_ in error_messages_:
                     errors_[-1] = Array({"code": error_code_, "message": error_message_, "data": message_.get_error_data(error_code_)})
                 # end for
@@ -3477,7 +3477,7 @@ def _wp_json_sanity_check(data_=None, depth_=None, *_args_):
     # end if
     if php_is_array(data_):
         output_ = Array()
-        for id_,el_ in data_:
+        for id_,el_ in data_.items():
             #// Don't forget to sanitize the ID!
             if php_is_string(id_):
                 clean_id_ = _wp_json_convert_string(id_)
@@ -3495,7 +3495,7 @@ def _wp_json_sanity_check(data_=None, depth_=None, *_args_):
         # end for
     elif php_is_object(data_):
         output_ = php_new_class("stdClass", lambda : stdClass())
-        for id_,el_ in data_:
+        for id_,el_ in data_.items():
             if php_is_string(id_):
                 clean_id_ = _wp_json_convert_string(id_)
             else:
@@ -3646,7 +3646,7 @@ def wp_send_json_error(data_=None, status_code_=None, *_args_):
     if (php_isset(lambda : data_)):
         if is_wp_error(data_):
             result_ = Array()
-            for code_,messages_ in data_.errors:
+            for code_,messages_ in data_.errors.items():
                 for message_ in messages_:
                     result_[-1] = Array({"code": code_, "message": message_})
                 # end for
@@ -3827,7 +3827,7 @@ def smilies_init(*_args_):
     #// Begin first "subpattern".
     wp_smiliessearch_ = "/(?<=" + spaces_ + "|^)"
     subchar_ = ""
-    for smiley_,img_ in wpsmiliestrans_:
+    for smiley_,img_ in wpsmiliestrans_.items():
         firstchar_ = php_substr(smiley_, 0, 1)
         rest_ = php_substr(smiley_, 1)
         #// New subpattern?
@@ -4115,7 +4115,7 @@ def wp_widgets_add_menu(*_args_):
         return
     # end if
     submenu_["themes.php"][7] = Array(__("Widgets"), "edit_theme_options", "widgets.php")
-    ksort(submenu_["themes.php"], SORT_NUMERIC)
+    php_ksort(submenu_["themes.php"], SORT_NUMERIC)
 # end def wp_widgets_add_menu
 #// 
 #// Flush all output buffers for PHP 5.2.
@@ -5084,7 +5084,7 @@ def wp_timezone_choice(selected_zone_=None, locale_=None, *_args_):
     if php_empty(lambda : selected_zone_):
         structure_[-1] = "<option selected=\"selected\" value=\"\">" + __("Select a city") + "</option>"
     # end if
-    for key_,zone_ in zonen_:
+    for key_,zone_ in zonen_.items():
         #// Build value in an array to join later.
         value_ = Array(zone_["continent"])
         if php_empty(lambda : zone_["city"]):
@@ -5258,7 +5258,7 @@ def get_file_data(file_=None, default_headers_=None, context_="", *_args_):
     else:
         all_headers_ = default_headers_
     # end if
-    for field_,regex_ in all_headers_:
+    for field_,regex_ in all_headers_.items():
         if php_preg_match("/^[ \\t\\/*#@]*" + preg_quote(regex_, "/") + ":(.*)$/mi", file_data_, match_) and match_[1]:
             all_headers_[field_] = _cleanup_header_comment(match_[1])
         else:

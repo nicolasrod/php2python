@@ -82,7 +82,7 @@ def delete_theme(stylesheet_=None, redirect_="", *_args_):
     #// Remove language files, silently.
     if (not php_empty(lambda : theme_translations_[stylesheet_])):
         translations_ = theme_translations_[stylesheet_]
-        for translation_,data_ in translations_:
+        for translation_,data_ in translations_.items():
             wp_filesystem_.delete(WP_LANG_DIR + "/themes/" + stylesheet_ + "-" + translation_ + ".po")
             wp_filesystem_.delete(WP_LANG_DIR + "/themes/" + stylesheet_ + "-" + translation_ + ".mo")
             json_translation_files_ = glob(WP_LANG_DIR + "/themes/" + stylesheet_ + "-" + translation_ + "-*.json")
@@ -226,7 +226,7 @@ def get_theme_feature_list(api_=None, *_args_):
     category_translations_ = Array({"Layout": __("Layout"), "Features": __("Features"), "Subject": __("Subject")})
     #// Loop over the wp.org canonical list and apply translations.
     wporg_features_ = Array()
-    for feature_category_,feature_items_ in feature_list_:
+    for feature_category_,feature_items_ in feature_list_.items():
         if (php_isset(lambda : category_translations_[feature_category_])):
             feature_category_ = category_translations_[feature_category_]
         # end if
@@ -404,7 +404,7 @@ def themes_api(action_=None, args_=None, *_args_):
         # end if
         #// Back-compat for info/1.2 API, upgrade the theme objects in query_themes to objects.
         if "query_themes" == action_:
-            for i_,theme_ in res_.themes:
+            for i_,theme_ in res_.themes.items():
                 res_.themes[i_] = theme_
             # end for
         # end if

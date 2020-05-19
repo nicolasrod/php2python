@@ -116,7 +116,7 @@ class WP_Recovery_Mode_Key_Service():
         
         
         records_ = self.get_keys()
-        for key_,record_ in records_:
+        for key_,record_ in records_.items():
             if (not (php_isset(lambda : record_["created_at"]))) or time() > record_["created_at"] + ttl_:
                 records_[key_] = None
             # end if

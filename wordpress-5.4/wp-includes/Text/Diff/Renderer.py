@@ -43,7 +43,7 @@ class Text_Diff_Renderer():
             params_ = Array()
         # end if
         
-        for param_,value_ in params_:
+        for param_,value_ in params_.items():
             v_ = "_" + param_
             if (php_isset(lambda : self.v_)):
                 self.v_ = value_
@@ -69,7 +69,7 @@ class Text_Diff_Renderer():
         
         
         params_ = Array()
-        for k_,v_ in get_object_vars(self):
+        for k_,v_ in get_object_vars(self).items():
             if k_[0] == "_":
                 params_[php_substr(k_, 1)] = v_
             # end if
@@ -93,7 +93,7 @@ class Text_Diff_Renderer():
         ntrail_ = self._trailing_context_lines
         output_ = self._startdiff()
         diffs_ = diff_.getdiff()
-        for i_,edit_ in diffs_:
+        for i_,edit_ in diffs_.items():
             #// If these are unchanged (copied) lines, and we want to keep
             #// leading or trailing context lines, extract them from the copy
             #// block.

@@ -289,7 +289,7 @@ class Requests_Session():
             options_ = Array()
         # end if
         
-        for key_,request_ in requests_:
+        for key_,request_ in requests_.items():
             requests_[key_] = self.merge_request(request_, False)
         # end for
         options_ = php_array_merge(self.options, options_)

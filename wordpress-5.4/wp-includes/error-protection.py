@@ -56,7 +56,7 @@ def wp_get_extension_error_description(error_=None, *_args_):
     constants_ = get_defined_constants(True)
     constants_ = constants_["Core"] if (php_isset(lambda : constants_["Core"])) else constants_["internal"]
     core_errors_ = Array()
-    for constant_,value_ in constants_:
+    for constant_,value_ in constants_.items():
         if 0 == php_strpos(constant_, "E_"):
             core_errors_[value_] = constant_
         # end if

@@ -82,7 +82,7 @@ class WP_REST_Post_Statuses_Controller(WP_REST_Controller):
         data_ = Array()
         statuses_ = get_post_stati(Array({"internal": False}), "object")
         statuses_["trash"] = get_post_status_object("trash")
-        for slug_,obj_ in statuses_:
+        for slug_,obj_ in statuses_.items():
             ret_ = self.check_read_permission(obj_)
             if (not ret_):
                 continue

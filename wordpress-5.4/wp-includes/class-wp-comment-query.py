@@ -493,7 +493,7 @@ class WP_Comment_Query():
             ordersby_ = self.query_vars["orderby"] if php_is_array(self.query_vars["orderby"]) else php_preg_split("/[,\\s]/", self.query_vars["orderby"])
             orderby_array_ = Array()
             found_orderby_comment_id_ = False
-            for _key_,_value_ in ordersby_:
+            for _key_,_value_ in ordersby_.items():
                 if (not _value_):
                     continue
                 # end if
@@ -608,7 +608,7 @@ class WP_Comment_Query():
         #// Filtering by comment_type: 'type', 'type__in', 'type__not_in'.
         raw_types_ = Array({"IN": php_array_merge(self.query_vars["type"], self.query_vars["type__in"]), "NOT IN": self.query_vars["type__not_in"]})
         comment_types_ = Array()
-        for operator_,_raw_types_ in raw_types_:
+        for operator_,_raw_types_ in raw_types_.items():
             _raw_types_ = array_unique(_raw_types_)
             for type_ in _raw_types_:
                 for case in Switch(type_):
@@ -665,7 +665,7 @@ class WP_Comment_Query():
         post_fields_ = php_array_filter(plucked_)
         if (not php_empty(lambda : post_fields_)):
             join_posts_table_ = True
-            for field_name_,field_value_ in post_fields_:
+            for field_name_,field_value_ in post_fields_.items():
                 #// $field_value may be an array.
                 esses_ = array_fill(0, php_count(field_value_), "%s")
                 #// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
@@ -851,7 +851,7 @@ class WP_Comment_Query():
                     parent_map_[level_comment_.comment_parent][-1] = level_comment_.comment_ID
                     child_ids_[-1] = level_comment_.comment_ID
                 # end for
-                for parent_id_,children_ in parent_map_:
+                for parent_id_,children_ in parent_map_.items():
                     cache_key_ = str("get_comment_child_ids:") + str(parent_id_) + str(":") + str(key_) + str(":") + str(last_changed_)
                     wp_cache_set(cache_key_, children_, "comment")
                 # end for
@@ -882,7 +882,7 @@ class WP_Comment_Query():
         if "threaded" == self.query_vars["hierarchical"]:
             threaded_comments_ = Array()
             ref_ = Array()
-            for k_,c_ in all_comments_:
+            for k_,c_ in all_comments_.items():
                 _c_ = get_comment(c_.comment_ID)
                 #// If the comment isn't in the reference array, it goes in the top level of the thread.
                 if (not (php_isset(lambda : ref_[c_.comment_parent]))):

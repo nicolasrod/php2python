@@ -83,7 +83,7 @@ class WP_REST_Meta_Fields():
         
         fields_ = self.get_registered_fields()
         response_ = Array()
-        for meta_key_,args_ in fields_:
+        for meta_key_,args_ in fields_.items():
             name_ = args_["name"]
             all_values_ = get_metadata(self.get_meta_type(), object_id_, meta_key_, False)
             if args_["single"]:
@@ -138,7 +138,7 @@ class WP_REST_Meta_Fields():
         
         
         fields_ = self.get_registered_fields()
-        for meta_key_,args_ in fields_:
+        for meta_key_,args_ in fields_.items():
             name_ = args_["name"]
             if (not php_array_key_exists(name_, meta_)):
                 continue
@@ -227,7 +227,7 @@ class WP_REST_Meta_Fields():
         current_ = get_metadata(meta_type_, object_id_, meta_key_, False)
         to_remove_ = current_
         to_add_ = values_
-        for add_key_,value_ in to_add_:
+        for add_key_,value_ in to_add_.items():
             remove_keys_ = php_array_keys(to_remove_, value_, True)
             if php_empty(lambda : remove_keys_):
                 continue
@@ -311,7 +311,7 @@ class WP_REST_Meta_Fields():
         if (not php_empty(lambda : meta_subtype_)):
             meta_keys_ = php_array_merge(meta_keys_, get_registered_meta_keys(meta_type_, meta_subtype_))
         # end if
-        for name_,args_ in meta_keys_:
+        for name_,args_ in meta_keys_.items():
             if php_empty(lambda : args_["show_in_rest"]):
                 continue
             # end if
@@ -422,7 +422,7 @@ class WP_REST_Meta_Fields():
         
         for case in Switch(schema_["type"]):
             if case("object"):
-                for key_,child_schema_ in schema_["properties"]:
+                for key_,child_schema_ in schema_["properties"].items():
                     schema_["properties"][key_] = self.default_additional_properties_to_false(child_schema_)
                 # end for
                 if (not (php_isset(lambda : schema_["additionalProperties"]))):

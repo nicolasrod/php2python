@@ -191,14 +191,14 @@ class getid3_lyrics3(getid3_handler):
                         # end for
                     # end if
                     fieldnametranslation_ = Array({"ETT": "title", "EAR": "artist", "EAL": "album", "INF": "comment", "AUT": "author"})
-                    for key_,value_ in fieldnametranslation_:
+                    for key_,value_ in fieldnametranslation_.items():
                         if (php_isset(lambda : ParsedLyrics3_["raw"][key_])):
                             ParsedLyrics3_["comments"][value_][-1] = php_trim(ParsedLyrics3_["raw"][key_])
                         # end if
                     # end for
                     if (php_isset(lambda : ParsedLyrics3_["raw"]["IMG"])):
                         imagestrings_ = php_explode("\r\n", ParsedLyrics3_["raw"]["IMG"])
-                        for key_,imagestring_ in imagestrings_:
+                        for key_,imagestring_ in imagestrings_.items():
                             if php_strpos(imagestring_, "||") != False:
                                 imagearray_ = php_explode("||", imagestring_)
                                 ParsedLyrics3_["images"][key_]["filename"] = imagearray_[0] if (php_isset(lambda : imagearray_[0])) else ""
@@ -225,7 +225,7 @@ class getid3_lyrics3(getid3_handler):
         if (php_isset(lambda : info_["id3v1"]["tag_offset_start"])) and info_["id3v1"]["tag_offset_start"] <= ParsedLyrics3_["tag_offset_end"]:
             self.warning("ID3v1 tag information ignored since it appears to be a false synch in Lyrics3 tag data")
             info_["id3v1"] = None
-            for key_,value_ in info_["warning"]:
+            for key_,value_ in info_["warning"].items():
                 if value_ == "Some ID3v1 fields do not use NULL characters for padding":
                     info_["warning"][key_] = None
                     sort(info_["warning"])
@@ -259,7 +259,7 @@ class getid3_lyrics3(getid3_handler):
         
         lyricsarray_ = php_explode("\r\n", Lyrics3data_["raw"]["LYR"])
         notimestamplyricsarray_ = Array()
-        for key_,lyricline_ in lyricsarray_:
+        for key_,lyricline_ in lyricsarray_.items():
             regs_ = Array()
             thislinetimestamps_ = None
             while True:
@@ -273,7 +273,7 @@ class getid3_lyrics3(getid3_handler):
             notimestamplyricsarray_[key_] = lyricline_
             if (php_isset(lambda : thislinetimestamps_)) and php_is_array(thislinetimestamps_):
                 sort(thislinetimestamps_)
-                for timestampkey_,timestamp_ in thislinetimestamps_:
+                for timestampkey_,timestamp_ in thislinetimestamps_.items():
                     if (php_isset(lambda : Lyrics3data_["synchedlyrics"][timestamp_])):
                         #// timestamps only have a 1-second resolution, it's possible that multiple lines
                         #// could have the same timestamp, if so, append
@@ -286,7 +286,7 @@ class getid3_lyrics3(getid3_handler):
         # end for
         Lyrics3data_["unsynchedlyrics"] = php_implode("\r\n", notimestamplyricsarray_)
         if (php_isset(lambda : Lyrics3data_["synchedlyrics"])) and php_is_array(Lyrics3data_["synchedlyrics"]):
-            ksort(Lyrics3data_["synchedlyrics"])
+            php_ksort(Lyrics3data_["synchedlyrics"])
         # end if
         return True
     # end def lyrics3lyricstimestampparse

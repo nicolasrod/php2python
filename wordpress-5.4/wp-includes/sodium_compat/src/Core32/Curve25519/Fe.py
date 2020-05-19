@@ -91,7 +91,7 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe(ArrayAccess):
         set_ = Array()
         #// @var int $i
         #// @var int $v
-        for i_,v_ in array_:
+        for i_,v_ in array_.items():
             set_[i_] = ParagonIE_Sodium_Core32_Int32.fromint(v_)
         # end for
         obj_ = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Fe", lambda : ParagonIE_Sodium_Core32_Curve25519_Fe())

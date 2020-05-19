@@ -103,7 +103,7 @@ def edit_user(user_id_=0, *_args_):
     if (php_isset(lambda : PHP_POST["description"])):
         user_.description = php_trim(PHP_POST["description"])
     # end if
-    for method_,name_ in wp_get_user_contact_methods(user_):
+    for method_,name_ in wp_get_user_contact_methods(user_).items():
         if (php_isset(lambda : PHP_POST[method_])):
             user_.method_ = sanitize_text_field(PHP_POST[method_])
         # end if

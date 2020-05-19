@@ -105,12 +105,12 @@ if php_empty(lambda : doing_wp_cron_):
 if doing_cron_transient_ != doing_wp_cron_:
     sys.exit(-1)
 # end if
-for timestamp_,cronhooks_ in crons_:
+for timestamp_,cronhooks_ in crons_.items():
     if timestamp_ > gmt_time_:
         break
     # end if
-    for hook_,keys_ in cronhooks_:
-        for k_,v_ in keys_:
+    for hook_,keys_ in cronhooks_.items():
+        for k_,v_ in keys_.items():
             schedule_ = v_["schedule"]
             if schedule_:
                 wp_reschedule_event(timestamp_, schedule_, hook_, v_["args"])

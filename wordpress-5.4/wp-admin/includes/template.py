@@ -725,7 +725,7 @@ def touch_time(edit_=1, for_post_=1, tab_index_=0, multi_=0, *_args_):
     # end if
     php_print("\n\n")
     map_ = Array({"mm": Array(mm_, cur_mm_), "jj": Array(jj_, cur_jj_), "aa": Array(aa_, cur_aa_), "hh": Array(hh_, cur_hh_), "mn": Array(mn_, cur_mn_)})
-    for timeunit_,value_ in map_:
+    for timeunit_,value_ in map_.items():
         unit_, curr_ = value_
         php_print("<input type=\"hidden\" id=\"hidden_" + timeunit_ + "\" name=\"hidden_" + timeunit_ + "\" value=\"" + unit_ + "\" />" + "\n")
         cur_timeunit_ = "cur_" + timeunit_
@@ -750,7 +750,7 @@ def page_template_dropdown(default_="", post_type_="page", *_args_):
     
     
     templates_ = get_page_templates(None, post_type_)
-    ksort(templates_)
+    php_ksort(templates_)
     for template_ in php_array_keys(templates_):
         selected_ = selected(default_, templates_[template_], False)
         php_print("\n   <option value='" + esc_attr(templates_[template_]) + str("' ") + str(selected_) + str(">") + esc_html(template_) + "</option>")
@@ -806,7 +806,7 @@ def wp_dropdown_roles(selected_="", *_args_):
     
     r_ = ""
     editable_roles_ = array_reverse(get_editable_roles())
-    for role_,details_ in editable_roles_:
+    for role_,details_ in editable_roles_.items():
         name_ = translate_user_role(details_["name"])
         #// Preselect specified role.
         if selected_ == role_:
@@ -1049,7 +1049,7 @@ def _get_plugin_from_callback(callback_=None, *_args_):
             filename_ = php_str_replace(plugin_dir_, "", filename_)
             filename_ = php_preg_replace("|^/([^/]*/).*$|", "\\1", filename_)
             plugins_ = get_plugins()
-            for name_,plugin_ in plugins_:
+            for name_,plugin_ in plugins_.items():
                 if php_strpos(name_, filename_) == 0:
                     return plugin_
                 # end if
@@ -1095,7 +1095,7 @@ def do_meta_boxes(screen_=None, context_=None, object_=None, *_args_):
     #// Pull them out of their previous context/priority and into the one the user chose.
     sorted_ = get_user_option(str("meta-box-order_") + str(page_))
     if (not already_sorted_) and sorted_:
-        for box_context_,ids_ in sorted_:
+        for box_context_,ids_ in sorted_.items():
             for id_ in php_explode(",", ids_):
                 if id_ and "dashboard_browser_nag" != id_:
                     add_meta_box(id_, None, None, screen_, box_context_, "sorted")
@@ -1543,7 +1543,7 @@ def get_settings_errors(setting_="", sanitize_=None, *_args_):
     #// Filter the results to those of a specific setting if one was set.
     if setting_:
         setting_errors_ = Array()
-        for key_,details_ in wp_settings_errors_:
+        for key_,details_ in wp_settings_errors_.items():
             if setting_ == details_["setting"]:
                 setting_errors_[-1] = wp_settings_errors_[key_]
             # end if
@@ -1597,7 +1597,7 @@ def settings_errors(setting_="", sanitize_=None, hide_on_update_=None, *_args_):
         return
     # end if
     output_ = ""
-    for key_,details_ in settings_errors_:
+    for key_,details_ in settings_errors_.items():
         if "updated" == details_["type"]:
             details_["type"] = "success"
         # end if
@@ -2142,7 +2142,7 @@ def get_submit_button(text_="", type_="primary large", name_="submit", wrap_=Non
     # end if
     attributes_ = ""
     if php_is_array(other_attributes_):
-        for attribute_,value_ in other_attributes_:
+        for attribute_,value_ in other_attributes_.items():
             attributes_ += attribute_ + "=\"" + esc_attr(value_) + "\" "
             pass
         # end for

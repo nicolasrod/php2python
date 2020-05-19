@@ -67,7 +67,7 @@ class WP_Customize_Nav_Menu_Locations_Control(WP_Customize_Control):
             <# } #>
             </li>
             """)
-            for location_,description_ in get_registered_nav_menus():
+            for location_,description_ in get_registered_nav_menus().items():
                 php_print("""                   <# elementId = _.uniqueId( 'customize-nav-menu-control-location-' ); #>
                 <li class=\"customize-control customize-control-checkbox assigned-menu-location\">
                 <span class=\"customize-inside-control-row\">

@@ -159,9 +159,9 @@ class WP_Embed():
         #// See https://core.trac.wordpress.org/ticket/11311
         url_ = php_str_replace("&amp;", "&", url_)
         #// Look for known internal handlers.
-        ksort(self.handlers)
-        for priority_,handlers_ in self.handlers:
-            for id_,handler_ in handlers_:
+        php_ksort(self.handlers)
+        for priority_,handlers_ in self.handlers.items():
+            for id_,handler_ in handlers_.items():
                 if php_preg_match(handler_["regex"], url_, matches_) and php_is_callable(handler_["callback"]):
                     return_ = php_call_user_func(handler_["callback"], matches_, attr_, url_, rawattr_)
                     if False != return_:

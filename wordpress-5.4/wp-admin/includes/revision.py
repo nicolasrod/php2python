@@ -67,7 +67,7 @@ def wp_get_revision_ui_diff(post_=None, compare_from_=None, compare_to_=None, *_
         compare_to_.post_title = __("(no title)")
     # end if
     return_ = Array()
-    for field_,name_ in _wp_post_revision_fields(post_):
+    for field_,name_ in _wp_post_revision_fields(post_).items():
         #// 
         #// Contextually filter a post revision field.
         #// 
@@ -159,7 +159,7 @@ def wp_prepare_revisions_for_js(post_=None, selected_revision_id_=None, from_=No
     revisions_ = wp_get_post_revisions(post_.ID, Array({"order": "ASC", "check_enabled": False}))
     #// If revisions are disabled, we only want autosaves and the current post.
     if (not wp_revisions_enabled(post_)):
-        for revision_id_,revision_ in revisions_:
+        for revision_id_,revision_ in revisions_.items():
             if (not wp_is_post_autosave(revision_)):
                 revisions_[revision_id_] = None
             # end if

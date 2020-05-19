@@ -276,7 +276,7 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
         orig_diffs_ = Array()
         final_diffs_ = Array()
         #// Compute word diffs for each matched pair using the inline diff.
-        for o_,f_ in orig_matches_:
+        for o_,f_ in orig_matches_.items():
             if php_is_numeric(o_) and php_is_numeric(f_):
                 text_diff_ = php_new_class("Text_Diff", lambda : Text_Diff("auto", Array(Array(orig_[o_]), Array(final_[f_]))))
                 renderer_ = php_new_class(self.inline_diff_renderer, lambda : {**locals(), **globals()}[self.inline_diff_renderer]())
@@ -378,7 +378,7 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
         #// Order by string distance.
         orig_matches_ = Array()
         final_matches_ = Array()
-        for keys_,difference_ in matches_:
+        for keys_,difference_ in matches_.items():
             o_, f_ = php_explode(",", keys_)
             o_ = php_int(o_)
             f_ = php_int(f_)
@@ -401,8 +401,8 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
             # end if
         # end for
         #// We read the text in this order.
-        ksort(orig_matches_)
-        ksort(final_matches_)
+        php_ksort(orig_matches_)
+        php_ksort(final_matches_)
         #// Stores rows and blanks for each column.
         orig_rows_ = php_array_keys(orig_matches_)
         orig_rows_copy_ = orig_rows_

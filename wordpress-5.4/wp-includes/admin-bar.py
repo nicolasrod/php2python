@@ -510,7 +510,7 @@ def wp_admin_bar_new_content_menu(wp_admin_bar_=None, *_args_):
     # end if
     title_ = "<span class=\"ab-icon\"></span><span class=\"ab-label\">" + _x("New", "admin bar menu group label") + "</span>"
     wp_admin_bar_.add_node(Array({"id": "new-content", "title": title_, "href": admin_url(current(php_array_keys(actions_)))}))
-    for link_,action_ in actions_:
+    for link_,action_ in actions_.items():
         title_, id_ = action_
         wp_admin_bar_.add_node(Array({"parent": "new-content", "id": id_, "title": title_, "href": admin_url(link_)}))
     # end for

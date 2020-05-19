@@ -245,7 +245,7 @@ class WP_REST_Controller():
         
         
         schema_ = self.get_item_schema()
-        for key_,value_ in data_:
+        for key_,value_ in data_.items():
             if php_empty(lambda : schema_["properties"][key_]) or php_empty(lambda : schema_["properties"][key_]["context"]):
                 continue
             # end if
@@ -254,7 +254,7 @@ class WP_REST_Controller():
                 continue
             # end if
             if "object" == schema_["properties"][key_]["type"] and (not php_empty(lambda : schema_["properties"][key_]["properties"])):
-                for attribute_,details_ in schema_["properties"][key_]["properties"]:
+                for attribute_,details_ in schema_["properties"][key_]["properties"].items():
                     if php_empty(lambda : details_["context"]):
                         continue
                     # end if
@@ -356,7 +356,7 @@ class WP_REST_Controller():
         
         additional_fields_ = self.get_additional_fields()
         requested_fields_ = self.get_fields_for_response(request_)
-        for field_name_,field_options_ in additional_fields_:
+        for field_name_,field_options_ in additional_fields_.items():
             if (not field_options_["get_callback"]):
                 continue
             # end if
@@ -380,7 +380,7 @@ class WP_REST_Controller():
         
         
         additional_fields_ = self.get_additional_fields()
-        for field_name_,field_options_ in additional_fields_:
+        for field_name_,field_options_ in additional_fields_.items():
             if (not field_options_["update_callback"]):
                 continue
             # end if
@@ -414,7 +414,7 @@ class WP_REST_Controller():
         #// Can't use $this->get_object_type otherwise we cause an inf loop.
         object_type_ = schema_["title"]
         additional_fields_ = self.get_additional_fields(object_type_)
-        for field_name_,field_options_ in additional_fields_:
+        for field_name_,field_options_ in additional_fields_.items():
             if (not field_options_["schema"]):
                 continue
             # end if
@@ -481,7 +481,7 @@ class WP_REST_Controller():
         schema_ = self.get_item_schema()
         properties_ = schema_["properties"] if (php_isset(lambda : schema_["properties"])) else Array()
         additional_fields_ = self.get_additional_fields()
-        for field_name_,field_options_ in additional_fields_:
+        for field_name_,field_options_ in additional_fields_.items():
             #// For back-compat, include any field with an empty schema
             #// because it won't be present in $this->get_item_schema().
             if php_is_null(field_options_["schema"]):
@@ -491,7 +491,7 @@ class WP_REST_Controller():
         #// Exclude fields that specify a different context than the request context.
         context_ = request_["context"]
         if context_:
-            for name_,options_ in properties_:
+            for name_,options_ in properties_.items():
                 if (not php_empty(lambda : options_["context"])) and (not php_in_array(context_, options_["context"], True)):
                     properties_[name_] = None
                 # end if
@@ -511,7 +511,7 @@ class WP_REST_Controller():
         if php_in_array("id", fields_, True):
             requested_fields_[-1] = "id"
         # end if
-        def _closure_cdaaf1b4(response_fields_=None, field_=None):
+        def _closure_44b60005(response_fields_=None, field_=None):
             
             
             if php_in_array(field_, fields_, True):
@@ -526,12 +526,12 @@ class WP_REST_Controller():
                 response_fields_[-1] = field_
             # end if
             return response_fields_
-        # end def _closure_cdaaf1b4
+        # end def _closure_44b60005
         #// Return the list of all requested fields which appear in the schema.
         response_fields_[-1] = field_
         nested_fields_ = php_explode(".", field_)
         response_fields_[-1] = field_
-        return array_reduce(requested_fields_, (lambda *args, **kwargs: _closure_cdaaf1b4(*args, **kwargs)), Array())
+        return array_reduce(requested_fields_, (lambda *args, **kwargs: _closure_44b60005(*args, **kwargs)), Array())
     # end def get_fields_for_response
     #// 
     #// Retrieves an array of endpoint arguments from the item schema for the controller.
@@ -551,7 +551,7 @@ class WP_REST_Controller():
         schema_ = self.get_item_schema()
         schema_properties_ = schema_["properties"] if (not php_empty(lambda : schema_["properties"])) else Array()
         endpoint_args_ = Array()
-        for field_id_,params_ in schema_properties_:
+        for field_id_,params_ in schema_properties_.items():
             #// Arguments specified as `readonly` are not allowed to be set.
             if (not php_empty(lambda : params_["readonly"])):
                 continue

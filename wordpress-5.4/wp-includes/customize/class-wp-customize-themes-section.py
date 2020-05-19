@@ -168,11 +168,11 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
         feature_list_ = get_theme_feature_list(False)
         pass
         php_print("     <# if ( 'wporg' === data.action ) { #>\n            <div class=\"filter-drawer filter-details\">\n              ")
-        for feature_name_,features_ in feature_list_:
+        for feature_name_,features_ in feature_list_.items():
             php_print("                 <fieldset class=\"filter-group\">\n                     <legend>")
             php_print(esc_html(feature_name_))
             php_print("</legend>\n                      <div class=\"filter-group-feature\">\n                          ")
-            for feature_,feature_name_ in features_:
+            for feature_,feature_name_ in features_.items():
                 php_print("                             <input type=\"checkbox\" id=\"filter-id-")
                 php_print(esc_attr(feature_))
                 php_print("\" value=\"")

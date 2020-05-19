@@ -34,7 +34,7 @@ if is_multisite():
 # end if
 php_include_file(__DIR__ + "/includes/network.php", once=True)
 #// We need to create references to ms global tables to enable Network.
-for table_,prefixed_table_ in wpdb_.tables("ms_global"):
+for table_,prefixed_table_ in wpdb_.tables("ms_global").items():
     wpdb_.table_ = prefixed_table_
 # end for
 if (not network_domain_check()) and (not php_defined("WP_ALLOW_MULTISITE")) or (not WP_ALLOW_MULTISITE):

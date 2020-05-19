@@ -678,7 +678,7 @@ class WP_Posts_List_Table(WP_List_Table):
         if (not (php_isset(lambda : PHP_GLOBALS["post"]))):
             PHP_GLOBALS["post"] = reset(ids_)
         # end if
-        for page_id_,level_ in to_display_:
+        for page_id_,level_ in to_display_.items():
             php_print(" ")
             self.single_row(page_id_, level_)
         # end for
@@ -1645,7 +1645,7 @@ class WP_Posts_List_Table(WP_List_Table):
             </fieldset>
             """)
             columns_ = self.get_column_info()
-            for column_name_,column_display_name_ in columns_:
+            for column_name_,column_display_name_ in columns_.items():
                 if (php_isset(lambda : core_columns_[column_name_])):
                     continue
                 # end if

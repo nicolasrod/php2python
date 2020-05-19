@@ -132,7 +132,7 @@ class ParagonIE_Sodium_Core_X25519(ParagonIE_Sodium_Core_Curve25519):
         carry8_ = h_[8] + 1 << 25 >> 26
         h_[9] += carry8_
         h_[8] -= carry8_ << 26
-        for i_,value_ in h_:
+        for i_,value_ in h_.items():
             h_[i_] = php_int(value_)
         # end for
         return ParagonIE_Sodium_Core_Curve25519_Fe.fromarray(h_)

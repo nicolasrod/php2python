@@ -48,7 +48,7 @@ def wp_unregister_GLOBALS(*_args_):
     #// Variables that shouldn't be unset.
     no_unset_ = Array("GLOBALS", "_GET", "_POST", "_COOKIE", "_REQUEST", "_SERVER", "_ENV", "_FILES", "table_prefix")
     input_ = php_array_merge(PHP_REQUEST, PHP_POST, PHP_COOKIE, PHP_SERVER, PHP_ENV, PHP_FILES, PHP_SESSION if (php_isset(lambda : PHP_SESSION)) and php_is_array(PHP_SESSION) else Array())
-    for k_,v_ in input_:
+    for k_,v_ in input_.items():
         if (not php_in_array(k_, no_unset_)) and (php_isset(lambda : PHP_GLOBALS[k_])):
             PHP_GLOBALS[k_] = None
         # end if
@@ -649,7 +649,7 @@ def wp_skip_paused_plugins(plugins_=None, *_args_):
     if php_empty(lambda : paused_plugins_):
         return plugins_
     # end if
-    for index_,plugin_ in plugins_:
+    for index_,plugin_ in plugins_.items():
         plugin_ = php_explode("/", plugin_basename(plugin_))
         if php_array_key_exists(plugin_, paused_plugins_):
             plugins_[index_] = None
@@ -710,7 +710,7 @@ def wp_skip_paused_themes(themes_=None, *_args_):
     if php_empty(lambda : paused_themes_):
         return themes_
     # end if
-    for index_,theme_ in themes_:
+    for index_,theme_ in themes_.items():
         theme_ = php_basename(theme_)
         if php_array_key_exists(theme_, paused_themes_):
             themes_[index_] = None

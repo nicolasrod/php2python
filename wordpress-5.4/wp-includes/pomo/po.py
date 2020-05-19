@@ -34,7 +34,7 @@ if (not php_class_exists("PO", False)):
             
             
             header_string_ = ""
-            for header_,value_ in self.headers:
+            for header_,value_ in self.headers.items():
                 header_string_ += str(header_) + str(": ") + str(value_) + str("\n")
             # end for
             poified_ = PO.poify(header_string_)
@@ -249,7 +249,7 @@ if (not php_class_exists("PO", False)):
             else:
                 po_[-1] = "msgid_plural " + PO.poify(entry_.plural)
                 translations_ = Array("", "") if php_empty(lambda : entry_.translations) else entry_.translations
-                for i_,translation_ in translations_:
+                for i_,translation_ in translations_.items():
                     translation_ = PO.match_begin_and_end_newlines(translation_, entry_.plural)
                     po_[-1] = str("msgstr[") + str(i_) + str("] ") + PO.poify(translation_)
                 # end for

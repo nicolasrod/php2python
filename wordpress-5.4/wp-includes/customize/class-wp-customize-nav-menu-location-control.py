@@ -85,7 +85,7 @@ class WP_Customize_Nav_Menu_Location_Control(WP_Customize_Control):
         php_print("\n           <select ")
         self.link()
         php_print(">\n              ")
-        for value_,label_ in self.choices:
+        for value_,label_ in self.choices.items():
             php_print("<option value=\"" + esc_attr(value_) + "\"" + selected(self.value(), value_, False) + ">" + label_ + "</option>")
         # end for
         php_print("         </select>\n     </label>\n      <button type=\"button\" class=\"button-link create-menu")

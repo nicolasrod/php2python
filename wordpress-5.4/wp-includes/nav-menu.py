@@ -90,7 +90,7 @@ def register_nav_menus(locations_=None, *_args_):
     global _wp_registered_nav_menus_
     php_check_if_defined("_wp_registered_nav_menus_")
     add_theme_support("menus")
-    for key_,value_ in locations_:
+    for key_,value_ in locations_.items():
         if php_is_int(key_):
             _doing_it_wrong(__FUNCTION__, __("Nav menu locations must be strings."), "5.3.0")
             break
@@ -276,7 +276,7 @@ def wp_delete_nav_menu(menu_=None, *_args_):
     result_ = wp_delete_term(menu_.term_id, "nav_menu")
     #// Remove this menu from any locations.
     locations_ = get_nav_menu_locations()
-    for location_,menu_id_ in locations_:
+    for location_,menu_id_ in locations_.items():
         if menu_id_ == menu_.term_id:
             locations_[location_] = 0
         # end if
@@ -637,7 +637,7 @@ def wp_get_nav_menu_items(menu_=None, args_=None, *_args_):
     if ARRAY_A == args_["output"]:
         items_ = wp_list_sort(items_, Array({args_["output_key"]: "ASC"}))
         i_ = 1
-        for k_,item_ in items_:
+        for k_,item_ in items_.items():
             items_[k_].args_["output_key"] = i_
             i_ += 1
             i_ += 1
@@ -1015,7 +1015,7 @@ def wp_map_nav_menu_locations(new_nav_menu_locations_=None, old_nav_menu_locatio
     # end if
     old_locations_ = php_array_keys(old_nav_menu_locations_)
     #// Map locations with the same slug.
-    for location_,name_ in registered_nav_menus_:
+    for location_,name_ in registered_nav_menus_.items():
         if php_in_array(location_, old_locations_, True):
             new_nav_menu_locations_[location_] = old_nav_menu_locations_[location_]
             old_nav_menu_locations_[location_] = None
@@ -1035,7 +1035,7 @@ def wp_map_nav_menu_locations(new_nav_menu_locations_=None, old_nav_menu_locatio
         #// ...and see if any of these slugs...
         for slug_ in slug_group_:
             #// ...and any of the new menu locations...
-            for new_location_,name_ in registered_nav_menus_:
+            for new_location_,name_ in registered_nav_menus_.items():
                 #// ...actually match!
                 if php_is_string(new_location_) and False == php_stripos(new_location_, slug_) and False == php_stripos(slug_, new_location_):
                     continue
@@ -1043,7 +1043,7 @@ def wp_map_nav_menu_locations(new_nav_menu_locations_=None, old_nav_menu_locatio
                     continue
                 # end if
                 #// Then see if any of the old locations...
-                for location_,menu_id_ in old_nav_menu_locations_:
+                for location_,menu_id_ in old_nav_menu_locations_.items():
                     #// ...and any slug in the same group...
                     for slug_ in slug_group_:
                         #// ... have a match as well.

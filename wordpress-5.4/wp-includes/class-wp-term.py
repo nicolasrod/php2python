@@ -182,7 +182,7 @@ class WP_Term():
     def __init__(self, term_=None):
         
         
-        for key_,value_ in get_object_vars(term_):
+        for key_,value_ in get_object_vars(term_).items():
             self.key_ = value_
         # end for
     # end def __init__

@@ -56,7 +56,7 @@ class WP_oEmbed():
         host_ = urlencode(home_url())
         providers_ = Array({"#https?://((m|www)\\.)?youtube\\.com/watch.*#i": Array("https://www.youtube.com/oembed", True), "#https?://((m|www)\\.)?youtube\\.com/playlist.*#i": Array("https://www.youtube.com/oembed", True), "#https?://youtu\\.be/.*#i": Array("https://www.youtube.com/oembed", True), "#https?://(.+\\.)?vimeo\\.com/.*#i": Array("https://vimeo.com/api/oembed.{format}", True)}, {"#https?://(www\\.)?dailymotion\\.com/.*#i": Array("https://www.dailymotion.com/services/oembed", True), "#https?://dai\\.ly/.*#i": Array("https://www.dailymotion.com/services/oembed", True), "#https?://(www\\.)?flickr\\.com/.*#i": Array("https://www.flickr.com/services/oembed/", True), "#https?://flic\\.kr/.*#i": Array("https://www.flickr.com/services/oembed/", True), "#https?://(.+\\.)?smugmug\\.com/.*#i": Array("https://api.smugmug.com/services/oembed/", True), "#https?://(www\\.)?hulu\\.com/watch/.*#i": Array("https://www.hulu.com/api/oembed.{format}", True)}, {"#https?://(www\\.)?scribd\\.com/(doc|document)/.*#i": Array("https://www.scribd.com/services/oembed", True), "#https?://wordpress\\.tv/.*#i": Array("https://wordpress.tv/oembed/", True), "#https?://(.+\\.)?polldaddy\\.com/.*#i": Array("https://api.crowdsignal.com/oembed", True), "#https?://poll\\.fm/.*#i": Array("https://api.crowdsignal.com/oembed", True), "#https?://(.+\\.)?survey\\.fm/.*#i": Array("https://api.crowdsignal.com/oembed", True), "#https?://(www\\.)?twitter\\.com/\\w{1,15}/status(es)?/.*#i": Array("https://publish.twitter.com/oembed", True)}, {"#https?://(www\\.)?twitter\\.com/\\w{1,15}$#i": Array("https://publish.twitter.com/oembed", True)}, {"#https?://(www\\.)?twitter\\.com/\\w{1,15}/likes$#i": Array("https://publish.twitter.com/oembed", True)}, {"#https?://(www\\.)?twitter\\.com/\\w{1,15}/lists/.*#i": Array("https://publish.twitter.com/oembed", True)}, {"#https?://(www\\.)?twitter\\.com/\\w{1,15}/timelines/.*#i": Array("https://publish.twitter.com/oembed", True)}, {"#https?://(www\\.)?twitter\\.com/i/moments/.*#i": Array("https://publish.twitter.com/oembed", True), "#https?://(www\\.)?soundcloud\\.com/.*#i": Array("https://soundcloud.com/oembed", True), "#https?://(.+?\\.)?slideshare\\.net/.*#i": Array("https://www.slideshare.net/api/oembed/2", True), "#https?://(www\\.)?instagr(\\.am|am\\.com)/(p|tv)/.*#i": Array("https://api.instagram.com/oembed", True), "#https?://(open|play)\\.spotify\\.com/.*#i": Array("https://embed.spotify.com/oembed/", True), "#https?://(.+\\.)?imgur\\.com/.*#i": Array("https://api.imgur.com/oembed", True), "#https?://(www\\.)?meetu(\\.ps|p\\.com)/.*#i": Array("https://api.meetup.com/oembed", True), "#https?://(www\\.)?issuu\\.com/.+/docs/.+#i": Array("https://issuu.com/oembed_wp", True), "#https?://(www\\.)?mixcloud\\.com/.*#i": Array("https://www.mixcloud.com/oembed", True), "#https?://(www\\.|embed\\.)?ted\\.com/talks/.*#i": Array("https://www.ted.com/services/v1/oembed.{format}", True)}, {"#https?://(www\\.)?(animoto|video214)\\.com/play/.*#i": Array("https://animoto.com/oembeds/create", True), "#https?://(.+)\\.tumblr\\.com/post/.*#i": Array("https://www.tumblr.com/oembed/1.0", True), "#https?://(www\\.)?kickstarter\\.com/projects/.*#i": Array("https://www.kickstarter.com/services/oembed", True), "#https?://kck\\.st/.*#i": Array("https://www.kickstarter.com/services/oembed", True), "#https?://cloudup\\.com/.*#i": Array("https://cloudup.com/oembed", True), "#https?://(www\\.)?reverbnation\\.com/.*#i": Array("https://www.reverbnation.com/oembed", True), "#https?://videopress\\.com/v/.*#": Array("https://public-api.wordpress.com/oembed/?for=" + host_, True), "#https?://(www\\.)?reddit\\.com/r/[^/]+/comments/.*#i": Array("https://www.reddit.com/oembed", True), "#https?://(www\\.)?speakerdeck\\.com/.*#i": Array("https://speakerdeck.com/oembed.{format}", True)}, {"#https?://www\\.facebook\\.com/.*/posts/.*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/.*/activity/.*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/.*/photos/.*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/photo(s/|\\.php).*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/permalink\\.php.*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/media/.*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/questions/.*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/notes/.*#i": Array("https://www.facebook.com/plugins/post/oembed.json/", True), "#https?://www\\.facebook\\.com/.*/videos/.*#i": Array("https://www.facebook.com/plugins/video/oembed.json/", True), "#https?://www\\.facebook\\.com/video\\.php.*#i": Array("https://www.facebook.com/plugins/video/oembed.json/", True), "#https?://(www\\.)?screencast\\.com/.*#i": Array("https://api.screencast.com/external/oembed", True), "#https?://([a-z0-9-]+\\.)?amazon\\.(com|com\\.mx|com\\.br|ca)/.*#i": Array("https://read.amazon.com/kp/api/oembed", True), "#https?://([a-z0-9-]+\\.)?amazon\\.(co\\.uk|de|fr|it|es|in|nl|ru)/.*#i": Array("https://read.amazon.co.uk/kp/api/oembed", True), "#https?://([a-z0-9-]+\\.)?amazon\\.(co\\.jp|com\\.au)/.*#i": Array("https://read.amazon.com.au/kp/api/oembed", True), "#https?://([a-z0-9-]+\\.)?amazon\\.cn/.*#i": Array("https://read.amazon.cn/kp/api/oembed", True), "#https?://(www\\.)?a\\.co/.*#i": Array("https://read.amazon.com/kp/api/oembed", True), "#https?://(www\\.)?amzn\\.to/.*#i": Array("https://read.amazon.com/kp/api/oembed", True), "#https?://(www\\.)?amzn\\.eu/.*#i": Array("https://read.amazon.co.uk/kp/api/oembed", True), "#https?://(www\\.)?amzn\\.in/.*#i": Array("https://read.amazon.in/kp/api/oembed", True), "#https?://(www\\.)?amzn\\.asia/.*#i": Array("https://read.amazon.com.au/kp/api/oembed", True), "#https?://(www\\.)?z\\.cn/.*#i": Array("https://read.amazon.cn/kp/api/oembed", True), "#https?://www\\.someecards\\.com/.+-cards/.+#i": Array("https://www.someecards.com/v2/oembed/", True), "#https?://www\\.someecards\\.com/usercards/viewcard/.+#i": Array("https://www.someecards.com/v2/oembed/", True), "#https?://some\\.ly\\/.+#i": Array("https://www.someecards.com/v2/oembed/", True), "#https?://(www\\.)?tiktok\\.com/.*/video/.*#i": Array("https://www.tiktok.com/oembed", True)})
         if (not php_empty(lambda : self.early_providers["add"])):
-            for format_,data_ in self.early_providers["add"]:
+            for format_,data_ in self.early_providers["add"].items():
                 providers_[format_] = data_
             # end for
         # end if
@@ -195,7 +195,7 @@ class WP_oEmbed():
         if (not (php_isset(lambda : args_["discover"]))):
             args_["discover"] = True
         # end if
-        for matchmask_,data_ in self.providers:
+        for matchmask_,data_ in self.providers.items():
             providerurl_, regex_ = data_
             #// Turn the asterisk-type provider URLs into regex.
             if (not regex_):
@@ -386,7 +386,7 @@ class WP_oEmbed():
             # end if
             #// Do a quick check.
             tagfound_ = False
-            for linktype_,format_ in linktypes_:
+            for linktype_,format_ in linktypes_.items():
                 if php_stripos(html_, linktype_):
                     tagfound_ = True
                     break
@@ -545,7 +545,7 @@ class WP_oEmbed():
             return False
         # end if
         return_ = php_new_class("stdClass", lambda : stdClass())
-        for key_,value_ in xml_:
+        for key_,value_ in xml_.items():
             return_.key_ = php_str(value_)
         # end for
         return return_
@@ -634,7 +634,7 @@ class WP_oEmbed():
         replace_ = Array("__TAB__", "__NL__", "__CR__", "__SPACE__")
         tokenized_ = php_str_replace(search_, replace_, html_)
         preg_match_all("#(<pre[^>]*>.+?</pre>)#i", tokenized_, matches_, PREG_SET_ORDER)
-        for i_,match_ in matches_:
+        for i_,match_ in matches_.items():
             tag_html_ = php_str_replace(replace_, search_, match_[0])
             tag_token_ = token_ + i_
             found_[tag_token_] = tag_html_

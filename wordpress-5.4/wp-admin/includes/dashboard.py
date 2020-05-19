@@ -395,7 +395,7 @@ def wp_network_dashboard_right_now(*_args_):
     sentence_ = php_sprintf(__("You have %1$s and %2$s."), blog_text_, user_text_)
     if actions_:
         php_print("<ul class=\"subsubsub\">")
-        for class_,action_ in actions_:
+        for class_,action_ in actions_.items():
             actions_[class_] = str("    <li class='") + str(class_) + str("'>") + str(action_)
         # end for
         php_print(php_implode(" |</li>\n", actions_) + "</li>\n")
@@ -628,7 +628,7 @@ def _wp_dashboard_recent_comments_row(comment_=None, show_date_=None, *_args_):
         #//
         actions_ = apply_filters("comment_row_actions", php_array_filter(actions_), comment_)
         i_ = 0
-        for action_,link_ in actions_:
+        for action_,link_ in actions_.items():
             i_ += 1
             sep_ = "" if "approve" == action_ or "unapprove" == action_ and 2 == i_ or 1 == i_ else " | "
             #// Reply and quickedit need a hide-if-no-js span.
@@ -1134,7 +1134,7 @@ def wp_dashboard_primary(*_args_):
 def wp_dashboard_primary_output(widget_id_=None, feeds_=None, *_args_):
     
     
-    for type_,args_ in feeds_:
+    for type_,args_ in feeds_.items():
         args_["type"] = type_
         php_print("<div class=\"rss-widget\">")
         wp_widget_rss_output(args_["url"], args_)

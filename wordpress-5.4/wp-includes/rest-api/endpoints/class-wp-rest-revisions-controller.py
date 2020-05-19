@@ -166,7 +166,7 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
             registered_ = self.get_collection_params()
             args_ = Array({"post_parent": parent_.ID, "post_type": "revision", "post_status": "inherit", "posts_per_page": -1, "orderby": "date ID", "order": "DESC", "suppress_filters": True})
             parameter_mappings_ = Array({"exclude": "post__not_in", "include": "post__in", "offset": "offset", "order": "order", "orderby": "orderby", "page": "paged", "per_page": "posts_per_page", "search": "s"})
-            for api_param_,wp_param_ in parameter_mappings_:
+            for api_param_,wp_param_ in parameter_mappings_.items():
                 if (php_isset(lambda : registered_[api_param_]) and php_isset(lambda : request_[api_param_])):
                     args_[wp_param_] = request_[api_param_]
                 # end if
@@ -360,7 +360,7 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
         # end if
         
         query_args_ = Array()
-        for key_,value_ in prepared_args_:
+        for key_,value_ in prepared_args_.items():
             #// This filter is documented in wp-includes/rest-api/endpoints/class-wp-rest-posts-controller.php
             query_args_[key_] = apply_filters(str("rest_query_var-") + str(key_), value_)
             pass

@@ -180,7 +180,7 @@ def wp_privacy_generate_personal_data_export_group_html(group_data_=None, group_
         group_html_ += "<p>" + esc_html(group_data_["group_description"]) + "</p>"
     # end if
     group_html_ += "<div>"
-    for group_item_id_,group_item_data_ in group_data_["items"]:
+    for group_item_id_,group_item_data_ in group_data_["items"].items():
         group_html_ += "<table>"
         group_html_ += "<tbody>"
         for group_item_datum_ in group_item_data_:
@@ -305,7 +305,7 @@ def wp_privacy_generate_personal_data_export_file(request_id_=None, *_args_):
         fwrite(file_, "<div id=\"table_of_contents\">")
         fwrite(file_, "<h2>" + esc_html__("Table of Contents") + "</h2>")
         fwrite(file_, "<ul>")
-        for group_id_,group_data_ in groups_:
+        for group_id_,group_data_ in groups_.items():
             group_label_ = esc_html(group_data_["group_label"])
             group_id_attr_ = sanitize_title_with_dashes(group_data_["group_label"] + "-" + group_id_)
             group_items_count_ = php_count(group_data_["items"])
@@ -320,7 +320,7 @@ def wp_privacy_generate_personal_data_export_file(request_id_=None, *_args_):
         fwrite(file_, "</div>")
     # end if
     #// Now, iterate over every group in $groups and have the formatter render it in HTML.
-    for group_id_,group_data_ in groups_:
+    for group_id_,group_data_ in groups_.items():
         fwrite(file_, wp_privacy_generate_personal_data_export_group_html(group_data_, group_id_, groups_count_))
     # end for
     fwrite(file_, "</body>\n")

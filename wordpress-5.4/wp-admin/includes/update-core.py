@@ -210,7 +210,7 @@ def update_core(from_=None, to_=None, *_args_):
             pass
         # end if
         if php_is_array(checksums_):
-            for file_,checksum_ in checksums_:
+            for file_,checksum_ in checksums_.items():
                 if "wp-content" == php_substr(file_, 0, 10):
                     continue
                 # end if
@@ -236,7 +236,7 @@ def update_core(from_=None, to_=None, *_args_):
         files_writable_ = php_array_filter(check_is_writable_, Array(wp_filesystem_, "is_writable"))
         if files_writable_ != check_is_writable_:
             files_not_writable_ = php_array_diff_key(check_is_writable_, files_writable_)
-            for relative_file_not_writable_,file_not_writable_ in files_not_writable_:
+            for relative_file_not_writable_,file_not_writable_ in files_not_writable_.items():
                 #// If the writable check failed, chmod file to 0644 and try again, same as copy_dir().
                 wp_filesystem_.chmod(file_not_writable_, FS_CHMOD_FILE)
                 if wp_filesystem_.is_writable(file_not_writable_):
@@ -276,7 +276,7 @@ def update_core(from_=None, to_=None, *_args_):
     skip_ = Array("wp-content")
     failed_ = Array()
     if (php_isset(lambda : checksums_)) and php_is_array(checksums_):
-        for file_,checksum_ in checksums_:
+        for file_,checksum_ in checksums_.items():
             if "wp-content" == php_substr(file_, 0, 10):
                 continue
             # end if
@@ -356,7 +356,7 @@ def update_core(from_=None, to_=None, *_args_):
     #// $development_build controls us overwriting bundled themes and plugins when a non-stable release is being updated.
     #//
     if (not is_wp_error(result_)) and (not php_defined("CORE_UPGRADE_SKIP_NEW_BUNDLED")) or (not CORE_UPGRADE_SKIP_NEW_BUNDLED):
-        for file_,introduced_version_ in _new_bundled_files_:
+        for file_,introduced_version_ in _new_bundled_files_.items():
             #// If a $development_build or if $introduced version is greater than what the site was previously running.
             if development_build_ or php_version_compare(introduced_version_, old_wp_version_, ">"):
                 directory_ = "/" == file_[php_strlen(file_) - 1]
@@ -478,7 +478,7 @@ def _copy_dir(from_=None, to_=None, skip_list_=None, *_args_):
     dirlist_ = wp_filesystem_.dirlist(from_)
     from_ = trailingslashit(from_)
     to_ = trailingslashit(to_)
-    for filename_,fileinfo_ in dirlist_:
+    for filename_,fileinfo_ in dirlist_.items():
         if php_in_array(filename_, skip_list_, True):
             continue
         # end if

@@ -7445,5 +7445,97 @@
       ],
       "endLine": 475
     }
+  },
+  {
+    "nodeType": "Stmt_Global",
+    "vars": [
+      {
+        "nodeType": "Expr_Variable",
+        "name": "wp_object_cache",
+        "attributes": {
+          "startLine": 477,
+          "endLine": 477
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 477,
+      "endLine": 477
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_Isset",
+        "vars": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "wp_object_cache",
+            "attributes": {
+              "startLine": 479,
+              "endLine": 479
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 479,
+          "endLine": 479
+        }
+      },
+      "attributes": {
+        "startLine": 479,
+        "endLine": 479
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "wp_object_cache",
+            "attributes": {
+              "startLine": 480,
+              "endLine": 480
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_New",
+            "class": {
+              "nodeType": "Name",
+              "parts": [
+                "WP_Object_Cache"
+              ],
+              "attributes": {
+                "startLine": 480,
+                "endLine": 480
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 480,
+              "endLine": 480
+            }
+          },
+          "attributes": {
+            "startLine": 480,
+            "endLine": 480
+          }
+        },
+        "attributes": {
+          "startLine": 480,
+          "endLine": 480
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 479,
+      "endLine": 481
+    }
   }
 ]

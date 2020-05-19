@@ -91,7 +91,7 @@ class WP_REST_Taxonomies_Controller(WP_REST_Controller):
             taxonomies_ = get_taxonomies("", "objects")
         # end if
         data_ = Array()
-        for tax_type_,value_ in taxonomies_:
+        for tax_type_,value_ in taxonomies_.items():
             if php_empty(lambda : value_.show_in_rest) or "edit" == request_["context"] and (not current_user_can(value_.cap.assign_terms)):
                 continue
             # end if

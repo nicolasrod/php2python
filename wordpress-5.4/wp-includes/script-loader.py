@@ -83,7 +83,7 @@ def wp_default_packages_vendor(scripts_=None, *_args_):
     suffix_ = wp_scripts_get_suffix()
     vendor_scripts_ = Array({"react": Array("wp-polyfill"), "react-dom": Array("react")}, "moment", "lodash", "wp-polyfill-fetch", "wp-polyfill-formdata", "wp-polyfill-node-contains", "wp-polyfill-url", "wp-polyfill-dom-rect", "wp-polyfill-element-closest", "wp-polyfill")
     vendor_scripts_versions_ = Array({"react": "16.9.0", "react-dom": "16.9.0", "moment": "2.22.2", "lodash": "4.17.15", "wp-polyfill-fetch": "3.0.0", "wp-polyfill-formdata": "3.0.12", "wp-polyfill-node-contains": "3.42.0", "wp-polyfill-url": "3.6.4", "wp-polyfill-dom-rect": "3.42.0", "wp-polyfill-element-closest": "2.0.2", "wp-polyfill": "7.4.4"})
-    for handle_,dependencies_ in vendor_scripts_:
+    for handle_,dependencies_ in vendor_scripts_.items():
         if php_is_string(dependencies_):
             handle_ = dependencies_
             dependencies_ = Array()
@@ -112,7 +112,7 @@ def wp_get_script_polyfill(scripts_=None, tests_=None, *_args_):
     
     
     polyfill_ = ""
-    for test_,handle_ in tests_:
+    for test_,handle_ in tests_.items():
         if (not php_array_key_exists(handle_, scripts_.registered)):
             continue
         # end if
@@ -152,7 +152,7 @@ def wp_default_packages_scripts(scripts_=None, *_args_):
     #// 'annotations.js' => array('dependencies' => array(...), 'version' => '...'),
     #// 'api-fetch.js' => array(...
     assets_ = php_include_file(ABSPATH + WPINC + "/assets/script-loader-packages.php", once=False)
-    for package_name_,package_data_ in assets_:
+    for package_name_,package_data_ in assets_.items():
         basename_ = php_basename(package_name_, ".js")
         handle_ = "wp-" + basename_
         path_ = str("/wp-includes/js/dist/") + str(basename_) + str(suffix_) + str(".js")
@@ -251,7 +251,7 @@ def wp_tinymce_inline_scripts(*_args_):
     #// Do "by hand" translation from PHP array to js object.
     #// Prevents breakage in some custom settings.
     init_obj_ = ""
-    for key_,value_ in tinymce_settings_:
+    for key_,value_ in tinymce_settings_.items():
         if php_is_bool(value_):
             val_ = "true" if value_ else "false"
             init_obj_ += key_ + ":" + val_ + ","
@@ -721,7 +721,7 @@ def wp_default_styles(styles_=None, *_args_):
     styles_.add("wp-block-library-theme", str("/wp-includes/css/dist/block-library/theme") + str(suffix_) + str(".css"))
     styles_.add("wp-edit-blocks", str("/wp-includes/css/dist/block-library/editor") + str(suffix_) + str(".css"), Array("wp-components", "wp-editor", "wp-block-library", "wp-block-library-theme"))
     package_styles_ = Array({"block-editor": Array("wp-components", "wp-editor-font"), "block-library": Array(), "components": Array(), "edit-post": Array("wp-components", "wp-block-editor", "wp-editor", "wp-edit-blocks", "wp-block-library", "wp-nux"), "editor": Array("wp-components", "wp-block-editor", "wp-nux"), "format-library": Array(), "list-reusable-blocks": Array("wp-components"), "nux": Array("wp-components")})
-    for package_,dependencies_ in package_styles_:
+    for package_,dependencies_ in package_styles_.items():
         handle_ = "wp-" + package_
         path_ = str("/wp-includes/css/dist/") + str(package_) + str("/style") + str(suffix_) + str(".css")
         styles_.add(handle_, path_, dependencies_)
@@ -981,7 +981,7 @@ def _print_scripts(*_args_):
         # end if
         concat_ = str_split(concat_, 128)
         concatenated_ = ""
-        for key_,chunk_ in concat_:
+        for key_,chunk_ in concat_.items():
             concatenated_ += str("&load%5Bchunk_") + str(key_) + str("%5D=") + str(chunk_)
         # end for
         src_ = wp_scripts_.base_url + str("/wp-admin/load-scripts.php?c=") + str(zip_) + concatenated_ + "&ver=" + wp_scripts_.default_version
@@ -1153,7 +1153,7 @@ def _print_styles(*_args_):
         ver_ = wp_styles_.default_version
         concat_ = str_split(concat_, 128)
         concatenated_ = ""
-        for key_,chunk_ in concat_:
+        for key_,chunk_ in concat_.items():
             concatenated_ += str("&load%5Bchunk_") + str(key_) + str("%5D=") + str(chunk_)
         # end for
         href_ = wp_styles_.base_url + str("/wp-admin/load-styles.php?c=") + str(zip_) + str("&dir=") + str(dir_) + concatenated_ + "&ver=" + ver_
@@ -1251,7 +1251,7 @@ def wp_enqueue_registered_block_scripts_and_styles(*_args_):
     php_check_if_defined("current_screen_")
     is_editor_ = type(current_screen_).__name__ == "WP_Screen" and current_screen_.is_block_editor()
     block_registry_ = WP_Block_Type_Registry.get_instance()
-    for block_name_,block_type_ in block_registry_.get_all_registered():
+    for block_name_,block_type_ in block_registry_.get_all_registered().items():
         #// Front-end styles.
         if (not php_empty(lambda : block_type_.style)):
             wp_enqueue_style(block_type_.style)
@@ -1300,7 +1300,7 @@ def enqueue_editor_block_styles_assets(*_args_):
     
     block_styles_ = WP_Block_Styles_Registry.get_instance().get_all_registered()
     register_script_lines_ = Array("( function() {")
-    for block_name_,styles_ in block_styles_:
+    for block_name_,styles_ in block_styles_.items():
         for style_properties_ in styles_:
             register_script_lines_[-1] = php_sprintf("  wp.blocks.registerBlockStyle( '%s', %s );", block_name_, wp_json_encode(Array({"name": style_properties_["name"], "label": style_properties_["label"]})))
         # end for

@@ -240,7 +240,7 @@ php_print("""
 """)
 #// If we have a bulk message to issue:
 messages_ = Array()
-for message_,count_ in bulk_counts_:
+for message_,count_ in bulk_counts_.items():
     if (php_isset(lambda : bulk_messages_[post_type_][message_])):
         messages_[-1] = php_sprintf(bulk_messages_[post_type_][message_], number_format_i18n(count_))
     elif (php_isset(lambda : bulk_messages_["post"][message_])):

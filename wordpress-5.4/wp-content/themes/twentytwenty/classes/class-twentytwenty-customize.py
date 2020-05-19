@@ -116,8 +116,8 @@ if (not php_class_exists("TwentyTwenty_Customize")):
             #// Make sure the value is an array. Do not typecast, use empty array as fallback.
             value_ = value_ if php_is_array(value_) else Array()
             #// Loop values.
-            for area_,values_ in value_:
-                for context_,color_val_ in values_:
+            for area_,values_ in value_.items():
+                for context_,color_val_ in values_.items():
                     value_[area_][context_] = sanitize_hex_color(color_val_)
                 # end for
             # end for

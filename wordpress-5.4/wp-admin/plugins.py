@@ -74,14 +74,14 @@ if action_:
             check_admin_referer("bulk-plugins")
             plugins_ = wp_unslash(PHP_POST["checked"]) if (php_isset(lambda : PHP_POST["checked"])) else Array()
             if is_network_admin():
-                for i_,plugin_ in plugins_:
+                for i_,plugin_ in plugins_.items():
                     #// Only activate plugins which are not already network activated.
                     if is_plugin_active_for_network(plugin_):
                         plugins_[i_] = None
                     # end if
                 # end for
             else:
-                for i_,plugin_ in plugins_:
+                for i_,plugin_ in plugins_.items():
                     #// Only activate plugins which are not already active and are not network-only when on Multisite.
                     if is_plugin_active(plugin_) or is_multisite() and is_network_only_plugin(plugin_):
                         plugins_[i_] = None
@@ -189,7 +189,7 @@ if action_:
             else:
                 plugins_ = php_array_filter(plugins_, "is_plugin_active")
                 plugins_ = php_array_diff(plugins_, php_array_filter(plugins_, "is_plugin_active_for_network"))
-                for i_,plugin_ in plugins_:
+                for i_,plugin_ in plugins_.items():
                     #// Only deactivate plugins which the user can deactivate.
                     if (not current_user_can("deactivate_plugin", plugin_)):
                         plugins_[i_] = None
@@ -260,7 +260,7 @@ if action_:
                         #// Get plugins list from that folder.
                         folder_plugins_ = get_plugins("/" + plugin_slug_)
                         if folder_plugins_:
-                            for plugin_file_,data_ in folder_plugins_:
+                            for plugin_file_,data_ in folder_plugins_.items():
                                 plugin_info_[plugin_file_] = _get_plugin_data_markup_translate(plugin_file_, data_)
                                 plugin_info_[plugin_file_]["is_uninstallable"] = is_uninstallable_plugin(plugin_)
                                 if (not plugin_info_[plugin_file_]["Network"]):
@@ -403,7 +403,7 @@ parent_file_ = "plugins.php"
 php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
 invalid_ = validate_active_plugins()
 if (not php_empty(lambda : invalid_)):
-    for plugin_file_,error_ in invalid_:
+    for plugin_file_,error_ in invalid_.items():
         php_print("<div id=\"message\" class=\"error\"><p>")
         printf(__("The plugin %1$s has been deactivated due to an error: %2$s"), "<code>" + esc_html(plugin_file_) + "</code>", error_.get_error_message())
         php_print("</p></div>")

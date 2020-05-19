@@ -220,7 +220,7 @@ class WP_Recovery_Mode_Email_Service():
         if (php_isset(lambda : plugins_[str(extension_["slug"]) + str("/") + str(extension_["slug"]) + str(".php")])):
             return plugins_[str(extension_["slug"]) + str("/") + str(extension_["slug"]) + str(".php")]
         else:
-            for file_,plugin_data_ in plugins_:
+            for file_,plugin_data_ in plugins_.items():
                 if 0 == php_strpos(file_, str(extension_["slug"]) + str("/")) or file_ == extension_["slug"]:
                     return plugin_data_
                 # end if

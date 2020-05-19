@@ -136,7 +136,7 @@ class WP_REST_Users_Controller(WP_REST_Controller):
         #// For each known parameter which is both registered and present in the request,
         #// set the parameter's value on the query $prepared_args.
         #//
-        for api_param_,wp_param_ in parameter_mappings_:
+        for api_param_,wp_param_ in parameter_mappings_.items():
             if (php_isset(lambda : registered_[api_param_]) and php_isset(lambda : request_[api_param_])):
                 prepared_args_[wp_param_] = request_[api_param_]
             # end if
@@ -337,7 +337,7 @@ class WP_REST_Users_Controller(WP_REST_Controller):
             ret_ = wpmu_validate_user_signup(user_.user_login, user_.user_email)
             if is_wp_error(ret_["errors"]) and ret_["errors"].has_errors():
                 error_ = php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", __("Invalid user parameter(s)."), Array({"status": 400})))
-                for code_,messages_ in ret_["errors"].errors:
+                for code_,messages_ in ret_["errors"].errors.items():
                     for message_ in messages_:
                         error_.add(code_, message_)
                     # end for

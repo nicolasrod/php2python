@@ -142,7 +142,7 @@ if editor_styles_ and current_theme_supports("editor-styles"):
 #// This filter is documented in wp-admin/includes/media.php
 image_size_names_ = apply_filters("image_size_names_choose", Array({"thumbnail": __("Thumbnail"), "medium": __("Medium"), "large": __("Large"), "full": __("Full Size")}))
 available_image_sizes_ = Array()
-for image_size_slug_,image_size_name_ in image_size_names_:
+for image_size_slug_,image_size_name_ in image_size_names_.items():
     available_image_sizes_[-1] = Array({"slug": image_size_slug_, "name": image_size_name_})
 # end for
 image_dimensions_ = Array()

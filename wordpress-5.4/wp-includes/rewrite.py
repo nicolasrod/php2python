@@ -524,14 +524,14 @@ def url_to_postid(url_=None, *_args_):
     url_ = php_trim(url_, "/")
     request_ = url_
     post_type_query_vars_ = Array()
-    for post_type_,t_ in get_post_types(Array(), "objects"):
+    for post_type_,t_ in get_post_types(Array(), "objects").items():
         if (not php_empty(lambda : t_.query_var)):
             post_type_query_vars_[t_.query_var] = post_type_
         # end if
     # end for
     #// Look for matches.
     request_match_ = request_
-    for match_,query_ in rewrite_:
+    for match_,query_ in rewrite_.items():
         #// If the requesting file is the anchor of the match,
         #// prepend it to the path info.
         if (not php_empty(lambda : url_)) and url_ != request_ and php_strpos(match_, url_) == 0:
@@ -559,7 +559,7 @@ def url_to_postid(url_=None, *_args_):
             php_check_if_defined("wp_")
             parse_str(query_, query_vars_)
             query_ = Array()
-            for key_,value_ in query_vars_:
+            for key_,value_ in query_vars_.items():
                 if php_in_array(key_, wp_.public_query_vars):
                     query_[key_] = value_
                     if (php_isset(lambda : post_type_query_vars_[key_])):

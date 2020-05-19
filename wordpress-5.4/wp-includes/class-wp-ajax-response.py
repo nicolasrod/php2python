@@ -102,7 +102,7 @@ class WP_Ajax_Response():
                 if php_is_scalar(error_data_):
                     response_ += str("<![CDATA[") + str(error_data_) + str("]]>")
                 elif php_is_array(error_data_):
-                    for k_,v_ in error_data_:
+                    for k_,v_ in error_data_.items():
                         response_ += str("<") + str(k_) + str("><![CDATA[") + str(v_) + str("]]></") + str(k_) + str(">")
                     # end for
                 # end if
@@ -113,7 +113,7 @@ class WP_Ajax_Response():
         # end if
         s_ = ""
         if php_is_array(parsed_args_["supplemental"]):
-            for k_,v_ in parsed_args_["supplemental"]:
+            for k_,v_ in parsed_args_["supplemental"].items():
                 s_ += str("<") + str(k_) + str("><![CDATA[") + str(v_) + str("]]></") + str(k_) + str(">")
             # end for
             s_ = str("<supplemental>") + str(s_) + str("</supplemental>")

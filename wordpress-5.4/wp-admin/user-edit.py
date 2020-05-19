@@ -450,7 +450,7 @@ for case in Switch(action_):
         # end if
         public_display_ = php_array_map("trim", public_display_)
         public_display_ = array_unique(public_display_)
-        for id_,item_ in public_display_:
+        for id_,item_ in public_display_.items():
             php_print("     <option ")
             selected(profileuser_.display_name, item_)
             php_print(">")
@@ -495,7 +495,7 @@ for case in Switch(action_):
         php_print("""\" class=\"regular-text code\" /></td>
         </tr>
         """)
-        for name_,desc_ in wp_get_user_contact_methods(profileuser_):
+        for name_,desc_ in wp_get_user_contact_methods(profileuser_).items():
             php_print(" <tr class=\"user-")
             php_print(name_)
             php_print("-wrap\">\n<th><label for=\"")
@@ -714,7 +714,7 @@ for case in Switch(action_):
             _e("Capabilities")
             php_print("</th>\n  <td>\n          ")
             output_ = ""
-            for cap_,value_ in profileuser_.caps:
+            for cap_,value_ in profileuser_.caps.items():
                 if (not wp_roles_.is_role(cap_)):
                     if "" != output_:
                         output_ += ", "

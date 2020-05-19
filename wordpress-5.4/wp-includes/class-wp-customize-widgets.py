@@ -162,7 +162,7 @@ class WP_Customize_Widgets():
         if (php_isset(lambda : cache_[setting_id_])):
             return cache_[setting_id_]
         # end if
-        for type_,pattern_ in self.setting_id_patterns:
+        for type_,pattern_ in self.setting_id_patterns.items():
             if php_preg_match(pattern_, setting_id_):
                 cache_[setting_id_] = type_
                 return type_
@@ -383,7 +383,7 @@ class WP_Customize_Widgets():
             self.manager.add_setting(setting_id_, setting_args_)
         # end if
         self.manager.add_panel("widgets", Array({"type": "widgets", "title": __("Widgets"), "description": __("Widgets are independent sections of content that can be placed into widgetized areas provided by your theme (commonly called sidebars)."), "priority": 110, "active_callback": Array(self, "is_panel_active"), "auto_expand_sole_section": True}))
-        for sidebar_id_,sidebar_widget_ids_ in sidebars_widgets_:
+        for sidebar_id_,sidebar_widget_ids_ in sidebars_widgets_.items():
             if php_empty(lambda : sidebar_widget_ids_):
                 sidebar_widget_ids_ = Array()
             # end if
@@ -423,7 +423,7 @@ class WP_Customize_Widgets():
                 # end if
             # end if
             #// Add a control for each active widget (located in a sidebar).
-            for i_,widget_id_ in sidebar_widget_ids_:
+            for i_,widget_id_ in sidebar_widget_ids_.items():
                 #// Skip widgets that may have gone away due to a plugin being deactivated.
                 if (not is_active_sidebar_) or (not (php_isset(lambda : wp_registered_widgets_[widget_id_]))):
                     continue
@@ -1243,7 +1243,7 @@ class WP_Customize_Widgets():
                 PHP_POST[key_] = PHP_REQUEST[key_]
                 added_input_vars_[-1] = key_
             else:
-                for key_,value_ in instance_:
+                for key_,value_ in instance_.items():
                     PHP_REQUEST[key_] = wp_slash(value_)
                     PHP_POST[key_] = PHP_REQUEST[key_]
                     added_input_vars_[-1] = key_
@@ -1251,7 +1251,7 @@ class WP_Customize_Widgets():
             # end if
         # end if
         #// Invoke the widget update callback.
-        for name_,control_ in wp_registered_widget_updates_:
+        for name_,control_ in wp_registered_widget_updates_.items():
             if name_ == parsed_id_["id_base"] and php_is_callable(control_["callback"]):
                 ob_start()
                 call_user_func_array(control_["callback"], control_["params"])

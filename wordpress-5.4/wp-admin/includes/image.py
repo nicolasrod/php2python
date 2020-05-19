@@ -109,7 +109,7 @@ def wp_get_missing_image_subsizes(attachment_id_=None, *_args_):
     # end if
     possible_sizes_ = Array()
     #// Skip registered sizes that are too large for the uploaded image.
-    for size_name_,size_data_ in registered_sizes_:
+    for size_name_,size_data_ in registered_sizes_.items():
         if image_resize_dimensions(full_width_, full_height_, size_data_["width"], size_data_["height"], size_data_["crop"]):
             possible_sizes_[size_name_] = size_data_
         # end if
@@ -352,7 +352,7 @@ def _wp_make_subsizes(new_sizes_=None, file_=None, image_meta_=None, attachment_
     # end if
     #// Check if any of the new sizes already exist.
     if (php_isset(lambda : image_meta_["sizes"])) and php_is_array(image_meta_["sizes"]):
-        for size_name_,size_meta_ in image_meta_["sizes"]:
+        for size_name_,size_meta_ in image_meta_["sizes"].items():
             #// 
             #// Only checks "size name" so we don't override existing images even if the dimensions
             #// don't match the currently defined size with the same name.
@@ -389,7 +389,7 @@ def _wp_make_subsizes(new_sizes_=None, file_=None, image_meta_=None, attachment_
         # end if
     # end if
     if php_method_exists(editor_, "make_subsize"):
-        for new_size_name_,new_size_data_ in new_sizes_:
+        for new_size_name_,new_size_data_ in new_sizes_.items():
             new_size_meta_ = editor_.make_subsize(new_size_data_)
             if is_wp_error(new_size_meta_):
                 pass
@@ -717,7 +717,7 @@ def wp_read_image_metadata(file_=None, *_args_):
             meta_[key_] = utf8_encode(meta_[key_])
         # end if
     # end for
-    for key_,keyword_ in meta_["keywords"]:
+    for key_,keyword_ in meta_["keywords"].items():
         if (not seems_utf8(keyword_)):
             meta_["keywords"][key_] = utf8_encode(keyword_)
         # end if
@@ -817,7 +817,7 @@ def load_image_to_edit(attachment_id_=None, mime_type_=None, size_="full", *_arg
             break
         # end if
     # end for
-    if is_resource(image_):
+    if php_is_resource(image_):
         #// 
         #// Filters the current image being loaded for editing.
         #// 

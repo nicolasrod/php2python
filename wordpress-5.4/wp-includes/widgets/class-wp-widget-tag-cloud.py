@@ -126,7 +126,7 @@ class WP_Widget_Tag_Cloud(WP_Widget):
             # end if
             if case():
                 printf("<p><label for=\"%1$s\">%2$s</label>" + "<select class=\"widefat\" id=\"%1$s\" name=\"%3$s\">", id_, __("Taxonomy:"), name_)
-                for taxonomy_,tax_ in taxonomies_:
+                for taxonomy_,tax_ in taxonomies_.items():
                     printf("<option value=\"%s\"%s>%s</option>", esc_attr(taxonomy_), selected(taxonomy_, current_taxonomy_, False), tax_.labels.name)
                 # end for
                 php_print("</select></p>" + count_checkbox_)

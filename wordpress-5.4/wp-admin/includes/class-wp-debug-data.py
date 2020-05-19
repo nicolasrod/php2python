@@ -52,7 +52,7 @@ class WP_Debug_Data():
         core_version_ = get_bloginfo("version")
         core_updates_ = get_core_updates()
         core_update_needed_ = ""
-        for core_,update_ in core_updates_:
+        for core_,update_ in core_updates_.items():
             if "upgrade" == update_.response:
                 #// translators: %s: Latest WordPress version number.
                 core_update_needed_ = " " + php_sprintf(__("(Latest version: %s)"), update_.version)
@@ -155,7 +155,7 @@ class WP_Debug_Data():
         dropin_descriptions_ = _get_dropins()
         #// Spare few function calls.
         not_available_ = __("Not available")
-        for dropin_key_,dropin_ in dropins_:
+        for dropin_key_,dropin_ in dropins_.items():
             info_["wp-dropins"]["fields"][sanitize_text_field(dropin_key_)] = Array({"label": dropin_key_, "value": dropin_descriptions_[dropin_key_][0], "debug": "true"})
         # end for
         #// Populate the media fields.
@@ -264,7 +264,7 @@ class WP_Debug_Data():
             info_["wp-server"]["fields"]["htaccess_extra_rules"] = Array({"label": __(".htaccess rules"), "value": htaccess_rules_string_, "debug": filtered_htaccess_content_})
         # end if
         #// Populate the database debug fields.
-        if is_resource(wpdb_.dbh):
+        if php_is_resource(wpdb_.dbh):
             #// Old mysql extension.
             extension_ = "mysql"
         elif php_is_object(wpdb_.dbh):
@@ -296,7 +296,7 @@ class WP_Debug_Data():
         info_["wp-database"]["fields"]["database_collate"] = Array({"label": __("Database collation"), "value": wpdb_.collate, "private": True})
         #// List must use plugins if there are any.
         mu_plugins_ = get_mu_plugins()
-        for plugin_path_,plugin_ in mu_plugins_:
+        for plugin_path_,plugin_ in mu_plugins_.items():
             plugin_version_ = plugin_["Version"]
             plugin_author_ = plugin_["Author"]
             plugin_version_string_ = __("No version or author information is available.")
@@ -322,7 +322,7 @@ class WP_Debug_Data():
         #// List all available plugins.
         plugins_ = get_plugins()
         plugin_updates_ = get_plugin_updates()
-        for plugin_path_,plugin_ in plugins_:
+        for plugin_path_,plugin_ in plugins_.items():
             plugin_part_ = "wp-plugins-active" if is_plugin_active(plugin_path_) else "wp-plugins-inactive"
             plugin_version_ = plugin_["Version"]
             plugin_author_ = plugin_["Author"]
@@ -356,7 +356,7 @@ class WP_Debug_Data():
         php_check_if_defined("_wp_theme_features_")
         theme_features_ = Array()
         if (not php_empty(lambda : _wp_theme_features_)):
-            for feature_,options_ in _wp_theme_features_:
+            for feature_,options_ in _wp_theme_features_.items():
                 theme_features_[-1] = feature_
             # end for
         # end if
@@ -394,7 +394,7 @@ class WP_Debug_Data():
         # end if
         #// Populate a list of all themes available in the install.
         all_themes_ = wp_get_themes()
-        for theme_slug_,theme_ in all_themes_:
+        for theme_slug_,theme_ in all_themes_.items():
             #// Exclude the currently active theme from the list of all themes.
             if active_theme_.stylesheet == theme_slug_:
                 continue
@@ -496,14 +496,14 @@ class WP_Debug_Data():
         
         
         return_ = "`\n"
-        for section_,details_ in info_array_:
+        for section_,details_ in info_array_.items():
             #// Skip this section if there are no fields, or the section has been declared as private.
             if php_empty(lambda : details_["fields"]) or (php_isset(lambda : details_["private"])) and details_["private"]:
                 continue
             # end if
             section_label_ = section_ if "debug" == type_ else details_["label"]
             return_ += php_sprintf("### %s%s ###\n\n", section_label_, php_sprintf(" (%d)", php_count(details_["fields"])) if (php_isset(lambda : details_["show_count"])) and details_["show_count"] else "")
-            for field_name_,field_ in details_["fields"]:
+            for field_name_,field_ in details_["fields"].items():
                 if (php_isset(lambda : field_["private"])) and True == field_["private"]:
                     continue
                 # end if
@@ -515,7 +515,7 @@ class WP_Debug_Data():
                 #// Can be array, one level deep only.
                 if php_is_array(debug_data_):
                     value_ = ""
-                    for sub_field_name_,sub_field_value_ in debug_data_:
+                    for sub_field_name_,sub_field_value_ in debug_data_.items():
                         value_ += php_sprintf("\n   %s: %s", sub_field_name_, sub_field_value_)
                     # end for
                 elif php_is_bool(debug_data_):
@@ -600,7 +600,7 @@ class WP_Debug_Data():
         size_total_ = 0
         all_sizes_ = Array()
         #// Loop over all the directories we want to gather the sizes for.
-        for name_,path_ in paths_:
+        for name_,path_ in paths_.items():
             dir_size_ = None
             #// Default to timeout.
             results_ = Array({"path": path_, "raw": 0})
