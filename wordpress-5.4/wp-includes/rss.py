@@ -154,7 +154,7 @@ class MagpieRSS():
             #// if inside an Atom content construct (e.g. content or summary) field treat tags as text
         elif self.feed_type == ATOM and self.incontent:
             #// if tags are inlined, then flatten
-            attrs_str_ = join(" ", php_array_map(Array("MagpieRSS", "map_attrs"), php_array_keys(attrs_), php_array_values(attrs_)))
+            attrs_str_ = php_join(" ", php_array_map(Array("MagpieRSS", "map_attrs"), php_array_keys(attrs_), php_array_values(attrs_)))
             self.append_content(str("<") + str(element_) + str(" ") + str(attrs_str_) + str(">"))
             array_unshift(self.stack, el_)
             #// Atom support many links per containging element.
@@ -178,7 +178,7 @@ class MagpieRSS():
         if self.feed_type == ATOM and self.incontent:
             self.append_content(text_)
         else:
-            current_el_ = join("_", array_reverse(self.stack))
+            current_el_ = php_join("_", php_array_reverse(self.stack))
             self.append(current_el_, text_)
         # end if
     # end def feed_cdata
@@ -817,7 +817,7 @@ if (not php_function_exists("wp_rss")):
                 rss_.items = php_array_slice(rss_.items, 0, num_items_)
             # end if
             for item_ in rss_.items:
-                printf("<li><a href=\"%1$s\" title=\"%2$s\">%3$s</a></li>", esc_url(item_["link"]), esc_attr(strip_tags(item_["description"])), esc_html(item_["title"]))
+                php_printf("<li><a href=\"%1$s\" title=\"%2$s\">%3$s</a></li>", esc_url(item_["link"]), esc_attr(strip_tags(item_["description"])), esc_html(item_["title"]))
             # end for
             php_print("</ul>")
         else:

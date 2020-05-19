@@ -168,7 +168,7 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
         r_ = ""
         for line_ in lines_:
             if encode_:
-                processed_line_ = htmlspecialchars(line_)
+                processed_line_ = php_htmlspecialchars(line_)
                 #// 
                 #// Contextually filters a diffed line.
                 #// 
@@ -207,7 +207,7 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
         r_ = ""
         for line_ in lines_:
             if encode_:
-                processed_line_ = htmlspecialchars(line_)
+                processed_line_ = php_htmlspecialchars(line_)
                 #// This filter is documented in wp-includes/wp-diff.php
                 line_ = apply_filters("process_text_diff_html", processed_line_, line_, "deleted")
             # end if
@@ -234,7 +234,7 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
         r_ = ""
         for line_ in lines_:
             if encode_:
-                processed_line_ = htmlspecialchars(line_)
+                processed_line_ = php_htmlspecialchars(line_)
                 #// This filter is documented in wp-includes/wp-diff.php
                 line_ = apply_filters("process_text_diff_html", processed_line_, line_, "unchanged")
             # end if
@@ -284,7 +284,7 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
                 #// If they're too different, don't include any <ins> or <del>'s.
                 if preg_match_all("!(<ins>.*?</ins>|<del>.*?</del>)!", diff_, diff_matches_):
                     #// Length of all text between <ins> or <del>.
-                    stripped_matches_ = php_strlen(strip_tags(join(" ", diff_matches_[0])))
+                    stripped_matches_ = php_strlen(strip_tags(php_join(" ", diff_matches_[0])))
                     #// Since we count length of text between <ins> or <del> (instead of picking just one),
                     #// we double the length of chars not in those tags.
                     stripped_diff_ = php_strlen(strip_tags(diff_)) * 2 - stripped_matches_
@@ -308,14 +308,14 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
             if (php_isset(lambda : orig_diffs_[orig_rows_[row_]])):
                 orig_line_ = orig_diffs_[orig_rows_[row_]]
             elif (php_isset(lambda : orig_[orig_rows_[row_]])):
-                orig_line_ = htmlspecialchars(orig_[orig_rows_[row_]])
+                orig_line_ = php_htmlspecialchars(orig_[orig_rows_[row_]])
             else:
                 orig_line_ = ""
             # end if
             if (php_isset(lambda : final_diffs_[final_rows_[row_]])):
                 final_line_ = final_diffs_[final_rows_[row_]]
             elif (php_isset(lambda : final_[final_rows_[row_]])):
-                final_line_ = htmlspecialchars(final_[final_rows_[row_]])
+                final_line_ = php_htmlspecialchars(final_[final_rows_[row_]])
             else:
                 final_line_ = ""
             # end if

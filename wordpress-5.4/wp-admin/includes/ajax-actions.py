@@ -142,7 +142,7 @@ def wp_ajax_ajax_tag_search(*_args_):
         wp_die()
     # end if
     results_ = get_terms(Array({"taxonomy": taxonomy_, "name__like": s_, "fields": "names", "hide_empty": False}))
-    php_print(join("\n", results_))
+    php_print(php_join("\n", results_))
     wp_die()
 # end def wp_ajax_ajax_tag_search
 #// 
@@ -1498,7 +1498,7 @@ def wp_ajax_inline_save(*_args_):
             #// translators: %s: User's display name.
             msg_template_ = __("Saving is disabled: %s is currently editing this page.")
         # end if
-        printf(msg_template_, esc_html(last_user_name_))
+        php_printf(msg_template_, esc_html(last_user_name_))
         wp_die()
     # end if
     data_ = PHP_POST

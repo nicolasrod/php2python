@@ -146,7 +146,7 @@ def _mb_substr(str_=None, start_=None, length_=None, encoding_=None, *_args_):
             break
         # end if
     # end while
-    return join("", php_array_slice(chars_, start_, length_))
+    return php_join("", php_array_slice(chars_, start_, length_))
 # end def _mb_substr
 if (not php_function_exists("mb_strlen")):
     #// 

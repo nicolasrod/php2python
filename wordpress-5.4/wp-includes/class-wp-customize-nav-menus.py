@@ -652,7 +652,7 @@ class WP_Customize_Nav_Menus():
         <span class=\"screen-reader-text\">
         """)
         #// translators: 1: Title of a menu item, 2: Type of a menu item.
-        printf(__("Add to menu: %1$s (%2$s)"), "{{ data.title || wp.customize.Menus.data.l10n.untitled }}", "{{ data.type_label }}")
+        php_printf(__("Add to menu: %1$s (%2$s)"), "{{ data.title || wp.customize.Menus.data.l10n.untitled }}", "{{ data.type_label }}")
         php_print("""                           </span>
         </button>
         </div>
@@ -662,7 +662,7 @@ class WP_Customize_Nav_Menus():
         <script type=\"text/html\" id=\"tmpl-menu-item-reorder-nav\">
         <div class=\"menu-item-reorder-nav\">
         """)
-        printf("<button type=\"button\" class=\"menus-move-up\">%1$s</button><button type=\"button\" class=\"menus-move-down\">%2$s</button><button type=\"button\" class=\"menus-move-left\">%3$s</button><button type=\"button\" class=\"menus-move-right\">%4$s</button>", __("Move up"), __("Move down"), __("Move one level up"), __("Move one level down"))
+        php_printf("<button type=\"button\" class=\"menus-move-up\">%1$s</button><button type=\"button\" class=\"menus-move-down\">%2$s</button><button type=\"button\" class=\"menus-move-left\">%3$s</button><button type=\"button\" class=\"menus-move-right\">%4$s</button>", __("Move up"), __("Move down"), __("Move one level up"), __("Move one level down"))
         php_print("""           </div>
         </script>
         <script type=\"text/html\" id=\"tmpl-nav-menu-delete-button\">
@@ -719,7 +719,7 @@ class WP_Customize_Nav_Menus():
         <span class=\"customize-action\">
         """)
         #// translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer.
-        printf(__("Customizing &#9656; %s"), esc_html(self.manager.get_panel("nav_menus").title))
+        php_printf(__("Customizing &#9656; %s"), esc_html(self.manager.get_panel("nav_menus").title))
         php_print("                 </span>\n                   ")
         _e("Add Menu Items")
         php_print("""               </h3>
@@ -786,7 +786,7 @@ class WP_Customize_Nav_Menus():
         <span class=\"screen-reader-text\">
         """)
         #// translators: %s: Title of a section with menu items.
-        printf(__("Toggle section: %s"), esc_html(available_item_type_["title"]))
+        php_printf(__("Toggle section: %s"), esc_html(available_item_type_["title"]))
         php_print("""                       </span>
         <span class=\"toggle-indicator\" aria-hidden=\"true\"></span>
         </button>
@@ -1091,7 +1091,7 @@ class WP_Customize_Nav_Menus():
         
         #// Why not wp_localize_script? Because we're not localizing, and it forces values into strings.
         exports_ = Array({"navMenuInstanceArgs": self.preview_nav_menu_instance_args})
-        printf("<script>var _wpCustomizePreviewNavMenusExports = %s;</script>", wp_json_encode(exports_))
+        php_printf("<script>var _wpCustomizePreviewNavMenusExports = %s;</script>", wp_json_encode(exports_))
     # end def export_preview_data
     #// 
     #// Export any wp_nav_menu() calls during the rendering of any partials.

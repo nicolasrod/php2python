@@ -32,10 +32,10 @@ php_print("""                           </a>
 <span class=\"to-the-top-long\">
 """)
 #// translators: %s: HTML character for up arrow.
-printf(__("To the top %s", "twentytwenty"), "<span class=\"arrow\" aria-hidden=\"true\">&uarr;</span>")
+php_printf(__("To the top %s", "twentytwenty"), "<span class=\"arrow\" aria-hidden=\"true\">&uarr;</span>")
 php_print("                     </span><!-- .to-the-top-long -->\n                      <span class=\"to-the-top-short\">\n                         ")
 #// translators: %s: HTML character for up arrow.
-printf(__("Up %s", "twentytwenty"), "<span class=\"arrow\" aria-hidden=\"true\">&uarr;</span>")
+php_printf(__("Up %s", "twentytwenty"), "<span class=\"arrow\" aria-hidden=\"true\">&uarr;</span>")
 php_print("""                       </span><!-- .to-the-top-short -->
 </a><!-- .to-the-top -->
 </div><!-- .section-inner -->

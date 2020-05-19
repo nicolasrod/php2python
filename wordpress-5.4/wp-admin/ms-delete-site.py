@@ -75,7 +75,7 @@ if (php_isset(lambda : PHP_POST["action"])) and "deleteblog" == PHP_POST["action
     php_print("</p>\n\n ")
 else:
     php_print(" <p>\n   ")
-    printf(__("If you do not want to use your %s site any more, you can delete it using the form below. When you click <strong>Delete My Site Permanently</strong> you will be sent an email with a link in it. Click on this link to delete your site."), get_network().site_name)
+    php_printf(__("If you do not want to use your %s site any more, you can delete it using the form below. When you click <strong>Delete My Site Permanently</strong> you will be sent an email with a link in it. Click on this link to delete your site."), get_network().site_name)
     php_print(" </p>\n  <p>")
     _e("Remember, once deleted your site cannot be restored.")
     php_print("""</p>
@@ -83,7 +83,7 @@ else:
     """)
     wp_nonce_field("delete-blog")
     php_print("     <input type=\"hidden\" name=\"action\" value=\"deleteblog\" />\n        <p><input id=\"confirmdelete\" type=\"checkbox\" name=\"confirmdelete\" value=\"1\" /> <label for=\"confirmdelete\"><strong>\n      ")
-    printf(__("I'm sure I want to permanently disable my site, and I am aware I can never get it back or use %s again."), blog_.domain + blog_.path)
+    php_printf(__("I'm sure I want to permanently disable my site, and I am aware I can never get it back or use %s again."), blog_.domain + blog_.path)
     php_print("     </strong></label></p>\n     ")
     submit_button(__("Delete My Site Permanently"))
     php_print(" </form>\n   ")

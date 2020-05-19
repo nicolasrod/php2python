@@ -1259,7 +1259,7 @@ if (not php_class_exists("SimplePie", False)):
                         self.data = parser_.get_data()
                         if (not self.get_type() & (1 << (SIMPLEPIE_TYPE_NONE).bit_length()) - 1 - SIMPLEPIE_TYPE_NONE):
                             self.error = str("A feed could not be found at ") + str(self.feed_url) + str(". This does not appear to be a valid RSS or Atom feed.")
-                            self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, 0))
+                            self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, inspect.currentframe().f_lineno))
                             return False
                         # end if
                         if (php_isset(lambda : headers_)):
@@ -1280,7 +1280,7 @@ if (not php_class_exists("SimplePie", False)):
             else:
                 self.error = "The data could not be converted to UTF-8. You MUST have either the iconv or mbstring extension installed. Upgrading to PHP 5.x (which includes iconv) is highly recommended."
             # end if
-            self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, 0))
+            self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, inspect.currentframe().f_lineno))
             return False
         # end def init
         #// 
@@ -1371,7 +1371,7 @@ if (not php_class_exists("SimplePie", False)):
                         file_ = locate_.find(self.autodiscovery, self.all_discovered_feeds)
                         if (not file_):
                             self.error = str("A feed could not be found at ") + str(self.feed_url) + str(". A feed with an invalid mime type may fall victim to this error, or ") + SIMPLEPIE_NAME + " was unable to auto-discover it.. Use force_feed() if you are certain this URL is a real feed."
-                            self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, 0))
+                            self.registry.call("Misc", "error", Array(self.error, E_USER_NOTICE, __FILE__, inspect.currentframe().f_lineno))
                             return False
                         # end if
                     except SimplePie_Exception as e_:
@@ -2594,7 +2594,7 @@ if (not php_class_exists("SimplePie", False)):
                 return False
             # end if
             class_ = get_class(self)
-            trace_ = debug_backtrace()
+            trace_ = php_debug_backtrace()
             file_ = trace_[0]["file"]
             line_ = trace_[0]["line"]
             trigger_error(str("Call to undefined method ") + str(class_) + str("::") + str(method_) + str("() in ") + str(file_) + str(" on line ") + str(line_), E_USER_ERROR)

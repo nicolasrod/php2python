@@ -250,7 +250,7 @@ class _WP_Editors():
         if False != php_stripos(content_, "textarea"):
             content_ = php_preg_replace("%</textarea%i", "&lt;/textarea", content_)
         # end if
-        printf(the_editor_, content_)
+        php_printf(the_editor_, content_)
         php_print("""
         </div>
         """)
@@ -272,13 +272,13 @@ class _WP_Editors():
         php_check_if_defined("tinymce_version_")
         if php_empty(lambda : self.first_init):
             if is_admin():
-                add_action("admin_print_footer_scripts", Array(__CLASS__, "editor_js"), 50)
-                add_action("admin_print_footer_scripts", Array(__CLASS__, "force_uncompressed_tinymce"), 1)
-                add_action("admin_print_footer_scripts", Array(__CLASS__, "enqueue_scripts"), 1)
+                add_action("admin_print_footer_scripts", Array(self.__class__.__name__, "editor_js"), 50)
+                add_action("admin_print_footer_scripts", Array(self.__class__.__name__, "force_uncompressed_tinymce"), 1)
+                add_action("admin_print_footer_scripts", Array(self.__class__.__name__, "enqueue_scripts"), 1)
             else:
-                add_action("wp_print_footer_scripts", Array(__CLASS__, "editor_js"), 50)
-                add_action("wp_print_footer_scripts", Array(__CLASS__, "force_uncompressed_tinymce"), 1)
-                add_action("wp_print_footer_scripts", Array(__CLASS__, "enqueue_scripts"), 1)
+                add_action("wp_print_footer_scripts", Array(self.__class__.__name__, "editor_js"), 50)
+                add_action("wp_print_footer_scripts", Array(self.__class__.__name__, "force_uncompressed_tinymce"), 1)
+                add_action("wp_print_footer_scripts", Array(self.__class__.__name__, "enqueue_scripts"), 1)
             # end if
         # end if
         if self.this_quicktags:
@@ -700,11 +700,11 @@ class _WP_Editors():
         #// Also add wp-includes/css/editor.css.
         wp_enqueue_style("editor-buttons")
         if is_admin():
-            add_action("admin_print_footer_scripts", Array(__CLASS__, "force_uncompressed_tinymce"), 1)
-            add_action("admin_print_footer_scripts", Array(__CLASS__, "print_default_editor_scripts"), 45)
+            add_action("admin_print_footer_scripts", Array(self.__class__.__name__, "force_uncompressed_tinymce"), 1)
+            add_action("admin_print_footer_scripts", Array(self.__class__.__name__, "print_default_editor_scripts"), 45)
         else:
-            add_action("wp_print_footer_scripts", Array(__CLASS__, "force_uncompressed_tinymce"), 1)
-            add_action("wp_print_footer_scripts", Array(__CLASS__, "print_default_editor_scripts"), 45)
+            add_action("wp_print_footer_scripts", Array(self.__class__.__name__, "force_uncompressed_tinymce"), 1)
+            add_action("wp_print_footer_scripts", Array(self.__class__.__name__, "print_default_editor_scripts"), 45)
         # end if
     # end def enqueue_default_editor
     #// 
@@ -1123,7 +1123,7 @@ class _WP_Editors():
     def wp_fullscreen_html(self):
         
         
-        _deprecated_function(__FUNCTION__, "4.3.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0")
     # end def wp_fullscreen_html
     #// 
     #// Performs post queries for internal linking.

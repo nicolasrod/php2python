@@ -100,7 +100,7 @@ def map_meta_cap(cap_=None, user_id_=None, *args_):
             post_type_ = get_post_type_object(post_.post_type)
             if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
                 caps_[-1] = "edit_others_posts"
                 break
             # end if
@@ -166,7 +166,7 @@ def map_meta_cap(cap_=None, user_id_=None, *args_):
             post_type_ = get_post_type_object(post_.post_type)
             if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
                 caps_[-1] = "edit_others_posts"
                 break
             # end if
@@ -232,7 +232,7 @@ def map_meta_cap(cap_=None, user_id_=None, *args_):
             post_type_ = get_post_type_object(post_.post_type)
             if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
                 caps_[-1] = "edit_others_posts"
                 break
             # end if
@@ -247,7 +247,7 @@ def map_meta_cap(cap_=None, user_id_=None, *args_):
             status_obj_ = get_post_status_object(post_.post_status)
             if (not status_obj_):
                 #// translators: 1: Post status, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post status %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post with that status."), post_.post_status, cap_), "5.4.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The post status %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post with that status."), post_.post_status, cap_), "5.4.0")
                 caps_[-1] = "edit_others_posts"
                 break
             # end if
@@ -273,7 +273,7 @@ def map_meta_cap(cap_=None, user_id_=None, *args_):
             post_type_ = get_post_type_object(post_.post_type)
             if (not post_type_):
                 #// translators: 1: Post type, 2: Capability name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."), post_.post_type, cap_), "4.4.0")
                 caps_[-1] = "edit_others_posts"
                 break
             # end if

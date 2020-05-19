@@ -304,7 +304,7 @@ class WP_Media_List_Table(WP_List_Table):
             php_print(post_.ID)
             php_print("\">\n                ")
             #// translators: %s: Attachment title.
-            printf(__("Select %s"), _draft_or_post_title())
+            php_printf(__("Select %s"), _draft_or_post_title())
             php_print("         </label>\n          <input type=\"checkbox\" name=\"media[]\" id=\"cb-select-")
             php_print(post_.ID)
             php_print("\" value=\"")
@@ -362,7 +362,7 @@ class WP_Media_List_Table(WP_List_Table):
     def column_author(self, post_=None):
         
         
-        printf("<a href=\"%s\">%s</a>", esc_url(add_query_arg(Array({"author": get_the_author_meta("ID")}), "upload.php")), get_the_author())
+        php_printf("<a href=\"%s\">%s</a>", esc_url(add_query_arg(Array({"author": get_the_author_meta("ID")}), "upload.php")), get_the_author())
     # end def column_author
     #// 
     #// Handles the description column output.
@@ -434,14 +434,14 @@ class WP_Media_List_Table(WP_List_Table):
             # end if
             if user_can_edit_:
                 detach_url_ = add_query_arg(Array({"parent_post_id": post_.post_parent, "media[]": post_.ID, "_wpnonce": wp_create_nonce("bulk-" + self._args["plural"])}), "upload.php")
-                printf("<br /><a href=\"%s\" class=\"hide-if-no-js detach-from-parent\" aria-label=\"%s\">%s</a>", detach_url_, esc_attr(php_sprintf(__("Detach from &#8220;%s&#8221;"), title_)), __("Detach"))
+                php_printf("<br /><a href=\"%s\" class=\"hide-if-no-js detach-from-parent\" aria-label=\"%s\">%s</a>", detach_url_, esc_attr(php_sprintf(__("Detach from &#8220;%s&#8221;"), title_)), __("Detach"))
             # end if
         else:
             _e("(Unattached)")
             php_print("         ")
             if user_can_edit_:
                 title_ = _draft_or_post_title(post_.post_parent)
-                printf("<br /><a href=\"#the-list\" onclick=\"findPosts.open( 'media[]', '%s' ); return false;\" class=\"hide-if-no-js aria-button-if-js\" aria-label=\"%s\">%s</a>", post_.ID, esc_attr(php_sprintf(__("Attach &#8220;%s&#8221; to existing content"), title_)), __("Attach"))
+                php_printf("<br /><a href=\"#the-list\" onclick=\"findPosts.open( 'media[]', '%s' ); return false;\" class=\"hide-if-no-js aria-button-if-js\" aria-label=\"%s\">%s</a>", post_.ID, esc_attr(php_sprintf(__("Attach &#8220;%s&#8221; to existing content"), title_)), __("Attach"))
             # end if
         # end if
     # end def column_parent
@@ -495,7 +495,7 @@ class WP_Media_List_Table(WP_List_Table):
                     out_[-1] = php_sprintf("<a href=\"%s\">%s</a>", esc_url(add_query_arg(posts_in_term_qv_, "upload.php")), esc_html(sanitize_term_field("name", t_.name, t_.term_id, taxonomy_, "display")))
                 # end for
                 #// translators: Used between list items, there is a space after the comma.
-                php_print(join(__(", "), out_))
+                php_print(php_join(__(", "), out_))
             else:
                 php_print("<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">" + get_taxonomy(taxonomy_).labels.no_terms + "</span>")
             # end if

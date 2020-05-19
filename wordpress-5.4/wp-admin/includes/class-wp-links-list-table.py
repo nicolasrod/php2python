@@ -155,7 +155,7 @@ class WP_Links_List_Table(WP_List_Table):
         php_print(link_.link_id)
         php_print("\">\n            ")
         #// translators: %s: Link name.
-        printf(__("Select %s"), link_.link_name)
+        php_printf(__("Select %s"), link_.link_name)
         php_print("     </label>\n      <input type=\"checkbox\" name=\"linkcheck[]\" id=\"cb-select-")
         php_print(link_.link_id)
         php_print("\" value=\"")
@@ -173,7 +173,7 @@ class WP_Links_List_Table(WP_List_Table):
         
         
         edit_link_ = get_edit_bookmark_link(link_)
-        printf("<strong><a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s</a></strong>", edit_link_, esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), link_.link_name)), link_.link_name)
+        php_printf("<strong><a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s</a></strong>", edit_link_, esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), link_.link_name)), link_.link_name)
     # end def column_name
     #// 
     #// Handles the link URL column output.

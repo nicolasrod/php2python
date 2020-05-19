@@ -57,7 +57,7 @@ class WP_Customize_Nav_Menu_Locations_Control(WP_Customize_Control):
             """)
             php_print(_x("Where do you want this menu to appear?", "menu locations"))
             php_print("                         <em class=\"new-menu-locations-widget-note\">\n                             ")
-            printf(_x("(If you plan to use a menu <a href=\"%1$s\" %2$s>widget%3$s</a>, skip this step.)", "menu locations"), __("https://wordpress.org/support/article/wordpress-widgets/"), " class=\"external-link\" target=\"_blank\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
+            php_printf(_x("(If you plan to use a menu <a href=\"%1$s\" %2$s>widget%3$s</a>, skip this step.)", "menu locations"), __("https://wordpress.org/support/article/wordpress-widgets/"), " class=\"external-link\" target=\"_blank\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
             php_print("""                           </em>
             </p>
             <# } else { #>
@@ -76,7 +76,7 @@ class WP_Customize_Nav_Menu_Locations_Control(WP_Customize_Control):
                 php_print("\" class=\"menu-location\" />\n                          <label for=\"{{ elementId }}\">\n                               ")
                 php_print(description_)
                 php_print("                             <span class=\"theme-location-set\">\n                                   ")
-                printf(_x("(Current: %s)", "menu location"), "<span class=\"current-menu-location-name-" + esc_attr(location_) + "\"></span>")
+                php_printf(_x("(Current: %s)", "menu location"), "<span class=\"current-menu-location-name-" + esc_attr(location_) + "\"></span>")
                 php_print("""                               </span>
                 </label>
                 </span>

@@ -26,7 +26,7 @@ if '__PHP2PY_LOADED__' not in globals():
 def tinymce_include(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_editor()")
     wp_tiny_mce()
 # end def tinymce_include
 #// 
@@ -39,7 +39,7 @@ def tinymce_include(*_args_):
 def documentation_link(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0")
 # end def documentation_link
 #// 
 #// Calculates the new dimensions for a downsampled image.
@@ -57,7 +57,7 @@ def documentation_link(*_args_):
 def wp_shrink_dimensions(width_=None, height_=None, wmax_=128, hmax_=96, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "wp_constrain_dimensions()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "wp_constrain_dimensions()")
     return wp_constrain_dimensions(width_, height_, wmax_, hmax_)
 # end def wp_shrink_dimensions
 #// 
@@ -74,7 +74,7 @@ def wp_shrink_dimensions(width_=None, height_=None, wmax_=128, hmax_=96, *_args_
 def get_udims(width_=None, height_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "wp_constrain_dimensions()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "wp_constrain_dimensions()")
     return wp_constrain_dimensions(width_, height_, 128, 96)
 # end def get_udims
 #// 
@@ -93,7 +93,7 @@ def dropdown_categories(default_=0, parent_=0, popular_ids_=None, *_args_):
         popular_ids_ = Array()
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.6.0", "wp_category_checklist()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.6.0", "wp_category_checklist()")
     global post_ID_
     php_check_if_defined("post_ID_")
     wp_category_checklist(post_ID_)
@@ -110,7 +110,7 @@ def dropdown_categories(default_=0, parent_=0, popular_ids_=None, *_args_):
 def dropdown_link_categories(default_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.6.0", "wp_link_category_checklist()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.6.0", "wp_link_category_checklist()")
     global link_id_
     php_check_if_defined("link_id_")
     wp_link_category_checklist(link_id_)
@@ -128,7 +128,7 @@ def dropdown_link_categories(default_=0, *_args_):
 def get_real_file_to_edit(file_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.9.0")
     return WP_CONTENT_DIR + file_
 # end def get_real_file_to_edit
 #// 
@@ -148,7 +148,7 @@ def get_real_file_to_edit(file_=None, *_args_):
 def wp_dropdown_cats(currentcat_=0, currentparent_=0, parent_=0, level_=0, categories_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "wp_dropdown_categories()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "wp_dropdown_categories()")
     if (not categories_):
         categories_ = get_categories(Array({"hide_empty": 0}))
     # end if
@@ -185,7 +185,7 @@ def wp_dropdown_cats(currentcat_=0, currentparent_=0, parent_=0, level_=0, categ
 def add_option_update_handler(option_group_=None, option_name_=None, sanitize_callback_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "register_setting()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "register_setting()")
     register_setting(option_group_, option_name_, sanitize_callback_)
 # end def add_option_update_handler
 #// 
@@ -202,7 +202,7 @@ def add_option_update_handler(option_group_=None, option_name_=None, sanitize_ca
 def remove_option_update_handler(option_group_=None, option_name_=None, sanitize_callback_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "unregister_setting()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "unregister_setting()")
     unregister_setting(option_group_, option_name_, sanitize_callback_)
 # end def remove_option_update_handler
 #// 
@@ -216,7 +216,7 @@ def remove_option_update_handler(option_group_=None, option_name_=None, sanitize
 def codepress_get_lang(filename_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0")
 # end def codepress_get_lang
 #// 
 #// Adds JavaScript required to make CodePress work on the theme/plugin editors.
@@ -227,7 +227,7 @@ def codepress_get_lang(filename_=None, *_args_):
 def codepress_footer_js(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0")
 # end def codepress_footer_js
 #// 
 #// Determine whether to use CodePress.
@@ -238,7 +238,7 @@ def codepress_footer_js(*_args_):
 def use_codepress(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0")
 # end def use_codepress
 #// 
 #// Get all user IDs.
@@ -252,7 +252,7 @@ def use_codepress(*_args_):
 def get_author_user_ids(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "get_users()")
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not is_multisite()):
@@ -276,14 +276,14 @@ def get_author_user_ids(*_args_):
 def get_editable_authors(user_id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "get_users()")
     global wpdb_
     php_check_if_defined("wpdb_")
     editable_ = get_editable_user_ids(user_id_)
     if (not editable_):
         return False
     else:
-        editable_ = join(",", editable_)
+        editable_ = php_join(",", editable_)
         authors_ = wpdb_.get_results(str("SELECT * FROM ") + str(wpdb_.users) + str(" WHERE ID IN (") + str(editable_) + str(") ORDER BY display_name"))
     # end if
     return apply_filters("get_editable_authors", authors_)
@@ -304,7 +304,7 @@ def get_editable_user_ids(user_id_=None, exclude_zeros_=None, post_type_="post",
         exclude_zeros_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "get_users()")
     global wpdb_
     php_check_if_defined("wpdb_")
     user_ = get_userdata(user_id_)
@@ -341,7 +341,7 @@ def get_editable_user_ids(user_id_=None, exclude_zeros_=None, post_type_="post",
 def get_nonauthor_user_ids(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "get_users()")
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not is_multisite()):
@@ -501,7 +501,7 @@ if (not php_class_exists("WP_User_Search", False)):
         def __init__(self, search_term_="", page_="", role_=""):
             
             
-            _deprecated_function(__FUNCTION__, "3.1.0", "WP_User_Query")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "WP_User_Query")
             self.search_term = wp_unslash(search_term_)
             self.raw_page = False if "" == page_ else php_int(page_)
             self.page = 1 if php_int("" == page_) else page_
@@ -694,7 +694,7 @@ if (not php_class_exists("WP_User_Search", False)):
 def get_others_unpublished_posts(user_id_=None, type_="any", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0")
     global wpdb_
     php_check_if_defined("wpdb_")
     editable_ = get_editable_user_ids(user_id_)
@@ -707,7 +707,7 @@ def get_others_unpublished_posts(user_id_=None, type_="any", *_args_):
     if (not editable_):
         other_unpubs_ = ""
     else:
-        editable_ = join(",", editable_)
+        editable_ = php_join(",", editable_)
         other_unpubs_ = wpdb_.get_results(wpdb_.prepare(str("SELECT ID, post_title, post_author FROM ") + str(wpdb_.posts) + str(" WHERE post_type = 'post' AND ") + str(type_sql_) + str(" AND post_author IN (") + str(editable_) + str(") AND post_author != %d ORDER BY post_modified ") + str(dir_), user_id_))
     # end if
     return apply_filters("get_others_drafts", other_unpubs_)
@@ -724,7 +724,7 @@ def get_others_unpublished_posts(user_id_=None, type_="any", *_args_):
 def get_others_drafts(user_id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0")
     return get_others_unpublished_posts(user_id_, "draft")
 # end def get_others_drafts
 #// 
@@ -739,7 +739,7 @@ def get_others_drafts(user_id_=None, *_args_):
 def get_others_pending(user_id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0")
     return get_others_unpublished_posts(user_id_, "pending")
 # end def get_others_pending
 #// 
@@ -752,7 +752,7 @@ def get_others_pending(user_id_=None, *_args_):
 def wp_dashboard_quick_press_output(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.2.0", "wp_dashboard_quick_press()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.2.0", "wp_dashboard_quick_press()")
     wp_dashboard_quick_press()
 # end def wp_dashboard_quick_press_output
 #// 
@@ -772,7 +772,7 @@ def wp_tiny_mce(teeny_=None, settings_=None, *_args_):
         settings_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_editor()")
     num_ = 1
     if (not php_class_exists("_WP_Editors", False)):
         php_include_file(ABSPATH + WPINC + "/class-wp-editor.php", once=True)
@@ -792,7 +792,7 @@ def wp_tiny_mce(teeny_=None, settings_=None, *_args_):
 def wp_preload_dialogs(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_editor()")
 # end def wp_preload_dialogs
 #// 
 #// Prints TinyMCE editor JS.
@@ -803,7 +803,7 @@ def wp_preload_dialogs(*_args_):
 def wp_print_editor_js(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_editor()")
 # end def wp_print_editor_js
 #// 
 #// Handles quicktags.
@@ -814,7 +814,7 @@ def wp_print_editor_js(*_args_):
 def wp_quicktags(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_editor()")
 # end def wp_quicktags
 #// 
 #// Returns the screen layout options.
@@ -826,7 +826,7 @@ def wp_quicktags(*_args_):
 def screen_layout(screen_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "$current_screen->render_screen_layout()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "$current_screen->render_screen_layout()")
     current_screen_ = get_current_screen()
     if (not current_screen_):
         return ""
@@ -845,7 +845,7 @@ def screen_layout(screen_=None, *_args_):
 def screen_options(screen_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "$current_screen->render_per_page_options()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "$current_screen->render_per_page_options()")
     current_screen_ = get_current_screen()
     if (not current_screen_):
         return ""
@@ -877,7 +877,7 @@ def screen_meta(screen_=None, *_args_):
 def favorite_actions(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.2.0", "WP_Admin_Bar")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.2.0", "WP_Admin_Bar")
 # end def favorite_actions
 #// 
 #// Handles uploading an image.
@@ -890,7 +890,7 @@ def favorite_actions(*_args_):
 def media_upload_image(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
 # end def media_upload_image
 #// 
@@ -904,7 +904,7 @@ def media_upload_image(*_args_):
 def media_upload_audio(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
 # end def media_upload_audio
 #// 
@@ -918,7 +918,7 @@ def media_upload_audio(*_args_):
 def media_upload_video(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
 # end def media_upload_video
 #// 
@@ -932,7 +932,7 @@ def media_upload_video(*_args_):
 def media_upload_file(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_upload_handler()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_upload_handler()")
     return wp_media_upload_handler()
 # end def media_upload_file
 #// 
@@ -946,7 +946,7 @@ def media_upload_file(*_args_):
 def type_url_form_image(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('image')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_insert_url_form('image')")
     return wp_media_insert_url_form("image")
 # end def type_url_form_image
 #// 
@@ -960,7 +960,7 @@ def type_url_form_image(*_args_):
 def type_url_form_audio(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('audio')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_insert_url_form('audio')")
     return wp_media_insert_url_form("audio")
 # end def type_url_form_audio
 #// 
@@ -974,7 +974,7 @@ def type_url_form_audio(*_args_):
 def type_url_form_video(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('video')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_insert_url_form('video')")
     return wp_media_insert_url_form("video")
 # end def type_url_form_video
 #// 
@@ -988,7 +988,7 @@ def type_url_form_video(*_args_):
 def type_url_form_file(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_media_insert_url_form('file')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_media_insert_url_form('file')")
     return wp_media_insert_url_form("file")
 # end def type_url_form_file
 #// 
@@ -1006,7 +1006,7 @@ def type_url_form_file(*_args_):
 def add_contextual_help(screen_=None, help_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "get_current_screen()->add_help_tab()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "get_current_screen()->add_help_tab()")
     if php_is_string(screen_):
         screen_ = convert_to_screen(screen_)
     # end if
@@ -1024,7 +1024,7 @@ def add_contextual_help(screen_=None, help_=None, *_args_):
 def get_allowed_themes(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_themes( array( 'allowed' => true ) )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "wp_get_themes( array( 'allowed' => true ) )")
     themes_ = wp_get_themes(Array({"allowed": True}))
     wp_themes_ = Array()
     for theme_ in themes_:
@@ -1044,7 +1044,7 @@ def get_allowed_themes(*_args_):
 def get_broken_themes(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_themes( array( 'errors' => true )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "wp_get_themes( array( 'errors' => true )")
     themes_ = wp_get_themes(Array({"errors": True}))
     broken_ = Array()
     for theme_ in themes_:
@@ -1065,7 +1065,7 @@ def get_broken_themes(*_args_):
 def current_theme_info(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_theme()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "wp_get_theme()")
     return wp_get_theme()
 # end def current_theme_info
 #// 
@@ -1078,7 +1078,7 @@ def current_theme_info(*_args_):
 def _insert_into_post_button(type_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0")
 # end def _insert_into_post_button
 #// 
 #// This was once used to display a media button.
@@ -1090,7 +1090,7 @@ def _insert_into_post_button(type_=None, *_args_):
 def _media_button(title_=None, icon_=None, type_=None, id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0")
 # end def _media_button
 #// 
 #// Gets an existing post and format it for editing.
@@ -1105,7 +1105,7 @@ def _media_button(title_=None, icon_=None, type_=None, id_=None, *_args_):
 def get_post_to_edit(id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "get_post()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "get_post()")
     return get_post(id_, OBJECT, "edit")
 # end def get_post_to_edit
 #// 
@@ -1120,7 +1120,7 @@ def get_post_to_edit(id_=None, *_args_):
 def get_default_page_to_edit(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "get_default_post_to_edit( 'page' )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "get_default_post_to_edit( 'page' )")
     page_ = get_default_post_to_edit()
     page_.post_type = "page"
     return page_
@@ -1140,7 +1140,7 @@ def get_default_page_to_edit(*_args_):
 def wp_create_thumbnail(file_=None, max_side_=None, deprecated_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "image_resize()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "image_resize()")
     return apply_filters("wp_create_thumbnail", image_resize(file_, max_side_, max_side_))
 # end def wp_create_thumbnail
 #// 
@@ -1154,7 +1154,7 @@ def wp_create_thumbnail(file_=None, max_side_=None, deprecated_="", *_args_):
 def wp_nav_menu_locations_meta_box(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.6.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.6.0")
 # end def wp_nav_menu_locations_meta_box
 #// 
 #// This was once used to kick-off the Core Updater.
@@ -1169,7 +1169,7 @@ def wp_nav_menu_locations_meta_box(*_args_):
 def wp_update_core(current_=None, feedback_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.7.0", "new Core_Upgrader();")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.7.0", "new Core_Upgrader();")
     if (not php_empty(lambda : feedback_)):
         add_filter("update_feedback", feedback_)
     # end if
@@ -1191,7 +1191,7 @@ def wp_update_core(current_=None, feedback_="", *_args_):
 def wp_update_plugin(plugin_=None, feedback_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.7.0", "new Plugin_Upgrader();")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.7.0", "new Plugin_Upgrader();")
     if (not php_empty(lambda : feedback_)):
         add_filter("update_feedback", feedback_)
     # end if
@@ -1213,7 +1213,7 @@ def wp_update_plugin(plugin_=None, feedback_="", *_args_):
 def wp_update_theme(theme_=None, feedback_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.7.0", "new Theme_Upgrader();")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.7.0", "new Theme_Upgrader();")
     if (not php_empty(lambda : feedback_)):
         add_filter("update_feedback", feedback_)
     # end if
@@ -1234,7 +1234,7 @@ def the_attachment_links(id_=None, *_args_):
         id_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.7.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.7.0")
 # end def the_attachment_links
 #// 
 #// Displays a screen icon.
@@ -1245,7 +1245,7 @@ def the_attachment_links(id_=None, *_args_):
 def screen_icon(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.8.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.8.0")
     php_print(get_screen_icon())
 # end def screen_icon
 #// 
@@ -1259,7 +1259,7 @@ def screen_icon(*_args_):
 def get_screen_icon(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.8.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.8.0")
     return "<!-- Screen icons are no longer used as of WordPress 3.8. -->"
 # end def get_screen_icon
 #// 
@@ -1368,7 +1368,7 @@ def wp_dashboard_plugins_output(rss_=None, args_=None, *_args_):
         args_ = Array()
     # end if
     
-    _deprecated_function(__FUNCTION__, "4.8.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.8.0")
     #// Plugin feeds plus link to install them.
     popular_ = fetch_feed(args_["url"]["popular"])
     plugin_slugs_ = get_transient("plugin_slugs")
@@ -1444,7 +1444,7 @@ def wp_dashboard_plugins_output(rss_=None, args_=None, *_args_):
 def _relocate_children(old_ID_=None, new_ID_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.9.0")
 # end def _relocate_children
 #// 
 #// Add a top-level menu page in the 'objects' section.
@@ -1472,7 +1472,7 @@ def _relocate_children(old_ID_=None, new_ID_=None, *_args_):
 def add_object_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", icon_url_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.5.0", "add_menu_page()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0", "add_menu_page()")
     global _wp_last_object_menu_
     php_check_if_defined("_wp_last_object_menu_")
     _wp_last_object_menu_ += 1
@@ -1504,7 +1504,7 @@ def add_object_page(page_title_=None, menu_title_=None, capability_=None, menu_s
 def add_utility_page(page_title_=None, menu_title_=None, capability_=None, menu_slug_=None, function_="", icon_url_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.5.0", "add_menu_page()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0", "add_menu_page()")
     global _wp_last_utility_menu_
     php_check_if_defined("_wp_last_utility_menu_")
     _wp_last_utility_menu_ += 1
@@ -1531,7 +1531,7 @@ def post_form_autocomplete_off(*_args_):
     global is_safari_
     global is_chrome_
     php_check_if_defined("is_safari_","is_chrome_")
-    _deprecated_function(__FUNCTION__, "4.6.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.6.0")
     if is_safari_ or is_chrome_:
         php_print(" autocomplete=\"off\"")
     # end if
@@ -1569,7 +1569,7 @@ class WP_Privacy_Data_Export_Requests_Table(WP_Privacy_Data_Export_Requests_List
     def __init__(self, args_=None):
         
         
-        _deprecated_function(__CLASS__, "5.3.0", "WP_Privacy_Data_Export_Requests_List_Table")
+        _deprecated_function(self.__class__.__name__, "5.3.0", "WP_Privacy_Data_Export_Requests_List_Table")
         if (not (php_isset(lambda : args_["screen"]))) or args_["screen"] == "export_personal_data":
             args_["screen"] = "export-personal-data"
         # end if
@@ -1586,7 +1586,7 @@ class WP_Privacy_Data_Removal_Requests_Table(WP_Privacy_Data_Removal_Requests_Li
     def __init__(self, args_=None):
         
         
-        _deprecated_function(__CLASS__, "5.3.0", "WP_Privacy_Data_Removal_Requests_List_Table")
+        _deprecated_function(self.__class__.__name__, "5.3.0", "WP_Privacy_Data_Removal_Requests_List_Table")
         if (not (php_isset(lambda : args_["screen"]))) or args_["screen"] == "remove_personal_data":
             args_["screen"] = "erase-personal-data"
         # end if
@@ -1603,7 +1603,7 @@ class WP_Privacy_Data_Removal_Requests_Table(WP_Privacy_Data_Removal_Requests_Li
 def _wp_privacy_requests_screen_options(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "5.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0")
 # end def _wp_privacy_requests_screen_options
 #// 
 #// Return the user request object for the specified request ID.
@@ -1618,6 +1618,6 @@ def _wp_privacy_requests_screen_options(*_args_):
 def wp_get_user_request_data(request_id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "5.4.0", "wp_get_user_request()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "5.4.0", "wp_get_user_request()")
     return wp_get_user_request(request_id_)
 # end def wp_get_user_request_data

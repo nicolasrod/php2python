@@ -293,7 +293,7 @@ def wp_cache_add_non_persistent_groups(groups_=None, *_args_):
 def wp_cache_reset(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "WP_Object_Cache::reset()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "WP_Object_Cache::reset()")
     global wp_object_cache_
     php_check_if_defined("wp_object_cache_")
     wp_object_cache_.reset()

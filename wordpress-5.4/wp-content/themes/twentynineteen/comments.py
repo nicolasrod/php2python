@@ -42,9 +42,9 @@ if comments_open():
 else:
     if "1" == discussion_.responses:
         #// translators: %s: Post title.
-        printf(_x("One reply on &ldquo;%s&rdquo;", "comments title", "twentynineteen"), get_the_title())
+        php_printf(_x("One reply on &ldquo;%s&rdquo;", "comments title", "twentynineteen"), get_the_title())
     else:
-        printf(_nx("%1$s reply on &ldquo;%2$s&rdquo;", "%1$s replies on &ldquo;%2$s&rdquo;", discussion_.responses, "comments title", "twentynineteen"), number_format_i18n(discussion_.responses), get_the_title())
+        php_printf(_nx("%1$s reply on &ldquo;%2$s&rdquo;", "%1$s replies on &ldquo;%2$s&rdquo;", discussion_.responses, "comments title", "twentynineteen"), number_format_i18n(discussion_.responses), get_the_title())
     # end if
 # end if
 php_print("     </h2><!-- .comments-title -->\n     ")

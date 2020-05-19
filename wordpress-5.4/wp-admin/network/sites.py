@@ -312,7 +312,7 @@ if current_user_can("create_sites"):
 php_print("\n")
 if (php_isset(lambda : PHP_REQUEST["s"])) and php_strlen(PHP_REQUEST["s"]):
     #// translators: %s: Search query.
-    printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(s_))
+    php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(s_))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">

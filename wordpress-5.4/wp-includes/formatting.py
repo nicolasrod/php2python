@@ -610,7 +610,7 @@ def _get_wptexturize_split_regex(shortcode_regex_="", *_args_):
 def _get_wptexturize_shortcode_regex(tagnames_=None, *_args_):
     
     
-    tagregexp_ = join("|", php_array_map("preg_quote", tagnames_))
+    tagregexp_ = php_join("|", php_array_map("preg_quote", tagnames_))
     tagregexp_ = str("(?:") + str(tagregexp_) + str(")(?=[\\s\\]\\/])")
     #// Excerpt of get_shortcode_regex().
     #// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
@@ -708,7 +708,7 @@ def shortcode_unautop(pee_=None, *_args_):
     if php_empty(lambda : shortcode_tags_) or (not php_is_array(shortcode_tags_)):
         return pee_
     # end if
-    tagregexp_ = join("|", php_array_map("preg_quote", php_array_keys(shortcode_tags_)))
+    tagregexp_ = php_join("|", php_array_map("preg_quote", php_array_keys(shortcode_tags_)))
     spaces_ = wp_spaces_regexp()
     #// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound,WordPress.WhiteSpace.PrecisionAlignment.Found -- don't remove regex indentation
     pattern_ = "/" + "<p>" + "(?:" + spaces_ + ")*+" + "(" + "\\[" + str("(") + str(tagregexp_) + str(")") + "(?![\\w-])" + "[^\\]\\/]*" + "(?:" + "\\/(?!\\])" + "[^\\]\\/]*" + ")*?" + "(?:" + "\\/\\]" + "|" + "\\]" + "(?:" + "[^\\[]*+" + "(?:" + "\\[(?!\\/\\2\\])" + "[^\\[]*+" + ")*+" + "\\[\\/\\2\\]" + ")?" + ")" + ")" + "(?:" + spaces_ + ")*+" + "<\\/p>" + "/"
@@ -846,7 +846,7 @@ def _wp_specialchars(string_=None, quote_style_=None, charset_=None, double_enco
         #// This is required for PHP < 5.4.0 because ENT_HTML401 flag is unavailable.
         string_ = wp_kses_normalize_entities(string_)
     # end if
-    string_ = htmlspecialchars(string_, quote_style_, charset_, double_encode_)
+    string_ = php_htmlspecialchars(string_, quote_style_, charset_, double_encode_)
     #// Back-compat.
     if "single" == _quote_style_:
         string_ = php_str_replace("'", "&#039;", string_)
@@ -1779,7 +1779,7 @@ def convert_chars(content_=None, deprecated_="", *_args_):
     
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "0.71")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "0.71")
     # end if
     if php_strpos(content_, "&") != False:
         content_ = php_preg_replace("/&([^#])(?![a-z1-4]{1,8};)/i", "&#038;$1", content_)
@@ -2587,7 +2587,7 @@ def wp_targeted_link_rel_callback(matches_=None, *_args_):
         rel_ = php_implode(" ", array_unique(all_parts_))
     # end if
     atts_["rel"]["whole"] = "rel=\"" + esc_attr(rel_) + "\""
-    link_html_ = join(" ", php_array_column(atts_, "whole"))
+    link_html_ = php_join(" ", php_array_column(atts_, "whole"))
     if is_escaped_:
         link_html_ = php_preg_replace("/['\"]/", "\\\\$0", link_html_)
     # end if
@@ -2733,7 +2733,7 @@ def is_email(email_=None, deprecated_=None, *_args_):
     # end if
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "3.0.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0")
     # end if
     #// Test for the minimum length the email can be.
     if php_strlen(email_) < 6:
@@ -3005,7 +3005,7 @@ def sanitize_email(email_=None, *_args_):
         return apply_filters("sanitize_email", "", email_, "domain_no_valid_subs")
     # end if
     #// Join valid subs into the new domain.
-    domain_ = join(".", new_subs_)
+    domain_ = php_join(".", new_subs_)
     #// Put the email back together.
     sanitized_email_ = local_ + "@" + domain_
     #// Congratulations, your email made it!
@@ -3263,7 +3263,7 @@ def format_for_editor(text_=None, default_editor_=None, *_args_):
     # end if
     
     if text_:
-        text_ = htmlspecialchars(text_, ENT_NOQUOTES, get_option("blog_charset"))
+        text_ = php_htmlspecialchars(text_, ENT_NOQUOTES, get_option("blog_charset"))
     # end if
     #// 
     #// Filters the text after it is formatted for the editor.
@@ -3557,7 +3557,7 @@ def esc_attr(text_=None, *_args_):
 def esc_textarea(text_=None, *_args_):
     
     
-    safe_text_ = htmlspecialchars(text_, ENT_QUOTES, get_option("blog_charset"))
+    safe_text_ = php_htmlspecialchars(text_, ENT_QUOTES, get_option("blog_charset"))
     #// 
     #// Filters a string cleaned and escaped for output in a textarea element.
     #// 

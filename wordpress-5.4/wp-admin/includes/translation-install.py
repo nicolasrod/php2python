@@ -136,12 +136,12 @@ def wp_install_language_form(languages_=None, *_args_):
     if (not php_empty(lambda : wp_local_package_)) and (php_isset(lambda : languages_[wp_local_package_])):
         if (php_isset(lambda : languages_[wp_local_package_])):
             language_ = languages_[wp_local_package_]
-            printf("<option value=\"%s\" lang=\"%s\" data-continue=\"%s\"%s>%s</option>" + "\n", esc_attr(language_["language"]), esc_attr(current(language_["iso"])), esc_attr(language_["strings"]["continue"] if language_["strings"]["continue"] else "Continue"), " data-installed=\"1\"" if php_in_array(language_["language"], installed_languages_) else "", esc_html(language_["native_name"]))
+            php_printf("<option value=\"%s\" lang=\"%s\" data-continue=\"%s\"%s>%s</option>" + "\n", esc_attr(language_["language"]), esc_attr(current(language_["iso"])), esc_attr(language_["strings"]["continue"] if language_["strings"]["continue"] else "Continue"), " data-installed=\"1\"" if php_in_array(language_["language"], installed_languages_) else "", esc_html(language_["native_name"]))
             languages_[wp_local_package_] = None
         # end if
     # end if
     for language_ in languages_:
-        printf("<option value=\"%s\" lang=\"%s\" data-continue=\"%s\"%s>%s</option>" + "\n", esc_attr(language_["language"]), esc_attr(current(language_["iso"])), esc_attr(language_["strings"]["continue"] if language_["strings"]["continue"] else "Continue"), " data-installed=\"1\"" if php_in_array(language_["language"], installed_languages_) else "", esc_html(language_["native_name"]))
+        php_printf("<option value=\"%s\" lang=\"%s\" data-continue=\"%s\"%s>%s</option>" + "\n", esc_attr(language_["language"]), esc_attr(current(language_["iso"])), esc_attr(language_["strings"]["continue"] if language_["strings"]["continue"] else "Continue"), " data-installed=\"1\"" if php_in_array(language_["language"], installed_languages_) else "", esc_html(language_["native_name"]))
     # end for
     php_print("</select>\n")
     php_print("<p class=\"step\"><span class=\"spinner\"></span><input id=\"language-continue\" type=\"submit\" class=\"button button-primary button-large\" value=\"Continue\" /></p>")

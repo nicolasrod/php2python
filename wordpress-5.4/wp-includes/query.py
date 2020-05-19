@@ -173,7 +173,7 @@ def is_archive(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_archive()
@@ -199,7 +199,7 @@ def is_post_type_archive(post_types_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_post_type_archive(post_types_)
@@ -225,7 +225,7 @@ def is_attachment(attachment_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_attachment(attachment_)
@@ -254,7 +254,7 @@ def is_author(author_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_author(author_)
@@ -283,7 +283,7 @@ def is_category(category_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_category(category_)
@@ -312,7 +312,7 @@ def is_tag(tag_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_tag(tag_)
@@ -348,7 +348,7 @@ def is_tax(taxonomy_="", term_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_tax(taxonomy_, term_)
@@ -372,7 +372,7 @@ def is_date(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_date()
@@ -398,7 +398,7 @@ def is_day(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_day()
@@ -424,7 +424,7 @@ def is_feed(feeds_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_feed(feeds_)
@@ -444,7 +444,7 @@ def is_comment_feed(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_comment_feed()
@@ -477,7 +477,7 @@ def is_front_page(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_front_page()
@@ -510,7 +510,7 @@ def is_home(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_home()
@@ -540,7 +540,7 @@ def is_privacy_policy(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_privacy_policy()
@@ -564,7 +564,7 @@ def is_month(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_month()
@@ -596,7 +596,7 @@ def is_page(page_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_page(page_)
@@ -620,7 +620,7 @@ def is_paged(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_paged()
@@ -644,7 +644,7 @@ def is_preview(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_preview()
@@ -664,7 +664,7 @@ def is_robots(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_robots()
@@ -684,7 +684,7 @@ def is_favicon(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_favicon()
@@ -708,7 +708,7 @@ def is_search(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_search()
@@ -742,7 +742,7 @@ def is_single(post_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_single(post_)
@@ -776,7 +776,7 @@ def is_singular(post_types_="", *_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_singular(post_types_)
@@ -800,7 +800,7 @@ def is_time(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_time()
@@ -824,7 +824,7 @@ def is_trackback(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_trackback()
@@ -848,7 +848,7 @@ def is_year(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_year()
@@ -872,7 +872,7 @@ def is_404(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_404()
@@ -892,7 +892,7 @@ def is_embed(*_args_):
     global wp_query_
     php_check_if_defined("wp_query_")
     if (not (php_isset(lambda : wp_query_))):
-        _doing_it_wrong(__FUNCTION__, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Conditional query tags do not work before the query is run. Before then, they always return false."), "3.1.0")
         return False
     # end if
     return wp_query_.is_embed()
@@ -915,7 +915,7 @@ def is_main_query(*_args_):
     
     if "pre_get_posts" == current_filter():
         message_ = php_sprintf(__("In %1$s, use the %2$s method, not the %3$s function. See %4$s."), "<code>pre_get_posts</code>", "<code>WP_Query->is_main_query()</code>", "<code>is_main_query()</code>", __("https://codex.wordpress.org/Function_Reference/is_main_query"))
-        _doing_it_wrong(__FUNCTION__, message_, "3.7.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "3.7.0")
     # end if
     global wp_query_
     php_check_if_defined("wp_query_")

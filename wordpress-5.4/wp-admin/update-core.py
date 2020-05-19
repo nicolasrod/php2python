@@ -332,7 +332,7 @@ def list_plugin_updates(*_args_):
             php_print(checkbox_id_)
             php_print("\" class=\"screen-reader-text\">\n               ")
             #// translators: %s: Plugin name.
-            printf(__("Select %s"), plugin_data_.Name)
+            php_printf(__("Select %s"), plugin_data_.Name)
             php_print("         </label>\n      ")
         # end if
         php_print("     </td>\n     <td class=\"plugin-title\"><p>\n            ")
@@ -340,7 +340,7 @@ def list_plugin_updates(*_args_):
         php_print("         <strong>")
         php_print(plugin_data_.Name)
         php_print("</strong>\n          ")
-        printf(__("You have version %1$s installed. Update to %2$s."), plugin_data_.Version, plugin_data_.update.new_version)
+        php_printf(__("You have version %1$s installed. Update to %2$s."), plugin_data_.Version, plugin_data_.update.new_version)
         php_print(" " + details_ + compat_ + upgrade_notice_)
         php_print("     </p></td>\n </tr>\n     ")
     # end for
@@ -378,7 +378,7 @@ def list_theme_updates(*_args_):
     php_print("</h2>\n<p>")
     _e("The following themes have new versions available. Check the ones you want to update and then click &#8220;Update Themes&#8221;.")
     php_print("</p>\n<p>\n  ")
-    printf(__("<strong>Please Note:</strong> Any customizations you have made to theme files will be lost. Please consider using <a href=\"%s\">child themes</a> for modifications."), __("https://developer.wordpress.org/themes/advanced-topics/child-themes/"))
+    php_printf(__("<strong>Please Note:</strong> Any customizations you have made to theme files will be lost. Please consider using <a href=\"%s\">child themes</a> for modifications."), __("https://developer.wordpress.org/themes/advanced-topics/child-themes/"))
     php_print("</p>\n<form method=\"post\" action=\"")
     php_print(esc_url(form_action_))
     php_print("\" name=\"upgrade-themes\" class=\"upgrade\">\n  ")
@@ -407,7 +407,7 @@ def list_theme_updates(*_args_):
         php_print(checkbox_id_)
         php_print("\" class=\"screen-reader-text\">\n               ")
         #// translators: %s: Theme name.
-        printf(__("Select %s"), theme_.display("Name"))
+        php_printf(__("Select %s"), theme_.display("Name"))
         php_print("""           </label>
         </td>
         <td class=\"plugin-title\"><p>
@@ -416,7 +416,7 @@ def list_theme_updates(*_args_):
         php_print("\" width=\"85\" height=\"64\" class=\"updates-table-screenshot\" alt=\"\" />\n           <strong>")
         php_print(theme_.display("Name"))
         php_print("</strong>\n          ")
-        printf(__("You have version %1$s installed. Update to %2$s."), theme_.display("Version"), theme_.update["new_version"])
+        php_printf(__("You have version %1$s installed. Update to %2$s."), theme_.display("Version"), theme_.update["new_version"])
         php_print("     </p></td>\n </tr>\n         ")
     # end for
     php_print("""   </tbody>
@@ -614,7 +614,7 @@ if "upgrade-core" == action_:
     # end if
     php_print("<p>")
     #// translators: 1: Date, 2: Time.
-    printf(__("Last checked on %1$s at %2$s."), date_i18n(__("F j, Y"), last_update_check_), date_i18n(__("g:i a"), last_update_check_))
+    php_printf(__("Last checked on %1$s at %2$s."), date_i18n(__("F j, Y"), last_update_check_), date_i18n(__("g:i a"), last_update_check_))
     php_print(" &nbsp; <a class=\"button\" href=\"" + esc_url(self_admin_url("update-core.php?force-check=1")) + "\">" + __("Check Again") + "</a>")
     php_print("</p>")
     if current_user_can("update_core"):

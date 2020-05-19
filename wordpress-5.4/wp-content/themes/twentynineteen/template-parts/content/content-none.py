@@ -18,7 +18,7 @@ php_print("""</h1>
 <div class=\"page-content\">
 """)
 if is_home() and current_user_can("publish_posts"):
-    printf("<p>" + wp_kses(__("Ready to publish your first post? <a href=\"%1$s\">Get started here</a>.", "twentynineteen"), Array({"a": Array({"href": Array()})})) + "</p>", esc_url(admin_url("post-new.php")))
+    php_printf("<p>" + wp_kses(__("Ready to publish your first post? <a href=\"%1$s\">Get started here</a>.", "twentynineteen"), Array({"a": Array({"href": Array()})})) + "</p>", esc_url(admin_url("post-new.php")))
 elif is_search():
     php_print("\n           <p>")
     _e("Sorry, but nothing matched your search terms. Please try again with some different keywords.", "twentynineteen")

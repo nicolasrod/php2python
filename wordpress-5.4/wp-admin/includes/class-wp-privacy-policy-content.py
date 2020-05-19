@@ -127,7 +127,7 @@ class WP_Privacy_Policy_Content():
             return
         # end if
         php_print("     <div class=\"policy-text-updated notice notice-warning is-dismissible\">\n          <p>\n           ")
-        printf(__("The suggested privacy policy text has changed. Please <a href=\"%s\">review the guide</a> and update your privacy policy."), esc_url(admin_url("privacy-policy-guide.php")))
+        php_printf(__("The suggested privacy policy text has changed. Please <a href=\"%s\">review the guide</a> and update your privacy policy."), esc_url(admin_url("privacy-policy-guide.php")))
         php_print("         </p>\n      </div>\n        ")
     # end def policy_text_changed_notice
     #// 
@@ -293,7 +293,7 @@ class WP_Privacy_Policy_Content():
         else:
             php_print("         <div class=\"notice notice-warning inline wp-pp-notice\">\n             <p>\n               ")
             php_print(message_)
-            printf(" <a href=\"%s\" target=\"_blank\">%s <span class=\"screen-reader-text\">%s</span></a>", url_, label_, __("(opens in a new tab)"))
+            php_printf(" <a href=\"%s\" target=\"_blank\">%s <span class=\"screen-reader-text\">%s</span></a>", url_, label_, __("(opens in a new tab)"))
             php_print("             </p>\n          </div>\n            ")
         # end if
     # end def notice

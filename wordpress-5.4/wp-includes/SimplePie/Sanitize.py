@@ -222,7 +222,7 @@ class SimplePie_Sanitize():
             # end if
             if type_ & SIMPLEPIE_CONSTRUCT_HTML | SIMPLEPIE_CONSTRUCT_XHTML:
                 if (not php_class_exists("DOMDocument")):
-                    self.registry.call("Misc", "error", Array("DOMDocument not found, unable to use sanitizer", E_USER_WARNING, __FILE__, 0))
+                    self.registry.call("Misc", "error", Array("DOMDocument not found, unable to use sanitizer", E_USER_WARNING, __FILE__, inspect.currentframe().f_lineno))
                     return ""
                 # end if
                 document_ = php_new_class("DOMDocument", lambda : DOMDocument())
@@ -304,7 +304,7 @@ class SimplePie_Sanitize():
                 # end if
             # end if
             if type_ & SIMPLEPIE_CONSTRUCT_TEXT | SIMPLEPIE_CONSTRUCT_IRI:
-                data_ = htmlspecialchars(data_, ENT_COMPAT, "UTF-8")
+                data_ = php_htmlspecialchars(data_, ENT_COMPAT, "UTF-8")
             # end if
             if self.output_encoding != "UTF-8":
                 data_ = self.registry.call("Misc", "change_encoding", Array(data_, "UTF-8", self.output_encoding))
@@ -356,11 +356,11 @@ class SimplePie_Sanitize():
         
         if self.encode_instead_of_strip:
             if (php_isset(lambda : match_[4])) and (not php_in_array(php_strtolower(match_[1]), Array("script", "style"))):
-                match_[1] = htmlspecialchars(match_[1], ENT_COMPAT, "UTF-8")
-                match_[2] = htmlspecialchars(match_[2], ENT_COMPAT, "UTF-8")
+                match_[1] = php_htmlspecialchars(match_[1], ENT_COMPAT, "UTF-8")
+                match_[2] = php_htmlspecialchars(match_[2], ENT_COMPAT, "UTF-8")
                 return str("&lt;") + str(match_[1]) + str(match_[2]) + str("&gt;") + str(match_[3]) + str("&lt;/") + str(match_[1]) + str("&gt;")
             else:
-                return htmlspecialchars(match_[0], ENT_COMPAT, "UTF-8")
+                return php_htmlspecialchars(match_[0], ENT_COMPAT, "UTF-8")
             # end if
         elif (php_isset(lambda : match_[4])) and (not php_in_array(php_strtolower(match_[1]), Array("script", "style"))):
             return match_[4]

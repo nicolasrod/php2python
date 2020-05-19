@@ -123,7 +123,7 @@ class WP_Roles():
     def _init(self):
         
         
-        _deprecated_function(__METHOD__, "4.9.0", "WP_Roles::for_site()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0", "WP_Roles::for_site()")
         self.for_site()
     # end def _init
     #// 
@@ -138,7 +138,7 @@ class WP_Roles():
     def reinit(self):
         
         
-        _deprecated_function(__METHOD__, "4.7.0", "WP_Roles::for_site()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0", "WP_Roles::for_site()")
         self.for_site()
     # end def reinit
     #// 

@@ -89,7 +89,7 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
         php_print("                 </div>\n                    ")
         self.filter_drawer_content_template()
         php_print("                 <div class=\"error unexpected-error\" style=\"display: none; \">\n                      <p>\n                           ")
-        printf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/"))
+        php_printf(__("An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href=\"%s\">support forums</a>."), __("https://wordpress.org/support/forums/"))
         php_print("""                       </p>
         </div>
         <ul class=\"themes\">
@@ -97,7 +97,7 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
         <p class=\"no-themes\">""")
         _e("No themes found. Try a different search.")
         php_print("</p>\n                   <p class=\"no-themes-local\">\n                     ")
-        printf(__("No themes found. Try a different search, or %s."), php_sprintf("<button type=\"button\" class=\"button-link search-dotorg-themes\">%s</button>", __("Search WordPress.org themes")))
+        php_printf(__("No themes found. Try a different search, or %s."), php_sprintf("<button type=\"button\" class=\"button-link search-dotorg-themes\">%s</button>", __("Search WordPress.org themes")))
         php_print("""                   </p>
         <p class=\"spinner\"></p>
         </div>
@@ -134,7 +134,7 @@ class WP_Customize_Themes_Section(WP_Customize_Section):
         _e("Filter themes")
         php_print("</span><span class=\"filter-count-filters\">\n               ")
         #// translators: %s: Number of filters selected.
-        printf(__("Filter themes (%s)"), "<span class=\"theme-filter-count\">0</span>")
+        php_printf(__("Filter themes (%s)"), "<span class=\"theme-filter-count\">0</span>")
         php_print("""               </span>
         </button>
         <# } else { #>

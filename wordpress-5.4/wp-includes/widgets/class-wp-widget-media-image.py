@@ -84,7 +84,7 @@ class WP_Widget_Media_Image(WP_Widget_Media):
             if "custom" == size_ or (not php_in_array(size_, php_array_merge(get_intermediate_image_sizes(), Array("full")), True)):
                 size_ = Array(instance_["width"], instance_["height"])
             # end if
-            image_attributes_["class"] += php_sprintf(" attachment-%1$s size-%1$s", join("x", size_) if php_is_array(size_) else size_)
+            image_attributes_["class"] += php_sprintf(" attachment-%1$s size-%1$s", php_join("x", size_) if php_is_array(size_) else size_)
             image_ = wp_get_attachment_image(attachment_.ID, size_, False, image_attributes_)
             caption_size_ = _wp_get_image_size_from_meta(instance_["size"], wp_get_attachment_metadata(attachment_.ID))
             width_ = 0 if php_empty(lambda : caption_size_[0]) else caption_size_[0]

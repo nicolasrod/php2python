@@ -60,7 +60,7 @@ def get_category_parents(id_=None, link_=None, separator_="/", nicename_=None, d
     # end if
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "4.8.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "4.8.0")
     # end if
     format_ = "slug" if nicename_ else "name"
     args_ = Array({"separator": separator_, "link": link_, "format": format_})
@@ -351,7 +351,7 @@ def wp_dropdown_categories(args_="", *_args_):
     defaults_["selected"] = get_query_var("cat") if is_category() else 0
     #// Back compat.
     if (php_isset(lambda : args_["type"])) and "link" == args_["type"]:
-        _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("%1$s is deprecated. Use %2$s instead."), "<code>type => link</code>", "<code>taxonomy => link_category</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", php_sprintf(__("%1$s is deprecated. Use %2$s instead."), "<code>type => link</code>", "<code>taxonomy => link_category</code>"))
         args_["taxonomy"] = "link_category"
     # end if
     #// Parse incoming $args into an array and merge it with $defaults.
@@ -760,7 +760,7 @@ def wp_generate_tag_cloud(tags_=None, args_="", *_args_):
                 uasort(tags_, "_wp_object_count_sort_cb")
             # end if
             if "DESC" == args_["order"]:
-                tags_ = array_reverse(tags_, True)
+                tags_ = php_array_reverse(tags_, True)
             # end if
         # end if
     # end if
@@ -838,12 +838,12 @@ def wp_generate_tag_cloud(tags_=None, args_="", *_args_):
             #// Note: this is redundant but doesn't harm.
             #//
             return_ = "<ul class='wp-tag-cloud' role='list'>\n  <li>"
-            return_ += join("</li>\n    <li>", a_)
+            return_ += php_join("</li>\n    <li>", a_)
             return_ += "</li>\n</ul>\n"
             break
         # end if
         if case():
-            return_ = join(args_["separator"], a_)
+            return_ = php_join(args_["separator"], a_)
             break
         # end if
     # end for
@@ -1162,7 +1162,7 @@ def get_the_term_list(id_=None, taxonomy_=None, before_="", sep_="", after_="", 
     #//
     term_links_ = apply_filters(str("term_links-") + str(taxonomy_), links_)
     #// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-    return before_ + join(sep_, term_links_) + after_
+    return before_ + php_join(sep_, term_links_) + after_
 # end def get_the_term_list
 #// 
 #// Retrieve term parents with separator.
@@ -1205,7 +1205,7 @@ def get_term_parents_list(term_id_=None, taxonomy_=None, args_=None, *_args_):
     if args_["inclusive"]:
         array_unshift(parents_, term_id_)
     # end if
-    for term_id_ in array_reverse(parents_):
+    for term_id_ in php_array_reverse(parents_):
         parent_ = get_term(term_id_, taxonomy_)
         name_ = parent_.slug if "slug" == args_["format"] else parent_.name
         if args_["link"]:

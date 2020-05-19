@@ -454,7 +454,7 @@ def comment_class(class_="", comment_=None, post_id_=None, echo_=None, *_args_):
     # end if
     
     #// Separates classes with a single space, collates classes for comment DIV.
-    class_ = "class=\"" + join(" ", get_comment_class(class_, comment_, post_id_)) + "\""
+    class_ = "class=\"" + php_join(" ", get_comment_class(class_, comment_, post_id_)) + "\""
     if echo_:
         php_print(class_)
     else:
@@ -838,10 +838,10 @@ def comments_link(deprecated_="", deprecated_2_="", *_args_):
     
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "0.72")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "0.72")
     # end if
     if (not php_empty(lambda : deprecated_2_)):
-        _deprecated_argument(__FUNCTION__, "1.3.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "1.3.0")
     # end if
     php_print(esc_url(get_comments_link()))
 # end def comments_link
@@ -1210,7 +1210,7 @@ def trackback_url(deprecated_echo_=None, *_args_):
     # end if
     
     if True != deprecated_echo_:
-        _deprecated_argument(__FUNCTION__, "2.5.0", php_sprintf(__("Use %s instead if you do not want the value echoed."), "<code>get_trackback_url()</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.5.0", php_sprintf(__("Use %s instead if you do not want the value echoed."), "<code>get_trackback_url()</code>"))
     # end if
     if deprecated_echo_:
         php_print(get_trackback_url())
@@ -1231,7 +1231,7 @@ def trackback_rdf(deprecated_="", *_args_):
     
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.5.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.5.0")
     # end if
     if (php_isset(lambda : PHP_SERVER["HTTP_USER_AGENT"])) and False != php_stripos(PHP_SERVER["HTTP_USER_AGENT"], "W3C_Validator"):
         return
@@ -1933,7 +1933,7 @@ def comment_form_title(noreplytext_=None, replytext_=None, linktoparent_=None, *
         #// Sets the global so that template tags can be used in the comment form.
         comment_ = get_comment(replytoid_)
         author_ = "<a href=\"#comment-" + get_comment_ID() + "\">" + get_comment_author(comment_) + "</a>" if linktoparent_ else get_comment_author(comment_)
-        printf(replytext_, author_)
+        php_printf(replytext_, author_)
     # end if
 # end def comment_form_title
 #// 
@@ -2283,7 +2283,7 @@ def comment_form(args_=None, post_id_=None, *_args_):
         #//
         do_action("comment_form_must_log_in_after")
     else:
-        printf("<form action=\"%s\" method=\"post\" id=\"%s\" class=\"%s\"%s>", esc_url(args_["action"]), esc_attr(args_["id_form"]), esc_attr(args_["class_form"]), " novalidate" if html5_ else "")
+        php_printf("<form action=\"%s\" method=\"post\" id=\"%s\" class=\"%s\"%s>", esc_url(args_["action"]), esc_attr(args_["id_form"]), esc_attr(args_["class_form"]), " novalidate" if html5_ else "")
         #// 
         #// Fires at the top of the comment form, inside the form tag.
         #// 

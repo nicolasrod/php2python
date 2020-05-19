@@ -94,8 +94,8 @@ class AtomParser():
         
         self.feed = php_new_class("AtomFeed", lambda : AtomFeed())
         self.current = None
-        self.map_attrs_func = Array(__CLASS__, "map_attrs")
-        self.map_xmlns_func = Array(__CLASS__, "map_xmlns")
+        self.map_attrs_func = Array(self.__class__.__name__, "map_attrs")
+        self.map_xmlns_func = Array(self.__class__.__name__, "map_xmlns")
     # end def __init__
     #// 
     #// PHP4 constructor.
@@ -218,7 +218,7 @@ class AtomParser():
                 with_prefix_ = self.ns_to_prefix(key_, True)
                 attrs_prefix_[with_prefix_[1]] = self.xml_escape(value_)
             # end for
-            attrs_str_ = join(" ", php_array_map(self.map_attrs_func, php_array_keys(attrs_prefix_), php_array_values(attrs_prefix_)))
+            attrs_str_ = php_join(" ", php_array_map(self.map_attrs_func, php_array_keys(attrs_prefix_), php_array_values(attrs_prefix_)))
             if php_strlen(attrs_str_) > 0:
                 attrs_str_ = " " + attrs_str_
             # end if
@@ -229,7 +229,7 @@ class AtomParser():
             xmlns_str_ = ""
             if php_count(self.content_ns_decls) > 0:
                 array_unshift(self.content_ns_contexts, self.content_ns_decls)
-                xmlns_str_ += join(" ", php_array_map(self.map_xmlns_func, php_array_keys(self.content_ns_contexts[0]), php_array_values(self.content_ns_contexts[0])))
+                xmlns_str_ += php_join(" ", php_array_map(self.map_xmlns_func, php_array_keys(self.content_ns_contexts[0]), php_array_values(self.content_ns_contexts[0])))
                 if php_strlen(xmlns_str_) > 0:
                     xmlns_str_ = " " + xmlns_str_
                 # end if
@@ -284,9 +284,9 @@ class AtomParser():
                     # end if
                 # end for
                 if php_in_array(tag_, self.ATOM_CONTENT_ELEMENTS):
-                    self.current.tag_ = Array(origtype_, join("", newcontent_))
+                    self.current.tag_ = Array(origtype_, php_join("", newcontent_))
                 else:
-                    self.current.tag_ = join("", newcontent_)
+                    self.current.tag_ = php_join("", newcontent_)
                 # end if
                 self.in_content = Array()
             else:
@@ -342,7 +342,7 @@ class AtomParser():
         name_ = php_array_pop(components_)
         if (not php_empty(lambda : components_)):
             #// # re-join back the namespace component
-            ns_ = join(":", components_)
+            ns_ = php_join(":", components_)
             for context_ in self.ns_contexts:
                 for mapping_ in context_:
                     if mapping_[1] == ns_ and php_strlen(mapping_[0]) > 0:

@@ -1620,7 +1620,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         #// Emit a _doing_it_wrong warning if user tries to add new properties using this filter.
         new_fields_ = php_array_diff(php_array_keys(schema_["properties"]), schema_fields_)
         if php_count(new_fields_) > 0:
-            _doing_it_wrong(__METHOD__, __("Please use register_rest_field to add new schema properties."), "5.4.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Please use register_rest_field to add new schema properties."), "5.4.0")
         # end if
         self.schema = schema_
         return self.add_additional_fields_schema(self.schema)

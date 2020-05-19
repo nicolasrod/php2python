@@ -451,7 +451,7 @@ for case in Switch(wp_list_table_.current_action()):
         # end if
         if php_strlen(usersearch_):
             #// translators: %s: Search query.
-            printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(usersearch_))
+            php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(usersearch_))
         # end if
         php_print("""
         <hr class=\"wp-header-end\">

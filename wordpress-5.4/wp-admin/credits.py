@@ -57,13 +57,13 @@ _e("Credits")
 php_print("</h1>\n\n            ")
 if (not credits_):
     php_print("\n           <p>\n               ")
-    printf(__("WordPress is created by a <a href=\"%1$s\">worldwide team</a> of passionate individuals. <a href=\"%2$s\">Get involved in WordPress</a>."), __("https://wordpress.org/about/"), __("https://make.wordpress.org/"))
+    php_printf(__("WordPress is created by a <a href=\"%1$s\">worldwide team</a> of passionate individuals. <a href=\"%2$s\">Get involved in WordPress</a>."), __("https://wordpress.org/about/"), __("https://make.wordpress.org/"))
     php_print("         </p>\n\n            ")
 else:
     php_print("\n           <p>\n               ")
     _e("WordPress is created by a worldwide team of passionate individuals.")
     php_print("         </p>\n          <p>\n               ")
-    printf(__("Want to see your name in lights on this page? <a href=\"%s\">Get involved in WordPress</a>."), __("https://make.wordpress.org/"))
+    php_printf(__("Want to see your name in lights on this page? <a href=\"%s\">Get involved in WordPress</a>."), __("https://make.wordpress.org/"))
     php_print("         </p>\n\n            ")
 # end if
 php_print("""       </div>

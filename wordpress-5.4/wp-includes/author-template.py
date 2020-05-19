@@ -33,7 +33,7 @@ def get_the_author(deprecated_="", *_args_):
     global authordata_
     php_check_if_defined("authordata_")
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.1.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.1.0")
     # end if
     #// 
     #// Filters the display name of the current post's author.
@@ -69,10 +69,10 @@ def the_author(deprecated_="", deprecated_echo_=None, *_args_):
     # end if
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.1.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.1.0")
     # end if
     if True != deprecated_echo_:
-        _deprecated_argument(__FUNCTION__, "1.5.0", php_sprintf(__("Use %s instead if you do not want the value echoed."), "<code>get_the_author()</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "1.5.0", php_sprintf(__("Use %s instead if you do not want the value echoed."), "<code>get_the_author()</code>"))
     # end if
     if deprecated_echo_:
         php_print(get_the_author())
@@ -319,7 +319,7 @@ def the_author_posts_link(deprecated_="", *_args_):
     
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.1.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.1.0")
     # end if
     php_print(get_the_author_posts_link())
 # end def the_author_posts_link

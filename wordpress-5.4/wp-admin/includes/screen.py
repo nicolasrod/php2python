@@ -125,7 +125,7 @@ def meta_box_prefs(screen_=None, *_args_):
                 if php_is_array(box_["args"]) and (php_isset(lambda : box_["args"]["__widget_basename"])):
                     widget_title_ = box_["args"]["__widget_basename"]
                 # end if
-                printf("<label for=\"%1$s-hide\"><input class=\"hide-postbox-tog\" name=\"%1$s-hide\" type=\"checkbox\" id=\"%1$s-hide\" value=\"%1$s\" %2$s />%3$s</label>", esc_attr(box_["id"]), checked(php_in_array(box_["id"], hidden_), False, False), widget_title_)
+                php_printf("<label for=\"%1$s-hide\"><input class=\"hide-postbox-tog\" name=\"%1$s-hide\" type=\"checkbox\" id=\"%1$s-hide\" value=\"%1$s\" %2$s />%3$s</label>", esc_attr(box_["id"]), checked(php_in_array(box_["id"], hidden_), False, False), widget_title_)
             # end for
         # end for
     # end for

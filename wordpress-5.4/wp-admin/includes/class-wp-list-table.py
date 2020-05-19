@@ -554,7 +554,7 @@ class WP_List_Table():
             # end if
             month_ = zeroise(arc_row_.month, 2)
             year_ = arc_row_.year
-            printf("<option %s value='%s'>%s</option>\n", selected(m_, year_ + month_, False), esc_attr(arc_row_.year + month_), php_sprintf(__("%1$s %2$d"), wp_locale_.get_month(month_), year_))
+            php_printf("<option %s value='%s'>%s</option>\n", selected(m_, year_ + month_, False), esc_attr(arc_row_.year + month_), php_sprintf(__("%1$s %2$d"), wp_locale_.get_month(month_), year_))
         # end for
         php_print("     </select>\n     ")
     # end def months_dropdown
@@ -578,7 +578,7 @@ class WP_List_Table():
                 classes_[-1] = "current"
                 aria_current_ = " aria-current=\"page\""
             # end if
-            printf(str("<a href='%s' class='%s' id='view-switch-") + str(mode_) + str("'") + str(aria_current_) + str("><span class='screen-reader-text'>%s</span></a>\n"), esc_url(add_query_arg("mode", mode_)), php_implode(" ", classes_), title_)
+            php_printf(str("<a href='%s' class='%s' id='view-switch-") + str(mode_) + str("'") + str(aria_current_) + str("><span class='screen-reader-text'>%s</span></a>\n"), esc_url(add_query_arg("mode", mode_)), php_implode(" ", classes_), title_)
         # end for
         php_print("     </div>\n        ")
     # end def view_switcher
@@ -601,17 +601,17 @@ class WP_List_Table():
         pending_phrase_ = php_sprintf(_n("%s pending comment", "%s pending comments", pending_comments_), pending_comments_number_)
         #// No comments at all.
         if (not approved_comments_) and (not pending_comments_):
-            printf("<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">%s</span>", __("No comments"))
+            php_printf("<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">%s</span>", __("No comments"))
             pass
         elif approved_comments_:
-            printf("<a href=\"%s\" class=\"post-com-count post-com-count-approved\"><span class=\"comment-count-approved\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></a>", esc_url(add_query_arg(Array({"p": post_id_, "comment_status": "approved"}), admin_url("edit-comments.php"))), approved_comments_number_, approved_phrase_ if pending_comments_ else approved_only_phrase_)
+            php_printf("<a href=\"%s\" class=\"post-com-count post-com-count-approved\"><span class=\"comment-count-approved\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></a>", esc_url(add_query_arg(Array({"p": post_id_, "comment_status": "approved"}), admin_url("edit-comments.php"))), approved_comments_number_, approved_phrase_ if pending_comments_ else approved_only_phrase_)
         else:
-            printf("<span class=\"post-com-count post-com-count-no-comments\"><span class=\"comment-count comment-count-no-comments\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></span>", approved_comments_number_, __("No approved comments") if pending_comments_ else __("No comments"))
+            php_printf("<span class=\"post-com-count post-com-count-no-comments\"><span class=\"comment-count comment-count-no-comments\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></span>", approved_comments_number_, __("No approved comments") if pending_comments_ else __("No comments"))
         # end if
         if pending_comments_:
-            printf("<a href=\"%s\" class=\"post-com-count post-com-count-pending\"><span class=\"comment-count-pending\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></a>", esc_url(add_query_arg(Array({"p": post_id_, "comment_status": "moderated"}), admin_url("edit-comments.php"))), pending_comments_number_, pending_phrase_)
+            php_printf("<a href=\"%s\" class=\"post-com-count post-com-count-pending\"><span class=\"comment-count-pending\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></a>", esc_url(add_query_arg(Array({"p": post_id_, "comment_status": "moderated"}), admin_url("edit-comments.php"))), pending_comments_number_, pending_phrase_)
         else:
-            printf("<span class=\"post-com-count post-com-count-pending post-com-count-no-pending\"><span class=\"comment-count comment-count-no-pending\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></span>", pending_comments_number_, __("No pending comments") if approved_comments_ else __("No comments"))
+            php_printf("<span class=\"post-com-count post-com-count-pending post-com-count-no-pending\"><span class=\"comment-count comment-count-no-pending\" aria-hidden=\"true\">%s</span><span class=\"screen-reader-text\">%s</span></span>", pending_comments_number_, __("No pending comments") if approved_comments_ else __("No comments"))
         # end if
     # end def comments_bubble
     #// 
@@ -741,7 +741,7 @@ class WP_List_Table():
         if (not php_empty(lambda : infinite_scroll_)):
             pagination_links_class_ += " hide-if-js"
         # end if
-        output_ += str("\n<span class='") + str(pagination_links_class_) + str("'>") + join("\n", page_links_) + "</span>"
+        output_ += str("\n<span class='") + str(pagination_links_class_) + str("'>") + php_join("\n", page_links_) + "</span>"
         if total_pages_:
             page_class_ = " one-page" if total_pages_ < 2 else ""
         else:
@@ -976,7 +976,7 @@ class WP_List_Table():
             scope_ = "scope=\"col\"" if "th" == tag_ else ""
             id_ = str("id='") + str(column_key_) + str("'") if with_id_ else ""
             if (not php_empty(lambda : class_)):
-                class_ = "class='" + join(" ", class_) + "'"
+                class_ = "class='" + php_join(" ", class_) + "'"
             # end if
             php_print(str("<") + str(tag_) + str(" ") + str(scope_) + str(" ") + str(id_) + str(" ") + str(class_) + str(">") + str(column_display_name_) + str("</") + str(tag_) + str(">"))
         # end for
@@ -1221,6 +1221,6 @@ class WP_List_Table():
         
         
         args_ = Array({"class": get_class(self), "screen": Array({"id": self.screen.id, "base": self.screen.base})})
-        printf("<script type='text/javascript'>list_args = %s;</script>\n", wp_json_encode(args_))
+        php_printf("<script type='text/javascript'>list_args = %s;</script>\n", wp_json_encode(args_))
     # end def _js_vars
 # end class WP_List_Table

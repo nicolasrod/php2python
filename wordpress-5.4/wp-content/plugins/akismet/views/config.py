@@ -54,7 +54,7 @@ if stat_totals_ and (php_isset(lambda : stat_totals_["all"])) and php_int(stat_t
     
     <div class=\"akismet-new-snapshot\">
     <iframe allowtransparency=\"true\" scrolling=\"no\" frameborder=\"0\" style=\"width: 100%; height: 220px; overflow: hidden;\" src=\"""")
-    printf("//akismet.com/web/1.0/snapshot.php?blog=%s&api_key=%s&height=200&locale=%s", urlencode(get_option("home")), Akismet.get_api_key(), get_locale())
+    php_printf("//akismet.com/web/1.0/snapshot.php?blog=%s&api_key=%s&height=200&locale=%s", urlencode(get_option("home")), Akismet.get_api_key(), get_locale())
     php_print("""\"></iframe>
     <ul>
     <li>
@@ -75,9 +75,9 @@ if stat_totals_ and (php_isset(lambda : stat_totals_["all"])) and php_int(stat_t
     php_print("</h3>\n                          <span>")
     php_print(floatval(stat_totals_["all"].accuracy))
     php_print("%</span>\n                           ")
-    printf(_n("%s missed spam", "%s missed spam", stat_totals_["all"].missed_spam, "akismet"), number_format(stat_totals_["all"].missed_spam))
+    php_printf(_n("%s missed spam", "%s missed spam", stat_totals_["all"].missed_spam, "akismet"), number_format(stat_totals_["all"].missed_spam))
     php_print("                         |\n                         ")
-    printf(_n("%s false positive", "%s false positives", stat_totals_["all"].false_positives, "akismet"), number_format(stat_totals_["all"].false_positives))
+    php_printf(_n("%s false positive", "%s false positives", stat_totals_["all"].false_positives, "akismet"), number_format(stat_totals_["all"].false_positives))
     php_print("""                       </li>
     </ul>
     </div>
@@ -192,7 +192,7 @@ if akismet_user_:
     esc_html_e("Note:", "akismet")
     php_print("</strong>\n                                      ")
     delete_interval_ = php_max(1, php_intval(apply_filters("akismet_delete_comment_interval", 15)))
-    printf(_n("Spam in the <a href=\"%1$s\">spam folder</a> older than 1 day is deleted automatically.", "Spam in the <a href=\"%1$s\">spam folder</a> older than %2$d days is deleted automatically.", delete_interval_, "akismet"), admin_url("edit-comments.php?comment_status=spam"), delete_interval_)
+    php_printf(_n("Spam in the <a href=\"%1$s\">spam folder</a> older than 1 day is deleted automatically.", "Spam in the <a href=\"%1$s\">spam folder</a> older than %2$d days is deleted automatically.", delete_interval_, "akismet"), admin_url("edit-comments.php?comment_status=spam"), delete_interval_)
     php_print("""                                   </td>
     </tr>
     <tr>

@@ -45,7 +45,7 @@ def get_categories(args_="", *_args_):
     args_["taxonomy"] = apply_filters("get_categories_taxonomy", args_["taxonomy"], args_)
     #// Back compat.
     if (php_isset(lambda : args_["type"])) and "link" == args_["type"]:
-        _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("%1$s is deprecated. Use %2$s instead."), "<code>type => link</code>", "<code>taxonomy => link_category</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", php_sprintf(__("%1$s is deprecated. Use %2$s instead."), "<code>type => link</code>", "<code>taxonomy => link_category</code>"))
         args_["taxonomy"] = "link_category"
     # end if
     categories_ = get_terms(args_)

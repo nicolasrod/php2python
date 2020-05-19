@@ -427,7 +427,7 @@ class WP_REST_Request(ArrayAccess):
         
         
         order_ = self.get_parameter_order()
-        order_ = array_reverse(order_, True)
+        order_ = php_array_reverse(order_, True)
         params_ = Array()
         for type_ in order_:
             #// array_merge() / the "+" operator will mess up

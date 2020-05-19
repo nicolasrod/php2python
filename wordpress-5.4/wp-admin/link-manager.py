@@ -65,7 +65,7 @@ php_print(esc_html_x("Add New", "link"))
 php_print("</a>\n\n")
 if (php_isset(lambda : PHP_REQUEST["s"])) and php_strlen(PHP_REQUEST["s"]):
     #// translators: %s: Search query.
-    printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(wp_unslash(PHP_REQUEST["s"])))
+    php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(wp_unslash(PHP_REQUEST["s"])))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">
@@ -74,7 +74,7 @@ if (php_isset(lambda : PHP_REQUEST["deleted"])):
     php_print("<div id=\"message\" class=\"updated notice is-dismissible\"><p>")
     deleted_ = php_int(PHP_REQUEST["deleted"])
     #// translators: %s: Number of links.
-    printf(_n("%s link deleted.", "%s links deleted.", deleted_), deleted_)
+    php_printf(_n("%s link deleted.", "%s links deleted.", deleted_), deleted_)
     php_print("</p></div>")
     PHP_SERVER["REQUEST_URI"] = remove_query_arg(Array("deleted"), PHP_SERVER["REQUEST_URI"])
 # end if

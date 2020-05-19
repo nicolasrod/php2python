@@ -57,11 +57,11 @@ _e("From time to time, your WordPress site may send data to WordPress.org &#8212
 php_print("""</p>
 <p>
 """)
-printf(__("This data is used to provide general enhancements to WordPress, which includes helping to protect your site by finding and automatically installing new updates. It is also used to calculate statistics, such as those shown on the <a href=\"%s\">WordPress.org stats page</a>."), __("https://wordpress.org/about/stats/"))
+php_printf(__("This data is used to provide general enhancements to WordPress, which includes helping to protect your site by finding and automatically installing new updates. It is also used to calculate statistics, such as those shown on the <a href=\"%s\">WordPress.org stats page</a>."), __("https://wordpress.org/about/stats/"))
 php_print("""           </p>
 <p>
 """)
-printf(__("We take privacy and transparency very seriously. To learn more about what data we collect, and how we use it, please visit <a href=\"%s\">WordPress.org/about/privacy</a>."), __("https://wordpress.org/about/privacy/"))
+php_printf(__("We take privacy and transparency very seriously. To learn more about what data we collect, and how we use it, please visit <a href=\"%s\">WordPress.org/about/privacy</a>."), __("https://wordpress.org/about/privacy/"))
 php_print("""           </p>
 </div>
 </div>

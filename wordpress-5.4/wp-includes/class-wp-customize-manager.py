@@ -439,7 +439,7 @@ class WP_Customize_Manager():
     def wp_die_handler(self):
         
         
-        _deprecated_function(__METHOD__, "4.7.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
         if self.doing_ajax() or (php_isset(lambda : PHP_POST["customized"])):
             return "_ajax_wp_die_handler"
         # end if
@@ -872,7 +872,7 @@ class WP_Customize_Manager():
     def wp_redirect_status(self, status_=None):
         
         
-        _deprecated_function(__FUNCTION__, "4.7.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
         if self.is_preview() and (not is_admin()):
             return 200
         # end if
@@ -1764,7 +1764,7 @@ class WP_Customize_Manager():
     def customize_preview_override_404_status(self):
         
         
-        _deprecated_function(__METHOD__, "4.7.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
     # end def customize_preview_override_404_status
     #// 
     #// Print base element for preview frame.
@@ -1775,7 +1775,7 @@ class WP_Customize_Manager():
     def customize_preview_base(self):
         
         
-        _deprecated_function(__METHOD__, "4.7.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
     # end def customize_preview_base
     #// 
     #// Print a workaround to handle HTML5 tags in IE < 9.
@@ -1786,7 +1786,7 @@ class WP_Customize_Manager():
     def customize_preview_html5(self):
         
         
-        _deprecated_function(__FUNCTION__, "4.7.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
     # end def customize_preview_html5
     #// 
     #// Print CSS for loading indicators for the Customizer preview.
@@ -1921,7 +1921,7 @@ class WP_Customize_Manager():
         #//
         for id_,setting_ in self.settings.items():
             if setting_.check_capabilities():
-                printf("v[%s] = %s;\n", wp_json_encode(id_), wp_json_encode(setting_.js_value()))
+                php_printf("v[%s] = %s;\n", wp_json_encode(id_), wp_json_encode(setting_.js_value()))
             # end if
         # end for
         php_print("         })( _wpCustomizeSettings.values );\n        </script>\n     ")
@@ -1935,7 +1935,7 @@ class WP_Customize_Manager():
     def customize_preview_signature(self):
         
         
-        _deprecated_function(__METHOD__, "4.7.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
     # end def customize_preview_signature
     #// 
     #// Removes the signature in case we experience a case where the Customizer was not properly executed.
@@ -1951,7 +1951,7 @@ class WP_Customize_Manager():
             return_ = None
         # end if
         
-        _deprecated_function(__METHOD__, "4.7.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
         return return_
     # end def remove_preview_signature
     #// 
@@ -2113,7 +2113,7 @@ class WP_Customize_Manager():
         if is_wp_error(validity_):
             notification_ = Array()
             for error_code_,error_messages_ in validity_.errors.items():
-                notification_[error_code_] = Array({"message": join(" ", error_messages_), "data": validity_.get_error_data(error_code_)})
+                notification_[error_code_] = Array({"message": php_join(" ", error_messages_), "data": validity_.get_error_data(error_code_)})
             # end for
             return notification_
         else:
@@ -3306,7 +3306,7 @@ class WP_Customize_Manager():
         #// Removing core components this way is _doing_it_wrong().
         if php_in_array(id_, self.components, True):
             message_ = php_sprintf(__("Removing %1$s manually will cause PHP warnings. Use the %2$s filter instead."), id_, "<a href=\"" + esc_url("https://developer.wordpress.org/reference/hooks/customize_loaded_components/") + "\"><code>customize_loaded_components</code></a>")
-            _doing_it_wrong(__METHOD__, message_, "4.5.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "4.5.0")
         # end if
         self.panels[id_] = None
     # end def remove_panel
@@ -3767,7 +3767,7 @@ class WP_Customize_Manager():
     def _cmp_priority(self, a_=None, b_=None):
         
         
-        _deprecated_function(__METHOD__, "4.7.0", "wp_list_sort")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0", "wp_list_sort")
         if a_.priority == b_.priority:
             return a_.instance_number - b_.instance_number
         else:
@@ -4180,7 +4180,7 @@ class WP_Customize_Manager():
         php_print("(function ( s ){\n")
         for setting_ in self.settings():
             if setting_.check_capabilities():
-                printf("s[%s] = %s;\n", wp_json_encode(setting_.id), wp_json_encode(setting_.json()))
+                php_printf("s[%s] = %s;\n", wp_json_encode(setting_.id), wp_json_encode(setting_.json()))
             # end if
         # end for
         php_print("})( _wpCustomizeSettings.settings );\n")
@@ -4188,7 +4188,7 @@ class WP_Customize_Manager():
         php_print("(function ( c ){\n")
         for control_ in self.controls():
             if control_.check_capabilities():
-                printf("c[%s] = %s;\n", wp_json_encode(control_.id), wp_json_encode(control_.json()))
+                php_printf("c[%s] = %s;\n", wp_json_encode(control_.id), wp_json_encode(control_.json()))
             # end if
         # end for
         php_print("})( _wpCustomizeSettings.controls );\n")

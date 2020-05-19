@@ -265,7 +265,7 @@ def login_footer(input_id_="", *_args_):
         php_print(esc_url(home_url("/")))
         php_print("\">\n        ")
         #// translators: %s: Site title.
-        printf(_x("&larr; Back to %s", "site"), get_bloginfo("title", "display"))
+        php_printf(_x("&larr; Back to %s", "site"), get_bloginfo("title", "display"))
         php_print("     </a></p>\n      ")
         the_privacy_policy_link("<div class=\"privacy-policy-page-link\">", "</div>")
     # end if
@@ -567,9 +567,9 @@ for case in Switch(action_):
         admin_email_help_url_ = __("https://wordpress.org/support/article/settings-general-screen/#email-address")
         #// translators: accessibility text
         accessibility_text_ = php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)"))
-        printf("<a href=\"%s\" rel=\"noopener noreferrer\" target=\"_blank\">%s%s</a>", esc_url(admin_email_help_url_), __("Why is this important?"), accessibility_text_)
+        php_printf("<a href=\"%s\" rel=\"noopener noreferrer\" target=\"_blank\">%s%s</a>", esc_url(admin_email_help_url_), __("Why is this important?"), accessibility_text_)
         php_print("         </p>\n          <p class=\"admin-email__details\">\n                ")
-        printf(__("Current administration email: %s"), "<strong>" + esc_html(admin_email_) + "</strong>")
+        php_printf(__("Current administration email: %s"), "<strong>" + esc_html(admin_email_) + "</strong>")
         php_print("         </p>\n          <p class=\"admin-email__details\">\n                ")
         _e("This email may be different from your personal email address.")
         php_print("""           </p>

@@ -112,7 +112,7 @@ def get_wp_title_rss(deprecated_="&#8211;", *_args_):
     
     if "&#8211;" != deprecated_:
         #// translators: %s: 'document_title_separator' filter name.
-        _deprecated_argument(__FUNCTION__, "4.4.0", php_sprintf(__("Use the %s filter instead."), "<code>document_title_separator</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "4.4.0", php_sprintf(__("Use the %s filter instead."), "<code>document_title_separator</code>"))
     # end if
     #// 
     #// Filters the blog title for use as the feed title.
@@ -138,7 +138,7 @@ def wp_title_rss(deprecated_="&#8211;", *_args_):
     
     if "&#8211;" != deprecated_:
         #// translators: %s: 'document_title_separator' filter name.
-        _deprecated_argument(__FUNCTION__, "4.4.0", php_sprintf(__("Use the %s filter instead."), "<code>document_title_separator</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "4.4.0", php_sprintf(__("Use the %s filter instead."), "<code>document_title_separator</code>"))
     # end if
     #// 
     #// Filters the blog title for display of the feed title.
@@ -597,7 +597,7 @@ def prep_atom_text_construct(data_=None, *_args_):
     if php_strpos(data_, "]]>") == False:
         return Array("html", str("<![CDATA[") + str(data_) + str("]]>"))
     else:
-        return Array("html", htmlspecialchars(data_))
+        return Array("html", php_htmlspecialchars(data_))
     # end if
 # end def prep_atom_text_construct
 #// 

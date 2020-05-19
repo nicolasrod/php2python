@@ -32,9 +32,9 @@ php_print("""
 if have_comments():
     php_print(" <h3 id=\"comments\">\n      ")
     if 1 == get_comments_number():
-        printf(__("One response to %s"), "&#8220;" + get_the_title() + "&#8221;")
+        php_printf(__("One response to %s"), "&#8220;" + get_the_title() + "&#8221;")
     else:
-        printf(_n("%1$s response to %2$s", "%1$s responses to %2$s", get_comments_number()), number_format_i18n(get_comments_number()), "&#8220;" + get_the_title() + "&#8221;")
+        php_printf(_n("%1$s response to %2$s", "%1$s responses to %2$s", get_comments_number()), number_format_i18n(get_comments_number()), "&#8220;" + get_the_title() + "&#8221;")
     # end if
     php_print("""   </h3>
     <div class=\"navigation\">

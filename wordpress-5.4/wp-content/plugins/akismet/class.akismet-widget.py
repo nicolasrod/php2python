@@ -104,7 +104,7 @@ class Akismet_Widget(WP_Widget):
             php_print(args_["after_title"])
         # end if
         php_print("\n   <div class=\"a-stats\">\n       <a href=\"https://akismet.com\" target=\"_blank\" title=\"\">")
-        printf(_n("<strong class=\"count\">%1$s spam</strong> blocked by <strong>Akismet</strong>", "<strong class=\"count\">%1$s spam</strong> blocked by <strong>Akismet</strong>", count_, "akismet"), number_format_i18n(count_))
+        php_printf(_n("<strong class=\"count\">%1$s spam</strong> blocked by <strong>Akismet</strong>", "<strong class=\"count\">%1$s spam</strong> blocked by <strong>Akismet</strong>", count_, "akismet"), number_format_i18n(count_))
         php_print("""</a>
         </div>
         """)

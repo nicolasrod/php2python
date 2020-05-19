@@ -263,7 +263,7 @@ def register_sidebar(args_=None, *_args_):
     #//
     sidebar_ = wp_parse_args(args_, apply_filters("register_sidebar_defaults", defaults_))
     if id_is_empty_:
-        _doing_it_wrong(__FUNCTION__, php_sprintf(__("No %1$s was set in the arguments array for the \"%2$s\" sidebar. Defaulting to \"%3$s\". Manually set the %1$s to \"%3$s\" to silence this notice and keep existing sidebar content."), "<code>id</code>", sidebar_["name"], sidebar_["id"]), "4.2.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("No %1$s was set in the arguments array for the \"%2$s\" sidebar. Defaulting to \"%3$s\". Manually set the %1$s to \"%3$s\" to silence this notice and keep existing sidebar content."), "<code>id</code>", sidebar_["name"], sidebar_["id"]), "4.2.0")
     # end if
     wp_registered_sidebars_[sidebar_["id"]] = sidebar_
     add_theme_support("widgets")
@@ -913,7 +913,7 @@ def wp_get_sidebars_widgets(deprecated_=None, *_args_):
     # end if
     
     if True != deprecated_:
-        _deprecated_argument(__FUNCTION__, "2.8.1")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.8.1")
     # end if
     global _wp_sidebars_widgets_
     global sidebars_widgets_
@@ -1078,7 +1078,7 @@ def the_widget(widget_=None, instance_=None, args_=None, *_args_):
     global wp_widget_factory_
     php_check_if_defined("wp_widget_factory_")
     if (not (php_isset(lambda : wp_widget_factory_.widgets[widget_]))):
-        _doing_it_wrong(__FUNCTION__, php_sprintf(__("Widgets need to be registered using %s, before they can be displayed."), "<code>register_widget()</code>"), "4.9.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("Widgets need to be registered using %s, before they can be displayed."), "<code>register_widget()</code>"), "4.9.0")
         return
     # end if
     widget_obj_ = wp_widget_factory_.widgets[widget_]

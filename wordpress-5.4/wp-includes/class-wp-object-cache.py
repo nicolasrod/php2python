@@ -373,7 +373,7 @@ class WP_Object_Cache():
     def reset(self):
         
         
-        _deprecated_function(__FUNCTION__, "3.5.0", "switch_to_blog()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "switch_to_blog()")
         #// Clear out non-global caches since the blog ID has changed.
         for group_ in php_array_keys(self.cache):
             if (not (php_isset(lambda : self.global_groups[group_]))):

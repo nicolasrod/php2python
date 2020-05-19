@@ -137,9 +137,9 @@ else:
         php_print("</h2>\n          ")
         php_print("<p class=\"lead-in\">")
         if "" == signup_.domain + signup_.path:
-            printf(__("Your account has been activated. You may now <a href=\"%1$s\">log in</a> to the site using your chosen username of &#8220;%2$s&#8221;. Please check your email inbox at %3$s for your password and login instructions. If you do not receive an email, please check your junk or spam folder. If you still do not receive an email within an hour, you can <a href=\"%4$s\">reset your password</a>."), network_site_url("wp-login.php", "login"), signup_.user_login, signup_.user_email, wp_lostpassword_url())
+            php_printf(__("Your account has been activated. You may now <a href=\"%1$s\">log in</a> to the site using your chosen username of &#8220;%2$s&#8221;. Please check your email inbox at %3$s for your password and login instructions. If you do not receive an email, please check your junk or spam folder. If you still do not receive an email within an hour, you can <a href=\"%4$s\">reset your password</a>."), network_site_url("wp-login.php", "login"), signup_.user_login, signup_.user_email, wp_lostpassword_url())
         else:
-            printf(__("Your site at %1$s is active. You may now log in to your site using your chosen username of &#8220;%2$s&#8221;. Please check your email inbox at %3$s for your password and login instructions. If you do not receive an email, please check your junk or spam folder. If you still do not receive an email within an hour, you can <a href=\"%4$s\">reset your password</a>."), php_sprintf("<a href=\"http://%1$s\">%1$s</a>", signup_.domain), signup_.user_login, signup_.user_email, wp_lostpassword_url())
+            php_printf(__("Your site at %1$s is active. You may now log in to your site using your chosen username of &#8220;%2$s&#8221;. Please check your email inbox at %3$s for your password and login instructions. If you do not receive an email, please check your junk or spam folder. If you still do not receive an email within an hour, you can <a href=\"%4$s\">reset your password</a>."), php_sprintf("<a href=\"http://%1$s\">%1$s</a>", signup_.domain), signup_.user_login, signup_.user_email, wp_lostpassword_url())
         # end if
         php_print("</p>")
     elif None == result_ or is_wp_error(result_):
@@ -176,12 +176,12 @@ else:
             restore_current_blog()
             php_print("             <p class=\"view\">\n                ")
             #// translators: 1: Site URL, 2: Login URL.
-            printf(__("Your account is now activated. <a href=\"%1$s\">View your site</a> or <a href=\"%2$s\">Log in</a>"), url_, esc_url(login_url_))
+            php_printf(__("Your account is now activated. <a href=\"%1$s\">View your site</a> or <a href=\"%2$s\">Log in</a>"), url_, esc_url(login_url_))
             php_print("             </p>\n          ")
         else:
             php_print("             <p class=\"view\">\n                ")
             #// translators: 1: Login URL, 2: Network home URL.
-            printf(__("Your account is now activated. <a href=\"%1$s\">Log in</a> or go back to the <a href=\"%2$s\">homepage</a>."), network_site_url("wp-login.php", "login"), network_home_url())
+            php_printf(__("Your account is now activated. <a href=\"%1$s\">Log in</a> or go back to the <a href=\"%2$s\">homepage</a>."), network_site_url("wp-login.php", "login"), network_home_url())
             php_print("             </p>\n              ")
         # end if
     # end if

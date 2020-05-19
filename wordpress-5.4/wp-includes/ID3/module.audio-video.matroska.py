@@ -542,7 +542,7 @@ class getid3_matroska(getid3_handler):
                                 module_dataformat_ = "mp3" if track_info_["dataformat"] == "mp2" else "ac3" if track_info_["dataformat"] == "eac3" else track_info_["dataformat"]
                                 getid3_lib.includedependency(GETID3_INCLUDEPATH + "module.audio." + module_dataformat_ + ".php", __FILE__, True)
                                 if (not (php_isset(lambda : info_["matroska"]["track_data_offsets"][trackarray_["TrackNumber"]]))):
-                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because $info[matroska][track_data_offsets][" + trackarray_["TrackNumber"] + "] not set")
+                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + inspect.currentframe().f_lineno + "] because $info[matroska][track_data_offsets][" + trackarray_["TrackNumber"] + "] not set")
                                     break
                                 # end if
                                 #// create temp instance
@@ -557,7 +557,7 @@ class getid3_matroska(getid3_handler):
                                 #// analyze
                                 class_ = "getid3_" + module_dataformat_
                                 header_data_key_ = "mpeg" if track_info_["dataformat"][0] == "m" else track_info_["dataformat"]
-                                getid3_audio_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_](getid3_temp_, __CLASS__))
+                                getid3_audio_ = php_new_class(class_, lambda : {**locals(), **globals()}[class_](getid3_temp_, self.__class__.__name__))
                                 if track_info_["dataformat"] == "flac":
                                     getid3_audio_.analyzestring(trackarray_["CodecPrivate"])
                                 else:
@@ -571,7 +571,7 @@ class getid3_matroska(getid3_handler):
                                         # end for
                                     # end if
                                 else:
-                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because " + class_ + "::Analyze() failed at offset " + getid3_temp_.info["avdataoffset"])
+                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + inspect.currentframe().f_lineno + "] because " + class_ + "::Analyze() failed at offset " + getid3_temp_.info["avdataoffset"])
                                 # end if
                                 #// copy errors and warnings
                                 if (not php_empty(lambda : getid3_temp_.info["error"])):
@@ -606,12 +606,12 @@ class getid3_matroska(getid3_handler):
                             # end if
                             if case("A_VORBIS"):
                                 if (not (php_isset(lambda : trackarray_["CodecPrivate"]))):
-                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because CodecPrivate data not set")
+                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + inspect.currentframe().f_lineno + "] because CodecPrivate data not set")
                                     break
                                 # end if
                                 vorbis_offset_ = php_strpos(trackarray_["CodecPrivate"], "vorbis", 1)
                                 if vorbis_offset_ == False:
-                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + 0 + "] because CodecPrivate data does not contain \"vorbis\" keyword")
+                                    self.warning("Unable to parse audio data [" + php_basename(__FILE__) + ":" + inspect.currentframe().f_lineno + "] because CodecPrivate data does not contain \"vorbis\" keyword")
                                     break
                                 # end if
                                 vorbis_offset_ -= 1
@@ -745,7 +745,7 @@ class getid3_matroska(getid3_handler):
                                 break
                             # end if
                             if case():
-                                self.unhandledelement("header", 0, element_data_)
+                                self.unhandledelement("header", inspect.currentframe().f_lineno, element_data_)
                                 break
                             # end if
                         # end for
@@ -794,7 +794,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("seekhead.seek", 0, sub_seek_entry_)
+                                                        self.unhandledelement("seekhead.seek", inspect.currentframe().f_lineno, sub_seek_entry_)
                                                     # end if
                                                 # end for
                                                 break
@@ -810,7 +810,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("seekhead", 0, seek_entry_)
+                                            self.unhandledelement("seekhead", inspect.currentframe().f_lineno, seek_entry_)
                                             break
                                         # end if
                                     # end for
@@ -951,7 +951,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("track.video", 0, sub_subelement_)
+                                                                    self.unhandledelement("track.video", inspect.currentframe().f_lineno, sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -984,7 +984,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("track.audio", 0, sub_subelement_)
+                                                                    self.unhandledelement("track.audio", inspect.currentframe().f_lineno, sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -1031,7 +1031,7 @@ class getid3_matroska(getid3_handler):
                                                                                             break
                                                                                         # end if
                                                                                         if case():
-                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", 0, sub_sub_sub_subelement_)
+                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", inspect.currentframe().f_lineno, sub_sub_sub_subelement_)
                                                                                             break
                                                                                         # end if
                                                                                     # end for
@@ -1066,7 +1066,7 @@ class getid3_matroska(getid3_handler):
                                                                                             break
                                                                                         # end if
                                                                                         if case():
-                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", 0, sub_sub_sub_subelement_)
+                                                                                            self.unhandledelement("track.contentencodings.contentencoding.contentcompression", inspect.currentframe().f_lineno, sub_sub_sub_subelement_)
                                                                                             break
                                                                                         # end if
                                                                                     # end for
@@ -1074,7 +1074,7 @@ class getid3_matroska(getid3_handler):
                                                                                 break
                                                                             # end if
                                                                             if case():
-                                                                                self.unhandledelement("track.contentencodings.contentencoding", 0, sub_sub_subelement_)
+                                                                                self.unhandledelement("track.contentencodings.contentencoding", inspect.currentframe().f_lineno, sub_sub_subelement_)
                                                                                 break
                                                                             # end if
                                                                         # end for
@@ -1082,7 +1082,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("track.contentencodings", 0, sub_subelement_)
+                                                                    self.unhandledelement("track.contentencodings", inspect.currentframe().f_lineno, sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -1090,7 +1090,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("track", 0, subelement_)
+                                                        self.unhandledelement("track", inspect.currentframe().f_lineno, subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1099,7 +1099,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("tracks", 0, track_entry_)
+                                            self.unhandledelement("tracks", inspect.currentframe().f_lineno, track_entry_)
                                             break
                                         # end if
                                     # end for
@@ -1183,7 +1183,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("info.chaptertranslate", 0, sub_subelement_)
+                                                        self.unhandledelement("info.chaptertranslate", inspect.currentframe().f_lineno, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1192,7 +1192,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("info", 0, subelement_)
+                                            self.unhandledelement("info", inspect.currentframe().f_lineno, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1244,7 +1244,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("cues.cuepoint.cuetrackpositions", 0, sub_sub_subelement_)
+                                                                    self.unhandledelement("cues.cuepoint.cuetrackpositions", inspect.currentframe().f_lineno, sub_sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -1257,7 +1257,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("cues.cuepoint", 0, sub_subelement_)
+                                                        self.unhandledelement("cues.cuepoint", inspect.currentframe().f_lineno, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1266,7 +1266,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("cues", 0, subelement_)
+                                            self.unhandledelement("cues", inspect.currentframe().f_lineno, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1322,7 +1322,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("tags.tag.targets", 0, sub_sub_subelement_)
+                                                                    self.unhandledelement("tags.tag.targets", inspect.currentframe().f_lineno, sub_sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -1335,7 +1335,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("tags.tag", 0, sub_subelement_)
+                                                        self.unhandledelement("tags.tag", inspect.currentframe().f_lineno, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1344,7 +1344,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("tags", 0, subelement_)
+                                            self.unhandledelement("tags", inspect.currentframe().f_lineno, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1390,7 +1390,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("attachments.attachedfile", 0, sub_subelement_)
+                                                        self.unhandledelement("attachments.attachedfile", inspect.currentframe().f_lineno, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1399,7 +1399,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("attachments", 0, subelement_)
+                                            self.unhandledelement("attachments", inspect.currentframe().f_lineno, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1480,7 +1480,7 @@ class getid3_matroska(getid3_handler):
                                                                                 break
                                                                             # end if
                                                                             if case():
-                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chaptertrack", 0, sub_sub_sub_subelement_)
+                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chaptertrack", inspect.currentframe().f_lineno, sub_sub_sub_subelement_)
                                                                                 break
                                                                             # end if
                                                                         # end for
@@ -1507,7 +1507,7 @@ class getid3_matroska(getid3_handler):
                                                                                 break
                                                                             # end if
                                                                             if case():
-                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chapterdisplay", 0, sub_sub_sub_subelement_)
+                                                                                self.unhandledelement("chapters.editionentry.chapteratom.chapterdisplay", inspect.currentframe().f_lineno, sub_sub_sub_subelement_)
                                                                                 break
                                                                             # end if
                                                                         # end for
@@ -1516,7 +1516,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case():
-                                                                    self.unhandledelement("chapters.editionentry.chapteratom", 0, sub_sub_subelement_)
+                                                                    self.unhandledelement("chapters.editionentry.chapteratom", inspect.currentframe().f_lineno, sub_sub_subelement_)
                                                                     break
                                                                 # end if
                                                             # end for
@@ -1525,7 +1525,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("chapters.editionentry", 0, sub_subelement_)
+                                                        self.unhandledelement("chapters.editionentry", inspect.currentframe().f_lineno, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1534,7 +1534,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("chapters", 0, subelement_)
+                                            self.unhandledelement("chapters", inspect.currentframe().f_lineno, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1573,7 +1573,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("cluster.silenttracks", 0, sub_subelement_)
+                                                        self.unhandledelement("cluster.silenttracks", inspect.currentframe().f_lineno, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1611,7 +1611,7 @@ class getid3_matroska(getid3_handler):
                                                         break
                                                     # end if
                                                     if case():
-                                                        self.unhandledelement("clusters.blockgroup", 0, sub_subelement_)
+                                                        self.unhandledelement("clusters.blockgroup", inspect.currentframe().f_lineno, sub_subelement_)
                                                         break
                                                     # end if
                                                 # end for
@@ -1624,7 +1624,7 @@ class getid3_matroska(getid3_handler):
                                             break
                                         # end if
                                         if case():
-                                            self.unhandledelement("cluster", 0, subelement_)
+                                            self.unhandledelement("cluster", inspect.currentframe().f_lineno, subelement_)
                                             break
                                         # end if
                                     # end for
@@ -1646,7 +1646,7 @@ class getid3_matroska(getid3_handler):
                                 break
                             # end if
                             if case():
-                                self.unhandledelement("segment", 0, element_data_)
+                                self.unhandledelement("segment", inspect.currentframe().f_lineno, element_data_)
                                 break
                             # end if
                         # end for
@@ -1654,7 +1654,7 @@ class getid3_matroska(getid3_handler):
                     break
                 # end if
                 if case():
-                    self.unhandledelement("root", 0, top_element_)
+                    self.unhandledelement("root", inspect.currentframe().f_lineno, top_element_)
                     break
                 # end if
             # end for
@@ -1848,7 +1848,7 @@ class getid3_matroska(getid3_handler):
                     break
                 # end if
                 if case():
-                    self.unhandledelement("tag.simpletag", 0, element_)
+                    self.unhandledelement("tag.simpletag", inspect.currentframe().f_lineno, element_)
                     break
                 # end if
             # end for
@@ -2305,7 +2305,7 @@ class getid3_matroska(getid3_handler):
         
         
         stream_ = Array()
-        for stream_ in array_reverse(streams_):
+        for stream_ in php_array_reverse(streams_):
             if stream_["default"]:
                 break
             # end if

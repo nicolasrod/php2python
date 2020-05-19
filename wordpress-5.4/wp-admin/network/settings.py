@@ -112,8 +112,8 @@ php_print("                 </p>\n                  ")
 new_admin_email_ = get_site_option("new_admin_email")
 if new_admin_email_ and get_site_option("admin_email") != new_admin_email_:
     php_print("                     <div class=\"updated inline\">\n                        <p>\n                       ")
-    printf(__("There is a pending change of the network admin email to %s."), "<code>" + esc_html(new_admin_email_) + "</code>")
-    printf(" <a href=\"%1$s\">%2$s</a>", esc_url(wp_nonce_url(network_admin_url("settings.php?dismiss=new_network_admin_email"), "dismiss_new_network_admin_email")), __("Cancel"))
+    php_printf(__("There is a pending change of the network admin email to %s."), "<code>" + esc_html(new_admin_email_) + "</code>")
+    php_printf(" <a href=\"%1$s\">%2$s</a>", esc_url(wp_nonce_url(network_admin_url("settings.php?dismiss=new_network_admin_email"), "dismiss_new_network_admin_email")), __("Cancel"))
     php_print("                     </p>\n                      </div>\n                    ")
 # end if
 php_print("""               </td>
@@ -152,7 +152,7 @@ _e("Both sites and user accounts can be registered")
 php_print("</label>\n                   ")
 if is_subdomain_install():
     php_print("<p class=\"description\">")
-    printf(__("If registration is disabled, please set %1$s in %2$s to a URL you will redirect visitors to if they visit a non-existent site."), "<code>NOBLOGREDIRECT</code>", "<code>wp-config.php</code>")
+    php_printf(__("If registration is disabled, please set %1$s in %2$s to a URL you will redirect visitors to if they visit a non-existent site."), "<code>NOBLOGREDIRECT</code>", "<code>wp-config.php</code>")
     php_print("</p>")
 # end if
 php_print("""                   </fieldset>
@@ -329,7 +329,7 @@ _e("Site upload space")
 php_print("</th>\n              <td>\n                  <label><input type=\"checkbox\" id=\"upload_space_check_disabled\" name=\"upload_space_check_disabled\" value=\"0\"")
 checked(php_bool(get_site_option("upload_space_check_disabled")), False)
 php_print("/>\n                     ")
-printf(__("Limit total size of files uploaded to %s MB"), "</label><label><input name=\"blog_upload_space\" type=\"number\" min=\"0\" style=\"width: 100px\" id=\"blog_upload_space\" aria-describedby=\"blog-upload-space-desc\" value=\"" + esc_attr(get_site_option("blog_upload_space", 100)) + "\" />")
+php_printf(__("Limit total size of files uploaded to %s MB"), "</label><label><input name=\"blog_upload_space\" type=\"number\" min=\"0\" style=\"width: 100px\" id=\"blog_upload_space\" aria-describedby=\"blog-upload-space-desc\" value=\"" + esc_attr(get_site_option("blog_upload_space", 100)) + "\" />")
 php_print("                 </label><br />\n                    <p class=\"screen-reader-text\" id=\"blog-upload-space-desc\">\n                        ")
 _e("Size in megabytes")
 php_print("""                   </p>
@@ -349,7 +349,7 @@ php_print("""                   </p>
 <th scope=\"row\"><label for=\"fileupload_maxk\">""")
 _e("Max upload file size")
 php_print("</label></th>\n              <td>\n                  ")
-printf(__("%s KB"), "<input name=\"fileupload_maxk\" type=\"number\" min=\"0\" style=\"width: 100px\" id=\"fileupload_maxk\" aria-describedby=\"fileupload-maxk-desc\" value=\"" + esc_attr(get_site_option("fileupload_maxk", 300)) + "\" />")
+php_printf(__("%s KB"), "<input name=\"fileupload_maxk\" type=\"number\" min=\"0\" style=\"width: 100px\" id=\"fileupload_maxk\" aria-describedby=\"fileupload-maxk-desc\" value=\"" + esc_attr(get_site_option("fileupload_maxk", 300)) + "\" />")
 php_print("                 <p class=\"screen-reader-text\" id=\"fileupload-maxk-desc\">\n                      ")
 _e("Size in kilobytes")
 php_print("""                   </p>

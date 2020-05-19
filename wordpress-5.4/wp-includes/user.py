@@ -422,7 +422,7 @@ def get_user_option(option_=None, user_=0, deprecated_="", *_args_):
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "3.0.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0")
     # end if
     if php_empty(lambda : user_):
         user_ = get_current_user_id()
@@ -2686,7 +2686,7 @@ def wp_user_personal_data_exporter(email_address_=None, *_args_):
         #// Remove items that use reserved names.
         extra_data_ = php_array_filter(_extra_data_, (lambda item_=None:  (not php_in_array(item_["name"], reserved_names_, True))))
         if php_count(extra_data_) != php_count(_extra_data_):
-            _doing_it_wrong(__FUNCTION__, php_sprintf(__("Filter %s returned items with reserved names."), "<code>wp_privacy_additional_user_profile_data</code>"), "5.4.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("Filter %s returned items with reserved names."), "<code>wp_privacy_additional_user_profile_data</code>"), "5.4.0")
         # end if
         if (not php_empty(lambda : extra_data_)):
             user_data_to_export_ = php_array_merge(user_data_to_export_, extra_data_)

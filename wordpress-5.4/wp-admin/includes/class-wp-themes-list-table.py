@@ -89,21 +89,21 @@ class WP_Themes_List_Table(WP_List_Table):
         blog_id_ = get_current_blog_id()
         if is_multisite():
             if current_user_can("install_themes") and current_user_can("manage_network_themes"):
-                printf(__("You only have one theme enabled for this site right now. Visit the Network Admin to <a href=\"%1$s\">enable</a> or <a href=\"%2$s\">install</a> more themes."), network_admin_url("site-themes.php?id=" + blog_id_), network_admin_url("theme-install.php"))
+                php_printf(__("You only have one theme enabled for this site right now. Visit the Network Admin to <a href=\"%1$s\">enable</a> or <a href=\"%2$s\">install</a> more themes."), network_admin_url("site-themes.php?id=" + blog_id_), network_admin_url("theme-install.php"))
                 return
             elif current_user_can("manage_network_themes"):
-                printf(__("You only have one theme enabled for this site right now. Visit the Network Admin to <a href=\"%s\">enable</a> more themes."), network_admin_url("site-themes.php?id=" + blog_id_))
+                php_printf(__("You only have one theme enabled for this site right now. Visit the Network Admin to <a href=\"%s\">enable</a> more themes."), network_admin_url("site-themes.php?id=" + blog_id_))
                 return
             # end if
             pass
         else:
             if current_user_can("install_themes"):
-                printf(__("You only have one theme installed right now. Live a little! You can choose from over 1,000 free themes in the WordPress Theme Directory at any time: just click on the <a href=\"%s\">Install Themes</a> tab above."), admin_url("theme-install.php"))
+                php_printf(__("You only have one theme installed right now. Live a little! You can choose from over 1,000 free themes in the WordPress Theme Directory at any time: just click on the <a href=\"%s\">Install Themes</a> tab above."), admin_url("theme-install.php"))
                 return
             # end if
         # end if
         #// Fallthrough.
-        printf(__("Only the current theme is available to you. Contact the %s administrator for information about accessing additional themes."), get_site_option("site_name"))
+        php_printf(__("Only the current theme is available to you. Contact the %s administrator for information about accessing additional themes."), get_site_option("site_name"))
     # end def no_items
     #// 
     #// @param string $which
@@ -210,7 +210,7 @@ class WP_Themes_List_Table(WP_List_Table):
             php_print(title_)
             php_print("</h3>\n          <div class=\"theme-author\">\n              ")
             #// translators: %s: Theme author.
-            printf(__("By %s"), author_)
+            php_printf(__("By %s"), author_)
             php_print("""           </div>
             <div class=\"action-links\">
             <ul>
@@ -236,7 +236,7 @@ class WP_Themes_List_Table(WP_List_Table):
             php_print(theme_.display("Description"))
             php_print("</p>\n               ")
             if theme_.parent():
-                printf(" <p class=\"howto\">" + __("This <a href=\"%1$s\">child theme</a> requires its parent theme, %2$s.") + "</p>", __("https://developer.wordpress.org/themes/advanced-topics/child-themes/"), theme_.parent().display("Name"))
+                php_printf(" <p class=\"howto\">" + __("This <a href=\"%1$s\">child theme</a> requires its parent theme, %2$s.") + "</p>", __("https://developer.wordpress.org/themes/advanced-topics/child-themes/"), theme_.parent().display("Name"))
             # end if
             php_print("""           </div>
             </div>
@@ -294,7 +294,7 @@ class WP_Themes_List_Table(WP_List_Table):
         if php_is_array(extra_args_):
             args_ = php_array_merge(args_, extra_args_)
         # end if
-        printf("<script type='text/javascript'>var theme_list_args = %s;</script>\n", wp_json_encode(args_))
+        php_printf("<script type='text/javascript'>var theme_list_args = %s;</script>\n", wp_json_encode(args_))
         super()._js_vars()
     # end def _js_vars
 # end class WP_Themes_List_Table

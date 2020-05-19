@@ -203,7 +203,7 @@ class WP_Scripts(WP_Dependencies):
             echo_ = True
         # end if
         
-        _deprecated_function(__FUNCTION__, "3.3.0", "WP_Scripts::print_extra_script()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "WP_Scripts::print_extra_script()")
         return self.print_extra_script(handle_, echo_)
     # end def print_scripts_l10n
     #// 
@@ -436,7 +436,7 @@ class WP_Scripts(WP_Dependencies):
         # end if
         output_ = php_trim(php_implode("\n", output_), "\n")
         if echo_:
-            printf("""<script%s>
+            php_printf("""<script%s>
             %s
             </script>
             """, self.type_attr, output_)
@@ -562,7 +562,7 @@ class WP_Scripts(WP_Dependencies):
         # end if
         output_ = str("""( function( domain, translations ) {\n var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;\n localeData[\"\"].domain = domain;\n wp.i18n.setLocaleData( localeData, domain );\n} )( \"""") + str(domain_) + str("\", ") + str(json_translations_) + str(" );")
         if echo_:
-            printf("""<script%s>
+            php_printf("""<script%s>
             %s
             </script>
             """, self.type_attr, output_)

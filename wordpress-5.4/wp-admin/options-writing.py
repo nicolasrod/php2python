@@ -101,7 +101,7 @@ if apply_filters("enable_post_by_email_configuration", True):
     php_print("<h2 class=\"title\">")
     _e("Post via email")
     php_print("</h2>\n<p>\n ")
-    printf(__("To post to WordPress by email you must set up a secret email account with POP3 access. Any mail received at this address will be posted, so it&#8217;s a good idea to keep this address very secret. Here are three random strings you could use: %1$s, %2$s, %3$s."), php_sprintf("<kbd>%s</kbd>", wp_generate_password(8, False)), php_sprintf("<kbd>%s</kbd>", wp_generate_password(8, False)), php_sprintf("<kbd>%s</kbd>", wp_generate_password(8, False)))
+    php_printf(__("To post to WordPress by email you must set up a secret email account with POP3 access. Any mail received at this address will be posted, so it&#8217;s a good idea to keep this address very secret. Here are three random strings you could use: %1$s, %2$s, %3$s."), php_sprintf("<kbd>%s</kbd>", wp_generate_password(8, False)), php_sprintf("<kbd>%s</kbd>", wp_generate_password(8, False)), php_sprintf("<kbd>%s</kbd>", wp_generate_password(8, False)))
     php_print("""</p>
     <table class=\"form-table\" role=\"presentation\">
     <tr>
@@ -154,13 +154,13 @@ if apply_filters("enable_update_services_configuration", True):
     php_print("</h2>\n\n    ")
     if 1 == get_option("blog_public"):
         php_print("\n   <p><label for=\"ping_sites\">\n     ")
-        printf(__("When you publish a new post, WordPress automatically notifies the following site update services. For more about this, see <a href=\"%s\">Update Services</a> on the Codex. Separate multiple service URLs with line breaks."), __("https://codex.wordpress.org/Update_Services"))
+        php_printf(__("When you publish a new post, WordPress automatically notifies the following site update services. For more about this, see <a href=\"%s\">Update Services</a> on the Codex. Separate multiple service URLs with line breaks."), __("https://codex.wordpress.org/Update_Services"))
         php_print(" </label></p>\n\n    <textarea name=\"ping_sites\" id=\"ping_sites\" class=\"large-text code\" rows=\"3\">")
         php_print(esc_textarea(get_option("ping_sites")))
         php_print("</textarea>\n\n  ")
     else:
         php_print("\n   <p>\n       ")
-        printf(__("WordPress is not notifying any <a href=\"%1$s\">Update Services</a> because of your site&#8217;s <a href=\"%2$s\">visibility settings</a>."), __("https://codex.wordpress.org/Update_Services"), "options-reading.php")
+        php_printf(__("WordPress is not notifying any <a href=\"%1$s\">Update Services</a> because of your site&#8217;s <a href=\"%2$s\">visibility settings</a>."), __("https://codex.wordpress.org/Update_Services"), "options-reading.php")
         php_print(" </p>\n\n    ")
     # end if
 # end if

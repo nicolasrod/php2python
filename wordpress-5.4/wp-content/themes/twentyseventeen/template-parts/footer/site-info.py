@@ -16,5 +16,5 @@ php_print(" <a href=\"")
 php_print(esc_url(__("https://wordpress.org/", "twentyseventeen")))
 php_print("\" class=\"imprint\">\n      ")
 #// translators: %s: WordPress
-printf(__("Proudly powered by %s", "twentyseventeen"), "WordPress")
+php_printf(__("Proudly powered by %s", "twentyseventeen"), "WordPress")
 php_print(" </a>\n</div><!-- .site-info -->\n")

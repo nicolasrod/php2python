@@ -372,16 +372,16 @@ def wp_plugin_update_row(file_=None, plugin_data_=None, *_args_):
         requires_php_ = response_.requires_php if (php_isset(lambda : response_.requires_php)) else None
         compatible_php_ = is_php_version_compatible(requires_php_)
         notice_type_ = "notice-warning" if compatible_php_ else "notice-error"
-        printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\" data-plugin=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline %s notice-alt\"><p>", active_class_, esc_attr(response_.slug + "-update"), esc_attr(response_.slug), esc_attr(file_), esc_attr(wp_list_table_.get_column_count()), notice_type_)
+        php_printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\" data-plugin=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline %s notice-alt\"><p>", active_class_, esc_attr(response_.slug + "-update"), esc_attr(response_.slug), esc_attr(file_), esc_attr(wp_list_table_.get_column_count()), notice_type_)
         if (not current_user_can("update_plugins")):
-            printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version))
+            php_printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version))
         elif php_empty(lambda : response_.package):
-            printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>"), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version))
+            php_printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>"), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version))
         else:
             if compatible_php_:
-                printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version), wp_nonce_url(self_admin_url("update.php?action=upgrade-plugin&plugin=") + file_, "upgrade-plugin_" + file_), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), plugin_name_))))
+                php_printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version), wp_nonce_url(self_admin_url("update.php?action=upgrade-plugin&plugin=") + file_, "upgrade-plugin_" + file_), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), plugin_name_))))
             else:
-                printf(__("There is a new version of %1$s available, but it doesn&#8217;t work with your version of PHP. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\">learn more about updating PHP</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version), esc_url(wp_get_update_php_url()))
+                php_printf(__("There is a new version of %1$s available, but it doesn&#8217;t work with your version of PHP. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\">learn more about updating PHP</a>."), plugin_name_, esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), plugin_name_, response_.new_version))), esc_attr(response_.new_version), esc_url(wp_get_update_php_url()))
                 wp_update_php_annotation("<br><em>", "</em>")
             # end if
         # end if
@@ -482,13 +482,13 @@ def wp_theme_update_row(theme_key_=None, theme_=None, *_args_):
     #// @var WP_MS_Themes_List_Table $wp_list_table
     wp_list_table_ = _get_list_table("WP_MS_Themes_List_Table")
     active_ = " active" if theme_.is_allowed("network") else ""
-    printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline notice-warning notice-alt\"><p>", active_, esc_attr(theme_.get_stylesheet() + "-update"), esc_attr(theme_.get_stylesheet()), wp_list_table_.get_column_count())
+    php_printf("<tr class=\"plugin-update-tr%s\" id=\"%s\" data-slug=\"%s\">" + "<td colspan=\"%s\" class=\"plugin-update colspanchange\">" + "<div class=\"update-message notice inline notice-warning notice-alt\"><p>", active_, esc_attr(theme_.get_stylesheet() + "-update"), esc_attr(theme_.get_stylesheet()), wp_list_table_.get_column_count())
     if (not current_user_can("update_themes")):
-        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"])
+        php_printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>."), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"])
     elif php_empty(lambda : response_["package"]):
-        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>"), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"])
+        php_printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>"), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"])
     else:
-        printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"], wp_nonce_url(self_admin_url("update.php?action=upgrade-theme&theme=") + theme_key_, "upgrade-theme_" + theme_key_), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), theme_["Name"]))))
+        php_printf(__("There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View version %4$s details</a> or <a href=\"%5$s\" %6$s>update now</a>."), theme_["Name"], esc_url(details_url_), php_sprintf("class=\"thickbox open-plugin-details-modal\" aria-label=\"%s\"", esc_attr(php_sprintf(__("View %1$s version %2$s details"), theme_["Name"], response_["new_version"]))), response_["new_version"], wp_nonce_url(self_admin_url("update.php?action=upgrade-theme&theme=") + theme_key_, "upgrade-theme_" + theme_key_), php_sprintf("class=\"update-link\" aria-label=\"%s\"", esc_attr(php_sprintf(__("Update %s now"), theme_["Name"]))))
     # end if
     #// 
     #// Fires at the end of the update message container in each
@@ -583,19 +583,19 @@ def wp_print_admin_notice_templates(*_args_):
     <# if ( 'plugin' === data.type ) { #>
     """)
     #// translators: %s: Number of plugins.
-    printf(__("%s plugin successfully updated."), "{{ data.successes }}")
+    php_printf(__("%s plugin successfully updated."), "{{ data.successes }}")
     php_print("                     <# } else { #>\n                            ")
     #// translators: %s: Number of themes.
-    printf(__("%s theme successfully updated."), "{{ data.successes }}")
+    php_printf(__("%s theme successfully updated."), "{{ data.successes }}")
     php_print("""                       <# } #>
     <# } else { #>
     <# if ( 'plugin' === data.type ) { #>
     """)
     #// translators: %s: Number of plugins.
-    printf(__("%s plugins successfully updated."), "{{ data.successes }}")
+    php_printf(__("%s plugins successfully updated."), "{{ data.successes }}")
     php_print("                     <# } else { #>\n                            ")
     #// translators: %s: Number of themes.
-    printf(__("%s themes successfully updated."), "{{ data.successes }}")
+    php_printf(__("%s themes successfully updated."), "{{ data.successes }}")
     php_print("""                       <# } #>
     <# } #>
     <# } #>
@@ -604,10 +604,10 @@ def wp_print_admin_notice_templates(*_args_):
     <# if ( 1 === data.errors ) { #>
     """)
     #// translators: %s: Number of failed updates.
-    printf(__("%s update failed."), "{{ data.errors }}")
+    php_printf(__("%s update failed."), "{{ data.errors }}")
     php_print("                     <# } else { #>\n                            ")
     #// translators: %s: Number of failed updates.
-    printf(__("%s updates failed."), "{{ data.errors }}")
+    php_printf(__("%s updates failed."), "{{ data.errors }}")
     php_print("                     <# } #>\n                       <span class=\"screen-reader-text\">")
     _e("Show more details")
     php_print("""</span>
@@ -668,9 +668,9 @@ def wp_print_update_row_templates(*_args_):
     <td colspan=\"{{ data.colspan }}\" class=\"plugin-update colspanchange\">
     <# if ( data.plugin ) { #>
     """)
-    printf(_x("%s was successfully deleted.", "plugin"), "<strong>{{{ data.name }}}</strong>")
+    php_printf(_x("%s was successfully deleted.", "plugin"), "<strong>{{{ data.name }}}</strong>")
     php_print("             <# } else { #>\n                    ")
-    printf(_x("%s was successfully deleted.", "theme"), "<strong>{{{ data.name }}}</strong>")
+    php_printf(_x("%s was successfully deleted.", "theme"), "<strong>{{{ data.name }}}</strong>")
     php_print("""               <# } #>
     </td>
     </tr>
@@ -692,6 +692,6 @@ def wp_recovery_mode_nag(*_args_):
     url_ = add_query_arg("action", WP_Recovery_Mode.EXIT_ACTION, url_)
     url_ = wp_nonce_url(url_, WP_Recovery_Mode.EXIT_ACTION)
     php_print(" <div class=\"notice notice-info\">\n        <p>\n           ")
-    printf(__("You are in recovery mode. This means there may be an error with a theme or plugin. To exit recovery mode, log out or use the Exit button. <a href=\"%s\">Exit Recovery Mode</a>"), esc_url(url_))
+    php_printf(__("You are in recovery mode. This means there may be an error with a theme or plugin. To exit recovery mode, log out or use the Exit button. <a href=\"%s\">Exit Recovery Mode</a>"), esc_url(url_))
     php_print("     </p>\n  </div>\n    ")
 # end def wp_recovery_mode_nag

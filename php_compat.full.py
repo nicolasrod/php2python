@@ -3,7 +3,6 @@ def php_php_addcslashes(_str, _charlist="\\'\!\0"): pass
 def php_array_merge_recursive(*args): pass
 def php_array_reduce(_array,_callback,_initial=None,_carry=None,_item=None): pass
 def php_array_replace_recursive(_array1, *args): pass
-def php_array_reverse(_array, _preserve_keys=False): pass
 def php_array_splice(_input, _offset, _length=None, _replacement=[]): pass
 def php_array_sum(_array): pass
 def php_array_unique(_array, _sort_flags=SORT_STRING): pass

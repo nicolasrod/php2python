@@ -202,7 +202,7 @@ def upload_is_user_over_quota(echo_=None, *_args_):
     space_used_ = get_space_used()
     if space_allowed_ - space_used_ < 0:
         if echo_:
-            printf(__("Sorry, you have used your space allocation of %s. Please delete some files to upload more files."), size_format(space_allowed_ * MB_IN_BYTES))
+            php_printf(__("Sorry, you have used your space allocation of %s. Please delete some files to upload more files."), size_format(space_allowed_ * MB_IN_BYTES))
         # end if
         return True
     else:
@@ -223,7 +223,7 @@ def display_space_usage(*_args_):
     space_ = size_format(space_allowed_ * MB_IN_BYTES)
     php_print(" <strong>\n  ")
     #// translators: Storage space that's been used. 1: Percentage of used space, 2: Total space allowed in megabytes or gigabytes.
-    printf(__("Used: %1$s%% of %2$s"), number_format(percent_used_), space_)
+    php_printf(__("Used: %1$s%% of %2$s"), number_format(percent_used_), space_)
     php_print(" </strong>\n ")
 # end def display_space_usage
 #// 
@@ -653,7 +653,7 @@ def confirm_delete_users(users_=None, *_args_):
             blogs_ = get_blogs_of_user(user_id_, True)
             if (not php_empty(lambda : blogs_)):
                 php_print("             <td><fieldset><p><legend>\n             ")
-                printf(__("What should be done with content owned by %s?"), "<em>" + delete_user_.user_login + "</em>")
+                php_printf(__("What should be done with content owned by %s?"), "<em>" + delete_user_.user_login + "</em>")
                 php_print("             </legend></p>\n             ")
                 for key_,details_ in blogs_.items():
                     blog_users_ = get_users(Array({"blog_id": details_.userblog_id, "fields": Array("ID", "user_login")}))
@@ -674,7 +674,7 @@ def confirm_delete_users(users_=None, *_args_):
                         user_dropdown_ += "</select>\n"
                         php_print("                     <ul style=\"list-style:none;\">\n                           <li>\n                              ")
                         #// translators: %s: Link to user's site.
-                        printf(__("Site: %s"), user_site_)
+                        php_printf(__("Site: %s"), user_site_)
                         php_print("                         </li>\n                         <li><label><input type=\"radio\" id=\"delete_option0\" name=\"delete[")
                         php_print(details_.userblog_id + "][" + delete_user_.ID)
                         php_print("]\" value=\"delete\" checked=\"checked\" />\n                            ")

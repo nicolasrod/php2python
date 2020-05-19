@@ -265,7 +265,7 @@ def get_terms_to_edit(post_id_=None, taxonomy_="post_tag", *_args_):
     for term_ in terms_:
         term_names_[-1] = term_.name
     # end for
-    terms_to_edit_ = esc_attr(join(",", term_names_))
+    terms_to_edit_ = esc_attr(php_join(",", term_names_))
     #// 
     #// Filters the comma-separated list of terms available to edit.
     #// 

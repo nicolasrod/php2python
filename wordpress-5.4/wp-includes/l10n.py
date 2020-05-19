@@ -802,7 +802,7 @@ def load_plugin_textdomain(domain_=None, deprecated_=None, plugin_rel_path_=None
     if False != plugin_rel_path_:
         path_ = WP_PLUGIN_DIR + "/" + php_trim(plugin_rel_path_, "/")
     elif False != deprecated_:
-        _deprecated_argument(__FUNCTION__, "2.7.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.7.0")
         path_ = ABSPATH + php_trim(deprecated_, "/")
     else:
         path_ = WP_PLUGIN_DIR
@@ -1432,7 +1432,7 @@ def wp_dropdown_languages(args_=None, *_args_):
     # end if
     #// Combine the output string.
     output_ = php_sprintf("<select name=\"%s\" id=\"%s\">", esc_attr(parsed_args_["name"]), esc_attr(parsed_args_["id"]))
-    output_ += join("\n", structure_)
+    output_ += php_join("\n", structure_)
     output_ += "</select>"
     if parsed_args_["echo"]:
         php_print(output_)

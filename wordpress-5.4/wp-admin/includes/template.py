@@ -445,7 +445,7 @@ def wp_comment_trashnotice(*_args_):
     
     php_print("<div class=\"hidden\" id=\"trash-undo-holder\">\n    <div class=\"trash-undo-inside\">\n     ")
     #// translators: %s: Comment author, filled by AJAX.
-    printf(__("Comment by %s moved to the Trash."), "<strong></strong>")
+    php_printf(__("Comment by %s moved to the Trash."), "<strong></strong>")
     php_print("     <span class=\"undo untrash\"><a href=\"#\">")
     _e("Undo")
     php_print("""</a></span>
@@ -455,7 +455,7 @@ def wp_comment_trashnotice(*_args_):
     <div class=\"spam-undo-inside\">
     """)
     #// translators: %s: Comment author, filled by AJAX.
-    printf(__("Comment by %s marked as spam."), "<strong></strong>")
+    php_printf(__("Comment by %s marked as spam."), "<strong></strong>")
     php_print("     <span class=\"undo unspam\"><a href=\"#\">")
     _e("Undo")
     php_print("""</a></span>
@@ -718,7 +718,7 @@ def touch_time(edit_=1, for_post_=1, tab_index_=0, multi_=0, *_args_):
     minute_ = "<label><span class=\"screen-reader-text\">" + __("Minute") + "</span><input type=\"text\" " + "" if multi_ else "id=\"mn\" " + "name=\"mn\" value=\"" + mn_ + "\" size=\"2\" maxlength=\"2\"" + tab_index_attribute_ + " autocomplete=\"off\" /></label>"
     php_print("<div class=\"timestamp-wrap\">")
     #// translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute.
-    printf(__("%1$s %2$s, %3$s at %4$s:%5$s"), month_, day_, year_, hour_, minute_)
+    php_printf(__("%1$s %2$s, %3$s at %4$s:%5$s"), month_, day_, year_, hour_, minute_)
     php_print("</div><input type=\"hidden\" id=\"ss\" name=\"ss\" value=\"" + ss_ + "\" />")
     if multi_:
         return
@@ -805,7 +805,7 @@ def wp_dropdown_roles(selected_="", *_args_):
     
     
     r_ = ""
-    editable_roles_ = array_reverse(get_editable_roles())
+    editable_roles_ = php_array_reverse(get_editable_roles())
     for role_,details_ in editable_roles_.items():
         name_ = translate_user_role(details_["name"])
         #// Preselect specified role.
@@ -849,7 +849,7 @@ def wp_import_upload_form(action_=None, *_args_):
         php_print("<form enctype=\"multipart/form-data\" id=\"import-upload-form\" method=\"post\" class=\"wp-upload-form\" action=\"")
         php_print(esc_url(wp_nonce_url(action_, "import-upload")))
         php_print("\">\n<p>\n       ")
-        printf("<label for=\"upload\">%s</label> (%s)", __("Choose a file from your computer:"), php_sprintf(__("Maximum size: %s"), size_))
+        php_printf("<label for=\"upload\">%s</label> (%s)", __("Choose a file from your computer:"), php_sprintf(__("Maximum size: %s"), size_))
         php_print("<input type=\"file\" id=\"upload\" name=\"import\" size=\"25\" />\n<input type=\"hidden\" name=\"action\" value=\"save\" />\n<input type=\"hidden\" name=\"max_file_size\" value=\"")
         php_print(bytes_)
         php_print("\" />\n</p>\n        ")
@@ -988,7 +988,7 @@ def do_block_editor_incompatible_meta_box(object_=None, box_=None, *_args_):
     php_print("<p>")
     if plugin_:
         #// translators: %s: The name of the plugin that generated this meta box.
-        printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin_["Name"]) + str("</strong>"))
+        php_printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin_["Name"]) + str("</strong>"))
     else:
         _e("This meta box isn't compatible with the block editor.")
     # end if
@@ -996,7 +996,7 @@ def do_block_editor_incompatible_meta_box(object_=None, box_=None, *_args_):
     if php_empty(lambda : plugins_["classic-editor/classic-editor.php"]):
         if current_user_can("install_plugins"):
             php_print("<p>")
-            printf(__("Please install the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."), esc_url(wp_nonce_url(self_admin_url("plugin-install.php?tab=favorites&user=wordpressdotorg&save=0"), "save_wporg_username_" + get_current_user_id())))
+            php_printf(__("Please install the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."), esc_url(wp_nonce_url(self_admin_url("plugin-install.php?tab=favorites&user=wordpressdotorg&save=0"), "save_wporg_username_" + get_current_user_id())))
             php_print("</p>")
         # end if
     elif is_plugin_inactive("classic-editor/classic-editor.php"):
@@ -1004,14 +1004,14 @@ def do_block_editor_incompatible_meta_box(object_=None, box_=None, *_args_):
             activate_url_ = wp_nonce_url(self_admin_url("plugins.php?action=activate&plugin=classic-editor/classic-editor.php"), "activate-plugin_classic-editor/classic-editor.php")
             php_print("<p>")
             #// translators: %s: A link to activate the Classic Editor plugin.
-            printf(__("Please activate the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."), esc_url(activate_url_))
+            php_printf(__("Please activate the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."), esc_url(activate_url_))
             php_print("</p>")
         # end if
     elif type(object_).__name__ == "WP_Post":
         edit_url_ = add_query_arg(Array({"classic-editor": "", "classic-editor__forget": ""}), get_edit_post_link(object_))
         php_print("<p>")
         #// translators: %s: A link to use the Classic Editor plugin.
-        printf(__("Please open the <a href=\"%s\">classic editor</a> to use this meta box."), esc_url(edit_url_))
+        php_printf(__("Please open the <a href=\"%s\">classic editor</a> to use this meta box."), esc_url(edit_url_))
         php_print("</p>")
     # end if
 # end def do_block_editor_incompatible_meta_box
@@ -1090,7 +1090,7 @@ def do_meta_boxes(screen_=None, context_=None, object_=None, *_args_):
     # end if
     page_ = screen_.id
     hidden_ = get_hidden_meta_boxes(screen_)
-    printf("<div id=\"%s-sortables\" class=\"meta-box-sortables\">", esc_attr(context_))
+    php_printf("<div id=\"%s-sortables\" class=\"meta-box-sortables\">", esc_attr(context_))
     #// Grab the ones the user has manually sorted.
     #// Pull them out of their previous context/priority and into the one the user chose.
     sorted_ = get_user_option(str("meta-box-order_") + str(page_))
@@ -1160,7 +1160,7 @@ def do_meta_boxes(screen_=None, context_=None, object_=None, *_args_):
                         if plugin_:
                             php_print("                         <div class=\"error inline\">\n                              <p>\n                                   ")
                             #// translators: %s: The name of the plugin that generated this meta box.
-                            printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin_["Name"]) + str("</strong>"))
+                            php_printf(__("This meta box, from the %s plugin, isn't compatible with the block editor."), str("<strong>") + str(plugin_["Name"]) + str("</strong>"))
                             php_print("                             </p>\n                          </div>\n                            ")
                         # end if
                     # end if
@@ -1324,11 +1324,11 @@ def add_settings_section(id_=None, title_=None, callback_=None, page_=None, *_ar
     global wp_settings_sections_
     php_check_if_defined("wp_settings_sections_")
     if "misc" == page_:
-        _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
         page_ = "general"
     # end if
     if "privacy" == page_:
-        _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
         page_ = "reading"
     # end if
     wp_settings_sections_[page_][id_] = Array({"id": id_, "title": title_, "callback": callback_})
@@ -1376,11 +1376,11 @@ def add_settings_field(id_=None, title_=None, callback_=None, page_=None, sectio
     global wp_settings_fields_
     php_check_if_defined("wp_settings_fields_")
     if "misc" == page_:
-        _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
         page_ = "general"
     # end if
     if "privacy" == page_:
-        _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
         page_ = "reading"
     # end if
     wp_settings_fields_[page_][section_][id_] = Array({"id": id_, "title": title_, "callback": callback_, "args": args_})

@@ -420,7 +420,7 @@ class WP_User():
         
         global wpdb_
         php_check_if_defined("wpdb_")
-        _deprecated_function(__METHOD__, "4.9.0", "WP_User::for_site()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0", "WP_User::for_site()")
         if php_empty(lambda : cap_key_):
             self.cap_key = wpdb_.get_blog_prefix(self.site_id) + "capabilities"
         else:
@@ -694,7 +694,7 @@ class WP_User():
         
         
         if php_is_numeric(cap_):
-            _deprecated_argument(__FUNCTION__, "2.0.0", __("Usage of user levels is deprecated. Use capabilities instead."))
+            _deprecated_argument(inspect.currentframe().f_code.co_name, "2.0.0", __("Usage of user levels is deprecated. Use capabilities instead."))
             cap_ = self.translate_level_to_cap(cap_)
         # end if
         caps_ = map_meta_cap(cap_, self.ID, args_)
@@ -763,7 +763,7 @@ class WP_User():
     def for_blog(self, blog_id_=""):
         
         
-        _deprecated_function(__METHOD__, "4.9.0", "WP_User::for_site()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0", "WP_User::for_site()")
         self.for_site(blog_id_)
     # end def for_blog
     #// 

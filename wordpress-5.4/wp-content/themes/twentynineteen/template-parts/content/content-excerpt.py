@@ -14,7 +14,7 @@ php_print("\" ")
 post_class()
 php_print(">\n  <header class=\"entry-header\">\n       ")
 if is_sticky() and is_home() and (not is_paged()):
-    printf("<span class=\"sticky-post\">%s</span>", _x("Featured", "post", "twentynineteen"))
+    php_printf("<span class=\"sticky-post\">%s</span>", _x("Featured", "post", "twentynineteen"))
 # end if
 the_title(php_sprintf("<h2 class=\"entry-title\"><a href=\"%s\" rel=\"bookmark\">", esc_url(get_permalink())), "</a></h2>")
 php_print(" </header><!-- .entry-header -->\n\n ")

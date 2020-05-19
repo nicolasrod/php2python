@@ -142,7 +142,7 @@ php_print("""</label>
 submitted_ = php_sprintf(__("%1$s at %2$s"), date_i18n(_x("M j, Y", "publish box date format"), strtotime(comment_.comment_date)), date_i18n(_x("H:i", "publish box time format"), strtotime(comment_.comment_date)))
 php_print("<span id=\"timestamp\">\n")
 #// translators: %s: Comment date.
-printf(__("Submitted on: %s"), "<b>" + submitted_ + "</b>")
+php_printf(__("Submitted on: %s"), "<b>" + submitted_ + "</b>")
 php_print("</span>\n<a href=\"#edit_timestamp\" class=\"edit-timestamp hide-if-no-js\"><span aria-hidden=\"true\">")
 _e("Edit")
 php_print("</span> <span class=\"screen-reader-text\">")
@@ -162,7 +162,7 @@ else:
     post_link_ = esc_html(get_the_title(post_id_))
 # end if
 php_print("\n<div class=\"misc-pub-section misc-pub-response-to\">\n    ")
-printf(__("In response to: %s"), "<b>" + post_link_ + "</b>")
+php_printf(__("In response to: %s"), "<b>" + post_link_ + "</b>")
 php_print("</div>\n\n")
 if comment_.comment_parent:
     parent_ = get_comment(comment_.comment_parent)
@@ -170,7 +170,7 @@ if comment_.comment_parent:
         parent_link_ = esc_url(get_comment_link(parent_))
         name_ = get_comment_author(parent_)
         php_print(" <div class=\"misc-pub-section misc-pub-reply-to\">\n        ")
-        printf(__("In reply to: %s"), "<b><a href=\"" + parent_link_ + "\">" + name_ + "</a></b>")
+        php_printf(__("In reply to: %s"), "<b><a href=\"" + parent_link_ + "\">" + name_ + "</a></b>")
         php_print(" </div>\n        ")
     # end if
 # end if

@@ -140,7 +140,7 @@ if (not php_empty(lambda : messages_)):
     # end for
 # end if
 php_print("<p>\n")
-printf(__("Required fields are marked %s"), "<span class=\"required\">*</span>")
+php_printf(__("Required fields are marked %s"), "<span class=\"required\">*</span>")
 php_print("</p>\n<form method=\"post\" action=\"")
 php_print(network_admin_url("site-new.php?action=add-site"))
 php_print("\" novalidate=\"novalidate\">\n")

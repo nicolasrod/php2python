@@ -53,7 +53,7 @@ php_print("</h1>\n\n")
 if php_in_array(get_site_option("registration"), Array("all", "blog")):
     #// This filter is documented in wp-login.php
     sign_up_url_ = apply_filters("wp_signup_location", network_site_url("wp-signup.php"))
-    printf(" <a href=\"%s\" class=\"page-title-action\">%s</a>", esc_url(sign_up_url_), esc_html_x("Add New", "site"))
+    php_printf(" <a href=\"%s\" class=\"page-title-action\">%s</a>", esc_url(sign_up_url_), esc_html_x("Add New", "site"))
 # end if
 if php_empty(lambda : blogs_):
     php_print("<p>")

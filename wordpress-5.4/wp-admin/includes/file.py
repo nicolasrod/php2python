@@ -188,13 +188,13 @@ def wp_print_file_editor_templates(*_args_):
     <# if ( 'php_error' === data.code ) { #>
     <p>
     """)
-    printf(__("Your PHP code changes were rolled back due to an error on line %1$s of file %2$s. Please fix and try saving again."), "{{ data.line }}", "{{ data.file }}")
+    php_printf(__("Your PHP code changes were rolled back due to an error on line %1$s of file %2$s. Please fix and try saving again."), "{{ data.line }}", "{{ data.file }}")
     php_print("""               </p>
     <pre>{{ data.message }}</pre>
     <# } else if ( 'file_not_writable' === data.code ) { #>
     <p>
     """)
-    printf(__("You need to make this file writable before you can save your changes. See <a href=\"%s\">Changing File Permissions</a> for more information."), __("https://wordpress.org/support/article/changing-file-permissions/"))
+    php_printf(__("You need to make this file writable before you can save your changes. See <a href=\"%s\">Changing File Permissions</a> for more information."), __("https://wordpress.org/support/article/changing-file-permissions/"))
     php_print("""               </p>
     <# } else { #>
     <p>{{ data.message || data.code }}</p>

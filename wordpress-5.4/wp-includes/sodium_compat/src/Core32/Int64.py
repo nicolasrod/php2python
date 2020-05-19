@@ -331,7 +331,7 @@ class ParagonIE_Sodium_Core32_Int64():
         #// Handle negative numbers
         aNeg_ = self.limbs[0] >> 15 & 1
         bNeg_ = int_ >> 31 & 1
-        a_ = array_reverse(self.limbs)
+        a_ = php_array_reverse(self.limbs)
         b_ = Array(int_ & 65535, int_ >> 16 & 65535, -bNeg_ & 65535, -bNeg_ & 65535)
         if aNeg_:
             i_ = 0
@@ -390,8 +390,8 @@ class ParagonIE_Sodium_Core32_Int64():
         
         aNeg_ = self.limbs[0] >> 15 & 1
         bNeg_ = right_.limbs[0] >> 15 & 1
-        a_ = array_reverse(self.limbs)
-        b_ = array_reverse(right_.limbs)
+        a_ = php_array_reverse(self.limbs)
+        b_ = php_array_reverse(right_.limbs)
         if aNeg_:
             i_ = 0
             while i_ < 4:

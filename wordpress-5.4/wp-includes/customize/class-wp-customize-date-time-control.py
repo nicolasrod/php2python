@@ -159,7 +159,7 @@ class WP_Customize_Date_Time_Control(WP_Customize_Control):
         php_print("</label>\n                   <input id=\"{{ idPrefix }}date-time-year\" type=\"number\" size=\"4\" autocomplete=\"off\" class=\"date-input year\" data-component=\"year\" min=\"{{ data.minYear }}\" max=\"{{ data.maxYear }}\">\n                   ")
         year_field_ = php_trim(ob_get_clean())
         php_print("\n                   ")
-        printf(date_format_, year_field_, month_field_, day_field_)
+        php_printf(date_format_, year_field_, month_field_, day_field_)
         php_print("""               </div>
         </fieldset>
         <# if ( data.includeTime ) { #>

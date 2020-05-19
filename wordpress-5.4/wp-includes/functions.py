@@ -485,7 +485,7 @@ def human_readable_duration(duration_="", *_args_):
         duration_ = php_substr(duration_, 1)
     # end if
     #// Extract duration parts.
-    duration_parts_ = array_reverse(php_explode(":", duration_))
+    duration_parts_ = php_array_reverse(php_explode(":", duration_))
     duration_count_ = php_count(duration_parts_)
     hour_ = None
     minute_ = None
@@ -907,7 +907,7 @@ def wp_get_http_headers(url_=None, deprecated_=None, *_args_):
     # end if
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.7.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.7.0")
     # end if
     response_ = wp_safe_remote_head(url_)
     if is_wp_error(response_):
@@ -2457,7 +2457,7 @@ def wp_upload_bits(name_=None, deprecated_=None, bits_=None, time_=None, *_args_
     # end if
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.0.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.0.0")
     # end if
     if php_empty(lambda : name_):
         return Array({"error": __("Empty filename")})
@@ -3000,7 +3000,7 @@ def _default_wp_die_handler(message_=None, title_="", args_=None, *_args_):
     if php_is_string(message_):
         if (not php_empty(lambda : parsed_args_["additional_errors"])):
             message_ = php_array_merge(Array(message_), wp_list_pluck(parsed_args_["additional_errors"], "message"))
-            message_ = "<ul>\n      <li>" + join("</li>\n       <li>", message_) + "</li>\n </ul>"
+            message_ = "<ul>\n      <li>" + php_join("</li>\n       <li>", message_) + "</li>\n </ul>"
         # end if
         message_ = php_sprintf("<div class=\"wp-die-message\">%s</div>", message_)
     # end if
@@ -3314,8 +3314,8 @@ def _xml_wp_die_handler(message_=None, title_="", args_=None, *_args_):
     # end if
     
     message_, title_, parsed_args_ = _wp_die_process_input(message_, title_, args_)
-    message_ = htmlspecialchars(message_)
-    title_ = htmlspecialchars(title_)
+    message_ = php_htmlspecialchars(message_)
+    title_ = php_htmlspecialchars(title_)
     xml_ = str("<error>\n    <code>") + str(parsed_args_["code"]) + str("</code>\n    <title><![CDATA[") + str(title_) + str("]]></title>\n    <message><![CDATA[") + str(message_) + str("]]></message>\n    <data>\n        <status>") + str(parsed_args_["response"]) + str("""</status>\n    </data>\n</error>\n""")
     if (not php_headers_sent()):
         php_header(str("Content-Type: text/xml; charset=") + str(parsed_args_["charset"]))
@@ -3565,7 +3565,7 @@ def _wp_json_convert_string(string_=None, *_args_):
 def _wp_json_prepare_data(data_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "5.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0")
     return data_
 # end def _wp_json_prepare_data
 #// 
@@ -5107,7 +5107,7 @@ def wp_timezone_choice(selected_zone_=None, locale_=None, *_args_):
             # end if
         # end if
         #// Build the value.
-        value_ = join("/", value_)
+        value_ = php_join("/", value_)
         selected_ = ""
         if value_ == selected_zone_:
             selected_ = "selected=\"selected\" "
@@ -5146,7 +5146,7 @@ def wp_timezone_choice(selected_zone_=None, locale_=None, *_args_):
         structure_[-1] = "<option " + selected_ + "value=\"" + esc_attr(offset_value_) + "\">" + esc_html(offset_name_) + "</option>"
     # end for
     structure_[-1] = "</optgroup>"
-    return join("\n", structure_)
+    return php_join("\n", structure_)
 # end def wp_timezone_choice
 #// 
 #// Strip close comment and close php tags from file headers used by WP.
@@ -5576,7 +5576,7 @@ def wp_debug_backtrace_summary(ignore_class_=None, skip_frames_=0, pretty_=None,
     # end if
     
     truncate_paths_ = None
-    trace_ = debug_backtrace(False)
+    trace_ = php_debug_backtrace(False)
     caller_ = Array()
     check_class_ = (not php_is_null(ignore_class_))
     skip_frames_ += 1
@@ -5605,7 +5605,7 @@ def wp_debug_backtrace_summary(ignore_class_=None, skip_frames_=0, pretty_=None,
         # end if
     # end for
     if pretty_:
-        return join(", ", array_reverse(caller_))
+        return php_join(", ", php_array_reverse(caller_))
     else:
         return caller_
     # end if
@@ -6174,7 +6174,7 @@ def wp_is_uuid(uuid_=None, version_=None, *_args_):
     # end if
     if php_is_numeric(version_):
         if 4 != php_int(version_):
-            _doing_it_wrong(__FUNCTION__, __("Only UUID V4 is supported at this time."), "4.9.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Only UUID V4 is supported at this time."), "4.9.0")
             return False
         # end if
         regex_ = "/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/"
@@ -6653,7 +6653,7 @@ def wp_direct_php_update_button(*_args_):
         return
     # end if
     php_print("<p class=\"button-container\">")
-    printf("<a class=\"button button-primary\" href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(direct_update_url_), __("Update PHP"), __("(opens in a new tab)"))
+    php_printf("<a class=\"button button-primary\" href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(direct_update_url_), __("Update PHP"), __("(opens in a new tab)"))
     php_print("</p>")
 # end def wp_direct_php_update_button
 #// 

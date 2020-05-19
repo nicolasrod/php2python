@@ -60,7 +60,7 @@ while True:
     #// Retrieve attachment metadata.
     metadata_ = wp_get_attachment_metadata()
     if metadata_:
-        printf("<span class=\"full-size-link\"><span class=\"screen-reader-text\">%1$s</span><a href=\"%2$s\">%3$s &times; %4$s</a></span>", _x("Full size", "Used before full size attachment link.", "twentynineteen"), esc_url(wp_get_attachment_url()), absint(metadata_["width"]), absint(metadata_["height"]))
+        php_printf("<span class=\"full-size-link\"><span class=\"screen-reader-text\">%1$s</span><a href=\"%2$s\">%3$s &times; %4$s</a></span>", _x("Full size", "Used before full size attachment link.", "twentynineteen"), esc_url(wp_get_attachment_url()), absint(metadata_["width"]), absint(metadata_["height"]))
     # end if
     php_print("\n                       ")
     twentynineteen_entry_footer()

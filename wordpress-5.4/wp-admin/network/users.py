@@ -212,7 +212,7 @@ if current_user_can("create_users"):
 # end if
 if php_strlen(usersearch_):
     #// translators: %s: Search query.
-    printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(usersearch_))
+    php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(usersearch_))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">

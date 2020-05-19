@@ -185,17 +185,17 @@ def network_step1(errors_=None, *_args_):
         if got_mod_rewrite_:
             #// Dangerous assumptions.
             php_print("<div class=\"updated inline\"><p><strong>" + __("Note:") + "</strong> ")
-            printf(__("Please make sure the Apache %s module is installed as it will be used at the end of this installation."), "<code>mod_rewrite</code>")
+            php_printf(__("Please make sure the Apache %s module is installed as it will be used at the end of this installation."), "<code>mod_rewrite</code>")
             php_print("</p>")
         elif is_apache_:
             php_print("<div class=\"error inline\"><p><strong>" + __("Warning:") + "</strong> ")
-            printf(__("It looks like the Apache %s module is not installed."), "<code>mod_rewrite</code>")
+            php_printf(__("It looks like the Apache %s module is not installed."), "<code>mod_rewrite</code>")
             php_print("</p>")
         # end if
         if got_mod_rewrite_ or is_apache_:
             #// Protect against mod_rewrite mimicry (but ! Apache).
             php_print("<p>")
-            printf(__("If %1$s is disabled, ask your administrator to enable that module, or look at the <a href=\"%2$s\">Apache documentation</a> or <a href=\"%3$s\">elsewhere</a> for help setting it up."), "<code>mod_rewrite</code>", "https://httpd.apache.org/docs/mod/mod_rewrite.html", "https://www.google.com/search?q=apache+mod_rewrite")
+            php_printf(__("If %1$s is disabled, ask your administrator to enable that module, or look at the <a href=\"%2$s\">Apache documentation</a> or <a href=\"%3$s\">elsewhere</a> for help setting it up."), "<code>mod_rewrite</code>", "https://httpd.apache.org/docs/mod/mod_rewrite.html", "https://www.google.com/search?q=apache+mod_rewrite")
             php_print("</p></div>")
         # end if
     # end if
@@ -215,7 +215,7 @@ def network_step1(errors_=None, *_args_):
         php_print(" /> ")
         _e("Sub-domains")
         php_print("</label></th>\n              <td>\n              ")
-        printf(_x("like <code>site1.%1$s</code> and <code>site2.%1$s</code>", "subdomain examples"), hostname_)
+        php_printf(_x("like <code>site1.%1$s</code> and <code>site2.%1$s</code>", "subdomain examples"), hostname_)
         php_print("""               </td>
         </tr>
         <tr>
@@ -224,7 +224,7 @@ def network_step1(errors_=None, *_args_):
         php_print(" /> ")
         _e("Sub-directories")
         php_print("</label></th>\n              <td>\n              ")
-        printf(_x("like <code>%1$s/site1</code> and <code>%1$s/site2</code>", "subdirectory examples"), hostname_)
+        php_printf(_x("like <code>%1$s/site1</code> and <code>%1$s/site2</code>", "subdirectory examples"), hostname_)
         php_print("""               </td>
         </tr>
         </table>
@@ -238,14 +238,14 @@ def network_step1(errors_=None, *_args_):
         php_print("     <h3>")
         esc_html_e("Server Address")
         php_print("</h3>\n      <p>\n       ")
-        printf(__("We recommend you change your site domain to %1$s before enabling the network feature. It will still be possible to visit your site using the %3$s prefix with an address like %2$s but any links will not have the %3$s prefix."), "<code>" + php_substr(hostname_, 4) + "</code>", "<code>" + hostname_ + "</code>", "<code>www</code>")
+        php_printf(__("We recommend you change your site domain to %1$s before enabling the network feature. It will still be possible to visit your site using the %3$s prefix with an address like %2$s but any links will not have the %3$s prefix."), "<code>" + php_substr(hostname_, 4) + "</code>", "<code>" + hostname_ + "</code>", "<code>www</code>")
         php_print("""       </p>
         <table class=\"form-table\" role=\"presentation\">
         <tr>
         <th scope='row'>""")
         esc_html_e("Server Address")
         php_print("</th>\n          <td>\n              ")
-        printf(__("The internet address of your network will be %s."), "<code>" + hostname_ + "</code>")
+        php_printf(__("The internet address of your network will be %s."), "<code>" + hostname_ + "</code>")
         php_print("""               </td>
         </tr>
         </table>
@@ -258,7 +258,7 @@ def network_step1(errors_=None, *_args_):
         php_print("         <tr>\n              <th scope=\"row\">")
         esc_html_e("Sub-directory Installation")
         php_print("</th>\n              <td>\n              ")
-        printf(__("Because you are using %1$s, the sites in your WordPress network must use sub-directories. Consider using %2$s if you wish to use sub-domains."), "<code>localhost</code>", "<code>localhost.localdomain</code>")
+        php_printf(__("Because you are using %1$s, the sites in your WordPress network must use sub-directories. Consider using %2$s if you wish to use sub-domains."), "<code>localhost</code>", "<code>localhost.localdomain</code>")
         #// Uh oh:
         if (not allow_subdirectory_install()):
             php_print(" <strong>" + __("Warning:") + " " + __("The main site in a sub-directory installation will need to use a modified permalink structure, potentially breaking existing links.") + "</strong>")
@@ -287,7 +287,7 @@ def network_step1(errors_=None, *_args_):
         php_print("         <tr>\n              <th scope='row'>")
         esc_html_e("Server Address")
         php_print("</th>\n              <td>\n                  ")
-        printf(__("The internet address of your network will be %s."), "<code>" + hostname_ + "</code>")
+        php_printf(__("The internet address of your network will be %s."), "<code>" + hostname_ + "</code>")
         php_print("             </td>\n         </tr>\n     ")
     # end if
     php_print("         <tr>\n              <th scope='row'><label for=\"sitename\">")
@@ -381,18 +381,18 @@ def network_step2(errors_=None, *_args_):
         php_print("</p>\n       <div class=\"notice notice-warning inline\"><p>\n       ")
         if php_file_exists(home_path_ + ".htaccess"):
             php_print("<strong>" + __("Caution:") + "</strong> ")
-            printf(__("We recommend you back up your existing %1$s and %2$s files."), "<code>wp-config.php</code>", "<code>.htaccess</code>")
+            php_printf(__("We recommend you back up your existing %1$s and %2$s files."), "<code>wp-config.php</code>", "<code>.htaccess</code>")
         elif php_file_exists(home_path_ + "web.config"):
             php_print("<strong>" + __("Caution:") + "</strong> ")
-            printf(__("We recommend you back up your existing %1$s and %2$s files."), "<code>wp-config.php</code>", "<code>web.config</code>")
+            php_printf(__("We recommend you back up your existing %1$s and %2$s files."), "<code>wp-config.php</code>", "<code>web.config</code>")
         else:
             php_print("<strong>" + __("Caution:") + "</strong> ")
-            printf(__("We recommend you back up your existing %s file."), "<code>wp-config.php</code>")
+            php_printf(__("We recommend you back up your existing %s file."), "<code>wp-config.php</code>")
         # end if
         php_print("     </p></div>\n        ")
     # end if
     php_print(" <ol>\n      <li><p>\n       ")
-    printf(__("Add the following to your %1$s file in %2$s <strong>above</strong> the line reading %3$s:"), "<code>wp-config.php</code>", "<code>" + location_of_wp_config_ + "</code>", "<code>/* " + __("That&#8217;s all, stop editing! Happy publishing.") + " */</code>")
+    php_printf(__("Add the following to your %1$s file in %2$s <strong>above</strong> the line reading %3$s:"), "<code>wp-config.php</code>", "<code>" + location_of_wp_config_ + "</code>", "<code>/* " + __("That&#8217;s all, stop editing! Happy publishing.") + " */</code>")
     php_print("""       </p>
     <textarea class=\"code\" readonly=\"readonly\" cols=\"100\" rows=\"7\">
     define('MULTISITE', true);
@@ -429,9 +429,9 @@ def network_step2(errors_=None, *_args_):
         num_keys_salts_ = php_count(keys_salts_)
         php_print("     <p>\n           ")
         if 1 == num_keys_salts_:
-            printf(__("This unique authentication key is also missing from your %s file."), "<code>wp-config.php</code>")
+            php_printf(__("This unique authentication key is also missing from your %s file."), "<code>wp-config.php</code>")
         else:
-            printf(__("These unique authentication keys are also missing from your %s file."), "<code>wp-config.php</code>")
+            php_printf(__("These unique authentication keys are also missing from your %s file."), "<code>wp-config.php</code>")
         # end if
         php_print("         ")
         _e("To make your installation more secure, you should also add:")
@@ -485,7 +485,7 @@ def network_step2(errors_=None, *_args_):
         </configuration>
         """
         php_print("<li><p>")
-        printf(__("Add the following to your %1$s file in %2$s, <strong>replacing</strong> other WordPress rules:"), "<code>web.config</code>", "<code>" + home_path_ + "</code>")
+        php_printf(__("Add the following to your %1$s file in %2$s, <strong>replacing</strong> other WordPress rules:"), "<code>web.config</code>", "<code>" + home_path_ + "</code>")
         php_print("</p>")
         if (not subdomain_install_) and WP_CONTENT_DIR != ABSPATH + "wp-content":
             php_print("<p><strong>" + __("Warning:") + " " + __("Subdirectory networks may not be fully compatible with custom wp-content directories.") + "</strong></p>")
@@ -505,7 +505,7 @@ def network_step2(errors_=None, *_args_):
         # end if
         htaccess_file_ = str("RewriteEngine On\nRewriteBase ") + str(base_) + str("\nRewriteRule ^index\\.php$ - [L]\n") + str(ms_files_rewriting_) + str("\n# add a trailing slash to /wp-admin\nRewriteRule ^") + str(subdir_match_) + str("wp-admin$ ") + str(subdir_replacement_01_) + str("""wp-admin/ [R=301,L]\n\nRewriteCond %{REQUEST_FILENAME} -f [OR]\nRewriteCond %{REQUEST_FILENAME} -d\nRewriteRule ^ - [L]\nRewriteRule ^""") + str(subdir_match_) + str("(wp-(content|admin|includes).*) ") + str(rewrite_base_) + str(subdir_replacement_12_) + str(" [L]\nRewriteRule ^") + str(subdir_match_) + str("(.*\\.php)$ ") + str(rewrite_base_) + str(subdir_replacement_12_) + str(" [L]\nRewriteRule . index.php [L]\n")
         php_print("<li><p>")
-        printf(__("Add the following to your %1$s file in %2$s, <strong>replacing</strong> other WordPress rules:"), "<code>.htaccess</code>", "<code>" + home_path_ + "</code>")
+        php_printf(__("Add the following to your %1$s file in %2$s, <strong>replacing</strong> other WordPress rules:"), "<code>.htaccess</code>", "<code>" + home_path_ + "</code>")
         php_print("</p>")
         if (not subdomain_install_) and WP_CONTENT_DIR != ABSPATH + "wp-content":
             php_print("<p><strong>" + __("Warning:") + " " + __("Subdirectory networks may not be fully compatible with custom wp-content directories.") + "</strong></p>")

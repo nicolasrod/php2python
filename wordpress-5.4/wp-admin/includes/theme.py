@@ -543,17 +543,17 @@ def customize_themes_print_templates(*_args_):
     <h2 class=\"theme-name\">{{{ data.name }}}<span class=\"theme-version\">
     """)
     #// translators: %s: Theme version.
-    printf(__("Version: %s"), "{{ data.version }}")
+    php_printf(__("Version: %s"), "{{ data.version }}")
     php_print("                 </span></h2>\n                  <h3 class=\"theme-author\">\n                       ")
     #// translators: %s: Theme author link.
-    printf(__("By %s"), "{{{ data.authorAndUri }}}")
+    php_printf(__("By %s"), "{{{ data.authorAndUri }}}")
     php_print("""                   </h3>
     <# if ( data.stars && 0 != data.num_ratings ) { #>
     <div class=\"theme-rating\">
     {{{ data.stars }}}
     <a class=\"num-ratings\" target=\"_blank\" href=\"{{ data.reviews_url }}\">
     """)
-    printf("%1$s <span class=\"screen-reader-text\">%2$s</span>", php_sprintf(__("(%s ratings)"), "{{ data.num_ratings }}"), __("(opens in a new tab)"))
+    php_printf("%1$s <span class=\"screen-reader-text\">%2$s</span>", php_sprintf(__("(%s ratings)"), "{{ data.num_ratings }}"), __("(opens in a new tab)"))
     php_print("""                           </a>
     </div>
     <# } #>
@@ -568,7 +568,7 @@ def customize_themes_print_templates(*_args_):
     <# if ( data.parent ) { #>
     <p class=\"parent-theme\">
     """)
-    printf(__("This is a child theme of %s."), "<strong>{{{ data.parent }}}</strong>")
+    php_printf(__("This is a child theme of %s."), "<strong>{{{ data.parent }}}</strong>")
     php_print("""                       </p>
     <# } #>
     <p class=\"theme-description\">{{{ data.description }}}</p>
@@ -713,5 +713,5 @@ def paused_themes_notice(*_args_):
     if (not (php_isset(lambda : PHP_GLOBALS["_paused_themes"]))) or php_empty(lambda : PHP_GLOBALS["_paused_themes"]):
         return
     # end if
-    printf("<div class=\"notice notice-error\"><p><strong>%s</strong><br>%s</p><p><a href=\"%s\">%s</a></p></div>", __("One or more themes failed to load properly."), __("You can find more details and make changes on the Themes screen."), esc_url(admin_url("themes.php")), __("Go to the Themes screen"))
+    php_printf("<div class=\"notice notice-error\"><p><strong>%s</strong><br>%s</p><p><a href=\"%s\">%s</a></p></div>", __("One or more themes failed to load properly."), __("You can find more details and make changes on the Themes screen."), esc_url(admin_url("themes.php")), __("Go to the Themes screen"))
 # end def paused_themes_notice

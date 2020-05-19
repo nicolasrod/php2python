@@ -26,7 +26,7 @@ if (not php_function_exists("twentynineteen_posted_on")):
             time_string_ = "<time class=\"entry-date published\" datetime=\"%1$s\">%2$s</time><time class=\"updated\" datetime=\"%3$s\">%4$s</time>"
         # end if
         time_string_ = php_sprintf(time_string_, esc_attr(get_the_date(DATE_W3C)), esc_html(get_the_date()), esc_attr(get_the_modified_date(DATE_W3C)), esc_html(get_the_modified_date()))
-        printf("<span class=\"posted-on\">%1$s<a href=\"%2$s\" rel=\"bookmark\">%3$s</a></span>", twentynineteen_get_icon_svg("watch", 16), esc_url(get_permalink()), time_string_)
+        php_printf("<span class=\"posted-on\">%1$s<a href=\"%2$s\" rel=\"bookmark\">%3$s</a></span>", twentynineteen_get_icon_svg("watch", 16), esc_url(get_permalink()), time_string_)
     # end def twentynineteen_posted_on
 # end if
 if (not php_function_exists("twentynineteen_posted_by")):
@@ -36,7 +36,7 @@ if (not php_function_exists("twentynineteen_posted_by")):
     def twentynineteen_posted_by(*_args_):
         
         
-        printf("<span class=\"byline\">%1$s<span class=\"screen-reader-text\">%2$s</span><span class=\"author vcard\"><a class=\"url fn n\" href=\"%3$s\">%4$s</a></span></span>", twentynineteen_get_icon_svg("person", 16), __("Posted by", "twentynineteen"), esc_url(get_author_posts_url(get_the_author_meta("ID"))), esc_html(get_the_author()))
+        php_printf("<span class=\"byline\">%1$s<span class=\"screen-reader-text\">%2$s</span><span class=\"author vcard\"><a class=\"url fn n\" href=\"%3$s\">%4$s</a></span></span>", twentynineteen_get_icon_svg("person", 16), __("Posted by", "twentynineteen"), esc_url(get_author_posts_url(get_the_author_meta("ID"))), esc_html(get_the_author()))
     # end def twentynineteen_posted_by
 # end if
 if (not php_function_exists("twentynineteen_comment_count")):
@@ -71,13 +71,13 @@ if (not php_function_exists("twentynineteen_entry_footer")):
             #// translators: Used between list items, there is a space after the comma.
             categories_list_ = get_the_category_list(__(", ", "twentynineteen"))
             if categories_list_:
-                printf("<span class=\"cat-links\">%1$s<span class=\"screen-reader-text\">%2$s</span>%3$s</span>", twentynineteen_get_icon_svg("archive", 16), __("Posted in", "twentynineteen"), categories_list_)
+                php_printf("<span class=\"cat-links\">%1$s<span class=\"screen-reader-text\">%2$s</span>%3$s</span>", twentynineteen_get_icon_svg("archive", 16), __("Posted in", "twentynineteen"), categories_list_)
                 pass
             # end if
             #// translators: Used between list items, there is a space after the comma.
             tags_list_ = get_the_tag_list("", __(", ", "twentynineteen"))
             if tags_list_:
-                printf("<span class=\"tags-links\">%1$s<span class=\"screen-reader-text\">%2$s </span>%3$s</span>", twentynineteen_get_icon_svg("tag", 16), __("Tags:", "twentynineteen"), tags_list_)
+                php_printf("<span class=\"tags-links\">%1$s<span class=\"screen-reader-text\">%2$s </span>%3$s</span>", twentynineteen_get_icon_svg("tag", 16), __("Tags:", "twentynineteen"), tags_list_)
                 pass
             # end if
         # end if
@@ -145,7 +145,7 @@ if (not php_function_exists("twentynineteen_discussion_avatars_list")):
         # end if
         php_print("<ol class=\"discussion-avatar-list\">", "\n")
         for id_or_email_ in comment_authors_:
-            printf("<li>%s</li>\n", twentynineteen_get_user_avatar_markup(id_or_email_))
+            php_printf("<li>%s</li>\n", twentynineteen_get_user_avatar_markup(id_or_email_))
         # end for
         php_print("</ol><!-- .discussion-avatar-list -->", "\n")
     # end def twentynineteen_discussion_avatars_list

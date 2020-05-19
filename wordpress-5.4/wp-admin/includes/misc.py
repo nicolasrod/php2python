@@ -288,9 +288,9 @@ def update_recently_edited(file_=None, *_args_):
     
     oldfiles_ = get_option("recently_edited")
     if oldfiles_:
-        oldfiles_ = array_reverse(oldfiles_)
+        oldfiles_ = php_array_reverse(oldfiles_)
         oldfiles_[-1] = file_
-        oldfiles_ = array_reverse(oldfiles_)
+        oldfiles_ = php_array_reverse(oldfiles_)
         oldfiles_ = array_unique(oldfiles_)
         if 5 < php_count(oldfiles_):
             php_array_pop(oldfiles_)

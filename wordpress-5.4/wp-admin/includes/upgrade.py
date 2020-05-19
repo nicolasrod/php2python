@@ -52,7 +52,7 @@ if (not php_function_exists("wp_install")):
         
         
         if (not php_empty(lambda : deprecated_)):
-            _deprecated_argument(__FUNCTION__, "2.6.0")
+            _deprecated_argument(inspect.currentframe().f_code.co_name, "2.6.0")
         # end if
         wp_check_mysql_version()
         wp_cache_flush()
@@ -746,7 +746,7 @@ def upgrade_130(*_args_):
             limit_ = option_.dupes - 1
             dupe_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT option_id FROM ") + str(wpdb_.options) + str(" WHERE option_name = %s LIMIT %d"), option_.option_name, limit_))
             if dupe_ids_:
-                dupe_ids_ = join(",", dupe_ids_)
+                dupe_ids_ = php_join(",", dupe_ids_)
                 wpdb_.query(str("DELETE FROM ") + str(wpdb_.options) + str(" WHERE option_id IN (") + str(dupe_ids_) + str(")"))
             # end if
         # end if

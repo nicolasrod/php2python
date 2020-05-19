@@ -76,7 +76,7 @@ class Walker_Nav_Menu(Walker):
         #// @param stdClass $args    An object of `wp_nav_menu()` arguments.
         #// @param int      $depth   Depth of menu item. Used for padding.
         #//
-        class_names_ = join(" ", apply_filters("nav_menu_submenu_css_class", classes_, args_, depth_))
+        class_names_ = php_join(" ", apply_filters("nav_menu_submenu_css_class", classes_, args_, depth_))
         class_names_ = " class=\"" + esc_attr(class_names_) + "\"" if class_names_ else ""
         output_ += str(n_) + str(indent_) + str("<ul") + str(class_names_) + str(">") + str(n_)
     # end def start_lvl
@@ -156,7 +156,7 @@ class Walker_Nav_Menu(Walker):
         #// @param stdClass $args    An object of wp_nav_menu() arguments.
         #// @param int      $depth   Depth of menu item. Used for padding.
         #//
-        class_names_ = join(" ", apply_filters("nav_menu_css_class", php_array_filter(classes_), item_, args_, depth_))
+        class_names_ = php_join(" ", apply_filters("nav_menu_css_class", php_array_filter(classes_), item_, args_, depth_))
         class_names_ = " class=\"" + esc_attr(class_names_) + "\"" if class_names_ else ""
         #// 
         #// Filters the ID applied to a menu item's list item element.

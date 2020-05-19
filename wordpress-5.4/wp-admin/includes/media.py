@@ -546,7 +546,7 @@ def media_buttons(editor_id_="content", *_args_):
     wp_enqueue_media(Array({"post": post_}))
     img_ = "<span class=\"wp-media-buttons-icon\"></span> "
     id_attribute_ = " id=\"insert-media-button\"" if 1 == instance_ else ""
-    printf("<button type=\"button\"%s class=\"button insert-media add_media\" data-editor=\"%s\">%s</button>", id_attribute_, esc_attr(editor_id_), img_ + __("Add Media"))
+    php_printf("<button type=\"button\"%s class=\"button insert-media add_media\" data-editor=\"%s\">%s</button>", id_attribute_, esc_attr(editor_id_), img_ + __("Add Media"))
     #// 
     #// Filters the legacy (pre-3.5.0) media buttons.
     #// 
@@ -951,7 +951,7 @@ def image_align_input_fields(post_=None, checked_="", *_args_):
         name_ = esc_attr(name_)
         out_[-1] = str("<input type='radio' name='attachments[") + str(post_.ID) + str("][align]' id='image-align-") + str(name_) + str("-") + str(post_.ID) + str("' value='") + str(name_) + str("'") + " checked='checked'" if checked_ == name_ else "" + str(" /><label for='image-align-") + str(name_) + str("-") + str(post_.ID) + str("' class='align image-align-") + str(name_) + str("-label'>") + str(label_) + str("</label>")
     # end for
-    return join("\n", out_)
+    return php_join("\n", out_)
 # end def image_align_input_fields
 #// 
 #// Retrieve HTML for the size radio buttons with the specified one checked.
@@ -1008,7 +1008,7 @@ def image_size_input_fields(post_=None, check_="", *_args_):
         html_ += "</div>"
         out_[-1] = html_
     # end for
-    return Array({"label": __("Size"), "input": "html", "html": join("\n", out_)})
+    return Array({"label": __("Size"), "input": "html", "html": php_join("\n", out_)})
 # end def image_size_input_fields
 #// 
 #// Retrieve HTML for the Link URL buttons with the default link type as specified.
@@ -1187,7 +1187,7 @@ def get_attachment_fields_to_edit(post_=None, errors_=None, *_args_):
         for term_ in terms_:
             values_[-1] = term_.slug
         # end for
-        t_["value"] = join(", ", values_)
+        t_["value"] = php_join(", ", values_)
         form_fields_[taxonomy_] = t_
     # end for
     #// 
@@ -1423,7 +1423,7 @@ def get_media_item(attachment_id_=None, args_=None, *_args_):
         elif "textarea" == field_["input"]:
             if "post_content" == id_ and user_can_richedit():
                 #// Sanitize_post() skips the post_content when user_can_richedit.
-                field_["value"] = htmlspecialchars(field_["value"], ENT_QUOTES)
+                field_["value"] = php_htmlspecialchars(field_["value"], ENT_QUOTES)
             # end if
             #// Post_excerpt is already escaped by sanitize_post() in get_attachment_fields_to_edit().
             item_ += str("<textarea id='") + str(name_) + str("' name='") + str(name_) + str("'") + str(required_attr_) + str(">") + field_["value"] + "</textarea>"
@@ -1431,7 +1431,7 @@ def get_media_item(attachment_id_=None, args_=None, *_args_):
             item_ += str("<input type='text' class='text' id='") + str(name_) + str("' name='") + str(name_) + str("' value='") + esc_attr(field_["value"]) + str("'") + str(required_attr_) + str(" />")
         # end if
         if (not php_empty(lambda : field_["helps"])):
-            item_ += "<p class='help'>" + join("</p>\n<p class='help'>", array_unique(field_["helps"])) + "</p>"
+            item_ += "<p class='help'>" + php_join("</p>\n<p class='help'>", array_unique(field_["helps"])) + "</p>"
         # end if
         item_ += "</td>\n       </tr>\n"
         extra_rows_ = Array()
@@ -1507,7 +1507,7 @@ def get_compat_media_markup(attachment_id_=None, args_=None, *_args_):
             for term_ in terms_:
                 values_[-1] = term_.slug
             # end for
-            t_["value"] = join(", ", values_)
+            t_["value"] = php_join(", ", values_)
             t_["taxonomy"] = True
             form_fields_[taxonomy_] = t_
         # end for
@@ -1566,14 +1566,14 @@ def get_compat_media_markup(attachment_id_=None, args_=None, *_args_):
         elif "textarea" == field_["input"]:
             if "post_content" == id_ and user_can_richedit():
                 #// sanitize_post() skips the post_content when user_can_richedit.
-                field_["value"] = htmlspecialchars(field_["value"], ENT_QUOTES)
+                field_["value"] = php_htmlspecialchars(field_["value"], ENT_QUOTES)
             # end if
             item_ += str("<textarea id='") + str(id_attr_) + str("' name='") + str(name_) + str("'") + str(required_attr_) + str(">") + field_["value"] + "</textarea>"
         else:
             item_ += str("<input type='text' class='text' id='") + str(id_attr_) + str("' name='") + str(name_) + str("' value='") + esc_attr(field_["value"]) + str("' ") + str(readonly_) + str(required_attr_) + str(" />")
         # end if
         if (not php_empty(lambda : field_["helps"])):
-            item_ += "<p class='help'>" + join("</p>\n<p class='help'>", array_unique(field_["helps"])) + "</p>"
+            item_ += "<p class='help'>" + php_join("</p>\n<p class='help'>", array_unique(field_["helps"])) + "</p>"
         # end if
         item_ += "</td>\n       </tr>\n"
         extra_rows_ = Array()
@@ -1792,7 +1792,7 @@ def media_upload_form(errors_=None, *_args_):
     <p class=\"max-upload-size\">
     """)
     #// translators: %s: Maximum allowed file size.
-    printf(__("Maximum upload file size: %s."), esc_html(size_format(max_upload_size_)))
+    php_printf(__("Maximum upload file size: %s."), esc_html(size_format(max_upload_size_)))
     php_print("</p>\n   ")
     #// 
     #// Fires on the post upload UI screen.
@@ -2481,7 +2481,7 @@ def media_upload_flash_bypass(*_args_):
         browser_uploader_ += "&amp;post_id=" + php_intval(PHP_GLOBALS["post_ID"])
     # end if
     php_print(" <p class=\"upload-flash-bypass\">\n ")
-    printf(__("You are using the multi-file uploader. Problems? Try the <a href=\"%1$s\" %2$s>browser uploader</a> instead."), browser_uploader_, "target=\"_blank\"")
+    php_printf(__("You are using the multi-file uploader. Problems? Try the <a href=\"%1$s\" %2$s>browser uploader</a> instead."), browser_uploader_, "target=\"_blank\"")
     php_print(" </p>\n  ")
 # end def media_upload_flash_bypass
 #// 
@@ -2525,7 +2525,7 @@ def media_upload_max_image_resize(*_args_):
     php_print(checked_)
     php_print(" />\n    ")
     #// translators: 1: Link start tag, 2: Link end tag, 3: Width, 4: Height.
-    printf(__("Scale images to match the large size selected in %1$simage options%2$s (%3$d &times; %4$d)."), a_, end_, php_int(get_option("large_size_w", "1024")), php_int(get_option("large_size_h", "1024")))
+    php_printf(__("Scale images to match the large size selected in %1$simage options%2$s (%3$d &times; %4$d)."), a_, end_, php_int(get_option("large_size_w", "1024")), php_int(get_option("large_size_h", "1024")))
     php_print(" </label></p>\n  ")
 # end def media_upload_max_image_resize
 #// 
@@ -2646,7 +2646,7 @@ def edit_form_image_editor(post_=None, *_args_):
         </p>
         <p class=\"attachment-alt-text-description\" id=\"alt-text-description\">
         """)
-        printf(__("<a href=\"%1$s\" %2$s>Describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative."), esc_url("https://www.w3.org/WAI/tutorials/images/decision-tree"), "target=\"_blank\" rel=\"noopener noreferrer\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
+        php_printf(__("<a href=\"%1$s\" %2$s>Describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative."), esc_url("https://www.w3.org/WAI/tutorials/images/decision-tree"), "target=\"_blank\" rel=\"noopener noreferrer\"", php_sprintf("<span class=\"screen-reader-text\"> %s</span>", __("(opens in a new tab)")))
         php_print("     </p>\n  ")
     # end if
     php_print("\n       <p>\n           <label for=\"attachment_caption\"><strong>")

@@ -228,7 +228,7 @@ def install_dashboard(*_args_):
     
     
     php_print(" <p>\n       ")
-    printf(__("Plugins extend and expand the functionality of WordPress. You may automatically install plugins from the <a href=\"%s\">WordPress Plugin Directory</a> or upload a plugin in .zip format by clicking the button at the top of this page."), __("https://wordpress.org/plugins/"))
+    php_printf(__("Plugins extend and expand the functionality of WordPress. You may automatically install plugins from the <a href=\"%s\">WordPress Plugin Directory</a> or upload a plugin in .zip format by clicking the button at the top of this page."), __("https://wordpress.org/plugins/"))
     php_print(" </p>\n\n    ")
     display_plugins_table()
     php_print("\n   <div class=\"plugins-popular-tags-wrapper\">\n  <h2>")
@@ -364,7 +364,7 @@ def display_plugins_table(*_args_):
             break
         # end if
         if case("install_plugins_beta"):
-            printf("<p>" + __("You are using a development version of WordPress. These feature plugins are also under development. <a href=\"%s\">Learn more</a>.") + "</p>", "https://make.wordpress.org/core/handbook/about/release-cycle/features-as-plugins/")
+            php_printf("<p>" + __("You are using a development version of WordPress. These feature plugins are also under development. <a href=\"%s\">Learn more</a>.") + "</p>", "https://make.wordpress.org/core/handbook/about/release-cycle/features-as-plugins/")
             break
         # end if
     # end for
@@ -563,7 +563,7 @@ def install_plugin_information(*_args_):
         _e("Last Updated:")
         php_print("</strong>\n                  ")
         #// translators: %s: Human-readable time difference.
-        printf(__("%s ago"), human_time_diff(strtotime(api_.last_updated)))
+        php_printf(__("%s ago"), human_time_diff(strtotime(api_.last_updated)))
         php_print("             </li>\n         ")
     # end if
     if (not php_empty(lambda : api_.requires)):
@@ -571,7 +571,7 @@ def install_plugin_information(*_args_):
         _e("Requires WordPress Version:")
         php_print("</strong>\n                  ")
         #// translators: %s: Version number.
-        printf(__("%s or higher"), api_.requires)
+        php_printf(__("%s or higher"), api_.requires)
         php_print("             </li>\n         ")
     # end if
     if (not php_empty(lambda : api_.tested)):
@@ -586,7 +586,7 @@ def install_plugin_information(*_args_):
         _e("Requires PHP Version:")
         php_print("</strong>\n                  ")
         #// translators: %s: Version number.
-        printf(__("%s or higher"), api_.requires_php)
+        php_printf(__("%s or higher"), api_.requires_php)
         php_print("             </li>\n         ")
     # end if
     if (php_isset(lambda : api_.active_installs)):
@@ -595,7 +595,7 @@ def install_plugin_information(*_args_):
         php_print("</strong>\n              ")
         if api_.active_installs >= 1000000:
             active_installs_millions_ = floor(api_.active_installs / 1000000)
-            printf(_nx("%s+ Million", "%s+ Million", active_installs_millions_, "Active plugin installations"), number_format_i18n(active_installs_millions_))
+            php_printf(_nx("%s+ Million", "%s+ Million", active_installs_millions_, "Active plugin installations"), number_format_i18n(active_installs_millions_))
         elif 0 == api_.active_installs:
             _ex("Less Than 10", "Active plugin installations")
         else:
@@ -631,7 +631,7 @@ def install_plugin_information(*_args_):
         php_print("</h3>\n          ")
         wp_star_rating(Array({"rating": api_.rating, "type": "percent", "number": api_.num_ratings}))
         php_print("         <p aria-hidden=\"true\" class=\"fyi-description\">\n                ")
-        printf(_n("(based on %s rating)", "(based on %s ratings)", api_.num_ratings), number_format_i18n(api_.num_ratings))
+        php_printf(_n("(based on %s rating)", "(based on %s ratings)", api_.num_ratings), number_format_i18n(api_.num_ratings))
         php_print("         </p>\n          ")
     # end if
     if (not php_empty(lambda : api_.ratings)) and array_sum(api_.ratings) > 0:
@@ -645,7 +645,7 @@ def install_plugin_information(*_args_):
             _rating_ = ratecount_ / api_.num_ratings if api_.num_ratings else 0
             aria_label_ = esc_attr(php_sprintf(_n("Reviews with %1$d star: %2$s. Opens in a new tab.", "Reviews with %1$d stars: %2$s. Opens in a new tab.", key_), key_, number_format_i18n(ratecount_)))
             php_print("             <div class=\"counter-container\">\n                     <span class=\"counter-label\">\n                            ")
-            printf("<a href=\"%s\" target=\"_blank\" aria-label=\"%s\">%s</a>", str("https://wordpress.org/support/plugin/") + str(api_.slug) + str("/reviews/?filter=") + str(key_), aria_label_, php_sprintf(_n("%d star", "%d stars", key_), key_))
+            php_printf("<a href=\"%s\" target=\"_blank\" aria-label=\"%s\">%s</a>", str("https://wordpress.org/support/plugin/") + str(api_.slug) + str("/reviews/?filter=") + str(key_), aria_label_, php_sprintf(_n("%d star", "%d stars", key_), key_))
             php_print("                     </span>\n                       <span class=\"counter-back\">\n                         <span class=\"counter-bar\" style=\"width: ")
             php_print(92 * _rating_)
             php_print("px;\"></span>\n                      </span>\n                   <span class=\"counter-count\" aria-hidden=\"true\">")
@@ -687,7 +687,7 @@ def install_plugin_information(*_args_):
         php_print("<div class=\"notice notice-error notice-alt\"><p>")
         _e("<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>.")
         if current_user_can("update_php"):
-            printf(" " + __("<a href=\"%s\" target=\"_blank\">Click here to learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
+            php_printf(" " + __("<a href=\"%s\" target=\"_blank\">Click here to learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
             wp_update_php_annotation("</p><p><em>", "</em>")
         else:
             php_print("</p>")
@@ -702,7 +702,7 @@ def install_plugin_information(*_args_):
         php_print("<div class=\"notice notice-error notice-alt\"><p>")
         _e("<strong>Error:</strong> This plugin <strong>requires a newer version of WordPress</strong>.")
         if current_user_can("update_core"):
-            printf(" " + __("<a href=\"%s\" target=\"_parent\">Click here to update WordPress</a>."), self_admin_url("update-core.php"))
+            php_printf(" " + __("<a href=\"%s\" target=\"_parent\">Click here to update WordPress</a>."), self_admin_url("update-core.php"))
         # end if
         php_print("</p></div>")
     # end if
@@ -728,7 +728,7 @@ def install_plugin_information(*_args_):
                     if compatible_php_ and compatible_wp_:
                         php_print("<a data-slug=\"" + esc_attr(api_.slug) + "\" id=\"plugin_install_from_iframe\" class=\"button button-primary right\" href=\"" + status_["url"] + "\" target=\"_parent\">" + __("Install Now") + "</a>")
                     else:
-                        printf("<button type=\"button\" class=\"button button-primary button-disabled right\" disabled=\"disabled\">%s</button>", _x("Cannot Install", "plugin"))
+                        php_printf("<button type=\"button\" class=\"button button-primary button-disabled right\" disabled=\"disabled\">%s</button>", _x("Cannot Install", "plugin"))
                     # end if
                 # end if
                 break
@@ -738,7 +738,7 @@ def install_plugin_information(*_args_):
                     if compatible_php_:
                         php_print("<a data-slug=\"" + esc_attr(api_.slug) + "\" data-plugin=\"" + esc_attr(status_["file"]) + "\" id=\"plugin_update_from_iframe\" class=\"button button-primary right\" href=\"" + status_["url"] + "\" target=\"_parent\">" + __("Install Update Now") + "</a>")
                     else:
-                        printf("<button type=\"button\" class=\"button button-primary button-disabled right\" disabled=\"disabled\">%s</button>", _x("Cannot Update", "plugin"))
+                        php_printf("<button type=\"button\" class=\"button button-primary button-disabled right\" disabled=\"disabled\">%s</button>", _x("Cannot Update", "plugin"))
                     # end if
                 # end if
                 break

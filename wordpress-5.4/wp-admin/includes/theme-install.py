@@ -27,7 +27,7 @@ theme_field_defaults_ = Array({"description": True, "sections": False, "tested":
 def install_themes_feature_list(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0", "get_theme_feature_list()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "get_theme_feature_list()")
     cache_ = get_transient("wporg_theme_feature_list")
     if (not cache_):
         set_transient("wporg_theme_feature_list", Array(), 3 * HOUR_IN_SECONDS)
@@ -182,7 +182,7 @@ def install_themes_upload(*_args_):
 def display_theme(theme_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0")
     global wp_list_table_
     php_check_if_defined("wp_list_table_")
     if (not (php_isset(lambda : wp_list_table_))):

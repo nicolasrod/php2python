@@ -141,7 +141,7 @@ def _prime_network_caches(network_ids_=None, *_args_):
     php_check_if_defined("wpdb_")
     non_cached_ids_ = _get_non_cached_ids(network_ids_, "networks")
     if (not php_empty(lambda : non_cached_ids_)):
-        fresh_networks_ = wpdb_.get_results(php_sprintf(str("SELECT ") + str(wpdb_.site) + str(".* FROM ") + str(wpdb_.site) + str(" WHERE id IN (%s)"), join(",", php_array_map("intval", non_cached_ids_))))
+        fresh_networks_ = wpdb_.get_results(php_sprintf(str("SELECT ") + str(wpdb_.site) + str(".* FROM ") + str(wpdb_.site) + str(" WHERE id IN (%s)"), php_join(",", php_array_map("intval", non_cached_ids_))))
         #// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         update_network_cache(fresh_networks_)
     # end if

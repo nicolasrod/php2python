@@ -240,7 +240,7 @@ if is_writeable(real_file_):
     php_print("         <span class=\"spinner\"></span>\n       </p>\n  ")
 else:
     php_print("     <p><em>\n           ")
-    printf(__("You need to make this file writable before you can save your changes. See <a href=\"%s\">Changing File Permissions</a> for more information."), __("https://wordpress.org/support/article/changing-file-permissions/"))
+    php_printf(__("You need to make this file writable before you can save your changes. See <a href=\"%s\">Changing File Permissions</a> for more information."), __("https://wordpress.org/support/article/changing-file-permissions/"))
     php_print("     </em></p>\n ")
 # end if
 php_print("\n   ")

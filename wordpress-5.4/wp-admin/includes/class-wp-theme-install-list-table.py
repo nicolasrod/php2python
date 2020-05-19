@@ -303,7 +303,7 @@ class WP_Theme_Install_List_Table(WP_Themes_List_Table):
         php_print(name_)
         php_print("</h3>\n      <div class=\"theme-author\">\n      ")
         #// translators: %s: Theme author.
-        printf(__("By %s"), author_)
+        php_printf(__("By %s"), author_)
         php_print("""       </div>
         <div class=\"action-links\">
         <ul>
@@ -392,21 +392,21 @@ class WP_Theme_Install_List_Table(WP_Themes_List_Table):
         php_print("     <div class=\"install-theme-info\">\n        ")
         for case in Switch(status_):
             if case("update_available"):
-                printf("<a class=\"theme-install button button-primary\" href=\"%s\" title=\"%s\">%s</a>", esc_url(wp_nonce_url(update_url_, "upgrade-theme_" + theme_.slug)), esc_attr(php_sprintf(__("Update to version %s"), theme_.version)), __("Update"))
+                php_printf("<a class=\"theme-install button button-primary\" href=\"%s\" title=\"%s\">%s</a>", esc_url(wp_nonce_url(update_url_, "upgrade-theme_" + theme_.slug)), esc_attr(php_sprintf(__("Update to version %s"), theme_.version)), __("Update"))
                 break
             # end if
             if case("newer_installed"):
                 pass
             # end if
             if case("latest_installed"):
-                printf("<span class=\"theme-install\" title=\"%s\">%s</span>", esc_attr__("This theme is already installed and is up to date"), _x("Installed", "theme"))
+                php_printf("<span class=\"theme-install\" title=\"%s\">%s</span>", esc_attr__("This theme is already installed and is up to date"), _x("Installed", "theme"))
                 break
             # end if
             if case("install"):
                 pass
             # end if
             if case():
-                printf("<a class=\"theme-install button button-primary\" href=\"%s\">%s</a>", esc_url(wp_nonce_url(install_url_, "install-theme_" + theme_.slug)), __("Install"))
+                php_printf("<a class=\"theme-install button button-primary\" href=\"%s\">%s</a>", esc_url(wp_nonce_url(install_url_, "install-theme_" + theme_.slug)), __("Install"))
                 break
             # end if
         # end for
@@ -414,7 +414,7 @@ class WP_Theme_Install_List_Table(WP_Themes_List_Table):
         php_print(name_)
         php_print("</h3>\n          <span class=\"theme-by\">\n         ")
         #// translators: %s: Theme author.
-        printf(__("By %s"), author_)
+        php_printf(__("By %s"), author_)
         php_print("         </span>\n           ")
         if (php_isset(lambda : theme_.screenshot_url)):
             php_print("             <img class=\"theme-screenshot\" src=\"")

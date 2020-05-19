@@ -107,7 +107,7 @@ if doaction_:
                 # end if
                 trashed_ += 1
             # end for
-            sendback_ = add_query_arg(Array({"trashed": trashed_, "ids": join(",", post_ids_), "locked": locked_}), sendback_)
+            sendback_ = add_query_arg(Array({"trashed": trashed_, "ids": php_join(",", post_ids_), "locked": locked_}), sendback_)
             break
         # end if
         if case("untrash"):
@@ -233,7 +233,7 @@ if current_user_can(post_type_object_.cap.create_posts):
 # end if
 if (php_isset(lambda : PHP_REQUEST["s"])) and php_strlen(PHP_REQUEST["s"]):
     #// translators: %s: Search query.
-    printf(" <span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", get_search_query())
+    php_printf(" <span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", get_search_query())
 # end if
 php_print("""
 <hr class=\"wp-header-end\">
@@ -252,7 +252,7 @@ for message_,count_ in bulk_counts_.items():
     # end if
 # end for
 if messages_:
-    php_print("<div id=\"message\" class=\"updated notice is-dismissible\"><p>" + join(" ", messages_) + "</p></div>")
+    php_print("<div id=\"message\" class=\"updated notice is-dismissible\"><p>" + php_join(" ", messages_) + "</p></div>")
 # end if
 messages_ = None
 PHP_SERVER["REQUEST_URI"] = remove_query_arg(Array("locked", "skipped", "updated", "deleted", "trashed", "untrashed"), PHP_SERVER["REQUEST_URI"])

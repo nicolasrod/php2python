@@ -1040,7 +1040,7 @@ if (not php_function_exists("check_admin_referer")):
         # end if
         
         if -1 == action_:
-            _doing_it_wrong(__FUNCTION__, __("You should specify a nonce action to be verified by using the first parameter."), "3.2.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, __("You should specify a nonce action to be verified by using the first parameter."), "3.2.0")
         # end if
         adminurl_ = php_strtolower(admin_url())
         referer_ = php_strtolower(wp_get_referer())
@@ -1090,7 +1090,7 @@ if (not php_function_exists("check_ajax_referer")):
         # end if
         
         if -1 == action_:
-            _doing_it_wrong(__FUNCTION__, __("You should specify a nonce action to be verified by using the first parameter."), "4.7")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, __("You should specify a nonce action to be verified by using the first parameter."), "4.7")
         # end if
         nonce_ = ""
         if query_arg_ and (php_isset(lambda : PHP_REQUEST[query_arg_])):
@@ -1393,7 +1393,7 @@ if (not php_function_exists("wp_notify_postauthor")):
         # end if
         
         if None != deprecated_:
-            _deprecated_argument(__FUNCTION__, "3.8.0")
+            _deprecated_argument(inspect.currentframe().f_code.co_name, "3.8.0")
         # end if
         comment_ = get_comment(comment_id_)
         if php_empty(lambda : comment_) or php_empty(lambda : comment_.comment_post_ID):
@@ -1801,7 +1801,7 @@ if (not php_function_exists("wp_new_user_notification")):
         # end if
         
         if None != deprecated_:
-            _deprecated_argument(__FUNCTION__, "4.3.1")
+            _deprecated_argument(inspect.currentframe().f_code.co_name, "4.3.1")
         # end if
         #// Accepts only 'user', 'admin' , 'both' or default '' as $notify.
         if (not php_in_array(notify_, Array("user", "admin", "both", ""), True)):
@@ -2448,7 +2448,7 @@ if (not php_function_exists("get_avatar")):
                 class_[-1] = args_["class"]
             # end if
         # end if
-        avatar_ = php_sprintf("<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>", esc_attr(args_["alt"]), esc_url(url_), esc_url(url2x_) + " 2x", esc_attr(join(" ", class_)), php_int(args_["height"]), php_int(args_["width"]), args_["extra_attr"])
+        avatar_ = php_sprintf("<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>", esc_attr(args_["alt"]), esc_url(url_), esc_url(url2x_) + " 2x", esc_attr(php_join(" ", class_)), php_int(args_["height"]), php_int(args_["width"]), args_["extra_attr"])
         #// 
         #// Filters the avatar to retrieve.
         #// 

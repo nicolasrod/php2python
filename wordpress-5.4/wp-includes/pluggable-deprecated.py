@@ -38,7 +38,7 @@ if (not php_function_exists("set_current_user")):
     def set_current_user(id_=None, name_="", *_args_):
         
         
-        _deprecated_function(__FUNCTION__, "3.0.0", "wp_set_current_user()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "wp_set_current_user()")
         return wp_set_current_user(id_, name_)
     # end def set_current_user
 # end if
@@ -55,7 +55,7 @@ if (not php_function_exists("get_currentuserinfo")):
     def get_currentuserinfo(*_args_):
         
         
-        _deprecated_function(__FUNCTION__, "4.5.0", "wp_get_current_user()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0", "wp_get_current_user()")
         return _wp_get_current_user()
     # end def get_currentuserinfo
 # end if
@@ -73,7 +73,7 @@ if (not php_function_exists("get_userdatabylogin")):
     def get_userdatabylogin(user_login_=None, *_args_):
         
         
-        _deprecated_function(__FUNCTION__, "3.3.0", "get_user_by('login')")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "get_user_by('login')")
         return get_user_by("login", user_login_)
     # end def get_userdatabylogin
 # end if
@@ -91,7 +91,7 @@ if (not php_function_exists("get_user_by_email")):
     def get_user_by_email(email_=None, *_args_):
         
         
-        _deprecated_function(__FUNCTION__, "3.3.0", "get_user_by('email')")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "get_user_by('email')")
         return get_user_by("email", email_)
     # end def get_user_by_email
 # end if
@@ -118,7 +118,7 @@ if (not php_function_exists("wp_setcookie")):
             remember_ = False
         # end if
         
-        _deprecated_function(__FUNCTION__, "2.5.0", "wp_set_auth_cookie()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "wp_set_auth_cookie()")
         user_ = get_user_by("login", username_)
         wp_set_auth_cookie(user_.ID, remember_)
     # end def wp_setcookie
@@ -136,7 +136,7 @@ if (not php_function_exists("wp_clearcookie")):
     def wp_clearcookie(*_args_):
         
         
-        _deprecated_function(__FUNCTION__, "2.5.0", "wp_clear_auth_cookie()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "wp_clear_auth_cookie()")
         wp_clear_auth_cookie()
     # end def wp_clearcookie
 else:
@@ -157,7 +157,7 @@ if (not php_function_exists("wp_get_cookie_login")):
     def wp_get_cookie_login(*_args_):
         
         
-        _deprecated_function(__FUNCTION__, "2.5.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0")
         return False
     # end def wp_get_cookie_login
 else:
@@ -188,7 +188,7 @@ if (not php_function_exists("wp_login")):
     def wp_login(username_=None, password_=None, deprecated_="", *_args_):
         
         
-        _deprecated_function(__FUNCTION__, "2.5.0", "wp_signon()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "wp_signon()")
         global error_
         php_check_if_defined("error_")
         user_ = wp_authenticate(username_, password_)
@@ -217,13 +217,13 @@ if (not php_class_exists("wp_atom_server", False)):
         def __call(self, name_=None, arguments_=None):
             
             
-            _deprecated_function(__CLASS__ + "::" + name_, "3.5.0", "the Atom Publishing Protocol plugin")
+            _deprecated_function(self.__class__.__name__ + "::" + name_, "3.5.0", "the Atom Publishing Protocol plugin")
         # end def __call
         @classmethod
         def __callstatic(self, name_=None, arguments_=None):
             
             
-            _deprecated_function(__CLASS__ + "::" + name_, "3.5.0", "the Atom Publishing Protocol plugin")
+            _deprecated_function(self.__class__.__name__ + "::" + name_, "3.5.0", "the Atom Publishing Protocol plugin")
         # end def __callstatic
     # end class wp_atom_server
 # end if

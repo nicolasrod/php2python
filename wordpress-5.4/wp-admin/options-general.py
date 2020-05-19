@@ -89,7 +89,7 @@ if (not is_multisite()):
     php_print("\" />\n  ")
     if (not php_defined("WP_HOME")):
         php_print("<p class=\"description\" id=\"home-description\">\n      ")
-        printf(__("Enter the address here if you <a href=\"%s\">want your site home page to be different from your WordPress installation directory</a>."), __("https://wordpress.org/support/article/giving-wordpress-its-own-directory/"))
+        php_printf(__("Enter the address here if you <a href=\"%s\">want your site home page to be different from your WordPress installation directory</a>."), __("https://wordpress.org/support/article/giving-wordpress-its-own-directory/"))
         php_print("</p>\n")
     # end if
     php_print("""</td>
@@ -106,8 +106,8 @@ php_print("</p>\n")
 new_admin_email_ = get_option("new_admin_email")
 if new_admin_email_ and get_option("admin_email") != new_admin_email_:
     php_print(" <div class=\"updated inline\">\n    <p>\n   ")
-    printf(__("There is a pending change of the admin email to %s."), "<code>" + esc_html(new_admin_email_) + "</code>")
-    printf(" <a href=\"%1$s\">%2$s</a>", esc_url(wp_nonce_url(admin_url("options.php?dismiss=new_admin_email"), "dismiss-" + get_current_blog_id() + "-new_admin_email")), __("Cancel"))
+    php_printf(__("There is a pending change of the admin email to %s."), "<code>" + esc_html(new_admin_email_) + "</code>")
+    php_printf(" <a href=\"%1$s\">%2$s</a>", esc_url(wp_nonce_url(admin_url("options.php?dismiss=new_admin_email"), "dismiss-" + get_current_blog_id() + "-new_admin_email")), __("Cancel"))
     php_print(" </p>\n  </div>\n")
 # end if
 php_print("""</td>
@@ -184,16 +184,16 @@ php_print(wp_timezone_choice(tzstring_, get_user_locale()))
 php_print("""</select>
 <p class=\"description\" id=\"timezone-description\">
 """)
-printf(__("Choose either a city in the same timezone as you or a %s (Coordinated Universal Time) time offset."), "<abbr>UTC</abbr>")
+php_printf(__("Choose either a city in the same timezone as you or a %s (Coordinated Universal Time) time offset."), "<abbr>UTC</abbr>")
 php_print("""</p>
 <p class=\"timezone-info\">
 <span id=\"utc-time\">
 """)
-printf(__("Universal time is %s."), "<code>" + date_i18n(timezone_format_, False, True) + "</code>")
+php_printf(__("Universal time is %s."), "<code>" + date_i18n(timezone_format_, False, True) + "</code>")
 php_print(" </span>\n")
 if get_option("timezone_string") or (not php_empty(lambda : current_offset_)):
     php_print(" <span id=\"local-time\">\n  ")
-    printf(__("Local time is %s."), "<code>" + date_i18n(timezone_format_) + "</code>")
+    php_printf(__("Local time is %s."), "<code>" + date_i18n(timezone_format_) + "</code>")
     php_print(" </span>\n")
 # end if
 php_print("</p>\n\n")
@@ -213,7 +213,7 @@ if check_zone_info_ and tzstring_:
         if (not php_empty(lambda : transitions_[1])):
             php_print(" ")
             message_ = __("Daylight saving time begins on: %s.") if transitions_[1]["isdst"] else __("Standard time begins on: %s.")
-            printf(message_, "<code>" + wp_date(__("F j, Y") + " " + __("g:i a"), transitions_[1]["ts"]) + "</code>")
+            php_printf(message_, "<code>" + wp_date(__("F j, Y") + " " + __("g:i a"), transitions_[1]["ts"]) + "</code>")
         else:
             _e("This timezone does not observe daylight saving time.")
         # end if

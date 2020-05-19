@@ -73,13 +73,13 @@ def add_shortcode(tag_=None, callback_=None, *_args_):
     php_check_if_defined("shortcode_tags_")
     if "" == php_trim(tag_):
         message_ = __("Invalid shortcode name: Empty name given.")
-        _doing_it_wrong(__FUNCTION__, message_, "4.4.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "4.4.0")
         return
     # end if
     if 0 != php_preg_match("@[<>&/\\[\\]\\x00-\\x20=]@", tag_):
         #// translators: 1: Shortcode name, 2: Space-separated list of reserved characters.
         message_ = php_sprintf(__("Invalid shortcode name: %1$s. Do not use spaces or reserved characters: %2$s"), tag_, "& / < > [ ] =")
-        _doing_it_wrong(__FUNCTION__, message_, "4.4.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "4.4.0")
         return
     # end if
     shortcode_tags_[tag_] = callback_
@@ -263,7 +263,7 @@ def get_shortcode_regex(tagnames_=None, *_args_):
     if php_empty(lambda : tagnames_):
         tagnames_ = php_array_keys(shortcode_tags_)
     # end if
-    tagregexp_ = join("|", php_array_map("preg_quote", tagnames_))
+    tagregexp_ = php_join("|", php_array_map("preg_quote", tagnames_))
     #// WARNING! Do not change this regex without changing do_shortcode_tag() and strip_shortcode_tag().
     #// Also, see shortcode_unautop() and shortcode.js.
     #// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
@@ -297,7 +297,7 @@ def do_shortcode_tag(m_=None, *_args_):
     if (not php_is_callable(shortcode_tags_[tag_])):
         #// translators: %s: Shortcode tag.
         message_ = php_sprintf(__("Attempting to parse a shortcode without a valid callback: %s"), tag_)
-        _doing_it_wrong(__FUNCTION__, message_, "4.3.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "4.3.0")
         return m_[0]
     # end if
     #// 

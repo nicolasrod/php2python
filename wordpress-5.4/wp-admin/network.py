@@ -38,7 +38,7 @@ for table_,prefixed_table_ in wpdb_.tables("ms_global").items():
     wpdb_.table_ = prefixed_table_
 # end for
 if (not network_domain_check()) and (not php_defined("WP_ALLOW_MULTISITE")) or (not WP_ALLOW_MULTISITE):
-    wp_die(printf(__("You must define the %1$s constant as true in your %2$s file to allow creation of a Network."), "<code>WP_ALLOW_MULTISITE</code>", "<code>wp-config.php</code>"))
+    wp_die(php_printf(__("You must define the %1$s constant as true in your %2$s file to allow creation of a Network."), "<code>WP_ALLOW_MULTISITE</code>", "<code>wp-config.php</code>"))
 # end if
 if is_network_admin():
     title_ = __("Network Setup")

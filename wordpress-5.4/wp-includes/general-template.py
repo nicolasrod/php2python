@@ -661,7 +661,7 @@ def get_bloginfo(show_="", filter_="raw", *_args_):
         # end if
         if case("siteurl"):
             #// Deprecated.
-            _deprecated_argument(__FUNCTION__, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s option instead."), "<code>" + show_ + "</code>", "<code>bloginfo()</code>", "<code>url</code>"))
+            _deprecated_argument(inspect.currentframe().f_code.co_name, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s option instead."), "<code>" + show_ + "</code>", "<code>bloginfo()</code>", "<code>url</code>"))
         # end if
         if case("url"):
             output_ = home_url()
@@ -753,7 +753,7 @@ def get_bloginfo(show_="", filter_="raw", *_args_):
             break
         # end if
         if case("text_direction"):
-            _deprecated_argument(__FUNCTION__, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s function instead."), "<code>" + show_ + "</code>", "<code>bloginfo()</code>", "<code>is_rtl()</code>"))
+            _deprecated_argument(inspect.currentframe().f_code.co_name, "2.2.0", php_sprintf(__("The %1$s option is deprecated for the family of %2$s functions. Use the %3$s function instead."), "<code>" + show_ + "</code>", "<code>bloginfo()</code>", "<code>is_rtl()</code>"))
             if php_function_exists("is_rtl"):
                 output_ = "rtl" if is_rtl() else "ltr"
             else:
@@ -1193,7 +1193,7 @@ def wp_title(sep_="&raquo;", display_=None, seplocation_="", *_args_):
     #// Determines position of the separator and direction of the breadcrumb.
     if "right" == seplocation_:
         #// Separator on right, so reverse the order.
-        title_array_ = array_reverse(title_array_)
+        title_array_ = php_array_reverse(title_array_)
         title_ = php_implode(str(" ") + str(sep_) + str(" "), title_array_) + prefix_
     else:
         title_ = prefix_ + php_implode(str(" ") + str(sep_) + str(" "), title_array_)
@@ -3836,12 +3836,12 @@ def paginate_links(args_="", *_args_):
         # end if
         if case("list"):
             r_ += "<ul class='page-numbers'>\n  <li>"
-            r_ += join("</li>\n <li>", page_links_)
+            r_ += php_join("</li>\n <li>", page_links_)
             r_ += "</li>\n</ul>\n"
             break
         # end if
         if case():
-            r_ = join("\n", page_links_)
+            r_ = php_join("\n", page_links_)
             break
         # end if
     # end for

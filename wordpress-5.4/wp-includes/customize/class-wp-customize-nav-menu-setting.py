@@ -279,7 +279,7 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
     def _sort_menus_by_orderby(self, menu1_=None, menu2_=None):
         
         
-        _deprecated_function(__METHOD__, "4.7.0", "wp_list_sort")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0", "wp_list_sort")
         key_ = self._current_menus_sort_orderby
         return strcmp(menu1_.key_, menu2_.key_)
     # end def _sort_menus_by_orderby

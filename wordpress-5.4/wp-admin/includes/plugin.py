@@ -85,7 +85,7 @@ def get_plugin_data(plugin_file_=None, markup_=None, translate_=None, *_args_):
     #// Site Wide Only is the old header for Network.
     if (not plugin_data_["Network"]) and plugin_data_["_sitewide"]:
         #// translators: 1: Site Wide Only: true, 2: Network: true
-        _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The %1$s plugin header is deprecated. Use %2$s instead."), "<code>Site Wide Only: true</code>", "<code>Network: true</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", php_sprintf(__("The %1$s plugin header is deprecated. Use %2$s instead."), "<code>Site Wide Only: true</code>", "<code>Network: true</code>"))
         plugin_data_["Network"] = plugin_data_["_sitewide"]
     # end if
     plugin_data_["Network"] = "true" == php_strtolower(plugin_data_["Network"])
@@ -1261,7 +1261,7 @@ def add_submenu_page(parent_slug_=None, page_title_=None, menu_title_=None, capa
     new_sub_menu_ = Array(menu_title_, capability_, menu_slug_, page_title_)
     if (not php_is_int(position_)):
         if None != position_:
-            _doing_it_wrong(__FUNCTION__, php_sprintf(__("The seventh parameter passed to %s should be an integer representing menu position."), "<code>add_submenu_page()</code>"), "5.3.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The seventh parameter passed to %s should be an integer representing menu position."), "<code>add_submenu_page()</code>"), "5.3.0")
         # end if
         submenu_[parent_slug_][-1] = new_sub_menu_
     else:
@@ -2167,10 +2167,10 @@ def wp_add_privacy_policy_content(plugin_name_=None, policy_text_=None, *_args_)
     
     
     if (not is_admin()):
-        _doing_it_wrong(__FUNCTION__, php_sprintf(__("The suggested privacy policy content should be added only in wp-admin by using the %s (or later) action."), "<code>admin_init</code>"), "4.9.7")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The suggested privacy policy content should be added only in wp-admin by using the %s (or later) action."), "<code>admin_init</code>"), "4.9.7")
         return
     elif (not doing_action("admin_init")) and (not did_action("admin_init")):
-        _doing_it_wrong(__FUNCTION__, php_sprintf(__("The suggested privacy policy content should be added by using the %s (or later) action. Please see the inline documentation."), "<code>admin_init</code>"), "4.9.7")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The suggested privacy policy content should be added by using the %s (or later) action. Please see the inline documentation."), "<code>admin_init</code>"), "4.9.7")
         return
     # end if
     if (not php_class_exists("WP_Privacy_Policy_Content")):
@@ -2279,5 +2279,5 @@ def paused_plugins_notice(*_args_):
     if (not (php_isset(lambda : PHP_GLOBALS["_paused_plugins"]))) or php_empty(lambda : PHP_GLOBALS["_paused_plugins"]):
         return
     # end if
-    printf("<div class=\"notice notice-error\"><p><strong>%s</strong><br>%s</p><p><a href=\"%s\">%s</a></p></div>", __("One or more plugins failed to load properly."), __("You can find more details and make changes on the Plugins screen."), esc_url(admin_url("plugins.php?plugin_status=paused")), __("Go to the Plugins screen"))
+    php_printf("<div class=\"notice notice-error\"><p><strong>%s</strong><br>%s</p><p><a href=\"%s\">%s</a></p></div>", __("One or more plugins failed to load properly."), __("You can find more details and make changes on the Plugins screen."), esc_url(admin_url("plugins.php?plugin_status=paused")), __("Go to the Plugins screen"))
 # end def paused_plugins_notice

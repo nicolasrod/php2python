@@ -2045,10 +2045,10 @@ class WP_Query():
             if php_empty(lambda : in_search_post_types_):
                 where_ += " AND 1=0 "
             else:
-                where_ += str(" AND ") + str(wpdb_.posts) + str(".post_type IN ('") + join("', '", php_array_map("esc_sql", in_search_post_types_)) + "')"
+                where_ += str(" AND ") + str(wpdb_.posts) + str(".post_type IN ('") + php_join("', '", php_array_map("esc_sql", in_search_post_types_)) + "')"
             # end if
         elif (not php_empty(lambda : post_type_)) and php_is_array(post_type_):
-            where_ += str(" AND ") + str(wpdb_.posts) + str(".post_type IN ('") + join("', '", esc_sql(post_type_)) + "')"
+            where_ += str(" AND ") + str(wpdb_.posts) + str(".post_type IN ('") + php_join("', '", esc_sql(post_type_)) + "')"
         elif (not php_empty(lambda : post_type_)):
             where_ += wpdb_.prepare(str(" AND ") + str(wpdb_.posts) + str(".post_type = %s"), post_type_)
             post_type_object_ = get_post_type_object(post_type_)
@@ -2104,20 +2104,20 @@ class WP_Query():
                 p_status_ = None
             # end if
             if (not php_empty(lambda : e_status_)):
-                statuswheres_[-1] = "(" + join(" AND ", e_status_) + ")"
+                statuswheres_[-1] = "(" + php_join(" AND ", e_status_) + ")"
             # end if
             if (not php_empty(lambda : r_status_)):
                 if (not php_empty(lambda : q_["perm"])) and "editable" == q_["perm"] and (not current_user_can(edit_others_cap_)):
-                    statuswheres_[-1] = str("(") + str(wpdb_.posts) + str(".post_author = ") + str(user_id_) + str(" ") + "AND (" + join(" OR ", r_status_) + "))"
+                    statuswheres_[-1] = str("(") + str(wpdb_.posts) + str(".post_author = ") + str(user_id_) + str(" ") + "AND (" + php_join(" OR ", r_status_) + "))"
                 else:
-                    statuswheres_[-1] = "(" + join(" OR ", r_status_) + ")"
+                    statuswheres_[-1] = "(" + php_join(" OR ", r_status_) + ")"
                 # end if
             # end if
             if (not php_empty(lambda : p_status_)):
                 if (not php_empty(lambda : q_["perm"])) and "readable" == q_["perm"] and (not current_user_can(read_private_cap_)):
-                    statuswheres_[-1] = str("(") + str(wpdb_.posts) + str(".post_author = ") + str(user_id_) + str(" ") + "AND (" + join(" OR ", p_status_) + "))"
+                    statuswheres_[-1] = str("(") + str(wpdb_.posts) + str(".post_author = ") + str(user_id_) + str(" ") + "AND (" + php_join(" OR ", p_status_) + "))"
                 else:
-                    statuswheres_[-1] = "(" + join(" OR ", p_status_) + ")"
+                    statuswheres_[-1] = "(" + php_join(" OR ", p_status_) + ")"
                 # end if
             # end if
             if post_status_join_:
@@ -2265,7 +2265,7 @@ class WP_Query():
             for comment_ in self.comments:
                 post_ids_[-1] = php_int(comment_.comment_post_ID)
             # end for
-            post_ids_ = join(",", post_ids_)
+            post_ids_ = php_join(",", post_ids_)
             join_ = ""
             if post_ids_:
                 where_ = str("AND ") + str(wpdb_.posts) + str(".ID IN (") + str(post_ids_) + str(") ")
@@ -3340,7 +3340,7 @@ class WP_Query():
     def is_comments_popup(self):
         
         
-        _deprecated_function(__FUNCTION__, "4.5.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0")
         return False
     # end def is_comments_popup
     #// 
@@ -3907,7 +3907,7 @@ class WP_Query():
     def lazyload_term_meta(self, check_=None, term_id_=None):
         
         
-        _deprecated_function(__METHOD__, "4.5.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0")
         return check_
     # end def lazyload_term_meta
     #// 
@@ -3923,7 +3923,7 @@ class WP_Query():
     def lazyload_comment_meta(self, check_=None, comment_id_=None):
         
         
-        _deprecated_function(__METHOD__, "4.5.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0")
         return check_
     # end def lazyload_comment_meta
 # end class WP_Query

@@ -49,7 +49,7 @@ class WP_Customize_New_Menu_Section(WP_Customize_Section):
             args_ = Array()
         # end if
         
-        _deprecated_function(__METHOD__, "4.9.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
         super().__init__(manager_, id_, args_)
     # end def __init__
     #// 
@@ -61,7 +61,7 @@ class WP_Customize_New_Menu_Section(WP_Customize_Section):
     def render(self):
         
         
-        _deprecated_function(__METHOD__, "4.9.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
         php_print("     <li id=\"accordion-section-")
         php_print(esc_attr(self.id))
         php_print("\" class=\"accordion-section-new-menu\">\n           <button type=\"button\" class=\"button add-new-menu-item add-menu-toggle\" aria-expanded=\"false\">\n               ")

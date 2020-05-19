@@ -1523,10 +1523,10 @@ def _admin_notice_post_locked(*_args_):
         php_print("</div>\n     <p class=\"currently-editing wp-tab-first\" tabindex=\"0\">\n       ")
         if override_:
             #// translators: %s: User's display name.
-            printf(__("%s is already editing this post. Do you want to take over?"), esc_html(user_.display_name))
+            php_printf(__("%s is already editing this post. Do you want to take over?"), esc_html(user_.display_name))
         else:
             #// translators: %s: User's display name.
-            printf(__("%s is already editing this post."), esc_html(user_.display_name))
+            php_printf(__("%s is already editing this post."), esc_html(user_.display_name))
         # end if
         php_print("     </p>\n      ")
         #// 
@@ -2047,7 +2047,7 @@ def the_block_editor_meta_boxes(*_args_):
     #// meta boxes will not display because inline scripts for `wp-edit-post` will not be printed again after this point.
     #//
     if wp_script_is("wp-edit-post", "done"):
-        printf("""<script type='text/javascript'>
+        php_printf("""<script type='text/javascript'>
         %s
         </script>
         """, php_trim(script_))

@@ -290,7 +290,7 @@ class WP_Styles(WP_Dependencies):
         if (not echo_):
             return output_
         # end if
-        printf("""<style id='%s-inline-css'%s>
+        php_printf("""<style id='%s-inline-css'%s>
         %s
         </style>
         """, esc_attr(handle_), self.type_attr, output_)

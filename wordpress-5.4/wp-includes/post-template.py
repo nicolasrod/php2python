@@ -390,7 +390,7 @@ def get_the_excerpt(post_=None, *_args_):
     # end if
     
     if php_is_bool(post_):
-        _deprecated_argument(__FUNCTION__, "2.3.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.3.0")
     # end if
     post_ = get_post(post_)
     if php_empty(lambda : post_):
@@ -442,7 +442,7 @@ def post_class(class_="", post_id_=None, *_args_):
     # end if
     
     #// Separates classes with a single space, collates classes for post DIV.
-    php_print("class=\"" + join(" ", get_post_class(class_, post_id_)) + "\"")
+    php_print("class=\"" + php_join(" ", get_post_class(class_, post_id_)) + "\"")
 # end def post_class
 #// 
 #// Retrieves an array of the class names for the post container element.
@@ -565,7 +565,7 @@ def body_class(class_="", *_args_):
     
     
     #// Separates class names with a single space, collates class names for body element.
-    php_print("class=\"" + join(" ", get_body_class(class_)) + "\"")
+    php_print("class=\"" + php_join(" ", get_body_class(class_)) + "\"")
 # end def body_class
 #// 
 #// Retrieves an array of the class names for the body element.
@@ -1416,7 +1416,7 @@ def the_attachment_link(id_=0, fullsize_=None, deprecated_=None, permalink_=None
     # end if
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.5.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.5.0")
     # end if
     if fullsize_:
         php_print(wp_get_attachment_link(id_, "full", permalink_))
@@ -1741,7 +1741,7 @@ def wp_list_post_revisions(post_id_=0, type_="all", *_args_):
     #// $args array with (parent, format, right, left, type) deprecated since 3.6.
     if php_is_array(type_):
         type_ = type_["type"] if (not php_empty(lambda : type_["type"])) else type_
-        _deprecated_argument(__FUNCTION__, "3.6.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.6.0")
     # end if
     revisions_ = wp_get_post_revisions(post_.ID)
     if (not revisions_):

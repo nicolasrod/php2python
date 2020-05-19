@@ -65,7 +65,7 @@ def wp_print_styles(handles_=None, *_args_):
         #//
         do_action("wp_print_styles")
     # end if
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     global wp_styles_
     php_check_if_defined("wp_styles_")
     if (not type(wp_styles_).__name__ == "WP_Styles"):
@@ -95,9 +95,9 @@ def wp_print_styles(handles_=None, *_args_):
 def wp_add_inline_style(handle_=None, data_=None, *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     if False != php_stripos(data_, "</style>"):
-        _doing_it_wrong(__FUNCTION__, php_sprintf(__("Do not pass %1$s tags to %2$s."), "<code>&lt;style&gt;</code>", "<code>wp_add_inline_style()</code>"), "3.7.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("Do not pass %1$s tags to %2$s."), "<code>&lt;style&gt;</code>", "<code>wp_add_inline_style()</code>"), "3.7.0")
         data_ = php_trim(php_preg_replace("#<style[^>]*>(.*)</style>#is", "$1", data_))
     # end if
     return wp_styles().add_inline_style(handle_, data_)
@@ -132,7 +132,7 @@ def wp_register_style(handle_=None, src_=None, deps_=None, ver_=None, media_="al
         ver_ = False
     # end if
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     return wp_styles().add(handle_, src_, deps_, ver_, media_)
 # end def wp_register_style
 #// 
@@ -147,7 +147,7 @@ def wp_register_style(handle_=None, src_=None, deps_=None, ver_=None, media_="al
 def wp_deregister_style(handle_=None, *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     wp_styles().remove(handle_)
 # end def wp_deregister_style
 #// 
@@ -181,7 +181,7 @@ def wp_enqueue_style(handle_=None, src_="", deps_=None, ver_=None, media_="all",
         ver_ = False
     # end if
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     wp_styles_ = wp_styles()
     if src_:
         _handle_ = php_explode("?", handle_)
@@ -201,7 +201,7 @@ def wp_enqueue_style(handle_=None, src_="", deps_=None, ver_=None, media_="all",
 def wp_dequeue_style(handle_=None, *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     wp_styles().dequeue(handle_)
 # end def wp_dequeue_style
 #// 
@@ -217,7 +217,7 @@ def wp_dequeue_style(handle_=None, *_args_):
 def wp_style_is(handle_=None, list_="enqueued", *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     return php_bool(wp_styles().query(handle_, list_))
 # end def wp_style_is
 #// 

@@ -859,7 +859,7 @@ def register_uninstall_hook(file_=None, callback_=None, *_args_):
     
     
     if php_is_array(callback_) and php_is_object(callback_[0]):
-        _doing_it_wrong(__FUNCTION__, __("Only a static class method or function can be used in an uninstall hook."), "3.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Only a static class method or function can be used in an uninstall hook."), "3.1.0")
         return
     # end if
     #// 

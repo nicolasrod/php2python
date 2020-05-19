@@ -95,7 +95,7 @@ class WP_Customize_Theme_Control(WP_Customize_Control):
         <div class=\"theme-author\">
         """)
         #// translators: Theme author name.
-        printf(_x("By %s", "theme author"), "{{ data.theme.author }}")
+        php_printf(_x("By %s", "theme author"), "{{ data.theme.author }}")
         php_print("""           </div>
         <# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
         <div class=\"update-message notice inline notice-warning notice-alt\" data-slug=\"{{ data.theme.id }}\">
@@ -104,7 +104,7 @@ class WP_Customize_Theme_Control(WP_Customize_Control):
         if is_multisite():
             _e("New version available.")
         else:
-            printf(__("New version available. %s"), "<button class=\"button-link update-theme\" type=\"button\">" + __("Update now") + "</button>")
+            php_printf(__("New version available. %s"), "<button class=\"button-link update-theme\" type=\"button\">" + __("Update now") + "</button>")
         # end if
         php_print("""                   </p>
         </div>

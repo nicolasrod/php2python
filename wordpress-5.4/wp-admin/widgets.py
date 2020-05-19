@@ -198,7 +198,7 @@ if (php_isset(lambda : PHP_REQUEST["editwidget"])) and PHP_REQUEST["editwidget"]
     php_print(width_)
     php_print(">\n  <h2>\n  ")
     #// translators: %s: Widget name.
-    printf(__("Widget %s"), name_)
+    php_printf(__("Widget %s"), name_)
     php_print("""   </h2>
     <form action=\"widgets.php\" method=\"post\">
     <div class=\"widget-inside\">
@@ -284,7 +284,7 @@ php_print("""
 php_print(esc_html(title_))
 php_print("</h1>\n\n")
 if current_user_can("customize"):
-    printf(" <a class=\"page-title-action hide-if-no-customize\" href=\"%1$s\">%2$s</a>", esc_url(add_query_arg(Array(Array({"autofocus": Array({"panel": "widgets"})}), {"return": urlencode(remove_query_arg(wp_removable_query_args(), wp_unslash(PHP_SERVER["REQUEST_URI"])))}), admin_url("customize.php"))), __("Manage with Live Preview"))
+    php_printf(" <a class=\"page-title-action hide-if-no-customize\" href=\"%1$s\">%2$s</a>", esc_url(add_query_arg(Array(Array({"autofocus": Array({"panel": "widgets"})}), {"return": urlencode(remove_query_arg(wp_removable_query_args(), wp_unslash(PHP_SERVER["REQUEST_URI"])))}), admin_url("customize.php"))), __("Manage with Live Preview"))
 # end if
 nonce_ = wp_create_nonce("widgets-access")
 php_print("<div class=\"widget-access-link\">\n <a id=\"access-on\" href=\"widgets.php?widgets-access=on&_wpnonce=")

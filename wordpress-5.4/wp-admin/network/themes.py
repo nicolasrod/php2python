@@ -81,7 +81,7 @@ if action_:
             php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
             php_print("<div class=\"wrap\">")
             php_print("<h1>" + esc_html(title_) + "</h1>")
-            url_ = self_admin_url("update.php?action=update-selected-themes&amp;themes=" + urlencode(join(",", themes_)))
+            url_ = self_admin_url("update.php?action=update-selected-themes&amp;themes=" + urlencode(php_join(",", themes_)))
             url_ = wp_nonce_url(url_, "bulk-update-themes")
             php_print(str("<iframe src='") + str(url_) + str("' style='width: 100%; height:100%; min-height:850px;'></iframe>"))
             php_print("</div>")
@@ -219,7 +219,7 @@ if current_user_can("install_themes"):
 php_print("\n")
 if (php_isset(lambda : PHP_REQUEST["s"])) and php_strlen(PHP_REQUEST["s"]):
     #// translators: %s: Search query.
-    printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(s_))
+    php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(s_))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">

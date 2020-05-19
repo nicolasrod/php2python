@@ -1267,7 +1267,7 @@ class WP_Theme(ArrayAccess):
     def get_core_default_theme(self):
         
         
-        for slug_,name_ in array_reverse(self.default_themes).items():
+        for slug_,name_ in php_array_reverse(self.default_themes).items():
             theme_ = wp_get_theme(slug_)
             if theme_.exists():
                 return theme_

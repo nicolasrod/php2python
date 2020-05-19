@@ -225,7 +225,7 @@ def twentyseventeen_pingback_header(*_args_):
     
     
     if is_singular() and pings_open():
-        printf("<link rel=\"pingback\" href=\"%s\">" + "\n", esc_url(get_bloginfo("pingback_url")))
+        php_printf("<link rel=\"pingback\" href=\"%s\">" + "\n", esc_url(get_bloginfo("pingback_url")))
     # end if
 # end def twentyseventeen_pingback_header
 add_action("wp_head", "twentyseventeen_pingback_header")

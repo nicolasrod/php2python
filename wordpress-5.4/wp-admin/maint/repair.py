@@ -35,7 +35,7 @@ php_print("</a></p>\n\n")
 if (not php_defined("WP_ALLOW_REPAIR")) or (not WP_ALLOW_REPAIR):
     php_print("<h1 class=\"screen-reader-text\">" + __("Allow automatic database repair") + "</h1>")
     php_print("<p>")
-    printf(__("To allow use of this page to automatically repair database problems, please add the following line to your %s file. Once this line is added to your config, reload this page."), "<code>wp-config.php</code>")
+    php_printf(__("To allow use of this page to automatically repair database problems, please add the following line to your %s file. Once this line is added to your config, reload this page."), "<code>wp-config.php</code>")
     php_print("</p><p><code>define('WP_ALLOW_REPAIR', true);</code></p>")
     default_key_ = "put your unique phrase here"
     missing_key_ = False
@@ -85,15 +85,15 @@ elif (php_isset(lambda : PHP_REQUEST["repair"])):
         php_print("<p>")
         if "OK" == check_.Msg_text:
             #// translators: %s: Table name.
-            printf(__("The %s table is okay."), str("<code>") + str(table_) + str("</code>"))
+            php_printf(__("The %s table is okay."), str("<code>") + str(table_) + str("</code>"))
         else:
             #// translators: 1: Table name, 2: Error message.
-            printf(__("The %1$s table is not okay. It is reporting the following error: %2$s. WordPress will attempt to repair this table&hellip;"), str("<code>") + str(table_) + str("</code>"), str("<code>") + str(check_.Msg_text) + str("</code>"))
+            php_printf(__("The %1$s table is not okay. It is reporting the following error: %2$s. WordPress will attempt to repair this table&hellip;"), str("<code>") + str(table_) + str("</code>"), str("<code>") + str(check_.Msg_text) + str("</code>"))
             repair_ = wpdb_.get_row(str("REPAIR TABLE ") + str(table_))
             php_print("<br />&nbsp;&nbsp;&nbsp;&nbsp;")
             if "OK" == check_.Msg_text:
                 #// translators: %s: Table name.
-                printf(__("Successfully repaired the %s table."), str("<code>") + str(table_) + str("</code>"))
+                php_printf(__("Successfully repaired the %s table."), str("<code>") + str(table_) + str("</code>"))
             else:
                 #// translators: 1: Table name, 2: Error message.
                 php_print(php_sprintf(__("Failed to repair the %1$s table. Error: %2$s"), str("<code>") + str(table_) + str("</code>"), str("<code>") + str(check_.Msg_text) + str("</code>")) + "<br />")
@@ -106,23 +106,23 @@ elif (php_isset(lambda : PHP_REQUEST["repair"])):
             php_print("<br />&nbsp;&nbsp;&nbsp;&nbsp;")
             if "Table is already up to date" == check_.Msg_text:
                 #// translators: %s: Table name.
-                printf(__("The %s table is already optimized."), str("<code>") + str(table_) + str("</code>"))
+                php_printf(__("The %s table is already optimized."), str("<code>") + str(table_) + str("</code>"))
             else:
                 check_ = wpdb_.get_row(str("OPTIMIZE TABLE ") + str(table_))
                 php_print("<br />&nbsp;&nbsp;&nbsp;&nbsp;")
                 if "OK" == check_.Msg_text or "Table is already up to date" == check_.Msg_text:
                     #// translators: %s: Table name.
-                    printf(__("Successfully optimized the %s table."), str("<code>") + str(table_) + str("</code>"))
+                    php_printf(__("Successfully optimized the %s table."), str("<code>") + str(table_) + str("</code>"))
                 else:
                     #// translators: 1: Table name. 2: Error message.
-                    printf(__("Failed to optimize the %1$s table. Error: %2$s"), str("<code>") + str(table_) + str("</code>"), str("<code>") + str(check_.Msg_text) + str("</code>"))
+                    php_printf(__("Failed to optimize the %1$s table. Error: %2$s"), str("<code>") + str(table_) + str("</code>"), str("<code>") + str(check_.Msg_text) + str("</code>"))
                 # end if
             # end if
         # end if
         php_print("</p>")
     # end for
     if problems_:
-        printf("<p>" + __("Some database problems could not be repaired. Please copy-and-paste the following list of errors to the <a href=\"%s\">WordPress support forums</a> to get additional assistance.") + "</p>", __("https://wordpress.org/support/forum/how-to-and-troubleshooting"))
+        php_printf("<p>" + __("Some database problems could not be repaired. Please copy-and-paste the following list of errors to the <a href=\"%s\">WordPress support forums</a> to get additional assistance.") + "</p>", __("https://wordpress.org/support/forum/how-to-and-troubleshooting"))
         problem_output_ = ""
         for table_,problem_ in problems_.items():
             problem_output_ += str(table_) + str(": ") + str(problem_) + str("\n")

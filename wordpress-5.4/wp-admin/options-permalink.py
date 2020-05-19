@@ -122,7 +122,7 @@ php_print("""</h1>
 """)
 wp_nonce_field("update-permalink")
 php_print("\n   <p>\n   ")
-printf(__("WordPress offers you the ability to create a custom URL structure for your permalinks and archives. Custom URL structures can improve the aesthetics, usability, and forward-compatibility of your links. A <a href=\"%s\">number of tags are available</a>, and here are some examples to get you started."), __("https://wordpress.org/support/article/using-permalinks/"))
+php_printf(__("WordPress offers you the ability to create a custom URL structure for your permalinks and archives. Custom URL structures can improve the aesthetics, usability, and forward-compatibility of your links. A <a href=\"%s\">number of tags are available</a>, and here are some examples to get you started."), __("https://wordpress.org/support/article/using-permalinks/"))
 php_print(" </p>\n\n")
 if is_multisite() and (not is_subdomain_install()) and is_main_site() and 0 == php_strpos(permalink_structure_, "/blog/"):
     permalink_structure_ = php_preg_replace("|^/?blog|", "", permalink_structure_)
@@ -245,7 +245,7 @@ php_print("""           </div>
 _e("Optional")
 php_print("</h2>\n<p>\n")
 #// translators: %s: Placeholder that must come at the start of the URL.
-printf(__("If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/uncategorized/</code>. If you leave these blank the defaults will be used."), get_option("home") + blog_prefix_ + prefix_)
+php_printf(__("If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/uncategorized/</code>. If you leave these blank the defaults will be used."), get_option("home") + blog_prefix_ + prefix_)
 php_print("""</p>
 <table class=\"form-table\" role=\"presentation\">
 <tr>
@@ -278,7 +278,7 @@ if (not is_multisite()):
         if (php_isset(lambda : PHP_POST["submit"])) and permalink_structure_ and (not using_index_permalinks_) and (not writable_):
             if php_file_exists(home_path_ + "web.config"):
                 php_print("<p>\n                ")
-                printf(__("If your %1$s file was <a href=\"%2$s\">writable</a>, we could do this automatically, but it isn&#8217;t so this is the url rewrite rule you should have in your %1$s file. Click in the field and press %3$s to select all. Then insert this rule inside of the %4$s element in %1$s file."), "<code>web.config</code>", __("https://wordpress.org/support/article/changing-file-permissions/"), "<kbd>CTRL + a</kbd>", "<code>/&lt;configuration&gt;/&lt;system.webServer&gt;/&lt;rewrite&gt;/&lt;rules&gt;</code>")
+                php_printf(__("If your %1$s file was <a href=\"%2$s\">writable</a>, we could do this automatically, but it isn&#8217;t so this is the url rewrite rule you should have in your %1$s file. Click in the field and press %3$s to select all. Then insert this rule inside of the %4$s element in %1$s file."), "<code>web.config</code>", __("https://wordpress.org/support/article/changing-file-permissions/"), "<kbd>CTRL + a</kbd>", "<code>/&lt;configuration&gt;/&lt;system.webServer&gt;/&lt;rewrite&gt;/&lt;rules&gt;</code>")
                 php_print("</p>\n<form action=\"options-permalink.php\" method=\"post\">\n              ")
                 wp_nonce_field("update-permalink")
                 php_print(" <p><textarea rows=\"9\" class=\"large-text readonly\" name=\"rules\" id=\"rules\" readonly=\"readonly\">")
@@ -287,11 +287,11 @@ if (not is_multisite()):
                 </form>
                 <p>
                 """)
-                printf(__("If you temporarily make your %s file writable for us to generate rewrite rules automatically, do not forget to revert the permissions after rule has been saved."), "<code>web.config</code>")
+                php_printf(__("If you temporarily make your %s file writable for us to generate rewrite rules automatically, do not forget to revert the permissions after rule has been saved."), "<code>web.config</code>")
                 php_print("</p>\n       ")
             else:
                 php_print("<p>\n            ")
-                printf(__("If the root directory of your site was <a href=\"%1$s\">writable</a>, we could do this automatically, but it isn&#8217;t so this is the url rewrite rule you should have in your %2$s file. Create a new file, called %2$s in the root directory of your site. Click in the field and press %3$s to select all. Then insert this code into the %2$s file."), __("https://wordpress.org/support/article/changing-file-permissions/"), "<code>web.config</code>", "<kbd>CTRL + a</kbd>")
+                php_printf(__("If the root directory of your site was <a href=\"%1$s\">writable</a>, we could do this automatically, but it isn&#8217;t so this is the url rewrite rule you should have in your %2$s file. Create a new file, called %2$s in the root directory of your site. Click in the field and press %3$s to select all. Then insert this code into the %2$s file."), __("https://wordpress.org/support/article/changing-file-permissions/"), "<code>web.config</code>", "<kbd>CTRL + a</kbd>")
                 php_print("</p>\n<form action=\"options-permalink.php\" method=\"post\">\n          ")
                 wp_nonce_field("update-permalink")
                 php_print(" <p><textarea rows=\"18\" class=\"large-text readonly\" name=\"rules\" id=\"rules\" readonly=\"readonly\">")
@@ -300,7 +300,7 @@ if (not is_multisite()):
                 </form>
                 <p>
                 """)
-                printf(__("If you temporarily make your site&#8217;s root directory writable for us to generate the %s file automatically, do not forget to revert the permissions after the file has been created."), "<code>web.config</code>")
+                php_printf(__("If you temporarily make your site&#8217;s root directory writable for us to generate the %s file automatically, do not forget to revert the permissions after the file has been created."), "<code>web.config</code>")
                 php_print("</p>\n       ")
             # end if
             php_print(" ")
@@ -312,7 +312,7 @@ if (not is_multisite()):
     else:
         if permalink_structure_ and (not using_index_permalinks_) and (not writable_) and update_required_:
             php_print("<p>\n        ")
-            printf(__("If your %1$s file was <a href=\"%2$s\">writable</a>, we could do this automatically, but it isn&#8217;t so these are the mod_rewrite rules you should have in your %1$s file. Click in the field and press %3$s to select all."), "<code>.htaccess</code>", __("https://wordpress.org/support/article/changing-file-permissions/"), "<kbd>CTRL + a</kbd>")
+            php_printf(__("If your %1$s file was <a href=\"%2$s\">writable</a>, we could do this automatically, but it isn&#8217;t so these are the mod_rewrite rules you should have in your %1$s file. Click in the field and press %3$s to select all."), "<code>.htaccess</code>", __("https://wordpress.org/support/article/changing-file-permissions/"), "<kbd>CTRL + a</kbd>")
             php_print("</p>\n<form action=\"options-permalink.php\" method=\"post\">\n      ")
             wp_nonce_field("update-permalink")
             php_print(" <p><textarea rows=\"6\" class=\"large-text readonly\" name=\"rules\" id=\"rules\" readonly=\"readonly\">")

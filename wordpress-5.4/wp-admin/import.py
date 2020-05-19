@@ -51,7 +51,7 @@ if (not php_empty(lambda : PHP_REQUEST["invalid"])):
     _e("Error:")
     php_print("</strong>\n          ")
     #// translators: %s: Importer slug.
-    printf(__("The %s importer is invalid or is not installed."), "<strong>" + esc_html(PHP_REQUEST["invalid"]) + "</strong>")
+    php_printf(__("The %s importer is invalid or is not installed."), "<strong>" + esc_html(PHP_REQUEST["invalid"]) + "</strong>")
     php_print("     </p>\n  </div>\n")
 # end if
 php_print("<p>")

@@ -481,8 +481,8 @@ for case in Switch(action_):
         new_email_ = get_user_meta(current_user_.ID, "_new_email", True)
         if new_email_ and new_email_["newemail"] != current_user_.user_email and profileuser_.ID == current_user_.ID:
             php_print("     <div class=\"updated inline\">\n        <p>\n           ")
-            printf(__("There is a pending change of your email to %s."), "<code>" + esc_html(new_email_["newemail"]) + "</code>")
-            printf(" <a href=\"%1$s\">%2$s</a>", esc_url(wp_nonce_url(self_admin_url("profile.php?dismiss=" + current_user_.ID + "_new_email"), "dismiss-" + current_user_.ID + "_new_email")), __("Cancel"))
+            php_printf(__("There is a pending change of your email to %s."), "<code>" + esc_html(new_email_["newemail"]) + "</code>")
+            php_printf(" <a href=\"%1$s\">%2$s</a>", esc_url(wp_nonce_url(self_admin_url("profile.php?dismiss=" + current_user_.ID + "_new_email"), "dismiss-" + current_user_.ID + "_new_email")), __("Cancel"))
             php_print("     </p>\n      </div>\n        ")
         # end if
         php_print("""   </td>
@@ -661,7 +661,7 @@ for case in Switch(action_):
             _e("Log Out Everywhere")
             php_print("</button></p>\n          <p class=\"description\">\n             ")
             #// translators: %s: User's display name.
-            printf(__("Log %s out of all locations."), profileuser_.display_name)
+            php_printf(__("Log %s out of all locations."), profileuser_.display_name)
             php_print("""           </p>
             </td>
             </tr>

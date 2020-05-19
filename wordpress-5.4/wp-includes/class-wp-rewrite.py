@@ -378,7 +378,7 @@ class WP_Rewrite():
             return Array(Array(), Array())
         # end if
         #// Now reverse it, because we need parents after children for rewrite rules to work properly.
-        posts_ = array_reverse(posts_, True)
+        posts_ = php_array_reverse(posts_, True)
         page_uris_ = Array()
         page_attachment_uris_ = Array()
         for id_,post_ in posts_.items():

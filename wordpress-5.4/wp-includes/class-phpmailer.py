@@ -3667,7 +3667,7 @@ class phpmailerException(Exception):
     def errormessage(self):
         
         
-        errorMsg_ = "<strong>" + htmlspecialchars(self.getmessage()) + "</strong><br />\n"
+        errorMsg_ = "<strong>" + php_htmlspecialchars(self.getmessage()) + "</strong><br />\n"
         return errorMsg_
     # end def errormessage
 # end class phpmailerException

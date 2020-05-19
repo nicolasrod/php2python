@@ -433,7 +433,7 @@ def update_blog_option(id_=None, option_=None, value_=None, deprecated_=None, *_
     
     id_ = php_int(id_)
     if None != deprecated_:
-        _deprecated_argument(__FUNCTION__, "3.1.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.1.0")
     # end if
     if get_current_blog_id() == id_:
         return update_option(option_, value_)
@@ -672,7 +672,7 @@ def update_blog_status(blog_id_=None, pref_=None, value_=None, deprecated_=None,
     global wpdb_
     php_check_if_defined("wpdb_")
     if None != deprecated_:
-        _deprecated_argument(__FUNCTION__, "3.1.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.1.0")
     # end if
     if (not php_in_array(pref_, Array("site_id", "domain", "path", "registered", "last_updated", "public", "archived", "mature", "spam", "deleted", "lang_id"))):
         return value_
@@ -724,7 +724,7 @@ def get_last_updated(deprecated_="", start_=0, quantity_=40, *_args_):
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "MU")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "MU")
         pass
     # end if
     return wpdb_.get_results(wpdb_.prepare(str("SELECT blog_id, domain, path FROM ") + str(wpdb_.blogs) + str(" WHERE site_id = %d AND public = '1' AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' AND last_updated != '0000-00-00 00:00:00' ORDER BY last_updated DESC limit %d, %d"), get_current_network_id(), start_, quantity_), ARRAY_A)

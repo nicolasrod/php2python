@@ -189,7 +189,7 @@ class WP_MS_Users_List_Table(WP_List_Table):
         php_print(user_.ID)
         php_print("\">\n            ")
         #// translators: %s: User login.
-        printf(__("Select %s"), user_.user_login)
+        php_printf(__("Select %s"), user_.user_login)
         php_print("     </label>\n      <input type=\"checkbox\" id=\"blog_")
         php_print(user_.ID)
         php_print("\" name=\"allusers[]\" value=\"")

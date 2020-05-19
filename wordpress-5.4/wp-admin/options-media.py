@@ -118,7 +118,7 @@ if (not is_multisite()):
         php_print(esc_attr(get_option("upload_path")))
         php_print("\" class=\"regular-text code\" />\n<p class=\"description\">\n       ")
         #// translators: %s: wp-content/uploads
-        printf(__("Default is %s"), "<code>wp-content/uploads</code>")
+        php_printf(__("Default is %s"), "<code>wp-content/uploads</code>")
         php_print("""</p>
         </td>
         </tr>

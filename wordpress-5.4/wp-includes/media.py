@@ -967,7 +967,7 @@ def wp_get_attachment_image(attachment_id_=None, size_="thumbnail", icon_=None, 
         hwstring_ = image_hwstring(width_, height_)
         size_class_ = size_
         if php_is_array(size_class_):
-            size_class_ = join("x", size_class_)
+            size_class_ = php_join("x", size_class_)
         # end if
         attachment_ = get_post(attachment_id_)
         default_attr_ = Array({"src": src_, "class": str("attachment-") + str(size_class_) + str(" size-") + str(size_class_), "alt": php_trim(strip_tags(get_post_meta(attachment_id_, "_wp_attachment_image_alt", True)))})
@@ -1822,7 +1822,7 @@ def wp_underscore_playlist_templates(*_args_):
     <span class=\"wp-playlist-item-meta wp-playlist-item-title\">
     """)
     #// translators: %s: Playlist item title.
-    printf(_x("&#8220;%s&#8221;", "playlist item title"), "{{ data.title }}")
+    php_printf(_x("&#8220;%s&#8221;", "playlist item title"), "{{ data.title }}")
     php_print("""       </span>
     <# if ( data.meta.album ) { #><span class=\"wp-playlist-item-meta wp-playlist-item-album\">{{ data.meta.album }}</span><# } #>
     <# if ( data.meta.artist ) { #><span class=\"wp-playlist-item-meta wp-playlist-item-artist\">{{ data.meta.artist }}</span><# } #>
@@ -1838,7 +1838,7 @@ def wp_underscore_playlist_templates(*_args_):
     <span class=\"wp-playlist-item-title\">
     """)
     #// translators: %s: Playlist item title.
-    printf(_x("&#8220;%s&#8221;", "playlist item title"), "{{{ data.title }}}")
+    php_printf(_x("&#8220;%s&#8221;", "playlist item title"), "{{{ data.title }}}")
     php_print("""               </span>
     <# if ( data.artists && data.meta.artist ) { #>
     <span class=\"wp-playlist-item-artist\"> &mdash; {{ data.meta.artist }}</span>
@@ -2059,7 +2059,7 @@ def wp_playlist_shortcode(attr_=None, *_args_):
     <ol>
     """)
     for att_id_,attachment_ in attachments_.items():
-        printf("<li>%s</li>", wp_get_attachment_link(att_id_))
+        php_printf("<li>%s</li>", wp_get_attachment_link(att_id_))
     # end for
     php_print(" </ol>\n </noscript>\n   <script type=\"application/json\" class=\"wp-playlist-script\">")
     php_print(wp_json_encode(data_))
@@ -2259,7 +2259,7 @@ def wp_audio_shortcode(attr_=None, content_="", *_args_):
     if "mediaelement" == library_ and 1 == instance_:
         html_ += "<!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->\n"
     # end if
-    html_ += php_sprintf("<audio %s controls=\"controls\">", join(" ", attr_strings_))
+    html_ += php_sprintf("<audio %s controls=\"controls\">", php_join(" ", attr_strings_))
     fileurl_ = ""
     source_ = "<source type=\"%s\" src=\"%s\" />"
     for fallback_ in default_types_:
@@ -2480,7 +2480,7 @@ def wp_video_shortcode(attr_=None, content_="", *_args_):
     if "mediaelement" == library_ and 1 == instance_:
         html_ += "<!--[if lt IE 9]><script>document.createElement('video');</script><![endif]-->\n"
     # end if
-    html_ += php_sprintf("<video %s controls=\"controls\">", join(" ", attr_strings_))
+    html_ += php_sprintf("<video %s controls=\"controls\">", php_join(" ", attr_strings_))
     fileurl_ = ""
     source_ = "<source type=\"%s\" src=\"%s\" />"
     for fallback_ in default_types_:

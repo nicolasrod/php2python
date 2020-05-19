@@ -41,13 +41,13 @@ if (not php_class_exists("TwentyTwenty_Customize")):
             #// Site Identity
             #// 
             #// 2X Header Logo ----------------
-            wp_customize_.add_setting("retina_logo", Array({"capability": "edit_theme_options", "sanitize_callback": Array(__CLASS__, "sanitize_checkbox"), "transport": "postMessage"}))
+            wp_customize_.add_setting("retina_logo", Array({"capability": "edit_theme_options", "sanitize_callback": Array(self.__class__.__name__, "sanitize_checkbox"), "transport": "postMessage"}))
             wp_customize_.add_control("retina_logo", Array({"type": "checkbox", "section": "title_tagline", "priority": 10, "label": __("Retina logo", "twentytwenty"), "description": __("Scales the logo to half its uploaded size, making it sharp on high-res screens.", "twentytwenty")}))
             #// Header & Footer Background Color.
             wp_customize_.add_setting("header_footer_background_color", Array({"default": "#ffffff", "sanitize_callback": "sanitize_hex_color", "transport": "postMessage"}))
             wp_customize_.add_control(php_new_class("WP_Customize_Color_Control", lambda : WP_Customize_Color_Control(wp_customize_, "header_footer_background_color", Array({"label": __("Header &amp; Footer Background Color", "twentytwenty"), "section": "colors"}))))
             #// Enable picking an accent color.
-            wp_customize_.add_setting("accent_hue_active", Array({"capability": "edit_theme_options", "sanitize_callback": Array(__CLASS__, "sanitize_select"), "transport": "postMessage", "default": "default"}))
+            wp_customize_.add_setting("accent_hue_active", Array({"capability": "edit_theme_options", "sanitize_callback": Array(self.__class__.__name__, "sanitize_select"), "transport": "postMessage", "default": "default"}))
             wp_customize_.add_control("accent_hue_active", Array({"type": "radio", "section": "colors", "label": __("Primary Color", "twentytwenty"), "choices": Array({"default": __("Default", "twentytwenty"), "custom": __("Custom", "twentytwenty")})}))
             #// 
             #// Implementation for the accent color.
@@ -60,7 +60,7 @@ if (not php_class_exists("TwentyTwenty_Customize")):
             #// Add the setting for the hue colorpicker.
             wp_customize_.add_setting("accent_hue", Array({"default": 344, "type": "theme_mod", "sanitize_callback": "absint", "transport": "postMessage"}))
             #// Add setting to hold colors derived from the accent hue.
-            wp_customize_.add_setting("accent_accessible_colors", Array({"default": Array({"content": Array({"text": "#000000", "accent": "#cd2653", "secondary": "#6d6d6d", "borders": "#dcd7ca"})}, {"header-footer": Array({"text": "#000000", "accent": "#cd2653", "secondary": "#6d6d6d", "borders": "#dcd7ca"})})}, {"type": "theme_mod", "transport": "postMessage", "sanitize_callback": Array(__CLASS__, "sanitize_accent_accessible_colors")}))
+            wp_customize_.add_setting("accent_accessible_colors", Array({"default": Array({"content": Array({"text": "#000000", "accent": "#cd2653", "secondary": "#6d6d6d", "borders": "#dcd7ca"})}, {"header-footer": Array({"text": "#000000", "accent": "#cd2653", "secondary": "#6d6d6d", "borders": "#dcd7ca"})})}, {"type": "theme_mod", "transport": "postMessage", "sanitize_callback": Array(self.__class__.__name__, "sanitize_accent_accessible_colors")}))
             #// Add the hue-only colorpicker for the accent color.
             wp_customize_.add_control(php_new_class("WP_Customize_Color_Control", lambda : WP_Customize_Color_Control(wp_customize_, "accent_hue", Array({"section": "colors", "settings": "accent_hue", "description": __("Apply a custom color for links, buttons, featured images.", "twentytwenty"), "mode": "hue", "active_callback": (lambda :  "custom" == wp_customize_.get_setting("accent_hue_active").value())}))))
             #// Update background color with postMessage, so inline CSS output is updated as well.
@@ -70,20 +70,20 @@ if (not php_class_exists("TwentyTwenty_Customize")):
             #//
             wp_customize_.add_section("options", Array({"title": __("Theme Options", "twentytwenty"), "priority": 40, "capability": "edit_theme_options"}))
             #// Enable Header Search -----------------------------------------------
-            wp_customize_.add_setting("enable_header_search", Array({"capability": "edit_theme_options", "default": True, "sanitize_callback": Array(__CLASS__, "sanitize_checkbox")}))
+            wp_customize_.add_setting("enable_header_search", Array({"capability": "edit_theme_options", "default": True, "sanitize_callback": Array(self.__class__.__name__, "sanitize_checkbox")}))
             wp_customize_.add_control("enable_header_search", Array({"type": "checkbox", "section": "options", "priority": 10, "label": __("Show search in header", "twentytwenty")}))
             #// Show author bio ----------------------------------------------------
-            wp_customize_.add_setting("show_author_bio", Array({"capability": "edit_theme_options", "default": True, "sanitize_callback": Array(__CLASS__, "sanitize_checkbox")}))
+            wp_customize_.add_setting("show_author_bio", Array({"capability": "edit_theme_options", "default": True, "sanitize_callback": Array(self.__class__.__name__, "sanitize_checkbox")}))
             wp_customize_.add_control("show_author_bio", Array({"type": "checkbox", "section": "options", "priority": 10, "label": __("Show author bio", "twentytwenty")}))
             #// Display full content or excerpts on the blog and archives ---------
-            wp_customize_.add_setting("blog_content", Array({"capability": "edit_theme_options", "default": "full", "sanitize_callback": Array(__CLASS__, "sanitize_select")}))
+            wp_customize_.add_setting("blog_content", Array({"capability": "edit_theme_options", "default": "full", "sanitize_callback": Array(self.__class__.__name__, "sanitize_select")}))
             wp_customize_.add_control("blog_content", Array({"type": "radio", "section": "options", "priority": 10, "label": __("On archive pages, posts show:", "twentytwenty"), "choices": Array({"full": __("Full text", "twentytwenty"), "summary": __("Summary", "twentytwenty")})}))
             #// 
             #// Template: Cover Template.
             #//
             wp_customize_.add_section("cover_template_options", Array({"title": __("Cover Template", "twentytwenty"), "capability": "edit_theme_options", "description": __("Settings for the \"Cover Template\" page template. Add a featured image to use as background.", "twentytwenty"), "priority": 42}))
             #// Overlay Fixed Background ------
-            wp_customize_.add_setting("cover_template_fixed_background", Array({"capability": "edit_theme_options", "default": True, "sanitize_callback": Array(__CLASS__, "sanitize_checkbox"), "transport": "postMessage"}))
+            wp_customize_.add_setting("cover_template_fixed_background", Array({"capability": "edit_theme_options", "default": True, "sanitize_callback": Array(self.__class__.__name__, "sanitize_checkbox"), "transport": "postMessage"}))
             wp_customize_.add_control("cover_template_fixed_background", Array({"type": "checkbox", "section": "cover_template_options", "label": __("Fixed Background Image", "twentytwenty"), "description": __("Creates a parallax effect when the visitor scrolls.", "twentytwenty")}))
             wp_customize_.selective_refresh.add_partial("cover_template_fixed_background", Array({"selector": ".cover-header", "type": "cover_fixed"}))
             #// Separator ---------------------

@@ -20,7 +20,7 @@ php_print("""</h1>
 if is_home() and current_user_can("publish_posts"):
     php_print("\n           <p>\n           ")
     #// translators: %s: Post editor URL.
-    printf(__("Ready to publish your first post? <a href=\"%s\">Get started here</a>.", "twentyseventeen"), esc_url(admin_url("post-new.php")))
+    php_printf(__("Ready to publish your first post? <a href=\"%s\">Get started here</a>.", "twentyseventeen"), esc_url(admin_url("post-new.php")))
     php_print("         </p>\n\n        ")
 else:
     php_print("\n           <p>")

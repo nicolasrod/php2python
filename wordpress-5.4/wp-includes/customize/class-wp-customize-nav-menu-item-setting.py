@@ -382,9 +382,9 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
         self.original_nav_menu_term_id = self._original_value["nav_menu_term_id"]
         self._previewed_blog_id = get_current_blog_id()
         add_filter("wp_get_nav_menu_items", Array(self, "filter_wp_get_nav_menu_items"), 10, 3)
-        sort_callback_ = Array(__CLASS__, "sort_wp_get_nav_menu_items")
+        sort_callback_ = Array(self.__class__.__name__, "sort_wp_get_nav_menu_items")
         if (not has_filter("wp_get_nav_menu_items", sort_callback_)):
-            add_filter("wp_get_nav_menu_items", Array(__CLASS__, "sort_wp_get_nav_menu_items"), 1000, 3)
+            add_filter("wp_get_nav_menu_items", Array(self.__class__.__name__, "sort_wp_get_nav_menu_items"), 1000, 3)
         # end if
         #// @todo Add get_post_metadata filters for plugins to add their data.
         return True

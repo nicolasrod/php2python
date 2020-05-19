@@ -58,17 +58,17 @@ def akismet_rightnow(*_args_):
 def akismet_admin_init(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_admin_init
 def akismet_version_warning(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_version_warning
 def akismet_load_js_and_css(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_load_js_and_css
 def akismet_nonce_field(action_=None, *_args_):
     if action_ is None:
@@ -85,12 +85,12 @@ def akismet_plugin_action_links(links_=None, file_=None, *_args_):
 def akismet_conf(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_conf
 def akismet_stats_display(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_stats_display
 def akismet_stats(*_args_):
     
@@ -100,7 +100,7 @@ def akismet_stats(*_args_):
 def akismet_admin_warnings(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_admin_warnings
 def akismet_comment_row_action(a_=None, comment_=None, *_args_):
     
@@ -115,13 +115,13 @@ def akismet_comment_status_meta_box(comment_=None, *_args_):
 def akismet_comments_columns(columns_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
     return columns_
 # end def akismet_comments_columns
 def akismet_comment_column_row(column_=None, comment_id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_comment_column_row
 def akismet_text_add_link_callback(m_=None, *_args_):
     
@@ -188,7 +188,7 @@ def akismet_get_server_connectivity(cache_timeout_=86400, *_args_):
 def akismet_server_connectivity_ok(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
     return True
 # end def akismet_server_connectivity_ok
 def akismet_admin_menu(*_args_):
@@ -204,7 +204,7 @@ def akismet_load_menu(*_args_):
 def akismet_init(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_init
 def akismet_get_key(*_args_):
     
@@ -300,34 +300,34 @@ def akismet_fix_scheduled_recheck(*_args_):
 def akismet_spam_comments(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
     return Array()
 # end def akismet_spam_comments
 def akismet_spam_totals(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
     return Array()
 # end def akismet_spam_totals
 def akismet_manage_page(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_manage_page
 def akismet_caught(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def akismet_caught
 def redirect_old_akismet_urls(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
 # end def redirect_old_akismet_urls
 def akismet_kill_proxy_check(option_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0")
     return 0
 # end def akismet_kill_proxy_check
 def akismet_pingback_forwarded_for(r_=None, url_=None, *_args_):

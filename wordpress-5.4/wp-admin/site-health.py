@@ -97,7 +97,7 @@ php_print("""</p>
 <h3 class=\"site-health-issue-count-title\">
 """)
 #// translators: %s: Number of critical issues found.
-printf(_n("%s critical issue", "%s critical issues", 0), "<span class=\"issue-count\">0</span>")
+php_printf(_n("%s critical issue", "%s critical issues", 0), "<span class=\"issue-count\">0</span>")
 php_print("""           </h3>
 <div id=\"health-check-site-status-critical\" class=\"health-check-accordion issues\"></div>
 </div>
@@ -105,7 +105,7 @@ php_print("""           </h3>
 <h3 class=\"site-health-issue-count-title\">
 """)
 #// translators: %s: Number of recommended improvements.
-printf(_n("%s recommended improvement", "%s recommended improvements", 0), "<span class=\"issue-count\">0</span>")
+php_printf(_n("%s recommended improvement", "%s recommended improvements", 0), "<span class=\"issue-count\">0</span>")
 php_print("""           </h3>
 <div id=\"health-check-site-status-recommended\" class=\"health-check-accordion issues\"></div>
 </div>
@@ -121,7 +121,7 @@ php_print("""           <span class=\"icon\"></span>
 <h3 class=\"site-health-issue-count-title\">
 """)
 #// translators: %s: Number of items with no issues.
-printf(_n("%s item with no issues detected", "%s items with no issues detected", 0), "<span class=\"issue-count\">0</span>")
+php_printf(_n("%s item with no issues detected", "%s items with no issues detected", 0), "<span class=\"issue-count\">0</span>")
 php_print("""       </h3>
 <div id=\"health-check-site-status-good\" class=\"health-check-accordion issues\"></div>
 </div>

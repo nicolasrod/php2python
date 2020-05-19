@@ -614,7 +614,7 @@ class wp_xmlrpc_server(IXR_Server):
             enclosures_ = get_post_meta(post_["ID"], "enclosure")
             if (not php_empty(lambda : enclosures_)):
                 encdata_ = php_explode("\n", enclosures_[0])
-                _post_["enclosure"]["url"] = php_trim(htmlspecialchars(encdata_[0]))
+                _post_["enclosure"]["url"] = php_trim(php_htmlspecialchars(encdata_[0]))
                 _post_["enclosure"]["length"] = php_int(php_trim(encdata_[1]))
                 _post_["enclosure"]["type"] = php_trim(encdata_[2])
             # end if
@@ -4963,7 +4963,7 @@ class wp_xmlrpc_server(IXR_Server):
                 if "enclosure" == key_:
                     for enc_ in val_:
                         encdata_ = php_explode("\n", enc_)
-                        enclosure_["url"] = php_trim(htmlspecialchars(encdata_[0]))
+                        enclosure_["url"] = php_trim(php_htmlspecialchars(encdata_[0]))
                         enclosure_["length"] = php_int(php_trim(encdata_[1]))
                         enclosure_["type"] = php_trim(encdata_[2])
                         break

@@ -14,7 +14,7 @@ php_print("\" ")
 post_class()
 php_print(">\n  <header class=\"entry-header\">\n       ")
 if is_sticky() and is_home() and (not is_paged()):
-    printf("<span class=\"sticky-post\">%s</span>", _x("Featured", "post", "twentynineteen"))
+    php_printf("<span class=\"sticky-post\">%s</span>", _x("Featured", "post", "twentynineteen"))
 # end if
 if is_singular():
     the_title("<h1 class=\"entry-title\">", "</h1>")

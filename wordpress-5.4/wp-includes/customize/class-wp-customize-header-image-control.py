@@ -167,11 +167,11 @@ class WP_Customize_Header_Image_Control(WP_Customize_Image_Control):
         if current_theme_supports("custom-header", "video"):
             _e("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image that matches the size of your video &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit.")
         elif width_ and height_:
-            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header size of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s &times; %s</strong>", width_, height_))
+            php_printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header size of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s &times; %s</strong>", width_, height_))
         elif width_:
-            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header width of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", width_))
+            php_printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header width of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", width_))
         else:
-            printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header height of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", height_))
+            php_printf(__("Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image with a header height of %s pixels &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit."), php_sprintf("<strong>%s</strong>", height_))
         # end if
         php_print("""           </p>
         <div class=\"current\">

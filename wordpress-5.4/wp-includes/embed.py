@@ -219,7 +219,7 @@ def wp_maybe_load_embeds(*_args_):
     #// 
     #// @param callable $handler Audio embed handler callback function.
     #//
-    wp_embed_register_handler("audio", "#^https?://.+?\\.(" + join("|", wp_get_audio_extensions()) + ")$#i", apply_filters("wp_audio_embed_handler", "wp_embed_handler_audio"), 9999)
+    wp_embed_register_handler("audio", "#^https?://.+?\\.(" + php_join("|", wp_get_audio_extensions()) + ")$#i", apply_filters("wp_audio_embed_handler", "wp_embed_handler_audio"), 9999)
     #// 
     #// Filters the video embed handler callback.
     #// 
@@ -227,7 +227,7 @@ def wp_maybe_load_embeds(*_args_):
     #// 
     #// @param callable $handler Video embed handler callback function.
     #//
-    wp_embed_register_handler("video", "#^https?://.+?\\.(" + join("|", wp_get_video_extensions()) + ")$#i", apply_filters("wp_video_embed_handler", "wp_embed_handler_video"), 9999)
+    wp_embed_register_handler("video", "#^https?://.+?\\.(" + php_join("|", wp_get_video_extensions()) + ")$#i", apply_filters("wp_video_embed_handler", "wp_embed_handler_video"), 9999)
 # end def wp_maybe_load_embeds
 #// 
 #// YouTube iframe embed handler callback.
@@ -958,7 +958,7 @@ def print_embed_comments_button(*_args_):
     php_print(" <div class=\"wp-embed-comments\">\n     <a href=\"")
     comments_link()
     php_print("\" target=\"_top\">\n            <span class=\"dashicons dashicons-admin-comments\"></span>\n            ")
-    printf(_n("%s <span class=\"screen-reader-text\">Comment</span>", "%s <span class=\"screen-reader-text\">Comments</span>", get_comments_number()), number_format_i18n(get_comments_number()))
+    php_printf(_n("%s <span class=\"screen-reader-text\">Comment</span>", "%s <span class=\"screen-reader-text\">Comments</span>", get_comments_number()), number_format_i18n(get_comments_number()))
     php_print("     </a>\n  </div>\n    ")
 # end def print_embed_comments_button
 #// 

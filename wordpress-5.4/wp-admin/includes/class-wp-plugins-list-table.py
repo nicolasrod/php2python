@@ -305,7 +305,7 @@ class WP_Plugins_List_Table(WP_List_Table):
         if (not php_empty(lambda : PHP_REQUEST["s"])):
             s_ = esc_html(wp_unslash(PHP_REQUEST["s"]))
             #// translators: %s: Plugin search term.
-            printf(__("No plugins found for &#8220;%s&#8221;."), s_)
+            php_printf(__("No plugins found for &#8220;%s&#8221;."), s_)
             #// We assume that somebody who can install plugins in multisite is experienced enough to not need this helper link.
             if (not is_multisite()) and current_user_can("install_plugins"):
                 php_print(" <a href=\"" + esc_url(admin_url("plugin-install.php?tab=search&s=" + urlencode(s_))) + "\">" + __("Search for plugins in the WordPress Plugin Directory.") + "</a>")
@@ -703,7 +703,7 @@ class WP_Plugins_List_Table(WP_List_Table):
             class_ += " paused"
         # end if
         plugin_slug_ = plugin_data_["slug"] if (php_isset(lambda : plugin_data_["slug"])) else sanitize_title(plugin_name_)
-        printf("<tr class=\"%s\" data-slug=\"%s\" data-plugin=\"%s\">", esc_attr(class_), esc_attr(plugin_slug_), esc_attr(plugin_file_))
+        php_printf("<tr class=\"%s\" data-slug=\"%s\" data-plugin=\"%s\">", esc_attr(class_), esc_attr(plugin_slug_), esc_attr(plugin_file_))
         columns_, hidden_, sortable_, primary_ = self.get_column_info()
         for column_name_,column_display_name_ in columns_.items():
             extra_classes_ = ""
@@ -762,10 +762,10 @@ class WP_Plugins_List_Table(WP_List_Table):
                     php_print("</div>")
                     if paused_:
                         notice_text_ = __("This plugin failed to load properly and is paused during recovery mode.")
-                        printf("<p><span class=\"dashicons dashicons-warning\"></span> <strong>%s</strong></p>", notice_text_)
+                        php_printf("<p><span class=\"dashicons dashicons-warning\"></span> <strong>%s</strong></p>", notice_text_)
                         error_ = wp_get_plugin_error(plugin_file_)
                         if False != error_:
-                            printf("<div class=\"error-display\"><p>%s</p></div>", wp_get_extension_error_description(error_))
+                            php_printf("<div class=\"error-display\"><p>%s</p></div>", wp_get_extension_error_description(error_))
                         # end if
                     # end if
                     php_print("</td>")

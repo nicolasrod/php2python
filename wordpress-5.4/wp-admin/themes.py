@@ -255,7 +255,7 @@ for theme_ in themes_:
     _e("Theme Details")
     php_print("</span>\n    <div class=\"theme-author\">\n      ")
     #// translators: %s: Theme author name.
-    printf(__("By %s"), theme_["author"])
+    php_printf(__("By %s"), theme_["author"])
     php_print("""   </div>
     <div class=\"theme-id-container\">
     """)
@@ -416,7 +416,7 @@ php_print("""</p></div>
 _e("Theme Details")
 php_print("</span>\n    <div class=\"theme-author\">\n      ")
 #// translators: %s: Theme author name.
-printf(__("By %s"), "{{{ data.author }}}")
+php_printf(__("By %s"), "{{{ data.author }}}")
 php_print("""   </div>
 <div class=\"theme-id-container\">
 <# if ( data.active ) { #>
@@ -479,10 +479,10 @@ php_print("""</span>
 <h2 class=\"theme-name\">{{{ data.name }}}<span class=\"theme-version\">
 """)
 #// translators: %s: Theme version.
-printf(__("Version: %s"), "{{ data.version }}")
+php_printf(__("Version: %s"), "{{ data.version }}")
 php_print("             </span></h2>\n              <p class=\"theme-author\">\n                    ")
 #// translators: %s: Theme author link.
-printf(__("By %s"), "{{{ data.authorAndUri }}}")
+php_printf(__("By %s"), "{{{ data.authorAndUri }}}")
 php_print("""               </p>
 <# if ( data.hasUpdate ) { #>
 <div class=\"notice notice-warning notice-alt notice-large\">
@@ -497,7 +497,7 @@ php_print("""</h3>
 <p class=\"parent-theme\">
 """)
 #// translators: %s: Theme name.
-printf(__("This is a child theme of %s."), "<strong>{{{ data.parent }}}</strong>")
+php_printf(__("This is a child theme of %s."), "<strong>{{{ data.parent }}}</strong>")
 php_print("""                   </p>
 <# } #>
 <# if ( data.tags ) { #>

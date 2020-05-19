@@ -949,7 +949,7 @@ def register_post_type(post_type_=None, args_=None, *_args_):
     #// Sanitize post type name.
     post_type_ = sanitize_key(post_type_)
     if php_empty(lambda : post_type_) or php_strlen(post_type_) > 20:
-        _doing_it_wrong(__FUNCTION__, __("Post type names must be between 1 and 20 characters in length."), "4.2.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Post type names must be between 1 and 20 characters in length."), "4.2.0")
         return php_new_class("WP_Error", lambda : WP_Error("post_type_length_invalid", __("Post type names must be between 1 and 20 characters in length.")))
     # end if
     post_type_object_ = php_new_class("WP_Post_Type", lambda : WP_Post_Type(post_type_, args_))
@@ -2265,7 +2265,7 @@ def wp_post_mime_type_where(post_mime_types_=None, table_alias_="", *_args_):
         # end if
     # end for
     if (not php_empty(lambda : wheres_)):
-        where_ = " AND (" + join(" OR ", wheres_) + ") "
+        where_ = " AND (" + php_join(" OR ", wheres_) + ") "
     # end if
     return where_
 # end def wp_post_mime_type_where
@@ -2765,7 +2765,7 @@ def wp_get_recent_posts(args_=None, output_=None, *_args_):
     # end if
     
     if php_is_numeric(args_):
-        _deprecated_argument(__FUNCTION__, "3.1.0", __("Passing an integer number of posts is deprecated. Pass an array of arguments instead."))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.1.0", __("Passing an integer number of posts is deprecated. Pass an array of arguments instead."))
         args_ = Array({"numberposts": absint(args_)})
     # end if
     #// Set default arguments.
@@ -3176,7 +3176,7 @@ def wp_insert_post(postarr_=None, wp_error_=None, *_args_):
             taxonomy_obj_ = get_taxonomy(taxonomy_)
             if (not taxonomy_obj_):
                 #// translators: %s: Taxonomy name.
-                _doing_it_wrong(__FUNCTION__, php_sprintf(__("Invalid taxonomy: %s."), taxonomy_), "4.4.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("Invalid taxonomy: %s."), taxonomy_), "4.4.0")
                 continue
             # end if
             #// array = hierarchical, string = non-hierarchical.
@@ -4119,7 +4119,7 @@ def get_page_by_path(page_path_=None, output_=None, post_type_="page", *_args_):
     post_type_in_string_ = "'" + php_implode("','", post_types_) + "'"
     sql_ = str("\n      SELECT ID, post_name, post_parent, post_type\n      FROM ") + str(wpdb_.posts) + str("\n        WHERE post_name IN (") + str(in_string_) + str(")\n     AND post_type IN (") + str(post_type_in_string_) + str(")\n ")
     pages_ = wpdb_.get_results(sql_, OBJECT_K)
-    revparts_ = array_reverse(parts_)
+    revparts_ = php_array_reverse(parts_)
     foundid_ = 0
     for page_ in pages_:
         if page_.post_name == revparts_[0]:
@@ -4218,7 +4218,7 @@ def get_page_children(page_id_=None, pages_=None, *_args_):
     #// Start the search by looking at immediate children.
     if (php_isset(lambda : children_[page_id_])):
         #// Always start at the end of the stack in order to preserve original `$pages` order.
-        to_look_ = array_reverse(children_[page_id_])
+        to_look_ = php_array_reverse(children_[page_id_])
         while True:
             
             if not (to_look_):
@@ -4227,7 +4227,7 @@ def get_page_children(page_id_=None, pages_=None, *_args_):
             p_ = php_array_pop(to_look_)
             page_list_[-1] = p_
             if (php_isset(lambda : children_[p_.ID])):
-                for child_ in array_reverse(children_[p_.ID]):
+                for child_ in php_array_reverse(children_[p_.ID]):
                     #// Append to the `$to_look` stack to descend the tree.
                     to_look_[-1] = child_
                 # end for
@@ -6076,7 +6076,7 @@ def _prime_post_caches(ids_=None, update_term_cache_=None, update_meta_cache_=No
     php_check_if_defined("wpdb_")
     non_cached_ids_ = _get_non_cached_ids(ids_, "posts")
     if (not php_empty(lambda : non_cached_ids_)):
-        fresh_posts_ = wpdb_.get_results(php_sprintf(str("SELECT ") + str(wpdb_.posts) + str(".* FROM ") + str(wpdb_.posts) + str(" WHERE ID IN (%s)"), join(",", non_cached_ids_)))
+        fresh_posts_ = wpdb_.get_results(php_sprintf(str("SELECT ") + str(wpdb_.posts) + str(".* FROM ") + str(wpdb_.posts) + str(" WHERE ID IN (%s)"), php_join(",", non_cached_ids_)))
         update_post_caches(fresh_posts_, "any", update_term_cache_, update_meta_cache_)
     # end if
 # end def _prime_post_caches
@@ -6150,7 +6150,7 @@ def _filter_query_attachment_filenames(clauses_=None, *_args_):
     
     global wpdb_
     php_check_if_defined("wpdb_")
-    remove_filter("posts_clauses", __FUNCTION__)
+    remove_filter("posts_clauses", inspect.currentframe().f_code.co_name)
     #// Add a LEFT JOIN of the postmeta table so we don't trample existing JOINs.
     clauses_["join"] += str(" LEFT JOIN ") + str(wpdb_.postmeta) + str(" AS sq1 ON ( ") + str(wpdb_.posts) + str(".ID = sq1.post_id AND sq1.meta_key = '_wp_attached_file' )")
     clauses_["groupby"] = str(wpdb_.posts) + str(".ID")

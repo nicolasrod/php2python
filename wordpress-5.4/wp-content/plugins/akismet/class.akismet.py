@@ -363,7 +363,7 @@ class Akismet():
             wpdb_.queries = Array()
             for comment_id_ in comment_ids_:
                 do_action("delete_comment", comment_id_)
-                do_action("akismet_batch_delete_count", __FUNCTION__)
+                do_action("akismet_batch_delete_count", inspect.currentframe().f_code.co_name)
             # end for
             #// Prepared as strings since comment_id is an unsigned BIGINT, and using %d will constrain the value to the maximum signed BIGINT.
             format_string_ = php_implode(", ", array_fill(0, php_count(comment_ids_), "%s"))
@@ -402,7 +402,7 @@ class Akismet():
             wpdb_.queries = Array()
             for comment_id_ in comment_ids_:
                 delete_comment_meta(comment_id_, "akismet_as_submitted")
-                do_action("akismet_batch_delete_count", __FUNCTION__)
+                do_action("akismet_batch_delete_count", inspect.currentframe().f_code.co_name)
             # end for
             do_action("akismet_delete_commentmeta_batch", php_count(comment_ids_))
         # end while
@@ -434,7 +434,7 @@ class Akismet():
             for commentmeta_ in commentmeta_results_:
                 if "akismet_" == php_substr(commentmeta_.meta_key, 0, 8):
                     delete_comment_meta(commentmeta_.comment_id, commentmeta_.meta_key)
-                    do_action("akismet_batch_delete_count", __FUNCTION__)
+                    do_action("akismet_batch_delete_count", inspect.currentframe().f_code.co_name)
                     commentmeta_deleted_ += 1
                 # end if
                 last_meta_id_ = commentmeta_.meta_id
@@ -949,7 +949,7 @@ class Akismet():
         if user_id_ > 0:
             comment_user_ = php_new_class("WP_User", lambda : WP_User(user_id_))
             if (php_isset(lambda : comment_user_.roles)):
-                roles_ = join(",", comment_user_.roles)
+                roles_ = php_join(",", comment_user_.roles)
             # end if
         # end if
         if is_multisite() and is_super_admin(user_id_):
@@ -957,7 +957,7 @@ class Akismet():
                 roles_ = "super_admin"
             else:
                 comment_user_.roles[-1] = "super_admin"
-                roles_ = join(",", comment_user_.roles)
+                roles_ = php_join(",", comment_user_.roles)
             # end if
         # end if
         return roles_

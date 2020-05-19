@@ -2361,7 +2361,7 @@ def discover_pingback_server_uri(url_=None, deprecated_="", *_args_):
     
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.7.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.7.0")
     # end if
     pingback_str_dquote_ = "rel=\"pingback\""
     pingback_str_squote_ = "rel='pingback'"
@@ -2794,7 +2794,7 @@ def _prime_comment_caches(comment_ids_=None, update_meta_cache_=None, *_args_):
     php_check_if_defined("wpdb_")
     non_cached_ids_ = _get_non_cached_ids(comment_ids_, "comment")
     if (not php_empty(lambda : non_cached_ids_)):
-        fresh_comments_ = wpdb_.get_results(php_sprintf(str("SELECT ") + str(wpdb_.comments) + str(".* FROM ") + str(wpdb_.comments) + str(" WHERE comment_ID IN (%s)"), join(",", php_array_map("intval", non_cached_ids_))))
+        fresh_comments_ = wpdb_.get_results(php_sprintf(str("SELECT ") + str(wpdb_.comments) + str(".* FROM ") + str(wpdb_.comments) + str(" WHERE comment_ID IN (%s)"), php_join(",", php_array_map("intval", non_cached_ids_))))
         update_comment_cache(fresh_comments_, update_meta_cache_)
     # end if
 # end def _prime_comment_caches

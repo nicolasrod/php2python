@@ -63,24 +63,24 @@ class WP_Block_Type_Registry():
         # end if
         if (not php_is_string(name_)):
             message_ = __("Block type names must be strings.")
-            _doing_it_wrong(__METHOD__, message_, "5.0.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.0.0")
             return False
         # end if
         if php_preg_match("/[A-Z]+/", name_):
             message_ = __("Block type names must not contain uppercase characters.")
-            _doing_it_wrong(__METHOD__, message_, "5.0.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.0.0")
             return False
         # end if
         name_matcher_ = "/^[a-z0-9-]+\\/[a-z0-9-]+$/"
         if (not php_preg_match(name_matcher_, name_)):
             message_ = __("Block type names must contain a namespace prefix. Example: my-plugin/my-custom-block-type")
-            _doing_it_wrong(__METHOD__, message_, "5.0.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.0.0")
             return False
         # end if
         if self.is_registered(name_):
             #// translators: %s: Block name.
             message_ = php_sprintf(__("Block type \"%s\" is already registered."), name_)
-            _doing_it_wrong(__METHOD__, message_, "5.0.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.0.0")
             return False
         # end if
         if (not block_type_):
@@ -107,7 +107,7 @@ class WP_Block_Type_Registry():
         if (not self.is_registered(name_)):
             #// translators: %s: Block name.
             message_ = php_sprintf(__("Block type \"%s\" is not registered."), name_)
-            _doing_it_wrong(__METHOD__, message_, "5.0.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.0.0")
             return False
         # end if
         unregistered_block_type_ = self.registered_block_types[name_]

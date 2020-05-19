@@ -1503,7 +1503,7 @@ class WP_Customize_Widgets():
         # end if
         self.sidebar_instance_count[index_] += 1
         if (not self.manager.selective_refresh.is_render_partials_request()):
-            printf("\n<!--dynamic_sidebar_before:%s:%d-->\n", esc_html(index_), php_intval(self.sidebar_instance_count[index_]))
+            php_printf("\n<!--dynamic_sidebar_before:%s:%d-->\n", esc_html(index_), php_intval(self.sidebar_instance_count[index_]))
         # end if
     # end def start_dynamic_sidebar
     #// 
@@ -1520,7 +1520,7 @@ class WP_Customize_Widgets():
         
         php_array_shift(self.current_dynamic_sidebar_id_stack)
         if (not self.manager.selective_refresh.is_render_partials_request()):
-            printf("\n<!--dynamic_sidebar_after:%s:%d-->\n", esc_html(index_), php_intval(self.sidebar_instance_count[index_]))
+            php_printf("\n<!--dynamic_sidebar_after:%s:%d-->\n", esc_html(index_), php_intval(self.sidebar_instance_count[index_]))
         # end if
     # end def end_dynamic_sidebar
     #// 
@@ -1754,7 +1754,7 @@ class WP_Customize_Widgets():
     def setup_widget_addition_previews(self):
         
         
-        _deprecated_function(__METHOD__, "4.2.0", "customize_dynamic_setting_args")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.2.0", "customize_dynamic_setting_args")
     # end def setup_widget_addition_previews
     #// 
     #// {@internal Missing Summary}
@@ -1767,7 +1767,7 @@ class WP_Customize_Widgets():
     def prepreview_added_sidebars_widgets(self):
         
         
-        _deprecated_function(__METHOD__, "4.2.0", "customize_dynamic_setting_args")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.2.0", "customize_dynamic_setting_args")
     # end def prepreview_added_sidebars_widgets
     #// 
     #// {@internal Missing Summary}
@@ -1780,7 +1780,7 @@ class WP_Customize_Widgets():
     def prepreview_added_widget_instance(self):
         
         
-        _deprecated_function(__METHOD__, "4.2.0", "customize_dynamic_setting_args")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.2.0", "customize_dynamic_setting_args")
     # end def prepreview_added_widget_instance
     #// 
     #// {@internal Missing Summary}
@@ -1793,6 +1793,6 @@ class WP_Customize_Widgets():
     def remove_prepreview_filters(self):
         
         
-        _deprecated_function(__METHOD__, "4.2.0", "customize_dynamic_setting_args")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.2.0", "customize_dynamic_setting_args")
     # end def remove_prepreview_filters
 # end class WP_Customize_Widgets

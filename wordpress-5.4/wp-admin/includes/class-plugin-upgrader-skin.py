@@ -49,7 +49,7 @@ class Plugin_Upgrader_Skin(WP_Upgrader_Skin):
         self.plugin = self.upgrader.plugin_info()
         if (not php_empty(lambda : self.plugin)) and (not is_wp_error(self.result)) and self.plugin_active:
             #// Currently used only when JS is off for a single plugin update?
-            printf("<iframe title=\"%s\" style=\"border:0;overflow:hidden\" width=\"100%%\" height=\"170\" src=\"%s\"></iframe>", esc_attr__("Update progress"), wp_nonce_url("update.php?action=activate-plugin&networkwide=" + self.plugin_network_active + "&plugin=" + urlencode(self.plugin), "activate-plugin_" + self.plugin))
+            php_printf("<iframe title=\"%s\" style=\"border:0;overflow:hidden\" width=\"100%%\" height=\"170\" src=\"%s\"></iframe>", esc_attr__("Update progress"), wp_nonce_url("update.php?action=activate-plugin&networkwide=" + self.plugin_network_active + "&plugin=" + urlencode(self.plugin), "activate-plugin_" + self.plugin))
         # end if
         self.decrement_update_count("plugin")
         update_actions_ = Array({"activate_plugin": php_sprintf("<a href=\"%s\" target=\"_parent\">%s</a>", wp_nonce_url("plugins.php?action=activate&amp;plugin=" + urlencode(self.plugin), "activate-plugin_" + self.plugin), __("Activate Plugin")), "plugins_page": php_sprintf("<a href=\"%s\" target=\"_parent\">%s</a>", self_admin_url("plugins.php"), __("Return to Plugins page"))})

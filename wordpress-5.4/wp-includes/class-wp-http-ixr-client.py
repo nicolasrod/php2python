@@ -86,7 +86,7 @@ class WP_HTTP_IXR_Client(IXR_Client):
         # end if
         #// Now send the request.
         if self.debug:
-            php_print("<pre class=\"ixr_request\">" + htmlspecialchars(xml_) + """
+            php_print("<pre class=\"ixr_request\">" + php_htmlspecialchars(xml_) + """
             </pre>
             """)
         # end if
@@ -102,7 +102,7 @@ class WP_HTTP_IXR_Client(IXR_Client):
             return False
         # end if
         if self.debug:
-            php_print("<pre class=\"ixr_response\">" + htmlspecialchars(wp_remote_retrieve_body(response_)) + """
+            php_print("<pre class=\"ixr_response\">" + php_htmlspecialchars(wp_remote_retrieve_body(response_)) + """
             </pre>
             """)
         # end if

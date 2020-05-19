@@ -154,11 +154,11 @@ for case in Switch(step_):
         </ol>
         <p>
         """)
-        printf(__("We&#8217;re going to use this information to create a %s file."), "<code>wp-config.php</code>")
+        php_printf(__("We&#8217;re going to use this information to create a %s file."), "<code>wp-config.php</code>")
         php_print(" <strong>\n      ")
-        printf(__("If for any reason this automatic file creation doesn&#8217;t work, don&#8217;t worry. All this does is fill in the database information to a configuration file. You may also simply open %1$s in a text editor, fill in your information, and save it as %2$s."), "<code>wp-config-sample.php</code>", "<code>wp-config.php</code>")
+        php_printf(__("If for any reason this automatic file creation doesn&#8217;t work, don&#8217;t worry. All this does is fill in the database information to a configuration file. You may also simply open %1$s in a text editor, fill in your information, and save it as %2$s."), "<code>wp-config-sample.php</code>", "<code>wp-config.php</code>")
         php_print(" </strong>\n     ")
-        printf(__("Need more help? <a href=\"%s\">We got it</a>."), __("https://wordpress.org/support/article/editing-wp-config-php/"))
+        php_printf(__("Need more help? <a href=\"%s\">We got it</a>."), __("https://wordpress.org/support/article/editing-wp-config-php/"))
         php_print("</p>\n<p>")
         _e("In all likelihood, these items were supplied to you by your Web Host. If you don&#8217;t have this information, then you will need to contact them before you can continue. If you&#8217;re all ready&hellip;")
         php_print("</p>\n\n<p class=\"step\"><a href=\"")
@@ -192,7 +192,7 @@ for case in Switch(step_):
         <th scope=\"row\"><label for=\"uname\">""")
         _e("Username")
         php_print("</label></th>\n          <td><input name=\"uname\" id=\"uname\" type=\"text\" aria-describedby=\"uname-desc\" size=\"25\" value=\"")
-        php_print(htmlspecialchars(_x("username", "example username"), ENT_QUOTES))
+        php_print(php_htmlspecialchars(_x("username", "example username"), ENT_QUOTES))
         php_print("\" /></td>\n         <td id=\"uname-desc\">")
         _e("Your database username.")
         php_print("""</td>
@@ -201,7 +201,7 @@ for case in Switch(step_):
         <th scope=\"row\"><label for=\"pwd\">""")
         _e("Password")
         php_print("</label></th>\n          <td><input name=\"pwd\" id=\"pwd\" type=\"text\" aria-describedby=\"pwd-desc\" size=\"25\" value=\"")
-        php_print(htmlspecialchars(_x("password", "example password"), ENT_QUOTES))
+        php_print(php_htmlspecialchars(_x("password", "example password"), ENT_QUOTES))
         php_print("\" autocomplete=\"off\" /></td>\n            <td id=\"pwd-desc\">")
         _e("Your database password.")
         php_print("""</td>
@@ -214,7 +214,7 @@ for case in Switch(step_):
         <td id=\"dbhost-desc\">
         """)
         #// translators: %s: localhost
-        printf(__("You should be able to get this info from your web host, if %s doesn&#8217;t work."), "<code>localhost</code>")
+        php_printf(__("You should be able to get this info from your web host, if %s doesn&#8217;t work."), "<code>localhost</code>")
         php_print("""           </td>
         </tr>
         <tr>
@@ -232,7 +232,7 @@ for case in Switch(step_):
         php_print(" <input type=\"hidden\" name=\"language\" value=\"")
         php_print(esc_attr(language_))
         php_print("\" />\n  <p class=\"step\"><input name=\"submit\" type=\"submit\" value=\"")
-        php_print(htmlspecialchars(__("Submit"), ENT_QUOTES))
+        php_print(php_htmlspecialchars(__("Submit"), ENT_QUOTES))
         php_print("\" class=\"button button-large\" /></p>\n</form>\n       ")
         break
     # end if
@@ -390,10 +390,10 @@ for case in Switch(step_):
             setup_config_display_header()
             php_print(" <p>\n           ")
             #// translators: %s: wp-config.php
-            printf(__("Unable to write to %s file."), "<code>wp-config.php</code>")
+            php_printf(__("Unable to write to %s file."), "<code>wp-config.php</code>")
             php_print("</p>\n<p>\n          ")
             #// translators: %s: wp-config.php
-            printf(__("You can create the %s file manually and paste the following text into it."), "<code>wp-config.php</code>")
+            php_printf(__("You can create the %s file manually and paste the following text into it."), "<code>wp-config.php</code>")
             config_text_ = ""
             for line_ in config_file_:
                 config_text_ += htmlentities(line_, ENT_COMPAT, "UTF-8")

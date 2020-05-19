@@ -429,7 +429,7 @@ class WP_Comments_List_Table(WP_List_Table):
         if (not the_comment_class_):
             the_comment_class_ = ""
         # end if
-        the_comment_class_ = join(" ", get_comment_class(the_comment_class_, comment_, comment_.comment_post_ID))
+        the_comment_class_ = php_join(" ", get_comment_class(the_comment_class_, comment_, comment_.comment_post_ID))
         if comment_.comment_post_ID > 0:
             post_ = get_post(comment_.comment_post_ID)
         # end if
@@ -564,7 +564,7 @@ class WP_Comments_List_Table(WP_List_Table):
             if parent_:
                 parent_link_ = esc_url(get_comment_link(parent_))
                 name_ = get_comment_author(parent_)
-                printf(__("In reply to %s."), "<a href=\"" + parent_link_ + "\">" + name_ + "</a>")
+                php_printf(__("In reply to %s."), "<a href=\"" + parent_link_ + "\">" + name_ + "</a>")
             # end if
         # end if
         comment_text(comment_)
@@ -605,14 +605,14 @@ class WP_Comments_List_Table(WP_List_Table):
         comment_author(comment_)
         php_print("</strong><br />")
         if (not php_empty(lambda : author_url_display_)):
-            printf("<a href=\"%s\">%s</a><br />", esc_url(author_url_), esc_html(author_url_display_))
+            php_printf("<a href=\"%s\">%s</a><br />", esc_url(author_url_), esc_html(author_url_display_))
         # end if
         if self.user_can:
             if (not php_empty(lambda : comment_.comment_author_email)):
                 #// This filter is documented in wp-includes/comment-template.php
                 email_ = apply_filters("comment_email", comment_.comment_author_email, comment_)
                 if (not php_empty(lambda : email_)) and "@" != email_:
-                    printf("<a href=\"%1$s\">%2$s</a><br />", esc_url("mailto:" + email_), esc_html(email_))
+                    php_printf("<a href=\"%1$s\">%2$s</a><br />", esc_url("mailto:" + email_), esc_html(email_))
                 # end if
             # end if
             author_ip_ = get_comment_author_IP(comment_)
@@ -621,7 +621,7 @@ class WP_Comments_List_Table(WP_List_Table):
                 if "spam" == comment_status_:
                     author_ip_url_ = add_query_arg("comment_status", "spam", author_ip_url_)
                 # end if
-                printf("<a href=\"%1$s\">%2$s</a>", esc_url(author_ip_url_), esc_html(author_ip_))
+                php_printf("<a href=\"%1$s\">%2$s</a>", esc_url(author_ip_url_), esc_html(author_ip_))
             # end if
         # end if
     # end def column_author
@@ -634,7 +634,7 @@ class WP_Comments_List_Table(WP_List_Table):
         submitted_ = php_sprintf(__("%1$s at %2$s"), get_comment_date(__("Y/m/d"), comment_), get_comment_date(__("g:i a"), comment_))
         php_print("<div class=\"submitted-on\">")
         if "approved" == wp_get_comment_status(comment_) and (not php_empty(lambda : comment_.comment_post_ID)):
-            printf("<a href=\"%s\">%s</a>", esc_url(get_comment_link(comment_)), submitted_)
+            php_printf("<a href=\"%s\">%s</a>", esc_url(get_comment_link(comment_)), submitted_)
         else:
             php_print(submitted_)
         # end if

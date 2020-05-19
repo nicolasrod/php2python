@@ -81,7 +81,7 @@ def wp_print_scripts(handles_=None, *_args_):
         #// For 'wp_head'.
         handles_ = False
     # end if
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     global wp_scripts_
     php_check_if_defined("wp_scripts_")
     if (not type(wp_scripts_).__name__ == "WP_Scripts"):
@@ -113,9 +113,9 @@ def wp_print_scripts(handles_=None, *_args_):
 def wp_add_inline_script(handle_=None, data_=None, position_="after", *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     if False != php_stripos(data_, "</script>"):
-        _doing_it_wrong(__FUNCTION__, php_sprintf(__("Do not pass %1$s tags to %2$s."), "<code>&lt;script&gt;</code>", "<code>wp_add_inline_script()</code>"), "4.5.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("Do not pass %1$s tags to %2$s."), "<code>&lt;script&gt;</code>", "<code>wp_add_inline_script()</code>"), "4.5.0")
         data_ = php_trim(php_preg_replace("#<script[^>]*>(.*)</script>#is", "$1", data_))
     # end if
     return wp_scripts().add_inline_script(handle_, data_, position_)
@@ -155,7 +155,7 @@ def wp_register_script(handle_=None, src_=None, deps_=None, ver_=None, in_footer
     # end if
     
     wp_scripts_ = wp_scripts()
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     registered_ = wp_scripts_.add(handle_, src_, deps_, ver_)
     if in_footer_:
         wp_scripts_.add_data(handle_, "group", 1)
@@ -195,7 +195,7 @@ def wp_localize_script(handle_=None, object_name_=None, l10n_=None, *_args_):
     global wp_scripts_
     php_check_if_defined("wp_scripts_")
     if (not type(wp_scripts_).__name__ == "WP_Scripts"):
-        _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+        _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
         return False
     # end if
     return wp_scripts_.localize(handle_, object_name_, l10n_)
@@ -224,7 +224,7 @@ def wp_set_script_translations(handle_=None, domain_="default", path_=None, *_ar
     global wp_scripts_
     php_check_if_defined("wp_scripts_")
     if (not type(wp_scripts_).__name__ == "WP_Scripts"):
-        _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+        _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
         return False
     # end if
     return wp_scripts_.set_translations(handle_, domain_, path_)
@@ -244,7 +244,7 @@ def wp_set_script_translations(handle_=None, domain_="default", path_=None, *_ar
 def wp_deregister_script(handle_=None, *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     #// 
     #// Do not allow accidental or negligent de-registering of critical scripts in the admin.
     #// Show minimal remorse if the correct hook is used.
@@ -254,7 +254,7 @@ def wp_deregister_script(handle_=None, *_args_):
         no_ = Array("jquery", "jquery-core", "jquery-migrate", "jquery-ui-core", "jquery-ui-accordion", "jquery-ui-autocomplete", "jquery-ui-button", "jquery-ui-datepicker", "jquery-ui-dialog", "jquery-ui-draggable", "jquery-ui-droppable", "jquery-ui-menu", "jquery-ui-mouse", "jquery-ui-position", "jquery-ui-progressbar", "jquery-ui-resizable", "jquery-ui-selectable", "jquery-ui-slider", "jquery-ui-sortable", "jquery-ui-spinner", "jquery-ui-tabs", "jquery-ui-tooltip", "jquery-ui-widget", "underscore", "backbone")
         if php_in_array(handle_, no_):
             message_ = php_sprintf(__("Do not deregister the %1$s script in the administration area. To target the front-end theme, use the %2$s hook."), str("<code>") + str(handle_) + str("</code>"), "<code>wp_enqueue_scripts</code>")
-            _doing_it_wrong(__FUNCTION__, message_, "3.6.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "3.6.0")
             return
         # end if
     # end if
@@ -294,7 +294,7 @@ def wp_enqueue_script(handle_=None, src_="", deps_=None, ver_=None, in_footer_=N
     # end if
     
     wp_scripts_ = wp_scripts()
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     if src_ or in_footer_:
         _handle_ = php_explode("?", handle_)
         if src_:
@@ -318,7 +318,7 @@ def wp_enqueue_script(handle_=None, src_="", deps_=None, ver_=None, in_footer_=N
 def wp_dequeue_script(handle_=None, *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     wp_scripts().dequeue(handle_)
 # end def wp_dequeue_script
 #// 
@@ -339,7 +339,7 @@ def wp_dequeue_script(handle_=None, *_args_):
 def wp_script_is(handle_=None, list_="enqueued", *_args_):
     
     
-    _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
+    _wp_scripts_maybe_doing_it_wrong(inspect.currentframe().f_code.co_name)
     return php_bool(wp_scripts().query(handle_, list_))
 # end def wp_script_is
 #// 

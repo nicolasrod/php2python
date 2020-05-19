@@ -50,12 +50,12 @@ class WP_Block_Styles_Registry():
         
         if (not (php_isset(lambda : block_name_))) or (not php_is_string(block_name_)):
             message_ = __("Block name must be a string.")
-            _doing_it_wrong(__METHOD__, message_, "5.3.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.3.0")
             return False
         # end if
         if (not (php_isset(lambda : style_properties_["name"]))) or (not php_is_string(style_properties_["name"])):
             message_ = __("Block style name must be a string.")
-            _doing_it_wrong(__METHOD__, message_, "5.3.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.3.0")
             return False
         # end if
         block_style_name_ = style_properties_["name"]
@@ -78,7 +78,7 @@ class WP_Block_Styles_Registry():
         if (not self.is_registered(block_name_, block_style_name_)):
             #// translators: 1: Block name, 2: Block style name.
             message_ = php_sprintf(__("Block \"%1$s\" does not contain a style named \"%2$s\"."), block_name_, block_style_name_)
-            _doing_it_wrong(__METHOD__, message_, "5.3.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, message_, "5.3.0")
             return False
         # end if
         self.registered_block_styles[block_name_][block_style_name_] = None

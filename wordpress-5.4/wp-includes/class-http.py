@@ -798,7 +798,7 @@ class WP_Http():
     def parse_url(self, url_=None):
         
         
-        _deprecated_function(__METHOD__, "4.4.0", "wp_parse_url()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0", "wp_parse_url()")
         return wp_parse_url(url_)
     # end def parse_url
     #// 

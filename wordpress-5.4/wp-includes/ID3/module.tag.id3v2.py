@@ -2263,7 +2263,7 @@ class getid3_id3v2(getid3_handler):
     def lookupcurrencyunits(self, currencyid_=None):
         
         
-        begin_ = 0
+        begin_ = inspect.currentframe().f_lineno
         #// This is not a comment!
         #// AED Dirhams
         #// AFA Afghanis
@@ -2449,7 +2449,7 @@ class getid3_id3v2(getid3_handler):
         #// ZMK Kwacha
         #// ZWD Zimbabwe Dollars
         #//
-        return getid3_lib.embeddedlookup(currencyid_, begin_, 0, __FILE__, "id3v2-currency-units")
+        return getid3_lib.embeddedlookup(currencyid_, begin_, inspect.currentframe().f_lineno, __FILE__, "id3v2-currency-units")
     # end def lookupcurrencyunits
     #// 
     #// @param string $currencyid
@@ -2459,7 +2459,7 @@ class getid3_id3v2(getid3_handler):
     def lookupcurrencycountry(self, currencyid_=None):
         
         
-        begin_ = 0
+        begin_ = inspect.currentframe().f_lineno
         #// This is not a comment!
         #// AED United Arab Emirates
         #// AFA Afghanistan
@@ -2645,7 +2645,7 @@ class getid3_id3v2(getid3_handler):
         #// ZMK Zambia
         #// ZWD Zimbabwe
         #//
-        return getid3_lib.embeddedlookup(currencyid_, begin_, 0, __FILE__, "id3v2-currency-country")
+        return getid3_lib.embeddedlookup(currencyid_, begin_, inspect.currentframe().f_lineno, __FILE__, "id3v2-currency-country")
     # end def lookupcurrencycountry
     #// 
     #// @param string $languagecode
@@ -2669,7 +2669,7 @@ class getid3_id3v2(getid3_handler):
         #// [ISO-639-2]. The language should be represented in lower case. If the
         #// language is not known the string "XXX" should be used.
         #// ISO 639-2 - http://www.id3.org/iso639-2.html
-        begin_ = 0
+        begin_ = inspect.currentframe().f_lineno
         #// This is not a comment!
         #// XXX unknown
         #// xxx unknown
@@ -3101,7 +3101,7 @@ class getid3_id3v2(getid3_handler):
         #// zul Zulu
         #// zun Zuni
         #//
-        return getid3_lib.embeddedlookup(languagecode_, begin_, 0, __FILE__, "id3v2-languagecode")
+        return getid3_lib.embeddedlookup(languagecode_, begin_, inspect.currentframe().f_lineno, __FILE__, "id3v2-languagecode")
     # end def languagelookup
     #// 
     #// @param int $index
@@ -3187,7 +3187,7 @@ class getid3_id3v2(getid3_handler):
     def framenamelonglookup(self, framename_=None):
         
         
-        begin_ = 0
+        begin_ = inspect.currentframe().f_lineno
         #// This is not a comment!
         #// AENC    Audio encryption
         #// APIC    Attached picture
@@ -3357,7 +3357,7 @@ class getid3_id3v2(getid3_handler):
         #// TSTU    Recording Studio
         #// rgad    Replay Gain Adjustment
         #//
-        return getid3_lib.embeddedlookup(framename_, begin_, 0, __FILE__, "id3v2-framename_long")
+        return getid3_lib.embeddedlookup(framename_, begin_, inspect.currentframe().f_lineno, __FILE__, "id3v2-framename_long")
         pass
     # end def framenamelonglookup
     #// 
@@ -3369,7 +3369,7 @@ class getid3_id3v2(getid3_handler):
     def framenameshortlookup(self, framename_=None):
         
         
-        begin_ = 0
+        begin_ = inspect.currentframe().f_lineno
         #// This is not a comment!
         #// AENC    audio_encryption
         #// APIC    attached_picture
@@ -3539,7 +3539,7 @@ class getid3_id3v2(getid3_handler):
         #// TSTU    recording_studio
         #// rgad    replay_gain_adjustment
         #//
-        return getid3_lib.embeddedlookup(framename_, begin_, 0, __FILE__, "id3v2-framename_short")
+        return getid3_lib.embeddedlookup(framename_, begin_, inspect.currentframe().f_lineno, __FILE__, "id3v2-framename_short")
     # end def framenameshortlookup
     #// 
     #// @param string $encoding

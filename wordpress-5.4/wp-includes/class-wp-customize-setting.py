@@ -697,7 +697,7 @@ class WP_Customize_Setting():
     def _update_theme_mod(self):
         
         
-        _deprecated_function(__METHOD__, "4.4.0", __CLASS__ + "::update()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0", self.__class__.__name__ + "::update()")
     # end def _update_theme_mod
     #// 
     #// Deprecated method.
@@ -708,7 +708,7 @@ class WP_Customize_Setting():
     def _update_option(self):
         
         
-        _deprecated_function(__METHOD__, "4.4.0", __CLASS__ + "::update()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0", self.__class__.__name__ + "::update()")
     # end def _update_option
     #// 
     #// Fetch the value of the setting.

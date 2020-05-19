@@ -765,7 +765,7 @@ class WP_Posts_List_Table(WP_List_Table):
             the_ID()
             php_print("\">\n                ")
             #// translators: %s: Post title.
-            printf(__("Select %s"), _draft_or_post_title())
+            php_printf(__("Select %s"), _draft_or_post_title())
             php_print("         </label>\n          <input id=\"cb-select-")
             the_ID()
             php_print("\" type=\"checkbox\" name=\"post[]\" value=\"")
@@ -775,7 +775,7 @@ class WP_Posts_List_Table(WP_List_Table):
             <span class=\"locked-indicator-icon\" aria-hidden=\"true\"></span>
             <span class=\"screen-reader-text\">
             """)
-            printf(__("&#8220;%s&#8221; is locked"), _draft_or_post_title())
+            php_printf(__("&#8220;%s&#8221; is locked"), _draft_or_post_title())
             php_print("             </span>\n           </div>\n            ")
         # end if
     # end def column_cb
@@ -849,9 +849,9 @@ class WP_Posts_List_Table(WP_List_Table):
         php_print("<strong>")
         title_ = _draft_or_post_title()
         if can_edit_post_ and "trash" != post_.post_status:
-            printf("<a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s%s</a>", get_edit_post_link(post_.ID), esc_attr(php_sprintf(__("&#8220;%s&#8221; (Edit)"), title_)), pad_, title_)
+            php_printf("<a class=\"row-title\" href=\"%s\" aria-label=\"%s\">%s%s</a>", get_edit_post_link(post_.ID), esc_attr(php_sprintf(__("&#8220;%s&#8221; (Edit)"), title_)), pad_, title_)
         else:
-            printf("<span>%s%s</span>", pad_, title_)
+            php_printf("<span>%s%s</span>", pad_, title_)
         # end if
         _post_states(post_)
         if (php_isset(lambda : parent_name_)):
@@ -1021,7 +1021,7 @@ class WP_Posts_List_Table(WP_List_Table):
                 #//
                 term_links_ = apply_filters("post_column_taxonomy_links", term_links_, taxonomy_, terms_)
                 #// translators: Used between list items, there is a space after the comma.
-                php_print(join(__(", "), term_links_))
+                php_print(php_join(__(", "), term_links_))
             else:
                 php_print("<span aria-hidden=\"true\">&#8212;</span><span class=\"screen-reader-text\">" + taxonomy_object_.labels.no_terms + "</span>")
             # end if

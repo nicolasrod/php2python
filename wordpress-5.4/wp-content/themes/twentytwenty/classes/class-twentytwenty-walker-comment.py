@@ -58,12 +58,12 @@ if (not php_class_exists("TwentyTwenty_Walker_Comment")):
                 if php_empty(lambda : comment_author_url_):
                     php_print(wp_kses_post(avatar_))
                 else:
-                    printf("<a href=\"%s\" rel=\"external nofollow\" class=\"url\">", comment_author_url_)
+                    php_printf("<a href=\"%s\" rel=\"external nofollow\" class=\"url\">", comment_author_url_)
                     #// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --Escaped in https://developer.wordpress.org/reference/functions/get_comment_author_url
                     php_print(wp_kses_post(avatar_))
                 # end if
             # end if
-            printf("<span class=\"fn\">%1$s</span><span class=\"screen-reader-text says\">%2$s</span>", esc_html(comment_author_), __("says:", "twentytwenty"))
+            php_printf("<span class=\"fn\">%1$s</span><span class=\"screen-reader-text says\">%2$s</span>", esc_html(comment_author_), __("says:", "twentytwenty"))
             if (not php_empty(lambda : comment_author_url_)):
                 php_print("</a>")
             # end if

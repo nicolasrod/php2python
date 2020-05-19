@@ -62,7 +62,7 @@ if "grid" == mode_:
     <div class=\"error hide-if-js\">
     <p>
     """)
-    printf(__("The grid view for the Media Library requires JavaScript. <a href=\"%s\">Switch to the list view</a>."), "upload.php?mode=list")
+    php_printf(__("The grid view for the Media Library requires JavaScript. <a href=\"%s\">Switch to the list view</a>."), "upload.php?mode=list")
     php_print("""           </p>
     </div>
     </div>
@@ -112,7 +112,7 @@ if doaction_:
                     wp_die(__("Error in moving to Trash."))
                 # end if
             # end for
-            location_ = add_query_arg(Array({"trashed": php_count(post_ids_), "ids": join(",", post_ids_)}), location_)
+            location_ = add_query_arg(Array({"trashed": php_count(post_ids_), "ids": php_join(",", post_ids_)}), location_)
             break
         # end if
         if case("untrash"):
@@ -180,7 +180,7 @@ if current_user_can("upload_files"):
 # end if
 if (php_isset(lambda : PHP_REQUEST["s"])) and php_strlen(PHP_REQUEST["s"]):
     #// translators: %s: Search query.
-    printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", get_search_query())
+    php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", get_search_query())
 # end if
 php_print("""
 <hr class=\"wp-header-end\">

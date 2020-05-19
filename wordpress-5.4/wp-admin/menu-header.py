@@ -115,7 +115,7 @@ def _wp_menu_output(menu_=None, submenu_=None, submenu_as_parent_=None, *_args_)
         if (not php_empty(lambda : item_[4])):
             class_[-1] = esc_attr(item_[4])
         # end if
-        class_ = " class=\"" + join(" ", class_) + "\"" if class_ else ""
+        class_ = " class=\"" + php_join(" ", class_) + "\"" if class_ else ""
         id_ = " id=\"" + php_preg_replace("|[^a-zA-Z0-9_:.]|", "-", item_[5]) + "\"" if (not php_empty(lambda : item_[5])) else ""
         img_ = ""
         img_style_ = ""
@@ -215,7 +215,7 @@ def _wp_menu_output(menu_=None, submenu_=None, submenu_as_parent_=None, *_args_)
                 if (not php_empty(lambda : sub_item_[4])):
                     class_[-1] = esc_attr(sub_item_[4])
                 # end if
-                class_ = " class=\"" + join(" ", class_) + "\"" if class_ else ""
+                class_ = " class=\"" + php_join(" ", class_) + "\"" if class_ else ""
                 menu_hook_ = get_plugin_page_hook(sub_item_[2], item_[2])
                 sub_file_ = sub_item_[2]
                 pos_ = php_strpos(sub_file_, "?")

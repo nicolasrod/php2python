@@ -123,7 +123,7 @@ class WP_Site_Icon():
         self.site_icon_sizes = apply_filters("site_icon_image_sizes", self.site_icon_sizes)
         #// Use a natural sort of numbers.
         natsort(self.site_icon_sizes)
-        self.site_icon_sizes = array_reverse(self.site_icon_sizes)
+        self.site_icon_sizes = php_array_reverse(self.site_icon_sizes)
         #// Ensure that we only resize the image into sizes that allow cropping.
         for name_,size_array_ in sizes_.items():
             if (php_isset(lambda : size_array_["crop"])):

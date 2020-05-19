@@ -52,7 +52,7 @@ class Language_Pack_Upgrader_Skin(WP_Upgrader_Skin):
         name_ = self.upgrader.get_name_for_update(self.language_update)
         php_print("<div class=\"update-messages lp-show-latest\">")
         #// translators: 1: Project name (plugin, theme, or WordPress), 2: Language.
-        printf("<h2>" + __("Updating translations for %1$s (%2$s)&#8230;") + "</h2>", name_, self.language_update.language)
+        php_printf("<h2>" + __("Updating translations for %1$s (%2$s)&#8230;") + "</h2>", name_, self.language_update.language)
     # end def before
     #// 
     #// @param string|WP_Error $error

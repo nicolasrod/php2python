@@ -26,6 +26,7 @@ from goto import with_goto
 from packaging import version
 from urllib.parse import urlparse
 import subprocess
+import html
 
 _PHP_INCLUDES = {}
 __FILE__ = os.path.realpath(__file__)
@@ -155,8 +156,10 @@ def php_include_file(fname, once=True, redirect=False):
 class Resource:
     pass
 
+
 class Traversable:
     pass
+
 
 class Iterator:
     pass
@@ -395,6 +398,14 @@ E_WARNING = _Id()
 ENT_COMPAT = _Id()
 ENT_HTML401 = _Id()
 ENT_NOQUOTES = _Id()
+ENT_QUOTES = _Id()
+ENT_IGNORE = _Id()
+ENT_SUBSTITUTE = _Id()
+ENT_DISALLOWED = _Id()
+ENT_HTML401 = _Id()
+ENT_XML1 = _Id()
+ENT_XHTML = _Id()
+ENT_HTML5 = _Id()
 EXTR_OVERWRITE = _Id()
 FILEINFO_NONE = _Id()
 FILTER_DEFAULT = _Id()
@@ -515,7 +526,7 @@ def php_isset(v):
 def php_check_if_defined(*args):
     for k in args:
         if k not in globals():
-            globals()[k] = None
+            globals()[k] = Array()
 
 
 def php_define(k, v):
@@ -1381,6 +1392,7 @@ def php_is_null(_var):
 def php_is_numeric(_var):
     return isinstance(_var, int) or isinstance(_var, float)
 
+
 def php_is_resource(_var):
     return isinstance(_var, Resource)
 
@@ -1717,6 +1729,8 @@ def php_sprintf(_format, *args):
 
         if len(n) > 0:
             n = str(int(n) - 1)
+        if s == 's': # if string is specified, convert to string!
+            return f'{{{n}!s{fspec}}}'
         return f'{{{n}{fspec}}}'
 
     _format = re.sub(
@@ -2253,6 +2267,18 @@ def _check_db_is_connected(dbh):
         dbh, 'cnx') and dbh.cnx is not None, 'Not connected to database!'
 
 
+def php_mysqli_ping(dbh):
+    try:
+        php_mysqli_get_server_info()
+        return True
+    except:
+        return False
+mysqli_ping = php_mysqli_ping
+
+def php_mysqli_error(dbh):
+    return 'Some error!' if dbh.connect_errno != 0 else ''
+mysqli_error = php_mysqli_error
+
 def php_mysqli_get_server_info(dbh):
     _check_db_is_connected(dbh)
 
@@ -2382,6 +2408,7 @@ def php_hash_hmac(algo, data, key, raw_output_=None, *_args_):
     data = m.hexdigest()
     return data
 
+
 def php_shell_exec(_cmd):
     """
     >>> php_shell_exec('true')
@@ -2397,11 +2424,12 @@ def php_shell_exec(_cmd):
     if int(code[0]) != 0:
         return False
 
-    return "\n".join(out.values())    
+    return "\n".join(out.values())
 
 
 def php_exec(cmd, out=None, exitcode=None, shell=False):
-    proc = subprocess.run(cmd, check=False, text=True, shell=shell, stdout=subprocess.PIPE)
+    proc = subprocess.run(cmd, check=False, text=True,
+                          shell=shell, stdout=subprocess.PIPE)
     lines = proc.stdout.strip().split('\n')
 
     if isinstance(out, Array):
@@ -2409,7 +2437,8 @@ def php_exec(cmd, out=None, exitcode=None, shell=False):
             out[-1] = it
 
     if exitcode is not None:
-        assert isinstance(exitcode, Array), 'exitcode should be an array in Python! FIX THIS!'
+        assert isinstance(
+            exitcode, Array), 'exitcode should be an array in Python! FIX THIS!'
         exitcode[-1] = proc.returncode
 
     return lines[-1]
@@ -2431,6 +2460,32 @@ def php_ksort(arr, flags=None):
     for k, v in tmp.items():
         arr[k] = v
     return True
+
+def php_debug_backtrace(*args):
+    return Array()
+debug_backtrace = php_debug_backtrace
+
+
+def php_join(s, arr):
+    return s.join(arr)
+join = php_join
+
+def php_array_reverse(_array, _preserve_keys=False):
+    return _array  # TODO: Fix!
+array_reverse = php_array_reverse
+
+def php_htmlspecialchars(s, *args):
+    """
+    >>> php_htmlspecialchars("<a href='test'>Test</a>", ENT_QUOTES)
+    '&lt;a href=&#x27;test&#x27;&gt;Test&lt;/a&gt;'
+    """
+    return html.escape(s, quote=True)
+htmlspecialchars = php_htmlspecialchars
+
+
+def php_printf(fmt, *args):
+    php_print(php_sprintf(fmt, *args))
+printf = php_printf
 
 # ========================================================================================
 

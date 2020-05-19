@@ -92,7 +92,7 @@ def register_nav_menus(locations_=None, *_args_):
     add_theme_support("menus")
     for key_,value_ in locations_.items():
         if php_is_int(key_):
-            _doing_it_wrong(__FUNCTION__, __("Nav menu locations must be strings."), "5.3.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Nav menu locations must be strings."), "5.3.0")
             break
         # end if
     # end for

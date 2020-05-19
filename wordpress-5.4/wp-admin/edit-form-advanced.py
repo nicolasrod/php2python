@@ -365,7 +365,7 @@ if post_type_supports(post_type_, "editor"):
     php_print("\">\n\n  ")
     wp_editor(post_.post_content, "content", Array({"_content_editor_dfw": _content_editor_dfw_, "drag_drop_upload": True, "tabfocus_elements": "content-html,save-post", "editor_height": 300, "tinymce": Array({"resize": False, "wp_autoresize_on": _wp_editor_expand_, "add_unload_trigger": False, "wp_keep_scroll_position": (not is_IE_)})}))
     php_print("<table id=\"post-status-info\"><tbody><tr>\n <td id=\"wp-word-count\" class=\"hide-if-no-js\">\n ")
-    printf(__("Word count: %s"), "<span class=\"word-count\">0</span>")
+    php_printf(__("Word count: %s"), "<span class=\"word-count\">0</span>")
     php_print("""   </td>
     <td class=\"autosave-info\">
     <span class=\"autosave-message\">&nbsp;</span>
@@ -375,10 +375,10 @@ if post_type_supports(post_type_, "editor"):
         last_user_ = get_userdata(get_post_meta(post_ID_, "_edit_last", True))
         if last_user_:
             #// translators: 1: Name of most recent post author, 2: Post edited date, 3: Post edited time.
-            printf(__("Last edited by %1$s on %2$s at %3$s"), esc_html(last_user_.display_name), mysql2date(__("F j, Y"), post_.post_modified), mysql2date(__("g:i a"), post_.post_modified))
+            php_printf(__("Last edited by %1$s on %2$s at %3$s"), esc_html(last_user_.display_name), mysql2date(__("F j, Y"), post_.post_modified), mysql2date(__("g:i a"), post_.post_modified))
         else:
             #// translators: 1: Post edited date, 2: Post edited time.
-            printf(__("Last edited on %1$s at %2$s"), mysql2date(__("F j, Y"), post_.post_modified), mysql2date(__("g:i a"), post_.post_modified))
+            php_printf(__("Last edited on %1$s at %2$s"), mysql2date(__("F j, Y"), post_.post_modified), mysql2date(__("g:i a"), post_.post_modified))
         # end if
         php_print("</span>")
     # end if

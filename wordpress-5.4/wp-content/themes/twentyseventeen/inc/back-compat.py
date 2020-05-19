@@ -48,7 +48,7 @@ def twentyseventeen_upgrade_notice(*_args_):
     
     #// translators: %s: The current WordPress version.
     message_ = php_sprintf(__("Twenty Seventeen requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.", "twentyseventeen"), PHP_GLOBALS["wp_version"])
-    printf("<div class=\"error\"><p>%s</p></div>", message_)
+    php_printf("<div class=\"error\"><p>%s</p></div>", message_)
 # end def twentyseventeen_upgrade_notice
 #// 
 #// Prevents the Customizer from being loaded on WordPress versions prior to 4.7.

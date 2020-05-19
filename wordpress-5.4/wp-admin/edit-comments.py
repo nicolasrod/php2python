@@ -119,7 +119,7 @@ if doaction_:
         redirect_to_ = add_query_arg("deleted", deleted_, redirect_to_)
     # end if
     if trashed_ or spammed_:
-        redirect_to_ = add_query_arg("ids", join(",", comment_ids_), redirect_to_)
+        redirect_to_ = add_query_arg("ids", php_join(",", comment_ids_), redirect_to_)
     # end if
     wp_safe_redirect(redirect_to_)
     php_exit(0)
@@ -157,14 +157,14 @@ php_print("""
 <h1 class=\"wp-heading-inline\">
 """)
 if post_id_:
-    printf(__("Comments on &#8220;%s&#8221;"), php_sprintf("<a href=\"%1$s\">%2$s</a>", get_edit_post_link(post_id_), wp_html_excerpt(_draft_or_post_title(post_id_), 50, "&hellip;")))
+    php_printf(__("Comments on &#8220;%s&#8221;"), php_sprintf("<a href=\"%1$s\">%2$s</a>", get_edit_post_link(post_id_), wp_html_excerpt(_draft_or_post_title(post_id_), 50, "&hellip;")))
 else:
     _e("Comments")
 # end if
 php_print("</h1>\n\n")
 if (php_isset(lambda : PHP_REQUEST["s"])) and php_strlen(PHP_REQUEST["s"]):
     php_print("<span class=\"subtitle\">")
-    printf(__("Search results for &#8220;%s&#8221;"), wp_html_excerpt(esc_html(wp_unslash(PHP_REQUEST["s"])), 50, "&hellip;"))
+    php_printf(__("Search results for &#8220;%s&#8221;"), wp_html_excerpt(esc_html(wp_unslash(PHP_REQUEST["s"])), 50, "&hellip;"))
     php_print("</span>")
 # end if
 php_print("""

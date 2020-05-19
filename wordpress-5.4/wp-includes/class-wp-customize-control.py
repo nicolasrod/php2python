@@ -416,7 +416,7 @@ class WP_Customize_Control():
         
         id_ = "customize-control-" + php_str_replace(Array("[", "]"), Array("-", ""), self.id)
         class_ = "customize-control customize-control-" + self.type
-        printf("<li id=\"%s\" class=\"%s\">", esc_attr(id_), esc_attr(class_))
+        php_printf("<li id=\"%s\" class=\"%s\">", esc_attr(id_), esc_attr(class_))
         self.render_content()
         php_print("</li>")
     # end def render
@@ -664,7 +664,7 @@ class WP_Customize_Control():
                     pass
                     php_print("                 <button type=\"button\" class=\"button-link add-new-toggle\">\n                     ")
                     #// translators: %s: Add New Page label.
-                    printf(__("+ %s"), get_post_type_object("page").labels.add_new_item)
+                    php_printf(__("+ %s"), get_post_type_object("page").labels.add_new_item)
                     php_print("                 </button>\n                 <div class=\"new-content-item\">\n                      <label for=\"create-input-")
                     php_print(self.id)
                     php_print("\"><span class=\"screen-reader-text\">")

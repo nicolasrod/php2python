@@ -123,7 +123,7 @@ def twentyseventeen_front_page_section(partial_=None, id_=0, *_args_):
         wp_reset_postdata()
     elif is_customize_preview():
         #// The output placeholder anchor.
-        printf("<article class=\"panel-placeholder panel twentyseventeen-panel twentyseventeen-panel%1$s\" id=\"panel%1$s\">" + "<span class=\"twentyseventeen-panel-title\">%2$s</span></article>", id_, php_sprintf(__("Front Page Section %s Placeholder", "twentyseventeen"), id_))
+        php_printf("<article class=\"panel-placeholder panel twentyseventeen-panel twentyseventeen-panel%1$s\" id=\"panel%1$s\">" + "<span class=\"twentyseventeen-panel-title\">%2$s</span></article>", id_, php_sprintf(__("Front Page Section %s Placeholder", "twentyseventeen"), id_))
     # end if
 # end def twentyseventeen_front_page_section
 #// 

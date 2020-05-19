@@ -50,7 +50,7 @@ class WP_REST_Search_Controller(WP_REST_Controller):
         self.rest_base = "search"
         for search_handler_ in search_handlers_:
             if (not type(search_handler_).__name__ == "WP_REST_Search_Handler"):
-                _doing_it_wrong(__METHOD__, php_sprintf(__("REST search handlers must extend the %s class."), "WP_REST_Search_Handler"), "5.0.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("REST search handlers must extend the %s class."), "WP_REST_Search_Handler"), "5.0.0")
                 continue
             # end if
             self.search_handlers[search_handler_.get_type()] = search_handler_

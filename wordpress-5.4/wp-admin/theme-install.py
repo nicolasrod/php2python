@@ -209,7 +209,7 @@ php_print("""</div>
 _ex("Details &amp; Preview", "theme")
 php_print("</span>\n    <div class=\"theme-author\">\n      ")
 #// translators: %s: Theme author name.
-printf(__("By %s"), "{{ data.author }}")
+php_printf(__("By %s"), "{{ data.author }}")
 php_print("""   </div>
 <div class=\"theme-id-container\">
 <h3 class=\"theme-name\">{{ data.name }}</h3>
@@ -273,7 +273,7 @@ php_print("""</a>
 <span class=\"theme-by\">
 """)
 #// translators: %s: Theme author name.
-printf(__("By %s"), "{{ data.author }}")
+php_printf(__("By %s"), "{{ data.author }}")
 php_print("""                   </span>
 <img class=\"theme-screenshot\" src=\"{{ data.screenshot_url }}\" alt=\"\" />
 <div class=\"theme-details\">
@@ -294,7 +294,7 @@ php_print("""</span>
 <div class=\"theme-version\">
 """)
 #// translators: %s: Theme version.
-printf(__("Version: %s"), "{{ data.version }}")
+php_printf(__("Version: %s"), "{{ data.version }}")
 php_print("""                       </div>
 <div class=\"theme-description\">{{{ data.description }}}</div>
 </div>

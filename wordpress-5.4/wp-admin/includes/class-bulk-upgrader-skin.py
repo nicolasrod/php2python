@@ -137,7 +137,7 @@ class Bulk_Upgrader_Skin(WP_Upgrader_Skin):
         
         
         self.in_loop = True
-        printf("<h2>" + self.upgrader.strings["skin_before_update_header"] + " <span class=\"spinner waiting-" + self.upgrader.update_current + "\"></span></h2>", title_, self.upgrader.update_current, self.upgrader.update_count)
+        php_printf("<h2>" + self.upgrader.strings["skin_before_update_header"] + " <span class=\"spinner waiting-" + self.upgrader.update_current + "\"></span></h2>", title_, self.upgrader.update_current, self.upgrader.update_count)
         php_print("<script type=\"text/javascript\">jQuery('.waiting-" + esc_js(self.upgrader.update_current) + "').css(\"display\", \"inline-block\");</script>")
         #// This progress messages div gets moved via JavaScript when clicking on "Show details.".
         php_print("<div class=\"update-messages hide-if-js\" id=\"progress-" + esc_attr(self.upgrader.update_current) + "\"><p>")

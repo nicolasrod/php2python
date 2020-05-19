@@ -241,7 +241,7 @@ def wp_print_media_templates(*_args_):
         php_print("         <div class=\"upload-ui\">\n             <h2 class=\"upload-instructions\">")
         _e("Your browser cannot upload files")
         php_print("</h2>\n              <p>\n               ")
-        printf(__("The web browser on your device cannot be used to upload files. You may be able to use the <a href=\"%s\">native app for your device</a> instead."), "https://apps.wordpress.org/")
+        php_printf(__("The web browser on your device cannot be used to upload files. You may be able to use the <a href=\"%s\">native app for your device</a> instead."), "https://apps.wordpress.org/")
         php_print("             </p>\n          </div>\n        ")
     elif is_multisite() and (not is_upload_space_available()):
         php_print("         <div class=\"upload-ui\">\n             <h2 class=\"upload-instructions\">")
@@ -283,13 +283,13 @@ def wp_print_media_templates(*_args_):
             max_upload_size_ = 0
         # end if
         php_print("\n               <p class=\"max-upload-size\">\n             ")
-        printf(__("Maximum upload file size: %s."), esc_html(size_format(max_upload_size_)))
+        php_printf(__("Maximum upload file size: %s."), esc_html(size_format(max_upload_size_)))
         php_print("""               </p>
         <# if ( data.suggestedWidth && data.suggestedHeight ) { #>
         <p class=\"suggested-dimensions\">
         """)
         #// translators: 1: Suggested width number, 2: Suggested height number.
-        printf(__("Suggested image dimensions: %1$s by %2$s pixels."), "{{data.suggestedWidth}}", "{{data.suggestedHeight}}")
+        php_printf(__("Suggested image dimensions: %1$s by %2$s pixels."), "{{data.suggestedWidth}}", "{{data.suggestedHeight}}")
         php_print("""                   </p>
         <# } #>
         """)
@@ -423,7 +423,7 @@ if ( data.width ) {
     _e("Dimensions:")
     php_print("</strong>\n                          ")
     #// translators: 1: A number of pixels wide, 2: A number of pixels tall.
-    printf(__("%1$s by %2$s pixels"), "{{ data.width }}", "{{ data.height }}")
+    php_printf(__("%1$s by %2$s pixels"), "{{ data.width }}", "{{ data.height }}")
     php_print("""                       </div>
     <# } #>
     <# if ( data.originalImageURL && data.originalImageName ) { #>
@@ -648,7 +648,7 @@ if ( 'image' === data.type ) { #>
     <div class=\"dimensions\">
     """)
     #// translators: 1: A number of pixels wide, 2: A number of pixels tall.
-    printf(__("%1$s by %2$s pixels"), "{{ data.width }}", "{{ data.height }}")
+    php_printf(__("%1$s by %2$s pixels"), "{{ data.width }}", "{{ data.height }}")
     php_print("""                       </div>
     <# } #>
     <# if ( data.originalImageURL && data.originalImageName ) { #>
@@ -1502,7 +1502,7 @@ if ( ! _.isEmpty( data.model.content ) ) {
     <input class=\"content-track\" type=\"text\" id=\"video-details-track-{{ index }}\" aria-describedby=\"video-details-track-desc-{{ index }}\" value=\"{{ track.outerHTML }}\" />
     <span class=\"description\" id=\"video-details-track-desc-{{ index }}\">
     """)
-    printf(__("The %1$s, %2$s, and %3$s values can be edited to set the video track language and kind."), "srclang", "label", "kind")
+    php_printf(__("The %1$s, %2$s, and %3$s values can be edited to set the video track language and kind."), "srclang", "label", "kind")
     php_print("                     </span>\n                       <button type=\"button\" class=\"button-link remove-setting remove-track\">")
     _ex("Remove video track", "media")
     php_print("""</button><br/>

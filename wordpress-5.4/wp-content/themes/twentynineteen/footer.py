@@ -27,7 +27,7 @@ php_print("         <a href=\"")
 php_print(esc_url(__("https://wordpress.org/", "twentynineteen")))
 php_print("\" class=\"imprint\">\n              ")
 #// translators: %s: WordPress.
-printf(__("Proudly powered by %s.", "twentynineteen"), "WordPress")
+php_printf(__("Proudly powered by %s.", "twentynineteen"), "WordPress")
 php_print("         </a>\n          ")
 if php_function_exists("the_privacy_policy_link"):
     the_privacy_policy_link("", "<span role=\"separator\" aria-hidden=\"true\"></span>")

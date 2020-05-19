@@ -114,20 +114,20 @@ class WP_Widget_Tag_Cloud(WP_Widget):
         for case in Switch(php_count(taxonomies_)):
             if case(0):
                 php_print("<p>" + __("The tag cloud will not be displayed since there are no taxonomies that support the tag cloud widget.") + "</p>")
-                printf(input_, "")
+                php_printf(input_, "")
                 break
             # end if
             if case(1):
                 keys_ = php_array_keys(taxonomies_)
                 taxonomy_ = reset(keys_)
-                printf(input_, esc_attr(taxonomy_))
+                php_printf(input_, esc_attr(taxonomy_))
                 php_print(count_checkbox_)
                 break
             # end if
             if case():
-                printf("<p><label for=\"%1$s\">%2$s</label>" + "<select class=\"widefat\" id=\"%1$s\" name=\"%3$s\">", id_, __("Taxonomy:"), name_)
+                php_printf("<p><label for=\"%1$s\">%2$s</label>" + "<select class=\"widefat\" id=\"%1$s\" name=\"%3$s\">", id_, __("Taxonomy:"), name_)
                 for taxonomy_,tax_ in taxonomies_.items():
-                    printf("<option value=\"%s\"%s>%s</option>", esc_attr(taxonomy_), selected(taxonomy_, current_taxonomy_, False), tax_.labels.name)
+                    php_printf("<option value=\"%s\"%s>%s</option>", esc_attr(taxonomy_), selected(taxonomy_, current_taxonomy_, False), tax_.labels.name)
                 # end for
                 php_print("</select></p>" + count_checkbox_)
             # end if

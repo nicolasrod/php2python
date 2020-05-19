@@ -58,15 +58,15 @@ else:
     <input name=\"show_on_front\" type=\"radio\" value=\"page\" class=\"tog\" """)
     checked("page", get_option("show_on_front"))
     php_print(" />\n        ")
-    printf(__("A <a href=\"%s\">static page</a> (select below)"), "edit.php?post_type=page")
+    php_printf(__("A <a href=\"%s\">static page</a> (select below)"), "edit.php?post_type=page")
     php_print("""   </label>
     </p>
     <ul>
     <li><label for=\"page_on_front\">
     """)
-    printf(__("Homepage: %s"), wp_dropdown_pages(Array({"name": "page_on_front", "echo": 0, "show_option_none": __("&mdash; Select &mdash;"), "option_none_value": "0", "selected": get_option("page_on_front")})))
+    php_printf(__("Homepage: %s"), wp_dropdown_pages(Array({"name": "page_on_front", "echo": 0, "show_option_none": __("&mdash; Select &mdash;"), "option_none_value": "0", "selected": get_option("page_on_front")})))
     php_print("</label></li>\n  <li><label for=\"page_for_posts\">\n    ")
-    printf(__("Posts page: %s"), wp_dropdown_pages(Array({"name": "page_for_posts", "echo": 0, "show_option_none": __("&mdash; Select &mdash;"), "option_none_value": "0", "selected": get_option("page_for_posts")})))
+    php_printf(__("Posts page: %s"), wp_dropdown_pages(Array({"name": "page_for_posts", "echo": 0, "show_option_none": __("&mdash; Select &mdash;"), "option_none_value": "0", "selected": get_option("page_for_posts")})))
     php_print("</label></li>\n</ul>\n   ")
     if "page" == get_option("show_on_front") and get_option("page_for_posts") == get_option("page_on_front"):
         php_print(" <div id=\"front-page-warning\" class=\"error inline\"><p>")
@@ -115,7 +115,7 @@ php_print("""</label>
 </p>
 <p class=\"description\">
 """)
-printf(__("Your theme determines how content is displayed in browsers. <a href=\"%s\">Learn more about feeds</a>."), __("https://wordpress.org/support/article/wordpress-feeds/"))
+php_printf(__("Your theme determines how content is displayed in browsers. <a href=\"%s\">Learn more about feeds</a>."), __("https://wordpress.org/support/article/wordpress-feeds/"))
 php_print("""   </p>
 </fieldset></td>
 </tr>

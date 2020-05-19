@@ -371,7 +371,7 @@ def wp_clear_scheduled_hook(hook_=None, args_=None, *_args_):
     #// Backward compatibility.
     #// Previously, this function took the arguments as discrete vars rather than an array like the rest of the API.
     if (not php_is_array(args_)):
-        _deprecated_argument(__FUNCTION__, "3.0.0", __("This argument has changed to an array to match the behavior of the other cron functions."))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", __("This argument has changed to an array to match the behavior of the other cron functions."))
         args_ = php_array_slice(php_func_get_args(), 1)
     # end if
     #// 

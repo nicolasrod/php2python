@@ -52,7 +52,7 @@ class TwentyNineteen_Walker_Comment(Walker_Comment):
             if php_empty(lambda : comment_author_url_):
                 php_print(avatar_)
             else:
-                printf("<a href=\"%s\" rel=\"external nofollow\" class=\"url\">", comment_author_url_)
+                php_printf("<a href=\"%s\" rel=\"external nofollow\" class=\"url\">", comment_author_url_)
                 php_print(avatar_)
             # end if
         # end if
@@ -61,9 +61,9 @@ class TwentyNineteen_Walker_Comment(Walker_Comment):
         #// fill color to the inner check shape when in circle form.
         #//
         if twentynineteen_is_comment_by_post_author(comment_):
-            printf("<span class=\"post-author-badge\" aria-hidden=\"true\">%s</span>", twentynineteen_get_icon_svg("check", 24))
+            php_printf("<span class=\"post-author-badge\" aria-hidden=\"true\">%s</span>", twentynineteen_get_icon_svg("check", 24))
         # end if
-        printf(wp_kses(__("%s <span class=\"screen-reader-text says\">says:</span>", "twentynineteen"), Array({"span": Array({"class": Array()})})), "<b class=\"fn\">" + comment_author_ + "</b>")
+        php_printf(wp_kses(__("%s <span class=\"screen-reader-text says\">says:</span>", "twentynineteen"), Array({"span": Array({"class": Array()})})), "<b class=\"fn\">" + comment_author_ + "</b>")
         if (not php_empty(lambda : comment_author_url_)):
             php_print("</a>")
         # end if

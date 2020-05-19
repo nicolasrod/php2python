@@ -137,7 +137,7 @@ class WP_Nav_Menu_Widget(WP_Widget):
             url_ = admin_url("nav-menus.php")
         # end if
         #// translators: %s: URL to create a new menu.
-        printf(__("No menus have been created yet. <a href=\"%s\">Create some</a>."), esc_attr(url_))
+        php_printf(__("No menus have been created yet. <a href=\"%s\">Create some</a>."), esc_attr(url_))
         php_print("     </p>\n      <div class=\"nav-menu-widget-form-controls\" ")
         php_print(empty_menus_style_)
         php_print(">\n          <p>\n               <label for=\"")

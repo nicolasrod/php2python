@@ -428,10 +428,10 @@ class WP_Community_Events():
     def maybe_log_events_response(self, message_=None, details_=None):
         
         
-        _deprecated_function(__METHOD__, "4.9.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
         if (not WP_DEBUG_LOG):
             return
         # end if
-        php_error_log(php_sprintf("%s: %s. Details: %s", __METHOD__, php_trim(message_, "."), wp_json_encode(details_)))
+        php_error_log(php_sprintf("%s: %s. Details: %s", inspect.currentframe().f_code.co_name, php_trim(message_, "."), wp_json_encode(details_)))
     # end def maybe_log_events_response
 # end class WP_Community_Events

@@ -231,10 +231,10 @@ def wp_widget_control(sidebar_args_=None, *_args_):
     <span class=\"screen-reader-text edit\">
     """)
     #// translators: %s: Widget title.
-    printf(__("Edit widget: %s"), widget_title_)
+    php_printf(__("Edit widget: %s"), widget_title_)
     php_print("         </span>\n           <span class=\"screen-reader-text add\">\n               ")
     #// translators: %s: Widget title.
-    printf(__("Add widget: %s"), widget_title_)
+    php_printf(__("Add widget: %s"), widget_title_)
     php_print("""           </span>
     <span class=\"toggle-indicator\" aria-hidden=\"true\"></span>
     </button>

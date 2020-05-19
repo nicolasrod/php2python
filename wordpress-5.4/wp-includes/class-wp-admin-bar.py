@@ -139,7 +139,7 @@ class WP_Admin_Bar():
             if php_empty(lambda : args_["title"]):
                 return
             # end if
-            _doing_it_wrong(__METHOD__, __("The menu ID should not be empty."), "3.3.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, __("The menu ID should not be empty."), "3.3.0")
             #// Deprecated: Generate an ID from the title.
             args_["id"] = esc_attr(sanitize_title(php_trim(args_["title"])))
         # end if
@@ -157,7 +157,7 @@ class WP_Admin_Bar():
         back_compat_parents_ = Array({"my-account-with-avatar": Array("my-account", "3.3"), "my-blogs": Array("my-sites", "3.3")})
         if (php_isset(lambda : back_compat_parents_[args_["parent"]])):
             new_parent_, version_ = back_compat_parents_[args_["parent"]]
-            _deprecated_argument(__METHOD__, version_, php_sprintf("Use <code>%s</code> as the parent for the <code>%s</code> admin bar node instead of <code>%s</code>.", new_parent_, args_["id"], args_["parent"]))
+            _deprecated_argument(inspect.currentframe().f_code.co_name, version_, php_sprintf("Use <code>%s</code> as the parent for the <code>%s</code> admin bar node instead of <code>%s</code>.", new_parent_, args_["id"], args_["parent"]))
             args_["parent"] = new_parent_
         # end if
         self._set_node(args_)
@@ -532,7 +532,7 @@ class WP_Admin_Bar():
     def recursive_render(self, id_=None, node_=None):
         
         
-        _deprecated_function(__METHOD__, "3.3.0", "WP_Admin_bar::render(), WP_Admin_Bar::_render_item()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "WP_Admin_bar::render(), WP_Admin_Bar::_render_item()")
         self._render_item(node_)
     # end def recursive_render
     #// 

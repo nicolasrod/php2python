@@ -835,7 +835,7 @@ def update_meta_cache(meta_type_=None, object_ids_=None, *_args_):
         return cache_
     # end if
     #// Get meta info.
-    id_list_ = join(",", ids_)
+    id_list_ = php_join(",", ids_)
     id_column_ = "umeta_id" if "user" == meta_type_ else "meta_id"
     meta_list_ = wpdb_.get_results(str("SELECT ") + str(column_) + str(", meta_key, meta_value FROM ") + str(table_) + str(" WHERE ") + str(column_) + str(" IN (") + str(id_list_) + str(") ORDER BY ") + str(id_column_) + str(" ASC"), ARRAY_A)
     if (not php_empty(lambda : meta_list_)):
@@ -1081,7 +1081,7 @@ def register_meta(object_type_=None, meta_key_=None, args_=None, deprecated_=Non
     #// Require an item schema when registering array meta.
     if False != args_["show_in_rest"] and "array" == args_["type"]:
         if (not php_is_array(args_["show_in_rest"])) or (not (php_isset(lambda : args_["show_in_rest"]["schema"]["items"]))):
-            _doing_it_wrong(__FUNCTION__, __("When registering an \"array\" meta type to show in the REST API, you must specify the schema for each array item in \"show_in_rest.schema.items\"."), "5.3.0")
+            _doing_it_wrong(inspect.currentframe().f_code.co_name, __("When registering an \"array\" meta type to show in the REST API, you must specify the schema for each array item in \"show_in_rest.schema.items\"."), "5.3.0")
             return False
         # end if
     # end if

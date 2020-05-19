@@ -128,7 +128,7 @@ if action_:
             php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
             php_print("<div class=\"wrap\">")
             php_print("<h1>" + esc_html(title_) + "</h1>")
-            url_ = self_admin_url("update.php?action=update-selected&amp;plugins=" + urlencode(join(",", plugins_)))
+            url_ = self_admin_url("update.php?action=update-selected&amp;plugins=" + urlencode(php_join(",", plugins_)))
             url_ = wp_nonce_url(url_, "bulk-update-plugins")
             php_print(str("<iframe src='") + str(url_) + str("' style='width: 100%; height:100%; min-height:850px;'></iframe>"))
             php_print("</div>")
@@ -405,7 +405,7 @@ invalid_ = validate_active_plugins()
 if (not php_empty(lambda : invalid_)):
     for plugin_file_,error_ in invalid_.items():
         php_print("<div id=\"message\" class=\"error\"><p>")
-        printf(__("The plugin %1$s has been deactivated due to an error: %2$s"), "<code>" + esc_html(plugin_file_) + "</code>", error_.get_error_message())
+        php_printf(__("The plugin %1$s has been deactivated due to an error: %2$s"), "<code>" + esc_html(plugin_file_) + "</code>", error_.get_error_message())
         php_print("</p></div>")
     # end for
 # end if
@@ -437,7 +437,7 @@ elif (php_isset(lambda : PHP_REQUEST["deleted"])):
     delete_transient("plugins_delete_result_" + user_ID_)
     if is_wp_error(delete_result_):
         php_print("     <div id=\"message\" class=\"error notice is-dismissible\">\n            <p>\n               ")
-        printf(__("Plugin could not be deleted due to an error: %s"), delete_result_.get_error_message())
+        php_printf(__("Plugin could not be deleted due to an error: %s"), delete_result_.get_error_message())
         php_print("         </p>\n      </div>\n        ")
     else:
         php_print("     <div id=\"message\" class=\"updated notice is-dismissible\">\n          <p>\n               ")
@@ -488,7 +488,7 @@ if (not is_multisite()) or is_network_admin() and current_user_can("install_plug
 # end if
 if php_strlen(s_):
     #// translators: %s: Search query.
-    printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(urldecode(s_)))
+    php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(urldecode(s_)))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">

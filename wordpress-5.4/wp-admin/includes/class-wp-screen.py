@@ -1134,7 +1134,7 @@ class WP_Screen():
             php_print("' ")
             checked(screen_layout_columns_, i_)
             php_print(" />\n            ")
-            printf(_n("%s column", "%s columns", i_), number_format_i18n(i_))
+            php_printf(_n("%s column", "%s columns", i_), number_format_i18n(i_))
             php_print("         </label>\n      ")
             i_ += 1
         # end while

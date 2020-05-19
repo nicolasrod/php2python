@@ -143,7 +143,7 @@ class WP_Filesystem_Base():
             echo_ = False
         # end if
         
-        _deprecated_function(__FUNCTION__, "2.7.0", "WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "2.7.0", "WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()")
         self.verbose = echo_
         return self.abspath()
     # end def find_base_dir
@@ -167,7 +167,7 @@ class WP_Filesystem_Base():
             echo_ = False
         # end if
         
-        _deprecated_function(__FUNCTION__, "2.7.0", "WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "2.7.0", "WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()")
         self.verbose = echo_
         return self.abspath()
     # end def get_base_dir
@@ -261,7 +261,7 @@ class WP_Filesystem_Base():
         folder_ = untrailingslashit(folder_)
         if self.verbose:
             #// translators: 1: Folder to locate, 2: Folder to start searching from.
-            printf("\n" + __("Looking for %1$s in %2$s") + "<br/>\n", folder_, base_)
+            php_printf("\n" + __("Looking for %1$s in %2$s") + "<br/>\n", folder_, base_)
         # end if
         folder_parts_ = php_explode("/", folder_)
         folder_part_keys_ = php_array_keys(folder_parts_)
@@ -285,7 +285,7 @@ class WP_Filesystem_Base():
                 newdir_ = trailingslashit(path_join(base_, key_))
                 if self.verbose:
                     #// translators: %s: Directory name.
-                    printf("\n" + __("Changing to %s") + "<br/>\n", newdir_)
+                    php_printf("\n" + __("Changing to %s") + "<br/>\n", newdir_)
                 # end if
                 #// Only search for the remaining path tokens in the directory, not the full path again.
                 newfolder_ = php_implode("/", php_array_slice(folder_parts_, index_ + 1))
@@ -300,7 +300,7 @@ class WP_Filesystem_Base():
         if (php_isset(lambda : files_[last_path_])):
             if self.verbose:
                 #// translators: %s: Directory name.
-                printf("\n" + __("Found %s") + "<br/>\n", base_ + last_path_)
+                php_printf("\n" + __("Found %s") + "<br/>\n", base_ + last_path_)
             # end if
             return trailingslashit(base_ + last_path_)
         # end if

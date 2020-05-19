@@ -57,7 +57,7 @@ for case in Switch(action_):
             wp_redirect(this_file_)
             php_exit(0)
         # end if
-        all_links_ = join(",", linkcheck_)
+        all_links_ = php_join(",", linkcheck_)
         #// 
         #// Should now have an array of links we can change:
         #// $q = $wpdb->query("update $wpdb->links SET link_category='$category' WHERE link_id IN ($all_links)");

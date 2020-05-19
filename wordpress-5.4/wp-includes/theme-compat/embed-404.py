@@ -14,7 +14,7 @@ php_print("""</p>
 <div class=\"wp-embed-excerpt\">
 <p>
 """)
-printf(__("It looks like nothing was found at this location. Maybe try visiting %s directly?"), "<strong><a href=\"" + esc_url(home_url()) + "\">" + esc_html(get_bloginfo("name")) + "</a></strong>")
+php_printf(__("It looks like nothing was found at this location. Maybe try visiting %s directly?"), "<strong><a href=\"" + esc_url(home_url()) + "\">" + esc_html(get_bloginfo("name")) + "</a></strong>")
 php_print("""       </p>
 </div>
 """)

@@ -19,6 +19,7 @@ from contextlib import contextmanager
 # TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
 # TODO: alert when a class has a propert and a method named the same. not valid in python
 
+
 def _(x):
     return x.replace('\r', ' ').replace('\n', '\\n').strip()
 
@@ -95,6 +96,7 @@ _php_globals = {
 }
 
 fix_comment_line = partial(remove_both_ends, chars=('*', '/', ' ', '\t'))
+
 
 @contextmanager
 def namespace(self, name):
@@ -619,10 +621,10 @@ class AST:
     def Stmt_Namespace(self, node):
         name = self.parse(node['name']).replace('.', '_')
         qname = quote(name)
-        
+
         with namespace(self, name):
             stmts = self.parse_children(node, 'stmts', '\n')
-        
+
         if node['name'] is None:
             #  Global namespace
             return f'{stmts}\n'
@@ -655,8 +657,9 @@ class {name}({name}):
         supers = remove_both_ends(','.join([extends, implements]))
         name = self.parse(node['name'])
         with namespace(self, name):
-            stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
-        
+            stmts = self.pass_if_empty(
+                self.parse_children(node, 'stmts', '\n'))
+
         return self.with_docs(
             node, f'''
 class {name}({supers}):
@@ -711,8 +714,10 @@ class {name}({supers}):
         name = self.parse(node['name'])
 
         with namespace(self, name):
-            params = self.parse_children(node, 'params', ', ').replace(' = ', '=')
-            stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
+            params = self.parse_children(
+                node, 'params', ', ').replace(' = ', '=')
+            stmts = self.pass_if_empty(
+                self.parse_children(node, 'stmts', '\n'))
 
         if params.find('*') == -1:
             params = remove_both_ends(params + ', *_args_')
@@ -754,8 +759,9 @@ def {name}({params}):
         with namespace(self, name):
             params = remove_both_ends(
                 'self, ' + self.parse_children(node, 'params', ', ').replace(' = ', '='))
-            stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
-        
+            stmts = self.pass_if_empty(
+                self.parse_children(node, 'stmts', '\n'))
+
         global_access = self.get_global_access_for(node['stmts'])
         decorators = '\n'.join([
             '@classmethod' if node['flags'] == 9 else '',
@@ -889,19 +895,19 @@ while {cond}:
         return '__DIR__'
 
     def Scalar_MagicConst_Line(self, node):
-        return '0'
+        return 'inspect.currentframe().f_lineno'
 
     def Scalar_MagicConst_Method(self, node):
-        return '__METHOD__'
+        return 'inspect.currentframe().f_code.co_name'
 
     def Scalar_MagicConst_Class(self, node):
-        return '__CLASS__'
+        return 'self.__class__.__name__'
 
     def Scalar_MagicConst_Function(self, node):
-        return '__FUNCTION__'
+        return 'inspect.currentframe().f_code.co_name'
 
     def Scalar_MagicConst_Namespace(self, node):
-        return '_namespace__'
+        return '__namespace__'  # TODO: fix this!
 
     def Expr_ArrowFunction(self, node):
         raise Exception('Not Implemented yet!')
@@ -953,7 +959,7 @@ while {cond}:
         fn = self.parse(node['name']).strip()
 
         if fn.lower() == 'get_locals':
-            fn = 'php_get_locals(locals(), inspect.currentframe()   .f_code.co_varnames)'
+            fn = 'php_get_locals(locals(), inspect.currentframe().f_code.co_varnames)'
         if fn.lower() == 'compact':
             fn = 'php_compact'
             args = args.replace('",', '_",')

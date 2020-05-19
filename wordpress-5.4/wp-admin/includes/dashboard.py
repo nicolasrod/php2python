@@ -273,9 +273,9 @@ def wp_dashboard_right_now(*_args_):
             text_ = php_sprintf(text_, number_format_i18n(num_posts_.publish))
             post_type_object_ = get_post_type_object(post_type_)
             if post_type_object_ and current_user_can(post_type_object_.cap.edit_posts):
-                printf("<li class=\"%1$s-count\"><a href=\"edit.php?post_type=%1$s\">%2$s</a></li>", post_type_, text_)
+                php_printf("<li class=\"%1$s-count\"><a href=\"edit.php?post_type=%1$s\">%2$s</a></li>", post_type_, text_)
             else:
-                printf("<li class=\"%1$s-count\"><span>%2$s</span></li>", post_type_, text_)
+                php_printf("<li class=\"%1$s-count\"><span>%2$s</span></li>", post_type_, text_)
             # end if
         # end if
     # end for
@@ -550,7 +550,7 @@ def wp_dashboard_recent_drafts(drafts_=None, *_args_):
     # end if
     php_print("<div class=\"drafts\">")
     if php_count(drafts_) > 3:
-        printf("<p class=\"view-all\"><a href=\"%s\">%s</a></p>" + "\n", esc_url(admin_url("edit.php?post_status=draft")), __("View all drafts"))
+        php_printf("<p class=\"view-all\"><a href=\"%s\">%s</a></p>" + "\n", esc_url(admin_url("edit.php?post_status=draft")), __("View all drafts"))
     # end if
     php_print("<h2 class=\"hide-if-no-js\">" + __("Your Recent Drafts") + "</h2>\n<ul>")
     #// translators: Maximum number of words used in a preview of a draft on the dashboard.
@@ -560,7 +560,7 @@ def wp_dashboard_recent_drafts(drafts_=None, *_args_):
         url_ = get_edit_post_link(draft_.ID)
         title_ = _draft_or_post_title(draft_.ID)
         php_print("<li>\n")
-        printf("<div class=\"draft-title\"><a href=\"%s\" aria-label=\"%s\">%s</a><time datetime=\"%s\">%s</time></div>", esc_url(url_), esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), title_)), esc_html(title_), get_the_time("c", draft_), get_the_time(__("F j, Y"), draft_))
+        php_printf("<div class=\"draft-title\"><a href=\"%s\" aria-label=\"%s\">%s</a><time datetime=\"%s\">%s</time></div>", esc_url(url_), esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), title_)), esc_html(title_), get_the_time("c", draft_), get_the_time(__("F j, Y"), draft_))
         the_content_ = wp_trim_words(draft_.post_content, draft_length_)
         if the_content_:
             php_print("<p>" + the_content_ + "</p>")
@@ -658,9 +658,9 @@ def _wp_dashboard_recent_comments_row(comment_=None, show_date_=None, *_args_):
         php_print("\">\n            <p class=\"comment-meta\">\n                ")
         #// Comments might not have a post they relate to, e.g. programmatically created ones.
         if comment_post_link_:
-            printf(__("From %1$s on %2$s %3$s"), "<cite class=\"comment-author\">" + get_comment_author_link(comment_) + "</cite>", comment_post_link_, "<span class=\"approve\">" + __("[Pending]") + "</span>")
+            php_printf(__("From %1$s on %2$s %3$s"), "<cite class=\"comment-author\">" + get_comment_author_link(comment_) + "</cite>", comment_post_link_, "<span class=\"approve\">" + __("[Pending]") + "</span>")
         else:
-            printf(__("From %1$s %2$s"), "<cite class=\"comment-author\">" + get_comment_author_link(comment_) + "</cite>", "<span class=\"approve\">" + __("[Pending]") + "</span>")
+            php_printf(__("From %1$s %2$s"), "<cite class=\"comment-author\">" + get_comment_author_link(comment_) + "</cite>", "<span class=\"approve\">" + __("[Pending]") + "</span>")
         # end if
         php_print("         </p>\n\n                ")
     else:
@@ -681,9 +681,9 @@ def _wp_dashboard_recent_comments_row(comment_=None, show_date_=None, *_args_):
         php_print("         <div class=\"dashboard-comment-wrap has-row-actions\">\n            <p class=\"comment-meta\">\n                ")
         #// Pingbacks, Trackbacks or custom comment types might not have a post they relate to, e.g. programmatically created ones.
         if comment_post_link_:
-            printf(_x("%1$s on %2$s %3$s", "dashboard"), str("<strong>") + str(type_) + str("</strong>"), comment_post_link_, "<span class=\"approve\">" + __("[Pending]") + "</span>")
+            php_printf(_x("%1$s on %2$s %3$s", "dashboard"), str("<strong>") + str(type_) + str("</strong>"), comment_post_link_, "<span class=\"approve\">" + __("[Pending]") + "</span>")
         else:
-            printf(_x("%1$s %2$s", "dashboard"), str("<strong>") + str(type_) + str("</strong>"), "<span class=\"approve\">" + __("[Pending]") + "</span>")
+            php_printf(_x("%1$s %2$s", "dashboard"), str("<strong>") + str(type_) + str("</strong>"), "<span class=\"approve\">" + __("[Pending]") + "</span>")
         # end if
         php_print("         </p>\n          <p class=\"comment-author\">")
         comment_author_link(comment_)
@@ -778,7 +778,7 @@ def wp_dashboard_recent_posts(args_=None, *_args_):
             #// Use the post edit link for those who can edit, the permalink otherwise.
             recent_post_link_ = get_edit_post_link() if current_user_can("edit_post", get_the_ID()) else get_permalink()
             draft_or_post_title_ = _draft_or_post_title()
-            printf("<li><span>%1$s</span> <a href=\"%2$s\" aria-label=\"%3$s\">%4$s</a></li>", php_sprintf(_x("%1$s, %2$s", "dashboard"), relative_, get_the_time()), recent_post_link_, esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), draft_or_post_title_)), draft_or_post_title_)
+            php_printf("<li><span>%1$s</span> <a href=\"%2$s\" aria-label=\"%3$s\">%4$s</a></li>", php_sprintf(_x("%1$s, %2$s", "dashboard"), relative_, get_the_time()), recent_post_link_, esc_attr(php_sprintf(__("Edit &#8220;%s&#8221;"), draft_or_post_title_)), draft_or_post_title_)
         # end while
         php_print("</ul>")
         php_print("</div>")
@@ -998,15 +998,15 @@ def wp_dashboard_events_news(*_args_):
     php_print("""   </div>
     <p class=\"community-events-footer\">
     """)
-    printf("<a href=\"%1$s\" target=\"_blank\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", "https://make.wordpress.org/community/meetups-landing-page", __("Meetups"), __("(opens in a new tab)"))
+    php_printf("<a href=\"%1$s\" target=\"_blank\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", "https://make.wordpress.org/community/meetups-landing-page", __("Meetups"), __("(opens in a new tab)"))
     php_print("""
     |
     """)
-    printf("<a href=\"%1$s\" target=\"_blank\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", "https://central.wordcamp.org/schedule/", __("WordCamps"), __("(opens in a new tab)"))
+    php_printf("<a href=\"%1$s\" target=\"_blank\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", "https://central.wordcamp.org/schedule/", __("WordCamps"), __("(opens in a new tab)"))
     php_print("""
     |
     """)
-    printf("<a href=\"%1$s\" target=\"_blank\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(_x("https://wordpress.org/news/", "Events and News dashboard widget")), __("News"), __("(opens in a new tab)"))
+    php_printf("<a href=\"%1$s\" target=\"_blank\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(_x("https://wordpress.org/news/", "Events and News dashboard widget")), __("News"), __("(opens in a new tab)"))
     php_print(" </p>\n\n    ")
 # end def wp_dashboard_events_news
 #// 
@@ -1073,11 +1073,11 @@ def wp_print_community_events_templates(*_args_):
     
     
     php_print("\n   <script id=\"tmpl-community-events-attend-event-near\" type=\"text/template\">\n        ")
-    printf(__("Attend an upcoming event near %s."), "<strong>{{ data.location.description }}</strong>")
+    php_printf(__("Attend an upcoming event near %s."), "<strong>{{ data.location.description }}</strong>")
     php_print("""   </script>
     <script id=\"tmpl-community-events-could-not-locate\" type=\"text/template\">
     """)
-    printf(__("We couldn&#8217;t locate %s. Please try another nearby city. For example: Kansas City; Springfield; Portland."), "<em>{{data.unknownCity}}</em>")
+    php_printf(__("We couldn&#8217;t locate %s. Please try another nearby city. For example: Kansas City; Springfield; Portland."), "<em>{{data.unknownCity}}</em>")
     php_print("""   </script>
     <script id=\"tmpl-community-events-event-list\" type=\"text/template\">
     <# _.each( data.events, function( event ) { #>
@@ -1102,9 +1102,9 @@ def wp_print_community_events_templates(*_args_):
     <li class=\"event-none\">
     <# if ( data.location.description ) { #>
     """)
-    printf(__("There aren&#8217;t any events scheduled near %1$s at the moment. Would you like to <a href=\"%2$s\">organize one</a>?"), "{{ data.location.description }}", __("https://make.wordpress.org/community/handbook/meetup-organizer/welcome/"))
+    php_printf(__("There aren&#8217;t any events scheduled near %1$s at the moment. Would you like to <a href=\"%2$s\">organize one</a>?"), "{{ data.location.description }}", __("https://make.wordpress.org/community/handbook/meetup-organizer/welcome/"))
     php_print("\n           <# } else { #>\n                ")
-    printf(__("There aren&#8217;t any events scheduled near you at the moment. Would you like to <a href=\"%s\">organize one</a>?"), __("https://make.wordpress.org/community/handbook/meetup-organizer/welcome/"))
+    php_printf(__("There aren&#8217;t any events scheduled near you at the moment. Would you like to <a href=\"%s\">organize one</a>?"), __("https://make.wordpress.org/community/handbook/meetup-organizer/welcome/"))
     php_print("""           <# } #>
     </li>
     </script>
@@ -1174,12 +1174,12 @@ def wp_dashboard_quota(*_args_):
     <li class=\"storage-count\">
     """)
     text_ = php_sprintf(__("%s MB Space Allowed"), number_format_i18n(quota_))
-    printf("<a href=\"%1$s\">%2$s <span class=\"screen-reader-text\">(%3$s)</span></a>", esc_url(admin_url("upload.php")), text_, __("Manage Uploads"))
+    php_printf("<a href=\"%1$s\">%2$s <span class=\"screen-reader-text\">(%3$s)</span></a>", esc_url(admin_url("upload.php")), text_, __("Manage Uploads"))
     php_print("     </li><li class=\"storage-count ")
     php_print(used_class_)
     php_print("\">\n            ")
     text_ = php_sprintf(__("%1$s MB (%2$s%%) Space Used"), number_format_i18n(used_, 2), percentused_)
-    printf("<a href=\"%1$s\" class=\"musublink\">%2$s <span class=\"screen-reader-text\">(%3$s)</span></a>", esc_url(admin_url("upload.php")), text_, __("Manage Uploads"))
+    php_printf("<a href=\"%1$s\" class=\"musublink\">%2$s <span class=\"screen-reader-text\">(%3$s)</span></a>", esc_url(admin_url("upload.php")), text_, __("Manage Uploads"))
     php_print("""       </li>
     </ul>
     </div>
@@ -1318,7 +1318,7 @@ def wp_dashboard_php_nag(*_args_):
     php_print("""</p>
     <p class=\"button-container\">
     """)
-    printf("<a class=\"button button-primary\" href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(wp_get_update_php_url()), __("Learn more about updating PHP"), __("(opens in a new tab)"))
+    php_printf("<a class=\"button button-primary\" href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">%2$s <span class=\"screen-reader-text\">%3$s</span><span aria-hidden=\"true\" class=\"dashicons dashicons-external\"></span></a>", esc_url(wp_get_update_php_url()), __("Learn more about updating PHP"), __("(opens in a new tab)"))
     php_print(" </p>\n  ")
     wp_update_php_annotation()
     wp_direct_php_update_button()
@@ -1380,7 +1380,7 @@ def wp_dashboard_site_health(*_args_):
     """)
     if False == get_issues_:
         php_print("     <p>\n           ")
-        printf(__("Site health checks will automatically run periodically to gather information about your site. You can also <a href=\"%s\">visit the Site Health screen</a> to gather information about your site now."), esc_url(admin_url("site-health.php")))
+        php_printf(__("Site health checks will automatically run periodically to gather information about your site. You can also <a href=\"%s\">visit the Site Health screen</a> to gather information about your site now."), esc_url(admin_url("site-health.php")))
         php_print("     </p>\n  ")
     else:
         php_print("     <p>\n           ")
@@ -1402,7 +1402,7 @@ def wp_dashboard_site_health(*_args_):
     php_print("\n   ")
     if issues_total_ > 0 and False != get_issues_:
         php_print("     <p>\n           ")
-        printf(_n("Take a look at the <strong>%1$d item</strong> on the <a href=\"%2$s\">Site Health screen</a>.", "Take a look at the <strong>%1$d items</strong> on the <a href=\"%2$s\">Site Health screen</a>.", issues_total_), issues_total_, esc_url(admin_url("site-health.php")))
+        php_printf(_n("Take a look at the <strong>%1$d item</strong> on the <a href=\"%2$s\">Site Health screen</a>.", "Take a look at the <strong>%1$d items</strong> on the <a href=\"%2$s\">Site Health screen</a>.", issues_total_), issues_total_, esc_url(admin_url("site-health.php")))
         php_print("     </p>\n  ")
     # end if
     php_print("\n   ")
@@ -1452,7 +1452,7 @@ def wp_welcome_panel(*_args_):
         themes_link_ = add_query_arg("autofocus[panel]", "themes", admin_url("customize.php")) if current_user_can("customize") else admin_url("themes.php")
         php_print("         <p class=\"hide-if-no-customize\">\n                ")
         #// translators: %s: URL to Themes panel in Customizer or Themes screen.
-        printf(__("or, <a href=\"%s\">change your theme completely</a>"), themes_link_)
+        php_printf(__("or, <a href=\"%s\">change your theme completely</a>"), themes_link_)
         php_print("         </p>\n      ")
     # end if
     php_print(" </div>\n    <div class=\"welcome-panel-column\">\n      <h3>")
@@ -1460,29 +1460,29 @@ def wp_welcome_panel(*_args_):
     php_print("</h3>\n      <ul>\n      ")
     if "page" == get_option("show_on_front") and (not get_option("page_for_posts")):
         php_print("         <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-edit-page\">" + __("Edit your front page") + "</a>", get_edit_post_link(get_option("page_on_front")))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-edit-page\">" + __("Edit your front page") + "</a>", get_edit_post_link(get_option("page_on_front")))
         php_print("</li>\n          <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-add-page\">" + __("Add additional pages") + "</a>", admin_url("post-new.php?post_type=page"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-add-page\">" + __("Add additional pages") + "</a>", admin_url("post-new.php?post_type=page"))
         php_print("</li>\n      ")
     elif "page" == get_option("show_on_front"):
         php_print("         <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-edit-page\">" + __("Edit your front page") + "</a>", get_edit_post_link(get_option("page_on_front")))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-edit-page\">" + __("Edit your front page") + "</a>", get_edit_post_link(get_option("page_on_front")))
         php_print("</li>\n          <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-add-page\">" + __("Add additional pages") + "</a>", admin_url("post-new.php?post_type=page"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-add-page\">" + __("Add additional pages") + "</a>", admin_url("post-new.php?post_type=page"))
         php_print("</li>\n          <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-write-blog\">" + __("Add a blog post") + "</a>", admin_url("post-new.php"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-write-blog\">" + __("Add a blog post") + "</a>", admin_url("post-new.php"))
         php_print("</li>\n      ")
     else:
         php_print("         <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-write-blog\">" + __("Write your first blog post") + "</a>", admin_url("post-new.php"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-write-blog\">" + __("Write your first blog post") + "</a>", admin_url("post-new.php"))
         php_print("</li>\n          <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-add-page\">" + __("Add an About page") + "</a>", admin_url("post-new.php?post_type=page"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-add-page\">" + __("Add an About page") + "</a>", admin_url("post-new.php?post_type=page"))
         php_print("</li>\n          <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-setup-home\">" + __("Set up your homepage") + "</a>", add_query_arg("autofocus[section]", "static_front_page", admin_url("customize.php")) if current_user_can("customize") else admin_url("options-reading.php"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-setup-home\">" + __("Set up your homepage") + "</a>", add_query_arg("autofocus[section]", "static_front_page", admin_url("customize.php")) if current_user_can("customize") else admin_url("options-reading.php"))
         php_print("</li>\n      ")
     # end if
     php_print("         <li>")
-    printf("<a href=\"%s\" class=\"welcome-icon welcome-view-site\">" + __("View your site") + "</a>", home_url("/"))
+    php_printf("<a href=\"%s\" class=\"welcome-icon welcome-view-site\">" + __("View your site") + "</a>", home_url("/"))
     php_print("""</li>
     </ul>
     </div>
@@ -1492,23 +1492,23 @@ def wp_welcome_panel(*_args_):
     php_print("</h3>\n      <ul>\n      ")
     if current_theme_supports("widgets"):
         php_print("         <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-widgets\">" + __("Manage widgets") + "</a>", admin_url("widgets.php"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-widgets\">" + __("Manage widgets") + "</a>", admin_url("widgets.php"))
         php_print("</li>\n      ")
     # end if
     php_print("     ")
     if current_theme_supports("menus"):
         php_print("         <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-menus\">" + __("Manage menus") + "</a>", admin_url("nav-menus.php"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-menus\">" + __("Manage menus") + "</a>", admin_url("nav-menus.php"))
         php_print("</li>\n      ")
     # end if
     php_print("     ")
     if current_user_can("manage_options"):
         php_print("         <li>")
-        printf("<a href=\"%s\" class=\"welcome-icon welcome-comments\">" + __("Turn comments on or off") + "</a>", admin_url("options-discussion.php"))
+        php_printf("<a href=\"%s\" class=\"welcome-icon welcome-comments\">" + __("Turn comments on or off") + "</a>", admin_url("options-discussion.php"))
         php_print("</li>\n      ")
     # end if
     php_print("         <li>")
-    printf("<a href=\"%s\" class=\"welcome-icon welcome-learn-more\">" + __("Learn more about getting started") + "</a>", __("https://wordpress.org/support/article/first-steps-with-wordpress-b/"))
+    php_printf("<a href=\"%s\" class=\"welcome-icon welcome-learn-more\">" + __("Learn more about getting started") + "</a>", __("https://wordpress.org/support/article/first-steps-with-wordpress-b/"))
     php_print("""</li>
     </ul>
     </div>

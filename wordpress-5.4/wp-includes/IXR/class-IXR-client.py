@@ -87,7 +87,7 @@ class IXR_Client():
         request_ += xml_
         #// Now send the request
         if self.debug:
-            php_print("<pre class=\"ixr_request\">" + htmlspecialchars(request_) + """
+            php_print("<pre class=\"ixr_request\">" + php_htmlspecialchars(request_) + """
             </pre>
             """)
         # end if
@@ -131,7 +131,7 @@ class IXR_Client():
             # end if
         # end while
         if self.debug:
-            php_print("<pre class=\"ixr_response\">" + htmlspecialchars(debugContents_) + """
+            php_print("<pre class=\"ixr_response\">" + php_htmlspecialchars(debugContents_) + """
             </pre>
             """)
         # end if

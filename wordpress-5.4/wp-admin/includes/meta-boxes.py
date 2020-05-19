@@ -307,7 +307,7 @@ def post_submit_meta_box(post_=None, args_=None, *_args_):
     if (not php_empty(lambda : args_["args"]["revisions_count"])):
         php_print("<div class=\"misc-pub-section misc-pub-revisions\">\n        ")
         #// translators: Post revisions heading. %s: The number of available revisions.
-        printf(__("Revisions: %s"), "<b>" + number_format_i18n(args_["args"]["revisions_count"]) + "</b>")
+        php_printf(__("Revisions: %s"), "<b>" + number_format_i18n(args_["args"]["revisions_count"]) + "</b>")
         php_print(" <a class=\"hide-if-no-js\" href=\"")
         php_print(esc_url(get_edit_post_link(args_["args"]["revision_id"])))
         php_print("\"><span aria-hidden=\"true\">")
@@ -319,7 +319,7 @@ def post_submit_meta_box(post_=None, args_=None, *_args_):
     if can_publish_:
         pass
         php_print("<div class=\"misc-pub-section curtime misc-pub-curtime\">\n  <span id=\"timestamp\">\n       ")
-        printf(stamp_, "<b>" + date_ + "</b>")
+        php_printf(stamp_, "<b>" + date_ + "</b>")
         php_print(" </span>\n   <a href=\"#edit_timestamp\" class=\"edit-timestamp hide-if-no-js\" role=\"button\">\n       <span aria-hidden=\"true\">")
         _e("Edit")
         php_print("</span>\n        <span class=\"screen-reader-text\">")
@@ -440,7 +440,7 @@ def attachment_submit_meta_box(post_=None, *_args_):
     """)
     uploaded_on_ = php_sprintf(__("%1$s at %2$s"), date_i18n(_x("M j, Y", "publish box date format"), strtotime(post_.post_date)), date_i18n(_x("H:i", "publish box time format"), strtotime(post_.post_date)))
     #// translators: Attachment information. %s: Date the attachment was uploaded.
-    printf(__("Uploaded on: %s"), "<b>" + uploaded_on_ + "</b>")
+    php_printf(__("Uploaded on: %s"), "<b>" + uploaded_on_ + "</b>")
     php_print("""       </span>
     </div><!-- .misc-pub-section -->
     """)
@@ -712,7 +712,7 @@ def post_categories_meta_box(post_=None, box_=None, *_args_):
         php_print(tax_name_)
         php_print("-add\" class=\"hide-if-no-js taxonomy-add-new\">\n                   ")
         #// translators: %s: Add New taxonomy label.
-        printf(__("+ %s"), taxonomy_.labels.add_new_item)
+        php_printf(__("+ %s"), taxonomy_.labels.add_new_item)
         php_print("             </a>\n              <p id=\"")
         php_print(tax_name_)
         php_print("-add\" class=\"category-add wp-hidden-child\">\n                 <label class=\"screen-reader-text\" for=\"new")
@@ -792,7 +792,7 @@ def post_excerpt_meta_box(post_=None, *_args_):
     php_print(post_.post_excerpt)
     pass
     php_print("</textarea>\n<p>\n   ")
-    printf(__("Excerpts are optional hand-crafted summaries of your content that can be used in your theme. <a href=\"%s\">Learn more about manual excerpts</a>."), __("https://wordpress.org/support/article/excerpt/"))
+    php_printf(__("Excerpts are optional hand-crafted summaries of your content that can be used in your theme. <a href=\"%s\">Learn more about manual excerpts</a>."), __("https://wordpress.org/support/article/excerpt/"))
     php_print("</p>\n   ")
 # end def post_excerpt_meta_box
 #// 
@@ -821,7 +821,7 @@ def post_trackback_meta_box(post_=None, *_args_):
     php_print("</p>\n<p id=\"trackback-url-desc\" class=\"howto\">")
     _e("Separate multiple URLs with spaces")
     php_print("</p>\n<p>\n  ")
-    printf(__("Trackbacks are a way to notify legacy blog systems that you&#8217;ve linked to them. If you link other WordPress sites, they&#8217;ll be notified automatically using <a href=\"%s\">pingbacks</a>, no other action necessary."), __("https://wordpress.org/support/article/introduction-to-blogging/#comments"))
+    php_printf(__("Trackbacks are a way to notify legacy blog systems that you&#8217;ve linked to them. If you link other WordPress sites, they&#8217;ll be notified automatically using <a href=\"%s\">pingbacks</a>, no other action necessary."), __("https://wordpress.org/support/article/introduction-to-blogging/#comments"))
     php_print("</p>\n   ")
     if (not php_empty(lambda : pings_)):
         php_print(pings_)
@@ -847,7 +847,7 @@ def post_custom_meta_box(post_=None, *_args_):
     list_meta(metadata_)
     meta_form(post_)
     php_print("</div>\n<p>\n    ")
-    printf(__("Custom fields can be used to add extra metadata to a post that you can <a href=\"%s\">use in your theme</a>."), __("https://wordpress.org/support/article/custom-fields/"))
+    php_printf(__("Custom fields can be used to add extra metadata to a post that you can <a href=\"%s\">use in your theme</a>."), __("https://wordpress.org/support/article/custom-fields/"))
     php_print("</p>\n   ")
 # end def post_custom_meta_box
 #// 
@@ -867,7 +867,7 @@ def post_comment_status_meta_box(post_=None, *_args_):
     php_print("</label><br />\n <label for=\"ping_status\" class=\"selectit\"><input name=\"ping_status\" type=\"checkbox\" id=\"ping_status\" value=\"open\" ")
     checked(post_.ping_status, "open")
     php_print(" />\n        ")
-    printf(__("Allow <a href=\"%s\">trackbacks and pingbacks</a> on this page"), __("https://wordpress.org/support/article/introduction-to-blogging/#managing-comments"))
+    php_printf(__("Allow <a href=\"%s\">trackbacks and pingbacks</a> on this page"), __("https://wordpress.org/support/article/introduction-to-blogging/#managing-comments"))
     php_print(" </label>\n  ")
     #// 
     #// Fires at the end of the Discussion meta box on the post editing screen.
@@ -1121,7 +1121,7 @@ def link_submit_meta_box(link_=None, *_args_):
     do_action("post_submitbox_start", None)
     php_print("<div id=\"delete-action\">\n ")
     if (not php_empty(lambda : PHP_REQUEST["action"])) and "edit" == PHP_REQUEST["action"] and current_user_can("manage_links"):
-        printf("<a class=\"submitdelete deletion\" href=\"%s\" onclick=\"return confirm( '%s' );\">%s</a>", wp_nonce_url(str("link.php?action=delete&amp;link_id=") + str(link_.link_id), "delete-bookmark_" + link_.link_id), esc_js(php_sprintf(__("You are about to delete this link '%s'\n  'Cancel' to stop, 'OK' to delete."), link_.link_name)), __("Delete"))
+        php_printf("<a class=\"submitdelete deletion\" href=\"%s\" onclick=\"return confirm( '%s' );\">%s</a>", wp_nonce_url(str("link.php?action=delete&amp;link_id=") + str(link_.link_id), "delete-bookmark_" + link_.link_id), esc_js(php_sprintf(__("You are about to delete this link '%s'\n  'Cancel' to stop, 'OK' to delete."), link_.link_name)), __("Delete"))
     # end if
     php_print("""</div>
     <div id=\"publishing-action\">
@@ -1241,7 +1241,7 @@ def xfn_check(class_=None, value_="", deprecated_="", *_args_):
     global link_
     php_check_if_defined("link_")
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.5.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.5.0")
         pass
     # end if
     link_rel_ = link_.link_rel if (php_isset(lambda : link_.link_rel)) else ""

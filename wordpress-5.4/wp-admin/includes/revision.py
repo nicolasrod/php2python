@@ -320,17 +320,17 @@ if ( 'undefined' !== typeof data && data.model.attributes.compareTwoMode ) {
     <# if ( data.attributes.autosave ) { #>
     <span class=\"byline\">
     """)
-    printf(__("Autosave by %s"), "<span class=\"author-name\">{{ data.attributes.author.name }}</span>")
+    php_printf(__("Autosave by %s"), "<span class=\"author-name\">{{ data.attributes.author.name }}</span>")
     php_print("""                           </span>
     <# } else if ( data.attributes.current ) { #>
     <span class=\"byline\">
     """)
-    printf(__("Current Revision by %s"), "<span class=\"author-name\">{{ data.attributes.author.name }}</span>")
+    php_printf(__("Current Revision by %s"), "<span class=\"author-name\">{{ data.attributes.author.name }}</span>")
     php_print("""                           </span>
     <# } else { #>
     <span class=\"byline\">
     """)
-    printf(__("Revision by %s"), "<span class=\"author-name\">{{ data.attributes.author.name }}</span>")
+    php_printf(__("Revision by %s"), "<span class=\"author-name\">{{ data.attributes.author.name }}</span>")
     php_print("""                           </span>
     <# } #>
     <span class=\"time-ago\">{{ data.attributes.timeAgo }}</span>

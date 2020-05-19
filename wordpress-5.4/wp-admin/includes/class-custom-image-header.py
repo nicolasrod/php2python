@@ -423,14 +423,14 @@ class Custom_Image_Header():
         php_print("</h1>\n\n        ")
         if current_user_can("customize"):
             php_print("<div class=\"notice notice-info hide-if-no-customize\">\n    <p>\n           ")
-            printf(__("You can now manage and live-preview Custom Header in the <a href=\"%s\">Customizer</a>."), admin_url("customize.php?autofocus[control]=header_image"))
+            php_printf(__("You can now manage and live-preview Custom Header in the <a href=\"%s\">Customizer</a>."), admin_url("customize.php?autofocus[control]=header_image"))
             php_print(" </p>\n</div>\n      ")
         # end if
         php_print("\n       ")
         if (not php_empty(lambda : self.updated)):
             php_print("<div id=\"message\" class=\"updated\">\n <p>\n           ")
             #// translators: %s: Home URL.
-            printf(__("Header updated. <a href=\"%s\">Visit your site</a> to see how it looks."), home_url("/"))
+            php_printf(__("Header updated. <a href=\"%s\">Visit your site</a> to see how it looks."), home_url("/"))
             php_print(" </p>\n</div>\n      ")
         # end if
         php_print("\n<h2>")
@@ -490,22 +490,22 @@ class Custom_Image_Header():
             php_print("<br />\n         ")
             if (not current_theme_supports("custom-header", "flex-height")) and (not current_theme_supports("custom-header", "flex-width")):
                 #// translators: 1: Image width in pixels, 2: Image height in pixels.
-                printf(__("Images of exactly <strong>%1$d &times; %2$d pixels</strong> will be used as-is.") + "<br />", get_theme_support("custom-header", "width"), get_theme_support("custom-header", "height"))
+                php_printf(__("Images of exactly <strong>%1$d &times; %2$d pixels</strong> will be used as-is.") + "<br />", get_theme_support("custom-header", "width"), get_theme_support("custom-header", "height"))
             elif current_theme_supports("custom-header", "flex-height"):
                 if (not current_theme_supports("custom-header", "flex-width")):
-                    printf(__("Images should be at least %s wide.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "width")))
+                    php_printf(__("Images should be at least %s wide.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "width")))
                 # end if
             elif current_theme_supports("custom-header", "flex-width"):
                 if (not current_theme_supports("custom-header", "flex-height")):
-                    printf(__("Images should be at least %s tall.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "height")))
+                    php_printf(__("Images should be at least %s tall.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "height")))
                 # end if
             # end if
             if current_theme_supports("custom-header", "flex-height") or current_theme_supports("custom-header", "flex-width"):
                 if current_theme_supports("custom-header", "width"):
-                    printf(__("Suggested width is %s.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "width")))
+                    php_printf(__("Suggested width is %s.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "width")))
                 # end if
                 if current_theme_supports("custom-header", "height"):
-                    printf(__("Suggested height is %s.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "height")))
+                    php_printf(__("Suggested height is %s.") + " ", php_sprintf("<strong>" + __("%d pixels") + "</strong>", get_theme_support("custom-header", "height")))
                 # end if
             # end if
             php_print(" </p>\n  <form enctype=\"multipart/form-data\" id=\"upload-form\" class=\"wp-upload-form\" method=\"post\" action=\"")

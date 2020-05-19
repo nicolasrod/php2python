@@ -199,7 +199,7 @@ class IXR_Server():
         
         #// Returns a list of methods - uses array_reverse to ensure user defined
         #// methods are listed before server defined methods
-        return array_reverse(php_array_keys(self.callbacks))
+        return php_array_reverse(php_array_keys(self.callbacks))
     # end def listmethods
     def multicall(self, methodcalls_=None):
         

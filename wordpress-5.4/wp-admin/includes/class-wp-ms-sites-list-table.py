@@ -307,7 +307,7 @@ class WP_MS_Sites_List_Table(WP_List_Table):
             php_print(blog_["blog_id"])
             php_print("\">\n                ")
             #// translators: %s: Site URL.
-            printf(__("Select %s"), blogname_)
+            php_printf(__("Select %s"), blogname_)
             php_print("         </label>\n          <input type=\"checkbox\" id=\"blog_")
             php_print(blog_["blog_id"])
             php_print("\" name=\"allblogs[]\" value=\"")
@@ -352,7 +352,7 @@ class WP_MS_Sites_List_Table(WP_List_Table):
         if "list" != mode_:
             switch_to_blog(blog_["blog_id"])
             php_print("<p>")
-            printf(__("%1$s &#8211; %2$s"), get_option("blogname"), "<em>" + get_option("blogdescription") + "</em>")
+            php_printf(__("%1$s &#8211; %2$s"), get_option("blogname"), "<em>" + get_option("blogdescription") + "</em>")
             php_print("</p>")
             restore_current_blog()
         # end if
@@ -419,7 +419,7 @@ class WP_MS_Sites_List_Table(WP_List_Table):
             user_count_ = blog_users_.get_total()
             wp_cache_set(blog_["blog_id"] + "_user_count", user_count_, "blog-details", 12 * HOUR_IN_SECONDS)
         # end if
-        printf("<a href=\"%s\">%s</a>", esc_url(network_admin_url("site-users.php?id=" + blog_["blog_id"])), number_format_i18n(user_count_))
+        php_printf("<a href=\"%s\">%s</a>", esc_url(network_admin_url("site-users.php?id=" + blog_["blog_id"])), number_format_i18n(user_count_))
     # end def column_users
     #// 
     #// Handles the plugins column output.

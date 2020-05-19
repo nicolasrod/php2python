@@ -519,23 +519,23 @@ class WP_Plugin_Install_List_Table(WP_List_Table):
                 if (not compatible_php_) and (not compatible_wp_):
                     _e("This plugin doesn&#8217;t work with your versions of WordPress and PHP.")
                     if current_user_can("update_core") and current_user_can("update_php"):
-                        printf(" " + __("<a href=\"%1$s\">Please update WordPress</a>, and then <a href=\"%2$s\">learn more about updating PHP</a>."), self_admin_url("update-core.php"), esc_url(wp_get_update_php_url()))
+                        php_printf(" " + __("<a href=\"%1$s\">Please update WordPress</a>, and then <a href=\"%2$s\">learn more about updating PHP</a>."), self_admin_url("update-core.php"), esc_url(wp_get_update_php_url()))
                         wp_update_php_annotation("</p><p><em>", "</em>")
                     elif current_user_can("update_core"):
-                        printf(" " + __("<a href=\"%s\">Please update WordPress</a>."), self_admin_url("update-core.php"))
+                        php_printf(" " + __("<a href=\"%s\">Please update WordPress</a>."), self_admin_url("update-core.php"))
                     elif current_user_can("update_php"):
-                        printf(" " + __("<a href=\"%s\">Learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
+                        php_printf(" " + __("<a href=\"%s\">Learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
                         wp_update_php_annotation("</p><p><em>", "</em>")
                     # end if
                 elif (not compatible_wp_):
                     _e("This plugin doesn&#8217;t work with your version of WordPress.")
                     if current_user_can("update_core"):
-                        printf(" " + __("<a href=\"%s\">Please update WordPress</a>."), self_admin_url("update-core.php"))
+                        php_printf(" " + __("<a href=\"%s\">Please update WordPress</a>."), self_admin_url("update-core.php"))
                     # end if
                 elif (not compatible_php_):
                     _e("This plugin doesn&#8217;t work with your version of PHP.")
                     if current_user_can("update_php"):
-                        printf(" " + __("<a href=\"%s\">Learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
+                        php_printf(" " + __("<a href=\"%s\">Learn more about updating PHP</a>."), esc_url(wp_get_update_php_url()))
                         wp_update_php_annotation("</p><p><em>", "</em>")
                     # end if
                 # end if
@@ -579,7 +579,7 @@ class WP_Plugin_Install_List_Table(WP_List_Table):
             _e("Last Updated:")
             php_print("</strong>\n                  ")
             #// translators: %s: Human-readable time difference.
-            printf(__("%s ago"), human_time_diff(last_updated_timestamp_))
+            php_printf(__("%s ago"), human_time_diff(last_updated_timestamp_))
             php_print("             </div>\n                <div class=\"column-downloaded\">\n                 ")
             if plugin_["active_installs"] >= 1000000:
                 active_installs_millions_ = floor(plugin_["active_installs"] / 1000000)
@@ -590,7 +590,7 @@ class WP_Plugin_Install_List_Table(WP_List_Table):
                 active_installs_text_ = number_format_i18n(plugin_["active_installs"]) + "+"
             # end if
             #// translators: %s: Number of installations.
-            printf(__("%s Active Installations"), active_installs_text_)
+            php_printf(__("%s Active Installations"), active_installs_text_)
             php_print("             </div>\n                <div class=\"column-compatibility\">\n                  ")
             if (not tested_wp_):
                 php_print("<span class=\"compatibility-untested\">" + __("Untested with your version of WordPress") + "</span>")

@@ -64,7 +64,7 @@ def hello_dolly(*_args_):
     if "en_" != php_substr(get_user_locale(), 0, 3):
         lang_ = " lang=\"en\""
     # end if
-    printf("<p id=\"dolly\"><span class=\"screen-reader-text\">%s </span><span dir=\"ltr\"%s>%s</span></p>", __("Quote from Hello Dolly song, by Jerry Herman:"), lang_, chosen_)
+    php_printf("<p id=\"dolly\"><span class=\"screen-reader-text\">%s </span><span dir=\"ltr\"%s>%s</span></p>", __("Quote from Hello Dolly song, by Jerry Herman:"), lang_, chosen_)
 # end def hello_dolly
 #// Now we set that function up to execute when the admin_notices action is called.
 add_action("admin_notices", "hello_dolly")

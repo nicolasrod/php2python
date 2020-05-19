@@ -85,10 +85,10 @@ class WP_Customize_Nav_Menu_Item_Control(WP_Customize_Control):
         <button type=\"button\" class=\"button-link item-edit\" aria-expanded=\"false\"><span class=\"screen-reader-text\">
         """)
         #// translators: 1: Title of a menu item, 2: Type of a menu item.
-        printf(__("Edit menu item: %1$s (%2$s)"), "{{ data.title || wp.customize.Menus.data.l10n.untitled }}", "{{ data.item_type_label }}")
+        php_printf(__("Edit menu item: %1$s (%2$s)"), "{{ data.title || wp.customize.Menus.data.l10n.untitled }}", "{{ data.item_type_label }}")
         php_print("                 </span><span class=\"toggle-indicator\" aria-hidden=\"true\"></span></button>\n                 <button type=\"button\" class=\"button-link item-delete submitdelete deletion\"><span class=\"screen-reader-text\">\n                   ")
         #// translators: 1: Title of a menu item, 2: Type of a menu item.
-        printf(__("Remove Menu Item: %1$s (%2$s)"), "{{ data.title || wp.customize.Menus.data.l10n.untitled }}", "{{ data.item_type_label }}")
+        php_printf(__("Remove Menu Item: %1$s (%2$s)"), "{{ data.title || wp.customize.Menus.data.l10n.untitled }}", "{{ data.item_type_label }}")
         php_print("""                   </span></button>
         </span>
         </div>
@@ -167,7 +167,7 @@ class WP_Customize_Nav_Menu_Item_Control(WP_Customize_Control):
         <p class=\"link-to-original\">
         """)
         #// translators: Nav menu item original title. %s: Original title.
-        printf(__("Original: %s"), "<a class=\"original-link\" href=\"{{ data.url }}\">{{ data.original_title }}</a>")
+        php_printf(__("Original: %s"), "<a class=\"original-link\" href=\"{{ data.url }}\">{{ data.original_title }}</a>")
         php_print("""               </p>
         <# } #>
         <button type=\"button\" class=\"button-link button-link-delete item-delete submitdelete deletion\">""")

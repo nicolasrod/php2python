@@ -452,7 +452,7 @@ php_print(esc_html(__("Menus")))
 php_print("</h1>\n  ")
 if current_user_can("customize"):
     focus_ = Array({"section": "menu_locations"}) if locations_screen_ else Array({"panel": "nav_menus"})
-    printf(" <a class=\"page-title-action hide-if-no-customize\" href=\"%1$s\">%2$s</a>", esc_url(add_query_arg(Array(Array({"autofocus": focus_}), {"return": urlencode(remove_query_arg(wp_removable_query_args(), wp_unslash(PHP_SERVER["REQUEST_URI"])))}), admin_url("customize.php"))), __("Manage with Live Preview"))
+    php_printf(" <a class=\"page-title-action hide-if-no-customize\" href=\"%1$s\">%2$s</a>", esc_url(add_query_arg(Array(Array({"autofocus": focus_}), {"return": urlencode(remove_query_arg(wp_removable_query_args(), wp_unslash(PHP_SERVER["REQUEST_URI"])))}), admin_url("customize.php"))), __("Manage with Live Preview"))
 # end if
 nav_tab_active_class_ = ""
 nav_aria_current_ = ""
@@ -526,7 +526,7 @@ if locations_screen_:
         php_print("]\" id=\"locations-")
         php_print(_location_)
         php_print("\">\n                                <option value=\"0\">")
-        printf("&mdash; %s &mdash;", esc_html__("Select a Menu"))
+        php_printf("&mdash; %s &mdash;", esc_html__("Select a Menu"))
         php_print("</option>\n                              ")
         for menu_ in nav_menus_:
             data_orig_ = ""
@@ -596,7 +596,7 @@ else:
         php_print("</span>\n        </span><!-- /first-menu-message -->\n       ")
     elif menu_count_ < 2:
         php_print("     <span class=\"add-edit-menu-action\">\n         ")
-        printf(__("Edit your menu below, or <a href=\"%s\">create a new menu</a>. Don&#8217;t forget to save your changes!"), esc_url(add_query_arg(Array({"action": "edit", "menu": 0}), admin_url("nav-menus.php"))))
+        php_printf(__("Edit your menu below, or <a href=\"%s\">create a new menu</a>. Don&#8217;t forget to save your changes!"), esc_url(add_query_arg(Array({"action": "edit", "menu": 0}), admin_url("nav-menus.php"))))
         php_print("         <span class=\"screen-reader-text\">")
         _e("Click the Save Menu button to save your changes.")
         php_print("</span>\n        </span><!-- /add-edit-menu-action -->\n     ")
@@ -636,7 +636,7 @@ else:
                 assigned_locations_ = php_array_slice(locations_assigned_to_this_menu_, 0, absint(apply_filters("wp_nav_locations_listed_per_menu", 3)))
                 #// Adds ellipses following the number of locations defined in $assigned_locations.
                 if (not php_empty(lambda : assigned_locations_)):
-                    printf(" (%1$s%2$s)", php_implode(", ", assigned_locations_), " &hellip;" if php_count(locations_assigned_to_this_menu_) > php_count(assigned_locations_) else "")
+                    php_printf(" (%1$s%2$s)", php_implode(", ", assigned_locations_), " &hellip;" if php_count(locations_assigned_to_this_menu_) > php_count(assigned_locations_) else "")
                 # end if
             # end if
             php_print("                 </option>\n             ")
@@ -644,7 +644,7 @@ else:
         php_print("         </select>\n         <span class=\"submit-btn\"><input type=\"submit\" class=\"button\" value=\"")
         esc_attr_e("Select")
         php_print("\"></span>\n         <span class=\"add-new-menu-action\">\n              ")
-        printf(__("or <a href=\"%s\">create a new menu</a>. Don&#8217;t forget to save your changes!"), esc_url(add_query_arg(Array({"action": "edit", "menu": 0}), admin_url("nav-menus.php"))))
+        php_printf(__("or <a href=\"%s\">create a new menu</a>. Don&#8217;t forget to save your changes!"), esc_url(add_query_arg(Array({"action": "edit", "menu": 0}), admin_url("nav-menus.php"))))
         php_print("             <span class=\"screen-reader-text\">")
         _e("Click the Save Menu button to save your changes.")
         php_print("""</span>
@@ -770,7 +770,7 @@ else:
     php_print("</legend>\n                                  <div class=\"menu-settings-input checkbox-input\">\n                                        <input type=\"checkbox\"")
     checked(auto_add_)
     php_print(" name=\"auto-add-pages\" id=\"auto-add-pages\" value=\"1\" /> <label for=\"auto-add-pages\">")
-    printf(__("Automatically add new top-level pages to this menu"), esc_url(admin_url("edit.php?post_type=page")))
+    php_printf(__("Automatically add new top-level pages to this menu"), esc_url(admin_url("edit.php?post_type=page")))
     php_print("""</label>
     </div>
     </fieldset>
@@ -795,7 +795,7 @@ else:
             php_print("</label>\n                                           ")
             if (not php_empty(lambda : menu_locations_[location_])) and menu_locations_[location_] != nav_menu_selected_id_:
                 php_print("                                             <span class=\"theme-location-set\">\n                                               ")
-                printf(_x("(Currently set to: %s)", "menu location"), wp_get_nav_menu_object(menu_locations_[location_]).name)
+                php_printf(_x("(Currently set to: %s)", "menu location"), wp_get_nav_menu_object(menu_locations_[location_]).name)
                 php_print("                                             </span>\n                                           ")
             # end if
             php_print("                                     </div>\n                                        ")

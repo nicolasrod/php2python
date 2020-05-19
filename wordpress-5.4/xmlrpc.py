@@ -99,7 +99,7 @@ def logIO(io_=None, msg_=None, *_args_):
     
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    _deprecated_function(__FUNCTION__, "3.4.0", "error_log()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "error_log()")
     if (not php_empty(lambda : PHP_GLOBALS["xmlrpc_logging"])):
         php_error_log(io_ + " - " + msg_)
     # end if

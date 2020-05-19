@@ -248,7 +248,7 @@ class WP_User_Query():
                 post_type_ = wpdb_.prepare("%s", post_type_)
             # end for
             posts_table_ = wpdb_.get_blog_prefix(blog_id_) + "posts"
-            self.query_where += str(" AND ") + str(wpdb_.users) + str(".ID IN ( SELECT DISTINCT ") + str(posts_table_) + str(".post_author FROM ") + str(posts_table_) + str(" WHERE ") + str(posts_table_) + str(".post_status = 'publish' AND ") + str(posts_table_) + str(".post_type IN ( ") + join(", ", post_types_) + " ) )"
+            self.query_where += str(" AND ") + str(wpdb_.users) + str(".ID IN ( SELECT DISTINCT ") + str(posts_table_) + str(".post_author FROM ") + str(posts_table_) + str(" WHERE ") + str(posts_table_) + str(".post_status = 'publish' AND ") + str(posts_table_) + str(".post_type IN ( ") + php_join(", ", post_types_) + " ) )"
         # end if
         #// nicename
         if "" != qv_["nicename"]:

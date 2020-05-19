@@ -181,7 +181,7 @@ for case in Switch(action_):
             parent_ = get_comment(comment_.comment_parent)
             parent_link_ = esc_url(get_comment_link(parent_))
             name_ = get_comment_author(parent_)
-            printf(" | " + __("In reply to %s."), "<a href=\"" + parent_link_ + "\">" + name_ + "</a>")
+            php_printf(" | " + __("In reply to %s."), "<a href=\"" + parent_link_ + "\">" + name_ + "</a>")
         # end if
         php_print("""   </td>
         </tr>

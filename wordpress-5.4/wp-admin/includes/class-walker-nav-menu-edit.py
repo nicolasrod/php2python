@@ -132,16 +132,16 @@ class Walker_Nav_Menu_Edit(Walker_Nav_Menu):
         php_print("</span></span>\n                 <span class=\"item-controls\">\n                        <span class=\"item-type\">")
         php_print(esc_html(item_.type_label))
         php_print("</span>\n                        <span class=\"item-order hide-if-js\">\n                            ")
-        printf("<a href=\"%s\" class=\"item-move-up\" aria-label=\"%s\">&#8593;</a>", wp_nonce_url(add_query_arg(Array({"action": "move-up-menu-item", "menu-item": item_id_}), remove_query_arg(removed_args_, admin_url("nav-menus.php"))), "move-menu_item"), esc_attr__("Move up"))
+        php_printf("<a href=\"%s\" class=\"item-move-up\" aria-label=\"%s\">&#8593;</a>", wp_nonce_url(add_query_arg(Array({"action": "move-up-menu-item", "menu-item": item_id_}), remove_query_arg(removed_args_, admin_url("nav-menus.php"))), "move-menu_item"), esc_attr__("Move up"))
         php_print("                         |\n                         ")
-        printf("<a href=\"%s\" class=\"item-move-down\" aria-label=\"%s\">&#8595;</a>", wp_nonce_url(add_query_arg(Array({"action": "move-down-menu-item", "menu-item": item_id_}), remove_query_arg(removed_args_, admin_url("nav-menus.php"))), "move-menu_item"), esc_attr__("Move down"))
+        php_printf("<a href=\"%s\" class=\"item-move-down\" aria-label=\"%s\">&#8595;</a>", wp_nonce_url(add_query_arg(Array({"action": "move-down-menu-item", "menu-item": item_id_}), remove_query_arg(removed_args_, admin_url("nav-menus.php"))), "move-menu_item"), esc_attr__("Move down"))
         php_print("                     </span>\n                       ")
         if (php_isset(lambda : PHP_REQUEST["edit-menu-item"])) and item_id_ == PHP_REQUEST["edit-menu-item"]:
             edit_url_ = admin_url("nav-menus.php")
         else:
             edit_url_ = add_query_arg(Array({"edit-menu-item": item_id_}), remove_query_arg(removed_args_, admin_url("nav-menus.php#menu-item-settings-" + item_id_)))
         # end if
-        printf("<a class=\"item-edit\" id=\"edit-%s\" href=\"%s\" aria-label=\"%s\"><span class=\"screen-reader-text\">%s</span></a>", item_id_, edit_url_, esc_attr__("Edit menu item"), __("Edit"))
+        php_printf("<a class=\"item-edit\" id=\"edit-%s\" href=\"%s\" aria-label=\"%s\"><span class=\"screen-reader-text\">%s</span></a>", item_id_, edit_url_, esc_attr__("Edit menu item"), __("Edit"))
         php_print("""                   </span>
         </div>
         </div>
@@ -280,13 +280,13 @@ class Walker_Nav_Menu_Edit(Walker_Nav_Menu):
         if "custom" != item_.type and False != original_title_:
             php_print("                     <p class=\"link-to-original\">\n                            ")
             #// translators: %s: Link to menu item's original object.
-            printf(__("Original: %s"), "<a href=\"" + esc_attr(item_.url) + "\">" + esc_html(original_title_) + "</a>")
+            php_printf(__("Original: %s"), "<a href=\"" + esc_attr(item_.url) + "\">" + esc_html(original_title_) + "</a>")
             php_print("                     </p>\n                  ")
         # end if
         php_print("\n                   ")
-        printf("<a class=\"item-delete submitdelete deletion\" id=\"delete-%s\" href=\"%s\">%s</a>", item_id_, wp_nonce_url(add_query_arg(Array({"action": "delete-menu-item", "menu-item": item_id_}), admin_url("nav-menus.php")), "delete-menu_item_" + item_id_), __("Remove"))
+        php_printf("<a class=\"item-delete submitdelete deletion\" id=\"delete-%s\" href=\"%s\">%s</a>", item_id_, wp_nonce_url(add_query_arg(Array({"action": "delete-menu-item", "menu-item": item_id_}), admin_url("nav-menus.php")), "delete-menu_item_" + item_id_), __("Remove"))
         php_print("                 <span class=\"meta-sep hide-if-no-js\"> | </span>\n                 ")
-        printf("<a class=\"item-cancel submitcancel hide-if-no-js\" id=\"cancel-%s\" href=\"%s#menu-item-settings-%s\">%s</a>", item_id_, esc_url(add_query_arg(Array({"edit-menu-item": item_id_, "cancel": time()}), admin_url("nav-menus.php"))), item_id_, __("Cancel"))
+        php_printf("<a class=\"item-cancel submitcancel hide-if-no-js\" id=\"cancel-%s\" href=\"%s#menu-item-settings-%s\">%s</a>", item_id_, esc_url(add_query_arg(Array({"edit-menu-item": item_id_, "cancel": time()}), admin_url("nav-menus.php"))), item_id_, __("Cancel"))
         php_print("             </div>\n\n              <input class=\"menu-item-data-db-id\" type=\"hidden\" name=\"menu-item-db-id[")
         php_print(item_id_)
         php_print("]\" value=\"")

@@ -19,7 +19,7 @@ if php_bool(get_the_author_meta("description")):
     <h2 class=\"author-title\">
     <span class=\"author-heading\">
     """)
-    printf(__("Published by %s", "twentynineteen"), esc_html(get_the_author()))
+    php_printf(__("Published by %s", "twentynineteen"), esc_html(get_the_author()))
     php_print("""       </span>
     </h2>
     <p class=\"author-description\">

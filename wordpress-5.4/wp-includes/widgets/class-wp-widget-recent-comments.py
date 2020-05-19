@@ -57,7 +57,7 @@ class WP_Widget_Recent_Comments(WP_Widget):
             return
         # end if
         type_attr_ = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
-        printf("<style%s>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>", type_attr_)
+        php_printf("<style%s>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>", type_attr_)
     # end def recent_comments_style
     #// 
     #// Outputs the content for the current Recent Comments widget instance.
@@ -171,6 +171,6 @@ class WP_Widget_Recent_Comments(WP_Widget):
     def flush_widget_cache(self):
         
         
-        _deprecated_function(__METHOD__, "4.4.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0")
     # end def flush_widget_cache
 # end class WP_Widget_Recent_Comments

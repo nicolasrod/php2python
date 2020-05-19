@@ -32,7 +32,7 @@ if '__PHP2PY_LOADED__' not in globals():
 def get_dashboard_blog(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0", "get_site()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "get_site()")
     blog_ = get_site_option("dashboard_blog")
     if blog_:
         return get_site(blog_)
@@ -51,7 +51,7 @@ def get_dashboard_blog(*_args_):
 def generate_random_password(len_=8, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "wp_generate_password()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "wp_generate_password()")
     return wp_generate_password(len_)
 # end def generate_random_password
 #// 
@@ -72,7 +72,7 @@ def generate_random_password(len_=8, *_args_):
 def is_site_admin(user_login_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "is_super_admin()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "is_super_admin()")
     if php_empty(lambda : user_login_):
         user_id_ = get_current_user_id()
         if (not user_id_):
@@ -98,7 +98,7 @@ if (not php_function_exists("graceful_fail")):
     def graceful_fail(message_=None, *_args_):
         
         
-        _deprecated_function(__FUNCTION__, "3.0.0", "wp_die()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "wp_die()")
         message_ = apply_filters("graceful_fail", message_)
         message_template_ = apply_filters("graceful_fail_template", """<!DOCTYPE html>
         <html xmlns=\"http://www.w3.org/1999/xhtml\"><head>
@@ -139,7 +139,7 @@ if (not php_function_exists("graceful_fail")):
 def get_user_details(username_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "get_user_by()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "get_user_by()")
     return get_user_by("login", username_)
 # end def get_user_details
 #// 
@@ -154,7 +154,7 @@ def get_user_details(username_=None, *_args_):
 def clear_global_post_cache(post_id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "clean_post_cache()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "clean_post_cache()")
 # end def clear_global_post_cache
 #// 
 #// Deprecated functionality to determin if the current site is the main site.
@@ -166,7 +166,7 @@ def clear_global_post_cache(post_id_=None, *_args_):
 def is_main_blog(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "is_main_site()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "is_main_site()")
     return is_main_site()
 # end def is_main_blog
 #// 
@@ -185,7 +185,7 @@ def validate_email(email_=None, check_domain_=None, *_args_):
         check_domain_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "is_email()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "is_email()")
     return is_email(email_, check_domain_)
 # end def validate_email
 #// 
@@ -202,7 +202,7 @@ def validate_email(email_=None, check_domain_=None, *_args_):
 def get_blog_list(start_=0, num_=10, deprecated_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "wp_get_sites()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "wp_get_sites()")
     global wpdb_
     php_check_if_defined("wpdb_")
     blogs_ = wpdb_.get_results(wpdb_.prepare(str("SELECT blog_id, domain, path FROM ") + str(wpdb_.blogs) + str(" WHERE site_id = %d AND public = '1' AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY registered DESC"), get_current_network_id()), ARRAY_A)
@@ -235,7 +235,7 @@ def get_most_active_blogs(num_=10, display_=None, *_args_):
         display_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.0.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0")
     blogs_ = get_blog_list(0, "all", False)
     #// $blog_id -> $details
     if php_is_array(blogs_):
@@ -287,7 +287,7 @@ def get_most_active_blogs(num_=10, display_=None, *_args_):
 def wpmu_admin_do_redirect(url_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_redirect()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_redirect()")
     ref_ = ""
     if (php_isset(lambda : PHP_REQUEST["ref"])) and (php_isset(lambda : PHP_POST["ref"])) and PHP_REQUEST["ref"] != PHP_POST["ref"]:
         wp_die(__("A variable mismatch has been detected."), __("Sorry, you are not allowed to view this item."), 400)
@@ -331,7 +331,7 @@ def wpmu_admin_do_redirect(url_="", *_args_):
 def wpmu_admin_redirect_add_updated_param(url_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "add_query_arg()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "add_query_arg()")
     if php_strpos(url_, "updated=true") == False:
         if php_strpos(url_, "?") == False:
             return url_ + "?updated=true"
@@ -357,7 +357,7 @@ def wpmu_admin_redirect_add_updated_param(url_="", *_args_):
 def get_user_id_from_string(string_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.6.0", "get_user_by()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.6.0", "get_user_by()")
     if is_email(string_):
         user_ = get_user_by("email", string_)
     elif php_is_numeric(string_):
@@ -383,7 +383,7 @@ def get_user_id_from_string(string_=None, *_args_):
 def get_blogaddress_by_domain(domain_=None, path_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.7.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.7.0")
     if is_subdomain_install():
         url_ = "http://" + domain_ + path_
     else:
@@ -416,7 +416,7 @@ def get_blogaddress_by_domain(domain_=None, path_=None, *_args_):
 def create_empty_blog(domain_=None, path_=None, weblog_title_=None, site_id_=1, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.4.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0")
     if php_empty(lambda : path_):
         path_ = "/"
     # end if
@@ -453,7 +453,7 @@ def create_empty_blog(domain_=None, path_=None, weblog_title_=None, site_id_=1, 
 def get_admin_users_for_domain(domain_="", path_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.4.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0")
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not domain_):
@@ -495,7 +495,7 @@ def wp_get_sites(args_=None, *_args_):
         args_ = Array()
     # end if
     
-    _deprecated_function(__FUNCTION__, "4.6.0", "get_sites()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.6.0", "get_sites()")
     if wp_is_large_network():
         return Array()
     # end if
@@ -541,7 +541,7 @@ def is_user_option_local(key_=None, user_id_=0, blog_id_=0, *_args_):
     
     global wpdb_
     php_check_if_defined("wpdb_")
-    _deprecated_function(__FUNCTION__, "4.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
     current_user_ = wp_get_current_user()
     if blog_id_ == 0:
         blog_id_ = get_current_blog_id()
@@ -567,7 +567,7 @@ def is_user_option_local(key_=None, user_id_=0, blog_id_=0, *_args_):
 def insert_blog(domain_=None, path_=None, site_id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "5.1.0", "wp_insert_site()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "5.1.0", "wp_insert_site()")
     data_ = Array({"domain": domain_, "path": path_, "site_id": site_id_})
     site_id_ = wp_insert_site(data_)
     if is_wp_error(site_id_):
@@ -598,7 +598,7 @@ def install_blog(blog_id_=None, blog_title_="", *_args_):
     global wpdb_
     global wp_roles_
     php_check_if_defined("wpdb_","wp_roles_")
-    _deprecated_function(__FUNCTION__, "5.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "5.1.0")
     #// Cast for security.
     blog_id_ = php_int(blog_id_)
     php_include_file(ABSPATH + "wp-admin/includes/upgrade.php", once=True)
@@ -659,7 +659,7 @@ def install_blog_defaults(blog_id_=None, user_id_=None, *_args_):
     
     global wpdb_
     php_check_if_defined("wpdb_")
-    _deprecated_function(__FUNCTION__, "MU")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "MU")
     php_include_file(ABSPATH + "wp-admin/includes/upgrade.php", once=True)
     suppress_ = wpdb_.suppress_errors()
     wp_install_defaults(user_id_)
@@ -690,9 +690,9 @@ def update_user_status(id_=None, pref_=None, value_=None, deprecated_=None, *_ar
     
     global wpdb_
     php_check_if_defined("wpdb_")
-    _deprecated_function(__FUNCTION__, "5.3.0", "wp_update_user()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "wp_update_user()")
     if None != deprecated_:
-        _deprecated_argument(__FUNCTION__, "3.0.2")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.2")
     # end if
     wpdb_.update(wpdb_.users, Array({sanitize_key(pref_): value_}), Array({"ID": id_}))
     user_ = php_new_class("WP_User", lambda : WP_User(id_))

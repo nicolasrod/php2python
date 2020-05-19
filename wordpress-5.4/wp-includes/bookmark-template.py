@@ -189,7 +189,7 @@ def wp_list_bookmarks(args_="", *_args_):
         parsed_args_["class"] = php_explode(" ", parsed_args_["class"])
     # end if
     parsed_args_["class"] = php_array_map("sanitize_html_class", parsed_args_["class"])
-    parsed_args_["class"] = php_trim(join(" ", parsed_args_["class"]))
+    parsed_args_["class"] = php_trim(php_join(" ", parsed_args_["class"]))
     if parsed_args_["categorize"]:
         cats_ = get_terms(Array({"taxonomy": "link_category", "name__like": parsed_args_["category_name"], "include": parsed_args_["category"], "exclude": parsed_args_["exclude_category"], "orderby": parsed_args_["category_orderby"], "order": parsed_args_["category_order"], "hierarchical": 0}))
         if php_empty(lambda : cats_):

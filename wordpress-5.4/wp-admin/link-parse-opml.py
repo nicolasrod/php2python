@@ -94,7 +94,7 @@ xml_parser_ = xml_parser_create()
 #// Set the functions to handle opening and closing tags.
 xml_set_element_handler(xml_parser_, "startElement", "endElement")
 if (not xml_parse(xml_parser_, opml_, True)):
-    printf(__("XML Error: %1$s at line %2$s"), xml_error_string(xml_get_error_code(xml_parser_)), xml_get_current_line_number(xml_parser_))
+    php_printf(__("XML Error: %1$s at line %2$s"), xml_error_string(xml_get_error_code(xml_parser_)), xml_get_current_line_number(xml_parser_))
 # end if
 #// Free up memory used by the XML parser.
 xml_parser_free(xml_parser_)

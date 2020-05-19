@@ -226,7 +226,7 @@ php_print(esc_html(title_))
 php_print("</h1>\n\n")
 if (php_isset(lambda : PHP_REQUEST["s"])) and php_strlen(PHP_REQUEST["s"]):
     #// translators: %s: Search query.
-    printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(wp_unslash(PHP_REQUEST["s"])))
+    php_printf("<span class=\"subtitle\">" + __("Search results for &#8220;%s&#8221;") + "</span>", esc_html(wp_unslash(PHP_REQUEST["s"])))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">
@@ -462,17 +462,17 @@ php_print("""
 """)
 if "category" == taxonomy_:
     php_print("<div class=\"form-wrap edit-term-notes\">\n<p>\n ")
-    printf(__("Deleting a category does not delete the posts in that category. Instead, posts that were only assigned to the deleted category are set to the default category %s. The default category cannot be deleted."), "<strong>" + apply_filters("the_category", get_cat_name(get_option("default_category")), "", "") + "</strong>")
+    php_printf(__("Deleting a category does not delete the posts in that category. Instead, posts that were only assigned to the deleted category are set to the default category %s. The default category cannot be deleted."), "<strong>" + apply_filters("the_category", get_cat_name(get_option("default_category")), "", "") + "</strong>")
     php_print("</p>\n   ")
     if current_user_can("import"):
         php_print(" <p>\n       ")
-        printf(__("Categories can be selectively converted to tags using the <a href=\"%s\">category to tag converter</a>."), esc_url(import_link_))
+        php_printf(__("Categories can be selectively converted to tags using the <a href=\"%s\">category to tag converter</a>."), esc_url(import_link_))
         php_print(" </p>\n  ")
     # end if
     php_print("</div>\n")
 elif "post_tag" == taxonomy_ and current_user_can("import"):
     php_print("<div class=\"form-wrap edit-term-notes\">\n<p>\n ")
-    printf(__("Tags can be selectively converted to categories using the <a href=\"%s\">tag to category converter</a>."), esc_url(import_link_))
+    php_printf(__("Tags can be selectively converted to categories using the <a href=\"%s\">tag to category converter</a>."), esc_url(import_link_))
     php_print(" </p>\n</div>\n  ")
 # end if
 #// 

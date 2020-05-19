@@ -332,7 +332,7 @@ def export_wp(args_=None, *_args_):
             #// @param object $meta     Current meta object.
             #//
             if (not apply_filters("wxr_export_skip_termmeta", False, meta_.meta_key, meta_)):
-                printf("""      <wp:termmeta>
+                php_printf("""      <wp:termmeta>
                 <wp:meta_key>%s</wp:meta_key>
                 <wp:meta_value>%s</wp:meta_value>
                 </wp:termmeta>
@@ -543,7 +543,7 @@ def export_wp(args_=None, *_args_):
             if not (next_posts_):
                 break
             # end if
-            where_ = "WHERE ID IN (" + join(",", next_posts_) + ")"
+            where_ = "WHERE ID IN (" + php_join(",", next_posts_) + ")"
             posts_ = wpdb_.get_results(str("SELECT * FROM ") + str(wpdb_.posts) + str(" ") + str(where_))
             #// Begin Loop.
             for post_ in posts_:

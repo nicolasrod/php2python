@@ -51,7 +51,7 @@ class WP_Customize_New_Menu_Control(WP_Customize_Control):
             args_ = Array()
         # end if
         
-        _deprecated_function(__METHOD__, "4.9.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
         super().__init__(manager_, id_, args_)
     # end def __init__
     #// 
@@ -63,7 +63,7 @@ class WP_Customize_New_Menu_Control(WP_Customize_Control):
     def render_content(self):
         
         
-        _deprecated_function(__METHOD__, "4.9.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
         php_print("     <button type=\"button\" class=\"button button-primary\" id=\"create-new-menu-submit\">")
         _e("Create Menu")
         php_print("</button>\n      <span class=\"spinner\"></span>\n       ")

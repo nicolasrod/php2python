@@ -191,14 +191,14 @@ class Custom_Background():
         php_print("</h1>\n\n        ")
         if current_user_can("customize"):
             php_print("<div class=\"notice notice-info hide-if-no-customize\">\n    <p>\n           ")
-            printf(__("You can now manage and live-preview Custom Backgrounds in the <a href=\"%s\">Customizer</a>."), admin_url("customize.php?autofocus[control]=background_image"))
+            php_printf(__("You can now manage and live-preview Custom Backgrounds in the <a href=\"%s\">Customizer</a>."), admin_url("customize.php?autofocus[control]=background_image"))
             php_print(" </p>\n</div>\n      ")
         # end if
         php_print("\n       ")
         if (not php_empty(lambda : self.updated)):
             php_print("<div id=\"message\" class=\"updated\">\n <p>\n           ")
             #// translators: %s: Home URL.
-            printf(__("Background updated. <a href=\"%s\">Visit your site</a> to see how it looks."), home_url("/"))
+            php_printf(__("Background updated. <a href=\"%s\">Visit your site</a> to see how it looks."), home_url("/"))
             php_print(" </p>\n</div>\n      ")
         # end if
         php_print("\n<h2>")

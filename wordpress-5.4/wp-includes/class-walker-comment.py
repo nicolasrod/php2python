@@ -311,7 +311,7 @@ class Walker_Comment(Walker):
             php_print(get_avatar(comment_, args_["avatar_size"]))
         # end if
         php_print("         ")
-        printf(__("%s <span class=\"says\">says:</span>"), php_sprintf("<cite class=\"fn\">%s</cite>", get_comment_author_link(comment_)))
+        php_printf(__("%s <span class=\"says\">says:</span>"), php_sprintf("<cite class=\"fn\">%s</cite>", get_comment_author_link(comment_)))
         php_print("     </div>\n        ")
         if "0" == comment_.comment_approved:
             php_print("     <em class=\"comment-awaiting-moderation\">")
@@ -322,7 +322,7 @@ class Walker_Comment(Walker):
         php_print(esc_url(get_comment_link(comment_, args_)))
         php_print("\">\n            ")
         #// translators: 1: Comment date, 2: Comment time.
-        printf(__("%1$s at %2$s"), get_comment_date("", comment_), get_comment_time())
+        php_printf(__("%1$s at %2$s"), get_comment_date("", comment_), get_comment_time())
         php_print("             </a>\n              ")
         edit_comment_link(__("(Edit)"), "&nbsp;&nbsp;", "")
         php_print("     </div>\n\n      ")
@@ -372,7 +372,7 @@ class Walker_Comment(Walker):
             php_print(get_avatar(comment_, args_["avatar_size"]))
         # end if
         php_print("                     ")
-        printf(__("%s <span class=\"says\">says:</span>"), php_sprintf("<b class=\"fn\">%s</b>", get_comment_author_link(comment_)))
+        php_printf(__("%s <span class=\"says\">says:</span>"), php_sprintf("<b class=\"fn\">%s</b>", get_comment_author_link(comment_)))
         php_print("""                   </div><!-- .comment-author -->
         <div class=\"comment-metadata\">
         <a href=\"""")
@@ -381,7 +381,7 @@ class Walker_Comment(Walker):
         comment_time("c")
         php_print("\">\n                                ")
         #// translators: 1: Comment date, 2: Comment time.
-        printf(__("%1$s at %2$s"), get_comment_date("", comment_), get_comment_time())
+        php_printf(__("%1$s at %2$s"), get_comment_date("", comment_), get_comment_time())
         php_print("                         </time>\n                       </a>\n                      ")
         edit_comment_link(__("Edit"), "<span class=\"edit-link\">", "</span>")
         php_print("                 </div><!-- .comment-metadata -->\n\n                    ")

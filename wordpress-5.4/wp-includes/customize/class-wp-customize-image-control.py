@@ -44,7 +44,7 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
     def add_tab(self, id_=None, label_=None, callback_=None):
         
         
-        _deprecated_function(__METHOD__, "4.1.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.1.0")
     # end def add_tab
     #// 
     #// @since 3.4.0
@@ -55,7 +55,7 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
     def remove_tab(self, id_=None):
         
         
-        _deprecated_function(__METHOD__, "4.1.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.1.0")
     # end def remove_tab
     #// 
     #// @since 3.4.0
@@ -69,6 +69,6 @@ class WP_Customize_Image_Control(WP_Customize_Upload_Control):
             thumbnail_url_ = None
         # end if
         
-        _deprecated_function(__METHOD__, "4.1.0")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.1.0")
     # end def print_tab_image
 # end class WP_Customize_Image_Control

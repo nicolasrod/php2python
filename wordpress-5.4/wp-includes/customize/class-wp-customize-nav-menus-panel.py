@@ -57,7 +57,7 @@ class WP_Customize_Nav_Menus_Panel(WP_Customize_Panel):
     def wp_nav_menu_manage_columns(self):
         
         
-        _deprecated_function(__METHOD__, "4.5.0", "wp_nav_menu_manage_columns")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0", "wp_nav_menu_manage_columns")
         php_include_file(ABSPATH + "wp-admin/includes/nav-menu.php", once=True)
         return wp_nav_menu_manage_columns()
     # end def wp_nav_menu_manage_columns
@@ -82,7 +82,7 @@ class WP_Customize_Nav_Menus_Panel(WP_Customize_Panel):
         <span class=\"preview-notice\">
         """)
         #// translators: %s: The site/panel title in the Customizer.
-        printf(__("You are customizing %s"), "<strong class=\"panel-title\">{{ data.title }}</strong>")
+        php_printf(__("You are customizing %s"), "<strong class=\"panel-title\">{{ data.title }}</strong>")
         php_print("             </span>\n               <button type=\"button\" class=\"customize-help-toggle dashicons dashicons-editor-help\" aria-expanded=\"false\">\n                  <span class=\"screen-reader-text\">")
         _e("Help")
         php_print("""</span>

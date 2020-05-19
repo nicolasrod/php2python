@@ -37,32 +37,32 @@ if (not php_function_exists("dynamic_sidebar")) or (not dynamic_sidebar()):
         elif is_category():
             pass
             php_print("             <p>\n               ")
-            printf(__("You are currently browsing the archives for the %s category."), single_cat_title("", False))
+            php_printf(__("You are currently browsing the archives for the %s category."), single_cat_title("", False))
             php_print("             </p>\n\n            ")
         elif is_day():
             pass
             php_print("             <p>\n               ")
-            printf(__("You are currently browsing the %1$s blog archives for the day %2$s."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), get_the_time(__("l, F jS, Y")))
+            php_printf(__("You are currently browsing the %1$s blog archives for the day %2$s."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), get_the_time(__("l, F jS, Y")))
             php_print("             </p>\n\n            ")
         elif is_month():
             pass
             php_print("             <p>\n               ")
-            printf(__("You are currently browsing the %1$s blog archives for %2$s."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), get_the_time(__("F, Y")))
+            php_printf(__("You are currently browsing the %1$s blog archives for %2$s."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), get_the_time(__("F, Y")))
             php_print("             </p>\n\n            ")
         elif is_year():
             pass
             php_print("             <p>\n               ")
-            printf(__("You are currently browsing the %1$s blog archives for the year %2$s."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), get_the_time("Y"))
+            php_printf(__("You are currently browsing the %1$s blog archives for the year %2$s."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), get_the_time("Y"))
             php_print("             </p>\n\n            ")
         elif is_search():
             pass
             php_print("             <p>\n               ")
-            printf(__("You have searched the %1$s blog archives for <strong>&#8216;%2$s&#8217;</strong>. If you are unable to find anything in these search results, you can try one of these links."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), esc_html(get_search_query()))
+            php_printf(__("You have searched the %1$s blog archives for <strong>&#8216;%2$s&#8217;</strong>. If you are unable to find anything in these search results, you can try one of these links."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")), esc_html(get_search_query()))
             php_print("             </p>\n\n            ")
         elif (php_isset(lambda : PHP_REQUEST["paged"])) and (not php_empty(lambda : PHP_REQUEST["paged"])):
             pass
             php_print("             <p>\n               ")
-            printf(__("You are currently browsing the %s blog archives."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")))
+            php_printf(__("You are currently browsing the %s blog archives."), php_sprintf("<a href=\"%1$s/\">%2$s</a>", get_bloginfo("url"), get_bloginfo("name")))
             php_print("             </p>\n\n            ")
         # end if
         php_print("\n           </li>\n         ")

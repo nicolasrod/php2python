@@ -482,7 +482,7 @@ def ms_not_installed(domain_=None, path_=None, *_args_):
 def get_current_site_name(current_site_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.9.0", "get_current_site()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.9.0", "get_current_site()")
     return current_site_
 # end def get_current_site_name
 #// 
@@ -504,7 +504,7 @@ def wpmu_current_site(*_args_):
     
     global current_site_
     php_check_if_defined("current_site_")
-    _deprecated_function(__FUNCTION__, "3.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.9.0")
     return current_site_
 # end def wpmu_current_site
 #// 
@@ -522,7 +522,7 @@ def wpmu_current_site(*_args_):
 def wp_get_network(network_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.7.0", "get_network()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0", "get_network()")
     network_ = get_network(network_)
     if None == network_:
         return False

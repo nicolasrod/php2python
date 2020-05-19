@@ -57,7 +57,7 @@ if current_user_can("import"):
         php_print("     <div class=\"card\">\n          <h2 class=\"title\">")
         _e("Categories and Tags Converter")
         php_print("</h2>\n          <p>\n           ")
-        printf(__("If you want to convert your categories to tags (or vice versa), use the <a href=\"%s\">Categories and Tags Converter</a> available from the Import screen."), "import.php")
+        php_printf(__("If you want to convert your categories to tags (or vice versa), use the <a href=\"%s\">Categories and Tags Converter</a> available from the Import screen."), "import.php")
         php_print("         </p>\n      </div>\n        ")
     # end if
 # end if

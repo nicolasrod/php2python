@@ -135,7 +135,7 @@ def wp_check_php_mysql_versions(*_args_):
         protocol_ = wp_get_server_protocol()
         php_header(php_sprintf("%s 500 Internal Server Error", protocol_), True, 500)
         php_header("Content-Type: text/html; charset=utf-8")
-        printf("Your server is running PHP version %1$s but WordPress %2$s requires at least %3$s.", php_version_, wp_version_, required_php_version_)
+        php_printf("Your server is running PHP version %1$s but WordPress %2$s requires at least %3$s.", php_version_, wp_version_, required_php_version_)
         php_print(1)
         php_exit()
     # end if

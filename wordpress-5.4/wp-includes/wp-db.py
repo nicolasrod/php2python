@@ -989,11 +989,11 @@ class wpdb():
             if (not did_action("template_redirect")):
                 wp_load_translations_early()
                 message_ = "<h1>" + __("Can&#8217;t select database") + "</h1>\n"
-                message_ += "<p>" + php_sprintf(__("We were able to connect to the database server (which means your username and password is okay) but not able to select the %s database."), "<code>" + htmlspecialchars(db_, ENT_QUOTES) + "</code>") + "</p>\n"
+                message_ += "<p>" + php_sprintf(__("We were able to connect to the database server (which means your username and password is okay) but not able to select the %s database."), "<code>" + php_htmlspecialchars(db_, ENT_QUOTES) + "</code>") + "</p>\n"
                 message_ += "<ul>\n"
                 message_ += "<li>" + __("Are you sure it exists?") + "</li>\n"
-                message_ += "<li>" + php_sprintf(__("Does the user %1$s have permission to use the %2$s database?"), "<code>" + htmlspecialchars(self.dbuser, ENT_QUOTES) + "</code>", "<code>" + htmlspecialchars(db_, ENT_QUOTES) + "</code>") + "</li>\n"
-                message_ += "<li>" + php_sprintf(__("On some systems the name of your database is prefixed with your username, so it would be like <code>username_%1$s</code>. Could that be the problem?"), htmlspecialchars(db_, ENT_QUOTES)) + "</li>\n"
+                message_ += "<li>" + php_sprintf(__("Does the user %1$s have permission to use the %2$s database?"), "<code>" + php_htmlspecialchars(self.dbuser, ENT_QUOTES) + "</code>", "<code>" + php_htmlspecialchars(db_, ENT_QUOTES) + "</code>") + "</li>\n"
+                message_ += "<li>" + php_sprintf(__("On some systems the name of your database is prefixed with your username, so it would be like <code>username_%1$s</code>. Could that be the problem?"), php_htmlspecialchars(db_, ENT_QUOTES)) + "</li>\n"
                 message_ += "</ul>\n"
                 message_ += "<p>" + php_sprintf(__("If you don&#8217;t know how to set up a database you should <strong>contact your host</strong>. If all else fails you may find help at the <a href=\"%s\">WordPress Support Forums</a>."), __("https://wordpress.org/support/forums/")) + "</p>\n"
                 self.bail(message_, "db_select_fail")
@@ -1017,7 +1017,7 @@ class wpdb():
         
         
         if php_func_num_args() == 1 and php_function_exists("_deprecated_function"):
-            _deprecated_function(__METHOD__, "3.6.0", "wpdb::prepare() or esc_sql()")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "3.6.0", "wpdb::prepare() or esc_sql()")
         # end if
         return addslashes(string_)
     # end def _weak_escape
@@ -1094,7 +1094,7 @@ class wpdb():
         
         
         if php_func_num_args() == 1 and php_function_exists("_deprecated_function"):
-            _deprecated_function(__METHOD__, "3.6.0", "wpdb::prepare() or esc_sql()")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "3.6.0", "wpdb::prepare() or esc_sql()")
         # end if
         if php_is_array(data_):
             for k_,v_ in data_.items():
@@ -1282,7 +1282,7 @@ class wpdb():
         php_check_if_defined("EZSQL_ERROR_")
         if (not str_):
             if self.use_mysqli:
-                str_ = mysqli_error(self.dbh)
+                str_ = php_mysqli_error(self.dbh)
             else:
                 str_ = mysql_error(self.dbh)
             # end if
@@ -1315,9 +1315,9 @@ class wpdb():
                 wp_die(msg_)
             # end if
         else:
-            str_ = htmlspecialchars(str_, ENT_QUOTES)
-            query_ = htmlspecialchars(self.last_query, ENT_QUOTES)
-            printf("<div id=\"error\"><p class=\"wpdberror\"><strong>%s</strong> [%s]<br /><code>%s</code></p></div>", __("WordPress database error:"), str_, query_)
+            str_ = php_htmlspecialchars(str_, ENT_QUOTES)
+            query_ = php_htmlspecialchars(self.last_query, ENT_QUOTES)
+            php_printf("<div id=\"error\"><p class=\"wpdberror\"><strong>%s</strong> [%s]<br /><code>%s</code></p></div>", __("WordPress database error:"), str_, query_)
         # end if
     # end def print_error
     #// 
@@ -1499,7 +1499,7 @@ class wpdb():
                 php_exit(0)
             # end if
             message_ = "<h1>" + __("Error establishing a database connection") + "</h1>\n"
-            message_ += "<p>" + php_sprintf(__("This either means that the username and password information in your %1$s file is incorrect or we can&#8217;t contact the database server at %2$s. This could mean your host&#8217;s database server is down."), "<code>wp-config.php</code>", "<code>" + htmlspecialchars(self.dbhost, ENT_QUOTES) + "</code>") + "</p>\n"
+            message_ += "<p>" + php_sprintf(__("This either means that the username and password information in your %1$s file is incorrect or we can&#8217;t contact the database server at %2$s. This could mean your host&#8217;s database server is down."), "<code>wp-config.php</code>", "<code>" + php_htmlspecialchars(self.dbhost, ENT_QUOTES) + "</code>") + "</p>\n"
             message_ += "<ul>\n"
             message_ += "<li>" + __("Are you sure you have the correct username and password?") + "</li>\n"
             message_ += "<li>" + __("Are you sure you have typed the correct hostname?") + "</li>\n"
@@ -1590,7 +1590,7 @@ class wpdb():
         # end if
         
         if self.use_mysqli:
-            if (not php_empty(lambda : self.dbh)) and mysqli_ping(self.dbh):
+            if (not php_empty(lambda : self.dbh)) and php_mysqli_ping(self.dbh):
                 return True
             # end if
         else:
@@ -1631,7 +1631,7 @@ class wpdb():
         # end if
         wp_load_translations_early()
         message_ = "<h1>" + __("Error reconnecting to the database") + "</h1>\n"
-        message_ += "<p>" + php_sprintf(__("This means that we lost contact with the database server at %s. This could mean your host&#8217;s database server is down."), "<code>" + htmlspecialchars(self.dbhost, ENT_QUOTES) + "</code>") + "</p>\n"
+        message_ += "<p>" + php_sprintf(__("This means that we lost contact with the database server at %s. This could mean your host&#8217;s database server is down."), "<code>" + php_htmlspecialchars(self.dbhost, ENT_QUOTES) + "</code>") + "</p>\n"
         message_ += "<ul>\n"
         message_ += "<li>" + __("Are you sure the database server is running?") + "</li>\n"
         message_ += "<li>" + __("Are you sure the database server is not under particularly heavy load?") + "</li>\n"
@@ -1720,7 +1720,7 @@ class wpdb():
         #// If there is an error then take note of it.
         if self.use_mysqli:
             if type(self.dbh).__name__ == "mysqli":
-                self.last_error = mysqli_error(self.dbh)
+                self.last_error = php_mysqli_error(self.dbh)
             else:
                 self.last_error = __("Unable to retrieve the error message from MySQL")
             # end if
@@ -3083,7 +3083,7 @@ class wpdb():
             error_ = ""
             if self.use_mysqli:
                 if type(self.dbh).__name__ == "mysqli":
-                    error_ = mysqli_error(self.dbh)
+                    error_ = php_mysqli_error(self.dbh)
                 elif mysqli_connect_errno():
                     error_ = mysqli_connect_error()
                 # end if
@@ -3170,7 +3170,7 @@ class wpdb():
     def supports_collation(self):
         
         
-        _deprecated_function(__FUNCTION__, "3.5.0", "wpdb::has_cap( 'collation' )")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "wpdb::has_cap( 'collation' )")
         return self.has_cap("collation")
     # end def supports_collation
     #// 
@@ -3265,7 +3265,7 @@ class wpdb():
     def get_caller(self):
         
         
-        return wp_debug_backtrace_summary(__CLASS__)
+        return wp_debug_backtrace_summary(self.__class__.__name__)
     # end def get_caller
     #// 
     #// Retrieves the MySQL server version.

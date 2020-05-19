@@ -37,9 +37,9 @@ if have_comments():
     comments_number_ = get_comments_number()
     if "1" == comments_number_:
         #// translators: %s: Post title.
-        printf(_x("One Reply to &ldquo;%s&rdquo;", "comments title", "twentyseventeen"), get_the_title())
+        php_printf(_x("One Reply to &ldquo;%s&rdquo;", "comments title", "twentyseventeen"), get_the_title())
     else:
-        printf(_nx("%1$s Reply to &ldquo;%2$s&rdquo;", "%1$s Replies to &ldquo;%2$s&rdquo;", comments_number_, "comments title", "twentyseventeen"), number_format_i18n(comments_number_), get_the_title())
+        php_printf(_nx("%1$s Reply to &ldquo;%2$s&rdquo;", "%1$s Replies to &ldquo;%2$s&rdquo;", comments_number_, "comments title", "twentyseventeen"), number_format_i18n(comments_number_), get_the_title())
     # end if
     php_print("""       </h2>
     <ol class=\"comment-list\">

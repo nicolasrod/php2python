@@ -140,7 +140,7 @@ class SimplePie_Misc():
         full_ = str("<") + str(element_["tag"])
         for key_,value_ in element_["attribs"].items():
             key_ = php_strtolower(key_)
-            full_ += str(" ") + str(key_) + str("=\"") + htmlspecialchars(value_["data"]) + "\""
+            full_ += str(" ") + str(key_) + str("=\"") + php_htmlspecialchars(value_["data"]) + "\""
         # end for
         if element_["self_closing"]:
             full_ += " />"

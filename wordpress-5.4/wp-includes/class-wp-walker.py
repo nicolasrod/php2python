@@ -321,7 +321,7 @@ class Walker():
         #// Flat display.
         if -1 == max_depth_:
             if (not php_empty(lambda : args_[0]["reverse_top_level"])):
-                elements_ = array_reverse(elements_)
+                elements_ = php_array_reverse(elements_)
                 oldstart_ = start_
                 start_ = total_top_ - end_
                 end_ = total_top_ - oldstart_
@@ -360,14 +360,14 @@ class Walker():
             end_ = total_top_
         # end if
         if (not php_empty(lambda : args_[0]["reverse_top_level"])):
-            top_level_elements_ = array_reverse(top_level_elements_)
+            top_level_elements_ = php_array_reverse(top_level_elements_)
             oldstart_ = start_
             start_ = total_top_ - end_
             end_ = total_top_ - oldstart_
         # end if
         if (not php_empty(lambda : args_[0]["reverse_children"])):
             for parent_,children_ in children_elements_.items():
-                children_elements_[parent_] = array_reverse(children_)
+                children_elements_[parent_] = php_array_reverse(children_)
             # end for
         # end if
         for e_ in top_level_elements_:

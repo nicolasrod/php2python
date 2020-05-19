@@ -259,7 +259,7 @@ class WP_Widget_Custom_HTML(WP_Widget):
                 php_print("                 <# if ( data.codeEditorDisabled ) { #>\n                        <p>\n                           ")
                 _e("Some HTML tags are not permitted, including:")
                 php_print("                         <code>")
-                php_print(join("</code>, <code>", disallowed_html_))
+                php_print(php_join("</code>, <code>", disallowed_html_))
                 php_print("""</code>
                 </p>
                 <# } #>

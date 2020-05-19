@@ -51,7 +51,7 @@ class WP_REST_Controller():
     def register_routes(self):
         
         
-        _doing_it_wrong("WP_REST_Controller::register_routes", php_sprintf(__("Method '%s' must be overridden."), __METHOD__), "4.7")
+        _doing_it_wrong("WP_REST_Controller::register_routes", php_sprintf(__("Method '%s' must be overridden."), inspect.currentframe().f_code.co_name), "4.7")
     # end def register_routes
     #// 
     #// Checks if a given request has access to get items.
@@ -64,7 +64,7 @@ class WP_REST_Controller():
     def get_items_permissions_check(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def get_items_permissions_check
     #// 
     #// Retrieves a collection of items.
@@ -77,7 +77,7 @@ class WP_REST_Controller():
     def get_items(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def get_items
     #// 
     #// Checks if a given request has access to get a specific item.
@@ -90,7 +90,7 @@ class WP_REST_Controller():
     def get_item_permissions_check(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def get_item_permissions_check
     #// 
     #// Retrieves one item from the collection.
@@ -103,7 +103,7 @@ class WP_REST_Controller():
     def get_item(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def get_item
     #// 
     #// Checks if a given request has access to create items.
@@ -116,7 +116,7 @@ class WP_REST_Controller():
     def create_item_permissions_check(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def create_item_permissions_check
     #// 
     #// Creates one item from the collection.
@@ -129,7 +129,7 @@ class WP_REST_Controller():
     def create_item(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def create_item
     #// 
     #// Checks if a given request has access to update a specific item.
@@ -142,7 +142,7 @@ class WP_REST_Controller():
     def update_item_permissions_check(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def update_item_permissions_check
     #// 
     #// Updates one item from the collection.
@@ -155,7 +155,7 @@ class WP_REST_Controller():
     def update_item(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def update_item
     #// 
     #// Checks if a given request has access to delete a specific item.
@@ -168,7 +168,7 @@ class WP_REST_Controller():
     def delete_item_permissions_check(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def delete_item_permissions_check
     #// 
     #// Deletes one item from the collection.
@@ -181,7 +181,7 @@ class WP_REST_Controller():
     def delete_item(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def delete_item
     #// 
     #// Prepares one item for create or update operation.
@@ -194,7 +194,7 @@ class WP_REST_Controller():
     def prepare_item_for_database(self, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def prepare_item_for_database
     #// 
     #// Prepares the item for the REST response.
@@ -208,7 +208,7 @@ class WP_REST_Controller():
     def prepare_item_for_response(self, item_=None, request_=None):
         
         
-        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), __METHOD__), Array({"status": 405})))
+        return php_new_class("WP_Error", lambda : WP_Error("invalid-method", php_sprintf(__("Method '%s' not implemented. Must be overridden in subclass."), inspect.currentframe().f_code.co_name), Array({"status": 405})))
     # end def prepare_item_for_response
     #// 
     #// Prepares a response for insertion into a collection.
@@ -511,7 +511,7 @@ class WP_REST_Controller():
         if php_in_array("id", fields_, True):
             requested_fields_[-1] = "id"
         # end if
-        def _closure_ca5b9235(response_fields_=None, field_=None):
+        def _closure_af9f72ed(response_fields_=None, field_=None):
             
             
             if php_in_array(field_, fields_, True):
@@ -526,12 +526,12 @@ class WP_REST_Controller():
                 response_fields_[-1] = field_
             # end if
             return response_fields_
-        # end def _closure_ca5b9235
+        # end def _closure_af9f72ed
         #// Return the list of all requested fields which appear in the schema.
         response_fields_[-1] = field_
         nested_fields_ = php_explode(".", field_)
         response_fields_[-1] = field_
-        return array_reduce(requested_fields_, (lambda *args, **kwargs: _closure_ca5b9235(*args, **kwargs)), Array())
+        return array_reduce(requested_fields_, (lambda *args, **kwargs: _closure_af9f72ed(*args, **kwargs)), Array())
     # end def get_fields_for_response
     #// 
     #// Retrieves an array of endpoint arguments from the item schema for the controller.

@@ -438,7 +438,7 @@ def add_option(option_=None, value_="", deprecated_="", autoload_="yes", *_args_
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.3.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.3.0")
     # end if
     option_ = php_trim(option_)
     if php_empty(lambda : option_):
@@ -1801,17 +1801,17 @@ def register_setting(option_group_=None, option_name_=None, args_=None, *_args_)
     args_ = wp_parse_args(args_, defaults_)
     #// Require an item schema when registering settings with an array type.
     if False != args_["show_in_rest"] and "array" == args_["type"] and (not php_is_array(args_["show_in_rest"])) or (not (php_isset(lambda : args_["show_in_rest"]["schema"]["items"]))):
-        _doing_it_wrong(__FUNCTION__, __("When registering an \"array\" setting to show in the REST API, you must specify the schema for each array item in \"show_in_rest.schema.items\"."), "5.4.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("When registering an \"array\" setting to show in the REST API, you must specify the schema for each array item in \"show_in_rest.schema.items\"."), "5.4.0")
     # end if
     if (not php_is_array(wp_registered_settings_)):
         wp_registered_settings_ = Array()
     # end if
     if "misc" == option_group_:
-        _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
         option_group_ = "general"
     # end if
     if "privacy" == option_group_:
-        _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
         option_group_ = "reading"
     # end if
     new_whitelist_options_[option_group_][-1] = option_name_
@@ -1843,11 +1843,11 @@ def unregister_setting(option_group_=None, option_name_=None, deprecated_="", *_
     global wp_registered_settings_
     php_check_if_defined("new_whitelist_options_","wp_registered_settings_")
     if "misc" == option_group_:
-        _deprecated_argument(__FUNCTION__, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "misc"))
         option_group_ = "general"
     # end if
     if "privacy" == option_group_:
-        _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.5.0", php_sprintf(__("The \"%s\" options group has been removed. Use another settings group."), "privacy"))
         option_group_ = "reading"
     # end if
     pos_ = php_array_search(option_name_, new_whitelist_options_[option_group_])
@@ -1855,7 +1855,7 @@ def unregister_setting(option_group_=None, option_name_=None, deprecated_="", *_
         new_whitelist_options_[option_group_][pos_] = None
     # end if
     if "" != deprecated_:
-        _deprecated_argument(__FUNCTION__, "4.7.0", php_sprintf(__("%1$s is deprecated. The callback from %2$s is used instead."), "<code>$sanitize_callback</code>", "<code>register_setting()</code>"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "4.7.0", php_sprintf(__("%1$s is deprecated. The callback from %2$s is used instead."), "<code>$sanitize_callback</code>", "<code>register_setting()</code>"))
         remove_filter(str("sanitize_option_") + str(option_name_), deprecated_)
     # end if
     if (php_isset(lambda : wp_registered_settings_[option_name_])):

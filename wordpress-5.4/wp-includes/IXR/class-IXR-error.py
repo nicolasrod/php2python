@@ -23,7 +23,7 @@ class IXR_Error():
         
         
         self.code = code_
-        self.message = htmlspecialchars(message_)
+        self.message = php_htmlspecialchars(message_)
     # end def __init__
     #// 
     #// PHP4 constructor.

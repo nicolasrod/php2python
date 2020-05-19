@@ -1386,7 +1386,7 @@ def get_delete_post_link(id_=0, deprecated_="", force_delete_=None, *_args_):
     # end if
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "3.0.0")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.0.0")
     # end if
     post_ = get_post(id_)
     if (not post_):
@@ -1643,7 +1643,7 @@ def get_adjacent_post(in_same_term_=None, excluded_terms_="", previous_=None, ta
     if (not php_empty(lambda : excluded_terms_)) and (not php_is_array(excluded_terms_)):
         #// Back-compat, $excluded_terms used to be $excluded_categories with IDs separated by " and ".
         if False != php_strpos(excluded_terms_, " and "):
-            _deprecated_argument(__FUNCTION__, "3.3.0", php_sprintf(__("Use commas instead of %s to separate excluded terms."), "'and'"))
+            _deprecated_argument(inspect.currentframe().f_code.co_name, "3.3.0", php_sprintf(__("Use commas instead of %s to separate excluded terms."), "'and'"))
             excluded_terms_ = php_explode(" and ", excluded_terms_)
         else:
             excluded_terms_ = php_explode(",", excluded_terms_)

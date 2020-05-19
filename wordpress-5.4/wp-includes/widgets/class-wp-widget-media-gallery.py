@@ -133,7 +133,7 @@ class WP_Widget_Media_Gallery(WP_Widget_Media):
         <div class=\"gallery-icon-placeholder\">
         <p class=\"gallery-icon-placeholder-text\" aria-label=\"
         """)
-        printf(__("Additional images added to this gallery: %s"), "{{ data.ids.length - 5 }}")
+        php_printf(__("Additional images added to this gallery: %s"), "{{ data.ids.length - 5 }}")
         php_print("""                                       \">+{{ data.ids.length - 5 }}</p>
         </div>
         <# } #>

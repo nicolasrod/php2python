@@ -112,7 +112,7 @@ elif (not error_) and filesize(file_) > 0:
         docs_select_ = "<select name=\"docs-list\" id=\"docs-list\">"
         docs_select_ += "<option value=\"\">" + esc_attr__("Function Name&hellip;") + "</option>"
         for function_ in functions_:
-            docs_select_ += "<option value=\"" + esc_attr(urlencode(function_)) + "\">" + htmlspecialchars(function_) + "()</option>"
+            docs_select_ += "<option value=\"" + esc_attr(urlencode(function_)) + "\">" + php_htmlspecialchars(function_) + "()</option>"
         # end for
         docs_select_ += "</select>"
     # end if
@@ -184,7 +184,7 @@ _e("Theme Files")
 php_print("</h2>\n  <ul role=\"tree\" aria-labelledby=\"theme-files-label\">\n      ")
 if has_templates_ or theme_.parent() and theme_.parent():
     php_print("         <li class=\"howto\">\n              ")
-    printf(__("This child theme inherits templates from a parent theme, %s."), php_sprintf("<a href=\"%s\">%s</a>", self_admin_url("theme-editor.php?theme=" + urlencode(theme_.get_template())), theme_.parent().display("Name")))
+    php_printf(__("This child theme inherits templates from a parent theme, %s."), php_sprintf("<a href=\"%s\">%s</a>", self_admin_url("theme-editor.php?theme=" + urlencode(theme_.get_template())), theme_.parent().display("Name")))
     php_print("         </li>\n     ")
 # end if
 php_print("     <li role=\"treeitem\" tabindex=\"-1\" aria-expanded=\"true\" aria-level=\"1\" aria-posinset=\"1\" aria-setsize=\"1\">\n         <ul role=\"group\">\n               ")
@@ -245,7 +245,7 @@ else:
         php_print("                 <span class=\"spinner\"></span>\n               </p>\n          ")
     else:
         php_print("             <p><em>\n                   ")
-        printf(__("You need to make this file writable before you can save your changes. See <a href=\"%s\">Changing File Permissions</a> for more information."), __("https://wordpress.org/support/article/changing-file-permissions/"))
+        php_printf(__("You need to make this file writable before you can save your changes. See <a href=\"%s\">Changing File Permissions</a> for more information."), __("https://wordpress.org/support/article/changing-file-permissions/"))
         php_print("             </em></p>\n         ")
     # end if
     php_print("     </div>\n\n      ")

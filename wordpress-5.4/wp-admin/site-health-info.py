@@ -79,7 +79,7 @@ php_print("""   </h2>
 <p>
 """)
 #// translators: %s: URL to Site Health Status page.
-printf(__("This page can show you every detail about the configuration of your WordPress website. For any improvements that could be made, see the <a href=\"%s\">Site Health Status</a> page."), esc_url(admin_url("site-health.php")))
+php_printf(__("This page can show you every detail about the configuration of your WordPress website. For any improvements that could be made, see the <a href=\"%s\">Site Health Status</a> page."), esc_url(admin_url("site-health.php")))
 php_print(" </p>\n  <p>\n       ")
 _e("If you want to export a handy list of all the information on this page, you can use the button below to copy it to the clipboard. You can then paste it in a text file and save it to your device, or paste it in an email exchange with a support engineer or theme/plugin developer for example.")
 php_print("""   </p>
@@ -107,7 +107,7 @@ for section_,details_ in info_.items():
     php_print(esc_html(details_["label"]))
     php_print("                     ")
     if (php_isset(lambda : details_["show_count"])) and details_["show_count"]:
-        printf("(%d)", php_count(details_["fields"]))
+        php_printf("(%d)", php_count(details_["fields"]))
     # end if
     php_print("                 </span>\n                   ")
     if "wp-paths-sizes" == section_:
@@ -120,7 +120,7 @@ for section_,details_ in info_.items():
     php_print(esc_attr(section_))
     php_print("\" class=\"health-check-accordion-panel\" hidden=\"hidden\">\n               ")
     if (php_isset(lambda : details_["description"])) and (not php_empty(lambda : details_["description"])):
-        printf("<p>%s</p>", details_["description"])
+        php_printf("<p>%s</p>", details_["description"])
     # end if
     php_print("             <table class=\"widefat striped health-check-table\" role=\"presentation\">\n                    <tbody>\n                   ")
     for field_name_,field_ in details_["fields"].items():
@@ -134,9 +134,9 @@ for section_,details_ in info_.items():
             values_ = esc_html(field_["value"])
         # end if
         if php_in_array(field_name_, sizes_fields_, True):
-            printf("<tr><td>%s</td><td class=\"%s\">%s</td></tr>", esc_html(field_["label"]), esc_attr(field_name_), values_)
+            php_printf("<tr><td>%s</td><td class=\"%s\">%s</td></tr>", esc_html(field_["label"]), esc_attr(field_name_), values_)
         else:
-            printf("<tr><td>%s</td><td>%s</td></tr>", esc_html(field_["label"]), values_)
+            php_printf("<tr><td>%s</td><td>%s</td></tr>", esc_html(field_["label"]), values_)
         # end if
     # end for
     php_print("""                   </tbody>

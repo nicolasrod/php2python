@@ -83,7 +83,7 @@ php_print("\">\n<h1 class=\"wp-heading-inline\">\n")
 php_print(esc_html(title_))
 php_print("</h1>\n\n")
 if (not php_empty(lambda : tabs_["upload"])) and current_user_can("upload_plugins"):
-    printf(" <a href=\"%s\" class=\"upload-view-toggle page-title-action\"><span class=\"upload\">%s</span><span class=\"browse\">%s</span></a>", self_admin_url("plugin-install.php") if "upload" == tab_ else self_admin_url("plugin-install.php?tab=upload"), __("Upload Plugin"), __("Browse Plugins"))
+    php_printf(" <a href=\"%s\" class=\"upload-view-toggle page-title-action\"><span class=\"upload\">%s</span><span class=\"browse\">%s</span></a>", self_admin_url("plugin-install.php") if "upload" == tab_ else self_admin_url("plugin-install.php?tab=upload"), __("Upload Plugin"), __("Browse Plugins"))
 # end if
 php_print("""
 <hr class=\"wp-header-end\">

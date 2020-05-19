@@ -85,7 +85,7 @@ php_print("""</label>
 <input name=\"close_comments_for_old_posts\" type=\"checkbox\" id=\"close_comments_for_old_posts\" value=\"1\" """)
 checked("1", get_option("close_comments_for_old_posts"))
 php_print(" />\n")
-printf(__("Automatically close comments on posts older than %s days"), "</label> <label for=\"close_comments_days_old\"><input name=\"close_comments_days_old\" type=\"number\" min=\"0\" step=\"1\" id=\"close_comments_days_old\" value=\"" + esc_attr(get_option("close_comments_days_old")) + "\" class=\"small-text\" />")
+php_printf(__("Automatically close comments on posts older than %s days"), "</label> <label for=\"close_comments_days_old\"><input name=\"close_comments_days_old\" type=\"number\" min=\"0\" step=\"1\" id=\"close_comments_days_old\" value=\"" + esc_attr(get_option("close_comments_days_old")) + "\" class=\"small-text\" />")
 php_print("""</label>
 <br />
 <label for=\"show_comments_cookies_opt_in\">
@@ -120,7 +120,7 @@ while i_ <= maxdeep_:
 # end while
 thread_comments_depth_ += "</select>"
 #// translators: %s: Number of levels.
-printf(__("Enable threaded (nested) comments %s levels deep"), thread_comments_depth_)
+php_printf(__("Enable threaded (nested) comments %s levels deep"), thread_comments_depth_)
 php_print("""</label>
 <br />
 <label for=\"page_comments\">
@@ -136,7 +136,7 @@ if "oldest" == get_option("default_comments_page"):
     default_comments_page_ += " selected=\"selected\""
 # end if
 default_comments_page_ += ">" + __("first") + "</option></select>"
-printf(__("Break comments into pages with %1$s top level comments per page and the %2$s page displayed by default"), "</label> <label for=\"comments_per_page\"><input name=\"comments_per_page\" type=\"number\" step=\"1\" min=\"0\" id=\"comments_per_page\" value=\"" + esc_attr(get_option("comments_per_page")) + "\" class=\"small-text\" />", default_comments_page_)
+php_printf(__("Break comments into pages with %1$s top level comments per page and the %2$s page displayed by default"), "</label> <label for=\"comments_per_page\"><input name=\"comments_per_page\" type=\"number\" step=\"1\" min=\"0\" id=\"comments_per_page\" value=\"" + esc_attr(get_option("comments_per_page")) + "\" class=\"small-text\" />", default_comments_page_)
 php_print("""</label>
 <br />
 <label for=\"comment_order\">
@@ -151,7 +151,7 @@ if "desc" == get_option("comment_order"):
 # end if
 comment_order_ += ">" + __("newer") + "</option></select>"
 #// translators: %s: Form field control for 'older' or 'newer' comments.
-printf(__("Comments should be displayed with the %s comments at the top of each page"), comment_order_)
+php_printf(__("Comments should be displayed with the %s comments at the top of each page"), comment_order_)
 php_print("""</label>
 </fieldset></td>
 </tr>
@@ -196,7 +196,7 @@ _e("Comment Moderation")
 php_print("</th>\n<td><fieldset><legend class=\"screen-reader-text\"><span>")
 _e("Comment Moderation")
 php_print("</span></legend>\n<p><label for=\"comment_max_links\">\n")
-printf(__("Hold a comment in the queue if it contains %s or more links. (A common characteristic of comment spam is a large number of hyperlinks.)"), "<input name=\"comment_max_links\" type=\"number\" step=\"1\" min=\"0\" id=\"comment_max_links\" value=\"" + esc_attr(get_option("comment_max_links")) + "\" class=\"small-text\" />")
+php_printf(__("Hold a comment in the queue if it contains %s or more links. (A common characteristic of comment spam is a large number of hyperlinks.)"), "<input name=\"comment_max_links\" type=\"number\" step=\"1\" min=\"0\" id=\"comment_max_links\" value=\"" + esc_attr(get_option("comment_max_links")) + "\" class=\"small-text\" />")
 php_print("</label></p>\n\n<p><label for=\"moderation_keys\">")
 _e("When a comment contains any of these words in its content, name, URL, email, or IP address, it will be held in the <a href=\"edit-comments.php?comment_status=moderated\">moderation queue</a>. One word or IP address per line. It will match inside words, so &#8220;press&#8221; will match &#8220;WordPress&#8221;.")
 php_print("</label></p>\n<p>\n<textarea name=\"moderation_keys\" rows=\"10\" cols=\"50\" id=\"moderation_keys\" class=\"large-text code\">")

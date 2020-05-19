@@ -293,7 +293,7 @@ def twentytwenty_get_post_meta(post_id_=None, location_="single-top", *_args_):
             php_print("</span>\n                            ")
             twentytwenty_the_theme_svg("user")
             php_print("                     </span>\n                       <span class=\"meta-text\">\n                            ")
-            printf(__("By %s", "twentytwenty"), "<a href=\"" + esc_url(get_author_posts_url(get_the_author_meta("ID"))) + "\">" + esc_html(get_the_author_meta("display_name")) + "</a>")
+            php_printf(__("By %s", "twentytwenty"), "<a href=\"" + esc_url(get_author_posts_url(get_the_author_meta("ID"))) + "\">" + esc_html(get_the_author_meta("display_name")) + "</a>")
             php_print("                     </span>\n                   </li>\n                 ")
         # end if
         #// Post date.

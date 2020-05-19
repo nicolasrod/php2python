@@ -31,7 +31,7 @@ if '__PHP2PY_LOADED__' not in globals():
 def get_postdata(postid_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "1.5.1", "get_post()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "1.5.1", "get_post()")
     post_ = get_post(postid_)
     postdata_ = Array({"ID": post_.ID, "Author_ID": post_.post_author, "Date": post_.post_date, "Content": post_.post_content, "Excerpt": post_.post_excerpt, "Title": post_.post_title, "Category": post_.post_category, "post_status": post_.post_status, "comment_status": post_.comment_status, "ping_status": post_.ping_status, "post_password": post_.post_password, "to_ping": post_.to_ping, "pinged": post_.pinged, "post_type": post_.post_type, "post_name": post_.post_name})
     return postdata_
@@ -51,7 +51,7 @@ def start_wp(*_args_):
     
     global wp_query_
     php_check_if_defined("wp_query_")
-    _deprecated_function(__FUNCTION__, "1.5.0", __("new WordPress Loop"))
+    _deprecated_function(inspect.currentframe().f_code.co_name, "1.5.0", __("new WordPress Loop"))
     #// Since the old style loop is being used, advance the query iterator here.
     wp_query_.next_post()
     setup_postdata(get_post())
@@ -71,7 +71,7 @@ def the_category_ID(echo_=None, *_args_):
         echo_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "0.71", "get_the_category()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "0.71", "get_the_category()")
     #// Grab the first cat in the list.
     categories_ = get_the_category()
     cat_ = categories_[0].term_id
@@ -96,7 +96,7 @@ def the_category_head(before_="", after_="", *_args_):
     global currentcat_
     global previouscat_
     php_check_if_defined("currentcat_","previouscat_")
-    _deprecated_function(__FUNCTION__, "0.71", "get_the_category_by_ID()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "0.71", "get_the_category_by_ID()")
     #// Grab the first cat in the list.
     categories_ = get_the_category()
     currentcat_ = categories_[0].category_id
@@ -124,7 +124,7 @@ def the_category_head(before_="", after_="", *_args_):
 def previous_post(format_="%", previous_="previous post: ", title_="yes", in_same_cat_="no", limitprev_=1, excluded_categories_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "previous_post_link()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "previous_post_link()")
     if php_empty(lambda : in_same_cat_) or "no" == in_same_cat_:
         in_same_cat_ = False
     else:
@@ -159,7 +159,7 @@ def previous_post(format_="%", previous_="previous post: ", title_="yes", in_sam
 def next_post(format_="%", next_="next post: ", title_="yes", in_same_cat_="no", limitnext_=1, excluded_categories_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "next_post_link()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "next_post_link()")
     if php_empty(lambda : in_same_cat_) or "no" == in_same_cat_:
         in_same_cat_ = False
     else:
@@ -192,7 +192,7 @@ def next_post(format_="%", next_="next post: ", title_="yes", in_same_cat_="no",
 def user_can_create_post(user_id_=None, blog_id_=1, category_id_="None", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     author_data_ = get_userdata(user_id_)
     return author_data_.user_level > 1
 # end def user_can_create_post
@@ -211,7 +211,7 @@ def user_can_create_post(user_id_=None, blog_id_=1, category_id_="None", *_args_
 def user_can_create_draft(user_id_=None, blog_id_=1, category_id_="None", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     author_data_ = get_userdata(user_id_)
     return author_data_.user_level >= 1
 # end def user_can_create_draft
@@ -230,7 +230,7 @@ def user_can_create_draft(user_id_=None, blog_id_=1, category_id_="None", *_args
 def user_can_edit_post(user_id_=None, post_id_=None, blog_id_=1, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     author_data_ = get_userdata(user_id_)
     post_ = get_post(post_id_)
     post_author_data_ = get_userdata(post_.post_author)
@@ -255,7 +255,7 @@ def user_can_edit_post(user_id_=None, post_id_=None, blog_id_=1, *_args_):
 def user_can_delete_post(user_id_=None, post_id_=None, blog_id_=1, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     #// Right now if one can edit, one can delete.
     return user_can_edit_post(user_id_, post_id_, blog_id_)
 # end def user_can_delete_post
@@ -274,7 +274,7 @@ def user_can_delete_post(user_id_=None, post_id_=None, blog_id_=1, *_args_):
 def user_can_set_post_date(user_id_=None, blog_id_=1, category_id_="None", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     author_data_ = get_userdata(user_id_)
     return author_data_.user_level > 4 and user_can_create_post(user_id_, blog_id_, category_id_)
 # end def user_can_set_post_date
@@ -293,7 +293,7 @@ def user_can_set_post_date(user_id_=None, blog_id_=1, category_id_="None", *_arg
 def user_can_edit_post_date(user_id_=None, post_id_=None, blog_id_=1, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     author_data_ = get_userdata(user_id_)
     return author_data_.user_level > 4 and user_can_edit_post(user_id_, post_id_, blog_id_)
 # end def user_can_edit_post_date
@@ -312,7 +312,7 @@ def user_can_edit_post_date(user_id_=None, post_id_=None, blog_id_=1, *_args_):
 def user_can_edit_post_comments(user_id_=None, post_id_=None, blog_id_=1, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     #// Right now if one can edit a post, one can edit comments made on it.
     return user_can_edit_post(user_id_, post_id_, blog_id_)
 # end def user_can_edit_post_comments
@@ -331,7 +331,7 @@ def user_can_edit_post_comments(user_id_=None, post_id_=None, blog_id_=1, *_args
 def user_can_delete_post_comments(user_id_=None, post_id_=None, blog_id_=1, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     #// Right now if one can edit comments, one can delete comments.
     return user_can_edit_post_comments(user_id_, post_id_, blog_id_)
 # end def user_can_delete_post_comments
@@ -349,7 +349,7 @@ def user_can_delete_post_comments(user_id_=None, post_id_=None, blog_id_=1, *_ar
 def user_can_edit_user(user_id_=None, other_user_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "current_user_can()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "current_user_can()")
     user_ = get_userdata(user_id_)
     other_ = get_userdata(other_user_)
     if user_.user_level > other_.user_level or user_.user_level > 8 or user_.ID == other_.ID:
@@ -392,7 +392,7 @@ def get_linksbyname(cat_name_="noname", before_="", after_="<br />", between_=" 
         limit_ = -1
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_bookmarks()")
     cat_id_ = -1
     cat_ = get_term_by("name", cat_name_, "link_category")
     if cat_:
@@ -414,7 +414,7 @@ def get_linksbyname(cat_name_="noname", before_="", after_="<br />", between_=" 
 def wp_get_linksbyname(category_=None, args_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_list_bookmarks()")
     defaults_ = Array({"after": "<br />", "before": "", "categorize": 0, "category_after": "", "category_before": "", "category_name": category_, "show_description": 1, "title_li": ""})
     parsed_args_ = wp_parse_args(args_, defaults_)
     return wp_list_bookmarks(parsed_args_)
@@ -443,7 +443,7 @@ def get_linkobjectsbyname(cat_name_="noname", orderby_="name", limit_=None, *_ar
         limit_ = -1
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_bookmarks()")
     cat_id_ = -1
     cat_ = get_term_by("name", cat_name_, "link_category")
     if cat_:
@@ -494,7 +494,7 @@ def get_linkobjectsbyname(cat_name_="noname", orderby_="name", limit_=None, *_ar
 def get_linkobjects(category_=0, orderby_="name", limit_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_bookmarks()")
     links_ = get_bookmarks(Array({"category": category_, "orderby": orderby_, "limit": limit_}))
     links_array_ = Array()
     for link_ in links_:
@@ -533,7 +533,7 @@ def get_linksbyname_withrating(cat_name_="noname", before_="", after_="<br />", 
         limit_ = -1
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_bookmarks()")
     get_linksbyname(cat_name_, before_, after_, between_, show_images_, orderby_, show_description_, True, limit_, show_updated_)
 # end def get_linksbyname_withrating
 #// 
@@ -570,7 +570,7 @@ def get_links_withrating(category_=None, before_="", after_="<br />", between_="
         limit_ = -1
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_bookmarks()")
     get_links(category_, before_, after_, between_, show_images_, orderby_, show_description_, True, limit_, show_updated_)
 # end def get_links_withrating
 #// 
@@ -585,7 +585,7 @@ def get_links_withrating(category_=None, before_="", after_="<br />", between_="
 def get_autotoggle(id_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0")
     return 0
 # end def get_autotoggle
 #// 
@@ -626,7 +626,7 @@ def list_cats(optionall_=1, all_="All", sort_column_="ID", sort_order_="asc", fi
         hierarchical_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_categories()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_list_categories()")
     query_ = php_compact("optionall_", "all_", "sort_column_", "sort_order_", "file_", "list_", "optiondates_", "optioncount_", "hide_empty_", "use_desc_for_title_", "children_", "child_of_", "categories_", "recurse_", "feed_", "feed_image_", "exclude_", "hierarchical_")
     return wp_list_cats(query_)
 # end def list_cats
@@ -643,7 +643,7 @@ def list_cats(optionall_=1, all_="All", sort_column_="ID", sort_order_="asc", fi
 def wp_list_cats(args_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_categories()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_list_categories()")
     parsed_args_ = wp_parse_args(args_)
     #// Map to new names.
     if (php_isset(lambda : parsed_args_["optionall"])) and (php_isset(lambda : parsed_args_["all"])):
@@ -691,7 +691,7 @@ def dropdown_cats(optionall_=1, all_="All", orderby_="ID", order_="asc", show_la
         optionnone_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_dropdown_categories()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_dropdown_categories()")
     show_option_all_ = ""
     if optionall_:
         show_option_all_ = all_
@@ -733,7 +733,7 @@ def list_authors(optioncount_=None, exclude_admin_=None, show_fullname_=None, hi
         hide_empty_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_authors()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_list_authors()")
     args_ = php_compact("optioncount_", "exclude_admin_", "show_fullname_", "hide_empty_", "feed_", "feed_image_")
     return wp_list_authors(args_)
 # end def list_authors
@@ -751,7 +751,7 @@ def list_authors(optioncount_=None, exclude_admin_=None, show_fullname_=None, hi
 def wp_get_post_cats(blogid_="1", post_ID_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_get_post_categories()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_get_post_categories()")
     return wp_get_post_categories(post_ID_)
 # end def wp_get_post_cats
 #// 
@@ -772,7 +772,7 @@ def wp_set_post_cats(blogid_="1", post_ID_=0, post_categories_=None, *_args_):
         post_categories_ = Array()
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_set_post_categories()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_set_post_categories()")
     return wp_set_post_categories(post_ID_, post_categories_)
 # end def wp_set_post_cats
 #// 
@@ -795,7 +795,7 @@ def get_archives(type_="", limit_="", format_="html", before_="", after_="", sho
         show_post_count_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_get_archives()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_get_archives()")
     args_ = php_compact("type_", "limit_", "format_", "before_", "after_", "show_post_count_")
     return wp_get_archives(args_)
 # end def get_archives
@@ -814,7 +814,7 @@ def get_archives(type_="", limit_="", format_="html", before_="", after_="", sho
 def get_author_link(echo_=None, author_id_=None, author_nicename_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_author_posts_url()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_author_posts_url()")
     link_ = get_author_posts_url(author_id_, author_nicename_)
     if echo_:
         php_print(link_)
@@ -840,7 +840,7 @@ def get_author_link(echo_=None, author_id_=None, author_nicename_="", *_args_):
 def link_pages(before_="<br />", after_="<br />", next_or_number_="number", nextpagelink_="next page", previouspagelink_="previous page", pagelink_="%", more_file_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_link_pages()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_link_pages()")
     args_ = php_compact("before_", "after_", "next_or_number_", "nextpagelink_", "previouspagelink_", "pagelink_", "more_file_")
     return wp_link_pages(args_)
 # end def link_pages
@@ -857,7 +857,7 @@ def link_pages(before_="<br />", after_="<br />", next_or_number_="number", next
 def get_settings(option_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_option()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_option()")
     return get_option(option_)
 # end def get_settings
 #// 
@@ -870,7 +870,7 @@ def get_settings(option_=None, *_args_):
 def permalink_link(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "1.2.0", "the_permalink()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "1.2.0", "the_permalink()")
     the_permalink()
 # end def permalink_link
 #// 
@@ -885,7 +885,7 @@ def permalink_link(*_args_):
 def permalink_single_rss(deprecated_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.3.0", "the_permalink_rss()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.3.0", "the_permalink_rss()")
     the_permalink_rss()
 # end def permalink_single_rss
 #// 
@@ -901,7 +901,7 @@ def permalink_single_rss(deprecated_="", *_args_):
 def wp_get_links(args_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_list_bookmarks()")
     if php_strpos(args_, "=") == False:
         cat_id_ = args_
         args_ = add_query_arg("category", cat_id_, args_)
@@ -954,7 +954,7 @@ def get_links(category_=None, before_="", after_="<br />", between_=" ", show_im
         echo_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_bookmarks()")
     order_ = "ASC"
     if php_substr(orderby_, 0, 1) == "_":
         order_ = "DESC"
@@ -1045,7 +1045,7 @@ def get_links(category_=None, before_="", after_="<br />", between_=" ", show_im
 def get_links_list(order_="name", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "wp_list_bookmarks()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "wp_list_bookmarks()")
     order_ = php_strtolower(order_)
     #// Handle link category sorting.
     direction_ = "ASC"
@@ -1090,7 +1090,7 @@ def links_popup_script(text_="Links", width_=400, height_=400, file_="links.all.
         count_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0")
 # end def links_popup_script
 #// 
 #// Legacy function that retrieved the value of a link's link_rating field.
@@ -1105,7 +1105,7 @@ def links_popup_script(text_="Links", width_=400, height_=400, file_="links.all.
 def get_linkrating(link_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "sanitize_bookmark_field()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "sanitize_bookmark_field()")
     return sanitize_bookmark_field("link_rating", link_.link_rating, link_.link_id, "display")
 # end def get_linkrating
 #// 
@@ -1121,7 +1121,7 @@ def get_linkrating(link_=None, *_args_):
 def get_linkcatname(id_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_category()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_category()")
     id_ = php_int(id_)
     if php_empty(lambda : id_):
         return ""
@@ -1147,7 +1147,7 @@ def get_linkcatname(id_=0, *_args_):
 def comments_rss_link(link_text_="Comments RSS", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.5.0", "post_comments_feed_link()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "post_comments_feed_link()")
     post_comments_feed_link(link_text_)
 # end def comments_rss_link
 #// 
@@ -1166,7 +1166,7 @@ def get_category_rss_link(echo_=None, cat_ID_=1, *_args_):
         echo_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.5.0", "get_category_feed_link()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "get_category_feed_link()")
     link_ = get_category_feed_link(cat_ID_, "rss2")
     if echo_:
         php_print(link_)
@@ -1189,7 +1189,7 @@ def get_author_rss_link(echo_=None, author_id_=1, *_args_):
         echo_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.5.0", "get_author_feed_link()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "get_author_feed_link()")
     link_ = get_author_feed_link(author_id_)
     if echo_:
         php_print(link_)
@@ -1208,7 +1208,7 @@ def get_author_rss_link(echo_=None, author_id_=1, *_args_):
 def comments_rss(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.2.0", "get_post_comments_feed_link()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.2.0", "get_post_comments_feed_link()")
     return esc_url(get_post_comments_feed_link())
 # end def comments_rss
 #// 
@@ -1226,7 +1226,7 @@ def comments_rss(*_args_):
 def create_user(username_=None, password_=None, email_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.0.0", "wp_create_user()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.0.0", "wp_create_user()")
     return wp_create_user(username_, password_, email_)
 # end def create_user
 #// 
@@ -1237,7 +1237,7 @@ def create_user(username_=None, password_=None, email_=None, *_args_):
 def gzip_compression(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0")
     return False
 # end def gzip_compression
 #// 
@@ -1257,7 +1257,7 @@ def get_commentdata(comment_ID_=None, no_cache_=0, include_unapproved_=None, *_a
         include_unapproved_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.7.0", "get_comment()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.7.0", "get_comment()")
     return get_comment(comment_ID_, ARRAY_A)
 # end def get_commentdata
 #// 
@@ -1273,7 +1273,7 @@ def get_commentdata(comment_ID_=None, no_cache_=0, include_unapproved_=None, *_a
 def get_catname(cat_ID_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_cat_name()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_cat_name()")
     return get_cat_name(cat_ID_)
 # end def get_catname
 #// 
@@ -1294,7 +1294,7 @@ def get_category_children(id_=None, before_="/", after_="", visited_=None, *_arg
         visited_ = Array()
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_term_children()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_term_children()")
     if 0 == id_:
         return ""
     # end if
@@ -1331,7 +1331,7 @@ def get_category_children(id_=None, before_="/", after_="", visited_=None, *_arg
 def get_all_category_ids(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.0.0", "get_terms()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.0.0", "get_terms()")
     cat_ids_ = get_terms(Array({"taxonomy": "category", "fields": "ids", "get": "all"}))
     return cat_ids_
 # end def get_all_category_ids
@@ -1347,7 +1347,7 @@ def get_all_category_ids(*_args_):
 def get_the_author_description(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('description')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('description')")
     return get_the_author_meta("description")
 # end def get_the_author_description
 #// 
@@ -1360,7 +1360,7 @@ def get_the_author_description(*_args_):
 def the_author_description(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('description')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('description')")
     the_author_meta("description")
 # end def the_author_description
 #// 
@@ -1375,7 +1375,7 @@ def the_author_description(*_args_):
 def get_the_author_login(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('login')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('login')")
     return get_the_author_meta("login")
 # end def get_the_author_login
 #// 
@@ -1388,7 +1388,7 @@ def get_the_author_login(*_args_):
 def the_author_login(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('login')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('login')")
     the_author_meta("login")
 # end def the_author_login
 #// 
@@ -1403,7 +1403,7 @@ def the_author_login(*_args_):
 def get_the_author_firstname(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('first_name')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('first_name')")
     return get_the_author_meta("first_name")
 # end def get_the_author_firstname
 #// 
@@ -1416,7 +1416,7 @@ def get_the_author_firstname(*_args_):
 def the_author_firstname(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('first_name')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('first_name')")
     the_author_meta("first_name")
 # end def the_author_firstname
 #// 
@@ -1431,7 +1431,7 @@ def the_author_firstname(*_args_):
 def get_the_author_lastname(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('last_name')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('last_name')")
     return get_the_author_meta("last_name")
 # end def get_the_author_lastname
 #// 
@@ -1444,7 +1444,7 @@ def get_the_author_lastname(*_args_):
 def the_author_lastname(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('last_name')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('last_name')")
     the_author_meta("last_name")
 # end def the_author_lastname
 #// 
@@ -1459,7 +1459,7 @@ def the_author_lastname(*_args_):
 def get_the_author_nickname(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('nickname')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('nickname')")
     return get_the_author_meta("nickname")
 # end def get_the_author_nickname
 #// 
@@ -1472,7 +1472,7 @@ def get_the_author_nickname(*_args_):
 def the_author_nickname(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('nickname')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('nickname')")
     the_author_meta("nickname")
 # end def the_author_nickname
 #// 
@@ -1487,7 +1487,7 @@ def the_author_nickname(*_args_):
 def get_the_author_email(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('email')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('email')")
     return get_the_author_meta("email")
 # end def get_the_author_email
 #// 
@@ -1500,7 +1500,7 @@ def get_the_author_email(*_args_):
 def the_author_email(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('email')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('email')")
     the_author_meta("email")
 # end def the_author_email
 #// 
@@ -1515,7 +1515,7 @@ def the_author_email(*_args_):
 def get_the_author_icq(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('icq')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('icq')")
     return get_the_author_meta("icq")
 # end def get_the_author_icq
 #// 
@@ -1528,7 +1528,7 @@ def get_the_author_icq(*_args_):
 def the_author_icq(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('icq')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('icq')")
     the_author_meta("icq")
 # end def the_author_icq
 #// 
@@ -1543,7 +1543,7 @@ def the_author_icq(*_args_):
 def get_the_author_yim(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('yim')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('yim')")
     return get_the_author_meta("yim")
 # end def get_the_author_yim
 #// 
@@ -1556,7 +1556,7 @@ def get_the_author_yim(*_args_):
 def the_author_yim(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('yim')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('yim')")
     the_author_meta("yim")
 # end def the_author_yim
 #// 
@@ -1571,7 +1571,7 @@ def the_author_yim(*_args_):
 def get_the_author_msn(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('msn')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('msn')")
     return get_the_author_meta("msn")
 # end def get_the_author_msn
 #// 
@@ -1584,7 +1584,7 @@ def get_the_author_msn(*_args_):
 def the_author_msn(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('msn')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('msn')")
     the_author_meta("msn")
 # end def the_author_msn
 #// 
@@ -1599,7 +1599,7 @@ def the_author_msn(*_args_):
 def get_the_author_aim(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('aim')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('aim')")
     return get_the_author_meta("aim")
 # end def get_the_author_aim
 #// 
@@ -1612,7 +1612,7 @@ def get_the_author_aim(*_args_):
 def the_author_aim(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('aim')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('aim')")
     the_author_meta("aim")
 # end def the_author_aim
 #// 
@@ -1630,7 +1630,7 @@ def get_author_name(auth_id_=None, *_args_):
         auth_id_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('display_name')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('display_name')")
     return get_the_author_meta("display_name", auth_id_)
 # end def get_author_name
 #// 
@@ -1645,7 +1645,7 @@ def get_author_name(auth_id_=None, *_args_):
 def get_the_author_url(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('url')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('url')")
     return get_the_author_meta("url")
 # end def get_the_author_url
 #// 
@@ -1658,7 +1658,7 @@ def get_the_author_url(*_args_):
 def the_author_url(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('url')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('url')")
     the_author_meta("url")
 # end def the_author_url
 #// 
@@ -1673,7 +1673,7 @@ def the_author_url(*_args_):
 def get_the_author_ID(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "get_the_author_meta('ID')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "get_the_author_meta('ID')")
     return get_the_author_meta("ID")
 # end def get_the_author_ID
 #// 
@@ -1686,7 +1686,7 @@ def get_the_author_ID(*_args_):
 def the_author_ID(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "the_author_meta('ID')")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "the_author_meta('ID')")
     the_author_meta("ID")
 # end def the_author_ID
 #// 
@@ -1720,7 +1720,7 @@ def the_author_ID(*_args_):
 def the_content_rss(more_link_text_="(more...)", stripteaser_=0, more_file_="", cut_=0, encode_html_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.9.0", "the_content_feed()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.9.0", "the_content_feed()")
     content_ = get_the_content(more_link_text_, stripteaser_)
     #// 
     #// Filters the post content in the context of an RSS feed.
@@ -1778,7 +1778,7 @@ def the_content_rss(more_link_text_="(more...)", stripteaser_=0, more_file_="", 
 def make_url_footnote(content_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.9.0", "")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.9.0", "")
     preg_match_all("/<a(.+?)href=\\\"(.+?)\\\"(.*?)>(.+?)<\\/a>/", content_, matches_)
     links_summary_ = "\n"
     i_ = 0
@@ -1822,7 +1822,7 @@ def make_url_footnote(content_=None, *_args_):
 def _c(text_=None, domain_="default", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.9.0", "_x()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.9.0", "_x()")
     return before_last_bar(translate(text_, domain_))
 # end def _c
 #// 
@@ -1840,7 +1840,7 @@ def _c(text_=None, domain_="default", *_args_):
 def translate_with_context(text_=None, domain_="default", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.9.0", "_x()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.9.0", "_x()")
     return before_last_bar(translate(text_, domain_))
 # end def translate_with_context
 #// 
@@ -1862,7 +1862,7 @@ def translate_with_context(text_=None, domain_="default", *_args_):
 def _nc(single_=None, plural_=None, number_=None, domain_="default", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.9.0", "_nx()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.9.0", "_nx()")
     return before_last_bar(_n(single_, plural_, number_, domain_))
 # end def _nc
 #// 
@@ -1876,7 +1876,7 @@ def __ngettext(*args_):
     
     
     #// phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
-    _deprecated_function(__FUNCTION__, "2.8.0", "_n()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "_n()")
     return _n(args_)
 # end def __ngettext
 #// 
@@ -1890,7 +1890,7 @@ def __ngettext_noop(*args_):
     
     
     #// phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
-    _deprecated_function(__FUNCTION__, "2.8.0", "_n_noop()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "_n_noop()")
     return _n_noop(args_)
 # end def __ngettext_noop
 #// 
@@ -1905,7 +1905,7 @@ def __ngettext_noop(*args_):
 def get_alloptions(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "wp_load_alloptions()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "wp_load_alloptions()")
     return wp_load_alloptions()
 # end def get_alloptions
 #// 
@@ -1932,7 +1932,7 @@ def get_the_attachment_link(id_=0, fullsize_=None, max_dims_=None, permalink_=No
         permalink_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_link()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "wp_get_attachment_link()")
     id_ = php_int(id_)
     _post_ = get_post(id_)
     url_ = wp_get_attachment_url(_post_.ID)
@@ -1962,7 +1962,7 @@ def get_attachment_icon_src(id_=0, fullsize_=None, *_args_):
         fullsize_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_image_src()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "wp_get_attachment_image_src()")
     id_ = php_int(id_)
     post_ = get_post(id_)
     if (not post_):
@@ -2008,7 +2008,7 @@ def get_attachment_icon(id_=0, fullsize_=None, max_dims_=None, *_args_):
         max_dims_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_image()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "wp_get_attachment_image()")
     id_ = php_int(id_)
     post_ = get_post(id_)
     if (not post_):
@@ -2066,7 +2066,7 @@ def get_attachment_innerHTML(id_=0, fullsize_=None, max_dims_=None, *_args_):
         max_dims_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_image()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.5.0", "wp_get_attachment_image()")
     id_ = php_int(id_)
     post_ = get_post(id_)
     if (not post_):
@@ -2098,7 +2098,7 @@ def get_link(bookmark_id_=None, output_=None, filter_="raw", *_args_):
         output_ = OBJECT
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.1.0", "get_bookmark()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.1.0", "get_bookmark()")
     return get_bookmark(bookmark_id_, output_, filter_)
 # end def get_link
 #// 
@@ -2117,7 +2117,7 @@ def sanitize_url(url_=None, protocols_=None, *_args_):
         protocols_ = None
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "esc_url_raw()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "esc_url_raw()")
     return esc_url_raw(url_, protocols_)
 # end def sanitize_url
 #// 
@@ -2144,7 +2144,7 @@ def clean_url(url_=None, protocols_=None, context_="display", *_args_):
     if context_ == "db":
         _deprecated_function("clean_url( $context = 'db' )", "3.0.0", "esc_url_raw()")
     else:
-        _deprecated_function(__FUNCTION__, "3.0.0", "esc_url()")
+        _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "esc_url()")
     # end if
     return esc_url(url_, protocols_, context_)
 # end def clean_url
@@ -2163,7 +2163,7 @@ def clean_url(url_=None, protocols_=None, context_="display", *_args_):
 def js_escape(text_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "esc_js()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "esc_js()")
     return esc_js(text_)
 # end def js_escape
 #// 
@@ -2189,7 +2189,7 @@ def wp_specialchars(string_=None, quote_style_=None, charset_=None, double_encod
         double_encode_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "esc_html()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "esc_html()")
     if php_func_num_args() > 1:
         #// Maintain back-compat for people passing additional arguments.
         return _wp_specialchars(string_, quote_style_, charset_, double_encode_)
@@ -2210,7 +2210,7 @@ def wp_specialchars(string_=None, quote_style_=None, charset_=None, double_encod
 def attribute_escape(text_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "esc_attr()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "esc_attr()")
     return esc_attr(text_)
 # end def attribute_escape
 #// 
@@ -2235,7 +2235,7 @@ def attribute_escape(text_=None, *_args_):
 def register_sidebar_widget(name_=None, output_callback_=None, classname_="", *params_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "wp_register_sidebar_widget()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "wp_register_sidebar_widget()")
     #// Compat.
     if php_is_array(name_):
         if php_count(name_) == 3:
@@ -2263,7 +2263,7 @@ def register_sidebar_widget(name_=None, output_callback_=None, classname_="", *p
 def unregister_sidebar_widget(id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "wp_unregister_sidebar_widget()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "wp_unregister_sidebar_widget()")
     return wp_unregister_sidebar_widget(id_)
 # end def unregister_sidebar_widget
 #// 
@@ -2289,7 +2289,7 @@ def unregister_sidebar_widget(id_=None, *_args_):
 def register_widget_control(name_=None, control_callback_=None, width_="", height_="", *params_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "wp_register_widget_control()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "wp_register_widget_control()")
     #// Compat.
     if php_is_array(name_):
         if php_count(name_) == 3:
@@ -2320,7 +2320,7 @@ def register_widget_control(name_=None, control_callback_=None, width_="", heigh
 def unregister_widget_control(id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "2.8.0", "wp_unregister_widget_control()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "2.8.0", "wp_unregister_widget_control()")
     return wp_unregister_widget_control(id_)
 # end def unregister_widget_control
 #// 
@@ -2338,7 +2338,7 @@ def unregister_widget_control(id_=None, *_args_):
 def delete_usermeta(user_id_=None, meta_key_=None, meta_value_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "delete_user_meta()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "delete_user_meta()")
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not php_is_numeric(user_id_)):
@@ -2384,7 +2384,7 @@ def delete_usermeta(user_id_=None, meta_key_=None, meta_value_="", *_args_):
 def get_usermeta(user_id_=None, meta_key_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "get_user_meta()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "get_user_meta()")
     global wpdb_
     php_check_if_defined("wpdb_")
     user_id_ = php_int(user_id_)
@@ -2438,7 +2438,7 @@ def get_usermeta(user_id_=None, meta_key_="", *_args_):
 def update_usermeta(user_id_=None, meta_key_=None, meta_value_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "update_user_meta()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "update_user_meta()")
     global wpdb_
     php_check_if_defined("wpdb_")
     if (not php_is_numeric(user_id_)):
@@ -2491,7 +2491,7 @@ def update_usermeta(user_id_=None, meta_key_=None, meta_value_=None, *_args_):
 def get_users_of_blog(id_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0", "get_users()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0", "get_users()")
     global wpdb_
     php_check_if_defined("wpdb_")
     if php_empty(lambda : id_):
@@ -2515,7 +2515,7 @@ def automatic_feed_links(add_=None, *_args_):
         add_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "add_theme_support( 'automatic-feed-links' )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "add_theme_support( 'automatic-feed-links' )")
     if add_:
         add_theme_support("automatic-feed-links")
     else:
@@ -2539,7 +2539,7 @@ def get_profile(field_=None, user_=None, *_args_):
         user_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "get_the_author_meta()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "get_the_author_meta()")
     if user_:
         user_ = get_user_by("login", user_)
         user_ = user_.ID
@@ -2559,7 +2559,7 @@ def get_profile(field_=None, user_=None, *_args_):
 def get_usernumposts(userid_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "count_user_posts()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "count_user_posts()")
     return count_user_posts(userid_)
 # end def get_usernumposts
 #// 
@@ -2594,7 +2594,7 @@ def funky_javascript_callback(matches_=None, *_args_):
 def funky_javascript_fix(text_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0")
     #// Fixes for browsers' JavaScript bugs.
     global is_macIE_
     global is_winIE_
@@ -2617,7 +2617,7 @@ def funky_javascript_fix(text_=None, *_args_):
 def is_taxonomy(taxonomy_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "taxonomy_exists()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "taxonomy_exists()")
     return taxonomy_exists(taxonomy_)
 # end def is_taxonomy
 #// 
@@ -2635,7 +2635,7 @@ def is_taxonomy(taxonomy_=None, *_args_):
 def is_term(term_=None, taxonomy_="", parent_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.0.0", "term_exists()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.0.0", "term_exists()")
     return term_exists(term_, taxonomy_, parent_)
 # end def is_term
 #// 
@@ -2657,7 +2657,7 @@ def is_term(term_=None, taxonomy_="", parent_=0, *_args_):
 def is_plugin_page(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0")
     global plugin_page_
     php_check_if_defined("plugin_page_")
     if (php_isset(lambda : plugin_page_)):
@@ -2680,7 +2680,7 @@ def is_plugin_page(*_args_):
 def update_category_cache(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.1.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.1.0")
     return True
 # end def update_category_cache
 #// 
@@ -2694,7 +2694,7 @@ def update_category_cache(*_args_):
 def wp_timezone_supported(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.2.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.2.0")
     return True
 # end def wp_timezone_supported
 #// 
@@ -2719,7 +2719,7 @@ def the_editor(content_=None, id_="content", prev_id_="title", media_buttons_=No
         extended_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "wp_editor()")
     wp_editor(content_, id_, Array({"media_buttons": media_buttons_}))
 # end def the_editor
 #// 
@@ -2734,7 +2734,7 @@ def the_editor(content_=None, id_="content", prev_id_="title", media_buttons_=No
 def get_user_metavalues(ids_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     objects_ = Array()
     ids_ = php_array_map("intval", ids_)
     for id_ in ids_:
@@ -2765,7 +2765,7 @@ def get_user_metavalues(ids_=None, *_args_):
 def sanitize_user_object(user_=None, context_="display", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     if php_is_object(user_):
         if (not (php_isset(lambda : user_.ID))):
             user_.ID = 0
@@ -2812,7 +2812,7 @@ def get_boundary_post_rel_link(title_="%title", in_same_cat_=None, excluded_cate
         start_ = True
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     posts_ = get_boundary_post(in_same_cat_, excluded_categories_, start_)
     #// If there is no post, stop.
     if php_empty(lambda : posts_):
@@ -2848,7 +2848,7 @@ def start_post_rel_link(title_="%title", in_same_cat_=None, excluded_categories_
         in_same_cat_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     php_print(get_boundary_post_rel_link(title_, in_same_cat_, excluded_categories_, True))
 # end def start_post_rel_link
 #// 
@@ -2862,7 +2862,7 @@ def start_post_rel_link(title_="%title", in_same_cat_=None, excluded_categories_
 def get_index_rel_link(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     link_ = "<link rel='index' title='" + esc_attr(get_bloginfo("name", "display")) + "' href='" + esc_url(user_trailingslashit(get_bloginfo("url", "display"))) + "' />\n"
     return apply_filters("index_rel_link", link_)
 # end def get_index_rel_link
@@ -2875,7 +2875,7 @@ def get_index_rel_link(*_args_):
 def index_rel_link(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     php_print(get_index_rel_link())
 # end def index_rel_link
 #// 
@@ -2890,7 +2890,7 @@ def index_rel_link(*_args_):
 def get_parent_post_rel_link(title_="%title", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     if (not php_empty(lambda : PHP_GLOBALS["post"])) and (not php_empty(lambda : PHP_GLOBALS["post"].post_parent)):
         post_ = get_post(PHP_GLOBALS["post"].post_parent)
     # end if
@@ -2917,7 +2917,7 @@ def get_parent_post_rel_link(title_="%title", *_args_):
 def parent_post_rel_link(title_="%title", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     php_print(get_parent_post_rel_link(title_))
 # end def parent_post_rel_link
 #// 
@@ -2931,7 +2931,7 @@ def parent_post_rel_link(title_="%title", *_args_):
 def wp_admin_bar_dashboard_view_site_menu(wp_admin_bar_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0")
     user_id_ = get_current_user_id()
     if 0 != user_id_:
         if is_admin():
@@ -2956,7 +2956,7 @@ def wp_admin_bar_dashboard_view_site_menu(wp_admin_bar_=None, *_args_):
 def is_blog_user(blog_id_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.3.0", "is_user_member_of_blog()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.3.0", "is_user_member_of_blog()")
     return is_user_member_of_blog(get_current_user_id(), blog_id_)
 # end def is_blog_user
 #// 
@@ -2975,7 +2975,7 @@ def is_blog_user(blog_id_=0, *_args_):
 def debug_fopen(filename_=None, mode_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "error_log()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "error_log()")
     return False
 # end def debug_fopen
 #// 
@@ -2993,7 +2993,7 @@ def debug_fopen(filename_=None, mode_=None, *_args_):
 def debug_fwrite(fp_=None, string_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "error_log()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "error_log()")
     if (not php_empty(lambda : PHP_GLOBALS["debug"])):
         php_error_log(string_)
     # end if
@@ -3012,7 +3012,7 @@ def debug_fwrite(fp_=None, string_=None, *_args_):
 def debug_fclose(fp_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "error_log()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "error_log()")
 # end def debug_fclose
 #// 
 #// Retrieve list of themes with theme data in theme directory.
@@ -3030,7 +3030,7 @@ def debug_fclose(fp_=None, *_args_):
 def get_themes(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_themes()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "wp_get_themes()")
     global wp_themes_
     php_check_if_defined("wp_themes_")
     if (php_isset(lambda : wp_themes_)):
@@ -3061,7 +3061,7 @@ def get_themes(*_args_):
 def get_theme(theme_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_theme( $stylesheet )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "wp_get_theme( $stylesheet )")
     themes_ = get_themes()
     if php_is_array(themes_) and php_array_key_exists(theme_, themes_):
         return themes_[theme_]
@@ -3080,7 +3080,7 @@ def get_theme(theme_=None, *_args_):
 def get_current_theme(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_theme()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "wp_get_theme()")
     theme_ = get_option("current_theme")
     if theme_:
         return theme_
@@ -3102,7 +3102,7 @@ def get_current_theme(*_args_):
 def clean_pre(matches_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0")
     if php_is_array(matches_):
         text_ = matches_[1] + matches_[2] + "</pre>"
     else:
@@ -3127,7 +3127,7 @@ def clean_pre(matches_=None, *_args_):
 def add_custom_image_header(wp_head_callback_=None, admin_head_callback_=None, admin_preview_callback_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "add_theme_support( 'custom-header', $args )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "add_theme_support( 'custom-header', $args )")
     args_ = Array({"wp-head-callback": wp_head_callback_, "admin-head-callback": admin_head_callback_})
     if admin_preview_callback_:
         args_["admin-preview-callback"] = admin_preview_callback_
@@ -3146,7 +3146,7 @@ def add_custom_image_header(wp_head_callback_=None, admin_head_callback_=None, a
 def remove_custom_image_header(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "remove_theme_support( 'custom-header' )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "remove_theme_support( 'custom-header' )")
     return remove_theme_support("custom-header")
 # end def remove_custom_image_header
 #// 
@@ -3163,7 +3163,7 @@ def remove_custom_image_header(*_args_):
 def add_custom_background(wp_head_callback_="", admin_head_callback_="", admin_preview_callback_="", *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "add_theme_support( 'custom-background', $args )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "add_theme_support( 'custom-background', $args )")
     args_ = Array()
     if wp_head_callback_:
         args_["wp-head-callback"] = wp_head_callback_
@@ -3188,7 +3188,7 @@ def add_custom_background(wp_head_callback_="", admin_head_callback_="", admin_p
 def remove_custom_background(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "remove_theme_support( 'custom-background' )")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "remove_theme_support( 'custom-background' )")
     return remove_theme_support("custom-background")
 # end def remove_custom_background
 #// 
@@ -3204,7 +3204,7 @@ def remove_custom_background(*_args_):
 def get_theme_data(theme_file_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "wp_get_theme()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "wp_get_theme()")
     theme_ = php_new_class("WP_Theme", lambda : WP_Theme(wp_basename(php_dirname(theme_file_)), php_dirname(php_dirname(theme_file_))))
     theme_data_ = Array({"Name": theme_.get("Name"), "URI": theme_.display("ThemeURI", True, False), "Description": theme_.display("Description", True, False), "Author": theme_.display("Author", True, False), "AuthorURI": theme_.display("AuthorURI", True, False), "Version": theme_.get("Version"), "Template": theme_.get("Template"), "Status": theme_.get("Status"), "Tags": theme_.get("Tags"), "Title": theme_.get("Name"), "AuthorName": theme_.get("Author")})
     for extra_header_ in apply_filters("extra_theme_headers", Array()):
@@ -3228,7 +3228,7 @@ def get_theme_data(theme_file_=None, *_args_):
 def update_page_cache(pages_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "update_post_cache()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "update_post_cache()")
     update_post_cache(pages_)
 # end def update_page_cache
 #// 
@@ -3246,7 +3246,7 @@ def update_page_cache(pages_=None, *_args_):
 def clean_page_cache(id_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.0", "clean_post_cache()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.0", "clean_post_cache()")
     clean_post_cache(id_)
 # end def clean_page_cache
 #// 
@@ -3264,7 +3264,7 @@ def clean_page_cache(id_=None, *_args_):
 def wp_explain_nonce(action_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.4.1", "wp_nonce_ays()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.4.1", "wp_nonce_ays()")
     return __("Are you sure you want to do this?")
 # end def wp_explain_nonce
 #// 
@@ -3281,7 +3281,7 @@ def sticky_class(post_id_=None, *_args_):
         post_id_ = None
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "post_class()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "post_class()")
     if is_sticky(post_id_):
         php_print(" sticky")
     # end if
@@ -3301,7 +3301,7 @@ def sticky_class(post_id_=None, *_args_):
 def _get_post_ancestors(post_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0")
 # end def _get_post_ancestors
 #// 
 #// Load an image from a string, if PHP supports it.
@@ -3316,7 +3316,7 @@ def _get_post_ancestors(post_=None, *_args_):
 def wp_load_image(file_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "wp_get_image_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "wp_get_image_editor()")
     if php_is_numeric(file_):
         file_ = get_attached_file(file_)
     # end if
@@ -3371,7 +3371,7 @@ def image_resize(file_=None, max_w_=None, max_h_=None, crop_=None, suffix_=None,
         dest_path_ = None
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "wp_get_image_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "wp_get_image_editor()")
     editor_ = wp_get_image_editor(file_)
     if is_wp_error(editor_):
         return editor_
@@ -3407,7 +3407,7 @@ def wp_get_single_post(postid_=0, mode_=None, *_args_):
         mode_ = OBJECT
     # end if
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "get_post()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "get_post()")
     return get_post(postid_, mode_)
 # end def wp_get_single_post
 #// 
@@ -3424,7 +3424,7 @@ def wp_get_single_post(postid_=0, mode_=None, *_args_):
 def user_pass_ok(user_login_=None, user_pass_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "wp_authenticate()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "wp_authenticate()")
     user_ = wp_authenticate(user_login_, user_pass_)
     if is_wp_error(user_):
         return False
@@ -3455,7 +3455,7 @@ def _save_post_hook(*_args_):
 def gd_edit_image_support(mime_type_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "wp_image_editor_supports()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "wp_image_editor_supports()")
     if php_function_exists("imagetypes"):
         for case in Switch(mime_type_):
             if case("image/jpeg"):
@@ -3496,7 +3496,7 @@ def gd_edit_image_support(mime_type_=None, *_args_):
 def wp_convert_bytes_to_hr(bytes_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.6.0", "size_format()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.6.0", "size_format()")
     units_ = Array({0: "B", 1: "KB", 2: "MB", 3: "GB", 4: "TB"})
     log_ = log(bytes_, KB_IN_BYTES)
     power_ = php_int(log_)
@@ -3522,7 +3522,7 @@ def wp_convert_bytes_to_hr(bytes_=None, *_args_):
 def _search_terms_tidy(t_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.7.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.7.0")
     return php_trim(t_, "\"'\n\r ")
 # end def _search_terms_tidy
 #// 
@@ -3541,7 +3541,7 @@ def rich_edit_exists(*_args_):
     
     global wp_rich_edit_exists_
     php_check_if_defined("wp_rich_edit_exists_")
-    _deprecated_function(__FUNCTION__, "3.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.9.0")
     if (not (php_isset(lambda : wp_rich_edit_exists_))):
         wp_rich_edit_exists_ = php_file_exists(ABSPATH + WPINC + "/js/tinymce/tinymce.js")
     # end if
@@ -3576,7 +3576,7 @@ def default_topic_count_text(count_=None, *_args_):
 def format_to_post(content_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.9.0")
     return content_
 # end def format_to_post
 #// 
@@ -3592,7 +3592,7 @@ def format_to_post(content_=None, *_args_):
 def like_escape(text_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.0.0", "wpdb::esc_like()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.0.0", "wpdb::esc_like()")
     return php_str_replace(Array("%", "_"), Array("\\%", "\\_"), text_)
 # end def like_escape
 #// 
@@ -3610,7 +3610,7 @@ def like_escape(text_=None, *_args_):
 def url_is_accessable_via_ssl(url_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.0.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.0.0")
     response_ = wp_remote_get(set_url_scheme(url_, "https"))
     if (not is_wp_error(response_)):
         status_ = wp_remote_retrieve_response_code(response_)
@@ -3632,7 +3632,7 @@ def url_is_accessable_via_ssl(url_=None, *_args_):
 def preview_theme(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0")
 # end def preview_theme
 #// 
 #// Private function to modify the current template when previewing a theme
@@ -3646,7 +3646,7 @@ def preview_theme(*_args_):
 def _preview_theme_template_filter(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0")
     return ""
 # end def _preview_theme_template_filter
 #// 
@@ -3661,7 +3661,7 @@ def _preview_theme_template_filter(*_args_):
 def _preview_theme_stylesheet_filter(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0")
     return ""
 # end def _preview_theme_stylesheet_filter
 #// 
@@ -3677,7 +3677,7 @@ def _preview_theme_stylesheet_filter(*_args_):
 def preview_theme_ob_filter(content_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0")
     return content_
 # end def preview_theme_ob_filter
 #// 
@@ -3695,7 +3695,7 @@ def preview_theme_ob_filter(content_=None, *_args_):
 def preview_theme_ob_filter_callback(matches_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.3.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0")
     return ""
 # end def preview_theme_ob_filter_callback
 #// 
@@ -3714,7 +3714,7 @@ def preview_theme_ob_filter_callback(matches_=None, *_args_):
 def wp_richedit_pre(text_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.3.0", "format_for_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0", "format_for_editor()")
     if php_empty(lambda : text_):
         #// 
         #// Filters text returned for the rich text editor.
@@ -3735,7 +3735,7 @@ def wp_richedit_pre(text_=None, *_args_):
     # end if
     output_ = convert_chars(text_)
     output_ = wpautop(output_)
-    output_ = htmlspecialchars(output_, ENT_NOQUOTES, get_option("blog_charset"))
+    output_ = php_htmlspecialchars(output_, ENT_NOQUOTES, get_option("blog_charset"))
     #// This filter is documented in wp-includes/deprecated.php
     return apply_filters("richedit_pre", output_)
 # end def wp_richedit_pre
@@ -3755,9 +3755,9 @@ def wp_richedit_pre(text_=None, *_args_):
 def wp_htmledit_pre(output_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.3.0", "format_for_editor()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.3.0", "format_for_editor()")
     if (not php_empty(lambda : output_)):
-        output_ = htmlspecialchars(output_, ENT_NOQUOTES, get_option("blog_charset"))
+        output_ = php_htmlspecialchars(output_, ENT_NOQUOTES, get_option("blog_charset"))
     # end if
     #// Convert only '< > &'.
     #// 
@@ -3783,7 +3783,7 @@ def wp_htmledit_pre(output_=None, *_args_):
 def post_permalink(post_id_=0, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.4.0", "get_permalink()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0", "get_permalink()")
     return get_permalink(post_id_)
 # end def post_permalink
 #// 
@@ -3807,7 +3807,7 @@ def wp_get_http(url_=None, file_path_=None, red_=1, *_args_):
         file_path_ = False
     # end if
     
-    _deprecated_function(__FUNCTION__, "4.4.0", "WP_Http")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0", "WP_Http")
     php_no_error(lambda: set_time_limit(60))
     if red_ > 5:
         return False
@@ -3859,7 +3859,7 @@ def force_ssl_login(force_=None, *_args_):
         force_ = None
     # end if
     
-    _deprecated_function(__FUNCTION__, "4.4.0", "force_ssl_admin()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.4.0", "force_ssl_admin()")
     return force_ssl_admin(force_)
 # end def force_ssl_login
 #// 
@@ -3873,7 +3873,7 @@ def force_ssl_login(force_=None, *_args_):
 def get_comments_popup_template(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0")
     return ""
 # end def get_comments_popup_template
 #// 
@@ -3891,7 +3891,7 @@ def get_comments_popup_template(*_args_):
 def is_comments_popup(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0")
     return False
 # end def is_comments_popup
 #// 
@@ -3903,7 +3903,7 @@ def is_comments_popup(*_args_):
 def comments_popup_script(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0")
 # end def comments_popup_script
 #// 
 #// Adds element attributes to open links in new tabs.
@@ -3917,7 +3917,7 @@ def comments_popup_script(*_args_):
 def popuplinks(text_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.5.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.5.0")
     text_ = php_preg_replace("/<a (.+?)>/i", "<a $1 target='_blank' rel='external'>", text_)
     return text_
 # end def popuplinks
@@ -3935,7 +3935,7 @@ def popuplinks(text_=None, *_args_):
 def wp_embed_handler_googlevideo(matches_=None, attr_=None, url_=None, rawattr_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.6.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.6.0")
     return ""
 # end def wp_embed_handler_googlevideo
 #// 
@@ -3949,7 +3949,7 @@ def wp_embed_handler_googlevideo(matches_=None, attr_=None, url_=None, rawattr_=
 def get_paged_template(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.7.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
     return get_query_template("paged")
 # end def get_paged_template
 #// 
@@ -3975,7 +3975,7 @@ def get_paged_template(*_args_):
 def wp_kses_js_entities(string_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.7.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0")
     return php_preg_replace("%&\\s*\\{[^}]*(\\}\\s*;?|$)%", "", string_)
 # end def wp_kses_js_entities
 #// 
@@ -3995,7 +3995,7 @@ def wp_kses_js_entities(string_=None, *_args_):
 def _usort_terms_by_ID(a_=None, b_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.7.0", "wp_list_sort()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0", "wp_list_sort()")
     if a_.term_id > b_.term_id:
         return 1
     elif a_.term_id < b_.term_id:
@@ -4021,7 +4021,7 @@ def _usort_terms_by_ID(a_=None, b_=None, *_args_):
 def _usort_terms_by_name(a_=None, b_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.7.0", "wp_list_sort()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0", "wp_list_sort()")
     return strcmp(a_.name, b_.name)
 # end def _usort_terms_by_name
 #// 
@@ -4042,7 +4042,7 @@ def _sort_nav_menu_items(a_=None, b_=None, *_args_):
     
     global _menu_item_sort_prop_
     php_check_if_defined("_menu_item_sort_prop_")
-    _deprecated_function(__FUNCTION__, "4.7.0", "wp_list_sort()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.7.0", "wp_list_sort()")
     if php_empty(lambda : _menu_item_sort_prop_):
         return 0
     # end if
@@ -4069,7 +4069,7 @@ def _sort_nav_menu_items(a_=None, b_=None, *_args_):
 def get_shortcut_link(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
     link_ = ""
     #// 
     #// Filters the Press This bookmarklet link.
@@ -4090,7 +4090,7 @@ def get_shortcut_link(*_args_):
 def wp_ajax_press_this_save_post(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
     if is_plugin_active("press-this/press-this-plugin.php"):
         php_include_file(WP_PLUGIN_DIR + "/press-this/class-wp-press-this-plugin.php", once=False)
         wp_press_this_ = php_new_class("WP_Press_This_Plugin", lambda : WP_Press_This_Plugin())
@@ -4108,7 +4108,7 @@ def wp_ajax_press_this_save_post(*_args_):
 def wp_ajax_press_this_add_category(*_args_):
     
     
-    _deprecated_function(__FUNCTION__, "4.9.0")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "4.9.0")
     if is_plugin_active("press-this/press-this-plugin.php"):
         php_include_file(WP_PLUGIN_DIR + "/press-this/class-wp-press-this-plugin.php", once=False)
         wp_press_this_ = php_new_class("WP_Press_This_Plugin", lambda : WP_Press_This_Plugin())

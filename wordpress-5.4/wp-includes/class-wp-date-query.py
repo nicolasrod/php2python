@@ -344,7 +344,7 @@ class WP_Date_Query():
                 is_between_ = _value_ >= check_["min"] and _value_ <= check_["max"]
                 if (not php_is_numeric(_value_)) or (not is_between_):
                     error_ = php_sprintf(__("Invalid value %1$s for %2$s. Expected value should be between %3$s and %4$s."), "<code>" + esc_html(_value_) + "</code>", "<code>" + esc_html(key_) + "</code>", "<code>" + esc_html(check_["min"]) + "</code>", "<code>" + esc_html(check_["max"]) + "</code>")
-                    _doing_it_wrong(__CLASS__, error_, "4.1.0")
+                    _doing_it_wrong(self.__class__.__name__, error_, "4.1.0")
                     valid_ = False
                 # end if
             # end for
@@ -374,7 +374,7 @@ class WP_Date_Query():
             # end if
         # end if
         if (not php_empty(lambda : day_month_year_error_msg_)):
-            _doing_it_wrong(__CLASS__, day_month_year_error_msg_, "4.1.0")
+            _doing_it_wrong(self.__class__.__name__, day_month_year_error_msg_, "4.1.0")
         # end if
         return valid_
     # end def validate_date_values

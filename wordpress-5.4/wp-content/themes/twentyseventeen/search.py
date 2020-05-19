@@ -25,7 +25,7 @@ php_print("""
 if have_posts():
     php_print("         <h1 class=\"page-title\">\n         ")
     #// translators: Search query.
-    printf(__("Search Results for: %s", "twentyseventeen"), "<span>" + get_search_query() + "</span>")
+    php_printf(__("Search Results for: %s", "twentyseventeen"), "<span>" + get_search_query() + "</span>")
     php_print("         </h1>\n     ")
 else:
     php_print("         <h1 class=\"page-title\">")

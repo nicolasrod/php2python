@@ -83,7 +83,7 @@ if (php_isset(lambda : PHP_REQUEST["post_id"])):
 # end if
 id_ = media_handle_upload("async-upload", post_id_)
 if is_wp_error(id_):
-    printf("<div class=\"error-div error\">%s <strong>%s</strong><br />%s</div>", php_sprintf("<button type=\"button\" class=\"dismiss button-link\" onclick=\"jQuery(this).parents('div.media-item').slideUp(200, function(){jQuery(this).remove();});\">%s</button>", __("Dismiss")), php_sprintf(__("&#8220;%s&#8221; has failed to upload."), esc_html(PHP_FILES["async-upload"]["name"])), esc_html(id_.get_error_message()))
+    php_printf("<div class=\"error-div error\">%s <strong>%s</strong><br />%s</div>", php_sprintf("<button type=\"button\" class=\"dismiss button-link\" onclick=\"jQuery(this).parents('div.media-item').slideUp(200, function(){jQuery(this).remove();});\">%s</button>", __("Dismiss")), php_sprintf(__("&#8220;%s&#8221; has failed to upload."), esc_html(PHP_FILES["async-upload"]["name"])), esc_html(id_.get_error_message()))
     php_exit(0)
 # end if
 if PHP_REQUEST["short"]:

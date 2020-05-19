@@ -301,7 +301,7 @@ def register_taxonomy(taxonomy_=None, object_type_=None, args_=None, *_args_):
     # end if
     args_ = wp_parse_args(args_)
     if php_empty(lambda : taxonomy_) or php_strlen(taxonomy_) > 32:
-        _doing_it_wrong(__FUNCTION__, __("Taxonomy names must be between 1 and 32 characters in length."), "4.2.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Taxonomy names must be between 1 and 32 characters in length."), "4.2.0")
         return php_new_class("WP_Error", lambda : WP_Error("taxonomy_length_invalid", __("Taxonomy names must be between 1 and 32 characters in length.")))
     # end if
     taxonomy_object_ = php_new_class("WP_Taxonomy", lambda : WP_Taxonomy(taxonomy_, object_type_, args_))
@@ -2189,7 +2189,7 @@ def wp_set_object_terms(object_id_=None, terms_=None, taxonomy_=None, append_=No
             # end if
         # end for
         if values_:
-            if False == wpdb_.query(str("INSERT INTO ") + str(wpdb_.term_relationships) + str(" (object_id, term_taxonomy_id, term_order) VALUES ") + join(",", values_) + " ON DUPLICATE KEY UPDATE term_order = VALUES(term_order)"):
+            if False == wpdb_.query(str("INSERT INTO ") + str(wpdb_.term_relationships) + str(" (object_id, term_taxonomy_id, term_order) VALUES ") + php_join(",", values_) + " ON DUPLICATE KEY UPDATE term_order = VALUES(term_order)"):
                 return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not insert term relationship into the database."), wpdb_.last_error))
             # end if
         # end if
@@ -3193,7 +3193,7 @@ def _prime_term_caches(term_ids_=None, update_meta_cache_=None, *_args_):
     php_check_if_defined("wpdb_")
     non_cached_ids_ = _get_non_cached_ids(term_ids_, "terms")
     if (not php_empty(lambda : non_cached_ids_)):
-        fresh_terms_ = wpdb_.get_results(php_sprintf(str("SELECT t.*, tt.* FROM ") + str(wpdb_.terms) + str(" AS t INNER JOIN ") + str(wpdb_.term_taxonomy) + str(" AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (%s)"), join(",", php_array_map("intval", non_cached_ids_))))
+        fresh_terms_ = wpdb_.get_results(php_sprintf(str("SELECT t.*, tt.* FROM ") + str(wpdb_.terms) + str(" AS t INNER JOIN ") + str(wpdb_.term_taxonomy) + str(" AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (%s)"), php_join(",", php_array_map("intval", non_cached_ids_))))
         update_term_cache(fresh_terms_, update_meta_cache_)
         if update_meta_cache_:
             update_termmeta_cache(non_cached_ids_)
@@ -3676,7 +3676,7 @@ def get_term_link(term_=None, taxonomy_="", *_args_):
                 ancestor_term_ = get_term(ancestor_, taxonomy_)
                 hierarchical_slugs_[-1] = ancestor_term_.slug
             # end for
-            hierarchical_slugs_ = array_reverse(hierarchical_slugs_)
+            hierarchical_slugs_ = php_array_reverse(hierarchical_slugs_)
             hierarchical_slugs_[-1] = slug_
             termlink_ = php_str_replace(str("%") + str(taxonomy_) + str("%"), php_implode("/", hierarchical_slugs_), termlink_)
         else:
@@ -3745,7 +3745,7 @@ def the_taxonomies(args_=None, *_args_):
     
     defaults_ = Array({"post": 0, "before": "", "sep": " ", "after": ""})
     parsed_args_ = wp_parse_args(args_, defaults_)
-    php_print(parsed_args_["before"] + join(parsed_args_["sep"], get_the_taxonomies(parsed_args_["post"], parsed_args_)) + parsed_args_["after"])
+    php_print(parsed_args_["before"] + php_join(parsed_args_["sep"], get_the_taxonomies(parsed_args_["post"], parsed_args_)) + parsed_args_["after"])
 # end def the_taxonomies
 #// 
 #// Retrieve all taxonomies associated with a post.

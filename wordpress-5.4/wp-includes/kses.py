@@ -1360,7 +1360,7 @@ def safecss_filter_attr(css_=None, deprecated_="", *_args_):
     
     
     if (not php_empty(lambda : deprecated_)):
-        _deprecated_argument(__FUNCTION__, "2.8.1")
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "2.8.1")
         pass
     # end if
     css_ = wp_kses_no_null(css_)

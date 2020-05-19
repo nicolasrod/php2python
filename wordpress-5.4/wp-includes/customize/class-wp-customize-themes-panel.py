@@ -79,7 +79,7 @@ class WP_Customize_Themes_Panel(WP_Customize_Panel):
         <div class=\"accordion-section-title\">
         <span class=\"preview-notice\">
         """)
-        printf(__("You are browsing %s"), "<strong class=\"panel-title\">" + __("Themes") + "</strong>")
+        php_printf(__("You are browsing %s"), "<strong class=\"panel-title\">" + __("Themes") + "</strong>")
         pass
         php_print("             </span>\n               ")
         if current_user_can("install_themes") and (not is_multisite()):

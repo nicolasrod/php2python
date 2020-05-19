@@ -66,7 +66,7 @@ def wp_image_editor(post_id_=None, msg_=None, *_args_):
     php_print("</p>\n       </div>\n        ")
     if (php_isset(lambda : meta_["width"]) and php_isset(lambda : meta_["height"])):
         php_print("     <p>\n           ")
-        printf(__("Original dimensions %s"), "<span class=\"imgedit-original-dimensions\">" + meta_["width"] + " &times; " + meta_["height"] + "</span>")
+        php_printf(__("Original dimensions %s"), "<span class=\"imgedit-original-dimensions\">" + meta_["width"] + " &times; " + meta_["height"] + "</span>")
         php_print("     </p>\n      ")
     # end if
     php_print("""       <div class=\"imgedit-submit\">
@@ -404,7 +404,7 @@ def wp_stream_image(image_=None, mime_type_=None, attachment_id_=None, *_args_):
         return True
     else:
         #// translators: 1: $image, 2: WP_Image_Editor
-        _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("%1$s needs to be a %2$s object."), "$image", "WP_Image_Editor"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.5.0", php_sprintf(__("%1$s needs to be a %2$s object."), "$image", "WP_Image_Editor"))
         #// 
         #// Filters the GD image resource to be streamed to the browser.
         #// 
@@ -472,7 +472,7 @@ def wp_save_image_file(filename_=None, image_=None, mime_type_=None, post_id_=No
         return image_.save(filename_, mime_type_)
     else:
         #// translators: 1: $image, 2: WP_Image_Editor
-        _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("%1$s needs to be a %2$s object."), "$image", "WP_Image_Editor"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.5.0", php_sprintf(__("%1$s needs to be a %2$s object."), "$image", "WP_Image_Editor"))
         #// This filter is documented in wp-admin/includes/image-edit.php
         image_ = apply_filters_deprecated("image_save_pre", Array(image_, post_id_), "3.5.0", "image_editor_save_pre")
         #// 
@@ -542,7 +542,7 @@ def _image_get_preview_ratio(w_=None, h_=None, *_args_):
 def _rotate_image_resource(img_=None, angle_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "WP_Image_Editor::rotate()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "WP_Image_Editor::rotate()")
     if php_function_exists("imagerotate"):
         rotated_ = imagerotate(img_, angle_, 0)
         if php_is_resource(rotated_):
@@ -568,7 +568,7 @@ def _rotate_image_resource(img_=None, angle_=None, *_args_):
 def _flip_image_resource(img_=None, horz_=None, vert_=None, *_args_):
     
     
-    _deprecated_function(__FUNCTION__, "3.5.0", "WP_Image_Editor::flip()")
+    _deprecated_function(inspect.currentframe().f_code.co_name, "3.5.0", "WP_Image_Editor::flip()")
     w_ = imagesx(img_)
     h_ = imagesy(img_)
     dst_ = wp_imagecreatetruecolor(w_, h_)
@@ -624,7 +624,7 @@ def image_edit_apply_changes(image_=None, changes_=None, *_args_):
     
     if php_is_resource(image_):
         #// translators: 1: $image, 2: WP_Image_Editor
-        _deprecated_argument(__FUNCTION__, "3.5.0", php_sprintf(__("%1$s needs to be a %2$s object."), "$image", "WP_Image_Editor"))
+        _deprecated_argument(inspect.currentframe().f_code.co_name, "3.5.0", php_sprintf(__("%1$s needs to be a %2$s object."), "$image", "WP_Image_Editor"))
     # end if
     if (not php_is_array(changes_)):
         return image_

@@ -107,7 +107,7 @@ class IXR_Value():
                 break
             # end if
             if case("string"):
-                return "<string>" + htmlspecialchars(self.data) + "</string>"
+                return "<string>" + php_htmlspecialchars(self.data) + "</string>"
                 break
             # end if
             if case("array"):
@@ -122,7 +122,7 @@ class IXR_Value():
             if case("struct"):
                 return_ = "<struct>" + "\n"
                 for name_,value_ in self.data.items():
-                    name_ = htmlspecialchars(name_)
+                    name_ = php_htmlspecialchars(name_)
                     return_ += str("  <member><name>") + str(name_) + str("</name><value>")
                     return_ += value_.getxml() + "</value></member>\n"
                 # end for

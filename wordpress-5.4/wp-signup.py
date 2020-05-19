@@ -123,7 +123,7 @@ def show_blog_form(blogname_="", blog_title_="", errors_="", *_args_):
         else:
             site_ = __("domain") + "." + site_domain_ + current_network_.path
         # end if
-        printf("<p>(<strong>%s</strong>) %s</p>", php_sprintf(__("Your address will be %s."), site_), __("Must be at least 4 characters, letters and numbers only. It cannot be changed, so choose carefully!"))
+        php_printf("<p>(<strong>%s</strong>) %s</p>", php_sprintf(__("Your address will be %s."), site_), __("Must be at least 4 characters, letters and numbers only. It cannot be changed, so choose carefully!"))
     # end if
     pass
     php_print(" <label for=\"blog_title\">")
@@ -313,7 +313,7 @@ def signup_another_blog(blogname_="", blog_title_="", errors_="", *_args_):
         php_print("<p>" + __("There was a problem, please correct the form below and try again.") + "</p>")
     # end if
     php_print(" <p>\n       ")
-    printf(__("Welcome back, %s. By filling out the form below, you can <strong>add another site to your account</strong>. There is no limit to the number of sites you can have, so create to your heart&#8217;s content, but write responsibly!"), current_user_.display_name)
+    php_printf(__("Welcome back, %s. By filling out the form below, you can <strong>add another site to your account</strong>. There is no limit to the number of sites you can have, so create to your heart&#8217;s content, but write responsibly!"), current_user_.display_name)
     php_print(" </p>\n\n    ")
     blogs_ = get_blogs_of_user(current_user_.ID)
     if (not php_empty(lambda : blogs_)):
@@ -459,9 +459,9 @@ def confirm_another_blog_signup(domain_=None, path_=None, blog_title_=None, user
     site_ = php_sprintf("<a href=\"%1$s\">%2$s</a>", esc_url(home_url_), blog_title_)
     php_print(" <h2>\n  ")
     #// translators: %s: Site title.
-    printf(__("The site %s is yours."), site_)
+    php_printf(__("The site %s is yours."), site_)
     php_print(" </h2>\n <p>\n       ")
-    printf(__("%1$s is your new site. <a href=\"%2$s\">Log in</a> as &#8220;%3$s&#8221; using your existing password."), php_sprintf("<a href=\"%s\">%s</a>", esc_url(home_url_), untrailingslashit(domain_ + path_)), esc_url(login_url_), user_name_)
+    php_printf(__("%1$s is your new site. <a href=\"%2$s\">Log in</a> as &#8220;%3$s&#8221; using your existing password."), php_sprintf("<a href=\"%s\">%s</a>", esc_url(home_url_), untrailingslashit(domain_ + path_)), esc_url(login_url_), user_name_)
     php_print(" </p>\n  ")
     #// 
     #// Fires when the site or user sign-up process is complete.
@@ -508,7 +508,7 @@ def signup_user(user_name_="", user_email_="", errors_="", *_args_):
     errors_ = filtered_results_["errors"]
     php_print("\n   <h2>\n  ")
     #// translators: %s: Name of the network.
-    printf(__("Get your own %s account in seconds"), get_network().site_name)
+    php_printf(__("Get your own %s account in seconds"), get_network().site_name)
     php_print("""   </h2>
     <form id=\"setupform\" method=\"post\" action=\"wp-signup.php\" novalidate=\"novalidate\">
     <input type=\"hidden\" name=\"stage\" value=\"validate-user-signup\" />
@@ -577,12 +577,12 @@ def confirm_user_signup(user_name_=None, user_email_=None, *_args_):
     
     php_print(" <h2>\n  ")
     #// translators: %s: Username.
-    printf(__("%s is your new username"), user_name_)
+    php_printf(__("%s is your new username"), user_name_)
     php_print(" </h2>\n <p>")
     _e("But, before you can start using your new username, <strong>you must activate it</strong>.")
     php_print("</p>\n   <p>\n   ")
     #// translators: %s: Email address.
-    printf(__("Check your inbox at %s and click the link given."), "<strong>" + user_email_ + "</strong>")
+    php_printf(__("Check your inbox at %s and click the link given."), "<strong>" + user_email_ + "</strong>")
     php_print(" </p>\n  <p>")
     _e("If you do not activate your username within two days, you will have to sign up again.")
     php_print("</p>\n   ")
@@ -710,12 +710,12 @@ def confirm_blog_signup(domain_=None, path_=None, blog_title_=None, user_name_="
     
     php_print(" <h2>\n  ")
     #// translators: %s: Site address.
-    printf(__("Congratulations! Your new site, %s, is almost ready."), str("<a href='http://") + str(domain_) + str(path_) + str("'>") + str(blog_title_) + str("</a>"))
+    php_printf(__("Congratulations! Your new site, %s, is almost ready."), str("<a href='http://") + str(domain_) + str(path_) + str("'>") + str(blog_title_) + str("</a>"))
     php_print(" </h2>\n\n   <p>")
     _e("But, before you can start using your site, <strong>you must activate it</strong>.")
     php_print("</p>\n   <p>\n   ")
     #// translators: %s: Email address.
-    printf(__("Check your inbox at %s and click the link given."), "<strong>" + user_email_ + "</strong>")
+    php_printf(__("Check your inbox at %s and click the link given."), "<strong>" + user_email_ + "</strong>")
     php_print(" </p>\n  <p>")
     _e("If you do not activate your site within two days, you will have to sign up again.")
     php_print("</p>\n   <h2>")
@@ -728,7 +728,7 @@ def confirm_blog_signup(domain_=None, path_=None, blog_title_=None, user_name_="
     _e("Check the junk or spam folder of your email client. Sometime emails wind up there by mistake.")
     php_print("</p></li>\n          <li>\n          ")
     #// translators: %s: Email address.
-    printf(__("Have you entered your email correctly? You have entered %s, if it&#8217;s incorrect, you will not receive your email."), user_email_)
+    php_printf(__("Have you entered your email correctly? You have entered %s, if it&#8217;s incorrect, you will not receive your email."), user_email_)
     php_print("""           </li>
     </ul>
     </p>
@@ -804,7 +804,7 @@ if current_user_can("manage_network"):
     # end for
     php_print(" ")
     #// translators: %s: URL to Network Settings screen.
-    printf(__("To change or disable registration go to your <a href=\"%s\">Options page</a>."), esc_url(network_admin_url("settings.php")))
+    php_printf(__("To change or disable registration go to your <a href=\"%s\">Options page</a>."), esc_url(network_admin_url("settings.php")))
     php_print("</div>")
 # end if
 newblogname_ = php_strtolower(php_preg_replace("/^-|-$|[^-a-zA-Z0-9]/", "", PHP_REQUEST["new"])) if (php_isset(lambda : PHP_REQUEST["new"])) else None
@@ -814,7 +814,7 @@ if "none" == active_signup_:
 elif "blog" == active_signup_ and (not is_user_logged_in()):
     login_url_ = wp_login_url(network_site_url("wp-signup.php"))
     #// translators: %s: Login URL.
-    printf(__("You must first <a href=\"%s\">log in</a>, and then you can create a new site."), login_url_)
+    php_printf(__("You must first <a href=\"%s\">log in</a>, and then you can create a new site."), login_url_)
 else:
     stage_ = PHP_POST["stage"] if (php_isset(lambda : PHP_POST["stage"])) else "default"
     for case in Switch(stage_):
@@ -861,9 +861,9 @@ else:
             if newblogname_:
                 newblog_ = get_blogaddress_by_name(newblogname_)
                 if "blog" == active_signup_ or "all" == active_signup_:
-                    printf("<p><em>" + __("The site you were looking for, %s, does not exist, but you can create it now!") + "</em></p>", "<strong>" + newblog_ + "</strong>")
+                    php_printf("<p><em>" + __("The site you were looking for, %s, does not exist, but you can create it now!") + "</em></p>", "<strong>" + newblog_ + "</strong>")
                 else:
-                    printf("<p><em>" + __("The site you were looking for, %s, does not exist.") + "</em></p>", "<strong>" + newblog_ + "</strong>")
+                    php_printf("<p><em>" + __("The site you were looking for, %s, does not exist.") + "</em></p>", "<strong>" + newblog_ + "</strong>")
                 # end if
             # end if
             break

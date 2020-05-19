@@ -34,7 +34,7 @@ php_print("""<opml version=\"1.0\">
 <title>
 """)
 #// translators: %s: Site title.
-printf(__("Links for %s"), esc_attr(get_bloginfo("name", "display")))
+php_printf(__("Links for %s"), esc_attr(get_bloginfo("name", "display")))
 php_print("     </title>\n      <dateCreated>")
 php_print(gmdate("D, d M Y H:i:s"))
 php_print(" GMT</dateCreated>\n     ")

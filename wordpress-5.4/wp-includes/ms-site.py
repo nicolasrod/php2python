@@ -313,7 +313,7 @@ def _prime_site_caches(ids_=None, update_meta_cache_=None, *_args_):
     php_check_if_defined("wpdb_")
     non_cached_ids_ = _get_non_cached_ids(ids_, "sites")
     if (not php_empty(lambda : non_cached_ids_)):
-        fresh_sites_ = wpdb_.get_results(php_sprintf(str("SELECT * FROM ") + str(wpdb_.blogs) + str(" WHERE blog_id IN (%s)"), join(",", php_array_map("intval", non_cached_ids_))))
+        fresh_sites_ = wpdb_.get_results(php_sprintf(str("SELECT * FROM ") + str(wpdb_.blogs) + str(" WHERE blog_id IN (%s)"), php_join(",", php_array_map("intval", non_cached_ids_))))
         #// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         update_site_cache(fresh_sites_, update_meta_cache_)
     # end if
@@ -799,7 +799,7 @@ def wp_uninitialize_site(site_id_=None, *_args_):
         # end if
         index_ += 1
     # end while
-    stack_ = array_reverse(stack_)
+    stack_ = php_array_reverse(stack_)
     #// Last added directories are deepest.
     for dir_ in stack_:
         if dir_ != top_dir_:
@@ -1212,7 +1212,7 @@ def wp_check_site_meta_support_prefilter(check_=None, *_args_):
     
     if (not is_site_meta_supported()):
         #// translators: %s: Database table name.
-        _doing_it_wrong(__FUNCTION__, php_sprintf(__("The %s table is not installed. Please run the network database upgrade."), PHP_GLOBALS["wpdb"].blogmeta), "5.1.0")
+        _doing_it_wrong(inspect.currentframe().f_code.co_name, php_sprintf(__("The %s table is not installed. Please run the network database upgrade."), PHP_GLOBALS["wpdb"].blogmeta), "5.1.0")
         return False
     # end if
     return check_

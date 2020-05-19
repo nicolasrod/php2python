@@ -30,13 +30,13 @@ do_action("atom_comments_ns")
 php_print(">\n  <title type=\"text\">\n ")
 if is_singular():
     #// translators: Comments feed title. %s: Post title.
-    printf(ent2ncr(__("Comments on %s")), get_the_title_rss())
+    php_printf(ent2ncr(__("Comments on %s")), get_the_title_rss())
 elif is_search():
     #// translators: Comments feed title. 1: Site title, 2: Search query.
-    printf(ent2ncr(__("Comments for %1$s searching on %2$s")), get_bloginfo_rss("name"), get_search_query())
+    php_printf(ent2ncr(__("Comments for %1$s searching on %2$s")), get_bloginfo_rss("name"), get_search_query())
 else:
     #// translators: Comments feed title. %s: Site title.
-    printf(ent2ncr(__("Comments for %s")), get_wp_title_rss())
+    php_printf(ent2ncr(__("Comments for %s")), get_wp_title_rss())
 # end if
 php_print(" </title>\n  <subtitle type=\"text\">")
 bloginfo_rss("description")
@@ -94,10 +94,10 @@ while True:
         #// This filter is documented in wp-includes/feed.php
         title_ = apply_filters("the_title_rss", title_)
         #// translators: Individual comment title. 1: Post title, 2: Comment author name.
-        printf(ent2ncr(__("Comment on %1$s by %2$s")), title_, get_comment_author_rss())
+        php_printf(ent2ncr(__("Comment on %1$s by %2$s")), title_, get_comment_author_rss())
     else:
         #// translators: Comment author title. %s: Comment author name.
-        printf(ent2ncr(__("By: %s")), get_comment_author_rss())
+        php_printf(ent2ncr(__("By: %s")), get_comment_author_rss())
     # end if
     php_print("     </title>\n      <link rel=\"alternate\" href=\"")
     comment_link()

@@ -93,14 +93,14 @@ if privacy_policy_page_exists_:
     view_href_ = get_permalink(privacy_policy_page_id_)
     php_print("     <p class=\"tools-privacy-edit\"><strong>\n          ")
     if "publish" == get_post_status(privacy_policy_page_id_):
-        printf(__("<a href=\"%1$s\">Edit</a> or <a href=\"%2$s\">view</a> your Privacy Policy page content."), esc_url(edit_href_), esc_url(view_href_))
+        php_printf(__("<a href=\"%1$s\">Edit</a> or <a href=\"%2$s\">view</a> your Privacy Policy page content."), esc_url(edit_href_), esc_url(view_href_))
     else:
-        printf(__("<a href=\"%1$s\">Edit</a> or <a href=\"%2$s\">preview</a> your Privacy Policy page content."), esc_url(edit_href_), esc_url(view_href_))
+        php_printf(__("<a href=\"%1$s\">Edit</a> or <a href=\"%2$s\">preview</a> your Privacy Policy page content."), esc_url(edit_href_), esc_url(view_href_))
     # end if
     php_print("     </strong></p>\n     ")
 # end if
 php_print(" <p>\n       ")
-printf(__("Need help putting together your new Privacy Policy page? <a href=\"%1$s\" %2$s>Check out our guide%3$s</a> for recommendations on what content to include, along with policies suggested by your plugins and theme."), esc_url(admin_url("privacy-policy-guide.php")), "", "")
+php_printf(__("Need help putting together your new Privacy Policy page? <a href=\"%1$s\" %2$s>Check out our guide%3$s</a> for recommendations on what content to include, along with policies suggested by your plugins and theme."), esc_url(admin_url("privacy-policy-guide.php")), "", "")
 php_print("""   </p>
 <hr>
 <table class=\"form-table tools-privacy-policy-page\" role=\"presentation\">

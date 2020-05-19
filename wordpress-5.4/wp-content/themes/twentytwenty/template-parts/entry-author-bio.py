@@ -21,7 +21,7 @@ if php_bool(get_the_author_meta("description")) and php_bool(get_theme_mod("show
     """)
     php_print(get_avatar(get_the_author_meta("ID"), 160))
     php_print("     </div>\n        <h2 class=\"author-title heading-size-4\">\n            ")
-    printf(__("By %s", "twentytwenty"), esc_html(get_the_author()))
+    php_printf(__("By %s", "twentytwenty"), esc_html(get_the_author()))
     php_print("""       </h2>
     </div><!-- .author-name -->
     <div class=\"author-description\">

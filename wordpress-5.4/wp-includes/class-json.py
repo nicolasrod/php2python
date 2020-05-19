@@ -144,7 +144,7 @@ if (not php_class_exists("Services_JSON")):
         def __init__(self, use_=0):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             self.use = use_
             self._mb_strlen = php_function_exists("mb_strlen")
             self._mb_convert_encoding = php_function_exists("mb_convert_encoding")
@@ -183,7 +183,7 @@ if (not php_class_exists("Services_JSON")):
         def utf162utf8(self, utf16_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             #// oh please oh please oh please oh please oh please
             if self._mb_convert_encoding:
                 return mb_convert_encoding(utf16_, "UTF-8", "UTF-16")
@@ -225,7 +225,7 @@ if (not php_class_exists("Services_JSON")):
         def utf82utf16(self, utf8_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             #// oh please oh please oh please oh please oh please
             if self._mb_convert_encoding:
                 return mb_convert_encoding(utf8_, "UTF-16", "UTF-8")
@@ -266,7 +266,7 @@ if (not php_class_exists("Services_JSON")):
         def encode(self, var_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             php_header("Content-type: application/json")
             return self.encodeunsafe(var_)
         # end def encode
@@ -286,7 +286,7 @@ if (not php_class_exists("Services_JSON")):
         def encodeunsafe(self, var_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             #// see bug #16908 - regarding numeric locale printing
             lc_ = setlocale(LC_NUMERIC, 0)
             setlocale(LC_NUMERIC, "C")
@@ -310,7 +310,7 @@ if (not php_class_exists("Services_JSON")):
         def _encode(self, var_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             for case in Switch(gettype(var_)):
                 if case("boolean"):
                     return "true" if var_ else "false"
@@ -477,7 +477,7 @@ if (not php_class_exists("Services_JSON")):
                                 return property_
                             # end if
                         # end for
-                        return "{" + join(",", properties_) + "}"
+                        return "{" + php_join(",", properties_) + "}"
                     # end if
                     #// treat it like a regular array
                     elements_ = php_array_map(Array(self, "_encode"), var_)
@@ -486,7 +486,7 @@ if (not php_class_exists("Services_JSON")):
                             return element_
                         # end if
                     # end for
-                    return "[" + join(",", elements_) + "]"
+                    return "[" + php_join(",", elements_) + "]"
                 # end if
                 if case("object"):
                     #// support toJSON methods.
@@ -506,7 +506,7 @@ if (not php_class_exists("Services_JSON")):
                             return property_
                         # end if
                     # end for
-                    return "{" + join(",", properties_) + "}"
+                    return "{" + php_join(",", properties_) + "}"
                 # end if
                 if case():
                     return "null" if self.use & SERVICES_JSON_SUPPRESS_ERRORS else php_new_class("Services_JSON_Error", lambda : Services_JSON_Error(gettype(var_) + " can not be encoded as JSON string"))
@@ -527,7 +527,7 @@ if (not php_class_exists("Services_JSON")):
         def name_value(self, name_=None, value_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             encoded_value_ = self._encode(value_)
             if Services_JSON.iserror(encoded_value_):
                 return encoded_value_
@@ -547,7 +547,7 @@ if (not php_class_exists("Services_JSON")):
         def reduce_string(self, str_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             str_ = php_preg_replace(Array("#^\\s*//(.+)$#m", "#^\\s*/\\*(.+)\\*/#Us", "#/\\*(.+)\\*/\\s*$#Us"), "", str_)
             #// eliminate extraneous space
             return php_trim(str_)
@@ -569,7 +569,7 @@ if (not php_class_exists("Services_JSON")):
         def decode(self, str_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             str_ = self.reduce_string(str_)
             for case in Switch(php_strtolower(str_)):
                 if case("true"):
@@ -823,7 +823,7 @@ if (not php_class_exists("Services_JSON")):
                 code_ = None
             # end if
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             if php_class_exists("pear"):
                 return PEAR.iserror(data_, code_)
             elif php_is_object(data_) and get_class(data_) == "services_json_error" or is_subclass_of(data_, "services_json_error"):
@@ -842,7 +842,7 @@ if (not php_class_exists("Services_JSON")):
         def strlen8(self, str_=None):
             
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             if self._mb_strlen:
                 return php_mb_strlen(str_, "8bit")
             # end if
@@ -863,7 +863,7 @@ if (not php_class_exists("Services_JSON")):
                 length_ = False
             # end if
             
-            _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+            _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             if length_ == False:
                 length_ = self.strlen8(string_) - start_
             # end if
@@ -894,7 +894,7 @@ if (not php_class_exists("Services_JSON")):
                     userinfo_ = None
                 # end if
                 
-                _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+                _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
                 super().pear_error(message_, code_, mode_, options_, userinfo_)
             # end def __init__
             #// 
@@ -946,7 +946,7 @@ if (not php_class_exists("Services_JSON")):
                     userinfo_ = None
                 # end if
                 
-                _deprecated_function(__METHOD__, "5.3.0", "The PHP native JSON extension")
+                _deprecated_function(inspect.currentframe().f_code.co_name, "5.3.0", "The PHP native JSON extension")
             # end def __init__
             #// 
             #// PHP4 constructor.

@@ -60,7 +60,7 @@ php_print("""</p>
 <div class=\"about__section has-2-columns has-subtle-background-color\">
 <h2 class=\"is-section-header\">
 """)
-printf(__("Welcome to WordPress %s."), display_version_)
+php_printf(__("Welcome to WordPress %s."), display_version_)
 php_print("""           </h2>
 <div class=\"column\">
 <p>
@@ -172,9 +172,9 @@ _e("Add custom fields to menu itemsânatively")
 php_print("</h3>\n              <p>\n                   ")
 _e("Two new actions let you add custom fields to menu items&mdash;without a plugin and without writing custom walkers.")
 php_print("             </p>\n              <p>\n                   ")
-printf(__("On the Menus admin screen, %s fires just before the move buttons of a nav menu item in the menu editor."), "<code>wp_nav_menu_item_custom_fields</code>")
+php_printf(__("On the Menus admin screen, %s fires just before the move buttons of a nav menu item in the menu editor."), "<code>wp_nav_menu_item_custom_fields</code>")
 php_print("             </p>\n              <p>\n                   ")
-printf(__("In the Customizer, %s fires at the end of the menu-items form-fields template."), "<code>wp_nav_menu_item_custom_fields_customize_template</code>")
+php_printf(__("In the Customizer, %s fires at the end of the menu-items form-fields template."), "<code>wp_nav_menu_item_custom_fields_customize_template</code>")
 php_print("             </p>\n              <p>\n                   ")
 _e("Check your code and see where these new actions can replace your custom code, and if you&#8217;re concerned about duplication, add a check for the WordPress version.")
 php_print("""               </p>
@@ -199,7 +199,7 @@ php_print("""</li>
 <div class=\"column\">
 <p>
 """)
-printf(__("There&#8217;s lots more for developers to love in WordPress 5.4. To discover more and learn how to make these changes shine on your sites, themes, plugins and more, check the <a href=\"%s\">WordPress 5.4 Field Guide</a>."), "https://make.wordpress.org/core/2020/03/03/wordpress-5-4-field-guide/")
+php_printf(__("There&#8217;s lots more for developers to love in WordPress 5.4. To discover more and learn how to make these changes shine on your sites, themes, plugins and more, check the <a href=\"%s\">WordPress 5.4 Field Guide</a>."), "https://make.wordpress.org/core/2020/03/03/wordpress-5-4-field-guide/")
 php_print("""               </p>
 </div>
 </div>

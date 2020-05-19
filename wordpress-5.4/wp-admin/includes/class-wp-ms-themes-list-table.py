@@ -140,7 +140,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
             order_ = php_strtoupper(order_)
             if "Name" == orderby_:
                 if "ASC" == order_:
-                    self.items = array_reverse(self.items)
+                    self.items = php_array_reverse(self.items)
                 # end if
             else:
                 uasort(self.items, Array(self, "_order_callback"))
@@ -617,7 +617,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
         if (not php_empty(lambda : totals_["upgrade"])) and (not php_empty(lambda : theme_.update)):
             class_ += " update"
         # end if
-        printf("<tr class=\"%s\" data-slug=\"%s\">", esc_attr(class_), esc_attr(stylesheet_))
+        php_printf("<tr class=\"%s\" data-slug=\"%s\">", esc_attr(class_), esc_attr(stylesheet_))
         self.single_row_columns(theme_)
         php_print("</tr>")
         if self.is_site_themes:

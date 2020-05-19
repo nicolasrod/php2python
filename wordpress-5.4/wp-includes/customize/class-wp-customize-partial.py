@@ -201,7 +201,7 @@ class WP_Customize_Partial():
             return_render_ = php_call_user_func(self.render_callback, self, container_context_)
             ob_render_ = ob_get_clean()
             if None != return_render_ and "" != ob_render_:
-                _doing_it_wrong(__FUNCTION__, __("Partial render must echo the content or return the content string (or array), but not both."), "4.5.0")
+                _doing_it_wrong(inspect.currentframe().f_code.co_name, __("Partial render must echo the content or return the content string (or array), but not both."), "4.5.0")
             # end if
             #// 
             #// Note that the string return takes precedence because the $ob_render may just\

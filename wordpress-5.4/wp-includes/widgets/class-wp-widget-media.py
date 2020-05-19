@@ -159,7 +159,7 @@ class WP_Widget_Media(WP_Widget):
         # end if
         tokens_ = php_array_map("sanitize_html_class", tokens_)
         tokens_ = php_array_filter(tokens_)
-        return join(" ", tokens_)
+        return php_join(" ", tokens_)
     # end def sanitize_token_list
     #// 
     #// Displays the widget on the front-end.
@@ -285,7 +285,7 @@ class WP_Widget_Media(WP_Widget):
             php_print(esc_attr(self.get_field_id(name_)))
             pass
             php_print("\"\n             value=\"")
-            php_print(esc_attr(join(",", value_) if php_is_array(value_) else php_strval(value_)))
+            php_print(esc_attr(php_join(",", value_) if php_is_array(value_) else php_strval(value_)))
             php_print("\"\n         />\n            ")
         # end for
     # end def form
