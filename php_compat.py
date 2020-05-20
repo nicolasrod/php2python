@@ -128,8 +128,6 @@ def php_include_file(fname, once=True, redirect=False):
 
     _PHP_INCLUDES[__FILE__] = True
 
-    print(">> INCLUDING: ", __FILE__)
-
     with open(__FILE__) as src:
         code = compile(src.read().replace("\x00", ""), filename, "exec")
 
@@ -1730,7 +1728,7 @@ def php_sprintf(_format, *args):
 
         if len(n) > 0:
             n = str(int(n) - 1)
-        if s == 's': # if string is specified, convert to string!
+        if s == 's':  #  if string is specified, convert to string!
             return f'{{{n}!s{fspec}}}'
         return f'{{{n}{fspec}}}'
 
@@ -1816,7 +1814,11 @@ def php_str_replace(_search, _replace, _subject, _count=None):
     >>> php_str_replace(healthy, yummy, phrase)
     'You should eat pizza, beer, and ice cream every day.'
     """
-    assert _count is None, '_count parameter not implemented!'
+    assert _count is None or isinstance(
+        _count, Array), '_count parameter should be an Array!'
+
+    if _count is not None:
+        _count[0] = len(list(re.findall(_search, _subject)))
 
     if not isinstance(_search, Array):
         return _subject.replace(_search, _replace)
@@ -2274,11 +2276,17 @@ def php_mysqli_ping(dbh):
         return True
     except:
         return False
+
+
 mysqli_ping = php_mysqli_ping
+
 
 def php_mysqli_error(dbh):
     return 'Some error!' if dbh.connect_errno != 0 else ''
+
+
 mysqli_error = php_mysqli_error
+
 
 def php_mysqli_get_server_info(dbh):
     _check_db_is_connected(dbh)
@@ -2462,18 +2470,18 @@ def php_ksort(arr, flags=None):
         arr[k] = v
     return True
 
+
 def php_debug_backtrace(*args):
     return Array()
-debug_backtrace = php_debug_backtrace
 
 
 def php_join(s, arr):
     return s.join(arr)
-join = php_join
+
 
 def php_array_reverse(_array, _preserve_keys=False):
     return _array  # TODO: Fix!
-array_reverse = php_array_reverse
+
 
 def php_htmlspecialchars(s, *args):
     """
@@ -2481,13 +2489,21 @@ def php_htmlspecialchars(s, *args):
     '&lt;a href=&#x27;test&#x27;&gt;Test&lt;/a&gt;'
     """
     return html.escape(s, quote=True)
-htmlspecialchars = php_htmlspecialchars
 
 
 def php_printf(fmt, *args):
     php_print(php_sprintf(fmt, *args))
-printf = php_printf
 
+
+def php_preg_replace_callback(pattern, callback, subject, limit=-1, count=None):
+    """
+    >>> s = 'This is a Test String!'
+    >>> php_preg_replace_callback('\\s', lambda m: 'X', s)
+    'ThisXisXaXTestXString!'
+
+    TODO: limit and count parameters!
+    """
+    return re.sub(pattern, lambda m: php_call_user_func(callback, m), subject)
 # ========================================================================================
 
 
