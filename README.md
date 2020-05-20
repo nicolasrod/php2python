@@ -46,7 +46,7 @@ $ PHP2PY_COMPAT=$HOME/php_compat.py python3 index.py
 
 There are a few things left to finish in order to get a complete working converting without having to edit to converted code. I was waiting to tackle those before publishing the code but I'm not having much spare time left these days.
 
-Any PR's and/or comments are more than welcome.
+Any PRs and/or comments are more than welcome.
 
 Roadmap
 -------
