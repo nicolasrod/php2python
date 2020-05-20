@@ -1131,7 +1131,7 @@ if {cond}:
 
     def Stmt_Unset(self, node):
         _vars = self.parse_children(node, 'vars')
-        return '\n'.join([f'{x} = None' for x in _vars])
+        return '\n'.join([f'del {x}' for x in _vars])
 
     def Stmt_Switch(self, node):
         var = self.parse(node['cond'])

@@ -10,6 +10,7 @@ import inspect
 import io
 import itertools
 import json
+# python3 -m pip install mysql-connector-python
 import mysql.connector
 import os
 import os.path
