@@ -2405,8 +2405,6 @@ def php_hash_hmac(algo, data, key, raw_output_=None, *_args_):
     if raw_output_ is None:
         raw_output_ = False
 
-    print(">>>", algo)
-    print(data, "--", key)
     m = hmac.new(key.encode('ascii'), digestmod=getattr(
         hashlib, algo.lower().strip()))
     m.update(data.encode('ascii'))
