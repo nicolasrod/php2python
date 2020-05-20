@@ -6,13 +6,23 @@ Convert PHP code to Python running under CGI (beta).
 Requirements
 ------------
 
-- PHP 7 with Package PHP-Parser installed (https://github.com/nikic/PHP-Parser#quick-start)
-- Python 3 with Package goto-statement installed and the MySQL connector:
-  https://pypi.org/project/goto-statement/
-  https://pypi.org/project/mysql-connector-python/
+- PHP 7
+- Python 3
+- Pip https://pypi.org/project/pip/
+- Composer https://getcomposer.org/
+
+Install dependencies
+------------
 
 ```
-$ python3 -m pip install goto-statement mysql-connector-python
+$ php composer.phar install
+$ python3 -m pip install -r requirements.txt
+```
+
+If you have composer / pip installed globally:
+```
+$ composer install
+$ pip3 install -r requirements.txt
 ```
 
 
@@ -36,13 +46,13 @@ $ PHP2PY_COMPAT=$HOME/php_compat.py python3 index.py
 
 There are a few things left to finish in order to get a complete working converting without having to edit to converted code. I was waiting to tackle those before publishing the code but I'm not having much spare time left these days.
 
-Any PR's and/or comments are more than welcome.
+Any PRs and/or comments are more than welcome.
 
 Roadmap
 -------
 
 - [x] Complete implementation of AST nodes transformation.
-- [x] Address limitations of Python language 
+- [x] Address limitations of Python language
 - [ ] Finish implementing all of the supporting PHP functions to run WordPress.
 - [ ] Rearrange AST nodes to simplify conversion.
 - [ ] Refactor converted code to output Flask/Django code instead. Requires an overhaul of the
