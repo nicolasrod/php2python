@@ -1,5 +1,12 @@
 # coding: utf8
 
+"""
+PHP Compatibility Layer
+=======================
+Run its doctests by executing:
+
+$ python3 -m doctest php_compat.py
+"""
 import atexit
 import base64
 import cgi
