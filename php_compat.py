@@ -10,7 +10,6 @@ import inspect
 import io
 import itertools
 import json
-# python3 -m pip install mysql-connector-python
 import mysql.connector
 import os
 import os.path
@@ -28,14 +27,6 @@ from packaging import version
 from urllib.parse import urlparse
 import subprocess
 import html
-
-_PHP_INCLUDES = {}
-__FILE__ = os.path.realpath(__file__)
-__DIR__ = os.path.dirname(__FILE__)
-_HEADERS = {}
-_HEADERS_PRINTED = False
-_AUTOLOAD_FN = []
-
 
 def php_yield(var_):
     try:
@@ -128,6 +119,7 @@ def php_include_file(fname, once=True, redirect=False):
 
     _PHP_INCLUDES[__FILE__] = True
 
+    print(">>> IMPORTING:", __FILE__)
     with open(__FILE__) as src:
         code = compile(src.read().replace("\x00", ""), filename, "exec")
 
@@ -342,10 +334,16 @@ _PHP_INI_FILE_DETAILS = Array(dict(
     [(k, Array({'global_value': v, 'local_value': v, 'access': 7}))
      for k, v in _ini_json.items()]))
 
+
+
 # =============================================================0
 
-PHP_OS = sys.platform
+__FILE__ = os.path.realpath(__file__)
+__DIR__ = os.path.dirname(__FILE__)
+
 # TODO: probably use PHP_GLOBALS as a proxy objects and not get the reference to globals at this point
+
+PHP_OS = sys.platform
 PHP_GLOBALS = globals()
 PHP_REQUEST = Array(cgi.FieldStorage())
 PHP_SERVER = Array(os.environ)
@@ -364,6 +362,20 @@ PHP_SAPI = ""
 PHP_POST = PHP_REQUEST
 PHP_ENV = PHP_SERVER
 PHP_VERSION_ID = 73000
+
+_PHP_INCLUDES = {}
+_HEADERS = {}
+_HEADERS_PRINTED = False
+_AUTOLOAD_FN = []
+_PHP_SESSION_INFO = Array({
+    'name': 'PHPSESSID', 
+    'id': None, 
+    'path': None, 
+    'domain': None, 
+    'secure': False, 
+    'httponly': False
+})
+
 
 # -----------------------------------------------------------------------------------
 # PHP constants
@@ -2502,6 +2514,79 @@ def php_preg_replace_callback(pattern, callback, subject, limit=-1, count=None):
     TODO: limit and count parameters!
     """
     return re.sub(pattern, lambda m: php_call_user_func(callback, m), subject)
+
+fullpath = os.path.realpath
+
+def php_session_name(name=None):
+    global _PHP_SESSION_INFO
+
+    old_name = _PHP_SESSION_INFO['name']    
+
+    if name is not None:
+        assert not _HEADERS_PRINTED, 'Headers already sent! cannot change them at this point'
+        _PHP_SESSION_INFO['name'] = name
+    return old_name
+session_name = php_session_name
+
+def php_session_start(*args):
+    global _PHP_SESSION_INFO
+
+    if not _PHP_SESSION_INFO['id']:
+        _PHP_SESSION_INFO['id'] = php_uniqid()
+
+    # TODO: create or restore session here!
+
+    # TODO: add lifetime to the cookie => _PHP_SESSION_INFO['lifetime'] = lifetime
+
+    tmp = []
+        
+    if _PHP_SESSION_INFO["path"]:
+        tmp.append(f'Path={_PHP_SESSION_INFO["path"]}')
+
+    if _PHP_SESSION_INFO["domain"]:
+        tmp.append(f'Domain={_PHP_SESSION_INFO["domain"]}')
+
+    if _PHP_SESSION_INFO["secure"]:
+        tmp.append(f'Secure')
+
+    if _PHP_SESSION_INFO["httponly"]:
+        tmp.append(f'httponly')
+    
+    _HEADERS['Set-Cookie'] = f'{_PHP_SESSION_INFO["name"]}={";".join(tmp)}'
+session_start = php_session_start
+
+
+def php_session_set_cookie_params(lifetime, _path=None, domain=None, secure=False, httponly=False):
+    if php_is_array(lifetime):
+        path = lifetime.get('path', None)
+        domain = lifetime.get('domain', None)
+        secure = lifetime.get('secure', False)
+        httponly = lifetime.get('httponly', False)
+        lifetime = lifetime.get('lifetime', 600)
+
+
+    _PHP_SESSION_INFO['lifetime'] = lifetime
+
+    if _path:
+        _PHP_SESSION_INFO['path'] = _path
+
+    if domain:
+        _PHP_SESSION_INFO['domain'] = domain 
+
+    if secure:
+        _PHP_SESSION_INFO['secure'] = secure
+
+    if httponly:
+        _PHP_SESSION_INFO['httponly'] = httponly
+    return True
+session_set_cookie_params = php_session_set_cookie_params
+
+def php_unset(fn_del):
+    try:
+        fn_del()
+    except:
+        pass
+
 # ========================================================================================
 
 

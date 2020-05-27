@@ -510,6 +510,7 @@ class AST:
         return ''
 
     def Expr_Variable(self, node):
+        # TODO: if is byref, add byref_ to the variable name
         return self.fix_variables(self.parse(node['name']).replace('\n', ''))
 
     def VarLikeIdentifier(self, node):
@@ -1296,8 +1297,11 @@ def parse_ast(fname):
 # coding: utf-8
 
 if '__PHP2PY_LOADED__' not in globals():
-    import os
-    with open(os.getenv('PHP2PY_COMPAT', 'php_compat.py')) as f:
+    import os, os.path, sys
+    __compat_layer = os.getenv('PHP2PY_COMPAT', 'php_compat.py')
+    if not os.path.exists(__compat_layer):
+        sys.exit(f'[-] Compatibility layer not found in file {__compat_layer}. Aborting.')
+    with open(__compat_layer) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
     globals()['__PHP2PY_LOADED__'] = True
