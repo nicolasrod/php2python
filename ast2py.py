@@ -19,6 +19,12 @@ from contextlib import contextmanager
 # TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
 # TODO: alert when a class has a propert and a method named the same. not valid in python
 
+def Code(lines, ch='\n'):
+    if isinstance(lines, str):
+        return lines
+    if isinstance(lines, (list, tuple)):
+        return ch.join(lines)
+    assert False, 'Bad type for parameter lines!'
 
 def _(x):
     return x.replace('\r', ' ').replace('\n', '\\n').strip()
@@ -154,11 +160,15 @@ class AST:
     def pop_code(self, is_pre=False):
         if is_pre:
             code = '\n'.join(self.pre_code)
+            if len(code) > 0:
+                code += '\n'
             self.pre_code = []
         else:
             code = '\n'.join(self.post_code)
+            if len(code) > 0:
+                code = f'\n{code}'
             self.post_code = []
-        return code
+        return code.strip()
 
     def decorator_goto(self, node):
         goto_nodes = self.get_nodes_of_type(node, 'Stmt_Goto')
@@ -504,9 +514,10 @@ class AST:
         return self.parse_children(node, 'consts', '\n')
 
     def Stmt_TraitUse(self, node):  #  TODO: check this!
-        return ''
+        return '#@@ Trait Use!'
 
-    def Stmt_Declare(self, node):  #  TODO: check this!
+    def Stmt_Declare(self, node):
+        # python is kinda strict_type. I've no intentions to support ticks and encoding. 
         return ''
 
     def Expr_Variable(self, node):
@@ -1247,23 +1258,17 @@ while True:
 
         self.frames.append(node['nodeType'])
         self.parents.append(node)
-        r = getattr(self, node['nodeType'])(node)
+        code = Code(getattr(self, node['nodeType'])(node))
         self.parents.pop()
 
         pre_code = ''
         post_code = ''
 
         if len(self.frames) > 0 and self.frames[-1].startswith('Stmt_'):
-            pre_code = self.pop_code(True).strip()
-            if len(pre_code) > 0:
-                pre_code += '\n'
-
-            post_code = self.pop_code().strip()
-            if len(post_code) > 0:
-                post_code = f'\n{post_code}'
-
+            pre_code = self.pop_code(True)
+            post_code = self.pop_code()
+            
         self.frames.pop()
-        code = '\n'.join(r) if isinstance(r, list) else r
         return f'{pre_code}{code}{post_code}'.strip()
 
     def parse_children(self, node, name, delim=None):
@@ -1283,7 +1288,6 @@ while True:
         return self.parse(node[name])
 
 
-#  TODO: use simple templates for the conversion
 def parse_ast(fname):
     try:
         with open(fname) as f:
@@ -1317,7 +1321,8 @@ if '__PHP2PY_LOADED__' not in globals():
         pcode = parser.pop_code()
 
         if parsed is not None:
-            out.append(pcode)
+            if pcode:
+                out.append(pcode)
             out.append(parsed)
 
     out.append('')
