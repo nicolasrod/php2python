@@ -2344,7 +2344,7 @@ def php_mysqli_query(dbh, sql):
     Returns FALSE on failure. For successful SELECT, SHOW, DESCRIBE or EXPLAIN queries mysqli_query() will return a mysqli_result object. For other successful queries mysqli_query() will return TRUE.
     """
     _check_db_is_connected(dbh)
-
+    
     try:
         cursor = dbh.cnx.cursor()
         cursor.execute(sql)

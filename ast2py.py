@@ -168,7 +168,7 @@ class AST:
             if len(code) > 0:
                 code = f'\n{code}'
             self.post_code = []
-        return code.strip()
+        return code
 
     def decorator_goto(self, node):
         goto_nodes = self.get_nodes_of_type(node, 'Stmt_Goto')
