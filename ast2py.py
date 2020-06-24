@@ -1305,6 +1305,7 @@ if '__PHP2PY_LOADED__' not in globals():
     __compat_layer = os.getenv('PHP2PY_COMPAT', 'php_compat.py')
     if not os.path.exists(__compat_layer):
         sys.exit(f'[-] Compatibility layer not found in file {__compat_layer}. Aborting.')
+    # end if
     with open(__compat_layer) as f:
         exec(compile(f.read(), '<string>', 'exec'))
     # end with
