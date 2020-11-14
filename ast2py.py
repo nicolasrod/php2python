@@ -717,6 +717,7 @@ def {name}({params}):
 
         closure_id = str(uuid.uuid4()).replace('-', '')[:8]
         name = f'_closure_{closure_id}'
+
         self.push_code(
             f'''
 def {name}({params}):
@@ -724,6 +725,7 @@ def {name}({params}):
     {global_access}
     {stmts}
 # end def {name}''', True)
+       
         return f'(lambda *args, **kwargs: {name}(*args, **kwargs))'
 
     def Stmt_ClassMethod(self, node):
@@ -1198,7 +1200,8 @@ while True:
         pre_code = ''
         post_code = ''
 
-        if len(self.frames) > 0 and self.frames[-1].startswith('Stmt_'):
+        if len(self.frames) > 0 and self.frames[-1].startswith('Stmt_') \
+            and not self.is_inside_of_any('Expr_Closure'):
             pre_code = self.pop_code(True)
             post_code = self.pop_code()
             
