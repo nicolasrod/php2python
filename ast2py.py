@@ -19,6 +19,8 @@ from contextlib import contextmanager
 # TODO: handle \\ namespaces in class names (php_is_callable for example). manually sometimes...
 # TODO: alert when a class has a propert and a method named the same. not valid in python
 
+CR = '\n'
+
 def Code(lines, ch='\n'):
     if isinstance(lines, str):
         return lines
@@ -357,55 +359,31 @@ class AST:
         return self._binary_op(node, '{lhs} = {rhs}', 'var', 'expr')
 
     def Expr_AssignOp_Concat(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} += {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} += {rhs}')
 
     def Expr_AssignOp_Plus(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} += {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} += {rhs}')
 
     def Expr_AssignOp_Minus(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} -= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} -= {rhs}')
 
     def Expr_AssignOp_Mul(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} *= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} *= {rhs}')
 
     def Expr_AssignOp_Mod(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} %= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} %= {rhs}')
 
     def Expr_AssignOp_BitwiseOr(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} |= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} |= {rhs}')
 
     def Expr_AssignOp_BitwiseXor(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} ^= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} ^= {rhs}')
 
     def Expr_BinaryOp_BitwiseXor(self, node):
         return self._binary_op(node, t='{lhs} ^ {rhs}')
 
     def Expr_AssignOp_BitwiseAnd(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} &= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} &= {rhs}')
 
     def Expr_BinaryOp_Concat(self, node):
         return self._binary_op(node, t='{lhs} + {rhs}')
@@ -480,35 +458,23 @@ class AST:
         return self._binary_op(node, t='{lhs} >> {rhs}')
 
     def Expr_BinaryOp_Coalesce(self, node):
-        return self._binary_op(node,
-                               t='({lhs} if {lhs} is not None else {rhs})')
+        return self._binary_op(node, t='({lhs} if {lhs} is not None else {rhs})')
 
     def Expr_AssignOp_Div(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} /= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} /= {rhs}')
 
     def Expr_AssignOp_ShiftLeft(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} <<= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} <<= {rhs}')
 
     def Expr_AssignOp_ShiftRight(self, node):
-        return self._binary_op(node,
-                               left='var',
-                               right='expr',
-                               t='{lhs} >>= {rhs}')
+        return self._binary_op(node, left='var', right='expr', t='{lhs} >>= {rhs}')
 
     def Expr_BinaryOp_Spaceship(self, node):
         return self._binary_op(
             node, t='(0 if {lhs} == {rhs} else 1 if {lhs} > {rhs} else -1)')
 
     def Expr_ArrayDimFetch(self, node):
-        var = self.parse(node['var'])
-        dim = self.parse(node['dim'])
-        return f'{var}[{dim or -1}]'
+        return f"""{self.parse(node['var'])}[{self.parse(node['dim']) or -1}]"""
 
     def Stmt_Const(self, node):
         return self.parse_children(node, 'consts', '\n')
@@ -525,23 +491,19 @@ class AST:
         return self.fix_variables(self.parse(node['name']).replace('\n', ''))
 
     def VarLikeIdentifier(self, node):
-        name = self.fix_property(node['name'])
-        return f'{name}'
+        return f"""{self.fix_property(node['name'])}"""
 
     def Scalar_LNumber(self, node):
-        val = node['value']
-        return f'{val}'
+        return f"""{node['value']}"""
 
     def Scalar_DNumber(self, node):
         return self.Scalar_LNumber(node)
 
     def Expr_UnaryMinus(self, node):
-        expr = self.parse(node['expr'])
-        return f'-{expr}'
+        return f"""-{self.parse(node['expr'])}"""
 
     def Expr_UnaryPlus(self, node):
-        expr = self.parse(node['expr'])
-        return f'+{expr}'
+        return f"""+{self.parse(node['expr'])}"""
 
     def Scalar_String(self, node):
         return quote(node['value'])
@@ -560,23 +522,16 @@ class AST:
         return f'{klass}.{name}({args})'
 
     def Expr_ShellExec(self, node):
-        cmd = quote(self.parse_children(node, 'parts', ' '))
-        return f'php_exec({cmd})'
+        return f"""php_exec({quote(self.parse_children(node, 'parts', ' '))})"""
 
     def Name_FullyQualified(self, node):
-        name = self.parse_children(node, 'parts', '.')
-        return f'{name}'
+        return f"""{self.parse_children(node, 'parts', '.')}"""
 
     def Expr_StaticPropertyFetch(self, node):
-        return self._binary_op(node,
-                               left='class',
-                               right='name',
-                               t='{lhs}.{rhs}')
+        return self._binary_op(node, left='class', right='name', t='{lhs}.{rhs}')
 
     def Expr_Instanceof(self, node):
-        lhs = quote(self.parse(node['class']))
-        rhs = self.parse(node['expr'])
-        return f'type({rhs}).__name__ == {lhs}'
+        return f"""type({self.parse(node['expr'])}).__name__ == {quote(self.parse(node['class']))}"""
 
     def Expr_PreInc(self, node):
         var = self.parse(node['var'])
@@ -699,37 +654,29 @@ class {name}({supers}):
         return self.Comment_Doc(node)
 
     def Expr_Clone(self, node):
-        expr = self.parse(node['expr'])
-        return f'copy.deepcopy({expr})'
+        return f"""copy.deepcopy({self.parse(node['expr'])})"""
 
     def Stmt_Continue(self, node):
         return 'continue'
 
     def Stmt_Throw(self, node):
-        expr = self.parse(node['expr'])
-        return f'raise {expr}'
+        return f"""raise {self.parse(node['expr'])}"""
 
     def Stmt_Goto(self, node):
-        name = self.parse(node['name'])
-        return f'goto .{name}'
+        return f"""goto .{self.parse(node['name'])}"""
 
     def Stmt_Label(self, node):
-        name = self.parse(node['name'])
-        return f'label .{name}'
+        return f"""label .{self.parse(node['name'])}"""
 
     def Stmt_Finally(self, node):
-        stmts = self.parse_children(node, 'stmts', '\n')
-        return '''finally:
-        {stmts}'''
+        return f"""finally:\n{self.parse_children(node, 'stmts', CR)}"""
 
     def Stmt_Function(self, node):
         name = self.parse(node['name'])
 
         with namespace(self, name):
-            params = self.parse_children(
-                node, 'params', ', ').replace(' = ', '=')
-            stmts = self.pass_if_empty(
-                self.parse_children(node, 'stmts', '\n'))
+            params = self.parse_children(node, 'params', ', ').replace(' = ', '=')
+            stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
 
         if params.find('*') == -1:
             params = remove_both_ends(params + ', *_args_')
@@ -817,35 +764,28 @@ def {name}({params}):
         return self.with_docs(node, self.parse(node['expr']))
 
     def Expr_Print(self, node):
-        expr = self.parse(node['expr'])
-        return self.with_docs(node, f'php_print({expr})')
+        return self.with_docs(node, f"""php_print({self.parse(node['expr'])})""")
 
     def Stmt_Use(self, node):
         #  TODO: include class if not defined instead!
-        uses = self.parse_children(node, 'uses')
-        return self.with_docs(node, '\n'.join(uses))
+        return self.with_docs(node, '\n'.join(self.parse_children(node, 'uses')))
 
     def Expr_PropertyFetch(self, node):
-        var = self.parse(node['var'])
-        name = self.fix_property(self.parse(node['name']))
-        return f'{var}.{name}'
+        return f"""{self.parse(node['var'])}.{self.fix_property(self.parse(node['name']))}"""
 
     def Stmt_Nop(self, node):
         return 'pass' if self.is_inside_block() else ''
 
     def Expr_Empty(self, node):
-        expr = self.parse(node['expr'])
-        return f'php_empty(lambda : {expr})'
+        return f"""php_empty(lambda : {self.parse(node['expr'])})"""
 
     def Expr_Eval(self, node):
-        expr = self.parse(node['expr'])
-        return self.with_docs(node,
-                              f'''exec(compile({expr}, 'string', 'exec')''')
+        return self.with_docs(node, 
+            f'''exec(compile({self.parse(node['expr'])}, 'string', 'exec')''')
 
     def Expr_Isset(self, node):
         _vars = self.parse_children(node, 'vars')
-        expr = ' and '.join(
-            [f'php_isset(lambda : {v})' for v in _vars if v is not None])
+        expr = ' and '.join([f'php_isset(lambda : {v})' for v in _vars if v is not None])
         return f'({expr})'
 
     def Stmt_UseUse(self, node):
@@ -860,8 +800,7 @@ def {name}({params}):
         return f'{alias} = php_new_class({qklass}, lambda *args, **kwargs: {klass}(*args, **kwargs))'
 
     def Stmt_InlineHTML(self, node):
-        val = quote(node['value'])
-        return self.with_docs(node, f'php_print({val})')
+        return self.with_docs(node, f"""php_print({quote(node['value'])})""")
 
     def Stmt_Foreach(self, node):
         kvs = remove_both_ends(','.join([
@@ -899,9 +838,7 @@ while {cond}:
         return self.parse(node['value'])
 
     def Const(self, node):
-        name = self.parse(node['name'])
-        val = self.parse(node['value'])
-        return f'{name} = {val}'
+        return f"""{self.parse(node['name'])} = {self.parse(node['value'])}"""
 
     def Scalar_MagicConst_Dir(self, node):
         return '__DIR__'
@@ -958,13 +895,11 @@ while {cond}:
         raise Exception('Not Implemented yet!')
 
     def Expr_Include(self, node):
-        expr = self.parse(node['expr']).strip()
-        once = int(node["type"]) == 4
-        return self.with_docs(node, f'php_include_file({expr}, once={once})')
+        return self.with_docs(node, 
+            f"""php_include_file({self.parse(node['expr']).strip()}, once={int(node["type"]) == 4})""")
 
     def Expr_BooleanNot(self, node):
-        expr = self.parse(node['expr'])
-        return f'(not {expr})'
+        return f"""(not {self.parse(node['expr'])})"""
 
     def Expr_FuncCall(self, node):
         args = self.parse_children(node, 'args', ', ')
@@ -988,13 +923,10 @@ while {cond}:
         return node['name']
 
     def Expr_ClassConstFetch(self, node):
-        klass = self.parse(node['class'])
-        name = self.fix_property(self.parse(node['name']))
-        return f'{klass}.{name}'
+        return f"""{self.parse(node['class'])}.{self.fix_property(self.parse(node['name']))}"""
 
     def Scalar_EncapsedStringPart(self, node):
-        val = _(quote(node['value']))
-        return f'{val}'
+        return f"""{_(quote(node['value']))}"""
 
     # TODO: change for f'{variable}'
     # TODO: take into account parts' type!
@@ -1002,19 +934,16 @@ while {cond}:
         return ' + '.join([f'str({_(self.parse(x))})' for x in node['parts']])
 
     def Stmt_Echo(self, node):
-        expr = self.parse_children(node, 'exprs', ', ')
-        return self.with_docs(node, f'php_print({expr})')
+        return self.with_docs(node, 
+            f"""php_print({self.parse_children(node, 'exprs', ', ')})""")
 
     def Stmt_Static(self, node):
-        _vars = self.parse_children(node, 'vars', '\n ')
-        return f'{_vars}'
+        return f"""{self.parse_children(node, 'vars', CR)}"""
 
     def Stmt_StaticVar(self, node):
         name = self.parse(node['var'])
         self.static_vars[self.add_namespace(name)] = True
-        var = self.parse(node['var'])
-        def_ = self.parse(node['default'])
-        return f'{var} = {def_}'
+        return f"""{name} = {self.parse(node['default'])}"""
 
     def Expr_Exit(self, node):
         code = self.parse(node['expr']) or 0
@@ -1114,32 +1043,25 @@ if {cond}:
         return f'{{{key}: {value}}}'
 
     def Expr_Cast_Array(self, node):
-        expr = self.parse(node['expr'])
-        return f'{expr}'
+        return f"""{self.parse(node['expr'])}"""
 
     def Expr_Cast_Object(self, node):
-        expr = self.parse(node['expr'])
-        return f'{expr}'
+        return f"""{self.parse(node['expr'])}"""
 
     def Expr_Cast_Bool(self, node):
-        expr = self.parse(node['expr'])
-        return f'php_bool({expr})'
+        return f"""php_bool({self.parse(node['expr'])})"""
 
     def Expr_Cast_Double(self, node):
-        expr = self.parse(node['expr'])
-        return f'php_float({expr})'
+        return f"""php_float({self.parse(node['expr'])})"""
 
     def Expr_Cast_Int(self, node):
-        expr = self.parse(node['expr'])
-        return f'php_int({expr})'
+        return f"""php_int({self.parse(node['expr'])})"""
 
     def Expr_Cast_String(self, node):
-        expr = self.parse(node['expr'])
-        return f'php_str({expr})'
+        return f"""php_str({self.parse(node['expr'])})"""
 
     def Expr_ErrorSuppress(self, node):
-        expr = self.parse(node['expr'])
-        return f'php_no_error(lambda: {expr})'
+        return f"""php_no_error(lambda: {self.parse(node['expr'])})"""
 
     def Stmt_Unset(self, node):
         _vars = self.parse_children(node, 'vars')
@@ -1327,10 +1249,7 @@ if '__PHP2PY_LOADED__' not in globals():
             out.append(parsed)
 
     out.append('')
-    src, errs = pindent.reformat_string(__('\n'.join(out)),
-                                        stepsize=4,
-                                        tabsize=4,
-                                        expandtabs=1)
+    src, errs = pindent.reformat_string(__('\n'.join(out)), stepsize=4, tabsize=4, expandtabs=1)
     valid, syn = is_valid_code(src)
 
     if len(errs) != 0 or syn is not None:
@@ -1342,8 +1261,7 @@ if '__PHP2PY_LOADED__' not in globals():
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Convert AST files to Python Code')
+    parser = argparse.ArgumentParser(description='Convert AST files to Python Code')
     parser.add_argument('ast_file', type=str)
     parser.add_argument('--quiet', action='store_true')
     args = parser.parse_args()
