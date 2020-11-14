@@ -11,6 +11,9 @@ import time
 import json
 import subprocess
 
+def get_php2ast_path():
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "php2ast.php")
+
 def runbin(cmd):
     ps = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE)
     ret = ps.returncode
@@ -20,7 +23,7 @@ def convert(fname, fname_ast, fname_py, args):
     if not args.quiet:
         print(f"[+] Converting {fname}...")
 
-    ret, ast = runbin(["php", "php2ast.php", fname])
+    ret, ast = runbin(["php", get_php2ast_path(), fname])
 
     if ret != 0:
         print(ast)
