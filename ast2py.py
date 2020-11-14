@@ -487,7 +487,7 @@ class AST:
     ## =====================================================================
 
     def Expr_ArrayDimFetch(self, node):
-        return f"""{self.parse(node['var'])}[{self.parse(node['dim']) or -1}]"""
+        return f"""{self.parse(node['var'])}[{self.parse(node['dim'], def_='-1')}]"""
 
     def Stmt_Const(self, node):
         return self.parse_children(node, 'consts', '\n')
@@ -500,7 +500,7 @@ class AST:
         return ''
 
     def Expr_Variable(self, node):
-        # TODO: if is byref, add byref_ to the variable name
+        # TODO: if is byref, add byref_ to the variable name??
         return self.fix_variables(self.parse(node['name']).replace('\n', ''))
 
     def VarLikeIdentifier(self, node):
@@ -817,8 +817,8 @@ def {name}({params}):
 
     def Stmt_Foreach(self, node):
         kvs = remove_both_ends(','.join([
-            self.parse(node['keyVar']) or '',
-            self.parse(node['valueVar']) or ''
+            self.parse(node['keyVar'], def_=''),
+            self.parse(node['valueVar'], def_='')
         ]))
         get_items = '.items()' if kvs.find(',') != -1 else ''
         expr = self.parse(node['expr'])
@@ -923,7 +923,7 @@ while {cond}:
         return f"""{name} = {self.parse(node['default'])}"""
 
     def Expr_Exit(self, node):
-        code = self.parse(node['expr']) or 0
+        code = self.parse(node['expr'], 0)
 
         if isinstance(code, str):
             return self.with_docs(node, f'php_print({code})\nphp_exit()')
@@ -1180,9 +1180,9 @@ while True:
 
         return comments
 
-    def parse(self, node):
+    def parse(self, node, def_=None):
         if node is None:
-            return None
+            return def_
 
         if not isinstance(node, (list, dict)):
             return node
