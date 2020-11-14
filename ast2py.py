@@ -252,14 +252,10 @@ class AST:
         else:
             return cond, join_char.join(assigns), exprs
 
-    def _binary_op(self, node, t, left='left', right='right'):
-        lhs = self.parse(node[left])
-        rhs = self.parse(node[right])
-        return t.format(**locals())
-
     @staticmethod
     def pass_if_empty(data):
-        if len(data.strip()) == 0:
+        # hack: testing empty for strings and lists
+        if len(''.join(data).strip()) == 0:
             return 'pass'
         return data
 
@@ -296,9 +292,6 @@ class AST:
         return any([x.startswith('Expr_') for x in self.frames[:-1]])
 
     def fix_variables(self, name):
-        # if '[' in name:
-        #    return name
-
         if name in _php_globals:
             return _php_globals[name]
 
@@ -341,9 +334,14 @@ class AST:
             return 'None'
         return name
 
+    ## =====================================================================
+
     def Expr_BitwiseNot(self, node):
         expr = self.parse(node['expr'])
         return f'(1 << ({expr}).bit_length()) - 1 - {expr}'
+
+    ## =====================================================================
+    ## Assign
 
     def Expr_Assign(self, node):
         lhs = self.parse(node['var'])
@@ -356,122 +354,137 @@ class AST:
         return f'{lhs} = {rhs}'
 
     def Expr_AssignRef(self, node):
-        return self._binary_op(node, '{lhs} = {rhs}', 'var', 'expr')
-
+        return f"""{self.parse(node['var'])} = {self.parse(node['expr'])}"""
+        
     def Expr_AssignOp_Concat(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} += {rhs}')
-
+        return f"""{self.parse(node['var'])} += {self.parse(node['expr'])}"""
+        
     def Expr_AssignOp_Plus(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} += {rhs}')
-
+        return f"""{self.parse(node['var'])} += {self.parse(node['expr'])}"""
+        
     def Expr_AssignOp_Minus(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} -= {rhs}')
-
+        return f"""{self.parse(node['var'])} -= {self.parse(node['expr'])}"""
+        
     def Expr_AssignOp_Mul(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} *= {rhs}')
-
+        return f"""{self.parse(node['var'])} *= {self.parse(node['expr'])}"""
+        
     def Expr_AssignOp_Mod(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} %= {rhs}')
+        return f"""{self.parse(node['var'])} %= {self.parse(node['expr'])}"""
+
+    def Expr_AssignOp_Pow(self, node):
+        return f"""{self.parse(node['var'])} **= {self.parse(node['expr'])}"""
 
     def Expr_AssignOp_BitwiseOr(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} |= {rhs}')
-
+        return f"""{self.parse(node['var'])} |= {self.parse(node['expr'])}"""
+        
     def Expr_AssignOp_BitwiseXor(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} ^= {rhs}')
-
-    def Expr_BinaryOp_BitwiseXor(self, node):
-        return self._binary_op(node, t='{lhs} ^ {rhs}')
-
+        return f"""{self.parse(node['var'])} ^= {self.parse(node['expr'])}"""
+          
     def Expr_AssignOp_BitwiseAnd(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} &= {rhs}')
-
-    def Expr_BinaryOp_Concat(self, node):
-        return self._binary_op(node, t='{lhs} + {rhs}')
-
-    def Expr_BinaryOp_Mul(self, node):
-        return self._binary_op(node, t='{lhs} * {rhs}')
-
-    def Expr_BinaryOp_Mod(self, node):
-        return self._binary_op(node, t='{lhs} % {rhs}')
-
-    def Expr_BinaryOp_Div(self, node):
-        return self._binary_op(node, t='{lhs} / {rhs}')
-
-    def Expr_BinaryOp_Plus(self, node):
-        return self._binary_op(node, t='{lhs} + {rhs}')
-
-    def Expr_BinaryOp_Pow(self, node):
-        return self._binary_op(node, t='{lhs} ^ {rhs}')
-
-    def Expr_BinaryOp_Minus(self, node):
-        return self._binary_op(node, t='{lhs} - {rhs}')
-
-    def Expr_BinaryOp_BooleanOr(self, node):
-        return self._binary_op(node, t='{lhs} or {rhs}')
-
-    def Expr_BinaryOp_BooleanAnd(self, node):
-        return self._binary_op(node, t='{lhs} and {rhs}')
-
-    def Expr_BinaryOp_LogicalOr(self, node):
-        return self._binary_op(node, t='{lhs} or {rhs}')
-
-    def Expr_BinaryOp_LogicalXor(self, node):
-        return self._binary_op(node, t='bool({lhs}) != bool({rhs})')
-
-    def Expr_BinaryOp_LogicalAnd(self, node):
-        return self._binary_op(node, t='{lhs} and {rhs}')
-
-    def Expr_BinaryOp_Equal(self, node):
-        return self._binary_op(node, t='{lhs} == {rhs}')
-
-    def Expr_BinaryOp_NotEqual(self, node):
-        return self._binary_op(node, t='{lhs} != {rhs}')
-
-    def Expr_BinaryOp_Identical(self, node):
-        return self._binary_op(node, t='{lhs} == {rhs}')
-
-    def Expr_BinaryOp_NotIdentical(self, node):
-        return self._binary_op(node, t='{lhs} != {rhs}')
-
-    def Expr_BinaryOp_Greater(self, node):
-        return self._binary_op(node, t='{lhs} > {rhs}')
-
-    def Expr_BinaryOp_GreaterOrEqual(self, node):
-        return self._binary_op(node, t='{lhs} >= {rhs}')
-
-    def Expr_BinaryOp_Smaller(self, node):
-        return self._binary_op(node, t='{lhs} < {rhs}')
-
-    def Expr_BinaryOp_SmallerOrEqual(self, node):
-        return self._binary_op(node, t='{lhs} <= {rhs}')
-
-    def Expr_BinaryOp_BitwiseOr(self, node):
-        return self._binary_op(node, t='{lhs} | {rhs}')
-
-    def Expr_BinaryOp_BitwiseAnd(self, node):
-        return self._binary_op(node, t='{lhs} & {rhs}')
-
-    def Expr_BinaryOp_ShiftLeft(self, node):
-        return self._binary_op(node, t='{lhs} << {rhs}')
-
-    def Expr_BinaryOp_ShiftRight(self, node):
-        return self._binary_op(node, t='{lhs} >> {rhs}')
-
-    def Expr_BinaryOp_Coalesce(self, node):
-        return self._binary_op(node, t='({lhs} if {lhs} is not None else {rhs})')
+        return f"""{self.parse(node['var'])} &= {self.parse(node['expr'])}"""
 
     def Expr_AssignOp_Div(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} /= {rhs}')
-
+        return f"""{self.parse(node['var'])} /= {self.parse(node['expr'])}"""
+        
     def Expr_AssignOp_ShiftLeft(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} <<= {rhs}')
+        return f"""{self.parse(node['var'])} <<= {self.parse(node['expr'])}"""
 
     def Expr_AssignOp_ShiftRight(self, node):
-        return self._binary_op(node, left='var', right='expr', t='{lhs} >>= {rhs}')
+        return f"""{self.parse(node['var'])} >>= {self.parse(node['expr'])}"""
+
+    def Expr_AssignOp_Coalesce(self, node):
+        lhs = self.parse(node['var'])
+        rhs = self.parse(node['expr'])
+        return f"""{lhs} = {lhs} if {lhs} is not None else {rhs}"""
+
+    ## =====================================================================
+
+    def Expr_BinaryOp_BitwiseXor(self, node):
+        return f"""{self.parse(node['left'])} ^ {self.parse(node['right'])}"""
+    
+    def Expr_BinaryOp_Concat(self, node):
+        return f"""{self.parse(node['left'])} + {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Mul(self, node):
+        return f"""{self.parse(node['left'])} * {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Mod(self, node):
+        return f"""{self.parse(node['left'])} % {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Div(self, node):
+        return f"""{self.parse(node['left'])} / {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Plus(self, node):
+        return f"""{self.parse(node['left'])} + {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Pow(self, node):
+        return f"""{self.parse(node['left'])} ** {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Minus(self, node):
+        return f"""{self.parse(node['left'])} - {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_BooleanOr(self, node):
+        return f"""{self.parse(node['left'])} or {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_BooleanAnd(self, node):
+        return f"""{self.parse(node['left'])} and {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_LogicalOr(self, node):
+        return f"""{self.parse(node['left'])} or {self.parse(node['right'])}"""
+
+    def Expr_BinaryOp_LogicalXor(self, node):
+        return f"""bool({self.parse(node['left'])}) != bool({self.parse(node['right'])})"""
+        
+    def Expr_BinaryOp_LogicalAnd(self, node):
+        return f"""{self.parse(node['left'])} and {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Equal(self, node):
+        return f"""{self.parse(node['left'])} == {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_NotEqual(self, node):
+        return f"""{self.parse(node['left'])} != {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Identical(self, node):
+        return f"""{self.parse(node['left'])} == {self.parse(node['right'])}"""
+
+    def Expr_BinaryOp_NotIdentical(self, node):
+        return f"""{self.parse(node['left'])} != {self.parse(node['right'])}"""
+
+    def Expr_BinaryOp_Greater(self, node):
+        return f"""{self.parse(node['left'])} > {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_GreaterOrEqual(self, node):
+        return f"""{self.parse(node['left'])} >= {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Smaller(self, node):
+        return f"""{self.parse(node['left'])} < {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_SmallerOrEqual(self, node):
+        return f"""{self.parse(node['left'])} <= {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_BitwiseOr(self, node):
+        return f"""{self.parse(node['left'])} | {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_BitwiseAnd(self, node):
+        return f"""{self.parse(node['left'])} & {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_ShiftLeft(self, node):
+        return f"""{self.parse(node['left'])} << {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_ShiftRight(self, node):
+        return f"""{self.parse(node['left'])} >> {self.parse(node['right'])}"""
+        
+    def Expr_BinaryOp_Coalesce(self, node):
+        lhs = self.parse(node['left'])
+        rhs = self.parse(node['right'])
+        return f"""({lhs} if {lhs} is not None else {rhs})"""
 
     def Expr_BinaryOp_Spaceship(self, node):
-        return self._binary_op(
-            node, t='(0 if {lhs} == {rhs} else 1 if {lhs} > {rhs} else -1)')
+        lhs = self.parse(node['left'])
+        rhs = self.parse(node['right'])
+        return f'(0 if {lhs} == {rhs} else 1 if {lhs} > {rhs} else -1)'
+
+    ## =====================================================================
 
     def Expr_ArrayDimFetch(self, node):
         return f"""{self.parse(node['var'])}[{self.parse(node['dim']) or -1}]"""
@@ -528,7 +541,7 @@ class AST:
         return f"""{self.parse_children(node, 'parts', '.')}"""
 
     def Expr_StaticPropertyFetch(self, node):
-        return self._binary_op(node, left='class', right='name', t='{lhs}.{rhs}')
+        return f"""{self.parse(node["class"])}.{self.parse(node["name"])}"""
 
     def Expr_Instanceof(self, node):
         return f"""type({self.parse(node['expr'])}).__name__ == {quote(self.parse(node['class']))}"""
@@ -858,42 +871,6 @@ while {cond}:
     def Scalar_MagicConst_Namespace(self, node):
         return '__namespace__'  # TODO: fix this!
 
-    def Expr_ArrowFunction(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Expr_AssignOp_Coalesce(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Expr_AssignOp_Pow(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Expr_Cast_Unset(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Expr_ClosureUse(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def NullableType(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Name_Relative(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Scalar_MagicConst_Trait(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Stmt_ClassLike(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Stmt_TraitUseAdaptation_Alias(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def Stmt_TraitUseAdaptation_Precedence(self, node):
-        raise Exception('Not Implemented yet!')
-
-    def UnionType(self, node):
-        raise Exception('Not Implemented yet!')
-
     def Expr_Include(self, node):
         return self.with_docs(node, 
             f"""php_include_file({self.parse(node['expr']).strip()}, once={int(node["type"]) == 4})""")
@@ -1152,6 +1129,41 @@ while True:
     def Stmt_ClassConst(self, node):
         return '\n'.join([f'{x}' for x in self.parse_children(node, 'consts')])
 
+    ## =====================================================================
+    ## Not Implemented yet!
+
+    def Expr_ArrowFunction(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def Expr_Cast_Unset(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def Expr_ClosureUse(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def NullableType(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def Name_Relative(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def Scalar_MagicConst_Trait(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def Stmt_ClassLike(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def Stmt_TraitUseAdaptation_Alias(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def Stmt_TraitUseAdaptation_Precedence(self, node):
+        raise Exception('Not Implemented yet!')
+
+    def UnionType(self, node):
+        raise Exception('Not Implemented yet!')
+
+    ## =====================================================================
+
     def parse_docs(self, node):
         comments = ''
 
@@ -1233,6 +1245,8 @@ if '__PHP2PY_LOADED__' not in globals():
     # end with
     globals()['__PHP2PY_LOADED__'] = True
 # end if
+
+import inspect
 
 '''
     ]
