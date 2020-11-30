@@ -9,6 +9,7 @@ import ast
 import argparse
 import uuid
 import re
+import collections
 
 from php_compat import PHP_FUNCTIONS
 from functools import partial
@@ -105,6 +106,8 @@ _php_globals = {
 
 fix_comment_line = partial(remove_both_ends, chars=('*', '/', ' ', '\t'))
 
+ByrefParam = collections.namedtuple('ByrefParam', 'name full_name position')
+
 
 @contextmanager
 def namespace(self, name):
@@ -125,6 +128,7 @@ class AST:
         self.last_namespace = None
         self.static_vars = {}
         self.channel_data = None
+        self.byref_params = {}
 
     def add_namespace(self, name):
         if self.last_namespace is not None:
@@ -487,7 +491,16 @@ class AST:
     ## =====================================================================
 
     def Expr_ArrayDimFetch(self, node):
-        return f"""{self.parse(node['var'])}[{self.parse(node['dim'], def_='-1')}]"""
+        name = self.parse(node['var']) 
+        dim = self.parse(node['dim'], def_='-1')
+
+        if name == "PHP_GLOBALS":
+            # surely it's a string...
+            if dim.startswith('"'):
+                dim = dim[1:-1]
+            dim = quote(self.fix_variables(dim))
+
+        return f"""{name}[{dim}]"""
 
     def Stmt_Const(self, node):
         return self.parse_children(node, 'consts', '\n')
@@ -500,7 +513,6 @@ class AST:
         return ''
 
     def Expr_Variable(self, node):
-        # TODO: if is byref, add byref_ to the variable name??
         return self.fix_variables(self.parse(node['name']).replace('\n', ''))
 
     def VarLikeIdentifier(self, node):
@@ -691,6 +703,18 @@ class {name}({supers}):
             params = self.parse_children(node, 'params', ', ').replace(' = ', '=')
             stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
 
+        # find byref parameters
+        byrefs = []
+
+        for idx, param in enumerate(node['params']):
+            if param['byRef']:
+                param_name = param['var']['name']
+                full_name = f'{name}.byref_{param_name}'
+                byrefs.append(ByrefParam(name=param_name, full_name=full_name, position=idx))
+
+        byref_vars = "\n".join([f'{x.full_name} = {x.name}' for x in byrefs])
+        self.byref_params[name] = byrefs        # save byref params for the current function
+
         if params.find('*') == -1:
             params = remove_both_ends(params + ', *_args_')
 
@@ -701,6 +725,7 @@ def {name}({params}):
     {self.pop_params_init()}
     {self.get_global_access_for(node['stmts'])}
     {stmts}
+    {byref_vars}
 # end def {name}
 '''.replace('\n\n', '\n'))
 
@@ -892,6 +917,21 @@ while {cond}:
             args = re.sub('"$', '_"', args)
         else:
             fn = f'php_{fn}' if fn in PHP_FUNCTIONS else fn
+
+        # if the function has byrefs params, we patch the local vars with them
+        byrefs = self.byref_params.get(fn)
+        if byrefs:
+            local_vars = []
+            for idx, arg in enumerate(node['args']):
+                byref_arg = [x for x in byrefs if x.position == idx]
+                
+                if byref_arg:
+                    arg_name = self.parse(arg)
+                    local_vars.append(f'{arg_name} = {byref_arg[0].full_name}')
+
+            _set_vars = "\n".join(local_vars)
+            return f'''{fn}({args})
+{_set_vars}'''
 
         return f'{fn}({args})'
 
