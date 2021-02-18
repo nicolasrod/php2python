@@ -1,0 +1,60 @@
+def getEmailThreads(emails):
+ {
+    if (count($emails) && count($emails) <= 700):
+    {
+        $results[0]       = '';
+        $emails_filtered  = [];
+        $email_threads[0] = []; // 'sender|receiver'
+
+        array_walk($emails, function ($email_chunk) use (&$email_threads, &$emails_filtered, &$results)
+        {
+            $chunk    = explode(',', $email_chunk);
+
+            $sender   = trim($chunk[0]);
+            $receiver = trim($chunk[1]);
+            $body     = implode(array_slice($chunk, 2));
+
+            if (filter_var($sender, FILTER_VALIDATE_EMAIL) && filter_var($receiver, FILTER_VALIDATE_EMAIL))
+            {
+                if (preg_match('/[a-z]+\s*\**\?*\.*/', $body))
+                {
+                    $emails_filtered[] = [
+                    'sender'   => $sender,
+                    'receiver' => $receiver,
+                    'body'     => $body
+                    ];
+
+                    $thread_id = (int) implode(
+                                                array_keys($email_threads, "{$sender}|{$receiver}") ?:
+                                                array_keys($email_threads, "{$receiver}|{$sender}")
+                                                );
+
+                    if (empty($thread_id))
+                    {
+                    $email_threads[] = "{$sender}|{$receiver}";
+                    $results[]++;
+                    }
+
+                    if (! empty($thread_id))
+                    {
+                    $email_threads[$thread_id] = "{$sender}|{$receiver}";
+                    $results[$thread_id]++;
+                    }
+            }
+        }
+ });
+
+return array_filter($results);
+}
+ }
+
+
+var_dump(getEmailThreads([
+    'abc@gmail.com, x@gmail.com, hello x, how are you?',
+    'vw@gmail.com, xyz@gmail.com, good day.',
+    'c@gmail.com, abc@gmail.com, did you take a look at the event?',
+    'x@gmail.com, abc@gmail.com, i am great. how are you?---hello x, how are you?',
+    'xyz@gmail.com, vw@gmail.com, good day.---likewise.',
+    'abc@gmail.com, c@gmail.com, did you take a look at the event?',
+    'vw@gmail.com, xyz@gmail.com, good day.---likewise.---thanks',
+]));
