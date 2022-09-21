@@ -1,3 +1,4 @@
 goto-statement
 mysql-connector-python
 packaging
+resource
